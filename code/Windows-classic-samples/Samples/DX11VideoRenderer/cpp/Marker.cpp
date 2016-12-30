@@ -1,4 +1,4 @@
-#include "Marker.h"
+﻿#include "Marker.h"
 
 //////////////////////
 // CMarker class
@@ -27,7 +27,7 @@ HRESULT DX11VideoRenderer::CMarker::Create(
     const PROPVARIANT* pvarMarkerValue,     // Can be NULL.
     const PROPVARIANT* pvarContextValue,    // Can be NULL.
     IMarker** ppMarker
-    )
+)
 {
     if (ppMarker == NULL)
     {

@@ -1,4 +1,4 @@
-#include <SpellCheckProvider.h>
+﻿#include <SpellCheckProvider.h>
 #include <SpellCheck.h>
 #include "SampleSpellChecker.h"
 #include <atlbase.h>
@@ -14,11 +14,11 @@ WINAPI DllMain(_In_ HMODULE hModule, _In_ DWORD dwReason, _In_ PVOID lpvReserved
 {
     switch (dwReason)
     {
-        case DLL_PROCESS_ATTACH:
-            ::DisableThreadLibraryCalls(hModule);
-            break;
-        case DLL_PROCESS_DETACH:
-            break;
+    case DLL_PROCESS_ATTACH:
+        ::DisableThreadLibraryCalls(hModule);
+        break;
+    case DLL_PROCESS_DETACH:
+        break;
     }
 
     return _AtlModule.DllMain(dwReason, lpvReserved);

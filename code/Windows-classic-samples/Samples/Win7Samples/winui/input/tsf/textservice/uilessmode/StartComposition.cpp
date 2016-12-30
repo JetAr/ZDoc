@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -69,14 +69,14 @@ STDAPI CStartCompositionEditSession::DoEditSession(TfEditCookie ec)
     // start the new composition
     if ((pContextComposition->StartComposition(ec, pRangeInsert, _pTextService, &pComposition) == S_OK) && (pComposition != NULL))
     {
-        // Store the pointer of this new composition object in the instance 
-        // of the CTextService class. So this instance of the CTextService 
+        // Store the pointer of this new composition object in the instance
+        // of the CTextService class. So this instance of the CTextService
         // class can know now it is in the composition stage.
         _pTextService->_SetComposition(pComposition);
 
-        // 
+        //
         //  set selection to the adjusted range
-        // 
+        //
         TF_SELECTION tfSelection;
         tfSelection.range = pRangeInsert;
         tfSelection.style.ase = TF_AE_NONE;
@@ -101,7 +101,7 @@ Exit:
 //
 // _StartComposition
 //
-// this starts the new composition at the selection of the current 
+// this starts the new composition at the selection of the current
 // focus context.
 //----------------------------------------------------------------------------
 

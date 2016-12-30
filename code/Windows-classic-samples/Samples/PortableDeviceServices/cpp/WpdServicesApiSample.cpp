@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -63,49 +63,49 @@ void DoMenu()
             selectionIndex = static_cast<UINT>(_wtoi(selection));
             switch (selectionIndex)
             {
-                case 0:
-                {
-                    vector<PWSTR> contactsServices;
+            case 0:
+            {
+                vector<PWSTR> contactsServices;
 
-                    EumerateContactsServices(contactsServices);
-                    FreeServicePnPIDs(contactsServices);
-                    break;
-                }
-                case 1:
-                    // Release the old IPortableDeviceService interface before
-                    // obtaining a new one.
-                    portableDeviceService = nullptr;
-                    ChooseDeviceService(&portableDeviceService);
-                    break;
-                case 2:
-                    EnumerateAllContent(portableDeviceService.Get());
-                    break;
-                case 3:
-                    ListSupportedFormats(portableDeviceService.Get());
-                    break;
-                case 4:
-                    ListSupportedEvents(portableDeviceService.Get());
-                    break;
-                case 5:
-                    ListSupportedMethods(portableDeviceService.Get());
-                    break;
-                case 6:
-                    ListAbstractServices(portableDeviceService.Get());
-                    break;
-                case 7:
-                    ReadContentProperties(portableDeviceService.Get());
-                    break;
-                case 8:
-                    WriteContentProperties(portableDeviceService.Get());
-                    break;
-                case 9:
-                    InvokeMethods(portableDeviceService.Get());
-                    break;
-                case 10:
-                    InvokeMethodsAsync(portableDeviceService.Get());
-                    break;
-                default:
-                    break;
+                EumerateContactsServices(contactsServices);
+                FreeServicePnPIDs(contactsServices);
+                break;
+            }
+            case 1:
+                // Release the old IPortableDeviceService interface before
+                // obtaining a new one.
+                portableDeviceService = nullptr;
+                ChooseDeviceService(&portableDeviceService);
+                break;
+            case 2:
+                EnumerateAllContent(portableDeviceService.Get());
+                break;
+            case 3:
+                ListSupportedFormats(portableDeviceService.Get());
+                break;
+            case 4:
+                ListSupportedEvents(portableDeviceService.Get());
+                break;
+            case 5:
+                ListSupportedMethods(portableDeviceService.Get());
+                break;
+            case 6:
+                ListAbstractServices(portableDeviceService.Get());
+                break;
+            case 7:
+                ReadContentProperties(portableDeviceService.Get());
+                break;
+            case 8:
+                WriteContentProperties(portableDeviceService.Get());
+                break;
+            case 9:
+                InvokeMethods(portableDeviceService.Get());
+                break;
+            case 10:
+                InvokeMethodsAsync(portableDeviceService.Get());
+                break;
+            default:
+                break;
             }
         }
         else

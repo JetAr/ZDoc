@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -19,8 +19,8 @@
 class CDeviceModelPluginSampleModule : public CAtlDllModuleT< CDeviceModelPluginSampleModule >
 {
 public :
-	DECLARE_LIBID(LIBID_DeviceModelPluginSampleLib)
-	DECLARE_REGISTRY_APPID_RESOURCEID(IDR_DeviceModelPluginSample, "{0A74A5BD-EE0F-47A1-A934-16098728D943}")
+    DECLARE_LIBID(LIBID_DeviceModelPluginSampleLib)
+    DECLARE_REGISTRY_APPID_RESOURCEID(IDR_DeviceModelPluginSample, "{0A74A5BD-EE0F-47A1-A934-16098728D943}")
 };
 
 CDeviceModelPluginSampleModule _AtlModule;
@@ -33,12 +33,12 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
     if (!PrxDllMain(hInstance, dwReason, lpReserved))
         return FALSE;
 #endif
-	hInstance;
-    return _AtlModule.DllMain(dwReason, lpReserved); 
+    hInstance;
+    return _AtlModule.DllMain(dwReason, lpReserved);
 }
 
 
-// 
+//
 // Used to determine whether the DLL can be unloaded by OLE
 //
 STDAPI DllCanUnloadNow(void)
@@ -52,7 +52,7 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-// 
+//
 // Returns a class factory to create an object of the requested type
 //
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
@@ -65,7 +65,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 
-// 
+//
 // DllRegisterServer - Adds entries to the system registry
 //
 STDAPI DllRegisterServer(void)
@@ -77,16 +77,16 @@ STDAPI DllRegisterServer(void)
         return hr;
     hr = PrxDllRegisterServer();
 #endif
-	return hr;
+    return hr;
 }
 
 
-// 
+//
 // DllUnregisterServer - Removes entries from the system registry
 //
 STDAPI DllUnregisterServer(void)
 {
-	HRESULT hr = _AtlModule.DllUnregisterServer();
+    HRESULT hr = _AtlModule.DllUnregisterServer();
 #ifdef _MERGE_PROXYSTUB
     if (FAILED(hr))
         return hr;
@@ -95,5 +95,5 @@ STDAPI DllUnregisterServer(void)
         return hr;
     hr = PrxDllUnregisterServer();
 #endif
-	return hr;
+    return hr;
 }

@@ -1,4 +1,4 @@
-//
+﻿//
 // langbar.cpp
 //
 // Language bar ui code.
@@ -28,7 +28,7 @@ c_rgMenuItems[] =
 #define MENU_FLIPKEYS_INDEX     4
 
 class CLangBarItemButton : public ITfLangBarItemButton,
-                           public ITfSource
+    public ITfSource
 {
 public:
     CLangBarItemButton(CCaseTextService *pCase);
@@ -112,8 +112,8 @@ STDAPI CLangBarItemButton::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfLangBarItem) ||
-        IsEqualIID(riid, IID_ITfLangBarItemButton))
+            IsEqualIID(riid, IID_ITfLangBarItem) ||
+            IsEqualIID(riid, IID_ITfLangBarItemButton))
     {
         *ppvObj = (ITfLangBarItemButton *)this;
     }
@@ -237,18 +237,18 @@ STDAPI CLangBarItemButton::InitMenu(ITfMenu *pMenu)
     {
         switch (i)
         {
-            case MENU_SHOWSNOOP_INDEX:
-                dwFlags = _pCase->_IsSnoopWndVisible() ? TF_LBMENUF_CHECKED : 0;
-                break;
+        case MENU_SHOWSNOOP_INDEX:
+            dwFlags = _pCase->_IsSnoopWndVisible() ? TF_LBMENUF_CHECKED : 0;
+            break;
 
-            case MENU_FLIPKEYS_INDEX:
-                dwFlags = _pCase->_IsKeyFlipping() ? TF_LBMENUF_CHECKED : 0;
-                break;
+        case MENU_FLIPKEYS_INDEX:
+            dwFlags = _pCase->_IsKeyFlipping() ? TF_LBMENUF_CHECKED : 0;
+            break;
 
-            default:
-                // all other items are plain
-                dwFlags = 0;
-                break;
+        default:
+            // all other items are plain
+            dwFlags = 0;
+            break;
         }
 
         pMenu->AddMenuItem(i, dwFlags, NULL, NULL, c_rgMenuItems[i].pchDesc, (ULONG)wcslen(c_rgMenuItems[i].pchDesc), NULL);
@@ -278,7 +278,7 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
 STDAPI CLangBarItemButton::GetIcon(HICON *phIcon)
 {
     *phIcon = (HICON)LoadImage(g_hInst, TEXT("IDI_CASE"), IMAGE_ICON, 16, 16, 0);
- 
+
     return (*phIcon != NULL) ? S_OK : E_FAIL;
 }
 

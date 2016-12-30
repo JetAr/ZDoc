@@ -1,4 +1,4 @@
-#ifndef __WIA_COMMON_UTILS
+﻿#ifndef __WIA_COMMON_UTILS
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -29,17 +29,17 @@
 // Helper function to display an error message and an optional HRESULT
 void ReportError( LPCTSTR pszMessage, HRESULT hr = S_OK );
 
-HRESULT ReadPropertyGuid(IWiaItem2* pWiaItem2, PROPID propid , GUID* guid);
+HRESULT ReadPropertyGuid(IWiaItem2* pWiaItem2, PROPID propid, GUID* guid);
 
-HRESULT ReadPropertyBSTR(IWiaPropertyStorage* pWiaPropertyStorage, PROPID propid , BSTR* pbstr);
+HRESULT ReadPropertyBSTR(IWiaPropertyStorage* pWiaPropertyStorage, PROPID propid, BSTR* pbstr);
 
-HRESULT ReadPropertyLong(IWiaItem2* pWiaItem2, PROPID propid , LONG* lVal);    
+HRESULT ReadPropertyLong(IWiaItem2* pWiaItem2, PROPID propid, LONG* lVal);
 
-HRESULT WritePropertyGuid(IWiaPropertyStorage* pWiaPropertyStorage, PROPID propid , GUID guid);
+HRESULT WritePropertyGuid(IWiaPropertyStorage* pWiaPropertyStorage, PROPID propid, GUID guid);
 
-HRESULT WritePropertyLong(IWiaPropertyStorage* pWiaPropertyStorage, PROPID propid , LONG lVal);
+HRESULT WritePropertyLong(IWiaPropertyStorage* pWiaPropertyStorage, PROPID propid, LONG lVal);
 
-HRESULT ReadWiaPropsAndGetDeviceID( IWiaPropertyStorage *pWiaPropertyStorage ,BSTR* pbstrDeviceID );
+HRESULT ReadWiaPropsAndGetDeviceID( IWiaPropertyStorage *pWiaPropertyStorage,BSTR* pbstrDeviceID );
 
 HRESULT PrintItemName( IWiaItem2 *pIWiaItem2 );
 

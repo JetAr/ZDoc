@@ -1,4 +1,4 @@
-//
+﻿//
 // globals.cpp
 //
 // Global variables.
@@ -136,13 +136,13 @@ BOOL IsRangeCovered(TfEditCookie ec, ITfRange *pRangeTest, ITfRange *pRangeCover
     LONG lResult;
 
     if (pRangeCover->CompareStart(ec, pRangeTest, TF_ANCHOR_START, &lResult) != S_OK ||
-        lResult > 0)
+            lResult > 0)
     {
         return FALSE;
     }
 
     if (pRangeCover->CompareEnd(ec, pRangeTest, TF_ANCHOR_END, &lResult) != S_OK ||
-        lResult < 0)
+            lResult < 0)
     {
         return FALSE;
     }

@@ -1,7 +1,7 @@
-/*++
+﻿/*++
 
     Copyright (c) 1995 Intel Corporation
-    
+
 Module Name:
 
     nowarn.h
@@ -9,8 +9,8 @@ Module Name:
 Abstract:
 
     This header contains pragmas to turn off compiler warnings that
-    may be safely ignored. 
-    
+    may be safely ignored.
+
 --*/
 
 
@@ -38,5 +38,5 @@ Abstract:
 // unreferenced inline function has been removed
 #pragma warning(disable: 4514)
 
-// Note: Creating precompiled header 
+// Note: Creating precompiled header
 #pragma warning(disable: 4699)

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -26,7 +26,7 @@ public:
 
     ISAPI_STRING(
         DWORD   dwMaxAlloc = 0
-        );
+    );
 
     virtual
     ~ISAPI_STRING();
@@ -35,110 +35,110 @@ public:
     Copy(
         CHAR *  szString,
         DWORD   cchString = 0
-        );
+    );
 
     BOOL
     CopyW(
         WCHAR * szStringW,
         DWORD   cchStringW = 0
-        );
+    );
 
     BOOL
     Append(
         CHAR *  szString,
         DWORD   cchString = 0
-        );
+    );
 
     BOOL
     AppendW(
         WCHAR * szStringW,
         DWORD   cchStringW = 0
-        );
+    );
 
     BOOL
     Printf(
         CHAR *  szString,
         ...
-        );
+    );
 
     BOOL
     vsprintf_s(
         CHAR *  szFormat,
         va_list args
-        );
+    );
 
     VOID
     CalcLen(
         VOID
-        );
+    );
 
     DWORD
     QueryCB(
         VOID
-        );
+    );
 
     DWORD
     QueryCCH(
         VOID
-        );
+    );
 
     BOOL
     SetLen(
         DWORD   cchNewLength
-        );
+    );
 
     DWORD
     QueryBufferSize(
         VOID
-        );
+    );
 
     BOOL
     ResizeBuffer(
         DWORD   cbSize
-        );
+    );
 
     DWORD
     QueryMaxAlloc(
         VOID
-        );
+    );
 
     VOID
     SetMaxAlloc(
         DWORD   dwMaxAlloc
-        );
+    );
 
     CHAR *
     FindStr(
         CHAR *  szSubString,
         BOOL    fCaseInsensitive = FALSE,
         DWORD   dwStartingOffset = 0
-        );
+    );
 
     BOOL
     Base64Encode(
         VOID *  pBuffer,
         DWORD   cbBuffer
-        );
+    );
 
     BOOL
     Escape(
         BOOL    fAllowDoubleEscaping = FALSE
-        );
+    );
 
     VOID
     Unescape(
         VOID
-        );
+    );
 
     CHAR *
     QueryStr(
         VOID
-        );
+    );
 
     VOID
     ZeroBuffer(
         VOID
-        );
+    );
 
 private:
 
@@ -149,14 +149,14 @@ private:
         CHAR *  szString,
         DWORD   cchString,
         DWORD   dwOffset
-        );
+    );
 
     BOOL
     CopyWToOffset(
         WCHAR * szStringW,
         DWORD   cchStringW,
         DWORD   dwOffset
-        );
+    );
 };
 
 #endif  // _isapistring_h

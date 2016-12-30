@@ -1,8 +1,8 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample OLEDB Simple Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation.  All Rights Reserved.
 //
-// module MyClassFactory.h | Class Definitions for MyClassFactory and 
+// module MyClassFactory.h | Class Definitions for MyClassFactory and
 // DLL Entry Points
 //
 //
@@ -20,35 +20,35 @@
 ////////////////////////////////////////////////////////
 class MyClassFactory : public IClassFactory
 {
-	public: // @access public
-		MyClassFactory(void);
-		virtual ~MyClassFactory(void);
+public: // @access public
+    MyClassFactory(void);
+    virtual ~MyClassFactory(void);
 
-		//	IUnknown members
-		virtual inline STDMETHODIMP_(ULONG)	AddRef()								
-		{																
-			InterlockedIncrement((LONG*)&m_cRef);						
-			return m_cRef;												
-		}																
-		virtual inline STDMETHODIMP_(ULONG)	Release()								
-		{																
-			if(InterlockedDecrement((LONG*)&m_cRef))					
-				return m_cRef;											
-																		
-			delete this;												
-			return 0;													
-		}																
-		virtual STDMETHODIMP	QueryInterface(REFIID riid, void** ppv);
+    //	IUnknown members
+    virtual inline STDMETHODIMP_(ULONG)	AddRef()
+    {
+        InterlockedIncrement((LONG*)&m_cRef);
+        return m_cRef;
+    }
+    virtual inline STDMETHODIMP_(ULONG)	Release()
+    {
+        if(InterlockedDecrement((LONG*)&m_cRef))
+            return m_cRef;
 
-		//	IClassFactory members
-		STDMETHODIMP	CreateInstance(LPUNKNOWN, REFIID, LPVOID *);
-		STDMETHODIMP	LockServer(BOOL);
+        delete this;
+        return 0;
+    }
+    virtual STDMETHODIMP	QueryInterface(REFIID riid, void** ppv);
 
-		HRESULT			GetProviderCLSID();	
+    //	IClassFactory members
+    STDMETHODIMP	CreateInstance(LPUNKNOWN, REFIID, LPVOID *);
+    STDMETHODIMP	LockServer(BOOL);
 
-	protected: //@access protected
-		ULONG			m_cRef;
-		GUID			m_guidProv;
+    HRESULT			GetProviderCLSID();
+
+protected: //@access protected
+    ULONG			m_cRef;
+    GUID			m_guidProv;
 };
 
 

@@ -1,4 +1,4 @@
-
+﻿
 /*
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
@@ -9,13 +9,13 @@ Module Name:
 
 Abstract:
 
-    This sample illustrates the use of Media Streaming Terminal for receiving 
+    This sample illustrates the use of Media Streaming Terminal for receiving
     audio.
 
-    The application listens on addresses that support audio, accepts an 
-    incoming call and uses Media Streaming Terminal to get the incoming 
+    The application listens on addresses that support audio, accepts an
+    incoming call and uses Media Streaming Terminal to get the incoming
     data, which is written into a wav file.
- 
+
 */
 
 
@@ -59,7 +59,7 @@ ULONG g_nTAPINotificationCookie = 0;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // LogMessage
 //
 //
@@ -69,14 +69,14 @@ ULONG g_nTAPINotificationCookie = 0;
 
 void LogMessage(CHAR *pszFormat, ... )
 {
-    
+
     //
     // output buffer -- note: hardcoded limit
     //
 
     static int const BUFFER_SIZE = 1280;
 
-    char szBuffer[BUFFER_SIZE]; 
+    char szBuffer[BUFFER_SIZE];
 
 
     //
@@ -87,17 +87,17 @@ void LogMessage(CHAR *pszFormat, ... )
 
     GetLocalTime(&SystemTime);
 
-    
+
     //
     // format thread id and time
     //
 
     StringCbPrintf( szBuffer, BUFFER_SIZE, "[%lx]:[%02u:%02u:%02u.%03u]::",
-             GetCurrentThreadId(),
-             SystemTime.wHour,
-             SystemTime.wMinute,
-             SystemTime.wSecond,
-             SystemTime.wMilliseconds);
+                    GetCurrentThreadId(),
+                    SystemTime.wHour,
+                    SystemTime.wMinute,
+                    SystemTime.wSecond,
+                    SystemTime.wMilliseconds);
 
 
     size_t iStringLength = 0;
@@ -106,7 +106,7 @@ void LogMessage(CHAR *pszFormat, ... )
 
     if (FAILED(hr))
     {
-        // either this code is wrong, or someone else in the process corrupted 
+        // either this code is wrong, or someone else in the process corrupted
         // our memory.
         return;
     }
@@ -142,7 +142,7 @@ void LogMessage(CHAR *pszFormat, ... )
 
     if (FAILED(hr))
     {
-        // either this code is wrong, or someone else in the process corrupted 
+        // either this code is wrong, or someone else in the process corrupted
         // our memory.
         return;
     }
@@ -150,7 +150,7 @@ void LogMessage(CHAR *pszFormat, ... )
     iBytesLeft = BUFFER_SIZE - iStringLength;
 
     //
-    // append a carriage return to the string. ignore the result code, the 
+    // append a carriage return to the string. ignore the result code, the
     // result string will be null-terminated no matter what.
     //
 
@@ -158,7 +158,7 @@ void LogMessage(CHAR *pszFormat, ... )
 
 
     //
-    // log the buffer 
+    // log the buffer
     //
 
     printf(szBuffer);
@@ -166,7 +166,7 @@ void LogMessage(CHAR *pszFormat, ... )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // LogFormat
 //
 // use LogMessage to log wave format
@@ -197,7 +197,7 @@ void LogFormat(const WAVEFORMATEX *pWaveFormat)
 
 void *AllocateMemory(SIZE_T nMemorySize)
 {
-    
+
 
     //
     // use HeapAlloc to allocate and clear memory
@@ -219,7 +219,7 @@ void *AllocateMemory(SIZE_T nMemorySize)
 
 void FreeMemory(void *pMemory)
 {
-    
+
     //
     // get size of the allocated memory
     //
@@ -239,10 +239,10 @@ void FreeMemory(void *pMemory)
     else
     {
         //
-        // fill memory with 0xdd's before freeing, so it is easier to debug 
+        // fill memory with 0xdd's before freeing, so it is easier to debug
         // failures caused by using pointer to deallocated memory
         //
-        
+
         if (NULL != pMemory)
         {
             FillMemory(pMemory, nMemorySize, 0xdd);
@@ -255,7 +255,7 @@ void FreeMemory(void *pMemory)
     // use HeapFree to free memory. use return code to log the result, but
     // do not return it to the caller
     //
-    
+
     BOOL bFreeSuccess = HeapFree(GetProcessHeap(), 0, pMemory);
 
     if (FALSE == bFreeSuccess)
@@ -263,7 +263,7 @@ void FreeMemory(void *pMemory)
         LogError("FreeMemory: HeapFree failed");
 
         //
-        // if this assertion fires, it is likely there is a problem with the 
+        // if this assertion fires, it is likely there is a problem with the
         // memory we are trying to deallocate. Was it allocated using heapalloc
         // and on the same heap? Is this a valid pointer?
         //
@@ -292,14 +292,14 @@ HRESULT RegisterCallback()
 
     //
     // get connection point container on the tapi object
-    // 
-    
+    //
+
     IConnectionPointContainer *pCPContainer = NULL;
 
     hr = g_pTapi->QueryInterface(
-                                IID_IConnectionPointContainer,
-                                (void **)&pCPContainer
-                               );
+             IID_IConnectionPointContainer,
+             (void **)&pCPContainer
+         );
 
     if (FAILED(hr))
     {
@@ -332,12 +332,12 @@ HRESULT RegisterCallback()
 
     //
     // create the callback object and register it with TAPI.
-    // for simplicity, the callback in this sample is not a 
+    // for simplicity, the callback in this sample is not a
     // full-fledged COM object. So create is with new.
     //
 
-    ITTAPIEventNotification *pTAPIEventNotification = 
-                                                new CTAPIEventNotification;
+    ITTAPIEventNotification *pTAPIEventNotification =
+        new CTAPIEventNotification;
 
     if (NULL == pTAPIEventNotification)
     {
@@ -346,7 +346,7 @@ HRESULT RegisterCallback()
 
         pCP->Release();
         pCP = NULL;
-        
+
         return E_OUTOFMEMORY;
     }
 
@@ -355,7 +355,7 @@ HRESULT RegisterCallback()
     // will use the cookie later to register for events from addresses
     // and to unregister the callback when we no longer needs the events
     //
-    
+
     hr = pCP->Advise(pTAPIEventNotification,
                      &g_nTAPINotificationCookie);
 
@@ -364,7 +364,7 @@ HRESULT RegisterCallback()
 
 
     //
-    // whether Advise failed or succeeded, we no longer need a reference to 
+    // whether Advise failed or succeeded, we no longer need a reference to
     // the callback
     //
 
@@ -403,12 +403,12 @@ HRESULT UnRegisterCallBack()
 
     //
     // get connection point container on the tapi object
-    // 
-    
+    //
+
     IConnectionPointContainer *pCPContainer = NULL;
 
     hr = g_pTapi->QueryInterface(IID_IConnectionPointContainer,
-                                (void **)&pCPContainer);
+                                 (void **)&pCPContainer);
 
     if (FAILED(hr))
     {
@@ -440,10 +440,10 @@ HRESULT UnRegisterCallBack()
     }
 
 
-    // 
+    //
     // unregister the callback
     //
-    
+
     hr = pConnectionPoint->Unadvise(g_nTAPINotificationCookie);
 
     pConnectionPoint->Release();
@@ -466,7 +466,7 @@ HRESULT UnRegisterCallBack()
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // AddressSupportsAudio
 //
 // return TRUE if the address supports audio
@@ -477,13 +477,13 @@ BOOL AddressSupportsAudio(IN ITAddress *pAddress)
 {
 
     //
-    // get the address's ITMediaSupport so we can check 
+    // get the address's ITMediaSupport so we can check
     // the media type it supports
     //
 
     ITMediaSupport *pMediaSupport = NULL;
 
-    HRESULT hr = pAddress->QueryInterface(IID_ITMediaSupport, 
+    HRESULT hr = pAddress->QueryInterface(IID_ITMediaSupport,
                                           (void**)&pMediaSupport);
 
     if (FAILED(hr))
@@ -502,7 +502,7 @@ BOOL AddressSupportsAudio(IN ITAddress *pAddress)
     VARIANT_BOOL bAudioSupported = VARIANT_FALSE;
 
     hr = pMediaSupport->QueryMediaType(TAPIMEDIATYPE_AUDIO, &bAudioSupported);
-    
+
     pMediaSupport->Release();
     pMediaSupport = NULL;
 
@@ -534,7 +534,7 @@ BOOL AddressSupportsAudio(IN ITAddress *pAddress)
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // AddressSupportsMST
 //
 // return TRUE if the address supports media streaming terminal
@@ -584,15 +584,15 @@ BOOL AddressSupportsMST(IN ITAddress *pAddress)
 
 
     //
-    // walk through terminal class enumeration and see if the 
+    // walk through terminal class enumeration and see if the
     // media streaming terminal is in it
     //
 
     while (TRUE)
     {
-        
+
         GUID guid;
-        
+
         hr = pTerminalClassEnumerator->Next(1, &guid, NULL);
 
         if (S_OK != hr)
@@ -611,7 +611,7 @@ BOOL AddressSupportsMST(IN ITAddress *pAddress)
         }
     }
 
-    
+
     //
     // no longer need the enumeration
     //
@@ -619,7 +619,7 @@ BOOL AddressSupportsMST(IN ITAddress *pAddress)
     pTerminalClassEnumerator->Release();
     pTerminalClassEnumerator = NULL;
 
-  
+
     //
     // if we did not break out of the loop because the enumeration ended,
     // media streaming terminal was not in the list of supported terminals
@@ -629,7 +629,7 @@ BOOL AddressSupportsMST(IN ITAddress *pAddress)
     {
         return TRUE;
     }
-    else 
+    else
     {
         return FALSE;
     }
@@ -640,7 +640,7 @@ BOOL AddressSupportsMST(IN ITAddress *pAddress)
 ///////////////////////////////////////////////////////////////////////////////
 //
 // ListenOnAddress
-// 
+//
 // register to receieve notifications of calls on this addres.
 // calls on this address will trigger events on the callback object
 // we have registered with TAPI earlier.
@@ -649,7 +649,7 @@ BOOL AddressSupportsMST(IN ITAddress *pAddress)
 
 HRESULT ListenOnAddress(ITAddress *pAddress)
 {
-    
+
     long ulCallNotificationCookie = 0;
 
 
@@ -663,11 +663,11 @@ HRESULT ListenOnAddress(ITAddress *pAddress)
     //
 
     HRESULT  hr= g_pTapi->RegisterCallNotifications(pAddress,
-                                                   VARIANT_TRUE,
-                                                   VARIANT_TRUE,
-                                                   TAPIMEDIATYPE_AUDIO,
-                                                   g_nTAPINotificationCookie,
-                                                   &ulCallNotificationCookie
+                 VARIANT_TRUE,
+                 VARIANT_TRUE,
+                 TAPIMEDIATYPE_AUDIO,
+                 g_nTAPINotificationCookie,
+                 &ulCallNotificationCookie
                                                    );
 
     return hr;
@@ -688,12 +688,12 @@ HRESULT StartListening()
     HRESULT hr = S_OK;
 
     LogMessage("StartListening: started");
-    
+
 
     //
     // enumerate available addresses
-    // 
-    
+    //
+
     IEnumAddress *pEnumAddress = NULL;
 
     hr = g_pTapi->EnumerateAddresses( &pEnumAddress );
@@ -707,7 +707,7 @@ HRESULT StartListening()
 
 
     //
-    // this flag remains false until we succeded starting listening on at 
+    // this flag remains false until we succeded starting listening on at
     // least one address
     //
 
@@ -718,7 +718,7 @@ HRESULT StartListening()
     // walk through all the addresses and start listening on the ones that
     // support audio
     //
-    
+
     while (TRUE)
     {
         //
@@ -751,7 +751,7 @@ HRESULT StartListening()
         {
 
             LogMessage("StartListening: -> found address [%S]",
-                        bstrAddressName);
+                       bstrAddressName);
 
             SysFreeString(bstrAddressName);
         }
@@ -762,7 +762,7 @@ HRESULT StartListening()
 
 
         //
-        // if the address supports audio and media streaming terminal, 
+        // if the address supports audio and media streaming terminal,
         // start listening
         //
 
@@ -771,7 +771,7 @@ HRESULT StartListening()
 
             //
             // start listening on this address
-            // 
+            //
 
             LogMessage("StartListening: Starting listening.");
 
@@ -847,23 +847,23 @@ HRESULT StartListening()
 
 HRESULT InitializeTAPI()
 {
-    
+
     LogMessage("InitializeTAPI: started");
 
     HRESULT hr = E_FAIL;
-        
+
 
     //
     // cocreate the TAPI object
     //
 
     hr = CoCreateInstance(
-                          CLSID_TAPI,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITTAPI,
-                          (LPVOID *)&g_pTapi
-                         );
+             CLSID_TAPI,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITTAPI,
+             (LPVOID *)&g_pTapi
+         );
 
     if (FAILED(hr))
     {
@@ -885,7 +885,7 @@ HRESULT InitializeTAPI()
 
         g_pTapi->Release();
         g_pTapi = NULL;
-        
+
         return hr;
     }
 
@@ -903,7 +903,7 @@ HRESULT InitializeTAPI()
         g_pTapi->Shutdown();
         g_pTapi->Release();
         g_pTapi = NULL;
-        
+
         return hr;
     }
 
@@ -911,7 +911,7 @@ HRESULT InitializeTAPI()
     //
     // we want to be notified of these events:
     //
-   
+
     hr = g_pTapi->put_EventFilter(TE_CALLNOTIFICATION |
                                   TE_CALLSTATE |
                                   TE_CALLMEDIA);
@@ -975,7 +975,7 @@ HRESULT InitializeTAPI()
 ///////////////////////////////////////////////////////////////////////////////
 //
 // DisconnectAndReleaseCall
-// 
+//
 // disconnect and release the current call, if we have one
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -1010,7 +1010,7 @@ void DisconnectAndReleaseCall()
         g_pCurrentCall = NULL;
     }
 
-    
+
     LeaveCriticalSection(&g_CurrentCallCritSection);
 }
 
@@ -1029,8 +1029,8 @@ void ShutdownTapi()
 
     LogMessage("ShutdownTapi: started");
 
-    
-    // 
+
+    //
     // if there is still a call, disconnect it
     //
 
@@ -1061,17 +1061,17 @@ void ShutdownTapi()
 
     }
 
-    
+
     //
-    // in the unlikely case another call was received after we released the 
+    // in the unlikely case another call was received after we released the
     // call that we had, release the new call.
     //
-    
+
     EnterCriticalSection(&g_CurrentCallCritSection);
 
     if (NULL != g_pCurrentCall)
     {
-        
+
         g_pCurrentCall->Release();
         g_pCurrentCall = NULL;
 
@@ -1093,12 +1093,12 @@ void ShutdownTapi()
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-BOOL CtrlHandler(DWORD nEventType) 
+BOOL CtrlHandler(DWORD nEventType)
 {
 
     static BOOL bShutdownInProgress = FALSE;
 
-    
+
     //
     // are we in the middle of shutting down?
     //
@@ -1117,42 +1117,42 @@ BOOL CtrlHandler(DWORD nEventType)
     //
 
     switch (nEventType)
-    { 
- 
-        case CTRL_C_EVENT: 
-        case CTRL_CLOSE_EVENT: 
-        case CTRL_BREAK_EVENT: 
-        case CTRL_LOGOFF_EVENT: 
-        case CTRL_SHUTDOWN_EVENT:
+    {
 
-            LogMessage("CtrlHandler: Initiating shutdown.");
-            
-            //
-            // ignore subsequent shutdown requests...
-            //
+    case CTRL_C_EVENT:
+    case CTRL_CLOSE_EVENT:
+    case CTRL_BREAK_EVENT:
+    case CTRL_LOGOFF_EVENT:
+    case CTRL_SHUTDOWN_EVENT:
 
-            bShutdownInProgress = TRUE;
-            
-            //
-            // signal shutdown
-            //
+        LogMessage("CtrlHandler: Initiating shutdown.");
 
-            SetEvent(g_hExitEvent);
-            break;
+        //
+        // ignore subsequent shutdown requests...
+        //
 
-        default: 
-            break;
+        bShutdownInProgress = TRUE;
 
-    } 
+        //
+        // signal shutdown
+        //
+
+        SetEvent(g_hExitEvent);
+        break;
+
+    default:
+        break;
+
+    }
 
     return TRUE;
 }
- 
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // main
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 int __cdecl main(int argc, char* argv[])
@@ -1174,7 +1174,7 @@ int __cdecl main(int argc, char* argv[])
         return 1;
     }
 
-   
+
 
     //
     // we want to handle ctrl+c and ctrl+break events so we can cleanup on exit
@@ -1210,7 +1210,7 @@ int __cdecl main(int argc, char* argv[])
     if (FAILED(hr))
     {
         LogError("main: Failed to initialize worker thread");
-        
+
         CoUninitialize();
 
         CloseHandle(g_hExitEvent);
@@ -1230,15 +1230,15 @@ int __cdecl main(int argc, char* argv[])
     InitializeCriticalSection(&g_CurrentCallCritSection);
 
     //
-    // create and initialize tapi object, register the callback object 
+    // create and initialize tapi object, register the callback object
     // and start listening
     //
-    
+
     hr = InitializeTAPI();
 
     if (FAILED(hr))
     {
-        
+
         g_WorkerThread.Shutdown();
 
 
@@ -1251,7 +1251,7 @@ int __cdecl main(int argc, char* argv[])
         return 1;
     }
 
-    
+
     //
     // wait until ctrl+break handler or CS_DISCONNECT handler signal exit event
     //
@@ -1259,7 +1259,7 @@ int __cdecl main(int argc, char* argv[])
     LogMessage("main: waiting for exit event");
 
     DWORD nWaitResult = WaitForSingleObject(g_hExitEvent, INFINITE);
-    
+
     LogMessage("main: exit event signaled");
 
 
@@ -1294,7 +1294,7 @@ int __cdecl main(int argc, char* argv[])
     //
     // release com
     //
-    
+
     CoUninitialize();
 
 
@@ -1309,7 +1309,7 @@ int __cdecl main(int argc, char* argv[])
     //
     // exiting... we no longer want to handle ctrl+c and ctrl+break
     //
-    
+
     SetConsoleCtrlHandler( (PHANDLER_ROUTINE) CtrlHandler, FALSE);
 
 
@@ -1326,6 +1326,6 @@ int __cdecl main(int argc, char* argv[])
 
     LogMessage("main: exiting");
 
-	return 0;
+    return 0;
 }
 

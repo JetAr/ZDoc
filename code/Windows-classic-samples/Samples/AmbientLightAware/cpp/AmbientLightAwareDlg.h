@@ -1,10 +1,10 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation.  All rights reserved.
+// Copyright © Microsoft Corporation.  All rights reserved.
 //
 // Module:
 //        AmbientLightAwareDlg.h
@@ -12,7 +12,7 @@
 // Description:
 //        Dialog for Ambient Light Aware SDK Sample
 //
-// Comments: 
+// Comments:
 //        Standard vc++ dialog created by VS 2005 wizard.
 //
 //-----------------------------------------------------------------------------

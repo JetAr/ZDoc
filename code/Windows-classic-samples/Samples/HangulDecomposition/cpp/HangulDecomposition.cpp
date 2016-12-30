@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 
 #pragma comment(lib, "elscore.lib")
 
-// This function returns true if transliterating is succeeded and 
+// This function returns true if transliterating is succeeded and
 // transliterated result string is same as expected.
 bool TestRecognizeMappingText(_In_ PMAPPING_SERVICE_INFO mappingServiceInfo, _In_z_ const wchar_t* queryValue, _In_z_ const wchar_t* expectedValue);
 
@@ -31,7 +31,7 @@ int __cdecl main()
     {
         bool succeeded;
 
-        // Hangul syllable is decomposed into Korean 2beolsik keyboard keystrokes. 
+        // Hangul syllable is decomposed into Korean 2beolsik keyboard keystrokes.
         // Decomposed syllable string is represented by Compatibility Jamo.
         succeeded = TestRecognizeMappingText(mappingServiceInfo, L"\xAC00\xAC01", L"\x3131\x314F\x3131\x314F\x3131");
         wprintf(L"test %d: %s\n", testCount++, succeeded ? L"succeeded" : L"failed");

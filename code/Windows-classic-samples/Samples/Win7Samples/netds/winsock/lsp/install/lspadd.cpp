@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -37,12 +37,12 @@ InstallLsp(
     DWORD          *pdwCatalogIdArray,      // Array of IDs to install over
     BOOL            IfsProvider,
     BOOL            InstallOverAll
-    )
+)
 {
     OSVERSIONINFOEX     osv = {0};
     WSAPROTOCOL_INFOW  *pProtocolInfo = NULL,
-                       *pDummyEntry = NULL,
-                       *pLayeredEntries = NULL;
+                        *pDummyEntry = NULL,
+                         *pLayeredEntries = NULL;
     WCHAR               wszLspName[ WSAPROTOCOL_LEN ],
                         wszFullProviderPath[ MAX_PATH+1 ],
                         wszFullProviderPath32[ MAX_PATH+1 ];
@@ -61,13 +61,13 @@ InstallLsp(
 
     // Convert the LSP name to UNICODE since the Winsock catalog is all UNICODE
     rc = MultiByteToWideChar(
-            CP_ACP, 
-            0, 
-            lpszLspName, 
-            (int) strlen( lpszLspName ) + 1,
-            wszLspName, 
-            WSAPROTOCOL_LEN 
-            );
+             CP_ACP,
+             0,
+             lpszLspName,
+             (int) strlen( lpszLspName ) + 1,
+             wszLspName,
+             WSAPROTOCOL_LEN
+         );
     if (rc == 0)
     {
         fprintf(stderr, "InstallLsp: MultiByteToWideChar failed to convert '%s'; Error = %d\n",
@@ -76,34 +76,34 @@ InstallLsp(
     }
 
     rc = MultiByteToWideChar(
-            CP_ACP,
-            0,
-            lpszLspPathAndFile,
-            (int) strlen( lpszLspPathAndFile ) + 1,
-            wszFullProviderPath,
-            MAX_PATH
-            );
+             CP_ACP,
+             0,
+             lpszLspPathAndFile,
+             (int) strlen( lpszLspPathAndFile ) + 1,
+             wszFullProviderPath,
+             MAX_PATH
+         );
     if ( 0 == rc )
     {
         fprintf( stderr, "InstallLsp: MultiByteToWidechar failed to convert '%s': Error = %d\n",
-                lpszLspPathAndFile, GetLastError() );
+                 lpszLspPathAndFile, GetLastError() );
         goto cleanup;
     }
 
-    if (lpszLspPathAndFile32) 
+    if (lpszLspPathAndFile32)
     {
         rc = MultiByteToWideChar(
-                CP_ACP,
-                0,
-                lpszLspPathAndFile32,
-                (int) strlen( lpszLspPathAndFile32 ) + 1,
-                wszFullProviderPath32,
-                MAX_PATH
-                );
+                 CP_ACP,
+                 0,
+                 lpszLspPathAndFile32,
+                 (int) strlen( lpszLspPathAndFile32 ) + 1,
+                 wszFullProviderPath32,
+                 MAX_PATH
+             );
         if ( 0 == rc )
         {
             fprintf( stderr, "InstallLsp: MultiByteToWidechar failed to convert '%s': Error = %d\n",
-                    lpszLspPathAndFile32, GetLastError() );
+                     lpszLspPathAndFile32, GetLastError() );
             goto cleanup;
         }
     }
@@ -127,21 +127,21 @@ InstallLsp(
     osv.dwOSVersionInfoSize = sizeof(osv);
     GetVersionEx( (LPOSVERSIONINFO) &osv );
 
-    if ( osv.dwMajorVersion >= 6 ) 
+    if ( osv.dwMajorVersion >= 6 )
     {
         // On Windows Vista, use the new LSP install API
 
         rc = InstallProviderVista(
-                eCatalog,
-                wszLspName,
-                wszFullProviderPath,
-                wszFullProviderPath32,
-               &ProviderBaseGuid,
-                dwCatalogIdArrayCount,
-                pdwCatalogIdArray,
-                IfsProvider,
-                InstallOverAll
-                );
+                 eCatalog,
+                 wszLspName,
+                 wszFullProviderPath,
+                 wszFullProviderPath32,
+                 &ProviderBaseGuid,
+                 dwCatalogIdArrayCount,
+                 pdwCatalogIdArray,
+                 IfsProvider,
+                 InstallOverAll
+             );
         if ( SOCKET_ERROR == rc )
         {
             goto cleanup;
@@ -164,12 +164,12 @@ InstallLsp(
 
         // Install the 'dummy' protocol entry for the LSP
         rc = InstallProvider(
-                eCatalog, 
-                &ProviderBaseGuid, 
-                wszFullProviderPath, 
-                pDummyEntry, 
-                1
-                );
+                 eCatalog,
+                 &ProviderBaseGuid,
+                 wszFullProviderPath,
+                 pDummyEntry,
+                 1
+             );
         if ( NO_ERROR != rc )
         {
             fprintf(stderr, "InstallLsp: Unable to install the dummy LSP entry!\n");
@@ -183,13 +183,13 @@ InstallLsp(
         if ( FALSE == IfsProvider )
         {
             rc = InstallNonIfsLspProtocolChains( eCatalog, &ProviderBaseGuid, wszLspName,
-                    wszFullProviderPath, pdwCatalogIdArray, dwCatalogIdArrayCount );
+                                                 wszFullProviderPath, pdwCatalogIdArray, dwCatalogIdArrayCount );
 
         }
         else
         {
             rc = InstallIfsLspProtocolChains( eCatalog, &ProviderBaseGuid, wszLspName,
-                    wszFullProviderPath, pdwCatalogIdArray, dwCatalogIdArrayCount );
+                                              wszFullProviderPath, pdwCatalogIdArray, dwCatalogIdArrayCount );
         }
 
         if ( SOCKET_ERROR == rc )
@@ -222,17 +222,17 @@ cleanup:
 //    which catalog is specified, this routine calls the correct install
 //    routine.
 //
-int 
+int
 InstallProvider(
     WINSOCK_CATALOG     Catalog,        // Which catalog are we operating on
     GUID               *Guid,           // GUID under which provider will be installed
     WCHAR              *lpwszLspPath,   // Path to LSP's DLL
     WSAPROTOCOL_INFOW  *pProvider,      // Array of provider structures to install
     INT                 iProviderCount  // Number of providers in array
-    )
+)
 {
     WSAPROTOCOL_INFOW *pEnumProviders = NULL,
-                      *pEntry = NULL;
+                       *pEntry = NULL;
     INT                iEnumProviderCount,
                        ErrorCode,
                        rc = SOCKET_ERROR;
@@ -242,50 +242,50 @@ InstallProvider(
     {
         // Can't install only in 32-bit catalog from 64-bit
         fprintf( stderr, "InstallProvider: Error! It is not possible to install only "
-                "in 32-bit catalog from 64-bit process!\n\n"
-                );
+                 "in 32-bit catalog from 64-bit process!\n\n"
+               );
         goto cleanup;
     }
     else if ( LspCatalog64Only == Catalog )
     {
         // Just need to call WSCInstallProvider
-        rc = WSCInstallProvider( 
-                Guid, 
-                lpwszLspPath, 
-                pProvider, 
-                iProviderCount, 
-               &ErrorCode 
-                );
+        rc = WSCInstallProvider(
+                 Guid,
+                 lpwszLspPath,
+                 pProvider,
+                 iProviderCount,
+                 &ErrorCode
+             );
     }
     else
     {
         // To install in both we must call WSCInstallProviderPath64_32
         rc = WSCInstallProvider64_32(
-                Guid, 
-                lpwszLspPath, 
-                pProvider, 
-                iProviderCount, 
-               &ErrorCode
-                );
+                 Guid,
+                 lpwszLspPath,
+                 pProvider,
+                 iProviderCount,
+                 &ErrorCode
+             );
     }
 #else
     if ( LspCatalog32Only == Catalog )
     {
         // From a 32-bit process we can only install into 32-bit catalog
         rc = WSCInstallProvider(
-                Guid, 
-                lpwszLspPath, 
-                pProvider, 
-                iProviderCount, 
-               &ErrorCode
-                );
+                 Guid,
+                 lpwszLspPath,
+                 pProvider,
+                 iProviderCount,
+                 &ErrorCode
+             );
     }
     else
     {
         // From a 32-bit process, we can't touch the 64-bit catalog at all
         fprintf( stderr, "InstallProvider: Error! It is not possible to install into "
-                "the 64-bit catalog from a 32-bit process!\n\n"
-                );
+                 "the 64-bit catalog from a 32-bit process!\n\n"
+               );
         goto cleanup;
     }
 #endif
@@ -302,15 +302,15 @@ InstallProvider(
         fprintf( stderr, "InstallProvider: EnumerateProviders failed!\n" );
         goto cleanup;
     }
-    
+
     // Make sure our entry is in the catalog
     pEntry = FindProviderByGuid( Guid, pEnumProviders, iEnumProviderCount );
     if ( pEntry )
     {
-        printf( "Installed: [%4d] %S\n", 
+        printf( "Installed: [%4d] %S\n",
                 pEntry->dwCatalogEntryId,
                 pEntry->szProtocol
-                );
+              );
     }
 
 cleanup:
@@ -332,15 +332,15 @@ cleanup:
 //
 WSAPROTOCOL_INFOW *
 CreateDummyEntry(
-    WINSOCK_CATALOG Catalog, 
-    INT CatalogId, 
+    WINSOCK_CATALOG Catalog,
+    INT CatalogId,
     WCHAR *lpwszLspName,
     BOOL IfsProvider
-    )
+)
 {
     WSAPROTOCOL_INFOW *pProtocolInfo = NULL,
-                      *pDummyEntry = NULL,
-                      *pEntry = NULL;
+                       *pDummyEntry = NULL,
+                        *pEntry = NULL;
     INT                iProtocolCount = 0;
     int                err;
 
@@ -358,9 +358,9 @@ CreateDummyEntry(
     {
         // Allocate space and copy the provider structure
         pDummyEntry = (WSAPROTOCOL_INFOW *) LspAlloc(
-                sizeof( WSAPROTOCOL_INFOW ),
-               &err
-                );
+                          sizeof( WSAPROTOCOL_INFOW ),
+                          &err
+                      );
         if ( NULL == pDummyEntry )
         {
             fprintf( stderr, "CreateDummyEntry: LspAlloc failed: %d\n", err );
@@ -373,8 +373,8 @@ CreateDummyEntry(
     else
     {
         fprintf(stderr, "CreateDummyEntry: Error! Unable to find provider with ID of %d\n\n",
-                CatalogId 
-                );
+                CatalogId
+               );
         goto cleanup;
     }
 
@@ -425,13 +425,13 @@ InstallIfsLspProtocolChains(
     WCHAR          *lpszLspFullPathAndFile,
     DWORD          *pdwCatalogIdArray,
     DWORD           dwCatalogIdArrayCount
-    )
+)
 {
     WSAPROTOCOL_INFOW  *pProvider = NULL,
-                       *pProviderNew = NULL,
-                       *pLayeredEntries = NULL,
-                       *pEntry = NULL,
-                        TempEntry = {0};
+                        *pProviderNew = NULL,
+                         *pLayeredEntries = NULL,
+                          *pEntry = NULL,
+                           TempEntry = {0};
     DWORD              *pProviderOrder = NULL,
                         dwDummyLspId;
     WCHAR               wszLspDll[ MAX_PATH ];
@@ -463,7 +463,7 @@ InstallIfsLspProtocolChains(
 
     // Allocate space for the protocol chains of the new LSP
     pLayeredEntries = (WSAPROTOCOL_INFOW *) LspAlloc( sizeof(WSAPROTOCOL_INFOW) *
-            dwCatalogIdArrayCount, &err );
+                      dwCatalogIdArrayCount, &err );
     if ( NULL == pLayeredEntries )
     {
         fprintf( stderr, "InstallIfsLspProtocolChains: LspAlloc failed: %d\n", err );
@@ -480,12 +480,12 @@ InstallIfsLspProtocolChains(
     // non-IFS LSPs are positioned after it in the chain.
 
     // Loop through each ID we're layering over
-    for(i=0; i < (int)dwCatalogIdArrayCount ;i++)
+    for(i=0; i < (int)dwCatalogIdArrayCount ; i++)
     {
-        for(j=0; j < iProviderCount ;j++)
+        for(j=0; j < iProviderCount ; j++)
         {
             printf("Matching selected ID %d to catalog %d\n",
-                    pdwCatalogIdArray[ i ], pProvider[ j ].dwCatalogEntryId );
+                   pdwCatalogIdArray[ i ], pProvider[ j ].dwCatalogEntryId );
 
             if ( pdwCatalogIdArray[ i ] == pProvider[ j ].dwCatalogEntryId )
             {
@@ -500,14 +500,14 @@ InstallIfsLspProtocolChains(
                 memcpy( &pLayeredEntries[ LayerIdx ], &pProvider[ j ],
                         sizeof( pLayeredEntries[ 0  ] ) );
 
-                memcpy( &TempEntry, &pProvider[ j ], sizeof( TempEntry ) );        
+                memcpy( &TempEntry, &pProvider[ j ], sizeof( TempEntry ) );
 
                 // Fill in the new LSP entry's name
                 hr = StringCchPrintfW( pLayeredEntries[ LayerIdx ].szProtocol, WSAPROTOCOL_LEN,
-                        L"%s over [%s]",
-                        lpszLspName,
-                        pProvider[ j ].szProtocol 
-                        );
+                                       L"%s over [%s]",
+                                       lpszLspName,
+                                       pProvider[ j ].szProtocol
+                                     );
                 if ( FAILED( hr ) )
                 {
                     fprintf( stderr, "InstallIfsLspProtocolChains: StringCchPrintfW failed: 0x%x\n", hr );
@@ -517,10 +517,10 @@ InstallIfsLspProtocolChains(
                 // Check whether the selected entry contains non IFS LSPs in its chain
                 if ( pProvider[ j ].ProtocolChain.ChainLen >= 2 )
                 {
-                    for(k=pProvider[ j ].ProtocolChain.ChainLen-2 ; k >= 0 ;k--)
+                    for(k=pProvider[ j ].ProtocolChain.ChainLen-2 ; k >= 0 ; k--)
                     {
-                        bContainsNonIfs = IsNonIfsProvider( pProvider, iProviderCount, 
-                                pProvider[ j ].ProtocolChain.ChainEntries[ k ] );
+                        bContainsNonIfs = IsNonIfsProvider( pProvider, iProviderCount,
+                                                            pProvider[ j ].ProtocolChain.ChainEntries[ k ] );
 
                         if ( TRUE == bContainsNonIfs )
                         {
@@ -542,8 +542,8 @@ InstallIfsLspProtocolChains(
 
                             // Need to insert the IFS provider in all LSPs that  are layered
                             // above the location where the IFS provider was just inserted
-                            InsertIfsLspIntoAllChains( &TempEntry, pProvider, iProviderCount, 
-                                    LayerIdx + 1, k );
+                            InsertIfsLspIntoAllChains( &TempEntry, pProvider, iProviderCount,
+                                                       LayerIdx + 1, k );
 
                             break;
                         }
@@ -560,8 +560,8 @@ InstallIfsLspProtocolChains(
                     //     In case of multiple LSPs then if we didn't do this the [1] index
                     //     would contain the ID of that LSP's dummy entry and not the entry
                     //     itself.
-                    pLayeredEntries[ LayerIdx ].ProtocolChain.ChainEntries[ 1 ] = 
-                            TempEntry.dwCatalogEntryId;
+                    pLayeredEntries[ LayerIdx ].ProtocolChain.ChainEntries[ 1 ] =
+                        TempEntry.dwCatalogEntryId;
 
                     pLayeredEntries[ LayerIdx ].dwServiceFlags1 |= XP1_IFS_HANDLES;
                 }
@@ -574,7 +574,7 @@ InstallIfsLspProtocolChains(
     ASSERT( LayerIdx == (int)dwCatalogIdArrayCount );
 
     // Create a unique GUID for each provider to install and install it
-    for(i=0;i < (int)dwCatalogIdArrayCount ;i++)
+    for(i=0; i < (int)dwCatalogIdArrayCount ; i++)
     {
         if ( RPC_S_OK != UuidCreate( &pLayeredEntries[ i ].ProviderId ) )
         {
@@ -583,7 +583,7 @@ InstallIfsLspProtocolChains(
         }
 
         rc = InstallProvider( eCatalog, &pLayeredEntries[ i ].ProviderId,
-                lpszLspFullPathAndFile, &pLayeredEntries[ i ], 1 );
+                              lpszLspFullPathAndFile, &pLayeredEntries[ i ], 1 );
         if ( NO_ERROR != rc )
         {
             fprintf(stderr, "InstallIfsLspProtocolChains: Unable to install the dummy LSP entry!\n");
@@ -602,29 +602,29 @@ InstallIfsLspProtocolChains(
             goto cleanup;
         }
 
-        for(i=0; i < (int)dwCatalogIdArrayCount ;i++)
+        for(i=0; i < (int)dwCatalogIdArrayCount ; i++)
         {
             pLayeredEntries[ i ].dwCatalogEntryId = GetCatalogIdForProviderGuid(
-                   &pLayeredEntries[ i ].ProviderId,
+                    &pLayeredEntries[ i ].ProviderId,
                     pProviderNew,
                     iProviderCountNew
-                    );
+                                                    );
 
             ASSERT( pLayeredEntries[ i ].dwCatalogEntryId != 0 );
         }
 
         // Update the protocol chains of the modified entries to point to the just
         //    installed providers
-        for(i=0; i < iProviderCount ;i++)
+        for(i=0; i < iProviderCount ; i++)
         {
             if ( pProvider[ i ].dwProviderReserved == 0 )
                 continue;
 
-            for(j=0; j < pProvider[ i ].ProtocolChain.ChainLen ;j++)
+            for(j=0; j < pProvider[ i ].ProtocolChain.ChainLen ; j++)
             {
                 if ( UPDATE_LSP_ENTRY == pProvider[ i ].ProtocolChain.ChainEntries[ j ] )
                 {
-                    pProvider[ i ].ProtocolChain.ChainEntries[ j ] = 
+                    pProvider[ i ].ProtocolChain.ChainEntries[ j ] =
                         pLayeredEntries[ pProvider[ i ].dwProviderReserved - 1 ].dwCatalogEntryId;
 
                     pProvider[ i ].dwProviderReserved = 0;
@@ -634,11 +634,11 @@ InstallIfsLspProtocolChains(
             // Get the DLL path
             ProviderPathLen = MAX_PATH-1;
             rc = WSCGetProviderPath(
-                    &pProvider[ i ].ProviderId,
+                     &pProvider[ i ].ProviderId,
                      wszLspDll,
-                    &ProviderPathLen,
-                    &err
-                     );
+                     &ProviderPathLen,
+                     &err
+                 );
             if ( SOCKET_ERROR == rc )
             {
                 fprintf( stderr, "InstallIfsLspProtocolChains: WSCGetProviderPath failed: %d\n", err );
@@ -647,7 +647,7 @@ InstallIfsLspProtocolChains(
 
             // Update the providers which were modified
             rc = UpdateProvider( eCatalog, &pProvider[ i ].ProviderId,
-                    wszLspDll, &pProvider[ i ], 1, &err );
+                                 wszLspDll, &pProvider[ i ], 1, &err );
             if ( SOCKET_ERROR == rc )
             {
                 fprintf( stderr, "InstallIfsLspProtocolChains: UpdateProvider failed: %d\n", err );
@@ -655,10 +655,10 @@ InstallIfsLspProtocolChains(
             }
 
             printf("Updated entry ID: %d: %S (chain len = %d)\n",
-                    pProvider[ i ].dwCatalogEntryId,
-                    pProvider[ i ].szProtocol,
-                    pProvider[ i ].ProtocolChain.ChainLen
-                    );
+                   pProvider[ i ].dwCatalogEntryId,
+                   pProvider[ i ].szProtocol,
+                   pProvider[ i ].ProtocolChain.ChainLen
+                  );
         }
 
         FreeProviders( pProvider );
@@ -667,10 +667,10 @@ InstallIfsLspProtocolChains(
         FreeProviders( pProviderNew );
         pProviderNew = NULL;
 
-        
-        //WSCUpdateProvider doesn't update the process' copy of the winsock catalog. 
-        //By calling cleanup and startup again, it forces a refresh. Otherwise, 
-        //the rest of the installer code can't see the changes that were just made. 
+
+        //WSCUpdateProvider doesn't update the process' copy of the winsock catalog.
+        //By calling cleanup and startup again, it forces a refresh. Otherwise,
+        //the rest of the installer code can't see the changes that were just made.
         {
             WSADATA wsd;
 
@@ -678,7 +678,7 @@ InstallIfsLspProtocolChains(
 
             WSAStartup( MAKEWORD(2,2), &wsd );
         }
-        
+
 
         pProvider = EnumerateProviders( eCatalog, &iProviderCount );
         if ( NULL == pProvider )
@@ -697,7 +697,7 @@ InstallIfsLspProtocolChains(
 
         // First add the entries we layered over first
         idx = 0;
-        for(i=0; i < (int)dwCatalogIdArrayCount ;i++)
+        for(i=0; i < (int)dwCatalogIdArrayCount ; i++)
         {
             pEntry = FindProviderById( pdwCatalogIdArray[ i ], pProvider, iProviderCount );
             if ( NULL == pEntry )
@@ -713,7 +713,7 @@ InstallIfsLspProtocolChains(
 
         // Now go through the protocol chain of the entries we layered over and put those
         //    LSP entries next in the new order
-        for(i=0; i < (int)dwCatalogIdArrayCount ;i++)
+        for(i=0; i < (int)dwCatalogIdArrayCount ; i++)
         {
             pEntry = FindProviderById( pdwCatalogIdArray[ i ], pProvider, iProviderCount );
             if ( NULL == pEntry )
@@ -722,29 +722,29 @@ InstallIfsLspProtocolChains(
                 goto cleanup;
             }
 
-            printf("Looping through: %d: %S (chain len = %d)\n", 
-                    pEntry->dwCatalogEntryId,
-                    pEntry->szProtocol,
-                    pEntry->ProtocolChain.ChainLen );
+            printf("Looping through: %d: %S (chain len = %d)\n",
+                   pEntry->dwCatalogEntryId,
+                   pEntry->szProtocol,
+                   pEntry->ProtocolChain.ChainLen );
 
-            for(j=1; j < pEntry->ProtocolChain.ChainLen-1 ;j++)
+            for(j=1; j < pEntry->ProtocolChain.ChainLen-1 ; j++)
             {
                 dwDummyLspId = FindDummyIdFromProtocolChainId(
-                        pEntry->ProtocolChain.ChainEntries[ j ],
-                        pProvider,
-                        iProviderCount
-                        );
+                                   pEntry->ProtocolChain.ChainEntries[ j ],
+                                   pProvider,
+                                   iProviderCount
+                               );
 
-                printf("   Finding dummy ID for chain entry: %d is %d\n", 
-                        pEntry->ProtocolChain.ChainEntries[ j ],
-                        dwDummyLspId
-                        );
+                printf("   Finding dummy ID for chain entry: %d is %d\n",
+                       pEntry->ProtocolChain.ChainEntries[ j ],
+                       dwDummyLspId
+                      );
 
-                for(k=0; k < iProviderCount ;k++)
+                for(k=0; k < iProviderCount ; k++)
                 {
                     if ( ( pProvider[ k ].ProtocolChain.ChainLen >= 2 ) &&
-                         ( pProvider[ k ].ProtocolChain.ChainEntries[ 0 ] == dwDummyLspId ) &&
-                         ( pProvider[ k ].dwProviderReserved == 0 )
+                            ( pProvider[ k ].ProtocolChain.ChainEntries[ 0 ] == dwDummyLspId ) &&
+                            ( pProvider[ k ].dwProviderReserved == 0 )
                        )
                     {
                         pProviderOrder[ idx++ ] = pProvider[ k ].dwCatalogEntryId;
@@ -757,7 +757,7 @@ InstallIfsLspProtocolChains(
         }
 
         // Now any catalog entry that wasn't already copied, copy it
-        for(i=0; i < iProviderCount ;i++)
+        for(i=0; i < iProviderCount ; i++)
         {
             if ( pProvider[ i ].dwProviderReserved == 0 )
                 pProviderOrder[ idx++ ] = pProvider[ i ].dwCatalogEntryId;
@@ -770,7 +770,7 @@ InstallIfsLspProtocolChains(
         if ( NO_ERROR != rc )
         {
             fprintf( stderr, "InstallIfsLspProtocolChains: WriteProviderOrder failed: %d\n",
-                    err );
+                     err );
             goto cleanup;
         }
     }
@@ -780,7 +780,7 @@ InstallIfsLspProtocolChains(
         // Reorder the winsock catalog so the layered chain entries appear first.
         // Since we didn't have to modify any existing entries, all we need to do is
         //    move the added entries to the head of the catalog
-        // 
+        //
         rc = ReorderCatalog( eCatalog, dwDummyLspId );
         if ( NO_ERROR != rc )
         {
@@ -792,7 +792,7 @@ InstallIfsLspProtocolChains(
     retval = NO_ERROR;
 
 cleanup:
-    
+
     if ( NULL != pProvider )
     {
         FreeProviders( pProvider );
@@ -831,10 +831,10 @@ InstallNonIfsLspProtocolChains(
     WCHAR          *lpszLspFullPathAndFile,
     DWORD          *pdwCatalogIdArray,
     DWORD           dwCatalogIdArrayCount
-    )
+)
 {
     WSAPROTOCOL_INFOW   *pProvider = NULL,
-                        *pLayeredEntries = NULL;
+                         *pLayeredEntries = NULL;
     DWORD                dwDummyLspId = 0;
     INT                  iProviderCount = 0,
                          retval = SOCKET_ERROR,
@@ -853,7 +853,7 @@ InstallNonIfsLspProtocolChains(
     }
 
     pLayeredEntries = (WSAPROTOCOL_INFOW *) LspAlloc( sizeof(WSAPROTOCOL_INFOW) *
-            dwCatalogIdArrayCount, &err );
+                      dwCatalogIdArrayCount, &err );
     if ( NULL == pLayeredEntries )
     {
         fprintf( stderr, "InstallNonIfsLspProtocolChain: LspAlloc failed: %d\n", err );
@@ -867,9 +867,9 @@ InstallNonIfsLspProtocolChains(
 
     // Go through the catalog and build the layered entries
     idx = 0;
-    for(i=0; i < iProviderCount ;i++)
+    for(i=0; i < iProviderCount ; i++)
     {
-        for(j=0; j < (int) dwCatalogIdArrayCount ;j++)
+        for(j=0; j < (int) dwCatalogIdArrayCount ; j++)
         {
             if ( pProvider[ i ].dwCatalogEntryId == pdwCatalogIdArray[ j ] )
             {
@@ -883,17 +883,17 @@ InstallNonIfsLspProtocolChains(
 
                 // Put our LSP name in the protocol field
                 hr = StringCchPrintfW( pLayeredEntries[ idx ].szProtocol, WSAPROTOCOL_LEN,
-                        L"%s over [%s]",
-                        lpszLspName,
-                        pProvider[ i ].szProtocol
-                        );
+                                       L"%s over [%s]",
+                                       lpszLspName,
+                                       pProvider[ i ].szProtocol
+                                     );
                 if ( FAILED( hr ) )
                 {
                     fprintf( stderr, "InstallNonIfsLspProtocolChain: StringCchPrintfW failed: 0x%x\n", hr );
                     goto cleanup;
                 }
 
-                // Move all the protocol chain entries down by 1 position and insert 
+                // Move all the protocol chain entries down by 1 position and insert
                 // the dummy entry id at the head
                 InsertIdIntoProtocolChain( &pLayeredEntries[ idx ], 0, dwDummyLspId );
 
@@ -901,10 +901,10 @@ InstallNonIfsLspProtocolChains(
                 //     In case of multiple LSPs then if we didn't do this the [1] index
                 //     would contain the ID of that LSP's dummy entry and not the entry
                 //     itself.
-                pLayeredEntries[ idx ].ProtocolChain.ChainEntries[ 1 ] = 
-                        pProvider[ i ].dwCatalogEntryId;
+                pLayeredEntries[ idx ].ProtocolChain.ChainEntries[ 1 ] =
+                    pProvider[ i ].dwCatalogEntryId;
 
-                // Remove the IFS flag 
+                // Remove the IFS flag
                 pLayeredEntries[ idx ].dwServiceFlags1 &= (~XP1_IFS_HANDLES);
 
                 idx++;
@@ -912,7 +912,7 @@ InstallNonIfsLspProtocolChains(
         }
     }
 
-    for(i=0; i < (int)dwCatalogIdArrayCount ;i++)
+    for(i=0; i < (int)dwCatalogIdArrayCount ; i++)
     {
         // Create a GUID for the protocol chain entries
         if ( UuidCreate( &pLayeredEntries[ i ].ProviderId ) != RPC_S_OK )
@@ -923,12 +923,12 @@ InstallNonIfsLspProtocolChains(
 
         // Install the layered chain providers
         rc = InstallProvider(
-                eCatalog, 
-               &pLayeredEntries[ i ].ProviderId, 
-                lpszLspFullPathAndFile,
-               &pLayeredEntries[ i ], 
-                1
-                );
+                 eCatalog,
+                 &pLayeredEntries[ i ].ProviderId,
+                 lpszLspFullPathAndFile,
+                 &pLayeredEntries[ i ],
+                 1
+             );
         if ( NO_ERROR != rc )
         {
             fprintf(stderr, "InstallNonIfsLspProtocolChains: Unable to install layered chain entries!\n");
@@ -962,33 +962,33 @@ cleanup:
 //
 // Description:
 //    This routine takes a Winsock catalog entry where an IFS LSP entry is being
-//    inserted in the middle of the chain and the same IFS LSP entry needs to be 
+//    inserted in the middle of the chain and the same IFS LSP entry needs to be
 //    installed in the individual provider entries for every LSP referenced in the
 //    chain above the IFS provider position. This function traverses the protocol
 //    chain for all entries above the inserted IFS entry, looks up the provider
 //    belonging to that entry, and inserts the IFS LSP into it's chain.
 //
 int
-InsertIfsLspIntoAllChains( 
+InsertIfsLspIntoAllChains(
     WSAPROTOCOL_INFOW  *OriginalEntry,    // Original (unmodified) entry to follow chains
     WSAPROTOCOL_INFOW  *Catalog,          // Array of catalog entries
     int                 CatalogCount,     // Number of entries in Catalog array
     int                 IfsEntryIdx,      // Index into IFS standalone entry array
     int                 ChainIdx          // Chain index in OriginalEntry to start at
-    )
+)
 {
     WSAPROTOCOL_INFOW   TempEntry = {0};
     int                 Idx, i, j, k;
 
-    for(i=ChainIdx; i > 0 ;i--)
+    for(i=ChainIdx; i > 0 ; i--)
     {
-        #ifdef DBG
+#ifdef DBG
         printf( "Looking for entry: %d\n", OriginalEntry->ProtocolChain.ChainEntries[ i ] );
-        #endif
+#endif
 
-        for(j=0; j < CatalogCount ;j++)
+        for(j=0; j < CatalogCount ; j++)
         {
-            if ( Catalog[ j ].dwCatalogEntryId == OriginalEntry->ProtocolChain.ChainEntries[ i ] ) 
+            if ( Catalog[ j ].dwCatalogEntryId == OriginalEntry->ProtocolChain.ChainEntries[ i ] )
             {
                 printf( "Found match: %ws\n", Catalog[ j ].szProtocol );
                 Idx = j;
@@ -1000,12 +1000,12 @@ InsertIfsLspIntoAllChains(
                     // Not good. The catalog ID in the chain points to the dummy
                     // entry. We'll need to do some other heuristic to find the
                     // "right" entry.
-                    for(k=0; k < CatalogCount ;k++)
+                    for(k=0; k < CatalogCount ; k++)
                     {
                         if ( ( OriginalEntry->iAddressFamily == Catalog[ k ].iAddressFamily ) &&
-                             ( OriginalEntry->iSocketType == Catalog[ k ].iSocketType ) && 
-                             ( OriginalEntry->iProtocol == Catalog[ k ].iProtocol ) &&
-                             ( (i+1) == Catalog[ k ].ProtocolChain.ChainLen )
+                                ( OriginalEntry->iSocketType == Catalog[ k ].iSocketType ) &&
+                                ( OriginalEntry->iProtocol == Catalog[ k ].iProtocol ) &&
+                                ( (i+1) == Catalog[ k ].ProtocolChain.ChainLen )
                            )
                         {
                             Idx = k;
@@ -1021,10 +1021,10 @@ InsertIfsLspIntoAllChains(
 
                     if ( Catalog[ Idx ].ProtocolChain.ChainLen >= 2 )
                     {
-                        for(k=Catalog[ Idx ].ProtocolChain.ChainLen-2 ; k >= 0 ;k--)
+                        for(k=Catalog[ Idx ].ProtocolChain.ChainLen-2 ; k >= 0 ; k--)
                         {
-                            if ( TRUE == IsNonIfsProvider( Catalog, CatalogCount, 
-                                    Catalog[ Idx ].ProtocolChain.ChainEntries[ k ] ) )
+                            if ( TRUE == IsNonIfsProvider( Catalog, CatalogCount,
+                                                           Catalog[ Idx ].ProtocolChain.ChainEntries[ k ] ) )
                             {
                                 // K points to first non-IFS provider - insert after
                                 InsertIdIntoProtocolChain( &Catalog[ Idx ], k+1, UPDATE_LSP_ENTRY );
@@ -1057,11 +1057,11 @@ InsertIfsLspIntoAllChains(
 //    in the chain array occur at the head of the catalog. This routine
 //    also operates on the specified Winsock catalog.
 //
-int 
+int
 ReorderCatalog(
-    WINSOCK_CATALOG Catalog, 
+    WINSOCK_CATALOG Catalog,
     DWORD           dwLayeredId
-    )
+)
 {
     DWORD     *pdwProtocolOrder = NULL;
     INT        iProviderCount,
@@ -1073,16 +1073,16 @@ ReorderCatalog(
     {
         printf("Reordering 32-bit Winsock catalog...\n");
         pdwProtocolOrder = ReorderACatalog(
-                LspCatalog32Only, 
-                dwLayeredId, 
-               &iProviderCount
-                );
+                               LspCatalog32Only,
+                               dwLayeredId,
+                               &iProviderCount
+                           );
         if ( NULL == pdwProtocolOrder )
         {
             fprintf( stderr, "ReorderCatalog: ReorderACatalog failed!\n" );
             goto cleanup;
         }
-        
+
         rc = WriteProviderOrder( LspCatalog32Only, pdwProtocolOrder, iProviderCount, &ErrorCode );
         if ( SOCKET_ERROR == rc )
         {
@@ -1093,16 +1093,16 @@ ReorderCatalog(
     {
         printf("Reordering 64-bit Winsock catalog...\n");
         pdwProtocolOrder = ReorderACatalog(
-                LspCatalog64Only, 
-                dwLayeredId, 
-               &iProviderCount
-                );
+                               LspCatalog64Only,
+                               dwLayeredId,
+                               &iProviderCount
+                           );
         if ( NULL == pdwProtocolOrder )
         {
             fprintf(stderr, "ReorderCatalog: ReorderACatalog failed!\n");
             goto cleanup;
         }
-       
+
         rc = WriteProviderOrder( LspCatalog64Only, pdwProtocolOrder, iProviderCount, &ErrorCode );
         if ( SOCKET_ERROR == rc )
         {
@@ -1114,16 +1114,16 @@ ReorderCatalog(
     {
         printf("Reordering 32-bit Winsock catalog...\n");
         pdwProtocolOrder = ReorderACatalog(
-                LspCatalog32Only, 
-                dwLayeredId, 
-               &iProviderCount
-                );
+                               LspCatalog32Only,
+                               dwLayeredId,
+                               &iProviderCount
+                           );
         if ( NULL == pdwProtocolOrder )
         {
             fprintf( stderr, "ReorderCatalog: ReorderACatalog failed!\n" );
             goto cleanup;
         }
-        
+
         rc = WriteProviderOrder( LspCatalog32Only, pdwProtocolOrder, iProviderCount, &ErrorCode );
         if ( SOCKET_ERROR == rc )
         {
@@ -1154,7 +1154,7 @@ ReorderACatalog(
     WINSOCK_CATALOG Catalog,
     DWORD           dwLayerId,
     INT            *dwEntryCount
-    )
+)
 {
     WSAPROTOCOL_INFOW   *pProvider = NULL;
     DWORD               *pdwProtocolOrder = NULL;
@@ -1177,9 +1177,9 @@ ReorderACatalog(
 
     // Allocate space for the array of catalog IDs (the catalog order)
     pdwProtocolOrder = (DWORD *) LspAlloc(
-            sizeof( DWORD ) * iProviderCount,
-           &err
-            );
+                           sizeof( DWORD ) * iProviderCount,
+                           &err
+                       );
     if ( NULL == pdwProtocolOrder )
     {
         fprintf(stderr, "ReorderACatalog: LspAlloc failed: %d\n", GetLastError());
@@ -1189,7 +1189,7 @@ ReorderACatalog(
     idx = 0;
 
     // First put all the layered entries at the head of the catalog
-    for(i=0; i < iProviderCount ;i++)
+    for(i=0; i < iProviderCount ; i++)
     {
         if ( TRUE == IsIdInChain( &pProvider[ i ], dwLayerId ) )
         {
@@ -1198,7 +1198,7 @@ ReorderACatalog(
     }
 
     // Put the remaining entries after the layered chain entries
-    for(i=0; i < iProviderCount ;i++)
+    for(i=0; i < iProviderCount ; i++)
     {
         if ( FALSE == IsIdInChain( &pProvider[ i ], dwLayerId ) )
         {
@@ -1232,7 +1232,7 @@ WriteProviderOrder(
     DWORD          *pdwCatalogOrder,
     DWORD           dwNumberOfEntries,
     INT            *lpErrno
-    )
+)
 {
     int     rc = NO_ERROR;
 
@@ -1253,7 +1253,7 @@ WriteProviderOrder(
     else
     {
         fprintf( stderr, "WriteProviderOrder: Unable to manipulate 64-bit catalog from "
-                "a 32-bit process\n" );
+                 "a 32-bit process\n" );
     }
 #endif
     if ( 0 != rc )
@@ -1285,16 +1285,16 @@ WriteProviderOrder(
 //
 int
 InstallProviderVista(
-        WINSOCK_CATALOG eCatalog,               // Which catalog to install LSP into
-        __in_z WCHAR   *lpszLspName,            // String name of LSP
-        __in_z WCHAR   *lpszLspPathAndFile,     // Location of 64-bit LSP dll and dll name
-        __in_z WCHAR   *lpszLspPathAndFile32,   // Location of 32-bit LSP dll and dll name
-        LPGUID          providerGuid,
-        DWORD           dwCatalogIdArrayCount,  // Number of entries in pdwCatalogIdArray
-        DWORD          *pdwCatalogIdArray,      // Array of IDs to install over
-        BOOL            IfsProvider,
-        BOOL            InstallOverAll
-        )
+    WINSOCK_CATALOG eCatalog,               // Which catalog to install LSP into
+    __in_z WCHAR   *lpszLspName,            // String name of LSP
+    __in_z WCHAR   *lpszLspPathAndFile,     // Location of 64-bit LSP dll and dll name
+    __in_z WCHAR   *lpszLspPathAndFile32,   // Location of 32-bit LSP dll and dll name
+    LPGUID          providerGuid,
+    DWORD           dwCatalogIdArrayCount,  // Number of entries in pdwCatalogIdArray
+    DWORD          *pdwCatalogIdArray,      // Array of IDs to install over
+    BOOL            IfsProvider,
+    BOOL            InstallOverAll
+)
 {
     LPWSCINSTALLPROVIDERANDCHAINS lpInstallProviderAndChains;
     WSAPROTOCOL_INFOW *protocolList = NULL;
@@ -1304,7 +1304,7 @@ InstallProviderVista(
     char *lpInstallFunction = NULL;
     INT iEnumProviderCount;
     int rc, i, j, error;
-    
+
 
     rc = SOCKET_ERROR;
 
@@ -1325,7 +1325,7 @@ InstallProviderVista(
         fprintf(stderr, "New install API always installs into both catalogs!\n");
         goto cleanup;
     }
-    else 
+    else
     {
         lpInstallFunction = "WSCInstallProviderAndChains64_32";
     }
@@ -1344,10 +1344,10 @@ InstallProviderVista(
 #endif
 
     // Load the new install function
-    lpInstallProviderAndChains = (LPWSCINSTALLPROVIDERANDCHAINS) GetProcAddress( 
-            hMod,
-            lpInstallFunction
-            );
+    lpInstallProviderAndChains = (LPWSCINSTALLPROVIDERANDCHAINS) GetProcAddress(
+                                     hMod,
+                                     lpInstallFunction
+                                 );
     if ( NULL == lpInstallProviderAndChains )
     {
         fprintf( stderr, "InstallLsp: Unable to load WSCInstallProviderAndChains function!\n");
@@ -1362,21 +1362,21 @@ InstallProviderVista(
         //
 
         rc = lpInstallProviderAndChains(
-                providerGuid,
-                lpszLspPathAndFile,
+                 providerGuid,
+                 lpszLspPathAndFile,
 #ifdef _WIN64
-                (lpszLspPathAndFile32[0] == '\0' ? lpszLspPathAndFile : lpszLspPathAndFile32),
+                 (lpszLspPathAndFile32[0] == '\0' ? lpszLspPathAndFile : lpszLspPathAndFile32),
 #endif
-                lpszLspName,
-                ( IfsProvider ? XP1_IFS_HANDLES : 0 ),
-                NULL,
-                NULL,
-                NULL,
-               &error
-                );
+                 lpszLspName,
+                 ( IfsProvider ? XP1_IFS_HANDLES : 0 ),
+                 NULL,
+                 NULL,
+                 NULL,
+                 &error
+             );
         if ( SOCKET_ERROR == rc )
         {
-            fprintf(stderr, "InstallProviderVista: %s failed: %d\n", 
+            fprintf(stderr, "InstallProviderVista: %s failed: %d\n",
                     lpInstallFunction, error );
             goto cleanup;
         }
@@ -1389,7 +1389,7 @@ InstallProviderVista(
         //
 
         protocolList = (WSAPROTOCOL_INFOW *) LspAlloc( sizeof(WSAPROTOCOL_INFOW) *
-                dwCatalogIdArrayCount, &error);
+                       dwCatalogIdArrayCount, &error);
         if ( NULL == protocolList )
         {
             fprintf(stderr, "InstallProviderVista: Out of memory!\n");
@@ -1407,9 +1407,9 @@ InstallProviderVista(
 
         // Build a list of protocol structures to layer over
         dwEntryCount = 0;
-        for(i=0; i < (int)dwCatalogIdArrayCount ;i++)
+        for(i=0; i < (int)dwCatalogIdArrayCount ; i++)
         {
-            for(j=0; j < iEnumProviderCount ;j++)
+            for(j=0; j < iEnumProviderCount ; j++)
             {
                 if ( pdwCatalogIdArray[i] == pEnumProviders[j].dwCatalogEntryId )
                 {
@@ -1419,21 +1419,21 @@ InstallProviderVista(
         }
 
         rc = lpInstallProviderAndChains(
-                providerGuid,
-                lpszLspPathAndFile,
+                 providerGuid,
+                 lpszLspPathAndFile,
 #ifdef _WIN64
-                lpszLspPathAndFile,
+                 lpszLspPathAndFile,
 #endif
-                lpszLspName,
-                ( IfsProvider ? XP1_IFS_HANDLES : 0 ),
-                protocolList,
-                dwEntryCount,
-                NULL,
-               &error
-                );
+                 lpszLspName,
+                 ( IfsProvider ? XP1_IFS_HANDLES : 0 ),
+                 protocolList,
+                 dwEntryCount,
+                 NULL,
+                 &error
+             );
         if ( SOCKET_ERROR == rc )
         {
-            fprintf(stderr, "InstallProviderVista: %s failed: %d\n", 
+            fprintf(stderr, "InstallProviderVista: %s failed: %d\n",
                     lpInstallFunction, error );
             goto cleanup;
         }

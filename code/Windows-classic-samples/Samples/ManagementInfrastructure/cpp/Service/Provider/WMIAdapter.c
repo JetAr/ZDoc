@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -22,10 +22,10 @@ typedef HRESULT (__stdcall * fnRegisterDLL)(HINSTANCE module, GUID classId);
 typedef HRESULT (__stdcall * fnUnRegisterDLL)(GUID classId);
 typedef HRESULT (__stdcall * fnDllCanUnloadNow)(void);
 typedef HRESULT (__stdcall * fnDllGetClassObject)(CLSID supportedClassIds,
-    fnMI_Main main,
-    REFCLSID rclsid,
-    REFIID riid,
-    LPVOID * ppv);
+        fnMI_Main main,
+        REFCLSID rclsid,
+        REFIID riid,
+        LPVOID * ppv);
 
 // Helper DLL module handle
 volatile HMODULE g_hHelper = NULL;

@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,10 +14,10 @@
 //---------------------------------------------------------------------
 
 
-// Create and submit custom CMC request for a machine. 
-// Add custom extensions (Enhanced Key Usage, Name value 
+// Create and submit custom CMC request for a machine.
+// Add custom extensions (Enhanced Key Usage, Name value
 // pair) and Subject Alternative name, submit the request
-// to a standalone CA and use InstallResponse to install it. 
+// to a standalone CA and use InstallResponse to install it.
 
 #include <stdio.h>
 #include <certenroll.h>
@@ -40,7 +40,7 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     bool fCoInit = false;
     ICertRequest2* pCertRequest2 = NULL;
     ICertConfig* pCertConfig = NULL;
-    IX509Enrollment* pEnroll = NULL; 
+    IX509Enrollment* pEnroll = NULL;
     IX509CertificateRequest* pRequest = NULL;
     IX509CertificateRequestPkcs10* pPkcs10 = NULL;
     IX509CertificateRequestCmc* pCmc = NULL;
@@ -72,7 +72,8 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     LONG pDisposition = 0;
 
     // Process command line arguments
-    if (argc !=  5) {
+    if (argc !=  5)
+    {
         Usage();
         hr = E_INVALIDARG;
         _JumpError(hr, error, "invalid arg");
@@ -92,11 +93,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509CertificateRequestPkcs10
     hr = CoCreateInstance(
-            __uuidof(CX509CertificateRequestPkcs10),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509CertificateRequestPkcs10),
-            (void **) &pPkcs10);
+             __uuidof(CX509CertificateRequestPkcs10),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509CertificateRequestPkcs10),
+             (void **) &pPkcs10);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509CertificateRequestPkcs10
@@ -105,27 +106,27 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509CertificateRequestCmc
     hr = CoCreateInstance(
-            __uuidof(CX509CertificateRequestCmc),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509CertificateRequestCmc),
-            (void **) &pCmc);
+             __uuidof(CX509CertificateRequestCmc),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509CertificateRequestCmc),
+             (void **) &pCmc);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize CMC request
     hr = pCmc->InitializeFromInnerRequest(pPkcs10);
     _JumpIfError(hr, error, "InitializeFromInnerRequest");
 
-    
+
     /* Create EKU extention from an OID */
-    
+
     // Create IObjectId
     hr = CoCreateInstance(
-            __uuidof(CObjectId),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IObjectId),
-            (void **) &pEKUObjectId);
+             __uuidof(CObjectId),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IObjectId),
+             (void **) &pEKUObjectId);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Allocate BSTR for EKU OID
@@ -142,11 +143,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IObjectIds
     hr = CoCreateInstance(
-            __uuidof(CObjectIds),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IObjectIds),
-            (void **) &pEKUObjectIds);
+             __uuidof(CObjectIds),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IObjectIds),
+             (void **) &pEKUObjectIds);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Add IObjectId into IObjectIds collection
@@ -155,11 +156,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509ExtensionEnhancedKeyUsage
     hr = CoCreateInstance(
-            __uuidof(CX509ExtensionEnhancedKeyUsage),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509ExtensionEnhancedKeyUsage),
-            (void **) &pExtensionEKU);
+             __uuidof(CX509ExtensionEnhancedKeyUsage),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509ExtensionEnhancedKeyUsage),
+             (void **) &pExtensionEKU);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509ExtensionEnhancedKeyUsage from IObjectIds
@@ -168,8 +169,8 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // QueryInterface of IX509Extension
     hr = pExtensionEKU->QueryInterface(
-            __uuidof(IX509Extension),
-            (VOID **)&pExtension1);
+             __uuidof(IX509Extension),
+             (VOID **)&pExtension1);
     _JumpIfError(hr, error, "QueryInterface");
 
 
@@ -177,11 +178,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IAlternativeName
     hr = CoCreateInstance(
-            __uuidof(CAlternativeName),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IAlternativeName),
-            (void **) &anDnsName);
+             __uuidof(CAlternativeName),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IAlternativeName),
+             (void **) &anDnsName);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Allocate BSTR for DNS name
@@ -194,17 +195,17 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Initialize IAlternativeName
     hr = anDnsName->InitializeFromString(
-            XCN_CERT_ALT_NAME_DNS_NAME,     
-            strDnsName);              
+             XCN_CERT_ALT_NAME_DNS_NAME,
+             strDnsName);
     _JumpIfError(hr, error, "InitializeFromString");
 
     // Create IAlternativeNames
     hr = CoCreateInstance(
-            __uuidof(CAlternativeNames),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IAlternativeNames),
-            (void **) &pAlternativeNames);
+             __uuidof(CAlternativeNames),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IAlternativeNames),
+             (void **) &pAlternativeNames);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Add IAlternativeName into IAlternativeNames collection
@@ -213,21 +214,21 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509ExtensionAlternativeNames
     hr = CoCreateInstance(
-            __uuidof(CX509ExtensionAlternativeNames),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509ExtensionAlternativeNames),
-            (void **) &pExtensionSAN);
+             __uuidof(CX509ExtensionAlternativeNames),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509ExtensionAlternativeNames),
+             (void **) &pExtensionSAN);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509ExtensionAlternativeNames
     hr = pExtensionSAN->InitializeEncode(pAlternativeNames);
     _JumpIfError(hr, error, "InitializeEncode");
 
-    // QueryInterface of IX509Extension  
+    // QueryInterface of IX509Extension
     hr = pExtensionSAN->QueryInterface(
-            __uuidof(IX509Extension),
-            (VOID **)&pExtension2);
+             __uuidof(IX509Extension),
+             (VOID **)&pExtension2);
     _JumpIfError(hr, error, "QueryInterface");
 
 
@@ -250,11 +251,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509NameValuePair
     hr = CoCreateInstance(
-            __uuidof(CX509NameValuePair),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509NameValuePair),
-            (void **) &pPair);
+             __uuidof(CX509NameValuePair),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509NameValuePair),
+             (void **) &pPair);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Allocate BSTR for name
@@ -290,11 +291,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509Enrollment
     hr = CoCreateInstance(
-            __uuidof(CX509Enrollment),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509Enrollment),
-            (void **) &pEnroll);
+             __uuidof(CX509Enrollment),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509Enrollment),
+             (void **) &pEnroll);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509Enrollment from CMC request
@@ -303,42 +304,42 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create request
     hr = pEnroll->CreateRequest(
-            XCN_CRYPT_STRING_BASE64,
-            &strRequest);
+             XCN_CRYPT_STRING_BASE64,
+             &strRequest);
     _JumpIfError(hr, error, "CreateRequest");
 
 
     /* Submit request to SA CA, get response and install it */
-    
+
     // Create ICertConfig
     hr = CoCreateInstance(
-            __uuidof(CCertConfig),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(ICertConfig),
-            (void**)&pCertConfig);
+             __uuidof(CCertConfig),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(ICertConfig),
+             (void**)&pCertConfig);
     _JumpIfError(hr, error, "CoCreateInstance");
- 
+
     // Get the CA Config from UI
     hr = pCertConfig->GetConfig(CC_UIPICKCONFIG, &strCAConfig);
     _JumpIfError(hr, error, "GetConfig");
 
     // Create ICertRequest2
     hr = CoCreateInstance(
-            __uuidof(CCertRequest),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(ICertRequest2),
-            (void**)&pCertRequest2);
+             __uuidof(CCertRequest),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(ICertRequest2),
+             (void**)&pCertRequest2);
     _JumpIfError(hr, error, "CoCreateInstance");
-  
+
     // Submit the request
     hr = pCertRequest2->Submit(
-            CR_IN_BASE64 | CR_IN_FORMATANY, 
-            strRequest, 
-            NULL, 
-            strCAConfig,
-            &pDisposition);   
+             CR_IN_BASE64 | CR_IN_FORMATANY,
+             strRequest,
+             NULL,
+             strCAConfig,
+             &pDisposition);
     _JumpIfError(hr, error, "Submit");
 
     // Check the submission status
@@ -346,12 +347,12 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     {
         hr = pCertRequest2->GetDispositionMessage(&strDisposition);
         _JumpIfError(hr, error, "GetDispositionMessage");
-        
+
         if (pDisposition == CR_DISP_UNDER_SUBMISSION) // Pending
         {
             wprintf(L"The submission is pending: %ws\n", strDisposition);
             _JumpError(hr, error, "Submit");
-        } 
+        }
         else // Failed
         {
             wprintf(L"The submission failed: %ws\n", strDisposition);
@@ -362,16 +363,16 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Get the certifcate
     hr = pCertRequest2->GetCertificate(
-            CR_OUT_BASE64 | CR_OUT_CHAIN, 
-            &strCert);
+             CR_OUT_BASE64 | CR_OUT_CHAIN,
+             &strCert);
     _JumpIfError(hr, error, "GetCertificate");
 
     // Install the certifcate
     hr = pEnroll->InstallResponse(
-            AllowNone, 
-            strCert, 
-            XCN_CRYPT_STRING_BASE64, 
-            NULL);
+             AllowNone,
+             strCert,
+             XCN_CRYPT_STRING_BASE64,
+             NULL);
     _JumpIfError(hr, error, "InstallResponse");
 
 error:
@@ -402,7 +403,7 @@ error:
     if (NULL != anDnsName) anDnsName->Release();
     if (NULL != pAlternativeNames) pAlternativeNames->Release();
     if (NULL != pPair) pPair->Release();
-    if (NULL != pPairs) pPairs->Release(); 
+    if (NULL != pPairs) pPairs->Release();
     if (fCoInit) CoUninitialize();
     return hr;
 }

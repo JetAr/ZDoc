@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,21 +14,21 @@ void DisplayParameterUsage(
 {
     switch(static_cast<WPD_PARAMETER_USAGE_TYPES>(dwUsage))
     {
-        case WPD_PARAMETER_USAGE_RETURN:
-            printf("Return Value");
-            break;
-        case WPD_PARAMETER_USAGE_IN:
-            printf("Input Parameter");
-            break;
-        case WPD_PARAMETER_USAGE_OUT:
-            printf("Output Parameter");
-            break;
-        case WPD_PARAMETER_USAGE_INOUT:
-            printf("Input/Output Parameter");
-            break;
-        default:
-            printf("Unknown Parameter Usage");
-            break;
+    case WPD_PARAMETER_USAGE_RETURN:
+        printf("Return Value");
+        break;
+    case WPD_PARAMETER_USAGE_IN:
+        printf("Input Parameter");
+        break;
+    case WPD_PARAMETER_USAGE_OUT:
+        printf("Output Parameter");
+        break;
+    case WPD_PARAMETER_USAGE_INOUT:
+        printf("Input/Output Parameter");
+        break;
+    default:
+        printf("Unknown Parameter Usage");
+        break;
     }
 }
 
@@ -38,17 +38,17 @@ void DisplayMethodAccess(
 {
     switch(static_cast<WPD_COMMAND_ACCESS_TYPES>(dwAccess))
     {
-        case WPD_COMMAND_ACCESS_READ:
-            printf("Read");
-            break;
-            
-        case WPD_COMMAND_ACCESS_READWRITE:
-            printf("Read/Write");
-            break;
+    case WPD_COMMAND_ACCESS_READ:
+        printf("Read");
+        break;
 
-        default:
-            printf("Unknown Access");
-            break;
+    case WPD_COMMAND_ACCESS_READWRITE:
+        printf("Read/Write");
+        break;
+
+    default:
+        printf("Unknown Access");
+        break;
     }
 }
 
@@ -106,7 +106,7 @@ void DisplayMethodParameters(
                         printf("! Failed to get the method parameter name, hr = 0x%lx\n",hr);
                     }
 
-                    // Read the WPD_PARAMETER_ATTRIBUTE_USAGE value, if specified. 
+                    // Read the WPD_PARAMETER_ATTRIBUTE_USAGE value, if specified.
                     hr = pAttributes->GetUnsignedIntegerValue(WPD_PARAMETER_ATTRIBUTE_USAGE, &dwAttributeUsage);
                     if (SUCCEEDED(hr))
                     {
@@ -147,7 +147,7 @@ void DisplayMethodParameters(
                     CoTaskMemFree(pszParameterName);
                     pszParameterName = NULL;
                 }
-                
+
                 printf("\n");
             }
         }
@@ -187,7 +187,7 @@ void DisplayMethod(
         else
         {
             printf("%ws", (PWSTR)CGuidToString(Method));
-        }       
+        }
 
         // Display the method access if available, otherwise default to WPD_COMMAND_ACCESS_READ access
         hr = pAttributes->GetUnsignedIntegerValue(WPD_METHOD_ATTRIBUTE_ACCESS, &dwMethodAccess);
@@ -215,7 +215,7 @@ void DisplayMethod(
         {
             DisplayMethodParameters(pCapabilities, Method, pParameters);
         }
-        
+
         CoTaskMemFree(pszMethodName);
         pszMethodName = NULL;
 
@@ -289,20 +289,20 @@ void ListSupportedMethods(IPortableDeviceService* pService)
 
             PropVariantClear(&pv);
         }
-    }    
+    }
 }
- 
+
 
 class CMethodCallback : public IPortableDeviceServiceMethodCallback
 {
 public:
-   CMethodCallback () : m_cRef(1)
-   {
-   }
+    CMethodCallback () : m_cRef(1)
+    {
+    }
 
-   ~CMethodCallback ()
-   {
-   }
+    ~CMethodCallback ()
+    {
+    }
 
 public:
     // IPortableDeviceServiceMethodCallback::QueryInterface
@@ -315,7 +315,7 @@ public:
         if (g_hMethodCompleteEvent != NULL)
         {
             SetEvent(g_hMethodCompleteEvent);
-        }          
+        }
         return S_OK;
     }
 
@@ -339,7 +339,7 @@ public:
         }
 
         if ((riid == IID_IUnknown) ||
-            (riid == IID_IPortableDeviceServiceMethodCallback))
+                (riid == IID_IPortableDeviceServiceMethodCallback))
         {
             AddRef();
             *ppvObj = this;
@@ -418,24 +418,24 @@ void InvokeMethods(IPortableDeviceService* pService)
         else
         {
             printf("! Failed to invoke %ws, hr = 0x%lx\n",NAME_FullEnumSyncSvc_EndSync, hr);
-        } 
+        }
     }
 }
 
 
 HRESULT InvokeMethodAsync(
-    IPortableDeviceServiceMethods*  pMethods, 
+    IPortableDeviceServiceMethods*  pMethods,
     REFGUID                         Method,
     IPortableDeviceValues*          pParameters)
 {
     HRESULT hr = S_OK;
-    
+
     // Cleanup any previously created global event handles.
     if (g_hMethodCompleteEvent != NULL)
     {
         CloseHandle(g_hMethodCompleteEvent);
         g_hMethodCompleteEvent = NULL;
-    }  
+    }
 
     // In order to create a simpler to follow example we create and wait infinitely
     // for the method to complete and ignore any errors.
@@ -453,9 +453,9 @@ HRESULT InvokeMethodAsync(
         }
         else
         {
-            // Call InvokeAsync() to begin the Asynchronous method operation.  
+            // Call InvokeAsync() to begin the Asynchronous method operation.
             // Each pCallback parameter is used as the method context, and therefore must be unique.
-            hr = pMethods->InvokeAsync(Method, pParameters, pCallback);                
+            hr = pMethods->InvokeAsync(Method, pParameters, pCallback);
             if(FAILED(hr))
             {
                 printf("! Failed to invoke method asynchronously, hr = 0x%lx\n", hr);

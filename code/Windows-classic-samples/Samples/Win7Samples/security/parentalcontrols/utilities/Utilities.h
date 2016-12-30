@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -63,29 +63,29 @@ HRESULT WpcuSidStringForCurrentUser(PWSTR* ppszSID);
 HRESULT WpcuWmiConnect(PCWSTR pcszWpcNamespace, IWbemServices** ppiWmiServices);
 
 HRESULT WpcuWmiObjectGet(IWbemServices* piWmiServices, PCWSTR pcszObjectPath,
-                                      IWbemClassObject** ppiWmiSystemSettings);
+                         IWbemClassObject** ppiWmiSystemSettings);
 
-HRESULT WpcuWmiInstancePutString(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiInstancePutString(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                  PCWSTR pcszValue);
-HRESULT WpcuWmiInstancePutStringArray(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiInstancePutStringArray(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                       DWORD dwNumElements, PCWSTR* pcszValue);
-HRESULT WpcuWmiInstancePutDWORD(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiInstancePutDWORD(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                 DWORD dwValue);
-HRESULT WpcuWmiInstancePutDWORDArray(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiInstancePutDWORDArray(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                      DWORD dwNumElements, DWORD* dwValue);
-HRESULT WpcuWmiInstancePutBOOL(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiInstancePutBOOL(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                BOOL fValue);
 HRESULT WpcuWmiInstancePutNULLVariant(IWbemClassObject* piInstance, PCWSTR pcszProperty);
 
-HRESULT WpcuWmiStringFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiStringFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                   PWSTR* ppszValue);
-HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                        DWORD* pdwNumElements, PWSTR** pppszValue);
-HRESULT WpcuWmiDWORDFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiDWORDFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                  DWORD* pdwValue);
-HRESULT WpcuWmiDWORDArrayFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
-                                 DWORD* pdwNumElements, DWORD** ppdwValue);
-HRESULT WpcuWmiBOOLFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiDWORDArrayFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty,
+                                      DWORD* pdwNumElements, DWORD** ppdwValue);
+HRESULT WpcuWmiBOOLFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                 BOOL* pfValue);
 
 

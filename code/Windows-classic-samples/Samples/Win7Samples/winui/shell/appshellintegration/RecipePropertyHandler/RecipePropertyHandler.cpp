@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -23,7 +23,10 @@
 // utilize the BSTR features of its inputs. this saves the allocations
 // that would be necessary otherwise
 
-__inline BSTR CastToBSTRForInput(PCWSTR psz) { return const_cast<BSTR>(psz); }
+__inline BSTR CastToBSTRForInput(PCWSTR psz)
+{
+    return const_cast<BSTR>(psz);
+}
 
 template <class T> void SafeRelease(T **ppT)
 {
@@ -78,7 +81,8 @@ public:
     // IUnknown
     IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv)
     {
-        static const QITAB qit[] = {
+        static const QITAB qit[] =
+        {
             QITABENT(CRecipePropertyHandler, IPropertyStore),
             QITABENT(CRecipePropertyHandler, IPropertyStoreCapabilities),
             QITABENT(CRecipePropertyHandler, IInitializeWithStream),
@@ -188,7 +192,7 @@ HRESULT CRecipePropertyHandler::SetValue(REFPROPERTYKEY key, REFPROPVARIANT prop
         // check grfMode to ensure writes are allowed
         hr = STG_E_ACCESSDENIED;
         if ((_grfMode & STGM_READWRITE) &&
-            (key != PKEY_Search_Contents))  // this property is read-only
+                (key != PKEY_Search_Contents))  // this property is read-only
         {
             hr = _pCache->SetValueAndState(key, &propVar, PSC_DIRTY);
         }
@@ -333,8 +337,8 @@ HRESULT CRecipePropertyHandler::_LoadCacheFromDom()
 
 // Loads specified values from given parent node and creates a PROPVARIANT from them
 HRESULT CRecipePropertyHandler::_LoadPropertyValues(IXMLDOMNode *pNodeParent,
-                                                    PCWSTR pszValueNodeName,
-                                                    PROPVARIANT *ppropvarValues)
+        PCWSTR pszValueNodeName,
+        PROPVARIANT *ppropvarValues)
 {
     // intialize the outparam
     PropVariantInit(ppropvarValues);
@@ -605,8 +609,8 @@ HRESULT CRecipePropertyHandler::_SaveCacheToDom()
 
 // Saves the values in the given PROPVARIANT to the specified XML nodes
 HRESULT CRecipePropertyHandler::_SavePropertyValues(IXMLDOMNode* pNodeParent,
-                                                    PCWSTR pszValueNodeName,
-                                                    REFPROPVARIANT propvarValues)
+        PCWSTR pszValueNodeName,
+        REFPROPVARIANT propvarValues)
 {
     // iterate through each value in the PROPVARIANT
     HRESULT hr = S_OK;
@@ -834,8 +838,8 @@ HRESULT DeserializePropVariantFromString(PCWSTR pszIn, PROPVARIANT *ppropvar)
 
     // compute and validate the required buffer size
     if (CryptStringToBinaryW(pszIn, 0, CRYPT_STRING_BASE64, NULL, &cbBlob, &dwSkip, &dwFormatUsed) &&
-        dwSkip == 0 &&
-        dwFormatUsed == CRYPT_STRING_BASE64)
+            dwSkip == 0 &&
+            dwFormatUsed == CRYPT_STRING_BASE64)
     {
         // allocate a buffer to hold the serialized binary blob
         BYTE *pbSerialized = (BYTE *)CoTaskMemAlloc(cbBlob);

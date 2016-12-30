@@ -1,14 +1,14 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   Common.h 
+*   Common.h
 *       This module contains the definitions used by all modules in the
-*       CoffeeShop0 application.         
+*       CoffeeShop0 application.
 ******************************************************************************/
 
 #define NORMAL_LOADSTRING  100                  // Normal size of loaded strings

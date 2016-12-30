@@ -1,14 +1,14 @@
-/*++
+﻿/*++
 
-THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
+THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 PARTICULAR PURPOSE.
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
-    
+
     ucs.c
 
 Abstract:
@@ -32,18 +32,18 @@ Environment:
 #include <math.h>
 #include "ucsCounters.h"
 
-#define M_PI 3.14159265358979323846 
+#define M_PI 3.14159265358979323846
 #define TIME_INTERVAL 1000
 #define AMPLITUDE 30.0
 #define ALTITUDE 30
 
 ULONG
 CreateInstance(
-    PPERF_COUNTERSET_INSTANCE *Object1Instance1, 
-    PPERF_COUNTERSET_INSTANCE *Object1Instance2, 
+    PPERF_COUNTERSET_INSTANCE *Object1Instance1,
+    PPERF_COUNTERSET_INSTANCE *Object1Instance2,
     PPERF_COUNTERSET_INSTANCE *Object1Instance3,
     PPERF_COUNTERSET_INSTANCE *Object2Instance
-    )
+)
 /*++
 
 Routine Description:
@@ -66,17 +66,20 @@ Return Value:
     //
 
     *Object1Instance1 = PerfCreateInstance(UserModeCountersSample, & GeometricWaveGuid, L"Instance_1", 0);
-    if (*Object1Instance1 == NULL) {
+    if (*Object1Instance1 == NULL)
+    {
         return GetLastError();
     }
 
     *Object1Instance2 = PerfCreateInstance(UserModeCountersSample, & GeometricWaveGuid, L"Instance_2", 0);
-    if (*Object1Instance2 == NULL) {
+    if (*Object1Instance2 == NULL)
+    {
         return GetLastError();
     }
 
     *Object1Instance3 = PerfCreateInstance(UserModeCountersSample, & GeometricWaveGuid, L"Instance_3", 0);
-    if (*Object1Instance2 == NULL) {
+    if (*Object1Instance2 == NULL)
+    {
         return GetLastError();
     }
 
@@ -85,7 +88,8 @@ Return Value:
     //
 
     *Object2Instance = PerfCreateInstance(UserModeCountersSample, & TrignometricWaveGuid, L"_Default", 0);
-    if (*Object2Instance == NULL) {
+    if (*Object2Instance == NULL)
+    {
         return GetLastError();
     }
     return ERROR_SUCCESS;
@@ -96,7 +100,7 @@ UpdataGeometricWave(
     PPERF_COUNTERSET_INSTANCE Object,
     ULONG MinimalValue,
     ULONG Degree
-    )
+)
 /*++
 
 Routine Description:
@@ -118,19 +122,21 @@ Return Value:
 --*/
 {
     ULONG High;
-    ULONG Increase; 
+    ULONG Increase;
     ULONG Status;
-    
+
     High = ((Degree % 180) > 90) ? ALTITUDE : -ALTITUDE;
     Status = PerfSetULongCounterValue(UserModeCountersSample, Object, 2, MinimalValue + High);
-    if (Status != ERROR_SUCCESS){
+    if (Status != ERROR_SUCCESS)
+    {
         return Status;
     }
 
     Increase = (Degree < 180) ? Degree : 360 - Degree;
     Increase = (ULONG)((double)ALTITUDE / 180 * Increase);
     Status = PerfSetULongCounterValue(UserModeCountersSample, Object, 1, MinimalValue + Increase);
-    if (Status != ERROR_SUCCESS){
+    if (Status != ERROR_SUCCESS)
+    {
         return Status;
     }
 
@@ -140,7 +146,7 @@ Return Value:
 ULONG
 RunSample(
     VOID
-    )
+)
 /*++
 
 Routine Description:
@@ -177,12 +183,14 @@ Return Value:
     //
 
     Status = CounterInitialize( NULL, NULL, NULL, NULL);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         return Status;
     }
 
     Status = CreateInstance(&Object1Instance1, &Object1Instance2, &Object1Instance3, &Object2Instance);
-    if (Status != ERROR_SUCCESS){
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
@@ -191,44 +199,50 @@ Return Value:
     //
 
     Status = PerfSetCounterRefValue(UserModeCountersSample, Object2Instance, 1, & Sine);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     Status = PerfSetCounterRefValue(UserModeCountersSample, Object2Instance, 2, & Cosine);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     Base = 50;
     Status = PerfSetCounterRefValue(UserModeCountersSample, Object2Instance, 3, & Base);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     Status = PerfSetULongCounterValue(UserModeCountersSample, Object2Instance, 4, Base);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     NaturalNumbers = 1;
     Status = PerfSetCounterRefValue(UserModeCountersSample, Object2Instance, 5, &NaturalNumbers);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     Degree = 0;
-    
+
     printf("\tPress any key to quit\n");
 
-    while (!_kbhit()) {
-        
+    while (!_kbhit())
+    {
+
         //
         // Increment the Degree value to between 0 - 360.
         //
 
         Degree = (Degree + 10) % 360;
-        
+
         //
         // Increment the Natural Number counter. Set it to 1 if we reach 100.
         //
@@ -244,17 +258,20 @@ Return Value:
         Cosine = Base + (ULONG) (AMPLITUDE * cos(Angle));
 
         Status = UpdataGeometricWave(Object1Instance1, 30, Degree);
-        if (Status != ERROR_SUCCESS) {
+        if (Status != ERROR_SUCCESS)
+        {
             break;
         }
 
         Status = UpdataGeometricWave(Object1Instance2, 50, Degree);
-        if (Status != ERROR_SUCCESS) {
+        if (Status != ERROR_SUCCESS)
+        {
             break;
         }
 
         Status = UpdataGeometricWave(Object1Instance3, 80, Degree);
-        if (Status != ERROR_SUCCESS) {
+        if (Status != ERROR_SUCCESS)
+        {
             break;
         }
 
@@ -279,7 +296,7 @@ Cleanup:
 int
 __cdecl wmain(
     VOID
-    )
+)
 /*++
 
 Routine Description:
@@ -287,8 +304,8 @@ Routine Description:
     Starting point of the V2 provider executable.
     1. Initializes the provider.
     2. Creates instacnes for the counter sets.
-    3. Sets the counter values for all the objects' counters in both counter 
-        sets iteratively sleeps for 1 second between iterations. 
+    3. Sets the counter values for all the objects' counters in both counter
+        sets iteratively sleeps for 1 second between iterations.
 
 Arguments:
 
@@ -301,7 +318,7 @@ Return Value:
 --*/
 {
     ULONG Status;
-    
+
     Status = RunSample();
 
     return Status;

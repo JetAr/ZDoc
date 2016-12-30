@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -67,7 +67,7 @@ HRESULT FillCountedString(const WCHAR* src, CountedString* dest) throw ()
     if ( FAILED(hr) )
     {
         // Failed to allocate memory
-        DebugPrintfW(L" --- SdkCommon - FillCountedString: Failed to allocate buffer memory (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - FillCountedString: Failed to allocate buffer memory (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -119,7 +119,7 @@ HRESULT CreateOutputSoHConstructor(INapSoHConstructor* &pISohConstructor,
     hr = CreateSoHConstructor(pISohConstructor);
     if ( FAILED(hr) )
     {
-        DebugPrintfW(L" --- SdkCommon - CreateOutputSoHConstructor(): failed on call to CreateSoHConstructor (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateOutputSoHConstructor(): failed on call to CreateSoHConstructor (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -127,11 +127,11 @@ HRESULT CreateOutputSoHConstructor(INapSoHConstructor* &pISohConstructor,
     hr = pISohConstructor->Initialize(systemHealthId, sohType);
     if ( FAILED(hr) )
     {
-        DebugPrintfW(L" --- SdkCommon - CreateOutputSoHConstructor(): failed on call to Initialize (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateOutputSoHConstructor(): failed on call to Initialize (error = 0x%08x)",hr);
         ReleaseObject(pISohConstructor);
     }
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
@@ -151,7 +151,7 @@ HRESULT CreateInputSoHProcessor(INapSoHProcessor*   &pISohProcessor,
     hr = CreateSoHProcessor(pISohProcessor);
     if ( FAILED(hr) )
     {
-        DebugPrintfW(L" --- SdkCommon - CreateInputSoHProcessor(): failed on call to CreateSoHProcessor (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateInputSoHProcessor(): failed on call to CreateSoHProcessor (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -159,11 +159,11 @@ HRESULT CreateInputSoHProcessor(INapSoHProcessor*   &pISohProcessor,
     hr = pISohProcessor->Initialize(pInputSoh, sohType, &systemHealthId);
     if ( FAILED(hr) )
     {
-        DebugPrintfW(L" --- SdkCommon - CreateInputSoHProcessor(): failed on call to Initialize (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateInputSoHProcessor(): failed on call to Initialize (error = 0x%08x)",hr);
         ReleaseObject(pISohProcessor);
     }
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
@@ -182,12 +182,12 @@ void ReleaseObject(IUnknown *pIUnknown) throw()
 // Free a WCHAR string buffer. Upon exit, the input variable will be set to
 // NULL.
 void FreeMemory(WCHAR* &pAllocatedMemory) throw()
-{	
-	if (pAllocatedMemory)
-	{
-		CoTaskMemFree(pAllocatedMemory);
-		pAllocatedMemory = NULL;
-	}
+{
+    if (pAllocatedMemory)
+    {
+        CoTaskMemFree(pAllocatedMemory);
+        pAllocatedMemory = NULL;
+    }
 }
 
 
@@ -195,32 +195,32 @@ void FreeMemory(WCHAR* &pAllocatedMemory) throw()
 // internal string member. Upon exit, the input variable will be set to NULL.
 void FreeMemory(CountedString* &pAllocatedMemory) throw()
 {
-	if (pAllocatedMemory)
-	{
-		FreeMemory(pAllocatedMemory->string);
-		CoTaskMemFree(pAllocatedMemory);
-		pAllocatedMemory = NULL;
-	}
+    if (pAllocatedMemory)
+    {
+        FreeMemory(pAllocatedMemory->string);
+        CoTaskMemFree(pAllocatedMemory);
+        pAllocatedMemory = NULL;
+    }
 }
 
 
 // Allocate a buffer to contain a WCHAR string, which is "stringSizeInBytes" wchars long.
 HRESULT AllocateMemory(OUT WCHAR* &pString, IN size_t stringSizeInBytes) throw()
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	pString = (WCHAR*) CoTaskMemAlloc(stringSizeInBytes);
-	if (!(pString))
-	{
-		// Failed to allocate memory
-		hr = E_OUTOFMEMORY;
-		goto Cleanup;
-	}
+    pString = (WCHAR*) CoTaskMemAlloc(stringSizeInBytes);
+    if (!(pString))
+    {
+        // Failed to allocate memory
+        hr = E_OUTOFMEMORY;
+        goto Cleanup;
+    }
 
-	ZeroMemory(pString, stringSizeInBytes);
+    ZeroMemory(pString, stringSizeInBytes);
 
 Cleanup:
-	return hr;
+    return hr;
 }
 
 
@@ -228,30 +228,30 @@ Cleanup:
 // buffer is "stringSizeInBytes" wchars long.
 HRESULT AllocateMemory(OUT CountedString* &pString, IN size_t stringSizeInBytes) throw()
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	pString = (CountedString*) CoTaskMemAlloc(sizeof(CountedString));
-	if (!pString)
-	{
-		// Failed to allocate memory
-		hr = E_OUTOFMEMORY;
-		goto Cleanup;
-	}
+    pString = (CountedString*) CoTaskMemAlloc(sizeof(CountedString));
+    if (!pString)
+    {
+        // Failed to allocate memory
+        hr = E_OUTOFMEMORY;
+        goto Cleanup;
+    }
 
-	ZeroMemory(pString, sizeof(CountedString));
+    ZeroMemory(pString, sizeof(CountedString));
 
-	hr = AllocateMemory(pString->string, stringSizeInBytes);
-	if (FAILED(hr))
-	{
-		// delete the allocated memory
-		FreeMemory(pString);
-		goto Cleanup;
-	}
+    hr = AllocateMemory(pString->string, stringSizeInBytes);
+    if (FAILED(hr))
+    {
+        // delete the allocated memory
+        FreeMemory(pString);
+        goto Cleanup;
+    }
 
-	ZeroMemory(pString->string, stringSizeInBytes);
+    ZeroMemory(pString->string, stringSizeInBytes);
 
 Cleanup:
-	return hr;
+    return hr;
 }
 
 //
@@ -275,7 +275,7 @@ HRESULT CreateSoHConstructor(INapSoHConstructor* &pISohConstructor) throw()
 
     if (FAILED(hr))
     {
-        DebugPrintfW(L" --- SdkCommon - CreateSoHConstructor(): failed on call to CoCreateInstance (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateSoHConstructor(): failed on call to CoCreateInstance (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -287,7 +287,7 @@ HRESULT CreateSoHConstructor(INapSoHConstructor* &pISohConstructor) throw()
         goto Cleanup;
     }
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
@@ -309,7 +309,7 @@ HRESULT CreateSoHProcessor(INapSoHProcessor* &pISohProcessor) throw()
 
     if (FAILED(hr))
     {
-        DebugPrintfW(L" --- SdkCommon - CreateSoHProcessor(): failed on call to CoCreateInstance (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateSoHProcessor(): failed on call to CoCreateInstance (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -320,7 +320,7 @@ HRESULT CreateSoHProcessor(INapSoHProcessor* &pISohProcessor) throw()
         goto Cleanup;
     }
 
- Cleanup:
+Cleanup:
     return hr;
 }
 

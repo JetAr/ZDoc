@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,21 +14,21 @@ void DisplayParameterUsage(
 {
     switch(static_cast<WPD_PARAMETER_USAGE_TYPES>(usage))
     {
-        case WPD_PARAMETER_USAGE_RETURN:
-            wprintf(L"Return Value");
-            break;
-        case WPD_PARAMETER_USAGE_IN:
-            wprintf(L"Input Parameter");
-            break;
-        case WPD_PARAMETER_USAGE_OUT:
-            wprintf(L"Output Parameter");
-            break;
-        case WPD_PARAMETER_USAGE_INOUT:
-            wprintf(L"Input/Output Parameter");
-            break;
-        default:
-            wprintf(L"Unknown Parameter Usage");
-            break;
+    case WPD_PARAMETER_USAGE_RETURN:
+        wprintf(L"Return Value");
+        break;
+    case WPD_PARAMETER_USAGE_IN:
+        wprintf(L"Input Parameter");
+        break;
+    case WPD_PARAMETER_USAGE_OUT:
+        wprintf(L"Output Parameter");
+        break;
+    case WPD_PARAMETER_USAGE_INOUT:
+        wprintf(L"Input/Output Parameter");
+        break;
+    default:
+        wprintf(L"Unknown Parameter Usage");
+        break;
     }
 }
 
@@ -38,17 +38,17 @@ void DisplayMethodAccess(
 {
     switch(static_cast<WPD_COMMAND_ACCESS_TYPES>(access))
     {
-        case WPD_COMMAND_ACCESS_READ:
-            wprintf(L"Read");
-            break;
-            
-        case WPD_COMMAND_ACCESS_READWRITE:
-            wprintf(L"Read/Write");
-            break;
+    case WPD_COMMAND_ACCESS_READ:
+        wprintf(L"Read");
+        break;
 
-        default:
-            wprintf(L"Unknown Access");
-            break;
+    case WPD_COMMAND_ACCESS_READWRITE:
+        wprintf(L"Read/Write");
+        break;
+
+    default:
+        wprintf(L"Unknown Access");
+        break;
     }
 }
 //</SnippetDisplayMethodAccess1>
@@ -105,7 +105,7 @@ void DisplayMethodParameters(
                         wprintf(L"! Failed to get the method parameter name, hr = 0x%lx\n", hr);
                     }
 
-                    // Read the WPD_PARAMETER_ATTRIBUTE_USAGE value, if specified. 
+                    // Read the WPD_PARAMETER_ATTRIBUTE_USAGE value, if specified.
                     hr = attributes->GetUnsignedIntegerValue(WPD_PARAMETER_ATTRIBUTE_USAGE, &attributeUsage);
                     if (SUCCEEDED(hr))
                     {
@@ -146,7 +146,7 @@ void DisplayMethodParameters(
                     CoTaskMemFree(parameterName);
                     parameterName = nullptr;
                 }
-                
+
                 wprintf(L"\n");
             }
         }
@@ -213,7 +213,7 @@ void DisplayMethod(
         {
             DisplayMethodParameters(capabilities, method, parameters.Get());
         }
-        
+
         CoTaskMemFree(methodName);
         methodName = nullptr;
 
@@ -288,18 +288,18 @@ void ListSupportedMethods(
 class CMethodCallback : public IPortableDeviceServiceMethodCallback
 {
 public:
-   CMethodCallback () : m_ref(0)
-   {
-   }
+    CMethodCallback () : m_ref(0)
+    {
+    }
 
-   ~CMethodCallback ()
-   {
-   }
+    ~CMethodCallback ()
+    {
+    }
 
 public:
     // IPortableDeviceServiceMethodCallback::QueryInterface
     IFACEMETHODIMP OnComplete(
-             HRESULT                 hrStatus,
+        HRESULT                 hrStatus,
         _In_ IPortableDeviceValues*  /*pResults*/) // We are ignoring results as our methods will not return any results
     {
         wprintf(L"** Method completed, status HRESULT = 0x%lx **\n", hrStatus);
@@ -385,7 +385,7 @@ void InvokeMethods(
         else
         {
             wprintf(L"! Failed to invoke %ws, hr = 0x%lx\n", NAME_FullEnumSyncSvc_EndSync, hr);
-        } 
+        }
     }
 }
 //</SnippetInvokeMethods1>
@@ -396,13 +396,13 @@ HRESULT InvokeMethodAsync(
     _In_opt_ IPortableDeviceValues*          parameters)
 {
     HRESULT hr = S_OK;
-    
+
     // Cleanup any previously created global event handles.
     if (g_methodCompleteEvent != nullptr)
     {
         CloseHandle(g_methodCompleteEvent);
         g_methodCompleteEvent = nullptr;
-    }  
+    }
 
     // In order to create a simpler to follow example we create and wait infinitely
     // for the method to complete and ignore any errors.

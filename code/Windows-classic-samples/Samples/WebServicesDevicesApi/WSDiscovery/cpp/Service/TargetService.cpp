@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -37,7 +37,7 @@ static HRESULT _GenerateEndpointReference
 // for this target service.
 //
 // A logical address is any address that begins with urn:uuid:
-// or uuid:, followed by a 36-character UUID.  
+// or uuid:, followed by a 36-character UUID.
 // A physical address is any addresses that begins with http://,
 // https:// or uri:.  Anything else is treated as invalid.
 //
@@ -60,14 +60,14 @@ static HRESULT _GenerateEndpointReference
 _Success_(return == S_OK)
 static HRESULT _GenerateXAddrsList
 (   _In_ LPWSTR epr
-,   _Outptr_ WSD_URI_LIST **xAddrsList
+    ,   _Outptr_ WSD_URI_LIST **xAddrsList
 );
 
 _Success_( return == S_OK )
 HRESULT CreateTargetService
 (   _In_opt_ LPCWSTR id
-,   _In_opt_ const WSD_URI_LIST *scopesList
-,   _Outptr_ CTargetService **targetService
+    ,   _In_opt_ const WSD_URI_LIST *scopesList
+    ,   _Outptr_ CTargetService **targetService
 )
 {
     HRESULT hr = S_OK;
@@ -114,16 +114,16 @@ HRESULT CreateTargetService
 }
 
 CTargetService::CTargetService()
-:   m_epr( NULL )
-,   m_typesList( NULL ) // <-- always NULL for the purpose of this sample
-,   m_scopesList( NULL )
-,   m_xAddrsList( NULL )
-,   m_publisher( NULL )
-,   m_instanceId( 0 )
-,   m_messageNum( 0 )
-,   m_isActive( FALSE )
-,   m_isSuspended( TRUE ) // suspend by default - will be waken up when sending Hello
-,   m_cRef( 1 )
+    :   m_epr( NULL )
+    ,   m_typesList( NULL ) // <-- always NULL for the purpose of this sample
+    ,   m_scopesList( NULL )
+    ,   m_xAddrsList( NULL )
+    ,   m_publisher( NULL )
+    ,   m_instanceId( 0 )
+    ,   m_messageNum( 0 )
+    ,   m_isActive( FALSE )
+    ,   m_isSuspended( TRUE ) // suspend by default - will be waken up when sending Hello
+    ,   m_cRef( 1 )
 {
     InitializeCriticalSection( &m_msgSeqCriticalSection );
 }
@@ -179,7 +179,7 @@ CTargetService::~CTargetService()
 
 HRESULT STDMETHODCALLTYPE CTargetService::Init
 (   _In_opt_ LPCWSTR id
-,   _In_opt_ const WSD_URI_LIST *scopesList
+    ,   _In_opt_ const WSD_URI_LIST *scopesList
 )
 {
     HRESULT hr = S_OK;
@@ -244,8 +244,8 @@ HRESULT STDMETHODCALLTYPE CTargetService::Init
         // and have them registered using this method.  If you have no
         // custom rules to use, this step is optional.
         hr = tempPublisher->RegisterScopeMatchingRule(
-            static_cast<IWSDScopeMatchingRule *>( this )
-        );
+                 static_cast<IWSDScopeMatchingRule *>( this )
+             );
     }
 
     if ( S_OK == hr )
@@ -301,8 +301,8 @@ HRESULT STDMETHODCALLTYPE CTargetService::Init
         // Registering the notification sink starts the publisher
         // (it will begin to listen to Probe and Resolve messages).
         hr = m_publisher->RegisterNotificationSink(
-            static_cast<IWSDiscoveryPublisherNotify *>( this )
-        );
+                 static_cast<IWSDiscoveryPublisherNotify *>( this )
+             );
     }
 
     if ( S_OK == hr )
@@ -403,8 +403,8 @@ HRESULT STDMETHODCALLTYPE CTargetService::SendHelloMessage()
         // Note that a target service may send more than one Hello message to update
         // its metadata, type, scope and XAddr information.
         hr = m_publisher->Publish(
-            m_epr, TARGET_SVC_METADATA_VER, instanceId,
-            messageNum, TARGET_SVC_SESSION_ID, m_typesList, m_scopesList, m_xAddrsList );
+                 m_epr, TARGET_SVC_METADATA_VER, instanceId,
+                 messageNum, TARGET_SVC_SESSION_ID, m_typesList, m_scopesList, m_xAddrsList );
     }
 
     if ( S_OK == hr )
@@ -443,8 +443,8 @@ HRESULT STDMETHODCALLTYPE CTargetService::SendByeMessage()
         // If there are extended information needed in the
         // ANY section, replace the last argument with that information.
         hr = m_publisher->UnPublish(
-            m_epr, instanceId, messageNum,
-            TARGET_SVC_SESSION_ID, NULL );
+                 m_epr, instanceId, messageNum,
+                 TARGET_SVC_SESSION_ID, NULL );
     }
 
     if ( S_OK == hr )
@@ -527,7 +527,7 @@ HRESULT STDMETHODCALLTYPE CTargetService::Terminate()
 
 HRESULT STDMETHODCALLTYPE CTargetService::ProbeHandler
 (   _In_ const WSD_SOAP_MESSAGE *soap
-,   _In_ IWSDMessageParameters *messageParameters
+    ,   _In_ IWSDMessageParameters *messageParameters
 )
 {
     HRESULT hr = S_OK;
@@ -581,10 +581,10 @@ HRESULT STDMETHODCALLTYPE CTargetService::ProbeHandler
             // a ProbeMatches message ONLY if the Probe matches the
             // target service.
             hr = m_publisher->MatchProbe(
-                soap, messageParameters, m_epr,
-                TARGET_SVC_METADATA_VER, instanceId, messageNum,
-                TARGET_SVC_SESSION_ID, m_typesList, m_scopesList,
-                m_xAddrsList );
+                     soap, messageParameters, m_epr,
+                     TARGET_SVC_METADATA_VER, instanceId, messageNum,
+                     TARGET_SVC_SESSION_ID, m_typesList, m_scopesList,
+                     m_xAddrsList );
         }
     }
 
@@ -593,7 +593,7 @@ HRESULT STDMETHODCALLTYPE CTargetService::ProbeHandler
 
 HRESULT STDMETHODCALLTYPE CTargetService::ResolveHandler
 (   _In_ const WSD_SOAP_MESSAGE *soap
-,   _In_ IWSDMessageParameters *messageParameters
+    ,   _In_ IWSDMessageParameters *messageParameters
 )
 {
     HRESULT hr = S_OK;
@@ -628,10 +628,10 @@ HRESULT STDMETHODCALLTYPE CTargetService::ResolveHandler
             // rather than Probe matching.  See ProbeHandler method
             // (above) for additional comments.
             hr = m_publisher->MatchResolve(
-                soap, messageParameters, m_epr,
-                TARGET_SVC_METADATA_VER, instanceId, messageNum,
-                TARGET_SVC_SESSION_ID, m_typesList, m_scopesList,
-                m_xAddrsList );
+                     soap, messageParameters, m_epr,
+                     TARGET_SVC_METADATA_VER, instanceId, messageNum,
+                     TARGET_SVC_SESSION_ID, m_typesList, m_scopesList,
+                     m_xAddrsList );
         }
     }
 
@@ -663,8 +663,8 @@ HRESULT STDMETHODCALLTYPE CTargetService::GetScopeRule
 
 HRESULT STDMETHODCALLTYPE CTargetService::MatchScopes
 (   _In_ LPCWSTR scope1 // client
-,   _In_ LPCWSTR scope2 // target service
-,   _Out_ BOOL *isMatch
+    ,   _In_ LPCWSTR scope2 // target service
+    ,   _Out_ BOOL *isMatch
 )
 {
     HRESULT hr = S_OK;
@@ -748,7 +748,7 @@ HRESULT STDMETHODCALLTYPE CTargetService::MatchScopes
 
 HRESULT STDMETHODCALLTYPE CTargetService::GetNextMessageNumber
 (   _Out_ ULONGLONG *nextMessageNum
-,   _Out_ ULONGLONG *nextInstanceId
+    ,   _Out_ ULONGLONG *nextInstanceId
 )
 {
     HRESULT hr = S_OK;
@@ -760,7 +760,7 @@ HRESULT STDMETHODCALLTYPE CTargetService::GetNextMessageNumber
         // target service has not been initialized yet
         hr = E_ABORT;
     }
-    else if ( NULL == nextMessageNum || 
+    else if ( NULL == nextMessageNum ||
               NULL == nextInstanceId )
     {
         hr = E_POINTER;
@@ -774,7 +774,7 @@ HRESULT STDMETHODCALLTYPE CTargetService::GetNextMessageNumber
         *nextInstanceId = m_instanceId;
 
         // Increment the MessageNumber (and InstanceId).
-        
+
         if ( MAX_MESSAGE_NUM <= m_messageNum )
         {
             // We have reached the maximum MessageNumber
@@ -805,7 +805,7 @@ HRESULT STDMETHODCALLTYPE CTargetService::GetNextMessageNumber
 
 HRESULT STDMETHODCALLTYPE CTargetService::QueryInterface
 (   _In_ REFIID riid
-,   _Outptr_ __RPC__deref_out void __RPC_FAR *__RPC_FAR *object
+    ,   _Outptr_ __RPC__deref_out void __RPC_FAR *__RPC_FAR *object
 )
 {
     HRESULT hr = S_OK;
@@ -830,7 +830,7 @@ HRESULT STDMETHODCALLTYPE CTargetService::QueryInterface
         else if ( __uuidof(IUnknown) == riid )
         {
             *object = static_cast<IUnknown*>(
-                static_cast<IWSDiscoveryPublisherNotify*>(this) );
+                          static_cast<IWSDiscoveryPublisherNotify*>(this) );
         }
         else
         {
@@ -930,7 +930,7 @@ HRESULT _GenerateEndpointReference
     {
         // formulate the EndpointReference string
         hr = StringCchPrintfW( tempEpr, eprStringLength + 1,
-            L"urn:uuid:%s", guidString);
+                               L"urn:uuid:%s", guidString);
     }
 
     if ( S_OK == hr )
@@ -958,7 +958,7 @@ HRESULT _GenerateEndpointReference
 _Success_(return == S_OK)
 HRESULT _GenerateXAddrsList
 (   _In_ LPWSTR epr
-,   _Outptr_ WSD_URI_LIST **xAddrsList
+    ,   _Outptr_ WSD_URI_LIST **xAddrsList
 )
 {
     HRESULT hr = S_OK;
@@ -986,7 +986,7 @@ HRESULT _GenerateXAddrsList
     {
         // create the XAddrs list
         tempXAddrsList = (WSD_URI_LIST *)
-            WSDAllocateLinkedMemory( NULL, sizeof( WSD_URI_LIST ) );
+                         WSDAllocateLinkedMemory( NULL, sizeof( WSD_URI_LIST ) );
 
         if ( NULL == tempXAddrsList )
         {
@@ -998,57 +998,57 @@ HRESULT _GenerateXAddrsList
             tempXAddrsList->Next = NULL;
         }
     }
-    
+
     if ( S_OK == hr )
     {
         // Determine whether this EndpointReference begins with http://
         eprSubstring = wcsstr( epr, L"http://" );
-        
+
         if ( NULL == eprSubstring )
         {
             // The EndpointReference does not begin with http:.
             // See if it begins with https://.
             eprSubstring = wcsstr( epr, L"https://" );
         }
-        
+
         if ( NULL == eprSubstring )
         {
             // The EndpointReference does not begin with https://.
             // See if it begins with uri:.
             eprSubstring = wcsstr( epr, L"uri:" );
         }
-        
+
         if ( NULL != eprSubstring )
         {
             // This EndpointReference begins with one of http://, https:// or uri:// and we will
             // treat this as a physical address, hence XAddrs = EndpointReference.
-            
+
             // Duplicate the EndpointReference and link it to the XAddrs list.
             hr = DeepCopyStringLinked( epr, tempXAddrsList, &tempXAddrs );
         }
     }
-    
+
     if ( S_OK == hr && NULL == eprSubstring )
     {
         // The EndpointReference is not a physical address.
         // Determine whether this string begins with urn:uuid:
         eprSubstring = wcsstr( epr, L"urn:uuid:" );
-        
+
         if ( NULL != eprSubstring )
         {
             // The EndpointReference begins with urn:uuid:.
-            
+
             //          1         2        3          4
             // 123456789012345678901234567890123456789012345
             // urn:uuid:f452f1ae-fbb4-11de-a6bb-00cc30bfc300
-            
+
             // Do a sanity check to make sure that the string is exactly
             // 45 characters long.
             if ( wcslen( eprSubstring ) != 45 )
             {
                 hr = E_INVALIDARG;
             }
-            
+
             if ( S_OK == hr )
             {
                 // Soft copy the UUID portion of the address.
@@ -1058,28 +1058,28 @@ HRESULT _GenerateXAddrsList
             }
         }
     }
-    
+
     if ( S_OK == hr && NULL == eprSubstring )
     {
         // The EndpointReference does not begin with urn:uuid:.
         // See if it begins with uuid: instead
         eprSubstring = wcsstr( epr, L"uuid:" );
-    
+
         if ( NULL != eprSubstring )
         {
             // The string begins with uuid:.
-            
+
             //          1         2        3          4
             // 12345678901234567890123456789012345678901
             // uuid:f452f1ae-fbb4-11de-a6bb-00cc30bfc300
-            
+
             // Do a sanity check to make sure that the string is exactly
             // 41 characters long.
             if ( wcslen( eprSubstring ) != 41 )
             {
                 hr = E_INVALIDARG;
             }
-            
+
             if ( S_OK == hr )
             {
                 // Soft copy the UUID portion of the address.
@@ -1089,20 +1089,20 @@ HRESULT _GenerateXAddrsList
             }
         }
     }
-    
+
     if ( S_OK == hr && NULL == eprSubstring )
     {
         // The string is not a logical nor a physical address.
         hr = E_INVALIDARG;
     }
-    
+
     if ( S_OK == hr && NULL != tempEprUuid )
     {
         // The EndpointReference begins with either urn:uuid or uuid:,
         // in which we know what the UUID of the EndpointReference is.
         // We proceed to generate an XAddrs using the format
         // http://hostname.sdk/(UUID of the logical address).
-        
+
         if ( S_OK == hr )
         {
             // get the host name
@@ -1115,14 +1115,14 @@ HRESULT _GenerateXAddrsList
             //
             // 1234567 + wcslen(hostName) + 12345 + wcslen(tempEprUuid)        +1 for NULL char
             // http://   hostName           .sdk/   (UUID of the logical address)
-            
-            length = sizeof( WCHAR ) * ( 
-                7 + // http://
-                wcslen( hostName ) + 
-                5 + // .sdk/
-                wcslen( tempEprUuid ) + 
-                1 // NULL char
-            ); 
+
+            length = sizeof( WCHAR ) * (
+                         7 + // http://
+                         wcslen( hostName ) +
+                         5 + // .sdk/
+                         wcslen( tempEprUuid ) +
+                         1 // NULL char
+                     );
 
             tempXAddrs = (LPWSTR)WSDAllocateLinkedMemory( tempXAddrsList, length );
 
@@ -1136,7 +1136,7 @@ HRESULT _GenerateXAddrsList
         {
             // create the XAddrs string
             hr = StringCchPrintfW( tempXAddrs, length, L"http://%s.sdk/%s",
-                hostName, tempEprUuid );
+                                   hostName, tempEprUuid );
         }
     }
 
@@ -1150,7 +1150,7 @@ HRESULT _GenerateXAddrsList
         *xAddrsList = tempXAddrsList;
         tempXAddrsList = NULL;
     }
-    
+
     // soft copy strings - do not delete
     eprSubstring = NULL;
     tempEprUuid = NULL;

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -111,7 +111,7 @@ ProxyResolver::~ProxyResolver()
 
 BOOL
 ProxyResolver::IsWhitespace(
-   _In_ WCHAR wcChar
+    _In_ WCHAR wcChar
 )
 /*++
 
@@ -146,7 +146,7 @@ Return Value:
     //
 
     if (wcChar >= L'\t' &&
-        wcChar <= L'\r')
+            wcChar <= L'\r')
     {
         fResults = TRUE;
         goto quit;
@@ -337,7 +337,7 @@ Return Value:
     //
 
     if (m_dwProxyCursor != 0 &&
-        !IsErrorValidForProxyFailover(dwRequestError))
+            !IsErrorValidForProxyFailover(dwRequestError))
     {
         dwError = ERROR_NO_MORE_ITEMS;
         goto quit;
@@ -430,8 +430,8 @@ Return Value:
     //
 
     if (m_fReturnedLastProxy ||
-        !m_fProxyFailOverValid ||
-        m_wpiProxyInfo.lpszProxy == NULL)
+            !m_fProxyFailOverValid ||
+            m_wpiProxyInfo.lpszProxy == NULL)
     {
         //
         // Already reached end, failover not valid, or type is not proxy.
@@ -454,8 +454,8 @@ Return Value:
     //
 
     while (*pwszCursor != L'\0' &&
-           *pwszCursor != L';' &&
-           !IsWhitespace(*pwszCursor))
+            *pwszCursor != L';' &&
+            !IsWhitespace(*pwszCursor))
     {
         pwszCursor++;
     }
@@ -465,8 +465,8 @@ Return Value:
     //
 
     while (*pwszCursor != L'\0' &&
-           (*pwszCursor == L';' ||
-           IsWhitespace(*pwszCursor)))
+            (*pwszCursor == L';' ||
+             IsWhitespace(*pwszCursor)))
     {
         pwszCursor++;
     }
@@ -550,8 +550,8 @@ Return Value:
     pProxyResolver = (ProxyResolver *)dwContext;
 
     if ((dwInternetStatus != WINHTTP_CALLBACK_STATUS_GETPROXYFORURL_COMPLETE &&
-        dwInternetStatus != WINHTTP_CALLBACK_STATUS_REQUEST_ERROR) ||
-        pProxyResolver == NULL)
+            dwInternetStatus != WINHTTP_CALLBACK_STATUS_REQUEST_ERROR) ||
+            pProxyResolver == NULL)
     {
         goto quit;
     }
@@ -570,7 +570,7 @@ Return Value:
     else if (dwInternetStatus == WINHTTP_CALLBACK_STATUS_GETPROXYFORURL_COMPLETE)
     {
         pProxyResolver->m_dwError = s_pfnWinhttpGetProxyResult(hResolver,
-                                                               &pProxyResolver->m_wprProxyResult);
+                                    &pProxyResolver->m_wprProxyResult);
     }
 
     if (hResolver != NULL)
@@ -620,7 +620,7 @@ Return Value:
     //
 
     dwError = s_pfnWinhttpCreateProxyResolver(hSession,
-                                              &hResolver);
+              &hResolver);
     if (dwError != ERROR_SUCCESS)
     {
         goto quit;

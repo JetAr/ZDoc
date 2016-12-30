@@ -1,11 +1,11 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            Main.cpp
 //
-// Abstract:            Entry point to sample, parsing of command line, and 
+// Abstract:            Entry point to sample, parsing of command line, and
 //						calling into the CAppend class to append files
 //
 //*****************************************************************************
@@ -15,11 +15,11 @@
 
 void usage()
 {
-   _tprintf( _T( "wmvappend -o <outfile> -i1 <firstinfile> -i2 <secondinfile> [-a <attributeindex>]\n" ) ) ;
-   _tprintf( _T( "\t outfile\t= Output WMV file name\n" ) ) ;
-   _tprintf( _T( "\t firstinfile\t= First Input WMV file name\n" ) ) ;
-   _tprintf( _T( "\t secondinfile\t= Second Input WMV file name\n" ) ) ;
-   _tprintf( _T( "\t attributeindex\t= (1 or 2)Input file index for applying attributes to outfile\n" ) ) ;
+    _tprintf( _T( "wmvappend -o <outfile> -i1 <firstinfile> -i2 <secondinfile> [-a <attributeindex>]\n" ) ) ;
+    _tprintf( _T( "\t outfile\t= Output WMV file name\n" ) ) ;
+    _tprintf( _T( "\t firstinfile\t= First Input WMV file name\n" ) ) ;
+    _tprintf( _T( "\t secondinfile\t= Second Input WMV file name\n" ) ) ;
+    _tprintf( _T( "\t attributeindex\t= (1 or 2)Input file index for applying attributes to outfile\n" ) ) ;
 }
 
 #ifndef UNICODE
@@ -30,42 +30,43 @@ void usage()
 //------------------------------------------------------------------------------
 HRESULT ConvertStrToUnicode( LPCTSTR ptszInString, __out LPWSTR* pwszOutStr)
 {
-	if( NULL == ptszInString || NULL == pwszOutStr  )
-	{
-		return( E_INVALIDARG ) ;
-	}
+    if( NULL == ptszInString || NULL == pwszOutStr  )
+    {
+        return( E_INVALIDARG ) ;
+    }
 
     HRESULT hr = S_OK;
 
-	do
-	{
+    do
+    {
 
-		int nSizeCount = 0 ;
-		//
-		// Get the memory required for this string
-		//
-		nSizeCount = MultiByteToWideChar( CP_ACP, 0, ptszInString, -1, NULL, 0 ) ;
-		if( 0 ==  nSizeCount )
-		{
-			hr = HRESULT_FROM_WIN32( GetLastError() );
-			break ;
-		}
+        int nSizeCount = 0 ;
+        //
+        // Get the memory required for this string
+        //
+        nSizeCount = MultiByteToWideChar( CP_ACP, 0, ptszInString, -1, NULL, 0 ) ;
+        if( 0 ==  nSizeCount )
+        {
+            hr = HRESULT_FROM_WIN32( GetLastError() );
+            break ;
+        }
 
-		(*pwszOutStr) = new WCHAR[nSizeCount] ;
-		if( NULL == (*pwszOutStr) )
-		{
-			hr = E_OUTOFMEMORY;
-			break ;
-		}
+        (*pwszOutStr) = new WCHAR[nSizeCount] ;
+        if( NULL == (*pwszOutStr) )
+        {
+            hr = E_OUTOFMEMORY;
+            break ;
+        }
 
-		if( 0 == MultiByteToWideChar( CP_ACP, 0, ptszInString, -1, (*pwszOutStr), nSizeCount ) )
-		{
-			hr = HRESULT_FROM_WIN32( GetLastError() );			
-		}
+        if( 0 == MultiByteToWideChar( CP_ACP, 0, ptszInString, -1, (*pwszOutStr), nSizeCount ) )
+        {
+            hr = HRESULT_FROM_WIN32( GetLastError() );
+        }
 
-	}while( FALSE );
+    }
+    while( FALSE );
 
-	return( hr );
+    return( hr );
 }
 
 #endif // UNICODE
@@ -97,7 +98,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             ptszFirstInFile = argv[i];
             continue;
         }
-        
+
         if( 0 == _tcsicmp( argv[i], _T( "-i2" ) ) )
         {
             i++;
@@ -121,7 +122,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             ptszOutFile = argv[i];
             continue;
         }
-        
+
         if ( 0 == _tcsicmp( argv[i], _T( "-a" ) ) )
         {
             i++;
@@ -144,42 +145,42 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     }
 
     if ( NULL == ptszFirstInFile ||  NULL == ptszSecondInFile  || NULL == ptszOutFile  )
-	{
-		usage();
-		return( E_INVALIDARG );
-	}
+    {
+        usage();
+        return( E_INVALIDARG );
+    }
 
     if( iAttr != 1 && iAttr != 2 )
     {
         _tprintf( _T( "Invalid Attribute Index\n\t Attribute Index can be either 1 or 2\n" ) ) ;
-		return( E_INVALIDARG );
+        return( E_INVALIDARG );
     }
 
-	//
-	// If attributes are being copied to the destination file from the second input file, swap file
-	// names to have them mapped properly 
-	// 
-	if( iAttr == 2 )
-	{
+    //
+    // If attributes are being copied to the destination file from the second input file, swap file
+    // names to have them mapped properly
+    //
+    if( iAttr == 2 )
+    {
         TCHAR *ptszTemp  = ptszFirstInFile ;
         ptszFirstInFile  = ptszSecondInFile ;
         ptszSecondInFile = ptszTemp ;
-	}
-    
-	if ( 0 == _tcsicmp( ptszFirstInFile, ptszOutFile ) )
-	{
-		_tprintf( _T( "First file name and destination file name are same. This is not allowed.\n" ) );
-		return( E_INVALIDARG );
-	}
-	else if ( 0 == _tcsicmp( ptszSecondInFile, ptszOutFile ) )
-	{
-		_tprintf( _T( "Second file name and destination file name are same. This is not allowed.\n" ) );
-		return( E_INVALIDARG );
-	}
-	
+    }
+
+    if ( 0 == _tcsicmp( ptszFirstInFile, ptszOutFile ) )
+    {
+        _tprintf( _T( "First file name and destination file name are same. This is not allowed.\n" ) );
+        return( E_INVALIDARG );
+    }
+    else if ( 0 == _tcsicmp( ptszSecondInFile, ptszOutFile ) )
+    {
+        _tprintf( _T( "Second file name and destination file name are same. This is not allowed.\n" ) );
+        return( E_INVALIDARG );
+    }
+
     //
     // Start the work
-    //    
+    //
     CAppend asfAppender ;
 
     do
@@ -195,32 +196,32 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         WCHAR*  pwszFirstInFile  = NULL ;
         WCHAR*  pwszSecondInFile = NULL ;
         WCHAR*  pwszOutFile      = NULL ;
-    
+
         hr = ConvertStrToUnicode( ptszFirstInFile, &pwszFirstInFile ) ;
-		if( FAILED( hr ) )
+        if( FAILED( hr ) )
         {
-			 _tprintf( _T( "Failed to convert file name to wchar string (hr=0x%08x)\n" ), hr );
-            break ;
-        }
-		
-		hr = ConvertStrToUnicode( ptszSecondInFile, &pwszSecondInFile ) ;
-		if( FAILED( hr ) )
-        {
-			 _tprintf( _T( "Failed to convert file name to wchar string (hr=0x%08x)\n" ), hr );
+            _tprintf( _T( "Failed to convert file name to wchar string (hr=0x%08x)\n" ), hr );
             break ;
         }
 
-		hr = ConvertStrToUnicode( ptszOutFile, &pwszOutFile ) ;
-		if( FAILED( hr ) )
+        hr = ConvertStrToUnicode( ptszSecondInFile, &pwszSecondInFile ) ;
+        if( FAILED( hr ) )
         {
-			_tprintf( _T( "Failed to convert file name to wchar string (hr=0x%08x)\n" ), hr );
+            _tprintf( _T( "Failed to convert file name to wchar string (hr=0x%08x)\n" ), hr );
             break ;
         }
-    
+
+        hr = ConvertStrToUnicode( ptszOutFile, &pwszOutFile ) ;
+        if( FAILED( hr ) )
+        {
+            _tprintf( _T( "Failed to convert file name to wchar string (hr=0x%08x)\n" ), hr );
+            break ;
+        }
+
         hr = asfAppender.CompareProfiles( pwszFirstInFile, pwszSecondInFile, &bEqualProfile ) ;
         if( FAILED( hr ) )
         {
-			break ;
+            break ;
         }
 
         if( !bEqualProfile )
@@ -230,8 +231,8 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             break ;
         }
 
-	    hr = asfAppender.Configure( pwszOutFile ) ;
-	    if( FAILED( hr ) )
+        hr = asfAppender.Configure( pwszOutFile ) ;
+        if( FAILED( hr ) )
         {
             break ;
         }
@@ -240,8 +241,8 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         SAFE_ARRAYDELETE( pwszSecondInFile ) ;
         SAFE_ARRAYDELETE( pwszOutFile );
 
-#else 
-    
+#else
+
         hr = asfAppender.CompareProfiles( ptszFirstInFile, ptszSecondInFile, &bEqualProfile ) ;
         if( FAILED( hr ) )
         {
@@ -255,8 +256,8 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             break ;
         }
 
-	    hr = asfAppender.Configure( ptszOutFile ) ;
-	    if( FAILED( hr ) )
+        hr = asfAppender.Configure( ptszOutFile ) ;
+        if( FAILED( hr ) )
         {
             break ;
         }
@@ -267,10 +268,10 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         if( FAILED( hr ) )
         {
             break ;
-        }    
+        }
 
-		hr = asfAppender.Exit() ;
-	}
+        hr = asfAppender.Exit() ;
+    }
     while( FALSE ) ;
 
     return( hr );

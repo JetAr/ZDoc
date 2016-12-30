@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -21,7 +21,7 @@ STDMETHODIMP CAuthenticateAdmin::InterfaceSupportsErrorInfo
     REFIID riid
 )
 {
-    static const IID* arr[] = 
+    static const IID* arr[] =
     {
         &IID_IAuthenticateAdmin
     };

@@ -1,13 +1,13 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
 // File:  OfficeDlg.cpp
 //
 // Description:
-//	This file implements the OfficeDlg dialog class which 
+//	This file implements the OfficeDlg dialog class which
 //		collects information for the OnAddEquipment() routine.
-// 
+//
 // History:
 //
 // **************************************************************************
@@ -27,29 +27,29 @@ static char THIS_FILE[] = __FILE__;
 
 
 COfficeDlg::COfficeDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(COfficeDlg::IDD, pParent)
+    : CDialog(COfficeDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(COfficeDlg)
-	m_item = _T("");
-	m_SKU = _T("");
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(COfficeDlg)
+    m_item = _T("");
+    m_SKU = _T("");
+    //}}AFX_DATA_INIT
 }
 
 
 void COfficeDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COfficeDlg)
-	DDX_Text(pDX, IDC_ITEM, m_item);
-	DDX_Text(pDX, IDC_SKU, m_SKU);
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(COfficeDlg)
+    DDX_Text(pDX, IDC_ITEM, m_item);
+    DDX_Text(pDX, IDC_SKU, m_SKU);
+    //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(COfficeDlg, CDialog)
-	//{{AFX_MSG_MAP(COfficeDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(COfficeDlg)
+    // NOTE: the ClassWizard will add message map macros here
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

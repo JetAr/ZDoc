@@ -1,6 +1,6 @@
-// From Network Programming for Microsoft Windows, Second Edition by 
-// Anthony Jones and James Ohlund.  
-// Copyright 2002.   Reproduced by permission of Microsoft Press.  
+﻿// From Network Programming for Microsoft Windows, Second Edition by
+// Anthony Jones and James Ohlund.
+// Copyright 2002.   Reproduced by permission of Microsoft Press.
 // All rights reserved.
 //
 //
@@ -21,7 +21,7 @@
 //    as a part of the data submitted to sendto, we include both
 //    the ICMP request and data.
 //
-//    For IPv4 the IP record route option is supported via the 
+//    For IPv4 the IP record route option is supported via the
 //    IP_OPTIONS socket option.
 //
 // Compile:
@@ -29,7 +29,7 @@
 //
 // Command Line Options/Parameters:
 //     ping.exe [-a 4|6] [-i ttl] [-l datasize] [-r] [host]
-//     
+//
 //     -a       Address family (IPv4 or IPv6)
 //     -i ttl   TTL value to set on socket
 //     -l size  Amount of data to send as part of the ICMP request
@@ -92,7 +92,7 @@ void usage(char *progname)
     return;
 }
 
-// 
+//
 // Function: InitIcmpHeader
 //
 // Description:
@@ -109,7 +109,7 @@ void InitIcmpHeader(char *buf, int datasize)
     icmp_hdr->icmp_id       = (USHORT)GetCurrentProcessId();
     icmp_hdr->icmp_checksum = 0;
     icmp_hdr->icmp_sequence = 0;
-  
+
     datapart = buf + sizeof(ICMP_HDR);
     //
     // Place some data in the buffer.
@@ -147,23 +147,23 @@ int InitIcmp6Header(char *buf, int datasize)
     return (sizeof(ICMPV6_HDR) + sizeof(ICMPV6_ECHO_REQUEST));
 }
 
-// 
+//
 // Function: checksum
 //
 // Description:
 //    This function calculates the 16-bit one's complement sum
 //    of the supplied buffer (ICMP) header.
 //
-USHORT checksum(USHORT *buffer, int size) 
+USHORT checksum(USHORT *buffer, int size)
 {
     unsigned long cksum=0;
 
-    while (size > 1) 
+    while (size > 1)
     {
         cksum += *buffer++;
         size -= sizeof(USHORT);
     }
-    if (size) 
+    if (size)
     {
         cksum += *(UCHAR*)buffer;
     }
@@ -183,54 +183,54 @@ BOOL ValidateArgs(int argc, char **argv)
     int                i;
     BOOL               isValid = FALSE;
 
-    for(i=1; i < argc ;i++)
+    for(i=1; i < argc ; i++)
     {
         if ((argv[i][0] == '-') || (argv[i][0] == '/'))
         {
             switch (tolower(argv[i][1]))
             {
-                case 'a':        // address family
-                    if (i+1 >= argc)
-                    {
-                        usage(argv[0]);
-                        goto CLEANUP;
-                    }
-                    if (argv[i+1][0] == '4')
-                        gAddressFamily = AF_INET;
-                    else if (argv[i+1][0] == '6')
-                        gAddressFamily = AF_INET6;
-                    else
-                    {
-                        usage(argv[0]);
-                        goto CLEANUP;
-                    }
-
-                    i++;
-                    break;
-                case 'i':        // Set TTL value
-                    if (i+1 >= argc)
-                    {
-                        usage(argv[0]);
-                        goto CLEANUP;
-                    }
-
-                    gTtl = atoi(argv[++i]);
-                    break;
-                case 'l':        // buffer size tos end
-                    if (i+1 >= argc)
-                    {
-                        usage(argv[0]);
-                        goto CLEANUP;
-                    }
-
-                    gDataSize = atoi(argv[++i]);
-                    break;
-                case 'r':        // record route option
-                    bRecordRoute = TRUE;
-                    break;
-                default:
+            case 'a':        // address family
+                if (i+1 >= argc)
+                {
                     usage(argv[0]);
                     goto CLEANUP;
+                }
+                if (argv[i+1][0] == '4')
+                    gAddressFamily = AF_INET;
+                else if (argv[i+1][0] == '6')
+                    gAddressFamily = AF_INET6;
+                else
+                {
+                    usage(argv[0]);
+                    goto CLEANUP;
+                }
+
+                i++;
+                break;
+            case 'i':        // Set TTL value
+                if (i+1 >= argc)
+                {
+                    usage(argv[0]);
+                    goto CLEANUP;
+                }
+
+                gTtl = atoi(argv[++i]);
+                break;
+            case 'l':        // buffer size tos end
+                if (i+1 >= argc)
+                {
+                    usage(argv[0]);
+                    goto CLEANUP;
+                }
+
+                gDataSize = atoi(argv[++i]);
+                break;
+            case 'r':        // record route option
+                bRecordRoute = TRUE;
+                break;
+            default:
+                usage(argv[0]);
+                goto CLEANUP;
             }
         }
         else
@@ -241,7 +241,7 @@ BOOL ValidateArgs(int argc, char **argv)
 
     isValid = TRUE;
 
-CLEANUP:    
+CLEANUP:
     return isValid;
 }
 
@@ -292,29 +292,29 @@ USHORT ComputeIcmp6PseudoHeaderChecksum(SOCKET s, char *icmppacket, int icmplen,
     SOCKADDR_STORAGE localif;
     DWORD            bytes;
     char             tmp[MAX_RECV_BUF_LEN] = {'\0'},
-                    *ptr=NULL,
-                     proto=0;
+            *ptr=NULL,
+             proto=0;
     int              rc, total, length, i;
 
     // Find out which local interface for the destination
     rc = WSAIoctl(
-            s,
-            SIO_ROUTING_INTERFACE_QUERY,
-            dest->ai_addr,
-            (DWORD) dest->ai_addrlen,
-            (SOCKADDR *) &localif,
-            (DWORD) sizeof(localif),
-           &bytes,
-            NULL,
-            NULL
-            );
+             s,
+             SIO_ROUTING_INTERFACE_QUERY,
+             dest->ai_addr,
+             (DWORD) dest->ai_addrlen,
+             (SOCKADDR *) &localif,
+             (DWORD) sizeof(localif),
+             &bytes,
+             NULL,
+             NULL
+         );
     if (rc == SOCKET_ERROR)
     {
         fprintf(stderr, "WSAIoctl failed: %d\n", WSAGetLastError());
         return 0xFFFF;
     }
 
-    // We use a temporary buffer to calculate the pseudo header. 
+    // We use a temporary buffer to calculate the pseudo header.
     ptr = tmp;
     total = 0;
 
@@ -323,12 +323,12 @@ USHORT ComputeIcmp6PseudoHeaderChecksum(SOCKET s, char *icmppacket, int icmplen,
     ptr   += sizeof(struct in6_addr);
     total += sizeof(struct in6_addr);
 
-    printf("%x%x%x%x\n", 
-            ((SOCKADDR_IN6 *) &localif)->sin6_addr.u.Byte[0],
-            ((SOCKADDR_IN6 *) &localif)->sin6_addr.u.Byte[1],
-            ((SOCKADDR_IN6 *) &localif)->sin6_addr.u.Byte[2],
-            ((SOCKADDR_IN6 *) &localif)->sin6_addr.u.Byte[3]
-            );
+    printf("%x%x%x%x\n",
+           ((SOCKADDR_IN6 *) &localif)->sin6_addr.u.Byte[0],
+           ((SOCKADDR_IN6 *) &localif)->sin6_addr.u.Byte[1],
+           ((SOCKADDR_IN6 *) &localif)->sin6_addr.u.Byte[2],
+           ((SOCKADDR_IN6 *) &localif)->sin6_addr.u.Byte[3]
+          );
 
     // Copy destination address
     memcpy(ptr, &((SOCKADDR_IN6 *)dest->ai_addr)->sin6_addr, sizeof(struct in6_addr));
@@ -342,12 +342,12 @@ USHORT ComputeIcmp6PseudoHeaderChecksum(SOCKET s, char *icmppacket, int icmplen,
     ptr   += sizeof(length);
     total += sizeof(length);
 
-    printf("%x%x%x%x\n", 
-            (char ) *(ptr - 4),
-            (char ) *(ptr - 3),
-            (char ) *(ptr - 2),
-            (char ) *(ptr - 1)
-            );
+    printf("%x%x%x%x\n",
+           (char ) *(ptr - 4),
+           (char ) *(ptr - 3),
+           (char ) *(ptr - 2),
+           (char ) *(ptr - 1)
+          );
 
     // Zero the 3 bytes
     memset(ptr, 0, 3);
@@ -366,14 +366,14 @@ USHORT ComputeIcmp6PseudoHeaderChecksum(SOCKET s, char *icmppacket, int icmplen,
     ptr   += icmplen;
     total += icmplen;
 
-    for(i=0; i < icmplen%2 ;i++)
+    for(i=0; i < icmplen%2 ; i++)
     {
         *ptr = 0;
         ptr++;
         total++;
     }
 
-    
+
     return checksum((USHORT *)tmp, total);
 }
 
@@ -405,11 +405,11 @@ void ComputeIcmpChecksum(SOCKET s, char *buf, int packetlen, struct addrinfo *de
         icmpv6 = (ICMPV6_HDR *)buf;
         icmpv6->icmp6_checksum = 0;
         icmpv6->icmp6_checksum = ComputeIcmp6PseudoHeaderChecksum(
-                s,
-                buf,
-                packetlen,
-                dest
-                );
+                                     s,
+                                     buf,
+                                     packetlen,
+                                     dest
+                                 );
     }
 }
 
@@ -432,16 +432,16 @@ int PostRecvfrom(SOCKET s, char *buf, int buflen, SOCKADDR *from, int *fromlen, 
     flags = 0;
 
     rc = WSARecvFrom(
-            s,
-           &wbuf,
-            1,
-           &bytes,
-           &flags,
-            from,
-            fromlen,
-            ol,
-            NULL
-            );
+             s,
+             &wbuf,
+             1,
+             &bytes,
+             &flags,
+             from,
+             fromlen,
+             ol,
+             NULL
+         );
     if (rc == SOCKET_ERROR)
     {
         if (WSAGetLastError() != WSA_IO_PENDING)
@@ -455,7 +455,7 @@ int PostRecvfrom(SOCKET s, char *buf, int buflen, SOCKADDR *from, int *fromlen, 
 
 //
 // Function: PrintPayload
-// 
+//
 // Description:
 //    This routine is for IPv4 only. It determines if there are any IP options
 //    present (by seeing if the IP header length is greater than 20 bytes) and
@@ -487,7 +487,7 @@ void PrintPayload(char *buf, int bytes)
         {
             v4opt = (IPV4_OPTION_HDR *)(buf + sizeof(IPV4_HDR));
             routes = (v4opt->opt_ptr / sizeof(ULONG)) - 1;
-            for(i=0; i < routes ;i++)
+            for(i=0; i < routes ; i++)
             {
                 hop.sin_addr.s_addr = v4opt->opt_addr[i];
 
@@ -538,12 +538,12 @@ int SetTtl(SOCKET s, int ttl)
     if (rc == NO_ERROR)
     {
         rc = setsockopt(
-                s,
-                optlevel,
-                option,
-                (char *)&ttl,
-                sizeof(ttl)
-                );
+                 s,
+                 optlevel,
+                 option,
+                 (char *)&ttl,
+                 sizeof(ttl)
+             );
     }
     if (rc == SOCKET_ERROR)
     {
@@ -551,7 +551,7 @@ int SetTtl(SOCKET s, int ttl)
     }
     return rc;
 }
-        
+
 //
 // Function: main
 //
@@ -559,7 +559,7 @@ int SetTtl(SOCKET s, int ttl)
 //    Setup the ICMP raw socket and create the ICMP header. Add
 //    the appropriate IP option header and start sending ICMP
 //    echo requests to the endpoint. For each send and receive we
-//    set a timeout value so that we don't wait forever for a 
+//    set a timeout value so that we don't wait forever for a
 //    response in case the endpoint is not responding. When we
 //    receive a packet decode it.
 //
@@ -572,7 +572,7 @@ int __cdecl main(int argc, char **argv)
     SOCKET             s=INVALID_SOCKET;
     char              *icmpbuf=NULL;
     struct addrinfo   *dest=NULL,
-                      *local=NULL;
+                           *local=NULL;
     IPV4_OPTION_HDR    ipopt;
     SOCKADDR_STORAGE   from;
     DWORD              bytes,
@@ -604,12 +604,12 @@ int __cdecl main(int argc, char **argv)
 
     // Resolve the destination address
     dest = ResolveAddress(
-            gDestination,
-            "0",
-            gAddressFamily,
-            0,
-            0
-            );
+               gDestination,
+               "0",
+               gAddressFamily,
+               0,
+               0
+           );
     if (dest == NULL)
     {
         printf("bad name %s\n", gDestination);
@@ -625,11 +625,11 @@ int __cdecl main(int argc, char **argv)
 
     // Get the bind address
     local = ResolveAddress(
-            NULL,
-            "0",
-            gAddressFamily,
-            0,
-            0
+                NULL,
+                "0",
+                gAddressFamily,
+                0,
+                0
             );
     if (local == NULL)
     {
@@ -640,7 +640,7 @@ int __cdecl main(int argc, char **argv)
 
     // Create the raw socket
     s = socket(gAddressFamily, SOCK_RAW, gProtocol);
-    if (s == INVALID_SOCKET) 
+    if (s == INVALID_SOCKET)
     {
         printf("socket failed: %d\n", WSAGetLastError());
         status = -1;
@@ -678,8 +678,8 @@ int __cdecl main(int argc, char **argv)
             ipopt.opt_ptr  = 4;               // point to the first addr offset
             ipopt.opt_len  = 39;              // length of option header
 
-            rc = setsockopt(s, IPPROTO_IP, IP_OPTIONS, 
-                    (char *)&ipopt, sizeof(ipopt));
+            rc = setsockopt(s, IPPROTO_IP, IP_OPTIONS,
+                            (char *)&ipopt, sizeof(ipopt));
             if (rc == SOCKET_ERROR)
             {
                 fprintf(stderr, "setsockopt(IP_OPTIONS) failed: %d\n", WSAGetLastError());
@@ -723,7 +723,7 @@ int __cdecl main(int argc, char **argv)
     printf(" with %d bytes of data\n\n", gDataSize);
 
     // Start sending the ICMP requests
-    for(i=0; i < DEFAULT_SEND_COUNT ;i++)
+    for(i=0; i < DEFAULT_SEND_COUNT ; i++)
     {
         // Set the sequence number and compute the checksum
         SetIcmpSequence(icmpbuf);
@@ -731,13 +731,13 @@ int __cdecl main(int argc, char **argv)
 
         time = GetTickCount();
         rc = sendto(
-                s,
-                icmpbuf,
-                packetlen,
-                0,
-                dest->ai_addr,
-                (int)dest->ai_addrlen
-                );
+                 s,
+                 icmpbuf,
+                 packetlen,
+                 0,
+                 dest->ai_addr,
+                 (int)dest->ai_addrlen
+             );
         if (rc == SOCKET_ERROR)
         {
             fprintf(stderr, "sendto failed: %d\n", WSAGetLastError());
@@ -760,12 +760,12 @@ int __cdecl main(int argc, char **argv)
         else
         {
             rc = WSAGetOverlappedResult(
-                   s,
-                   &recvol,
-                   &bytes,
-                    FALSE,
-                   &flags
-                    );
+                     s,
+                     &recvol,
+                     &bytes,
+                     FALSE,
+                     &flags
+                 );
             if (rc == FALSE)
             {
                 fprintf(stderr, "WSAGetOverlappedResult failed: %d\n", WSAGetLastError());
@@ -793,15 +793,15 @@ int __cdecl main(int argc, char **argv)
     }
 
 CLEANUP:
-    
+
     //
     // Cleanup
     //
     if (dest)
-         freeaddrinfo(dest);
+        freeaddrinfo(dest);
     if (local)
-         freeaddrinfo(local);
-    if (s != INVALID_SOCKET) 
+        freeaddrinfo(local);
+    if (s != INVALID_SOCKET)
         closesocket(s);
     if (recvol.hEvent != WSA_INVALID_EVENT)
         WSACloseEvent(recvol.hEvent);

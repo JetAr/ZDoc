@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // DShowPlayer.h: Implements DirectShow playback functionality.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -18,7 +18,7 @@
 
 #ifndef _WIN32_WINNT		// Allow use of features specific to Windows NT 4 or later.
 #define _WIN32_WINNT 0x0600		// Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
-#endif						
+#endif
 
 #ifndef _WIN32_WINDOWS		// Allow use of features specific to Windows 98 or later.
 #define _WIN32_WINDOWS 0x0410 // Change this to the appropriate value to target Windows Me or later.
@@ -58,15 +58,15 @@ const long MAX_VOLUME = 0;
 
 enum PlaybackState
 {
-	STATE_RUNNING,
-	STATE_PAUSED,
-	STATE_STOPPED,
-	STATE_CLOSED
+    STATE_RUNNING,
+    STATE_PAUSED,
+    STATE_STOPPED,
+    STATE_CLOSED
 };
 
 struct GraphEventCallback
 {
-	virtual void OnGraphEvent(long eventCode, LONG_PTR param1, LONG_PTR param2) = 0;
+    virtual void OnGraphEvent(long eventCode, LONG_PTR param1, LONG_PTR param2) = 0;
 };
 
 
@@ -74,66 +74,75 @@ class DShowPlayer
 {
 public:
 
-	DShowPlayer(HWND hwndVideo);
-	~DShowPlayer();
+    DShowPlayer(HWND hwndVideo);
+    ~DShowPlayer();
 
-	HRESULT SetEventWindow(HWND hwnd, UINT msg);
+    HRESULT SetEventWindow(HWND hwnd, UINT msg);
 
-	PlaybackState State() const { return m_state; }
+    PlaybackState State() const
+    {
+        return m_state;
+    }
 
-	HRESULT OpenFile(const WCHAR* sFileName);
-	
-	// Streaming
-	HRESULT Play();
-	HRESULT Pause();
-	HRESULT Stop();
+    HRESULT OpenFile(const WCHAR* sFileName);
 
-	// VMR functionality
-	BOOL    HasVideo() const;
-	HRESULT UpdateVideoWindow(const LPRECT prc);
-	HRESULT Repaint(HDC hdc);
-	HRESULT DisplayModeChanged();
+    // Streaming
+    HRESULT Play();
+    HRESULT Pause();
+    HRESULT Stop();
 
-	// events
-	HRESULT HandleGraphEvent(GraphEventCallback *pCB);
+    // VMR functionality
+    BOOL    HasVideo() const;
+    HRESULT UpdateVideoWindow(const LPRECT prc);
+    HRESULT Repaint(HDC hdc);
+    HRESULT DisplayModeChanged();
 
-	// seeking
-	BOOL	CanSeek() const;
-	HRESULT SetPosition(REFERENCE_TIME pos);
-	HRESULT GetDuration(LONGLONG *pDuration);
-	HRESULT GetCurrentPosition(LONGLONG *pTimeNow);
+    // events
+    HRESULT HandleGraphEvent(GraphEventCallback *pCB);
 
-	// Audio
-	HRESULT	Mute(BOOL bMute);
-	BOOL	IsMuted() const { return m_bMute; }
-	HRESULT	SetVolume(long lVolume);
-	long	GetVolume() const { return m_lVolume; }
+    // seeking
+    BOOL	CanSeek() const;
+    HRESULT SetPosition(REFERENCE_TIME pos);
+    HRESULT GetDuration(LONGLONG *pDuration);
+    HRESULT GetCurrentPosition(LONGLONG *pTimeNow);
+
+    // Audio
+    HRESULT	Mute(BOOL bMute);
+    BOOL	IsMuted() const
+    {
+        return m_bMute;
+    }
+    HRESULT	SetVolume(long lVolume);
+    long	GetVolume() const
+    {
+        return m_lVolume;
+    }
 
 private:
-	HRESULT InitializeGraph();
-	void	TearDownGraph();
+    HRESULT InitializeGraph();
+    void	TearDownGraph();
     HRESULT CreateVideoRenderer();
-	HRESULT	RenderStreams(IBaseFilter *pSource);
-	HRESULT UpdateVolume();
+    HRESULT	RenderStreams(IBaseFilter *pSource);
+    HRESULT UpdateVolume();
 
-	PlaybackState	m_state;
+    PlaybackState	m_state;
 
-	HWND			m_hwndVideo;	// Video clipping window
-	HWND			m_hwndEvent;	// Window to receive events
-	UINT			m_EventMsg;		// Windows message for graph events
+    HWND			m_hwndVideo;	// Video clipping window
+    HWND			m_hwndEvent;	// Window to receive events
+    UINT			m_EventMsg;		// Windows message for graph events
 
-	DWORD			m_seekCaps;		// Caps bits for IMediaSeeking
+    DWORD			m_seekCaps;		// Caps bits for IMediaSeeking
 
-	// Audio
+    // Audio
     BOOL            m_bAudioStream; // Is there an audio stream?
-	long			m_lVolume;		// Current volume (unless muted)
-	BOOL			m_bMute;		// Volume muted?		
+    long			m_lVolume;		// Current volume (unless muted)
+    BOOL			m_bMute;		// Volume muted?
 
-	IGraphBuilder	*m_pGraph;
-	IMediaControl	*m_pControl;
-	IMediaEventEx	*m_pEvent;
-	IMediaSeeking	*m_pSeek;
-	IBasicAudio		*m_pAudio;
+    IGraphBuilder	*m_pGraph;
+    IMediaControl	*m_pControl;
+    IMediaEventEx	*m_pEvent;
+    IMediaSeeking	*m_pSeek;
+    IBasicAudio		*m_pAudio;
 
     BaseVideoRenderer   *m_pVideo;
 

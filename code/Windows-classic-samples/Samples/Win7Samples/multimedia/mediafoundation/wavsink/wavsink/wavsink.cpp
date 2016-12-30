@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: WaveSink.cpp
 // Description: Archive sink for creating .wav files.
 //
@@ -19,8 +19,8 @@
 
 
 //-------------------------------------------------------------------
-// Name: CreateWavSink 
-// Description: Creates an instance of the WavSink object. 
+// Name: CreateWavSink
+// Description: Creates an instance of the WavSink object.
 //
 // To use the WavSink, include this header file in an application
 // and link to the library file created by this project.
@@ -68,8 +68,8 @@ struct PCM_Audio_Format_Params
 
 // g_AudioFormats: Static list of our preferred formats.
 
-// This is an ordered list that we use to hand out formats in the 
-// stream's IMFMediaTypeHandler::GetMediaTypeByIndex method. The 
+// This is an ordered list that we use to hand out formats in the
+// stream's IMFMediaTypeHandler::GetMediaTypeByIndex method. The
 // stream will accept other bit rates not listed here.
 
 PCM_Audio_Format_Params g_AudioFormats[] =
@@ -99,7 +99,7 @@ HRESULT CreatePCMAudioType(
     UINT32 bitsPerSample,     // Bits per sample
     UINT32 cChannels,         // Number of channels
     IMFMediaType **ppType     // Receives a pointer to the media type.
-    );
+);
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -112,8 +112,8 @@ HRESULT CreatePCMAudioType(
 
 
 //-------------------------------------------------------------------
-// Name: CreateInstance 
-// Description: Creates an instance of the WavSink object. 
+// Name: CreateInstance
+// Description: Creates an instance of the WavSink object.
 // [See CreateWavSink]
 //-------------------------------------------------------------------
 
@@ -224,8 +224,8 @@ HRESULT CWavSink::QueryInterface(REFIID iid, void** ppv)
 
 
 //-------------------------------------------------------------------
-// Name: GetCharacteristics 
-// Description: Returns the characteristics flags. 
+// Name: GetCharacteristics
+// Description: Returns the characteristics flags.
 //
 // Note: This sink has a fixed number of streams and is rateless.
 //-------------------------------------------------------------------
@@ -251,14 +251,14 @@ HRESULT CWavSink::GetCharacteristics(DWORD *pdwCharacteristics)
 
 
 //-------------------------------------------------------------------
-// Name: AddStreamSink 
-// Description: Adds a new stream to the sink. 
+// Name: AddStreamSink
+// Description: Adds a new stream to the sink.
 //
 // Note: This sink has a fixed number of streams, so this method
 //       always returns MF_E_STREAMSINKS_FIXED.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::AddStreamSink( 
+HRESULT CWavSink::AddStreamSink(
     DWORD dwStreamSinkIdentifier,
     IMFMediaType *pMediaType,
     IMFStreamSink **ppStreamSink)
@@ -269,8 +269,8 @@ HRESULT CWavSink::AddStreamSink(
 
 
 //-------------------------------------------------------------------
-// Name: RemoveStreamSink 
-// Description: Removes a stream from the sink. 
+// Name: RemoveStreamSink
+// Description: Removes a stream from the sink.
 //
 // Note: This sink has a fixed number of streams, so this method
 //       always returns MF_E_STREAMSINKS_FIXED.
@@ -283,8 +283,8 @@ HRESULT CWavSink::RemoveStreamSink(DWORD dwStreamSinkIdentifier)
 
 
 //-------------------------------------------------------------------
-// Name: GetStreamSinkCount 
-// Description: Returns the number of streams. 
+// Name: GetStreamSinkCount
+// Description: Returns the number of streams.
 //-------------------------------------------------------------------
 
 HRESULT CWavSink::GetStreamSinkCount(DWORD *pcStreamSinkCount)
@@ -309,11 +309,11 @@ HRESULT CWavSink::GetStreamSinkCount(DWORD *pcStreamSinkCount)
 
 
 //-------------------------------------------------------------------
-// Name: GetStreamSinkByIndex 
-// Description: Retrieves a stream by index. 
+// Name: GetStreamSinkByIndex
+// Description: Retrieves a stream by index.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::GetStreamSinkByIndex( 
+HRESULT CWavSink::GetStreamSinkByIndex(
     DWORD dwIndex,
     IMFStreamSink **ppStreamSink)
 {
@@ -324,7 +324,7 @@ HRESULT CWavSink::GetStreamSinkByIndex(
         return E_INVALIDARG;
     }
 
-    // Fixed stream: Index 0. 
+    // Fixed stream: Index 0.
     if (dwIndex > 0)
     {
         return MF_E_INVALIDINDEX;
@@ -343,11 +343,11 @@ HRESULT CWavSink::GetStreamSinkByIndex(
 
 
 //-------------------------------------------------------------------
-// Name: GetStreamSinkById 
-// Description: Retrieves a stream by ID. 
+// Name: GetStreamSinkById
+// Description: Retrieves a stream by ID.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::GetStreamSinkById( 
+HRESULT CWavSink::GetStreamSinkById(
     DWORD dwStreamSinkIdentifier,
     IMFStreamSink **ppStreamSink)
 {
@@ -378,8 +378,8 @@ HRESULT CWavSink::GetStreamSinkById(
 
 
 //-------------------------------------------------------------------
-// Name: SetPresentationClock 
-// Description: Sets the presentation clock. 
+// Name: SetPresentationClock
+// Description: Sets the presentation clock.
 //
 // pPresentationClock: Pointer to the clock. Can be NULL.
 //-------------------------------------------------------------------
@@ -427,8 +427,8 @@ HRESULT CWavSink::SetPresentationClock(IMFPresentationClock *pPresentationClock)
 
 
 //-------------------------------------------------------------------
-// Name: GetPresentationClock 
-// Description: Returns a pointer to the presentation clock. 
+// Name: GetPresentationClock
+// Description: Returns a pointer to the presentation clock.
 //-------------------------------------------------------------------
 
 HRESULT CWavSink::GetPresentationClock(IMFPresentationClock **ppPresentationClock)
@@ -462,8 +462,8 @@ HRESULT CWavSink::GetPresentationClock(IMFPresentationClock **ppPresentationCloc
 
 
 //-------------------------------------------------------------------
-// Name: Shutdown 
-// Description: Releases resources held by the media sink. 
+// Name: Shutdown
+// Description: Releases resources held by the media sink.
 //-------------------------------------------------------------------
 
 HRESULT CWavSink::Shutdown()
@@ -479,7 +479,7 @@ HRESULT CWavSink::Shutdown()
 
         SAFE_RELEASE(m_pClock);
         SAFE_RELEASE(m_pStream);
- 
+
         m_IsShutdown = true;
     }
 
@@ -490,13 +490,13 @@ HRESULT CWavSink::Shutdown()
 
 
 //-------------------------------------------------------------------
-// Name: BeginFinalize 
+// Name: BeginFinalize
 // Description: Starts the asynchronous finalize operation.
 //
 // Note: We use the Finalize operation to write the RIFF headers.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::BeginFinalize( 
+HRESULT CWavSink::BeginFinalize(
     IMFAsyncCallback *pCallback,
     IUnknown *punkState)
 {
@@ -516,7 +516,7 @@ HRESULT CWavSink::BeginFinalize(
 
 
 //-------------------------------------------------------------------
-// Name: EndFinalize 
+// Name: EndFinalize
 // Description: Completes the asynchronous finalize operation.
 //-------------------------------------------------------------------
 
@@ -540,21 +540,21 @@ HRESULT CWavSink::EndFinalize(IMFAsyncResult *pResult)
 }
 
 //-------------------------------------------------------------------
-// Name: OnClockStart 
+// Name: OnClockStart
 // Description: Called when the presentation clock starts.
 //
 // hnsSystemTime: System time when the clock started.
 // llClockStartOffset: Starting presentatation time.
 //
 // Note: For an archive sink, we don't care about the system time.
-//       But we need to cache the value of llClockStartOffset. This 
-//       gives us the earliest time stamp that we archive. If any 
+//       But we need to cache the value of llClockStartOffset. This
+//       gives us the earliest time stamp that we archive. If any
 //       input samples have an earlier time stamp, we discard them.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::OnClockStart( 
-        /* [in] */ MFTIME hnsSystemTime,
-        /* [in] */ LONGLONG llClockStartOffset)
+HRESULT CWavSink::OnClockStart(
+    /* [in] */ MFTIME hnsSystemTime,
+    /* [in] */ LONGLONG llClockStartOffset)
 {
     AutoLock lock(m_critSec);
 
@@ -566,17 +566,17 @@ HRESULT CWavSink::OnClockStart(
     }
 
     return hr;
-}    
+}
 
 //-------------------------------------------------------------------
-// Name: OnClockStop 
+// Name: OnClockStop
 // Description: Called when the presentation clock stops.
 //
 // Note: After this method is called, we stop accepting new data.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::OnClockStop( 
-        /* [in] */ MFTIME hnsSystemTime)
+HRESULT CWavSink::OnClockStop(
+    /* [in] */ MFTIME hnsSystemTime)
 {
     TRACE((L"CWavSink::OnClockStop\n"));
     AutoLock lock(m_critSec);
@@ -589,19 +589,19 @@ HRESULT CWavSink::OnClockStop(
     }
 
     return hr;
-}    
+}
 
 
 //-------------------------------------------------------------------
-// Name: OnClockPause 
+// Name: OnClockPause
 // Description: Called when the presentation clock paused.
 //
 // Note: For an archive sink, the paused state is equivalent to the
 //       running (started) state. We still accept data and archive it.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::OnClockPause( 
-        /* [in] */ MFTIME hnsSystemTime)
+HRESULT CWavSink::OnClockPause(
+    /* [in] */ MFTIME hnsSystemTime)
 {
     AutoLock lock(m_critSec);
 
@@ -617,12 +617,12 @@ HRESULT CWavSink::OnClockPause(
 
 
 //-------------------------------------------------------------------
-// Name: OnClockRestart 
+// Name: OnClockRestart
 // Description: Called when the presentation clock restarts.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::OnClockRestart( 
-        /* [in] */ MFTIME hnsSystemTime)
+HRESULT CWavSink::OnClockRestart(
+    /* [in] */ MFTIME hnsSystemTime)
 {
     AutoLock lock(m_critSec);
 
@@ -638,15 +638,15 @@ HRESULT CWavSink::OnClockRestart(
 
 
 //-------------------------------------------------------------------
-// Name: OnClockSetRate 
+// Name: OnClockSetRate
 // Description: Called when the presentation clock's rate changes.
 //
 // Note: For a rateless sink, the clock rate is not important.
 //-------------------------------------------------------------------
 
-HRESULT CWavSink::OnClockSetRate( 
-        /* [in] */ MFTIME hnsSystemTime,
-        /* [in] */ float flRate)
+HRESULT CWavSink::OnClockSetRate(
+    /* [in] */ MFTIME hnsSystemTime,
+    /* [in] */ float flRate)
 {
     return S_OK;
 }
@@ -656,7 +656,7 @@ HRESULT CWavSink::OnClockSetRate(
 
 
 //-------------------------------------------------------------------
-// Name: Initialize 
+// Name: Initialize
 // Description: Initializes the media sink.
 //
 // Note: This method is called once when the media sink is first
@@ -689,7 +689,7 @@ HRESULT CWavSink::Initialize(IMFByteStream *pByteStream)
 //
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-CWavStream::CAsyncOperation::CAsyncOperation(StreamOperation op) 
+CWavStream::CAsyncOperation::CAsyncOperation(StreamOperation op)
     : m_nRefCount(1), m_op(op)
 {
 }
@@ -739,8 +739,8 @@ HRESULT CWavStream::CAsyncOperation::QueryInterface(REFIID iid, void** ppv)
 //
 // CWavStream class. - Implements the stream sink.
 //
-// Notes: 
-// - Most of the real work gets done in this class. 
+// Notes:
+// - Most of the real work gets done in this class.
 // - The sink has one stream. If it had multiple streams, it would need to coordinate them.
 // - Most operations are done asynchronously on a work queue.
 // - Async methods are handled like this:
@@ -751,7 +751,7 @@ HRESULT CWavStream::CAsyncOperation::QueryInterface(REFIID iid, void** ppv)
 // - Locking:
 //      To avoid deadlocks, do not hold the CWavStream lock followed by the CWavSink lock.
 //      The other order is OK (CWavSink, then CWavStream).
-// 
+//
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -759,12 +759,12 @@ HRESULT CWavStream::CAsyncOperation::QueryInterface(REFIID iid, void** ppv)
 // CWavStream constructor
 //-------------------------------------------------------------------
 
-CWavStream::CWavStream() 
-    : m_nRefCount(1), m_state(State_TypeNotSet), m_IsShutdown(FALSE), 
-    m_pSink(NULL), m_pEventQueue(NULL), m_pByteStream(NULL), 
-    m_pCurrentType(NULL), m_pFinalizeResult(NULL),
-    m_StartTime(0), m_cbDataWritten(0), m_WorkQueueId(0), 
-    m_WorkQueueCB(this, &CWavStream::OnDispatchWorkItem)
+CWavStream::CWavStream()
+    : m_nRefCount(1), m_state(State_TypeNotSet), m_IsShutdown(FALSE),
+      m_pSink(NULL), m_pEventQueue(NULL), m_pByteStream(NULL),
+      m_pCurrentType(NULL), m_pFinalizeResult(NULL),
+      m_StartTime(0), m_cbDataWritten(0), m_WorkQueueId(0),
+      m_WorkQueueCB(this, &CWavStream::OnDispatchWorkItem)
 {
 
 }
@@ -866,7 +866,7 @@ HRESULT CWavStream::EndGetEvent(IMFAsyncResult* pResult, IMFMediaEvent** ppEvent
 
 HRESULT CWavStream::GetEvent(DWORD dwFlags, IMFMediaEvent** ppEvent)
 {
-    // NOTE: 
+    // NOTE:
     // GetEvent can block indefinitely, so we don't hold the lock.
     // This requires some juggling with the event queue pointer.
 
@@ -874,8 +874,9 @@ HRESULT CWavStream::GetEvent(DWORD dwFlags, IMFMediaEvent** ppEvent)
 
     IMFMediaEventQueue *pQueue = NULL;
 
-    { // scope for lock
-      
+    {
+        // scope for lock
+
         AutoLock lock(m_critSec);
 
         // Check shutdown
@@ -924,7 +925,7 @@ HRESULT CWavStream::QueueEvent(MediaEventType met, REFGUID guidExtendedType, HRE
 
 
 //-------------------------------------------------------------------
-// Name: GetMediaSink 
+// Name: GetMediaSink
 // Description: Returns the parent media sink.
 //-------------------------------------------------------------------
 
@@ -951,7 +952,7 @@ HRESULT CWavStream::GetMediaSink(IMFMediaSink **ppMediaSink)
 
 
 //-------------------------------------------------------------------
-// Name: GetIdentifier 
+// Name: GetIdentifier
 // Description: Returns the stream identifier.
 //-------------------------------------------------------------------
 
@@ -976,7 +977,7 @@ HRESULT CWavStream::GetIdentifier(DWORD *pdwIdentifier)
 
 
 //-------------------------------------------------------------------
-// Name: GetMediaTypeHandler 
+// Name: GetMediaTypeHandler
 // Description: Returns a media type handler for this stream.
 //-------------------------------------------------------------------
 
@@ -1001,7 +1002,7 @@ HRESULT CWavStream::GetMediaTypeHandler(IMFMediaTypeHandler **ppHandler)
 
 
 //-------------------------------------------------------------------
-// Name: ProcessSample 
+// Name: ProcessSample
 // Description: Receives an input sample. [Asynchronous]
 //
 // Note: The client should only give us a sample after we send an
@@ -1018,7 +1019,7 @@ HRESULT CWavStream::ProcessSample(IMFSample *pSample)
     }
 
     HRESULT hr = S_OK;
-    
+
     hr = CheckShutdown();
 
     // Validate the operation.
@@ -1039,7 +1040,7 @@ HRESULT CWavStream::ProcessSample(IMFSample *pSample)
         if (m_state != State_Paused)
         {
             // Queue the operation.
-            hr = QueueAsyncOperation(OpProcessSample); 
+            hr = QueueAsyncOperation(OpProcessSample);
         }
     }
 
@@ -1048,19 +1049,19 @@ HRESULT CWavStream::ProcessSample(IMFSample *pSample)
 
 
 //-------------------------------------------------------------------
-// Name: PlaceMarker 
+// Name: PlaceMarker
 // Description: Receives a marker. [Asynchronous]
 //
 // Note: The client can call PlaceMarker at any time. In response,
 //       we need to queue an MEStreamSinkMarer event, but not until
 //       *after* we have processed all samples that we have received
-//       up to this point. 
+//       up to this point.
 //
 //       Also, in general you might need to handle specific marker
 //       types, although this sink does not.
 //-------------------------------------------------------------------
 
-HRESULT CWavStream::PlaceMarker( 
+HRESULT CWavStream::PlaceMarker(
     MFSTREAMSINK_MARKER_TYPE eMarkerType,
     const PROPVARIANT *pvarMarkerValue,
     const PROPVARIANT *pvarContextValue)
@@ -1069,9 +1070,9 @@ HRESULT CWavStream::PlaceMarker(
     AutoLock lock(m_critSec);
 
     HRESULT hr = S_OK;
-    
+
     IMarker *pMarker = NULL;
-    
+
     hr = CheckShutdown();
 
     if (SUCCEEDED(hr))
@@ -1083,10 +1084,10 @@ HRESULT CWavStream::PlaceMarker(
     if (SUCCEEDED(hr))
     {
         hr = CMarker::Create(
-            eMarkerType,
-            pvarMarkerValue,
-            pvarContextValue,
-            &pMarker);
+                 eMarkerType,
+                 pvarMarkerValue,
+                 pvarContextValue,
+                 &pMarker);
     }
 
     if (SUCCEEDED(hr))
@@ -1106,12 +1107,12 @@ HRESULT CWavStream::PlaceMarker(
 
     SAFE_RELEASE(pMarker);
 
-    return hr;   
+    return hr;
 }
 
 
 //-------------------------------------------------------------------
-// Name: Flush 
+// Name: Flush
 // Description: Discards all samples that were not processed yet.
 //-------------------------------------------------------------------
 
@@ -1123,7 +1124,7 @@ HRESULT CWavStream::Flush()
 
     if (SUCCEEDED(hr))
     {
-        // Note: Even though we are flushing data, we still need to send 
+        // Note: Even though we are flushing data, we still need to send
         // any marker events that were queued.
         hr = ProcessSamplesFromQueue(DropSamples);
     }
@@ -1135,7 +1136,7 @@ HRESULT CWavStream::Flush()
 /// IMFMediaTypeHandler methods
 
 //-------------------------------------------------------------------
-// Name: IsMediaTypeSupported 
+// Name: IsMediaTypeSupported
 // Description: Check if a media type is supported.
 //
 // pMediaType: The media type to check.
@@ -1143,7 +1144,7 @@ HRESULT CWavStream::Flush()
 //-------------------------------------------------------------------
 
 
-HRESULT CWavStream::IsMediaTypeSupported( 
+HRESULT CWavStream::IsMediaTypeSupported(
     /* [in] */ IMFMediaType *pMediaType,
     /* [out] */ IMFMediaType **ppMediaType)
 {
@@ -1165,7 +1166,7 @@ HRESULT CWavStream::IsMediaTypeSupported(
         hr = pMediaType->GetGUID(MF_MT_MAJOR_TYPE, &majorType);
     }
 
-    // First make sure it's audio. 
+    // First make sure it's audio.
     if (SUCCEEDED(hr))
     {
         if (majorType != MFMediaType_Audio)
@@ -1200,7 +1201,7 @@ HRESULT CWavStream::IsMediaTypeSupported(
 
 
 //-------------------------------------------------------------------
-// Name: GetMediaTypeCount 
+// Name: GetMediaTypeCount
 // Description: Return the number of preferred media types.
 //-------------------------------------------------------------------
 
@@ -1225,11 +1226,11 @@ HRESULT CWavStream::GetMediaTypeCount(DWORD *pdwTypeCount)
 
 
 //-------------------------------------------------------------------
-// Name: GetMediaTypeByIndex 
+// Name: GetMediaTypeByIndex
 // Description: Return a preferred media type by index.
 //-------------------------------------------------------------------
 
-HRESULT CWavStream::GetMediaTypeByIndex( 
+HRESULT CWavStream::GetMediaTypeByIndex(
     /* [in] */ DWORD dwIndex,
     /* [out] */ IMFMediaType **ppType)
 {
@@ -1264,7 +1265,7 @@ HRESULT CWavStream::GetMediaTypeByIndex(
 
 
 //-------------------------------------------------------------------
-// Name: SetCurrentMediaType 
+// Name: SetCurrentMediaType
 // Description: Set the current media type.
 //-------------------------------------------------------------------
 
@@ -1304,7 +1305,7 @@ HRESULT CWavStream::SetCurrentMediaType(IMFMediaType *pMediaType)
 }
 
 //-------------------------------------------------------------------
-// Name: GetCurrentMediaType 
+// Name: GetCurrentMediaType
 // Description: Return the current media type, if any.
 //-------------------------------------------------------------------
 
@@ -1338,7 +1339,7 @@ HRESULT CWavStream::GetCurrentMediaType(IMFMediaType **ppMediaType)
 
 
 //-------------------------------------------------------------------
-// Name: GetMajorType 
+// Name: GetMajorType
 // Description: Return the major type GUID.
 //-------------------------------------------------------------------
 
@@ -1360,7 +1361,7 @@ HRESULT CWavStream::GetMajorType(GUID *pguidMajorType)
 
 
 //-------------------------------------------------------------------
-// Name: Initialize 
+// Name: Initialize
 // Description: Initializes the stream sink.
 //
 // Note: This method is called once when the media sink is first
@@ -1373,7 +1374,7 @@ HRESULT CWavStream::Initialize(CWavSink *pParent, IMFByteStream *pByteStream)
     assert(pByteStream != NULL);
 
     HRESULT hr = S_OK;
-    
+
     DWORD dwCaps  = 0;
     const DWORD dwRequiredCaps = (MFBYTESTREAM_IS_WRITABLE | MFBYTESTREAM_IS_SEEKABLE);
 
@@ -1420,7 +1421,7 @@ HRESULT CWavStream::Initialize(CWavSink *pParent, IMFByteStream *pByteStream)
 
 
 //-------------------------------------------------------------------
-// Name: Start 
+// Name: Start
 // Description: Called when the presentation clock starts.
 //
 // Note: Start time can be PRESENTATION_CURRENT_POSITION meaning
@@ -1546,7 +1547,7 @@ HRESULT CWavStream::Finalize(IMFAsyncCallback *pCallback, IUnknown *punkState)
     if (SUCCEEDED(hr))
     {
         m_state = State_Finalized;
-        hr = QueueAsyncOperation(OpFinalize); 
+        hr = QueueAsyncOperation(OpFinalize);
     }
 
     return hr;
@@ -1559,21 +1560,21 @@ HRESULT CWavStream::Finalize(IMFAsyncCallback *pCallback, IUnknown *punkState)
 // If an entry is TRUE, the operation is valid from that state.
 //-------------------------------------------------------------------
 
-BOOL CWavStream::ValidStateMatrix[CWavStream::State_Count][CWavStream::Op_Count] = 
+BOOL CWavStream::ValidStateMatrix[CWavStream::State_Count][CWavStream::Op_Count] =
 {
 // States:    Operations:
 //            SetType   Start     Restart   Pause     Stop      Sample    Marker    Finalize
-/* NotSet */  TRUE,     FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE,
+    /* NotSet */  TRUE,     FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE,
 
-/* Ready */   TRUE,     TRUE,     FALSE,    TRUE,     TRUE,     FALSE,    TRUE,     TRUE,
+    /* Ready */   TRUE,     TRUE,     FALSE,    TRUE,     TRUE,     FALSE,    TRUE,     TRUE,
 
-/* Start */   FALSE,    TRUE,     FALSE,    TRUE,     TRUE,     TRUE,     TRUE,     TRUE,
+    /* Start */   FALSE,    TRUE,     FALSE,    TRUE,     TRUE,     TRUE,     TRUE,     TRUE,
 
-/* Pause */   FALSE,    TRUE,     TRUE,     TRUE,     TRUE,     TRUE,     TRUE,     TRUE,
+    /* Pause */   FALSE,    TRUE,     TRUE,     TRUE,     TRUE,     TRUE,     TRUE,     TRUE,
 
-/* Stop */    FALSE,    TRUE,     FALSE,    FALSE,    TRUE,     FALSE,    TRUE,     TRUE,
+    /* Stop */    FALSE,    TRUE,     FALSE,    FALSE,    TRUE,     FALSE,    TRUE,     TRUE,
 
-/* Final */   FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE
+    /* Final */   FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE,    FALSE
 
 // Note about states:
 // 1. OnClockRestart should only be called from paused state.
@@ -1592,7 +1593,7 @@ HRESULT CWavStream::ValidateOperation(StreamOperation op)
     assert(!m_IsShutdown);
 
     HRESULT hr = S_OK;
-    
+
     BOOL bTransitionAllowed = ValidStateMatrix[m_state][op];
 
     if (bTransitionAllowed)
@@ -1651,7 +1652,7 @@ HRESULT CWavStream::QueueAsyncOperation(StreamOperation op)
 
     if (SUCCEEDED(hr))
     {
-        hr = MFPutWorkItem(m_WorkQueueId, &m_WorkQueueCB, pOp); 
+        hr = MFPutWorkItem(m_WorkQueueId, &m_WorkQueueCB, pOp);
     }
 
     SAFE_RELEASE(pOp);
@@ -1690,7 +1691,7 @@ HRESULT CWavStream::OnDispatchWorkItem(IMFAsyncResult* pAsyncResult)
         case OpRestart:
             // Send MEStreamSinkStarted.
             hr = QueueEvent(MEStreamSinkStarted, GUID_NULL, hr, NULL);
-            
+
             // Kick things off by requesting two samples...
             if (SUCCEEDED(hr))
             {
@@ -1770,7 +1771,7 @@ HRESULT CWavStream::DispatchProcessSample(CAsyncOperation* pOp)
 
 //-------------------------------------------------------------------
 // Name: ProcessSamplesFromQueue
-// Description: 
+// Description:
 //
 // Removes all of the samples and markers that are currently in the
 // queue and processes them.
@@ -1823,7 +1824,7 @@ HRESULT CWavStream::ProcessSamplesFromQueue(FlushState bFlushData)
             {
                 hr = SendMarkerEvent(pMarker, bFlushData);
             }
-            else 
+            else
             {
                 assert(pSample != NULL);    // Not a marker, must be a sample
                 if (bFlushData == WriteSamples)
@@ -1924,7 +1925,7 @@ HRESULT CWavStream::WriteSampleToFile(IMFSample *pSample)
 //-------------------------------------------------------------------
 // Name: SendMarkerEvent
 // Description: Saned a marker event.
-// 
+//
 // pMarker: Pointer to our custom IMarker interface, which holds
 //          the marker information.
 //-------------------------------------------------------------------
@@ -1933,10 +1934,10 @@ HRESULT CWavStream::SendMarkerEvent(IMarker *pMarker, FlushState FlushState)
 {
     HRESULT hr = S_OK;
     HRESULT hrStatus = S_OK;  // Status code for marker event.
-    
+
     if (FlushState == DropSamples)
     {
-        hrStatus = E_ABORT; 
+        hrStatus = E_ABORT;
     }
 
     PROPVARIANT var;
@@ -1962,7 +1963,7 @@ HRESULT CWavStream::SendMarkerEvent(IMarker *pMarker, FlushState FlushState)
 
 HRESULT CWavStream::DispatchFinalize(CAsyncOperation* pOp)
 {
-    HRESULT hr = S_OK; 
+    HRESULT hr = S_OK;
 
     WAVEFORMATEX *pWav = NULL;
     UINT cbSize = 0;
@@ -1976,7 +1977,7 @@ HRESULT CWavStream::DispatchFinalize(CAsyncOperation* pOp)
     // Write any samples left in the queue...
     hr = ProcessSamplesFromQueue(WriteSamples);
 
-    // Now we're done writing all of the audio data. 
+    // Now we're done writing all of the audio data.
 
     // Fill in the RIFF headers...
     if (SUCCEEDED(hr))
@@ -1991,12 +1992,12 @@ HRESULT CWavStream::DispatchFinalize(CAsyncOperation* pOp)
         header.fccWaveType = MAKEFOURCC('W', 'A', 'V', 'E');
         header.WaveHeader.fcc = MAKEFOURCC('f', 'm', 't', ' ');
         header.WaveHeader.cb = RIFFROUND(sizeof(WAVEFORMATEX));
-   
+
         CopyMemory(&header.WaveFormat, pWav, sizeof(WAVEFORMATEX));
         header.DataHeader.fcc = MAKEFOURCC('d', 'a', 't', 'a');
         header.DataHeader.cb = m_cbDataWritten;
     }
-    
+
     // Move the file pointer back to the start of the file and write the
     // RIFF headers.
     if (SUCCEEDED(hr))
@@ -2030,7 +2031,7 @@ HRESULT CWavStream::DispatchFinalize(CAsyncOperation* pOp)
 //////////////////////
 // CMarker class
 // Holds information from IMFStreamSink::PlaceMarker
-// 
+//
 
 CMarker::CMarker(MFSTREAMSINK_MARKER_TYPE eMarkerType) : m_nRefCount(1), m_eMarkerType(eMarkerType)
 {
@@ -2046,13 +2047,13 @@ CMarker::~CMarker()
     PropVariantClear(&m_varContextValue);
 }
 
-/* static */ 
+/* static */
 HRESULT CMarker::Create(
     MFSTREAMSINK_MARKER_TYPE eMarkerType,
     const PROPVARIANT* pvarMarkerValue,     // Can be NULL.
     const PROPVARIANT* pvarContextValue,    // Can be NULL.
     IMarker **ppMarker
-    )
+)
 {
     if (ppMarker == NULL)
     {
@@ -2179,7 +2180,7 @@ HRESULT CreatePCMAudioType(
     UINT32 bitsPerSample,     // Bits per sample
     UINT32 cChannels,         // Number of channels
     IMFMediaType **ppType     // Receives a pointer to the media type.
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -2249,9 +2250,9 @@ HRESULT CreatePCMAudioType(
 
 //-------------------------------------------------------------------
 // Name: ValidateWaveFormat
-// Description: Validates a WAVEFORMATEX structure. 
+// Description: Validates a WAVEFORMATEX structure.
 //
-// Just to keep the sample as simple as possible, we only accept 
+// Just to keep the sample as simple as possible, we only accept
 // uncompressed PCM formats.
 //-------------------------------------------------------------------
 
@@ -2279,7 +2280,7 @@ HRESULT ValidateWaveFormat(const WAVEFORMATEX *pWav, DWORD cbSize)
 
     // Make sure block alignment was calculated correctly.
     if (pWav->nBlockAlign != pWav->nChannels * (pWav->wBitsPerSample / 8))
-    {   
+    {
         return MF_E_INVALIDMEDIATYPE;
     }
 

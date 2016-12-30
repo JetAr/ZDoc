@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright 1998 - 2000 Microsoft Corporation
 
@@ -112,7 +112,8 @@ _tmain(void)
     //
     // exit if running in console session
     //
-    if (dwSessionId == 0){
+    if (dwSessionId == 0)
+    {
         _tprintf(TEXT1("running in console session\n"));
         return;
     }
@@ -186,106 +187,109 @@ _tmain(void)
     _tprintf(TEXT1("Page Size       : %u\n"), tsvi.si.dwPageSize);
     _tprintf(TEXT1("Number of procs : %u\n"), tsvi.si.dwNumberOfProcessors);
 
-    if (tsvi.si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL){
+    if (tsvi.si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)
+    {
 
         _tprintf(TEXT1("Processor type  : "), tsvi.si.dwNumberOfProcessors);
         switch (tsvi.si.wProcessorLevel)
         {
-            case 3:
-                _tprintf(TEXT1("Intel 80386\n"));
-                break;
+        case 3:
+            _tprintf(TEXT1("Intel 80386\n"));
+            break;
 
-            case 4:
-                _tprintf(TEXT1("Intel 80486\n"));
-                break;
+        case 4:
+            _tprintf(TEXT1("Intel 80486\n"));
+            break;
 
-            case 5:
-                _tprintf(TEXT1("Intel Pentium\n"));
-                break;
+        case 5:
+            _tprintf(TEXT1("Intel Pentium\n"));
+            break;
 
-            case 6:
-                _tprintf(TEXT1("Intel Pentium Pro or Pentium II\n"));
-                break;
+        case 6:
+            _tprintf(TEXT1("Intel Pentium Pro or Pentium II\n"));
+            break;
 
-            default:
-                _tprintf(TEXT1("Intel ????\n"));
-                break;
+        default:
+            _tprintf(TEXT1("Intel ????\n"));
+            break;
         }
     }
 
     _tprintf(TEXT1("\nMemory Load - Avail Physical - Avail Page File - Avail Virtual\n"));
 
-    while(bContinue){
+    while(bContinue)
+    {
         dwWait = WaitForMultipleObjects(3, hEventConnect, FALSE, dwTimeout);
         switch(dwWait)
         {
-            case WAIT_TIMEOUT:
-                if (bQuery) {
-                    //
-                    // initialize buffer
-                    //
-                    ZeroMemory(&ms, sizeof(ms));
-                    ulBytesRead = 0;
-                    ZeroMemory(buffer, sizeof(buffer));
-
-                    dwControlCode = TSMEMORYINFO;
-                    if (!WTSVirtualChannelWrite(hVirtChannel,
-                                                (PCHAR)&dwControlCode,
-                                                sizeof(dwControlCode),
-                                                &ulBytesWritten))
-                        DisplayError(TEXT("WTSVirtualChannelWrite"));
-
-                    //
-                    // read data
-                    //
-                    if (!WTSVirtualChannelRead(hVirtChannel,
-                                               INFINITE,
-                                               (PCHAR)&ms,
-                                               sizeof(ms),
-                                               &ulBytesRead))
-                        DisplayError(TEXT("WTSVirtualChannelRead"));
-
-                    //
-                    // display data
-                    //
-                    _stprintf_s(buffer, 256,
-                             TEXT("%10lu%%   %14lu   %15lu   %13lu"),
-                             ms.dwMemoryLoad,
-                             ms.dwAvailPhys,
-                             ms.dwAvailPageFile,
-                             ms.dwAvailVirtual);
-                    _tprintf(TEXT1("\r%s"), buffer);
-                }
-                break;
-
-            case WAIT_OBJECT_0: // reconnect
+        case WAIT_TIMEOUT:
+            if (bQuery)
+            {
                 //
-                // allow query to occur
+                // initialize buffer
                 //
-                bQuery = TRUE;
-                dwTimeout = QUERY_INTERVAL;
-                _tprintf(TEXT1("-reconnected-\n"), buffer);
-                break;
+                ZeroMemory(&ms, sizeof(ms));
+                ulBytesRead = 0;
+                ZeroMemory(buffer, sizeof(buffer));
 
-            case WAIT_OBJECT_0 + 1: // disconnect
+                dwControlCode = TSMEMORYINFO;
+                if (!WTSVirtualChannelWrite(hVirtChannel,
+                                            (PCHAR)&dwControlCode,
+                                            sizeof(dwControlCode),
+                                            &ulBytesWritten))
+                    DisplayError(TEXT("WTSVirtualChannelWrite"));
+
                 //
-                // do not query
+                // read data
                 //
-                bQuery = FALSE;
-                dwTimeout = INFINITE;
-                _tprintf(TEXT1("\n-disconnected-\n"), buffer);
-                break;
+                if (!WTSVirtualChannelRead(hVirtChannel,
+                                           INFINITE,
+                                           (PCHAR)&ms,
+                                           sizeof(ms),
+                                           &ulBytesRead))
+                    DisplayError(TEXT("WTSVirtualChannelRead"));
 
-            case WAIT_OBJECT_0 + 2: // stop
-                bContinue = FALSE;
-                break;
+                //
+                // display data
+                //
+                _stprintf_s(buffer, 256,
+                            TEXT("%10lu%%   %14lu   %15lu   %13lu"),
+                            ms.dwMemoryLoad,
+                            ms.dwAvailPhys,
+                            ms.dwAvailPageFile,
+                            ms.dwAvailVirtual);
+                _tprintf(TEXT1("\r%s"), buffer);
+            }
+            break;
 
-            case WAIT_FAILED:
-                DisplayError(TEXT("WaitForMultipleObjects"));
-                break;
+        case WAIT_OBJECT_0: // reconnect
+            //
+            // allow query to occur
+            //
+            bQuery = TRUE;
+            dwTimeout = QUERY_INTERVAL;
+            _tprintf(TEXT1("-reconnected-\n"), buffer);
+            break;
 
-            default:
-                break;
+        case WAIT_OBJECT_0 + 1: // disconnect
+            //
+            // do not query
+            //
+            bQuery = FALSE;
+            dwTimeout = INFINITE;
+            _tprintf(TEXT1("\n-disconnected-\n"), buffer);
+            break;
+
+        case WAIT_OBJECT_0 + 2: // stop
+            bContinue = FALSE;
+            break;
+
+        case WAIT_FAILED:
+            DisplayError(TEXT("WaitForMultipleObjects"));
+            break;
+
+        default:
+            break;
         }
     }
 

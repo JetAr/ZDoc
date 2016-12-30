@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,7 +31,10 @@ public:
     bool m_Private;
     bool m_Supported;
 
-    BOOL operator==(GUID& Guid) {return memcmp(&m_Guid, &Guid, sizeof(GUID)) == 0;};
+    BOOL operator==(GUID& Guid)
+    {
+        return memcmp(&m_Guid, &Guid, sizeof(GUID)) == 0;
+    };
 };
 
 class CIcsManager

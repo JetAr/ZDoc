@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,8 +11,8 @@
     FILE: Windows Parental Controls (WPC) Compliance Application sample
 
     PURPOSE: Shows simple flow of Compliance API usage for an application
-      implementing HTTP-based communication, and not needing any, or at 
-      least infrequent, access to the Parental Controls WMI-based settings 
+      implementing HTTP-based communication, and not needing any, or at
+      least infrequent, access to the Parental Controls WMI-based settings
       policy management interfaces.
 
     FUNCTIONS:
@@ -20,7 +20,7 @@
         wmain() - implements overall command line application
 
     COMMENTS:
-        Sample may easily be modified for time, games, or application 
+        Sample may easily be modified for time, games, or application
         restrictions awareness.
 
 ****************************************************************************/
@@ -45,14 +45,14 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
     {
         // Obtain Compliance interface
         IWindowsParentalControls* pWPC = NULL;
-        hr = CoCreateInstance(__uuidof(WindowsParentalControls), 0, CLSCTX_INPROC_SERVER, 
-                    __uuidof(IWindowsParentalControls), (LPVOID *)&pWPC);
+        hr = CoCreateInstance(__uuidof(WindowsParentalControls), 0, CLSCTX_INPROC_SERVER,
+                              __uuidof(IWindowsParentalControls), (LPVOID *)&pWPC);
         if (FAILED(hr))
         {
             wprintf(L"Info:  Parental Controls interface not detected.\n");
             wprintf(L"Info:   This is an error if on a supported SKU of Windows Vista.\n");
 
-            // Applications needing parental controls functionality on unsupported 
+            // Applications needing parental controls functionality on unsupported
             //  operating system versions will use alternative implementations
         }
         else
@@ -90,13 +90,13 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
                         if (FAILED(hr))
                         {
                             wprintf(L"Error:  GetRestrictions() failed, hr is %8x\n",
-                                hr);
+                                    hr);
                         }
                         else
                         {
                             if (dwRestrictions & WPCFLAG_WEB_FILTERED)
                             {
-                                // Take any necessary actions for web filtering of HTTP 
+                                // Take any necessary actions for web filtering of HTTP
                                 //  traffic
                                 wprintf(L"Info:  HTTP filtering for user is on\n");
                             }
@@ -109,19 +109,19 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
                                 // Take action to monitor logout warning events
                                 wprintf(L"Info:  Time restrictions for user are on - \
                                          monitoring for logout events\n");
-                                // Set up an Event Tracing for Windows subscription to 
+                                // Set up an Event Tracing for Windows subscription to
                                 //  the winlogon channel
-                                HANDLE hSubWinlogon = EvtSubscribe(NULL, 
-                                                       NULL, 
-                                                       L"Microsoft-Windows-Winlogon/Operational", 
-                                                       L"Event/System[EventID=1001] and \
+                                HANDLE hSubWinlogon = EvtSubscribe(NULL,
+                                                                   NULL,
+                                                                   L"Microsoft-Windows-Winlogon/Operational",
+                                                                   L"Event/System[EventID=1001] and \
                                                         Event/System/Provider[@Name='Microsoft-Windows-Winlogon'] and \
                                                         Event/System/Provider[@Guid='{dbe9b383-7cf3-4331-91cc-a3cb16a3b538}'] \
-                                                        and Event/EventData/Data[@Name='TimeLeft']", 
-                                                       NULL, 
-                                                       NULL, 
-                                                       EventCallBack, 
-                                                       EvtSubscribeToFutureEvents);
+                                                        and Event/EventData/Data[@Name='TimeLeft']",
+                                                                   NULL,
+                                                                   NULL,
+                                                                   EventCallBack,
+                                                                   EvtSubscribeToFutureEvents);
                                 if (!hSubWinlogon)
                                 {
                                     hr = HRESULT_FROM_WIN32(GetLastError());
@@ -162,7 +162,7 @@ DWORD WINAPI EventCallBack(EVT_SUBSCRIBE_NOTIFY_ACTION, PVOID, EVT_HANDLE hEvent
     HRESULT hr = S_OK;
     DWORD cb = 0;
     DWORD dwPropCount = 0;
-    
+
     // Call once to get the required size
     EvtRender(NULL, hEvent, EvtRenderEventXml, cb, NULL, &cb, &dwPropCount);
 
@@ -194,8 +194,8 @@ DWORD WINAPI EventCallBack(EVT_SUBSCRIBE_NOTIFY_ACTION, PVOID, EVT_HANDLE hEvent
                 // Create a DOM Document for the ETW event, then load and parse it
                 IXMLDOMDocument2* pXMLDocument;
 
-                hr = CoCreateInstance(CLSID_DOMDocument60, 0, CLSCTX_INPROC_SERVER, 
-                    IID_IXMLDOMDocument2, (LPVOID *) &pXMLDocument);
+                hr = CoCreateInstance(CLSID_DOMDocument60, 0, CLSCTX_INPROC_SERVER,
+                                      IID_IXMLDOMDocument2, (LPVOID *) &pXMLDocument);
                 if (FAILED(hr))
                 {
                     wprintf(L"Error:  CoCreate of DOMDOcument60 failed, hr is 0x%08x\n", hr);
@@ -219,7 +219,7 @@ DWORD WINAPI EventCallBack(EVT_SUBSCRIBE_NOTIFY_ACTION, PVOID, EVT_HANDLE hEvent
                         else
                         {
                             hr = EventParseXML(pXMLDocument);
-                            
+
                         }
                         SysFreeString(bstrXML);
                     }
@@ -230,7 +230,7 @@ DWORD WINAPI EventCallBack(EVT_SUBSCRIBE_NOTIFY_ACTION, PVOID, EVT_HANDLE hEvent
         }
         delete [] pszBuff;
     }
-   
+
     return ERROR_SUCCESS;
 }
 
@@ -248,7 +248,7 @@ HRESULT EventParseXML(IXMLDOMDocument2* pXMLDom)
     else
     {
         VARIANT var;
-        var.vt = VT_BSTR;        
+        var.vt = VT_BSTR;
         var.bstrVal = bstrNameSpace;
         // Set the namespace
         hr = pXMLDom->setProperty(bstrSelectionNamespaces, var);
@@ -289,6 +289,6 @@ HRESULT EventParseXML(IXMLDOMDocument2* pXMLDom)
         SysFreeString(bstrNameSpace);
         SysFreeString(bstrSelectionNamespaces);
     }
-    
+
     return hr;
 }

@@ -1,4 +1,4 @@
-// dllmain.h : Declaration of module class.
+﻿// dllmain.h : Declaration of module class.
 
 class CSdkShaInfoModule : public CAtlDllModuleT< CSdkShaInfoModule >
 {

@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /*++
 
@@ -11,7 +11,7 @@ Module Name:
     callnot.h
 
 Abstract:
-    
+
     Declaration of the CTAPIEventNotification object
 
 --*/
@@ -37,18 +37,18 @@ public:
     // CTAPIEventNotification implements ITTAPIEventNotification
     //  Declare ITTAPIEventNotification methods here
     HRESULT STDMETHODCALLTYPE Event(
-                                    TAPI_EVENT TapiEvent,
-                                    IDispatch * pEvent
-                                   );
+        TAPI_EVENT TapiEvent,
+        IDispatch * pEvent
+    );
 
-    
+
 // other COM stuff:
 public:
 
     // constructor
     CTAPIEventNotification() {}
     // destructor
-    ~CTAPIEventNotification(){}
+    ~CTAPIEventNotification() {}
 
     // initialization function
     // this stuff could also be done in the
@@ -69,7 +69,7 @@ public:
     }
 
     // IUnknown implementation
-	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject)
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void **ppvObject)
     {
         if (iid == IID_ITTAPIEventNotification)
         {
@@ -92,14 +92,14 @@ public:
     //
     // reference counting needs to be thread safe
     //
-    
+
     ULONG STDMETHODCALLTYPE AddRef()
     {
         ULONG l = InterlockedIncrement(&m_dwRefCount);
         return l;
     }
-    
-	ULONG STDMETHODCALLTYPE Release()
+
+    ULONG STDMETHODCALLTYPE Release()
     {
         ULONG l = InterlockedDecrement(&m_dwRefCount);
 
@@ -107,7 +107,7 @@ public:
         {
             delete this;
         }
-        
+
         return l;
     }
 

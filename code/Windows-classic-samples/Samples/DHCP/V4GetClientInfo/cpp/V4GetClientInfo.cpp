@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 
 VOID FreeClientInfoMemory(LPDHCP_CLIENT_INFO_PB pClientInfo)
 {
-    if (NULL != pClientInfo) 
+    if (NULL != pClientInfo)
     {
         // Frees client name
         if( NULL != pClientInfo->ClientName)
@@ -57,14 +57,15 @@ int __cdecl main(void)
 
     //Creates a DHCPv4 client lease record in the DHCP server database
     dwError = DhcpV4GetClientInfo(
-                          pwszServer,    //ServerIpAddress, if this is NULL, it means the current server on which the program is run
-                          &searchInfo,
-                          &pClientInfo
-                          );
+                  pwszServer,    //ServerIpAddress, if this is NULL, it means the current server on which the program is run
+                  &searchInfo,
+                  &pClientInfo
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4GetClientInfo failed with Error = %d\n",dwError);
-    }else
+    }
+    else
     {
         wprintf(L"Client Name = %s\n",pClientInfo->ClientName);
         wprintf(L"Client Comment = %s\n",pClientInfo->ClientComment);

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -18,7 +18,7 @@
 namespace SDK_METHOD_SAMPLE_COMMON
 {
 
-/// The heap handle to use for all allocations.  
+/// The heap handle to use for all allocations.
 HANDLE g_localHeap = NULL;
 
 /**
@@ -36,20 +36,20 @@ DWORD
 InitializeHeap(
 )
 {
-	DWORD dwErr = ERROR_SUCCESS;
+    DWORD dwErr = ERROR_SUCCESS;
 
-	g_localHeap = NULL;   // Make sure the global value is initialized.
+    g_localHeap = NULL;   // Make sure the global value is initialized.
 
-	g_localHeap = HeapCreate(0,  // Serialize access to the heap
-	                                       1,   // Create a 0-byte heap; allocations will increase it, as necessary.
-	                                       0);  // Heap is growable; limited only by available memory
-	if (! g_localHeap)
-	{
-		dwErr = GetLastError();
-		EapTrace("InitializeHeap(): Heap creation failed -- hit error %d!", dwErr);
-	}
+    g_localHeap = HeapCreate(0,  // Serialize access to the heap
+                             1,   // Create a 0-byte heap; allocations will increase it, as necessary.
+                             0);  // Heap is growable; limited only by available memory
+    if (! g_localHeap)
+    {
+        dwErr = GetLastError();
+        EapTrace("InitializeHeap(): Heap creation failed -- hit error %d!", dwErr);
+    }
 
-	return dwErr;
+    return dwErr;
 }
 
 
@@ -73,33 +73,33 @@ DWORD
 CleanupHeap(
 )
 {
-	DWORD dwErr = ERROR_SUCCESS;
-	BOOL  fOk   = TRUE;
+    DWORD dwErr = ERROR_SUCCESS;
+    BOOL  fOk   = TRUE;
 
-	// Sanity check.
-	if (! g_localHeap)
-	{
-		EapTrace("CleanupHeap(): Heap has not been created yet; exiting.");
-		goto LDone;
-	}   
+    // Sanity check.
+    if (! g_localHeap)
+    {
+        EapTrace("CleanupHeap(): Heap has not been created yet; exiting.");
+        goto LDone;
+    }
 
-	// Free the heap.
-	fOk = HeapDestroy(g_localHeap);
-	if (! fOk)
-	{
-		dwErr = GetLastError();
-		EapTrace("CleanupHeap(): Heap destruction failed -- hit error %d!", dwErr);
-		goto LDone;
-	}
+    // Free the heap.
+    fOk = HeapDestroy(g_localHeap);
+    if (! fOk)
+    {
+        dwErr = GetLastError();
+        EapTrace("CleanupHeap(): Heap destruction failed -- hit error %d!", dwErr);
+        goto LDone;
+    }
 
-	// Reinitialize the heap handle.
-	g_localHeap = NULL;
+    // Reinitialize the heap handle.
+    g_localHeap = NULL;
 
 LDone:
-	return dwErr;
+    return dwErr;
 }
 
-    
+
 
 /**
   * Allocate memory, using our local heap.
@@ -119,35 +119,35 @@ AllocateMemory(
     IN OUT PVOID *ppBuffer
 )
 {
-	DWORD dwErr   = ERROR_SUCCESS;
+    DWORD dwErr   = ERROR_SUCCESS;
 
-	// Sanity checks.
-	if (ppBuffer == NULL)
-	{
-		EapTrace("AllocateMemory(): Invalid buffer pointer passed in!");
-		dwErr = ERROR_INVALID_PARAMETER;
-		goto LDone;
-	}
+    // Sanity checks.
+    if (ppBuffer == NULL)
+    {
+        EapTrace("AllocateMemory(): Invalid buffer pointer passed in!");
+        dwErr = ERROR_INVALID_PARAMETER;
+        goto LDone;
+    }
 
-	if (! g_localHeap)
-	{
-		EapTrace("AllocateMemory(): Heap has not been created yet!");
-		dwErr = ERROR_INVALID_HANDLE;
-		goto LDone;
-	}   
+    if (! g_localHeap)
+    {
+        EapTrace("AllocateMemory(): Heap has not been created yet!");
+        dwErr = ERROR_INVALID_HANDLE;
+        goto LDone;
+    }
 
-	// Allocate a new memory block on the heap.  Use HEAP_ZERO_MEMORY to
-	// initialize the memory block, so callers don't have to do so.
-	*ppBuffer = (PBYTE)HeapAlloc(g_localHeap, HEAP_ZERO_MEMORY, sizeInBytes);
-	if (*ppBuffer == NULL)
-	{
-		EapTrace("AllocateMemory(): Not enough memory");
-		dwErr = ERROR_OUTOFMEMORY;
-		goto LDone;
-	}
+    // Allocate a new memory block on the heap.  Use HEAP_ZERO_MEMORY to
+    // initialize the memory block, so callers don't have to do so.
+    *ppBuffer = (PBYTE)HeapAlloc(g_localHeap, HEAP_ZERO_MEMORY, sizeInBytes);
+    if (*ppBuffer == NULL)
+    {
+        EapTrace("AllocateMemory(): Not enough memory");
+        dwErr = ERROR_OUTOFMEMORY;
+        goto LDone;
+    }
 
 LDone:
-	return dwErr;
+    return dwErr;
 }
 
 
@@ -171,44 +171,44 @@ FreeMemory(
     IN OUT PVOID *ppBuffer
 )
 {
-	DWORD dwErr = ERROR_SUCCESS;
-	BOOL  fOk   = TRUE;
+    DWORD dwErr = ERROR_SUCCESS;
+    BOOL  fOk   = TRUE;
 
-	// Sanity checks.
-	if (ppBuffer == NULL)
-	{
-		EapTrace("FreeMemory(): Invalid buffer pointer passed in!");
-		dwErr = ERROR_INVALID_PARAMETER;
-		goto LDone;
-	}
+    // Sanity checks.
+    if (ppBuffer == NULL)
+    {
+        EapTrace("FreeMemory(): Invalid buffer pointer passed in!");
+        dwErr = ERROR_INVALID_PARAMETER;
+        goto LDone;
+    }
 
-	if (! g_localHeap)
-	{
-		EapTrace("FreeMemory(): Heap has not been created yet!");
-		dwErr = ERROR_INVALID_HANDLE;
-		goto LDone;
-	}   
+    if (! g_localHeap)
+    {
+        EapTrace("FreeMemory(): Heap has not been created yet!");
+        dwErr = ERROR_INVALID_HANDLE;
+        goto LDone;
+    }
 
-	// Don't try to free NULL pointers.
-	if (*ppBuffer == NULL)
-	{
-		// Ignore this silently.
-		goto LDone;
-	}
+    // Don't try to free NULL pointers.
+    if (*ppBuffer == NULL)
+    {
+        // Ignore this silently.
+        goto LDone;
+    }
 
-	fOk = HeapFree(g_localHeap, 0, *ppBuffer);
-	if (! fOk)
-	{
-		dwErr = GetLastError();
-		EapTrace("FreeMemory(): Error %d while freeing memory!", dwErr);
-		goto LDone;
-	}
+    fOk = HeapFree(g_localHeap, 0, *ppBuffer);
+    if (! fOk)
+    {
+        dwErr = GetLastError();
+        EapTrace("FreeMemory(): Error %d while freeing memory!", dwErr);
+        goto LDone;
+    }
 
-	// Re-initialize the buffer pointer.
-	*ppBuffer = NULL;
+    // Re-initialize the buffer pointer.
+    *ppBuffer = NULL;
 
 LDone:
-	return dwErr;
+    return dwErr;
 }
 
 }// End "namespace SDK_METHOD_SAMPLE_COMMON

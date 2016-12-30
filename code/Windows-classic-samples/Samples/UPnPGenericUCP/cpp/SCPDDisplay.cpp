@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,49 +24,50 @@ static char THIS_FILE[] = __FILE__;
 
 
 CSCPDDisplay::CSCPDDisplay(BSTR bstrDocument, CWnd* pParent)
-: CDialog(CSCPDDisplay::IDD, pParent)
+    : CDialog(CSCPDDisplay::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSCPDDisplay)
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(CSCPDDisplay)
+    //}}AFX_DATA_INIT
     m_bstrSCPDDocument = SysAllocString(bstrDocument);
 }
 
-CSCPDDisplay::~CSCPDDisplay(){
+CSCPDDisplay::~CSCPDDisplay()
+{
 
-	SysFreeString(m_bstrSCPDDocument);
+    SysFreeString(m_bstrSCPDDocument);
 }
 
 void CSCPDDisplay::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSCPDDisplay)
-	DDX_Control(pDX, IDC_SCPDOK, m_OkButton);
-	DDX_Control(pDX, IDC_SCPDDISPLAY, m_DocumentDisplay);
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CSCPDDisplay)
+    DDX_Control(pDX, IDC_SCPDOK, m_OkButton);
+    DDX_Control(pDX, IDC_SCPDDISPLAY, m_DocumentDisplay);
+    //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CSCPDDisplay, CDialog)
-	//{{AFX_MSG_MAP(CSCPDDisplay)
-	ON_BN_CLICKED(IDC_SCPDOK, OnOk)
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CSCPDDisplay)
+    ON_BN_CLICKED(IDC_SCPDOK, OnOk)
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // DeviceProp message handlers
 
-void CSCPDDisplay::OnOk() 
+void CSCPDDisplay::OnOk()
 {
-	// TODO: Add your control notification handler code here
-	EndDialog(1);
-	return;
+    // TODO: Add your control notification handler code here
+    EndDialog(1);
+    return;
 }
 
 //+---------------------------------------------------------------------------
 //
 //  Member:		OnInitDialog
 //
-//  Purpose:    Initialization of the dialog box. 
+//  Purpose:    Initialization of the dialog box.
 //
 //  Arguments:
 //				None
@@ -74,7 +75,7 @@ void CSCPDDisplay::OnOk()
 //  Returns:    TRUE
 //
 //  Notes:
-//				
+//
 //
 
 
@@ -87,6 +88,6 @@ BOOL CSCPDDisplay::OnInitDialog()
     {
         m_DocumentDisplay.SetWindowText(m_bstrSCPDDocument);
     }
-     
+
     return TRUE;
 }

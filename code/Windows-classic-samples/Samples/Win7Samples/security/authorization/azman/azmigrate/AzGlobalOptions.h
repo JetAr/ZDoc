@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -47,7 +47,8 @@ public:
 
     static vector<CComBSTR> m_bstrAppNames;
 
-    static void setDefaults() {
+    static void setDefaults()
+    {
 
         m_bOverWrite = false;
 

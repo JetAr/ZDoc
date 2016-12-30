@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -20,7 +20,7 @@ MI_Result StreamInstance(_In_ MI_Context* context, _In_z_ MI_Char *propertyName,
 
     if(arrInstances == NULL)
         return result;
-	
+
     if(size > 1)
     {
         //Streaming more than one instance at a time.
@@ -36,7 +36,7 @@ MI_Result StreamInstance(_In_ MI_Context* context, _In_z_ MI_Char *propertyName,
     }
 
     for( i = 0 ; i < size; i++)
-    {	
+    {
         MI_Instance_Destruct(arrInstances[i]);
     }
 
@@ -71,16 +71,16 @@ MI_Result Invoke_GetWindowsServices(
         // Cannot get access to SCManager object.
         return ResultFromWin32Error(GetLastError());
     }
-        
+
     returnValue = EnumServicesStatus(
-        hSvcCtlMgr,
-        SERVICE_WIN32,
-        SERVICE_STATE_ALL,
-        NULL,
-        0,
-        &dwBytesNeeded,
-        &dwServiceCount,
-        &dwResumeHandle);
+                      hSvcCtlMgr,
+                      SERVICE_WIN32,
+                      SERVICE_STATE_ALL,
+                      NULL,
+                      0,
+                      &dwBytesNeeded,
+                      &dwServiceCount,
+                      &dwResumeHandle);
 
     if (!returnValue)
     {
@@ -96,14 +96,14 @@ MI_Result Invoke_GetWindowsServices(
 
             dwResumeHandle = 0;
             returnValue = EnumServicesStatus(
-                hSvcCtlMgr,
-                SERVICE_WIN32,
-                SERVICE_STATE_ALL,
-                lpServiceArray,
-                dwBytesNeeded,
-                &dwBytesNeeded,
-                &dwServiceCount,
-                &dwResumeHandle);
+                              hSvcCtlMgr,
+                              SERVICE_WIN32,
+                              SERVICE_STATE_ALL,
+                              lpServiceArray,
+                              dwBytesNeeded,
+                              &dwBytesNeeded,
+                              &dwServiceCount,
+                              &dwResumeHandle);
             if (!returnValue)
             {
                 FreeMemory(lpServiceArray);
@@ -122,7 +122,7 @@ MI_Result Invoke_GetWindowsServices(
         CloseServiceHandle(hSvcCtlMgr);
         return MI_RESULT_FAILED;
     }
-   
+
     // Enumerating through all the services and posting the instance to wmi service.
     for(dwServiceIndex = 0; dwServiceIndex < dwServiceCount; dwServiceIndex++)
     {
@@ -131,7 +131,7 @@ MI_Result Invoke_GetWindowsServices(
         if(!bRequiredAllServices)
         {
             if( (in->status.value == 0 && lpServiceArray[dwServiceIndex].ServiceStatus.dwCurrentState == SERVICE_STOPPED) ||
-                 (in->status.value == 1 && lpServiceArray[dwServiceIndex].ServiceStatus.dwCurrentState == SERVICE_RUNNING) )
+                    (in->status.value == 1 && lpServiceArray[dwServiceIndex].ServiceStatus.dwCurrentState == SERVICE_RUNNING) )
             {
                 // Desired service instance, process further
             }
@@ -141,13 +141,13 @@ MI_Result Invoke_GetWindowsServices(
                 continue;
             }
         }
-        
+
         //Setting service instance properties
         result = SetService(&serviceInstance, &hSvcCtlMgr, &lpServiceArray[dwServiceIndex], context);
         if(result == MI_RESULT_OK)
         {
             MI_Instance *instance;
-            
+
             instance = &(serviceInstance.__instance);
             result = StreamInstance(context, L"services", &instance, 1); //Streaming one instance at a time
             if(result != MI_RESULT_OK)
@@ -157,13 +157,13 @@ MI_Result Invoke_GetWindowsServices(
         }
         else
         {
-            // Notifying the user of the failure to query particular service information. 
+            // Notifying the user of the failure to query particular service information.
             // And also requesting for resonse whether to continue or stop processing further
             MI_Boolean bContinue = FALSE;
             MI_Char errMsg[MAX_PATH];
             StringCchPrintfW(errMsg,MAX_PATH,L"Error Querying the  service config %s", lpServiceArray[dwServiceIndex].lpServiceName);
             MI_Context_WriteError(context, result, MI_RESULT_TYPE_MI,errMsg, &bContinue);
-		    
+
             if(!bContinue)
             {
                 // The user asked to cancel the operation

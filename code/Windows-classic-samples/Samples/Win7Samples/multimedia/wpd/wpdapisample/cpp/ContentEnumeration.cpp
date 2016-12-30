@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -203,34 +203,34 @@ HRESULT CreateIPortableDevicePropVariantCollectionWithAllObjectIDs(
 
 namespace Helpers
 {
-    class SimplePropVariantWrapper : public PROPVARIANT
+class SimplePropVariantWrapper : public PROPVARIANT
+{
+public:
+    SimplePropVariantWrapper()
     {
-    public:
-        SimplePropVariantWrapper()
-        {
-            PropVariantInit(this);
-        }
-        SimplePropVariantWrapper(const PROPVARIANT& other) throw(...)
-        {
-            PropVariantInit(this);
-            VerifyHrOrThrow(PropVariantCopy(this, &other));
-        }
-        SimplePropVariantWrapper& operator=(const PROPVARIANT& other) throw(...)
-        {
-            if (this != &other)
-            {
-                PropVariantClear(this);
-                VerifyHrOrThrow(PropVariantCopy(this, &other));
-            }
-        }
-        ~SimplePropVariantWrapper()
+        PropVariantInit(this);
+    }
+    SimplePropVariantWrapper(const PROPVARIANT& other) throw(...)
+    {
+        PropVariantInit(this);
+        VerifyHrOrThrow(PropVariantCopy(this, &other));
+    }
+    SimplePropVariantWrapper& operator=(const PROPVARIANT& other) throw(...)
+    {
+        if (this != &other)
         {
             PropVariantClear(this);
+            VerifyHrOrThrow(PropVariantCopy(this, &other));
         }
-    };
+    }
+    ~SimplePropVariantWrapper()
+    {
+        PropVariantClear(this);
+    }
+};
 
 }
-    
+
 void ReadHintLocations(
     IPortableDevice* pDevice)
 {
@@ -259,25 +259,25 @@ void ReadHintLocations(
 
             VerifyHrOrThrow(
                 spParams.CoCreateInstance(CLSID_PortableDeviceValues)
-                );
+            );
             VerifyHrOrThrow(
                 spParams->SetGuidValue(
                     WPD_PROPERTY_COMMON_COMMAND_CATEGORY,
                     WPD_COMMAND_DEVICE_HINTS_GET_CONTENT_LOCATION.fmtid
-                    )
-                );
+                )
+            );
             VerifyHrOrThrow(
                 spParams->SetUnsignedIntegerValue(
                     WPD_PROPERTY_COMMON_COMMAND_ID,
                     WPD_COMMAND_DEVICE_HINTS_GET_CONTENT_LOCATION.pid
-                    )
-                );
+                )
+            );
             VerifyHrOrThrow(
                 spParams->SetGuidValue(
                     WPD_PROPERTY_DEVICE_HINTS_CONTENT_TYPE,
                     formatTypes[nCurrentType]
-                    )
-                );
+                )
+            );
 
             // Send the command
             CComPtr<IPortableDeviceValues> spResults;
@@ -286,10 +286,10 @@ void ReadHintLocations(
                 // Get the collection
                 CComPtr<IPortableDevicePropVariantCollection> spPortableDevicePropVariantCollection;
                 if (S_OK == spResults->GetIPortableDevicePropVariantCollectionValue(
-                        WPD_PROPERTY_DEVICE_HINTS_CONTENT_LOCATIONS,
-                        &spPortableDevicePropVariantCollection
+                            WPD_PROPERTY_DEVICE_HINTS_CONTENT_LOCATIONS,
+                            &spPortableDevicePropVariantCollection
                         )
-                    )
+                   )
                 {
                     // Get the count of folders
                     DWORD dwCount = 0;
@@ -304,11 +304,11 @@ void ReadHintLocations(
                             spPortableDevicePropVariantCollection->GetAt(
                                 dwCurrentSubFolder,
                                 &propVarCurrentSubFolder
-                                )
-                            );
-                        if (propVarCurrentSubFolder.vt == VT_BSTR ||
-                            propVarCurrentSubFolder.vt == VT_LPWSTR
                             )
+                        );
+                        if (propVarCurrentSubFolder.vt == VT_BSTR ||
+                                propVarCurrentSubFolder.vt == VT_LPWSTR
+                           )
                         {
                             // Get the values for this item
                             CComPtr<IPortableDeviceValues> spPortableDeviceValues;
@@ -317,7 +317,7 @@ void ReadHintLocations(
                                     propVarCurrentSubFolder.pwszVal,
                                     NULL,
                                     &spPortableDeviceValues)
-                                    );
+                            );
 
                             // Get the PUOID
                             CComHeapPtr<WCHAR> spszPersistentUniqueId;
@@ -325,16 +325,16 @@ void ReadHintLocations(
                                 spPortableDeviceValues->GetStringValue(
                                     WPD_OBJECT_PERSISTENT_UNIQUE_ID,
                                     &spszPersistentUniqueId
-                                    )
-                                );
+                                )
+                            );
 
                             // Convert it to a string
                             CAtlStringW strPersistentUniqueId(spszPersistentUniqueId);
 
                             printf(" '%ws' (%ws)\n",
-                                propVarCurrentSubFolder.pwszVal,
-                                strPersistentUniqueId.GetString()
-                                );
+                                   propVarCurrentSubFolder.pwszVal,
+                                   strPersistentUniqueId.GetString()
+                                  );
                         }
                         else
                         {

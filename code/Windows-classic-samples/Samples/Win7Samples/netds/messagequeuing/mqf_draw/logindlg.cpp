@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -32,29 +32,29 @@ static char THIS_FILE[] = __FILE__;
 
 
 CLoginDlg::CLoginDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CLoginDlg::IDD, pParent)
+    : CDialog(CLoginDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CLoginDlg)
-	m_strLogin = _T("");
-	m_fDsEnabledLocaly = IsDsEnabledLocaly();
+    //{{AFX_DATA_INIT(CLoginDlg)
+    m_strLogin = _T("");
+    m_fDsEnabledLocaly = IsDsEnabledLocaly();
 
-	//}}AFX_DATA_INIT
+    //}}AFX_DATA_INIT
 }
 
 
 void CLoginDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CLoginDlg)
-	DDX_Text(pDX, IDC_EDIT_LOGIN, m_strLogin);
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CLoginDlg)
+    DDX_Text(pDX, IDC_EDIT_LOGIN, m_strLogin);
+    //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CLoginDlg, CDialog)
-	//{{AFX_MSG_MAP(CLoginDlg)
-		// NOTE: The ClassWizard will add message map macros here.
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CLoginDlg)
+    // NOTE: The ClassWizard will add message map macros here.
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -64,67 +64,67 @@ BOOL CLoginDlg::IsDsEnabledLocaly()
 /*++
 
 Routine Description:
-    
+
       The routine checks whether the local computer is operating in domain (DS-enabled) mode
       or in workgroup (DS-disabled) mode.
 
 Arguments:
-    
+
       None
 
 Return Value:
-    
+
       TRUE     -  domain (DS-enabled) mode.
       FALSE    -  workgroup (DS-disabled) mode.
 
 --*/
 
 {
-       
+
 
     MQPRIVATEPROPS PrivateProps;
     QMPROPID       aPropId[MAX_VAR];
     MQPROPVARIANT  aPropVar[MAX_VAR];
-    DWORD          cProp;  
+    DWORD          cProp;
     HRESULT        hr;
     //
     // Specify the PROPID_PC_DS_ENABLED property, which indicates whether
-	// the computer is enabled to access the directory service.
+    // the computer is enabled to access the directory service.
     //
     cProp = 0;
 
     aPropId[cProp] = PROPID_PC_DS_ENABLED;
     aPropVar[cProp].vt = VT_NULL;
-    ++cProp;	
+    ++cProp;
     //
     // Create a PRIVATEPROPS structure.
     //
     PrivateProps.cProp = cProp;
-	PrivateProps.aPropID = aPropId;
-	PrivateProps.aPropVar = aPropVar;
+    PrivateProps.aPropID = aPropId;
+    PrivateProps.aPropVar = aPropVar;
     PrivateProps.aStatus = NULL;
 
     //
     // Retrieve the information.
     //
-    
+
 
     //
     // This code is used to detect a DS connection.
-    // This code is designed to allow compilation both on 
+    // This code is designed to allow compilation both on
     // NT 4.0 and on Windows 2000 adn later.
     //
     HINSTANCE hMqrtLibrary = GetModuleHandle(TEXT("mqrt.dll"));
-	if(hMqrtLibrary == NULL)
-	{
-		AfxMessageBox("An incomplete installation of MSMQ was detected. Exiting...");
-		exit(1);
-	}
+    if(hMqrtLibrary == NULL)
+    {
+        AfxMessageBox("An incomplete installation of MSMQ was detected. Exiting...");
+        exit(1);
+    }
 
-    typedef HRESULT (APIENTRY *MQGetPrivateComputerInformation_ROUTINE)(LPCWSTR , MQPRIVATEPROPS*);
-    MQGetPrivateComputerInformation_ROUTINE pfMQGetPrivateComputerInformation = 
-          (MQGetPrivateComputerInformation_ROUTINE)GetProcAddress(hMqrtLibrary,
-													 "MQGetPrivateComputerInformation");
+    typedef HRESULT (APIENTRY *MQGetPrivateComputerInformation_ROUTINE)(LPCWSTR, MQPRIVATEPROPS*);
+    MQGetPrivateComputerInformation_ROUTINE pfMQGetPrivateComputerInformation =
+        (MQGetPrivateComputerInformation_ROUTINE)GetProcAddress(hMqrtLibrary,
+                "MQGetPrivateComputerInformation");
     if(pfMQGetPrivateComputerInformation == NULL)
     {
         //
@@ -135,20 +135,20 @@ Return Value:
         return TRUE;
     }
 
-	hr = pfMQGetPrivateComputerInformation(
-				     NULL,
-					 &PrivateProps);
-	if(FAILED(hr))
-	{
+    hr = pfMQGetPrivateComputerInformation(
+             NULL,
+             &PrivateProps);
+    if(FAILED(hr))
+    {
         //
         // We were not able to determine whether the local computer is enabled to access the DS.
         // Notify the user and assume the worst case, i.e., that access to the DS is disasbled.
         //
-        AfxMessageBox("No connection to the DS was detected.");        
+        AfxMessageBox("No connection to the DS was detected.");
         return FALSE;
-    }                             
-	
-    
+    }
+
+
     if(PrivateProps.aPropVar[0].boolVal == 0)
     {
         //

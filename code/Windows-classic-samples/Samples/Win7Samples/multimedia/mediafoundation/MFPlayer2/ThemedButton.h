@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // File: ThemedButton.h
 // Description: Implements a theme-aware button control.
@@ -43,7 +43,7 @@ struct BitmapStripInfo
 // This class is used to manage the various images the themed button draws
 // in different states.
 //
-// Possibly the standard image-list control could be used instead, but this 
+// Possibly the standard image-list control could be used instead, but this
 // class is more straightforward for the requirements of this sample.
 //------------------------------------------------------------------------------
 
@@ -67,7 +67,10 @@ public:
     }
 
     BOOL    Load(int nID, int cImages);
-    UINT    NumImages() const { return m_cImages; }
+    UINT    NumImages() const
+    {
+        return m_cImages;
+    }
     BOOL    GetImage(UINT i, BitmapStripInfo *pInfo);
 };
 
@@ -103,8 +106,14 @@ public:
     ThemedButton();
     ~ThemedButton();
 
-    void SetWindow(HWND hwnd) { m_hwnd = hwnd; }
-    HWND Window() const { return m_hwnd; }
+    void SetWindow(HWND hwnd)
+    {
+        m_hwnd = hwnd;
+    }
+    HWND Window() const
+    {
+        return m_hwnd;
+    }
 
     void    ResetTheme();
     LRESULT Draw(const NMCUSTOMDRAW *pDraw);

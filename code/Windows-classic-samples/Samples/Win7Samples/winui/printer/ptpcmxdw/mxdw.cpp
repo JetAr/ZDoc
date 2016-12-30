@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,7 +10,7 @@
 HRESULT
 IsXPSCapableDriver(
     HDC hdc
-    )
+)
 {
     CHAR    lpszOutData[ARRAYSIZE(gszTechnologyIdentifier)] = {0};
     INT     cbOutput                                        = (INT) ( strlen(gszTechnologyIdentifier) + 1 );
@@ -23,8 +23,8 @@ IsXPSCapableDriver(
                 NULL,           // input structure
                 cbOutput,       // size of output structure
                 lpszOutData     // output structure
-                )
-        )
+            )
+       )
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
@@ -56,7 +56,7 @@ PutTogetherEscapeStructureForImage(
     __in                              LPCSTR                      pszURI,
     __deref_out_bcount(*pcbOutBuffer) PBYTE                      *ppbOutBuffer,
     __out                             PDWORD                      pcbOutBuffer
-    )
+)
 {
     P_MXDC_ESCAPE_HEADER_T          pEscHeader      = NULL;
     P_MXDC_XPS_S0PAGE_RESOURCE_T    pEscData        = NULL;
@@ -65,9 +65,9 @@ PutTogetherEscapeStructureForImage(
     HRESULT                         hr              = S_OK;
 
     if ( NULL == pbInBuffer   ||
-         0    == cbInBuffer   ||
-         NULL == ppbOutBuffer ||
-         NULL == pcbOutBuffer )
+            0    == cbInBuffer   ||
+            NULL == ppbOutBuffer ||
+            NULL == pcbOutBuffer )
     {
         hr = E_INVALIDARG;
     }
@@ -80,11 +80,11 @@ PutTogetherEscapeStructureForImage(
         //
         // bData[1] is the beginig of the data buffer. The actual
         // size of the buffer is cbBuffer (which includes bData[1]
-        // So we subtract 1 
+        // So we subtract 1
         //
-        cbEscBuffer =  sizeof(MXDC_S0PAGE_RESOURCE_ESCAPE_T) - sizeof(pEscData->bData); 
+        cbEscBuffer =  sizeof(MXDC_S0PAGE_RESOURCE_ESCAPE_T) - sizeof(pEscData->bData);
         cbEscBuffer += cbInBuffer;
-    
+
         // Allocate contiguous data
         pEscBuffer = (P_MXDC_S0PAGE_RESOURCE_ESCAPE_T) MemAlloc(cbEscBuffer);
 
@@ -97,14 +97,14 @@ PutTogetherEscapeStructureForImage(
             // Zero out allocated memory
             memset((PBYTE)pEscBuffer, 0, cbEscBuffer);
 
-            
+
             pEscHeader      = &(pEscBuffer->mxdcEscape);
             pEscData        = &(pEscBuffer->xpsS0PageResourcePassthrough);
 
             // Fill out the Escape Header data
             pEscHeader->cbInput    = cbEscBuffer;
             pEscHeader->cbOutput   = 0;
-            pEscHeader->opCode     = OpCode; 
+            pEscHeader->opCode     = OpCode;
 
             // Fill out the Escape data
             pEscData->dwSize         = sizeof(MXDC_XPS_S0PAGE_RESOURCE_T) + cbInBuffer - sizeof(pEscData->bData);
@@ -112,7 +112,7 @@ PutTogetherEscapeStructureForImage(
             hr = StringCchCopyA((LPSTR)pEscData->szUri, CCHOF(pEscData->szUri), pszURI);
             if ( SUCCEEDED(hr) )
             {
-                pEscData->dwDataSize = cbInBuffer; 
+                pEscData->dwDataSize = cbInBuffer;
                 memcpy(&pEscData->bData, pbInBuffer, cbInBuffer);
             }
         }
@@ -134,7 +134,7 @@ PutTogetherEscapeStructureForPrintTicket(
     __in                               DWORD           cbInBuffer,
     __deref_out_bcount(*pcbOutBuffer)  PBYTE          *ppbOutBuffer,
     __out                              PDWORD          pcbOutBuffer
-    )
+)
 {
 
     P_MXDC_ESCAPE_HEADER_T      pEscHeader  = NULL;
@@ -144,9 +144,9 @@ PutTogetherEscapeStructureForPrintTicket(
     HRESULT                     hr          = S_OK;
 
     if ( NULL == pbInBuffer   ||
-         0    == cbInBuffer   ||
-         NULL == ppbOutBuffer ||
-         NULL == pcbOutBuffer )
+            0    == cbInBuffer   ||
+            NULL == ppbOutBuffer ||
+            NULL == pcbOutBuffer )
     {
         hr = E_INVALIDARG;
     }
@@ -159,14 +159,14 @@ PutTogetherEscapeStructureForPrintTicket(
         //
         // bData[1] is the beginig of the data buffer. The actual
         // size of the buffer is cbBuffer (which includes bData[1]
-        // So we subtract 1 
+        // So we subtract 1
         //
-        cbEscBuffer = sizeof(MXDC_PRINTTICKET_ESCAPE_T) - sizeof(pEscData->bData); 
+        cbEscBuffer = sizeof(MXDC_PRINTTICKET_ESCAPE_T) - sizeof(pEscData->bData);
         cbEscBuffer += cbInBuffer;
-    
+
         // Allocate contiguous data
         pEscBuffer = (P_MXDC_PRINTTICKET_ESCAPE_T) MemAlloc(cbEscBuffer);
-        
+
         if ( NULL == pEscBuffer )
         {
             hr = E_OUTOFMEMORY;
@@ -183,7 +183,7 @@ PutTogetherEscapeStructureForPrintTicket(
             // Fill out the Escape Header data
             pEscHeader->cbInput    = cbEscBuffer;
             pEscHeader->cbOutput   = 0;
-            pEscHeader->opCode     = OpCode; 
+            pEscHeader->opCode     = OpCode;
 
             // Fill out the actual escape data
             pEscData->dwDataSize   = cbInBuffer + sizeof(pEscData->dwDataSize);
@@ -208,9 +208,9 @@ PutTogetherEscapeStructureForFixedPage(
     __in                              DWORD                       cbInBuffer,
     __deref_out_bcount(*pcbOutBuffer) PBYTE                      *ppbOutBuffer,
     __out                             PDWORD                      pcbOutBuffer
-    )
+)
 {
-    
+
     P_MXDC_S0PAGE_PASSTHROUGH_ESCAPE_T  pEscBuffer  = NULL;
     P_MXDC_ESCAPE_HEADER_T              pEscHeader  = NULL;
     P_MXDC_S0PAGE_DATA_T                pEscData    = NULL;
@@ -219,9 +219,9 @@ PutTogetherEscapeStructureForFixedPage(
     HRESULT                             hr          = S_OK;
 
     if ( NULL == pbInBuffer   ||
-         0    == cbInBuffer   ||
-         NULL == ppbOutBuffer ||
-         NULL == pcbOutBuffer )
+            0    == cbInBuffer   ||
+            NULL == ppbOutBuffer ||
+            NULL == pcbOutBuffer )
     {
         hr = E_INVALIDARG;
     }
@@ -234,14 +234,14 @@ PutTogetherEscapeStructureForFixedPage(
         //
         // bData[1] is the beginig of the data buffer. The actual
         // size of the buffer is cbBuffer (which includes bData[1]
-        // So we subtract 1 
+        // So we subtract 1
         //
-        cbEscBuffer = sizeof(MXDC_S0PAGE_PASSTHROUGH_ESCAPE_T) - sizeof(pEscData->bData); 
+        cbEscBuffer = sizeof(MXDC_S0PAGE_PASSTHROUGH_ESCAPE_T) - sizeof(pEscData->bData);
         cbEscBuffer += cbInBuffer;
-    
+
         // Allocate contiguous data
         pEscBuffer = (P_MXDC_S0PAGE_PASSTHROUGH_ESCAPE_T)MemAlloc(cbEscBuffer);
-        
+
         if ( NULL == pEscBuffer )
         {
             hr = E_OUTOFMEMORY;
@@ -260,7 +260,7 @@ PutTogetherEscapeStructureForFixedPage(
             // Fill out the Escape Header data
             pEscHeader->cbInput    = cbEscBuffer;
             pEscHeader->cbOutput   = 0;
-            pEscHeader->opCode     = OpCode; 
+            pEscHeader->opCode     = OpCode;
 
             // Fill out the actual escape data
             pEscData->dwSize       = cbInBuffer + sizeof(pEscData->dwSize);

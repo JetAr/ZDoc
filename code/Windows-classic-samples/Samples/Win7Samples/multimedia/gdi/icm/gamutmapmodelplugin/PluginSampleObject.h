@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -17,9 +17,9 @@
 
 #include "PluginSampleObject.h"
 
-class ATL_NO_VTABLE CGamutMapModelPluginSample : 
-	public CComObjectRootEx<CComSingleThreadModel>,
-	public CComCoClass<CGamutMapModelPluginSample, &CLSID_GamutMapModelPluginSample>,
+class ATL_NO_VTABLE CGamutMapModelPluginSample :
+    public CComObjectRootEx<CComSingleThreadModel>,
+    public CComCoClass<CGamutMapModelPluginSample, &CLSID_GamutMapModelPluginSample>,
     public IGamutMapModelPlugIn
 {
 public:
@@ -43,42 +43,42 @@ public:
     }
 
 
-DECLARE_REGISTRY_RESOURCEID(IDR_GamutMapModelPluginSample)
+    DECLARE_REGISTRY_RESOURCEID(IDR_GamutMapModelPluginSample)
 
 
-BEGIN_COM_MAP(CGamutMapModelPluginSample)
+    BEGIN_COM_MAP(CGamutMapModelPluginSample)
     COM_INTERFACE_ENTRY(IGamutMapModelPlugIn)
-END_COM_MAP()
+    END_COM_MAP()
 
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	HRESULT FinalConstruct()
-	{
-		return S_OK;
-	}
-	
-	void FinalRelease() 
-	{
-	}
+    HRESULT FinalConstruct()
+    {
+        return S_OK;
+    }
+
+    void FinalRelease()
+    {
+    }
 
 public:
 
     //
     // Gamut Map Model Plugin Methods
     //
-    STDMETHOD(Initialize)( 
+    STDMETHOD(Initialize)(
         BSTR bstrXml,
         IDeviceModelPlugIn *pDM1,
         IDeviceModelPlugIn *pDM2,
         GamutBoundaryDescription *GBD1,
-        GamutBoundaryDescription *GBD2 
+        GamutBoundaryDescription *GBD2
     );
 
     STDMETHOD(SourceToDestinationAppearanceColors)(UINT cColors,
-                                                const JChColorF *pInputColors,
-                                                JChColorF *pOutputColors
-    ); 
+            const JChColorF *pInputColors,
+            JChColorF *pOutputColors
+                                                  );
 
 
 private:

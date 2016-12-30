@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -96,116 +96,116 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
-        case WM_CREATE:
+    case WM_CREATE:
+    {
+        HRESULT hr;
+
+
+        // Create a recognition context that uses the default recognizer.
+        // The single context will be used for all the recognition.
+        hr = CoCreateInstance(CLSID_InkRecognizerContext,
+                              NULL, CLSCTX_INPROC_SERVER,
+                              IID_IInkRecognizerContext,
+                              (void **) &g_pIInkRecoContext);
+        if (FAILED(hr))
         {
-            HRESULT hr;
-
-
-            // Create a recognition context that uses the default recognizer.
-            // The single context will be used for all the recognition.
-            hr = CoCreateInstance(CLSID_InkRecognizerContext,
-                                  NULL, CLSCTX_INPROC_SERVER,
-                                  IID_IInkRecognizerContext,
-                                  (void **) &g_pIInkRecoContext);
-            if (FAILED(hr))
-            {
-                ::MessageBox(NULL, TEXT("There are no handwriting recognizers installed.\n"
-                     TEXT("You need to have at least one in order to run this sample.\nExiting.")),
-                     gc_szAppName, MB_ICONERROR);
-                return -1;
-            }
-
-            // Create the InkCollector object.
-            hr = CoCreateInstance(CLSID_InkCollector,
-                                  NULL, CLSCTX_INPROC_SERVER,
-                                  IID_IInkCollector,
-                                  (void **) &g_pIInkCollector);
-            if (FAILED(hr))
-                return -1;
-
-            // Get a pointer to the Ink object
-            hr = g_pIInkCollector->get_Ink(&g_pIInkDisp);
-            if (FAILED(hr))
-                return -1;
-
-            // Tell InkCollector the window to collect ink in
-            hr = g_pIInkCollector->put_hWnd((long)hwnd);
-            if (FAILED(hr))
-                return -1;
-
-            // Enable ink input in the window
-            hr = g_pIInkCollector->put_Enabled(VARIANT_TRUE);
-            if (FAILED(hr))
-                return -1;
-
-            break;
+            ::MessageBox(NULL, TEXT("There are no handwriting recognizers installed.\n"
+                                    TEXT("You need to have at least one in order to run this sample.\nExiting.")),
+                         gc_szAppName, MB_ICONERROR);
+            return -1;
         }
 
-        case WM_DESTROY:
+        // Create the InkCollector object.
+        hr = CoCreateInstance(CLSID_InkCollector,
+                              NULL, CLSCTX_INPROC_SERVER,
+                              IID_IInkCollector,
+                              (void **) &g_pIInkCollector);
+        if (FAILED(hr))
+            return -1;
 
-            PostQuitMessage(0);
-            break;
+        // Get a pointer to the Ink object
+        hr = g_pIInkCollector->get_Ink(&g_pIInkDisp);
+        if (FAILED(hr))
+            return -1;
 
-        case WM_COMMAND:
+        // Tell InkCollector the window to collect ink in
+        hr = g_pIInkCollector->put_hWnd((long)hwnd);
+        if (FAILED(hr))
+            return -1;
 
-            if (wParam == ID_CLEAR)
+        // Enable ink input in the window
+        hr = g_pIInkCollector->put_Enabled(VARIANT_TRUE);
+        if (FAILED(hr))
+            return -1;
+
+        break;
+    }
+
+    case WM_DESTROY:
+
+        PostQuitMessage(0);
+        break;
+
+    case WM_COMMAND:
+
+        if (wParam == ID_CLEAR)
+        {
+            // Delete all strokes from the Ink
+            g_pIInkDisp->DeleteStrokes(0);
+
+            // Update the window
+            InvalidateRect(hwnd, NULL, TRUE);
+        }
+        else if (wParam == ID_RECOGNIZE)
+        {
+            // change cursor to the system's Hourglass
+            HCURSOR hCursor = ::SetCursor(::LoadCursor(NULL, IDC_WAIT));
+            // Get a pointer to the ink stroke collection
+            // This collection is a snapshot of the entire ink object
+            IInkStrokes* pIInkStrokes = NULL;
+            HRESULT hr = g_pIInkDisp->get_Strokes(&pIInkStrokes);
+            if (SUCCEEDED(hr))
             {
-                // Delete all strokes from the Ink
-                g_pIInkDisp->DeleteStrokes(0);
-
-                // Update the window
-                InvalidateRect(hwnd, NULL, TRUE);
-            }
-            else if (wParam == ID_RECOGNIZE)
-            {
-                // change cursor to the system's Hourglass
-                HCURSOR hCursor = ::SetCursor(::LoadCursor(NULL, IDC_WAIT));
-                // Get a pointer to the ink stroke collection
-                // This collection is a snapshot of the entire ink object
-                IInkStrokes* pIInkStrokes = NULL;
-                HRESULT hr = g_pIInkDisp->get_Strokes(&pIInkStrokes);
+                // Pass the stroke collection to the recognition context
+                hr = g_pIInkRecoContext->putref_Strokes(pIInkStrokes);
                 if (SUCCEEDED(hr))
                 {
-                    // Pass the stroke collection to the recognition context
-                    hr = g_pIInkRecoContext->putref_Strokes(pIInkStrokes);
-                    if (SUCCEEDED(hr))
+                    // Recognize
+                    IInkRecognitionResult* pIInkRecoResult = NULL;
+                    InkRecognitionStatus RecognitionStatus;
+                    hr = g_pIInkRecoContext->Recognize(&RecognitionStatus, &pIInkRecoResult);
+                    if (SUCCEEDED(hr) && (pIInkRecoResult!= NULL))
                     {
-                        // Recognize
-                        IInkRecognitionResult* pIInkRecoResult = NULL;
-                        InkRecognitionStatus RecognitionStatus;
-                        hr = g_pIInkRecoContext->Recognize(&RecognitionStatus, &pIInkRecoResult);
-                        if (SUCCEEDED(hr) && (pIInkRecoResult!= NULL))
+                        // Get the best result of the recognition
+                        BSTR bstrBestResult = NULL;
+                        hr = pIInkRecoResult->get_TopString(&bstrBestResult);
+                        pIInkRecoResult->Release();
+                        pIInkRecoResult = NULL;
+
+                        // Show the result string
+                        if (SUCCEEDED(hr) && bstrBestResult)
                         {
-                            // Get the best result of the recognition
-                            BSTR bstrBestResult = NULL;
-                            hr = pIInkRecoResult->get_TopString(&bstrBestResult);
-                            pIInkRecoResult->Release();
-                            pIInkRecoResult = NULL;
-
-                            // Show the result string
-                            if (SUCCEEDED(hr) && bstrBestResult)
-                            {
-                                MessageBoxW(hwnd, bstrBestResult,
-                                            L"Recognition Results", MB_OK);
-                                SysFreeString(bstrBestResult);
-                            }
+                            MessageBoxW(hwnd, bstrBestResult,
+                                        L"Recognition Results", MB_OK);
+                            SysFreeString(bstrBestResult);
                         }
-                        // Reset the recognition context
-                        g_pIInkRecoContext->putref_Strokes(NULL);
                     }
-                    pIInkStrokes->Release();
+                    // Reset the recognition context
+                    g_pIInkRecoContext->putref_Strokes(NULL);
                 }
-                // restore the cursor
-                ::SetCursor(hCursor);
+                pIInkStrokes->Release();
             }
-            else
-            {
-                return DefWindowProc(hwnd, uMsg, wParam, lParam);
-            }
-            break;
-
-        default:
+            // restore the cursor
+            ::SetCursor(hCursor);
+        }
+        else
+        {
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
+        }
+        break;
+
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
 
     return 0;

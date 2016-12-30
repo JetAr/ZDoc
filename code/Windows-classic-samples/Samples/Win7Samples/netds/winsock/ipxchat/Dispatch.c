@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 //  MODULE:   dispatch.c
 //
 //  PURPOSE:  Implement the generic message and command dispatchers.
-//    
+//
 //
 //  FUNCTIONS:
 //    DispMessage - Call the function associated with a message.
@@ -50,10 +50,10 @@ LRESULT DispDefault(EDWP, HWND, UINT, WPARAM, LPARAM);
 //    message or default function.
 //
 
-LRESULT DispMessage(LPMSDI lpmsdi, 
-                    HWND   hwnd, 
-                    UINT   uMessage, 
-                    WPARAM wparam, 
+LRESULT DispMessage(LPMSDI lpmsdi,
+                    HWND   hwnd,
+                    UINT   uMessage,
+                    WPARAM wparam,
                     LPARAM lparam)
 {
     int  imsd = 0;
@@ -96,9 +96,9 @@ LRESULT DispMessage(LPMSDI lpmsdi,
 //
 
 
-LRESULT DispCommand(LPCMDI lpcmdi, 
-                    HWND   hwnd, 
-                    WPARAM wparam, 
+LRESULT DispCommand(LPCMDI lpcmdi,
+                    HWND   hwnd,
+                    WPARAM wparam,
                     LPARAM lparam)
 {
     WORD    wCommand = GET_WM_COMMAND_ID(wparam, lparam);
@@ -146,24 +146,24 @@ LRESULT DispCommand(LPCMDI lpcmdi,
 //    parameters.
 //
 
-LRESULT DispDefault(EDWP   edwp, 
-                    HWND   hwnd, 
-                    UINT   uMessage, 
-                    WPARAM wparam, 
+LRESULT DispDefault(EDWP   edwp,
+                    HWND   hwnd,
+                    UINT   uMessage,
+                    WPARAM wparam,
                     LPARAM lparam)
 {
     switch (edwp)
     {
-        case edwpNone:
-            return 0;
-        case edwpWindow:
-            return DefWindowProc(hwnd, uMessage, wparam, lparam);
-        case edwpDialog:
-            return DefDlgProc(hwnd, uMessage, wparam, lparam);
-        case edwpMDIFrame:
-            return DefFrameProc(hwnd, hwndMDIIPXChat, uMessage, wparam, lparam);
-        case edwpMDIChild:
-            return DefMDIChildProc(hwnd, uMessage, wparam, lparam);
+    case edwpNone:
+        return 0;
+    case edwpWindow:
+        return DefWindowProc(hwnd, uMessage, wparam, lparam);
+    case edwpDialog:
+        return DefDlgProc(hwnd, uMessage, wparam, lparam);
+    case edwpMDIFrame:
+        return DefFrameProc(hwnd, hwndMDIIPXChat, uMessage, wparam, lparam);
+    case edwpMDIChild:
+        return DefMDIChildProc(hwnd, uMessage, wparam, lparam);
     }
     return 0;
 }

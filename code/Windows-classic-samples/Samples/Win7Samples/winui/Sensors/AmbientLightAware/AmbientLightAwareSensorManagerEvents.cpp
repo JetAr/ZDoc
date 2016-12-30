@@ -1,10 +1,10 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation.  All rights reserved.
+// Copyright © Microsoft Corporation.  All rights reserved.
 //
 // Module:
 //        AmbientLightAwareSensorManagerEvents.cpp
@@ -12,9 +12,9 @@
 // Description:
 //        Implementation of ISensorManagerEvents
 //
-// Comments: 
+// Comments:
 //        This is a standard c++ class, but needs to support IUnknown methods
-//        to be properly implemented.  This class overrides 
+//        to be properly implemented.  This class overrides
 //        ISensorManagerEvents functions to receive updated information from
 //        the Sensors API when it is published.
 //
@@ -81,7 +81,7 @@ CAmbientLightAwareSensorManagerEvents::~CAmbientLightAwareSensorManagerEvents()
 //        REFIID riid:     Input. ID of the interface being requested. Either
 //                         IUnknown or one of the two classes we inherit.
 //        void** ppObject: Output. Address of pointer variable that receives
-//                         the interface pointer requested in riid. Upon 
+//                         the interface pointer requested in riid. Upon
 //                         successful return, *ppvObject contains the requested
 //                         interface pointer to the object. If the object does
 //                         not support the interface specified in iid,
@@ -134,7 +134,7 @@ STDMETHODIMP CAmbientLightAwareSensorManagerEvents::QueryInterface(REFIID riid, 
 ULONG _stdcall CAmbientLightAwareSensorManagerEvents::AddRef()
 {
     m_lRefCount++;
-    return m_lRefCount; 
+    return m_lRefCount;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

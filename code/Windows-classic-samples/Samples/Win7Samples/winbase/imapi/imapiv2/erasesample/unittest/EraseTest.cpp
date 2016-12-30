@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -13,12 +13,12 @@ Main test routintes.
 
 VOID PrintHelp(WCHAR * selfName)
 {
-    printf("Usage:\n"           
+    printf("Usage:\n"
            "%S DriveLetter [-fullerase]\n"
            "Example:\n"
            "%S E: -fullerase\n",
            selfName, selfName
-           );
+          );
     return;
 }
 
@@ -28,7 +28,7 @@ GetParameters(
     IN  WCHAR*          Arguments[],
     OUT IDiscRecorder2** Recorder,
     OUT VARIANT_BOOL*   FullErase
-    )
+)
 {
     BOOLEAN validArgument = TRUE;
 
@@ -68,10 +68,10 @@ GetParameters(
         if (SUCCEEDED(hr))
         {
             hr = CoCreateInstance(CLSID_MsftDiscMaster2,
-                                  NULL, 
+                                  NULL,
                                   CLSCTX_ALL,
                                   IID_PPV_ARGS(&tmpDiscMaster)
-                                  );
+                                 );
             if (FAILED(hr))
             {
                 printf("Failed to Create DiscMaster. Error: 0x%X.\n", hr);
@@ -80,7 +80,7 @@ GetParameters(
 
         // get a new enumerator for the disc recorders
         if (SUCCEEDED(hr))
-        {        
+        {
             hr = tmpDiscMaster->get__NewEnum(&tmpRecorderEnumerator);
             if (FAILED(hr))
             {
@@ -108,10 +108,10 @@ GetParameters(
                 {
                     // Create a new IDiscRecorder2
                     hr = CoCreateInstance(CLSID_MsftDiscRecorder2,
-                                          NULL, 
+                                          NULL,
                                           CLSCTX_ALL,
                                           IID_PPV_ARGS(&tmpRecorder)
-                                          );
+                                         );
                     if (FAILED(hr))
                     {
                         printf("Failed CoCreateInstance for DiscRecorder. Error: 0x%X.\n", hr);
@@ -196,7 +196,7 @@ int _tmain(int argc, _TCHAR* argv[])
     {
         hr = TestErase(recorder, fullErase);
     }
-    
+
     return hr;
 }
 
@@ -207,31 +207,31 @@ DWORD GetSecondsElapsed(SYSTEMTIME* StartTime, SYSTEMTIME* EndTime)
     FILETIME         End;
     unsigned __int64 Start64 = 0;
     unsigned __int64 End64 = 0;
-    unsigned __int64 Elapsed64 = 0; 
-        
+    unsigned __int64 Elapsed64 = 0;
+
     //
     //--- Convert System time
     //
     SystemTimeToFileTime(StartTime,&Start);
     SystemTimeToFileTime(EndTime,&End);
 
-     
+
     //
-    //---- Convert start and end file 
+    //---- Convert start and end file
     //---- time to 2  64 bit usigned integers
     //
     ((LPDWORD)(&Start64))[1] = Start.dwHighDateTime;
     ((LPDWORD)(&Start64))[0] = Start.dwLowDateTime;
-  
+
     ((LPDWORD)(&End64))[1] = End.dwHighDateTime;
     ((LPDWORD)(&End64))[0] = End.dwLowDateTime;
 
-   
+
     //
     //--- Calc elapsed time
     //
     Elapsed64 = End64 - Start64;
-    
+
     //
     //---- Get micro seconds elapsed
     //
@@ -304,10 +304,10 @@ HRESULT TestErase(IDiscRecorder2* Recorder, VARIANT_BOOL FullErase)
     if (SUCCEEDED(hr))
     {
         hr = CoCreateInstance(__uuidof(MsftEraseSample),
-                              NULL, 
+                              NULL,
                               CLSCTX_ALL,
                               IID_PPV_ARGS(&eraser)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("CoCreateInstance of CLSID_MsftEraseSample failed. Error: 0x%X.\n", hr);
@@ -356,12 +356,12 @@ HRESULT TestErase(IDiscRecorder2* Recorder, VARIANT_BOOL FullErase)
         if (FAILED(hr))
         {
             printf("Failed put_FullErase(). Error: 0x%X.\n", hr);
-        }            
+        }
     }
 
     // release the recorder early...
     ReleaseAndNull(Recorder);
-   
+
     // create event
     if (SUCCEEDED(hr))
     {
@@ -402,11 +402,11 @@ HRESULT TestErase(IDiscRecorder2* Recorder, VARIANT_BOOL FullErase)
 
             CalcElapsedTime(&startTime, &endTime, &elapsedTime);
             printf(" - Time to erase: %02d:%02d:%02d\n", elapsedTime.wHour,
-                                                         elapsedTime.wMinute,
-                                                         elapsedTime.wSecond);
+                   elapsedTime.wMinute,
+                   elapsedTime.wSecond);
         }
     }
-    
+
     // unhook events
     if (NULL != eventSink)
     {

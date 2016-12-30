@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -37,7 +37,7 @@ using namespace std;
 Description:
 
     This routine is called to convert a SAFEARRAY of strings to a vector of strings
-    
+
 Arguments:
 
     ValueList - The SAFEARRAY of strings to be converted
@@ -48,35 +48,35 @@ Return value:
     HRESULT
 
 Notes:
-    
+
 
 --*/
-HRESULT GetValues(  
+HRESULT GetValues(
     SAFEARRAY           *const  ValueList,
     vector <wstring>            &Values )
 {
     HRESULT hr = S_OK;
     long lowerBound = 0;
-       long upperBound = 0;
+    long upperBound = 0;
 
     //Go through SAFEARRAY and populate the vector
 
-       //Get the lower bound of the safearray
+    //Get the lower bound of the safearray
     hr = SafeArrayGetLBound (ValueList, 1, &lowerBound);
     if(FAILED(hr))
     {
         goto exit;
     }
 
-       //Get the upper bound of the safearray
+    //Get the upper bound of the safearray
     hr = SafeArrayGetUBound (ValueList, 1, &upperBound);
     if(FAILED(hr))
     {
         goto exit;
     }
 
-       //Loop through the safe array and populate the vector
-    for (long i = lowerBound; i <= upperBound; i++) 
+    //Loop through the safe array and populate the vector
+    for (long i = lowerBound; i <= upperBound; i++)
     {
         //Convert each element into a wstring and save it to the vector
         _variant_t var;
@@ -91,7 +91,7 @@ HRESULT GetValues(
     }
 
 exit:
-    
+
     return hr;
 }
 
@@ -102,7 +102,7 @@ exit:
 Description:
 
     This routine prints a property definition along with its possible values
-    
+
 Arguments:
 
     PropertyDefinition - The FSRM property definition to be printed
@@ -112,13 +112,13 @@ Return value:
     HRESULT
 
 Notes:
-    
+
 
 --*/
 
 HRESULT DisplayPropertyDefinition(
     const CComPtr<IFsrmPropertyDefinition>  & PropertyDefinition
-    )
+)
 {
     CComBSTR        description;
     CComBSTR        name;
@@ -130,35 +130,42 @@ HRESULT DisplayPropertyDefinition(
     HRESULT hr=S_OK;
 
     // get the members of the PropertyDefinition
-    
+
     hr = PropertyDefinition->get_Description(&description);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
     hr = PropertyDefinition->get_Name(&name);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
     hr = PropertyDefinition->get_Type(&type);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
 
     hr = PropertyDefinition->get_PossibleValues(&list);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
     hr = GetValues(list,possibleValues);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
 
     hr = PropertyDefinition->get_ValueDescriptions(&list);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
     hr = GetValues(list,valueDescriptions);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
 
@@ -169,51 +176,54 @@ HRESULT DisplayPropertyDefinition(
     printf("\tName:\t\t%ws\n",OLE2CW(name.m_str));
     printf("\tDefinition:\t%ws\n",OLE2CW(description.m_str));
     printf("\tType:\t\t");
-    switch(type){
-        case FsrmPropertyDefinitionType_Unknown:
-            printf("Unknown\n");
-            break;
+    switch(type)
+    {
+    case FsrmPropertyDefinitionType_Unknown:
+        printf("Unknown\n");
+        break;
 
-        case FsrmPropertyDefinitionType_OrderedList:
-            printf("Ordered List\n");
-            //Print the possible values and their descriptions
-            for(unsigned int i=0;i<possibleValues.size() && valueDescriptions.size(); ++i){
-                printf("\t\t%d Value:\t %ws\n",i+1,possibleValues[i].c_str());
-                printf("\t\t%d Description:\t %ws\n",i+1,valueDescriptions[i].c_str());
-            }
-            break;
+    case FsrmPropertyDefinitionType_OrderedList:
+        printf("Ordered List\n");
+        //Print the possible values and their descriptions
+        for(unsigned int i=0; i<possibleValues.size() && valueDescriptions.size(); ++i)
+        {
+            printf("\t\t%d Value:\t %ws\n",i+1,possibleValues[i].c_str());
+            printf("\t\t%d Description:\t %ws\n",i+1,valueDescriptions[i].c_str());
+        }
+        break;
 
-        case FsrmPropertyDefinitionType_MultiChoiceList:
-            printf("Multichoice List\n");
-            //Print the possible values and their descriptions
-            for(unsigned int i=0;i<possibleValues.size() && valueDescriptions.size(); ++i){
-                printf("\t\t%d Value:\t %ws\n",i+1,possibleValues[i].c_str());
-                printf("\t\t%d Description:\t %ws\n",i+1,valueDescriptions[i].c_str());
-            }
-            break;
+    case FsrmPropertyDefinitionType_MultiChoiceList:
+        printf("Multichoice List\n");
+        //Print the possible values and their descriptions
+        for(unsigned int i=0; i<possibleValues.size() && valueDescriptions.size(); ++i)
+        {
+            printf("\t\t%d Value:\t %ws\n",i+1,possibleValues[i].c_str());
+            printf("\t\t%d Description:\t %ws\n",i+1,valueDescriptions[i].c_str());
+        }
+        break;
 
-        case FsrmPropertyDefinitionType_Int:
-            printf("Int\n");
-            break;
+    case FsrmPropertyDefinitionType_Int:
+        printf("Int\n");
+        break;
 
-        case FsrmPropertyDefinitionType_Bool:
-            printf("Bool\n");
-            break;
+    case FsrmPropertyDefinitionType_Bool:
+        printf("Bool\n");
+        break;
 
-        case FsrmPropertyDefinitionType_Date:
-            printf("Date\n");
-            break;
+    case FsrmPropertyDefinitionType_Date:
+        printf("Date\n");
+        break;
 
-        case FsrmPropertyDefinitionType_MultiString:
-            printf("Multistring\n");
-            break;
+    case FsrmPropertyDefinitionType_MultiString:
+        printf("Multistring\n");
+        break;
 
-        case FsrmPropertyDefinitionType_String:
-            printf("String\n");
-            break;
+    case FsrmPropertyDefinitionType_String:
+        printf("String\n");
+        break;
 
-        default:
-            printf("Error type %d not defined\n",type);
+    default:
+        printf("Error type %d not defined\n",type);
 
     }
 
@@ -230,7 +240,7 @@ exit:
 Description:
 
     This routine enumerates the properties defined in FSRM
-    
+
 Arguments:
 
     FsrmManager - The FSRM classification manager object
@@ -240,7 +250,7 @@ Return value:
     HRESULT
 
 Notes:
-    
+
 
 --*/
 
@@ -250,12 +260,13 @@ HRESULT EnumerateProperties(
     HRESULT hr = S_OK;
     CComPtr<IFsrmCollection> fsrmCollection;
     long propertyCount = 0;
-    
+
     // Get the collection of property definition
     hr = FsrmManager->EnumPropertyDefinitions(  FsrmEnumOptions_None,
-                                                &fsrmCollection);
-    if ( FAILED(hr)) {
-         
+            &fsrmCollection);
+    if ( FAILED(hr))
+    {
+
         goto exit;
     }
 
@@ -263,26 +274,30 @@ HRESULT EnumerateProperties(
     // printing each one
 
     hr = fsrmCollection->get_Count(&propertyCount);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
 
         goto exit;
-    }       
-    for(long i = 0; i < propertyCount; ++i ) {
+    }
+    for(long i = 0; i < propertyCount; ++i )
+    {
 
         // get the variant and convert it into a IFsrmPropertyDefinition
         CComPtr<IFsrmPropertyDefinition> propertyDefinition;
         _variant_t var;
-        
+
         hr = fsrmCollection->get_Item(i+1, &var);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
 
             goto exit;
         }
 
         hr = var.pdispVal->QueryInterface(  __uuidof(IFsrmPropertyDefinition),
                                             reinterpret_cast<void**>(&propertyDefinition));
-        if (FAILED(hr)){
+        if (FAILED(hr))
+        {
 
             goto exit;
         }
@@ -290,7 +305,7 @@ HRESULT EnumerateProperties(
         printf("Property %d\n",1+i);
         DisplayPropertyDefinition(propertyDefinition);
         printf("\n");
-    
+
     }
 
 exit:
@@ -305,7 +320,7 @@ exit:
 Description:
 
     This routine prints the FSRM property to the screen
-    
+
 Arguments:
 
     Property - The FSRM property object
@@ -315,7 +330,7 @@ Return value:
     HRESULT
 
 Notes:
-    
+
 
 --*/
 
@@ -333,65 +348,78 @@ HRESULT DisplayProperty(
 
     //Get the property's value
     hr = Property->get_Value(&value);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
 
     //Get the property's name
     hr = Property->get_Name(&name);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
 
-    //Get the property flags    
+    //Get the property flags
     hr = Property->get_PropertyFlags(&propertyFlag);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
 
     //Get the sources that set the property
     hr = Property->get_Sources(&list);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
 
     //Convert the SAFEARRAY to a wstring vector
     hr = GetValues(list,sources);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         goto exit;
     }
-    
+
     //print the information
-    
+
     printf("\tName:\t\t%ws\n",OLE2CW(name.m_str));
     printf("\tValue:\t\t%ws\n",OLE2CW(value.m_str));
     printf("\tProperty Flags:\t");
 
-    if ( propertyFlag & FsrmPropertyFlags_Orphaned ) {
+    if ( propertyFlag & FsrmPropertyFlags_Orphaned )
+    {
         printf("Orphaned ");
     }
-    if ( propertyFlag & FsrmPropertyFlags_RetrievedFromCache ) {
+    if ( propertyFlag & FsrmPropertyFlags_RetrievedFromCache )
+    {
         printf("RetrievedFromCache ");
     }
-    if ( propertyFlag & FsrmPropertyFlags_RetrievedFromStorage ) {
+    if ( propertyFlag & FsrmPropertyFlags_RetrievedFromStorage )
+    {
         printf("RetrievedFromStorage ");
     }
-    if ( propertyFlag & FsrmPropertyFlags_SetByClassifier ) {
+    if ( propertyFlag & FsrmPropertyFlags_SetByClassifier )
+    {
         printf("SetByClassifier ");
     }
-    if ( propertyFlag & FsrmPropertyFlags_Deleted ) {
+    if ( propertyFlag & FsrmPropertyFlags_Deleted )
+    {
         printf("Deleted ");
     }
-    if ( propertyFlag & FsrmPropertyFlags_Reclassified ) {
+    if ( propertyFlag & FsrmPropertyFlags_Reclassified )
+    {
         printf("Reclassified ");
     }
-    if ( propertyFlag & FsrmPropertyFlags_AggregationFailed ) {
+    if ( propertyFlag & FsrmPropertyFlags_AggregationFailed )
+    {
         printf("AggregationFailed");
     }
     printf("\n");
 
     printf("\tSources:\n");
-    for(unsigned int i=0;i<sources.size(); ++i){
+    for(unsigned int i=0; i<sources.size(); ++i)
+    {
         printf("\t\t%d - %ws\n",i+1,sources[i].c_str());
     }
 
@@ -408,7 +436,7 @@ exit:
 Description:
 
     This routine enumerates and prints the FSRM properties on a file
-    
+
 Arguments:
 
     FilePath         - The file whose properties will be enumerated
@@ -419,12 +447,12 @@ Return value:
     HRESULT
 
 Notes:
-    
+
 
 --*/
 
 HRESULT EnumerateFileProperties(
-    CComBSTR                    &FilePath, 
+    CComBSTR                    &FilePath,
     IFsrmClassificationManager  *FsrmManager)
 {
     HRESULT hr = S_OK;
@@ -432,54 +460,58 @@ HRESULT EnumerateFileProperties(
     long propertyCount = 0;
 
     //Get the list of properties for a file
-    hr = FsrmManager->EnumFileProperties(   FilePath, 
-                                            FsrmGetFilePropertyOptions_None, 
+    hr = FsrmManager->EnumFileProperties(   FilePath,
+                                            FsrmGetFilePropertyOptions_None,
                                             &fsrmCollection);
-                                            
+
     //If failed, get the error info and print the message
-    if ( FAILED(hr)) {
+    if ( FAILED(hr))
+    {
 
-            CComPtr<IErrorInfo> spErrorInfo = NULL;
-            CComBSTR spErrorMessage;
+        CComPtr<IErrorInfo> spErrorInfo = NULL;
+        CComBSTR spErrorMessage;
 
-            if(SUCCEEDED(GetErrorInfo(0, &spErrorInfo)))
+        if(SUCCEEDED(GetErrorInfo(0, &spErrorInfo)))
+        {
+            if (spErrorInfo)
             {
-                if (spErrorInfo)
+                if (SUCCEEDED(spErrorInfo->GetDescription(&spErrorMessage)))
                 {
-                    if (SUCCEEDED(spErrorInfo->GetDescription(&spErrorMessage)))
-                    {
-                        printf(
-                            "The following error(s) occurred while enumerating properties:\n%ws\n",
-                            !spErrorMessage ? L"No additional error information found" : spErrorMessage
-                            );
-                    }
+                    printf(
+                        "The following error(s) occurred while enumerating properties:\n%ws\n",
+                        !spErrorMessage ? L"No additional error information found" : spErrorMessage
+                    );
                 }
             }
+        }
 
         goto exit;
     }
-    
+
     //Loop over all the properties and print each property
 
 
     //Get the count of properties on the file
     hr = fsrmCollection->get_Count(&propertyCount);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
 
         goto exit;
     }
-    for(long i = 0; i < propertyCount; ++i ) {
+    for(long i = 0; i < propertyCount; ++i )
+    {
 
         //Get the variant and convert it into a IFsrmProperty
 
-        
+
         CComPtr<IFsrmProperty> property_;
         _variant_t var;
 
         //Get the next property item
         hr = fsrmCollection->get_Item(i+1, &var);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
 
             goto exit;
         }
@@ -487,7 +519,8 @@ HRESULT EnumerateFileProperties(
         //Get the IFsrmProperty object on the property
         hr = var.pdispVal->QueryInterface(  __uuidof(IFsrmProperty),
                                             reinterpret_cast<void**>(&property_));
-        if (FAILED(hr)){
+        if (FAILED(hr))
+        {
 
             goto exit;
         }
@@ -497,7 +530,7 @@ HRESULT EnumerateFileProperties(
         //Call the display property method to print the property
         DisplayProperty(property_);
         printf("\n");
-    
+
     }
 
 exit:
@@ -512,7 +545,7 @@ exit:
 Description:
 
     This routine queries and prints a requested property from a file
-    
+
 Arguments:
 
     FilePath          - The file whose properties will be enumerated
@@ -524,13 +557,13 @@ Return value:
     HRESULT
 
 Notes:
-    
+
 
 --*/
 
 HRESULT GetFileProperty(
     CComBSTR                    &FilePath,
-    CComBSTR                    &PropertyName, 
+    CComBSTR                    &PropertyName,
     IFsrmClassificationManager  *FsrmManager)
 {
     HRESULT hr = S_OK;
@@ -538,20 +571,22 @@ HRESULT GetFileProperty(
     long propertyCount = 0;
 
     //Call to get the requested property on the file
-    hr = FsrmManager->GetFileProperty(  FilePath, 
-                                        PropertyName, 
-                                        FsrmGetFilePropertyOptions_None, 
+    hr = FsrmManager->GetFileProperty(  FilePath,
+                                        PropertyName,
+                                        FsrmGetFilePropertyOptions_None,
                                         &property_);
 
-    //If succeeded to get property, print it                                        
-    if ( SUCCEEDED(hr)) {
+    //If succeeded to get property, print it
+    if ( SUCCEEDED(hr))
+    {
 
         DisplayProperty(property_);
 
-        }
+    }
     //If failed to get property, get and print the error
-    else {     
-    
+    else
+    {
+
         CComPtr<IErrorInfo> spErrorInfo = NULL;
         CComBSTR spErrorMessage;
 
@@ -566,7 +601,7 @@ HRESULT GetFileProperty(
                     printf(
                         "The following error(s) occurred while getting file properties:\n%ws\n",
                         !spErrorMessage ? L"No additional error information found" : spErrorMessage
-                        );
+                    );
                 }
             }
         }
@@ -582,18 +617,18 @@ HRESULT GetFileProperty(
 Description:
 
     This routine compares to wchar_t values
-    
+
 Arguments:
 
     a   -   A wchar_t to compare
     b   -   A wchar_t to compare
-    
+
 Return value:
 
     bool
-    
+
 Notes:
-    
+
 
 --*/
 inline bool WCharCaseInsensitiveCompare(wchar_t a, wchar_t b)
@@ -609,25 +644,25 @@ inline bool WCharCaseInsensitiveCompare(wchar_t a, wchar_t b)
 Description:
 
     This routine performs a case insensitive comparison on two wstring objects
-    
+
 Arguments:
 
     a   -   A wstring to compare
     b   -   A wstring to compare
-    
+
 Return value:
 
     bool
-    
+
 Notes:
-    
+
 
 --*/
 
 inline bool const StringCaseInsensitiveEqual(std::wstring& a, const std::wstring& b)
 {
-    return (a.size() == b.size() && 
-        equal(a.begin(),a.end(),b.begin(),WCharCaseInsensitiveCompare));    
+    return (a.size() == b.size() &&
+            equal(a.begin(),a.end(),b.begin(),WCharCaseInsensitiveCompare));
 }
 
 /*++
@@ -637,17 +672,17 @@ inline bool const StringCaseInsensitiveEqual(std::wstring& a, const std::wstring
 Description:
 
     This routine prints the usage of this program
-    
+
 Arguments:
 
     void
-    
+
 Return value:
 
     void
-    
+
 Notes:
-    
+
 
 --*/
 static void DisplayUsage()
@@ -676,24 +711,24 @@ static void DisplayUsage()
 Description:
 
     main program routine
-    
+
 Arguments:
 
     argc - argument count
     argv - arguments
-    
+
 Return value:
 
     int
-    
+
 Notes:
-    
+
 
 --*/
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-    HRESULT hr = S_OK; 
+    HRESULT hr = S_OK;
     CComBSTR *filePath = NULL ;
     CComBSTR *propertyName = NULL;
 
@@ -701,52 +736,61 @@ int _tmain(int argc, _TCHAR* argv[])
     bool enumerateFileProperties = false;
     bool enumerateProperties = false;
 
-    //Parse command line arguments 
+    //Parse command line arguments
 
-    for(int i=1;i<argc;i++){
+    for(int i=1; i<argc; i++)
+    {
         std::wstring input = std::wstring(argv[i]);
 
-        //Get the file path 
-        if(StringCaseInsensitiveEqual(input,L"-f") && i+1<argc){
+        //Get the file path
+        if(StringCaseInsensitiveEqual(input,L"-f") && i+1<argc)
+        {
             filePath = new CComBSTR(argv[i+1]);
             i++;
             continue;
         }
 
         //Get the property name to retrieve
-        if(StringCaseInsensitiveEqual(input,L"-p") && i+1<argc){
+        if(StringCaseInsensitiveEqual(input,L"-p") && i+1<argc)
+        {
             propertyName = new CComBSTR(argv[i+1]);
             i++;
             continue;
         }
 
         //Program must run GetFileProperty
-        if(StringCaseInsensitiveEqual(input,L"-GetFileProperty")){
+        if(StringCaseInsensitiveEqual(input,L"-GetFileProperty"))
+        {
             getFileProperty = true;
         }
 
         //Program must EnumerateFileProperties
-        if(StringCaseInsensitiveEqual(input,L"-EnumerateFileProperties")){
+        if(StringCaseInsensitiveEqual(input,L"-EnumerateFileProperties"))
+        {
             enumerateFileProperties = true;
         }
 
         //Program must Enumerate FSRM properties
-        if(StringCaseInsensitiveEqual(input,L"-EnumerateProperties")){
+        if(StringCaseInsensitiveEqual(input,L"-EnumerateProperties"))
+        {
             enumerateProperties = true;
         }
     }
 
-    if (!(getFileProperty || enumerateProperties || enumerateFileProperties )){
+    if (!(getFileProperty || enumerateProperties || enumerateFileProperties ))
+    {
 
         DisplayUsage();
         return -1;
     }
-    if (enumerateFileProperties && filePath == NULL) {
+    if (enumerateFileProperties && filePath == NULL)
+    {
 
         DisplayUsage();
         return -1;
     }
-    if (getFileProperty && (filePath == NULL || propertyName == NULL)) {
+    if (getFileProperty && (filePath == NULL || propertyName == NULL))
+    {
 
         DisplayUsage();
         return -1;
@@ -757,53 +801,61 @@ int _tmain(int argc, _TCHAR* argv[])
     hr = CoInitialize(0);
 
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
         {
-            
+
             CComPtr<IFsrmClassificationManager> fsrmManager;
 
             //Create an instance of the FSRM Classification Manager
             hr = CoCreateInstance(
-                __uuidof(FsrmClassificationManager), 
-                NULL, 
-                CLSCTX_SERVER,
-                __uuidof(IFsrmClassificationManager),
-                (void**) &fsrmManager);
+                     __uuidof(FsrmClassificationManager),
+                     NULL,
+                     CLSCTX_SERVER,
+                     __uuidof(IFsrmClassificationManager),
+                     (void**) &fsrmManager);
 
-            if ( SUCCEEDED(hr)) {
+            if ( SUCCEEDED(hr))
+            {
 
-                if (enumerateProperties) {
+                if (enumerateProperties)
+                {
                     printf( "Enumerating Properties\n" );
 
                     hr = EnumerateProperties(fsrmManager);
 
-                    if(FAILED(hr)){
+                    if(FAILED(hr))
+                    {
                         printf("Failed to enumerate properties with error 0x%x\n",hr);
                     }
                 }
-                if (enumerateFileProperties) {
+                if (enumerateFileProperties)
+                {
                     printf( "Enumerating File Properties - %ws\n",(LPWSTR)*filePath );
 
                     hr = EnumerateFileProperties(*filePath,fsrmManager);
 
-                    if(FAILED(hr)){
-                        printf("Failed to get file properties of %ws with error 0x%x\n", 
-                                (LPWSTR)*filePath, 
-                                hr );
+                    if(FAILED(hr))
+                    {
+                        printf("Failed to get file properties of %ws with error 0x%x\n",
+                               (LPWSTR)*filePath,
+                               hr );
                     }
                 }
-                if (getFileProperty) {
+                if (getFileProperty)
+                {
                     printf( "Getting the %ws Property from file %ws\n",
-                                (LPWSTR)*propertyName,
-                                (LPWSTR)*filePath );
+                            (LPWSTR)*propertyName,
+                            (LPWSTR)*filePath );
 
                     hr = GetFileProperty(*filePath,*propertyName,fsrmManager);
 
-                    if(FAILED(hr)){
+                    if(FAILED(hr))
+                    {
                         printf("Failed to get file property %ws of file %ws with error 0x%x\n",
-                                (LPWSTR)*propertyName,
-                                (LPWSTR)*filePath, 
-                                hr );
+                               (LPWSTR)*propertyName,
+                               (LPWSTR)*filePath,
+                               hr );
                     }
                 }
 

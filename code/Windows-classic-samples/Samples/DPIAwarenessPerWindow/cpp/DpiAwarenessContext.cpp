@@ -1,13 +1,13 @@
-//*********************************************************
+ï»¿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // This code is licensed under the MIT License (MIT).
-// THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
-// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH 
+// THE SOFTWARE IS PROVIDED â€œAS ISâ€, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+// IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+// TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 //*********************************************************
@@ -87,22 +87,22 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         return FALSE;
     }
 
-    // Here we create the primary top-level window but before the window is created it 
+    // Here we create the primary top-level window but before the window is created it
     // doesn't have a DPI associated with it, so we don't know what pixel dimensions
-    // it should have. We'll create the window with zero width and height and then 
+    // it should have. We'll create the window with zero width and height and then
     // resize it for DPI in the WM_CREATE handler in the winproc.
     HWND hWnd = CreateWindowW(
-        WINDOWCLASSNAME,
-        L"DpiAwarenessContext Sample",
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        0,
-        0,
-        0,
-        nullptr,
-        hmenu,
-        hInstance,
-        nullptr);
+                    WINDOWCLASSNAME,
+                    L"DpiAwarenessContext Sample",
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT,
+                    0,
+                    0,
+                    0,
+                    nullptr,
+                    hmenu,
+                    hInstance,
+                    nullptr);
 
     if (!hWnd)
     {
@@ -195,19 +195,19 @@ LRESULT DoInitialWindowSetup(HWND hWnd)
     rcWindow.bottom = rcWindow.top + MulDiv(WINDOW_HEIGHT96, uDpi, 96);
     SetWindowPos(hWnd, nullptr, rcWindow.right, rcWindow.top, rcWindow.right - rcWindow.left, rcWindow.bottom - rcWindow.top, SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Create a static control for use displaying DPI-related information. 
+    // Create a static control for use displaying DPI-related information.
     // Initially the static control will not be sized, but we will immediately scale
     // it with a helper function.
     GetClientRect(hWnd, &rcWindow);
     HWND hWndStatic = CreateWindowEx(WS_EX_LEFT, L"STATIC", nullptr, SS_LEFT | WS_CHILD | WS_VISIBLE,
-        0,
-        0,
-        0,
-        0,
-        hWnd,
-        nullptr,
-        g_hInst,
-        nullptr);
+                                     0,
+                                     0,
+                                     0,
+                                     0,
+                                     hWnd,
+                                     nullptr,
+                                     g_hInst,
+                                     nullptr);
 
     if (hWndStatic == nullptr)
     {
@@ -242,12 +242,12 @@ UINT HandleDpiChange(HWND hWnd, WPARAM wParam, LPARAM lParam)
         RECT *lprcNewScale = (RECT*)lParam;
 
         SetWindowPos(hWnd,
-            nullptr,
-            lprcNewScale->left,
-            lprcNewScale->top,
-            lprcNewScale->right - lprcNewScale->left,
-            lprcNewScale->bottom - lprcNewScale->top,
-            SWP_NOZORDER | SWP_NOACTIVATE);
+                     nullptr,
+                     lprcNewScale->left,
+                     lprcNewScale->top,
+                     lprcNewScale->right - lprcNewScale->left,
+                     lprcNewScale->bottom - lprcNewScale->top,
+                     SWP_NOZORDER | SWP_NOACTIVATE);
 
         // Resize the Static control
         HWND hWndStatic = GetWindow(hWnd, GW_CHILD);
@@ -259,9 +259,9 @@ UINT HandleDpiChange(HWND hWnd, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// Create a DPI-unaware instance of the window class. Use SetThreadDpiAwareness to 
-// temporarily change the current thread's DPI awareness to DPI_AWARENESS_CONTEXT_UNAWARE 
-// before creating the new window. This will mark the new window as DPI unaware which will 
+// Create a DPI-unaware instance of the window class. Use SetThreadDpiAwareness to
+// temporarily change the current thread's DPI awareness to DPI_AWARENESS_CONTEXT_UNAWARE
+// before creating the new window. This will mark the new window as DPI unaware which will
 // result in the DWM scaling the window for DPI whenever the DPI != 96
 VOID CreateDpiUnawareWindow(HWND hWnd)
 {
@@ -269,17 +269,17 @@ VOID CreateDpiUnawareWindow(HWND hWnd)
     DPI_AWARENESS_CONTEXT previousDpiContext = SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_UNAWARE);
 
     HWND hWndUnaware = CreateWindow(
-        WINDOWCLASSNAME,
-        L"DPI Unaware Top-Level Window",
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        0,
-        WINDOW_WIDTH96, // Because the DWM will scale this window, we don't need to DPI scale these values ourself
-        WINDOW_HEIGHT96,
-        nullptr,
-        nullptr,
-        g_hInst,
-        nullptr);
+                           WINDOWCLASSNAME,
+                           L"DPI Unaware Top-Level Window",
+                           WS_OVERLAPPEDWINDOW,
+                           CW_USEDEFAULT,
+                           0,
+                           WINDOW_WIDTH96, // Because the DWM will scale this window, we don't need to DPI scale these values ourself
+                           WINDOW_HEIGHT96,
+                           nullptr,
+                           nullptr,
+                           g_hInst,
+                           nullptr);
     ShowWindow(hWndUnaware, SW_SHOWNORMAL);
 
     // Restore the current thread's DPI awareness context
@@ -291,56 +291,56 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-        case WM_NCCREATE:
-        {
-            // Enable per-monitor DPI scaling for caption, menu, and top-level
-            // scroll bars for top-level windows that are running as per-monitor
-            // DPI aware (This will have no effect if the thread's DPI context is
-            // not per-monitor-DPI-aware). This API should be called while 
-            // processing WM_NCCREATE.
-            EnableNonClientDpiScaling(hWnd);
+    case WM_NCCREATE:
+    {
+        // Enable per-monitor DPI scaling for caption, menu, and top-level
+        // scroll bars for top-level windows that are running as per-monitor
+        // DPI aware (This will have no effect if the thread's DPI context is
+        // not per-monitor-DPI-aware). This API should be called while
+        // processing WM_NCCREATE.
+        EnableNonClientDpiScaling(hWnd);
 
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+
+    case WM_CREATE:
+    {
+        return DoInitialWindowSetup(hWnd);
+    }
+
+    // On DPI change resize the window, scale the font, and update
+    // the DPI-info string
+    case WM_DPICHANGED:
+    {
+        return HandleDpiChange(hWnd, wParam, lParam);
+    }
+
+    case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+        // Parse the menu selections:
+        switch (wmId)
+        {
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            return 0;
+
+        case IDM_DPIUNAWARE:
+            // Create a new top-level window that is running with a DPI-unaware context.
+            // This window will be scaled by the DWM whenever the DPI != 96
+            CreateDpiUnawareWindow(hWnd);
+
+        default:
             return DefWindowProc(hWnd, message, wParam, lParam);
         }
+    }
 
-        case WM_CREATE:
-        {
-            return DoInitialWindowSetup(hWnd);
-        }
-
-        // On DPI change resize the window, scale the font, and update
-        // the DPI-info string
-        case WM_DPICHANGED:
-        {
-            return HandleDpiChange(hWnd, wParam, lParam);
-        }
-
-        case WM_COMMAND:
-        {
-            int wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-                case IDM_EXIT:
-                    DestroyWindow(hWnd);
-                    return 0;
-
-                case IDM_DPIUNAWARE:
-                    // Create a new top-level window that is running with a DPI-unaware context.
-                    // This window will be scaled by the DWM whenever the DPI != 96
-                    CreateDpiUnawareWindow(hWnd);
-
-                default:
-                    return DefWindowProc(hWnd, message, wParam, lParam);
-            }
-        }
-
-        case WM_DESTROY:
-        {
-            DeleteFont(hWnd);
-            PostQuitMessage(0);
-            return 0;
-        }
+    case WM_DESTROY:
+    {
+        DeleteFont(hWnd);
+        PostQuitMessage(0);
+        return 0;
+    }
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -354,7 +354,7 @@ VOID DeleteFont(HWND hWnd)
     {
         return;
     }
-    
+
     // Get a handle to the font
     HFONT hFont = (HFONT)SendMessage(hWndStatic, WM_GETFONT, 0, 0);
     if (hFont == nullptr)

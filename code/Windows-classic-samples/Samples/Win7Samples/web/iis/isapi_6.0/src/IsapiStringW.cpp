@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -20,7 +20,7 @@ Author:
 
 ISAPI_STRINGW::ISAPI_STRINGW(
     DWORD   dwMaxAlloc
-    )
+)
 /*++
 
 Purpose:
@@ -63,7 +63,7 @@ BOOL
 ISAPI_STRINGW::Copy(
     WCHAR * szStringW,
     DWORD   cchStringW
-    )
+)
 /*++
 
 Purpose:
@@ -100,7 +100,7 @@ BOOL
 ISAPI_STRINGW::CopyA(
     CHAR *  szString,
     DWORD   cchString
-    )
+)
 /*++
 
 Purpose:
@@ -137,7 +137,7 @@ BOOL
 ISAPI_STRINGW::Append(
     WCHAR * szStringW,
     DWORD   cchStringW
-    )
+)
 /*++
 
 Purpose:
@@ -174,7 +174,7 @@ BOOL
 ISAPI_STRINGW::AppendA(
     CHAR *  szString,
     DWORD   cchString
-    )
+)
 /*++
 
 Purpose:
@@ -211,7 +211,7 @@ BOOL
 ISAPI_STRINGW::Printf(
     WCHAR *  szStringW,
     ...
-    )
+)
 /*++
 
 Purpose:
@@ -242,7 +242,7 @@ Returns:
     va_start( args, szStringW );
 
     fResult = vsprintf_s( szStringW,
-                        args );
+                          args );
 
     va_end( args );
 
@@ -253,7 +253,7 @@ BOOL
 ISAPI_STRINGW::vsprintf_s(
     WCHAR * szFormatW,
     va_list args
-    )
+)
 /*++
 
 Purpose:
@@ -285,10 +285,10 @@ Returns:
         cbBuffer = QueryBufferSize();
 
         cchWritten = (DWORD)_vsnwprintf_s( QueryStr(),
-										sizeof(QueryStr()),
-                                         cbBuffer,
-                                         szFormatW,
-                                         args );
+                                           sizeof(QueryStr()),
+                                           cbBuffer,
+                                           szFormatW,
+                                           args );
 
         if ( cchWritten < 0 )
         {
@@ -326,7 +326,8 @@ Returns:
             }
         }
 
-    } while ( cchWritten < 0 );
+    }
+    while ( cchWritten < 0 );
 
     SetLen( cchWritten );
 
@@ -344,7 +345,7 @@ Failed:
 VOID
 ISAPI_STRINGW::CalcLen(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -368,7 +369,7 @@ Returns:
 DWORD
 ISAPI_STRINGW::QueryCB(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -394,7 +395,7 @@ Returns:
 DWORD
 ISAPI_STRINGW::QueryCCH(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -418,7 +419,7 @@ Returns:
 BOOL
 ISAPI_STRINGW::SetLen(
     DWORD   cchNewLength
-    )
+)
 /*++
 
 Purpose:
@@ -450,14 +451,14 @@ Returns:
     pCursor = (WCHAR*)_Buffer.QueryPtr() + cchNewLength;
 
     *pCursor = L'\0';
-    
+
     return TRUE;
 }
 
 DWORD
 ISAPI_STRINGW::QueryBufferSize(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -480,7 +481,7 @@ Returns:
 BOOL
 ISAPI_STRINGW::ResizeBuffer(
     DWORD   cbSize
-    )
+)
 /*++
 
 Purpose:
@@ -504,7 +505,7 @@ Returns:
 DWORD
 ISAPI_STRINGW::QueryMaxAlloc(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -527,7 +528,7 @@ Returns:
 VOID
 ISAPI_STRINGW::SetMaxAlloc(
     DWORD   dwMaxAlloc
-    )
+)
 /*++
 
 Purpose:
@@ -550,7 +551,7 @@ Returns:
 WCHAR *
 ISAPI_STRINGW::QueryStr(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -575,7 +576,7 @@ ISAPI_STRINGW::CopyToOffset(
     WCHAR * szStringW,
     DWORD   cchStringW,
     DWORD   cchOffset
-    )
+)
 /*++
 
 Purpose:
@@ -624,7 +625,7 @@ ISAPI_STRINGW::CopyAToOffset(
     CHAR *  szString,
     DWORD   cchString,
     DWORD   cchOffset
-    )
+)
 /*++
 
 Purpose:

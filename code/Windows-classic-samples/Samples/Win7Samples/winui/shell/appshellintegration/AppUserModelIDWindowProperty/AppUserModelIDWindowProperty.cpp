@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -85,31 +85,31 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         SetAppID(hWnd, c_szAppUserModelID1);
         break;
     case WM_COMMAND:
+    {
+        int const wmId = LOWORD(wParam);
+        // Parse the menu selections
+        switch (wmId)
         {
-            int const wmId = LOWORD(wParam);
-            // Parse the menu selections
-            switch (wmId)
-            {
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            case IDM_FILE_APPID1:
-                // Set the first AppUserModelID on the window, replacing the previous value
-                SetAppID(hWnd, c_szAppUserModelID1);
-                break;
-            case IDM_FILE_APPID2:
-                // Set the second AppUserModelID on the window, replacing the previous value
-                SetAppID(hWnd, c_szAppUserModelID2);
-                break;
-            case IDM_FILE_APPID3:
-                // Set the third AppUserModelID on the window, replacing the previous value
-                SetAppID(hWnd, c_szAppUserModelID3);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
             break;
+        case IDM_FILE_APPID1:
+            // Set the first AppUserModelID on the window, replacing the previous value
+            SetAppID(hWnd, c_szAppUserModelID1);
+            break;
+        case IDM_FILE_APPID2:
+            // Set the second AppUserModelID on the window, replacing the previous value
+            SetAppID(hWnd, c_szAppUserModelID2);
+            break;
+        case IDM_FILE_APPID3:
+            // Set the third AppUserModelID on the window, replacing the previous value
+            SetAppID(hWnd, c_szAppUserModelID3);
+            break;
+        default:
+            return DefWindowProc(hWnd, message, wParam, lParam);
         }
+        break;
+    }
     case WM_DESTROY:
         // Remove any AppUserModelID value set on this window.  This must be done before the window
         // is completely destroyed, or the value will be leaked.

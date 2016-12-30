@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,9 +22,9 @@ int __cdecl main(void)
 
     // This triggers the address allocation
     dwError = DhcpV4FailoverTriggerAddrAllocation(
-                        pwszServerName,      // Server IP Address, a value of NULL signifies the current server (where program is executed)
-                        pwszRelationshipName // Relationship name
-                        );
+                  pwszServerName,      // Server IP Address, a value of NULL signifies the current server (where program is executed)
+                  pwszRelationshipName // Relationship name
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverTriggerAddrAllocation failed with Error = %d\n",dwError);

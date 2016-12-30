@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // winmain.cpp. Application entry-point.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -50,7 +50,7 @@ enum FileContainer
     FileContainer_MP4 = IDC_CAPTURE_MP4,
     FileContainer_WMV = IDC_CAPTURE_WMV
 };
-    
+
 DeviceList  g_devices;
 CCapture    *g_pCapture = NULL;
 HDEVNOTIFY  g_hdevnotify = NULL;
@@ -59,7 +59,7 @@ const UINT32 TARGET_BIT_RATE = 240 * 1000;
 
 INT_PTR CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-void    OnInitDialog(HWND hDlg); 
+void    OnInitDialog(HWND hDlg);
 void    OnCloseDialog();
 
 void    UpdateUI(HWND hDlg);
@@ -72,7 +72,7 @@ HRESULT UpdateDeviceList(HWND hDlg);
 void    OnDeviceChange(HWND hwnd, WPARAM reason, DEV_BROADCAST_HDR *pHdr);
 
 void    NotifyError(HWND hwnd, const WCHAR *sErrorMessage, HRESULT hrErr);
-void    EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable); 
+void    EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable);
 
 
 INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPWSTR /*lpCmdLine*/, INT /*nCmdShow*/)
@@ -80,11 +80,11 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPWSTR /*l
     (void)HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
 
     INT_PTR ret = DialogBox(
-        hInstance, 
-        MAKEINTRESOURCE(IDD_DIALOG1), 
-        NULL, 
-        DialogProc 
-        );
+                      hInstance,
+                      MAKEINTRESOURCE(IDD_DIALOG1),
+                      NULL,
+                      DialogProc
+                  );
 
     if (ret == 0 || ret == -1)
     {
@@ -156,7 +156,7 @@ void OnInitDialog(HWND hDlg)
 
     SetWindowText(hEdit, TEXT("capture.mp4"));
 
-    CheckRadioButton(hDlg, IDC_CAPTURE_MP4, IDC_CAPTURE_WMV, IDC_CAPTURE_MP4); 
+    CheckRadioButton(hDlg, IDC_CAPTURE_MP4, IDC_CAPTURE_WMV, IDC_CAPTURE_MP4);
 
     // Initialize the COM library
     hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -174,13 +174,13 @@ void OnInitDialog(HWND hDlg)
 
         di.dbcc_size = sizeof(di);
         di.dbcc_devicetype  = DBT_DEVTYP_DEVICEINTERFACE;
-        di.dbcc_classguid  = KSCATEGORY_CAPTURE; 
+        di.dbcc_classguid  = KSCATEGORY_CAPTURE;
 
         g_hdevnotify = RegisterDeviceNotification(
-            hDlg,
-            &di,
-            DEVICE_NOTIFY_WINDOW_HANDLE
-            );
+                           hDlg,
+                           &di,
+                           DEVICE_NOTIFY_WINDOW_HANDLE
+                       );
 
         if (g_hdevnotify == NULL)
         {
@@ -201,14 +201,14 @@ void OnInitDialog(HWND hDlg)
         if (g_devices.Count() == 0)
         {
             ::MessageBox(
-                hDlg, 
+                hDlg,
                 TEXT("Could not find any video capture devices."),
                 TEXT("MFCaptureToFile"),
                 MB_OK
-                );
+            );
         }
     }
-    else    
+    else
     {
         OnCloseDialog();
         ::EndDialog(hDlg, 0);
@@ -219,7 +219,7 @@ void OnInitDialog(HWND hDlg)
 
 //-----------------------------------------------------------------------------
 // OnCloseDialog
-// 
+//
 // Frees resources before closing the dialog.
 //-----------------------------------------------------------------------------
 
@@ -246,7 +246,7 @@ void OnCloseDialog()
 
 //-----------------------------------------------------------------------------
 // StartCapture
-// 
+//
 // Starts video capture.
 //-----------------------------------------------------------------------------
 
@@ -275,7 +275,7 @@ void StartCapture(HWND hDlg)
 
     if (0 == GetWindowText(hEdit, pszFile, MAX_PATH))
     {
-       hr = HRESULT_FROM_WIN32(GetLastError());
+        hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
     // Create the media source for the capture device.
@@ -314,22 +314,22 @@ void StartCapture(HWND hDlg)
 
 //-----------------------------------------------------------------------------
 // StopCapture
-// 
+//
 // Stops video capture.
 //-----------------------------------------------------------------------------
 
 void StopCapture(HWND hDlg)
 {
     HRESULT hr = S_OK;
-    
+
     hr = g_pCapture->EndCaptureSession();
 
     SafeRelease(&g_pCapture);
 
     UpdateDeviceList(hDlg);
 
-    // NOTE: Updating the device list releases the existing IMFActivate 
-    // pointers. This ensures that the current instance of the video capture 
+    // NOTE: Updating the device list releases the existing IMFActivate
+    // pointers. This ensures that the current instance of the video capture
     // source is released.
 
     UpdateUI(hDlg);
@@ -344,7 +344,7 @@ void StopCapture(HWND hDlg)
 
 //-----------------------------------------------------------------------------
 // CreateSelectedDevice
-// 
+//
 // Create a media source for the video capture device selected by the user.
 //-----------------------------------------------------------------------------
 
@@ -362,7 +362,7 @@ HRESULT GetSelectedDevice(HWND hDlg, IMFActivate **ppActivate)
 
     // Now find the index of the device within the device list.
     //
-    // This index is stored as item data in the combo box, so that 
+    // This index is stored as item data in the combo box, so that
     // the order of the combo box items does not need to match the
     // order of the device list.
 
@@ -381,7 +381,7 @@ HRESULT GetSelectedDevice(HWND hDlg, IMFActivate **ppActivate)
 
 //-----------------------------------------------------------------------------
 // UpdateDeviceList
-// 
+//
 // Enumerates the video capture devices and populates the list of device
 // names in the dialog UI.
 //-----------------------------------------------------------------------------
@@ -400,7 +400,10 @@ HRESULT UpdateDeviceList(HWND hDlg)
 
     hr = g_devices.EnumerateDevices();
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     for (UINT32 iDevice = 0; iDevice < g_devices.Count(); iDevice++)
     {
@@ -408,7 +411,10 @@ HRESULT UpdateDeviceList(HWND hDlg)
 
         hr = g_devices.GetDeviceName(iDevice, &szFriendlyName);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         // Add the string to the combo-box. This message returns the index in the list.
 
@@ -447,7 +453,7 @@ done:
 
 //-----------------------------------------------------------------------------
 // OnSelectEncodingType
-// 
+//
 // Called when the user toggles between file-format types.
 //-----------------------------------------------------------------------------
 
@@ -481,7 +487,7 @@ void OnSelectEncodingType(HWND hDlg, FileContainer file)
 
 //-----------------------------------------------------------------------------
 // UpdateUI
-// 
+//
 // Updates the dialog UI for the current state.
 //-----------------------------------------------------------------------------
 
@@ -516,7 +522,7 @@ void UpdateUI(HWND hDlg)
 
 //-----------------------------------------------------------------------------
 // OnDeviceChange
-// 
+//
 // Handles WM_DEVICECHANGE messages.
 //-----------------------------------------------------------------------------
 
@@ -572,18 +578,18 @@ void NotifyError(HWND hwnd, const WCHAR *sErrorMessage, HRESULT hrErr)
 }
 
 
-void EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable) 
-{ 
+void EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable)
+{
     HWND hwnd = GetDlgItem(hDlg, nIDDlgItem);
 
     if (!bEnable &&  hwnd == GetFocus())
     {
-        // When disabling a control that has focus, set the 
+        // When disabling a control that has focus, set the
         // focus to the next control.
 
         ::SendMessage(GetParent(hwnd), WM_NEXTDLGCTL, 0, FALSE);
     }
-    EnableWindow(hwnd, bEnable); 
+    EnableWindow(hwnd, bEnable);
 }
 
 

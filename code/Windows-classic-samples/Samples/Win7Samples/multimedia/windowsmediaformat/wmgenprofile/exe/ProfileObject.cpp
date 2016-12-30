@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -65,7 +65,7 @@ ULONG CProfileObject::AddRef()
 
 //------------------------------------------------------------------------------
 // Name: CProfileObject::Release()
-// Desc: Releases a reference and destroys the object 
+// Desc: Releases a reference and destroys the object
 //       if the reference count is zero.
 //------------------------------------------------------------------------------
 ULONG CProfileObject::Release()
@@ -304,12 +304,12 @@ StreamType CStream::GetStreamType( )
 //------------------------------------------------------------------------------
 void CStream::SetStreamType( StreamType stNewType )
 {
-    assert( ( stNewType == ST_Audio ) || 
-            ( stNewType == ST_Video ) || 
-            ( stNewType == ST_Script ) || 
-            ( stNewType == ST_Image ) || 
-            ( stNewType == ST_Web ) || 
-            ( stNewType == ST_File ) || 
+    assert( ( stNewType == ST_Audio ) ||
+            ( stNewType == ST_Video ) ||
+            ( stNewType == ST_Script ) ||
+            ( stNewType == ST_Image ) ||
+            ( stNewType == ST_Web ) ||
+            ( stNewType == ST_File ) ||
             ( stNewType == ST_Arbitrary ) );
 
     m_stStreamType = stNewType;
@@ -904,8 +904,8 @@ HRESULT CMutex::RemoveAllStreams()
 void CMutex::SetMutexType( MUTEX_TYPE mtType )
 {
     assert( ( mtType == MT_Bitrate ) ||
-         ( mtType == MT_Language ) ||
-         ( mtType == MT_Presentation ) );
+            ( mtType == MT_Language ) ||
+            ( mtType == MT_Presentation ) );
 
     m_mtType = mtType;
 }

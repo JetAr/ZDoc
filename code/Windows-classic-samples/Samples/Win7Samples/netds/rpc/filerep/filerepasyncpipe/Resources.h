@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,14 +8,15 @@
 
 /*
     FILE: Resources.h
-    
+
     PURPOSE: Declarations for resource management routines and
         data structures.
 
 */
 #pragma once
 
-typedef struct {
+typedef struct
+{
     LONG Value;
     LONG Bound;
 } Counter;
@@ -119,12 +120,14 @@ VOID CountersDelete(Counter *pCounters[], UINT n);
 */
 BOOL CountersCheckForNonzero(Counter *pCounters[], UINT n);
 
-typedef struct _QueueNode {
+typedef struct _QueueNode
+{
     VOID *pData;
     _QueueNode *pNext;
 } QueueNode;
 
-typedef struct {
+typedef struct
+{
     QueueNode *pFirst;
     QueueNode *pLast;
     LPCRITICAL_SECTION lpCriticalSection;
@@ -214,7 +217,8 @@ BOOL QueuesCreate(Queue *Queues[], UINT n, BOOL NoCritSec);
 */
 VOID QueuesDelete(Queue *Queues[], UINT n);
 
-typedef struct _QueueHashNode {
+typedef struct _QueueHashNode
+{
     VOID *pKey;
     VOID *pValue;
 } QueueHashNode;

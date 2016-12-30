@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -230,35 +230,35 @@ STDMETHODIMP CMyDeviceContextMenu::GetCommandString(
     {
         switch (uFlags)
         {
-            case GCS_HELPTEXTA:
-                {
-                    int cchLoaded = LoadStringA(g_hmodThisDll, IDS_MENU_DESC_DISPLAY_INFO, pszName, uMaxNameLen);
-                    DWORD sc = GetLastError();
-                    hr = (cchLoaded == 0) ? HRESULT_FROM_WIN32(sc) : S_OK;
-                    break;
-                }
+        case GCS_HELPTEXTA:
+        {
+            int cchLoaded = LoadStringA(g_hmodThisDll, IDS_MENU_DESC_DISPLAY_INFO, pszName, uMaxNameLen);
+            DWORD sc = GetLastError();
+            hr = (cchLoaded == 0) ? HRESULT_FROM_WIN32(sc) : S_OK;
+            break;
+        }
 
-            case GCS_HELPTEXTW:
-                {
-                    int cchLoaded = LoadStringW(g_hmodThisDll, IDS_MENU_DESC_DISPLAY_INFO, (LPWSTR) pszName, uMaxNameLen);
-                    DWORD sc = GetLastError();
-                    hr = (cchLoaded == 0) ? HRESULT_FROM_WIN32(sc) : S_OK;
-                    break;
-                }
+        case GCS_HELPTEXTW:
+        {
+            int cchLoaded = LoadStringW(g_hmodThisDll, IDS_MENU_DESC_DISPLAY_INFO, (LPWSTR) pszName, uMaxNameLen);
+            DWORD sc = GetLastError();
+            hr = (cchLoaded == 0) ? HRESULT_FROM_WIN32(sc) : S_OK;
+            break;
+        }
 
-            case GCS_VERBA:
-                hr = StringCchCopyNA(pszName, uMaxNameLen, g_aszDisplayInfoVerb, ARRAYSIZE(g_aszDisplayInfoVerb));
-                break;
+        case GCS_VERBA:
+            hr = StringCchCopyNA(pszName, uMaxNameLen, g_aszDisplayInfoVerb, ARRAYSIZE(g_aszDisplayInfoVerb));
+            break;
 
-            case GCS_VERBW:
-                hr = StringCchCopyNW((LPWSTR) pszName, uMaxNameLen, g_wszDisplayInfoVerb, ARRAYSIZE(g_wszDisplayInfoVerb));
-                break;
+        case GCS_VERBW:
+            hr = StringCchCopyNW((LPWSTR) pszName, uMaxNameLen, g_wszDisplayInfoVerb, ARRAYSIZE(g_wszDisplayInfoVerb));
+            break;
 
-            case GCS_VALIDATEA:
-            case GCS_VALIDATEW:
-            default:
-                hr = S_OK;
-                break;
+        case GCS_VALIDATEA:
+        case GCS_VALIDATEW:
+        default:
+            hr = S_OK;
+            break;
         } // switch: info requested
     } // else: command ID was recognized
 
@@ -388,7 +388,7 @@ HRESULT CMyDeviceContextMenu::_GetSelectedItemProperty(__in REFPROPERTYKEY pkey,
                 }
                 psi2->Release();
             }
-           psi->Release();
+            psi->Release();
         }
         pItemArray->Release();
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,19 +10,19 @@
 //
 // Abstract:
 //      This application demonstrates a very simple-minded Winsock application
-//      that uses the native ATM Winsock 2 service provider.  The specific 
-//      ATM protocol addressing demonstrated by this application is AAL5.  This 
-//      application makes no attempt to do anything useful per se, but concentrates 
-//      how setting up a connection using AAL5 and sending some data.  Additionally, 
-//      this application demonstrates several Winsock2-specific APIs and techniques 
+//      that uses the native ATM Winsock 2 service provider.  The specific
+//      ATM protocol addressing demonstrated by this application is AAL5.  This
+//      application makes no attempt to do anything useful per se, but concentrates
+//      how setting up a connection using AAL5 and sending some data.  Additionally,
+//      this application demonstrates several Winsock2-specific APIs and techniques
 //      that are useful whether or not your main interest is ATM or not.
 //
-//      Commandline parameters determine whether this application functions as 
+//      Commandline parameters determine whether this application functions as
 //      either a sender (-n), a receiver (-i), or simply allows ATM interfaces to
 //      be enumerated.  When specifying the ATM interface to bind to (on the receiver)
 //      or the remote ATM interface to connect to on the sender the interface
 //      is a 40 character NSAP address, with the last 2 hex digits (0 - 255 decimal)
-//      representing the port.  The commandline switch (-a) can be used to enumerate 
+//      representing the port.  The commandline switch (-a) can be used to enumerate
 //      all ATM interface on the local machine - note the last 2 digits will be 00.
 //
 //      Use the -? commandline switch to determine available options.
@@ -30,10 +30,10 @@
 //      This application simply sends a buffer of data when acting as the sender,
 //      to an instance of itself acting as a receiver.  Any number of senders (up
 //      to MAXCLIENTS) can be started to interact with one instance of a receiver.
-//      The size of the data buffer (-b), its contents (-d), and the number of 
-//      times to send (-l) this buffer are controllable via commandline switches. 
-//      A repeat value of 0 implies continuous sending.  A delay 
-//      commandline switch (-s:#), measured in milliseconds can be specified for the 
+//      The size of the data buffer (-b), its contents (-d), and the number of
+//      times to send (-l) this buffer are controllable via commandline switches.
+//      A repeat value of 0 implies continuous sending.  A delay
+//      commandline switch (-s:#), measured in milliseconds can be specified for the
 //      sender to insure the total transfer spans a measured unit of time.  Additionally,
 //      the commandline switch (-s2:#) is available to delay closing the connection,
 //      measured in milliseconds, to allow the receiver time to pick up the data.  This
@@ -56,7 +56,7 @@
 // Build:
 //      Use the headers and libs from the May99 Platform SDK or later.
 //      Link with ws2_32.lib
-//      
+//
 //
 
 #define ATMEVENT_MAIN
@@ -88,7 +88,8 @@ int __cdecl main(int argc, char **argv)
     if (!FindATMServiceProvider(&options.protocolInfo))
     {
         printf("No matching service provider found\n");
-    } else
+    }
+    else
     {
         PrintOptions(&options);
         if (CMD_RECEIVER == options.cmd)
@@ -157,8 +158,8 @@ BOOL ValidOptions(int argc, char **argv, OPTIONS *pOptions)
                     pOptions->fillchar = argv[i][3];
                 break;
 
-            case 'i' : 
-                pOptions->cmd = CMD_RECEIVER; 
+            case 'i' :
+                pOptions->cmd = CMD_RECEIVER;
                 if (strlen(argv[i]) > 3)
                 {
                     hRet = StringCbLength(&argv[i][3],sizeof(pOptions->szLocalInterface),&dwSize);
@@ -171,8 +172,8 @@ BOOL ValidOptions(int argc, char **argv, OPTIONS *pOptions)
                     pOptions->nRepeat = atoi(&argv[i][3]);
                 break;
 
-            case 'n' : 
-                pOptions->cmd = CMD_SENDER; 
+            case 'n' :
+                pOptions->cmd = CMD_SENDER;
                 if (strlen(argv[i]) > 3)
                 {
                     hRet = StringCbLength(&argv[i][3],sizeof(pOptions->szRemoteInterface),&dwSize);
@@ -196,7 +197,8 @@ BOOL ValidOptions(int argc, char **argv, OPTIONS *pOptions)
                 return FALSE;
                 break;
             }
-        } else
+        }
+        else
         {
             printf("  unknown option %s\n", argv[i]);
             Usage(argv[0], &default_options);
@@ -209,7 +211,7 @@ BOOL ValidOptions(int argc, char **argv, OPTIONS *pOptions)
         pOptions->fillchar = 0;
 
     pOptions->buf = (char*)Malloc(pOptions->nBufSize);
-    
+
     if (!pOptions->buf)
         return FALSE;
     else
@@ -279,15 +281,15 @@ VOID Usage(CHAR *szProgramname, OPTIONS *pOptions)
 
 
 // Abstract:
-//      Look for an ATM service provider.  
+//      Look for an ATM service provider.
 //
-//      Notice that actual service provider names are different on NT and Win9x 
-//      when searching for a service provider, you should not use the service provider 
+//      Notice that actual service provider names are different on NT and Win9x
+//      when searching for a service provider, you should not use the service provider
 //      name, but instead use the various flags in the protocol structure.
 //
 BOOL FindATMServiceProvider(
-                           WSAPROTOCOL_INFO    *pProtocolInfo
-                           )
+    WSAPROTOCOL_INFO    *pProtocolInfo
+)
 {
     int nRet = 0;
     WSAPROTOCOL_INFO *lpProtocolBuf = NULL;
@@ -301,11 +303,13 @@ BOOL FindATMServiceProvider(
     if (SOCKET_ERROR != nRet)
     {
         printf("WSAEnumProtocols: should not have suceeded\n");
-    } else if (WSAENOBUFS != (dwErr = WSAGetLastError()))
+    }
+    else if (WSAENOBUFS != (dwErr = WSAGetLastError()))
     {
-        // WSAEnumProtocols failed for some reason not relating to buffer size 
+        // WSAEnumProtocols failed for some reason not relating to buffer size
         printf("WSAEnumProtocols(1): %d\n", WSAGetLastError());
-    } else
+    }
+    else
     {
         // WSAEnumProtocols failed for the "expected" reason, allocate a buffer
         // of the needed size
@@ -318,25 +322,26 @@ BOOL FindATMServiceProvider(
             if (SOCKET_ERROR == nRet)
             {
                 printf("WSAEnumProtocols(3): %d\n", WSAGetLastError());
-            } else
+            }
+            else
             {
-                // loop thru protocols, looking for a matching service provider 
+                // loop thru protocols, looking for a matching service provider
                 for (int i=0; i<nRet; i++)
                 {
                     printf("  sp <%s>\n", lpProtocolBuf[i].szProtocol);
                     if (AF_ATM        == lpProtocolBuf[i].iAddressFamily &&
-                        ATMPROTO_AAL5 == lpProtocolBuf[i].iProtocol &&
-                        SOCK_RAW      == lpProtocolBuf[i].iSocketType)
+                            ATMPROTO_AAL5 == lpProtocolBuf[i].iProtocol &&
+                            SOCK_RAW      == lpProtocolBuf[i].iSocketType)
                     {
                         *pProtocolInfo = lpProtocolBuf[i];
                         bProtocolFound = TRUE;
                         break;
                     }
-                }     
-            } 
+                }
+            }
             if (lpProtocolBuf) Free(lpProtocolBuf);
         }
-    } 
+    }
 
     if (bProtocolFound)
         printf("  Using service provider <%s>\n\n", pProtocolInfo->szProtocol);

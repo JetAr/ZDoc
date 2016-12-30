@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,9 +40,9 @@
 #if MMPROFILECACHE
 
 #ifdef DEBUG
-#define KEYSCACHED 3 
+#define KEYSCACHED 3
 #else
-#define KEYSCACHED 2 
+#define KEYSCACHED 2
 #endif
 
 HKEY   ahkey[KEYSCACHED];
@@ -58,7 +58,7 @@ static HKEY GetKeyA(LPCSTR appname, BOOL * closekey, BOOL fCreate)
 {
     HKEY key = 0;
     char achName[MAX_PATH];
-	HRESULT hr;
+    HRESULT hr;
 #if !MMPROFILECACHE
     *closekey = TRUE;
 #else
@@ -71,10 +71,13 @@ static HKEY GetKeyA(LPCSTR appname, BOOL * closekey, BOOL fCreate)
     //
     atm = FindAtomA(appname);
 
-    if (atm != 0) {
-	// Atom exists... search the table for it.
-        for (n=0; n<keyscached; ++n) {
-            if (akeyatoms[n] == atm) {
+    if (atm != 0)
+    {
+        // Atom exists... search the table for it.
+        for (n=0; n<keyscached; ++n)
+        {
+            if (akeyatoms[n] == atm)
+            {
                 DPF2(("Found existing key for %s\n", appname));
                 return ahkey[n];
             }
@@ -84,20 +87,24 @@ static HKEY GetKeyA(LPCSTR appname, BOOL * closekey, BOOL fCreate)
 #endif
 
     hr = StringCchCopyA(achName, MAX_PATH, KEYNAMEA);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
 
     if ((!fCreate && RegOpenKeyA(ROOTKEY, achName, &key) == ERROR_SUCCESS)
-        || (fCreate && RegCreateKeyA(ROOTKEY, achName, &key) == ERROR_SUCCESS)) {
+            || (fCreate && RegCreateKeyA(ROOTKEY, achName, &key) == ERROR_SUCCESS))
+    {
 #if MMPROFILECACHE
         if ((keyscached < KEYSCACHED)
-	  && (atm = AddAtomA(appname))) {
+                && (atm = AddAtomA(appname)))
+        {
             // Add this key to the cache array
             akeyatoms[keyscached] = atm;
             ahkey[keyscached] = key;
             DPF1(("Adding key %s to cache array in position %d\n", appname, keyscached));
             ++keyscached;
-        } else {
+        }
+        else
+        {
             DPF2(("Not adding key %s to cache array\n", appname));
             *closekey = TRUE;
         }
@@ -108,7 +115,8 @@ static HKEY GetKeyA(LPCSTR appname, BOOL * closekey, BOOL fCreate)
 }
 
 #ifdef UNICODE
-static HKEY GetKeyW(LPCWSTR appname, BOOL * closekey, BOOL fCreate) {
+static HKEY GetKeyW(LPCWSTR appname, BOOL * closekey, BOOL fCreate)
+{
 
     HKEY key = 0;
     WCHAR achName[MAX_PATH];
@@ -124,10 +132,13 @@ static HKEY GetKeyW(LPCWSTR appname, BOOL * closekey, BOOL fCreate) {
     //
     atm = FindAtomW(appname);
 
-    if (atm != 0) {
-	// Atom exists... search the table for it.
-        for (n=0; n<keyscached; ++n) {
-            if (akeyatoms[n] == atm) {
+    if (atm != 0)
+    {
+        // Atom exists... search the table for it.
+        for (n=0; n<keyscached; ++n)
+        {
+            if (akeyatoms[n] == atm)
+            {
                 DPF2(("(W)Found existing key for %ls\n", appname));
                 return ahkey[n];
             }
@@ -140,16 +151,20 @@ static HKEY GetKeyW(LPCWSTR appname, BOOL * closekey, BOOL fCreate) {
     StrCchCatW(achName, MAX_PATH, appname);
 
     if ((!fCreate && RegOpenKeyW(ROOTKEY, achName, &key) == ERROR_SUCCESS)
-        || (fCreate && RegCreateKeyW(ROOTKEY, achName, &key) == ERROR_SUCCESS)) {
+            || (fCreate && RegCreateKeyW(ROOTKEY, achName, &key) == ERROR_SUCCESS))
+    {
 #if MMPROFILECACHE
         if (keyscached < KEYSCACHED
-	  && (atm = AddAtomW(appname))) {
+                && (atm = AddAtomW(appname)))
+        {
             // Add this key to the cache array
             akeyatoms[keyscached] = atm;
             ahkey[keyscached] = key;
             DPF1(("Adding key %ls to cache array in position %d\n", appname, keyscached));
             ++keyscached;
-        } else {
+        }
+        else
+        {
             DPF2(("Not adding key to cache array\n"));
             *closekey = TRUE;
         }
@@ -179,27 +194,33 @@ mmGetProfileInt(LPCSTR appname, LPCSTR valuename, INT uDefault)
 
     HKEY key = GetKeyA(appname, &fCloseKey, FALSE);
 
-    if (key) {
+    if (key)
+    {
 
         cbData = sizeof(dwData);
         if (RegQueryValueExA(
-            key,
-            (LPSTR)valuename,
-            NULL,
-            &dwType,
-            (PBYTE) &dwData,
-            (LPDWORD)&cbData) == ERROR_SUCCESS) {
-            if (dwType == REG_DWORD || dwType == REG_BINARY) {
+                    key,
+                    (LPSTR)valuename,
+                    NULL,
+                    &dwType,
+                    (PBYTE) &dwData,
+                    (LPDWORD)&cbData) == ERROR_SUCCESS)
+        {
+            if (dwType == REG_DWORD || dwType == REG_BINARY)
+            {
                 value = (INT)dwData;
 #ifdef USESTRINGSALSO
-            } else if (dwType == REG_SZ) {
-		value = atoi((LPSTR) &dwData);
+            }
+            else if (dwType == REG_SZ)
+            {
+                value = atoi((LPSTR) &dwData);
 #endif
-	    }
-	}
+            }
+        }
 
         // close open key open if we did not cache it
-        if (fCloseKey) {
+        if (fCloseKey)
+        {
             RegCloseKey(key);
         }
     }
@@ -224,35 +245,40 @@ mmGetProfileString(
 {
     DWORD dwType;
     BOOL fCloseKey;
-	HRESULT hr;
+    HRESULT hr;
 
     HKEY key = GetKey(appname, &fCloseKey, FALSE);
 
-    if (key) {
+    if (key)
+    {
 
         cbResult = cbResult * sizeof(TCHAR);
         if (RegQueryValueEx(
-            key,
-            (LPTSTR)valuename,
-            NULL,
-            &dwType,
-            (LPBYTE)pResult,
-            (LPDWORD)&cbResult) == ERROR_SUCCESS) {
+                    key,
+                    (LPTSTR)valuename,
+                    NULL,
+                    &dwType,
+                    (LPBYTE)pResult,
+                    (LPDWORD)&cbResult) == ERROR_SUCCESS)
+        {
 
-                if (dwType == REG_SZ) {
-                    // cbResult is set to the size including null
-                    // we return the number of characters
+            if (dwType == REG_SZ)
+            {
+                // cbResult is set to the size including null
+                // we return the number of characters
 
-                    // close key if we did not cache it
-                    if (fCloseKey) {
-                        RegCloseKey(key);
-                    }
-                    return(cbResult/sizeof(TCHAR) - 1);
+                // close key if we did not cache it
+                if (fCloseKey)
+                {
+                    RegCloseKey(key);
                 }
+                return(cbResult/sizeof(TCHAR) - 1);
+            }
         }
 
         // close open key if we did not cache it
-        if (fCloseKey) {
+        if (fCloseKey)
+        {
             RegCloseKey(key);
         }
     }
@@ -260,10 +286,11 @@ mmGetProfileString(
     // if we got here, we didn't find it, or it was the wrong type - return
     // the default string
     hr = StringCchCopy(pResult, cbResult, pDefault);
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_COPY);
-		return NULL;
-	}
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_COPY);
+        return NULL;
+    }
     return(lstrlen(pDefault));
 }
 #endif
@@ -280,31 +307,39 @@ mmWriteProfileString(LPCTSTR appname, LPCTSTR valuename, LPCTSTR pData)
     HKEY key = GetKey(appname, &fCloseKey, TRUE);
     BOOL fResult = !(ERROR_SUCCESS);
 
-    if (key) {
-        if (pData) {
+    if (key)
+    {
+        if (pData)
+        {
             fResult = RegSetValueEx(
-                key,
-                (LPTSTR)valuename,
-                0,
-                REG_SZ,
-                (LPBYTE)pData,
-                (lstrlen(pData) + 1) * sizeof(TCHAR)
-            );
-        } else {
+                          key,
+                          (LPTSTR)valuename,
+                          0,
+                          REG_SZ,
+                          (LPBYTE)pData,
+                          (lstrlen(pData) + 1) * sizeof(TCHAR)
+                      );
+        }
+        else
+        {
             fResult = RegDeleteValue(
-                key,
-                (LPTSTR)valuename
-            );
+                          key,
+                          (LPTSTR)valuename
+                      );
         }
 
-        if (fCloseKey) {
+        if (fCloseKey)
+        {
             RegCloseKey(key);
         }
     }
 
-    if (ERROR_SUCCESS == fResult) {
+    if (ERROR_SUCCESS == fResult)
+    {
         return TRUE;
-    } else {
+    }
+    else
+    {
         return FALSE;
     }
 }
@@ -320,24 +355,24 @@ mmWriteProfileString(LPCTSTR appname, LPCTSTR valuename, LPCTSTR pData)
  * convert an Ansi string to Unicode
  */
 LPWSTR mmAnsiToWide (
-   LPWSTR lpwsz,  // out: wide char buffer to convert into
-   LPCSTR lpsz,   // in: ansi string to convert from
-   UINT   nChars) // in: count of characters in each buffer
+    LPWSTR lpwsz,  // out: wide char buffer to convert into
+    LPCSTR lpsz,   // in: ansi string to convert from
+    UINT   nChars) // in: count of characters in each buffer
 {
-   MultiByteToWideChar(GetACP(), 0, lpsz, nChars, lpwsz, nChars);
-   return lpwsz;
+    MultiByteToWideChar(GetACP(), 0, lpsz, nChars, lpwsz, nChars);
+    return lpwsz;
 }
 
 /*
  * convert a unicode string to ansi
  */
 LPSTR mmWideToAnsi (
-   LPSTR   lpsz,   // out: ansi buffer to convert into
-   LPCWSTR lpwsz,  // in: wide char buffer to convert from
-   UINT    nChars) // in: count of characters (not bytes!)
+    LPSTR   lpsz,   // out: ansi buffer to convert into
+    LPCWSTR lpwsz,  // in: wide char buffer to convert from
+    UINT    nChars) // in: count of characters (not bytes!)
 {
-   WideCharToMultiByte(GetACP(), 0, lpwsz, nChars, lpsz, nChars, NULL, NULL);
-   return lpsz;
+    WideCharToMultiByte(GetACP(), 0, lpwsz, nChars, lpsz, nChars, NULL, NULL);
+    return lpsz;
 }
 
 
@@ -347,10 +382,12 @@ LPSTR mmWideToAnsi (
 #if MMPROFILECACHE
 VOID CloseKeys()
 {
-    for (; keyscached--;) {
+    for (; keyscached--;)
+    {
 
 #ifdef DEBUG
-        if (!ahkey[keyscached]) {           
+        if (!ahkey[keyscached])
+        {
             DPF0(("Closing a null key\n"));
         }
 #endif
@@ -371,7 +408,8 @@ BOOL
 mmWriteProfileInt(LPCTSTR appname, LPCTSTR valuename, INT Value)
 {
     // If we would write the same as already there... return.
-    if (mmGetProfileInt(appname, valuename, !Value) == ((UINT)Value)) {
+    if (mmGetProfileInt(appname, valuename, !Value) == ((UINT)Value))
+    {
         return TRUE;
     }
 
@@ -380,10 +418,11 @@ mmWriteProfileInt(LPCTSTR appname, LPCTSTR valuename, INT Value)
         HKEY hkey;
 
         HRESULT hr = StringCchCopy(achName, MAX_PATH, KEYNAME);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
-        
-        if (RegCreateKey(ROOTKEY, achName, &hkey) == ERROR_SUCCESS) {
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
+
+        if (RegCreateKey(ROOTKEY, achName, &hkey) == ERROR_SUCCESS)
+        {
             RegSetValueEx(
                 hkey,
                 valuename,

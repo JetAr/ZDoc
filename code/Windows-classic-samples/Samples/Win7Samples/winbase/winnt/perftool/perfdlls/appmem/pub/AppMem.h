@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright 1995 - 2000 Microsoft Corporation
 
@@ -8,7 +8,7 @@ Module Name:
 
 Abstract:
 
-    function prototypes and definitions for applications using the 
+    function prototypes and definitions for applications using the
     application memory performance counters
 
 Revision History

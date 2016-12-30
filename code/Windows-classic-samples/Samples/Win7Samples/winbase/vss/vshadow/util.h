@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © 2006 Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© 2006 Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 #pragma once
@@ -16,24 +16,27 @@
 #include <resapi.h>
 
 /////////////////////////////////////////////////////////////////////////
-//  Utility classes 
+//  Utility classes
 //
 
-// Used to automatically release a CoTaskMemAlloc allocated pointer when 
+// Used to automatically release a CoTaskMemAlloc allocated pointer when
 // when the instance of this class goes out of scope
 // (even if an exception is thrown)
 class CAutoComPointer
 {
 public:
     CAutoComPointer(LPVOID ptr): m_ptr(ptr) {};
-    ~CAutoComPointer() { CoTaskMemFree(m_ptr); }
+    ~CAutoComPointer()
+    {
+        CoTaskMemFree(m_ptr);
+    }
 private:
     LPVOID m_ptr;
-    
+
 };
 
 
-// Used to automatically release the contents of a VSS_SNAPSHOT_PROP structure 
+// Used to automatically release the contents of a VSS_SNAPSHOT_PROP structure
 // (but not the structure itself)
 // when the instance of this class goes out of scope
 // (even if an exception is thrown)
@@ -41,7 +44,10 @@ class CAutoSnapPointer
 {
 public:
     CAutoSnapPointer(VSS_SNAPSHOT_PROP * ptr): m_ptr(ptr) {};
-    ~CAutoSnapPointer() { ::VssFreeSnapshotProperties(m_ptr); }
+    ~CAutoSnapPointer()
+    {
+        ::VssFreeSnapshotProperties(m_ptr);
+    }
 private:
     VSS_SNAPSHOT_PROP * m_ptr;
 };
@@ -54,7 +60,10 @@ class CAutoHandle
 {
 public:
     CAutoHandle(HANDLE h): m_h(h) {};
-    ~CAutoHandle() { ::CloseHandle(m_h); }
+    ~CAutoHandle()
+    {
+        ::CloseHandle(m_h);
+    }
 private:
     HANDLE m_h;
 };
@@ -67,7 +76,10 @@ class CAutoSearchHandle
 {
 public:
     CAutoSearchHandle(HANDLE h): m_h(h) {};
-    ~CAutoSearchHandle() { ::FindClose(m_h); }
+    ~CAutoSearchHandle()
+    {
+        ::FindClose(m_h);
+    }
 private:
     HANDLE m_h;
 };
@@ -82,7 +94,7 @@ class WString2Buffer
 {
 public:
 
-    WString2Buffer(wstring & s): 
+    WString2Buffer(wstring & s):
         m_s(s), m_sv(s.length() + 1, L'\0')
     {
         // Move data from wstring to the temporary vector
@@ -96,13 +108,19 @@ public:
         m_s.assign(m_sv.begin(), m_sv.end());
     }
 
-    // Return the temporary WCHAR buffer 
-    operator WCHAR* () { return &(m_sv[0]); }
+    // Return the temporary WCHAR buffer
+    operator WCHAR* ()
+    {
+        return &(m_sv[0]);
+    }
 
-    // Return the available size of the temporary WCHAR buffer 
-    size_t length() { return m_s.length(); }
+    // Return the available size of the temporary WCHAR buffer
+    size_t length()
+    {
+        return m_s.length();
+    }
 
-private: 
+private:
     wstring &       m_s;
     vector<WCHAR>   m_sv;
 };
@@ -126,7 +144,7 @@ inline string WString2String(wstring src)
         chBuffer.resize(iChars);
         WideCharToMultiByte(CP_ACP, 0, src.c_str(), -1, &chBuffer.front(), (int)chBuffer.size(), NULL, NULL);
     }
-    
+
     return std::string(&chBuffer.front());
 }
 
@@ -168,8 +186,8 @@ inline vector<wstring> SplitWString(wstring str, WCHAR separator)
         }
 
         wstring token = remainder.substr(0, position);
-        ft.Trace(DBG_INFO, L"Extracting token: '%s' from '%s' between 0..%d", 
-            token.c_str(), remainder.c_str(), position);
+        ft.Trace(DBG_INFO, L"Extracting token: '%s' from '%s' between 0..%d",
+                 token.c_str(), remainder.c_str(), position);
 
         // Add this substring and continue with the rest
         strings.push_back(token);
@@ -207,11 +225,11 @@ inline bool IsEqual(wstring str1, wstring str2)
 }
 
 
-// Returns TRUE if the string is already present in the string list  
+// Returns TRUE if the string is already present in the string list
 // (performs case insensitive comparison)
 inline bool FindStringInList(wstring str, vector<wstring> stringList)
 {
-    // Check to see if the volume is already added 
+    // Check to see if the volume is already added
     for (unsigned i = 0; i < stringList.size( ); i++)
         if (IsEqual(str, stringList[i]))
             return true;
@@ -220,7 +238,7 @@ inline bool FindStringInList(wstring str, vector<wstring> stringList)
 }
 
 
-// Append a backslash to the current string 
+// Append a backslash to the current string
 inline wstring AppendBackslash(wstring str)
 {
     if (str.length() == 0)
@@ -245,7 +263,7 @@ inline bool IsVolume(wstring volumePath)
     bool bIsVolume = false;
     ft.Trace(DBG_INFO, L"Checking if %s is a real volume path...", volumePath.c_str());
     _ASSERTE(volumePath.length() > 0);
-    
+
     // If the last character is not '\\', append one
     volumePath = AppendBackslash(volumePath);
 
@@ -270,7 +288,7 @@ inline bool IsVolume(wstring volumePath)
     ft.Trace(DBG_INFO, L"IsVolume returns %s", (bIsVolume) ? L"TRUE" : L"FALSE");
     return bIsVolume;
 }
-    
+
 
 
 
@@ -321,13 +339,13 @@ inline wstring GetUniqueVolumeNameForPath(wstring path, bool bIsBackup=false)
     {
         DWORD cchVolumeRootPath = MAX_PATH;
         DWORD cchVolumeUniqueName = MAX_PATH;
-        
+
         DWORD dwRet = ClusterPrepareSharedVolumeForBackup(
-            path.c_str(),
-            WString2Buffer(volumeRootPath),
-            &cchVolumeRootPath,
-            WString2Buffer(volumeUniqueName),
-            &cchVolumeUniqueName);
+                          path.c_str(),
+                          WString2Buffer(volumeRootPath),
+                          &cchVolumeRootPath,
+                          WString2Buffer(volumeUniqueName),
+                          &cchVolumeUniqueName);
 
         CHECK_WIN32_ERROR(dwRet, "ClusterPrepareSharedVolumeForBackup");
 
@@ -337,7 +355,7 @@ inline wstring GetUniqueVolumeNameForPath(wstring path, bool bIsBackup=false)
     else
     {
         // Get the root path of the volume
-        
+
         CHECK_WIN32(GetVolumePathNameW((LPCWSTR)path.c_str(), WString2Buffer(volumeRootPath), (DWORD)volumeRootPath.length()));
         ft.Trace(DBG_INFO, L"- Path name: %s ...", volumeRootPath.c_str());
 
@@ -345,7 +363,7 @@ inline wstring GetUniqueVolumeNameForPath(wstring path, bool bIsBackup=false)
         CHECK_WIN32(GetVolumeNameForVolumeMountPointW((LPCWSTR)volumeRootPath.c_str(), WString2Buffer(volumeUniqueName), (DWORD)volumeUniqueName.length()));
         ft.Trace(DBG_INFO, L"- Unique volume name: %s ...", volumeUniqueName.c_str());
     }
-    
+
     return volumeUniqueName;
 }
 
@@ -367,13 +385,13 @@ inline bool GetUniqueVolumeNameForPathNoThrow(wstring path, wstring &volname)
 
     if (ClusterIsPathOnSharedVolume(path.c_str()))
     {
-        DWORD dwRet = ClusterGetVolumePathName(path.c_str(), 
-            WString2Buffer(volumeUniqueName), 
-            (DWORD)volumeUniqueName.length());
+        DWORD dwRet = ClusterGetVolumePathName(path.c_str(),
+                                               WString2Buffer(volumeUniqueName),
+                                               (DWORD)volumeUniqueName.length());
 
         if (dwRet != ERROR_SUCCESS)
             return false;
-        
+
         ft.Trace(DBG_INFO, L"- Path name: %s ...", volumeRootPath.c_str());
         ft.Trace(DBG_INFO, L"- Unique volume name: Deffering until component selection ...");
     }
@@ -392,8 +410,8 @@ inline bool GetUniqueVolumeNameForPathNoThrow(wstring path, wstring &volname)
 
         // Get the unique volume name
         if (!GetVolumeNameForVolumeMountPointW((LPCWSTR)volumeRootPath.c_str(),
-                                                WString2Buffer(volumeUniqueName),
-                                                (DWORD)volumeUniqueName.length()))
+                                               WString2Buffer(volumeUniqueName),
+                                               (DWORD)volumeUniqueName.length()))
         {
             ft.Trace(DBG_INFO, L"GetVolumeNameForVolumeMountPointW(%s) fails winerror %d", volumeRootPath.c_str(), GetLastError());
             return false;
@@ -401,7 +419,7 @@ inline bool GetUniqueVolumeNameForPathNoThrow(wstring path, wstring &volname)
 
         ft.Trace(DBG_INFO, L"- Unique volume name: %s ...", volumeUniqueName.c_str());
     }
-    
+
     volname = volumeUniqueName;
 
     return true;
@@ -427,13 +445,13 @@ inline wstring GetDeviceForVolumeName(wstring volumeName)
     wstring globalRootPrefix = L"\\\\?\\GLOBALROOT";
     if (IsEqual(volumeName.substr(0,globalRootPrefix.size()), globalRootPrefix))
     {
-        wstring kernelDevice = volumeName.substr(globalRootPrefix.size()); 
+        wstring kernelDevice = volumeName.substr(globalRootPrefix.size());
         ft.Trace(DBG_INFO, L"- GLOBALROOT prefix eliminated. Returning kernel device:  '%s' ", kernelDevice.c_str());
 
         return kernelDevice;
     }
 
-    // If this is a volume name, get the device 
+    // If this is a volume name, get the device
     wstring dosPrefix = L"\\\\?\\";
     wstring volumePrefix = L"\\\\?\\Volume";
     if (IsEqual(volumeName.substr(0,volumePrefix.size()), volumePrefix))
@@ -462,17 +480,17 @@ inline wstring GetDisplayNameForVolume(wstring volumeName)
 
     DWORD dwRequired = 0;
     wstring volumeMountPoints(MAX_PATH, L'\0');
-    if (!GetVolumePathNamesForVolumeName((LPCWSTR)volumeName.c_str(), 
-            WString2Buffer(volumeMountPoints), 
-            (DWORD)volumeMountPoints.length(), 
-            &dwRequired))
+    if (!GetVolumePathNamesForVolumeName((LPCWSTR)volumeName.c_str(),
+                                         WString2Buffer(volumeMountPoints),
+                                         (DWORD)volumeMountPoints.length(),
+                                         &dwRequired))
     {
-            // If not enough, retry with a larger size
-            volumeMountPoints.resize(dwRequired, L'\0');
-            CHECK_WIN32(!GetVolumePathNamesForVolumeName((LPCWSTR)volumeName.c_str(), 
-                WString2Buffer(volumeMountPoints), 
-                (DWORD)volumeMountPoints.length(), 
-                &dwRequired));
+        // If not enough, retry with a larger size
+        volumeMountPoints.resize(dwRequired, L'\0');
+        CHECK_WIN32(!GetVolumePathNamesForVolumeName((LPCWSTR)volumeName.c_str(),
+                    WString2Buffer(volumeMountPoints),
+                    (DWORD)volumeMountPoints.length(),
+                    &dwRequired));
     }
 
     // compute the smallest mount point by enumerating the returned MULTI_SZ
@@ -490,21 +508,21 @@ inline bool GetDisplayNameForVolumeNoThrow(wstring volumeName, wstring &volumeNa
 
     DWORD dwRequired = 0;
     wstring volumeMountPoints(MAX_PATH, L'\0');
-    if (!GetVolumePathNamesForVolumeName((LPCWSTR)volumeName.c_str(), 
-            WString2Buffer(volumeMountPoints), 
-            (DWORD)volumeMountPoints.length(), 
-            &dwRequired))
+    if (!GetVolumePathNamesForVolumeName((LPCWSTR)volumeName.c_str(),
+                                         WString2Buffer(volumeMountPoints),
+                                         (DWORD)volumeMountPoints.length(),
+                                         &dwRequired))
     {
-            // If not enough, retry with a larger size
-            volumeMountPoints.resize(dwRequired, L'\0');
-            if(!dwRequired || !GetVolumePathNamesForVolumeName((LPCWSTR)volumeName.c_str(), 
-                                                                WString2Buffer(volumeMountPoints), 
-                                                                (DWORD)volumeMountPoints.length(), 
-                                                                &dwRequired))
-            {
-                ft.Trace(DBG_INFO, L"GetVolumePathNamesForVolumeName(%s) fails winerror %d", volumeName.c_str(), GetLastError());
-                return false;
-            }
+        // If not enough, retry with a larger size
+        volumeMountPoints.resize(dwRequired, L'\0');
+        if(!dwRequired || !GetVolumePathNamesForVolumeName((LPCWSTR)volumeName.c_str(),
+                WString2Buffer(volumeMountPoints),
+                (DWORD)volumeMountPoints.length(),
+                &dwRequired))
+        {
+            ft.Trace(DBG_INFO, L"GetVolumePathNamesForVolumeName(%s) fails winerror %d", volumeName.c_str(), GetLastError());
+            return false;
+        }
     }
 
     // compute the smallest mount point by enumerating the returned MULTI_SZ
@@ -527,12 +545,12 @@ inline wstring ReadFileContents(wstring fileName)
     ft.WriteLine(L"Reading the file '%s' ...", fileName.c_str());
 
     HANDLE hFile = CreateFile((LPWSTR)fileName.c_str(),
-                          GENERIC_READ,
-                          FILE_SHARE_READ,
-                          NULL,
-                          OPEN_EXISTING,
-                          0,
-                          NULL);
+                              GENERIC_READ,
+                              FILE_SHARE_READ,
+                              NULL,
+                              OPEN_EXISTING,
+                              0,
+                              NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)
         CHECK_WIN32_ERROR(GetLastError(), L"CreateFile");
@@ -553,7 +571,7 @@ inline wstring ReadFileContents(wstring fileName)
 }
 
 
-// Utility function to write a new file 
+// Utility function to write a new file
 inline void WriteFile(wstring fileName, wstring contents)
 {
     FunctionTracer ft(DBG_INFO);
@@ -561,12 +579,12 @@ inline void WriteFile(wstring fileName, wstring contents)
     ft.WriteLine(L"Writing the file '%s' ...", fileName.c_str());
 
     HANDLE hFile = CreateFile((LPWSTR)fileName.c_str(),
-                          GENERIC_WRITE,
-                          FILE_SHARE_READ|FILE_SHARE_WRITE,
-                          NULL,
-                          CREATE_ALWAYS,
-                          0,
-                          NULL);
+                              GENERIC_WRITE,
+                              FILE_SHARE_READ|FILE_SHARE_WRITE,
+                              NULL,
+                              CREATE_ALWAYS,
+                              0,
+                              NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)
         CHECK_WIN32_ERROR(GetLastError(), L"CreateFile");
@@ -599,38 +617,38 @@ inline void ExecCommand(wstring execCommand)
 
     //
     // Security Remarks - CreateProcess
-    // 
-    // The first parameter, lpApplicationName, can be NULL, in which case the 
-    // executable name must be in the white space-delimited string pointed to 
-    // by lpCommandLine. If the executable or path name has a space in it, there 
-    // is a risk that a different executable could be run because of the way the 
-    // function parses spaces. The following example is dangerous because the 
+    //
+    // The first parameter, lpApplicationName, can be NULL, in which case the
+    // executable name must be in the white space-delimited string pointed to
+    // by lpCommandLine. If the executable or path name has a space in it, there
+    // is a risk that a different executable could be run because of the way the
+    // function parses spaces. The following example is dangerous because the
     // function will attempt to run "Program.exe", if it exists, instead of "MyApp.exe".
-    // 
+    //
     // CreateProcess(NULL, "C:\\Program Files\\MyApp", ...)
-    // 
-    // If a malicious user were to create an application called "Program.exe" 
-    // on a system, any program that incorrectly calls CreateProcess 
-    // using the Program Files directory will run this application 
+    //
+    // If a malicious user were to create an application called "Program.exe"
+    // on a system, any program that incorrectly calls CreateProcess
+    // using the Program Files directory will run this application
     // instead of the intended application.
-    // 
+    //
     // For this reason we blocked parameters in the executed command.
     //
 
     // Prepend/append the command with double-quotes. This will prevent adding parameters
     execCommand = wstring(L"\"") + execCommand + wstring(L"\"");
 
-    // Start the child process. 
-    CHECK_WIN32( CreateProcess( NULL, // No module name (use command line). 
-        (LPWSTR)execCommand.c_str(), // Command line. 
-        NULL,             // Process handle not inheritable. 
-        NULL,             // Thread handle not inheritable. 
-        FALSE,            // Set handle inheritance to FALSE. 
-        0,                // No creation flags. 
-        NULL,             // Use parent's environment block. 
-        NULL,             // Use parent's starting directory. 
-        &si,              // Pointer to STARTUPINFO structure.
-        &pi ))             // Pointer to PROCESS_INFORMATION structure.
+    // Start the child process.
+    CHECK_WIN32( CreateProcess( NULL, // No module name (use command line).
+                                (LPWSTR)execCommand.c_str(), // Command line.
+                                NULL,             // Process handle not inheritable.
+                                NULL,             // Thread handle not inheritable.
+                                FALSE,            // Set handle inheritance to FALSE.
+                                0,                // No creation flags.
+                                NULL,             // Use parent's environment block.
+                                NULL,             // Use parent's starting directory.
+                                &si,              // Pointer to STARTUPINFO structure.
+                                &pi ))             // Pointer to PROCESS_INFORMATION structure.
 
     // Close process and thread handles automatically when we wil leave this function
     CAutoHandle autoCleanupHandleProcess(pi.hProcess);

@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Parse.cpp
 // MPEG-1 parsing code.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -42,14 +42,14 @@ inline DWORD MAKE_DWORD(const BYTE *pData)
 
 //-------------------------------------------------------------------
 // AdvanceBufferPointer
-// Advances a byte array pointer. 
-// 
-// pData: The array pointer. 
+// Advances a byte array pointer.
+//
+// pData: The array pointer.
 // cbBufferSize: The array size. On output, the size remaining.
 // cbAdvance: Number of bytes to advance the pointer.
 //
 // This function is just a helper for keeping a valid pointer as we
-// walk through a buffer. 
+// walk through a buffer.
 //-------------------------------------------------------------------
 
 inline HRESULT AdvanceBufferPointer(const BYTE* &pData, DWORD &cbBufferSize, DWORD cbAdvance)
@@ -155,8 +155,8 @@ HRESULT Buffer::Reserve(DWORD cb)
 
     HRESULT hr = S_OK;
 
-    // If this would push the end position past the end of the array, 
-    // then we need to copy up the data to start of the array. We might 
+    // If this would push the end position past the end of the array,
+    // then we need to copy up the data to start of the array. We might
     // also need to realloc the array.
 
     if (cb > GetCount() - m_end)
@@ -169,10 +169,10 @@ HRESULT Buffer::Reserve(DWORD cb)
             // Array needs to grow
             CHECK_HR(hr = SetSize(DataSize() + cb));
         }
-        
+
         MoveMemory(Ptr(), DataPtr(), DataSize());
 
-        // Reset begin and end. 
+        // Reset begin and end.
         m_end = DataSize(); // Update m_end first before resetting m_begin!
         m_begin = 0;
     }
@@ -254,10 +254,10 @@ Parser::~Parser()
 //-------------------------------------------------------------------
 // GetSystemHeader class
 //
-// Returns a copy of the system header. 
+// Returns a copy of the system header.
 // Do not call this method unless HasSystemHeader() returns TRUE.
-// 
-// The caller must free the returned structure by calling 
+//
+// The caller must free the returned structure by calling
 // CoTaskMemFree.
 //-------------------------------------------------------------------
 
@@ -282,7 +282,7 @@ HRESULT Parser::GetSystemHeader(MPEG1SystemHeader **ppHeader)
     }
 
     CopyMemory(pHeader, m_pHeader, m_pHeader->cbSize);
-    
+
     *ppHeader = pHeader;
     return S_OK;
 }
@@ -292,10 +292,10 @@ HRESULT Parser::GetSystemHeader(MPEG1SystemHeader **ppHeader)
 // ParseBytes
 // Parses as much data as possible from the pData buffer, and returns
 // the amount of data parsed in pAte (*pAte <= cbLen).
-// 
+//
 // Return values:
 //      S_OK: The method consumed some data (*pAte > 0).
-//      S_FALSE: The method did not consume any data (*pAte == 0). 
+//      S_FALSE: The method did not consume any data (*pAte == 0).
 //      [or an error code]
 //
 // If the method returns S_FALSE, the caller must allocate a larger
@@ -346,7 +346,7 @@ HRESULT Parser::ParseBytes(const BYTE *pData, DWORD cbLen, DWORD *pAte)
             // Start of packet.
             hr = ParsePacketHeader(pData, cbLen, &cbParsed);
             break;
-            
+
         }
     }
 
@@ -407,20 +407,20 @@ HRESULT Parser::ParsePackHeader(const BYTE *pData, DWORD cbLen, DWORD *pAte)
 
     // Check marker bits
     if ( ((pData[4] & 0xF1) != 0x21) ||
-         ((pData[6] & 0x01) != 0x01) ||
-         ((pData[8] & 0x01) != 0x01) ||
-         ((pData[9] & 0x80) != 0x80) ||
-         ((pData[11] & 0x01) != 0x01) )
+            ((pData[6] & 0x01) != 0x01) ||
+            ((pData[8] & 0x01) != 0x01) ||
+            ((pData[9] & 0x80) != 0x80) ||
+            ((pData[11] & 0x01) != 0x01) )
     {
         return E_FAIL;
     }
 
 
     // Calculate the SCR.
-    LONGLONG scr = ( (pData[8] & 0xFE) >> 1) | 
-                   ( (pData[7]) << 7) | 
-                   ( (pData[6] & 0xFE) << 14) | 
-                   ( (pData[5]) << 22) | 
+    LONGLONG scr = ( (pData[8] & 0xFE) >> 1) |
+                   ( (pData[7]) << 7) |
+                   ( (pData[6] & 0xFE) << 14) |
+                   ( (pData[5]) << 22) |
                    ( (pData[4] & 0x0E) << 29);
 
     DWORD muxRate = ( (pData[11] & 0xFE) >> 1) |
@@ -440,10 +440,10 @@ HRESULT Parser::ParsePackHeader(const BYTE *pData, DWORD cbLen, DWORD *pAte)
 //-------------------------------------------------------------------
 // ParseSystemHeader.
 // Parses the MPEG-1 system header.
-// 
-// NOTES: 
+//
+// NOTES:
 // The system header optionally appears after the pack header.
-// The first pack must contain a system header. 
+// The first pack must contain a system header.
 // Subsequent packs may contain a system header.
 //-------------------------------------------------------------------
 
@@ -456,9 +456,9 @@ HRESULT Parser::ParseSystemHeader(const BYTE *pData, DWORD cbLen, DWORD *pAte)
         return S_FALSE; // Not enough data yet.
     }
 
-    // Find the total header length. 
+    // Find the total header length.
     DWORD cbHeaderLen = MPEG1_SYSTEM_HEADER_PREFIX +  MAKE_WORD(pData[4], pData[5]);
-    
+
     if (cbHeaderLen < MPEG1_SYSTEM_HEADER_MIN_SIZE - MPEG1_SYSTEM_HEADER_PREFIX)
     {
         return E_FAIL;  // Invalid value.
@@ -469,7 +469,7 @@ HRESULT Parser::ParseSystemHeader(const BYTE *pData, DWORD cbLen, DWORD *pAte)
         return S_FALSE; // Not enough data yet.
     }
 
-    // We have enough data to parse the header. 
+    // We have enough data to parse the header.
 
     HRESULT hr = S_OK;
 
@@ -499,9 +499,9 @@ HRESULT Parser::ParseSystemHeader(const BYTE *pData, DWORD cbLen, DWORD *pAte)
 
         // Check marker bits
         if ( ((pData[6] & 0x80) != 0x80) ||
-             ((pData[8] & 0x01) != 0x01) ||
-             ((pData[10] & 0x20) != 0x20) ||
-             (pData[11] != 0xFF) )
+                ((pData[8] & 0x01) != 0x01) ||
+                ((pData[10] & 0x20) != 0x20) ||
+                (pData[11] != 0xFF) )
         {
             CHECK_HR(hr = E_FAIL);  // Invalid bits.
         }
@@ -542,9 +542,9 @@ done:
 //-------------------------------------------------------------------
 // ParsePacketHeader
 //
-// Parses the packet header. 
+// Parses the packet header.
 //
-// If the method returns S_OK, then HasPacket() returns TRUE and the 
+// If the method returns S_OK, then HasPacket() returns TRUE and the
 // caller can start parsing the packet.
 //-------------------------------------------------------------------
 
@@ -569,7 +569,7 @@ HRESULT Parser::ParsePacketHeader(const BYTE *pData, DWORD cbLen, DWORD *pAte)
         return S_FALSE; // Not enough data yet.
     }
 
-    // Make sure the start code is 0x000001xx 
+    // Make sure the start code is 0x000001xx
     if ((MAKE_DWORD(pData) & 0xFFFFFF00) != MPEG1_START_CODE_PREFIX)
     {
         return E_FAIL;
@@ -621,7 +621,7 @@ HRESULT Parser::ParsePacketHeader(const BYTE *pData, DWORD cbLen, DWORD *pAte)
         // Skip STD buffer size.
         CHECK_HR(hr = AdvanceBufferPointer(pData, cbLeft, 2));
     }
-    
+
     CHECK_HR(ValidateBufferSize(cbLeft, 1));
 
     if ((*pData & 0xF1) == 0x21)
@@ -676,8 +676,8 @@ done:
 // OnEndOfStream
 // Called when the parser reaches the MPEG-1 stop code.
 //
-// Note: Obviously the parser is not guaranteed to see a stop code 
-// before the client reaches the end of the source data. The client 
+// Note: Obviously the parser is not guaranteed to see a stop code
+// before the client reaches the end of the source data. The client
 // must be prepared to handle that case.
 //-------------------------------------------------------------------
 
@@ -691,7 +691,7 @@ HRESULT Parser::OnEndOfStream()
 
 
 //-------------------------------------------------------------------
-// Static functions 
+// Static functions
 //-------------------------------------------------------------------
 
 
@@ -709,8 +709,8 @@ HRESULT ParsePTS(const BYTE *pData, LONGLONG *pPTS)
     // Check marker bits.
     // The first byte can be '0010xxx1' or '0x11xxxx1'
     if (((byte1 & 0xE1) != 0x21) ||
-        ((word1 & 0x01) != 0x01) ||
-        ((word2 & 0x01) != 0x01) )
+            ((word1 & 0x01) != 0x01) ||
+            ((word2 & 0x01) != 0x01) )
     {
         return E_FAIL;
     }
@@ -720,9 +720,9 @@ HRESULT ParsePTS(const BYTE *pData, LONGLONG *pPTS)
     // The PTS is 33 bits, so bit 32 goes in the high-order DWORD
     li.HighPart = (byte1 & 0x08) >> 3;
 
-    li.LowPart = (static_cast<DWORD>(byte1 & 0x06) << 29) | 
-              (static_cast<DWORD>(word1 & 0xFFFE) << 14) | 
-              (static_cast<DWORD>(word2) >> 1);
+    li.LowPart = (static_cast<DWORD>(byte1 & 0x06) << 29) |
+                 (static_cast<DWORD>(word1 & 0xFFFE) << 14) |
+                 (static_cast<DWORD>(word2) >> 1);
 
     *pPTS = li.QuadPart;
     return S_OK;
@@ -731,8 +731,8 @@ HRESULT ParsePTS(const BYTE *pData, LONGLONG *pPTS)
 
 //-------------------------------------------------------------------
 // ParseStreamData
-// Parses the stream information (for one stream) in the system 
-// header. 
+// Parses the stream information (for one stream) in the system
+// header.
 //-------------------------------------------------------------------
 
 HRESULT ParseStreamData(const BYTE *pStreamInfo, MPEG1StreamHeader& header)
@@ -785,11 +785,11 @@ HRESULT ParseStreamData(const BYTE *pStreamInfo, MPEG1StreamHeader& header)
 // ParseStreamId
 // Parses an MPEG-1 stream ID.
 //
-// Note: 
-// The id is a stream code, plus (for some types) a stream number, 
-// bitwise-OR'd. This function returns the type and the stream number. 
+// Note:
+// The id is a stream code, plus (for some types) a stream number,
+// bitwise-OR'd. This function returns the type and the stream number.
 //
-// See ISO/EIC 11172-1, sec 2.4.4.2 
+// See ISO/EIC 11172-1, sec 2.4.4.2
 //-------------------------------------------------------------------
 
 HRESULT ParseStreamId(BYTE id, StreamType *pType, BYTE *pStreamNum)
@@ -856,17 +856,17 @@ HRESULT ParseStreamId(BYTE id, StreamType *pType, BYTE *pStreamNum)
 // ReadVideoSequenceHeader
 // Parses a video sequence header.
 //
-// Call Parser::HasPacket() to ensure that pData points to the start 
-// of a payload, and call Parser::PacketHeader() to verify it is a 
-// video packet. 
+// Call Parser::HasPacket() to ensure that pData points to the start
+// of a payload, and call Parser::PacketHeader() to verify it is a
+// video packet.
 //-------------------------------------------------------------------
 
 HRESULT ReadVideoSequenceHeader(
-    const BYTE *pData, 
-    DWORD cbData, 
-    MPEG1VideoSeqHeader& seqHeader, 
+    const BYTE *pData,
+    DWORD cbData,
+    MPEG1VideoSeqHeader& seqHeader,
     DWORD *pAte
-    )
+)
 {
     DWORD cbPadding = 0;
 
@@ -980,7 +980,7 @@ HRESULT ReadVideoSequenceHeader(
 
 //-------------------------------------------------------------------
 // GetFrameRate
-// Returns the frame rate from the picture_rate field of the sequence 
+// Returns the frame rate from the picture_rate field of the sequence
 // header.
 //
 // See ISO/IEC 11172-2, 2.4.3.2 "Sequence Header"
@@ -988,7 +988,7 @@ HRESULT ReadVideoSequenceHeader(
 
 HRESULT GetFrameRate(BYTE frameRateCode, MFRatio *pRatio)
 {
-    MFRatio frameRates[] = 
+    MFRatio frameRates[] =
     {
         { 0, 0 },           // invalid
         { 24000, 1001 },    // 23.976 fps
@@ -1013,7 +1013,7 @@ HRESULT GetFrameRate(BYTE frameRateCode, MFRatio *pRatio)
 
 //-------------------------------------------------------------------
 // GetPixelAspectRatio
-// Returns the pixel aspect ratio (PAR) from the pel_aspect_ratio 
+// Returns the pixel aspect ratio (PAR) from the pel_aspect_ratio
 // field of the sequence header.
 //
 // See ISO/IEC 11172-2, 2.4.3.2 "Sequence Header"
@@ -1021,8 +1021,9 @@ HRESULT GetFrameRate(BYTE frameRateCode, MFRatio *pRatio)
 
 HRESULT GetPixelAspectRatio(BYTE pixelAspectCode, MFRatio *pRatio)
 {
-    DWORD height[] = { 0, 10000, 6735, 7031, 7615, 8055, 8437, 8935, 9157, 
-        9815, 10255, 10695, 10950, 11575, 12015 };
+    DWORD height[] = { 0, 10000, 6735, 7031, 7615, 8055, 8437, 8935, 9157,
+                       9815, 10255, 10695, 10950, 11575, 12015
+                     };
 
     const DWORD width = 10000;
 
@@ -1043,21 +1044,21 @@ HRESULT GetPixelAspectRatio(BYTE pixelAspectCode, MFRatio *pRatio)
 // ReadAudioFrameHeader
 // Parses an audio frame header.
 //
-// Call Parser::HasPacket() to ensure that pData points to the start 
-// of a payload, and call Parser::PacketHeader() to verify it is an 
-// audio packet. 
+// Call Parser::HasPacket() to ensure that pData points to the start
+// of a payload, and call Parser::PacketHeader() to verify it is an
+// audio packet.
 //-------------------------------------------------------------------
 
 HRESULT ReadAudioFrameHeader(
-    const BYTE *pData, 
-    DWORD cbData, 
-    MPEG1AudioFrameHeader& audioHeader, 
+    const BYTE *pData,
+    DWORD cbData,
+    MPEG1AudioFrameHeader& audioHeader,
     DWORD *pAte
-    )
+)
 {
     HRESULT hr = S_OK;
     MPEG1AudioFrameHeader header;
-    ZeroMemory(&header, sizeof(header)); 
+    ZeroMemory(&header, sizeof(header));
 
     BYTE bitRateIndex = 0;
     BYTE samplingIndex = 0;
@@ -1106,7 +1107,7 @@ HRESULT ReadAudioFrameHeader(
     samplingIndex = (pData[2] & 0x0C) >> 2;
 
     // Bit rate.
-    // Note: Accoring to ISO/IEC 11172-3, some combinations of bitrate and 
+    // Note: Accoring to ISO/IEC 11172-3, some combinations of bitrate and
     // mode are not valid. However, this is up to the decoder to validate.
     CHECK_HR(hr = GetAudioBitRate(header.layer, bitRateIndex, &header.dwBitRate));
 
@@ -1144,7 +1145,7 @@ HRESULT ReadAudioFrameHeader(
         header.nChannels = 2;
     }
 
-    header.nBlockAlign = 1; 
+    header.nBlockAlign = 1;
 
     CopyMemory(&audioHeader, &header, sizeof(audioHeader));
 
@@ -1156,7 +1157,7 @@ done:
 
 //-------------------------------------------------------------------
 // GetAudioBitRate
-// Returns the audio bit rate in KBits per second, from the 
+// Returns the audio bit rate in KBits per second, from the
 // bitrate_index field of the audio frame header.
 //
 // See ISO/IEC 11172-3, 2.4.2.3, "Header"
@@ -1166,8 +1167,8 @@ HRESULT GetAudioBitRate(MPEG1AudioLayer layer, BYTE index, DWORD *pdwBitRate)
 {
     const DWORD MAX_BITRATE_INDEX = 14;
 
-    // Table of bit rates. 
-    const DWORD bitrate[3][ (MAX_BITRATE_INDEX+1) ] = 
+    // Table of bit rates.
+    const DWORD bitrate[3][ (MAX_BITRATE_INDEX+1) ] =
     {
         { 0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448 },    // Layer I
         { 0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384 },       // Layer II
@@ -1214,4 +1215,4 @@ inline HRESULT GetSamplingFrequency(BYTE code, DWORD *pdwSamplesPerSec)
     }
     return S_OK;
 }
-        
+

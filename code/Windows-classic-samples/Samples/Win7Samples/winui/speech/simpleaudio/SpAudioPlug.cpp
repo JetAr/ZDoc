@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 // SpAudioPlug.cpp : Implementation of SpAudioPlug and DLL registration.
 
@@ -38,7 +38,7 @@ void CBasicQueueByArray<T>::_Clear()
 template <class T>
 ULONG CBasicQueueByArray<T>::_SpaceSize()
 {
-     return (m_ulHeader >= m_ulTail) ? (m_ulQueueSize - (m_ulHeader -  m_ulTail) - 1) : (m_ulTail - m_ulHeader - 1);
+    return (m_ulHeader >= m_ulTail) ? (m_ulQueueSize - (m_ulHeader -  m_ulTail) - 1) : (m_ulTail - m_ulHeader - 1);
 }
 
 template <class T>
@@ -50,34 +50,34 @@ ULONG CBasicQueueByArray<T>::_DataSize()
 
 template <class T>
 CBasicQueueByArray<T>::CBasicQueueByArray() :
-m_pCoMemAlloc(NULL),
-m_ulQueueSize(0),
-m_ulHeader(0),
-m_ulTail(0),
-m_hSpaceAvailable(0),
-m_hDataAvailable(0),
-m_ullTotalOut(0),
-m_ullTotalIn(0),
-m_ulSpaceNotifySize(1),
-m_ulDataNotifySize(1)
+    m_pCoMemAlloc(NULL),
+    m_ulQueueSize(0),
+    m_ulHeader(0),
+    m_ulTail(0),
+    m_hSpaceAvailable(0),
+    m_hDataAvailable(0),
+    m_ullTotalOut(0),
+    m_ullTotalIn(0),
+    m_ulSpaceNotifySize(1),
+    m_ulDataNotifySize(1)
 {
-    InitializeCriticalSection(&m_CriticalSection); 
+    InitializeCriticalSection(&m_CriticalSection);
 }
 
 template <class T>
 CBasicQueueByArray<T>::CBasicQueueByArray(ULONG ulQueueSize, HRESULT *phr) :
-m_pCoMemAlloc(NULL),
-m_ulQueueSize(0),
-m_ulHeader(0),
-m_ulTail(0),
-m_hSpaceAvailable(0),
-m_hDataAvailable(0),
-m_ullTotalOut(0),
-m_ullTotalIn(0),
-m_ulSpaceNotifySize(1),
-m_ulDataNotifySize(1)
+    m_pCoMemAlloc(NULL),
+    m_ulQueueSize(0),
+    m_ulHeader(0),
+    m_ulTail(0),
+    m_hSpaceAvailable(0),
+    m_hDataAvailable(0),
+    m_ullTotalOut(0),
+    m_ullTotalIn(0),
+    m_ulSpaceNotifySize(1),
+    m_ulDataNotifySize(1)
 {
-    InitializeCriticalSection(&m_CriticalSection); 
+    InitializeCriticalSection(&m_CriticalSection);
     *phr = Init(ulQueueSize);
 }
 
@@ -170,7 +170,7 @@ HRESULT CBasicQueueByArray<T>::Init(ULONG ulQueueSize, HANDLE hSpaceAvailable, H
     {
         //We allocated additional dummy space is to deal with the case that m_ulHeader catches up from behind to m_ulTail.
         //We shouldn't use the dummy space to store any value
-        m_pCoMemAlloc = (T*)::CoTaskMemAlloc(sizeof(T)*(ulQueueSize + 1)); 
+        m_pCoMemAlloc = (T*)::CoTaskMemAlloc(sizeof(T)*(ulQueueSize + 1));
         if (m_pCoMemAlloc)
         {
             m_ulQueueSize = ulQueueSize + 1;
@@ -235,7 +235,7 @@ void CBasicQueueByArray<T>::InsertHead(T* pElements, ULONG ulCount, ULONG * pulR
 
 
 
-//When ulCount == 0, the caller wants to get the remaining 
+//When ulCount == 0, the caller wants to get the remaining
 template <class T>
 void CBasicQueueByArray<T>::RemoveTail(T* pElements, ULONG ulCount, ULONG * pulReturnCount)
 {
@@ -285,7 +285,7 @@ void CBasicQueueByArray<T>::ResetPos()
 /****************************************************************************
 * SpAudioPlug::Init *
 *------------------------------*
-*   Description:  
+*   Description:
 ****************************************************************************/
 HRESULT SpAudioPlug::Init(VARIANT_BOOL fWrite,  SpeechAudioFormatType FormatType)
 {
@@ -321,7 +321,7 @@ HRESULT SpAudioPlug::Init(VARIANT_BOOL fWrite,  SpeechAudioFormatType FormatType
     {
         if (eFormat != SPSF_NoAssignedFormat && m_Format.ComputeFormatEnum() != eFormat)
         {
-           hr = m_Format.AssignFormat(eFormat);
+            hr = m_Format.AssignFormat(eFormat);
             if (SUCCEEDED(hr))
             {
                 static const SPAUDIOBUFFERINFO BuffInfo = {50, 500, 0};
@@ -338,7 +338,7 @@ HRESULT SpAudioPlug::Init(VARIANT_BOOL fWrite,  SpeechAudioFormatType FormatType
 /****************************************************************************
 * SpAudioPlug::SetData *
 *------------------------------*
-*   Description:  
+*   Description:
 ****************************************************************************/
 HRESULT SpAudioPlug::SetData(VARIANT vData, long * pWritten)
 {
@@ -367,22 +367,22 @@ HRESULT SpAudioPlug::SetData(VARIANT vData, long * pWritten)
         ULONG ulDataSize = 0;
 
         hr = SafeArrayAccessData( fByRef ? *vData.pparray : vData.parray,
-            (void **)&pArray );
+                                  (void **)&pArray );
         if( SUCCEEDED( hr ) )
         {
-            ulDataSize = fByRef ? 
-                (*vData.pparray)->rgsabound[0].cElements : 
-            vData.parray->rgsabound[0].cElements;
+            ulDataSize = fByRef ?
+                         (*vData.pparray)->rgsabound[0].cElements :
+                         vData.parray->rgsabound[0].cElements;
         }
 
         ULONG cbRemaining = ulDataSize;
         ULONG ulWrite = 0;
         BYTE * pHeader = pArray;
 
-	    if (pWritten)
-	    {
-	        *pWritten = 0;
-	    }
+        if (pWritten)
+        {
+            *pWritten = 0;
+        }
 
         while(cbRemaining)
         {
@@ -425,7 +425,7 @@ HRESULT SpAudioPlug::SetData(VARIANT vData, long * pWritten)
 /****************************************************************************
 * SpAudioPlug::GetData *
 *------------------------------*
-*   Description:  
+*   Description:
 ****************************************************************************/
 HRESULT SpAudioPlug::GetData(VARIANT* pData)
 {
@@ -438,7 +438,7 @@ HRESULT SpAudioPlug::GetData(VARIANT* pData)
     }
 
     //We can lock the queue several times on the same thread without blocking the client thread, this is character of critical section
-    //The reason we want to lock the queue explicitly is the possible inconsistent state between 
+    //The reason we want to lock the queue explicitly is the possible inconsistent state between
     m_Queue.Lock();
     ULONG ulDataAvailable = m_Queue.DataSize();
     if (ulDataAvailable)
@@ -459,7 +459,7 @@ HRESULT SpAudioPlug::GetData(VARIANT* pData)
             {
                 // Free our memory if we failed.
                 hr = SafeArrayDestroy(psa);
-                VariantClear( pData );    
+                VariantClear( pData );
             }
 
         }
@@ -487,27 +487,27 @@ HRESULT SpAudioPlug::GetData(VARIANT* pData)
 /****************************************************************************
 * SpAudioPlug::SpAudioPlug *
 *------------------------------*
-*   Description:  
+*   Description:
 *       ctor
 *********************************************************************/
-SpAudioPlug::SpAudioPlug() : 
-m_State(SPAS_CLOSED),
-m_fWrite(TRUE),
-m_SpEventSource(this),
-m_cbEventBias(0),
-m_ulBufferNotifySize(0),
-m_hQueueHasDataEvent(NULL),
-m_hQueueHasSpaceEvent(NULL),
-m_autohAPIEvent(NULL)
+SpAudioPlug::SpAudioPlug() :
+    m_State(SPAS_CLOSED),
+    m_fWrite(TRUE),
+    m_SpEventSource(this),
+    m_cbEventBias(0),
+    m_ulBufferNotifySize(0),
+    m_hQueueHasDataEvent(NULL),
+    m_hQueueHasSpaceEvent(NULL),
+    m_autohAPIEvent(NULL)
 {
-    InitializeCriticalSection(&m_CriticalSection); 
+    InitializeCriticalSection(&m_CriticalSection);
 }
 
 /****************************************************************************
 * SpAudioPlug::FinalConstruct *
 *-----------------------------*
-*   Description:  
-*       Called by ATL when our object is constructed. 
+*   Description:
+*       Called by ATL when our object is constructed.
 ************************************************************************/
 HRESULT SpAudioPlug::FinalConstruct()
 {
@@ -537,8 +537,8 @@ HRESULT SpAudioPlug::FinalConstruct()
 /****************************************************************************
 * SpAudioPlug::FinalRelease *
 *-----------------------------*
-*   Description:  
-*       Called by ATL when our object is going away. 
+*   Description:
+*       Called by ATL when our object is going away.
 *********************************************************************/
 void SpAudioPlug::FinalRelease()
 {
@@ -552,10 +552,10 @@ void SpAudioPlug::FinalRelease()
         ::CloseHandle(m_hQueueHasSpaceEvent);
     }
 
-	if (m_autohAPIEvent)
-	{
-		CloseHandle(m_autohAPIEvent);
-	}
+    if (m_autohAPIEvent)
+    {
+        CloseHandle(m_autohAPIEvent);
+    }
 
     DeleteCriticalSection(&m_CriticalSection);
 
@@ -567,7 +567,7 @@ void SpAudioPlug::FinalRelease()
 /****************************************************************************
 * SpAudioPlug::AddEvents *
 *-----------------------*
-*   Description:  
+*   Description:
 *       ISpEventSink::AddEvents implementation.
 *
 *   Return:
@@ -575,15 +575,15 @@ void SpAudioPlug::FinalRelease()
 *   FAILED(hr) otherwise
 *********************************************************************/
 STDMETHODIMP SpAudioPlug::AddEvents(const SPEVENT* pEventArray, ULONG ulCount)
-{                                                                               
+{
     HRESULT hr = S_OK;
-   SPAUTO_OBJ_LOCK;
-   
+    SPAUTO_OBJ_LOCK;
+
     if( SPIsBadReadPtr(pEventArray, sizeof(SPEVENT ) * ulCount))
-    {                                                                           
-        hr = E_INVALIDARG;                                                      
-    }                                                                               
-    else 
+    {
+        hr = E_INVALIDARG;
+    }
+    else
     {
         ULONGLONG ullDevicePosition = m_fWrite ? m_Queue.GetTotalOut() : m_Queue.GetTotalIn();
         hr = m_SpEventSource._AddEvents(pEventArray, ulCount);
@@ -597,7 +597,7 @@ STDMETHODIMP SpAudioPlug::AddEvents(const SPEVENT* pEventArray, ULONG ulCount)
 /****************************************************************************
 * SpAudioPlug::GetEventInterest *
 *------------------------------*
-*   Description:  
+*   Description:
 *       ISpEventSink::GetEventInterest implementation.
 *
 *   Return:
@@ -626,7 +626,7 @@ STDMETHODIMP SpAudioPlug::GetEventInterest(ULONGLONG * pullEventInterest)
 /****************************************************************************
 * SpAudioPlug::_ProcessEvent *
 *---------------------*
-*   Description:  
+*   Description:
 *
 *   Return:
 *********************************************************************/
@@ -677,7 +677,7 @@ void SpAudioPlug::_ProcessEvent()
 /****************************************************************************
 * SpAudioPlug::Read *
 *---------------------*
-*   Description:  
+*   Description:
 *       ISequentialStream::Read implementation.
 *
 *   Return:
@@ -688,9 +688,9 @@ STDMETHODIMP SpAudioPlug::Read(void * pv, ULONG cb, ULONG *pcbRead)
 {
 
     HRESULT hr = S_OK;
-    
+
     if (SPIsBadWritePtr(pv, cb) ||
-        SP_IS_BAD_OPTIONAL_WRITE_PTR(pcbRead))
+            SP_IS_BAD_OPTIONAL_WRITE_PTR(pcbRead))
     {
         return E_POINTER;
     }
@@ -758,7 +758,7 @@ STDMETHODIMP SpAudioPlug::Read(void * pv, ULONG cb, ULONG *pcbRead)
 /****************************************************************************
 * SpAudioPlug::Write *
 *----------------------*
-*   Description:  
+*   Description:
 *       ISequentialStream::Write implementation.
 *
 *
@@ -770,7 +770,7 @@ STDMETHODIMP SpAudioPlug::Write(const void * pv, ULONG cb, ULONG *pcb)
 {
 
     HRESULT hr = S_OK;
-    
+
     if (!m_fWrite)
     {
         return STG_E_ACCESSDENIED;
@@ -817,15 +817,15 @@ STDMETHODIMP SpAudioPlug::Write(const void * pv, ULONG cb, ULONG *pcb)
         }
 
     }
-    
-        
+
+
     return hr;
 }
 
 /****************************************************************************
 * SpAudioPlug::Seek *
 *---------------------*
-*   Description:  
+*   Description:
 *       IStream::Seek implementation. It can only be used to retrieve the current seek position
 *
 *   Return:
@@ -862,7 +862,7 @@ STDMETHODIMP SpAudioPlug::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
 /****************************************************************************
 * SpAudioPlug::SetSize *
 *------------------------*
-*   Description:  
+*   Description:
 *       IStream::SetSize implementation.
 *
 *   Return:
@@ -880,7 +880,7 @@ STDMETHODIMP SpAudioPlug::SetSize(ULARGE_INTEGER libNewSize)
 /****************************************************************************
 * SpAudioPlug::CopyTo *
 *-----------------------*
-*   Description:  
+*   Description:
 *       IStream::CopyTo implementation. Delegate to the actual audio device.
 *
 *   Return:
@@ -904,7 +904,7 @@ STDMETHODIMP SpAudioPlug::CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGE
 /****************************************************************************
 * SpAudioPlug::Commit *
 *-----------------------*
-*   Description:  
+*   Description:
 *       IStream::Commit implementation. Delegate to the actual audio device.
 *
 *   Return:
@@ -915,7 +915,7 @@ STDMETHODIMP SpAudioPlug::Commit(DWORD grfCommitFlags)
 {
 
     HRESULT hr = S_OK;
-    
+
     SPAUTO_OBJ_LOCK;
     if (m_fWrite && m_State == SPAS_RUN)
     {
@@ -927,7 +927,7 @@ STDMETHODIMP SpAudioPlug::Commit(DWORD grfCommitFlags)
 /****************************************************************************
 * SpAudioPlug::Revert *
 *-----------------------*
-*   Description:  
+*   Description:
 *       IStream::Revert implementation. Delegate to the actual audio device.
 *
 *   Return:
@@ -937,17 +937,17 @@ STDMETHODIMP SpAudioPlug::Commit(DWORD grfCommitFlags)
 STDMETHODIMP SpAudioPlug::Revert(void)
 {
 
-    
+
     SPAUTO_OBJ_LOCK;
-            
+
     return E_NOTIMPL;
 }
 
 /****************************************************************************
 * SpAudioPlug::LockRegion *
 *---------------------------*
-*   Description:  
-*       IStream::LockRegion implementation. Delegate to the actual audio 
+*   Description:
+*       IStream::LockRegion implementation. Delegate to the actual audio
 *       device.
 *
 *   Return:
@@ -957,16 +957,16 @@ STDMETHODIMP SpAudioPlug::Revert(void)
 STDMETHODIMP SpAudioPlug::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
 
-    
+
     SPAUTO_OBJ_LOCK;
-            
+
     return E_NOTIMPL;
 }
 
 /****************************************************************************
 * SpAudioPlug::UnlockRegion *
 *-----------------------------*
-*   Description:  
+*   Description:
 *       IStream::UnlockRegion implementation. Delegate to the actual audio
 *       device.
 *
@@ -977,16 +977,16 @@ STDMETHODIMP SpAudioPlug::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb
 STDMETHODIMP SpAudioPlug::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
 
-    
+
     SPAUTO_OBJ_LOCK;
-            
+
     return E_NOTIMPL;
 }
 
 /****************************************************************************
 * SpAudioPlug::Stat *
 *---------------------*
-*   Description:  
+*   Description:
 *       IStream::Stat implementation. Delegate to the actual audio device.
 *
 *   Return:
@@ -996,16 +996,16 @@ STDMETHODIMP SpAudioPlug::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER 
 STDMETHODIMP SpAudioPlug::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
 
-    
+
     SPAUTO_OBJ_LOCK;
-            
+
     return E_NOTIMPL;
 }
 
 /****************************************************************************
 * SpAudioPlug::Clone *
 *----------------------*
-*   Description:  
+*   Description:
 *       IStream::Clone implementation. Delegate to the actual audio device.
 *
 *   Return:
@@ -1015,16 +1015,16 @@ STDMETHODIMP SpAudioPlug::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 STDMETHODIMP SpAudioPlug::Clone(IStream **ppstm)
 {
 
-    
+
     SPAUTO_OBJ_LOCK;
-            
+
     return E_NOTIMPL;
 }
 
 /****************************************************************************
 * SpAudioPlug::GetFormat *
 *--------------------------*
-*   Description:  
+*   Description:
 *       ISpStreamFormat::GetFormat implementation.
 *       GetFormat is called for input device
 *
@@ -1037,11 +1037,11 @@ STDMETHODIMP SpAudioPlug::GetFormat(GUID * pguidFormatId, WAVEFORMATEX ** ppCoMe
 {
 
     HRESULT hr = S_OK;
-    
+
     SPAUTO_OBJ_LOCK;
-    
-    if (SP_IS_BAD_WRITE_PTR(pguidFormatId) || 
-             SP_IS_BAD_WRITE_PTR(ppCoMemWaveFormatEx))
+
+    if (SP_IS_BAD_WRITE_PTR(pguidFormatId) ||
+            SP_IS_BAD_WRITE_PTR(ppCoMemWaveFormatEx))
     {
         return E_POINTER;
     }
@@ -1055,14 +1055,14 @@ STDMETHODIMP SpAudioPlug::GetFormat(GUID * pguidFormatId, WAVEFORMATEX ** ppCoMe
     {
         hr = m_Format.CopyTo(pguidFormatId, ppCoMemWaveFormatEx);
     }
-            
+
     return hr;
 }
 
 /****************************************************************************
 * SpAudioPlug::SetState *
 *-------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::SetState implementation.
 *   Return:
 *   S_OK on success
@@ -1072,9 +1072,9 @@ STDMETHODIMP SpAudioPlug::SetState(SPAUDIOSTATE NewState, ULONGLONG ullReserved 
 {
 
     HRESULT hr = S_OK;
-    
+
     SPAUTO_OBJ_LOCK;
-    
+
     if (m_State != NewState)
     {
         m_State = NewState;
@@ -1097,7 +1097,7 @@ STDMETHODIMP SpAudioPlug::SetState(SPAUDIOSTATE NewState, ULONGLONG ullReserved 
 /****************************************************************************
 * SpAudioPlug::SetFormat *
 *--------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::SetFormat implementation. We don't allow setting the format
 *       to anything other than the input format.
 *       We'll let the format converter do the right thing for us for
@@ -1110,9 +1110,9 @@ STDMETHODIMP SpAudioPlug::SetState(SPAUDIOSTATE NewState, ULONGLONG ullReserved 
 STDMETHODIMP SpAudioPlug::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pWaveFormatEx)
 {
     HRESULT hr = S_OK;
-    
+
     SPAUTO_OBJ_LOCK;
-    
+
     if (!m_Format.IsEqual(rguidFmtId, pWaveFormatEx))
     {
         hr = SPERR_UNSUPPORTED_FORMAT;
@@ -1124,7 +1124,7 @@ STDMETHODIMP SpAudioPlug::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pWa
 /****************************************************************************
 * SpAudioPlug::GetStatus *
 *--------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::GetStatus implementation.
 *
 *   Return:
@@ -1173,14 +1173,14 @@ STDMETHODIMP SpAudioPlug::GetStatus(SPAUDIOSTATUS *pStatus)
         m_Queue.Unlock();
     }
 
-            
+
     return hr;
 }
 
 /****************************************************************************
 * SpAudioPlug::SetBufferInfo *
 *------------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::SetBufferInfo implementation. Delegate to the actual audio
 *       device.
 *
@@ -1195,7 +1195,7 @@ STDMETHODIMP SpAudioPlug::SetBufferInfo(const SPAUDIOBUFFERINFO * pInfo)
 
     HRESULT hr = S_OK;
 
-    
+
     if (m_State != SPAS_CLOSED)
     {
         hr = SPERR_DEVICE_BUSY;
@@ -1206,31 +1206,31 @@ STDMETHODIMP SpAudioPlug::SetBufferInfo(const SPAUDIOBUFFERINFO * pInfo)
         if (m_fWrite)
         {
             m_Queue.Init(m_Format.WaveFormatExPtr()->nAvgBytesPerSec * pInfo->ulMsBufferSize / 1000,
-                m_hQueueHasSpaceEvent,
-                m_hQueueHasDataEvent,
-                m_Format.WaveFormatExPtr()->nAvgBytesPerSec *pInfo->ulMsMinNotification / 1000,
-                1);
+                         m_hQueueHasSpaceEvent,
+                         m_hQueueHasDataEvent,
+                         m_Format.WaveFormatExPtr()->nAvgBytesPerSec *pInfo->ulMsMinNotification / 1000,
+                         1);
         }
         else
         {
             m_Queue.Init(m_Format.WaveFormatExPtr()->nAvgBytesPerSec * pInfo->ulMsBufferSize / 1000,
-                m_hQueueHasSpaceEvent,
-                m_hQueueHasDataEvent,
-                1,
-                1);
+                         m_hQueueHasSpaceEvent,
+                         m_hQueueHasDataEvent,
+                         1,
+                         1);
         }
 
         m_cbEventBias = (m_Format.WaveFormatExPtr()->nAvgBytesPerSec * pInfo->ulMsEventBias) / 1000;
     }
 
-            
+
     return hr;
 }
 
 /****************************************************************************
 * SpAudioPlug::GetBufferInfo *
 *------------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::GetBufferInfo implementation. Delegate to the actual audio
 *       device.
 *
@@ -1242,18 +1242,18 @@ STDMETHODIMP SpAudioPlug::GetBufferInfo(SPAUDIOBUFFERINFO * pInfo)
 {
 
     HRESULT hr = S_OK;
-    
+
     SPAUTO_OBJ_LOCK;
 
     *pInfo = m_BufferInfo;
-            
+
     return hr;
 }
 
 /****************************************************************************
 * SpAudioPlug::GetDefaultFormat *
 *---------------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::GetDefaultFormat implementation.
 *       GetDefaultFormat is called for output device.
 *
@@ -1265,11 +1265,11 @@ STDMETHODIMP SpAudioPlug::GetDefaultFormat(GUID * pFormatId, WAVEFORMATEX ** ppC
 {
 
     HRESULT hr = S_OK;
-    
+
     SPAUTO_OBJ_LOCK;
-    
-    if (SP_IS_BAD_WRITE_PTR(pFormatId) || 
-             SP_IS_BAD_WRITE_PTR(ppCoMemWaveFormatEx))
+
+    if (SP_IS_BAD_WRITE_PTR(pFormatId) ||
+            SP_IS_BAD_WRITE_PTR(ppCoMemWaveFormatEx))
     {
         return E_POINTER;
     }
@@ -1283,15 +1283,15 @@ STDMETHODIMP SpAudioPlug::GetDefaultFormat(GUID * pFormatId, WAVEFORMATEX ** ppC
     {
         hr = m_Format.CopyTo(pFormatId, ppCoMemWaveFormatEx);
     }
-    
-    
+
+
     return hr;
 }
 
 /****************************************************************************
 * SpAudioPlug::EventHandle *
 *----------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::EventHandle implementation. Delegate to the actual audio
 *       device.
 *
@@ -1302,16 +1302,16 @@ STDMETHODIMP SpAudioPlug::GetDefaultFormat(GUID * pFormatId, WAVEFORMATEX ** ppC
 STDMETHODIMP_(HANDLE) SpAudioPlug::EventHandle()
 {
 
-    
+
     SPAUTO_OBJ_LOCK;
-    
+
     return m_autohAPIEvent;
 }
 
 /****************************************************************************
 * SpAudioPlug::GetVolumeLevel *
 *-------------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio:GetVolumeLevel implementation. Delegate to the actual audio
 *       device.
 *
@@ -1322,16 +1322,16 @@ STDMETHODIMP_(HANDLE) SpAudioPlug::EventHandle()
 STDMETHODIMP SpAudioPlug::GetVolumeLevel(ULONG *pLevel)
 {
 
-    
+
     SPAUTO_OBJ_LOCK;
-        
+
     return E_NOTIMPL ;
 }
 
 /****************************************************************************
 * SpAudioPlug::SetVolumeLevel *
 *-------------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::SetVolumeLevel implementation. Delegate to the actual audio
 *       device.
 *
@@ -1344,14 +1344,14 @@ STDMETHODIMP SpAudioPlug::SetVolumeLevel(ULONG Level)
 
 
     SPAUTO_OBJ_LOCK;
-            
+
     return E_NOTIMPL ;
 }
 
 /****************************************************************************
 * SpAudioPlug::GetBufferNotifySize *
 *------------------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::GetBufferNotifySize implementation. Delegate to the actual
 *       audio device.
 *
@@ -1363,18 +1363,18 @@ STDMETHODIMP SpAudioPlug::GetBufferNotifySize(ULONG *pcbSize)
 {
 
     HRESULT hr = S_OK;
-    
+
     SPAUTO_OBJ_LOCK;
-    
+
     *pcbSize = m_ulBufferNotifySize;
-        
+
     return hr;
 }
 
 /****************************************************************************
 * SpAudioPlug::SetBufferNotifySize *
 *------------------------------------*
-*   Description:  
+*   Description:
 *       ISpAudio::SetBufferNotifySize implementation. Delegate to the actual
 *       audio device.
 *
@@ -1386,10 +1386,10 @@ STDMETHODIMP SpAudioPlug::SetBufferNotifySize(ULONG cbSize)
 {
 
     HRESULT hr = S_OK;
-    
+
     SPAUTO_OBJ_LOCK;
-    
+
     m_ulBufferNotifySize = cbSize;
-        
+
     return hr;
 }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -23,34 +23,38 @@ OUTPUTMANAGER OutMgr;
 // If we get an error that is not on the appropriate list then we exit the application
 
 // These are the errors we expect from general Dxgi API due to a transition
-HRESULT SystemTransitionsExpectedErrors[] = {
-                                                DXGI_ERROR_DEVICE_REMOVED,
-                                                DXGI_ERROR_ACCESS_LOST,
-                                                static_cast<HRESULT>(WAIT_ABANDONED),
-                                                S_OK                                    // Terminate list with zero valued HRESULT
-                                            };
+HRESULT SystemTransitionsExpectedErrors[] =
+{
+    DXGI_ERROR_DEVICE_REMOVED,
+    DXGI_ERROR_ACCESS_LOST,
+    static_cast<HRESULT>(WAIT_ABANDONED),
+    S_OK                                    // Terminate list with zero valued HRESULT
+};
 
 // These are the errors we expect from IDXGIOutput1::DuplicateOutput due to a transition
-HRESULT CreateDuplicationExpectedErrors[] = {
-                                                DXGI_ERROR_DEVICE_REMOVED,
-                                                static_cast<HRESULT>(E_ACCESSDENIED),
-                                                DXGI_ERROR_UNSUPPORTED,
-                                                DXGI_ERROR_SESSION_DISCONNECTED,
-                                                S_OK                                    // Terminate list with zero valued HRESULT
-                                            };
+HRESULT CreateDuplicationExpectedErrors[] =
+{
+    DXGI_ERROR_DEVICE_REMOVED,
+    static_cast<HRESULT>(E_ACCESSDENIED),
+    DXGI_ERROR_UNSUPPORTED,
+    DXGI_ERROR_SESSION_DISCONNECTED,
+    S_OK                                    // Terminate list with zero valued HRESULT
+};
 
 // These are the errors we expect from IDXGIOutputDuplication methods due to a transition
-HRESULT FrameInfoExpectedErrors[] = {
-                                        DXGI_ERROR_DEVICE_REMOVED,
-                                        DXGI_ERROR_ACCESS_LOST,
-                                        S_OK                                    // Terminate list with zero valued HRESULT
-                                    };
+HRESULT FrameInfoExpectedErrors[] =
+{
+    DXGI_ERROR_DEVICE_REMOVED,
+    DXGI_ERROR_ACCESS_LOST,
+    S_OK                                    // Terminate list with zero valued HRESULT
+};
 
 // These are the errors we expect from IDXGIAdapter::EnumOutputs methods due to outputs becoming stale during a transition
-HRESULT EnumOutputsExpectedErrors[] = {
-                                          DXGI_ERROR_NOT_FOUND,
-                                          S_OK                                    // Terminate list with zero valued HRESULT
-                                      };
+HRESULT EnumOutputsExpectedErrors[] =
+{
+    DXGI_ERROR_NOT_FOUND,
+    S_OK                                    // Terminate list with zero valued HRESULT
+};
 
 
 //
@@ -68,20 +72,20 @@ typedef struct
 {
     UINT    WaitTime;
     UINT    WaitCount;
-}WAIT_BAND;
+} WAIT_BAND;
 
 #define WAIT_BAND_COUNT 3
 #define WAIT_BAND_STOP 0
 
 class DYNAMIC_WAIT
 {
-    public :
-        DYNAMIC_WAIT();
-        ~DYNAMIC_WAIT();
+public :
+    DYNAMIC_WAIT();
+    ~DYNAMIC_WAIT();
 
-        void Wait();
+    void Wait();
 
-    private :
+private :
 
     static const WAIT_BAND   m_WaitBands[WAIT_BAND_COUNT];
 
@@ -94,11 +98,12 @@ class DYNAMIC_WAIT
     LARGE_INTEGER           m_LastWakeUpTime;
     BOOL                    m_QPCValid;
 };
-const WAIT_BAND DYNAMIC_WAIT::m_WaitBands[WAIT_BAND_COUNT] = {
-                                                                 {250, 20},
-                                                                 {2000, 60},
-                                                                 {5000, WAIT_BAND_STOP}   // Never move past this band
-                                                             };
+const WAIT_BAND DYNAMIC_WAIT::m_WaitBands[WAIT_BAND_COUNT] =
+{
+    {250, 20},
+    {2000, 60},
+    {5000, WAIT_BAND_STOP}   // Never move past this band
+};
 
 DYNAMIC_WAIT::DYNAMIC_WAIT() : m_CurrentWaitBandIdx(0), m_WaitCountInCurrentBand(0)
 {
@@ -223,10 +228,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
     RECT WindowRect = {0, 0, 800, 600};
     AdjustWindowRect(&WindowRect, WS_OVERLAPPEDWINDOW, FALSE);
     WindowHandle = CreateWindowW(L"ddasample", L"DXGI desktop duplication sample",
-                           WS_OVERLAPPEDWINDOW,
-                           0, 0,
-                           WindowRect.right - WindowRect.left, WindowRect.bottom - WindowRect.top,
-                           nullptr, nullptr, hInstance, nullptr);
+                                 WS_OVERLAPPEDWINDOW,
+                                 0, 0,
+                                 WindowRect.right - WindowRect.left, WindowRect.bottom - WindowRect.top,
+                                 nullptr, nullptr, hInstance, nullptr);
     if (!WindowHandle)
     {
         ProcessFailure(nullptr, L"Window creation failed", L"Error", E_FAIL);
@@ -378,7 +383,7 @@ bool ProcessCmdline(_Out_ INT* Output)
     for (UINT i = 1; i < static_cast<UINT>(__argc); ++i)
     {
         if ((strcmp(__argv[i], "-output") == 0) ||
-            (strcmp(__argv[i], "/output") == 0))
+                (strcmp(__argv[i], "/output") == 0))
         {
             if (++i >= static_cast<UINT>(__argc))
             {
@@ -410,19 +415,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-        case WM_DESTROY:
-        {
-            PostQuitMessage(0);
-            break;
-        }
-        case WM_SIZE:
-        {
-            // Tell output manager that window size has changed
-            OutMgr.WindowResize();
-            break;
-        }
-        default:
-            return DefWindowProc(hWnd, message, wParam, lParam);
+    case WM_DESTROY:
+    {
+        PostQuitMessage(0);
+        break;
+    }
+    case WM_SIZE:
+    {
+        // Tell output manager that window size has changed
+        OutMgr.WindowResize();
+        break;
+    }
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
     return 0;
@@ -620,28 +625,28 @@ DUPL_RETURN ProcessFailure(_In_opt_ ID3D11Device* Device, _In_ LPCWSTR Str, _In_
 
         switch (DeviceRemovedReason)
         {
-            case DXGI_ERROR_DEVICE_REMOVED :
-            case DXGI_ERROR_DEVICE_RESET :
-            case static_cast<HRESULT>(E_OUTOFMEMORY) :
-            {
-                // Our device has been stopped due to an external event on the GPU so map them all to
-                // device removed and continue processing the condition
-                TranslatedHr = DXGI_ERROR_DEVICE_REMOVED;
-                break;
-            }
+        case DXGI_ERROR_DEVICE_REMOVED :
+        case DXGI_ERROR_DEVICE_RESET :
+        case static_cast<HRESULT>(E_OUTOFMEMORY) :
+        {
+            // Our device has been stopped due to an external event on the GPU so map them all to
+            // device removed and continue processing the condition
+            TranslatedHr = DXGI_ERROR_DEVICE_REMOVED;
+            break;
+        }
 
-            case S_OK :
-            {
-                // Device is not removed so use original error
-                TranslatedHr = hr;
-                break;
-            }
+        case S_OK :
+        {
+            // Device is not removed so use original error
+            TranslatedHr = hr;
+            break;
+        }
 
-            default :
-            {
-                // Device is removed but not a error we want to remap
-                TranslatedHr = DeviceRemovedReason;
-            }
+        default :
+        {
+            // Device is removed but not a error we want to remap
+            TranslatedHr = DeviceRemovedReason;
+        }
         }
     }
     else

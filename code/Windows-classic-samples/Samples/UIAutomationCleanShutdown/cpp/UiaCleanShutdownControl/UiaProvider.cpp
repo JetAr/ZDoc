@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -106,29 +106,29 @@ HRESULT STDMETHODCALLTYPE CleanShutdownProvider::GetPropertyValue(PROPERTYID idP
     }
     else if (idProp == UIA_LocalizedControlTypePropertyId)
     {
-         // In a production application this should be loaded from a resource so it can be localized
-         retVal->bstrVal = SysAllocString(L"CleanShutdownControl");
-         if (retVal->bstrVal != NULL)
-         {
+        // In a production application this should be loaded from a resource so it can be localized
+        retVal->bstrVal = SysAllocString(L"CleanShutdownControl");
+        if (retVal->bstrVal != NULL)
+        {
             retVal->vt = VT_BSTR;
-         } 
+        }
     }
     else if (idProp == UIA_NamePropertyId)
     {
-         // In a production application this should be loaded from a resource so it can be localized
-         retVal->bstrVal = SysAllocString(L"Clean Shutdown Control");
-         if (retVal->bstrVal != NULL)
-         {
+        // In a production application this should be loaded from a resource so it can be localized
+        retVal->bstrVal = SysAllocString(L"Clean Shutdown Control");
+        if (retVal->bstrVal != NULL)
+        {
             retVal->vt = VT_BSTR;
-         } 
+        }
     }
     else if (idProp == UIA_AutomationIdPropertyId)
     {
-         retVal->bstrVal = SysAllocString(L"CleanShutdownControl-0001");
-         if (retVal->bstrVal != NULL)
-         {
+        retVal->bstrVal = SysAllocString(L"CleanShutdownControl-0001");
+        if (retVal->bstrVal != NULL)
+        {
             retVal->vt = VT_BSTR;
-         } 
+        }
     }
     else if (idProp == UIA_IsControlElementPropertyId)
     {
@@ -162,7 +162,7 @@ HRESULT STDMETHODCALLTYPE CleanShutdownProvider::get_HostRawElementProvider(_Out
     // Unlike other methods, specifically DON'T check whether _hwnd is still valid
     // It's not guaranteed to be valid after the window is destroyed, and that's
     // when UiaDisconnectProvider runs.
-    return UiaHostProviderFromHwnd(_hwnd, retVal); 
+    return UiaHostProviderFromHwnd(_hwnd, retVal);
 }
 
 HRESULT STDMETHODCALLTYPE CleanShutdownProvider::Toggle()

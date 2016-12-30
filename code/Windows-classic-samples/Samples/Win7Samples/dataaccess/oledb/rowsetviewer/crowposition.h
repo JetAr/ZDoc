@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -25,31 +25,43 @@
 class CRowPosition : public CContainerBase
 {
 public:
-	//Constructors
-	CRowPosition(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CRowPosition();
+    //Constructors
+    CRowPosition(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CRowPosition();
 
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	//Pure Virtual
-	virtual WCHAR*			GetObjectName()			{ return L"RowPosition";		} 
-	virtual UINT			GetObjectMenu()			{ return IDM_ROWPOSITIONMENU;	}
-	virtual LONG			GetObjectImage()		{ return IMAGE_ARROW_DOWN;		}
-	virtual REFIID			GetDefaultInterface()	{ return IID_IRowPosition;		}
+    //Pure Virtual
+    virtual WCHAR*			GetObjectName()
+    {
+        return L"RowPosition";
+    }
+    virtual UINT			GetObjectMenu()
+    {
+        return IDM_ROWPOSITIONMENU;
+    }
+    virtual LONG			GetObjectImage()
+    {
+        return IMAGE_ARROW_DOWN;
+    }
+    virtual REFIID			GetDefaultInterface()
+    {
+        return IID_IRowPosition;
+    }
 
-	//Interface Helpers
-	virtual HRESULT			Initialize(IUnknown* pIUnkRowset);
-	virtual HRESULT			GetRowset(REFIID riid, IUnknown** ppIUnknown);
+    //Interface Helpers
+    virtual HRESULT			Initialize(IUnknown* pIUnkRowset);
+    virtual HRESULT			GetRowset(REFIID riid, IUnknown** ppIUnknown);
 
-	//OLE DB Interfaces
-	//[MANDATORY]
-	IRowPosition*				m_pIRowPosition;
+    //OLE DB Interfaces
+    //[MANDATORY]
+    IRowPosition*				m_pIRowPosition;
 
-	//Extra interfaces
-	DWORD						m_dwCookieRowPos;
+    //Extra interfaces
+    DWORD						m_dwCookieRowPos;
 };
 
 

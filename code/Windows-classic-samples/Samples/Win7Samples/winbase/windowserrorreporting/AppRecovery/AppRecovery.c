@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -34,7 +34,8 @@ Abstract:
 //
 // This is the volatile state information we will be saving to disk during recovery.
 //
-typedef struct _STATE_BLOCK {
+typedef struct _STATE_BLOCK
+{
     char RandomNumber[16];
 } STATE_BLOCK, *PSTATE_BLOCK;
 
@@ -61,7 +62,8 @@ MyRecoveryCallback (
     // Let WER know that we are recovering. In return, WER will let us know if the user has cancelled recovery.
     //
     hr = ApplicationRecoveryInProgress (&RecoveryCancelled);
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         //
         // Something bad has happened... bail out of recovery.
         //
@@ -70,7 +72,8 @@ MyRecoveryCallback (
         return 0;
     }
 
-    if (RecoveryCancelled) {
+    if (RecoveryCancelled)
+    {
         //
         // The user has cancelled recovery.
         //
@@ -94,13 +97,15 @@ MyRecoveryCallback (
                              0,
                              NULL);
 
-    if (INVALID_HANDLE_VALUE != FileHandle) {
+    if (INVALID_HANDLE_VALUE != FileHandle)
+    {
         //
         // Write the whole state block to the file.
         //
         rc = WriteFile (FileHandle, StateBlock, sizeof (STATE_BLOCK), &BytesWritten, NULL);
 
-        if (!rc) {
+        if (!rc)
+        {
             //
             // We couldn't write to the file. Let WER know we are done with recovery, but it had failed.
             //
@@ -124,7 +129,8 @@ MyRecoveryCallback (
 
         return 0;
     }
-    else {
+    else
+    {
         //
         // We couldn't open the file. Let WER know we are done with recovery, but it had failed.
         //
@@ -153,11 +159,12 @@ wmain (
     // Register the application for recovery.
     //
     hr = RegisterApplicationRecoveryCallback (MyRecoveryCallback,
-                                              &g_StateBlock,
-                                              RECOVERY_DEFAULT_PING_INTERVAL,
-                                              0);
+            &g_StateBlock,
+            RECOVERY_DEFAULT_PING_INTERVAL,
+            0);
 
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"RegisterApplicationRecoveryCallback failed with 0x%08X\n", hr);
         return -1;
     }

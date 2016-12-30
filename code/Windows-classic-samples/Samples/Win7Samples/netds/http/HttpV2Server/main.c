@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
 
  THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
@@ -50,7 +50,7 @@
 DWORD
 DoReceiveRequests(
     HANDLE hReqQueue
-    );
+);
 
 DWORD
 SendHttpResponse(
@@ -59,13 +59,13 @@ SendHttpResponse(
     IN USHORT StatusCode,
     __in IN PSTR pReason,
     __in_opt IN PSTR pEntity
-    );
+);
 
 DWORD
 SendHttpPostResponse(
     IN HANDLE hReqQueue,
     IN PHTTP_REQUEST pRequest
-    );
+);
 
 /***************************************************************************++
 
@@ -85,7 +85,7 @@ __cdecl
 wmain(
     int argc,
     __in_ecount(argc) wchar_t * argv[]
-    )
+)
 {
     ULONG           retCode;
     int i;
@@ -106,12 +106,12 @@ wmain(
     //
     // Initialize HTTP APIs.
     //
-    
+
     retCode = HttpInitialize(
-                HttpApiVersion,
-                HTTP_INITIALIZE_SERVER,    // Flags
-                NULL                       // Reserved
-                );
+                  HttpApiVersion,
+                  HTTP_INITIALIZE_SERVER,    // Flags
+                  NULL                       // Reserved
+              );
 
     if (retCode != NO_ERROR)
     {
@@ -140,8 +140,8 @@ wmain(
     // Create UrlGroup handle
     //
 
-    retCode = HttpCreateUrlGroup(ssID,  
-                                 &urlGroupId, 
+    retCode = HttpCreateUrlGroup(ssID,
+                                 &urlGroupId,
                                  0);
 
 
@@ -150,7 +150,7 @@ wmain(
         wprintf(L"HttpCreateUrlGroup failed with %lu \n", retCode);
         goto CleanUp;
     }
-    
+
     //
     // Create a request queue handle
     //
@@ -173,7 +173,7 @@ wmain(
     BindingProperty.Flags.Present = 1;// Specifies that the property is present on UrlGroup
     BindingProperty.RequestQueueHandle = hReqQueue;
 
-    
+
     //
     // Bind the request queue to UrlGroup
     //
@@ -222,8 +222,8 @@ wmain(
     for (i = 1; i < argc; i++)
     {
         wprintf(
-          L"we are listening for requests on the following url: %s\n",
-          argv[i]);
+            L"we are listening for requests on the following url: %s\n",
+            argv[i]);
 
 
         retCode = HttpAddUrlToUrlGroup(urlGroupId,
@@ -249,17 +249,17 @@ CleanUp:
     // HTTP_URL_FLAG_REMOVE_ALL flag allows us to remove
     // all the URLs registered on URL Group at once
     //
-    if (!HTTP_IS_NULL_ID(&urlGroupId)) 
+    if (!HTTP_IS_NULL_ID(&urlGroupId))
     {
 
         retCode = HttpRemoveUrlFromUrlGroup(urlGroupId,
                                             NULL,
                                             HTTP_URL_FLAG_REMOVE_ALL);
 
-       if (retCode != NO_ERROR)
-       {
-           wprintf(L"HttpRemoveUrl failed with %lu \n", retCode);
-       }
+        if (retCode != NO_ERROR)
+        {
+            wprintf(L"HttpRemoveUrl failed with %lu \n", retCode);
+        }
 
     }
 
@@ -267,14 +267,14 @@ CleanUp:
     // Close the Url Group
     //
 
-    if (!HTTP_IS_NULL_ID(&urlGroupId)) 
+    if (!HTTP_IS_NULL_ID(&urlGroupId))
     {
         retCode = HttpCloseUrlGroup(urlGroupId);
 
-       if (retCode != NO_ERROR)
-       {
-           wprintf(L"HttpCloseUrlGroup failed with %lu \n", retCode);
-       }
+        if (retCode != NO_ERROR)
+        {
+            wprintf(L"HttpCloseUrlGroup failed with %lu \n", retCode);
+        }
 
     }
 
@@ -282,15 +282,15 @@ CleanUp:
     //
     // Close the serversession
     //
-    
-    if (!HTTP_IS_NULL_ID(&urlGroupId)) 
+
+    if (!HTTP_IS_NULL_ID(&urlGroupId))
     {
         retCode = HttpCloseServerSession(ssID);
 
-       if (retCode != NO_ERROR)
-       {
-           wprintf(L"HttpCloseServerSession failed with %lu \n", retCode);
-       }
+        if (retCode != NO_ERROR)
+        {
+            wprintf(L"HttpCloseServerSession failed with %lu \n", retCode);
+        }
 
     }
 
@@ -302,10 +302,10 @@ CleanUp:
     {
         retCode = HttpCloseRequestQueue(hReqQueue);
 
-       if (retCode != NO_ERROR)
-       {
-           wprintf(L"HttpCloseRequestQueue failed with %lu \n", retCode);
-       }
+        if (retCode != NO_ERROR)
+        {
+            wprintf(L"HttpCloseRequestQueue failed with %lu \n", retCode);
+        }
     }
 
     //
@@ -332,7 +332,7 @@ Return Value:
 DWORD
 DoReceiveRequests(
     IN HANDLE hReqQueue
-    )
+)
 {
     ULONG              result;
     HTTP_REQUEST_ID    requestId;
@@ -366,14 +366,14 @@ DoReceiveRequests(
         RtlZeroMemory(pRequest, RequestBufferLength);
 
         result = HttpReceiveHttpRequest(
-                    hReqQueue,          // Req Queue
-                    requestId,          // Req ID
-                    0,                  // Flags
-                    pRequest,           // HTTP request buffer
-                    RequestBufferLength,// req buffer length
-                    &bytesRead,         // bytes received
-                    NULL                // LPOVERLAPPED
-                    );
+                     hReqQueue,          // Req Queue
+                     requestId,          // Req ID
+                     0,                  // Flags
+                     pRequest,           // HTTP request buffer
+                     RequestBufferLength,// req buffer length
+                     &bytesRead,         // bytes received
+                     NULL                // LPOVERLAPPED
+                 );
 
         if(NO_ERROR == result)
         {
@@ -382,39 +382,39 @@ DoReceiveRequests(
             //
             switch(pRequest->Verb)
             {
-                case HttpVerbGET:
-                    wprintf(L"Got a GET request for %ws \n",
-                            pRequest->CookedUrl.pFullUrl);
+            case HttpVerbGET:
+                wprintf(L"Got a GET request for %ws \n",
+                        pRequest->CookedUrl.pFullUrl);
 
-                    result = SendHttpResponse(
-                                hReqQueue,
-                                pRequest,
-                                200,
-                                "OK",
-                                "Hey! You hit the server \r\n"
-                                );
-                    break;
+                result = SendHttpResponse(
+                             hReqQueue,
+                             pRequest,
+                             200,
+                             "OK",
+                             "Hey! You hit the server \r\n"
+                         );
+                break;
 
-                case HttpVerbPOST:
+            case HttpVerbPOST:
 
-                    wprintf(L"Got a POST request for %ws \n",
-                            pRequest->CookedUrl.pFullUrl);
+                wprintf(L"Got a POST request for %ws \n",
+                        pRequest->CookedUrl.pFullUrl);
 
-                    result = SendHttpPostResponse(hReqQueue, pRequest);
-                    break;
+                result = SendHttpPostResponse(hReqQueue, pRequest);
+                break;
 
-                default:
-                    wprintf(L"Got a unknown request for %ws \n",
-                            pRequest->CookedUrl.pFullUrl);
+            default:
+                wprintf(L"Got a unknown request for %ws \n",
+                        pRequest->CookedUrl.pFullUrl);
 
-                    result = SendHttpResponse(
-                                hReqQueue,
-                                pRequest,
-                                503,
-                                "Not Implemented",
-                                NULL
-                                );
-                    break;
+                result = SendHttpResponse(
+                             hReqQueue,
+                             pRequest,
+                             503,
+                             "Not Implemented",
+                             NULL
+                         );
+                break;
             }
 
             if(result != NO_ERROR)
@@ -503,7 +503,7 @@ SendHttpResponse(
     IN USHORT StatusCode,
     __in IN PSTR pReason,
     __in_opt IN PSTR pEntityString
-    )
+)
 {
     HTTP_RESPONSE   response;
     HTTP_DATA_CHUNK dataChunk;
@@ -539,17 +539,17 @@ SendHttpResponse(
     //
 
     result = HttpSendHttpResponse(
-                    hReqQueue,           // ReqQueueHandle
-                    pRequest->RequestId, // Request ID
-                    0,                   // Flags
-                    &response,           // HTTP response
-                    NULL,                // pReserved1
-                    &bytesSent,          // bytes sent   (OPTIONAL)
-                    NULL,                // pReserved2   (must be NULL)
-                    0,                   // Reserved3    (must be 0)
-                    NULL,                // LPOVERLAPPED (OPTIONAL)
-                    NULL                 // pReserved4   (must be NULL)
-                    );
+                 hReqQueue,           // ReqQueueHandle
+                 pRequest->RequestId, // Request ID
+                 0,                   // Flags
+                 &response,           // HTTP response
+                 NULL,                // pReserved1
+                 &bytesSent,          // bytes sent   (OPTIONAL)
+                 NULL,                // pReserved2   (must be NULL)
+                 0,                   // Reserved3    (must be 0)
+                 NULL,                // LPOVERLAPPED (OPTIONAL)
+                 NULL                 // pReserved4   (must be NULL)
+             );
 
     if(result != NO_ERROR)
     {
@@ -576,7 +576,7 @@ DWORD
 SendHttpPostResponse(
     IN HANDLE hReqQueue,
     IN PHTTP_REQUEST pRequest
-    )
+)
 {
     HTTP_RESPONSE   response;
     DWORD           result;
@@ -630,10 +630,10 @@ SendHttpPostResponse(
         //
 
         if(GetTempFileName(
-                L".",
-                L"New",
-                0,
-                szTempName
+                    L".",
+                    L"New",
+                    0,
+                    szTempName
                 ) == 0)
         {
             result = GetLastError();
@@ -649,7 +649,7 @@ SendHttpPostResponse(
                         CREATE_ALWAYS,                 // overrwrite existing
                         FILE_ATTRIBUTE_NORMAL,         // normal file.
                         NULL
-                        );
+                    );
 
         if(hTempFile == INVALID_HANDLE_VALUE)
         {
@@ -665,151 +665,152 @@ SendHttpPostResponse(
             //
             BytesRead = 0;
             result = HttpReceiveRequestEntityBody(
-                        hReqQueue,
-                        pRequest->RequestId,
-                        0,
-                        pEntityBuffer,
-                        EntityBufferLength,
-                        &BytesRead,
-                        NULL
-                        );
+                         hReqQueue,
+                         pRequest->RequestId,
+                         0,
+                         pEntityBuffer,
+                         EntityBufferLength,
+                         &BytesRead,
+                         NULL
+                     );
 
             switch(result)
             {
-                case NO_ERROR:
+            case NO_ERROR:
 
-                    if(BytesRead != 0)
-                    {
-                        TotalBytesRead += BytesRead;
-                        WriteFile(
-                                hTempFile,
-                                pEntityBuffer,
-                                BytesRead,
-                                &TempFileBytesWritten,
-                                NULL
-                                );
-                    }
-                    break;
+                if(BytesRead != 0)
+                {
+                    TotalBytesRead += BytesRead;
+                    WriteFile(
+                        hTempFile,
+                        pEntityBuffer,
+                        BytesRead,
+                        &TempFileBytesWritten,
+                        NULL
+                    );
+                }
+                break;
 
-                case ERROR_HANDLE_EOF:
+            case ERROR_HANDLE_EOF:
 
-                    //
-                    // We have read the last request entity body. We can send
-                    // back a response.
-                    //
-                    // To illustrate entity sends via
-                    // HttpSendResponseEntityBody, we will send the response
-                    // over multiple calls. This is achieved by passing the
-                    // HTTP_SEND_RESPONSE_FLAG_MORE_DATA flag.
+                //
+                // We have read the last request entity body. We can send
+                // back a response.
+                //
+                // To illustrate entity sends via
+                // HttpSendResponseEntityBody, we will send the response
+                // over multiple calls. This is achieved by passing the
+                // HTTP_SEND_RESPONSE_FLAG_MORE_DATA flag.
 
-                    if(BytesRead != 0)
-                    {
-                        TotalBytesRead += BytesRead;
-                        WriteFile(
-                                hTempFile,
-                                pEntityBuffer,
-                                BytesRead,
-                                &TempFileBytesWritten,
-                                NULL
-                                );
-                    }
+                if(BytesRead != 0)
+                {
+                    TotalBytesRead += BytesRead;
+                    WriteFile(
+                        hTempFile,
+                        pEntityBuffer,
+                        BytesRead,
+                        &TempFileBytesWritten,
+                        NULL
+                    );
+                }
 
-                    //
-                    // Since we are sending the response over multiple API
-                    // calls, we have to add a content-length.
-                    //
-                    // Alternatively, we could have sent using chunked transfer
-                    // encoding, by passing "Transfer-Encoding: Chunked".
-                    //
+                //
+                // Since we are sending the response over multiple API
+                // calls, we have to add a content-length.
+                //
+                // Alternatively, we could have sent using chunked transfer
+                // encoding, by passing "Transfer-Encoding: Chunked".
+                //
 
-                    // NOTE: Since we are accumulating the TotalBytesRead in
-                    //       a ULONG, this will not work for entity bodies that
-                    //       are larger than 4 GB. For supporting large entity
-                    //       bodies, we would have to use a ULONGLONG.
-                    //
-
-
-                    StringCchPrintfA(
-                            szContentLength,
-                            sizeof(szContentLength),
-                            "%lu",
-                            TotalBytesRead
-                            );
-
-                    ADD_KNOWN_HEADER(
-                            response,
-                            HttpHeaderContentLength,
-                            szContentLength
-                            );
-
-                    result =
-                        HttpSendHttpResponse(
-                               hReqQueue,           // ReqQueueHandle
-                               pRequest->RequestId, // Request ID
-                               HTTP_SEND_RESPONSE_FLAG_MORE_DATA,
-                               &response,           // HTTP response
-                               NULL,                // pReserved1
-                               &bytesSent,          // bytes sent (optional)
-                               NULL,                // pReserved2
-                               0,                   // Reserved3
-                               NULL,                // LPOVERLAPPED
-                               NULL                 // pReserved4
-                               );
-
-                    if(result != NO_ERROR)
-                    {
-                        wprintf(L"HttpSendHttpResponse failed with %lu \n",
-                                result);
-                        goto Done;
-                    }
-
-                    //
-                    // Send entity body from a file handle.
-                    //
-                    dataChunk.DataChunkType =
-                        HttpDataChunkFromFileHandle;
-
-                    dataChunk.FromFileHandle.
-                        ByteRange.StartingOffset.QuadPart = 0;
-
-                    dataChunk.FromFileHandle.
-                        ByteRange.Length.QuadPart = HTTP_BYTE_RANGE_TO_EOF;
-
-                    dataChunk.FromFileHandle.FileHandle = hTempFile;
-
-                    result = HttpSendResponseEntityBody(
-                                hReqQueue,
-                                pRequest->RequestId,
-                                0,                    // This is the last send.
-                                1,                    // Entity Chunk Count.
-                                &dataChunk,
-                                NULL,
-                                NULL,
-                                0,
-                                NULL,
-                                NULL
-                                );
-
-                    if(result != NO_ERROR)
-                    {
-                        wprintf(
-                           L"HttpSendResponseEntityBody failed with %lu \n",
-                           result
-                           );
-                    }
-
-                    goto Done;
-
-                    break;
+                // NOTE: Since we are accumulating the TotalBytesRead in
+                //       a ULONG, this will not work for entity bodies that
+                //       are larger than 4 GB. For supporting large entity
+                //       bodies, we would have to use a ULONGLONG.
+                //
 
 
-                default:
-                    wprintf(L"HttpReceiveRequestEntityBody failed with %lu \n",
+                StringCchPrintfA(
+                    szContentLength,
+                    sizeof(szContentLength),
+                    "%lu",
+                    TotalBytesRead
+                );
+
+                ADD_KNOWN_HEADER(
+                    response,
+                    HttpHeaderContentLength,
+                    szContentLength
+                );
+
+                result =
+                    HttpSendHttpResponse(
+                        hReqQueue,           // ReqQueueHandle
+                        pRequest->RequestId, // Request ID
+                        HTTP_SEND_RESPONSE_FLAG_MORE_DATA,
+                        &response,           // HTTP response
+                        NULL,                // pReserved1
+                        &bytesSent,          // bytes sent (optional)
+                        NULL,                // pReserved2
+                        0,                   // Reserved3
+                        NULL,                // LPOVERLAPPED
+                        NULL                 // pReserved4
+                    );
+
+                if(result != NO_ERROR)
+                {
+                    wprintf(L"HttpSendHttpResponse failed with %lu \n",
                             result);
                     goto Done;
+                }
+
+                //
+                // Send entity body from a file handle.
+                //
+                dataChunk.DataChunkType =
+                    HttpDataChunkFromFileHandle;
+
+                dataChunk.FromFileHandle.
+                ByteRange.StartingOffset.QuadPart = 0;
+
+                dataChunk.FromFileHandle.
+                ByteRange.Length.QuadPart = HTTP_BYTE_RANGE_TO_EOF;
+
+                dataChunk.FromFileHandle.FileHandle = hTempFile;
+
+                result = HttpSendResponseEntityBody(
+                             hReqQueue,
+                             pRequest->RequestId,
+                             0,                    // This is the last send.
+                             1,                    // Entity Chunk Count.
+                             &dataChunk,
+                             NULL,
+                             NULL,
+                             0,
+                             NULL,
+                             NULL
+                         );
+
+                if(result != NO_ERROR)
+                {
+                    wprintf(
+                        L"HttpSendResponseEntityBody failed with %lu \n",
+                        result
+                    );
+                }
+
+                goto Done;
+
+                break;
+
+
+            default:
+                wprintf(L"HttpReceiveRequestEntityBody failed with %lu \n",
+                        result);
+                goto Done;
             }
 
-        } while(TRUE);
+        }
+        while(TRUE);
     }
     else
     {
@@ -817,17 +818,17 @@ SendHttpPostResponse(
         //
 
         result = HttpSendHttpResponse(
-                   hReqQueue,           // ReqQueueHandle
-                   pRequest->RequestId, // Request ID
-                   0,
-                   &response,           // HTTP response
-                   NULL,                // pReserved1
-                   &bytesSent,          // bytes sent (optional)
-                   NULL,                // pReserved2
-                   0,                   // Reserved3
-                   NULL,                // LPOVERLAPPED
-                   NULL                 // pReserved4
-                   );
+                     hReqQueue,           // ReqQueueHandle
+                     pRequest->RequestId, // Request ID
+                     0,
+                     &response,           // HTTP response
+                     NULL,                // pReserved1
+                     &bytesSent,          // bytes sent (optional)
+                     NULL,                // pReserved2
+                     0,                   // Reserved3
+                     NULL,                // LPOVERLAPPED
+                     NULL                 // pReserved4
+                 );
         if(result != NO_ERROR)
         {
             wprintf(L"HttpSendHttpResponse failed with %lu \n", result);

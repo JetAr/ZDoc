@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -82,17 +82,17 @@ int __cdecl main(void)
     for(;;)
     {
         dwError = DhcpV4EnumSubnetClients(
-                    pwszServer,        // Server IP Address, a value of NULL reflects the current server (where the program is executed)
-                    dwSubnetAddress,   // Subnet Address
-                    &resumeHandle,     // Resume Handle
-                    preferredMax,      // Preferred maximum
-                    &pEnumClientInfo,  // Pointer to a DHCP_CLIENT_INFO_PB_ARRAY, contains the DHCP client lease records set available for the specified subnet.
-                    &dwElementsRead,   // Total number of elements read
-                    &dwElementsTotal   // Total number of elements
-                    );
+                      pwszServer,        // Server IP Address, a value of NULL reflects the current server (where the program is executed)
+                      dwSubnetAddress,   // Subnet Address
+                      &resumeHandle,     // Resume Handle
+                      preferredMax,      // Preferred maximum
+                      &pEnumClientInfo,  // Pointer to a DHCP_CLIENT_INFO_PB_ARRAY, contains the DHCP client lease records set available for the specified subnet.
+                      &dwElementsRead,   // Total number of elements read
+                      &dwElementsTotal   // Total number of elements
+                  );
         if ((ERROR_SUCCESS != dwError) &&
-            (ERROR_MORE_DATA != dwError) &&
-            (ERROR_NO_MORE_ITEMS != dwError ))
+                (ERROR_MORE_DATA != dwError) &&
+                (ERROR_NO_MORE_ITEMS != dwError ))
         {
             wprintf(L"Error in enumerating policies. Error = %d\n",dwError);
             break;

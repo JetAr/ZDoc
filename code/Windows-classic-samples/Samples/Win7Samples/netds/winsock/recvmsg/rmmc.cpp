@@ -1,17 +1,17 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * rmmc.cpp
 *
 * This IPv6 sample demonstrates the use of WSARecvMsg() and the IPV6_PKTINFO option
-* to determine multicast reception on a datagram socket. 
+* to determine multicast reception on a datagram socket.
 *
-* WSARecvMsg is new to Windows Sockets in Windows XP. 
+* WSARecvMsg is new to Windows Sockets in Windows XP.
 *
 * This sample requires that TCP/IP version 6 be installed on the system.
 *
-* A IPv6 datagram socket is created and bound and the IPV6_PKTINFO option is set. 
-* The socket is joined to multicast group and an overlapped WSARecvMsg is posted. 
+* A IPv6 datagram socket is created and bound and the IPV6_PKTINFO option is set.
+* The socket is joined to multicast group and an overlapped WSARecvMsg is posted.
 * MSG_MCAST flag is checked upon completion, upon where further
-* processing can be made. 
+* processing can be made.
 *
 *
 * This is a part of the Microsoft Source Code Samples.
@@ -24,14 +24,14 @@
 \******************************************************************************/
 
 #ifdef _IA64_
-    #pragma warning (disable: 4311)
-    #pragma warning (disable: 4312)
+#pragma warning (disable: 4311)
+#pragma warning (disable: 4312)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
-  
+
 #include <winsock2.h>
 #include <ws2ipdef.h>
 #include <ws2tcpip.h>
@@ -56,7 +56,7 @@
 
 #define CLOSESOCKEVENT(h) \
         if(WSA_INVALID_EVENT != h) {WSACloseEvent(h); h = WSA_INVALID_EVENT;}
-        
+
 #define ERR(e) \
         { \
         printf("%s:%s failed: %d [%s@%ld]\n",__FUNCTION__,e,WSAGetLastError(),__FILE__,__LINE__); \
@@ -107,7 +107,7 @@ VOID InitMcastAddr(SOCKADDR* pmcaddr,int size)
                         NULL,
                         pmcaddr,
                         &size
-                        );
+                       );
 
     ((SOCKADDR_IN6*)pmcaddr)->sin6_port = htons(DEFAULT_PORT);
 
@@ -123,9 +123,9 @@ BOOL SetIpv6PktInfoOption(SOCKET sock)
                                    IPV6_PKTINFO,
                                    (CHAR*)&dwEnableOption,
                                    sizeof dwEnableOption
-                                   ))
+                                  ))
     {
-        ERR("setsockopt IPV6_PKTINFO"); 
+        ERR("setsockopt IPV6_PKTINFO");
         return FALSE;
     }
 
@@ -142,7 +142,7 @@ BOOL AllocAndInitIpv6PktInfo(LPWSAMSG pWSAMsg)
         ERR("HeapAlloc");
         return FALSE;
     }
-    
+
     pWSAMsg->Control.buf = (CHAR*)CtrlBuf;
     pWSAMsg->Control.len = (ULONG)MSIZE(CtrlBuf);
 
@@ -157,7 +157,7 @@ BOOL ProcessIpv6Msg(LPWSAMSG pWSAMsg)
     pCtrlInfo = WSA_CMSG_FIRSTHDR(pWSAMsg);
 
     if ((IPPROTO_IPV6 == pCtrlInfo->cmsg_level) &&
-        (IPV6_PKTINFO == pCtrlInfo->cmsg_type))
+            (IPV6_PKTINFO == pCtrlInfo->cmsg_type))
     {
         pPktInfo = (PIN6_PKTINFO)WSA_CMSG_DATA(pCtrlInfo);
 
@@ -215,7 +215,7 @@ BOOL RouteLookup(SOCKADDR   *destAddr,
                             NULL,
                             szAddr,
                             &dwBytes
-                            );
+                           );
 
         dwBytes = sizeof(szAddr);
 
@@ -226,7 +226,7 @@ BOOL RouteLookup(SOCKADDR   *destAddr,
                             NULL,
                             szAddr,
                             &dwBytes
-                            );
+                           );
 
         bRet = TRUE;
     }
@@ -239,14 +239,14 @@ BOOL RouteLookup(SOCKADDR   *destAddr,
 }
 
 
-DWORD 
+DWORD
 GetInterfaceIndexForAddress(
     SOCKADDR *pAddr
-    )
+)
 {
     IP_ADAPTER_UNICAST_ADDRESS *pTmpUniAddr = NULL;
     IP_ADAPTER_ADDRESSES       *pAdaptAddr = NULL,
-                               *pTmpAdaptAddr = NULL;
+                                *pTmpAdaptAddr = NULL;
     MIB_IPADDRTABLE            *pMibTable = NULL;
     DWORD                       dwRet = 0,
                                 dwReturn = (DWORD) SOCKET_ERROR,
@@ -269,16 +269,16 @@ GetInterfaceIndexForAddress(
 
         switch (pAddr->sa_family)
         {
-            case AF_INET:
-                Family = AF_INET;
-                break;
-            case AF_INET6:
-                Family = AF_INET6;
-                break;
-            default:
-                WSASetLastError(WSAEAFNOSUPPORT);
-                __leave;
-                break;
+        case AF_INET:
+            Family = AF_INET;
+            break;
+        case AF_INET6:
+            Family = AF_INET6;
+            break;
+        default:
+            WSASetLastError(WSAEAFNOSUPPORT);
+            __leave;
+            break;
         }
 
         if (fnGetAdaptersAddresses)
@@ -286,11 +286,11 @@ GetInterfaceIndexForAddress(
 
 
             if (ERROR_BUFFER_OVERFLOW != (dwRet = fnGetAdaptersAddresses(Family,
-                            GAA_FLAG_SKIP_ANYCAST|GAA_FLAG_SKIP_MULTICAST|GAA_FLAG_SKIP_DNS_SERVER,
-                            NULL,
-                            NULL,
-                            &dwSize
-                            )))
+                                                  GAA_FLAG_SKIP_ANYCAST|GAA_FLAG_SKIP_MULTICAST|GAA_FLAG_SKIP_DNS_SERVER,
+                                                  NULL,
+                                                  NULL,
+                                                  &dwSize
+                                                                        )))
             {
                 WSASetLastError(dwRet);
                 ERR("GetAdaptersAddresses");
@@ -304,18 +304,18 @@ GetInterfaceIndexForAddress(
             }
 
             if (ERROR_SUCCESS != (dwRet = fnGetAdaptersAddresses(Family,
-                            GAA_FLAG_SKIP_ANYCAST|GAA_FLAG_SKIP_MULTICAST|GAA_FLAG_SKIP_DNS_SERVER,
-                            NULL,
-                            pAdaptAddr,
-                            &dwSize
-                            )))
+                                          GAA_FLAG_SKIP_ANYCAST|GAA_FLAG_SKIP_MULTICAST|GAA_FLAG_SKIP_DNS_SERVER,
+                                          NULL,
+                                          pAdaptAddr,
+                                          &dwSize
+                                                                )))
             {
                 WSASetLastError(dwRet);
                 ERR("GetAdaptersAddresses");
                 __leave;
             }
 
-            //look at each IP_ADAPTER_ADDRESSES node 
+            //look at each IP_ADAPTER_ADDRESSES node
 
             pTmpAdaptAddr = pAdaptAddr;
 
@@ -370,9 +370,9 @@ GetInterfaceIndexForAddress(
         {
             //call with NULL to get size needed to alloc
             if (ERROR_INSUFFICIENT_BUFFER != (dwRet = GetIpAddrTable(NULL,
-                            &dwSize,
-                            TRUE
-                            )))
+                                              &dwSize,
+                                              TRUE
+                                                                    )))
             {
                 WSASetLastError(dwRet);
                 ERR("GetIpAddrTable");
@@ -386,9 +386,9 @@ GetInterfaceIndexForAddress(
             }
 
             if (NO_ERROR != (dwRet = GetIpAddrTable(pMibTable,
-                            &dwSize,
-                            TRUE
-                            )))
+                                                    &dwSize,
+                                                    TRUE
+                                                   )))
             {
                 WSASetLastError(dwRet);
                 ERR("GetIpAddrTable");
@@ -457,12 +457,12 @@ int SetSendInterface(SOCKET s, SOCKADDR *iface)
     {
         // Set the send interface
         rc = setsockopt(
-                       s,
-                       optlevel,
-                       option,
-                       optval,
-                       optlen
-                       );
+                 s,
+                 optlevel,
+                 option,
+                 optval,
+                 optlen
+             );
         if(SOCKET_ERROR == rc)
         {
             ERR("setsockopt");
@@ -483,16 +483,16 @@ LPFN_WSARECVMSG GetWSARecvMsgFunctionPointer()
 
     sock = socket(AF_INET6,SOCK_DGRAM,0);
 
-    if(SOCKET_ERROR == WSAIoctl(sock, 
-                                SIO_GET_EXTENSION_FUNCTION_POINTER, 
-                                &guidWSARecvMsg, 
-                                sizeof(guidWSARecvMsg), 
-                                &lpfnWSARecvMsg, 
-                                sizeof(lpfnWSARecvMsg), 
-                                &dwBytes, 
-                                NULL, 
+    if(SOCKET_ERROR == WSAIoctl(sock,
+                                SIO_GET_EXTENSION_FUNCTION_POINTER,
+                                &guidWSARecvMsg,
+                                sizeof(guidWSARecvMsg),
+                                &lpfnWSARecvMsg,
+                                sizeof(lpfnWSARecvMsg),
+                                &dwBytes,
+                                NULL,
                                 NULL
-                                ))
+                               ))
     {
         ERR("WSAIoctl SIO_GET_EXTENSION_FUNCTION_POINTER");
         return NULL;
@@ -556,12 +556,12 @@ int __cdecl main()
                         sizeof mcaddr,
                         (SOCKADDR*)&addr,
                         sizeof addr
-                        ))
+                       ))
         {
             ERR("RouteLookup");
             __leave;
         }
-        
+
         SET_PORT((SOCKADDR*)&addr,DEFAULT_PORT);
 
         if (SOCKET_ERROR == bind(sock,(SOCKADDR*)&addr,sizeof addr))
@@ -652,7 +652,7 @@ int __cdecl main()
         SET_PORT((SOCKADDR*)&mcaddr,DEFAULT_PORT);
 
         //send a few packets
-        for (i=0;i<5;i++)
+        for (i=0; i<5; i++)
         {
 
             if (SOCKET_ERROR == (rc = sendto(sock,
@@ -683,14 +683,14 @@ int __cdecl main()
                                     &dwBytes,
                                     TRUE,
                                     &dwFlags
-                                    ))
+                                   ))
         {
             ERR("WSAGetOverlappedResult");
             __leave;
         }
 
         printf("WSARecvMsg completed with %d bytes\n",dwBytes);
-        
+
         // if multicast packet do further processing
         if (MSG_MCAST & wsamsg.dwFlags)
         {
@@ -701,7 +701,7 @@ int __cdecl main()
             }
 
         }
-        
+
     }
     __finally
     {

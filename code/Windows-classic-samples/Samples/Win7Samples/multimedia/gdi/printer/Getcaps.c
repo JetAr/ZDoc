@@ -1,11 +1,11 @@
-
+﻿
 /******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
+*       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1993 - 2000 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
+*       All rights reserved.
+*       This source code is only intended as a supplement to
 *       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
+*       See these sources for detailed information regarding the
 *       Microsoft samples programs.
 \******************************************************************************/
 
@@ -44,57 +44,57 @@
 \******************************************************************************/
 
 LRESULT CALLBACK   GetDeviceCapsDlgProc (HWND   hwnd, UINT msg, WPARAM wParam,
-                                         LPARAM lParam)
+        LPARAM lParam)
 {
-  switch (msg)
-  {
+    switch (msg)
+    {
     case WM_INITDIALOG:
     {
-      BOOL bReturn;
-      char buf[BUFSIZE];
+        BOOL bReturn;
+        char buf[BUFSIZE];
 
-      SendDlgItemMessage (hwnd, DID_LISTBOX, WM_SETFONT, (WPARAM)GetStockObject(ANSI_FIXED_FONT), (LPARAM)0);
+        SendDlgItemMessage (hwnd, DID_LISTBOX, WM_SETFONT, (WPARAM)GetStockObject(ANSI_FIXED_FONT), (LPARAM)0);
 
-	  ghwndDevCaps = hwnd;
+        ghwndDevCaps = hwnd;
 
-      //
-      // shove all the caps info in the list box
-      //
+        //
+        // shove all the caps info in the list box
+        //
 
-      SetCursor (LoadCursor (NULL, IDC_WAIT));
-      bReturn = DisplayDeviceCapsInfo ();
-      SetCursor (LoadCursor (NULL, IDC_ARROW));
+        SetCursor (LoadCursor (NULL, IDC_WAIT));
+        bReturn = DisplayDeviceCapsInfo ();
+        SetCursor (LoadCursor (NULL, IDC_ARROW));
 
-      if (!bReturn)
-      {
-        EndDialog (hwnd, TRUE);
-      }
+        if (!bReturn)
+        {
+            EndDialog (hwnd, TRUE);
+        }
 
-      //
-      // set window title to reflect current device
-      //
+        //
+        // set window title to reflect current device
+        //
 
-      else
-      {
-        if ( _snprintf_s (buf, BUFSIZE, BUFSIZE-1, "GetDeviceCaps: %s;%s;%s", gszDeviceName, gszPort, gszDriverName) > 0 )
-	        SetWindowText (hwnd, (LPCSTR) buf);
-      }
+        else
+        {
+            if ( _snprintf_s (buf, BUFSIZE, BUFSIZE-1, "GetDeviceCaps: %s;%s;%s", gszDeviceName, gszPort, gszDriverName) > 0 )
+                SetWindowText (hwnd, (LPCSTR) buf);
+        }
 
-      break;
+        break;
     }
 
     case WM_COMMAND:
 
-      switch (LOWORD (wParam))
-      {
+        switch (LOWORD (wParam))
+        {
         case DID_OK:
 
-          EndDialog (hwnd, TRUE);
-          return 1;
-      }
-      break;
-  }
-  return 0;
+            EndDialog (hwnd, TRUE);
+            return 1;
+        }
+        break;
+    }
+    return 0;
 }
 
 
@@ -113,43 +113,43 @@ LRESULT CALLBACK   GetDeviceCapsDlgProc (HWND   hwnd, UINT msg, WPARAM wParam,
 
 BOOL DisplayDeviceCapsInfo ()
 {
-	HDC hdc;
-	int i, iValue;
-	
-	if (!strcmp (gszDeviceName, "Display"))
-	{
-		if (!(hdc = GetDC (ghwndDevCaps)))
-		{
-			ErrMsgBox (GetStringRes(IDS_GETDCFAIL), ERR_MOD_NAME);
-			return FALSE;
-		}
-	}
-	
-	else
-	{
-		if (!(hdc = CreateDC (gszDriverName, gszDeviceName, gszPort, NULL)))
-		{
-			char buf[BUFSIZE];
-			
-			if (_snprintf_s (buf, BUFSIZE, _TRUNCATE, GetStringRes(IDS_FMT_CREDCFAIL),	gszDriverName, gszDeviceName, gszPort) > 0)
-				ErrMsgBox (buf, ERR_MOD_NAME);
+    HDC hdc;
+    int i, iValue;
 
-			return FALSE;
-		}
-	}
-	
-	for (i = 0; i < MAX_DEVICE_CAPS; i++)
-	{
-		iValue = GetDeviceCaps (hdc, gaCaps[i].iValue);
-		TranslateDeviceCaps (i, gaCaps[i].iValue, iValue);
-	}
-	
-	if (!strcmp (gszDeviceName, "Display"))
-		ReleaseDC(ghwndDevCaps, hdc);
-	else
-		DeleteDC (hdc);
-	
-	return TRUE;
+    if (!strcmp (gszDeviceName, "Display"))
+    {
+        if (!(hdc = GetDC (ghwndDevCaps)))
+        {
+            ErrMsgBox (GetStringRes(IDS_GETDCFAIL), ERR_MOD_NAME);
+            return FALSE;
+        }
+    }
+
+    else
+    {
+        if (!(hdc = CreateDC (gszDriverName, gszDeviceName, gszPort, NULL)))
+        {
+            char buf[BUFSIZE];
+
+            if (_snprintf_s (buf, BUFSIZE, _TRUNCATE, GetStringRes(IDS_FMT_CREDCFAIL),	gszDriverName, gszDeviceName, gszPort) > 0)
+                ErrMsgBox (buf, ERR_MOD_NAME);
+
+            return FALSE;
+        }
+    }
+
+    for (i = 0; i < MAX_DEVICE_CAPS; i++)
+    {
+        iValue = GetDeviceCaps (hdc, gaCaps[i].iValue);
+        TranslateDeviceCaps (i, gaCaps[i].iValue, iValue);
+    }
+
+    if (!strcmp (gszDeviceName, "Display"))
+        ReleaseDC(ghwndDevCaps, hdc);
+    else
+        DeleteDC (hdc);
+
+    return TRUE;
 }
 
 
@@ -172,66 +172,66 @@ BOOL DisplayDeviceCapsInfo ()
 
 void TranslateDeviceCaps (int arrayIndex, int capIndex, int iValue)
 {
-  char buf[BUFSIZE];
+    char buf[BUFSIZE];
 
-  strncpy_s (buf, BUFSIZE, gaCaps[arrayIndex].szValue, _countof(gaCaps[arrayIndex].szValue));
+    strncpy_s (buf, BUFSIZE, gaCaps[arrayIndex].szValue, _countof(gaCaps[arrayIndex].szValue));
 
-  switch (capIndex)
-  {
+    switch (capIndex)
+    {
     case TECHNOLOGY:
     {
-      int     i;
-      
-      for (i = 0; i < MAX_TECHNOLOGY_CAPS; i++)
-        if (iValue == (gaTechnologyCaps + i)->iValue)
-        {
-          strncat_s(buf, BUFSIZE, (gaTechnologyCaps + i)->szValue, _TRUNCATE);
-          SendDlgItemMessage (ghwndDevCaps, DID_LISTBOX, LB_INSERTSTRING,
-                              (UINT)-1, (LONG_PTR) buf);
-          break;
-        }
-            
-      break;
+        int     i;
+
+        for (i = 0; i < MAX_TECHNOLOGY_CAPS; i++)
+            if (iValue == (gaTechnologyCaps + i)->iValue)
+            {
+                strncat_s(buf, BUFSIZE, (gaTechnologyCaps + i)->szValue, _TRUNCATE);
+                SendDlgItemMessage (ghwndDevCaps, DID_LISTBOX, LB_INSERTSTRING,
+                                    (UINT)-1, (LONG_PTR) buf);
+                break;
+            }
+
+        break;
     }
 
     case CURVECAPS:
 
-      ComplexDeviceCapsLine (buf, gaCurveCaps, MAX_CURVE_CAPS, iValue, BUFSIZE);
-      break;
+        ComplexDeviceCapsLine (buf, gaCurveCaps, MAX_CURVE_CAPS, iValue, BUFSIZE);
+        break;
 
     case LINECAPS:
 
-      ComplexDeviceCapsLine (buf, gaLineCaps, MAX_LINE_CAPS, iValue, BUFSIZE);
-      break;
+        ComplexDeviceCapsLine (buf, gaLineCaps, MAX_LINE_CAPS, iValue, BUFSIZE);
+        break;
 
     case POLYGONALCAPS:
 
-      ComplexDeviceCapsLine (buf, gaPolygonCaps, MAX_POLYGON_CAPS, iValue, BUFSIZE);
-      break;
+        ComplexDeviceCapsLine (buf, gaPolygonCaps, MAX_POLYGON_CAPS, iValue, BUFSIZE);
+        break;
 
     case TEXTCAPS:
 
-      ComplexDeviceCapsLine (buf, gaTextCaps, MAX_TEXT_CAPS, iValue, BUFSIZE);
-      break;
+        ComplexDeviceCapsLine (buf, gaTextCaps, MAX_TEXT_CAPS, iValue, BUFSIZE);
+        break;
 
     case CLIPCAPS:
 
-      ComplexDeviceCapsLine (buf, gaClipCaps, MAX_CLIP_CAPS, iValue, BUFSIZE);
-      break;
+        ComplexDeviceCapsLine (buf, gaClipCaps, MAX_CLIP_CAPS, iValue, BUFSIZE);
+        break;
 
     case RASTERCAPS:
 
-      ComplexDeviceCapsLine (buf, gaRasterCaps, MAX_RASTER_CAPS, iValue, BUFSIZE);
-      break;
+        ComplexDeviceCapsLine (buf, gaRasterCaps, MAX_RASTER_CAPS, iValue, BUFSIZE);
+        break;
 
     default:
 
-      sprintf_s(buf, sizeof(buf), gaCaps[arrayIndex].szValue, iValue);
+        sprintf_s(buf, sizeof(buf), gaCaps[arrayIndex].szValue, iValue);
 
-      SendDlgItemMessage (ghwndDevCaps, DID_LISTBOX, LB_INSERTSTRING,
-                          (UINT)-1, (LONG_PTR) buf);
-      break;
-  }
+        SendDlgItemMessage (ghwndDevCaps, DID_LISTBOX, LB_INSERTSTRING,
+                            (UINT)-1, (LONG_PTR) buf);
+        break;
+    }
 }
 
 
@@ -259,37 +259,37 @@ void TranslateDeviceCaps (int arrayIndex, int capIndex, int iValue)
 \******************************************************************************/
 
 void ComplexDeviceCapsLine (char *pbuf, CAPSLOOKUP *pLkUp, int iMaxEntries,
-                     int iValue, int iBuffSize)
+                            int iValue, int iBuffSize)
 {
-  int  i;
-  BOOL bNewLine = FALSE;
+    int  i;
+    BOOL bNewLine = FALSE;
 
-  for (i = 0; i < iMaxEntries; i++)
+    for (i = 0; i < iMaxEntries; i++)
 
-    if (iValue & (pLkUp + i)->iValue)
-    {
-      if (bNewLine)
-      {
-        //
-        // Keep the first symbolic constant on the same line as the
-        //   cap type, eg:  "TECHNOLOGY:     DT_RASDISPLAY".
-        //
+        if (iValue & (pLkUp + i)->iValue)
+        {
+            if (bNewLine)
+            {
+                //
+                // Keep the first symbolic constant on the same line as the
+                //   cap type, eg:  "TECHNOLOGY:     DT_RASDISPLAY".
+                //
 
-        strncpy_s (pbuf, iBuffSize, BLANKS, _countof(BLANKS));
-        strncat_s (pbuf, iBuffSize, (pLkUp + i)->szValue, _TRUNCATE);
-      }
-      else
-      {
-        //
-        // Put symbolic constant on new line, eg:
-        //                  "                DT_RASPRINTER".
-        //
+                strncpy_s (pbuf, iBuffSize, BLANKS, _countof(BLANKS));
+                strncat_s (pbuf, iBuffSize, (pLkUp + i)->szValue, _TRUNCATE);
+            }
+            else
+            {
+                //
+                // Put symbolic constant on new line, eg:
+                //                  "                DT_RASPRINTER".
+                //
 
-        strncat_s (pbuf, iBuffSize, (pLkUp + i)->szValue, _TRUNCATE);
-        bNewLine = TRUE;
-      }
-      SendDlgItemMessage (ghwndDevCaps, DID_LISTBOX, LB_INSERTSTRING,
-                          (UINT)-1, (LONG_PTR) pbuf);
-   }
+                strncat_s (pbuf, iBuffSize, (pLkUp + i)->szValue, _TRUNCATE);
+                bNewLine = TRUE;
+            }
+            SendDlgItemMessage (ghwndDevCaps, DID_LISTBOX, LB_INSERTSTRING,
+                                (UINT)-1, (LONG_PTR) pbuf);
+        }
 }
 

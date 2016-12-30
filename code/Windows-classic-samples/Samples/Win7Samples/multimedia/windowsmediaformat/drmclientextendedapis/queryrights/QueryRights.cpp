@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 //
 // QueryRights.cpp : Application entry for the QureyRights sample application.
 //
@@ -17,7 +17,7 @@
 // Function: wmain
 // Description: Application entry point. The QueryRights application accepts
 //  a single argument specifying the name of a text file containing a list of
-//  key IDs. The application create a report text file that contains the 
+//  key IDs. The application create a report text file that contains the
 //  license status for each right for each KID.
 ///////////////////////////////////////////////////////////////////////////////
 void wmain(int argc, wchar_t **argv)
@@ -37,7 +37,7 @@ void wmain(int argc, wchar_t **argv)
     // Initialize the rights reporter object.
     // This call starts COM and WMDRM as well as allocating internal resources.
     hr = RightsReporter.Initialize();
-    
+
     // Validate the command-line arguments.
     if (SUCCEEDED(hr))
     {
@@ -53,16 +53,16 @@ void wmain(int argc, wchar_t **argv)
             }
 
             // The second argument needn't be an existing file, but it must be
-            //  a valid file path. To test this, have the rights reporter 
+            //  a valid file path. To test this, have the rights reporter
             //  object open the output file.
             if (SUCCEEDED(hr))
             {
                 hr = RightsReporter.SetReportFile(argv[2]);
 
                 if (FAILED(hr))
-                {                
+                {
                     DisplayError(hr, L"Specified output filename is invalid.\n");
-                }                   
+                }
             }
         }
         else
@@ -107,7 +107,7 @@ void wmain(int argc, wchar_t **argv)
         wprintf(L"Usage:\n\tQueryRights.exe <inputfile> <outputfile>\n");
     }
 
-    
+
     // Delete the array of KIDs.
     if (ppKIDStrings != NULL)
     {

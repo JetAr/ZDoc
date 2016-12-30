@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -190,7 +190,7 @@ void DisplayFunctionalObjectIDs(
                 // VarTypes.
 
                 if ((pvObjectID.pwszVal != NULL)        &&
-                    (pvObjectID.vt      == VT_LPWSTR))
+                        (pvObjectID.vt      == VT_LPWSTR))
                 {
                     // Display the object identifiers separated by commas
                     printf("%ws", pvObjectID.pwszVal);
@@ -214,7 +214,7 @@ void DisplayFunctionalObjectIDs(
 void ListFunctionalObjects(
     IPortableDevice* pDevice)
 {
-	//<SnippetCapabilities7>
+    //<SnippetCapabilities7>
     HRESULT hr = S_OK;
     CComPtr<IPortableDeviceCapabilities>            pCapabilities;
     CComPtr<IPortableDevicePropVariantCollection>   pCategories;
@@ -274,7 +274,7 @@ void ListFunctionalObjects(
                 // functional categories are returned as VT_CLSID
                 // VarTypes.
                 if ((pv.puuid != NULL)      &&
-                    (pv.vt    == VT_CLSID))
+                        (pv.vt    == VT_CLSID))
                 {
                     // Display the functional category name
                     printf("Functional Category: ");
@@ -305,7 +305,7 @@ void ListFunctionalObjects(
             PropVariantClear(&pv);
         }
     }
-	//</SnippetCapabilities7>
+    //</SnippetCapabilities7>
 }
 
 // Display all content types contained in an IPortableDevicePropVariantCollection
@@ -340,7 +340,7 @@ void DisplayContentTypes(
                 // VarTypes.
 
                 if ((pvContentType.puuid != NULL)        &&
-                    (pvContentType.vt    == VT_CLSID))
+                        (pvContentType.vt    == VT_CLSID))
                 {
                     // Display the content types separated by commas
                     DisplayContentType(*pvContentType.puuid);
@@ -365,7 +365,7 @@ void DisplayContentTypes(
 void ListFunctionalCategories(
     IPortableDevice* pDevice)
 {
-	//<SnippetCapabilities1>
+    //<SnippetCapabilities1>
     HRESULT hr = S_OK;
     CComPtr<IPortableDeviceCapabilities>            pCapabilities;
     CComPtr<IPortableDevicePropVariantCollection>   pCategories;
@@ -394,9 +394,9 @@ void ListFunctionalCategories(
             printf("! Failed to get functional categories from the device, hr = 0x%lx\n",hr);
         }
     }
-	//</SnippetCapabilities1>
+    //</SnippetCapabilities1>
     // Get the number of functional categories found on the device.
-	//<SnippetCapabilities2>
+    //<SnippetCapabilities2>
     if (SUCCEEDED(hr))
     {
         hr = pCategories->GetCount(&dwNumCategories);
@@ -433,14 +433,14 @@ void ListFunctionalCategories(
             PropVariantClear(&pv);
         }
     }
-	//</SnippetCapabilities2>
+    //</SnippetCapabilities2>
 }
 
 // List supported content types the device supports
 void ListSupportedContentTypes(
     IPortableDevice* pDevice)
 {
-	//</SnippetCapabilities3>
+    //</SnippetCapabilities3>
     HRESULT hr = S_OK;
     CComPtr<IPortableDeviceCapabilities>            pCapabilities;
     CComPtr<IPortableDevicePropVariantCollection>   pCategories;
@@ -499,7 +499,7 @@ void ListSupportedContentTypes(
                 // VarTypes.
 
                 if ((pv.puuid != NULL)      &&
-                    (pv.vt    == VT_CLSID))
+                        (pv.vt    == VT_CLSID))
                 {
                     // Display the functional category name
                     printf("Functional Category: ");
@@ -529,7 +529,7 @@ void ListSupportedContentTypes(
             PropVariantClear(&pv);
         }
     }
-	//</SnippetCapabilities3>
+    //</SnippetCapabilities3>
 }
 
 // Determines if a device supports a particular functional category.
@@ -587,7 +587,7 @@ BOOL SupportsFunctionalCategory(
                 // VarTypes.
 
                 if ((pv.puuid != NULL)      &&
-                    (pv.vt    == VT_CLSID))
+                        (pv.vt    == VT_CLSID))
                 {
                     bSupported = IsEqualGUID(guidCategory, *pv.puuid);
                 }
@@ -744,7 +744,7 @@ HRESULT ReadProfileInformationProperties(
     if (SUCCEEDED(hr))
     {
         hr = pObjectProperties->GetIPortableDeviceValuesCollectionValue(WPD_RENDERING_INFORMATION_PROFILES,
-                                                                        &pRenderingInfoProfiles);
+                &pRenderingInfoProfiles);
         if (FAILED(hr))
         {
             printf("! Failed to get WPD_RENDERING_INFORMATION_PROFILES from rendering information, hr= 0x%lx\n",  hr);
@@ -781,34 +781,34 @@ void DisplayExpectedValues(
     {
         switch(dwAttributeForm)
         {
-            case WPD_PROPERTY_ATTRIBUTE_FORM_RANGE:
-                {
-                    DWORD dwMin  = 0;
-                    DWORD dwMax  = 0;
-                    DWORD dwStep = 0;
+        case WPD_PROPERTY_ATTRIBUTE_FORM_RANGE:
+        {
+            DWORD dwMin  = 0;
+            DWORD dwMax  = 0;
+            DWORD dwStep = 0;
 
-                    hr = pExpectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_MIN, &dwMin);
-                    if (FAILED(hr))
-                    {
-                        printf("! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_MIN from expected values collection, hr = 0x%lx\n", hr);
-                    }
-                    hr = pExpectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_MAX, &dwMax);
-                    if (FAILED(hr))
-                    {
-                        printf("! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_MAX from expected values collection, hr = 0x%lx\n", hr);
-                    }
-                    hr = pExpectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_STEP, &dwStep);
-                    if (FAILED(hr))
-                    {
-                        printf("! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_STEP from expected values collection, hr = 0x%lx\n", hr);
-                    }
+            hr = pExpectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_MIN, &dwMin);
+            if (FAILED(hr))
+            {
+                printf("! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_MIN from expected values collection, hr = 0x%lx\n", hr);
+            }
+            hr = pExpectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_MAX, &dwMax);
+            if (FAILED(hr))
+            {
+                printf("! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_MAX from expected values collection, hr = 0x%lx\n", hr);
+            }
+            hr = pExpectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_STEP, &dwStep);
+            if (FAILED(hr))
+            {
+                printf("! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_STEP from expected values collection, hr = 0x%lx\n", hr);
+            }
 
-                    printf("MIN: %d, MAX: %d, STEP: %d\n", dwMin, dwMax, dwStep);
-                }
-                break;
-            default:
-                printf("* DisplayExpectedValues helper function did not display attributes for form %d", dwAttributeForm);
-                break;
+            printf("MIN: %d, MAX: %d, STEP: %d\n", dwMin, dwMax, dwStep);
+        }
+        break;
+        default:
+            printf("* DisplayExpectedValues helper function did not display attributes for form %d", dwAttributeForm);
+            break;
         }
     }
 }
@@ -932,7 +932,7 @@ void ListRenderingCapabilityInformation(
         PropVariantInit(&pv);
         hr = pRenderingInfoObjects->GetAt(0, &pv);
         if ((SUCCEEDED(hr))    &&
-            (pv.vt== VT_LPWSTR) )
+                (pv.vt== VT_LPWSTR) )
         {
             strRenderingInfoObjectID = pv.pwszVal;
         }
@@ -991,7 +991,7 @@ void ListRenderingCapabilityInformation(
 void ListSupportedEvents(
     IPortableDevice* pDevice)
 {
-	//<SnippetCapabilities4>
+    //<SnippetCapabilities4>
     HRESULT hr = S_OK;
     CComPtr<IPortableDeviceCapabilities>            pCapabilities;
     CComPtr<IPortableDevicePropVariantCollection>   pEvents;
@@ -1002,7 +1002,7 @@ void ListSupportedEvents(
         printf("! A NULL IPortableDevice interface pointer was received\n");
         return;
     }
-	//</SnippetCapabilities4>
+    //</SnippetCapabilities4>
 
     // Get an IPortableDeviceCapabilities interface from the IPortableDevice interface to
     // access the device capabilities-specific methods.
@@ -1013,7 +1013,7 @@ void ListSupportedEvents(
     }
 
     // Get all events supported by the device.
-	//<SnippetCapabilities5>
+    //<SnippetCapabilities5>
     if (SUCCEEDED(hr))
     {
         hr = pCapabilities->GetSupportedEvents(&pEvents);
@@ -1022,9 +1022,9 @@ void ListSupportedEvents(
             printf("! Failed to get supported events from the device, hr = 0x%lx\n",hr);
         }
     }
-	//</SnippetCapabilities5>
+    //</SnippetCapabilities5>
     // Get the number of supported events found on the device.
-	//<SnippetCapabilities6>
+    //<SnippetCapabilities6>
     if (SUCCEEDED(hr))
     {
         hr = pEvents->GetCount(&dwNumEvents);
@@ -1063,5 +1063,5 @@ void ListSupportedEvents(
             PropVariantClear(&pv);
         }
     }
-	//</SnippetCapabilities6>
+    //</SnippetCapabilities6>
 }

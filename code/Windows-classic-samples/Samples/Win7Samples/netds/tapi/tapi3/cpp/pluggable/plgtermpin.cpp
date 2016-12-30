@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999-2001 Microsoft Corporation
 
@@ -17,14 +17,14 @@ Abstract:
 #include "stdafx.h"
 #include "PlgTermPin.h"
 #include <initguid.h>
-#include "GUIDs.h"       
+#include "GUIDs.h"
 
 // --- Construction/Destruction ---
 CPlgPin::CPlgPin(
-        CPlgFilter*  pFilter,
-        HRESULT*    phr,
-        LPCWSTR     pPinName)
-        : CBaseInputPin(_T("CPlgPin"), pFilter, pFilter, phr, pPinName)
+    CPlgFilter*  pFilter,
+    HRESULT*    phr,
+    LPCWSTR     pPinName)
+    : CBaseInputPin(_T("CPlgPin"), pFilter, pFilter, phr, pPinName)
 {
     LOG((MSP_TRACE, "CPlgPin::CPlgPin"));
 }
@@ -55,7 +55,7 @@ HRESULT CPlgPin::CheckMediaType(const CMediaType * pmt)
     if (!pmt)
     {
         LOG((MSP_ERROR, "CPlgPin::CheckMediaType - "
-            "invalid pointer, return E_POINTER"));
+             "invalid pointer, return E_POINTER"));
         return E_POINTER;
     }
 
@@ -64,9 +64,9 @@ HRESULT CPlgPin::CheckMediaType(const CMediaType * pmt)
     {
 
         LOG((MSP_ERROR,
-            "CPlgPin::CheckMediaType - media type invalid. "
-            "E_INVALIDARG"));
-        
+             "CPlgPin::CheckMediaType - media type invalid. "
+             "E_INVALIDARG"));
+
         return VFW_E_INVALIDMEDIATYPE;
     }
 
@@ -77,10 +77,10 @@ HRESULT CPlgPin::CheckMediaType(const CMediaType * pmt)
     //
 
     if (pmt->majortype  != MEDIATYPE_Audio ||
-        pmt->formattype != FORMAT_WaveFormatEx)
+            pmt->formattype != FORMAT_WaveFormatEx)
     {
         LOG((MSP_ERROR, "CPlgPin::CheckMediaType - "
-            "non-Audio type, return VFW_E_INVALIDMEDIATYPE"));
+             "non-Audio type, return VFW_E_INVALIDMEDIATYPE"));
         return VFW_E_INVALIDMEDIATYPE;
     }
 
@@ -97,15 +97,15 @@ Description:
     CBasePin, start using this mediatype
 --*/
 HRESULT CPlgPin::SetMediaType(
-     IN     const CMediaType*       pmt
-     )
+    IN     const CMediaType*       pmt
+)
 {
     LOG((MSP_TRACE, "CPlgPin::SetMediaType - enter"));
 
     LOG((MSP_TRACE,"SetMediaType %d bit %d channel %dHz",
-        ((LPWAVEFORMATEX)(pmt->pbFormat))->wBitsPerSample,
-        ((LPWAVEFORMATEX)(pmt->pbFormat))->nChannels,
-        ((LPWAVEFORMATEX)(pmt->pbFormat))->nSamplesPerSec));
+         ((LPWAVEFORMATEX)(pmt->pbFormat))->wBitsPerSample,
+         ((LPWAVEFORMATEX)(pmt->pbFormat))->nChannels,
+         ((LPWAVEFORMATEX)(pmt->pbFormat))->nSamplesPerSec));
 
     CAutoLock lock((CPlgFilter*)m_pFilter);
 
@@ -117,7 +117,7 @@ HRESULT CPlgPin::SetMediaType(
 
         WAVEFORMATEX *pwf = (WAVEFORMATEX *) pmt->Format();
 
-   }
+    }
     // We assume this format has been checked out already and is OK
     LOG((MSP_TRACE, "CPlgPin::SetMediaType - exit 0x%08x", hr));
     return hr;
@@ -131,8 +131,8 @@ Description:
     Enumerate supported input types
 --*/
 HRESULT CPlgPin::GetMediaType(
-     OUT    CMediaType*             pmt
-     )
+    OUT    CMediaType*             pmt
+)
 {
     LOG((MSP_TRACE, "CPlgPin::GetMediaType - enter"));
     //
@@ -142,7 +142,7 @@ HRESULT CPlgPin::GetMediaType(
     if (!pmt)
     {
         LOG((MSP_ERROR, "CPlgPin::GetMediaType - "
-            "invalid pointer, return E_POINTER"));
+             "invalid pointer, return E_POINTER"));
         return E_POINTER;
     }
 
@@ -157,7 +157,7 @@ HRESULT CPlgPin::GetMediaType(
     if (FAILED (hr))
     {
         LOG((MSP_ERROR, "CPlgPin::GetMediaType - "
-            "InitMediaType failed, return 0x%08x", hr));
+             "InitMediaType failed, return 0x%08x", hr));
         return hr;
     }
 
@@ -192,10 +192,10 @@ HRESULT CPlgPin::Active(void)
 
     HRESULT hr = CBasePin::Active();
 
-	if(((CPlgFilter*)m_pFilter)->m_pPlgEventSink != NULL)
-	{
-		((CPlgFilter*)m_pFilter)->m_pPlgEventSink->FireEvent(1);
-	}
+    if(((CPlgFilter*)m_pFilter)->m_pPlgEventSink != NULL)
+    {
+        ((CPlgFilter*)m_pFilter)->m_pPlgEventSink->FireEvent(1);
+    }
 
     LOG((MSP_TRACE, "CPlgPin::Active - exit 0x%08x", hr));
     return hr;
@@ -225,7 +225,7 @@ HRESULT CPlgPin::Inactive(void)
     {
         ((CPlgFilter*)m_pFilter)->m_pPlgEventSink->FireEvent(0);
     }
-    
+
     LOG((MSP_TRACE, "CPlgPin::Inactive - exit 0x%08x", hr));
     return hr;
 }
@@ -238,7 +238,7 @@ Description:
 --*/
 HRESULT CPlgPin::Receive(
     IN  IMediaSample*       pSample
-    )
+)
 {
     LOG((MSP_TRACE, "CPlgPin::Receive - enter"));
     //
@@ -263,7 +263,7 @@ HRESULT CPlgPin::Receive(
     if (((CPlgFilter*)m_pFilter)->m_State == State_Stopped)
     {
         LOG((MSP_ERROR, "CPlgPin::Receive - "
-            "the filter is stoped, return E_FAIL"));
+             "the filter is stoped, return E_FAIL"));
         return E_FAIL;
     }
 
@@ -272,7 +272,7 @@ HRESULT CPlgPin::Receive(
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CPlgPin::Receive - "
-            "base Received failed, return 0x%08x", hr));
+             "base Received failed, return 0x%08x", hr));
         return hr;
     }
 
@@ -295,7 +295,7 @@ Description:
 HRESULT CPlgPin::InitMediaType(void)
 {
     LOG((MSP_TRACE, "CPlgPin::InitMediaType - enter"));
-  
+
     CPlgFilter* pFilter = (CPlgFilter*)m_pFilter;
 
     if(NULL == m_pFilter)
@@ -309,7 +309,7 @@ HRESULT CPlgPin::InitMediaType(void)
     if(pFilter->m_lpWaveFormatEx != NULL)
     {
         LOG((MSP_TRACE, "CTGPin::InitMediaType - succeeded,"
-            "WAVEFORMATEX already initialize"));    
+             "WAVEFORMATEX already initialize"));
         return S_OK;
     }
 
@@ -321,24 +321,24 @@ HRESULT CPlgPin::InitMediaType(void)
     if (!pFilter->m_lpWaveFormatEx)
     {
         LOG((MSP_ERROR, "CTGPin::InitMediaType - "
-            "cannot allocate WAVEFORMATEX, return E_OUTOFMEMORY"));
+             "cannot allocate WAVEFORMATEX, return E_OUTOFMEMORY"));
         return E_OUTOFMEMORY;
     }
-                
+
     // reset the memory
     ZeroMemory(pFilter->m_lpWaveFormatEx, sizeof (WAVEFORMATEX));
-    
+
     // sets the fields
     pFilter->m_lpWaveFormatEx->wFormatTag      = WAVE_FORMAT_PCM;
-    pFilter->m_lpWaveFormatEx->wBitsPerSample  = 16;    
+    pFilter->m_lpWaveFormatEx->wBitsPerSample  = 16;
     pFilter->m_lpWaveFormatEx->nChannels       = 1;
     pFilter->m_lpWaveFormatEx->nSamplesPerSec  = 8000;
     pFilter->m_lpWaveFormatEx->nBlockAlign     = 1 * ((16 + 7)/8);
-    pFilter->m_lpWaveFormatEx->nAvgBytesPerSec = 8000 * 
-                                               pFilter->m_lpWaveFormatEx->nBlockAlign;
+    pFilter->m_lpWaveFormatEx->nAvgBytesPerSec = 8000 *
+            pFilter->m_lpWaveFormatEx->nBlockAlign;
     pFilter->m_lpWaveFormatEx->cbSize          = 0;
-    
-    LOG((MSP_TRACE, "CPlgPin::InitMediaType exit - S_OK"));    
+
+    LOG((MSP_TRACE, "CPlgPin::InitMediaType exit - S_OK"));
     return S_OK;
 }
 

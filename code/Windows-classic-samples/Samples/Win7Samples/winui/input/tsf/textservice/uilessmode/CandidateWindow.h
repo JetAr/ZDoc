@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -85,7 +85,7 @@ private:
 
     static void _SetThis(HWND hwnd, LPARAM lParam)
     {
-        SetWindowLongPtr(hwnd, GWLP_USERDATA, 
+        SetWindowLongPtr(hwnd, GWLP_USERDATA,
                          (LONG_PTR)((CREATESTRUCT *)lParam)->lpCreateParams);
     }
 

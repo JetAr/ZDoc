@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,7 +11,7 @@ SAFEARRAY * BuildIntSafeArray(_In_reads_(length) const int * data, _In_ int leng
 
 // A Class representing the top level frame of the AnnotatedTextControl
 class CleanShutdownProvider : public IRawElementProviderSimple,
-                              public IToggleProvider
+    public IToggleProvider
 {
 public:
     CleanShutdownProvider(_In_ HWND hwnd, _In_ UiaCleanShutdownControl *control);
@@ -21,7 +21,7 @@ public:
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     HRESULT STDMETHODCALLTYPE QueryInterface(_In_ REFIID riid, _Outptr_ void**ppInterface);
-    
+
     // IRawElementProviderSimple methods
     HRESULT STDMETHODCALLTYPE get_ProviderOptions(_Out_ ProviderOptions * retVal);
     HRESULT STDMETHODCALLTYPE GetPatternProvider(PATTERNID iid, _Outptr_result_maybenull_ IUnknown * * retVal );

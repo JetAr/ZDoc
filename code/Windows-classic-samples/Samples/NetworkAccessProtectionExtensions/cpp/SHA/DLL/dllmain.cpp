@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,13 +22,13 @@ CSdkShaInfoModule sdkModule;
 
 // DLL Entry Point
 extern "C" BOOL WINAPI DllMain(
-    _In_ HINSTANCE hInstance, 
-    _In_ DWORD reason, 
+    _In_ HINSTANCE hInstance,
+    _In_ DWORD reason,
     _In_opt_ LPVOID /*lpReserved*/)
 {
     if (reason == DLL_PROCESS_ATTACH)
     {
-		g_hModule = (HMODULE)hInstance ;
+        g_hModule = (HMODULE)hInstance ;
     }
 
     return TRUE ;
@@ -42,12 +42,12 @@ HRESULT CSdkShaInfoModule::RegisterServer()
     // Write CLSID to a buffer
     wchar_t *lpClsid = NULL;
     hr = StringFromCLSID(
-            CLSID_ComponentInfo,
-            &lpClsid);
+             CLSID_ComponentInfo,
+             &lpClsid);
     if (FAILED(hr))
     {
-		lpClsid = NULL;
-		goto Cleanup;
+        lpClsid = NULL;
+        goto Cleanup;
     }
 
     wchar_t keyPath[MAX_KEY_LENGTH] = {0};
@@ -139,9 +139,9 @@ HRESULT CSdkShaInfoModule::RegisterServer()
 
     wchar_t buff[MAX_PATH] = {0};
     if (!GetModuleFileName(
-        g_hModule,
-        buff,
-        MAX_PATH))
+                g_hModule,
+                buff,
+                MAX_PATH))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Cleanup;
@@ -254,12 +254,12 @@ HRESULT CSdkShaInfoModule::UnregisterServer()
     // Write CLSID to a buffer
     wchar_t *lpClsid = NULL;
     hr = StringFromCLSID(
-            CLSID_ComponentInfo,
-            &lpClsid);
+             CLSID_ComponentInfo,
+             &lpClsid);
     if (FAILED(hr))
     {
-		lpClsid = NULL;
-		goto Cleanup;
+        lpClsid = NULL;
+        goto Cleanup;
     }
 
     // SOFTWARE\CLASSES\<progId>

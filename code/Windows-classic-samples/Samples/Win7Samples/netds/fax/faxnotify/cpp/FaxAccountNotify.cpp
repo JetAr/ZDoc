@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -16,7 +16,7 @@
 //
 //  function:   _CFaxAccountNotify
 //
-//  Synopsis:   _CFaxAccountNotify constructor 
+//  Synopsis:   _CFaxAccountNotify constructor
 //
 //  Arguments:  none
 //
@@ -39,7 +39,7 @@ _CFaxAccountNotify::_CFaxAccountNotify()
 //
 //  function:   ~_CFaxAccountNotify
 //
-//  Synopsis:   _CFaxAccountNotify destructor 
+//  Synopsis:   _CFaxAccountNotify destructor
 //
 //  Arguments:  none
 //
@@ -64,7 +64,7 @@ _CFaxAccountNotify::~_CFaxAccountNotify()
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnOutgoingJobAdded(
-    IFaxAccount *pFaxAccount, 
+    IFaxAccount *pFaxAccount,
     BSTR bstrJobId)
 {
     ValidateFaxAccount(pFaxAccount);
@@ -72,7 +72,7 @@ STDMETHODIMP _CFaxAccountNotify::OnOutgoingJobAdded(
     {
         _tprintf( TEXT("FaxAccountNotify: JobId in OnOutgoingJobAdded is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxAccountNotify: OUTGOING JOB ADDED: %s \n"), bstrJobId);
     return S_OK;
 }
@@ -91,7 +91,7 @@ STDMETHODIMP _CFaxAccountNotify::OnOutgoingJobAdded(
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnOutgoingJobRemoved(
-    IFaxAccount *pFaxAccount, 
+    IFaxAccount *pFaxAccount,
     BSTR bstrJobId)
 {
     ValidateFaxAccount(pFaxAccount);
@@ -99,7 +99,7 @@ STDMETHODIMP _CFaxAccountNotify::OnOutgoingJobRemoved(
     {
         _tprintf( TEXT("FaxAccountNotify: JobId in OnOutgoingJobRemoved is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxAccountNotify: OUTGOING JOB REMOVED: %s \n"), bstrJobId);
     return S_OK;
 }
@@ -116,18 +116,18 @@ STDMETHODIMP _CFaxAccountNotify::OnOutgoingJobRemoved(
 //
 //  Returns:    S_OK if successful
 //
-//----------------------------------------------------------------------------     
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnOutgoingJobChanged(
-    IFaxAccount *pFaxAccount, 
-    BSTR bstrJobId, 
+    IFaxAccount *pFaxAccount,
+    BSTR bstrJobId,
     IFaxJobStatus *pJobStatus)
-{    
-    ValidateFaxAccount(pFaxAccount);   
+{
+    ValidateFaxAccount(pFaxAccount);
     if (bstrJobId == NULL || pJobStatus == NULL)
     {
         _tprintf( TEXT("FaxAccountNotify: JobId or JobStatus in OnOutgoingJobChanged is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxAccountNotify: OUTGOING JOB CHANGED: %s \n"), bstrJobId);
     if (pJobStatus != NULL)
     {
@@ -140,16 +140,16 @@ STDMETHODIMP _CFaxAccountNotify::OnOutgoingJobChanged(
 //
 //  function:   OnServerShutDown
 //
-//  Synopsis:   Handles server shutdown event. 
-//              This is raised when fax service is stopped.  
+//  Synopsis:   Handles server shutdown event.
+//              This is raised when fax service is stopped.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnServerShutDown(IFaxServer2 *pFaxServer)
-{    
+{
     ValidateFaxServer(pFaxServer);
     _tprintf( TEXT("FaxAccountNotify: SERVER SHUTDOWN \n"));
     return S_OK;
@@ -159,16 +159,16 @@ STDMETHODIMP _CFaxAccountNotify::OnServerShutDown(IFaxServer2 *pFaxServer)
 //
 //  function:   OnIncomingJobAdded
 //
-//  Synopsis:   Handles Incoming Job added event. 
+//  Synopsis:   Handles Incoming Job added event.
 //
 //  Arguments:  pFaxAccount : Fax Account object
 //              bstrJobId  : Job id of the added job
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnIncomingJobAdded(
-    IFaxAccount *pFaxAccount, 
+    IFaxAccount *pFaxAccount,
     BSTR bstrJobId)
 {
     ValidateFaxAccount(pFaxAccount);
@@ -176,7 +176,7 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingJobAdded(
     {
         _tprintf( TEXT("FaxAccountNotify: JobId in OnIncomingJobAdded is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxAccountNotify: INCOMING JOB ADDED: %s \n"), bstrJobId);
     return S_OK;
 }
@@ -185,16 +185,16 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingJobAdded(
 //
 //  function:   OnIncomingJobRemoved
 //
-//  Synopsis:   Handles Incoming Job removed event. 
+//  Synopsis:   Handles Incoming Job removed event.
 //
 //  Arguments:  pFaxAccount : Fax Account object
 //              bstrJobId  : Job id of the added job
 //
 //  Returns:    S_OK if successful
 //
-//----------------------------------------------------------------------------  
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnIncomingJobRemoved(
-    IFaxAccount *pFaxAccount, 
+    IFaxAccount *pFaxAccount,
     BSTR bstrJobId)
 {
     ValidateFaxAccount(pFaxAccount);
@@ -202,8 +202,8 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingJobRemoved(
     {
         _tprintf( TEXT("FaxAccountNotify: JobId in OnIncomingJobRemoved is NULL \n"));
         return E_INVALIDARG;
-    }        
-    _tprintf( TEXT("FaxAccountNotify: INCOMING JOB REMOVED: %s \n"), bstrJobId);  
+    }
+    _tprintf( TEXT("FaxAccountNotify: INCOMING JOB REMOVED: %s \n"), bstrJobId);
     return S_OK;
 }
 
@@ -211,7 +211,7 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingJobRemoved(
 //
 //  function:   OnIncomingJobChanged
 //
-//  Synopsis:   Handles Incoming Job changed event. 
+//  Synopsis:   Handles Incoming Job changed event.
 //
 //  Arguments:  pFaxAccount : Fax Account object
 //              bstrJobId  : Job id of the removed job
@@ -219,10 +219,10 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingJobRemoved(
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnIncomingJobChanged(
-    IFaxAccount *pFaxAccount, 
-    BSTR bstrJobId, 
+    IFaxAccount *pFaxAccount,
+    BSTR bstrJobId,
     IFaxJobStatus *pJobStatus)
 {
     ValidateFaxAccount(pFaxAccount);
@@ -230,7 +230,7 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingJobChanged(
     {
         _tprintf( TEXT("FaxAccountNotify: JobId or JobStatus in OnIncomingJobChanged is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxAccountNotify: INCOMING JOB CHANGED: %s \n"), bstrJobId);
     if (pJobStatus != NULL)
     {
@@ -243,16 +243,16 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingJobChanged(
 //
 //  function:   OnIncomingMessageAdded
 //
-//  Synopsis:   Handles Incoming Message added event. 
+//  Synopsis:   Handles Incoming Message added event.
 //
 //  Arguments:  pFaxAccount : Fax Account object
 //              bstrMessageId  : Id of the added message
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnIncomingMessageAdded(
-    IFaxAccount *pFaxAccount, 
+    IFaxAccount *pFaxAccount,
     BSTR bstrMessageId,
     VARIANT_BOOL fAddedToReceiveFolder)
 {
@@ -261,8 +261,8 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingMessageAdded(
         _tprintf( TEXT("FaxAccountNotify: Id in OnIncomingMessageAdded is NULL \n"));
         return E_INVALIDARG;
     }
-	if(fAddedToReceiveFolder == VARIANT_TRUE)
-		_tprintf( TEXT("FaxAccountNotify: Message added to Server Inbox \n"));
+    if(fAddedToReceiveFolder == VARIANT_TRUE)
+        _tprintf( TEXT("FaxAccountNotify: Message added to Server Inbox \n"));
     else
         _tprintf( TEXT("FaxAccountNotify: Message is added to User Inbox \n"));
 
@@ -274,16 +274,16 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingMessageAdded(
 //
 //  function:   OnIncomingMessageRemoved
 //
-//  Synopsis:   Handles Incoming Message removed event. 
+//  Synopsis:   Handles Incoming Message removed event.
 //
 //  Arguments:  pFaxAccount : Fax Account object
 //              bstrMessageId  : Id of the removed message
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnIncomingMessageRemoved(
-    IFaxAccount *pFaxAccount, 
+    IFaxAccount *pFaxAccount,
     BSTR bstrMessageId,
     VARIANT_BOOL fRemovedFromReceiveFolder)
 {
@@ -291,36 +291,36 @@ STDMETHODIMP _CFaxAccountNotify::OnIncomingMessageRemoved(
     {
         _tprintf( TEXT("FaxAccountNotify: Id in OnIncomingMessageRemovd is NULL \n"));
         return E_INVALIDARG;
-    }       
-	if(fRemovedFromReceiveFolder == VARIANT_TRUE) 
-		_tprintf( TEXT("FaxAccountNotify: Message is removed from Server Inbox \n"));
+    }
+    if(fRemovedFromReceiveFolder == VARIANT_TRUE)
+        _tprintf( TEXT("FaxAccountNotify: Message is removed from Server Inbox \n"));
     else
         _tprintf( TEXT("FaxAccountNotify: Message is removed from User Inbox \n"));
     _tprintf( TEXT("FaxAccountNotify: INCOMING MESSAGE REMOVED: %s \n"), bstrMessageId);
-    return S_OK;    
+    return S_OK;
 }
 
 //+---------------------------------------------------------------------------
 //
 //  function:   OnOutgoingMessageAdded
 //
-//  Synopsis:   Handles Outgoing Message Added event. 
+//  Synopsis:   Handles Outgoing Message Added event.
 //
 //  Arguments:  pFaxAccount : Fax Account object
 //              bstrMessageId  : Id of the added message
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnOutgoingMessageAdded(
-    IFaxAccount *pFaxAccount, 
+    IFaxAccount *pFaxAccount,
     BSTR bstrMessageId)
 {
     if (bstrMessageId == NULL)
     {
         _tprintf( TEXT("FaxAccountNotify: Id in OnOutgoingMessageAdded is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxAccountNotify: OUTGOING MESSAGE ADDED: %s \n"), bstrMessageId);
     return S_OK;
 }
@@ -329,32 +329,32 @@ STDMETHODIMP _CFaxAccountNotify::OnOutgoingMessageAdded(
 //
 //  function:   OnOutgoingMessageRemoved
 //
-//  Synopsis:   Handles Outgoing Message Removed event. 
+//  Synopsis:   Handles Outgoing Message Removed event.
 //
 //  Arguments:  pFaxAccount : Fax Account object
 //              bstrMessageId  : Id of the removed message
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxAccountNotify::OnOutgoingMessageRemoved(
-    IFaxAccount *pFaxAccount, 
+    IFaxAccount *pFaxAccount,
     BSTR bstrMessageId)
 {
     if (bstrMessageId == NULL)
     {
         _tprintf( TEXT("FaxAccountNotify: Id in OnOutgoingMessageRemovd is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxAccountNotify: OUTGOING MESSAGE REMOVED: %s \n"), bstrMessageId);
-    return S_OK;   
+    return S_OK;
 }
 
 //+---------------------------------------------------------------------------
 //
 //  function:   ValidateFaxAccount
 //
-//  Synopsis:   Checks if the FaxAccount object is valid 
+//  Synopsis:   Checks if the FaxAccount object is valid
 //
 //  Arguments:  pFaxAccount : Fax Account object
 //

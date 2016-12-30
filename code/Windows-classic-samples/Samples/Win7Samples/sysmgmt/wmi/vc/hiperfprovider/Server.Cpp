@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////
 
 //
 
@@ -10,11 +10,11 @@
 
 //
 
-//  Generic COM server framework, adapted for the BasicHiPerf provider 
+//  Generic COM server framework, adapted for the BasicHiPerf provider
 
-//	sample.  This module contains nothing specific to the BasicHiPerf 
+//	sample.  This module contains nothing specific to the BasicHiPerf
 
-//	provider except what is defined in the section bracketed by the 
+//	provider except what is defined in the section bracketed by the
 
 //	CLSID SPECIFIC comments below.
 
@@ -43,7 +43,7 @@
 //
 
 // For new providers, this is the only area that needs to be modified in this
-// file.  Include any appropriate header files, a unique CLSID and update 
+// file.  Include any appropriate header files, a unique CLSID and update
 // the macros.
 
 #include "wbemprov.h"
@@ -53,7 +53,7 @@
 
 // {B56B1D80-AA4F-11d2-B348-00105A1469B7}
 DEFINE_GUID(CLSID_BasicHiPerf_v1,
-0xb56b1d80, 0xaa4f, 0x11d2, 0xb3, 0x48, 0x0, 0x10, 0x5a, 0x14, 0x69, 0xb7);
+            0xb56b1d80, 0xaa4f, 0x11d2, 0xb3, 0x48, 0x0, 0x10, 0x5a, 0x14, 0x69, 0xb7);
 
 #define IMPLEMENTED_CLSID           CLSID_BasicHiPerf_v1
 #define SERVER_REGISTRY_COMMENT     L"WMI Basic HiPerf Provider"
@@ -94,7 +94,7 @@ BOOL WINAPI DllMain(
     HINSTANCE hinstDLL,
     DWORD dwReason,
     LPVOID lpReserved
-    )
+)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -130,34 +130,34 @@ STDAPI DllGetClassObject(
     REFCLSID rclsid,
     REFIID riid,
     LPVOID * ppv
-    )
+)
 {
     CClassFactory *pClassFactory = NULL;
-	HRESULT hRes;
+    HRESULT hRes;
 
     //  Verify the caller is asking for our type of object
-	// ===================================================
+    // ===================================================
 
-    if (IMPLEMENTED_CLSID == rclsid) 
-	{
-		// Create the class factory
-		// ========================
+    if (IMPLEMENTED_CLSID == rclsid)
+    {
+        // Create the class factory
+        // ========================
 
-		pClassFactory = new CClassFactory;
+        pClassFactory = new CClassFactory;
 
-		if (!pClassFactory)
-			return E_OUTOFMEMORY;
-		
-		hRes = pClassFactory->QueryInterface(riid, ppv);
-		if (FAILED(hRes))
-		{
-			delete pClassFactory;
-			return hRes;
-		}
-		hRes = S_OK;
-	}
-	else 
-		hRes = CLASS_E_CLASSNOTAVAILABLE;
+        if (!pClassFactory)
+            return E_OUTOFMEMORY;
+
+        hRes = pClassFactory->QueryInterface(riid, ppv);
+        if (FAILED(hRes))
+        {
+            delete pClassFactory;
+            return hRes;
+        }
+        hRes = S_OK;
+    }
+    else
+        hRes = CLASS_E_CLASSNOTAVAILABLE;
 
     return hRes;
 }
@@ -208,14 +208,14 @@ STDAPI DllRegisterServer(void)
     // Get the dll's filename
     // ======================
 
-	memset (Path, NULL, sizeof(Path));
+    memset (Path, NULL, sizeof(Path));
     GetModuleFileNameW(g_hInstance, Path, sizeof(Path)/sizeof(wchar_t) - 1);
 
     // Convert CLSID to string.
     // ========================
 
     StringFromGUID2(IMPLEMENTED_CLSID, pGuidStr,(sizeof pGuidStr)/(sizeof pGuidStr[0]));
-	StringCbPrintfW(KeyPath, sizeof(KeyPath), L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
+    StringCbPrintfW(KeyPath, sizeof(KeyPath), L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
 
     // Place it in registry.
     // CLSID\\CLSID_Nt5PerProvider_v1 : <no_name> : "name"
@@ -225,24 +225,24 @@ STDAPI DllRegisterServer(void)
 
     HKEY hKey;
     LONG lRes = RegCreateKeyExW( HKEY_LOCAL_MACHINE, KeyPath, 0, NULL,
-                    REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, 
-                    &hKey, NULL );
+                                 REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
+                                 &hKey, NULL );
     if (lRes)
         return E_FAIL;
 
-    wchar_t *pName = SERVER_REGISTRY_COMMENT; 
-    RegSetValueExW(hKey, 0, 0, REG_SZ, (const BYTE *) pName, 
-		(DWORD)(wcslen(pName) * sizeof(wchar_t) + sizeof(wchar_t)));
+    wchar_t *pName = SERVER_REGISTRY_COMMENT;
+    RegSetValueExW(hKey, 0, 0, REG_SZ, (const BYTE *) pName,
+                   (DWORD)(wcslen(pName) * sizeof(wchar_t) + sizeof(wchar_t)));
 
     HKEY hSubkey;
     lRes = RegCreateKeyEx(hKey, "InprocServer32", 0, NULL,
-                    REG_OPTION_NON_VOLATILE, KEY_WRITE, 
-					NULL, &hSubkey, NULL);
+                          REG_OPTION_NON_VOLATILE, KEY_WRITE,
+                          NULL, &hSubkey, NULL);
 
-    RegSetValueExW(hSubkey, 0, 0, REG_SZ, (const BYTE *) Path, 
-		(DWORD)(wcslen(Path) * sizeof(wchar_t) + sizeof(wchar_t)));
-    RegSetValueExW(hSubkey, L"ThreadingModel", 0, REG_SZ, (const BYTE *) L"Both", 
-		(DWORD)(wcslen(L"Both") * sizeof(wchar_t) + sizeof(wchar_t)));
+    RegSetValueExW(hSubkey, 0, 0, REG_SZ, (const BYTE *) Path,
+                   (DWORD)(wcslen(Path) * sizeof(wchar_t) + sizeof(wchar_t)));
+    RegSetValueExW(hSubkey, L"ThreadingModel", 0, REG_SZ, (const BYTE *) L"Both",
+                   (DWORD)(wcslen(L"Both") * sizeof(wchar_t) + sizeof(wchar_t)));
 
     RegCloseKey(hSubkey);
     RegCloseKey(hKey);
@@ -271,7 +271,7 @@ STDAPI DllUnregisterServer(void)
     wchar_t KeyPath[256];
 
     StringFromGUID2(IMPLEMENTED_CLSID, pGuidStr,(sizeof pGuidStr)/(sizeof pGuidStr[0]));
-	StringCbPrintfW(KeyPath, sizeof(KeyPath), L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
+    StringCbPrintfW(KeyPath, sizeof(KeyPath), L"Software\\Classes\\CLSID\\\\%s", pGuidStr);
 
     // Delete InProcServer32 subkey.
     // =============================

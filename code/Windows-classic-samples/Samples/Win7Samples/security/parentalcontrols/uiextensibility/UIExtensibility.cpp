@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
     FILE: Windows Parental Controls (WPC) User Interface Extensibility sample
 
     PURPOSE: Demonstrates managing ISV-registered links in the Parental
-             Controls User Interface central page.  Instances of the 
+             Controls User Interface central page.  Instances of the
              WpcExtension WMI class in the WPC namespace are manipulated
              for this purpose.
 
@@ -19,18 +19,18 @@
     FUNCTIONS:
 
         wmain() - implements overall command line application
-        WpcsUIExtensEnum() - returns an iterator for enumerating 
-          instances of the WpcExtension class 
+        WpcsUIExtensEnum() - returns an iterator for enumerating
+          instances of the WpcExtension class
         WpcsUIExtensQuery() - returns an iterator for obtaining
           matching results from a WMI query
         WpcsUIExtensAdd() - adds a new WpcExtension class instance
           entry
-        WpcsUIExtensModify() - modifies one or more properties in 
+        WpcsUIExtensModify() - modifies one or more properties in
           an existing WpcExtension instance
         WpcsUIExtensDelete() - removes a WpcExtension instance
         GetObjectPath() - helper function to build a BSTR needed
           to specify a given WpcExtension instance
-        PrintEntries() - example function showing use of an 
+        PrintEntries() - example function showing use of an
           iterator returned from WpcsUIExtensEnum() or
           WpcsUIExtensQuery() to print results
         CmdLineParse() - handle command line input
@@ -55,21 +55,21 @@
 #include "UIExtensibility.h"
 
 
-HRESULT WpcsUIExtensEnum(IWbemServices* piWmiServices, 
+HRESULT WpcsUIExtensEnum(IWbemServices* piWmiServices,
                          IEnumWbemClassObject** ppiEnumerator);
 
-HRESULT WpcsUIExtensQuery(IWbemServices* piWmiServices, PCWSTR pcszQuery, 
+HRESULT WpcsUIExtensQuery(IWbemServices* piWmiServices, PCWSTR pcszQuery,
                           IEnumWbemClassObject** ppiEnumerator);
 
 HRESULT WpcsUIExtensAdd(IWbemServices* piWmiServices, UXENTRY* pEntry);
 
-HRESULT WpcsUIExtensModify(IWbemServices* piWmiServices, DWORD dwMask, 
+HRESULT WpcsUIExtensModify(IWbemServices* piWmiServices, DWORD dwMask,
                            UXENTRY* pEntry);
 
 HRESULT WpcsUIExtensDelete(IWbemServices* piWmiServices, UXENTRY* pEntry);
 
-HRESULT GetObjectPath(PCWSTR pcszGuid, UINT nSubsystem, 
-                                      BSTR* pbstrObjectPath);
+HRESULT GetObjectPath(PCWSTR pcszGuid, UINT nSubsystem,
+                      BSTR* pbstrObjectPath);
 
 HRESULT CmdLineParse(int argc, WCHAR* argv[], PARSERESULT* pParseResult);
 
@@ -87,9 +87,9 @@ void Usage (PCWSTR pcszProgramName)
     wprintf(L" Where operations and associated arguments are as follows:\n\n");
     wprintf(L"list \t\t\t\tList registered extensions\n\n");
     wprintf(L"query <query string> \t\tPerform query and list matches\n\n");
-	wprintf(L"add /g:<GUID> /c:<subsystem> /n:<name_path> /s:<subtitle_path> \n\t /i:<image_path> /d:<disabled_image_path> /e:<exe_path>\n");
+    wprintf(L"add /g:<GUID> /c:<subsystem> /n:<name_path> /s:<subtitle_path> \n\t /i:<image_path> /d:<disabled_image_path> /e:<exe_path>\n");
     wprintf(L"\t\t\t\tAdd new extension keyed by GUID string\n\t\t\t\tand subsystem (currently 0)\n\n");
-	wprintf(L"mod /g:<GUID> /c:<subsystem> [/n:<name_path> | /s:<subtitle_path> | \n\t /i:<image_path> | /d:<disabled_image_path> | /e:<exe_path>]\n");
+    wprintf(L"mod /g:<GUID> /c:<subsystem> [/n:<name_path> | /s:<subtitle_path> | \n\t /i:<image_path> | /d:<disabled_image_path> | /e:<exe_path>]\n");
     wprintf(L"\t\t\t\tModify one or more elements \n\t\t\t\tin existing extension\n\n");
     wprintf(L"del /g:<GUID> /c:<subsystem> \tDelete extension\n\n");
 }
@@ -134,67 +134,67 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
             IEnumWbemClassObject* piEnum = NULL;
             switch (stParseResult.eOperation)
             {
-                case OPERATION_LIST:
-                    hr = WpcsUIExtensEnum(piWmiServices, &piEnum);
-                    if (FAILED(hr))
-                    {
-                        wprintf(L"Error:  WpcsUIExtensEnum() failed, hr is %8x.\n", hr);
-                    }
-                    else
-                    {
-                        hr = PrintEntries(piEnum);
-                    }
-                    break;
+            case OPERATION_LIST:
+                hr = WpcsUIExtensEnum(piWmiServices, &piEnum);
+                if (FAILED(hr))
+                {
+                    wprintf(L"Error:  WpcsUIExtensEnum() failed, hr is %8x.\n", hr);
+                }
+                else
+                {
+                    hr = PrintEntries(piEnum);
+                }
+                break;
 
-                case OPERATION_QUERY:
-                    hr = WpcsUIExtensQuery(piWmiServices, stParseResult.pszQuery, 
-						&piEnum);
-                    if (FAILED(hr))
-                    {
-                        wprintf(L"Error:  WpcsUIExtensQuery() failed, hr is %8x.\n", hr);
-                    }
-                    else
-                    {
-                        hr = PrintEntries(piEnum);
-                    }
-                    break;
+            case OPERATION_QUERY:
+                hr = WpcsUIExtensQuery(piWmiServices, stParseResult.pszQuery,
+                                       &piEnum);
+                if (FAILED(hr))
+                {
+                    wprintf(L"Error:  WpcsUIExtensQuery() failed, hr is %8x.\n", hr);
+                }
+                else
+                {
+                    hr = PrintEntries(piEnum);
+                }
+                break;
 
-                case OPERATION_ADD:
-                    hr = WpcsUIExtensAdd(piWmiServices, &(stParseResult.stEntry));
-                    if (FAILED(hr))
-                    {
-                        wprintf(L"Error:  WpcsUIExtensAdd() failed, hr is %8x.\n", hr);
-                    }
-                    else
-                    {
-                        wprintf(L"Info:  Extension entry added.\n");
-                    }
-                    break;
+            case OPERATION_ADD:
+                hr = WpcsUIExtensAdd(piWmiServices, &(stParseResult.stEntry));
+                if (FAILED(hr))
+                {
+                    wprintf(L"Error:  WpcsUIExtensAdd() failed, hr is %8x.\n", hr);
+                }
+                else
+                {
+                    wprintf(L"Info:  Extension entry added.\n");
+                }
+                break;
 
-                case OPERATION_MOD:
-                    hr = WpcsUIExtensModify(piWmiServices, stParseResult.dwMask, 
-                        &(stParseResult.stEntry));
-                    if (FAILED(hr))
-                    {
-                        wprintf(L"Error:  WpcsUIExtensModify() failed, hr is %8x.\n", hr);
-                    }
-                    else
-                    {
-                        wprintf(L"Info:  Extension entry modified.\n");
-                    }
-                    break;
+            case OPERATION_MOD:
+                hr = WpcsUIExtensModify(piWmiServices, stParseResult.dwMask,
+                                        &(stParseResult.stEntry));
+                if (FAILED(hr))
+                {
+                    wprintf(L"Error:  WpcsUIExtensModify() failed, hr is %8x.\n", hr);
+                }
+                else
+                {
+                    wprintf(L"Info:  Extension entry modified.\n");
+                }
+                break;
 
-                case OPERATION_DEL:
-                    hr = WpcsUIExtensDelete(piWmiServices, &(stParseResult.stEntry));
-                    if (FAILED(hr))
-                    {
-                        wprintf(L"Error:  WpcsUIExtensDelete() failed, hr is %8x.\n", hr);
-                    }
-                    else
-                    {
-                        wprintf(L"Info:  Extension entry deleted.\n");
-                    }
-                    break;
+            case OPERATION_DEL:
+                hr = WpcsUIExtensDelete(piWmiServices, &(stParseResult.stEntry));
+                if (FAILED(hr))
+                {
+                    wprintf(L"Error:  WpcsUIExtensDelete() failed, hr is %8x.\n", hr);
+                }
+                else
+                {
+                    wprintf(L"Info:  Extension entry deleted.\n");
+                }
+                break;
             }
 
             // Cleanup
@@ -215,8 +215,8 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
     return (SUCCEEDED(hr)) ? 0 : 1;
 }
 
-HRESULT WpcsUIExtensEnum(IWbemServices* piWmiServices, 
-                        IEnumWbemClassObject** ppiEnumerator)
+HRESULT WpcsUIExtensEnum(IWbemServices* piWmiServices,
+                         IEnumWbemClassObject** ppiEnumerator)
 {
     if (!piWmiServices || !ppiEnumerator)
     {
@@ -231,18 +231,18 @@ HRESULT WpcsUIExtensEnum(IWbemServices* piWmiServices,
     }
     else
     {
-        hr = piWmiServices->CreateInstanceEnum(bstrClass, WBEM_FLAG_SHALLOW, NULL, 
-            ppiEnumerator);
+        hr = piWmiServices->CreateInstanceEnum(bstrClass, WBEM_FLAG_SHALLOW, NULL,
+                                               ppiEnumerator);
         SysFreeString(bstrClass);
     }
 
     return (hr);
 }
 
-HRESULT WpcsUIExtensQuery(IWbemServices* piWmiServices, PCWSTR pcszQuery, 
-                         IEnumWbemClassObject** ppiEnumerator) 
+HRESULT WpcsUIExtensQuery(IWbemServices* piWmiServices, PCWSTR pcszQuery,
+                          IEnumWbemClassObject** ppiEnumerator)
 {
-    if (!piWmiServices || !pcszQuery || !ppiEnumerator) 
+    if (!piWmiServices || !pcszQuery || !ppiEnumerator)
     {
         return E_INVALIDARG;
     }
@@ -264,9 +264,9 @@ HRESULT WpcsUIExtensQuery(IWbemServices* piWmiServices, PCWSTR pcszQuery,
         else
         {
             // Obtain enumerator for query
-            hr = piWmiServices->ExecQuery(bstrWQL, bstrQuery, 
-                WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, 
-                                         NULL, ppiEnumerator);
+            hr = piWmiServices->ExecQuery(bstrWQL, bstrQuery,
+                                          WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
+                                          NULL, ppiEnumerator);
 
             SysFreeString(bstrQuery);
         }
@@ -292,10 +292,10 @@ HRESULT WpcsUIExtensAdd(IWbemServices* piWmiServices, UXENTRY* pEntry)
     }
     else
     {
-        // Get the class object    
+        // Get the class object
         IWbemClassObject* piClass;
-        hr = piWmiServices->GetObject(bstrObjectPath, WBEM_FLAG_RETURN_WBEM_COMPLETE, 
-            NULL, &piClass, NULL);
+        hr = piWmiServices->GetObject(bstrObjectPath, WBEM_FLAG_RETURN_WBEM_COMPLETE,
+                                      NULL, &piClass, NULL);
         if (SUCCEEDED(hr))
         {
             // Spawn a new instance
@@ -307,42 +307,42 @@ HRESULT WpcsUIExtensAdd(IWbemServices* piWmiServices, UXENTRY* pEntry)
                 hr = WpcuWmiInstancePutString(piInstance, L"ID", pEntry->pszGuid);
                 if (SUCCEEDED(hr))
                 {
-                    hr = WpcuWmiInstancePutDWORD(piInstance, L"Subsystem", 
-						pEntry->nSubsystem);
+                    hr = WpcuWmiInstancePutDWORD(piInstance, L"Subsystem",
+                                                 pEntry->nSubsystem);
                     if (SUCCEEDED(hr) && pEntry->pszNamePath)
                     {
-                        hr = WpcuWmiInstancePutString(piInstance, L"Name", 
-                            pEntry->pszNamePath);
+                        hr = WpcuWmiInstancePutString(piInstance, L"Name",
+                                                      pEntry->pszNamePath);
                     }
                     if (SUCCEEDED(hr) && pEntry->pszSubTitlePath)
                     {
-                        hr = WpcuWmiInstancePutString(piInstance, L"SubTitle", 
-                            pEntry->pszSubTitlePath);
+                        hr = WpcuWmiInstancePutString(piInstance, L"SubTitle",
+                                                      pEntry->pszSubTitlePath);
                     }
                     if (SUCCEEDED(hr) && pEntry->pszImagePath)
                     {
-                        hr = WpcuWmiInstancePutString(piInstance, L"ImagePath", 
-                            pEntry->pszImagePath);
+                        hr = WpcuWmiInstancePutString(piInstance, L"ImagePath",
+                                                      pEntry->pszImagePath);
                     }
-					if (SUCCEEDED(hr) && pEntry->pszDisabledImagePath)
+                    if (SUCCEEDED(hr) && pEntry->pszDisabledImagePath)
                     {
-                        hr = WpcuWmiInstancePutString(piInstance, L"DisabledImagePath", 
-                            pEntry->pszDisabledImagePath);
+                        hr = WpcuWmiInstancePutString(piInstance, L"DisabledImagePath",
+                                                      pEntry->pszDisabledImagePath);
                     }
                     if (SUCCEEDED(hr) && pEntry->pszExePath)
                     {
-                        hr = WpcuWmiInstancePutString(piInstance, L"Path", 
-                            pEntry->pszExePath);
+                        hr = WpcuWmiInstancePutString(piInstance, L"Path",
+                                                      pEntry->pszExePath);
                     }
 
                     if (SUCCEEDED(hr))
                     {
                         // Put instance
-                        hr = piWmiServices->PutInstance(piInstance, 
-                            WBEM_FLAG_CREATE_ONLY, NULL, NULL);
+                        hr = piWmiServices->PutInstance(piInstance,
+                                                        WBEM_FLAG_CREATE_ONLY, NULL, NULL);
                     }
                 }
-                
+
                 piInstance->Release();
             }
             piClass->Release();
@@ -366,32 +366,32 @@ HRESULT WpcsUIExtensModify(IWbemServices* piWmiServices, DWORD dwMask,  UXENTRY*
     {
         // Get existing object
         IWbemClassObject* piInstance;
-        hr = piWmiServices->GetObject(bstrObjectPath, WBEM_FLAG_RETURN_WBEM_COMPLETE, 
-			NULL, &piInstance, NULL);
+        hr = piWmiServices->GetObject(bstrObjectPath, WBEM_FLAG_RETURN_WBEM_COMPLETE,
+                                      NULL, &piInstance, NULL);
         if (SUCCEEDED(hr))
         {
             // Put data as needed
-			if (dwMask & UMASK_NAMEPATH)
+            if (dwMask & UMASK_NAMEPATH)
             {
                 hr = WpcuWmiInstancePutString(piInstance, L"Name", pEntry->pszNamePath);
             }
 
             if (SUCCEEDED(hr) && (dwMask & UMASK_SUBTITLEPATH))
             {
-				hr = WpcuWmiInstancePutString(piInstance, L"SubTitlePath", 
-					pEntry->pszSubTitlePath);
+                hr = WpcuWmiInstancePutString(piInstance, L"SubTitlePath",
+                                              pEntry->pszSubTitlePath);
             }
 
             if (SUCCEEDED(hr) && (dwMask & UMASK_IMAGEPATH))
             {
-                hr = WpcuWmiInstancePutString(piInstance, L"ImagePath", 
-					pEntry->pszImagePath);
+                hr = WpcuWmiInstancePutString(piInstance, L"ImagePath",
+                                              pEntry->pszImagePath);
             }
 
-			if (SUCCEEDED(hr) && (dwMask & UMASK_DISABLEDIMAGEPATH))
+            if (SUCCEEDED(hr) && (dwMask & UMASK_DISABLEDIMAGEPATH))
             {
-                hr = WpcuWmiInstancePutString(piInstance, L"DisabledImagePath", 
-					pEntry->pszImagePath);
+                hr = WpcuWmiInstancePutString(piInstance, L"DisabledImagePath",
+                                              pEntry->pszImagePath);
             }
 
             if (SUCCEEDED(hr) && (dwMask & UMASK_EXEPATH))
@@ -402,12 +402,12 @@ HRESULT WpcsUIExtensModify(IWbemServices* piWmiServices, DWORD dwMask,  UXENTRY*
             if (SUCCEEDED(hr))
             {
                 // Put instance - use UPDATE_ONLY for modify
-                hr = piWmiServices->PutInstance(piInstance, WBEM_FLAG_UPDATE_ONLY, NULL, 
-					NULL);
+                hr = piWmiServices->PutInstance(piInstance, WBEM_FLAG_UPDATE_ONLY, NULL,
+                                                NULL);
             }
             piInstance->Release();
         }
-        
+
         SysFreeString(bstrObjectPath);
     }
 
@@ -443,11 +443,11 @@ HRESULT GetObjectPath(PCWSTR pcszGuid, UINT nSubsystem, BSTR* pbstrObjectPath)
     {
         return E_INVALIDARG;
     }
-    
-    // Build the instance string. Max size is classname + format string (-wildcards) + 
+
+    // Build the instance string. Max size is classname + format string (-wildcards) +
     // guid length + 1 subsystem digit + NULL, but it is fine to slightly overestimate.
-    size_t cch = wcslen(WPCS_WMI_UI_EXTENSION) + wcslen(WPCS_WMI_UI_EXTENSION_FORMAT_KEYS) 
-		+ wcslen(pcszGuid) + 2;
+    size_t cch = wcslen(WPCS_WMI_UI_EXTENSION) + wcslen(WPCS_WMI_UI_EXTENSION_FORMAT_KEYS)
+                 + wcslen(pcszGuid) + 2;
     HRESULT hr = S_OK;
     PWSTR pszObjectPath = new WCHAR[cch];
     if (!pszObjectPath)
@@ -456,8 +456,8 @@ HRESULT GetObjectPath(PCWSTR pcszGuid, UINT nSubsystem, BSTR* pbstrObjectPath)
     }
     else
     {
-        hr = StringCchPrintfW(pszObjectPath, cch, WPCS_WMI_UI_EXTENSION_FORMAT_KEYS, 
-			WPCS_WMI_UI_EXTENSION, pcszGuid, nSubsystem);
+        hr = StringCchPrintfW(pszObjectPath, cch, WPCS_WMI_UI_EXTENSION_FORMAT_KEYS,
+                              WPCS_WMI_UI_EXTENSION, pcszGuid, nSubsystem);
         if (SUCCEEDED(hr))
         {
             // Convert object path to BSTR
@@ -474,7 +474,7 @@ HRESULT GetObjectPath(PCWSTR pcszGuid, UINT nSubsystem, BSTR* pbstrObjectPath)
         delete [] pszObjectPath;
     }
     return hr;
-    
+
 }
 
 
@@ -484,7 +484,7 @@ HRESULT PrintEntries(IEnumWbemClassObject* piEnumerator)
     {
         return E_INVALIDARG;
     }
-    
+
     // Print out list
     wprintf(L"Info:  UI extension list:\n");
 
@@ -495,7 +495,7 @@ HRESULT PrintEntries(IEnumWbemClassObject* piEnumerator)
     IWbemClassObject* piInstance;
     ULONG cReturned = 0;
     ULONG i=0;
-    do 
+    do
     {
         hr = piEnumerator->Next(WBEM_INFINITE, 1, &piInstance, &cReturned);
         if (FAILED(hr))
@@ -540,10 +540,10 @@ HRESULT PrintEntries(IEnumWbemClassObject* piEnumerator)
             }
             else
             {
-                wprintf(L"Error:  Failed to retrieve Subsystem, hrProp is %8x.\n", 
-					hrProp);
+                wprintf(L"Error:  Failed to retrieve Subsystem, hrProp is %8x.\n",
+                        hrProp);
             }
-            
+
             hrProp = WpcuWmiStringFromInstance(piInstance, L"Name", &psz);
             if (SUCCEEDED(hrProp))
             {
@@ -561,7 +561,7 @@ HRESULT PrintEntries(IEnumWbemClassObject* piEnumerator)
             {
                 wprintf(L"Error:  Failed to retrieve Name, hrProp is %8x.\n", hrProp);
             }
-            
+
             hrProp = WpcuWmiStringFromInstance(piInstance, L"SubTitle", &psz);
             if (SUCCEEDED(hrProp))
             {
@@ -579,7 +579,7 @@ HRESULT PrintEntries(IEnumWbemClassObject* piEnumerator)
             {
                 wprintf(L"Error:  Failed to retrieve SubTitle, hrProp is %8x.\n", hrProp);
             }
-            
+
             hrProp = WpcuWmiStringFromInstance(piInstance, L"Path", &psz);
             if (SUCCEEDED(hrProp))
             {
@@ -597,7 +597,7 @@ HRESULT PrintEntries(IEnumWbemClassObject* piEnumerator)
             {
                 wprintf(L"Error:  Failed to retrieve ExePath, hrProp is %8x.\n", hrProp);
             }
-            
+
             hrProp = WpcuWmiStringFromInstance(piInstance, L"ImagePath", &psz);
             if (SUCCEEDED(hrProp))
             {
@@ -613,11 +613,11 @@ HRESULT PrintEntries(IEnumWbemClassObject* piEnumerator)
             }
             else
             {
-                wprintf(L"Error:  Failed to retrieve ImagePath, hrProp is %8x.\n", 
-					hrProp);
+                wprintf(L"Error:  Failed to retrieve ImagePath, hrProp is %8x.\n",
+                        hrProp);
             }
-			
-			hrProp = WpcuWmiStringFromInstance(piInstance, L"DisabledImagePath", &psz);
+
+            hrProp = WpcuWmiStringFromInstance(piInstance, L"DisabledImagePath", &psz);
             if (SUCCEEDED(hrProp))
             {
                 if (psz)
@@ -632,14 +632,15 @@ HRESULT PrintEntries(IEnumWbemClassObject* piEnumerator)
             }
             else
             {
-                wprintf(L"Error:  Failed to retrieve DisabledImagePath, hrProp is %8x.\n", 
-					hrProp);
+                wprintf(L"Error:  Failed to retrieve DisabledImagePath, hrProp is %8x.\n",
+                        hrProp);
             }
 
             // Free the interface
             piInstance->Release();
         }
-    } while (hr == WBEM_S_NO_ERROR);
+    }
+    while (hr == WBEM_S_NO_ERROR);
 
     wprintf(L"Info:  End of list.\n");
     return hr;
@@ -654,45 +655,45 @@ HRESULT GetParameter(PWSTR pszArg, PARSERESULT* pParseResult)
     {
         hr = E_INVALIDARG;
     }
-    else 
+    else
     {
         if ((_wcsnicmp(pszArg, L"/g:", 3) == 0) || (_wcsnicmp(pszArg, L"-g:", 3) == 0))
         {
             pParseResult->stEntry.pszGuid = &(pszArg[3]);
             pParseResult->dwMask |= UMASK_GUID;
         }
-        else if ((_wcsnicmp(pszArg, L"/c:", 3) == 0) || (_wcsnicmp(pszArg, L"-c:", 3) 
-			== 0))
+        else if ((_wcsnicmp(pszArg, L"/c:", 3) == 0) || (_wcsnicmp(pszArg, L"-c:", 3)
+                 == 0))
         {
             pParseResult->stEntry.nSubsystem = _wtoi(&(pszArg[3]));
             pParseResult->dwMask |= UMASK_SUBSYSTEM;
-        } 
-        else if ((_wcsnicmp(pszArg, L"/n:", 3) == 0) || (_wcsnicmp(pszArg, L"-n:", 3) 
-			== 0))
+        }
+        else if ((_wcsnicmp(pszArg, L"/n:", 3) == 0) || (_wcsnicmp(pszArg, L"-n:", 3)
+                 == 0))
         {
             pParseResult->stEntry.pszNamePath = &(pszArg[3]);
             pParseResult->dwMask |= UMASK_NAMEPATH;
         }
-        else if ((_wcsnicmp(pszArg, L"/s:", 3) == 0) || (_wcsnicmp(pszArg, L"-s:", 3) 
-			== 0))
+        else if ((_wcsnicmp(pszArg, L"/s:", 3) == 0) || (_wcsnicmp(pszArg, L"-s:", 3)
+                 == 0))
         {
             pParseResult->stEntry.pszSubTitlePath = &(pszArg[3]);
             pParseResult->dwMask |= UMASK_SUBTITLEPATH;
         }
-        else if ((_wcsnicmp(pszArg, L"/i:", 3) == 0) || (_wcsnicmp(pszArg, L"-i:", 3) 
-			== 0))
+        else if ((_wcsnicmp(pszArg, L"/i:", 3) == 0) || (_wcsnicmp(pszArg, L"-i:", 3)
+                 == 0))
         {
             pParseResult->stEntry.pszImagePath= &(pszArg[3]);
             pParseResult->dwMask |= UMASK_IMAGEPATH;
         }
-		else if ((_wcsnicmp(pszArg, L"/d:", 3) == 0) || (_wcsnicmp(pszArg, L"-d:", 3) 
-			== 0))
+        else if ((_wcsnicmp(pszArg, L"/d:", 3) == 0) || (_wcsnicmp(pszArg, L"-d:", 3)
+                 == 0))
         {
             pParseResult->stEntry.pszDisabledImagePath= &(pszArg[3]);
             pParseResult->dwMask |= UMASK_DISABLEDIMAGEPATH;
         }
-        else if ((_wcsnicmp(pszArg, L"/e:", 3) == 0) || (_wcsnicmp(pszArg, L"-e:", 3) 
-			== 0))
+        else if ((_wcsnicmp(pszArg, L"/e:", 3) == 0) || (_wcsnicmp(pszArg, L"-e:", 3)
+                 == 0))
         {
             pParseResult->stEntry.pszExePath = &(pszArg[3]);
             pParseResult->dwMask |= UMASK_EXEPATH;
@@ -737,8 +738,8 @@ HRESULT CmdLineParse(int argc, WCHAR* argv[], PARSERESULT* pParseResult)
                 hr = S_OK;
             }
         }
-        else if ((_wcsicmp(argv[1], L"add") == 0) || (_wcsicmp(argv[1], L"mod") == 0) || 
-			(_wcsicmp(argv[1], L"del") == 0))
+        else if ((_wcsicmp(argv[1], L"add") == 0) || (_wcsicmp(argv[1], L"mod") == 0) ||
+                 (_wcsicmp(argv[1], L"del") == 0))
         {
             if (argc >= 4 && argc <= 9)
             {
@@ -754,9 +755,9 @@ HRESULT CmdLineParse(int argc, WCHAR* argv[], PARSERESULT* pParseResult)
                 {
                     pParseResult->eOperation = OPERATION_DEL;
                 }
-                
+
                 hr = S_OK;
-                for (int i=2;SUCCEEDED(hr) && i<argc; ++i)
+                for (int i=2; SUCCEEDED(hr) && i<argc; ++i)
                 {
                     hr = GetParameter(argv[i], pParseResult);
                 }

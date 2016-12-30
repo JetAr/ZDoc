@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,29 +8,29 @@
 #include "stdafx.h"
 
 // TODO - TODO - TODO -TODO - TODO - TODO - TODO - TODO - TODO - TODO
-// 
+//
 // CLSID_FDProvider must match the value defined in FDProvider.cpp
 //
 // TODO - TODO - TODO -TODO - TODO - TODO - TODO - TODO - TODO - TODO
 const GUID CLSID_FDProvider = { 0x8c19066a, 0x643a, 0x4586, { 0x92, 0xb2, 0xa7, 0x85, 0xb9, 0xd, 0x76, 0x6f }};
 
-class TClassFactory: 
+class TClassFactory:
     public IClassFactory
 {
 public:
     // IUnknown
     STDMETHODIMP_(ULONG) AddRef();
-    
+
     STDMETHODIMP_(ULONG) Release();
-    
+
     STDMETHODIMP QueryInterface(
-        REFIID riid, 
+        REFIID riid,
         __deref_out void** ppv);
 
     // IClassFactory
     STDMETHODIMP CreateInstance(
-        __in_opt IUnknown* punkOuter, 
-        REFIID iid, 
+        __in_opt IUnknown* punkOuter,
+        REFIID iid,
         __deref_out void** ppv);
 
     STDMETHODIMP LockServer(
@@ -69,11 +69,11 @@ TClassFactory::TClassFactory():
     m_cRef(1),
     m_pFDProviderClassFactory(NULL),
     m_pIEXEHostControl(NULL)
-{ 
+{
 }  // TClassFactory::TClassFactory
 
-TClassFactory::~TClassFactory() 
-{ 
+TClassFactory::~TClassFactory()
+{
     if (m_pFDProviderClassFactory)
     {
         m_pFDProviderClassFactory->Release();
@@ -93,26 +93,26 @@ HRESULT TClassFactory::Init()
     // Load the profider that will be hosted
     // and get a pointer to it's class factory
     hr = CoGetClassObject(
-        CLSID_FDProvider,
-        CLSCTX_INPROC_SERVER,
-        NULL,
-        IID_IClassFactory,
-        (void**) &m_pFDProviderClassFactory);
+             CLSID_FDProvider,
+             CLSCTX_INPROC_SERVER,
+             NULL,
+             IID_IClassFactory,
+             (void**) &m_pFDProviderClassFactory);
 
-    // Get a pointer to IEXEHostControl exposed by 
+    // Get a pointer to IEXEHostControl exposed by
     // the provider's class factory
     if (S_OK == hr)
     {
         hr = m_pFDProviderClassFactory->QueryInterface(
-            __uuidof(IEXEHostControl),
-            (void**) &m_pIEXEHostControl);
+                 __uuidof(IEXEHostControl),
+                 (void**) &m_pIEXEHostControl);
     }
 
     // Register our liftime notification callback with the provider
     if (S_OK == hr)
     {
         hr = m_pIEXEHostControl->RegisterProviderLifetimeNotificationCallback(
-            &ProviderLifetimeNotificationCallback);
+                 &ProviderLifetimeNotificationCallback);
     }
 
     return hr;
@@ -135,7 +135,7 @@ STDMETHODIMP_(ULONG) TClassFactory::Release()
 }  // TClassFactory::Release
 
 STDMETHODIMP TClassFactory::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     __deref_out_opt void** ppv)
 {
     HRESULT hr = S_OK;
@@ -171,14 +171,14 @@ STDMETHODIMP TClassFactory::QueryInterface(
 }  // TClassFactory::QueryInterface
 
 STDMETHODIMP TClassFactory::CreateInstance(
-    __in_opt IUnknown* pUnkownOuter, 
-    REFIID riid, 
+    __in_opt IUnknown* pUnkownOuter,
+    REFIID riid,
     __deref_out_opt void** ppv)
 {
     return m_pFDProviderClassFactory->CreateInstance(
-        pUnkownOuter,
-        riid,
-        ppv);
+               pUnkownOuter,
+               riid,
+               ppv);
 }  // TClassFactory::CreateInstance
 
 STDMETHODIMP TClassFactory::LockServer(
@@ -225,7 +225,7 @@ VOID __stdcall ProviderLifetimeNotificationCallback(
         InterlockedDecrement(&g_cHostProcessRefCount);
         if (CoReleaseServerProcess() == 0)
         {
-            // If there are no provider objects 
+            // If there are no provider objects
             // and no Lock on the class object, let the exe exit
             SetEvent(g_hQuitEvent);
         }
@@ -248,10 +248,10 @@ int __stdcall WinMain(
     MSG msg = {0};
 
     hr = CoInitializeEx(
-        NULL,
-        COINIT_MULTITHREADED);
+             NULL,
+             COINIT_MULTITHREADED);
 
-    // Create and event that will be signaled 
+    // Create and event that will be signaled
     // when all COM objects have been released
     // and the process should end.
     if (S_OK == hr)
@@ -260,10 +260,10 @@ int __stdcall WinMain(
         if (S_OK == hr)
         {
             g_hQuitEvent = CreateEvent(
-                NULL, 
-                TRUE, 
-                FALSE, 
-                NULL);
+                               NULL,
+                               TRUE,
+                               FALSE,
+                               NULL);
             if (!g_hQuitEvent)
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
@@ -286,11 +286,11 @@ int __stdcall WinMain(
 
         // TODO - TODO - TODO -TODO - TODO - TODO - TODO - TODO - TODO - TODO
         //
-        // If this EXE host is converted into a Windows Service, 
+        // If this EXE host is converted into a Windows Service,
         // the message pump and WTSRegisterSessionNotification should be
         // removed and HandlerEx with SERVICE_CONTROL_SESSIONCHANGE
         // should be used instead.
-        // 
+        //
         // TODO - TODO - TODO -TODO - TODO - TODO - TODO - TODO - TODO - TODO
 
         // Create a message only window to process
@@ -298,14 +298,14 @@ int __stdcall WinMain(
         if (S_OK == hr)
         {
             hMessageWindow = CreateWindow(
-                L"Message",
-                L"",
-                0,
-                CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-                HWND_MESSAGE,  // Message only window
-                NULL,
-                hInstance,
-                NULL);
+                                 L"Message",
+                                 L"",
+                                 0,
+                                 CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+                                 HWND_MESSAGE,  // Message only window
+                                 NULL,
+                                 hInstance,
+                                 NULL);
             if (!hMessageWindow)
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
@@ -316,8 +316,8 @@ int __stdcall WinMain(
         if (S_OK == hr)
         {
             if (WTSRegisterSessionNotification(
-                hMessageWindow,
-                NOTIFY_FOR_ALL_SESSIONS))
+                        hMessageWindow,
+                        NOTIFY_FOR_ALL_SESSIONS))
             {
                 fWTSRegistered = true;
             }
@@ -326,16 +326,16 @@ int __stdcall WinMain(
                 hr = HRESULT_FROM_WIN32(GetLastError());
             }
         }
-    
+
         // Register our class factory with COM remoting
         if (S_OK == hr)
         {
             hr = CoRegisterClassObject(
-                CLSID_FDProvider,
-                (IClassFactory*) pClassFactory,
-                CLSCTX_LOCAL_SERVER,
-                REGCLS_MULTIPLEUSE,
-                &hClassRegistration);
+                     CLSID_FDProvider,
+                     (IClassFactory*) pClassFactory,
+                     CLSCTX_LOCAL_SERVER,
+                     REGCLS_MULTIPLEUSE,
+                     &hClassRegistration);
         }
 
         // Start a message pump and wait for g_hQuitEvent to be signaled
@@ -344,15 +344,15 @@ int __stdcall WinMain(
             while (!fQuit)
             {
                 WaitResult = MsgWaitForMultipleObjectsEx(
-                    1,
-                    &g_hQuitEvent,
-                    INFINITE,
-                    QS_ALLINPUT,
-                    MWMO_INPUTAVAILABLE);
+                                 1,
+                                 &g_hQuitEvent,
+                                 INFINITE,
+                                 QS_ALLINPUT,
+                                 MWMO_INPUTAVAILABLE);
 
                 if (WAIT_OBJECT_0 == WaitResult)
                 {
-                    // g_hQuitEvent has been signaled 
+                    // g_hQuitEvent has been signaled
                     fQuit = true;
                 }
                 else if (WAIT_OBJECT_0 + 1 == WaitResult)
@@ -369,12 +369,12 @@ int __stdcall WinMain(
                         {
                             if (WTS_SESSION_LOGOFF == msg.wParam)
                             {
-                                // A logoff has occured.  
+                                // A logoff has occured.
 
                                 hr = pClassFactory->ProcessLogoffNotification((DWORD) msg.lParam);
                                 if (S_OK != hr)
                                 {
-                                    // if the logoff can not be processed, 
+                                    // if the logoff can not be processed,
                                     // exit the process.
                                     fQuit = true;
                                 }
@@ -420,7 +420,7 @@ int __stdcall WinMain(
         CoUninitialize();
     }
 
-	return hr;
+    return hr;
 }  // WinMain
 
 //---------------------------------------------------------------------------

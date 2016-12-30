@@ -1,4 +1,4 @@
-// OpenURLDlg.cpp : Implementation of COpenURLDlg
+﻿// OpenURLDlg.cpp : Implementation of COpenURLDlg
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -59,7 +59,7 @@ LRESULT COpenURLDlg::OnBrowse(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl
     ofn.lpstrDefExt = NULL;
     ofn.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER;
     ofn.lpstrFilter = L"Media Files\0*.wma;*.wmv;*.asf;*.mp3;*.avi;*.mpg;*.mpeg;*.wav;*.mid\0All files\0*.*\0";
-    ofn.nFilterIndex = 0; 
+    ofn.nFilterIndex = 0;
     ofn.hwndOwner = m_hWnd;
     ofn.hInstance = _Module.GetResourceInstance();
 
@@ -73,6 +73,6 @@ LRESULT COpenURLDlg::OnBrowse(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl
     {
         EndDialog(IDCANCEL);
     }
-        
+
     return 0;
 }

@@ -1,4 +1,4 @@
-/******************************Module*Header*******************************\
+﻿/******************************Module*Header*******************************\
 * Module Name: display.h
 *
 *
@@ -40,7 +40,10 @@ public:
 
     virtual HRESULT         InitializeDisplaySystem(_In_ HWND hwnd);
 
-    virtual HRESULT         InitializeXclModeDisplaySystem(_In_ IUnknown* lpDD, _Out_ UINT* pAdapterID) { return E_NOTIMPL; }
+    virtual HRESULT         InitializeXclModeDisplaySystem(_In_ IUnknown* lpDD, _Out_ UINT* pAdapterID)
+    {
+        return E_NOTIMPL;
+    }
 
     virtual void            TerminateDisplaySystem();
     CAMDDrawMonitorInfo*    FindMonitor(_In_ HMONITOR hMon);
@@ -48,9 +51,13 @@ public:
 
 
     CAMDDrawMonitorInfo&    operator[](int i)
-                            { return m_DDMon[i]; }
+    {
+        return m_DDMon[i];
+    }
     DWORD                   Count() const
-                            { return m_dwNumMonitors; }
+    {
+        return m_dwNumMonitors;
+    }
 
     static BOOL CALLBACK    MonitorEnumProc(_In_ HMONITOR hMon, _In_opt_ HDC hDC, _In_ LPRECT pRect, LPARAM dwData);
 
@@ -64,7 +71,8 @@ protected:
     CAMDDrawMonitorInfo     m_DDMon[EVR_MAX_MONITORS];
 };
 
-typedef struct {
+typedef struct
+{
     HWND hwnd;
     CMonitorArray* pMonArray;
 } MonitorEnumProcInfo;

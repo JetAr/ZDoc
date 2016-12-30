@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -64,88 +64,88 @@ static PCLIPBOOKSERVER_RESOURCE g_pSingleInstanceResourceClipBookServer = NULL;
 
 RESID WINAPI
 ClipBookServerOpen(
-      LPCWSTR           pwszResourceNameIn
+    LPCWSTR           pwszResourceNameIn
     , HKEY              hkeyResourceKeyIn
     , RESOURCE_HANDLE   hResourceHandleIn
-    );
+);
 
 void WINAPI
 ClipBookServerClose(
     RESID residIn
-    );
+);
 
 DWORD WINAPI
 ClipBookServerOnline(
-      RESID     residIn
+    RESID     residIn
     , PHANDLE   phEventHandleInout
-    );
+);
 
 DWORD WINAPI
 ClipBookServerOnlineThread(
-      PCLUS_WORKER              pWorkerIn
+    PCLUS_WORKER              pWorkerIn
     , PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
-    );
+);
 
 DWORD WINAPI
 ClipBookServerOffline(
     RESID residIn
-    );
+);
 
 DWORD WINAPI
 ClipBookServerOfflineThread(
-      PCLUS_WORKER              pWorkerIn
+    PCLUS_WORKER              pWorkerIn
     , PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
-    );
+);
 
 void WINAPI
 ClipBookServerTerminate(
     RESID residIn
-    );
+);
 
 BOOL WINAPI
 ClipBookServerLooksAlive(
     RESID residIn
-    );
+);
 
 BOOL WINAPI
 ClipBookServerIsAlive(
     RESID residIn
-    );
+);
 
 BOOL
 ClipBookServerCheckIsAlive(
-      PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
+    PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
     , BOOL                      fFullCheckIn
-    );
+);
 
 DWORD WINAPI
 ClipBookServerResourceControl(
-      RESID     residIn
+    RESID     residIn
     , DWORD     nControlCodeIn
     , PVOID     pInBufferIn
     , DWORD     cbInBufferSizeIn
     , PVOID     pOutBufferOut
     , DWORD     cbOutBufferSizeIn
     , LPDWORD   pcbBytesReturnedOut
-    );
+);
 
 DWORD
 ClipBookServerGetRequiredDependencies(
-      PVOID     pOutBufferOut
+    PVOID     pOutBufferOut
     , DWORD     cbOutBufferSizeIn
     , LPDWORD   pcbBytesReturnedOut
-    );
+);
 
 DWORD
 ClipBookServerVerifyRequiredDependencies(
     PCLIPBOOKSERVER_RESOURCE pResourceEntryIn
-    );
+);
 
 DWORD
 ClipBookServerSetNameHandler(
-      PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
+    PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
     , LPWSTR                    pwszNameIn
-    );
+);
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -177,10 +177,10 @@ ClipBookServerSetNameHandler(
 /////////////////////////////////////////////////////////////////////////////
 BOOL WINAPI
 ClipBookServerDllMain(
-      HINSTANCE hDllHandleIn
+    HINSTANCE hDllHandleIn
     , DWORD     nReasonIn
     , LPVOID    ReservedIn
-    )
+)
 {
     BOOL    fSuccess = TRUE;
     DWORD   sc = ERROR_SUCCESS;
@@ -190,42 +190,42 @@ ClipBookServerDllMain(
 
     switch ( nReasonIn )
     {
-        case DLL_PROCESS_ATTACH:
-            g_hSingleInstanceSemaphoreClipBookServer = CreateSemaphoreW(
-                  NULL
-                , 0
-                , 1
-                , CLIPBOOKSERVER_SINGLE_INSTANCE_SEMAPHORE
+    case DLL_PROCESS_ATTACH:
+        g_hSingleInstanceSemaphoreClipBookServer = CreateSemaphoreW(
+                    NULL
+                    , 0
+                    , 1
+                    , CLIPBOOKSERVER_SINGLE_INSTANCE_SEMAPHORE
                 );
-            sc = GetLastError();
-            if ( g_hSingleInstanceSemaphoreClipBookServer == NULL )
-            {
-                fSuccess = FALSE;
-                goto Cleanup;
-            } // if: error creating semaphore
+        sc = GetLastError();
+        if ( g_hSingleInstanceSemaphoreClipBookServer == NULL )
+        {
+            fSuccess = FALSE;
+            goto Cleanup;
+        } // if: error creating semaphore
 
-            if ( sc != ERROR_ALREADY_EXISTS )
-            {
-                // If the semaphore didnt exist, set its initial count to 1.
-                ReleaseSemaphore( g_hSingleInstanceSemaphoreClipBookServer, 1, NULL );
-            } // if: semaphore didn't already exist
+        if ( sc != ERROR_ALREADY_EXISTS )
+        {
+            // If the semaphore didnt exist, set its initial count to 1.
+            ReleaseSemaphore( g_hSingleInstanceSemaphoreClipBookServer, 1, NULL );
+        } // if: semaphore didn't already exist
 
-            break;
+        break;
 
-        case DLL_PROCESS_DETACH:
-            if ( g_hSingleInstanceSemaphoreClipBookServer != NULL )
-            {
-                CloseHandle( g_hSingleInstanceSemaphoreClipBookServer );
-                g_hSingleInstanceSemaphoreClipBookServer = NULL;
-            } // if: single instance semaphore was created
+    case DLL_PROCESS_DETACH:
+        if ( g_hSingleInstanceSemaphoreClipBookServer != NULL )
+        {
+            CloseHandle( g_hSingleInstanceSemaphoreClipBookServer );
+            g_hSingleInstanceSemaphoreClipBookServer = NULL;
+        } // if: single instance semaphore was created
 
-            if ( g_schSCMHandle != NULL )
-            {
-                CloseServiceHandle( g_schSCMHandle );
-                g_schSCMHandle = NULL;
-            } // if: global SCM handle was opened
+        if ( g_schSCMHandle != NULL )
+        {
+            CloseServiceHandle( g_schSCMHandle );
+            g_schSCMHandle = NULL;
+        } // if: global SCM handle was opened
 
-            break;
+        break;
 
     } // switch: nReason
 
@@ -301,13 +301,13 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 ClipBookServerStartup(
-      LPCWSTR                       pwszResourceTypeIn
+    LPCWSTR                       pwszResourceTypeIn
     , DWORD                         nMinVersionSupportedIn
     , DWORD                         nMaxVersionSupportedIn
     , PSET_RESOURCE_STATUS_ROUTINE  pfnSetResourceStatusIn
     , PLOG_EVENT_ROUTINE            pfnLogEventIn
     , PCLRES_FUNCTION_TABLE *       pFunctionTableOut
-    )
+)
 {
     DWORD sc = ERROR_SUCCESS;
 
@@ -316,18 +316,18 @@ ClipBookServerStartup(
     UNREFERENCED_PARAMETER( pfnLogEventIn );
 
     if (   (nMinVersionSupportedIn > CLRES_VERSION_V1_00)
-        || (nMaxVersionSupportedIn < CLRES_VERSION_V1_00) )
+            || (nMaxVersionSupportedIn < CLRES_VERSION_V1_00) )
     {
         sc = ERROR_REVISION_MISMATCH;
     } // if: version not supported
     else if ( 0 == CompareStringW(
-                        LOCALE_SYSTEM_DEFAULT,
-                        NORM_IGNORECASE,
-                        pwszResourceTypeIn,
-                        -1,
-                        RESTYPE_NAME,
-                        -1
-                        )
+                  LOCALE_SYSTEM_DEFAULT,
+                  NORM_IGNORECASE,
+                  pwszResourceTypeIn,
+                  -1,
+                  RESTYPE_NAME,
+                  -1
+              )
             )
     {
         *pFunctionTableOut = &g_ClipBookServerFunctionTable;
@@ -387,10 +387,10 @@ ClipBookServerStartup(
 /////////////////////////////////////////////////////////////////////////////
 RESID WINAPI
 ClipBookServerOpen(
-      LPCWSTR           pwszResourceNameIn
+    LPCWSTR           pwszResourceNameIn
     , HKEY              hkeyResourceKeyIn
     , RESOURCE_HANDLE   hResourceHandleIn
-    )
+)
 {
     DWORD                   sc = ERROR_SUCCESS;
     size_t                  cchBuffer = 0;
@@ -411,10 +411,10 @@ ClipBookServerOpen(
         //
 
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"A resource of this type is already running.\n"
-            );
+        );
         sc = ERROR_OBJECT_ALREADY_EXISTS;
         goto Cleanup;
     } // if: semaphore for resources of this type already already locked
@@ -422,10 +422,10 @@ ClipBookServerOpen(
     if ( g_pSingleInstanceResourceClipBookServer != NULL )
     {
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Single instance resource already set!\n"
-            );
+        );
         sc = ERROR_OBJECT_ALREADY_EXISTS;
         goto Cleanup;
     } // if: resource of this type already exists
@@ -441,11 +441,11 @@ ClipBookServerOpen(
         {
             sc = GetLastError();
             (g_pfnLogEvent)(
-                  hResourceHandleIn
+                hResourceHandleIn
                 , LOG_ERROR
                 , L"Failed to open Service Control Manager. Error: %1!u!.\n"
                 , sc
-                );
+            );
             goto Cleanup;
         } // if: error opening the Service Control Manager
     } // if: Service Control Manager not open yet
@@ -460,21 +460,21 @@ ClipBookServerOpen(
     //
 
     sc = ResUtilSetResourceServiceStartParameters(
-              CLIPBOOKSERVER_SVCNAME
-            , g_schSCMHandle
-            , &hService
-            , g_pfnLogEvent
-            , hResourceHandleIn
-            );
+             CLIPBOOKSERVER_SVCNAME
+             , g_schSCMHandle
+             , &hService
+             , g_pfnLogEvent
+             , hResourceHandleIn
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Failed to set the service start parameters for the '%1!s!' service. Error: %2!u!.\n"
             , CLIPBOOKSERVER_SVCNAME
             , sc
-            );
+        );
         goto Cleanup;
     } // if:  error setting service start parameters
 
@@ -483,7 +483,7 @@ ClipBookServerOpen(
         CloseServiceHandle( hService );
         hService = NULL;
     } // if: hService is not NULL
-    
+
     //
     // Make sure the service has been stopped.
     //
@@ -492,12 +492,12 @@ ClipBookServerOpen(
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Failed to stop the '%1!s!' service. Error: %2!u!.\n"
             , CLIPBOOKSERVER_SVCNAME
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error stopping the service
 
@@ -506,19 +506,19 @@ ClipBookServerOpen(
     //
 
     sc = ClusterRegOpenKey(
-              hkeyResourceKeyIn
-            , L"Parameters"
-            , KEY_ALL_ACCESS
-            , &hkeyParameters
-            );
+             hkeyResourceKeyIn
+             , L"Parameters"
+             , KEY_ALL_ACCESS
+             , &hkeyParameters
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to open Parameters key. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error creating the Parameters key for the resource
 
@@ -531,11 +531,11 @@ ClipBookServerOpen(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to allocate resource entry structure. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error allocating memory for the resource
 
@@ -560,11 +560,11 @@ ClipBookServerOpen(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to allocate the resource name buffer. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error allocating memory for the name.
 
@@ -573,11 +573,11 @@ ClipBookServerOpen(
     {
         sc = HRESULT_CODE( hr );
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to allocate the resource name buffer. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if:
 
@@ -590,11 +590,11 @@ ClipBookServerOpen(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to open the cluster. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error opening the cluster
 
@@ -607,11 +607,11 @@ ClipBookServerOpen(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to open the resource. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error opening the resource
 
@@ -634,11 +634,11 @@ Cleanup:
         assert( sc != ERROR_SUCCESS );
 
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: failed with error %1!u!.\n"
             , sc
-            );
+        );
 
         if ( hkeyParameters != NULL )
         {
@@ -668,7 +668,7 @@ Cleanup:
         CloseServiceHandle( hService );
         hService = NULL;
     } // if: hService is not NULL
-    
+
     SetLastError( sc );
 
     return resid;
@@ -701,7 +701,7 @@ Cleanup:
 void WINAPI
 ClipBookServerClose(
     RESID residIn
-    )
+)
 {
     PCLIPBOOKSERVER_RESOURCE pResourceEntry = NULL;
     DWORD                   sc = ERROR_SUCCESS;
@@ -721,11 +721,11 @@ ClipBookServerClose(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Close resource sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
     } // if: invalid resource ID
@@ -733,20 +733,20 @@ ClipBookServerClose(
     if ( pResourceEntry->pwszResourceName == NULL )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_INFORMATION
             , L"Close request for resource with resid 0x%1!08x!.\n"
             , residIn
-            );
+        );
     } // if: resource name is null...
     else
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_INFORMATION
             , L"Close request for resource '%1!s!'.\n"
             , pResourceEntry->pwszResourceName
-            );
+        );
     } // else: resource name is not null...
 
     //
@@ -786,13 +786,13 @@ ClipBookServerClose(
     if ( pResourceEntry == g_pSingleInstanceResourceClipBookServer )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_INFORMATION
             , L"Close: Setting semaphore '%1!s!'.\n"
             , CLIPBOOKSERVER_SINGLE_INSTANCE_SEMAPHORE
-            );
+        );
         g_pSingleInstanceResourceClipBookServer = NULL;
-        ReleaseSemaphore( g_hSingleInstanceSemaphoreClipBookServer, 1 , NULL );
+        ReleaseSemaphore( g_hSingleInstanceSemaphoreClipBookServer, 1, NULL );
     } // if: this is the single resource instance
 
     //
@@ -882,9 +882,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 ClipBookServerOnline(
-      RESID     residIn
+    RESID     residIn
     , PHANDLE   phEventHandleOut
-    )
+)
 {
     PCLIPBOOKSERVER_RESOURCE pResourceEntry = NULL;
     DWORD                   sc = ERROR_SUCCESS;
@@ -905,19 +905,19 @@ ClipBookServerOnline(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Online sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return ERROR_RESOURCE_NOT_FOUND;
     } // if: invalid resource ID
 
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"Online request.\n"
-        );
+    );
 
     //
     // Start the Online thread to perform the online operation.
@@ -926,19 +926,19 @@ ClipBookServerOnline(
     pResourceEntry->state = ClusterResourceOnlinePending;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     sc = ClusWorkerCreate(
-              &pResourceEntry->cwWorkerThread
-            , reinterpret_cast< PWORKER_START_ROUTINE >( ClipBookServerOnlineThread )
-            , pResourceEntry
-            );
+             &pResourceEntry->cwWorkerThread
+             , reinterpret_cast< PWORKER_START_ROUTINE >( ClipBookServerOnlineThread )
+             , pResourceEntry
+         );
     if ( sc != ERROR_SUCCESS )
     {
         pResourceEntry->state = ClusterResourceFailed;
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Online: Unable to start thread. Error: %1!u!.\n"
             , sc
-            );
+        );
     } // if: error creating the worker thread
     else
     {
@@ -977,9 +977,9 @@ ClipBookServerOnline(
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 ClipBookServerOnlineThread(
-      PCLUS_WORKER              pWorkerIn
+    PCLUS_WORKER              pWorkerIn
     , PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
-    )
+)
 {
     RESOURCE_STATUS         resourceStatus;
     DWORD                   sc = ERROR_SUCCESS;
@@ -1014,11 +1014,11 @@ ClipBookServerOnlineThread(
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Required dependency not found. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: required dependencies are missing
 
@@ -1033,19 +1033,19 @@ ClipBookServerOnlineThread(
     } // if: terminating
 
     sc = ResUtilSetResourceServiceEnvironment(
-              CLIPBOOKSERVER_SVCNAME
-            , pResourceEntryIn->hResource
-            , g_pfnLogEvent
-            , pResourceEntryIn->hResourceHandle
-            );
+             CLIPBOOKSERVER_SVCNAME
+             , pResourceEntryIn->hResource
+             , g_pfnLogEvent
+             , pResourceEntryIn->hResourceHandle
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Failed to set service environment. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error setting the environment for the service
 
@@ -1058,12 +1058,12 @@ ClipBookServerOnlineThread(
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Failed to stop the '%1!s!' service. Error: %2!u!.\n"
             , CLIPBOOKSERVER_SVCNAME
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error stopping the service
 
@@ -1077,20 +1077,20 @@ ClipBookServerOnlineThread(
     } // if: terminating
 
     sc = ResUtilSetResourceServiceStartParameters(
-              CLIPBOOKSERVER_SVCNAME
-            , g_schSCMHandle
-            , &pResourceEntryIn->hService
-            , g_pfnLogEvent
-            , pResourceEntryIn->hResourceHandle
-            );
+             CLIPBOOKSERVER_SVCNAME
+             , g_schSCMHandle
+             , &pResourceEntryIn->hService
+             , g_pfnLogEvent
+             , pResourceEntryIn->hResourceHandle
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Failed to set service start parameters. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if:  error setting service start parameters
 
@@ -1116,12 +1116,12 @@ ClipBookServerOnlineThread(
             //
 
             (g_pfnLogEvent)(
-                  pResourceEntryIn->hResourceHandle
+                pResourceEntryIn->hResourceHandle
                 , LOG_ERROR
                 , L"OnlineThread: Failed to start the '%1!s!' service. Error: %2!u!.\n"
                 , CLIPBOOKSERVER_SVCNAME
                 , sc
-                );
+            );
             sc = ERROR_SERVICE_NEVER_STARTED;
             goto Cleanup;
         } // if: error other than service already running occurred
@@ -1142,22 +1142,22 @@ ClipBookServerOnlineThread(
         //
 
         if ( ! QueryServiceStatusEx(
-                  pResourceEntryIn->hService
-                , SC_STATUS_PROCESS_INFO
-                , reinterpret_cast< LPBYTE >( &ServiceStatus )
-                , sizeof( SERVICE_STATUS_PROCESS )
-                , &cbBytesNeeded
+                    pResourceEntryIn->hService
+                    , SC_STATUS_PROCESS_INFO
+                    , reinterpret_cast< LPBYTE >( &ServiceStatus )
+                    , sizeof( SERVICE_STATUS_PROCESS )
+                    , &cbBytesNeeded
                 )
            )
         {
             sc = GetLastError();
             (g_pfnLogEvent)(
-                  pResourceEntryIn->hResourceHandle
+                pResourceEntryIn->hResourceHandle
                 , LOG_ERROR
                 , L"OnlineThread: Failed to query service status for the '%1!s!' service. Error: %2!u!.\n"
                 , CLIPBOOKSERVER_SVCNAME
                 , sc
-                );
+            );
             resourceStatus.ResourceState = ClusterResourceFailed;
             goto Cleanup;
         } // if: error querying service status
@@ -1187,11 +1187,11 @@ ClipBookServerOnlineThread(
         //
 
         resExitState = static_cast< RESOURCE_EXIT_STATE >(
-            (g_pfnSetResourceStatus)(
-                  pResourceEntryIn->hResourceHandle
-                , &resourceStatus
-                )
-            );
+                           (g_pfnSetResourceStatus)(
+                               pResourceEntryIn->hResourceHandle
+                               , &resourceStatus
+                           )
+                       );
         if ( resExitState != ResourceExitStateContinue )
         {
             goto Cleanup;
@@ -1228,12 +1228,12 @@ ClipBookServerOnlineThread(
         //
 
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Failed to start the '%1!s!' service. Error: %2!u!.\n"
             , CLIPBOOKSERVER_SVCNAME
             , sc
-            );
+        );
         goto Cleanup;
     } // if: service not running when loop exited
 
@@ -1250,11 +1250,11 @@ ClipBookServerOnlineThread(
     } // if: not running in the system process
 
     (g_pfnLogEvent)(
-          pResourceEntryIn->hResourceHandle
+        pResourceEntryIn->hResourceHandle
         , LOG_INFORMATION
         , L"The '%1!s!' service is now online.\n"
         , CLIPBOOKSERVER_SVCNAME
-        );
+    );
 
 
 Cleanup:
@@ -1262,11 +1262,11 @@ Cleanup:
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Error %1!u! bringing resource online.\n"
             , sc
-            );
+        );
 
         if ( pResourceEntryIn->hService != NULL )
         {
@@ -1328,7 +1328,7 @@ Cleanup:
 DWORD WINAPI
 ClipBookServerOffline(
     RESID residIn
-    )
+)
 {
     PCLIPBOOKSERVER_RESOURCE pResourceEntry = NULL;
     DWORD                   sc = ERROR_SUCCESS;
@@ -1348,20 +1348,20 @@ ClipBookServerOffline(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Offline resource sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
     } // if: invalid resource ID
 
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"Offline request.\n"
-        );
+    );
 
     //
     // Start the Offline thread to perform the offline operation.
@@ -1370,19 +1370,19 @@ ClipBookServerOffline(
     pResourceEntry->state = ClusterResourceOfflinePending;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     sc = ClusWorkerCreate(
-              &pResourceEntry->cwWorkerThread
-            , reinterpret_cast< PWORKER_START_ROUTINE >( ClipBookServerOfflineThread )
-            , pResourceEntry
-            );
+             &pResourceEntry->cwWorkerThread
+             , reinterpret_cast< PWORKER_START_ROUTINE >( ClipBookServerOfflineThread )
+             , pResourceEntry
+         );
     if ( sc != ERROR_SUCCESS )
     {
         pResourceEntry->state = ClusterResourceFailed;
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Offline: Unable to start thread. Error: %1!u!.\n"
             , sc
-            );
+        );
     } // if: error creating the worker thread
     else
     {
@@ -1423,9 +1423,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 ClipBookServerOfflineThread(
-      PCLUS_WORKER              pWorkerIn
+    PCLUS_WORKER              pWorkerIn
     , PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
-    )
+)
 {
     RESOURCE_STATUS     resourceStatus;
     DWORD               sc = ERROR_SUCCESS;
@@ -1456,15 +1456,15 @@ ClipBookServerOfflineThread(
     while ( ClusWorkerCheckTerminate( pWorkerIn ) == FALSE )
     {
         sc = (ControlService(
-                      pResourceEntryIn->hService
-                    , (fDidStop
-                        ? SERVICE_CONTROL_INTERROGATE
-                        : SERVICE_CONTROL_STOP)
-                    , &ServiceStatus
-                    )
-                ? ERROR_SUCCESS
-                : GetLastError()
-                );
+                  pResourceEntryIn->hService
+                  , (fDidStop
+                     ? SERVICE_CONTROL_INTERROGATE
+                     : SERVICE_CONTROL_STOP)
+                  , &ServiceStatus
+              )
+              ? ERROR_SUCCESS
+              : GetLastError()
+             );
 
         if ( sc == ERROR_SUCCESS )
         {
@@ -1473,11 +1473,11 @@ ClipBookServerOfflineThread(
             if ( ServiceStatus.dwCurrentState == SERVICE_STOPPED )
             {
                 (g_pfnLogEvent)(
-                      pResourceEntryIn->hResourceHandle
+                    pResourceEntryIn->hResourceHandle
                     , LOG_INFORMATION
                     , L"OfflineThread: The '%1!s!' service stopped.\n"
                     , CLIPBOOKSERVER_SVCNAME
-                    );
+                );
 
                 //
                 // Set the status to offline.
@@ -1489,26 +1489,26 @@ ClipBookServerOfflineThread(
                 pResourceEntryIn->dwProcessId = 0;
 
                 (g_pfnLogEvent)(
-                      pResourceEntryIn->hResourceHandle
+                    pResourceEntryIn->hResourceHandle
                     , LOG_INFORMATION
                     , L"OfflineThread: Service is now offline.\n"
-                    );
+                );
                 break;
             } // if: current service state is STOPPED
         } // if: ControlService completed successfully
 
         if (    ( sc == ERROR_EXCEPTION_IN_SERVICE )
-            ||  ( sc == ERROR_PROCESS_ABORTED )
-            ||  ( sc == ERROR_SERVICE_NOT_ACTIVE )
+                ||  ( sc == ERROR_PROCESS_ABORTED )
+                ||  ( sc == ERROR_SERVICE_NOT_ACTIVE )
            )
         {
             (g_pfnLogEvent)(
-                  pResourceEntryIn->hResourceHandle
+                pResourceEntryIn->hResourceHandle
                 , LOG_INFORMATION
                 , L"OfflineThread: The '%1!s!' service died or is not active any more; status = %2!u!.\n"
                 , CLIPBOOKSERVER_SVCNAME
                 , sc
-                );
+            );
 
             //
             // Set the status to offline.
@@ -1519,18 +1519,18 @@ ClipBookServerOfflineThread(
             pResourceEntryIn->hService = NULL;
             pResourceEntryIn->dwProcessId = 0;
             (g_pfnLogEvent)(
-                  pResourceEntryIn->hResourceHandle
+                pResourceEntryIn->hResourceHandle
                 , LOG_INFORMATION
                 , L"OfflineThread: Service is now offline.\n"
-                );
+            );
             break;
         } // if: service stopped abnormally
 
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_INFORMATION
             , L"OfflineThread: retrying...\n"
-            );
+        );
 
         Sleep( nRetryTime );
 
@@ -1541,10 +1541,10 @@ ClipBookServerOfflineThread(
     //
 
     ResUtilRemoveResourceServiceEnvironment(
-              CLIPBOOKSERVER_SVCNAME
-            , g_pfnLogEvent
-            , pResourceEntryIn->hResourceHandle
-            );
+        CLIPBOOKSERVER_SVCNAME
+        , g_pfnLogEvent
+        , pResourceEntryIn->hResourceHandle
+    );
 
 Cleanup:
 
@@ -1580,7 +1580,7 @@ Cleanup:
 void WINAPI
 ClipBookServerTerminate(
     RESID residIn
-    )
+)
 {
     PCLIPBOOKSERVER_RESOURCE pResourceEntry = NULL;
     DWORD                   sc = ERROR_SUCCESS;
@@ -1599,19 +1599,19 @@ ClipBookServerTerminate(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Terminate resource sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return;
     } // if: invalid resource ID
 
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"Terminate request.\n"
-        );
+    );
 
     //
     // Kill off any pending threads.
@@ -1629,15 +1629,15 @@ ClipBookServerTerminate(
         for ( ;; )
         {
             sc = (ControlService(
-                          pResourceEntry->hService
-                        , (fDidStop
-                            ? SERVICE_CONTROL_INTERROGATE
-                            : SERVICE_CONTROL_STOP)
-                        , &ServiceStatus
-                        )
-                    ? ERROR_SUCCESS
-                    : GetLastError()
-                    );
+                      pResourceEntry->hService
+                      , (fDidStop
+                         ? SERVICE_CONTROL_INTERROGATE
+                         : SERVICE_CONTROL_STOP)
+                      , &ServiceStatus
+                  )
+                  ? ERROR_SUCCESS
+                  : GetLastError()
+                 );
 
             if ( sc == ERROR_SUCCESS )
             {
@@ -1646,45 +1646,45 @@ ClipBookServerTerminate(
                 if ( ServiceStatus.dwCurrentState == SERVICE_STOPPED )
                 {
                     (g_pfnLogEvent)(
-                          pResourceEntry->hResourceHandle
+                        pResourceEntry->hResourceHandle
                         , LOG_INFORMATION
                         , L"Terminate: The '%1!s!' service stopped.\n"
                         , CLIPBOOKSERVER_SVCNAME
-                        );
+                    );
                     break;
                 } // if: current service state is STOPPED
             } // if: ControlService completed successfully
 
             if (    ( sc == ERROR_EXCEPTION_IN_SERVICE )
-                ||  ( sc == ERROR_PROCESS_ABORTED )
-                ||  ( sc == ERROR_SERVICE_NOT_ACTIVE )
+                    ||  ( sc == ERROR_PROCESS_ABORTED )
+                    ||  ( sc == ERROR_SERVICE_NOT_ACTIVE )
                )
             {
                 (g_pfnLogEvent)(
-                      pResourceEntry->hResourceHandle
+                    pResourceEntry->hResourceHandle
                     , LOG_INFORMATION
                     , L"Terminate: Service died; status = %1!u!.\n"
                     , sc
-                    );
+                );
                 break;
             } // if: service stopped abnormally
 
             if ( (nTotalRetryTime -= nRetryTime) == 0 )
             {
                 (g_pfnLogEvent)(
-                      pResourceEntry->hResourceHandle
+                    pResourceEntry->hResourceHandle
                     , LOG_ERROR
                     , L"Terminate: Service did not stop; giving up.\n"
-                    );
+                );
 
                 break;
             } // if: retried too many times
 
             (g_pfnLogEvent)(
-                  pResourceEntry->hResourceHandle
+                pResourceEntry->hResourceHandle
                 , LOG_INFORMATION
                 , L"Terminate: retrying...\n"
-                );
+            );
 
             Sleep( nRetryTime );
         } // for: forever
@@ -1701,18 +1701,18 @@ ClipBookServerTerminate(
             HANDLE hSvcProcess = NULL;
 
             hSvcProcess = OpenProcess(
-                                  PROCESS_TERMINATE
-                                , FALSE
-                                , pResourceEntry->dwProcessId
-                                );
+                              PROCESS_TERMINATE
+                              , FALSE
+                              , pResourceEntry->dwProcessId
+                          );
             if ( hSvcProcess != NULL )
             {
                 (g_pfnLogEvent)(
-                      pResourceEntry->hResourceHandle
+                    pResourceEntry->hResourceHandle
                     , LOG_INFORMATION
                     , L"Terminate: Terminating processid %1!u!\n"
                     , pResourceEntry->dwProcessId
-                    );
+                );
                 TerminateProcess( hSvcProcess, 0 );
                 CloseHandle( hSvcProcess );
             } // if: opened process successfully
@@ -1728,10 +1728,10 @@ ClipBookServerTerminate(
     //
 
     ResUtilRemoveResourceServiceEnvironment(
-              CLIPBOOKSERVER_SVCNAME
-            , g_pfnLogEvent
-            , pResourceEntry->hResourceHandle
-            );
+        CLIPBOOKSERVER_SVCNAME
+        , g_pfnLogEvent
+        , pResourceEntry->hResourceHandle
+    );
 
     pResourceEntry->state = ClusterResourceFailed;
 
@@ -1769,7 +1769,7 @@ ClipBookServerTerminate(
 BOOL WINAPI
 ClipBookServerLooksAlive(
     RESID residIn
-    )
+)
 {
     PCLIPBOOKSERVER_RESOURCE pResourceEntry = NULL;
 
@@ -1787,20 +1787,20 @@ ClipBookServerLooksAlive(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"LooksAlive sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return FALSE;
     } // if: invalid resource ID
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"LooksAlive request.\n"
-        );
+    );
 #endif
 
     //
@@ -1857,7 +1857,7 @@ ClipBookServerLooksAlive(
 BOOL WINAPI
 ClipBookServerIsAlive(
     RESID residIn
-    )
+)
 {
     PCLIPBOOKSERVER_RESOURCE pResourceEntry = NULL;
 
@@ -1875,20 +1875,20 @@ ClipBookServerIsAlive(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"IsAlive sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return FALSE;
     } // if: invalid resource ID
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"IsAlive request.\n"
-        );
+    );
 #endif
 
     //
@@ -1928,9 +1928,9 @@ ClipBookServerIsAlive(
 /////////////////////////////////////////////////////////////////////////////
 BOOL
 ClipBookServerCheckIsAlive(
-      PCLIPBOOKSERVER_RESOURCE  pResourceEntryIn
+    PCLIPBOOKSERVER_RESOURCE  pResourceEntryIn
     , BOOL                     fFullCheckIn
-    )
+)
 {
     BOOL    fIsAlive = TRUE;
     DWORD   sc;
@@ -1943,12 +1943,12 @@ ClipBookServerCheckIsAlive(
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"CheckIsAlive: Verification of the '%1!s!' service failed. Error: %2!u!.\n"
             , CLIPBOOKSERVER_SVCNAME
             , sc
-            );
+        );
         fIsAlive = FALSE;
         goto Cleanup;
     } // if: error verifying service
@@ -2026,14 +2026,14 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 ClipBookServerResourceControl(
-      RESID     residIn
+    RESID     residIn
     , DWORD     nControlCodeIn
     , PVOID     pInBufferIn
     , DWORD     cbInBufferSizeIn
     , PVOID     pOutBufferOut
     , DWORD     cbOutBufferSizeIn
     , LPDWORD   pcbBytesReturnedOut
-    )
+)
 {
     DWORD               sc = ERROR_SUCCESS;
     PCLIPBOOKSERVER_RESOURCE pResourceEntry = NULL;
@@ -2052,45 +2052,45 @@ ClipBookServerResourceControl(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"ResourceControl sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return ERROR_RESOURCE_NOT_FOUND;
     } // if: invalid resource ID
 
     switch ( nControlCodeIn )
     {
-        case CLUSCTL_RESOURCE_UNKNOWN:
-            *pcbBytesReturnedOut = 0;
-            sc = ERROR_SUCCESS;
-            break;
+    case CLUSCTL_RESOURCE_UNKNOWN:
+        *pcbBytesReturnedOut = 0;
+        sc = ERROR_SUCCESS;
+        break;
 
-        case CLUSCTL_RESOURCE_SET_NAME:
-            sc = ClipBookServerSetNameHandler( pResourceEntry, static_cast< LPWSTR >( pInBufferIn ) );
-            break;
+    case CLUSCTL_RESOURCE_SET_NAME:
+        sc = ClipBookServerSetNameHandler( pResourceEntry, static_cast< LPWSTR >( pInBufferIn ) );
+        break;
 
-        case CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES:
-            sc = ClipBookServerGetRequiredDependencies( pOutBufferOut, cbOutBufferSizeIn, pcbBytesReturnedOut );
-            break;
+    case CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES:
+        sc = ClipBookServerGetRequiredDependencies( pOutBufferOut, cbOutBufferSizeIn, pcbBytesReturnedOut );
+        break;
 
-        case CLUSCTL_RESOURCE_GET_CHARACTERISTICS:
-        case CLUSCTL_RESOURCE_GET_CLASS_INFO:
-        case CLUSCTL_RESOURCE_STORAGE_GET_DISK_INFO:
-        case CLUSCTL_RESOURCE_STORAGE_IS_PATH_VALID:
-        case CLUSCTL_RESOURCE_DELETE:
-        case CLUSCTL_RESOURCE_INSTALL_NODE:
-        case CLUSCTL_RESOURCE_EVICT_NODE:
-        case CLUSCTL_RESOURCE_ADD_DEPENDENCY:
-        case CLUSCTL_RESOURCE_REMOVE_DEPENDENCY:
-        case CLUSCTL_RESOURCE_ADD_OWNER:
-        case CLUSCTL_RESOURCE_REMOVE_OWNER:
-        case CLUSCTL_RESOURCE_CLUSTER_NAME_CHANGED:
-        case CLUSCTL_RESOURCE_CLUSTER_VERSION_CHANGED:
-        default:
-            sc = ERROR_INVALID_FUNCTION;
-            break;
+    case CLUSCTL_RESOURCE_GET_CHARACTERISTICS:
+    case CLUSCTL_RESOURCE_GET_CLASS_INFO:
+    case CLUSCTL_RESOURCE_STORAGE_GET_DISK_INFO:
+    case CLUSCTL_RESOURCE_STORAGE_IS_PATH_VALID:
+    case CLUSCTL_RESOURCE_DELETE:
+    case CLUSCTL_RESOURCE_INSTALL_NODE:
+    case CLUSCTL_RESOURCE_EVICT_NODE:
+    case CLUSCTL_RESOURCE_ADD_DEPENDENCY:
+    case CLUSCTL_RESOURCE_REMOVE_DEPENDENCY:
+    case CLUSCTL_RESOURCE_ADD_OWNER:
+    case CLUSCTL_RESOURCE_REMOVE_OWNER:
+    case CLUSCTL_RESOURCE_CLUSTER_NAME_CHANGED:
+    case CLUSCTL_RESOURCE_CLUSTER_VERSION_CHANGED:
+    default:
+        sc = ERROR_INVALID_FUNCTION;
+        break;
     } // switch: nControlCodeIn
 
     return sc;
@@ -2135,10 +2135,10 @@ ClipBookServerResourceControl(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 ClipBookServerGetRequiredDependencies(
-      PVOID     pOutBufferOut
+    PVOID     pOutBufferOut
     , DWORD     cbOutBufferSizeIn
     , LPDWORD   pcbBytesReturnedOut
-    )
+)
 {
     //
     // TODO: Specify your resource's required dependencies here.
@@ -2195,10 +2195,10 @@ ClipBookServerGetRequiredDependencies(
         pdepdata->netnameEntry.Syntax.dw = CLUSPROP_SYNTAX_NAME;
         pdepdata->netnameEntry.cbLength = sizeof( RESOURCE_TYPE_NETWORK_NAME );
         hr = StringCchCopyW(
-                  pdepdata->netnameEntry.sz
-                , RTL_NUMBER_OF( pdepdata->netnameEntry.sz )
-                , RESOURCE_TYPE_NETWORK_NAME
-                );
+                 pdepdata->netnameEntry.sz
+                 , RTL_NUMBER_OF( pdepdata->netnameEntry.sz )
+                 , RESOURCE_TYPE_NETWORK_NAME
+             );
         if ( FAILED( hr ) )
         {
             sc = HRESULT_CODE( hr );
@@ -2248,8 +2248,8 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD ClipBookServerVerifyRequiredDependencies(
     PCLIPBOOKSERVER_RESOURCE pResourceEntryIn
-    )
-{ 
+)
+{
     DWORD                   sc = ERROR_SUCCESS;
     DWORD                   cbBuffer = 0;
     PBYTE                   pbBuffer = NULL;
@@ -2261,18 +2261,18 @@ DWORD ClipBookServerVerifyRequiredDependencies(
     //
 
     sc = ClipBookServerGetRequiredDependencies(
-                  NULL
-                , 0
-                , &cbBuffer
-                );
+             NULL
+             , 0
+             , &cbBuffer
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"VerifyRequiredDependencies: Failed to retrieve list of required dependencies. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if:
 
@@ -2281,27 +2281,27 @@ DWORD ClipBookServerVerifyRequiredDependencies(
     {
         sc = ERROR_OUTOFMEMORY;
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"VerifyRequiredDependencies: Failed to allocate memory. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if:
 
     sc = ClipBookServerGetRequiredDependencies(
-                  pbBuffer
-                , cbBuffer
-                , &cbBuffer
-                );
+             pbBuffer
+             , cbBuffer
+             , &cbBuffer
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"VerifyRequiredDependencies: Failed to retrieve list of required dependencies. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if:
 
@@ -2331,11 +2331,11 @@ DWORD ClipBookServerVerifyRequiredDependencies(
             //
 
             hResource = ResUtilGetResourceDependencyByClass(
-                              pResourceEntryIn->hCluster    
+                            pResourceEntryIn->hCluster
                             , pResourceEntryIn->hResource
                             , props.pResourceClassInfoValue
                             , TRUE  // bRecurse
-                            );
+                        );
             if ( hResource == NULL )
             {
                 sc = GetLastError();
@@ -2357,11 +2357,11 @@ DWORD ClipBookServerVerifyRequiredDependencies(
                     //
 
                     (g_pfnLogEvent)(
-                          pResourceEntryIn->hResourceHandle
+                        pResourceEntryIn->hResourceHandle
                         , LOG_ERROR
                         , L"VerifyRequiredDependencies: Missing storage resource dependency. Error: %1!u!.\n"
                         , sc
-                        );
+                    );
                 } // if: storage resclass dependency
                 else
                 {
@@ -2370,12 +2370,12 @@ DWORD ClipBookServerVerifyRequiredDependencies(
                     //
 
                     (g_pfnLogEvent)(
-                          pResourceEntryIn->hResourceHandle
+                        pResourceEntryIn->hResourceHandle
                         , LOG_ERROR
                         , L"VerifyRequiredDependencies: Missing resource class dependency. Class: %1!u!. Error: %2!u!.\n"
                         , props.pResourceClassInfoValue->rc
                         , sc
-                        );
+                    );
                 } // else: custom resclass dependency
                 goto Cleanup;
             } // if: hResource == NULL
@@ -2389,11 +2389,11 @@ DWORD ClipBookServerVerifyRequiredDependencies(
             //
 
             hResource = ResUtilGetResourceDependencyByName(
-                              pResourceEntryIn->hCluster
+                            pResourceEntryIn->hCluster
                             , pResourceEntryIn->hResource
                             , props.pStringValue->sz
                             , TRUE  // bRecurse
-                            );
+                        );
             if ( hResource == NULL )
             {
                 sc = GetLastError();
@@ -2409,12 +2409,12 @@ DWORD ClipBookServerVerifyRequiredDependencies(
                 } // if:
 
                 (g_pfnLogEvent)(
-                      pResourceEntryIn->hResourceHandle
+                    pResourceEntryIn->hResourceHandle
                     , LOG_ERROR
                     , L"VerifyRequiredDependencies: Missing a required depencency on '%1!s!'. Error: %2!u!.\n"
                     , props.pStringValue->sz
                     , sc
-                    );
+                );
                 goto Cleanup;
             } // if: hResource == NULL
 
@@ -2424,16 +2424,16 @@ DWORD ClipBookServerVerifyRequiredDependencies(
         {
             //
             // If we got here then our list of required dependencies contains an invalid entry.
-            // 
+            //
             //
 
             sc = ERROR_DEPENDENCY_NOT_FOUND;
             (g_pfnLogEvent)(
-                  pResourceEntryIn->hResourceHandle
+                pResourceEntryIn->hResourceHandle
                 , LOG_ERROR
                 , L"VerifyRequiredDependencies: Invalid dependency type. Error: %1!u!.\n"
                 , sc
-                );
+            );
             goto Cleanup;
         } // else: unknown
 
@@ -2448,11 +2448,11 @@ DWORD ClipBookServerVerifyRequiredDependencies(
         {
             sc = ERROR_INVALID_DATA;
             (g_pfnLogEvent)(
-                  pResourceEntryIn->hResourceHandle
+                pResourceEntryIn->hResourceHandle
                 , LOG_ERROR
                 , L"VerifyRequiredDependencies: Invalid property list detected. Error: %1!u!.\n"
                 , sc
-                );
+            );
             goto Cleanup;
         } // if: we've gone beyond the end of the buffer
 
@@ -2501,9 +2501,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 ClipBookServerSetNameHandler(
-      PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
+    PCLIPBOOKSERVER_RESOURCE   pResourceEntryIn
     , LPWSTR                    pwszNameIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     DWORD   cchNameBuffer = 0;
@@ -2520,12 +2520,12 @@ ClipBookServerSetNameHandler(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"Failed to allocate memory for the new resource name '%1!s!'. Error: %2!u!.\n"
             , pwszNameIn
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error allocating memory for the name.
 
@@ -2571,4 +2571,4 @@ CLRES_V1_FUNCTION_TABLE(
     NULL,                               // Release
     ClipBookServerResourceControl,       // ResControl
     NULL                                // ResTypeControl
-    );
+);

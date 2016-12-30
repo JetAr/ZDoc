@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     Copyright (c) Microsoft Corporation
 
@@ -62,7 +62,7 @@ DllMain (
     _In_ HANDLE hInstance,
     _In_ DWORD dwReason,
     _In_ LPVOID pReserved
-    )
+)
 /*++
 
 Routine Description:
@@ -109,7 +109,7 @@ PXEAPI
 PxeProviderInitialize (
     _In_ HANDLE hProvider,
     _In_ HKEY hProviderKey
-    )
+)
 /*++
 
 Routine Description:
@@ -186,7 +186,7 @@ DWORD
 PXEAPI
 PxeProviderShutdown (
     _In_ PVOID pContext
-    )
+)
 /*++
 
 Routine Description:
@@ -220,7 +220,7 @@ PxeProviderRecvRequest (
     _In_ PXE_ADDRESS *pRemoteAddress,
     _Out_ PXE_BOOT_ACTION *pAction,
     _In_ PVOID pContext
-    )
+)
 /*++
 
 Routine Description:
@@ -539,8 +539,8 @@ Return Value:
     W32_CLEANUP_ON_FAILURE(dwError, Cleanup);
 
     hr = StringCchLengthA((STRSAFE_LPCSTR)pszBcdFile,
-                           DHCP_REPLY_PACKET_SIZE,
-                           &cchOptionLen);
+                          DHCP_REPLY_PACKET_SIZE,
+                          &cchOptionLen);
     if (FAILED(hr))
     {
         dwError = GetLastError();
@@ -631,12 +631,12 @@ Cleanup:
 
     if (hOptionHandle!= NULL)
     {
-         WdsBpCloseHandle(hOptionHandle);
+        WdsBpCloseHandle(hOptionHandle);
     }
 
     if (pBuffer!= NULL)
     {
-         delete[] pBuffer;
+        delete[] pBuffer;
     }
 
     return dwError;
@@ -646,7 +646,7 @@ Cleanup:
 DWORD
 InitializeConfiguration (
     VOID
-    )
+)
 /*++
 
 Routine Description:
@@ -717,7 +717,7 @@ Return Value:
                                 wszDefaultBootProgram,
                                 NUMELEM(wszDefaultBootProgram),
                                 g_wszConfigurationFile) == 0 ||
-        wszDefaultBootProgram[0] == 0)
+            wszDefaultBootProgram[0] == 0)
     {
         dwError = ERROR_FILE_NOT_FOUND;
         goto Cleanup;
@@ -751,12 +751,12 @@ Return Value:
     //
 
     if ((GetPrivateProfileString(CONFIGURATION_SECTION,
-                                CONFIGURATION_DEFAULT_BCD_FILE,
-                                NULL,
-                                wszDefaultBcdFile,
-                                NUMELEM(wszDefaultBcdFile),
-                                g_wszConfigurationFile) == 0) ||
-        (wszDefaultBootProgram[0] == 0))
+                                 CONFIGURATION_DEFAULT_BCD_FILE,
+                                 NULL,
+                                 wszDefaultBcdFile,
+                                 NUMELEM(wszDefaultBcdFile),
+                                 g_wszConfigurationFile) == 0) ||
+            (wszDefaultBootProgram[0] == 0))
     {
         dwError = ERROR_FILE_NOT_FOUND;
         goto Cleanup;
@@ -850,7 +850,7 @@ DWORD
 GetClientMacAddress (
     _In_ PVOID pPacket,
     _Inout_updates_(MAX_MAC_ADDR_STRING_LEN) LPWSTR pwszMacAddress
-    )
+)
 /*++
 
 Routine Description:

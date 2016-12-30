@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -35,11 +35,11 @@ int __cdecl main(void)
 
     // Adds a policy range for the policy "testPolicy" on subnet address 10.0.0.0
     dwError = DhcpV4AddPolicyRange(
-                          pwszServer,    //ServerIpAddress, if this is NULL, it means the current server on which the program is run
-                          dwScope,       // SubnetAddress
-                          pwszPolicyName,// Name of the policy
-                          &range         // Range to be added
-                          );
+                  pwszServer,    //ServerIpAddress, if this is NULL, it means the current server on which the program is run
+                  dwScope,       // SubnetAddress
+                  pwszPolicyName,// Name of the policy
+                  &range         // Range to be added
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4AddPolicyRange failed with Error = %d\n",dwError);

@@ -1,4 +1,4 @@
-
+﻿
 #include "imapi2sample.h"
 
 HRESULT EraseMedia(ULONG index, BOOL full)
@@ -23,7 +23,7 @@ HRESULT EraseMedia(ULONG index, BOOL full)
         hr = CoCreateInstance(CLSID_MsftDiscFormat2Erase,
                               NULL, CLSCTX_ALL,
                               IID_PPV_ARGS(&eraser)
-                              );
+                             );
         if (FAILED(hr))
         {
             printf("CoCreateInstance failed\n");
@@ -91,13 +91,13 @@ HRESULT EraseMedia(ULONG index, BOOL full)
             {
                 printf("Failed put_FullErase()");
                 PrintHR(hr);
-            }            
+            }
         }
     }
 
     // release the recorder early...
     ReleaseAndNull(recorder);
-   
+
     // create event
     if (SUCCEEDED(hr))
     {
@@ -141,11 +141,11 @@ HRESULT EraseMedia(ULONG index, BOOL full)
 
             CalcElapsedTime(&startTime, &endTime, &elapsedTime);
             printf(" - Time to erase: %02d:%02d:%02d\n", elapsedTime.wHour,
-                                            elapsedTime.wMinute,
-                                            elapsedTime.wSecond);
+                   elapsedTime.wMinute,
+                   elapsedTime.wSecond);
         }
     }
-    
+
     // unhook events
     if (NULL != eventSink)
     {
@@ -159,7 +159,7 @@ HRESULT EraseMedia(ULONG index, BOOL full)
     {
         printf("EraseMedia succeeded for drive index %d\n",
                index
-               );
+              );
     }
     else
     {

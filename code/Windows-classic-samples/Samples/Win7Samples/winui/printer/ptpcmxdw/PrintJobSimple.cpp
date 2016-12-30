@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,24 +17,24 @@ Routine Description:
 
     A simple job for the printer "Microsoft XPS Document Writer" is created.
     A print ticket is sent as part of this job using ExtEscape. The driver should understand
-    this escape, so we test whether driver is XPS capable before sending the Print Ticket. 
+    this escape, so we test whether driver is XPS capable before sending the Print Ticket.
     A simple line of text is also sent.
-    
+
 Arguments:
 
     <None>
 
 Return Value:
 
-    S_OK if successful, 
-    E_* if there is an error 
+    S_OK if successful,
+    E_* if there is an error
 
 --*/
 
-HRESULT 
+HRESULT
 CreatePrintTicketJobSimple(
-        VOID
-    )
+    VOID
+)
 {
     HDC               hdcMXDW        = NULL;
     HRESULT           hr             = S_OK;
@@ -78,11 +78,11 @@ CreatePrintTicketJobSimple(
     if ( SUCCEEDED(hr) )
     {
         hr = PutTogetherEscapeStructureForPrintTicket(
-                                        MXDCOP_PRINTTICKET_FIXED_DOC,
-                                        pbPTBuf,
-                                        cbPTBuf, 
-                                        &pEscData,
-                                        &cbEscData);
+                 MXDCOP_PRINTTICKET_FIXED_DOC,
+                 pbPTBuf,
+                 cbPTBuf,
+                 &pEscData,
+                 &cbEscData);
     }
 
     //
@@ -92,7 +92,7 @@ CreatePrintTicketJobSimple(
     {
         hdcMXDW = CreateDC( NULL, si.szPrinterName, NULL, NULL);
         if(NULL == hdcMXDW)
-        {   
+        {
             DWORD dwLastError = GetLastError();
             vFormatAndPrint(IDS_APP_CREATEDC_FAILED);
             if ( ERROR_INVALID_PRINTER_NAME == dwLastError )
@@ -100,7 +100,7 @@ CreatePrintTicketJobSimple(
                 vFormatAndPrint(IDS_APP_MXDWPRINTER_NOTINSTALLED);
             }
             hr = HRESULT_FROM_WIN32(dwLastError);
-       }
+        }
     }
 
 
@@ -108,7 +108,7 @@ CreatePrintTicketJobSimple(
     if (SUCCEEDED (hr) )
     {
         hr = IsXPSCapableDriver(hdcMXDW);
-        
+
         // Only a return value of S_OK from IsXPSCapableDriver() means driver is  XPS capable
         // while we were querying the driver.
         // A return value of S_FALSE means driver is not XPS capable
@@ -120,17 +120,18 @@ CreatePrintTicketJobSimple(
     }
 
     if ( SUCCEEDED(hr) )
-    {    
-        DOCINFO DocInfo = { 
-                            sizeof(DOCINFO), 
-                            L"Document with Single PrintTicket", // Title of the print job
-                            NULL,                                // Not specifying output file. Driver will throw UI.
-                            NULL,                                // Not specifying data type. 
-                            0
-                          };
+    {
+        DOCINFO DocInfo =
+        {
+            sizeof(DOCINFO),
+            L"Document with Single PrintTicket", // Title of the print job
+            NULL,                                // Not specifying output file. Driver will throw UI.
+            NULL,                                // Not specifying data type.
+            0
+        };
 
         if( StartDoc(hdcMXDW, &DocInfo) > 0)
-        { 
+        {
             bStartDocSent = TRUE;
         }
         else
@@ -149,7 +150,7 @@ CreatePrintTicketJobSimple(
             bStartPageSent = TRUE;
         }
         else
-        { 
+        {
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
     }
@@ -158,12 +159,12 @@ CreatePrintTicketJobSimple(
     if ( SUCCEEDED (hr) )
     {
         if( ExtEscape(hdcMXDW, MXDC_ESCAPE, cbEscData, (LPCSTR) pEscData, 0, NULL) <= 0 )
-        { 
+        {
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
     }
 
-    // Send some text 
+    // Send some text
     if ( SUCCEEDED (hr) )
     {
         WCHAR szText[] = L"This page is associated with default Print Ticket";
@@ -196,7 +197,7 @@ CreatePrintTicketJobSimple(
 
     if(pEscData != NULL)
     {
-        MemFree (pEscData); 
+        MemFree (pEscData);
         pEscData = NULL;
     }
 

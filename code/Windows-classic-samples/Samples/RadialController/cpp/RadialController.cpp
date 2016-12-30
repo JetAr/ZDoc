@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include <tchar.h>
 #include <StrSafe.h>
 #include <wrl\implements.h>
@@ -42,21 +42,22 @@ int _cdecl _tmain(
     TCHAR *argv[])
 {
     // Register Window Class
-    WNDCLASS wndClass = {
+    WNDCLASS wndClass =
+    {
         CS_DBLCLKS, (WNDPROC)WindowProc,
         0,0,0,0,0,0,0, CLASSNAME
     };
     RegisterClass(&wndClass);
 
     HWND hwnd = CreateWindow(
-        CLASSNAME,
-        L"Message Listener Window",
-        WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_VSCROLL,
-        CW_USEDEFAULT,       // default horizontal position 
-        CW_USEDEFAULT,       // default vertical position 
-        CW_USEDEFAULT,       // default width 
-        CW_USEDEFAULT,       // default height
-        NULL, NULL, NULL, NULL);
+                    CLASSNAME,
+                    L"Message Listener Window",
+                    WS_OVERLAPPEDWINDOW | WS_VISIBLE | WS_VSCROLL,
+                    CW_USEDEFAULT,       // default horizontal position
+                    CW_USEDEFAULT,       // default vertical position
+                    CW_USEDEFAULT,       // default width
+                    CW_USEDEFAULT,       // default height
+                    NULL, NULL, NULL, NULL);
 
     console = GetStdHandle(STD_OUTPUT_HANDLE);
     PrintStartupMessage();

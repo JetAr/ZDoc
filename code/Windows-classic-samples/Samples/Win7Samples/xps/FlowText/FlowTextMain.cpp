@@ -1,4 +1,4 @@
-
+﻿
 //+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -22,10 +22,10 @@
 HRESULT
 MakeTextLayout(
     IDWriteTextLayout** ppTextLayout
-    )
+)
 {
-    static WCHAR TEXT_STRING[] = 
-L"The XML Paper Specification (XPS) provides users and developers with a robust, open and trustworthy format for electronic paper. The XML Paper Specification describes electronic paper in a way that can be read by hardware, read by software, and read by people. XPS documents print better, can be shared easier, are more secure and can be archived with confidence.";
+    static WCHAR TEXT_STRING[] =
+        L"The XML Paper Specification (XPS) provides users and developers with a robust, open and trustworthy format for electronic paper. The XML Paper Specification describes electronic paper in a way that can be read by hardware, read by software, and read by people. XPS documents print better, can be shared easier, are more secure and can be archived with confidence.";
 
     HRESULT hr = S_OK;
 
@@ -37,23 +37,23 @@ L"The XML Paper Specification (XPS) provides users and developers with a robust,
     modifyFormatRange.length = 20;
 
     hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown **>(&pDWriteFactory)
-            );
+             DWRITE_FACTORY_TYPE_SHARED,
+             __uuidof(IDWriteFactory),
+             reinterpret_cast<IUnknown **>(&pDWriteFactory)
+         );
 
     if (SUCCEEDED(hr))
     {
         hr = pDWriteFactory->CreateTextFormat(
-                L"Arial",
-                NULL, //__maybenull IDWriteFontCollection* fontCollection,
-                DWRITE_FONT_WEIGHT_REGULAR,
-                DWRITE_FONT_STYLE_NORMAL,
-                DWRITE_FONT_STRETCH_NORMAL,
-                12.0,
-                L"en-US", //localeName,
-                &pTextFormat
-                );
+                 L"Arial",
+                 NULL, //__maybenull IDWriteFontCollection* fontCollection,
+                 DWRITE_FONT_WEIGHT_REGULAR,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 12.0,
+                 L"en-US", //localeName,
+                 &pTextFormat
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -64,13 +64,13 @@ L"The XML Paper Specification (XPS) provides users and developers with a robust,
     if (SUCCEEDED(hr))
     {
         hr = pDWriteFactory->CreateTextLayout(
-                TEXT_STRING, // at least 100 characters
-                (UINT32)wcslen(TEXT_STRING),
-                pTextFormat,
-                400.0, // limit text width to cause line breaks if text is long enough
-                400.0,
-                &pResultLayout
-                );
+                 TEXT_STRING, // at least 100 characters
+                 (UINT32)wcslen(TEXT_STRING),
+                 pTextFormat,
+                 400.0, // limit text width to cause line breaks if text is long enough
+                 400.0,
+                 &pResultLayout
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -110,17 +110,17 @@ L"The XML Paper Specification (XPS) provides users and developers with a robust,
     }
 
     // cleanup resources
-    if (pResultLayout) 
+    if (pResultLayout)
     {
         pResultLayout->Release();
         pResultLayout = NULL;
     }
-    if (pTextFormat) 
+    if (pTextFormat)
     {
         pTextFormat->Release();
         pTextFormat = NULL;
     }
-    if (pDWriteFactory) 
+    if (pDWriteFactory)
     {
         pDWriteFactory->Release();
         pDWriteFactory = NULL;
@@ -133,10 +133,10 @@ L"The XML Paper Specification (XPS) provides users and developers with a robust,
 // This method saves XPS OM canvas to one page XPS file on Desktop.
 //
 HRESULT
-SaveCanvasToXpsViaPackage( 
-    IXpsOMObjectFactory *xpsFactory, 
+SaveCanvasToXpsViaPackage(
+    IXpsOMObjectFactory *xpsFactory,
     IXpsOMCanvas *canvas
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -192,12 +192,12 @@ SaveCanvasToXpsViaPackage(
 
     if (SUCCEEDED(hr))
     {
-        hr = xpsFactory->CreatePage( 
-                &pageSize,
-                NULL, // language
-                opcPartUri, 
-                &xpsPage
-                );
+        hr = xpsFactory->CreatePage(
+                 &pageSize,
+                 NULL, // language
+                 opcPartUri,
+                 &xpsPage
+             );
         opcPartUri->Release();
         opcPartUri = NULL;
     }
@@ -255,55 +255,55 @@ SaveCanvasToXpsViaPackage(
     if (SUCCEEDED(hr))
     {
         hr = xpsPackage->WriteToFile(
-                szDesktopPath,
-                NULL, // LPSECURITY_ATTRIBUTES
-                FILE_ATTRIBUTE_NORMAL,
-                FALSE // optimizeMarkupSize
-                );
+                 szDesktopPath,
+                 NULL, // LPSECURITY_ATTRIBUTES
+                 FILE_ATTRIBUTE_NORMAL,
+                 FALSE // optimizeMarkupSize
+             );
     }
 
     // release resources
-    if (xpsPackage) 
+    if (xpsPackage)
     {
         xpsPackage->Release();
         xpsPackage = NULL;
     }
-    if (xpsFDS) 
+    if (xpsFDS)
     {
         xpsFDS->Release();
         xpsFDS = NULL;
     }
-    if (fixedDocuments) 
+    if (fixedDocuments)
     {
         fixedDocuments->Release();
         fixedDocuments = NULL;
     }
-    if (xpsFD) 
+    if (xpsFD)
     {
         xpsFD->Release();
         xpsFD = NULL;
     }
-    if (pageRefs) 
+    if (pageRefs)
     {
         pageRefs->Release();
         pageRefs = NULL;
     }
-    if (xpsPageRef) 
+    if (xpsPageRef)
     {
         xpsPageRef->Release();
         xpsPageRef = NULL;
     }
-    if (xpsPage) 
+    if (xpsPage)
     {
         xpsPage->Release();
         xpsPage = NULL;
     }
-    if (opcPartUri) 
+    if (opcPartUri)
     {
         opcPartUri->Release();
         opcPartUri = NULL;
     }
-    if (pageVisuals) 
+    if (pageVisuals)
     {
         pageVisuals->Release();
         pageVisuals = NULL;
@@ -328,12 +328,12 @@ wmain()
     {
         bCOMInitialized = true;
         hr = CoCreateInstance(
-                __uuidof(XpsOMObjectFactory), 
-                NULL, 
-                CLSCTX_INPROC_SERVER,
-                __uuidof(IXpsOMObjectFactory), 
-                reinterpret_cast<LPVOID*>(&xpsFactory)
-                );
+                 __uuidof(XpsOMObjectFactory),
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 __uuidof(IXpsOMObjectFactory),
+                 reinterpret_cast<LPVOID*>(&xpsFactory)
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -347,41 +347,41 @@ wmain()
     }
 
     if (SUCCEEDED(hr))
-    {        
+    {
         hr = textLayout->Draw(
-                NULL, //clientDrawingContext
-                pCanvasBuilder, // IDWriteTextRenderer implementation
-                15.0, // originX
-                15.0 // originY
-                );
+                 NULL, //clientDrawingContext
+                 pCanvasBuilder, // IDWriteTextRenderer implementation
+                 15.0, // originX
+                 15.0 // originY
+             );
     }
 
     if (SUCCEEDED(hr))
     {
-        hr = SaveCanvasToXpsViaPackage( 
-                xpsFactory, 
-                pCanvasBuilder->GetCanvas()
-                );
+        hr = SaveCanvasToXpsViaPackage(
+                 xpsFactory,
+                 pCanvasBuilder->GetCanvas()
+             );
         // pCanvasBuilder->GetResources()  -  xpsPartResources object is also available if streaming serialization is preferred
     }
 
     // release resources
-    if (pCanvasBuilder) 
+    if (pCanvasBuilder)
     {
         pCanvasBuilder->Release();
         pCanvasBuilder = NULL;
     }
-    if (textLayout) 
+    if (textLayout)
     {
         textLayout->Release();
         textLayout = NULL;
     }
-    if (xpsFactory) 
+    if (xpsFactory)
     {
         xpsFactory->Release();
         xpsFactory = NULL;
     }
-    if (bCOMInitialized) 
+    if (bCOMInitialized)
     {
         CoUninitialize();
         bCOMInitialized = false;

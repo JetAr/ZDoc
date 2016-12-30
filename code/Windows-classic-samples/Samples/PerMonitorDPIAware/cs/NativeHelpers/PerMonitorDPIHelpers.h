@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -10,21 +10,21 @@
 
 using namespace System;
 
-namespace NativeHelpers 
+namespace NativeHelpers
 {
-	public ref class PerMonitorDPIHelper
-	{
-	public:
-		
-		static BOOL SetPerMonitorDPIAware();
+public ref class PerMonitorDPIHelper
+{
+public:
 
-		static PROCESS_DPI_AWARENESS GetPerMonitorDPIAware();
-		
-		static double GetDpiForWindow(IntPtr hwnd);
+    static BOOL SetPerMonitorDPIAware();
 
-		static double GetSystemDPI();	
-		
-	private:
-		static double GetDpiForHwnd(HWND hWnd);		
-	};
+    static PROCESS_DPI_AWARENESS GetPerMonitorDPIAware();
+
+    static double GetDpiForWindow(IntPtr hwnd);
+
+    static double GetSystemDPI();
+
+private:
+    static double GetDpiForHwnd(HWND hWnd);
+};
 }

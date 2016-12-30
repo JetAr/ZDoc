@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "stdafx.h"
 #include "atlfile.h"
@@ -37,8 +37,8 @@ public:
 
         return cRef;
     }
-    
-    virtual STDMETHODIMP_(ULONG) Release() 
+
+    virtual STDMETHODIMP_(ULONG) Release()
     {
         LONG cRef = InterlockedDecrement( &m_cRef );
 
@@ -48,7 +48,7 @@ public:
         }
         return( cRef );
     }
-    
+
 private:
     CAtlFile m_file;
     LONG m_cRef;

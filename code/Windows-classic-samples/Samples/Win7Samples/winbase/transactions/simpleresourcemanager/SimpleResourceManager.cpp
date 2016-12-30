@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -41,28 +41,28 @@ public:
     bool CloseConnection();
 
     virtual HRESULT STDMETHODCALLTYPE PrepareRequest(
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfRM,
-            /* [in] */ BOOL fWantMoniker,
-            /* [in] */ BOOL fSinglePhase);
-        
+        /* [in] */ BOOL fRetaining,
+        /* [in] */ DWORD grfRM,
+        /* [in] */ BOOL fWantMoniker,
+        /* [in] */ BOOL fSinglePhase);
+
     virtual HRESULT STDMETHODCALLTYPE CommitRequest(
-            /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW *pNewUOW);
-        
+        /* [in] */ DWORD grfRM,
+        /* [unique][in] */ XACTUOW *pNewUOW);
+
     virtual HRESULT STDMETHODCALLTYPE AbortRequest(
-            /* [unique][in] */ BOID *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW *pNewUOW);
-        
+        /* [unique][in] */ BOID *pboidReason,
+        /* [in] */ BOOL fRetaining,
+        /* [unique][in] */ XACTUOW *pNewUOW);
+
     virtual HRESULT STDMETHODCALLTYPE TMDown(void);
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
-                /* [in] */ REFIID riid,
-                /* [iid_is][out] */ void **ppvObject);
-            
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void **ppvObject);
+
     virtual ULONG STDMETHODCALLTYPE AddRef( void);
-            
+
     virtual ULONG STDMETHODCALLTYPE Release( void);
 
 private:
@@ -103,7 +103,7 @@ bool DTCResourceManager::Init()
 
     // recover any transactions that are not completed
     bool returnValue = DoRecovery();
-    
+
     return returnValue;
 }
 
@@ -111,18 +111,18 @@ HRESULT DTCResourceManager::RegisterWithMSDTC()
 {
     IResourceManagerFactory* pRMFactory = NULL;
     HRESULT hr = S_OK ;
-    
+
     hr = DtcGetTransactionManager(
-    NULL,              // [in] char * pszHost,
-    NULL,              // [in] char * pszTmName,
-    IID_IResourceManagerFactory,    // [in] REFIID riid,
-    0,                // [in] DWORD dwReserved1,
-    0,                // [in] WORD wcbVarLenReserved2,
-    (void *)NULL,          // [in] void * pvVarDataReserved2,
-    (void **)&pRMFactory // [out] void ** ppv
-    );
+             NULL,              // [in] char * pszHost,
+             NULL,              // [in] char * pszTmName,
+             IID_IResourceManagerFactory,    // [in] REFIID riid,
+             0,                // [in] DWORD dwReserved1,
+             0,                // [in] WORD wcbVarLenReserved2,
+             (void *)NULL,          // [in] void * pvVarDataReserved2,
+             (void **)&pRMFactory // [out] void ** ppv
+         );
     if (FAILED (hr))
-    {        
+    {
         std::cout << "DtcGetTransactionManager failed: Error # " << std::hex << hr << ".";
         std::cout << " Make sure MSDTC service is running." << std::endl;
         goto cleanup;
@@ -130,9 +130,9 @@ HRESULT DTCResourceManager::RegisterWithMSDTC()
 
     std::cout << "The resource manager is registering with MSDTC" << std::endl;
     hr = pRMFactory->Create(const_cast<GUID*>(&ResourceManagerGUID),
-        const_cast<char*>(_rmName.c_str()), this, &_pRMManager);
-    if (FAILED (hr)) 
-    {        
+                            const_cast<char*>(_rmName.c_str()), this, &_pRMManager);
+    if (FAILED (hr))
+    {
         std::cout << "IResourceManagerFactory->Create failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
@@ -169,16 +169,16 @@ bool DTCResourceManager::OpenConnection(byte* transactionToken, ULONG tokenSize)
     std::cout << "The resource manager received an OpenConnection request. Enlisting in the transaction..." << std::endl;
     ITransactionReceiverFactory* pTxReceiverFactory = NULL;
     HRESULT hr = DtcGetTransactionManager(
-    NULL,              // [in] char * pszHost,
-    NULL,              // [in] char * pszTmName,
-    IID_ITransactionReceiverFactory,    // [in] REFIID riid,
-    0,                // [in] DWORD dwReserved1,
-    0,                // [in] WORD wcbVarLenReserved2,
-    (void *)NULL,          // [in] void * pvVarDataReserved2,
-    (void **)&pTxReceiverFactory // [out] void ** ppv
-    );
+                     NULL,              // [in] char * pszHost,
+                     NULL,              // [in] char * pszTmName,
+                     IID_ITransactionReceiverFactory,    // [in] REFIID riid,
+                     0,                // [in] DWORD dwReserved1,
+                     0,                // [in] WORD wcbVarLenReserved2,
+                     (void *)NULL,          // [in] void * pvVarDataReserved2,
+                     (void **)&pTxReceiverFactory // [out] void ** ppv
+                 );
     if (FAILED (hr))
-    {        
+    {
         std::cout << "DtcGetTransactionManager for ITransactionReceiverFactory failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
@@ -186,7 +186,7 @@ bool DTCResourceManager::OpenConnection(byte* transactionToken, ULONG tokenSize)
     ITransactionReceiver* pTxReceiver = NULL;
     hr = pTxReceiverFactory->Create(&pTxReceiver);
     if (FAILED(hr))
-    {        
+    {
         std::cout << "pTxReceiverFactory->Create failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
@@ -194,7 +194,7 @@ bool DTCResourceManager::OpenConnection(byte* transactionToken, ULONG tokenSize)
     ITransaction* pTx = NULL;
     hr = pTxReceiver->UnmarshalPropagationToken(tokenSize, transactionToken, &pTx);
     if (FAILED(hr))
-    {        
+    {
         std::cout << "pTxReceiver->UnmarshalPropagationToken failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
@@ -204,7 +204,7 @@ bool DTCResourceManager::OpenConnection(byte* transactionToken, ULONG tokenSize)
 
     hr = _pRMManager->Enlist(pTx, this, &uow, &isoLevel, &_pEnlist);
     if (FAILED(hr))
-    {        
+    {
         std::cout << "pRMManager->Enlist failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
@@ -291,7 +291,7 @@ HRESULT DTCResourceManager::AbortRequest(BOID *pboidReason, BOOL fRetaining, XAC
 HRESULT DTCResourceManager::TMDown(void)
 {
     assert(false); // not yet implemented
-    // here we put recovery code that will "restart the RM": reconnect with MSDTC, re-read the log and 
+    // here we put recovery code that will "restart the RM": reconnect with MSDTC, re-read the log and
     // recover transactions found in it, and start listening for clients
     return S_OK;
 }
@@ -335,7 +335,7 @@ ULONG DTCResourceManager::AddRef()
 ULONG DTCResourceManager::Release()
 {
     ULONG localCount = InterlockedDecrement( (LONG*) &this->_cRef );
-    
+
     if ( 0 == localCount )
     {
         delete this;
@@ -344,7 +344,7 @@ ULONG DTCResourceManager::Release()
     return localCount;
 }
 
-// This function will create an MSDTC transaction 
+// This function will create an MSDTC transaction
 bool CreateDTCTransaction(ITransaction** ppTransaction)
 {
     if(!ppTransaction)
@@ -359,16 +359,16 @@ bool CreateDTCTransaction(ITransaction** ppTransaction)
 
     // Obtain a transaction dispenser interface pointer from the DTC.
     hr = DtcGetTransactionManager(
-    NULL,              // [in] char * pszHost,
-    NULL,              // [in] char * pszTmName,
-    IID_ITransactionDispenser,    // [in] REFIID riid,
-    0,                // [in] DWORD dwReserved1,
-    0,                // [in] WORD wcbVarLenReserved2,
-    (void *)NULL,          // [in] void * pvVarDataReserved2,
-    (void **)&pTransactionDispenser // [out] void ** ppv
-    );
+             NULL,              // [in] char * pszHost,
+             NULL,              // [in] char * pszTmName,
+             IID_ITransactionDispenser,    // [in] REFIID riid,
+             0,                // [in] DWORD dwReserved1,
+             0,                // [in] WORD wcbVarLenReserved2,
+             (void *)NULL,          // [in] void * pvVarDataReserved2,
+             (void **)&pTransactionDispenser // [out] void ** ppv
+         );
     if (FAILED (hr))
-    {        
+    {
         std::cout << "DtcGetTransactionManager failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
@@ -376,14 +376,14 @@ bool CreateDTCTransaction(ITransaction** ppTransaction)
     std::cout << "The client creates a transaction" << std::endl;
     // Initiate a DTC transaction.
     hr = pTransactionDispenser->BeginTransaction(
-    NULL,                        // [in] IUnknown * punkOuter,
-    ISOLATIONLEVEL_SERIALIZABLE, // [in] ISOLEVEL isoLevel,
-    ISOFLAG_RETAIN_NONE,         // [in] ULONG isoFlags,
-    NULL,                        // [in] ITransactionOptions * pOptions,
-    &pTransaction                // [out] ITransaction * ppTransaction
-    );
+             NULL,                        // [in] IUnknown * punkOuter,
+             ISOLATIONLEVEL_SERIALIZABLE, // [in] ISOLEVEL isoLevel,
+             ISOFLAG_RETAIN_NONE,         // [in] ULONG isoFlags,
+             NULL,                        // [in] ITransactionOptions * pOptions,
+             &pTransaction                // [out] ITransaction * ppTransaction
+         );
     if (FAILED (hr))
-    {        
+    {
         std::cout << "BeginTransaction failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
@@ -407,7 +407,7 @@ cleanup:
 }
 
 // This function will "marshal" a transaction object into a byte array called token
-// The token can be passed across processes, machines to resource managers so that they can enlist 
+// The token can be passed across processes, machines to resource managers so that they can enlist
 //    in the transaction
 bool MarshalDTCTransaction(ITransaction* pTransaction, byte** ppTxToken, ULONG* pTokenSize)
 {
@@ -422,14 +422,14 @@ bool MarshalDTCTransaction(ITransaction* pTransaction, byte** ppTxToken, ULONG* 
     // Obtain a transaction dispenser interface pointer from the DTC.
     ITransactionDispenser* pTransactionDispenser = NULL;
     hr = DtcGetTransactionManager(
-    NULL,              // [in] char * pszHost,
-    NULL,              // [in] char * pszTmName,
-    IID_ITransactionDispenser,    // [in] REFIID riid,
-    0,                // [in] DWORD dwReserved1,
-    0,                // [in] WORD wcbVarLenReserved2,
-    (void *)NULL,          // [in] void * pvVarDataReserved2,
-    (void **)&pTransactionDispenser // [out] void ** ppv
-    );
+             NULL,              // [in] char * pszHost,
+             NULL,              // [in] char * pszTmName,
+             IID_ITransactionDispenser,    // [in] REFIID riid,
+             0,                // [in] DWORD dwReserved1,
+             0,                // [in] WORD wcbVarLenReserved2,
+             (void *)NULL,          // [in] void * pvVarDataReserved2,
+             (void **)&pTransactionDispenser // [out] void ** ppv
+         );
     if (FAILED (hr))
     {
         std::cout << "DtcGetTransactionManager failed: Error # " << std::hex << hr << std::endl;
@@ -447,13 +447,13 @@ bool MarshalDTCTransaction(ITransaction* pTransaction, byte** ppTxToken, ULONG* 
     ITransactionTransmitter* pTxTransmitter = NULL;
     hr = pTxTransmitterFactory->Create(&pTxTransmitter);
     if (FAILED(hr))
-    {        
+    {
         std::cout << "pTxTransmitterFactory->Create failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
 
     hr = pTxTransmitter->Set(pTransaction);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         std::cout << "pTxTransmitter->Set failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
@@ -461,7 +461,7 @@ bool MarshalDTCTransaction(ITransaction* pTransaction, byte** ppTxToken, ULONG* 
 
     ULONG tokenSize = 0;
     hr = pTxTransmitter->GetPropagationTokenSize(&tokenSize);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         std::cout << "pTxTransmitter->GetPropagationTokenSize failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
@@ -484,15 +484,15 @@ bool MarshalDTCTransaction(ITransaction* pTransaction, byte** ppTxToken, ULONG* 
     }
     ULONG tokenSizeUsed = 0;
     hr = pTxTransmitter->MarshalPropagationToken(tokenSize, token, &tokenSizeUsed);
-    if (FAILED(hr)) 
-    {        
+    if (FAILED(hr))
+    {
         std::cout << "pTxTransmitter->MarshalPropagationToken failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
 
     hr = pTxTransmitter->Reset();
-    if (FAILED(hr)) 
-    {        
+    if (FAILED(hr))
+    {
         std::cout << "pTxTransmitter->Reset failed: Error # " << std::hex << hr << std::endl;
         goto cleanup;
     }
@@ -519,7 +519,7 @@ cleanup:
         token = NULL;
         return false;
     }
-    
+
     *ppTxToken = token;
     *pTokenSize = tokenSize;
     return true;
@@ -534,7 +534,7 @@ int _tmain(int argc, _TCHAR* argv[])
     DTCResourceManager* resourceManager = NULL;
     try
     {
-        resourceManager = new DTCResourceManager();    
+        resourceManager = new DTCResourceManager();
     }
     catch( std::bad_alloc )
     {
@@ -585,16 +585,16 @@ int _tmain(int argc, _TCHAR* argv[])
     // Commit the transaction.
     HRESULT hr = S_OK;
     hr = pTransaction->Commit(
-    FALSE,                // [in] BOOL fRetaining,
-    XACTTC_SYNC_PHASEONE, // [in] DWORD grfTC,
-    0                     // [in] DWORD grfRM
-    );
+             FALSE,                // [in] BOOL fRetaining,
+             XACTTC_SYNC_PHASEONE, // [in] DWORD grfTC,
+             0                     // [in] DWORD grfRM
+         );
     if (FAILED(hr))
-    {        
+    {
         std::cout << "pTransaction->Commit() failed: Error # " << std::hex << hr << std::endl;
         exit(1); // Replace with specific error handling.
     }
-     
+
     // Release the transaction object.
     pTransaction->Release();
     pTransaction = NULL;
@@ -604,8 +604,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
     std::cout << std::endl << "The client exits" << std::endl;
-    
-    // Since the resource manager is sharing its lifetime with the client process in this sample, 
+
+    // Since the resource manager is sharing its lifetime with the client process in this sample,
     // to avoid "failed to notify" transactions, we will ask for the user to keep this process alive
     // until the resource manager will complete the transaction
     std::cout << std::endl << "Press ENTER after you see the Resource Manager completing the transaction." << std::endl;

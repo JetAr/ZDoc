@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
                    Microsoft RPC Version 2.0
-           
+
                       picklt Example
 
     FILE:       pickltc.c
@@ -78,18 +78,18 @@ void DumpData(
     printf_s( "\n\t\t%p", pObject2->pObject1 );
 
     if ( pObject2->pObject1 )
-        {
+    {
         OBJECT1 * pObject1 = pObject2->pObject1;
 
         printf_s( "\n\tObject1");
         for (i=0; i < ARR_SIZE; i++)
-            {
+        {
             if ( (i % 5) == 0 )
                 printf_s( "\n\t\t");
             printf_s( "%08xl  ", pObject1->al[i] );
-            }
-        printf_s( "\n\t\t%x\n", pObject1->s );
         }
+        printf_s( "\n\t\t%x\n", pObject1->s );
+    }
 
     printf_s( "\n" );
 }
@@ -102,31 +102,36 @@ void WriteDataToFile(
     FILE *      pFile;
     size_t      Count;
 
-    if ( pszFileName ) {
+    if ( pszFileName )
+    {
 
-      fopen_s( &pFile,pszFileName, "w+b" );
-        if ( pFile == NULL ) {
+        fopen_s( &pFile,pszFileName, "w+b" );
+        if ( pFile == NULL )
+        {
             printf_s("Cannot open the file for writing\n");
             exit(1);
-            }
+        }
 
         Count = sizeof(long);
-        if ( fwrite( &ulSizeToWrite, sizeof(byte), Count, pFile) != Count ) {
+        if ( fwrite( &ulSizeToWrite, sizeof(byte), Count, pFile) != Count )
+        {
             printf_s("Cannot write1 to the file\n");
             exit(1);
-            }
+        }
 
         Count = (size_t) ulSizeToWrite;
-        if ( fwrite( pbBuffer, sizeof(byte), Count, pFile) != Count ) {
+        if ( fwrite( pbBuffer, sizeof(byte), Count, pFile) != Count )
+        {
             printf_s("Cannot write2 to the file\n");
             exit(1);
-            }
+        }
 
-        if ( fclose( pFile ) != 0) {
+        if ( fclose( pFile ) != 0)
+        {
             printf_s("Failed to close the file\n");
             exit(1);
-            }
         }
+    }
 }
 
 void ReadDataFromFile(
@@ -139,31 +144,36 @@ void ReadDataFromFile(
     unsigned long   ulWrittenSize;
 
 
-    if ( pszFileName ) {
+    if ( pszFileName )
+    {
 
         fopen_s( &pFile,pszFileName, "r+b" );
-        if ( pFile == NULL ) {
+        if ( pFile == NULL )
+        {
             printf_s("Cannot open the file for reading\n");
             exit(1);
-            }
+        }
 
         Count = sizeof(long);
-        if ( fread( &ulWrittenSize, sizeof(byte), Count, pFile) != Count ) {
+        if ( fread( &ulWrittenSize, sizeof(byte), Count, pFile) != Count )
+        {
             printf_s("Cannot read1 from the file\n");
             exit(1);
-            }
+        }
 
         Count = (size_t)ulWrittenSize;
-        if ( fread( pbBuffer, sizeof(byte), Count, pFile) != Count ) {
+        if ( fread( pbBuffer, sizeof(byte), Count, pFile) != Count )
+        {
             printf_s("Cannot read2 from the file\n");
             exit(1);
-            }
+        }
 
-        if ( fclose( pFile ) != 0) {
+        if ( fclose( pFile ) != 0)
+        {
             printf_s("Failed to close the file\n");
             exit(1);
-            }
         }
+    }
 }
 
 void __cdecl main(int argc, char **argv)
@@ -179,9 +189,12 @@ void __cdecl main(int argc, char **argv)
     int fFixedStyle = 1;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'd':
                 fEncode = 0;
                 break;
@@ -215,12 +228,13 @@ void __cdecl main(int argc, char **argv)
     */
 
     pbPicklingBuffer = (unsigned char *)
-            midl_user_allocate( BUFSIZE * sizeof(unsigned char));
+                       midl_user_allocate( BUFSIZE * sizeof(unsigned char));
 
-    if ( pbPicklingBuffer == NULL ) {
+    if ( pbPicklingBuffer == NULL )
+    {
         printf_s("Cannot allocate the pickling buffer\n");
         exit(1);
-        }
+    }
     else
         memset( pbPicklingBuffer, 0xdd, BUFSIZE );
 
@@ -229,7 +243,8 @@ void __cdecl main(int argc, char **argv)
         The global ImplicitPicHandle is used, but it has to be set up.
     */
 
-    if ( fEncode ) {
+    if ( fEncode )
+    {
 
         unsigned char * pszNameId;
         OBJECT1         Object1;
@@ -239,19 +254,22 @@ void __cdecl main(int argc, char **argv)
 
         printf_s("\nEncoding run: use -d for decoding\n\n");
 
-        if ( fFixedStyle ) {
+        if ( fFixedStyle )
+        {
 
             printf_s("Creating a fixed buffer encoding handle\n");
             status = MesEncodeFixedBufferHandleCreate( pbPicklingBuffer,
-                                                       BUFSIZE,
-                                                       & ulEncodedSize,
-                                                       & ImplicitPicHandle );
+                     BUFSIZE,
+                     & ulEncodedSize,
+                     & ImplicitPicHandle );
             printf_s("MesEncodeFixedBufferHandleCreate returned 0x%x\n", status);
-            if (status) {
+            if (status)
+            {
                 exit(status);
             }
         }
-        else {
+        else
+        {
             /* Incremental style */
 
             pUserState->LastSize = 0;
@@ -260,11 +278,12 @@ void __cdecl main(int argc, char **argv)
 
             printf_s("Creating an incremental encoding handle\n");
             status = MesEncodeIncrementalHandleCreate( pUserState,
-                                                       PicAlloc,
-                                                       PicWrite,
-                                                       & ImplicitPicHandle );
+                     PicAlloc,
+                     PicWrite,
+                     & ImplicitPicHandle );
             printf_s("MesEncodeIncrementalHandleCreate returned 0x%x\n", status);
-            if (status) {
+            if (status)
+            {
                 exit(status);
             }
         }
@@ -281,7 +300,8 @@ void __cdecl main(int argc, char **argv)
         Object2a.pObject1 = NULL;
 
         pObject2b = midl_user_allocate( sizeof(OBJECT2) );
-        if (pObject2b == NULL ) {
+        if (pObject2b == NULL )
+        {
             printf_s("Out of memory for Object2b\n");
             exit(1);
         }
@@ -306,11 +326,12 @@ void __cdecl main(int argc, char **argv)
         WriteDataToFile( pszFileName,
                          pbPicklingBuffer,
                          fFixedStyle  ? ulEncodedSize
-                                      : pUserState->LastSize);
+                         : pUserState->LastSize);
 
         midl_user_free( pObject2b );
     }
-    else {
+    else
+    {
         OBJECT2      Object2c, Object2d;
 
         printf_s("\nDecoding run: use -e for encoding\n\n");
@@ -320,18 +341,21 @@ void __cdecl main(int argc, char **argv)
                           pbPicklingBuffer,
                           BUFSIZE );
 
-        if ( fFixedStyle ) {
+        if ( fFixedStyle )
+        {
 
             printf_s("Creating a decoding handle\n");
             status = MesDecodeBufferHandleCreate( pbPicklingBuffer,
                                                   BUFSIZE,
                                                   & ImplicitPicHandle );
             printf_s("MesDecodeFixedBufferHandleCreate returned 0x%x\n", status);
-            if (status) {
+            if (status)
+            {
                 exit(status);
             }
         }
-        else {
+        else
+        {
 
             pUserState->LastSize = 0;
             pUserState->pMemBuffer = (char *)pbPicklingBuffer;
@@ -339,10 +363,11 @@ void __cdecl main(int argc, char **argv)
 
             printf_s("Creating an incremental decoding handle\n");
             status = MesDecodeIncrementalHandleCreate( pUserState,
-                                                       PicRead,
-                                                       & ImplicitPicHandle );
+                     PicRead,
+                     & ImplicitPicHandle );
             printf_s("MesDecodeIncrementalHandleCreate returned 0x%x\n", status);
-            if (status) {
+            if (status)
+            {
                 exit(status);
             }
         }
@@ -436,7 +461,8 @@ PicAlloc(
 
     if ( (pPic->pMemBuffer - pPic->pBufferStart) + *pCount <= BUFSIZE )
         *ppBuf = (char *)pPic->pMemBuffer;
-    else {
+    else
+    {
         printf_s(" Buffer too small\n");
         exit(1);
     }
@@ -454,7 +480,8 @@ PicWrite(
     PickleControlBlock * pPic = (PickleControlBlock *)pState;
 
 
-    if ( pPic->pMemBuffer != pBuf ) {
+    if ( pPic->pMemBuffer != pBuf )
+    {
         printf_s(" Buffer poiner corrupted\n");
         exit(1);
     }

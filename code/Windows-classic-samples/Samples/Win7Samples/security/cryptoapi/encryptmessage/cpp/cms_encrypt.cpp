@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 
 Title: Encrypting Data and creating an enveloped message
 
-This example shows how to encrypt and decrypt a PKCS7 / CMS message.                
+This example shows how to encrypt and decrypt a PKCS7 / CMS message.
 It illustrates use of the CryptEncryptMessage and CryptDecryptMessage API.
 
 ****************************************************************/
@@ -27,59 +27,59 @@ It illustrates use of the CryptEncryptMessage and CryptDecryptMessage API.
 
 	Prints error information to the console
 *****************************************************************************/
-void 
-ReportError( 
-    LPCWSTR     wszMessage, 
-    DWORD       dwErrCode 
-    )
+void
+ReportError(
+    LPCWSTR     wszMessage,
+    DWORD       dwErrCode
+)
 {
-	LPWSTR pwszMsgBuf = NULL;
+    LPWSTR pwszMsgBuf = NULL;
 
-	if( NULL!=wszMessage && 0!=*wszMessage )
+    if( NULL!=wszMessage && 0!=*wszMessage )
     {
         wprintf( L"%s\n", wszMessage );
     }
 
-	FormatMessageW(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+    FormatMessageW(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM,
         NULL,                                       // Location of message
-                                                    //  definition ignored
+        //  definition ignored
         dwErrCode,                                  // Message identifier for
-                                                    //  the requested message    
+        //  the requested message
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  // Language identifier for
-                                                    //  the requested message
+        //  the requested message
         (LPWSTR) &pwszMsgBuf,                       // Buffer that receives
-                                                    //  the formatted message
+        //  the formatted message
         0,                                          // Size of output buffer
-                                                    //  not needed as allocate
-                                                    //  buffer flag is set
+        //  not needed as allocate
+        //  buffer flag is set
         NULL                                        // Array of insert values
-		);
-	
-	if( NULL != pwszMsgBuf )
-	{
-	    wprintf( L"Error: 0x%08x (%d) %s\n", dwErrCode, dwErrCode, pwszMsgBuf );
-		LocalFree(pwszMsgBuf);
-	}
-	else
-	{
-	    wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
-	}
+    );
+
+    if( NULL != pwszMsgBuf )
+    {
+        wprintf( L"Error: 0x%08x (%d) %s\n", dwErrCode, dwErrCode, pwszMsgBuf );
+        LocalFree(pwszMsgBuf);
+    }
+    else
+    {
+        wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
+    }
 }
 
 /*****************************************************************************
   HrLoadFile
 
-    Load file into allocated (*ppbData). 
+    Load file into allocated (*ppbData).
     The caller must free the memory by LocalFree().
 *****************************************************************************/
 HRESULT
 HrLoadFile(
-	LPCWSTR  wszFileName,
+    LPCWSTR  wszFileName,
     PBYTE   *ppbData,
     DWORD   *pcbData
-    )
+)
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE;
     DWORD       cbRead = 0;
@@ -88,23 +88,23 @@ HrLoadFile(
     *ppbData = NULL;
     *pcbData = 0;
 
-    hFile = CreateFileW( wszFileName, 
-                        GENERIC_READ,
-                        0,
-                        NULL, 
-                        OPEN_EXISTING, 
-                        0, 
-                        NULL );
+    hFile = CreateFileW( wszFileName,
+                         GENERIC_READ,
+                         0,
+                         NULL,
+                         OPEN_EXISTING,
+                         0,
+                         NULL );
 
     if( INVALID_HANDLE_VALUE == hFile )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
     *pcbData = GetFileSize( hFile, NULL );
-    if( *pcbData == 0 ) 
+    if( *pcbData == 0 )
     {
         hr = S_FALSE;
         goto CleanUp;
@@ -114,14 +114,14 @@ HrLoadFile(
     if( NULL == *ppbData )
     {
         hr = HRESULT_FROM_WIN32( ERROR_OUTOFMEMORY );
-        
+
         goto CleanUp;
     }
 
     if( !ReadFile( hFile, *ppbData, *pcbData, &cbRead, NULL ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -153,33 +153,33 @@ CleanUp:
 HRESULT
 HrSaveFile(
     LPCWSTR             wszFileName,
-	PBYTE               pbData,
+    PBYTE               pbData,
     DWORD               cbData
-    )
+)
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE;
     HRESULT     hr = S_OK;
     DWORD       cbWritten = 0;
 
-    hFile = CreateFileW( wszFileName, 
-                        GENERIC_WRITE,
-                        0,
-                        NULL, 
-                        CREATE_ALWAYS, 
-                        0, 
-                        NULL );
+    hFile = CreateFileW( wszFileName,
+                         GENERIC_WRITE,
+                         0,
+                         NULL,
+                         CREATE_ALWAYS,
+                         0,
+                         NULL );
 
     if( INVALID_HANDLE_VALUE == hFile )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
     if( !WriteFile( hFile, pbData, cbData, &cbWritten, NULL ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -197,10 +197,10 @@ CleanUp:
  Usage
 
 *****************************************************************************/
-void 
-Usage( 
-    LPCWSTR wsName 
-    )
+void
+Usage(
+    LPCWSTR wsName
+)
 {
     wprintf( L"%s [Options] {COMMAND}\n", wsName );
     wprintf( L"    Options:\n" );
@@ -226,17 +226,17 @@ __cdecl
 wmain(
     int     argc,
     LPWSTR  argv[]
-    )
+)
 {
     HRESULT                     hr = S_OK;
 
-    BOOL                        fEncrypt = TRUE;        
+    BOOL                        fEncrypt = TRUE;
 
     LPCWSTR                     pwszInputFile = NULL;
     LPCWSTR                     pwszOutputFile = NULL;
 
     BYTE                        *pbInput = NULL;
-    DWORD                       cbInput = 0;    
+    DWORD                       cbInput = 0;
     BYTE                        *pbOutput = NULL;
     DWORD                       cbOutput = 0;
 
@@ -258,7 +258,7 @@ wmain(
     for( i=1; i<argc; i++ )
     {
         if ( lstrcmpW (argv[i], L"/?") == 0 ||
-             lstrcmpW (argv[i], L"-?") == 0 ) 
+                lstrcmpW (argv[i], L"-?") == 0 )
         {
             Usage( L"cms_encrypt.exe" );
             goto CleanUp;
@@ -272,43 +272,40 @@ wmain(
             if( i+1 >= argc )
             {
                 hr = E_INVALIDARG;
-                
+
                 goto CleanUp;
             }
 
             pwszStoreName = argv[++i];
         }
-        else
-        if ( lstrcmpW (argv[i], L"-n") == 0 )
+        else if ( lstrcmpW (argv[i], L"-n") == 0 )
         {
             if( i+1 >= argc )
             {
                 hr = E_INVALIDARG;
-                
+
                 goto CleanUp;
             }
 
             pwszCName = argv[++i];
         }
-        else
-        if ( lstrcmpW (argv[i], L"-a") == 0 )
+        else if ( lstrcmpW (argv[i], L"-a") == 0 )
         {
             if( i+1 >= argc )
             {
                 hr = E_INVALIDARG;
-                
+
                 goto CleanUp;
             }
 
             pwszAlgName = argv[++i];
         }
-        else
-        if ( lstrcmpW (argv[i], L"-k") == 0 )
+        else if ( lstrcmpW (argv[i], L"-k") == 0 )
         {
             if( i+1 >= argc )
             {
                 hr = E_INVALIDARG;
-                
+
                 goto CleanUp;
             }
 
@@ -328,8 +325,7 @@ wmain(
         pwszInputFile = argv[++i];
         pwszOutputFile = argv[++i];
     }
-    else
-    if( 0 == lstrcmpW (argv[i], L"DECRYPT"))
+    else if( 0 == lstrcmpW (argv[i], L"DECRYPT"))
     {
         if( i+2 >= argc )
         {
@@ -357,13 +353,13 @@ wmain(
     // Open the certificate store to be searched.
 
     hStoreHandle = CertOpenStore(
-                           CERT_STORE_PROV_SYSTEM,          // the store provider type
-                           0,                               // the encoding type is not needed
-                           NULL,                            // use the default HCRYPTPROV
-                           CERT_SYSTEM_STORE_CURRENT_USER,  // set the store location in a 
-                                                            //  registry location
-                           pwszStoreName
-                           );                               // the store name 
+                       CERT_STORE_PROV_SYSTEM,          // the store provider type
+                       0,                               // the encoding type is not needed
+                       NULL,                            // use the default HCRYPTPROV
+                       CERT_SYSTEM_STORE_CURRENT_USER,  // set the store location in a
+                       //  registry location
+                       pwszStoreName
+                   );                               // the store name
 
     if( NULL == hStoreHandle )
     {
@@ -373,13 +369,13 @@ wmain(
 
     //
     // Load file
-    // 
+    //
 
     hr = HrLoadFile(
-                                            pwszInputFile,
-                                            &pbInput,
-                                            &cbInput
-                                            );
+             pwszInputFile,
+             &pbInput,
+             &cbInput
+         );
     if( FAILED(hr) )
     {
         wprintf( L"Unable to read file: %s\n", pwszInputFile );
@@ -395,18 +391,18 @@ wmain(
         // Get a certificate that has the specified Subject Name
 
         pRecipientCert = CertFindCertificateInStore(
-                               hStoreHandle,
-                               X509_ASN_ENCODING ,        // Use X509_ASN_ENCODING
-                               0,                         // No dwFlags needed
-                               CERT_FIND_SUBJECT_STR,     // Find a certificate with a
-                                                          //  subject that matches the 
-                                                          //  string in the next parameter
-                               pwszCName,                 // The Unicode string to be found
-                                                          //  in a certificate's subject
-                               NULL);                     // NULL for the first call to the
-                                                          //  function; In all subsequent
-                                                          //  calls, it is the last pointer
-                                                          //  returned by the function
+                             hStoreHandle,
+                             X509_ASN_ENCODING,         // Use X509_ASN_ENCODING
+                             0,                         // No dwFlags needed
+                             CERT_FIND_SUBJECT_STR,     // Find a certificate with a
+                             //  subject that matches the
+                             //  string in the next parameter
+                             pwszCName,                 // The Unicode string to be found
+                             //  in a certificate's subject
+                             NULL);                     // NULL for the first call to the
+        //  function; In all subsequent
+        //  calls, it is the last pointer
+        //  returned by the function
         if( NULL == pRecipientCert )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
@@ -414,7 +410,7 @@ wmain(
         }
 
         //-------------------------------------------------------------------
-        // Initialize the CRYPT_ENCRYPT_MESSAGE_PARA structure. 
+        // Initialize the CRYPT_ENCRYPT_MESSAGE_PARA structure.
 
         EncryptParams.cbSize =  sizeof(EncryptParams);
         EncryptParams.dwMsgEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;
@@ -428,9 +424,9 @@ wmain(
         PCCRYPT_OID_INFO pOidInfo = CryptFindOIDInfo(
                                         CRYPT_OID_INFO_NAME_KEY,
                                         (void*)pwszAlgName,
-                                        CRYPT_ENCRYPT_ALG_OID_GROUP_ID | 
-                                            (cKeySize << CRYPT_OID_INFO_OID_GROUP_BIT_LEN_SHIFT)
-                                        );
+                                        CRYPT_ENCRYPT_ALG_OID_GROUP_ID |
+                                        (cKeySize << CRYPT_OID_INFO_OID_GROUP_BIT_LEN_SHIFT)
+                                    );
         if( NULL == pOidInfo )
         {
             hr = CRYPT_E_UNKNOWN_ALGO;
@@ -444,13 +440,13 @@ wmain(
         // Call CryptEncryptMessage.
 
         if( !CryptEncryptMessage(
-                                  &EncryptParams,        // Pointer to encryption parameters
-                                  1,                     // Number of elements in the CertArray
-                                  &pRecipientCert,       // Array of pointers to recipient certificates
-                                  pbInput,               // Pointer to message to be encrypted
-                                  cbInput,               // Size of message to be encrypted
-                                  NULL,                  // Pointer to encrypted content
-                                  &cbOutput))            // Size of encrypted content
+                    &EncryptParams,        // Pointer to encryption parameters
+                    1,                     // Number of elements in the CertArray
+                    &pRecipientCert,       // Array of pointers to recipient certificates
+                    pbInput,               // Pointer to message to be encrypted
+                    cbInput,               // Size of message to be encrypted
+                    NULL,                  // Pointer to encrypted content
+                    &cbOutput))            // Size of encrypted content
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             wprintf( L"FAILED: CryptEncryptMessage\n" );
@@ -470,13 +466,13 @@ wmain(
         // Call CryptEncryptMessage again to encrypt the content.
 
         if( !CryptEncryptMessage(
-                                  &EncryptParams,        // Pointer to encryption parameters
-                                  1,                    // Number of elements in the CertArray
-                                  &pRecipientCert,        // Array of pointers to recipient certificates
-                                  pbInput,                // Pointer to message to be encrypted
-                                  cbInput,                // Size of message to be encrypted
-                                  pbOutput,                // Pointer to encrypted content
-                                  &cbOutput))            // Size of encrypted content
+                    &EncryptParams,        // Pointer to encryption parameters
+                    1,                    // Number of elements in the CertArray
+                    &pRecipientCert,        // Array of pointers to recipient certificates
+                    pbInput,                // Pointer to message to be encrypted
+                    cbInput,                // Size of message to be encrypted
+                    pbOutput,                // Pointer to encrypted content
+                    &cbOutput))            // Size of encrypted content
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             goto CleanUp;
@@ -501,13 +497,13 @@ wmain(
         //  Call CryptDecryptMessage to get the returned data size.
 
         if( !CryptDecryptMessage(
-                                              &DecryptParams,        // Pointer to decryption parameters
-                                              pbInput,                // Pointer to encrypted content
-                                              cbInput,                // Size of encrypted content
-                                              NULL,                    // Pointer to decrypted message
-                                              &cbOutput,            // Size of decrypted message
-                                              NULL))                // Pointer to certificate that corresponds
-                                                                    // to private exchange key for decryption
+                    &DecryptParams,        // Pointer to decryption parameters
+                    pbInput,                // Pointer to encrypted content
+                    cbInput,                // Size of encrypted content
+                    NULL,                    // Pointer to decrypted message
+                    &cbOutput,            // Size of decrypted message
+                    NULL))                // Pointer to certificate that corresponds
+            // to private exchange key for decryption
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             wprintf( L"FAILED: CryptDecryptMessage\n" );
@@ -528,13 +524,13 @@ wmain(
         // Call CryptDecryptMessage to decrypt the data.
 
         if( !CryptDecryptMessage(
-                                              &DecryptParams,        // Pointer to decryption parameters
-                                              pbInput,                // Pointer to encrypted content
-                                              cbInput,                // Size of encrypted content
-                                              pbOutput,                // Pointer to decrypted message
-                                              &cbOutput,            // Size of decrypted message
-                                              NULL))                // Pointer to certificate that corresponds
-                                                                    // to private exchange key for decryption
+                    &DecryptParams,        // Pointer to decryption parameters
+                    pbInput,                // Pointer to encrypted content
+                    cbInput,                // Size of encrypted content
+                    pbOutput,                // Pointer to decrypted message
+                    &cbOutput,            // Size of decrypted message
+                    NULL))                // Pointer to certificate that corresponds
+            // to private exchange key for decryption
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             goto CleanUp;
@@ -544,14 +540,14 @@ wmain(
     }
 
     hr = HrSaveFile(
-                                pwszOutputFile,
-                                pbOutput,
-                                cbOutput
-                                );
+             pwszOutputFile,
+             pbOutput,
+             cbOutput
+         );
     if( FAILED(hr) )
     {
         wprintf( L"Unable to save file: %s\n", pwszOutputFile );
-        
+
         goto CleanUp;
     }
 

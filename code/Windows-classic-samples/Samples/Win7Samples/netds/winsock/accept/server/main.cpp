@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,20 +26,24 @@ const char *AFImage(BYTE addressFamily)
 {
     char *szRetVal;
 
-    // return the printable string equivalent of the corresponding 
+    // return the printable string equivalent of the corresponding
     // address family.
     switch (addressFamily)
     {
-        case AF_UNSPEC : szRetVal = "AF_UNSPEC";
-                         break;
-        case AF_INET   : szRetVal = "AF_INET";
-                         break;
-        case AF_INET6  : szRetVal = "AF_INET6";
-                         break;
-        default        : szRetVal = "Unrecognized";
-                         break;
+    case AF_UNSPEC :
+        szRetVal = "AF_UNSPEC";
+        break;
+    case AF_INET   :
+        szRetVal = "AF_INET";
+        break;
+    case AF_INET6  :
+        szRetVal = "AF_INET6";
+        break;
+    default        :
+        szRetVal = "Unrecognized";
+        break;
     }
-    
+
     return szRetVal;
 }
 
@@ -57,14 +61,17 @@ const char *AcceptTypeImage(BYTE typeOfAccept)
     // to the user of his choices.
     switch (typeOfAccept)
     {
-        case NON_BLOCKING_ACCEPT : szRetVal = "NON_BLOCKING_ACCEPT";
-                                   break;
-        case ASYNC_SELECT_ACCEPT : szRetVal = "ASYNC_SELECT_ACCEPT";
-                                   break;
-        default                  : szRetVal = "Unrecognized";
-                                   break;
+    case NON_BLOCKING_ACCEPT :
+        szRetVal = "NON_BLOCKING_ACCEPT";
+        break;
+    case ASYNC_SELECT_ACCEPT :
+        szRetVal = "ASYNC_SELECT_ACCEPT";
+        break;
+    default                  :
+        szRetVal = "Unrecognized";
+        break;
     }
-    
+
     return szRetVal;
 }
 
@@ -72,7 +79,7 @@ const char *AcceptTypeImage(BYTE typeOfAccept)
 
 /*
     This function prints the available command-line options, the arguments
-    expected by each of them and the valid input values and the default 
+    expected by each of them and the valid input values and the default
     values for each them.
 */
 void PrintUsage(char *szProgramName)
@@ -96,10 +103,10 @@ void PrintUsage(char *szProgramName)
            "\n",
            szProgramName,
            DEFAULT_ADDRESS_FAMILY,
-          ( DEFAULT_INTERFACE == NULL ? "NULL" : DEFAULT_INTERFACE),
+           ( DEFAULT_INTERFACE == NULL ? "NULL" : DEFAULT_INTERFACE),
            DEFAULT_PORT,
            DEFAULT_TYPE_OF_ACCEPT
-           );
+          );
 
     return;
 }
@@ -111,13 +118,13 @@ void PrintUsage(char *szProgramName)
 BOOL ParseArguments(int argc, char *argv[])
 {
     // holds the return value from this function.
-    // TRUE indicates that all the supplied arguments are valid. 
+    // TRUE indicates that all the supplied arguments are valid.
     // FALSE indicates incorrect or insufficient number of arguments.
     BOOL retVal = FALSE;
 
     // loop index to go over the command-line arguments one by one.
     int i;
-    
+
     printf("Entering ParseArguments()\n");
 
     // fill up the default arguments and let the user options override these.
@@ -125,7 +132,7 @@ BOOL ParseArguments(int argc, char *argv[])
     g_AcceptContext.szInterface = DEFAULT_INTERFACE;
     g_AcceptContext.szPort = DEFAULT_PORT;
     g_AcceptContext.typeOfAccept = DEFAULT_TYPE_OF_ACCEPT;
-    
+
 
     // process each argument in the argv list.
     for (i = 1; i < argc ; i++)
@@ -143,157 +150,157 @@ BOOL ParseArguments(int argc, char *argv[])
         // process the option.
         switch(argv[i][1])
         {
-            case 'a' :
-            
-                // Address Family. 
-                // should be -a 0 or -a 4 or -a 6
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Argument 0/4/6 needed for -a option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
+        case 'a' :
 
-                // extract and validate the AF number.
-                switch(atoi(argv[i+1]))
-                {
-                    // Unspecified. 
-                    case 0:
-                      g_AcceptContext.addressFamily = AF_UNSPEC;
-                      break;
+            // Address Family.
+            // should be -a 0 or -a 4 or -a 6
 
-                    // IPv4.
-                    case 4:
-                      g_AcceptContext.addressFamily = AF_INET;
-                      break;                      
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Argument 0/4/6 needed for -a option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
 
-                    // IPv6.
-                    case 6:
-                      g_AcceptContext.addressFamily = AF_INET6;
-                      break;                      
-
-                    // Invalid value.
-                    default:
-                      printf("ERROR: Invalid address family. Must be 0/4/6\n");
-                      PrintUsage(argv[0]);
-                      goto CLEANUP;
-                }
-
-                // indicate that we have processed the next argument as well.
-                i++; 
-
-                // AF was fine. continue.
+            // extract and validate the AF number.
+            switch(atoi(argv[i+1]))
+            {
+            // Unspecified.
+            case 0:
+                g_AcceptContext.addressFamily = AF_UNSPEC;
                 break;
 
-            case 'i' :
-
-                // Interface to listen on.
-                // should be -i <interface>
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Interface needed for -i option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // make sure the input string length is less than
-                // the INET6_ADDRSTRLEN, the maximum valid IP address length.
-                if (FAILED(StringCchLength(argv[i+1],INET6_ADDRSTRLEN, NULL)))
-                {
-                    printf("ERROR: Interface string too long. "
-                           "can't exceed %d characters\n", 
-                           INET6_ADDRSTRLEN);
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // remember the interface string.
-                g_AcceptContext.szInterface = argv[i+1];
-
-                // indicate that we have processed the next argument as well.
-                i++; 
-
-                // continue.            
+            // IPv4.
+            case 4:
+                g_AcceptContext.addressFamily = AF_INET;
                 break;
 
-            case 'e' :
-            
-                // Endpoint or Port.
-                // should be -e <port number>
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Port number needed for -e option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // make sure the input string length is less than
-                // the maximum length for a service name.
-                if (FAILED(StringCchLength(argv[i+1], NI_MAXSERV, NULL)))
-                {
-                    printf("ERROR: Port number too long. "
-                           "can't exceed %d characters\n", 
-                           NI_MAXSERV);
-
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
-
-                // remember the port number string.
-                g_AcceptContext.szPort = argv[i+1];
-
-                // indicate that we have processed the next argument as well.
-                i++; 
-
-                // continue.            
+            // IPv6.
+            case 6:
+                g_AcceptContext.addressFamily = AF_INET6;
                 break;
-                
-            case 't' :
-           
-                // Type of Accept.
-                // should be -t 1 or -t 2
-                
-                // first check if there's one more argument.
-                if (i + 1 >= argc)
-                {
-                    printf("ERROR: Argument 1 or 2 needed for -t option\n");
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
 
-                // extract the type value
-                g_AcceptContext.typeOfAccept = (BYTE) atoi(argv[i+1]);
+            // Invalid value.
+            default:
+                printf("ERROR: Invalid address family. Must be 0/4/6\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
 
-                // indicate that we have processed the next argument as well.
-                i++; 
+            // indicate that we have processed the next argument as well.
+            i++;
 
-                // validate the accept type.
-                if (!(g_AcceptContext.typeOfAccept == 1 ||
-                      g_AcceptContext.typeOfAccept == 2))
-                {
-                    printf("ERROR: Invalid accept type: %d. Must be 1 or 2\n",
-                            g_AcceptContext.addressFamily);
-                    PrintUsage(argv[0]);
-                    goto CLEANUP;
-                }
+            // AF was fine. continue.
+            break;
 
-                // Accept type was fine. continue.
-                break;
-                
-            case 'h' : // help
-            case '?' : // help
-                        PrintUsage(argv[0]);
-                        goto CLEANUP;                        
-            default  : 
-                        printf("ERROR: Unrecognized option: %s\n", argv[i]);
-                        PrintUsage(argv[0]);
-                        goto CLEANUP;                        
+        case 'i' :
+
+            // Interface to listen on.
+            // should be -i <interface>
+
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Interface needed for -i option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // make sure the input string length is less than
+            // the INET6_ADDRSTRLEN, the maximum valid IP address length.
+            if (FAILED(StringCchLength(argv[i+1],INET6_ADDRSTRLEN, NULL)))
+            {
+                printf("ERROR: Interface string too long. "
+                       "can't exceed %d characters\n",
+                       INET6_ADDRSTRLEN);
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // remember the interface string.
+            g_AcceptContext.szInterface = argv[i+1];
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // continue.
+            break;
+
+        case 'e' :
+
+            // Endpoint or Port.
+            // should be -e <port number>
+
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Port number needed for -e option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // make sure the input string length is less than
+            // the maximum length for a service name.
+            if (FAILED(StringCchLength(argv[i+1], NI_MAXSERV, NULL)))
+            {
+                printf("ERROR: Port number too long. "
+                       "can't exceed %d characters\n",
+                       NI_MAXSERV);
+
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // remember the port number string.
+            g_AcceptContext.szPort = argv[i+1];
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // continue.
+            break;
+
+        case 't' :
+
+            // Type of Accept.
+            // should be -t 1 or -t 2
+
+            // first check if there's one more argument.
+            if (i + 1 >= argc)
+            {
+                printf("ERROR: Argument 1 or 2 needed for -t option\n");
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // extract the type value
+            g_AcceptContext.typeOfAccept = (BYTE) atoi(argv[i+1]);
+
+            // indicate that we have processed the next argument as well.
+            i++;
+
+            // validate the accept type.
+            if (!(g_AcceptContext.typeOfAccept == 1 ||
+                    g_AcceptContext.typeOfAccept == 2))
+            {
+                printf("ERROR: Invalid accept type: %d. Must be 1 or 2\n",
+                       g_AcceptContext.addressFamily);
+                PrintUsage(argv[0]);
+                goto CLEANUP;
+            }
+
+            // Accept type was fine. continue.
+            break;
+
+        case 'h' : // help
+        case '?' : // help
+            PrintUsage(argv[0]);
+            goto CLEANUP;
+        default  :
+            printf("ERROR: Unrecognized option: %s\n", argv[i]);
+            PrintUsage(argv[0]);
+            goto CLEANUP;
         }
     }
 
@@ -304,13 +311,13 @@ BOOL ParseArguments(int argc, char *argv[])
     printf("\tAddress Family = %s\n", AFImage(g_AcceptContext.addressFamily));
     printf("\tInterface = %s\n",g_AcceptContext.szInterface);
     printf("\tPort = %s\n", g_AcceptContext.szPort);
-    printf("\tType of Accept = %s\n", 
-                            AcceptTypeImage(g_AcceptContext.typeOfAccept));  
+    printf("\tType of Accept = %s\n",
+           AcceptTypeImage(g_AcceptContext.typeOfAccept));
 
     // all went well, signal that we can proceed.
     retVal = TRUE;
 
-CLEANUP:    
+CLEANUP:
 
     printf("Exiting ParseArguments()\n");
     return retVal;
@@ -345,7 +352,7 @@ int _cdecl main(int argc, char *argv[])
     if (retVal != 0)
     {
         printf("WSAStartup failed. Error = %d\n", retVal);
-        goto CLEANUP;        
+        goto CLEANUP;
     }
 
     // Depending on the command-line options given, create one or more
@@ -355,18 +362,18 @@ int _cdecl main(int argc, char *argv[])
     // Depending on the type of accept requested, call the suitable function.
     switch(g_AcceptContext.typeOfAccept)
     {
-        case NON_BLOCKING_ACCEPT:
-            NonBlockingAcceptMain();
-            break;
+    case NON_BLOCKING_ACCEPT:
+        NonBlockingAcceptMain();
+        break;
 
-        case ASYNC_SELECT_ACCEPT:
-            AsyncSelectAcceptMain();
-            break;
+    case ASYNC_SELECT_ACCEPT:
+        AsyncSelectAcceptMain();
+        break;
 
-        default:
-            // some error. return a non-zero error code.
-            retVal = 1;
-            break;
+    default:
+        // some error. return a non-zero error code.
+        retVal = 1;
+        break;
     }
 
     // we may not come here as per the current implementation since
@@ -381,7 +388,7 @@ int _cdecl main(int argc, char *argv[])
 
     // Inform Winsock that we're done with all the Winsock APIs.
     WSACleanup();
-  
+
 CLEANUP:
 
     printf("Exiting main()\n");

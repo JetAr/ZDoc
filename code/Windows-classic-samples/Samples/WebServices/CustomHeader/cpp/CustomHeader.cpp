@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -58,91 +58,91 @@ Exit:
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_MESSAGE* message = NULL;
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a message
     hr = WsCreateMessage(
-        WS_ENVELOPE_VERSION_SOAP_1_2, 
-        WS_ADDRESSING_VERSION_1_0, 
-        NULL, 
-        0, 
-        &message, 
-        error);
+             WS_ENVELOPE_VERSION_SOAP_1_2,
+             WS_ADDRESSING_VERSION_1_0,
+             NULL,
+             0,
+             &message,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Initialize the message
     hr = WsInitializeMessage(message, WS_BLANK_MESSAGE, NULL, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Initialize purchase order
     _PurchaseOrderType purchaseOrderToAdd;
     purchaseOrderToAdd.quantity = 100;
     purchaseOrderToAdd.productName = L"Pencil";
-    
+
     // Add purchase order data as a header
     hr = WsAddCustomHeader(
-        message,
-        &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
-        WS_WRITE_REQUIRED_VALUE,
-        &purchaseOrderToAdd,
-        sizeof(purchaseOrderToAdd),
-        0,
-        error);
-    
+             message,
+             &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
+             WS_WRITE_REQUIRED_VALUE,
+             &purchaseOrderToAdd,
+             sizeof(purchaseOrderToAdd),
+             0,
+             error);
+
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Get the purchase order header from the message
     _PurchaseOrderType* purchaseOrder;
     hr = WsGetCustomHeader(
-        message,
-        &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
-        WS_SINGLETON_HEADER,
-        0,
-        WS_READ_REQUIRED_POINTER,
-        NULL,
-        &purchaseOrder,
-        sizeof(purchaseOrder),
-        NULL,
-        error);
+             message,
+             &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
+             WS_SINGLETON_HEADER,
+             0,
+             WS_READ_REQUIRED_POINTER,
+             NULL,
+             &purchaseOrder,
+             sizeof(purchaseOrder),
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Print out header contents
     wprintf(L"%ld, %s\n",
-        purchaseOrder->quantity,
-        purchaseOrder->productName);
-    
+            purchaseOrder->quantity,
+            purchaseOrder->productName);
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (message != NULL)
     {
         WsFreeMessage(message);

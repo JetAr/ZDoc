@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -50,7 +50,7 @@ public:
     };
 
 public:
-    SampleEngine(){}
+    SampleEngine() {}
 
     SampleEngine(_In_ PCWSTR const languageTag)
     {
@@ -94,16 +94,16 @@ public:
                 const wchar_t* nextWordStart = FindFirstNonDelimiter(wordEnd);
                 const wchar_t* nextWordEnd = FindFirstDelimiter(nextWordStart);
 
-                if (ShouldIgnoreRepeatedWord() && 
-                    (CSTR_EQUAL == CompareStringOrdinal(wordStart, static_cast<int>(wordEnd - wordStart),
-                                                        nextWordStart, static_cast<int>(nextWordEnd - nextWordStart), FALSE)))
+                if (ShouldIgnoreRepeatedWord() &&
+                        (CSTR_EQUAL == CompareStringOrdinal(wordStart, static_cast<int>(wordEnd - wordStart),
+                                nextWordStart, static_cast<int>(nextWordEnd - nextWordStart), FALSE)))
                 {
                     result->correctiveAction = CorrectiveActionDelete;
                     result->startIndex = nextWordStart - text;
                     result->errorLength = nextWordEnd - nextWordStart;
                     break;
                 }
-                
+
                 currentPosition = wordEnd;
             }
             else
@@ -126,8 +126,8 @@ public:
 
         return hr;
     }
-    
-    HRESULT GetSuggestions(_In_ PCWSTR const word, _In_ const size_t maxSuggestions, _Out_range_(0, maxSuggestions) size_t* numSuggestions, 
+
+    HRESULT GetSuggestions(_In_ PCWSTR const word, _In_ const size_t maxSuggestions, _Out_range_(0, maxSuggestions) size_t* numSuggestions,
                            _Out_writes_to_(maxSuggestions, *numSuggestions) wchar_t suggestionList[][MAX_WORD_SIZE])
     {
         HRESULT hr = S_OK;

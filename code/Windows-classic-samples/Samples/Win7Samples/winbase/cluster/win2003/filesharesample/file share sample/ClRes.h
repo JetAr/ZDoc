@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -70,19 +70,19 @@
 #define FILESHARESAMPLE_SVCNAME   L"LanmanServer"
 
 BOOL WINAPI FileShareSampleDllMain(
-      HINSTANCE hDllHandleIn
+    HINSTANCE hDllHandleIn
     , DWORD     nReasonIn
     , LPVOID    ReservedIn
-    );
+);
 
 DWORD WINAPI FileShareSampleStartup(
-      LPCWSTR                       pwszResourceTypeIn
+    LPCWSTR                       pwszResourceTypeIn
     , DWORD                         nMinVersionSupportedIn
     , DWORD                         nMaxVersionSupportedIn
     , PSET_RESOURCE_STATUS_ROUTINE  pfnSetResourceStatusIn
     , PLOG_EVENT_ROUTINE            pfnLogEventIn
     , PCLRES_FUNCTION_TABLE *       pFunctionTableOut
-    );
+);
 
 /////////////////////////////////////////////////////////////////////////////
 // General Definitions

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -60,13 +60,13 @@ static char                 gszErrStr[512];
 *
 *****************************************************************************/
 VOID FNLOCAL Error(
-    HWND                    hWnd,                             
+    HWND                    hWnd,
     int                     nErrDesc,
     MMRESULT                mmrc)
 {
     LoadString(ghInst, nErrDesc, gszErrDescTxt, sizeof(gszErrDescTxt));
     mciGetErrorString(mmrc, gszErrCodeTxt, sizeof(gszErrCodeTxt));
-    
+
     StringCchPrintf(gszErrStr, ARRAY_SIZE(gszErrStr), gszErrFmt, (LPSTR)gszErrDescTxt, (LPSTR)gszErrCodeTxt);
     MessageBox(hWnd, gszErrStr, gszAppLongName, MB_ICONEXCLAMATION|MB_OK);
 }
@@ -95,7 +95,7 @@ VOID NEAR PASCAL MessagePump(
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
         TranslateMessage(&msg);
-        DispatchMessage(&msg); 
+        DispatchMessage(&msg);
     }
 }
 
@@ -164,8 +164,10 @@ VOID NEAR PASCAL EmbossedTextOut(
     ** and offset are used.
     */
     GetTextExtentPoint32(hDC, lpsz, cb, &sizeText);
-    rcText.left   = x;    rcText.right  = x+cx+sizeText.cx; 
-    rcText.top    = y;    rcText.bottom = y+cy+sizeText.cy; 
+    rcText.left   = x;
+    rcText.right  = x+cx+sizeText.cx;
+    rcText.top    = y;
+    rcText.bottom = y+cy+sizeText.cy;
     ExtTextOut(hDC, x+cx, y+cy, ETO_OPAQUE, &rcText, lpsz, cb, NULL);
     SetBkMode(hDC, TRANSPARENT);
     SetTextColor(hDC, crText);
@@ -190,7 +192,7 @@ VOID NEAR PASCAL EmbossedTextOut(
 * anPosX[]                  - Will contain the X coordinates for each char
 * anPosY                    - Will contain the Y coordinate for the string
 *
-* Returns HFONT or NULL if one could not be created 
+* Returns HFONT or NULL if one could not be created
 *
 *****************************************************************************/
 HFONT NEAR PASCAL CreateScaledFont(
@@ -198,7 +200,7 @@ HFONT NEAR PASCAL CreateScaledFont(
     LPRECT                  lpRect,
     LPSTR                   lpszFormat,
     int                     anPosX[],
-    int*                    nPosY)                                                        
+    int*                    nPosY)
 {
     LOGFONT                 lf;
     HFONT                   hFont;
@@ -216,7 +218,7 @@ HFONT NEAR PASCAL CreateScaledFont(
 
     ScaledClientHeight =  ((lpRect->bottom - lpRect->top)) * 3 / 4;
     ScaledClientWidth  =  ((lpRect->right  - lpRect->left)) * 3 / 4;
-    
+
     _fmemset(&lf, 0, sizeof(lf));
     lf.lfHeight         = -(int)ScaledClientHeight;
     lf.lfWeight         = FW_BOLD;
@@ -225,7 +227,7 @@ HFONT NEAR PASCAL CreateScaledFont(
     lf.lfQuality        = PROOF_QUALITY;
     lf.lfPitchAndFamily = FF_ROMAN|DEFAULT_PITCH;
     StringCchCopyA(lf.lfFaceName, sizeof(lf.lfFaceName) / sizeof(lf.lfFaceName[0]), gszFace);
-    
+
     hFont = CreateFontIndirect(&lf);
     h = SelectObject(hDC, hFont);
 
@@ -234,16 +236,16 @@ HFONT NEAR PASCAL CreateScaledFont(
 
     AspectN = (LONG)size.cx;
     AspectD = (LONG)size.cy;
-    
+
     FormatWidth = (ScaledClientHeight*AspectN)/AspectD;
 
     if (FormatWidth > ScaledClientWidth)
     {
         ScaledClientHeight =
             (ScaledClientWidth*AspectD)/AspectN;
-    	SelectObject(hDC, h);
+        SelectObject(hDC, h);
         DeleteObject(hFont);
-        
+
         lf.lfHeight = -(int)ScaledClientHeight;
 
         hFont = CreateFontIndirect(&lf);
@@ -251,7 +253,7 @@ HFONT NEAR PASCAL CreateScaledFont(
         SelectObject(hDC, hFont);
         GetTextExtentPoint(hDC, lpszFormat, cb, &size);
     }
-    
+
     *nPosY  = grcTWnd.top  + (grcTWnd.bottom- grcTWnd.top  - size.cy)/2;
     nPosX   = grcTWnd.left + (grcTWnd.right - grcTWnd.left - size.cx)/2;
 
@@ -262,7 +264,7 @@ HFONT NEAR PASCAL CreateScaledFont(
             GetTextExtentPoint(hDC, lpszFormat, jj, &size);
         else
             size.cx = 0;
-        
+
         anPosX[ii++] = nPosX + size.cx;
     }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 // Module Name: ASAccept.cpp
 //
 // Description:
-//             This file contains the functions for implementing the 
+//             This file contains the functions for implementing the
 // Async Select version of the accept. Many of the functions that are common
 // to Non-blocking accept and Async Select accept are defined in Common.cpp.
 
@@ -25,16 +25,21 @@ const char *FDImage(long lEvent)
     // return the printable strings corresponding to the event.
     switch(lEvent)
     {
-        case FD_READ:       szRetVal = "FD_READ";
-                            break;
-        case FD_WRITE:      szRetVal = "FD_WRITE";
-                            break;
-        case FD_ACCEPT:     szRetVal = "FD_ACCEPT";
-                            break;
-        case FD_CLOSE:      szRetVal = "FD_CLOSE";
-                            break;
-        default:            szRetVal = "Unexpected";
-                            break;
+    case FD_READ:
+        szRetVal = "FD_READ";
+        break;
+    case FD_WRITE:
+        szRetVal = "FD_WRITE";
+        break;
+    case FD_ACCEPT:
+        szRetVal = "FD_ACCEPT";
+        break;
+    case FD_CLOSE:
+        szRetVal = "FD_CLOSE";
+        break;
+    default:
+        szRetVal = "Unexpected";
+        break;
     }
 
     return szRetVal;
@@ -58,17 +63,17 @@ void ProcessAsyncSelectMessage(WPARAM wParam, LPARAM lParam)
     // get the error associated with the event, if any, using the macro below.
     int error = WSAGETSELECTERROR(lParam);
     BOOL bSocketToBeClosed = FALSE;
-    PSOCK_INFO pSockInfo;    
-    int rc;        
+    PSOCK_INFO pSockInfo;
+    int rc;
 
     printf("Entering ProcessAsyncSelectMessage() for "
            "Sock = %d, Event = %s, Error = %d\n",
-            sock, FDImage(event), error);
+           sock, FDImage(event), error);
 
     // first, get the SockInfo object corresponding to the signalled socket
     // to retrieve the context of this socket.
-    for(pSockInfo = g_AcceptContext.pSockList;pSockInfo;
-                                              pSockInfo = pSockInfo->next)        
+    for(pSockInfo = g_AcceptContext.pSockList; pSockInfo;
+            pSockInfo = pSockInfo->next)
     {
         if (sock == pSockInfo->sock)
             break; // found.
@@ -97,124 +102,124 @@ void ProcessAsyncSelectMessage(WPARAM wParam, LPARAM lParam)
         goto CLEANUP;
     }
 
-    // take the corresponding action depending on the event signalled.    
+    // take the corresponding action depending on the event signalled.
     switch(event)
     {
-        case FD_ACCEPT:
-            
-            // Accept the new connection.
-            pSockInfo = ProcessAcceptEvent(pSockInfo);
-            if (pSockInfo == NULL)
-            {
-                // some error in accepting the connection or allocating
-                // resources for the new socket.
-                break;
-            }
+    case FD_ACCEPT:
 
-            // request the specified events to be notified asynchronously
-            // to the hAcceptWindow for the given sock.
-            rc = WSAAsyncSelect(pSockInfo->sock, 
-                                g_AcceptContext.hAcceptWindow,
-                                WM_USER_ASYNCSELECT_MSG,
-                                FD_READ | FD_WRITE | FD_CLOSE);
-
-            // check if the request went through.            
-            if (rc == SOCKET_ERROR)
-            {
-                printf("ERROR: WSAAsyncSelect failed on sock %d. Error = %d\n",
-                       pSockInfo->sock, WSAGetLastError());
-                bSocketToBeClosed = TRUE;
-            }
+        // Accept the new connection.
+        pSockInfo = ProcessAcceptEvent(pSockInfo);
+        if (pSockInfo == NULL)
+        {
+            // some error in accepting the connection or allocating
+            // resources for the new socket.
             break;
-                
-        case FD_READ:
+        }
 
-            // Read data from the socket, if there's room for the new data.
-            bSocketToBeClosed = ProcessReadEvent(pSockInfo);
+        // request the specified events to be notified asynchronously
+        // to the hAcceptWindow for the given sock.
+        rc = WSAAsyncSelect(pSockInfo->sock,
+                            g_AcceptContext.hAcceptWindow,
+                            WM_USER_ASYNCSELECT_MSG,
+                            FD_READ | FD_WRITE | FD_CLOSE);
 
-            // check if the recv call indicated that the remote side has closed
-            // the socket and that we should also close it.
-            if (bSocketToBeClosed == FALSE)
-            {
-                // no, it didn't. so, go ahead and echo the received data back
-                // if possible.
-                bSocketToBeClosed = SendData(pSockInfo);            
+        // check if the request went through.
+        if (rc == SOCKET_ERROR)
+        {
+            printf("ERROR: WSAAsyncSelect failed on sock %d. Error = %d\n",
+                   pSockInfo->sock, WSAGetLastError());
+            bSocketToBeClosed = TRUE;
+        }
+        break;
 
-                // check if the echo was successful.
-                if (bSocketToBeClosed == FALSE)
-                {
-                    // yes it was. 
-                    // now, if this happens to be the last piece of the
-                    // incoming data, and a FD_CLOSE was already notified to
-                    // us, we may not receive any more FD_READ notifications.
-                    // So, we need to post a dummy FD_READ notification to
-                    // this socket so that we again do a recv until we get
-                    // a 0 from recv, which means graceful disconnect from
-                    // other side or until we receive an error from recv.
-                    if (pSockInfo->isFdCloseRecd)
-                    {
-                        // post ourselves another FD_READ in case 
-                        // there's no data left.
-                        printf("Posting a dummy FD_READ \n");
-                        PostMessage(g_AcceptContext.hAcceptWindow,
-                                    WM_USER_ASYNCSELECT_MSG,
-                                    pSockInfo->sock,
-                                    FD_READ);
-                    }
-                }
-            }
-            break;
-            
-        case FD_WRITE:
+    case FD_READ:
 
-            // since we usually echo the data immediately after receiving it
-            // in the FD_READ case above, we may not need this case, except
-            // for one important condition: when send fails with WSAEWOULDBLOCK
-            // then we'll be notified with this event once the remote side
-            // has started consuming the data and we can continue our send.
+        // Read data from the socket, if there's room for the new data.
+        bSocketToBeClosed = ProcessReadEvent(pSockInfo);
+
+        // check if the recv call indicated that the remote side has closed
+        // the socket and that we should also close it.
+        if (bSocketToBeClosed == FALSE)
+        {
+            // no, it didn't. so, go ahead and echo the received data back
+            // if possible.
             bSocketToBeClosed = SendData(pSockInfo);
 
-            // in this case, most likely, while the previous data wasn't
-            // sent, there would have been a FD_READ which didn't result
-            // in a recv call. Hence, there won't be another FD_READ posted
-            // unless we call recv. So, we post a dummy FD_READ ourselves
-            // to allow the FD_READ handling code to be explicitly called.
+            // check if the echo was successful.
+            if (bSocketToBeClosed == FALSE)
+            {
+                // yes it was.
+                // now, if this happens to be the last piece of the
+                // incoming data, and a FD_CLOSE was already notified to
+                // us, we may not receive any more FD_READ notifications.
+                // So, we need to post a dummy FD_READ notification to
+                // this socket so that we again do a recv until we get
+                // a 0 from recv, which means graceful disconnect from
+                // other side or until we receive an error from recv.
+                if (pSockInfo->isFdCloseRecd)
+                {
+                    // post ourselves another FD_READ in case
+                    // there's no data left.
+                    printf("Posting a dummy FD_READ \n");
+                    PostMessage(g_AcceptContext.hAcceptWindow,
+                                WM_USER_ASYNCSELECT_MSG,
+                                pSockInfo->sock,
+                                FD_READ);
+                }
+            }
+        }
+        break;
 
-            // Note: In a real implementation, we would have to maintain
-            // more elaborate state to avoid posting these possibly redundant
-            // window messages.
-            
-            printf("Posting a dummy FD_READ \n");
-            PostMessage(g_AcceptContext.hAcceptWindow,
-                        WM_USER_ASYNCSELECT_MSG,
-                        pSockInfo->sock,
-                        FD_READ);
-            
-            break;
-            
-        case FD_CLOSE:
+    case FD_WRITE:
 
-            // even though the remote side has closed the socket, there might
-            // still be data that's left to read. so, we should just remember
-            // that we received a FD_CLOSE but not close the socket until
-            // we have read all the data.
-            pSockInfo->isFdCloseRecd = TRUE;
+        // since we usually echo the data immediately after receiving it
+        // in the FD_READ case above, we may not need this case, except
+        // for one important condition: when send fails with WSAEWOULDBLOCK
+        // then we'll be notified with this event once the remote side
+        // has started consuming the data and we can continue our send.
+        bSocketToBeClosed = SendData(pSockInfo);
 
-            // post ourselves another FD_READ in case there's no data
-            // left in which case, we'll actually close the socket when recv
-            // returns 0.
-            printf("Posting a dummy FD_READ \n");
-            PostMessage(g_AcceptContext.hAcceptWindow,
-                        WM_USER_ASYNCSELECT_MSG,
-                        pSockInfo->sock,
-                        FD_READ);
-            
-            break;
-            
-        default:
-            printf("Unexpected event: 0x%x for socket %d\n", event, sock);
-            bSocketToBeClosed = TRUE;
-            break;
+        // in this case, most likely, while the previous data wasn't
+        // sent, there would have been a FD_READ which didn't result
+        // in a recv call. Hence, there won't be another FD_READ posted
+        // unless we call recv. So, we post a dummy FD_READ ourselves
+        // to allow the FD_READ handling code to be explicitly called.
+
+        // Note: In a real implementation, we would have to maintain
+        // more elaborate state to avoid posting these possibly redundant
+        // window messages.
+
+        printf("Posting a dummy FD_READ \n");
+        PostMessage(g_AcceptContext.hAcceptWindow,
+                    WM_USER_ASYNCSELECT_MSG,
+                    pSockInfo->sock,
+                    FD_READ);
+
+        break;
+
+    case FD_CLOSE:
+
+        // even though the remote side has closed the socket, there might
+        // still be data that's left to read. so, we should just remember
+        // that we received a FD_CLOSE but not close the socket until
+        // we have read all the data.
+        pSockInfo->isFdCloseRecd = TRUE;
+
+        // post ourselves another FD_READ in case there's no data
+        // left in which case, we'll actually close the socket when recv
+        // returns 0.
+        printf("Posting a dummy FD_READ \n");
+        PostMessage(g_AcceptContext.hAcceptWindow,
+                    WM_USER_ASYNCSELECT_MSG,
+                    pSockInfo->sock,
+                    FD_READ);
+
+        break;
+
+    default:
+        printf("Unexpected event: 0x%x for socket %d\n", event, sock);
+        bSocketToBeClosed = TRUE;
+        break;
     }
 
 CLEANUP:
@@ -237,17 +242,17 @@ CLEANUP:
         printf("Closed socket %d. "
                "Total Bytes Recd = %d, "
                "Total Bytes Sent = %d\n",
-                pSockInfo->sock, 
-                pSockInfo->nTotalRecd,
-                pSockInfo->nTotalSent);
+               pSockInfo->sock,
+               pSockInfo->nTotalRecd,
+               pSockInfo->nTotalSent);
 
         // delete it from the global list and free the memory.
         DeleteSockInfoFromList(&g_AcceptContext.pSockList,
                                pSockInfo);
     }
-    
+
     printf("Exiting ProcessAsyncSelectMessage()\n");
-	return ;
+    return ;
 }
 
 
@@ -262,81 +267,83 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message,
     LRESULT res = 0;
 
     // check what the message type is.
-    switch (message) {
+    switch (message)
+    {
 
-        case WM_DESTROY:
-    		PostQuitMessage(0);
-            break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
 
-    	// this is the message that that we gave in WSAAsyncSelect which
-    	// winsock will send us back for notifying us of socket events.
-        case WM_USER_ASYNCSELECT_MSG:
-       		ProcessAsyncSelectMessage(wParam, lParam);
-    		break;
+    // this is the message that that we gave in WSAAsyncSelect which
+    // winsock will send us back for notifying us of socket events.
+    case WM_USER_ASYNCSELECT_MSG:
+        ProcessAsyncSelectMessage(wParam, lParam);
+        break;
 
-    	default: 
-    		res = DefWindowProc(hWnd, message, wParam, lParam);
-            break;
+    default:
+        res = DefWindowProc(hWnd, message, wParam, lParam);
+        break;
     }
 
-	return res;
+    return res;
 }
 
 
 /*
-    This function creates a hidden window to receive the 
+    This function creates a hidden window to receive the
     async select messages sent by winsock for socket events.
 */
 HWND CreateAcceptWindow(void)
 {
-	WNDCLASS window;
-	HWND windowHandle = NULL;
+    WNDCLASS window;
+    HWND windowHandle = NULL;
 
     // set the window properties.
-	memset(&window, 0, sizeof(WNDCLASS));
-	window.lpszClassName = "Accept Window";
-	window.hInstance = NULL;
-	window.lpfnWndProc = (WNDPROC) MainWndProc;	
-	window.hCursor = NULL;	
-	window.hIcon = NULL;
-	window.lpszMenuName = NULL;
-	window.hbrBackground = NULL; 
-	window.style = 0;
-	window.cbClsExtra = 0;
-	window.cbWndExtra = 0;
+    memset(&window, 0, sizeof(WNDCLASS));
+    window.lpszClassName = "Accept Window";
+    window.hInstance = NULL;
+    window.lpfnWndProc = (WNDPROC) MainWndProc;
+    window.hCursor = NULL;
+    window.hIcon = NULL;
+    window.lpszMenuName = NULL;
+    window.hbrBackground = NULL;
+    window.style = 0;
+    window.cbClsExtra = 0;
+    window.cbWndExtra = 0;
 
-	// register the window class.
-	if (!RegisterClass(&window)) {
-		printf("Registerclass failed %d\n", GetLastError());
+    // register the window class.
+    if (!RegisterClass(&window))
+    {
+        printf("Registerclass failed %d\n", GetLastError());
         goto CLEANUP;
-	}
+    }
 
-	// create the window. 
-	windowHandle = CreateWindow("Accept Window",
-								"Accept Window",
-								WS_OVERLAPPEDWINDOW,	//WS_MINIMIZE,
-								CW_USEDEFAULT,
-								CW_USEDEFAULT,
-								CW_USEDEFAULT,
-								CW_USEDEFAULT,
-								(HWND) NULL,
-								(HMENU) NULL,
-								(HINSTANCE) NULL,
-								(LPVOID) NULL);
+    // create the window.
+    windowHandle = CreateWindow("Accept Window",
+                                "Accept Window",
+                                WS_OVERLAPPEDWINDOW,	//WS_MINIMIZE,
+                                CW_USEDEFAULT,
+                                CW_USEDEFAULT,
+                                CW_USEDEFAULT,
+                                CW_USEDEFAULT,
+                                (HWND) NULL,
+                                (HMENU) NULL,
+                                (HINSTANCE) NULL,
+                                (LPVOID) NULL);
 
-	// check if a window was created.
-	if (windowHandle == NULL) 
-	{
-		printf("CreateWindow failed %d\n", GetLastError());
-		return NULL;
-	}
+    // check if a window was created.
+    if (windowHandle == NULL)
+    {
+        printf("CreateWindow failed %d\n", GetLastError());
+        return NULL;
+    }
 
     // uncomment the line below to see the window on the taskbar.
     // ShowWindow(windowHandle, SW_MINIMIZE);
-	
+
 CLEANUP:
-	
-	return windowHandle;
+
+    return windowHandle;
 }
 
 
@@ -349,7 +356,7 @@ void AsyncSelectAcceptMain()
     PSOCK_INFO pSockInfo;
     int rc;
     MSG msg;
-     
+
     printf("Entering AsyncSelectAcceptMain()\n");
 
     // create a dummy hidden window to receive the async select messages.
@@ -362,32 +369,33 @@ void AsyncSelectAcceptMain()
 
     // Set for all the listening sockets to be signalled on FD_ACCEPT event.
     for(pSockInfo = g_AcceptContext.pSockList; pSockInfo != NULL;
-                                               pSockInfo = pSockInfo->next)
+            pSockInfo = pSockInfo->next)
     {
         // request asynchronous notifications for the FD_ACCEPT and FD_CLOSE
         // events to be sent to the hAcceptWindow for this sock.
         rc = WSAAsyncSelect(pSockInfo->sock,
-                            g_AcceptContext.hAcceptWindow, 
+                            g_AcceptContext.hAcceptWindow,
                             WM_USER_ASYNCSELECT_MSG,
                             FD_ACCEPT | FD_CLOSE);
         if (rc == SOCKET_ERROR)
         {
-            printf("ERROR: WSAAsyncSelect failed for sock %d. Error = %d\n", 
-                                    pSockInfo->sock, WSAGetLastError());
-            continue;                                                  
+            printf("ERROR: WSAAsyncSelect failed for sock %d. Error = %d\n",
+                   pSockInfo->sock, WSAGetLastError());
+            continue;
         }
     }
 
     // Main message loop to process messages to the Accept Window.
     // This will indirectly call MainWndProc which will in turn call
     // ProcessAsyncSelectMessage.
-    while (GetMessage(&msg, (HWND) NULL, 0, 0)) { 
-        TranslateMessage(&msg); 
-        DispatchMessage(&msg); 
-    } 
+    while (GetMessage(&msg, (HWND) NULL, 0, 0))
+    {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
 
-   
-CLEANUP:        
+
+CLEANUP:
 
     printf("Exiting AsyncSelectAcceptMain()\n");
     return ;

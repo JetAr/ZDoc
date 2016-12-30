@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -29,7 +29,7 @@ typedef struct _DecoupledHostArgument
     LPWSTR lpNamespace;
     LPWSTR lpProviderName;
     LPWSTR lpProviderPath;
-}DecoupledHostArgument;
+} DecoupledHostArgument;
 
 //
 // Shutdown the provider by closing hosted provider,
@@ -75,8 +75,8 @@ void ShutdownDecoupledHost(
 //  and printf help usage.
 //
 BOOL ParseArgument(__in int argc,
-    __in_ecount(argc) LPCWSTR argv[],
-    __out DecoupledHostArgument * pArgument)
+                   __in_ecount(argc) LPCWSTR argv[],
+                   __out DecoupledHostArgument * pArgument)
 {
     int i;
     memset(pArgument, 0, sizeof(DecoupledHostArgument));
@@ -173,17 +173,17 @@ int HostDecoupledProvider(__in DecoupledHostArgument * pArgument)
     MI_Application application = MI_APPLICATION_NULL;
     MI_HostedProvider hostedProvider = MI_HOSTEDPROVIDER_NULL;
     MI_Result result = MI_RESULT_OK;
-    
+
     // load provider DLL
     hProvider = LoadLibraryExW(pArgument->lpProviderPath, NULL, 0);
     if(hProvider == NULL)
     {
         DWORD dwErrorCode = GetLastError();
         fwprintf(stderr, L"%s %s %s %d.\r\n",
-            L"Failed to load library",
-            pArgument->lpProviderPath,
-            L"with error code",
-            dwErrorCode);
+                 L"Failed to load library",
+                 pArgument->lpProviderPath,
+                 L"with error code",
+                 dwErrorCode);
         return dwErrorCode;
     }
 
@@ -193,10 +193,10 @@ int HostDecoupledProvider(__in DecoupledHostArgument * pArgument)
     {
         DWORD dwErrorCode = GetLastError();
         fprintf(stderr, "%s %s %s %d.\r\n",
-            "Cannot find procedure",
-            MI_MAIN_FUNCNAME,
-            "from the provider module with error code",
-            dwErrorCode);
+                "Cannot find procedure",
+                MI_MAIN_FUNCNAME,
+                "from the provider module with error code",
+                dwErrorCode);
         return dwErrorCode;
     }
 
@@ -205,23 +205,23 @@ int HostDecoupledProvider(__in DecoupledHostArgument * pArgument)
     if(result != MI_RESULT_OK)
     {
         fprintf(stderr, "%s %d.\r\n",
-            "Failed to initialize MI_Application with error code",
-            result);
+                "Failed to initialize MI_Application with error code",
+                result);
         return result;
     }
 
     // host the given provider as decoupled provider
     result = MI_Application_NewHostedProvider(&application,
-        pArgument->lpNamespace,
-        pArgument->lpProviderName,
-        mi_main,
-        NULL,
-        &hostedProvider);
+             pArgument->lpNamespace,
+             pArgument->lpProviderName,
+             mi_main,
+             NULL,
+             &hostedProvider);
     if(result != MI_RESULT_OK)
     {
         fprintf(stderr, "%s %d.\r\n",
-            "Failed to host decoupled provider with error code",
-            result);
+                "Failed to host decoupled provider with error code",
+                result);
         return result;
     }
 
@@ -233,7 +233,7 @@ int HostDecoupledProvider(__in DecoupledHostArgument * pArgument)
         do
         {
             fprintf(stdout, "\r\n%s \r\n",
-            "enter 'exit' or 'quit' to terminate the decoupled host process.");
+                    "enter 'exit' or 'quit' to terminate the decoupled host process.");
             {
                 size_t finalLength = 0;
                 while (finalLength == 0)
@@ -273,8 +273,8 @@ int __cdecl wmain (int argc, _In_count_(argc) LPWSTR argv[])
     if (!ParseArgument(argc, argv, &argument))
     {
         fprintf(stderr, "%s\r\n",
-            "Usage: DcupHost.exe -Namespace <namespace>"\
-            " -ProviderName <provider name> -ProviderPath <provider dll path>");
+                "Usage: DcupHost.exe -Namespace <namespace>"\
+                " -ProviderName <provider name> -ProviderPath <provider dll path>");
 
         CleanupArgument(&argument);
         return ERROR_INVALID_PARAMETER;

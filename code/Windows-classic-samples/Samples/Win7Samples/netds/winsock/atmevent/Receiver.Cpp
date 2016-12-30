@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,10 +8,10 @@
 // Module:
 //      receiver.cpp
 //
-// Abstract: 
-//      Implement receive-side functionality.  The reciever can accept up to 
-//      MAXCLIENT connections from senders.  The receiver uses WSAEventSelect 
-//      to handle the potential multiple connections as well as to allow the 
+// Abstract:
+//      Implement receive-side functionality.  The reciever can accept up to
+//      MAXCLIENT connections from senders.  The receiver uses WSAEventSelect
+//      to handle the potential multiple connections as well as to allow the
 //      receiver handle a request for a QoS connection during the accept.
 //
 //
@@ -38,7 +38,7 @@ static BOOL fd_accept_func(DWORD, WSANETWORKEVENTS *, RECV_INFO *, OPTIONS *);
 static BOOL fd_read_func(DWORD, WSANETWORKEVENTS *, RECV_INFO *, OPTIONS *);
 static BOOL fd_close_func(DWORD, WSANETWORKEVENTS *, RECV_INFO *, OPTIONS *);
 int CALLBACK AcceptCondFunc(
-                           LPWSABUF, LPWSABUF, LPQOS, LPQOS, LPWSABUF, LPWSABUF, GROUP FAR *, DWORD_PTR);
+    LPWSABUF, LPWSABUF, LPQOS, LPQOS, LPWSABUF, LPWSABUF, GROUP FAR *, DWORD_PTR);
 
 
 
@@ -46,11 +46,11 @@ int CALLBACK AcceptCondFunc(
 // Abstract:
 //      Main function to create a socket that allows clients to connect and
 //      send it data.  Upto MAXCLIENTS can connect and send data.  The data
-//      is read in and then tossed (the data is not used).  
+//      is read in and then tossed (the data is not used).
 //
 VOID Receiver(
-             OPTIONS             *pOptions
-             )
+    OPTIONS             *pOptions
+)
 {
     WSANETWORKEVENTS NetworkEvents = {0};
     long lNetworkEvents = 0;
@@ -68,7 +68,7 @@ VOID Receiver(
     }
 
 
-     
+
 
     for (i=0; i<MAXCLIENTS+1; i++)
     {
@@ -112,30 +112,31 @@ VOID Receiver(
             NetworkEvents.lNetworkEvents = 0;
             if (SOCKET_ERROR == WSAEnumNetworkEvents(RecvInfo.sd[dwEvent], RecvInfo.hEvents[dwEvent], &NetworkEvents))
             {
-                printf("WSAEnumNetworkEvent: %d dwEvent %d lNetworkEvent %X\n", 
+                printf("WSAEnumNetworkEvent: %d dwEvent %d lNetworkEvent %X\n",
                        WSAGetLastError(), dwEvent, NetworkEvents.lNetworkEvents);
                 NetworkEvents.lNetworkEvents = 0;
                 bProcessEventsDone = TRUE;
-            } else
+            }
+            else
             {
                 // it is possible that more than one notification triggered the event
                 //printf("WSAEnumNetworkEvents %X\n", NetworkEvents.lNetworkEvents);
                 if (FD_ACCEPT & NetworkEvents.lNetworkEvents)
-                    bProcessEventsDone |= 
-                    fd_accept_func(dwEvent, &NetworkEvents, &RecvInfo, pOptions);
+                    bProcessEventsDone |=
+                        fd_accept_func(dwEvent, &NetworkEvents, &RecvInfo, pOptions);
                 if (FD_READ   & NetworkEvents.lNetworkEvents)
-                    bProcessEventsDone |= 
-                    fd_read_func(dwEvent, &NetworkEvents, &RecvInfo, pOptions);
+                    bProcessEventsDone |=
+                        fd_read_func(dwEvent, &NetworkEvents, &RecvInfo, pOptions);
                 if (FD_CLOSE  & NetworkEvents.lNetworkEvents)
-                    bProcessEventsDone |= 
-                    fd_close_func(dwEvent, &NetworkEvents, &RecvInfo, pOptions);
+                    bProcessEventsDone |=
+                        fd_close_func(dwEvent, &NetworkEvents, &RecvInfo, pOptions);
             }
             break;
         }
     } // while (!bProcessEventsDone)
 
 
-    CLEANUP:
+CLEANUP:
     for (i = 0; i < MAXCLIENTS+1; i++)
     {
         if (INVALID_SOCKET != RecvInfo.sd[i])
@@ -160,15 +161,15 @@ VOID Receiver(
 
 
 // Abstract:
-//      Create a socket on which to receive data.  Please note that WSA_FLAG_OVERLAPPED 
-//      *MUST* be specified.  Also, note that the parameters for WSASocket and the 
-//      data to fill in the SOCKADDR structure come from the supplied protocol 
+//      Create a socket on which to receive data.  Please note that WSA_FLAG_OVERLAPPED
+//      *MUST* be specified.  Also, note that the parameters for WSASocket and the
+//      data to fill in the SOCKADDR structure come from the supplied protocol
 //      info structure instead of being hardcoded.
 //
 static BOOL CreateReceivingSocket(
-                                 RECV_INFO           *pRecvInfo, 
-                                 OPTIONS             *pOptions
-                                 )
+    RECV_INFO           *pRecvInfo,
+    OPTIONS             *pOptions
+)
 {
     DWORD        dwSocketFlags = 0;
     SOCKADDR_ATM sockaddr = {0};
@@ -178,8 +179,8 @@ static BOOL CreateReceivingSocket(
 
     dwSocketFlags = WSA_FLAG_OVERLAPPED;
 
-    pRecvInfo->sd[0] = WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, 
-                                 &pOptions->protocolInfo, 0, dwSocketFlags);             
+    pRecvInfo->sd[0] = WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO,
+                                 &pOptions->protocolInfo, 0, dwSocketFlags);
     if (INVALID_SOCKET == pRecvInfo->sd[0])
     {
         printf("WSASocket failed w/%d", WSAGetLastError());
@@ -225,16 +226,16 @@ static BOOL CreateReceivingSocket(
 
 // Abstract:
 //      FD_ACCEPT handler.  Invoked when a client is trying to connect.
-//      WSAAccept is called and an Accept Condition function is supplied to allow  
+//      WSAAccept is called and an Accept Condition function is supplied to allow
 //      a connection to be rejected if too many client have already connected.
-//      
+//
 //
 static BOOL fd_accept_func(
-                          DWORD               dwEvent, 
-                          WSANETWORKEVENTS    *NetworkEvents, 
-                          RECV_INFO           *pRecvInfo, 
-                          OPTIONS             *pOptions
-                          )
+    DWORD               dwEvent,
+    WSANETWORKEVENTS    *NetworkEvents,
+    RECV_INFO           *pRecvInfo,
+    OPTIONS             *pOptions
+)
 {
     BOOL    bProcessEventsDone = FALSE;
     SOCKET  temp_socket = INVALID_SOCKET;
@@ -242,17 +243,18 @@ static BOOL fd_accept_func(
             i;
 
 
-    printf("  FD_ACCEPT: dwEvent=%d error code =%d\n", 
+    printf("  FD_ACCEPT: dwEvent=%d error code =%d\n",
            dwEvent, NetworkEvents->iErrorCode[FD_ACCEPT_BIT]);
     if (NetworkEvents->iErrorCode[FD_ACCEPT_BIT])
         return TRUE;
 
-    temp_socket = WSAAccept(pRecvInfo->sd[0], NULL, NULL, (LPCONDITIONPROC)AcceptCondFunc, (DWORD_PTR)pOptions); 
+    temp_socket = WSAAccept(pRecvInfo->sd[0], NULL, NULL, (LPCONDITIONPROC)AcceptCondFunc, (DWORD_PTR)pOptions);
     if (INVALID_SOCKET == temp_socket)
     {
         printf("    WSAAccept failed w/%d\n", WSAGetLastError());
         bProcessEventsDone = FALSE;
-    } else
+    }
+    else
     {
         // keep list of connected sockets
         printf("    socket connection accepted\n");
@@ -279,18 +281,18 @@ static BOOL fd_accept_func(
 
 
 // Abstract:
-//      FD_READ handler.  Handling FD_READ notifications is pretty straight-forward.  
-//      Just read the amount of data you are interested in reading at this moment.  
+//      FD_READ handler.  Handling FD_READ notifications is pretty straight-forward.
+//      Just read the amount of data you are interested in reading at this moment.
 //      If there is more data left, you will get another FD_READ.
 //
-//      
+//
 //
 static BOOL fd_read_func(
-                        DWORD               dwEvent, 
-                        WSANETWORKEVENTS    *NetworkEvents, 
-                        RECV_INFO           *pRecvInfo, 
-                        OPTIONS             *pOptions
-                        )
+    DWORD               dwEvent,
+    WSANETWORKEVENTS    *NetworkEvents,
+    RECV_INFO           *pRecvInfo,
+    OPTIONS             *pOptions
+)
 {
     BOOL        bProcessEventsDone = FALSE;
     int         nRecv = 0;
@@ -310,14 +312,14 @@ static BOOL fd_read_func(
 
         bufptr = pRecvInfo->recvbuf;
 
-        printf("  FD_READ: dwEvent=%d error code =%d bytestorecv=%d\n", 
+        printf("  FD_READ: dwEvent=%d error code =%d bytestorecv=%d\n",
                dwEvent, NetworkEvents->iErrorCode[FD_READ_BIT], nBytesToRecv);
         if (NetworkEvents->iErrorCode[FD_READ_BIT])
         {
             bProcessEventsDone = TRUE;
             __leave;
         }
-            
+
 
         nRecv = recv(pRecvInfo->sd[dwEvent], bufptr, nBytesToRecv, 0);
         if (SOCKET_ERROR == nRecv)
@@ -327,18 +329,20 @@ static BOOL fd_read_func(
             {
                 printf("    recv[from]: failed w/%d\n", WSAGetLastError());
                 bProcessEventsDone = TRUE;
-            } else
+            }
+            else
             {
                 printf("    recv[from]: WSAEWOULDBLOCK, wait for next FD_READ\n");
                 bProcessEventsDone = FALSE;
             }
-        } else
+        }
+        else
         {
             // we got data
             if (nRecv)
                 printf("    recv'ed bytes=%d char=<%c>\n", nRecv, *bufptr);
             else
-                printf("    recv'ed 0 bytes\n"); 
+                printf("    recv'ed 0 bytes\n");
 
             bufptr += nRecv;
             nBytesToRecv -= nRecv;
@@ -349,7 +353,7 @@ static BOOL fd_read_func(
             }
         }
 
-        
+
     }
     __finally
     {
@@ -365,23 +369,23 @@ static BOOL fd_read_func(
 
 
 // Abstract:
-//      FD_CLOSE handler.  When receiving FD_CLOSE, it is still possible for data 
+//      FD_CLOSE handler.  When receiving FD_CLOSE, it is still possible for data
 //      to be queued up and therefore the socket should be drained of that data so
-//      as not to lose that data.  Winsock2 events are manual reset events and FD_CLOSE 
-//      has no re-enabling function, therefore must reset the event here, otherwise 
+//      as not to lose that data.  Winsock2 events are manual reset events and FD_CLOSE
+//      has no re-enabling function, therefore must reset the event here, otherwise
 //      we would get additional FD_CLOSE notifications.
 //
 static BOOL fd_close_func(
-                         DWORD               dwEvent, 
-                         WSANETWORKEVENTS    *NetworkEvents, 
-                         RECV_INFO           *pRecvInfo, 
-                         OPTIONS             *pOptions
-                         )
+    DWORD               dwEvent,
+    WSANETWORKEVENTS    *NetworkEvents,
+    RECV_INFO           *pRecvInfo,
+    OPTIONS             *pOptions
+)
 {
     BOOL bProcessEventsDone = FALSE;
 
 
-    printf("  FD_CLOSE: dwEvent=%d error code =%d\n", 
+    printf("  FD_CLOSE: dwEvent=%d error code =%d\n",
            dwEvent, NetworkEvents->iErrorCode[FD_CLOSE_BIT]);
     if (NetworkEvents->iErrorCode[FD_CLOSE_BIT])
         bProcessEventsDone = TRUE;
@@ -404,21 +408,21 @@ static BOOL fd_close_func(
 
 
 // Abstract:
-//      Function called by Winsock to accept or reject a connection.  If more 
-//      than MAXCLIENTS attempt to connect the connection will be rejected 
-//      (CF_REJECT). 
+//      Function called by Winsock to accept or reject a connection.  If more
+//      than MAXCLIENTS attempt to connect the connection will be rejected
+//      (CF_REJECT).
 //
 //
 int CALLBACK AcceptCondFunc(
-                           LPWSABUF    lpCallerId,
-                           LPWSABUF    lpCallerData,
-                           LPQOS       lpSQos,
-                           LPQOS       lpGQos,
-                           LPWSABUF    lpCalleeId,
-                           LPWSABUF    lpCalleeData,
-                           GROUP FAR   *Group,
-                           DWORD_PTR       CallbackData
-                           )
+    LPWSABUF    lpCallerId,
+    LPWSABUF    lpCallerData,
+    LPQOS       lpSQos,
+    LPQOS       lpGQos,
+    LPWSABUF    lpCalleeId,
+    LPWSABUF    lpCalleeData,
+    GROUP FAR   *Group,
+    DWORD_PTR       CallbackData
+)
 {
     int     nRet        = CF_ACCEPT;
     OPTIONS *pOptions   = (OPTIONS *)CallbackData;
@@ -430,7 +434,7 @@ int CALLBACK AcceptCondFunc(
     lpSQos;
     lpGQos;
     Group;
-    
+
 
 
     printf("    AcceptCondFunc\n");
@@ -441,9 +445,10 @@ int CALLBACK AcceptCondFunc(
         nRet = CF_REJECT;
         // At this point a connection will already have been established,
         // this will just cause the connection to be reset.
-    } else
+    }
+    else
         pOptions->dwTotalClients++;
 
     return nRet;
-} 
+}
 

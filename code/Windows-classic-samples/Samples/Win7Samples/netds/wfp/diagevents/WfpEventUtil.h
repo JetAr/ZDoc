@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,8 +13,8 @@ Module Name:
 
 Abstract:
 
-    This file declares routines for managing program input through command 
-    line arguments and printing program output in form of diagnostic event 
+    This file declares routines for managing program input through command
+    line arguments and printing program output in form of diagnostic event
     details.
 
 --*/
@@ -29,18 +29,18 @@ Abstract:
 
 DWORD
 ParseArguments(
-   __in int argc, 
-   __in_ecount(argc) const wchar_t* const argv[],
-   __out int* mins,
-   __out ADDRESS_FAMILY* version,
-   __out SOCKADDR_STORAGE* remoteIpAddr,
-   __out BOOL* stop
+    __in int argc,
+    __in_ecount(argc) const wchar_t* const argv[],
+    __out int* mins,
+    __out ADDRESS_FAMILY* version,
+    __out SOCKADDR_STORAGE* remoteIpAddr,
+    __out BOOL* stop
 );
 
 VOID
-PrintEvents(   
-   __in FWPM_NET_EVENT0** matchedEvents,
-   __in UINT32 numMatchedEvents
+PrintEvents(
+    __in FWPM_NET_EVENT0** matchedEvents,
+    __in UINT32 numMatchedEvents
 );
 
 #endif   //_PRINT_WFP_EVENTS_H_

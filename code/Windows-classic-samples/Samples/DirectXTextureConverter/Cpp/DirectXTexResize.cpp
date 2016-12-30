@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexResize.cpp
-//  
+//
 // DirectX Texture Library - Image resizing operations
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -25,7 +25,7 @@ namespace DirectX
 //-------------------------------------------------------------------------------------
 
 extern HRESULT _ResizeSeparateColorAndAlpha( _In_ IWICImagingFactory* pWIC, _In_ IWICBitmap* original,
-                                             _In_ size_t newWidth, _In_ size_t newHeight, _In_ DWORD filter, _Inout_ const Image* img );
+        _In_ size_t newWidth, _In_ size_t newHeight, _In_ DWORD filter, _Inout_ const Image* img );
 
 //--- Do image resize using WIC ---
 static HRESULT _PerformResizeUsingWIC( _In_ const Image& srcImage, _In_ DWORD filter,
@@ -103,7 +103,7 @@ static HRESULT _PerformResizeUsingWIC( _In_ const Image& srcImage, _In_ DWORD fi
             if ( FAILED(hr) )
                 return hr;
 
-            hr = FC->CopyPixels( 0, static_cast<UINT>( destImage.rowPitch ), static_cast<UINT>( destImage.slicePitch ), destImage.pixels );  
+            hr = FC->CopyPixels( 0, static_cast<UINT>( destImage.rowPitch ), static_cast<UINT>( destImage.slicePitch ), destImage.pixels );
             if ( FAILED(hr) )
                 return hr;
         }
@@ -228,7 +228,7 @@ static HRESULT _ResizePointFilter( _In_ const Image& srcImage, _In_ const Image&
 
     // Allocate temporary space (2 scanlines)
     ScopedAlignedArrayXMVECTOR scanline( reinterpret_cast<XMVECTOR*>( _aligned_malloc(
-                                         ( sizeof(XMVECTOR) * (srcImage.width + destImage.width ) ), 16 ) ) );
+            ( sizeof(XMVECTOR) * (srcImage.width + destImage.width ) ), 16 ) ) );
     if ( !scanline )
         return E_OUTOFMEMORY;
 
@@ -289,7 +289,7 @@ static HRESULT _ResizeBoxFilter( _In_ const Image& srcImage, _In_ DWORD filter, 
 
     // Allocate temporary space (3 scanlines)
     ScopedAlignedArrayXMVECTOR scanline( reinterpret_cast<XMVECTOR*>( _aligned_malloc(
-                                         ( sizeof(XMVECTOR) * ( srcImage.width*2 + destImage.width ) ), 16 ) ) );
+            ( sizeof(XMVECTOR) * ( srcImage.width*2 + destImage.width ) ), 16 ) ) );
     if ( !scanline )
         return E_OUTOFMEMORY;
 
@@ -348,7 +348,7 @@ static HRESULT _ResizeLinearFilter( _In_ const Image& srcImage, _In_ DWORD filte
 
     // Allocate temporary space (3 scanlines, plus X and Y filters)
     ScopedAlignedArrayXMVECTOR scanline( reinterpret_cast<XMVECTOR*>( _aligned_malloc(
-                                         ( sizeof(XMVECTOR) * ( srcImage.width*2 + destImage.width ) ), 16 ) ) );
+            ( sizeof(XMVECTOR) * ( srcImage.width*2 + destImage.width ) ), 16 ) ) );
     if ( !scanline )
         return E_OUTOFMEMORY;
 
@@ -434,7 +434,7 @@ static HRESULT _ResizeCubicFilter( _In_ const Image& srcImage, _In_ DWORD filter
 
     // Allocate temporary space (5 scanlines, plus X and Y filters)
     ScopedAlignedArrayXMVECTOR scanline( reinterpret_cast<XMVECTOR*>( _aligned_malloc(
-                                         ( sizeof(XMVECTOR) * ( srcImage.width*4 + destImage.width ) ), 16 ) ) );
+            ( sizeof(XMVECTOR) * ( srcImage.width*4 + destImage.width ) ), 16 ) ) );
     if ( !scanline )
         return E_OUTOFMEMORY;
 
@@ -731,18 +731,18 @@ static HRESULT _ResizeTriangleFilter( _In_ const Image& srcImage, _In_ DWORD fil
                 {
                 case DXGI_FORMAT_R10G10B10A2_UNORM:
                 case DXGI_FORMAT_R10G10B10A2_UINT:
+                {
+                    // Need to slightly bias results for floating-point error accumulation which can
+                    // be visible with harshly quantized values
+                    static const XMVECTORF32 Bias = { 0.f, 0.f, 0.f, 0.1f };
+
+                    XMVECTOR* ptr = pAccSrc;
+                    for( size_t i=0; i < destImage.width; ++i, ++ptr )
                     {
-                        // Need to slightly bias results for floating-point error accumulation which can
-                        // be visible with harshly quantized values
-                        static const XMVECTORF32 Bias = { 0.f, 0.f, 0.f, 0.1f };
-                       
-                        XMVECTOR* ptr = pAccSrc;
-                        for( size_t i=0; i < destImage.width; ++i, ++ptr )
-                        {
-                            *ptr = XMVectorAdd( *ptr, Bias );
-                        }
+                        *ptr = XMVectorAdd( *ptr, Bias );
                     }
-                    break;
+                }
+                break;
                 }
 
                 // This performs any required clamping
@@ -782,7 +782,7 @@ static HRESULT _PerformResizeUsingCustomFilters( _In_ const Image& srcImage, _In
     {
     case TEX_FILTER_POINT:
         return _ResizePointFilter( srcImage, destImage );
-        
+
     case TEX_FILTER_BOX:
         return _ResizeBoxFilter( srcImage, filter, destImage );
 
@@ -834,7 +834,7 @@ HRESULT Resize( const Image& srcImage, size_t width, size_t height, DWORD filter
     HRESULT hr = image.Initialize2D( srcImage.format, width, height, 1, 1 );
     if ( FAILED(hr) )
         return hr;
-   
+
     const Image *rimage = image.GetImage( 0, 0, 0 );
     if ( !rimage )
         return E_POINTER;

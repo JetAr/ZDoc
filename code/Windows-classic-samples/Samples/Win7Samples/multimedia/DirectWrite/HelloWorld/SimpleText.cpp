@@ -1,24 +1,24 @@
-
+﻿
 /************************************************************************
  *
  * File: SimpleText.cpp
  *
- * Description: 
- * 
- * 
+ * Description:
+ *
+ *
  *  This file is part of the Microsoft Windows SDK Code Samples.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  ************************************************************************/
 
 #include "DWriteHelloWorld.h"
@@ -78,7 +78,7 @@ HRESULT SimpleText::Initialize(HWND hwndParent)
     dpiScaleX_ = GetDeviceCaps(screen, LOGPIXELSX) / 96.0f;
     dpiScaleY_ = GetDeviceCaps(screen, LOGPIXELSY) / 96.0f;
     ReleaseDC(0, screen);
-    
+
     HRESULT hr = S_OK;
 
     ATOM atom;
@@ -93,47 +93,47 @@ HRESULT SimpleText::Initialize(HWND hwndParent)
     wcex.hbrBackground = NULL;
     wcex.lpszMenuName  = NULL;
     wcex.hIcon         = LoadIcon(
-                            NULL,
-                            IDI_APPLICATION);
+                             NULL,
+                             IDI_APPLICATION);
     wcex.hCursor       = LoadCursor(
-                            NULL,
-                            IDC_ARROW);
+                             NULL,
+                             IDC_ARROW);
     wcex.lpszClassName = TEXT("D2DSimpleText");
     wcex.hIconSm       = LoadIcon(
-                            NULL,
-                            IDI_APPLICATION
-                            );
+                             NULL,
+                             IDI_APPLICATION
+                         );
 
     atom = RegisterClassEx(
-        &wcex
-        );
+               &wcex
+           );
 
     hr = atom ? S_OK : E_FAIL;
 
     // Create window.
     hwnd_ = CreateWindow(
-        TEXT("D2DSimpleText"),
-        TEXT(""),
-        WS_CHILD,
-        0,
-        0,
-        static_cast<int>(640.0f / dpiScaleX_),
-        static_cast<int>(480.0f / dpiScaleY_),
-        hwndParent,
-        NULL,
-        HINST_THISCOMPONENT,
-        this
-        );
-   
+                TEXT("D2DSimpleText"),
+                TEXT(""),
+                WS_CHILD,
+                0,
+                0,
+                static_cast<int>(640.0f / dpiScaleX_),
+                static_cast<int>(480.0f / dpiScaleY_),
+                hwndParent,
+                NULL,
+                HINST_THISCOMPONENT,
+                this
+            );
+
     if (SUCCEEDED(hr))
     {
         hr = hwnd_ ? S_OK : E_FAIL;
     }
-    
+
     if (SUCCEEDED(hr))
     {
         hr = CreateDeviceIndependentResources(
-            );
+             );
     }
 
 
@@ -142,12 +142,12 @@ HRESULT SimpleText::Initialize(HWND hwndParent)
         ShowWindow(
             hwnd_,
             SW_SHOWNORMAL
-            );
+        );
 
 
         UpdateWindow(
             hwnd_
-            );
+        );
     }
 
     if (SUCCEEDED(hr))
@@ -178,9 +178,9 @@ HRESULT SimpleText::CreateDeviceIndependentResources()
     // Create Direct2D factory.
 
     hr = D2D1CreateFactory(
-        D2D1_FACTORY_TYPE_SINGLE_THREADED,
-        &pD2DFactory_
-        );
+             D2D1_FACTORY_TYPE_SINGLE_THREADED,
+             &pD2DFactory_
+         );
 
 
     // Create a shared DirectWrite factory.
@@ -188,10 +188,10 @@ HRESULT SimpleText::CreateDeviceIndependentResources()
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown**>(&pDWriteFactory_)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&pDWriteFactory_)
+             );
     }
 
 
@@ -207,15 +207,15 @@ HRESULT SimpleText::CreateDeviceIndependentResources()
     if (SUCCEEDED(hr))
     {
         hr = pDWriteFactory_->CreateTextFormat(
-            L"Gabriola",                // Font family name.
-            NULL,                       // Font collection (NULL sets it to use the system font collection).
-            DWRITE_FONT_WEIGHT_REGULAR,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            72.0f,
-            L"en-us",
-            &pTextFormat_
-            );
+                 L"Gabriola",                // Font family name.
+                 NULL,                       // Font collection (NULL sets it to use the system font collection).
+                 DWRITE_FONT_WEIGHT_REGULAR,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 72.0f,
+                 L"en-us",
+                 &pTextFormat_
+             );
     }
 
 
@@ -260,21 +260,21 @@ HRESULT SimpleText::CreateDeviceResources()
     {
         // Create a Direct2D render target.
         hr = pD2DFactory_->CreateHwndRenderTarget(
-                D2D1::RenderTargetProperties(),
-                D2D1::HwndRenderTargetProperties(
-                    hwnd_,
-                    size
-                    ),
-                &pRT_
-                );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(
+                     hwnd_,
+                     size
+                 ),
+                 &pRT_
+             );
 
         // Create a black brush.
         if (SUCCEEDED(hr))
         {
             hr = pRT_->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Black),
-                &pBlackBrush_
-                );
+                     D2D1::ColorF(D2D1::ColorF::Black),
+                     &pBlackBrush_
+                 );
         }
     }
 
@@ -316,16 +316,16 @@ HRESULT SimpleText::DrawText()
     GetClientRect(
         hwnd_,
         &rc
-        );
+    );
 
     // Create a D2D rect that is the same size as the window.
 
     D2D1_RECT_F layoutRect = D2D1::RectF(
-        static_cast<FLOAT>(rc.top) / dpiScaleY_,
-        static_cast<FLOAT>(rc.left) / dpiScaleX_,
-        static_cast<FLOAT>(rc.right - rc.left) / dpiScaleX_,
-        static_cast<FLOAT>(rc.bottom - rc.top) / dpiScaleY_
-        );
+                                 static_cast<FLOAT>(rc.top) / dpiScaleY_,
+                                 static_cast<FLOAT>(rc.left) / dpiScaleX_,
+                                 static_cast<FLOAT>(rc.right - rc.left) / dpiScaleX_,
+                                 static_cast<FLOAT>(rc.bottom - rc.top) / dpiScaleY_
+                             );
 
 
     // Use the DrawText method of the D2D render target interface to draw.
@@ -336,7 +336,7 @@ HRESULT SimpleText::DrawText()
         pTextFormat_,    // The text format.
         layoutRect,       // The region of the window where the text will be rendered.
         pBlackBrush_     // The brush used to draw the text.
-        );
+    );
 
 
     return S_OK;
@@ -377,7 +377,7 @@ HRESULT SimpleText::DrawD2DContent()
         if (SUCCEEDED(hr))
         {
             hr = pRT_->EndDraw(
-                );
+                 );
         }
     }
 
@@ -435,45 +435,45 @@ LRESULT CALLBACK SimpleText::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPA
     }
 
     SimpleText *pSimpleText = reinterpret_cast<SimpleText *>(
-                ::GetWindowLongPtr(hwnd, GWLP_USERDATA));
+                                  ::GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
     if (pSimpleText)
     {
         switch(message)
         {
         case WM_SIZE:
-            {
-                UINT width = LOWORD(lParam);
-                UINT height = HIWORD(lParam);
-                pSimpleText->OnResize(width, height);
-            }
-            return 0;
+        {
+            UINT width = LOWORD(lParam);
+            UINT height = HIWORD(lParam);
+            pSimpleText->OnResize(width, height);
+        }
+        return 0;
 
         case WM_PAINT:
         case WM_DISPLAYCHANGE:
-            {
-                PAINTSTRUCT ps;
-                BeginPaint(hwnd, &ps);
-                pSimpleText->DrawD2DContent();
-                EndPaint(
-                    hwnd,
-                    &ps
-                    );
-            }
-            return 0;
+        {
+            PAINTSTRUCT ps;
+            BeginPaint(hwnd, &ps);
+            pSimpleText->DrawD2DContent();
+            EndPaint(
+                hwnd,
+                &ps
+            );
+        }
+        return 0;
 
         case WM_DESTROY:
-            {
-                PostQuitMessage(0);
-            }
-            return 1;
+        {
+            PostQuitMessage(0);
+        }
+        return 1;
         }
     }
     return DefWindowProc(
-        hwnd,
-        message,
-        wParam,
-        lParam
-        );
+               hwnd,
+               message,
+               wParam,
+               lParam
+           );
 }
 

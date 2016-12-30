@@ -1,4 +1,4 @@
-#ifndef __WIA_ITEMTREECHANGES_SAMPLE
+﻿#ifndef __WIA_ITEMTREECHANGES_SAMPLE
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF

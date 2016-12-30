@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -42,7 +42,10 @@ public:
     void RemoveVirtualKey(DWORD_PTR dwIndex);
     void PurgeVirtualKey();
 
-    DWORD_PTR GetVirtualKeyLength() { return _keystrokeBuffer.GetLength(); }
+    DWORD_PTR GetVirtualKeyLength()
+    {
+        return _keystrokeBuffer.GetLength();
+    }
     WCHAR GetVirtualKey(DWORD_PTR dwIndex);
 
     void GetReadingStrings(_Inout_ CSampleImeArray<CStringRange> *pReadingStrings, _Out_ BOOL *pIsWildcardIncluded);
@@ -57,16 +60,40 @@ public:
     WCHAR GetPunctuation(WCHAR wch);
 
     BOOL IsDoubleSingleByte(WCHAR wch);
-    BOOL IsWildcard() { return _isWildcard; }
-    BOOL IsDisableWildcardAtFirst() { return _isDisableWildcardAtFirst; }
-    BOOL IsWildcardChar(WCHAR wch) { return ((IsWildcardOneChar(wch) || IsWildcardAllChar(wch)) ? TRUE : FALSE); }
-    BOOL IsWildcardOneChar(WCHAR wch) { return (wch==L'?' ? TRUE : FALSE); }
-    BOOL IsWildcardAllChar(WCHAR wch) { return (wch==L'*' ? TRUE : FALSE); }
-    BOOL IsMakePhraseFromText() { return _hasMakePhraseFromText; }
-    BOOL IsKeystrokeSort() { return _isKeystrokeSort; }
+    BOOL IsWildcard()
+    {
+        return _isWildcard;
+    }
+    BOOL IsDisableWildcardAtFirst()
+    {
+        return _isDisableWildcardAtFirst;
+    }
+    BOOL IsWildcardChar(WCHAR wch)
+    {
+        return ((IsWildcardOneChar(wch) || IsWildcardAllChar(wch)) ? TRUE : FALSE);
+    }
+    BOOL IsWildcardOneChar(WCHAR wch)
+    {
+        return (wch==L'?' ? TRUE : FALSE);
+    }
+    BOOL IsWildcardAllChar(WCHAR wch)
+    {
+        return (wch==L'*' ? TRUE : FALSE);
+    }
+    BOOL IsMakePhraseFromText()
+    {
+        return _hasMakePhraseFromText;
+    }
+    BOOL IsKeystrokeSort()
+    {
+        return _isKeystrokeSort;
+    }
 
     // Dictionary engine
-    BOOL IsDictionaryAvailable() { return (_pTableDictionaryEngine ? TRUE : FALSE); }
+    BOOL IsDictionaryAvailable()
+    {
+        return (_pTableDictionaryEngine ? TRUE : FALSE);
+    }
 
     // Language bar control
     void SetLanguageBarStatus(DWORD status, BOOL isSet);
@@ -76,9 +103,18 @@ public:
     void ShowAllLanguageBarIcons();
     void HideAllLanguageBarIcons();
 
-    inline CCandidateRange *GetCandidateListIndexRange() { return &_candidateListIndexRange; }
-    inline UINT GetCandidateListPhraseModifier() { return _candidateListPhraseModifier; }
-    inline UINT GetCandidateWindowWidth() { return _candidateWndWidth; }
+    inline CCandidateRange *GetCandidateListIndexRange()
+    {
+        return &_candidateListIndexRange;
+    }
+    inline UINT GetCandidateListPhraseModifier()
+    {
+        return _candidateListPhraseModifier;
+    }
+    inline UINT GetCandidateWindowWidth()
+    {
+        return _candidateWndWidth;
+    }
 
 private:
     void InitKeyStrokeTable();
@@ -98,7 +134,7 @@ private:
     void CreateLanguageBarButton(DWORD dwEnable, GUID guidLangBar, _In_z_ LPCWSTR pwszDescriptionValue, _In_z_ LPCWSTR pwszTooltipValue, DWORD dwOnIconIndex, DWORD dwOffIconIndex, _Outptr_result_maybenull_ CLangBarItemButton **ppLangBarItemButton, BOOL isSecureMode);
     void SetInitialCandidateListRange();
     void SetDefaultCandidateTextFont();
-	void InitializeSampleIMECompartment(_In_ ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
+    void InitializeSampleIMECompartment(_In_ ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
 
     class XPreservedKey;
     void SetPreservedKey(const CLSID clsid, TF_PRESERVEDKEY & tfPreservedKey, _In_z_ LPCWSTR pwszDescription, _Out_ XPreservedKey *pXPreservedKey);
@@ -109,7 +145,7 @@ private:
     void PrivateCompartmentsUpdated(_In_ ITfThreadMgr *pThreadMgr);
     void KeyboardOpenCompartmentUpdated(_In_ ITfThreadMgr *pThreadMgr);
 
-    
+
     BOOL SetupDictionaryFile();
     CFile* GetDictionaryFile();
 

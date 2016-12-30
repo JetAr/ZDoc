@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -60,10 +60,22 @@ public:
     (
     );
 
-    bool IsSupported( ) const { return m_bSupported; };
-    bool IsSharingEnabled() const {return m_bSharingEnabled;};
-    bool IsPublic() const {return m_bPublic;};
-    bool IsPrivate() const {return m_bPrivate;};
+    bool IsSupported( ) const
+    {
+        return m_bSupported;
+    };
+    bool IsSharingEnabled() const
+    {
+        return m_bSharingEnabled;
+    };
+    bool IsPublic() const
+    {
+        return m_bPublic;
+    };
+    bool IsPrivate() const
+    {
+        return m_bPrivate;
+    };
 
     bool
     IsMatch
@@ -71,9 +83,15 @@ public:
         GUID*   pGuid
     );
 
-    void GetConnectionGuid(GUID & Guid) const {Guid = m_NetConnProps.guidId;};
+    void GetConnectionGuid(GUID & Guid) const
+    {
+        Guid = m_NetConnProps.guidId;
+    };
 
-    void GetConnectionName(CAtlString & strName) const {strName = m_NetConnProps.pszwName;};
+    void GetConnectionName(CAtlString & strName) const
+    {
+        strName = m_NetConnProps.pszwName;
+    };
 
     HRESULT
     RefreshSharingEnabled

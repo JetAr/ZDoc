@@ -1,4 +1,4 @@
-/*
+﻿/*
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,7 +14,8 @@ data type and constant definitions used by mainwnd.c
 // Use larger string buffer for counter path to accomondate longer counter/instance names.
 #define COUNTER_STRING_SIZE 1024
 
-typedef struct _CounterInfoBlock {
+typedef struct _CounterInfoBlock
+{
     struct _CounterInfoBlock *pNext;
     TCHAR   szCounterPath[COUNTER_STRING_SIZE];
     HCOUNTER    hCounter;

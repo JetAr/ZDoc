@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -53,7 +53,7 @@ int APIENTRY wWinMain(__in HINSTANCE hinst, __in_opt HINSTANCE hinstPrev, __in L
     UNREFERENCED_PARAMETER(nCmdShow);
     BOOL success = TRUE;
     MSG msg;
-    
+
     // Initialize global strings
     LoadString(hinst, IDS_WINDOW, g_tszWindowClass, MAX_LOADSTRING);
     LoadString(hinst, IDS_CAPTION, g_tszMainTitle, MAX_LOADSTRING);
@@ -65,12 +65,12 @@ int APIENTRY wWinMain(__in HINSTANCE hinst, __in_opt HINSTANCE hinstPrev, __in L
     MyRegisterClass(hinst);
 
     // Initialize Application
-    if (!InitInstance(hinst, SW_SHOWMAXIMIZED)) 
+    if (!InitInstance(hinst, SW_SHOWMAXIMIZED))
     {
         wprintf(L"Failed to initialize application");
         success = FALSE;
     }
-    
+
     if(success)
     {
         // Main message loop
@@ -81,7 +81,7 @@ int APIENTRY wWinMain(__in HINSTANCE hinst, __in_opt HINSTANCE hinstPrev, __in L
         }
     }
     return success;
-} 
+}
 
 // Register Window Class
 ATOM MyRegisterClass(HINSTANCE hInst)
@@ -107,11 +107,11 @@ BOOL InitInstance(HINSTANCE hinst, int nCmdShow)
     BOOL success = TRUE;
 
     // Store instance handler in global variable
-    g_hInst = hinst; 
+    g_hInst = hinst;
 
-    g_hWnd = CreateWindowEx(0, g_tszWindowClass, g_tszMainTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 
-        CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, g_hInst, 0);
-    
+    g_hWnd = CreateWindowEx(0, g_tszWindowClass, g_tszMainTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+                            CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, g_hInst, 0);
+
 
     if(!g_hWnd)
     {
@@ -137,12 +137,12 @@ BOOL InitInstance(HINSTANCE hinst, int nCmdShow)
 
     if(success)
     {
-        // Disable UI feedback for penflicks 
+        // Disable UI feedback for penflicks
         SetTabletInputServiceProperties();
-        
+
         // Ready for handling WM_TOUCH messages
         RegisterTouchWindow(g_hWnd, 0);
-        
+
         ShowWindow(g_hWnd, nCmdShow);
         UpdateWindow(g_hWnd);
     }
@@ -169,7 +169,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     // Handle each type of inData and based on which event we handle continue processing
     // the inData for manipulations by calling the ComTouchDriver
-    
+
     switch (msg)
     {
     case WM_TOUCH:
@@ -178,38 +178,38 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         hInput = (HTOUCHINPUT)lParam;
 
         pInputs = new (std::nothrow) TOUCHINPUT[iNumContacts];
-       
+
         // Get each touch input info and feed each TOUCHINPUT into the process input handler
 
         if(pInputs != NULL)
         {
             if(GetTouchInputInfo(hInput, iNumContacts, pInputs, sizeof(TOUCHINPUT)))
             {
-               for(int i = 0; i < iNumContacts; i++)
-               {
-                   // Bring touch input info into client coordinates
+                for(int i = 0; i < iNumContacts; i++)
+                {
+                    // Bring touch input info into client coordinates
 
-                   ptInputs.x = pInputs[i].x/100;	
-                   ptInputs.y = pInputs[i].y/100;
-                   ScreenToClient(g_hWnd, &ptInputs);
-                   pInputs[i].x = ptInputs.x;
-                   pInputs[i].y = ptInputs.y;
-                   g_ctDriver->ProcessInputEvent(&pInputs[i]);
-               }
-               g_ctDriver->ProcessChanges();
+                    ptInputs.x = pInputs[i].x/100;
+                    ptInputs.y = pInputs[i].y/100;
+                    ScreenToClient(g_hWnd, &ptInputs);
+                    pInputs[i].x = ptInputs.x;
+                    pInputs[i].y = ptInputs.y;
+                    g_ctDriver->ProcessInputEvent(&pInputs[i]);
+                }
+                g_ctDriver->ProcessChanges();
             }
         }
-        
+
         delete [] pInputs;
         CloseTouchInputHandle(hInput);
         break;
-    
+
     // For each Mouse event build a TOUCHINPUT struct and feed into the process input handler
 
     case WM_LBUTTONDOWN:
 
         FillInputData(&tInput, MOUSE_CURSOR_ID, TOUCHEVENTF_DOWN, (DWORD)GetMessageTime(),LOWORD(lParam),HIWORD(lParam));
-        g_ctDriver->ProcessInputEvent(&tInput);        
+        g_ctDriver->ProcessInputEvent(&tInput);
         break;
 
     case WM_MOUSEMOVE:
@@ -217,21 +217,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if(LOWORD(wParam) == MK_LBUTTON)
         {
             FillInputData(&tInput, MOUSE_CURSOR_ID, TOUCHEVENTF_MOVE, (DWORD)GetMessageTime(),LOWORD(lParam), HIWORD(lParam));
-            g_ctDriver->ProcessInputEvent(&tInput);      
+            g_ctDriver->ProcessInputEvent(&tInput);
             g_ctDriver->ProcessChanges();
         }
-      
+
         break;
 
     case WM_LBUTTONUP:
 
         FillInputData(&tInput, MOUSE_CURSOR_ID, TOUCHEVENTF_UP, (DWORD)GetMessageTime(),LOWORD(lParam), HIWORD(lParam));
         g_ctDriver->ProcessInputEvent(&tInput);
-        
+
         break;
 
     case WM_DESTROY:
-        
+
         if(g_ctDriver)
         {
             delete g_ctDriver;
@@ -246,7 +246,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_PAINT:
-        
+
         BeginPaint(g_hWnd, &ps);
         g_ctDriver->RenderInitialState(g_iCWidth, g_iCHeight);
         EndPaint(g_hWnd, &ps);
@@ -255,7 +255,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_TIMER:
         g_ctDriver->ProcessChanges();
         break;
-      
+
     default:
         return DefWindowProc(hWnd, msg, wParam, lParam);
     }
@@ -275,13 +275,13 @@ VOID FillInputData(TOUCHINPUT* inData, DWORD cursor, DWORD eType, DWORD time, in
 
 VOID SetTabletInputServiceProperties()
 {
-    DWORD_PTR dwHwndTabletProperty = 
-    TABLET_DISABLE_PRESSANDHOLD | // disables press and hold (right-click) gesture
-    TABLET_DISABLE_PENTAPFEEDBACK | // disables UI feedback on pen up (waves)
-    TABLET_DISABLE_PENBARRELFEEDBACK | // disables UI feedback on pen button down (circle)
-    TABLET_DISABLE_FLICKS; // disables pen flicks (back, forward, drag down, drag up)
-    
-    ATOM atom = ::GlobalAddAtom(MICROSOFT_TABLETPENSERVICE_PROPERTY);  
+    DWORD_PTR dwHwndTabletProperty =
+        TABLET_DISABLE_PRESSANDHOLD | // disables press and hold (right-click) gesture
+        TABLET_DISABLE_PENTAPFEEDBACK | // disables UI feedback on pen up (waves)
+        TABLET_DISABLE_PENBARRELFEEDBACK | // disables UI feedback on pen button down (circle)
+        TABLET_DISABLE_FLICKS; // disables pen flicks (back, forward, drag down, drag up)
+
+    ATOM atom = ::GlobalAddAtom(MICROSOFT_TABLETPENSERVICE_PROPERTY);
     SetProp(g_hWnd, MICROSOFT_TABLETPENSERVICE_PROPERTY, reinterpret_cast<HANDLE>(dwHwndTabletProperty));
     GlobalDeleteAtom(atom);
 

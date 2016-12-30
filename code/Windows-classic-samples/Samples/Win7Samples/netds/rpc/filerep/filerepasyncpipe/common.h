@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -6,7 +6,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
 /*
-   
+
 
     File Replication Sample
     Server System Service
@@ -31,7 +31,7 @@
 #define ASSERT(cond) {}
 #endif
 
-// Macro for printing out error message and exiting the program if an 
+// Macro for printing out error message and exiting the program if an
 // error occured during an RPC library call.
 #define EXIT_IF_FAIL(x, string){ \
         ((x) != RPC_S_OK) ? _tprintf(TEXT("%s failed with error %d\n"), \
@@ -45,14 +45,14 @@
 // Pipe Routine Pointer Types
 //
 typedef RPC_STATUS (__stdcall *WINAPI_MY_PIPE_PUSH)(
-                                  CHAR *state,
-                                  CHAR *buf,
-                                  unsigned long ecount);
+    CHAR *state,
+    CHAR *buf,
+    unsigned long ecount);
 
 typedef RPC_STATUS (__stdcall *WINAPI_MY_PIPE_PULL)(CHAR *state,
-						  CHAR *buf,
-						  unsigned long num,
-						  unsigned long * ecount);
+        CHAR *buf,
+        unsigned long num,
+        unsigned long * ecount);
 
 // Size for short message strings.
 #define MSG_SIZE (1024)

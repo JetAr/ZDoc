@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -47,8 +47,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int)
 }
 
 CHomeGroupUsersDialog::CHomeGroupUsersDialog() : _ulChangeNotify(NULL),
-                                                 _fCurrentlyFillingUserList(FALSE),
-                                                 _fNeedToRefillUserList(FALSE)
+    _fCurrentlyFillingUserList(FALSE),
+    _fNeedToRefillUserList(FALSE)
 {
 }
 
@@ -67,11 +67,11 @@ void CHomeGroupUsersDialog::_Initialize(HWND hwndDlg)
         notifyEntry.fRecursive = FALSE;
 
         _ulChangeNotify = SHChangeNotifyRegister(hwndDlg,
-            SHCNRF_InterruptLevel | SHCNRF_ShellLevel,
-            SHCNE_MKDIR | SHCNE_RMDIR | SHCNE_UPDATEDIR,
-            WM_HOMEGROUP_CHANGED,
-            1,
-            &notifyEntry);
+                          SHCNRF_InterruptLevel | SHCNRF_ShellLevel,
+                          SHCNE_MKDIR | SHCNE_RMDIR | SHCNE_UPDATEDIR,
+                          WM_HOMEGROUP_CHANGED,
+                          1,
+                          &notifyEntry);
 
         ILFree(pidlHomeGroup);
     }
@@ -152,7 +152,7 @@ void CHomeGroupUsersDialog::_FillUserList(HWND hwndDlg)
         {
             _FillUserList(hwndDlg);
         }
-     }
+    }
 }
 
 void CHomeGroupUsersDialog::_ShowSharingWizard(HWND hwndDlg)

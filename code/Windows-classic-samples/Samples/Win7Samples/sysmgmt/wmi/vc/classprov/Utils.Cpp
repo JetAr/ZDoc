@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 
 //
 
@@ -10,7 +10,7 @@
 
 //
 
-//  Purpose: General purpose utilities.  
+//  Purpose: General purpose utilities.
 
 //
 
@@ -33,11 +33,11 @@
 //
 //***************************************************************************
 
-SCODE CreateInst(IWbemServices * pNamespace, LPWSTR pKey, long lVal, 
-                                        IWbemClassObject ** pNewInst,
-                                        WCHAR * pwcClassName,
-										IWbemContext  *pCtx)
-{   
+SCODE CreateInst(IWbemServices * pNamespace, LPWSTR pKey, long lVal,
+                 IWbemClassObject ** pNewInst,
+                 WCHAR * pwcClassName,
+                 IWbemContext  *pCtx)
+{
     SCODE sc;
     IWbemClassObject * pClass = NULL;
     sc = pNamespace->GetObject(pwcClassName, 0, pCtx, &pClass, NULL);
@@ -53,11 +53,11 @@ SCODE CreateInst(IWbemServices * pNamespace, LPWSTR pKey, long lVal,
 
     v.vt = VT_BSTR;
     v.bstrVal = SysAllocString(pKey);
-	if (v.bstrVal == NULL)
-		return WBEM_E_OUT_OF_MEMORY;
+    if (v.bstrVal == NULL)
+        return WBEM_E_OUT_OF_MEMORY;
     sc = (*pNewInst)->Put(L"MyKey", 0, &v, 0);
     VariantClear(&v);
-	if(FAILED(sc))
+    if(FAILED(sc))
         return sc;
 
     // Set the number property value.
@@ -69,8 +69,8 @@ SCODE CreateInst(IWbemServices * pNamespace, LPWSTR pKey, long lVal,
 }
 
 SCODE CreateClass( IWbemServices * pNamespace, IWbemClassObject ** pNewClass,
-                                             WCHAR * pwcClassName,
-											 IWbemContext  *pCtx)
+                   WCHAR * pwcClassName,
+                   IWbemContext  *pCtx)
 {
 
     SCODE sc;
@@ -84,8 +84,8 @@ SCODE CreateClass( IWbemServices * pNamespace, IWbemClassObject ** pNewClass,
 
     v.vt = VT_BSTR;
     v.bstrVal = SysAllocString(pwcClassName);
-	if (!v.bstrVal)
-		return WBEM_E_OUT_OF_MEMORY;
+    if (!v.bstrVal)
+        return WBEM_E_OUT_OF_MEMORY;
     sc = (*pNewClass)->Put(L"__class", 0, &v, 0);
     VariantClear(&v);
 
@@ -99,38 +99,38 @@ SCODE CreateClass( IWbemServices * pNamespace, IWbemClassObject ** pNewClass,
 
     sc = (*pNewClass)->Put(L"MyValue", 0, &v, CIM_SINT32);
 
-	// Set the key qualifier
+    // Set the key qualifier
 
-	IWbemQualifierSet* pQualSet = NULL;
+    IWbemQualifierSet* pQualSet = NULL;
 
-	sc = (*pNewClass)->GetPropertyQualifierSet(L"MyKey", &pQualSet);
-	if(pQualSet)
-	{
-	    v.vt = VT_BOOL;
-		v.boolVal = VARIANT_TRUE;
-		sc = pQualSet->Put(L"Key", &v, 0);
-		pQualSet->Release();
-	}
+    sc = (*pNewClass)->GetPropertyQualifierSet(L"MyKey", &pQualSet);
+    if(pQualSet)
+    {
+        v.vt = VT_BOOL;
+        v.boolVal = VARIANT_TRUE;
+        sc = pQualSet->Put(L"Key", &v, 0);
+        pQualSet->Release();
+    }
 
-	// Set the dynamic qualifier
+    // Set the dynamic qualifier
 
-	sc = (*pNewClass)->GetQualifierSet(&pQualSet);
-	if(pQualSet)
-	{
-	    v.vt = VT_BOOL;
-		v.boolVal = VARIANT_TRUE;
-		sc = pQualSet->Put(L"Dynamic", &v, 0);
+    sc = (*pNewClass)->GetQualifierSet(&pQualSet);
+    if(pQualSet)
+    {
+        v.vt = VT_BOOL;
+        v.boolVal = VARIANT_TRUE;
+        sc = pQualSet->Put(L"Dynamic", &v, 0);
 
-	    v.vt = VT_BSTR;
-		v.bstrVal = SysAllocString(L"ClassProvSamp");
-		if (v.bstrVal)
-			sc = pQualSet->Put(L"Provider", &v, 0);
-		else
-			sc = WBEM_E_OUT_OF_MEMORY;
-		VariantClear(&v);
+        v.vt = VT_BSTR;
+        v.bstrVal = SysAllocString(L"ClassProvSamp");
+        if (v.bstrVal)
+            sc = pQualSet->Put(L"Provider", &v, 0);
+        else
+            sc = WBEM_E_OUT_OF_MEMORY;
+        VariantClear(&v);
 
-		pQualSet->Release();
-	}
+        pQualSet->Release();
+    }
 
     return sc;
 

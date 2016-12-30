@@ -1,4 +1,4 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+﻿// This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
@@ -14,7 +14,7 @@
 #ifdef RC_INVOKED
 #ifndef _INC_WINDOWS
 #define _INC_WINDOWS
-	#include "winres.h"           // extract from windows header
+#include "winres.h"           // extract from windows header
 #endif
 #endif
 
@@ -282,7 +282,7 @@
 #if _MFC_VER >= 0x0600
 #define ID_VIEW_REBAR                   0xE804
 #define ID_VIEW_AUTOARRANGE         0xE805
-	// E810 -> E81F must be kept in order for RANGE macros
+// E810 -> E81F must be kept in order for RANGE macros
 #define ID_VIEW_SMALLICON               0xE810
 #define ID_VIEW_LARGEICON               0xE811
 #define ID_VIEW_LIST                   0xE812
@@ -292,7 +292,7 @@
 #define AFX_ID_VIEW_MINIMUM              ID_VIEW_SMALLICON
 #define AFX_ID_VIEW_MAXIMUM              ID_VIEW_BYNAME
 #endif
-	// E800 -> E8FF reserved for other control bar commands
+// E800 -> E8FF reserved for other control bar commands
 
 // RecordForm commands
 #define ID_RECORD_FIRST                 0xE900
@@ -609,7 +609,7 @@
 #define AFX_IDD_CHANGESOURCE            30733
 
 // Standard cursors (0x7901->)
-	// AFX_IDC = Cursor resources
+// AFX_IDC = Cursor resources
 #define AFX_IDC_CONTEXTHELP             30977       // context sensitive help
 #define AFX_IDC_MAGNIFY                 30978       // print preview zoom
 #define AFX_IDC_SMALLARROWS             30979       // splitter

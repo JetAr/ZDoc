@@ -1,4 +1,4 @@
-//<SnippetMusicBundleSig_cppMainWholePage>
+﻿//<SnippetMusicBundleSig_cppMainWholePage>
 /*****************************************************************************
 *
 * File: main.cpp
@@ -12,18 +12,18 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 ****************************************************************************/
 
 #include <stdio.h>
@@ -48,7 +48,7 @@
 //=================================
 int
 wmain(
-    )
+)
 {
     HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 
@@ -58,12 +58,12 @@ wmain(
         IOpcFactory * opcFactory = NULL;
 
         hr = CoCreateInstance(
-                __uuidof(OpcFactory), 
-                NULL, 
-                CLSCTX_INPROC_SERVER,
-                __uuidof(IOpcFactory), 
-                (LPVOID*)&opcFactory
-                );
+                 __uuidof(OpcFactory),
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 __uuidof(IOpcFactory),
+                 (LPVOID*)&opcFactory
+             );
 
         if (SUCCEEDED(hr))
         {

@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -21,7 +21,7 @@
 #include "TSimpleList.h"
 
 #ifndef SAFE_RELEASE
-    #define SAFE_RELEASE( x )           \
+#define SAFE_RELEASE( x )           \
         if ( NULL != x )                \
         {                               \
             x->Release( );              \
@@ -30,7 +30,7 @@
 #endif // SAFE_RELEASE
 
 #ifndef SAFE_ARRAYDELETE
-    #define SAFE_ARRAYDELETE( x )       \
+#define SAFE_ARRAYDELETE( x )       \
        if( x )                          \
        {                                \
            delete [] x;                 \
@@ -39,7 +39,7 @@
 #endif //SAFE_ARRAYDELETE
 
 #ifndef SAFE_CLOSEFILEHANDLE
-    #define SAFE_CLOSEFILEHANDLE( h )   \
+#define SAFE_CLOSEFILEHANDLE( h )   \
         if( INVALID_HANDLE_VALUE != h ) \
         {                               \
             CloseHandle( h );           \
@@ -70,7 +70,7 @@ class CWMInput
 {
 public:
     CWMInput();
-    ~CWMInput() {}; 
+    ~CWMInput() {};
 
     //
     // Used by GetMinElement method of CTSimpleList< CWMInput >
@@ -96,7 +96,7 @@ public:
     BOOL                    m_fAddSMPTE;
 };
 
-// 
+//
 // AVI input list
 //
 typedef CTSimpleList< CWMInput > INPUTLIST;
@@ -116,26 +116,26 @@ public:
     CUncompAVIToWMV();
     ~CUncompAVIToWMV();
 
-    HRESULT Initial( __in LPTSTR pszInFile, 
+    HRESULT Initial( __in LPTSTR pszInFile,
                      BOOL        fInFileListFile,
-                     __in LPTSTR pszOutFile, 
+                     __in LPTSTR pszOutFile,
                      IWMProfile  * pProfile,
                      BOOL        fArbitrary,
                      BOOL        fPreserveProfile,
                      BOOL        fAddSMPTE,
                      int         nMaxDuration );
-    
+
     static HRESULT ListSystemProfile();
 
-    static HRESULT LoadSystemProfile( DWORD dwProfileIndex, 
+    static HRESULT LoadSystemProfile( DWORD dwProfileIndex,
                                       IWMProfile ** ppIWMProfile );
 
-    static HRESULT LoadCustomProfile( LPCTSTR ptszProfileFile, 
+    static HRESULT LoadCustomProfile( LPCTSTR ptszProfileFile,
                                       IWMProfile ** ppIWMProfile );
 
     static HRESULT CreateEmptyProfile( IWMProfile ** ppIWMProfile );
 
-    static HRESULT SaveProfile( LPCTSTR ptszFileName, 
+    static HRESULT SaveProfile( LPCTSTR ptszFileName,
                                 IWMProfile * pIWMProfile );
 
     HRESULT SetAttribute( CONTENT_DESC * pCntDesc );
@@ -144,7 +144,10 @@ public:
 
     HRESULT Start();
 
-    void    SetPreprocessing( BOOL fPreprocessing) { m_fPreprocessing = fPreprocessing; }
+    void    SetPreprocessing( BOOL fPreprocessing)
+    {
+        m_fPreprocessing = fPreprocessing;
+    }
 
 protected:
 
@@ -169,11 +172,11 @@ protected:
                             WORD  * wStreamNum,
                             __out LPWSTR * pwszConnectionName );
 
-    HRESULT GetTokensFromFile( LPCTSTR ptszFileName, 
-                               __out_ecount(*TokenNum) LPTSTR pptszTokens[], 
+    HRESULT GetTokensFromFile( LPCTSTR ptszFileName,
+                               __out_ecount(*TokenNum) LPTSTR pptszTokens[],
                                int * TokenNum );
 
-    HRESULT CreateProfileStreamList( IWMProfile * pProfile, 
+    HRESULT CreateProfileStreamList( IWMProfile * pProfile,
                                      CTSimpleList< CProfileStreams > * pProfStreamList );
 
     HRESULT AddArbitraryStream( IWMProfile * pProfile );
@@ -217,15 +220,15 @@ BOOL CompareMediaTypes( const WM_MEDIA_TYPE * pMedia1, const WM_MEDIA_TYPE * pMe
 class CProfileStreams
 {
 public :
-    CProfileStreams() : m_wStreamNum( 0 ), 
-                        m_pMt( NULL ), 
-                        m_pwszConnectionName( NULL )
+    CProfileStreams() : m_wStreamNum( 0 ),
+        m_pMt( NULL ),
+        m_pwszConnectionName( NULL )
     {
         ZeroMemory( &m_Type, sizeof( GUID ) );
     }
 
     CProfileStreams( GUID Type, WORD dwStreamNum, WM_MEDIA_TYPE * pMt, __in LPWSTR wszConnectionName ) :
-                m_Type( Type ), m_wStreamNum( dwStreamNum ), m_pwszConnectionName( wszConnectionName ), m_pMt( pMt )
+        m_Type( Type ), m_wStreamNum( dwStreamNum ), m_pwszConnectionName( wszConnectionName ), m_pMt( pMt )
     {
     }
 
@@ -244,7 +247,7 @@ public :
     //
     BOOL operator == ( const CWMInput & right )
     {
-       return( m_Type == right.m_Type && CompareMediaTypes( m_pMt, &right.m_Mt ) ); 
+        return( m_Type == right.m_Type && CompareMediaTypes( m_pMt, &right.m_Mt ) );
     }
 
     GUID                m_Type;

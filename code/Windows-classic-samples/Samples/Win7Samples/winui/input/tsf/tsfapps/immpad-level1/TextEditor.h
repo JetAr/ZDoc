@@ -1,4 +1,4 @@
-
+﻿
 #pragma once
 
 #include "TextLayout.h"
@@ -13,16 +13,16 @@
 class CTextEditor : public CTextContainer
 {
 public:
-    CTextEditor() 
+    CTextEditor()
     {
         _nSelStart = 0;
         _nSelEnd = 0;
     }
 
-    ~CTextEditor() 
+    ~CTextEditor()
     {
     }
-    
+
     void MoveSelection(UINT nSelStart, UINT nSelEnd);
     BOOL MoveSelectionAtPoint(POINT pt);
     BOOL InsertAtSelection(LPCWSTR psz);
@@ -34,11 +34,17 @@ public:
     BOOL MoveSelectionToLineFirstEnd(BOOL bFirst);
 
     void Render(HDC hdc, const LOGFONT *plf);
-    UINT GetSelectionStart() {return _nSelStart;}
-    UINT GetSelectionEnd() {return _nSelEnd;}
+    UINT GetSelectionStart()
+    {
+        return _nSelStart;
+    }
+    UINT GetSelectionEnd()
+    {
+        return _nSelEnd;
+    }
     void BlinkCaret(HDC hdc)
     {
-         _layout.BlinkCaret(hdc);
+        _layout.BlinkCaret(hdc);
     }
 
 private:

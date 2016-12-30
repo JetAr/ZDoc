@@ -1,12 +1,12 @@
-#pragma once
+﻿#pragma once
 
 #include <windows.h>
 #include <shlobj.h> // for IDeskband2, IObjectWithSite, IPesistStream, and IInputObject
 
 class CDeskBand : public IDeskBand2,
-                  public IPersistStream,
-                  public IObjectWithSite,
-                  public IInputObject
+    public IPersistStream,
+    public IObjectWithSite,
+    public IInputObject
 {
 public:
     // IUnknown

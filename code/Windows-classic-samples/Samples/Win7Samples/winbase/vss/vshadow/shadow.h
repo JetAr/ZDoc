@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © 2006 Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© 2006 Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 #pragma once
@@ -46,14 +46,14 @@ public:
 
     ~CommandLineParser();
 
-    // Main routine 
+    // Main routine
     int MainRoutine(vector<wstring> arguments);
 
-    
+
 
 private:
 
-    // Returns the final context based on whether the shapshot is persistent 
+    // Returns the final context based on whether the shapshot is persistent
     // and whether the creation is with/without writers
     DWORD UpdateFinalContext(DWORD dwContext);
 
@@ -85,8 +85,8 @@ private:
 
     // The VSS client
     VssClient   m_vssClient;
-    
-    // Flags to indicate whether the snapshot is persistent 
+
+    // Flags to indicate whether the snapshot is persistent
     // and whether the creation is with/without writers
     bool        m_bPersistent;
     bool        m_bWithWriters;

@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 /* ODBCSQL: a sample program that implements an ODBC command line interpreter.
 /*
 /* USAGE:   ODBCSQL DSN=<dsn name>   or
@@ -7,7 +7,7 @@
 /*
 /*
 /* Copyright(c) Microsoft Corporation.   This is a WDAC sample program and
-/* is not suitable for use in production environments.   
+/* is not suitable for use in production environments.
 /*
 /******************************************************************************/
 /* Modules:
@@ -51,7 +51,8 @@
 /* a column.
 /******************************************/
 
-typedef struct STR_BINDING {
+typedef struct STR_BINDING
+{
     SQLSMALLINT         cDisplaySize;           /* size to display  */
     WCHAR               *wszBuffer;             /* display buffer   */
     SQLLEN              indPtr;                 /* size or null     */
@@ -65,9 +66,9 @@ typedef struct STR_BINDING {
 /* Forward references                     */
 /******************************************/
 
-void HandleDiagnosticRecord (SQLHANDLE      hHandle,    
-                 SQLSMALLINT    hType,  
-                 RETCODE        RetCode);
+void HandleDiagnosticRecord (SQLHANDLE      hHandle,
+                             SQLSMALLINT    hType,
+                             RETCODE        RetCode);
 
 void DisplayResults(HSTMT       hStmt,
                     SQLSMALLINT cCols);
@@ -123,9 +124,9 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR **argv)
     TRYODBC(hEnv,
             SQL_HANDLE_ENV,
             SQLSetEnvAttr(hEnv,
-                SQL_ATTR_ODBC_VERSION,
-                (SQLPOINTER)SQL_OV_ODBC3,
-                0));
+                          SQL_ATTR_ODBC_VERSION,
+                          (SQLPOINTER)SQL_OV_ODBC3,
+                          0));
 
     // Allocate a connection
     TRYODBC(hEnv,
@@ -135,7 +136,7 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR **argv)
     if (argc > 1)
     {
         pwszConnStr = *++argv;
-    } 
+    }
     else
     {
         pwszConnStr = L"";
@@ -145,15 +146,15 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR **argv)
     // on the input, otherwise let the driver manager prompt for input.
 
     TRYODBC(hDbc,
-        SQL_HANDLE_DBC,
-        SQLDriverConnect(hDbc,
-                         GetDesktopWindow(),
-                         pwszConnStr,
-                         SQL_NTS,
-                         NULL,
-                         0,
-                         NULL,
-                         SQL_DRIVER_COMPLETE));
+            SQL_HANDLE_DBC,
+            SQLDriverConnect(hDbc,
+                             GetDesktopWindow(),
+                             pwszConnStr,
+                             SQL_NTS,
+                             NULL,
+                             0,
+                             NULL,
+                             SQL_DRIVER_COMPLETE));
 
     fwprintf(stderr, L"Connected!\n");
 
@@ -182,45 +183,45 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR **argv)
         switch(RetCode)
         {
         case SQL_SUCCESS_WITH_INFO:
-            {
-                HandleDiagnosticRecord(hStmt, SQL_HANDLE_STMT, RetCode);
-                // fall through
-            }
+        {
+            HandleDiagnosticRecord(hStmt, SQL_HANDLE_STMT, RetCode);
+            // fall through
+        }
         case SQL_SUCCESS:
+        {
+            // If this is a row-returning query, display
+            // results
+            TRYODBC(hStmt,
+                    SQL_HANDLE_STMT,
+                    SQLNumResultCols(hStmt,&sNumResults));
+
+            if (sNumResults > 0)
             {
-                // If this is a row-returning query, display
-                // results
+                DisplayResults(hStmt,sNumResults);
+            }
+            else
+            {
+                SQLLEN cRowCount;
+
                 TRYODBC(hStmt,
-                        SQL_HANDLE_STMT,
-                        SQLNumResultCols(hStmt,&sNumResults));
-
-                if (sNumResults > 0)
-                {
-                    DisplayResults(hStmt,sNumResults);
-                } 
-                else
-                {
-                    SQLLEN cRowCount;
-
-                    TRYODBC(hStmt,
                         SQL_HANDLE_STMT,
                         SQLRowCount(hStmt,&cRowCount));
 
-                    if (cRowCount >= 0)
-                    {
-                        wprintf(L"%Id %s affected\n",
-                                 cRowCount,
-                                 cRowCount == 1 ? L"row" : L"rows");
-                    }
+                if (cRowCount >= 0)
+                {
+                    wprintf(L"%Id %s affected\n",
+                            cRowCount,
+                            cRowCount == 1 ? L"row" : L"rows");
                 }
-                break;
             }
+            break;
+        }
 
         case SQL_ERROR:
-            {
-                HandleDiagnosticRecord(hStmt, SQL_HANDLE_STMT, RetCode);
-                break;
-            }
+        {
+            HandleDiagnosticRecord(hStmt, SQL_HANDLE_STMT, RetCode);
+            break;
+        }
 
         default:
             fwprintf(stderr, L"Unexpected return code %hd!\n", RetCode);
@@ -270,12 +271,12 @@ Exit:
 void DisplayResults(HSTMT       hStmt,
                     SQLSMALLINT cCols)
 {
-    BINDING         *pFirstBinding, *pThisBinding;          
+    BINDING         *pFirstBinding, *pThisBinding;
     SQLSMALLINT     cDisplaySize;
     RETCODE         RetCode = SQL_SUCCESS;
     int             iCount = 0;
 
-    // Allocate memory for each column 
+    // Allocate memory for each column
 
     AllocateBindings(hStmt, cCols, &pFirstBinding, &cDisplaySize);
 
@@ -288,7 +289,8 @@ void DisplayResults(HSTMT       hStmt,
 
     bool fNoData = false;
 
-    do {
+    do
+    {
         // Fetch a row
 
         if (iCount++ >= gHeight - 2)
@@ -297,7 +299,7 @@ void DisplayResults(HSTMT       hStmt,
             bool    fEnterReceived = false;
 
             while(!fEnterReceived)
-            {   
+            {
                 wprintf(L"              ");
                 SetConsole(cDisplaySize+2, TRUE);
                 wprintf(L"   Press ENTER to continue, Q to quit (height:%hd)", gHeight);
@@ -332,29 +334,30 @@ void DisplayResults(HSTMT       hStmt,
             // Display the data.   Ignore truncations
 
             for (pThisBinding = pFirstBinding;
-                pThisBinding;
-                pThisBinding = pThisBinding->sNext)
+                    pThisBinding;
+                    pThisBinding = pThisBinding->sNext)
             {
                 if (pThisBinding->indPtr != SQL_NULL_DATA)
                 {
                     wprintf(pThisBinding->fChar ? DISPLAY_FORMAT_C:DISPLAY_FORMAT,
-                        PIPE,
-                        pThisBinding->cDisplaySize,
-                        pThisBinding->cDisplaySize,
-                        pThisBinding->wszBuffer);
-                } 
+                            PIPE,
+                            pThisBinding->cDisplaySize,
+                            pThisBinding->cDisplaySize,
+                            pThisBinding->wszBuffer);
+                }
                 else
                 {
                     wprintf(DISPLAY_FORMAT_C,
-                        PIPE,
-                        pThisBinding->cDisplaySize,
-                        pThisBinding->cDisplaySize,
-                        L"<NULL>");
+                            PIPE,
+                            pThisBinding->cDisplaySize,
+                            pThisBinding->cDisplaySize,
+                            L"<NULL>");
                 }
             }
             wprintf(L" %c\n",PIPE);
         }
-    } while (!fNoData);
+    }
+    while (!fNoData);
 
     SetConsole(cDisplaySize+2, TRUE);
     wprintf(L"%*.*s", cDisplaySize+2, cDisplaySize+2, L" ");
@@ -375,7 +378,7 @@ Exit:
 
 /************************************************************************
 /* AllocateBindings:  Get column information and allocate bindings
-/* for each column.  
+/* for each column.
 /*
 /* Parameters:
 /*      hStmt      Statement handle
@@ -424,36 +427,36 @@ void AllocateBindings(HSTMT         hStmt,
         TRYODBC(hStmt,
                 SQL_HANDLE_STMT,
                 SQLColAttribute(hStmt,
-                    iCol,
-                    SQL_DESC_DISPLAY_SIZE,
-                    NULL,
-                    0,
-                    NULL,
-                    &cchDisplay));
+                                iCol,
+                                SQL_DESC_DISPLAY_SIZE,
+                                NULL,
+                                0,
+                                NULL,
+                                &cchDisplay));
 
 
         // Figure out if this is a character or numeric column; this is
         // used to determine if we want to display the data left- or right-
         // aligned.
 
-        // SQL_DESC_CONCISE_TYPE maps to the 1.x SQL_COLUMN_TYPE. 
+        // SQL_DESC_CONCISE_TYPE maps to the 1.x SQL_COLUMN_TYPE.
         // This is what you must use if you want to work
         // against a 2.x driver.
 
         TRYODBC(hStmt,
                 SQL_HANDLE_STMT,
                 SQLColAttribute(hStmt,
-                    iCol,
-                    SQL_DESC_CONCISE_TYPE,
-                    NULL,
-                    0,
-                    NULL,
-                    &ssType));
+                                iCol,
+                                SQL_DESC_CONCISE_TYPE,
+                                NULL,
+                                0,
+                                NULL,
+                                &ssType));
 
 
         pThisBinding->fChar = (ssType == SQL_CHAR ||
-                                ssType == SQL_VARCHAR ||
-                                ssType == SQL_LONGVARCHAR);
+                               ssType == SQL_VARCHAR ||
+                               ssType == SQL_LONGVARCHAR);
 
         pThisBinding->sNext = NULL;
 
@@ -473,7 +476,7 @@ void AllocateBindings(HSTMT         hStmt,
         }
 
         // Map this buffer to the driver's buffer.   At Fetch time,
-        // the driver will fill in this data.  Note that the size is 
+        // the driver will fill in this data.  Note that the size is
         // count of bytes (for Unicode).  All ODBC functions that take
         // SQLPOINTER use count of bytes; all functions that take only
         // strings use count of characters.
@@ -481,11 +484,11 @@ void AllocateBindings(HSTMT         hStmt,
         TRYODBC(hStmt,
                 SQL_HANDLE_STMT,
                 SQLBindCol(hStmt,
-                    iCol,
-                    SQL_C_TCHAR,
-                    (SQLPOINTER) pThisBinding->wszBuffer,
-                    (cchDisplay + 1) * sizeof(WCHAR),
-                    &pThisBinding->indPtr));
+                           iCol,
+                           SQL_C_TCHAR,
+                           (SQLPOINTER) pThisBinding->wszBuffer,
+                           (cchDisplay + 1) * sizeof(WCHAR),
+                           &pThisBinding->indPtr));
 
 
         // Now set the display size that we will use to display
@@ -494,12 +497,12 @@ void AllocateBindings(HSTMT         hStmt,
         TRYODBC(hStmt,
                 SQL_HANDLE_STMT,
                 SQLColAttribute(hStmt,
-                    iCol,
-                    SQL_DESC_NAME,
-                    NULL,
-                    0,
-                    &cchColumnNameLength,
-                    NULL));
+                                iCol,
+                                SQL_DESC_NAME,
+                                NULL,
+                                0,
+                                &cchColumnNameLength,
+                                NULL));
 
         pThisBinding->cDisplaySize = max((SQLSMALLINT)cchDisplay, cchColumnNameLength);
         if (pThisBinding->cDisplaySize < NULL_SIZE)
@@ -520,7 +523,7 @@ Exit:
 
 
 /************************************************************************
-/* DisplayTitles: print the titles of all the columns and set the 
+/* DisplayTitles: print the titles of all the columns and set the
 /*                shell window's width
 /*
 /* Parameters:
@@ -543,18 +546,18 @@ void DisplayTitles(HSTMT     hStmt,
         TRYODBC(hStmt,
                 SQL_HANDLE_STMT,
                 SQLColAttribute(hStmt,
-                    iCol++,
-                    SQL_DESC_NAME,
-                    wszTitle,
-                    sizeof(wszTitle), // Note count of bytes!
-                    NULL,
-                    NULL));
+                                iCol++,
+                                SQL_DESC_NAME,
+                                wszTitle,
+                                sizeof(wszTitle), // Note count of bytes!
+                                NULL,
+                                NULL));
 
         wprintf(DISPLAY_FORMAT_C,
-                 PIPE,
-                 pBinding->cDisplaySize,
-                 pBinding->cDisplaySize,
-                 wszTitle);
+                PIPE,
+                pBinding->cDisplaySize,
+                pBinding->cDisplaySize,
+                wszTitle);
     }
 
 Exit:
@@ -618,8 +621,8 @@ void SetConsole(DWORD dwDisplaySize,
 /*      RetCode     Return code of failing command
 /************************************************************************/
 
-void HandleDiagnosticRecord (SQLHANDLE      hHandle,    
-                             SQLSMALLINT    hType,  
+void HandleDiagnosticRecord (SQLHANDLE      hHandle,
+                             SQLSMALLINT    hType,
                              RETCODE        RetCode)
 {
     SQLSMALLINT iRec = 0;

@@ -1,4 +1,4 @@
-/* **************************************************************************
+﻿/* **************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -20,7 +20,7 @@ Abstract:
 
 #include "stdafx.h"
 
-template <class IAzNative> 
+template <class IAzNative>
 class CAzBase
 {
 public:
@@ -30,16 +30,17 @@ public:
 
     CAzBase(IAzNative *pNative,bool pisNew);
 
-    const CComBSTR& getName() const {
+    const CComBSTR& getName() const
+    {
 
         return m_name;
 
-}
+    }
 protected:
-    HRESULT InitializeUsingSafeArray(VARIANT &var, 
-                                    HRESULT (__stdcall IAzNative:: *targetMethod)(BSTR, VARIANT));
+    HRESULT InitializeUsingSafeArray(VARIANT &var,
+                                     HRESULT (__stdcall IAzNative:: *targetMethod)(BSTR, VARIANT));
 
-    CComPtr<IAzNative> m_native;	
+    CComPtr<IAzNative> m_native;
 
     CComBSTR m_name;
 

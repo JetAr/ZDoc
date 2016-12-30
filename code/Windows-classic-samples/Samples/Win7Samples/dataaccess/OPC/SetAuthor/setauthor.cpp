@@ -1,4 +1,4 @@
-//<SnippetSetAuthor_cppSetAuthorWholePage>
+﻿//<SnippetSetAuthor_cppSetAuthorWholePage>
 /*****************************************************************************
 *
 * File: setauthor.cpp
@@ -18,13 +18,13 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -48,28 +48,28 @@
 //////////////////////////////////////////////////////////////////////////////
 HRESULT
 SetAuthorMain(
-      LPCWSTR filename, // Name of file to read.
-      LPCWSTR newAuthor, // Optional. New author name. If specified, targetFile must also be specified.
-      LPCWSTR targetFile // Optional. Name of output file. If specified, newAuthor must also be
-                         // specified.
-      )
+    LPCWSTR filename, // Name of file to read.
+    LPCWSTR newAuthor, // Optional. New author name. If specified, targetFile must also be specified.
+    LPCWSTR targetFile // Optional. Name of output file. If specified, newAuthor must also be
+    // specified.
+)
 {
     IOpcPackage * package = NULL;
 
     // A representation of the part containing word processing document markup.
-    IOpcPart * documentPart = NULL; 
+    IOpcPart * documentPart = NULL;
 
 //<SnippetCreateFactory_cppCreateFactory>
     IOpcFactory * factory = NULL;
 
     // Create a new factory.
     HRESULT hr = CoCreateInstance(
-                    __uuidof(OpcFactory),
-                    NULL,
-                    CLSCTX_INPROC_SERVER,
-                    __uuidof(IOpcFactory),
-                    (LPVOID*)&factory
-                    );
+                     __uuidof(OpcFactory),
+                     NULL,
+                     CLSCTX_INPROC_SERVER,
+                     __uuidof(IOpcFactory),
+                     (LPVOID*)&factory
+                 );
 
 //</SnippetCreateFactory_cppCreateFactory>
 
@@ -79,7 +79,7 @@ SetAuthorMain(
         hr = opclib::LoadPackage(factory, filename, &package);
     }
 
-    if (SUCCEEDED(hr)) 
+    if (SUCCEEDED(hr))
     {
         // Locate the Main Document part that contains wordprocessing markup.
         hr = wordlib::FindDocumentInPackage(package, &documentPart);
@@ -164,13 +164,13 @@ SetAuthorMain(
 // Entry point for the sample
 int
 wmain(
-    int argc, 
+    int argc,
     wchar_t* argv[]
-    )
+)
 {
     if (argc != 2 && argc != 4)
     {
-        wprintf(L"Usage: Setauthor <filename> [<new author> <targetfile>]\n");   
+        wprintf(L"Usage: Setauthor <filename> [<new author> <targetfile>]\n");
         exit(0);
     }
 
@@ -196,10 +196,10 @@ wmain(
         // Display document content and properties. If requested, change
         // properties and save changes to document as a new file.
         hr = SetAuthorMain(
-                pFileName,
-                pNewAuthor,
-                pTargetFile
-                );
+                 pFileName,
+                 pNewAuthor,
+                 pTargetFile
+             );
 
         CoUninitialize();
     }

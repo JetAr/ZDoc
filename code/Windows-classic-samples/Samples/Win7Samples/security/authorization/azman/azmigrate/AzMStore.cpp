@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -32,7 +32,8 @@ CAzMStore::~CAzMStore(void)
 {
     CAzLogging::Entering(_TEXT("CAzMStore::~CAzMStore"));
 
-    for(std::vector<CAzApplication*>::iterator iter1 = m_apps.begin();iter1 != m_apps.end() ;iter1++ ) {
+    for(std::vector<CAzApplication*>::iterator iter1 = m_apps.begin(); iter1 != m_apps.end() ; iter1++ )
+    {
 
         CAzApplication *ptr=(*iter1);
 
@@ -52,12 +53,13 @@ Arguments: None
 
 Return Value:
 
-    Returns success, appropriate failure value of the native interface methods 
+    Returns success, appropriate failure value of the native interface methods
 
 --*/
-HRESULT CAzMStore::OverWriteStore() {
+HRESULT CAzMStore::OverWriteStore()
+{
 
-    CAzLogging::Entering(_TEXT("CAzMStore::OverWriteStore"));    
+    CAzLogging::Entering(_TEXT("CAzMStore::OverWriteStore"));
 
     HRESULT hr=InitializeStore(false,true);
 
@@ -66,7 +68,8 @@ HRESULT CAzMStore::OverWriteStore() {
     if (FAILED(hr))
         goto lError1;
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=m_native->Delete(CComVariant());
 
@@ -75,7 +78,8 @@ HRESULT CAzMStore::OverWriteStore() {
         if (FAILED(hr))
             goto lError1;
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeStore(true,true);
         }
@@ -84,7 +88,7 @@ HRESULT CAzMStore::OverWriteStore() {
 
     }
 lError1:
-    CAzLogging::Exiting(_TEXT("CAzMStore::OverWriteStore"));        
+    CAzLogging::Exiting(_TEXT("CAzMStore::OverWriteStore"));
 
     return hr;
 }
@@ -100,11 +104,12 @@ Arguments: pbcreateStore - Flag to create Store, or manage store
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
-HRESULT CAzMStore::InitializeStore(bool pbcreateStore,bool pbOverWritten){
+HRESULT CAzMStore::InitializeStore(bool pbcreateStore,bool pbOverWritten)
+{
 
     CAzLogging::Entering(_TEXT("CAzMStore::InitializeStore"));
 
@@ -117,9 +122,10 @@ HRESULT CAzMStore::InitializeStore(bool pbcreateStore,bool pbOverWritten){
     long lnewVersionFLag=0;
 
     //Donot create another instance if pbOverWritten==true as instance
-    //already created 
+    //already created
 
-    if (!pbOverWritten) {
+    if (!pbOverWritten)
+    {
 
         hr=m_native.CoCreateInstance(__uuidof(AzAuthorizationStore));
 
@@ -132,21 +138,24 @@ HRESULT CAzMStore::InitializeStore(bool pbcreateStore,bool pbOverWritten){
 
     hr=m_native.QueryInterface(&newStore);
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
         CAzGlobalOptions::m_bVersionTwo = true;
     }
 
     long flags=0;
 
-    if (pbcreateStore==true) {
+    if (pbcreateStore==true)
+    {
 
-       flags = AZ_AZSTORE_FLAG_CREATE;
+        flags = AZ_AZSTORE_FLAG_CREATE;
 
-       if (CAzGlobalOptions::m_bVersionTwo) 
-           flags |= AZ_AZSTORE_NT6_FUNCTION_LEVEL;
+        if (CAzGlobalOptions::m_bVersionTwo)
+            flags |= AZ_AZSTORE_NT6_FUNCTION_LEVEL;
 
-    } else
-      flags = AZ_AZSTORE_FLAG_MANAGE_STORE_ONLY;
+    }
+    else
+        flags = AZ_AZSTORE_FLAG_MANAGE_STORE_ONLY;
 
 
 //    long flags=((pbcreateStore==true) ? AZ_AZSTORE_FLAG_CREATE : AZ_AZSTORE_FLAG_MANAGE_STORE_ONLY);
@@ -159,12 +168,13 @@ HRESULT CAzMStore::InitializeStore(bool pbcreateStore,bool pbOverWritten){
 
     m_isNew=pbcreateStore;
 
-    if (SUCCEEDED(hr) && pbcreateStore) {
+    if (SUCCEEDED(hr) && pbcreateStore)
+    {
 
         m_native->Submit(0,CComVariant());
 
-        CAzLogging::Log(hr,_TEXT("Submitting changes on AzMan Authornization Store"),COLE2T(m_storeName));			
-    } 
+        CAzLogging::Log(hr,_TEXT("Submitting changes on AzMan Authornization Store"),COLE2T(m_storeName));
+    }
 
 lError1:
 
@@ -176,7 +186,8 @@ lError1:
 
 
 
-HRESULT CAzMStore::OpenApps(vector<CComBSTR> &pAppNames) {
+HRESULT CAzMStore::OpenApps(vector<CComBSTR> &pAppNames)
+{
 
     CAzLogging::Entering(_TEXT("CAzMStore::OpenApp"));
 
@@ -184,17 +195,20 @@ HRESULT CAzMStore::OpenApps(vector<CComBSTR> &pAppNames) {
 
     HRESULT hr=S_OK;
 
-    for (vector<CComBSTR>::iterator itr=pAppNames.begin() ; itr !=pAppNames.end() ; itr++) {
+    for (vector<CComBSTR>::iterator itr=pAppNames.begin() ; itr !=pAppNames.end() ; itr++)
+    {
 
         hr=m_native->OpenApplication(*itr,CComVariant(),&spApp);
 
         CAzLogging::Log(hr,_TEXT("Opening Application"),COLE2T(*itr));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             CAzApplication *app=new CAzApplication(spApp,false);
 
-            if (!app) {
+            if (!app)
+            {
                 hr = E_FAIL;
 
                 CAzLogging::Log(hr,_TEXT("Creating Application"),COLE2T(m_storeName));
@@ -205,7 +219,7 @@ HRESULT CAzMStore::OpenApps(vector<CComBSTR> &pAppNames) {
 
             m_apps.push_back(app);
         }
-       
+
 
     }
 
@@ -223,19 +237,20 @@ lError1:
 
 Routine description:
 
-    This method Opens the specified application and adds it to the internal vector 
+    This method Opens the specified application and adds it to the internal vector
     of applications
 
 Arguments: pAppName - Name of the app that needs to be opened
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
 
-HRESULT CAzMStore::OpenApp(CComBSTR &pAppName) {
+HRESULT CAzMStore::OpenApp(CComBSTR &pAppName)
+{
 
     CAzLogging::Entering(_TEXT("CAzMStore::OpenApp"));
 
@@ -248,11 +263,13 @@ HRESULT CAzMStore::OpenApp(CComBSTR &pAppName) {
 
     CAzLogging::Log(hr,_TEXT("Opening Application"),COLE2T(pAppName));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         CAzApplication *app=new CAzApplication(spApp,false);
 
-        if (!app) {
+        if (!app)
+        {
             hr = E_FAIL;
 
             CAzLogging::Log(hr,_TEXT("Creating Application"),COLE2T(m_storeName));
@@ -281,12 +298,13 @@ Arguments: NONE
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
 
-HRESULT CAzMStore::OpenAllApps() {
+HRESULT CAzMStore::OpenAllApps()
+{
 
     CAzLogging::Entering(_TEXT("CAzMStore::OpenAllApps"));
 
@@ -299,7 +317,7 @@ HRESULT CAzMStore::OpenAllApps() {
 
     CAzApplication *app;
 
-    CComVariant cVappl;	
+    CComVariant cVappl;
 
     HRESULT hr=m_native->get_Applications(&spAzApplications);
 
@@ -310,21 +328,22 @@ HRESULT CAzMStore::OpenAllApps() {
 
     hr=spAzApplications->get_Count(&lCount);
 
-    CAzLogging::Log(hr,_TEXT("Getting application count"),COLE2T(m_storeName));	
+    CAzLogging::Log(hr,_TEXT("Getting application count"),COLE2T(m_storeName));
 
     if (FAILED(hr))
         goto lError1;
 
-    if (lCount==0)	
+    if (lCount==0)
         goto lError1;
 
-    for (long i = 1 ; i <= lCount ; i++) {
+    for (long i = 1 ; i <= lCount ; i++)
+    {
 
         CComPtr<IAzApplication> spApp;
 
         hr=spAzApplications->get_Item(i,&cVappl);
 
-        CAzLogging::Log(hr,_TEXT("Getting application item"),COLE2T(m_storeName));	
+        CAzLogging::Log(hr,_TEXT("Getting application item"),COLE2T(m_storeName));
 
         if (FAILED(hr))
             goto lError1;
@@ -340,7 +359,8 @@ HRESULT CAzMStore::OpenAllApps() {
 
         app=new CAzApplication(spApp);
 
-       if (!app) {
+        if (!app)
+        {
 
             hr=E_FAIL;
 
@@ -366,17 +386,18 @@ Routine description:
 
     This method copies all store properties from source store to *this* store
 
-Arguments: sourceStore - Name of the source store 
+Arguments: sourceStore - Name of the source store
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
 
-HRESULT CAzMStore::CopyStoreProperties(CAzMStore &sourceStore) {
+HRESULT CAzMStore::CopyStoreProperties(CAzMStore &sourceStore)
+{
 
     CAzLogging::Entering(_TEXT("CopyStoreProperties"));
 
@@ -384,13 +405,15 @@ HRESULT CAzMStore::CopyStoreProperties(CAzMStore &sourceStore) {
 
     CComVariant cVVar;
 
-    for (long i=0;i<m_uchNumberOfProps;i++) {
+    for (long i=0; i<m_uchNumberOfProps; i++)
+    {
 
         hr=sourceStore.m_native->GetProperty(m_props[i],CComVariant(), &cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting IAzAuthorizationStore Property ID:"),COLE2T(sourceStore.m_storeName),m_props[i]);
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=m_native->SetProperty(m_props[i],cVVar,CComVariant());
 
@@ -402,13 +425,15 @@ HRESULT CAzMStore::CopyStoreProperties(CAzMStore &sourceStore) {
 
     }
 
-    if (!CAzGlobalOptions::m_bIgnorePolicyAdmins) {
+    if (!CAzGlobalOptions::m_bIgnorePolicyAdmins)
+    {
 
         hr=sourceStore.m_native->get_DelegatedPolicyUsers(&cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting IAzAuthorizationStore Delegated Policy Users"),COLE2T(m_storeName));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzAuthorizationStore::AddDelegatedPolicyUser);
 
@@ -416,13 +441,14 @@ HRESULT CAzMStore::CopyStoreProperties(CAzMStore &sourceStore) {
 
             cVVar.Clear();
 
-        } 
+        }
 
         hr=sourceStore.m_native->get_PolicyAdministrators(&cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting IAzAuthorizationStore Policy Admins"),COLE2T(m_storeName));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzAuthorizationStore::AddPolicyAdministrator);
 
@@ -435,7 +461,8 @@ HRESULT CAzMStore::CopyStoreProperties(CAzMStore &sourceStore) {
 
         CAzLogging::Log(hr,_TEXT("Getting IAzAuthorizationStore Policy Readers"),COLE2T(m_storeName));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzAuthorizationStore::AddPolicyReader);
 
@@ -443,11 +470,11 @@ HRESULT CAzMStore::CopyStoreProperties(CAzMStore &sourceStore) {
 
             cVVar.Clear();
 
-            } 
-        
-    hr=m_native->Submit(0,CComVariant());
+        }
 
-    CAzLogging::Log(hr,_TEXT("Submitting for IAzAuthorizationStore"),COLE2T(m_storeName));
+        hr=m_native->Submit(0,CComVariant());
+
+        CAzLogging::Log(hr,_TEXT("Submitting for IAzAuthorizationStore"),COLE2T(m_storeName));
 
     }
 
@@ -466,18 +493,19 @@ Routine description:
     It also copies all applications in the vector in the source store
     to *this* store
 
-Arguments: sourceStore - Name of the source store 
+Arguments: sourceStore - Name of the source store
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
 
 
-HRESULT CAzMStore::Copy(CAzMStore& sourceStore){
+HRESULT CAzMStore::Copy(CAzMStore& sourceStore)
+{
 
     CAzLogging::Entering(_TEXT("CAzMStore::Copy"));
 
@@ -503,24 +531,26 @@ HRESULT CAzMStore::Copy(CAzMStore& sourceStore){
 
     hr=CreateAppGroups(sourceStore,true);
 
-    CAzLogging::Log(hr,_TEXT("Creating AppGroup Links under Store"),COLE2T(m_storeName));	
+    CAzLogging::Log(hr,_TEXT("Creating AppGroup Links under Store"),COLE2T(m_storeName));
 
     if (FAILED(hr))
         goto lError1;
 
     sourceApps=sourceStore.getApps();
 
-    for(std::vector<CAzApplication*>::iterator iter1 = sourceApps.begin();iter1 != sourceApps.end() ;iter1++ ) {
+    for(std::vector<CAzApplication*>::iterator iter1 = sourceApps.begin(); iter1 != sourceApps.end() ; iter1++ )
+    {
 
         CComPtr<IAzApplication> app;
 
         hr=m_native->CreateApplication((*iter1)->getName(),CComVariant(),&app);
 
-        CAzLogging::Log(hr,_TEXT("Creating Application under Store"),COLE2T(m_storeName));	
+        CAzLogging::Log(hr,_TEXT("Creating Application under Store"),COLE2T(m_storeName));
 
         newApp=new CAzApplication(app,true);
 
-        if (!newApp) {
+        if (!newApp)
+        {
 
             hr=E_FAIL;
 
@@ -534,14 +564,15 @@ HRESULT CAzMStore::Copy(CAzMStore& sourceStore){
         if (FAILED(hr))
             goto lError1;
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             m_apps.push_back(newApp);
 
             m_native->CloseApplication((*iter1)->getName(),0);
 
         }
- }
+    }
     goto lDone;
 
 lError1:
@@ -552,10 +583,11 @@ lDone:
     CAzLogging::Exiting(_TEXT("CAzMStore::Copy"));
 
     return hr;
-    
+
 }
 
-const std::vector<CAzApplication *>& CAzMStore::getApps() const {
+const std::vector<CAzApplication *>& CAzMStore::getApps() const
+{
     return m_apps;
 }
 
@@ -566,18 +598,19 @@ Routine description:
 
     This method creates all app groups from source store into *this* store
 
-Arguments: sourceStore - Name of the source store 
+Arguments: sourceStore - Name of the source store
            bCreateLinks - If links between app groups need to be created or not
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
 
-HRESULT CAzMStore::CreateAppGroups(CAzMStore& sourceStore,bool bCreateLinks){
+HRESULT CAzMStore::CreateAppGroups(CAzMStore& sourceStore,bool bCreateLinks)
+{
 
     CAzLogging::Entering(_TEXT("CAzMStore::CreateAppGroups"));
 
@@ -585,32 +618,33 @@ HRESULT CAzMStore::CreateAppGroups(CAzMStore& sourceStore,bool bCreateLinks){
 
     long lCount=0;
 
-    CComVariant cVappl;	
+    CComVariant cVappl;
 
     HRESULT hr=sourceStore.m_native->get_ApplicationGroups(&spAzAppGroups);
 
-    CAzLogging::Log(hr,_TEXT("Getting ApplicationGroups for Store"),COLE2T(m_storeName));	
+    CAzLogging::Log(hr,_TEXT("Getting ApplicationGroups for Store"),COLE2T(m_storeName));
 
     if (FAILED(hr))
-        goto lError1;	
+        goto lError1;
 
     hr=spAzAppGroups->get_Count(&lCount);
 
-    CAzLogging::Log(hr,_TEXT("Getting ApplicationGroups Count"),COLE2T(m_storeName));	
+    CAzLogging::Log(hr,_TEXT("Getting ApplicationGroups Count"),COLE2T(m_storeName));
 
     if (FAILED(hr))
         goto lError1;
 
-    if (lCount==0)	
+    if (lCount==0)
         goto lError1;
 
-    for (long i = 1 ; i <= lCount ; i++) {
+    for (long i = 1 ; i <= lCount ; i++)
+    {
 
         CComPtr<IAzApplicationGroup> spSrcAppGroup,spNewAppGroup;
 
         hr=spAzAppGroups->get_Item(i,&cVappl);
 
-        CAzLogging::Log(hr,_TEXT("Getting ApplicationGroup Item"),COLE2T(m_storeName));	
+        CAzLogging::Log(hr,_TEXT("Getting ApplicationGroup Item"),COLE2T(m_storeName));
 
         if (FAILED(hr))
             goto lError1;
@@ -626,30 +660,33 @@ HRESULT CAzMStore::CreateAppGroups(CAzMStore& sourceStore,bool bCreateLinks){
 
         CAzAppGroup oldAppGroup = CAzAppGroup(spSrcAppGroup,false);
 
-        if (!bCreateLinks) {
+        if (!bCreateLinks)
+        {
 
             hr=m_native->CreateApplicationGroup(oldAppGroup.getName(),CComVariant(),&spNewAppGroup);
 
-            CAzLogging::Log(hr,_TEXT("Creating new application group for store"),COLE2T(m_storeName));	
+            CAzLogging::Log(hr,_TEXT("Creating new application group for store"),COLE2T(m_storeName));
 
             if (FAILED(hr))
                 goto lError1;
 
-        } else {
+        }
+        else
+        {
 
-                hr=m_native->OpenApplicationGroup(oldAppGroup.getName(),CComVariant(),&spNewAppGroup);
+            hr=m_native->OpenApplicationGroup(oldAppGroup.getName(),CComVariant(),&spNewAppGroup);
 
-                CAzLogging::Log(hr,_TEXT("Opening New App Group Object to create links"));			
+            CAzLogging::Log(hr,_TEXT("Opening New App Group Object to create links"));
 
-                if (FAILED(hr))
-                    goto lError1;
+            if (FAILED(hr))
+                goto lError1;
         }
 
         CAzAppGroup newAppGroup = CAzAppGroup(spNewAppGroup,!bCreateLinks);
 
         hr=bCreateLinks ? newAppGroup.CopyLinks(oldAppGroup) : newAppGroup.Copy(oldAppGroup);
 
-        CAzLogging::Log(hr,_TEXT("Setting Application group properties"),COLE2T(m_storeName));	
+        CAzLogging::Log(hr,_TEXT("Setting Application group properties"),COLE2T(m_storeName));
 
         if (FAILED(hr))
             goto lError1;
@@ -677,16 +714,17 @@ Arguments: cVVar - Variant which contains the SAFEARRAY
 
 Return Value:
 
-    Returns success, appropriate failure value of the procedures done within 
+    Returns success, appropriate failure value of the procedures done within
     this method
 
 --*/
 
-HRESULT CAzMStore::InitializeUsingSafeArray(VARIANT &cVVar, 
-                                                     HRESULT (__stdcall IAzAuthorizationStore::*targetMethod)(BSTR, VARIANT)) {
+HRESULT CAzMStore::InitializeUsingSafeArray(VARIANT &cVVar,
+        HRESULT (__stdcall IAzAuthorizationStore::*targetMethod)(BSTR, VARIANT))
+{
     CAzLogging::Entering(_TEXT("InitializeUsingSafeArray"));
 
-    SAFEARRAY *sa = V_ARRAY( &cVVar ); 
+    SAFEARRAY *sa = V_ARRAY( &cVVar );
 
     LONG lstart, lend;
 
@@ -698,12 +736,12 @@ HRESULT CAzMStore::InitializeUsingSafeArray(VARIANT &cVVar,
     // Get the lower and upper bound
     hr = SafeArrayGetLBound( sa, 1, &lstart );
 
-    if(FAILED(hr)) 
+    if(FAILED(hr))
         goto lEnd;
 
     hr = SafeArrayGetUBound( sa, 1, &lend );
 
-    if(FAILED(hr)) 
+    if(FAILED(hr))
         goto lEnd;
 
     if (0==(lend-lstart+1))
@@ -725,15 +763,15 @@ HRESULT CAzMStore::InitializeUsingSafeArray(VARIANT &cVVar,
 
         }
 
-        if(FAILED(hr)) 
-           goto lError1;
-    }   
+        if(FAILED(hr))
+            goto lError1;
+    }
     else
         goto lEnd;
 
 lError1:
     hr = SafeArrayUnaccessData(sa);
-    
+
 lEnd:
     CAzLogging::Exiting(_TEXT("InitializeUsingSafeArray"));
 
@@ -742,7 +780,8 @@ lEnd:
 
 
 // All the properties which are "Settable" for IAzApplication
-const unsigned int CAzMStore::m_props[]={
+const unsigned int CAzMStore::m_props[]=
+{
     AZ_PROP_AZSTORE_DOMAIN_TIMEOUT,
     AZ_PROP_AZSTORE_MAX_SCRIPT_ENGINES,
     AZ_PROP_AZSTORE_SCRIPT_ENGINE_TIMEOUT,

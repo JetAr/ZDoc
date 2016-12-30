@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -17,8 +17,8 @@
 #include "ItemTreeChanges.h"
 
 
-// This function enumerates items recursively starting from the root item and prints the item name and also various properties 
-// associated with the item. This function can be used to see the item tree supported by the scanner and thus it gives 
+// This function enumerates items recursively starting from the root item and prints the item name and also various properties
+// associated with the item. This function can be used to see the item tree supported by the scanner and thus it gives
 // a measure of the capabilities supported by the scanner.
 HRESULT EnumerateItems( IWiaItem2 *pWiaItem2 )
 {
@@ -29,15 +29,15 @@ HRESULT EnumerateItems( IWiaItem2 *pWiaItem2 )
         ReportError(TEXT("Invalid argument passed to EnumerateAndPreviewItems()"),hr);
         return hr;
     }
-    
+
     //Print the item name.
     PrintItemName( pWiaItem2 );
-    
+
     // Get the item type for this item
     LONG lItemType = 0;
     HRESULT hr = pWiaItem2->GetItemType( &lItemType );
-    
-    
+
+
     if (lItemType & WiaItemTypeProgrammableDataSource)
     {
         _tprintf(TEXT("\nProgrammable item"));
@@ -50,7 +50,7 @@ HRESULT EnumerateItems( IWiaItem2 *pWiaItem2 )
     {
         _tprintf(TEXT("\nNon-transferrable item"));
     }
-        
+
     if (lItemType & WiaItemTypeFile)
     {
         _tprintf(TEXT("\nFile item"));
@@ -58,18 +58,18 @@ HRESULT EnumerateItems( IWiaItem2 *pWiaItem2 )
     if (lItemType & WiaItemTypeStorage)
     {
         _tprintf(TEXT("\nStorage item"));
-    }   
+    }
 
     // find the item category
     GUID ItemCategory = GUID_NULL;
     ReadPropertyGuid(pWiaItem2,WIA_IPA_ITEM_CATEGORY,&ItemCategory );
-    
+
     if(IsEqualIID(ItemCategory,WIA_CATEGORY_FINISHED_FILE))
     {
         //files uploaded to storage will be finished files
         _tprintf(TEXT("\nFinished file item"));
     }
-        
+
 
     // If it is a folder, enumerate its children
     if (lItemType & WiaItemTypeFolder)
@@ -161,15 +161,15 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                 {
                     // Read some device properties - Device ID,name and descripion and return Device ID needed for creating Device
                     BSTR bstrDeviceID = NULL;
-                    HRESULT hr1 = ReadWiaPropsAndGetDeviceID( pWiaPropertyStorage ,&bstrDeviceID);
+                    HRESULT hr1 = ReadWiaPropsAndGetDeviceID( pWiaPropertyStorage,&bstrDeviceID);
                     if(SUCCEEDED(hr1))
                     {
-                        // Call a function to create the device using device ID 
+                        // Call a function to create the device using device ID
                         IWiaItem2 *pWiaRootItem2 = NULL;
                         hr1 = pWiaDevMgr2->CreateDevice( 0, bstrDeviceID, &pWiaRootItem2 );
                         if(SUCCEEDED(hr1))
                         {
-                            // Enumerate items 
+                            // Enumerate items
                             hr1 = EnumerateItems( pWiaRootItem2 );
                             if(FAILED(hr1))
                             {
@@ -188,7 +188,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                     {
                         ReportError(TEXT("ReadWiaPropsAndGetDeviceID() failed in EnumerateWiaDevices()"),hr1);
                     }
-                        
+
                     // Release the device's IWiaPropertyStorage*
                     pWiaPropertyStorage->Release();
                     pWiaPropertyStorage = NULL;
@@ -199,7 +199,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                     ReportError( TEXT("Error calling IEnumWIA_DEV_INFO::Next()"), hr );
                 }
             }
-            
+
             //
             // If the result of the enumeration is S_FALSE, since this
             // is normal, we will change it to S_OK.
@@ -230,7 +230,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
 
 
 // The entry function of the application
-extern "C" 
+extern "C"
 int __cdecl _tmain( int, TCHAR *[] )
 {
     // Initialize COM

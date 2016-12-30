@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -122,7 +122,7 @@ CAppInfo::~CAppInfo()
     bool bResult = RemoveAllSubscriptions();
     delete m_EventMap;
     m_EventMap = NULL;
- }
+}
 
 
 
@@ -130,7 +130,7 @@ CAppInfo::~CAppInfo()
 // Method:    CAppInfo::RemoveAllSubscriptions()
 // Params:  (None)
 // Returns: True always
-// Purpose:    Remove all subscriptions held by this Application object. Iterate 
+// Purpose:    Remove all subscriptions held by this Application object. Iterate
 //                through the event map and free each.
 //    Note:        We must call Release() because these are COM objects.
 // -----------------------------------------------------------------------------
@@ -162,7 +162,7 @@ bool CAppInfo::RemoveAllSubscriptions()
 // Method:    CAppInfo::AddSubscription(...)
 // Params:  e: The EventEnum that we want to subscribe to. (eg. Method)
 // Returns: true if the subscription was added successfully.
-// Purpose:    To create an Interface pointer to the appropriate Subscription 
+// Purpose:    To create an Interface pointer to the appropriate Subscription
 //                type within COM+. These all derive from IComSysLCE, so we use
 //                the polymorphism to do this. Once we have the specific interface
 //                required, we then determine which filter (if any) to use and we
@@ -178,225 +178,225 @@ bool CAppInfo::AddSubscription(EventEnum e)
 
     switch (e)
     {
-        // Note: The QI will do our AddRef
-        case Application:
-        {                        
-            CComObject <CAppSub> * pSub;
-            hr = CComObject<CAppSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Thread:
-        {                        
-            CComObject <CThreadSub> * pSub;
-            hr = CComObject<CThreadSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Instance:
-        {                        
-            CComObject <CInstanceSub> * pSub;
-            hr = CComObject<CInstanceSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Transaction:
-        {
-            CComObject <CTxSub> * pSub;
-            hr = CComObject<CTxSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Method:
-        {                        
-            CComObject <CMethodSub> * pSub;
-            hr = CComObject<CMethodSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Object:
-        {                        
-            CComObject <CObjSub> * pSub;
-            hr = CComObject<CObjSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Resource:
-        {                        
-            CComObject <CResourceSub> * pSub;
-            hr = CComObject<CResourceSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case User:
-        {                        
-            CComObject <CUserSub> * pSub;
-            hr = CComObject<CUserSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Security:
-        {                        
-            CComObject <CSecuritySub> * pSub;
-            hr = CComObject<CSecuritySub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case ObjectConstruction:
-        {                        
-            CComObject <CObjConstSub> * pSub;
-            hr = CComObject<CObjConstSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case ObjectPool:
-        {                        
-            CComObject <CObjPoolSub> * pSub;
-            hr = CComObject<CObjPoolSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case ObjectPool2:
-        {                        
-            CComObject <CObjPool2Sub> * pSub;
-            hr = CComObject<CObjPool2Sub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Activity:
-        {                        
-            CComObject <CActivitySub> * pSub;
-            hr = CComObject<CActivitySub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Identity:
-        {                        
-            CComObject <CIdentitySub> * pSub;
-            hr = CComObject<CIdentitySub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case QC:
-        {                        
-            CComObject <CQCSub> * pSub;
-            hr = CComObject<CQCSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case Exception:
-        {                        
-            CComObject <CExceptionSub> * pSub;
-            hr = CComObject<CExceptionSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case CRM:
-        {                        
-            CComObject <CCRMSub> * pSub;
-            hr = CComObject<CCRMSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        //Events generated by system process  
-        case EventStore:
-        {                        
-            CComObject <CEvtStoreSub> * pSub;
-            hr = CComObject<CEvtStoreSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        case LoadBalancing:  
-        {                        
-            CComObject <CLBSub> * pSub;
-            hr = CComObject<CLBSub>::CreateInstance(&pSub);
-            if (FAILED(hr))
-                return false;
-            _ASSERTE(pSub);
-            pSub->SetSpyObj(m_pSpy);
-            pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
-            break;
-        }
-        default:
-            ATLTRACE(L"Object type not implemented yet\n");
-            _ASSERTE(0);
-            break;
+    // Note: The QI will do our AddRef
+    case Application:
+    {
+        CComObject <CAppSub> * pSub;
+        hr = CComObject<CAppSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Thread:
+    {
+        CComObject <CThreadSub> * pSub;
+        hr = CComObject<CThreadSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Instance:
+    {
+        CComObject <CInstanceSub> * pSub;
+        hr = CComObject<CInstanceSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Transaction:
+    {
+        CComObject <CTxSub> * pSub;
+        hr = CComObject<CTxSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Method:
+    {
+        CComObject <CMethodSub> * pSub;
+        hr = CComObject<CMethodSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Object:
+    {
+        CComObject <CObjSub> * pSub;
+        hr = CComObject<CObjSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Resource:
+    {
+        CComObject <CResourceSub> * pSub;
+        hr = CComObject<CResourceSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case User:
+    {
+        CComObject <CUserSub> * pSub;
+        hr = CComObject<CUserSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Security:
+    {
+        CComObject <CSecuritySub> * pSub;
+        hr = CComObject<CSecuritySub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case ObjectConstruction:
+    {
+        CComObject <CObjConstSub> * pSub;
+        hr = CComObject<CObjConstSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case ObjectPool:
+    {
+        CComObject <CObjPoolSub> * pSub;
+        hr = CComObject<CObjPoolSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case ObjectPool2:
+    {
+        CComObject <CObjPool2Sub> * pSub;
+        hr = CComObject<CObjPool2Sub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Activity:
+    {
+        CComObject <CActivitySub> * pSub;
+        hr = CComObject<CActivitySub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Identity:
+    {
+        CComObject <CIdentitySub> * pSub;
+        hr = CComObject<CIdentitySub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case QC:
+    {
+        CComObject <CQCSub> * pSub;
+        hr = CComObject<CQCSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case Exception:
+    {
+        CComObject <CExceptionSub> * pSub;
+        hr = CComObject<CExceptionSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case CRM:
+    {
+        CComObject <CCRMSub> * pSub;
+        hr = CComObject<CCRMSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    //Events generated by system process
+    case EventStore:
+    {
+        CComObject <CEvtStoreSub> * pSub;
+        hr = CComObject<CEvtStoreSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    case LoadBalancing:
+    {
+        CComObject <CLBSub> * pSub;
+        hr = CComObject<CLBSub>::CreateInstance(&pSub);
+        if (FAILED(hr))
+            return false;
+        _ASSERTE(pSub);
+        pSub->SetSpyObj(m_pSpy);
+        pSub->QueryInterface(IID_PPV_ARGS(&pSubscriber));
+        break;
+    }
+    default:
+        ATLTRACE(L"Object type not implemented yet\n");
+        _ASSERTE(0);
+        break;
     }
 
     // We've successfully created the Subscriber interface.
-    if (pSubscriber)     
+    if (pSubscriber)
     {
         CComBSTR    bstrPropertyName;
         CComVariant vPropertyValue;
@@ -459,7 +459,7 @@ bool CAppInfo::RemoveSubscription(EventEnum e)
         pSubscriber = NULL;
         m_EventMap->erase(e);
         return true;
-    };    
+    };
 
     return false;
 }

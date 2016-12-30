@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -23,7 +23,7 @@ CNetCostEventSink *g_pSinkDestCostMgr = NULL;
 void RegisterForMachineCostChangeNotifications()
 {
     HRESULT hr = S_OK;
-    
+
     //Registration is allowed only once, before unregister.
     if (!g_pSinkCostMgr)
     {
@@ -77,10 +77,10 @@ void RegisterForDestinationCostChangeNotifications()
         {
             wprintf(L"You have already registered for Destination cost notifications. Please unregister before registering for events again.\n");
             wprintf(L"The Win32 Cost API feature allows multiple registrations, but the sample SDK does not allow this.  \n");
-            
+
         }
     }
-    
+
     DisplayError(hr);
 }
 
@@ -93,7 +93,7 @@ void RegisterForDestinationCostChangeNotifications()
 void RegisterForConnectionCostChangeNotifications()
 {
     HRESULT hr = S_OK;
-    
+
     //Registration is allowed only once, before unregister.
     if (!g_pSinkConnectionCostMgr)
     {
@@ -114,76 +114,76 @@ void RegisterForConnectionCostChangeNotifications()
 //********************************************************************************************
 // Function: GetMachineCostandDataPlanStatus
 //
-// Description: Gets machine cost and data plan status, and displays to the user, along with suggested appropriate actions based on the 
+// Description: Gets machine cost and data plan status, and displays to the user, along with suggested appropriate actions based on the
 // retrieved cost and data plan status values.
 //
 //********************************************************************************************
 
 void GetMachineCostandDataPlanStatus()
 {
-    HRESULT hr = S_OK;    
+    HRESULT hr = S_OK;
     DWORD cost = 0;
     NLM_DATAPLAN_STATUS dataPlanStatus;
 
     CComPtr<INetworkCostManager> pCostManager;
-    hr = CoCreateInstance(CLSID_NetworkListManager, NULL, 
-        CLSCTX_ALL, __uuidof(INetworkCostManager), (LPVOID*)&pCostManager);
+    hr = CoCreateInstance(CLSID_NetworkListManager, NULL,
+                          CLSCTX_ALL, __uuidof(INetworkCostManager), (LPVOID*)&pCostManager);
 
     if (hr == S_OK)
     {
-        hr = pCostManager->GetCost(&cost, NULL);  
+        hr = pCostManager->GetCost(&cost, NULL);
     }
-    
+
     if (hr == S_OK)
     {
         hr = pCostManager->GetDataPlanStatus(&dataPlanStatus, NULL);
     }
-    
+
     if (hr == S_OK)
     {
         DisplayCostDescription(cost);
         DisplayDataPlanStatus(&dataPlanStatus);
-        
+
         //to give suggestions for data usage, depending on cost and data usage.
         CostBasedSuggestions(cost, &dataPlanStatus);
     }
-    DisplayError(hr);          
+    DisplayError(hr);
 }
-   
+
 
 //********************************************************************************************
 // Function: GetDestinationCostandDataPlanStatus
 //
-// Description: Gets cost and data plan status for the destination specified, and displays to the user, along with suggested appropriate actions based on the 
+// Description: Gets cost and data plan status for the destination specified, and displays to the user, along with suggested appropriate actions based on the
 // retrieved cost and data plan status values.
 //
 //********************************************************************************************
 
 void GetDestinationCostandDataPlanStatus()
 {
-    
-    HRESULT hr = S_OK;    
+
+    HRESULT hr = S_OK;
     DWORD cost = 0;
     NLM_DATAPLAN_STATUS dataPlanStatus = {0};
     DESTINATION_INFO sockAddr;
-    
+
     CComPtr<INetworkCostManager> pCostManager;
-    hr = CoCreateInstance(CLSID_NetworkListManager, NULL, 
-        CLSCTX_ALL, __uuidof(INetworkCostManager), (LPVOID*)&pCostManager);
-    
+    hr = CoCreateInstance(CLSID_NetworkListManager, NULL,
+                          CLSCTX_ALL, __uuidof(INetworkCostManager), (LPVOID*)&pCostManager);
+
     if (hr == S_OK)
     {
         hr = GetDestinationAddress(&sockAddr);
         if (hr == S_OK)
         {
-            hr = pCostManager->GetCost(&cost, &(sockAddr.ipAddr));  
+            hr = pCostManager->GetCost(&cost, &(sockAddr.ipAddr));
         }
-        
+
         if (hr == S_OK)
-        {    
-            hr = pCostManager->GetDataPlanStatus(&dataPlanStatus, &(sockAddr.ipAddr));  
+        {
+            hr = pCostManager->GetDataPlanStatus(&dataPlanStatus, &(sockAddr.ipAddr));
         }
-        
+
         if (hr == S_OK)
         {
             DisplayCostDescription(cost);
@@ -192,11 +192,11 @@ void GetDestinationCostandDataPlanStatus()
             CostBasedSuggestions(cost, &dataPlanStatus);
         }
     }
-    DisplayError(hr);          
-}        
-        
+    DisplayError(hr);
+}
 
-    
+
+
 //********************************************************************************************
 // Function: GetConnectionCostandDataPlanStatus
 //
@@ -205,7 +205,7 @@ void GetDestinationCostandDataPlanStatus()
 //********************************************************************************************
 
 void GetConnectionCostandDataPlanStatus()
-{   
+{
     HRESULT hr = S_OK;
     ULONG cFetched = 0;
     BOOL  bDone = FALSE;
@@ -213,30 +213,30 @@ void GetConnectionCostandDataPlanStatus()
     NLM_DATAPLAN_STATUS dataPlanStatus = {0};
     int numberOfConnections = 0;
     GUID interfaceGUID = {0};
-    
+
     CComPtr<INetworkCostManager> pCostManager;
     CComPtr<INetworkListManager> pNLM;
     CComPtr<IEnumNetworkConnections> pNetworkConnections;
-    hr = CoCreateInstance(CLSID_NetworkListManager, NULL, 
-        CLSCTX_ALL, __uuidof(INetworkCostManager), (LPVOID*)&pCostManager);
-    
+    hr = CoCreateInstance(CLSID_NetworkListManager, NULL,
+                          CLSCTX_ALL, __uuidof(INetworkCostManager), (LPVOID*)&pCostManager);
+
     if (hr == S_OK)
     {
         hr = pCostManager->QueryInterface(IID_PPV_ARGS(&pNLM));
     }
-    
+
     if (hr == S_OK)
     {
-        hr = pNLM->GetNetworkConnections(&pNetworkConnections);  
+        hr = pNLM->GetNetworkConnections(&pNetworkConnections);
     }
-    
+
     if (hr == S_OK)
     {
         while (!bDone)
         {
             CComPtr<INetworkConnection> pConnection;
             CComPtr<INetworkConnectionCost> pConnectionCost;
-            
+
             //Get cost and data plan status info for each of the connections on the machine
             hr = pNetworkConnections->Next(1, &pConnection, &cFetched);
             if ((S_OK == hr) && (cFetched > 0))
@@ -247,38 +247,38 @@ void GetConnectionCostandDataPlanStatus()
                 GetInterfaceType(interfaceGUID, hr);
 
                 // get the connection interface
-                hr = pConnection->QueryInterface(IID_PPV_ARGS(&pConnectionCost));  
+                hr = pConnection->QueryInterface(IID_PPV_ARGS(&pConnectionCost));
                 if (hr == S_OK)
                 {
                     hr = pConnectionCost->GetCost(&cost);
                 }
                 if (hr == S_OK)
                 {
-                    hr = pConnectionCost->GetDataPlanStatus(&dataPlanStatus);  
+                    hr = pConnectionCost->GetDataPlanStatus(&dataPlanStatus);
                 }
                 if (hr == S_OK)
                 {
                     DisplayCostDescription(cost);
                     DisplayDataPlanStatus(&dataPlanStatus);
-                    
+
                     //to give suggestions for data usage, depending on cost and data usage.
-                    CostBasedSuggestions(cost, &dataPlanStatus);     
+                    CostBasedSuggestions(cost, &dataPlanStatus);
                 }
-                DisplayError(hr);                                           
+                DisplayError(hr);
             }
             else
             {
                 bDone = TRUE;
-            }  
-            
+            }
+
             if (numberOfConnections == 0)
             {
                 wprintf(L"Machine has no network connection\n");
             }
-        } 
-        
+        }
+
     }
-     
+
     if (hr != S_FALSE)
     {
         DisplayError (hr);
@@ -315,13 +315,13 @@ void UnRegisterForMachineCostChangeNotifications()
         wprintf(L"You have not registered for Machine cost Notifications\n");
     }
     DisplayError(hr);
-}   
-    
+}
+
 
 //********************************************************************************************
 // Function: UnRegisterForDestinationCostChangeNotifications
 //
-// Description: 
+// Description:
 //
 //********************************************************************************************
 
@@ -351,7 +351,7 @@ void UnRegisterForDestinationCostChangeNotifications()
 //********************************************************************************************
 // Function: UnRegisterForConnectionCostChangeNotifications
 //
-// Description: 
+// Description:
 //
 //********************************************************************************************
 
@@ -381,13 +381,13 @@ void UnRegisterForConnectionCostChangeNotifications()
 //********************************************************************************************
 // Function: CostBasedSuggestions
 //
-// Description: Takes cost and data plan status as input, and suggests appropriate actions to the user based on the 
+// Description: Takes cost and data plan status as input, and suggests appropriate actions to the user based on the
 // cost and data plan status values.
 //
 //********************************************************************************************
-      
+
 void CostBasedSuggestions(_In_ DWORD cost, _In_ const NLM_DATAPLAN_STATUS *pDataPlanStatus)
-{   
+{
     if (cost == NLM_CONNECTION_COST_UNKNOWN)
     {
         wprintf(L"Cost value unknown\n");
@@ -399,7 +399,7 @@ void CostBasedSuggestions(_In_ DWORD cost, _In_ const NLM_DATAPLAN_STATUS *pData
         wprintf(L"Connection is out of the MNO's network. Continuing data usage may lead to high charges, \
             so the application can try to to stop or limit its data usage, to avoid high charges \n");
     }
-    
+
     else if (cost & NLM_CONNECTION_COST_OVERDATALIMIT)
     {
         if (cost & NLM_CONNECTION_COST_UNRESTRICTED)
@@ -418,8 +418,8 @@ void CostBasedSuggestions(_In_ DWORD cost, _In_ const NLM_DATAPLAN_STATUS *pData
     {
         wprintf(L"Network is in a state of congestion, so the application can limit or stop its current data usage, \
             and try again later.\n");
-    } 
-    
+    }
+
     else if (cost & NLM_CONNECTION_COST_VARIABLE)
     {
         wprintf(L"Cost type is variable, and data usage charged on a per byte basis. The application can therefore \
@@ -428,7 +428,7 @@ void CostBasedSuggestions(_In_ DWORD cost, _In_ const NLM_DATAPLAN_STATUS *pData
     else if (cost & NLM_CONNECTION_COST_FIXED)
     {
         if ((FALSE == IsDataPlanStatusAvailable(pDataPlanStatus)) || (NLM_UNKNOWN_DATAPLAN_STATUS == pDataPlanStatus->UsageData.UsageInMegabytes)
-            || (NLM_UNKNOWN_DATAPLAN_STATUS == pDataPlanStatus->DataLimitInMegabytes))
+                || (NLM_UNKNOWN_DATAPLAN_STATUS == pDataPlanStatus->DataLimitInMegabytes))
         {
             // No access to data usage, to compare the data usage and the data limit
             wprintf(L"Cost type is Fixed. No access to data plan status, to compare the data usage as a percent of data limit.\n");
@@ -440,12 +440,12 @@ void CostBasedSuggestions(_In_ DWORD cost, _In_ const NLM_DATAPLAN_STATUS *pData
         }
         else
         {
-            wprintf(L"Data usage is within limits, application can continue its current usage\n"); 
+            wprintf(L"Data usage is within limits, application can continue its current usage\n");
         }
     }
     else if (cost & NLM_CONNECTION_COST_UNRESTRICTED)
     {
-        wprintf(L"Cost type is unrestricted, application can continue its current data usage\n");    
+        wprintf(L"Cost type is unrestricted, application can continue its current data usage\n");
     }
     wprintf(L"--------------------------------------------------------------\n");
 }
@@ -466,41 +466,41 @@ void EvaluateUserChoice(_In_ int userchoice)
 
     switch (userchoice)
     {
-        case 1:
-            RegisterForMachineCostChangeNotifications();
-            break;
-        case 2:
-            RegisterForDestinationCostChangeNotifications();
-            break;
-        case 3:
-            RegisterForConnectionCostChangeNotifications();
-            break;
-        case 4:
-            GetMachineCostandDataPlanStatus();
-            break;
-        case 5:
-            GetDestinationCostandDataPlanStatus();
-            break;
-        case 6:
-            GetConnectionCostandDataPlanStatus();
-            break;
-        case 7:
-            UnRegisterForMachineCostChangeNotifications();
-            break;
-        case 8:
-            UnRegisterForDestinationCostChangeNotifications();
-            break;
-        case 9:
-            UnRegisterForConnectionCostChangeNotifications();
-            break;
-        case 10:
-            FreeMemoryAndExit();
-            break;
-        default:
-            wprintf(L"Invalid choice. Please enter a valid choice number \n");
-     }       
-            
-}     
+    case 1:
+        RegisterForMachineCostChangeNotifications();
+        break;
+    case 2:
+        RegisterForDestinationCostChangeNotifications();
+        break;
+    case 3:
+        RegisterForConnectionCostChangeNotifications();
+        break;
+    case 4:
+        GetMachineCostandDataPlanStatus();
+        break;
+    case 5:
+        GetDestinationCostandDataPlanStatus();
+        break;
+    case 6:
+        GetConnectionCostandDataPlanStatus();
+        break;
+    case 7:
+        UnRegisterForMachineCostChangeNotifications();
+        break;
+    case 8:
+        UnRegisterForDestinationCostChangeNotifications();
+        break;
+    case 9:
+        UnRegisterForConnectionCostChangeNotifications();
+        break;
+    case 10:
+        FreeMemoryAndExit();
+        break;
+    default:
+        wprintf(L"Invalid choice. Please enter a valid choice number \n");
+    }
+
+}
 
 //********************************************************************************************
 // Function: GetUserChoice
@@ -511,39 +511,41 @@ void EvaluateUserChoice(_In_ int userchoice)
 
 int GetUserChoice()
 {
-   int chr = -1;
-   int numchoices = 10;
-   PCWSTR choices[] = {
-      L"Register for machine Internet cost notifications",
-      L"Register for destination cost notifications",
-      L"Register for connection cost notifications",
-      L"Get machine wide cost and data plan status",
-      L"Get destination address based cost and data plan status",
-      L"Get connection cost and data plan status",
-      L"Unregister for machine cost notifications",
-      L"Unregister for destination cost notifications",
-      L"Unregister for connection cost notifications",
-      L"Exit" };
-   wprintf(L"---------------------------------------------------------\n");
-   for(int i=0; i<numchoices; i++)
-   {
-      wprintf(L"   %i. %s\n",i+1,choices[i]);
-   }
-   wprintf(L"---------------------------------------------------------\n");
-   wprintf(L"Enter a choice (1-%i): ",numchoices);
-   wscanf_s(L"%i",&chr);
-   FlushCurrentLine();
-   if (chr > 0 && chr <= numchoices)
-   {
-      EvaluateUserChoice(chr);      
-   }
-   else
-   {
-      wprintf(L"Invalid Choice. Please enter a valid choice number\n");
-      
-   }
-   return chr;
-   
+    int chr = -1;
+    int numchoices = 10;
+    PCWSTR choices[] =
+    {
+        L"Register for machine Internet cost notifications",
+        L"Register for destination cost notifications",
+        L"Register for connection cost notifications",
+        L"Get machine wide cost and data plan status",
+        L"Get destination address based cost and data plan status",
+        L"Get connection cost and data plan status",
+        L"Unregister for machine cost notifications",
+        L"Unregister for destination cost notifications",
+        L"Unregister for connection cost notifications",
+        L"Exit"
+    };
+    wprintf(L"---------------------------------------------------------\n");
+    for(int i=0; i<numchoices; i++)
+    {
+        wprintf(L"   %i. %s\n",i+1,choices[i]);
+    }
+    wprintf(L"---------------------------------------------------------\n");
+    wprintf(L"Enter a choice (1-%i): ",numchoices);
+    wscanf_s(L"%i",&chr);
+    FlushCurrentLine();
+    if (chr > 0 && chr <= numchoices)
+    {
+        EvaluateUserChoice(chr);
+    }
+    else
+    {
+        wprintf(L"Invalid Choice. Please enter a valid choice number\n");
+
+    }
+    return chr;
+
 }
 
 //********************************************************************************************
@@ -592,7 +594,7 @@ void __cdecl main()
             userChoice = GetUserChoice();
         }
         wprintf(L"Net Cost Sample SDK exited\n");
-        
+
         // When CoInitizlizeEx returns RPC_E_CHANGED_MODE, COM is already initialized. So, no need to uninitialize at the end.
         if (RPC_E_CHANGED_MODE != hrCoinit)
         {

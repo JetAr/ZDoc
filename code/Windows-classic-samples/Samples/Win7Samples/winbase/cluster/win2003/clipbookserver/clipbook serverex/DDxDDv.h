@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -33,40 +33,40 @@
 
 void AFXAPI
 DDX_Number(
-      CDataExchange *   pDXIn
+    CDataExchange *   pDXIn
     , int               nIDCIn
     , DWORD &           rdwValueInout
     , DWORD             dwMinIn
     , DWORD             dwMaxIn
     , BOOL              fSignedIn = FALSE
-    );
+);
 
 void AFXAPI
 DDV_RequiredText(
-      CDataExchange *   pDXIn
+    CDataExchange *   pDXIn
     , int               nIDCIn
     , int               nIDCLabelIn
     , const CString &   rstrValueIn
-    );
+);
 
 inline void AFXAPI
 DDX_Number(
-      CDataExchange *  pDXIn
+    CDataExchange *  pDXIn
     , int              nIDCIn
     , LONG &           rnValueInout
     , LONG             nMinIn
     , LONG             nMaxIn
     , BOOL             fSignedIn
-    )
+)
 {
     DDX_Number(
-          pDXIn
+        pDXIn
         , nIDCIn
         , reinterpret_cast< DWORD & >( rnValueInout )
         , static_cast< DWORD >( nMinIn )
         , static_cast< DWORD >( nMaxIn )
         , fSignedIn
-        );
+    );
 
 } //*** DDXNumber
 

@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -21,9 +21,9 @@ static const int DELETED_ROW = 1;
 // @rdesc NONE
 //
 CFileIdx::CFileIdx
-    (
+(
     void
-    )
+)
 {
     m_rgDex = NULL;
     m_ulDexCnt = 0;
@@ -37,7 +37,7 @@ CFileIdx::CFileIdx
 //
 CFileIdx:: ~CFileIdx()
 {
-	SAFE_FREE(m_rgDex);
+    SAFE_FREE(m_rgDex);
 }
 
 
@@ -49,9 +49,9 @@ CFileIdx:: ~CFileIdx()
 //      @flag FALSE | Failed to Initialize
 //
 BOOL CFileIdx::fInit
-    (
+(
     void
-    )
+)
 {
     //Allocate Offset Array
     m_rgDex = (LPFILEDEX) PROVIDER_ALLOC( ARRAY_INIT_SIZE * sizeof( FILEDEX ) );
@@ -72,9 +72,9 @@ BOOL CFileIdx::fInit
 //      @flag FALSE | Failed to Initialize
 //
 BOOL CFileIdx::ReAlloc
-    (
+(
     DBCOUNTITEM ulRows                //@parm IN | Number of rows to increase array for.
-    )
+)
 {
     VOID* pDex;
 
@@ -83,7 +83,7 @@ BOOL CFileIdx::ReAlloc
     if( !pDex )
         return FALSE;
 
-	m_ulDexCnt += ulRows;
+    m_ulDexCnt += ulRows;
     m_rgDex = (FILEDEX*) pDex;
     return TRUE;
 }
@@ -98,10 +98,10 @@ BOOL CFileIdx::ReAlloc
 //      @flag FALSE | Failed to Initialize
 //
 BOOL CFileIdx::SetIndex
-    (
+(
     DBCOUNTITEM	ulDex,        //@parm IN | Row Index value
     size_t		ulOffset      //@parm IN | Offset of Row in the File
-    )
+)
 {
     // Check index and realloc if beyond our current range
     if (m_ulDexCnt <= ulDex)
@@ -123,9 +123,9 @@ BOOL CFileIdx::SetIndex
 //      @flag FALSE | Failed to Initialize
 //
 BOOL CFileIdx::DeleteRow
-    (
+(
     DBCOUNTITEM ulDex                 //@parm IN | Row Index value
-    )
+)
 {
     // Index should alway be valid
     assert(m_ulDexCnt > ulDex);
@@ -145,13 +145,13 @@ BOOL CFileIdx::DeleteRow
 //      @flag FALSE | Row has not been Deleted
 //
 BOOL CFileIdx::IsDeleted
-    (
+(
     DBCOUNTITEM ulDex                 //@parm IN | Row Index value
-    )
+)
 {
     // Index should alway be valid and Check deletion status
     if ( (ulDex >= m_ulDexCnt) ||
-		 (DELETED_ROW != m_rgDex[ulDex].bStatus) )
+            (DELETED_ROW != m_rgDex[ulDex].bStatus) )
         return FALSE;
 
     return TRUE;
@@ -164,9 +164,9 @@ BOOL CFileIdx::IsDeleted
 // @rdesc Offset from Beginning of File
 //
 size_t CFileIdx::GetRowOffset
-    (
+(
     DBCOUNTITEM ulDex                 //@parm IN | Row Index value
-    )
+)
 {
     // Index should alway be valid
     assert(m_ulDexCnt > ulDex);

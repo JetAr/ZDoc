@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // ControlDlg.cpp : Defines the dialog to control the compositor.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -18,7 +18,8 @@ extern SmartPtr<CMyCompositor9> g_compositor;
 
 LRESULT OnXPos( HWND wnd, int pos )
 {
-    if( g_compositor == NULL ) {
+    if( g_compositor == NULL )
+    {
         SetWindowText( GetDlgItem( wnd, IDC_X ), TEXT("--") );
         return 0;
     }
@@ -34,7 +35,8 @@ LRESULT OnXPos( HWND wnd, int pos )
 
 LRESULT OnYPos( HWND wnd, int pos )
 {
-    if( g_compositor == NULL ) {
+    if( g_compositor == NULL )
+    {
         SetWindowText( GetDlgItem( wnd, IDC_Y ), TEXT("--") );
         return 0;
     }
@@ -61,18 +63,19 @@ LRESULT OnInitDialog( HWND wnd )
 
 LRESULT CALLBACK ControlWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    int pos; 
-    switch( message ) {
+    int pos;
+    switch( message )
+    {
     case WM_INITDIALOG:
         return OnInitDialog( hWnd );
     case WM_HSCROLL:
         pos = (int)SendMessage( GetDlgItem( hWnd, IDC_SLIDER_X), TBM_GETPOS, 0, 0);
         pos -= 500;
-        return OnXPos(hWnd, pos );        
+        return OnXPos(hWnd, pos );
     case WM_VSCROLL:
         pos = (int)SendMessage( GetDlgItem( hWnd, IDC_SLIDER_Y), TBM_GETPOS, 0, 0);
         pos -= 500;
-        return OnYPos(hWnd, pos );    
+        return OnYPos(hWnd, pos );
     case WM_CLOSE:
         DestroyWindow( hWnd );
         break;

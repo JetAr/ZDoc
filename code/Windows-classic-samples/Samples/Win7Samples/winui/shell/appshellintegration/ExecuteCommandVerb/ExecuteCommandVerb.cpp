@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -38,10 +38,10 @@ WCHAR const c_szVerbDisplayName[] = L"ExecuteCommand Verb Sample";
 
 class __declspec(uuid("ffa07888-75bd-471a-b325-59274e73227f"))
     CExecuteCommandVerb : public IExecuteCommand,
-                          public IObjectWithSelection,
-                          public IInitializeCommand,
-                          public IObjectWithSite,
-                          CAppMessageLoop
+    public IObjectWithSelection,
+    public IInitializeCommand,
+    public IObjectWithSite,
+    CAppMessageLoop
 {
 public:
     CExecuteCommandVerb() : _cRef(1), _psia(NULL), _punkSite(NULL)
@@ -87,7 +87,9 @@ public:
     }
 
     IFACEMETHODIMP SetParameters(PCWSTR /* pszParameters */)
-    { return S_OK; }
+    {
+        return S_OK;
+    }
 
     IFACEMETHODIMP SetPosition(POINT pt)
     {
@@ -102,10 +104,14 @@ public:
     }
 
     IFACEMETHODIMP SetNoShowUI(BOOL /* fNoShowUI */)
-    { return S_OK; }
+    {
+        return S_OK;
+    }
 
     IFACEMETHODIMP SetDirectory(PCWSTR /* pszDirectory */)
-    { return S_OK; }
+    {
+        return S_OK;
+    }
 
     IFACEMETHODIMP Execute();
 
@@ -245,9 +251,9 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, PWSTR pszCmdLine, int)
                     if (SUCCEEDED(hr))
                     {
                         MessageBox(NULL,
-                            L"Installed ExecuteCommand Verb Sample for .txt files\n\n"
-                            L"right click on a .txt file and choose 'ExecuteCommand Verb Sample' to see this in action",
-                            c_szVerbDisplayName, MB_OK);
+                                   L"Installed ExecuteCommand Verb Sample for .txt files\n\n"
+                                   L"right click on a .txt file and choose 'ExecuteCommand Verb Sample' to see this in action",
+                                   c_szVerbDisplayName, MB_OK);
                     }
                 }
             }

@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -62,13 +62,13 @@ class CExtObject
 {
 public:
     CExtObject( void );
-BEGIN_COM_MAP( CExtObject )
+    BEGIN_COM_MAP( CExtObject )
     COM_INTERFACE_ENTRY( IWEExtendPropertySheet )
     COM_INTERFACE_ENTRY( IWEExtendWizard )
     COM_INTERFACE_ENTRY( IWEExtendContextMenu )
     COM_INTERFACE_ENTRY( IWEInvokeCommand )
     COM_INTERFACE_ENTRY( ISupportErrorInfo )
-END_COM_MAP()
+    END_COM_MAP()
 
 //DECLARE_NOT_AGGREGATABLE( CExtObject )
 
@@ -79,13 +79,13 @@ END_COM_MAP()
 
 #pragma warning( push, 3 )
 #pragma warning( disable : 4996 ) // warning C4996: 'ATL::CComModule::UpdateRegistryClass' was declared deprecated
-DECLARE_REGISTRY(
-          CExtObject
+    DECLARE_REGISTRY(
+        CExtObject
         , _T("CLUADMEX.FileShareSampleEx")
         , _T("CLUADMEX.FileShareSampleEx")
         , IDS_CLUADMEX_COMOBJ_DESC
         , THREADFLAGS_APARTMENT
-        );
+    );
 #pragma warning( pop )
 
     //
@@ -100,9 +100,9 @@ DECLARE_REGISTRY(
 
 public:
     STDMETHOD( CreatePropertySheetPages )(
-                      IUnknown *                 piDataIn
-                    , IWCPropertySheetCallback * piCallbackIn
-                    );
+        IUnknown *                 piDataIn
+        , IWCPropertySheetCallback * piCallbackIn
+    );
 
     //
     // IWEExtendWizard
@@ -110,9 +110,9 @@ public:
 
 public:
     STDMETHOD( CreateWizardPages )(
-                      IUnknown *            piDataIn
-                    , IWCWizardCallback *   piCallbackIn
-                    );
+        IUnknown *            piDataIn
+        , IWCWizardCallback *   piCallbackIn
+    );
 
     //
     // IWEExtendContextMenu
@@ -120,38 +120,65 @@ public:
 
 public:
     STDMETHOD( AddContextMenuItems )(
-                      IUnknown *                piDataIn
-                    , IWCContextMenuCallback *  piCallbackIn
-                    );
+        IUnknown *                piDataIn
+        , IWCContextMenuCallback *  piCallbackIn
+    );
 
     //
     // IWEInvokeCommand
     //
 
     STDMETHOD( InvokeCommand )(
-                      ULONG         nCommandIDIn
-                    , IUnknown *    piDataIn
-                    );
+        ULONG         nCommandIDIn
+        , IUnknown *    piDataIn
+    );
 
-    CLUADMEX_OBJECT_TYPE Cot() { return (m_podObjData != NULL) ? m_podObjData->Cot() : CLUADMEX_OT_NONE; }
+    CLUADMEX_OBJECT_TYPE Cot()
+    {
+        return (m_podObjData != NULL) ? m_podObjData->Cot() : CLUADMEX_OT_NONE;
+    }
 
     //
     // IGetClusterUIInfo data
     //
 
-    LCID                        Lcid( void ) const                  { return m_lcid; }
-    HFONT                       Hfont( void ) const                 { return m_hfont; }
-    HICON                       Hicon( void ) const                 { return m_hicon; }
-    IWCWizardCallback *         PiWizardCallback( void ) const      { return m_piWizardCallback; }
-    BOOL                        BWizard( void ) const               { return m_bWizard; }
+    LCID                        Lcid( void ) const
+    {
+        return m_lcid;
+    }
+    HFONT                       Hfont( void ) const
+    {
+        return m_hfont;
+    }
+    HICON                       Hicon( void ) const
+    {
+        return m_hicon;
+    }
+    IWCWizardCallback *         PiWizardCallback( void ) const
+    {
+        return m_piWizardCallback;
+    }
+    BOOL                        BWizard( void ) const
+    {
+        return m_bWizard;
+    }
 
     //
     // IGetClusterDataInfo data
     //
 
-    HCLUSTER                    Hcluster( void ) const              { return m_hCluster; }
-    LONG                        Cobj( void ) const                  { return m_cobj; }
-    CObjData *                  PodObjData( void )                  { return m_podObjData; }
+    HCLUSTER                    Hcluster( void ) const
+    {
+        return m_hCluster;
+    }
+    LONG                        Cobj( void ) const
+    {
+        return m_cobj;
+    }
+    CObjData *                  PodObjData( void )
+    {
+        return m_podObjData;
+    }
     HRESULT                     HrGetObjectInfo( void );
 
 //

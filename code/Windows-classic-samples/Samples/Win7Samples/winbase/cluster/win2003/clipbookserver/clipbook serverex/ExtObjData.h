@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -54,12 +54,12 @@ protected:
 
     virtual HRESULT
     AddContextMenuItem(
-                  IWCContextMenuCallback * piCallbackIn
-                , UINT    nMenuItem
-                , UINT    nMenuItemDesc
-                , UINT    nBaseID
-                , ULONG   uFlags
-                );
+        IWCContextMenuCallback * piCallbackIn
+        , UINT    nMenuItem
+        , UINT    nMenuItemDesc
+        , UINT    nBaseID
+        , ULONG   uFlags
+    );
 
     virtual HRESULT HrInitialize( IUnknown * piDataIn );
 
@@ -76,14 +76,14 @@ public:
 
     static HRESULT
     S_HrCreateObject(
-          IUnknown *    piDataIn
+        IUnknown *    piDataIn
         , CObjData **   ppodOut
-        );
+    );
 
     virtual HRESULT
     AddContextMenuItems(
         IWCContextMenuCallback * piCallbackIn
-        )
+    )
     {
         UNREFERENCED_PARAMETER( piCallbackIn );
         return E_NOTIMPL;
@@ -92,7 +92,7 @@ public:
     virtual HRESULT
     InvokeCommand(
         ULONG nCommandIDIn
-        )
+    )
     {
         UNREFERENCED_PARAMETER( nCommandIDIn);
         return E_NOTIMPL;
@@ -101,7 +101,7 @@ public:
     virtual HRESULT
     GetPropertySheetPages(
         CRuntimeClass *** ppaPropSheetsOut
-        )
+    )
     {
         UNREFERENCED_PARAMETER( ppaPropSheetsOut );
         return E_NOTIMPL;
@@ -110,7 +110,7 @@ public:
     virtual HRESULT
     GetWizardPages(
         CRuntimeClass *** ppaWizardPagesOut
-        )
+    )
     {
         UNREFERENCED_PARAMETER( ppaWizardPagesOut );
         return E_NOTIMPL;
@@ -148,7 +148,10 @@ public:
     virtual HRESULT AddContextMenuItems( IWCContextMenuCallback * piCallbackIn );
     virtual HRESULT InvokeCommand( ULONG nCommandIDIn );
 
-    HCLUSTER GetHCluster( void ) { return m_hCluster; };
+    HCLUSTER GetHCluster( void )
+    {
+        return m_hCluster;
+    };
 
 };  //*** class CClusterData
 
@@ -170,7 +173,10 @@ public:
     virtual HRESULT AddContextMenuItems( IWCContextMenuCallback * piCallbackIn );
     virtual HRESULT InvokeCommand( ULONG nCommandIDIn );
 
-    HNODE GetHNode( void ) { return m_hNode; };
+    HNODE GetHNode( void )
+    {
+        return m_hNode;
+    };
 
 };  //*** class CNodeData
 
@@ -192,7 +198,10 @@ public:
     virtual HRESULT AddContextMenuItems( IWCContextMenuCallback * piCallbackIn );
     virtual HRESULT InvokeCommand( ULONG nCommandIDIn );
 
-    HGROUP GetHGroup( void ) { return m_hGroup; };
+    HGROUP GetHGroup( void )
+    {
+        return m_hGroup;
+    };
 
 };  //*** class CGroupData
 
@@ -217,7 +226,10 @@ public:
     virtual HRESULT GetPropertySheetPages( CRuntimeClass *** ppaPropSheetsOut );
     virtual HRESULT GetWizardPages( CRuntimeClass *** ppaWizardPagesOut );
 
-    HRESOURCE GetHResource( void ) { return m_hResource; };
+    HRESOURCE GetHResource( void )
+    {
+        return m_hResource;
+    };
 
 }; //*** class CResData
 
@@ -258,7 +270,10 @@ public:
     virtual HRESULT AddContextMenuItems( IWCContextMenuCallback * piCallbackIn );
     virtual HRESULT InvokeCommand( ULONG nCommandIDIn );
 
-    HNETWORK GetHNetwork( void ) { return m_hNetwork; };
+    HNETWORK GetHNetwork( void )
+    {
+        return m_hNetwork;
+    };
 
 };  //*** class CNetworkData
 
@@ -280,6 +295,9 @@ public:
     virtual HRESULT AddContextMenuItems( IWCContextMenuCallback * piCallbackIn );
     virtual HRESULT InvokeCommand( ULONG nCommandIDIn );
 
-    HNETINTERFACE GetHNetInterface( void ) { return m_hNetInterface; };
+    HNETINTERFACE GetHNetInterface( void )
+    {
+        return m_hNetInterface;
+    };
 
 };  //*** class CNetInterfaceData

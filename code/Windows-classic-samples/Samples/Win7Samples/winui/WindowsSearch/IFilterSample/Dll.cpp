@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -164,8 +164,8 @@ HRESULT CreateRegKeyAndSetValue(const REGISTRY_ENTRY *pRegistryEntry)
     else
     {
         lRet = RegSetValueExW(hKey, pRegistryEntry->pszValueName, 0, REG_SZ,
-                            (LPBYTE) pRegistryEntry->pszData,
-                            ((DWORD) wcslen(pRegistryEntry->pszData) + 1) * sizeof(WCHAR));
+                              (LPBYTE) pRegistryEntry->pszData,
+                              ((DWORD) wcslen(pRegistryEntry->pszData) + 1) * sizeof(WCHAR));
 
         hr = HRESULT_FROM_WIN32(lRet);
 

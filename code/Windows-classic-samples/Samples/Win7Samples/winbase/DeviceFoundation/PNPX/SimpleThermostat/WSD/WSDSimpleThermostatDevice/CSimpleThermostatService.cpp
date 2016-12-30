@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -55,7 +55,7 @@ CSimpleThermostatService::~CSimpleThermostatService()
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::GetCurrentTemp(
     LONG* plTempOut
-    )
+)
 {
     if( NULL == plTempOut )
     {
@@ -74,7 +74,7 @@ HRESULT CSimpleThermostatService::GetCurrentTemp(
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::GetDesiredTemp(
     LONG* plTempOut
-    )
+)
 {
     if( NULL == plTempOut )
     {
@@ -93,7 +93,7 @@ HRESULT CSimpleThermostatService::GetDesiredTemp(
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::SetDesiredTemp(
     LONG lTemp
-    )
+)
 {
     m_lDesiredTemp = lTemp;
 
@@ -109,9 +109,9 @@ HRESULT CSimpleThermostatService::SetDesiredTemp(
 // CSimpleThermostatService::QueryInterface
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

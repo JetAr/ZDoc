@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1997, Microsoft Corporation, all rights reserved
 
@@ -44,7 +44,7 @@ RasEapFreeMemory(
 
 Notes:
     Implementation of IEAPProviderConfig::Initialize
-    
+
 */
 
 STDMETHODIMP
@@ -146,7 +146,7 @@ CEapCfg::ServerInvokeConfigUI(
     else
     {
         MessageBox(hWnd, pwszMachineName, L"You are configuring the EAP on...",
-            MB_OK | MB_ICONINFORMATION);
+                   MB_OK | MB_ICONINFORMATION);
     }
 
     hr = HRESULT_FROM_WIN32(dwErr);
@@ -190,7 +190,7 @@ CEapCfg::RouterInvokeConfigUI(
                 &dwSizeOfConnectionDataOut);
 
     if (   (NO_ERROR == dwErr)
-        && (0 != dwSizeOfConnectionDataOut))
+            && (0 != dwSizeOfConnectionDataOut))
     {
         //
         // If we got valid ConnectionDataOut, allocate memory for it...
@@ -209,7 +209,7 @@ CEapCfg::RouterInvokeConfigUI(
         //
 
         CopyMemory(*ppConnectionDataOut, pConnectionDataOut,
-            dwSizeOfConnectionDataOut);
+                   dwSizeOfConnectionDataOut);
         *pdwSizeOfConnectionDataOut = dwSizeOfConnectionDataOut;
     }
 
@@ -250,15 +250,15 @@ CEapCfg::RouterInvokeCredentialsUI(
     *pdwSizeOfUserDataOut = 0;
 
     dwErr = GetIdentity(
-                    hwndParent,
-                    NULL /* pUserDataIn */,
-                    0 /* dwSizeOfUserDataIn */,
-                    &pUserDataOut,
-                    &dwSizeOfUserDataOut,
-                    &pwszIdentityOut);
+                hwndParent,
+                NULL /* pUserDataIn */,
+                0 /* dwSizeOfUserDataIn */,
+                &pUserDataOut,
+                &dwSizeOfUserDataOut,
+                &pwszIdentityOut);
 
     if (   (NO_ERROR == dwErr)
-        && (0 != dwSizeOfUserDataOut))
+            && (0 != dwSizeOfUserDataOut))
     {
         //
         // If we got valid UserDataOut, allocate memory for it...

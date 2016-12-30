@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -19,7 +19,7 @@ extern WS_CHANNEL_DECODER channelDecoder;
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -58,15 +58,15 @@ Exit:
     }
 }
 
-HANDLE closeServer = NULL;  
+HANDLE closeServer = NULL;
 
 
 HRESULT CALLBACK Add(
-    __in const WS_OPERATION_CONTEXT* context, 
-    __in int a, 
-    __in int b, 
-    __out int* result, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in const WS_OPERATION_CONTEXT* context,
+    __in int a,
+    __in int b,
+    __out int* result,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(context);
@@ -80,11 +80,11 @@ HRESULT CALLBACK Add(
 }
 
 HRESULT CALLBACK Subtract(
-    __in const WS_OPERATION_CONTEXT* context, 
-    __in int a, 
-    __in int b, 
-    __out int* result, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in const WS_OPERATION_CONTEXT* context,
+    __in int a,
+    __in int b,
+    __out int* result,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(context);
@@ -98,7 +98,7 @@ HRESULT CALLBACK Subtract(
 }
 
 HRESULT CALLBACK CloseChannelCallback(
-    __in const WS_OPERATION_CONTEXT* context, 
+    __in const WS_OPERATION_CONTEXT* context,
     __in_opt const WS_ASYNC_CONTEXT* asyncContext)
 {
     UNREFERENCED_PARAMETER(context);
@@ -111,7 +111,7 @@ HRESULT CALLBACK CloseChannelCallback(
 static const DefaultBinding_ICalculatorFunctionTable calculatorFunctions = {Add, Subtract};
 
 // Method contract for the service
-static const WS_SERVICE_CONTRACT calculatorContract = 
+static const WS_SERVICE_CONTRACT calculatorContract =
 {
     &CalculatorService_wsdl.contracts.DefaultBinding_ICalculator, // comes from the generated header.
     NULL, // for not specifying the default contract
@@ -122,33 +122,33 @@ static const WS_SERVICE_CONTRACT calculatorContract =
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_SERVICE_HOST* host = NULL;
     WS_SERVICE_ENDPOINT serviceEndpoint = {};
     const WS_SERVICE_ENDPOINT* serviceEndpoints[1];
     serviceEndpoints[0] = &serviceEndpoint;
-    
+
     WS_ERROR* error = NULL;
-    
-    
+
+
     // Set up channel properties for the custom channel
     WS_CHANNEL_PROPERTY channelPropertyArray[1];
-    
+
     // Set up channel property that specifies the callbacks that implement the custom channel
     channelPropertyArray[0].id = WS_CHANNEL_PROPERTY_DECODER;
     channelPropertyArray[0].value = &channelDecoder;
     channelPropertyArray[0].valueSize = sizeof(channelDecoder);
-    
+
     // Set up service endpoint properties
     WS_SERVICE_ENDPOINT_PROPERTY serviceEndpointProperties[1];
-    
+
     WS_SERVICE_PROPERTY_CLOSE_CALLBACK closeCallbackProperty = {CloseChannelCallback};
     serviceEndpointProperties[0].id = WS_SERVICE_ENDPOINT_PROPERTY_CLOSE_CHANNEL_CALLBACK;
     serviceEndpointProperties[0].value = &closeCallbackProperty;
     serviceEndpointProperties[0].valueSize = sizeof(closeCallbackProperty);
-    
-    
+
+
     // Initialize service endpoint
     serviceEndpoint.address.url.chars = L"http://+:80/example"; // address given as uri
     serviceEndpoint.address.url.length = (ULONG)wcslen(serviceEndpoint.address.url.chars);
@@ -159,44 +159,44 @@ int __cdecl wmain()
     serviceEndpoint.propertyCount = WsCountOf(serviceEndpointProperties);
     serviceEndpoint.channelProperties.properties = channelPropertyArray; // Channel properties
     serviceEndpoint.channelProperties.propertyCount = WsCountOf(channelPropertyArray); // Channel property Count
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Create Event object for closing the server
     closeServer = CreateEvent(
-        NULL, 
-        TRUE, 
-        FALSE, 
-        NULL);
+                      NULL,
+                      TRUE,
+                      FALSE,
+                      NULL);
     if (closeServer == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
-    }   
+    }
     // Creating a service host
     hr = WsCreateServiceHost(
-        serviceEndpoints, 
-        1, 
-        NULL, 
-        0, 
-        &host, 
-        error);
+             serviceEndpoints,
+             1,
+             NULL,
+             0,
+             &host,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    // WsOpenServiceHost to start the listeners in the service host 
+    // WsOpenServiceHost to start the listeners in the service host
     hr = WsOpenServiceHost(
-        host, 
-        NULL, 
-        error);
+             host,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -208,7 +208,7 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
@@ -219,8 +219,8 @@ Exit:
     {
         WsFreeServiceHost(host);
     }
-    
-    
+
+
     if (error != NULL)
     {
         WsFreeError(error);

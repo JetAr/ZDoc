@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -54,7 +54,7 @@ LONG CRegKey::Create(_In_ HKEY hKeyPresent, _In_ LPCWSTR pwszKeyName, _In_reads_
     HKEY keyHandle = nullptr;
 
     LONG res = RegCreateKeyEx(hKeyPresent, pwszKeyName, 0,
-        pwszClass, dwOptions, samDesired, lpSecAttr, &keyHandle, &disposition);
+                              pwszClass, dwOptions, samDesired, lpSecAttr, &keyHandle, &disposition);
 
     if (lpdwDisposition != nullptr)
     {
@@ -195,17 +195,17 @@ LONG CRegKey::QueryStringValue(_In_opt_ LPCWSTR pwszValueName, _Out_writes_opt_(
 
 LONG CRegKey::SetStringValue(_In_opt_ LPCWSTR pwszValueName, _In_ LPCWSTR pwszValue, DWORD dwType)
 {
-	size_t lenOfValue = 0;
+    size_t lenOfValue = 0;
     if (pwszValue == nullptr)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-	if (StringCchLength(pwszValue, STRSAFE_MAX_CCH, &lenOfValue) != S_OK)
+    if (StringCchLength(pwszValue, STRSAFE_MAX_CCH, &lenOfValue) != S_OK)
     {
         return ERROR_INVALID_PARAMETER;
     }
-	DWORD len = static_cast<DWORD>(lenOfValue);
+    DWORD len = static_cast<DWORD>(lenOfValue);
     return RegSetValueEx(_keyHandle, pwszValueName, NULL, dwType, (LPBYTE)pwszValue, (++len)*sizeof(WCHAR));
 }
 

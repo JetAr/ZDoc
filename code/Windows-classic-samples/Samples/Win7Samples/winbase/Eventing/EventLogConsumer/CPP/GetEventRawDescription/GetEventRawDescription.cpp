@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,7 +32,7 @@ Environment:
 void
 ShowHelp (
     __in PCWSTR ExeFile
-    )
+)
 
 /*++
 
@@ -55,11 +55,11 @@ Return Value:
     wprintf(L"For Example: %s Microsoft-Windows-Eventlog en-us\n", ExeFile);
 }
 
-DWORD 
+DWORD
 GetEventRawDescriptions (
     __in PCWSTR ProviderName,
     __in LCID Locale
-    )
+)
 
 /*++
 
@@ -96,11 +96,12 @@ Return Value:
     //
 
     ProviderMetadata = EvtOpenPublisherMetadata(NULL,
-                                                ProviderName,
-                                                NULL,
-                                                Locale,
-                                                0);
-    if (ProviderMetadata == NULL) {
+                       ProviderName,
+                       NULL,
+                       Locale,
+                       0);
+    if (ProviderMetadata == NULL)
+    {
         return GetLastError();
     }
 
@@ -109,7 +110,8 @@ Return Value:
     //
 
     EventMetaEnum = EvtOpenEventMetadataEnum(ProviderMetadata, 0);
-    if (EventMetaEnum == NULL) {
+    if (EventMetaEnum == NULL)
+    {
         Status = GetLastError();
         EvtClose(ProviderMetadata);
         return Status;
@@ -119,24 +121,26 @@ Return Value:
     BufferLength = 0;
     BufferLengthNeeded = 0;
 
-    while ((EventMeta = EvtNextEventMetadata(EventMetaEnum, 0)) != NULL) {
+    while ((EventMeta = EvtNextEventMetadata(EventMetaEnum, 0)) != NULL)
+    {
 
         //
         // Get the event & message IDs.
         //
 
-        if ((EvtGetEventMetadataProperty(EventMeta, 
+        if ((EvtGetEventMetadataProperty(EventMeta,
                                          EventMetadataEventMessageID,
-                                         0, 
+                                         0,
                                          sizeof(EVT_VARIANT),
                                          &EventMessageId,
                                          &BufferUsed) == FALSE) ||
-            (EvtGetEventMetadataProperty(EventMeta,
-                                         EventMetadataEventID,
-                                         0,
-                                         sizeof(EVT_VARIANT),
-                                         &EventId,
-                                         &BufferUsed) == FALSE)) {
+                (EvtGetEventMetadataProperty(EventMeta,
+                                             EventMetadataEventID,
+                                             0,
+                                             sizeof(EVT_VARIANT),
+                                             &EventId,
+                                             &BufferUsed) == FALSE))
+        {
             EvtClose(EventMeta);
             continue;
         }
@@ -145,12 +149,15 @@ Return Value:
         // Get the description, reallocating the buffer if needed.
         //
 
-        do {
-            if (BufferLengthNeeded > BufferLength) {
+        do
+        {
+            if (BufferLengthNeeded > BufferLength)
+            {
                 free(Description);
                 BufferLength = BufferLengthNeeded;
                 Description = (PWSTR)malloc(BufferLength * sizeof(WCHAR));
-                if (Description == NULL) {
+                if (Description == NULL)
+                {
                     Status = ERROR_OUTOFMEMORY;
                     BufferLength = 0;
                     break;
@@ -165,18 +172,23 @@ Return Value:
                                  EvtFormatMessageId,
                                  BufferLength,
                                  Description,
-                                 &BufferLengthNeeded) != FALSE) {
+                                 &BufferLengthNeeded) != FALSE)
+            {
                 Status = ERROR_SUCCESS;
-            } else {
+            }
+            else
+            {
                 Status = GetLastError();
             }
-        } while (Status == ERROR_INSUFFICIENT_BUFFER);
+        }
+        while (Status == ERROR_INSUFFICIENT_BUFFER);
 
         //
         // Display either the event message or an error message.
         //
 
-        switch (Status) {
+        switch (Status)
+        {
         case ERROR_SUCCESS:
         case ERROR_EVT_UNRESOLVED_VALUE_INSERT:
         case ERROR_EVT_UNRESOLVED_PARAMETER_INSERT:
@@ -199,7 +211,8 @@ Return Value:
     }
 
     Status = GetLastError();
-    if (Status == ERROR_NO_MORE_ITEMS) {
+    if (Status == ERROR_NO_MORE_ITEMS)
+    {
         Status = ERROR_SUCCESS;
     }
 
@@ -212,7 +225,7 @@ Return Value:
 
 int __cdecl
 wmain (
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) PWSTR* argv
 )
 
@@ -238,19 +251,24 @@ Return Value:
     LCID Locale;
     ULONG Status;
 
-    if (argc < 2 || argc > 3) {
+    if (argc < 2 || argc > 3)
+    {
         ShowHelp(argv[0]);
         return ERROR_SUCCESS;
     }
 
-    if (argc == 3) {
+    if (argc == 3)
+    {
         Locale = LocaleNameToLCID(argv[2], 0);
-    } else {
+    }
+    else
+    {
         Locale = 0;
     }
 
     Status = GetEventRawDescriptions(argv[1], Locale);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         wprintf(L"Error: %u\n", Status);
     }
 

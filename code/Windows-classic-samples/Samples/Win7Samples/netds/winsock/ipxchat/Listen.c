@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -97,7 +97,7 @@ LRESULT CmdListen(HWND hwnd, WORD wCommand, WORD wNotify, HWND hwndCtrl)
     wCommand;
 
     SetWindowText(hwnd, "IPX Chat Server");     // Change title bar text
-    
+
     // Start Dialog
     if(DialogBox(hInst, "ListenBox", hwnd, (DLGPROC)Listen))
     {
@@ -108,7 +108,7 @@ LRESULT CmdListen(HWND hwnd, WORD wCommand, WORD wNotify, HWND hwndCtrl)
         if (WSAAsyncSelect(sock,
                            hwnd,
                            MW_DATAREADY,
-                           FD_READ | FD_CLOSE) == SOCKET_ERROR) 
+                           FD_READ | FD_CLOSE) == SOCKET_ERROR)
         {
             MessageBox(hwnd, "WSAAsyncSelect Failed!", NULL, MB_OK);
             CleanUp();
@@ -184,15 +184,15 @@ LRESULT MsgListenInit(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
     lparam;
     wparam;
     uMessage;
-    
+
     // Create a font to use
-    if(NULL == (hfontDlg = CreateFont(14, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 
-                          VARIABLE_PITCH | FF_SWISS, "")))
+    if(NULL == (hfontDlg = CreateFont(14, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0,
+                                      VARIABLE_PITCH | FF_SWISS, "")))
         return FALSE;
 
     // Center the dialog over the application window
     CenterWindow (hdlg, GetWindow (hdlg, GW_OWNER));
-     
+
     // Initialize Socket Addresses
     SetDlgItemText(hdlg, LD_SOCKET, szListenSocket);
 
@@ -264,7 +264,7 @@ LRESULT MsgListenConnected(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lpara
     SetDlgItemText(hdlg,
                    LD_STATUS,
                    outtext);
-          
+
     EndDialog(hdlg, TRUE);          // Exit the dialog
     DeleteObject (hfontDlg);        // Drop font
     return (TRUE);
@@ -290,10 +290,10 @@ LRESULT MsgListenConnected(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lpara
 //    the command messages for the Listen dialog box.
 //
 
-LRESULT MsgListenCommand(HWND   hwnd, 
-                        UINT   uMessage, 
-                        WPARAM wparam, 
-                        LPARAM lparam)
+LRESULT MsgListenCommand(HWND   hwnd,
+                         UINT   uMessage,
+                         WPARAM wparam,
+                         LPARAM lparam)
 {
     uMessage;
 
@@ -324,8 +324,8 @@ LRESULT CmdListenDone(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
     hwndCtrl;
     wNotify;
     wCommand;
-    
-    
+
+
     if (INVALID_SOCKET != SrvSock)
     {
         closesocket(SrvSock);    // Free any aborted socket resources
@@ -369,14 +369,14 @@ LRESULT CmdListenNow(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
 
     // Get Socket Address
     GetDlgItemText(hdlg,
-         LD_SOCKET,
-         szXferBuffer,
-         sizeof(szXferBuffer));
+                   LD_SOCKET,
+                   szXferBuffer,
+                   sizeof(szXferBuffer));
     wVersionRequested = MAKEWORD(1, 1);
 
     SetDlgItemText(hdlg,
-                  LD_STATUS,
-                  "Calling WSAStartup");
+                   LD_STATUS,
+                   "Calling WSAStartup");
 
     // Initializes winsock dll
     if(WSAStartup(wVersionRequested, &wsaData) != 0)
@@ -389,19 +389,20 @@ LRESULT CmdListenNow(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
     }
 
     SetDlgItemText(hdlg,
-          LD_STATUS,
-          "WSAStartup Succeeded");
+                   LD_STATUS,
+                   "WSAStartup Succeeded");
 
     SetDlgItemText(hdlg,
-          LD_STATUS,
-          "Calling socket()");
+                   LD_STATUS,
+                   "Calling socket()");
 
     // Allocate socket handle
     SrvSock = socket(AF_IPX,         // IPX Family
                      SOCK_SEQPACKET, // Gives message mode transfers
                      NSPROTO_SPX);   // SPX is connection oriented transport
 
-    if(SrvSock == INVALID_SOCKET) {
+    if(SrvSock == INVALID_SOCKET)
+    {
         SetDlgItemText(hdlg,
                        LD_STATUS,
                        "ERROR on socket()");
@@ -425,8 +426,8 @@ LRESULT CmdListenNow(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
                    "Calling bind()");
 
     // Bind to socket address
-    if(bind(SrvSock, 
-            (PSOCKADDR) pSockAddr, 
+    if(bind(SrvSock,
+            (PSOCKADDR) pSockAddr,
             sizeof(SOCKADDR_IPX)) == SOCKET_ERROR)
     {
         SetDlgItemText(hdlg,
@@ -454,7 +455,7 @@ LRESULT CmdListenNow(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
     if (listen(SrvSock, 1) == SOCKET_ERROR)
     {
         hRet = StringCchPrintf(outtext,80,"FAILURE: listen() returned %u", WSAGetLastError());
-        SetDlgItemText(hdlg,                       
+        SetDlgItemText(hdlg,
                        LD_STATUS,
                        outtext);
         if (INVALID_SOCKET != SrvSock)
@@ -475,9 +476,9 @@ LRESULT CmdListenNow(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
                    "Calling WSAAsyncSelect()");
 
     // Specify message to be posted when client connects
-    if(WSAAsyncSelect(SrvSock, 
-                      hdlg, 
-                      LDM_CONNECTED, 
+    if(WSAAsyncSelect(SrvSock,
+                      hdlg,
+                      LDM_CONNECTED,
                       FD_ACCEPT) == SOCKET_ERROR)
     {
         SetDlgItemText(hdlg,
@@ -513,7 +514,7 @@ LRESULT CmdListenNow(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
                    LD_STATUS,
                    outtext);
 
-    
+
     SetFocus(GetDlgItem(hdlg, IDCANCEL));             // Give Cancel Button focus
     EnableWindow(GetDlgItem(hdlg, IDOK), FALSE);      // Grey OK button
     EnableWindow(GetDlgItem(hdlg, LD_SOCKET), FALSE); // Grey Socket Edit control

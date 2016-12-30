@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -76,7 +76,7 @@ Arguments:
         to it's caller.  Only the following bits are valid.
 
         USER_ALL_PARAMETERS - Write UserAllInfo->Parameters back to SAM.  If
-            the size of the buffer is changed, the old buffer must be deleted 
+            the size of the buffer is changed, the old buffer must be deleted
             using MIDL_user_free() and reallocate the
             buffer using MIDL_user_allocate().
 
@@ -130,10 +130,10 @@ Return Value:
     SYSTEMTIME CurrentTime;
     WCHAR buf[256];
     PNETLOGON_LOGON_IDENTITY_INFO Identity =
-    (PNETLOGON_LOGON_IDENTITY_INFO)LogonInformation;
-    
+        (PNETLOGON_LOGON_IDENTITY_INFO)LogonInformation;
+
     Status = STATUS_SUCCESS;
-    
+
     *Authoritative = TRUE;
     *UserFlags = 0;
     *WhichFields = 0;
@@ -141,40 +141,44 @@ Return Value:
 
     GetLocalTime( &CurrentTime );
 
-    if (!Identity) {
-    WriteLogFile(TEXT("No identity\r\n"));
-    return Status;
+    if (!Identity)
+    {
+        WriteLogFile(TEXT("No identity\r\n"));
+        return Status;
     }
-    
-    
+
+
     swprintf_s(buf, RTL_NUMBER_OF(buf),
-         L"%02d/%02d/%d %02d:%02d:%02d: Logon (level=%d) %wZ\\%wZ (%wZ) from %wZ\r\n",
-         CurrentTime.wMonth, CurrentTime.wDay, CurrentTime.wYear,
-         CurrentTime.wHour, CurrentTime.wMinute, CurrentTime.wSecond,
-         LogonLevel,
-         &Identity->LogonDomainName, &Identity->UserName,
-         &UserAll->FullName, &Identity->Workstation);
+               L"%02d/%02d/%d %02d:%02d:%02d: Logon (level=%d) %wZ\\%wZ (%wZ) from %wZ\r\n",
+               CurrentTime.wMonth, CurrentTime.wDay, CurrentTime.wYear,
+               CurrentTime.wHour, CurrentTime.wMinute, CurrentTime.wSecond,
+               LogonLevel,
+               &Identity->LogonDomainName, &Identity->UserName,
+               &UserAll->FullName, &Identity->Workstation);
     WriteLogFile(buf);
 
-    switch ( LogonLevel ) {
+    switch ( LogonLevel )
+    {
     case NetlogonInteractiveInformation:
     case NetlogonServiceInformation:
     case NetlogonNetworkInformation:
 
-    //
-    // If you care you can determine what to do here
-    //
+        //
+        // If you care you can determine what to do here
+        //
         *Authoritative = FALSE;
 
-    if (LogoffTime) {
-        LogoffTime->HighPart = 0x7FFFFFFF;
-        LogoffTime->LowPart = 0xFFFFFFFF;
-    }
+        if (LogoffTime)
+        {
+            LogoffTime->HighPart = 0x7FFFFFFF;
+            LogoffTime->LowPart = 0xFFFFFFFF;
+        }
 
-    if (KickoffTime) {
-        KickoffTime->HighPart = 0x7FFFFFFF;
-        KickoffTime->LowPart = 0xFFFFFFFF;
-    }
+        if (KickoffTime)
+        {
+            KickoffTime->HighPart = 0x7FFFFFFF;
+            KickoffTime->LowPart = 0xFFFFFFFF;
+        }
         break;
 
     default:
@@ -189,28 +193,28 @@ Return Value:
 static BOOL
 WriteLogFile(
     LPWSTR String
-    )
+)
 {
     HANDLE hFile;
     DWORD dwBytesWritten;
 
     hFile = CreateFile(LOGFILE,
-               GENERIC_WRITE,
-               0,
-               NULL,
-               OPEN_ALWAYS,
-               FILE_ATTRIBUTE_NORMAL|FILE_FLAG_SEQUENTIAL_SCAN,
-               NULL);
+                       GENERIC_WRITE,
+                       0,
+                       NULL,
+                       OPEN_ALWAYS,
+                       FILE_ATTRIBUTE_NORMAL|FILE_FLAG_SEQUENTIAL_SCAN,
+                       NULL);
     if (hFile == INVALID_HANDLE_VALUE)
-    return FALSE;
+        return FALSE;
 
     SetFilePointer(hFile, 0, NULL, FILE_END);
 
     WriteFile(hFile,
-          String,
-          (lstrlen(String) * sizeof(WCHAR)),
-          &dwBytesWritten,
-          NULL);
+              String,
+              (lstrlen(String) * sizeof(WCHAR)),
+              &dwBytesWritten,
+              NULL);
 
     CloseHandle(hFile);
 

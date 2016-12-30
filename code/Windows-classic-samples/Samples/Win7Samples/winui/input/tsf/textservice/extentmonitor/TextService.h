@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -31,10 +31,10 @@ class CRangeFromPointViewer;
 #define  DE_EVENTID_FROMLANGUAGEBAR       4
 
 class CExtentMonitorTextService : public ITfTextInputProcessor,
-                     public ITfThreadMgrEventSink,
-                     public ITfTextEditSink,
-                     public ITfTextLayoutSink,
-                     public ITfThreadFocusSink
+    public ITfThreadMgrEventSink,
+    public ITfTextEditSink,
+    public ITfTextLayoutSink,
+    public ITfThreadFocusSink
 {
 public:
     CExtentMonitorTextService();
@@ -69,9 +69,15 @@ public:
     // CClassFactory factory callback
     static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 
-    ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
+    ITfThreadMgr *_GetThreadMgr()
+    {
+        return _pThreadMgr;
+    }
 
-    CExtentPopupWindow *_GetPopupWindow() {return _pPopupWindow;}
+    CExtentPopupWindow *_GetPopupWindow()
+    {
+        return _pPopupWindow;
+    }
 
     void DumpExtentFocusContext(UINT nEventId);
     void _EnsurePopupWindow();
@@ -80,12 +86,18 @@ public:
     void _EnsureExtentVisualWindows();
     void _UpdateExtentVisualWindows();
     void _HideExtentVisualWindows();
-    BOOL IsShownExtentVisualWindows() {return _fIsShownExtentVisualWindows;}
+    BOOL IsShownExtentVisualWindows()
+    {
+        return _fIsShownExtentVisualWindows;
+    }
 
     void _EnsureRangeExtentViewer();
     void _UpdateRangeExtentViewer();
     void _HideRangeExtentViewer();
-    BOOL IsShownRangeExtentViewer() {return _fIsShownRangeExtentViewer;}
+    BOOL IsShownRangeExtentViewer()
+    {
+        return _fIsShownRangeExtentViewer;
+    }
 
     void GetRectFromPointOnFocusDocument(POINT pt);
     void _GetRectFromPoint(TfEditCookie ec, ITfContext *pContext, POINT pt);
@@ -93,7 +105,10 @@ public:
     void _EnsureRangeFromPointViewer();
     void _UpdateRangeFromPointViewer();
     void _HideRangeFromPointViewer();
-    BOOL IsShownRangeFromPointViewer() {return _fIsShownRangeFromPointViewer;}
+    BOOL IsShownRangeFromPointViewer()
+    {
+        return _fIsShownRangeFromPointViewer;
+    }
 
 private:
     // initialize and uninitialize ThreadMgrEventSink.

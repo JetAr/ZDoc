@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,20 +14,20 @@
 //
 VOID EnumerateVpnConnections(
     _In_opt_ LPWSTR serverName
-    );
+);
 
 //
-// Prints various fields of the speficied RAS_CONNECTION_4 structure in string format 
+// Prints various fields of the speficied RAS_CONNECTION_4 structure in string format
 //
 VOID PrintVPNConnectionDetails(
     _In_ RAS_CONNECTION_4* vpnConnection
-    );
+);
 
 //
-// Retrieve the authentication method from the speficied PROJECTION_INFO2 structure 
-// and prints it in string format 
+// Retrieve the authentication method from the speficied PROJECTION_INFO2 structure
+// and prints it in string format
 //
 VOID PrintAuthMethod(
     _In_ PROJECTION_INFO2* projectionInfo
-    );
+);
 

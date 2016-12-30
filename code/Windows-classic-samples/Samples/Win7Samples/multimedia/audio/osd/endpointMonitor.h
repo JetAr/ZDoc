@@ -1,11 +1,11 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved
 
-#pragma once 
+#pragma once
 
 class CVolumeMonitor : IMMNotificationClient, IAudioEndpointVolumeCallback
 {
@@ -25,14 +25,35 @@ private:
 
 
     // IMMNotificationClient (only need to really implement OnDefaultDeviceChanged)
-    IFACEMETHODIMP OnDeviceStateChanged(LPCWSTR /*pwstrDeviceId*/, DWORD /*dwNewState*/)    {   return S_OK;    }
-    IFACEMETHODIMP OnDeviceAdded(LPCWSTR /*pwstrDeviceId*/)   {   return S_OK;    }
-    IFACEMETHODIMP OnDeviceRemoved(LPCWSTR /*pwstrDeviceId*/) {   return S_OK;    }
+    IFACEMETHODIMP OnDeviceStateChanged(LPCWSTR /*pwstrDeviceId*/, DWORD /*dwNewState*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnDeviceAdded(LPCWSTR /*pwstrDeviceId*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnDeviceRemoved(LPCWSTR /*pwstrDeviceId*/)
+    {
+        return S_OK;
+    }
     IFACEMETHODIMP OnDefaultDeviceChanged(EDataFlow flow, ERole role, LPCWSTR pwstrDefaultDeviceId);   // ****
-    IFACEMETHODIMP OnPropertyValueChanged(LPCWSTR /*pwstrDeviceId*/, const PROPERTYKEY /*key*/)   {   return S_OK;    }
-    IFACEMETHODIMP OnDeviceQueryRemove()   {   return S_OK;    }
-    IFACEMETHODIMP OnDeviceQueryRemoveFailed() {   return S_OK;    }
-    IFACEMETHODIMP OnDeviceRemovePending() {   return S_OK;    }
+    IFACEMETHODIMP OnPropertyValueChanged(LPCWSTR /*pwstrDeviceId*/, const PROPERTYKEY /*key*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnDeviceQueryRemove()
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnDeviceQueryRemoveFailed()
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnDeviceRemovePending()
+    {
+        return S_OK;
+    }
 
     // IAudioEndpointVolumeCallback
     IFACEMETHODIMP OnNotify(PAUDIO_VOLUME_NOTIFICATION_DATA pNotify);

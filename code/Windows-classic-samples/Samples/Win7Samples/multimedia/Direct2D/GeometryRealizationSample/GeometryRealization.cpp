@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -58,13 +58,13 @@ public:
         ID2D1RenderTarget *pRT,
         ID2D1Brush *pBrush,
         REALIZATION_RENDER_MODE mode
-        );
+    );
 
     STDMETHOD(Draw)(
         ID2D1RenderTarget *pRT,
         ID2D1Brush *pBrush,
         REALIZATION_RENDER_MODE mode
-        );
+    );
 
     STDMETHOD(Update)(
         ID2D1Geometry *pGeometry,
@@ -72,7 +72,7 @@ public:
         CONST D2D1_MATRIX_3X2_F *pWorldTransform,
         float strokeWidth,
         ID2D1StrokeStyle *pIStrokeStyle
-        );
+    );
 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
@@ -80,7 +80,7 @@ public:
     STDMETHOD(QueryInterface)(
         REFIID iid,
         void ** ppvObject
-        );
+    );
 
     static HRESULT Create(
         ID2D1RenderTarget *pRT,
@@ -91,7 +91,7 @@ public:
         float strokeWidth,
         ID2D1StrokeStyle *pIStrokeStyle,
         IGeometryRealization **ppRealization
-        );
+    );
 
 // These methods are declared protected for white-box unit-testing.
 protected:
@@ -107,7 +107,7 @@ protected:
         CONST D2D1_MATRIX_3X2_F *pWorldTransform,
         float strokeWidth,
         ID2D1StrokeStyle *pIStrokeStyle
-        );
+    );
 
     static HRESULT GenerateOpacityMask(
         bool fill,
@@ -120,14 +120,14 @@ protected:
         ID2D1StrokeStyle *pStrokeStyle,
         D2D1_RECT_F *pMaskDestBounds,
         D2D1_RECT_F *pMaskSourceBounds
-        );
+    );
 
     HRESULT RenderToTarget(
         bool fill,
         ID2D1RenderTarget *pRT,
         ID2D1Brush *pBrush,
         REALIZATION_RENDER_MODE mode
-        );
+    );
 
     ID2D1Mesh *m_pFillMesh;
     ID2D1Mesh *m_pStrokeMesh;
@@ -169,7 +169,7 @@ class GeometryRealizationFactory : public IGeometryRealizationFactory
 public:
     STDMETHOD(CreateGeometryRealization)(
         IGeometryRealization **ppRealization
-        );
+    );
 
     STDMETHOD(CreateGeometryRealization)(
         ID2D1Geometry *pGeometry,
@@ -178,7 +178,7 @@ public:
         float strokeWidth,
         ID2D1StrokeStyle *pIStrokeStyle,
         IGeometryRealization **ppRealization
-        );
+    );
 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
@@ -186,14 +186,14 @@ public:
     STDMETHOD(QueryInterface)(
         REFIID iid,
         void ** ppvObject
-        );
+    );
 
     // Non-interface methods
     static HRESULT Create(
         ID2D1RenderTarget *pRT,
         UINT maxRealizationDimension,
         IGeometryRealizationFactory **ppFactory
-        );
+    );
 
 // These methods are declared protected for white-box unit-testing.
 protected:
@@ -204,7 +204,7 @@ protected:
     HRESULT Initialize(
         ID2D1RenderTarget *pRT,
         UINT maxRealizationDimension
-        );
+    );
 
     ID2D1RenderTarget *m_pRT;
 
@@ -226,13 +226,13 @@ HRESULT CreateGeometryRealizationFactory(
     ID2D1RenderTarget *pRT,
     UINT maxRealizationDimension,
     IGeometryRealizationFactory **ppFactory
-    )
+)
 {
     return GeometryRealizationFactory::Create(
-        pRT,
-        maxRealizationDimension,
-        ppFactory
-        );
+               pRT,
+               maxRealizationDimension,
+               ppFactory
+           );
 }
 
 //+-----------------------------------------------------------------------------
@@ -244,13 +244,13 @@ HRESULT CreateGeometryRealizationFactory(
 HRESULT CreateGeometryRealizationFactory(
     ID2D1RenderTarget *pRT,
     IGeometryRealizationFactory **ppFactory
-    )
+)
 {
     return CreateGeometryRealizationFactory(
-        pRT,
-        0xffffffff, // maxRealizationDimension
-        ppFactory
-        );
+               pRT,
+               0xffffffff, // maxRealizationDimension
+               ppFactory
+           );
 }
 
 //+-----------------------------------------------------------------------------
@@ -320,7 +320,7 @@ GeometryRealizationFactory::~GeometryRealizationFactory()
 HRESULT GeometryRealizationFactory::Initialize(
     ID2D1RenderTarget *pRT,
     UINT maxRealizationDimension
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -339,9 +339,9 @@ HRESULT GeometryRealizationFactory::Initialize(
         m_pRT->AddRef();
 
         m_maxRealizationDimension = min(
-            pRT->GetMaximumBitmapSize(),
-            maxRealizationDimension
-            );
+                                        pRT->GetMaximumBitmapSize(),
+                                        maxRealizationDimension
+                                    );
     }
 
     return hr;
@@ -360,18 +360,18 @@ STDMETHODIMP GeometryRealizationFactory::CreateGeometryRealization(
     float strokeWidth,
     ID2D1StrokeStyle *pIStrokeStyle,
     IGeometryRealization **ppRealization
-    )
+)
 {
     return GeometryRealization::Create(
-        m_pRT,
-        m_maxRealizationDimension,
-        pGeometry,
-        options,
-        pWorldTransform,
-        strokeWidth,
-        pIStrokeStyle,
-        ppRealization
-        );
+               m_pRT,
+               m_maxRealizationDimension,
+               pGeometry,
+               options,
+               pWorldTransform,
+               strokeWidth,
+               pIStrokeStyle,
+               ppRealization
+           );
 }
 
 //+-----------------------------------------------------------------------------
@@ -382,18 +382,18 @@ STDMETHODIMP GeometryRealizationFactory::CreateGeometryRealization(
 //------------------------------------------------------------------------------
 STDMETHODIMP GeometryRealizationFactory::CreateGeometryRealization(
     IGeometryRealization **ppRealization
-    )
+)
 {
     return GeometryRealization::Create(
-        m_pRT,
-        m_maxRealizationDimension,
-        NULL, // pGeometry
-        REALIZATION_CREATION_OPTIONS_ALIASED, // ignored.
-        NULL,
-        0.0f, // strokeWidth
-        NULL, // pIStrokeStyle
-        ppRealization
-        );
+               m_pRT,
+               m_maxRealizationDimension,
+               NULL, // pGeometry
+               REALIZATION_CREATION_OPTIONS_ALIASED, // ignored.
+               NULL,
+               0.0f, // strokeWidth
+               NULL, // pIStrokeStyle
+               ppRealization
+           );
 }
 
 //+-----------------------------------------------------------------------------
@@ -412,7 +412,7 @@ HRESULT GeometryRealization::Create(
     float strokeWidth,
     ID2D1StrokeStyle *pIStrokeStyle,
     IGeometryRealization **ppRealization
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -423,14 +423,14 @@ HRESULT GeometryRealization::Create(
     if (SUCCEEDED(hr))
     {
         hr = pRealization->Initialize(
-            pRT,
-            maxRealizationDimension,
-            pGeometry,
-            options,
-            pWorldTransform,
-            strokeWidth,
-            pIStrokeStyle
-            );
+                 pRT,
+                 maxRealizationDimension,
+                 pGeometry,
+                 options,
+                 pWorldTransform,
+                 strokeWidth,
+                 pIStrokeStyle
+             );
         if (SUCCEEDED(hr))
         {
             *ppRealization = pRealization;
@@ -490,14 +490,14 @@ STDMETHODIMP GeometryRealization::Fill(
     ID2D1RenderTarget *pRT,
     ID2D1Brush *pBrush,
     REALIZATION_RENDER_MODE mode
-    )
+)
 {
     return RenderToTarget(
-        true, // => fill
-        pRT,
-        pBrush,
-        mode
-        );
+               true, // => fill
+               pRT,
+               pBrush,
+               mode
+           );
 }
 
 
@@ -511,14 +511,14 @@ STDMETHODIMP GeometryRealization::Draw(
     ID2D1RenderTarget *pRT,
     ID2D1Brush *pBrush,
     REALIZATION_RENDER_MODE mode
-    )
+)
 {
     return RenderToTarget(
-        false, // => stroke
-        pRT,
-        pBrush,
-        mode
-        );
+               false, // => stroke
+               pRT,
+               pBrush,
+               mode
+           );
 }
 
 
@@ -550,7 +550,7 @@ STDMETHODIMP GeometryRealization::Update(
     CONST D2D1_MATRIX_3X2_F *pWorldTransform,
     float strokeWidth,
     ID2D1StrokeStyle *pIStrokeStyle
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -584,7 +584,7 @@ STDMETHODIMP GeometryRealization::Update(
         SafeReplace(&m_pGeometry, pGeometry);
         SafeReplace(&m_pStrokeStyle, pIStrokeStyle);
         m_strokeWidth = strokeWidth;
-     }
+    }
 
     if (options & REALIZATION_CREATION_OPTIONS_ANTI_ALIASED)
     {
@@ -595,33 +595,33 @@ STDMETHODIMP GeometryRealization::Update(
         if (options & REALIZATION_CREATION_OPTIONS_FILLED)
         {
             hr = GenerateOpacityMask(
-                    true, // => filled
-                    m_pRT,
-                    m_maxRealizationDimension,
-                    IN OUT &m_pFillRT,
-                    pGeometry,
-                    pWorldTransform,
-                    strokeWidth,
-                    pIStrokeStyle,
-                    &m_fillMaskDestBounds,
-                    &m_fillMaskSourceBounds
-                    );
+                     true, // => filled
+                     m_pRT,
+                     m_maxRealizationDimension,
+                     IN OUT &m_pFillRT,
+                     pGeometry,
+                     pWorldTransform,
+                     strokeWidth,
+                     pIStrokeStyle,
+                     &m_fillMaskDestBounds,
+                     &m_fillMaskSourceBounds
+                 );
         }
 
         if (SUCCEEDED(hr) && options & REALIZATION_CREATION_OPTIONS_STROKED)
         {
             hr = GenerateOpacityMask(
-                    false, // => stroked
-                    m_pRT,
-                    m_maxRealizationDimension,
-                    IN OUT &m_pStrokeRT,
-                    pGeometry,
-                    pWorldTransform,
-                    strokeWidth,
-                    pIStrokeStyle,
-                    &m_strokeMaskDestBounds,
-                    &m_strokeMaskSourceBounds
-                    );
+                     false, // => stroked
+                     m_pRT,
+                     m_maxRealizationDimension,
+                     IN OUT &m_pStrokeRT,
+                     pGeometry,
+                     pWorldTransform,
+                     strokeWidth,
+                     pIStrokeStyle,
+                     &m_strokeMaskDestBounds,
+                     &m_strokeMaskSourceBounds
+                 );
         }
     }
 
@@ -642,9 +642,9 @@ STDMETHODIMP GeometryRealization::Update(
                 if (SUCCEEDED(hr))
                 {
                     hr = pGeometry->Tessellate(
-                            pWorldTransform,
-                            pSink
-                            );
+                             pWorldTransform,
+                             pSink
+                         );
                     if (SUCCEEDED(hr))
                     {
                         hr = pSink->Close();
@@ -678,11 +678,11 @@ STDMETHODIMP GeometryRealization::Update(
                 if (SUCCEEDED(hr))
                 {
                     hr = pGeometry->Widen(
-                            strokeWidth,
-                            pIStrokeStyle,
-                            pWorldTransform,
-                            pGeometrySink
-                            );
+                             strokeWidth,
+                             pIStrokeStyle,
+                             pWorldTransform,
+                             pGeometrySink
+                         );
                     if (SUCCEEDED(hr))
                     {
                         hr = pGeometrySink->Close();
@@ -697,9 +697,9 @@ STDMETHODIMP GeometryRealization::Update(
                                 if (SUCCEEDED(hr))
                                 {
                                     hr = pPathGeometry->Tessellate(
-                                            NULL, // world transform (already handled in Widen)
-                                            pSink
-                                            );
+                                             NULL, // world transform (already handled in Widen)
+                                             pSink
+                                         );
                                     if (SUCCEEDED(hr))
                                     {
                                         hr = pSink->Close();
@@ -736,7 +736,7 @@ HRESULT GeometryRealization::RenderToTarget(
     ID2D1RenderTarget *pRT,
     ID2D1Brush *pBrush,
     REALIZATION_RENDER_MODE mode
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -744,7 +744,7 @@ HRESULT GeometryRealization::RenderToTarget(
     D2D1_MATRIX_3X2_F originalTransform;
 
     if (((mode == REALIZATION_RENDER_MODE_DEFAULT) && m_swRT) ||
-        (mode == REALIZATION_RENDER_MODE_FORCE_UNREALIZED)
+            (mode == REALIZATION_RENDER_MODE_FORCE_UNREALIZED)
        )
     {
         if (!m_pGeometry)
@@ -760,7 +760,7 @@ HRESULT GeometryRealization::RenderToTarget(
                 pRT->FillGeometry(
                     m_pGeometry,
                     pBrush
-                    );
+                );
             }
             else
             {
@@ -769,7 +769,7 @@ HRESULT GeometryRealization::RenderToTarget(
                     pBrush,
                     m_strokeWidth,
                     m_pStrokeStyle
-                    );
+                );
             }
         }
     }
@@ -809,7 +809,7 @@ HRESULT GeometryRealization::RenderToTarget(
                         D2D1_OPACITY_MASK_CONTENT_GRAPHICS,
                         &m_fillMaskDestBounds,
                         &m_fillMaskSourceBounds
-                        );
+                    );
 
                     pBitmap->Release();
                 }
@@ -835,7 +835,7 @@ HRESULT GeometryRealization::RenderToTarget(
                         D2D1_OPACITY_MASK_CONTENT_GRAPHICS,
                         &m_strokeMaskDestBounds,
                         &m_strokeMaskSourceBounds
-                        );
+                    );
 
                     pBitmap->Release();
                 }
@@ -854,7 +854,7 @@ HRESULT GeometryRealization::RenderToTarget(
                     pRT->FillMesh(
                         m_pFillMesh,
                         pBrush
-                        );
+                    );
                 }
             }
             else
@@ -868,7 +868,7 @@ HRESULT GeometryRealization::RenderToTarget(
                     pRT->FillMesh(
                         m_pStrokeMesh,
                         pBrush
-                        );
+                    );
                 }
             }
         }
@@ -909,21 +909,21 @@ HRESULT GeometryRealization::Initialize(
     m_pRT->AddRef();
 
     m_swRT = pRT->IsSupported(
-        D2D1::RenderTargetProperties(
-            D2D1_RENDER_TARGET_TYPE_SOFTWARE
-            ));
+                 D2D1::RenderTargetProperties(
+                     D2D1_RENDER_TARGET_TYPE_SOFTWARE
+                 ));
 
     m_maxRealizationDimension = maxRealizationDimension;
 
     if (pGeometry)
     {
         hr = Update(
-            pGeometry,
-            options,
-            pWorldTransform,
-            strokeWidth,
-            pIStrokeStyle
-            );
+                 pGeometry,
+                 options,
+                 pWorldTransform,
+                 strokeWidth,
+                 pIStrokeStyle
+             );
     }
 
     return hr;
@@ -959,7 +959,7 @@ HRESULT GeometryRealization::GenerateOpacityMask(
     ID2D1StrokeStyle *pStrokeStyle,
     D2D1_RECT_F *pMaskDestBounds,
     D2D1_RECT_F *pMaskSourceBounds
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -979,9 +979,9 @@ HRESULT GeometryRealization::GenerateOpacityMask(
     ID2D1SolidColorBrush *pBrush = NULL;
 
     hr = pBaseRT->CreateSolidColorBrush(
-        D2D1::ColorF(1.0f, 1.0f, 1.0f, 1.0f),
-        &pBrush
-        );
+             D2D1::ColorF(1.0f, 1.0f, 1.0f, 1.0f),
+             &pBrush
+         );
     if (SUCCEEDED(hr))
     {
         pBaseRT->GetDpi(&dpiX, &dpiY);
@@ -989,18 +989,18 @@ HRESULT GeometryRealization::GenerateOpacityMask(
         if (fill)
         {
             hr = pIGeometry->GetBounds(
-                pWorldTransform,
-                &bounds
-                );
+                     pWorldTransform,
+                     &bounds
+                 );
         }
         else
         {
             hr = pIGeometry->GetWidenedBounds(
-                strokeWidth,
-                pStrokeStyle,
-                pWorldTransform,
-                &bounds
-                );
+                     strokeWidth,
+                     pStrokeStyle,
+                     pWorldTransform,
+                     &bounds
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -1015,7 +1015,7 @@ HRESULT GeometryRealization::GenerateOpacityMask(
             if (
                 !(bounds.left <= bounds.right) ||
                 !(bounds.top <= bounds.bottom)
-               )
+            )
             {
                 // Bounds are empty or ill-defined.
 
@@ -1049,9 +1049,9 @@ HRESULT GeometryRealization::GenerateOpacityMask(
             //
 
             inflatedIntegerPixelSize = D2D1::SizeU(
-                static_cast<UINT>(inflatedPixelBounds.right - inflatedPixelBounds.left),
-                static_cast<UINT>(inflatedPixelBounds.bottom - inflatedPixelBounds.top)
-                );
+                                           static_cast<UINT>(inflatedPixelBounds.right - inflatedPixelBounds.left),
+                                           static_cast<UINT>(inflatedPixelBounds.bottom - inflatedPixelBounds.top)
+                                       );
 
             // Round up
             inflatedIntegerPixelSize.width =
@@ -1070,11 +1070,11 @@ HRESULT GeometryRealization::GenerateOpacityMask(
             // would hurt fill rate.
             //
             D2D1_RECT_F inflatedDipBounds = D2D1::RectF(
-                inflatedPixelBounds.left * 96/dpiX,
-                inflatedPixelBounds.top * 96/dpiY,
-                inflatedPixelBounds.right * 96/dpiX,
-                inflatedPixelBounds.bottom * 96/dpiY
-                );
+                                                inflatedPixelBounds.left * 96/dpiX,
+                                                inflatedPixelBounds.top * 96/dpiY,
+                                                inflatedPixelBounds.right * 96/dpiX,
+                                                inflatedPixelBounds.bottom * 96/dpiY
+                                            );
 
             if (pCompatRT)
             {
@@ -1129,7 +1129,7 @@ HRESULT GeometryRealization::GenerateOpacityMask(
             //
 
             if (currentRTSize.width > 2*inflatedIntegerPixelSize.width ||
-                currentRTSize.height > 2*inflatedIntegerPixelSize.height
+                    currentRTSize.height > 2*inflatedIntegerPixelSize.height
                )
             {
                 SafeRelease(&pCompatRT);
@@ -1137,7 +1137,7 @@ HRESULT GeometryRealization::GenerateOpacityMask(
             }
 
             if (inflatedIntegerPixelSize.width > currentRTSize.width ||
-                inflatedIntegerPixelSize.height > currentRTSize.height
+                    inflatedIntegerPixelSize.height > currentRTSize.height
                )
             {
                 SafeRelease(&pCompatRT);
@@ -1158,15 +1158,15 @@ HRESULT GeometryRealization::GenerateOpacityMask(
                     D2D1::PixelFormat(
                         DXGI_FORMAT_A8_UNORM,
                         D2D1_ALPHA_MODE_PREMULTIPLIED
-                        );
+                    );
 
                 hr = pBaseRT->CreateCompatibleRenderTarget(
-                    NULL, // desiredSize
-                    &currentRTSize,
-                    &alphaOnlyFormat,
-                    D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE,
-                    &pCompatRT
-                    );
+                         NULL, // desiredSize
+                         &currentRTSize,
+                         &alphaOnlyFormat,
+                         D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE,
+                         &pCompatRT
+                     );
             }
 
             if (SUCCEEDED(hr))
@@ -1180,23 +1180,23 @@ HRESULT GeometryRealization::GenerateOpacityMask(
                     D2D1::Matrix3x2F::Translation(
                         -inflatedDipBounds.left,
                         -inflatedDipBounds.top
-                        ) *
+                    ) *
                     D2D1::Matrix3x2F::Scale(
                         scaleX,
                         scaleY
-                        );
+                    );
 
                 if (pWorldTransform)
                 {
                     pCompatRT->SetTransform(
                         *pWorldTransform * translateMatrix
-                        );
+                    );
                 }
                 else
                 {
                     pCompatRT->SetTransform(
                         translateMatrix
-                        );
+                    );
                 }
 
                 //
@@ -1207,14 +1207,14 @@ HRESULT GeometryRealization::GenerateOpacityMask(
 
                 pCompatRT->Clear(
                     D2D1::ColorF(0.0f, 0.0f, 0.0f, 0.0f)
-                    );
+                );
 
                 if (fill)
                 {
                     pCompatRT->FillGeometry(
                         pIGeometry,
                         pBrush
-                        );
+                    );
                 }
                 else
                 {
@@ -1223,7 +1223,7 @@ HRESULT GeometryRealization::GenerateOpacityMask(
                         pBrush,
                         strokeWidth,
                         pStrokeStyle
-                        );
+                    );
                 }
 
                 hr = pCompatRT->EndDraw();
@@ -1236,11 +1236,11 @@ HRESULT GeometryRealization::GenerateOpacityMask(
                     *pMaskDestBounds = inflatedDipBounds;
 
                     *pMaskSourceBounds = D2D1::Rect<float>(
-                        0.0f,
-                        0.0f,
-                        static_cast<float>(inflatedDipBounds.right - inflatedDipBounds.left)*scaleX,
-                        static_cast<float>(inflatedDipBounds.bottom - inflatedDipBounds.top)*scaleY
-                        );
+                                             0.0f,
+                                             0.0f,
+                                             static_cast<float>(inflatedDipBounds.right - inflatedDipBounds.left)*scaleX,
+                                             static_cast<float>(inflatedDipBounds.bottom - inflatedDipBounds.top)*scaleY
+                                         );
 
                     if (*ppBitmapRT != pCompatRT)
                     {
@@ -1277,7 +1277,7 @@ STDMETHODIMP_(ULONG) GeometryRealizationFactory::AddRef()
 STDMETHODIMP_(ULONG) GeometryRealizationFactory::Release()
 {
     ULONG cRef = static_cast<ULONG>(
-        InterlockedDecrement(reinterpret_cast<LONG volatile *>(&m_cRef)));
+                     InterlockedDecrement(reinterpret_cast<LONG volatile *>(&m_cRef)));
 
     if(0 == cRef)
     {
@@ -1296,7 +1296,7 @@ STDMETHODIMP_(ULONG) GeometryRealizationFactory::Release()
 STDMETHODIMP GeometryRealizationFactory::QueryInterface(
     REFIID iid,
     void ** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -1341,7 +1341,7 @@ STDMETHODIMP_(ULONG)
 GeometryRealization::Release()
 {
     ULONG cRef = static_cast<ULONG>(
-        InterlockedDecrement(reinterpret_cast<LONG volatile *>(&m_cRef)));
+                     InterlockedDecrement(reinterpret_cast<LONG volatile *>(&m_cRef)));
 
     if(0 == cRef)
     {
@@ -1361,7 +1361,7 @@ STDMETHODIMP
 GeometryRealization::QueryInterface(
     REFIID iid,
     void ** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

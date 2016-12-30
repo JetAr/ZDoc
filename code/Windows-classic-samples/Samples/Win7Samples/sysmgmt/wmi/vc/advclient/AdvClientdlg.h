@@ -1,4 +1,4 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
@@ -7,7 +7,7 @@
 // Description:
 //	This file declares the CAdvClientDlg dialog class. It is the main
 //		dialog for the tutorial.
-// 
+//
 // Part of: WMI Tutorial #1.
 //
 // Used by: CAdvClientleApp::InitInstance().
@@ -33,90 +33,90 @@ class CAdvClientDlg : public CDialog
 {
 // Construction
 public:
-	CAdvClientDlg(CWnd* pParent = NULL);	// standard constructor
-	virtual ~CAdvClientDlg();
+    CAdvClientDlg(CWnd* pParent = NULL);	// standard constructor
+    virtual ~CAdvClientDlg();
 
 // Dialog Data
-	//{{AFX_DATA(CAdvClientDlg)
-	enum { IDD = IDD_SAMPLE_DIALOG };
-	CButton	m_diskDescriptions;
-	CListBox	m_eventList;
-	CButton	m_perm;
-	CButton	m_temp;
-	CButton	m_addEquipment;
-	CButton	m_enumServicesAsync;
-	CButton	m_enumServices;
-	CButton	m_enumDisks;
-	CButton	m_diskDetails;
-	CButton	m_connect;
-	CListBox	m_outputList;
-	CString	m_namespace;
-	//}}AFX_DATA
+    //{{AFX_DATA(CAdvClientDlg)
+    enum { IDD = IDD_SAMPLE_DIALOG };
+    CButton	m_diskDescriptions;
+    CListBox	m_eventList;
+    CButton	m_perm;
+    CButton	m_temp;
+    CButton	m_addEquipment;
+    CButton	m_enumServicesAsync;
+    CButton	m_enumServices;
+    CButton	m_enumDisks;
+    CButton	m_diskDetails;
+    CButton	m_connect;
+    CListBox	m_outputList;
+    CString	m_namespace;
+    //}}AFX_DATA
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAdvClientDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CAdvClientDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAdvClientDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
-	afx_msg void OnAddEquipment();
-	afx_msg void OnConnect();
-	afx_msg void OnEnumdisks();
-	afx_msg void OnEnumservices();
-	afx_msg void OnDiskdetails();
-	afx_msg void OnEnumservicesasync();
-	afx_msg void OnRegPerm();
-	afx_msg void OnRegTemp();
-	virtual void OnCancel();
-	afx_msg void OnDiskPropsDescriptions();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CAdvClientDlg)
+    virtual BOOL OnInitDialog();
+    afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+    afx_msg void OnAddEquipment();
+    afx_msg void OnConnect();
+    afx_msg void OnEnumdisks();
+    afx_msg void OnEnumservices();
+    afx_msg void OnDiskdetails();
+    afx_msg void OnEnumservicesasync();
+    afx_msg void OnRegPerm();
+    afx_msg void OnRegTemp();
+    virtual void OnCancel();
+    afx_msg void OnDiskPropsDescriptions();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 private:
 
-	BOOL m_regPerm, m_regTemp;
+    BOOL m_regPerm, m_regTemp;
 
-	CAsyncQuerySink *m_pQueryCallback;
-	IWbemServices *m_pIWbemServices;
-	IWbemServices *m_pOfficeService;	//this gets marshalled to the event thread
+    CAsyncQuerySink *m_pQueryCallback;
+    IWbemServices *m_pIWbemServices;
+    IWbemServices *m_pOfficeService;	//this gets marshalled to the event thread
 
-	BOOL EnsureOfficeNamespace(void);
-	BOOL CheckOfficeNamespace(void);
+    BOOL EnsureOfficeNamespace(void);
+    BOOL CheckOfficeNamespace(void);
 
-	HRESULT AssociateToMachine(IWbemClassObject *pEquipInst);
-	HRESULT GetCompSysRef(VARIANT *v);
+    HRESULT AssociateToMachine(IWbemClassObject *pEquipInst);
+    HRESULT GetCompSysRef(VARIANT *v);
 
-	// event related.
+    // event related.
     static DWORD WINAPI ThreadProc(LPVOID lpParameter);
 
-	IStream * m_pStream;
+    IStream * m_pStream;
 
-	HANDLE m_ptrReady;		// the thread has done the work.
-	HANDLE m_stopThread;	// telling the thread to stop.
+    HANDLE m_ptrReady;		// the thread has done the work.
+    HANDLE m_stopThread;	// telling the thread to stop.
     CRITICAL_SECTION m_critSect;
     DWORD m_threadId;
     HANDLE m_thread;
 
-	void StopThread();
-	BOOL PermRegistered();
-	BOOL OnTempRegister();
-	void OnTempUnregister();
-	BOOL OnPermRegister();
-	void OnPermUnregister();
+    void StopThread();
+    BOOL PermRegistered();
+    BOOL OnTempRegister();
+    void OnTempUnregister();
+    BOOL OnPermRegister();
+    void OnPermUnregister();
 
-	static STDMETHODIMP DisplayEvents(CAdvClientDlg *pThis, LONG lObjectCount,  IWbemClassObject **ppObjArray);
+    static STDMETHODIMP DisplayEvents(CAdvClientDlg *pThis, LONG lObjectCount,  IWbemClassObject **ppObjArray);
 
-	// SampleViewer.mof 'creates' the consumer.
-	BOOL GetConsumer(IWbemClassObject **pConsumer);
-	BOOL AddFilter(IWbemClassObject **pFilter);
-	BOOL AddBinding(IWbemClassObject *pConsumer, 
-					IWbemClassObject *pFilter);
+    // SampleViewer.mof 'creates' the consumer.
+    BOOL GetConsumer(IWbemClassObject **pConsumer);
+    BOOL AddFilter(IWbemClassObject **pFilter);
+    BOOL AddBinding(IWbemClassObject *pConsumer,
+                    IWbemClassObject *pFilter);
 
 };
 LPWSTR ValueToString(VARIANT *pValue, WCHAR **pbuf);

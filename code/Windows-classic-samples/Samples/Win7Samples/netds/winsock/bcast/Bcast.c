@@ -1,4 +1,4 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 *       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1996 - 2000 Microsoft Corporation.
 *       All rights reserved.
@@ -22,31 +22,31 @@ Abstract:
     command line options. For example,
 
     -s To run the example as a server(default role).
-    
+
     -c To run the example as a client.
-   
+
     -p <i or m or u> To specify the protocol to be used.
      i - IPX.
      m - Mailslots.
      u - UDP(default protocol).
-    
+
     -e <Endpoint> To specify an end point of your choice. This is a mandatory
-    parameter. Servers create this endpoint and read broadcast messages. An 
-    endpoint in case Mailslot protocol is a Mailslot name.(default is 5005). 
-    
-    -d <DomainName> - To specify a domain name or a workgroup name. This is 
+    parameter. Servers create this endpoint and read broadcast messages. An
+    endpoint in case Mailslot protocol is a Mailslot name.(default is 5005).
+
+    -d <DomainName> - To specify a domain name or a workgroup name. This is
     useful for Mailslot clients, only.
 
-    To run the application as a server, the following command lines can be 
+    To run the application as a server, the following command lines can be
     specified:
-    
+
     bcast -s -e 8000 -p u
     bcast -s -e 8000 -p i
     bcast -s -e MAILSLOT1 -p m
 
     To run the application as a client, the following command lines can be
     specified:
-    
+
     bcast -c -e 8000 -p u
     bcast -c -e 8000 -p i
     bcast -c -e MAILSLOT1 -p m -d DOMAIN1
@@ -89,77 +89,77 @@ typedef enum _PROTOCOL
 
 BOOL __stdcall
 CtrlCHandler (
-             DWORD dwEvent
-             );
+    DWORD dwEvent
+);
 
 void __stdcall
 DoMailSlot (
-           MODE mRole,
-           LPSTR lpsEndPoint,
-           LPSTR lpsDomainName
-           );
+    MODE mRole,
+    LPSTR lpsEndPoint,
+    LPSTR lpsDomainName
+);
 
 void __stdcall
 DoIpx (
-      MODE mRole,
-      USHORT usEndPoint
-      );
+    MODE mRole,
+    USHORT usEndPoint
+);
 
 void __stdcall
 DoUdp (
-      MODE mRole,
-      USHORT usEndPoint
-      );
+    MODE mRole,
+    USHORT usEndPoint
+);
 
 void __stdcall
 DoMailSlotServer (
-                 LPSTR lpsEndPoint
-                 );
+    LPSTR lpsEndPoint
+);
 
 void __stdcall
 DoMailSlotClient (
-                 LPSTR lpsEndPoint,
-                 LPSTR lpsDomainName
-                 );
+    LPSTR lpsEndPoint,
+    LPSTR lpsDomainName
+);
 
 void __stdcall
 DoUdpServer (
-            USHORT usEndPoint
-            );
+    USHORT usEndPoint
+);
 
 void __stdcall
 DoUdpClient (
-            USHORT usEndPoint
-            );
+    USHORT usEndPoint
+);
 
-void __stdcall 
+void __stdcall
 DoIpxServer (
-            USHORT usEndPoint
-            );
+    USHORT usEndPoint
+);
 
 void __stdcall
 DoIpxClient (
-            USHORT usEndPoint
-            );
+    USHORT usEndPoint
+);
 
 void __stdcall
 Usage (
-      CHAR *pszProgramName
-      );
+    CHAR *pszProgramName
+);
 
 void __stdcall
 PrintError (
-           LPSTR lpszRoutine,
-           LPSTR lpszCallName,
-           DWORD dwError
-           );
+    LPSTR lpszRoutine,
+    LPSTR lpszCallName,
+    DWORD dwError
+);
 
 CHAR * __stdcall
 IpxnetAddr (
-           CHAR *lpBuffer,
-           CHAR *lpsNetnum, 
-           CHAR *lpsNodenum 
-           );
+    CHAR *lpBuffer,
+    CHAR *lpsNetnum,
+    CHAR *lpsNodenum
+);
 
 void __stdcall
 DoStartup ( void );
@@ -182,9 +182,9 @@ HANDLE hSlot = INVALID_HANDLE_VALUE;
 
 void __cdecl
 main (
-     INT argc,
-     CHAR **argv
-     )
+    INT argc,
+    CHAR **argv
+)
 {
 
     // Default role of the application is SERVER, which means receiver of
@@ -206,7 +206,7 @@ main (
     // Install the CTRL+BREAK Handler
     //
     if ( FALSE == SetConsoleCtrlHandler ( (PHANDLER_ROUTINE) CtrlCHandler,
-                                          TRUE 
+                                          TRUE
                                         ) )
     {
         PrintError ( "main", "SetConsoleCtrlHandler", GetLastError ( ) );
@@ -224,55 +224,58 @@ main (
             //
             // Role of the application (Client - Sender of broadcasts).
             //
-            case 'c':  
+            case 'c':
                 mRole = CLIENT;
                 break;
 
-                //
-                // Role of the application (Server - Receiver of broadcasts)
-                //
-            case 's':  
+            //
+            // Role of the application (Server - Receiver of broadcasts)
+            //
+            case 's':
                 mRole = SERVER;
                 break;
 
-                //
-                // Network protocol (Mailslots, IPX or UDP).
-                //
+            //
+            // Network protocol (Mailslots, IPX or UDP).
+            //
             case 'p':
                 chProto = (char)tolower ( *argv[++i] );
                 if ( 'm' == (char)chProto )
                 {
                     pProto = MAILSLOT;
-                } else if ( 'i' == chProto )
+                }
+                else if ( 'i' == chProto )
                 {
                     pProto = IPX;
-                } else
+                }
+                else
                     pProto = UDP;
                 break;
 
-                //
-                // EndPoint.
-                //
-            case 'e': 
+            //
+            // EndPoint.
+            //
+            case 'e':
                 lpsEndPoint = argv[++i];
                 break;
 
-                //
-                // DomainName (Important for Mailslot broadcasts, only).
-                //
+            //
+            // DomainName (Important for Mailslot broadcasts, only).
+            //
             case 'd':
                 lpsDomainName = argv[++i];
                 break;
 
-                //
-                // Help.
-                //
+            //
+            // Help.
+            //
             case 'h':
             case '?':
             default:
                 Usage ( argv[0] );
             }
-        } else
+        }
+        else
             //
             // Help.
             //
@@ -290,13 +293,13 @@ main (
     }
 
     //
-    // Print a Summary of the switches specfied 
+    // Print a Summary of the switches specfied
     // Helpful for debugging
     //
     fprintf ( stdout, "SUMMARY:\n" );
     fprintf ( stdout, "\tRole-> %s\n", (CLIENT == mRole)?"Client":"Server" );
-    fprintf ( stdout, "\tProtocol-> %s\n", 
-              ( MAILSLOT == pProto ) ? "MAILSLOT" : 
+    fprintf ( stdout, "\tProtocol-> %s\n",
+              ( MAILSLOT == pProto ) ? "MAILSLOT" :
               ( IPX == pProto ) ? "IPX" : "UDP" );
     if (lpsEndPoint != NULL)
         fprintf ( stdout, "\tEndpoint-> %s\n", lpsEndPoint );
@@ -334,12 +337,12 @@ main (
 //
 BOOL __stdcall
 CtrlCHandler (
-             DWORD dwEvent
-             )
+    DWORD dwEvent
+)
 {
     if ( ( CTRL_C_EVENT == dwEvent ) || ( CTRL_BREAK_EVENT == dwEvent ) )
     {
-        DoCleanup ( );    
+        DoCleanup ( );
     }
 
     return FALSE;
@@ -352,10 +355,10 @@ CtrlCHandler (
 //
 void __stdcall
 DoMailSlot (
-           MODE mRole,
-           LPSTR lpsEndPoint,
-           LPSTR lpsDomainName
-           )
+    MODE mRole,
+    LPSTR lpsEndPoint,
+    LPSTR lpsDomainName
+)
 {
     switch ( mRole )
     {
@@ -376,9 +379,9 @@ DoMailSlot (
 //
 void __stdcall
 DoIpx (
-      MODE mRole,
-      USHORT usEndPoint
-      )
+    MODE mRole,
+    USHORT usEndPoint
+)
 {
     //
     // Initialize the global socket descriptor.
@@ -410,9 +413,9 @@ DoIpx (
 //
 void __stdcall
 DoUdp (
-      MODE mRole,
-      USHORT usEndPoint
-      )
+    MODE mRole,
+    USHORT usEndPoint
+)
 {
     //
     // Initialize the global socket descriptor.
@@ -444,26 +447,26 @@ DoUdp (
 //
 void __stdcall
 DoMailSlotServer (
-                 LPSTR lpsEndPoint
-                 )
+    LPSTR lpsEndPoint
+)
 {
 
 
-    // Variables that store MessageID, previous messageID, number of bytes to 
+    // Variables that store MessageID, previous messageID, number of bytes to
     // read/read, size of next available message and the number of messages.
     DWORD dwMessageID = 0,
-    dwPrevID = 0,
-    cbMessage = 0,
-    cbRead = 0, 
-    cbToRead = 0, 
-    nMessages  = 0;
+          dwPrevID = 0,
+          cbMessage = 0,
+          cbRead = 0,
+          cbToRead = 0,
+          nMessages  = 0;
     HRESULT hRet;
     size_t dwSize;
 
     BOOL fResult = FALSE;
 
-    CHAR achMailSlotName[MAX_MSLOTNAME], 
-    achBuffer[MAX_MSGLEN + sizeof ( DWORD )];
+    CHAR achMailSlotName[MAX_MSLOTNAME],
+         achBuffer[MAX_MSGLEN + sizeof ( DWORD )];
 
     // Variable that points past the message ID part in the message.
     LPSTR lpsMessage = NULL;
@@ -514,7 +517,7 @@ DoMailSlotServer (
     //
     // Get the message ID part from the message.
     //
-    
+
     memcpy ( &dwMessageID, achBuffer, sizeof ( DWORD ) );
 
     //
@@ -527,10 +530,10 @@ DoMailSlotServer (
     //
     // Print the message
     //
-    fprintf ( stdout, 
-              "A MailSlot Message of %d bytes received with ID %d\n", 
-              dwSize, 
-              dwMessageID 
+    fprintf ( stdout,
+              "A MailSlot Message of %d bytes received with ID %d\n",
+              dwSize,
+              dwMessageID
             );
 
     fprintf ( stdout, "MessageText->%s\n", lpsMessage );
@@ -547,15 +550,15 @@ DoMailSlotServer (
         //
         fResult = GetMailslotInfo ( hSlot,
                                     (LPDWORD) NULL,
-                                    &cbMessage, 
+                                    &cbMessage,
                                     &nMessages,
                                     (LPDWORD) NULL
                                   );
         if ( TRUE != fResult )
         {
-            PrintError ( "DoMailSlotServer", 
-                         "GetMailSlotInfo", 
-                         GetLastError ( ) 
+            PrintError ( "DoMailSlotServer",
+                         "GetMailSlotInfo",
+                         GetLastError ( )
                        );
         }
 
@@ -579,8 +582,8 @@ DoMailSlotServer (
         if ( TRUE != fResult )
         {
             PrintError ( "DoMailSlotServer",
-                         "ReadFile", 
-                         GetLastError ( ) 
+                         "ReadFile",
+                         GetLastError ( )
                        );
         }
 
@@ -594,12 +597,12 @@ DoMailSlotServer (
         hRet = StringCbLength(lpsMessage,cbRead,&dwSize);
         if ( dwMessageID != dwPrevID )
         {
-            
-            
-            fprintf ( stdout, 
-                      "A MailSlot Message of %d bytes received with ID %d\n", 
-                      dwSize, 
-                      dwMessageID 
+
+
+            fprintf ( stdout,
+                      "A MailSlot Message of %d bytes received with ID %d\n",
+                      dwSize,
+                      dwMessageID
                     );
 
             fprintf ( stdout, "MessageText->%s\n", achBuffer );
@@ -622,10 +625,10 @@ DoMailSlotServer (
 
 //
 // DoMailSlotClient () function implements the broadcast routine for a
-// Mailslot client. The function opens handle to the mailslot using 
+// Mailslot client. The function opens handle to the mailslot using
 // CreateFile (). CreateFile will fail on Windows NT for local mailslots,
-// if the mailslot is not already created using CreateMailSlot () API. 
-//  
+// if the mailslot is not already created using CreateMailSlot () API.
+//
 // The function appends a message number to the message which the server uses
 // to discard duplicate messages. In the event of a client runnig on a system
 // with multiple transport protocols loaded, a mailsot message is sent over
@@ -637,24 +640,24 @@ DoMailSlotServer (
 //
 void __stdcall
 DoMailSlotClient (
-                 LPSTR lpsEndPoint,
-                 LPSTR lpsDomainName
-                 )
+    LPSTR lpsEndPoint,
+    LPSTR lpsDomainName
+)
 {
     // Variables that store MessageID, number of bytes to write/written.
-    DWORD dwMessageID = 0, 
-    cbWritten = 0,
-    cbToWrite = 0;
+    DWORD dwMessageID = 0,
+          cbWritten = 0,
+          cbToWrite = 0;
     HRESULT hRet;
 
     BOOL fResult = FALSE;
 
     CHAR achMailSlotName[MAX_MSLOTNAME],
-    achBuffer[MAX_MSGLEN + sizeof ( DWORD ) ];
+         achBuffer[MAX_MSGLEN + sizeof ( DWORD ) ];
 
     if ( NULL == lpsDomainName )
     {
-        fprintf ( stdout, 
+        fprintf ( stdout,
                   "Domain/Workgroup name must be specified....Exiting\n"
                 );
         exit ( 1 );
@@ -666,11 +669,11 @@ DoMailSlotClient (
 
 
     if(FAILED(hRet = StringCchPrintf(achMailSlotName,
-                           MAX_MSLOTNAME,
-                           "\\\\%s\\mailslot\\%s",
-                           lpsDomainName,
-                           lpsEndPoint
-                          )))
+                                     MAX_MSLOTNAME,
+                                     "\\\\%s\\mailslot\\%s",
+                                     lpsDomainName,
+                                     lpsEndPoint
+                                    )))
     {
         PrintError("DoMailSlotClient","StringCchPrintf",hRet);
     }
@@ -685,7 +688,7 @@ DoMailSlotClient (
                          (LPSECURITY_ATTRIBUTES) NULL,
                          OPEN_EXISTING,
                          FILE_ATTRIBUTE_NORMAL,
-                         (HANDLE) NULL 
+                         (HANDLE) NULL
                        );
 
     if ( INVALID_HANDLE_VALUE == hSlot)
@@ -703,7 +706,7 @@ DoMailSlotClient (
     {
         PrintError("DoMailSlotClient","StringCchPrintf",hRet);
     }
-    
+
     if(FAILED(hRet = StringCchCopy(achBuffer + sizeof(DWORD),MAX_MSGLEN,"A MailSlot Broadcast Message")))
     {
         PrintError("DoMailSlotClient","StringCchCopy",hRet);
@@ -729,9 +732,9 @@ DoMailSlotClient (
         PrintError ( "DoMailSlotClient", "WriteFile", GetLastError ( ) );
     }
 
-    fprintf ( stdout, 
-              "%d bytes of MailSlot data broadcasted with ID %d\n", 
-              cbWritten, 
+    fprintf ( stdout,
+              "%d bytes of MailSlot data broadcasted with ID %d\n",
+              cbWritten,
               dwMessageID
             );
 
@@ -750,11 +753,11 @@ DoMailSlotClient (
 //
 // DoUdpServer () function receives the broadcast on a specified port. The
 // server will have to post a recv (), before the client sends the broadcast.
-// 
+//
 void __stdcall
 DoUdpServer (
-            USHORT usEndPoint
-            )
+    USHORT usEndPoint
+)
 {
 
     // IP address structures needed to bind to a local port and get the sender's
@@ -816,17 +819,17 @@ DoUdpServer (
 //
 // DoUdpClient () function implements the broadcast routine for an UDP
 // client. The function sets the SO_BROADCAST option with the global socket.
-// Calling this API is important. After binding to a local port, it sends an 
+// Calling this API is important. After binding to a local port, it sends an
 // UDP boradcasts to the IP address INADDR_BROADCAST, with a particular
 // port number.
 //
 void __stdcall
 DoUdpClient (
-            USHORT usEndPoint
-            )
+    USHORT usEndPoint
+)
 {
 
-    // IP address structures needed to fill the source and destination 
+    // IP address structures needed to fill the source and destination
     // addresses.
     SOCKADDR_IN saUdpServ = {0}, saUdpCli = {0};
     INT err = 0;
@@ -838,7 +841,7 @@ DoUdpClient (
     BOOL fBroadcast = TRUE;
 
 
-    err = setsockopt ( sock, 
+    err = setsockopt ( sock,
                        SOL_SOCKET,
                        SO_BROADCAST,
                        (CHAR *) &fBroadcast,
@@ -865,7 +868,7 @@ DoUdpClient (
     }
 
     //
-    // Fill an IP address structure, to send an IP broadcast. The 
+    // Fill an IP address structure, to send an IP broadcast. The
     // packet will be broadcasted to the specified port.
     //
     saUdpServ.sin_family = AF_INET;
@@ -910,14 +913,14 @@ DoUdpClient (
 
 //
 // DoIpxServer () function receives the broadcast on a specified socket. The
-// server will have to post a recv (), before the client sends the broadcast. 
+// server will have to post a recv (), before the client sends the broadcast.
 // It is necessary call setsockopt () with SO_BROADCAST flag set, in order to
 // receive IPX broadcasts on Windows 95.
 //
-void __stdcall 
+void __stdcall
 DoIpxServer (
-            USHORT usEndPoint
-            )
+    USHORT usEndPoint
+)
 {
 
     // IPX address structures needed to bind to a local socket and get the
@@ -926,8 +929,8 @@ DoIpxServer (
 
     INT err = 0, nSize = 0;
 
-    CHAR achBuffer[MAX_MSGLEN] = {'\0'}, 
-    achAddress[MAX_ADDLEN] = {'\0'};
+    CHAR achBuffer[MAX_MSGLEN] = {'\0'},
+                                 achAddress[MAX_ADDLEN] = {'\0'};
 
     OSVERSIONINFO osVer = {0};
 
@@ -950,11 +953,11 @@ DoIpxServer (
     //
     if ( VER_PLATFORM_WIN32_WINDOWS == osVer.dwPlatformId )
     {
-        err = setsockopt ( sock, 
-                           SOL_SOCKET, 
-                           SO_BROADCAST, 
-                           (CHAR *) &fBroadcast, 
-                           sizeof ( BOOL ) 
+        err = setsockopt ( sock,
+                           SOL_SOCKET,
+                           SO_BROADCAST,
+                           (CHAR *) &fBroadcast,
+                           sizeof ( BOOL )
                          );
 
         if ( SOCKET_ERROR == err )
@@ -987,7 +990,7 @@ DoIpxServer (
                      MAX_MSGLEN,
                      0,
                      (SOCKADDR *) &saIpxCli,
-                     &nSize 
+                     &nSize
                    );
 
     if ( SOCKET_ERROR == err )
@@ -999,15 +1002,15 @@ DoIpxServer (
     // print the sender's information.
     //
     achBuffer[err] = '\0';
-    fprintf ( stdout, 
-              "An Ipx Datagram of length %d bytes received from ", 
+    fprintf ( stdout,
+              "An Ipx Datagram of length %d bytes received from ",
               err );
-    fprintf ( stdout, 
-              "\n\tIPX Adress->%s ", 
-              IpxnetAddr ( achAddress, 
-                           saIpxCli.sa_netnum, 
-                           saIpxCli.sa_nodenum 
-                         ) 
+    fprintf ( stdout,
+              "\n\tIPX Adress->%s ",
+              IpxnetAddr ( achAddress,
+                           saIpxCli.sa_netnum,
+                           saIpxCli.sa_nodenum
+                         )
             );
     fprintf ( stdout, "\n\tSocket Number->%d\n", saIpxCli.sa_socket );
     fprintf ( stdout, "MessageText->%s\n", achBuffer );
@@ -1016,7 +1019,7 @@ DoIpxServer (
     // Call the cleanup routine.
     //
     DoCleanup ( );
-    return;              
+    return;
 
 }
 
@@ -1029,11 +1032,11 @@ DoIpxServer (
 //
 void __stdcall
 DoIpxClient (
-            USHORT usEndPoint
-            )
+    USHORT usEndPoint
+)
 {
 
-    // IPX address structures needed to fill the source and destination 
+    // IPX address structures needed to fill the source and destination
     // addresses.
     SOCKADDR_IPX saIpxServ = {0}, saIpxCli = {0};
     INT err = 0;
@@ -1044,11 +1047,11 @@ DoIpxClient (
     // Variable to set the broadcast option with setsockopt ().
     BOOL fBroadcast = TRUE;
 
-    err = setsockopt ( sock, 
-                       SOL_SOCKET, 
+    err = setsockopt ( sock,
+                       SOL_SOCKET,
                        SO_BROADCAST,
-                       (CHAR *) &fBroadcast, 
-                       sizeof ( BOOL ) 
+                       (CHAR *) &fBroadcast,
+                       sizeof ( BOOL )
                      );
 
     if ( SOCKET_ERROR == err )
@@ -1072,9 +1075,9 @@ DoIpxClient (
     }
 
     //
-    // Fill an IPX address structure, to send an IPX broadcast. The 
+    // Fill an IPX address structure, to send an IPX broadcast. The
     // packet will be broadcasted to the specified socket.
-    // 
+    //
     saIpxServ.sa_family = AF_IPX;
     saIpxServ.sa_socket = usEndPoint;
     memset ( saIpxServ.sa_netnum, 0, sizeof ( saIpxServ.sa_netnum ) );
@@ -1119,18 +1122,18 @@ DoIpxClient (
 //
 void __stdcall
 Usage (
-      CHAR *pszProgramName
-      )
+    CHAR *pszProgramName
+)
 {
     fprintf ( stderr, "Usage:  %s\n", pszProgramName );
-    fprintf ( stderr, 
+    fprintf ( stderr,
               "\t-s or -c (s - server, c - client, default - server)\n" );
-    fprintf ( stderr, 
+    fprintf ( stderr,
               "\t-p <i or m or u> (i - IPX, m - Mailslots, u - UDP)\n" );
     fprintf ( stderr, "\t-e <Endpoint>\n" );
-    fprintf ( stderr, 
+    fprintf ( stderr,
               "\t-d <DomainName> - needed only for a Mailslot client\n" );
-    fprintf ( stderr, 
+    fprintf ( stderr,
               "\n\tDefault Values-> Role:Server, Protocol:UDP, EndPoint:5005\n" );
 
     exit ( 1 );
@@ -1138,22 +1141,22 @@ Usage (
 
 
 //
-// PrintError () is a function available globally for printing the error and 
+// PrintError () is a function available globally for printing the error and
 // doing the cleanup.
 //
 void __stdcall
 PrintError (
-           LPSTR lpszRoutine,
-           LPSTR lpszCallName,
-           DWORD dwError
-           )
+    LPSTR lpszRoutine,
+    LPSTR lpszCallName,
+    DWORD dwError
+)
 {
 
-    fprintf ( stderr, 
-              "The Call to %s() in routine() %s failed with error %d\n", 
-              lpszCallName, 
+    fprintf ( stderr,
+              "The Call to %s() in routine() %s failed with error %d\n",
+              lpszCallName,
               lpszRoutine,
-              dwError 
+              dwError
             );
 
     DoCleanup ( );
@@ -1168,10 +1171,10 @@ PrintError (
 //
 CHAR * __stdcall
 IpxnetAddr (
-           CHAR *lpBuffer,
-           CHAR *lpsNetnum, 
-           CHAR *lpsNodenum 
-           )
+    CHAR *lpBuffer,
+    CHAR *lpsNetnum,
+    CHAR *lpsNodenum
+)
 {
 
     HRESULT hRet;
@@ -1185,14 +1188,14 @@ IpxnetAddr (
 
 
     if(FAILED(hRet = StringCchPrintf(lpBuffer,
-                           MAX_MSGLEN,
-                           "%02X%02X%02X%02X.%02X%02X%02X%02X%02X%02X",
-                           (UCHAR) lpsNetnum[0], (UCHAR) lpsNetnum[1], 
-                           (UCHAR) lpsNetnum[2], (UCHAR) lpsNetnum[3],
-                           (UCHAR) lpsNodenum[0], (UCHAR) lpsNodenum[1],
-                           (UCHAR) lpsNodenum[2], (UCHAR) lpsNodenum[3],
-                           (UCHAR) lpsNodenum[4], (USHORT) lpsNodenum[5]
-                          )))
+                                     MAX_MSGLEN,
+                                     "%02X%02X%02X%02X.%02X%02X%02X%02X%02X%02X",
+                                     (UCHAR) lpsNetnum[0], (UCHAR) lpsNetnum[1],
+                                     (UCHAR) lpsNetnum[2], (UCHAR) lpsNetnum[3],
+                                     (UCHAR) lpsNodenum[0], (UCHAR) lpsNodenum[1],
+                                     (UCHAR) lpsNodenum[2], (UCHAR) lpsNodenum[3],
+                                     (UCHAR) lpsNodenum[4], (USHORT) lpsNodenum[5]
+                                    )))
     {
         PrintError("IpxnetAddr","StringCchPrintf",hRet);
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -34,17 +34,17 @@ void WINAPI EapMethodAuthenticatorFreeErrorMemory(IN EAP_ERROR* pEapError)
         goto Cleanup;
     }
 
-        //
-        //If RootCauseString in EapError, free it.
-        //
-        if(pEapError->pRootCauseString)
-                FreeMemory((PVOID *)&(pEapError->pRootCauseString));
+    //
+    //If RootCauseString in EapError, free it.
+    //
+    if(pEapError->pRootCauseString)
+        FreeMemory((PVOID *)&(pEapError->pRootCauseString));
 
-        //
-        //If error string in EapError, free it.
-        //
-        if(pEapError->pRepairString)
-                FreeMemory((PVOID *)&(pEapError->pRepairString));
+    //
+    //If error string in EapError, free it.
+    //
+    if(pEapError->pRepairString)
+        FreeMemory((PVOID *)&(pEapError->pRepairString));
 
     //
     //Finally, free the EapError structure.
@@ -57,10 +57,10 @@ Cleanup:
 
 
 DWORD EapMethodAuthenticatorGetInfo(
-         IN EAP_METHOD_TYPE* pEapType,
-         OUT EAP_AUTHENTICATOR_METHOD_ROUTINES* pEapInfo,
-         OUT EAP_ERROR** ppEapError
-         )
+    IN EAP_METHOD_TYPE* pEapType,
+    OUT EAP_AUTHENTICATOR_METHOD_ROUTINES* pEapInfo,
+    OUT EAP_ERROR** ppEapError
+)
 {
     DWORD retCode = NO_ERROR;
 
@@ -76,7 +76,7 @@ DWORD EapMethodAuthenticatorGetInfo(
     // Verify if pEapType passed by EapHost correctly matches the EapType of this DLL.
     //
     if ((pEapType->eapType.type != EAPTYPE) ||
-         (pEapType->dwAuthorId != AUTHOR_ID))
+            (pEapType->dwAuthorId != AUTHOR_ID))
     {
         EapTrace("EapMethodAuthenticatorGetInfo() --- Input Eap Type Info does not match the supported Eap Type");
         retCode = ERROR_NOT_SUPPORTED;
@@ -109,11 +109,11 @@ Cleanup:
         {
             DWORD errCode = ERROR_SUCCESS;
             errCode = AllocateandFillEapError(ppEapError,
-                                        retCode,
-                                        0,
-                                        NULL, NULL, NULL,
-                                        NULL, NULL
-                                        );
+                                              retCode,
+                                              0,
+                                              NULL, NULL, NULL,
+                                              NULL, NULL
+                                             );
             if(errCode != ERROR_SUCCESS)
             {
                 //Report Error
@@ -125,9 +125,9 @@ Cleanup:
 
 
 DWORD APIENTRY SdkEapMethodAuthenticatorInitialize(
-         IN EAP_METHOD_TYPE* pEapType,
-         OUT EAP_ERROR** ppEapError
-         )
+    IN EAP_METHOD_TYPE* pEapType,
+    OUT EAP_ERROR** ppEapError
+)
 {
     DWORD retCode = NO_ERROR;
 
@@ -143,7 +143,7 @@ DWORD APIENTRY SdkEapMethodAuthenticatorInitialize(
     // Verify if pEapType passed by EapHost correctly matches the EapType of this DLL.
     //
     if ((pEapType->eapType.type != EAPTYPE) ||
-         (pEapType->dwAuthorId != AUTHOR_ID))
+            (pEapType->dwAuthorId != AUTHOR_ID))
     {
         EapTrace("EapMethodAuthenticatorInitialize() --- Input Eap Method Type Info does not match the supported Eap Method Type");
         retCode = ERROR_NOT_SUPPORTED;
@@ -163,11 +163,11 @@ Cleanup:
         {
             DWORD errCode = ERROR_SUCCESS;
             errCode = AllocateandFillEapError(ppEapError,
-                                        retCode,
-                                        0,
-                                        NULL, NULL, NULL,
-                                        NULL, NULL
-                                        );
+                                              retCode,
+                                              0,
+                                              NULL, NULL, NULL,
+                                              NULL, NULL
+                                             );
             if(errCode != ERROR_SUCCESS)
             {
                 //Report Error
@@ -179,27 +179,27 @@ Cleanup:
 
 
 DWORD APIENTRY SdkEapMethodAuthenticatorBeginSession(
-      // Flags to qualify the authentication process.
-      IN DWORD dwFlags,
-      // Identity of the user being authenticated
-      IN LPCWSTR pwszIdentity,
-      // Pointer to an array of attributes. This array contains attributes that
-      // describe the entity being authenticated.
-      IN const EapAttributes* const pAttributeArray,
-      // Specifies the size in bytes of the data pointed to by pConnectionData.
-      // If pConnectionData is NULL, this member is zero.
-      IN DWORD dwSizeofConnectionData,
-      // Pointer to connection data received from the authentication protocol's
-      // configuration user interface.
-      IN const BYTE* const pConnectionData,
-      // This is the maximum size of an eap packet that the authenticator can send.
-      IN DWORD dwMaxSendPacketSize,
-      // The session handle that identifies the current authentication session.
-      OUT EAP_SESSION_HANDLE* pSessionHandle,
-      // On an unsuccessful call, this will contain any error information about
-      // the failure. This will be null on a successful call.
-      OUT EAP_ERROR** ppEapError
-      )
+    // Flags to qualify the authentication process.
+    IN DWORD dwFlags,
+    // Identity of the user being authenticated
+    IN LPCWSTR pwszIdentity,
+    // Pointer to an array of attributes. This array contains attributes that
+    // describe the entity being authenticated.
+    IN const EapAttributes* const pAttributeArray,
+    // Specifies the size in bytes of the data pointed to by pConnectionData.
+    // If pConnectionData is NULL, this member is zero.
+    IN DWORD dwSizeofConnectionData,
+    // Pointer to connection data received from the authentication protocol's
+    // configuration user interface.
+    IN const BYTE* const pConnectionData,
+    // This is the maximum size of an eap packet that the authenticator can send.
+    IN DWORD dwMaxSendPacketSize,
+    // The session handle that identifies the current authentication session.
+    OUT EAP_SESSION_HANDLE* pSessionHandle,
+    // On an unsuccessful call, this will contain any error information about
+    // the failure. This will be null on a successful call.
+    OUT EAP_ERROR** ppEapError
+)
 {
     DWORD retCode = NO_ERROR;
     EAPCB* pwb    = NULL;
@@ -238,15 +238,15 @@ DWORD APIENTRY SdkEapMethodAuthenticatorBeginSession(
     //
     if(pwszIdentity != NULL)
     {
-         WideCharToMultiByte(
-                CP_ACP,
-                NO_FLAGS,
-                pwszIdentity,
-                AUTOMATIC_STRING_LENGTH,
-                pwb->aszIdentity,
-                UNLEN + 1,
-                NULL,
-                NULL );
+        WideCharToMultiByte(
+            CP_ACP,
+            NO_FLAGS,
+            pwszIdentity,
+            AUTOMATIC_STRING_LENGTH,
+            pwb->aszIdentity,
+            UNLEN + 1,
+            NULL,
+            NULL );
 
         EapTrace("Identity: \"%s\"", pwb->aszIdentity);
     }
@@ -309,11 +309,11 @@ Cleanup:
         {
             DWORD errCode = ERROR_SUCCESS;
             errCode = AllocateandFillEapError(ppEapError,
-                                        retCode,
-                                        0,
-                                        NULL, NULL, NULL,
-                                        NULL, NULL
-                                        );
+                                              retCode,
+                                              0,
+                                              NULL, NULL, NULL,
+                                              NULL, NULL
+                                             );
             if(errCode != ERROR_SUCCESS)
             {
                 //Report Error
@@ -326,18 +326,18 @@ Cleanup:
 
 
 DWORD APIENTRY SdkEapMethodAuthenticatorUpdateInnerMethodParams(
-      // context handle as returned from a successful call to
-      // EapAuthenticatorBeginSession
-      IN EAP_SESSION_HANDLE sessionHandle,
-      IN DWORD dwFlags,
-      IN CONST WCHAR* pwszIdentity,
-      // Pointer to an array of attributes. This array contains attributes that
-      // describe the entity being authenticated.
-      IN const EapAttributes* const pAttributeArray,
-      // On an unsuccessful call, this will contain any error information about
-      // the failure. This will be null on a successful call.
-      OUT EAP_ERROR** pEapError
-      )
+    // context handle as returned from a successful call to
+    // EapAuthenticatorBeginSession
+    IN EAP_SESSION_HANDLE sessionHandle,
+    IN DWORD dwFlags,
+    IN CONST WCHAR* pwszIdentity,
+    // Pointer to an array of attributes. This array contains attributes that
+    // describe the entity being authenticated.
+    IN const EapAttributes* const pAttributeArray,
+    // On an unsuccessful call, this will contain any error information about
+    // the failure. This will be null on a successful call.
+    OUT EAP_ERROR** pEapError
+)
 {
     DWORD retCode = ERROR_SUCCESS;
 
@@ -355,23 +355,23 @@ DWORD APIENTRY SdkEapMethodAuthenticatorUpdateInnerMethodParams(
 // needs to process. This should be called only after a successful call to
 // EapAuthenticatorBeginSession.
 DWORD APIENTRY SdkEapMethodAuthenticatorReceivePacket(
-         // context handle as returned from a successful call to
-         // EapAuthenticatorBeginSession
-         IN EAP_SESSION_HANDLE sessionHandle,
-         // Specifies the size, in bytes, of the buffer pointed to by
-         // pReceivePacket
-         IN DWORD cbReceivePacket,
-         // Pointer to a buffer that contains the incoming EAP data received by
-         // the supplicant.
-         IN const EapPacket* const pReceivePacket,
-         // This enumeration tells the supplicant to take an appropriate action.
-         // The supplicant will typically look at this action and either call
-         // another method on eaphost or do something else on its own.
-         OUT EAP_METHOD_AUTHENTICATOR_RESPONSE_ACTION* pEapOutput,
-         // On an unsuccessful call, this will contain any error information about
-         // the failure. This will be null on a successful call.
-         OUT EAP_ERROR** pEapError
-         )
+    // context handle as returned from a successful call to
+    // EapAuthenticatorBeginSession
+    IN EAP_SESSION_HANDLE sessionHandle,
+    // Specifies the size, in bytes, of the buffer pointed to by
+    // pReceivePacket
+    IN DWORD cbReceivePacket,
+    // Pointer to a buffer that contains the incoming EAP data received by
+    // the supplicant.
+    IN const EapPacket* const pReceivePacket,
+    // This enumeration tells the supplicant to take an appropriate action.
+    // The supplicant will typically look at this action and either call
+    // another method on eaphost or do something else on its own.
+    OUT EAP_METHOD_AUTHENTICATOR_RESPONSE_ACTION* pEapOutput,
+    // On an unsuccessful call, this will contain any error information about
+    // the failure. This will be null on a successful call.
+    OUT EAP_ERROR** pEapError
+)
 {
     DWORD retCode = NO_ERROR;
     EAPCB*  pwb = NULL;
@@ -397,119 +397,119 @@ DWORD APIENTRY SdkEapMethodAuthenticatorReceivePacket(
     //
     switch(pwb->EapState)
     {
-        case MYSTATE_ReqSent:
+    case MYSTATE_ReqSent:
 
-            EapTrace("Authenticator state: RecvPacket  --- MYSTATE_ReqSent");
+        EapTrace("Authenticator state: RecvPacket  --- MYSTATE_ReqSent");
 
-            if (pEapReceivePacket != NULL)
+        if (pEapReceivePacket != NULL)
+        {
+            //
+            // If we received a packet
+            //
+            if (pEapReceivePacket->Code == EapCodeResponse)
             {
                 //
-                // If we received a packet
+                // If we receive a response to our identity request,
+                // then process it.
                 //
-                if (pEapReceivePacket->Code == EapCodeResponse)
+                retCode = GetPasswordFromResponse((BYTE *)pEapReceivePacket,
+                                                  pwb->aszPassword,
+                                                  passwordLength);
+                if (retCode != NO_ERROR)
+                {
+                    // Need to fill the EapError
+                    goto Cleanup;
+                }
+                else
                 {
                     //
-                    // If we receive a response to our identity request,
-                    // then process it.
+                    // Place UserName and Password in an Attribute.
                     //
-                    retCode = GetPasswordFromResponse((BYTE *)pEapReceivePacket,
-                                                    pwb->aszPassword,
-                                                    passwordLength);
+                    retCode = MakeAuthenticationAttributes(
+                                  pwb->aszIdentity,
+                                  pwb->aszPassword,
+                                  pwb);
+
                     if (retCode != NO_ERROR)
                     {
-                        // Need to fill the EapError
+                        EapTrace("MakeAuthenticationAttributes failed %d", retCode);
                         goto Cleanup;
                     }
                     else
                     {
                         //
-                        // Place UserName and Password in an Attribute.
+                        // Now we have username and password obtained from the client.
+                        // The actual method will employ some mechanism to authenticate the client.
+                        // Here we compare the username and password obtained from the client with
+                        // the username and password passed by the administrator while configuring
+                        // the Sample Eap Method. The username and password is stored as
+                        // ConnectionData in the EAPCB (i.e., Eap Session Handle).
                         //
-                        retCode = MakeAuthenticationAttributes(
-                                                            pwb->aszIdentity,
-                                                            pwb->aszPassword,
-                                                            pwb);
 
-                        if (retCode != NO_ERROR)
+                        retCode = VerifyAuthenticationAttributes(pwb);
+                        if(retCode != NO_ERROR)
                         {
-                            EapTrace("MakeAuthenticationAttributes failed %d", retCode);
+                            EapTrace("VerifyAuthenticationAttributes failed %d", retCode);
                             goto Cleanup;
                         }
-                        else
-                        {
-                            //
-                            // Now we have username and password obtained from the client.
-                            // The actual method will employ some mechanism to authenticate the client.
-                            // Here we compare the username and password obtained from the client with
-                            // the username and password passed by the administrator while configuring
-                            // the Sample Eap Method. The username and password is stored as
-                            // ConnectionData in the EAPCB (i.e., Eap Session Handle).
-                            //
 
-                            retCode = VerifyAuthenticationAttributes(pwb);
-                            if(retCode != NO_ERROR)
-                            {
-                                EapTrace("VerifyAuthenticationAttributes failed %d", retCode);
-                                goto Cleanup;
-                            }
-
-                            *pEapOutput = EAP_METHOD_AUTHENTICATOR_RESPONSE_RESULT;
-                        }
+                        *pEapOutput = EAP_METHOD_AUTHENTICATOR_RESPONSE_RESULT;
                     }
-
-                    break;
                 }
-                else
-                {
-                    //
-                    // Otherwise silently drop the packet.
-                    // We should only get response
-                    //
-                    *pEapOutput = EAP_METHOD_AUTHENTICATOR_RESPONSE_DISCARD;
 
-                    break;
-                }
+                break;
             }
+            else
+            {
+                //
+                // Otherwise silently drop the packet.
+                // We should only get response
+                //
+                *pEapOutput = EAP_METHOD_AUTHENTICATOR_RESPONSE_DISCARD;
+
+                break;
+            }
+        }
 
         break;
 
-        default:
+    default:
         //
         // Authenticator has to be in MYSTATE_ReqSent state when SdkEapMethodAuthenticatorReceivePacket
         // is called. Any other state is not acceptable according to the state machine of this Eap Method.
         //
         EapTrace("SdkEapMethodAuthenticatorReceivePacket -- Authenticator state: [default] Present State = %d",
-                    pwb->EapState);
+                 pwb->EapState);
         // Need to fill the EapError
         retCode = ERROR_INVALID_STATE;
         break;
     }
 
- Cleanup:
+Cleanup:
     return retCode;
 }
 
 
 DWORD APIENTRY SdkEapMethodAuthenticatorSendPacket(
-         // context handle as returned from a successful call to
-         // EapHostAuthenticatorBeginSession
-         IN EAP_SESSION_HANDLE sessionHandle,
-         // Id to use when constructing the SendPacket
-         IN BYTE bPacketId,
-         // Specifies the limit on the size, in bytes, on the packet generated
-         // by eaphost. On a successful return, this will contain the size of the
-         // data added by the eap module.
-         OUT DWORD* pcbSendPacket,
-         // Pointer to a buffer that is allocated by the client and populated
-         // by the eap module. The value of the incoming buffer is ignored and
-         // the method populates it from the beginning of the buffer.
-         OUT EapPacket* pSendPacket,
-         // Timeout option for sending the packet
-         OUT EAP_AUTHENTICATOR_SEND_TIMEOUT* pTimeout,
-         // On an unsuccessful call, this will contain any error information about
-         // the failure. This will be null on a successful call.
-         OUT EAP_ERROR** ppEapError
-         )
+    // context handle as returned from a successful call to
+    // EapHostAuthenticatorBeginSession
+    IN EAP_SESSION_HANDLE sessionHandle,
+    // Id to use when constructing the SendPacket
+    IN BYTE bPacketId,
+    // Specifies the limit on the size, in bytes, on the packet generated
+    // by eaphost. On a successful return, this will contain the size of the
+    // data added by the eap module.
+    OUT DWORD* pcbSendPacket,
+    // Pointer to a buffer that is allocated by the client and populated
+    // by the eap module. The value of the incoming buffer is ignored and
+    // the method populates it from the beginning of the buffer.
+    OUT EapPacket* pSendPacket,
+    // Timeout option for sending the packet
+    OUT EAP_AUTHENTICATOR_SEND_TIMEOUT* pTimeout,
+    // On an unsuccessful call, this will contain any error information about
+    // the failure. This will be null on a successful call.
+    OUT EAP_ERROR** ppEapError
+)
 {
     DWORD retCode = NO_ERROR;
     EAPCB*  pwb = NULL;
@@ -530,36 +530,36 @@ DWORD APIENTRY SdkEapMethodAuthenticatorSendPacket(
     //
     switch(pwb->EapState)
     {
-        case MYSTATE_Initial:
-            //
-            // Create EAP-Challenge packet
-            //
-            retCode = MakeRequestMessage(pwb, bPacketId, pSendPacket, pcbSendPacket);
-            if(retCode != ERROR_SUCCESS)
-            {
-                // Need to fill the EapError
-                goto Cleanup;
-            }
+    case MYSTATE_Initial:
+        //
+        // Create EAP-Challenge packet
+        //
+        retCode = MakeRequestMessage(pwb, bPacketId, pSendPacket, pcbSendPacket);
+        if(retCode != ERROR_SUCCESS)
+        {
+            // Need to fill the EapError
+            goto Cleanup;
+        }
 
-            *pTimeout = EAP_AUTHENTICATOR_SEND_TIMEOUT_INTERACTIVE;
+        *pTimeout = EAP_AUTHENTICATOR_SEND_TIMEOUT_INTERACTIVE;
 
-            //
-            // Since we have sent a request we change to the ReqSent state
-            // where we will wait for a response.
-            //
-            pwb->EapState = MYSTATE_ReqSent;
+        //
+        // Since we have sent a request we change to the ReqSent state
+        // where we will wait for a response.
+        //
+        pwb->EapState = MYSTATE_ReqSent;
 
         break;
 
-        default:
-            //
-            // Authenticator has to be in MYSTATE_Initial state when SdkEapMethodAuthenticatorSendPacket
-            // is called. Any other state is not acceptable according to the state machine of this Eap Method.
-            //
-            EapTrace("SdkEapMethodAuthenticatorSendPacket -- Authenticator state: [default] Present State = %d",
-                    pwb->EapState);
-            // Need to fill the EapError
-            retCode = ERROR_INVALID_STATE;
+    default:
+        //
+        // Authenticator has to be in MYSTATE_Initial state when SdkEapMethodAuthenticatorSendPacket
+        // is called. Any other state is not acceptable according to the state machine of this Eap Method.
+        //
+        EapTrace("SdkEapMethodAuthenticatorSendPacket -- Authenticator state: [default] Present State = %d",
+                 pwb->EapState);
+        // Need to fill the EapError
+        retCode = ERROR_INVALID_STATE;
         break;
     }
 
@@ -568,17 +568,17 @@ Cleanup:
 }
 
 
-  // Returns an array of attributes that the caller needs to act on.
-  // The supplicant will call this when a call to
-  // EapHostAuthenticatorProcessRequestPacket returns EapHostAuthenticatorResponseRespond.
+// Returns an array of attributes that the caller needs to act on.
+// The supplicant will call this when a call to
+// EapHostAuthenticatorProcessRequestPacket returns EapHostAuthenticatorResponseRespond.
 DWORD APIENTRY SdkEapMethodAuthenticatorGetAttributes(
-      // context handle as returned from a successful call to
-      // EapHostAuthenticatorBeginSession
-      IN EAP_SESSION_HANDLE sessionHandle,
-      // Array of attributes that the caller needs to act on.
-      OUT EapAttributes* pAttribs,
-      OUT EAP_ERROR** pEapError
-      )
+    // context handle as returned from a successful call to
+    // EapHostAuthenticatorBeginSession
+    IN EAP_SESSION_HANDLE sessionHandle,
+    // Array of attributes that the caller needs to act on.
+    OUT EapAttributes* pAttribs,
+    OUT EAP_ERROR** pEapError
+)
 {
     DWORD retCode = NO_ERROR;
 
@@ -593,18 +593,18 @@ DWORD APIENTRY SdkEapMethodAuthenticatorGetAttributes(
 
 // Sets an array of attributes that the caller wants the eap method to act on.
 DWORD APIENTRY SdkEapMethodAuthenticatorSetAttributes(
-      // context handle as returned from a successful call to
-      // EapHostAuthenticatorBeginSession
-      IN EAP_SESSION_HANDLE sessionHandle,
-      IN const EapAttributes* const pAttribs,
-      // This enumeration tells the supplicant to take an appropriate action.
-      // The supplicant will typically look at this action and either call
-      // another method on eaphost or do something else on its own.
-      OUT EAP_METHOD_AUTHENTICATOR_RESPONSE_ACTION* pEapOutput,
-      // On an unsuccessful call, this will contain any error information about
-      // the failure. This will be null on a successful call.
-      OUT EAP_ERROR** ppEapError
-      )
+    // context handle as returned from a successful call to
+    // EapHostAuthenticatorBeginSession
+    IN EAP_SESSION_HANDLE sessionHandle,
+    IN const EapAttributes* const pAttribs,
+    // This enumeration tells the supplicant to take an appropriate action.
+    // The supplicant will typically look at this action and either call
+    // another method on eaphost or do something else on its own.
+    OUT EAP_METHOD_AUTHENTICATOR_RESPONSE_ACTION* pEapOutput,
+    // On an unsuccessful call, this will contain any error information about
+    // the failure. This will be null on a successful call.
+    OUT EAP_ERROR** ppEapError
+)
 {
     DWORD retCode = NO_ERROR;
 
@@ -617,25 +617,25 @@ DWORD APIENTRY SdkEapMethodAuthenticatorSetAttributes(
 }
 
 
-   // The authenticator will call this on completion of an authentication. This
-   // can happen in any of the following scenarios:
-   // 1. A call to EapHostAuthenticatorReceivePacket returned
-   //    EAP_HOST_AUTHENTICATOR_RESPONSE_SUCCESS or EAP_HOST_AUTHENTICATOR_RESPONSE_FAILURE
-   //    Even if the action returned above was a success, the authenticator can choose to call
-   //    this method with a failure.
-   // 2. The server can choose to terminate an authentication with a failure in the middle of
-   //    an authentication.
+// The authenticator will call this on completion of an authentication. This
+// can happen in any of the following scenarios:
+// 1. A call to EapHostAuthenticatorReceivePacket returned
+//    EAP_HOST_AUTHENTICATOR_RESPONSE_SUCCESS or EAP_HOST_AUTHENTICATOR_RESPONSE_FAILURE
+//    Even if the action returned above was a success, the authenticator can choose to call
+//    this method with a failure.
+// 2. The server can choose to terminate an authentication with a failure in the middle of
+//    an authentication.
 DWORD APIENTRY SdkEapMethodAuthenticatorGetResult(
-      // context handle as returned from a successful call to
-      // EapHostPeerBeginSession
-      IN EAP_SESSION_HANDLE sessionHandle,
-      // A structure that indicates the result and any state that the
-      // supplicant needs to save for future authentications.
-      OUT EAP_METHOD_AUTHENTICATOR_RESULT* pResult,
-      // On an unsuccessful call, this will contain any error information about
-      // the failure. This will be null on a successful call.
-      OUT EAP_ERROR** pEapError
-      )
+    // context handle as returned from a successful call to
+    // EapHostPeerBeginSession
+    IN EAP_SESSION_HANDLE sessionHandle,
+    // A structure that indicates the result and any state that the
+    // supplicant needs to save for future authentications.
+    OUT EAP_METHOD_AUTHENTICATOR_RESULT* pResult,
+    // On an unsuccessful call, this will contain any error information about
+    // the failure. This will be null on a successful call.
+    OUT EAP_ERROR** pEapError
+)
 {
     DWORD retCode = NO_ERROR;
     EAPCB*  pwb = NULL;
@@ -689,13 +689,13 @@ Cleanup:
 // Ends the authentication session. This cleans up any state that the eap
 // method or eaphost might be keeping.
 DWORD APIENTRY SdkEapMethodAuthenticatorEndSession(
-      // context handle as returned from a successful call to
-      // EapHostPeerBeginSession. This will be set to NULL on a successful call.
-      IN EAP_SESSION_HANDLE sessionHandle,
-      // On an unsuccessful call, this will contain any error information about
-      // the failure. This will be null on a successful call.
-      OUT EAP_ERROR** ppEapError
-   )
+    // context handle as returned from a successful call to
+    // EapHostPeerBeginSession. This will be set to NULL on a successful call.
+    IN EAP_SESSION_HANDLE sessionHandle,
+    // On an unsuccessful call, this will contain any error information about
+    // the failure. This will be null on a successful call.
+    OUT EAP_ERROR** ppEapError
+)
 {
     DWORD  retCode = NO_ERROR;
     EAPCB* pwb = NULL;
@@ -755,9 +755,9 @@ Cleanup:
 
 
 DWORD APIENTRY SdkEapAuthenticatorShutdown(
-         IN EAP_METHOD_TYPE* pEapType,
-         OUT EAP_ERROR** ppEapError
-         )
+    IN EAP_METHOD_TYPE* pEapType,
+    OUT EAP_ERROR** ppEapError
+)
 {
     DWORD retCode = NO_ERROR;
 
@@ -774,7 +774,7 @@ DWORD APIENTRY SdkEapAuthenticatorShutdown(
     // Verify if pEapType passed by EapHost correctly matches the EapType of this DLL.
     //
     if ((pEapType->eapType.type != EAPTYPE) ||
-         (pEapType->dwAuthorId != AUTHOR_ID))
+            (pEapType->dwAuthorId != AUTHOR_ID))
     {
         EapTrace("EapAuthenticatorShutdown() --- Input Eap Method Type Info does not match the supported Eap Method Type");
         retCode = ERROR_NOT_SUPPORTED;
@@ -796,16 +796,16 @@ Cleanup:
 //
 
 DWORD WINAPI EapMethodAuthenticatorInvokeConfigUI(
-               IN EAP_METHOD_TYPE* pEapMethodType,
-               IN HWND hwndParent,
-               IN DWORD dwFlags,
-               IN LPCWSTR pwszMachineName,
-               IN DWORD dwSizeOfConfigIn,
-               IN BYTE* pConfigIn,
-               OUT DWORD* pdwSizeOfConfigOut,
-               OUT BYTE** ppConfigOut,
-               OUT EAP_ERROR** ppEapError
-               )
+    IN EAP_METHOD_TYPE* pEapMethodType,
+    IN HWND hwndParent,
+    IN DWORD dwFlags,
+    IN LPCWSTR pwszMachineName,
+    IN DWORD dwSizeOfConfigIn,
+    IN BYTE* pConfigIn,
+    OUT DWORD* pdwSizeOfConfigOut,
+    OUT BYTE** ppConfigOut,
+    OUT EAP_ERROR** ppEapError
+)
 {
     DWORD retCode = ERROR_SUCCESS;
 
@@ -822,7 +822,7 @@ DWORD WINAPI EapMethodAuthenticatorInvokeConfigUI(
     // Verify if pEapType passed by EapHost correctly matches the EapType of this DLL.
     //
     if ((pEapMethodType->eapType.type != EAPTYPE) ||
-         (pEapMethodType->dwAuthorId != AUTHOR_ID))
+            (pEapMethodType->dwAuthorId != AUTHOR_ID))
     {
         EapTrace("EapMethodAuthenticatorInvokeConfigUI() --- Input Eap Method Type Info does not match the supported Eap Method Type");
         retCode = ERROR_NOT_SUPPORTED;
@@ -843,9 +843,9 @@ DWORD WINAPI EapMethodAuthenticatorInvokeConfigUI(
     // authentication attempts.
     //
     retCode = GetIdentityAsConfigData(
-        hwndParent,
-        ppConfigOut,
-        pdwSizeOfConfigOut);
+                  hwndParent,
+                  ppConfigOut,
+                  pdwSizeOfConfigOut);
 
 Cleanup:
     return retCode;
@@ -916,8 +916,8 @@ MakeRequestMessage(
 
     // Calculate the length of the Request Packet.
     sendPktSize = EAP_PACKET_HDR_LEN +                // Header - Code, Id, Length
-                    1 +                                                          // Data[0] = Type
-                    STRING_LENGTH_CHALLENGE_MESSAGE; // Challenge String Length includes NULL which counts for Data[1]
+                  1 +                                                          // Data[0] = Type
+                  STRING_LENGTH_CHALLENGE_MESSAGE; // Challenge String Length includes NULL which counts for Data[1]
 
     if(sendPktSize > *pcbSendPacket)
     {
@@ -1140,7 +1140,7 @@ MakeAuthenticationAttributes(
     }
 
     retCode = AddAttribute(pwb->pUserAttributes, eatUserName,
-                                         (DWORD)buflen , szUserName);
+                           (DWORD)buflen, szUserName);
     if (retCode != NO_ERROR)
     {
         goto Cleanup;
@@ -1159,7 +1159,7 @@ MakeAuthenticationAttributes(
     }
 
     retCode = AddAttribute(pwb->pUserAttributes, eatUserPassword,
-                                              (DWORD)buflen , szPassword);
+                           (DWORD)buflen, szPassword);
     if (retCode != NO_ERROR)
     {
         goto Cleanup;
@@ -1265,10 +1265,10 @@ Cleanup:
   * into the EAPCB work buffer.
   */
 DWORD FillMppeKeyAttribute(IN EAPCB *pwb,
-                                IN BYTE *&bBuffer,
-                                IN DWORD pattern,
-                                IN BYTE bKeyDirection,
-                                IN OUT EapAttribute &pAttrib)
+                           IN BYTE *&bBuffer,
+                           IN DWORD pattern,
+                           IN BYTE bKeyDirection,
+                           IN OUT EapAttribute &pAttrib)
 {
     DWORD retCode = ERROR_SUCCESS;
     DWORD dwIndex = 0;
@@ -1280,14 +1280,14 @@ DWORD FillMppeKeyAttribute(IN EAPCB *pwb,
     }
 
     retCode = ConstructMppeKeyAttribute(bKeyDirection,
-                          bBuffer, MPPE_KEY_LENGTH, &pAttrib);
+                                        bBuffer, MPPE_KEY_LENGTH, &pAttrib);
     if (retCode != NO_ERROR)
         goto Cleanup;
 
     // Add the newly-constructed attribute to the list of attribs.
     retCode = AppendAttributeToList(&(pwb->pMPPEKeyAttributes),
-                      pAttrib.eaType, pAttrib.dwLength,
-                      pAttrib.pValue);
+                                    pAttrib.eaType, pAttrib.dwLength,
+                                    pAttrib.pValue);
     if (retCode != NO_ERROR)
         goto Cleanup;
 
@@ -1358,12 +1358,12 @@ ConstructMppeKeyAttribute(
 
     // If key length isn't a multiple of 16, pad it out accordingly.
     if (cbAttribValue % MPPE_KEY_BLOCK_LENGTH)
-    cbAttribValue += MPPE_KEY_BLOCK_LENGTH - ( cbAttribValue %
-                                   MPPE_KEY_BLOCK_LENGTH );
+        cbAttribValue += MPPE_KEY_BLOCK_LENGTH - ( cbAttribValue %
+                         MPPE_KEY_BLOCK_LENGTH );
 
     // Include room for the vendor-attribute header & the Salt field (above).
     cbAttribValue = cbAttribValue + VENDOR_ATTRIBUTE_HEADER_LENGTH
-                  + MPPE_KEY_SALT_LENGTH;
+                    + MPPE_KEY_SALT_LENGTH;
 
     retCode = AllocateMemory(cbAttribValue, (PVOID*)&(pAttrib->pValue));
     if (retCode != NO_ERROR)
@@ -1385,8 +1385,8 @@ ConstructMppeKeyAttribute(
     // Salt field, and the MPPE key length subfield (1 byte).
     //
     CopyMemory(pByte + VENDOR_ATTRIBUTE_HEADER_LENGTH
-     + MPPE_KEY_SALT_LENGTH + 1,
-    pMppeKeyData, cbMppeKeyData);
+               + MPPE_KEY_SALT_LENGTH + 1,
+               pMppeKeyData, cbMppeKeyData);
 
     //
     // Fill in the rest of the RADIUS attribute data.
@@ -1395,10 +1395,10 @@ ConstructMppeKeyAttribute(
     pAttrib->dwLength = cbAttribValue;
 
 Cleanup:
-    if ((retCode != NO_ERROR) && 
-        (pAttrib != NULL) && 
-        (pAttrib->pValue != NULL)
-        )
+    if ((retCode != NO_ERROR) &&
+            (pAttrib != NULL) &&
+            (pAttrib->pValue != NULL)
+       )
         FreeMemory((PVOID*)&(pAttrib->pValue));
 
     return retCode;
@@ -1408,7 +1408,7 @@ Cleanup:
 
 DWORD
 VerifyAuthenticationAttributes(
-      IN EAPCB *pwb)
+    IN EAPCB *pwb)
 {
     DWORD retCode = NO_ERROR;
     USER_DATA_BLOB *pUserBlob = NULL;
@@ -1431,25 +1431,25 @@ VerifyAuthenticationAttributes(
 
             // If username field is present, store it.
             WideCharToMultiByte(
-                        CP_ACP,
-                        NO_FLAGS,
-                        pUserBlob->eapUserNamePassword.awszIdentity,
-                        AUTOMATIC_STRING_LENGTH,
-                        aszIdentity,
-                        UNLEN + 1,
-                        NULL,
-                        NULL );
+                CP_ACP,
+                NO_FLAGS,
+                pUserBlob->eapUserNamePassword.awszIdentity,
+                AUTOMATIC_STRING_LENGTH,
+                aszIdentity,
+                UNLEN + 1,
+                NULL,
+                NULL );
 
             // If password field is present, store it.
             WideCharToMultiByte(
-                        CP_ACP,
-                        NO_FLAGS,
-                        pUserBlob->eapUserNamePassword.awszPassword,
-                        AUTOMATIC_STRING_LENGTH,
-                        aszPassword,
-                        PWLEN + 1,
-                        NULL,
-                        NULL );
+                CP_ACP,
+                NO_FLAGS,
+                pUserBlob->eapUserNamePassword.awszPassword,
+                AUTOMATIC_STRING_LENGTH,
+                aszPassword,
+                PWLEN + 1,
+                NULL,
+                NULL );
 
             // User Name Attribute
             pEapAttr = &(((pwb->pUserAttributes)->pAttribs)[0]);
@@ -1509,7 +1509,7 @@ GetIdentityAsConfigData(
     OUT DWORD*  pdwSizeOfUserDataOut
 )
 {
-       USER_DATA_BLOB* pEapUserData = NULL;
+    USER_DATA_BLOB* pEapUserData = NULL;
     DWORD  retCode  = NO_ERROR;
 
     // Sanity checks.
@@ -1596,11 +1596,11 @@ GetUsernameAndPassword(
     int   result = 0;
 
     result = (int)DialogBoxParam(
-                     g_hInstance,
-                     MAKEINTRESOURCE(IDD_CONFIG_IDENTITY_DIALOG),
-                     hwndParent,
-                     UsernameDialogProc,
-                     (LPARAM)pEapUserData);
+                 g_hInstance,
+                 MAKEINTRESOURCE(IDD_CONFIG_IDENTITY_DIALOG),
+                 hwndParent,
+                 UsernameDialogProc,
+                 (LPARAM)pEapUserData);
 
     if (result < 0)
     {
@@ -1650,15 +1650,15 @@ UsernameDialogProc(
 
     switch (unMsg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
 
-            dwErr = InitUsernameDialog(hWnd, lParam);
+        dwErr = InitUsernameDialog(hWnd, lParam);
         break;
 
-        case WM_COMMAND:
+    case WM_COMMAND:
 
-            pEapUserData = (USER_DATA_BLOB*)((LONG_PTR)GetWindowLongPtr(hWnd, DWLP_USER));
-            dwErr = UsernameCommand(pEapUserData, LOWORD(wParam), hWnd);
+        pEapUserData = (USER_DATA_BLOB*)((LONG_PTR)GetWindowLongPtr(hWnd, DWLP_USER));
+        dwErr = UsernameCommand(pEapUserData, LOWORD(wParam), hWnd);
         break;
     }
 
@@ -1737,56 +1737,56 @@ UsernameCommand(
 
     switch(wId)
     {
-        case IDOK:
+    case IDOK:
 
-            //
-            // Save whatever the user typed in as the user name
-            //
+        //
+        // Save whatever the user typed in as the user name
+        //
 
-            hWnd = GetDlgItem(hWndDlg, IDC_EDIT_NAME);
-            if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
-            {
-                EapTrace("Error -- couldn't get username value! (error %d)",
-                         GetLastError());
-                goto LDone;
-            }
+        hWnd = GetDlgItem(hWndDlg, IDC_EDIT_NAME);
+        if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
+        {
+            EapTrace("Error -- couldn't get username value! (error %d)",
+                     GetLastError());
+            goto LDone;
+        }
 
-            editFieldLen = GetWindowTextLength(hWnd);
-            if(editFieldLen == 0)
-            {
-                MessageBox(NULL, L"UserName Field Cannot be Empty", L"MisConfiguration...", MB_OK);
-                goto LDone;
-            }
+        editFieldLen = GetWindowTextLength(hWnd);
+        if(editFieldLen == 0)
+        {
+            MessageBox(NULL, L"UserName Field Cannot be Empty", L"MisConfiguration...", MB_OK);
+            goto LDone;
+        }
 
-            GetWindowText(hWnd, pEapUserData->eapUserNamePassword.awszIdentity, UNLEN + 1);
+        GetWindowText(hWnd, pEapUserData->eapUserNamePassword.awszIdentity, UNLEN + 1);
 
-            //
-            // Save whatever the user typed in as the password
-            //
+        //
+        // Save whatever the user typed in as the password
+        //
 
-            hWnd = GetDlgItem(hWndDlg, IDC_EDIT_PASSWD);
-            if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
-            {
-                EapTrace("Error -- couldn't get password value! (error %d)",
-                         GetLastError());
-                goto LDone;
-            }
+        hWnd = GetDlgItem(hWndDlg, IDC_EDIT_PASSWD);
+        if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
+        {
+            EapTrace("Error -- couldn't get password value! (error %d)",
+                     GetLastError());
+            goto LDone;
+        }
 
-            editFieldLen = GetWindowTextLength(hWnd);
-            if(editFieldLen == 0)
-            {
-                MessageBox(NULL, L"Password Field Cannot be Empty", L"MisConfiguration...", MB_OK);
-                goto LDone;
-            }
+        editFieldLen = GetWindowTextLength(hWnd);
+        if(editFieldLen == 0)
+        {
+            MessageBox(NULL, L"Password Field Cannot be Empty", L"MisConfiguration...", MB_OK);
+            goto LDone;
+        }
 
-            GetWindowText(hWnd, pEapUserData->eapUserNamePassword.awszPassword, PWLEN + 1);
+        GetWindowText(hWnd, pEapUserData->eapUserNamePassword.awszPassword, PWLEN + 1);
 
-            // Fall through
+    // Fall through
 
-        case IDCANCEL:
+    case IDCANCEL:
 
-            EndDialog(hWndDlg, wId);
-            fOk = TRUE;
+        EndDialog(hWndDlg, wId);
+        fOk = TRUE;
 
         break;
     }

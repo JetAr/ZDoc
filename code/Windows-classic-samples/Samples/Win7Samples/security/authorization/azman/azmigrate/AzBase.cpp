@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -38,7 +38,8 @@ CAzBase<IAzNative>::~CAzBase(void)
 }
 
 template <class  IAzNative>
-CAzBase<IAzNative>::CAzBase(IAzNative *pNative,bool bIsNew){
+CAzBase<IAzNative>::CAzBase(IAzNative *pNative,bool bIsNew)
+{
 
     CAzLogging::Entering(_TEXT("Constructor"));
 
@@ -67,16 +68,17 @@ Arguments: cVVar - Variant which contains the SAFEARRAY
 
 Return Value:
 
-    Returns success, appropriate failure value of the procedures done within 
+    Returns success, appropriate failure value of the procedures done within
     this method
 
 --*/
 template <class  IAzNative>
-HRESULT CAzBase<IAzNative>::InitializeUsingSafeArray(VARIANT &cVVar, 
-                                                     HRESULT (__stdcall IAzNative::*targetMethod)(BSTR, VARIANT)) {
+HRESULT CAzBase<IAzNative>::InitializeUsingSafeArray(VARIANT &cVVar,
+        HRESULT (__stdcall IAzNative::*targetMethod)(BSTR, VARIANT))
+{
     CAzLogging::Entering(_TEXT("InitializeUsingSafeArray"));
 
-    SAFEARRAY *sa = V_ARRAY( &cVVar ); 
+    SAFEARRAY *sa = V_ARRAY( &cVVar );
 
     LONG lstart, lend;
 
@@ -88,12 +90,12 @@ HRESULT CAzBase<IAzNative>::InitializeUsingSafeArray(VARIANT &cVVar,
     // Get the lower and upper bound
     hr = SafeArrayGetLBound( sa, 1, &lstart );
 
-    if(FAILED(hr)) 
+    if(FAILED(hr))
         goto lEnd;
 
     hr = SafeArrayGetUBound( sa, 1, &lend );
 
-    if(FAILED(hr)) 
+    if(FAILED(hr))
         goto lEnd;
 
     if (0==(lend-lstart+1))
@@ -111,19 +113,19 @@ HRESULT CAzBase<IAzNative>::InitializeUsingSafeArray(VARIANT &cVVar,
 
             hr=(m_native->*targetMethod)(s,CComVariant());
 
-            CAzLogging::Log(hr,_TEXT("Calling Set Method in InitializeUsingSafeArray"),COLE2T(getName()));			
+            CAzLogging::Log(hr,_TEXT("Calling Set Method in InitializeUsingSafeArray"),COLE2T(getName()));
 
         }
 
-        if(FAILED(hr)) 
-           goto lError1;
-    }   
+        if(FAILED(hr))
+            goto lError1;
+    }
     else
         goto lEnd;
 
 lError1:
     hr = SafeArrayUnaccessData(sa);
-    
+
 lEnd:
     CAzLogging::Exiting(_TEXT("InitializeUsingSafeArray"));
 

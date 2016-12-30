@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: VideoTxt.cpp
 //
 // Desc: DirectShow sample code - implements DirectShow video renderer.
@@ -65,11 +65,11 @@ STDMETHODIMP CVideoText::NonDelegatingQueryInterface(REFIID riid,void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
 
-    if (riid == IID_IVideoWindow) 
+    if (riid == IID_IVideoWindow)
     {
         return CBaseVideoWindow::NonDelegatingQueryInterface(riid,ppv);
-    } 
-    else 
+    }
+    else
     {
         ASSERT(riid == IID_IBasicVideo);
         return CBaseBasicVideo::NonDelegatingQueryInterface(riid,ppv);
@@ -129,7 +129,7 @@ HRESULT CVideoText::InitWindowRegion(TCHAR *pStringName)
 
     // Set a window region according to the OS capabilities
 
-    if ((VersionInfo.dwPlatformId & VER_PLATFORM_WIN32_NT) == 0) 
+    if ((VersionInfo.dwPlatformId & VER_PLATFORM_WIN32_NT) == 0)
     {
         m_Size.cx = 320;
         m_Size.cy = 240;
@@ -152,7 +152,8 @@ HRESULT CVideoText::InitWindowRegion(TCHAR *pStringName)
     // Create a bitmap that matches the current format
 
     HBITMAP hMaskBitmap = CreateCompatibleBitmap(hdc,m_Size.cx,m_Size.cy);
-    if (hMaskBitmap == NULL) {
+    if (hMaskBitmap == NULL)
+    {
         ASSERT(hMaskBitmap);
         return E_UNEXPECTED;
     }
@@ -270,7 +271,7 @@ LRESULT CVideoText::OnReceiveMessage(HWND hwnd,          // Window handle
 
     // Blank out the window background
 
-    if (uMsg == WM_ERASEBKGND) 
+    if (uMsg == WM_ERASEBKGND)
     {
         EXECUTE_ASSERT(GetClientRect(m_hwnd,&ClientRect));
         HBRUSH hBrush = CreateSolidBrush(RGB(0,0,0));
@@ -282,7 +283,7 @@ LRESULT CVideoText::OnReceiveMessage(HWND hwnd,          // Window handle
 
     // Handle WM_CLOSE by aborting the playback
 
-    if (uMsg == WM_CLOSE) 
+    if (uMsg == WM_CLOSE)
     {
         m_pRenderer->NotifyEvent(EC_USERABORT,0,0);
         DoShowWindow(SW_HIDE);
@@ -295,7 +296,7 @@ LRESULT CVideoText::OnReceiveMessage(HWND hwnd,          // Window handle
     // mode where appropriate. These messages may also be used by the
     // resource manager to keep track of which renderer has the focus
 
-    if (uMsg == WM_ACTIVATEAPP) 
+    if (uMsg == WM_ACTIVATEAPP)
     {
         NOTE1("Notification of EC_ACTIVATE (%d)",(BOOL) wParam);
 
@@ -311,7 +312,7 @@ LRESULT CVideoText::OnReceiveMessage(HWND hwnd,          // Window handle
 
     // Treat clicks on text as requests to move window
 
-    if (uMsg == WM_NCHITTEST) 
+    if (uMsg == WM_NCHITTEST)
     {
         LRESULT Result = DefWindowProc(hwnd,uMsg,wParam,lParam);
         if (Result == HTCLIENT)
@@ -326,9 +327,9 @@ LRESULT CVideoText::OnReceiveMessage(HWND hwnd,          // Window handle
     // the DefWindowProc to show the cursor as normal. This is used
     // when our window is made fullscreen to imitate the Modex filter
 
-    if (uMsg == WM_SETCURSOR) 
+    if (uMsg == WM_SETCURSOR)
     {
-        if (IsCursorHidden() == TRUE) 
+        if (IsCursorHidden() == TRUE)
         {
             SetCursor(NULL);
             return (LRESULT) 1;
@@ -341,7 +342,7 @@ LRESULT CVideoText::OnReceiveMessage(HWND hwnd,          // Window handle
     // we can then accept the media type that matches the new display
     // mode since we may no longer be able to draw the current format
 
-    if (uMsg == WM_DISPLAYCHANGE) 
+    if (uMsg == WM_DISPLAYCHANGE)
     {
         m_pRenderer->m_Display.RefreshDisplayType(NULL);
         m_pRenderer->OnDisplayChange();
@@ -389,10 +390,10 @@ HRESULT CVideoText::IsDefaultTargetRect()
 
     // Check the destination matches the initial client area
 
-    if (TargetRect.left != 0  || 
-        TargetRect.top  != 0  ||
-        TargetRect.right  != m_Size.cx ||
-        TargetRect.bottom != m_Size.cy) 
+    if (TargetRect.left != 0  ||
+            TargetRect.top  != 0  ||
+            TargetRect.right  != m_Size.cx ||
+            TargetRect.bottom != m_Size.cy)
     {
         return S_FALSE;
     }
@@ -465,13 +466,13 @@ HRESULT CVideoText::IsDefaultSourceRect()
 
     // Check the coordinates match the video dimensions
 
-    if (SourceRect.right == VideoSize.cx) 
+    if (SourceRect.right == VideoSize.cx)
     {
-        if (SourceRect.bottom == VideoSize.cy) 
+        if (SourceRect.bottom == VideoSize.cy)
         {
-            if (SourceRect.left == 0) 
+            if (SourceRect.left == 0)
             {
-                if (SourceRect.top == 0) 
+                if (SourceRect.top == 0)
                 {
                     return S_OK;
                 }

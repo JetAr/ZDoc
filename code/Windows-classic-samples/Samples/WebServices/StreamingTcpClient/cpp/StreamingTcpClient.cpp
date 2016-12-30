@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -57,39 +57,39 @@ Exit:
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_CHANNEL* channel = NULL;
     WS_MESSAGE* message = NULL;
     _Null_terminated_ WCHAR* productName = L"Pencil";
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    
-    
+
+
+
     // Create a TCP duplex session channel
     hr = WsCreateChannel(
-        WS_CHANNEL_TYPE_DUPLEX_SESSION, 
-        WS_TCP_CHANNEL_BINDING, 
-        NULL, 
-        0, 
-        NULL, 
-        &channel, 
-        error);
+             WS_CHANNEL_TYPE_DUPLEX_SESSION,
+             WS_TCP_CHANNEL_BINDING,
+             NULL,
+             0,
+             NULL,
+             &channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Initialize address of service
     WS_ENDPOINT_ADDRESS address;
     address.url.chars = L"net.tcp://localhost/example";
@@ -97,126 +97,126 @@ int __cdecl wmain()
     address.headers = NULL;
     address.extensions = NULL;
     address.identity = NULL;
-    
+
     // Open channel to address
     hr = WsOpenChannel(
-        channel, 
-        &address, 
-        NULL, 
-        error);
+             channel,
+             &address,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateMessageForChannel(
-        channel,
-        NULL, 
-        0, 
-        &message, 
-        error);
+             channel,
+             NULL,
+             0,
+             &message,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Send some messages
     for (int i = 0; i < 100; i++)
     {
-            // Initialize message headers
-            hr = WsInitializeMessage(
-                message, 
-                WS_BLANK_MESSAGE, 
-                NULL, 
-                error);
+        // Initialize message headers
+        hr = WsInitializeMessage(
+                 message,
+                 WS_BLANK_MESSAGE,
+                 NULL,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
-            // Add the action header
-            hr = WsSetHeader(
-                message, 
-                WS_ACTION_HEADER, 
-                WS_XML_STRING_TYPE,
-                WS_WRITE_REQUIRED_VALUE,
-                PurchaseOrder_wsdl.messages.PurchaseOrder.action, 
-                sizeof(*PurchaseOrder_wsdl.messages.PurchaseOrder.action), 
-                error);
+
+        // Add the action header
+        hr = WsSetHeader(
+                 message,
+                 WS_ACTION_HEADER,
+                 WS_XML_STRING_TYPE,
+                 WS_WRITE_REQUIRED_VALUE,
+                 PurchaseOrder_wsdl.messages.PurchaseOrder.action,
+                 sizeof(*PurchaseOrder_wsdl.messages.PurchaseOrder.action),
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
-            // Send the message headers
-            hr = WsWriteMessageStart(
-                channel, 
-                message, 
-                NULL, 
-                error);
+
+        // Send the message headers
+        hr = WsWriteMessageStart(
+                 channel,
+                 message,
+                 NULL,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
-            // Get the writer for the body
-            WS_XML_WRITER* writer;
-            hr = WsGetMessageProperty(message, WS_MESSAGE_PROPERTY_BODY_WRITER, &writer, sizeof(writer), error);
+
+        // Get the writer for the body
+        WS_XML_WRITER* writer;
+        hr = WsGetMessageProperty(message, WS_MESSAGE_PROPERTY_BODY_WRITER, &writer, sizeof(writer), error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
-            // Stream out the body contents
-            for (int j = 0; j < 100; j++)
-            {
-                    // Initialize body data
-                    _PurchaseOrderType purchaseOrder;
-                    purchaseOrder.quantity = 1;
-                    purchaseOrder.productName = productName;
-            
-                    // Write body data
-                    hr = WsWriteElement(
-                        writer, 
-                        &PurchaseOrder_wsdl.globalElements.PurchaseOrderType, 
-                        WS_WRITE_REQUIRED_VALUE,
-                        &purchaseOrder, 
-                        sizeof(purchaseOrder), 
-                        error);
+
+        // Stream out the body contents
+        for (int j = 0; j < 100; j++)
+        {
+            // Initialize body data
+            _PurchaseOrderType purchaseOrder;
+            purchaseOrder.quantity = 1;
+            purchaseOrder.productName = productName;
+
+            // Write body data
+            hr = WsWriteElement(
+                     writer,
+                     &PurchaseOrder_wsdl.globalElements.PurchaseOrderType,
+                     WS_WRITE_REQUIRED_VALUE,
+                     &purchaseOrder,
+                     sizeof(purchaseOrder),
+                     error);
             if (FAILED(hr))
             {
                 goto Exit;
             }
-            }
-        
-            // Send the end of the message
-            hr = WsWriteMessageEnd(
-                channel, 
-                message, 
-                NULL, 
-                error);
+        }
+
+        // Send the end of the message
+        hr = WsWriteMessageEnd(
+                 channel,
+                 message,
+                 NULL,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
-            // Reset message so it can be used again
-            hr = WsResetMessage(
-                message, 
-                error);
+
+        // Reset message so it can be used again
+        hr = WsResetMessage(
+                 message,
+                 error);
         if (FAILED(hr))
         {
             goto Exit;
         }
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (channel != NULL)
     {
         // Close the channel
@@ -230,8 +230,8 @@ Exit:
     {
         WsFreeChannel(channel);
     }
-    
-    
+
+
     if (error != NULL)
     {
         WsFreeError(error);

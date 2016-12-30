@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 //    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
 //    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
 //
 //    File:          PropSheetHost.cpp
 //
-//    Description:   
+//    Description:
 //
 //***************************************************************************
 
@@ -27,7 +27,7 @@
 
 ***************************************************************************/
 
-CPropSheetHost::CPropSheetHost(HINSTANCE hInstance, 
+CPropSheetHost::CPropSheetHost(HINSTANCE hInstance,
                                HWND hwndParent)
 {
     m_hInst = hInstance;
@@ -110,7 +110,7 @@ void CPropSheetHost::Run()
     }
 
     /*
-    Display the proeprty sheet. This is a modal call and will not return 
+    Display the proeprty sheet. This is a modal call and will not return
     until the property sheet is dimissed.
     */
     _CreatePropertySheet();
@@ -132,7 +132,7 @@ HWND CPropSheetHost::_CreateHiddenWindow()
     if(!GetClassInfo(m_hInst, m_szHiddenWindowClass, &wc))
     {
         ZeroMemory(&wc, sizeof(wc));
-           
+
         wc.style          = CS_HREDRAW | CS_VREDRAW;
         wc.lpfnWndProc    = (WNDPROC)_HiddenWindowProc;
         wc.cbClsExtra     = 0;
@@ -152,7 +152,7 @@ HWND CPropSheetHost::_CreateHiddenWindow()
                                     m_szHiddenWindowClass,
                                     NULL,
                                     WS_OVERLAPPED |
-                                        0,
+                                    0,
                                     CW_USEDEFAULT,
                                     CW_USEDEFAULT,
                                     CW_USEDEFAULT,
@@ -172,21 +172,21 @@ HWND CPropSheetHost::_CreateHiddenWindow()
 ***************************************************************************/
 
 LRESULT CALLBACK CPropSheetHost::_HiddenWindowProc( HWND hWnd,
-                                                    UINT uMessage,
-                                                    WPARAM wParam,
-                                                    LPARAM lParam)
+        UINT uMessage,
+        WPARAM wParam,
+        LPARAM lParam)
 {
     CPropSheetHost *pThis = (CPropSheetHost*)((LONG_PTR)GetWindowLongPtr(hWnd, VIEW_POINTER_OFFSET));
 
     switch (uMessage)
     {
     case WM_NCCREATE:
-        {
-            LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
-            pThis = (CPropSheetHost*)(lpcs->lpCreateParams);
-            ::SetWindowLongPtr(hWnd, VIEW_POINTER_OFFSET, (LONG)(LONG_PTR)pThis);
-        }
-        break;
+    {
+        LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
+        pThis = (CPropSheetHost*)(lpcs->lpCreateParams);
+        ::SetWindowLongPtr(hWnd, VIEW_POINTER_OFFSET, (LONG)(LONG_PTR)pThis);
+    }
+    break;
 
     case WM_CREATE:
         break;
@@ -199,28 +199,28 @@ LRESULT CALLBACK CPropSheetHost::_HiddenWindowProc( HWND hWnd,
         break;
 
     case WM_DSA_SHEET_CREATE_NOTIFY:
-        {
-            PDSA_SEC_PAGE_INFO pSecPageInfo;
-            
-            // Extract the secondary sheet information from the wParam.
-            if(S_OK == pThis->_ExtractSecPageInfo(wParam, &pSecPageInfo))
-            {
-                // Create a secondary property sheet.
-                pThis->_CreateSecondaryPropertySheet(pSecPageInfo);
-            }
-            else
-            {
-                // Even if the extraction failed, the wParam needs to be freed.
-                pSecPageInfo = (PDSA_SEC_PAGE_INFO)wParam;
-            }
+    {
+        PDSA_SEC_PAGE_INFO pSecPageInfo;
 
-            /*
-            The receiver of the  message must free the DSA_SEC_PAGE_INFO 
-            structure when it is no longer needed.
-            */
-            LocalFree(pSecPageInfo);
+        // Extract the secondary sheet information from the wParam.
+        if(S_OK == pThis->_ExtractSecPageInfo(wParam, &pSecPageInfo))
+        {
+            // Create a secondary property sheet.
+            pThis->_CreateSecondaryPropertySheet(pSecPageInfo);
         }
-        return 0;
+        else
+        {
+            // Even if the extraction failed, the wParam needs to be freed.
+            pSecPageInfo = (PDSA_SEC_PAGE_INFO)wParam;
+        }
+
+        /*
+        The receiver of the  message must free the DSA_SEC_PAGE_INFO
+        structure when it is no longer needed.
+        */
+        LocalFree(pSecPageInfo);
+    }
+    return 0;
 
     case WM_DSA_SHEET_CLOSE_NOTIFY:
         if(PROP_SHEET_HOST_ID == wParam)
@@ -240,17 +240,17 @@ LRESULT CALLBACK CPropSheetHost::_HiddenWindowProc( HWND hWnd,
 
     CPropSheetHost::_AddPagesForObject()
 
-    This method will add all of the property pages for the specified object 
+    This method will add all of the property pages for the specified object
     by performing the following steps:
-    
+
     1. Create an instance of the CLSID_DsPropertyPages object.
-    
+
     2. Initialize the CLSID_DsPropertyPages object.
-    
-    3. Call the IShellPropSheetExt::AddPages method of the 
-    CLSID_DsPropertyPages object. The CLSID_DsPropertyPages will enumerate 
-    the admin property sheet extensions, create and initialize each 
-    extension object and call the extension's IShellPropSheetExt::AddPages 
+
+    3. Call the IShellPropSheetExt::AddPages method of the
+    CLSID_DsPropertyPages object. The CLSID_DsPropertyPages will enumerate
+    the admin property sheet extensions, create and initialize each
+    extension object and call the extension's IShellPropSheetExt::AddPages
     method to cause the extension to add its pages to the property sheet.
 
 ***************************************************************************/
@@ -258,7 +258,7 @@ LRESULT CALLBACK CPropSheetHost::_HiddenWindowProc( HWND hWnd,
 HRESULT CPropSheetHost::_AddPagesForObject(IADs *padsObject)
 {
     HRESULT hr;
-    
+
     // Get a copy of our IDataObject.
     CComPtr<IDataObject> spDataObject;
     hr = this->QueryInterface(IID_IDataObject, (LPVOID*)&spDataObject);
@@ -310,7 +310,7 @@ void CPropSheetHost::_CreatePropertySheet()
     {
         return;
     }
-    
+
     HRESULT hr;
 
     hr = _AddPagesForObject(m_spADObject);
@@ -320,7 +320,7 @@ void CPropSheetHost::_CreatePropertySheet()
     }
 
     /*
-    The property page handle array should have been filled in _AddPagesForObject 
+    The property page handle array should have been filled in _AddPagesForObject
     when AddPages was called.
     */
     if(m_rgPageHandles.GetSize() == 0)
@@ -376,7 +376,7 @@ void CPropSheetHost::_CreatePropertySheet()
 BOOL CALLBACK CPropSheetHost::_AddPagesCallback(HPROPSHEETPAGE hPage, LPARAM lParam)
 {
     CPropSheetHost *pThis = (CPropSheetHost*)lParam;
-    
+
     pThis->m_rgPageHandles.Add(hPage);
 
     return TRUE;
@@ -405,9 +405,9 @@ HRESULT CPropSheetHost::_ExtractSecPageInfo(WPARAM wParam, PDSA_SEC_PAGE_INFO *p
         {
             return E_UNEXPECTED;
         }
-        
+
         /*
-        Special case for Windows 2000. Need to insert an HWND member at the front 
+        Special case for Windows 2000. Need to insert an HWND member at the front
         of the DSA_SEC_PAGE_INFO structure.
         */
         if((5 == osvi.dwMajorVersion) && (0 == osvi.dwMinorVersion))
@@ -454,7 +454,7 @@ HRESULT CPropSheetHost::_ExtractSecPageInfo(WPARAM wParam, PDSA_SEC_PAGE_INFO *p
 void CPropSheetHost::_CreateSecondaryPropertySheet(DSA_SEC_PAGE_INFO *pDSASecPageInfo)
 {
     LPDSOBJECT pdsObject = &pDSASecPageInfo->dsObjectNames.aObjects[0];
-    
+
     LPWSTR pwszTitle = (LPWSTR)((LPBYTE)pDSASecPageInfo + pDSASecPageInfo->offsetTitle);
     LPWSTR pwszClass = (LPWSTR)((LPBYTE)pdsObject + pdsObject->offsetClass);
 
@@ -477,8 +477,8 @@ void CPropSheetHost::_CreateSecondaryPropertySheet(DSA_SEC_PAGE_INFO *pDSASecPag
     pSecondarySheet->Run();
 
     /*
-    Release the CPropSheetHost object. Other components may still hold a 
-    reference to the object, so this cannot just be deleted here. Let the object 
+    Release the CPropSheetHost object. Other components may still hold a
+    reference to the object, so this cannot just be deleted here. Let the object
     delete itself when all references are released.
     */
     pSecondarySheet->Release();

@@ -1,4 +1,4 @@
-#include "CHWMFT.h"
+﻿#include "CHWMFT.h"
 #include <strsafe.h>
 #include <mfapi.h>
 #include <initguid.h>
@@ -31,8 +31,8 @@
 #pragma region GlobalDefines
 
 // {C637E2D2-01A0-4ACE-9C43-D2AF07E00B8C}
-DEFINE_GUID(CLSID_MYMFT, 
-0xc637e2d2, 0x1a0, 0x4ace, 0x9c, 0x43, 0xd2, 0xaf, 0x7, 0xe0, 0xb, 0x8c);
+DEFINE_GUID(CLSID_MYMFT,
+            0xc637e2d2, 0x1a0, 0x4ace, 0x9c, 0x43, 0xd2, 0xaf, 0x7, 0xe0, 0xb, 0x8c);
 
 #define MY_MFT_NAME     L"Win8 SDK HW MFT Sample"
 #define MFT_CODEC_MERIT 8 /*Todo: Replace this with the actual codec Merit*/
@@ -45,7 +45,7 @@ DEFINE_GUID(CLSID_MYMFT,
 class ClassFactory : public IClassFactory
 {
 protected:
-            volatile ULONG  m_ulRefCount; // Reference count.
+    volatile ULONG  m_ulRefCount; // Reference count.
     static  volatile ULONG  m_ulServerLocks; // Number of server locks
 
 public:
@@ -104,7 +104,7 @@ public:
             {
                 *ppvObject = (IClassFactory*)this;
             }
-            else 
+            else
             {
                 *ppvObject = NULL;
                 hr = E_NOINTERFACE;
@@ -112,7 +112,8 @@ public:
             }
 
             AddRef();
-        }while(false);
+        }
+        while(false);
 
         return hr;
     }
@@ -141,13 +142,14 @@ public:
             }
 
             hr = pHWMFT->QueryInterface(riid,
-                ppv
-                );
+                                        ppv
+                                       );
             if(FAILED(hr))
             {
                 break;
             }
-        }while(false);
+        }
+        while(false);
 
         SAFERELEASE(pHWMFT);
 
@@ -156,7 +158,7 @@ public:
 
     HRESULT __stdcall LockServer(
         BOOL bLock)
-    {   
+    {
         HRESULT hr = S_OK;
 
         do
@@ -169,7 +171,8 @@ public:
             {
                 InterlockedDecrement(&m_ulServerLocks);
             }
-        }while(false);
+        }
+        while(false);
 
         return hr;
     }
@@ -203,31 +206,32 @@ HRESULT CreateObjectKeyName(
         }
 
         if(StringCchPrintf(pwszName,
-            dwMax,
-            L"CLSID\\{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
-            guid.Data1,
-            guid.Data2,
-            guid.Data3,
-            guid.Data4[0],
-            guid.Data4[1],
-            guid.Data4[2],
-            guid.Data4[3],
-            guid.Data4[4],
-            guid.Data4[5],
-            guid.Data4[6],
-            guid.Data4[7]
-            ) < 0)
-            {
-                hr = E_FAIL;
-                break;
-            }
-    }while(false);
+                           dwMax,
+                           L"CLSID\\{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+                           guid.Data1,
+                           guid.Data2,
+                           guid.Data3,
+                           guid.Data4[0],
+                           guid.Data4[1],
+                           guid.Data4[2],
+                           guid.Data4[3],
+                           guid.Data4[4],
+                           guid.Data4[5],
+                           guid.Data4[6],
+                           guid.Data4[7]
+                          ) < 0)
+        {
+            hr = E_FAIL;
+            break;
+        }
+    }
+    while(false);
 
     return hr;
 }
 
 HRESULT SetKeyValue(
-            HKEY    hKey,
+    HKEY    hKey,
     const   WCHAR*  pwszName,
     const   WCHAR*  pwszValue)
 {
@@ -236,19 +240,20 @@ HRESULT SetKeyValue(
     do
     {
         hr = HRESULT_FROM_WIN32(
-            RegSetValueEx(hKey,
-                pwszName,
-                0,
-                REG_SZ,
-                (BYTE*)pwszValue,
-                (DWORD)((wcslen(pwszValue) + 1) * sizeof(WCHAR))
-                )
-            );
+                 RegSetValueEx(hKey,
+                               pwszName,
+                               0,
+                               REG_SZ,
+                               (BYTE*)pwszValue,
+                               (DWORD)((wcslen(pwszValue) + 1) * sizeof(WCHAR))
+                              )
+             );
         if(FAILED(hr))
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -274,9 +279,9 @@ HRESULT RegisterObject(
 
         // Create the name of the key from the object's CLSID
         hr = CreateObjectKeyName(guid,
-            pwszBuffer,
-            sizeof(pwszBuffer) / sizeof(pwszBuffer[0])
-            );
+                                 pwszBuffer,
+                                 sizeof(pwszBuffer) / sizeof(pwszBuffer[0])
+                                );
         if(FAILED(hr))
         {
             break;
@@ -284,26 +289,26 @@ HRESULT RegisterObject(
 
         // Create the new key.
         hr = HRESULT_FROM_WIN32(
-            RegCreateKeyEx(
-                HKEY_CLASSES_ROOT,
-                pwszBuffer,
-                0,
-                NULL,
-                REG_OPTION_NON_VOLATILE,
-                KEY_ALL_ACCESS,
-                NULL,
-                &hKey,
-                NULL
-                )
-            );
+                 RegCreateKeyEx(
+                     HKEY_CLASSES_ROOT,
+                     pwszBuffer,
+                     0,
+                     NULL,
+                     REG_OPTION_NON_VOLATILE,
+                     KEY_ALL_ACCESS,
+                     NULL,
+                     &hKey,
+                     NULL
+                 )
+             );
         if(FAILED(hr))
         {
             break;
         }
 
         hr = SetKeyValue(hKey,
-            NULL,
-            pwszDescription);
+                         NULL,
+                         pwszDescription);
         if(FAILED(hr))
         {
             break;
@@ -311,24 +316,24 @@ HRESULT RegisterObject(
 
         // Create the "InprocServer32" subkey
         hr = HRESULT_FROM_WIN32(
-            RegCreateKeyEx(
-                hKey,
-                L"InprocServer32",
-                0,
-                NULL,
-                REG_OPTION_NON_VOLATILE,
-                KEY_ALL_ACCESS,
-                NULL,
-                &hSubkey,
-                NULL
-                )
-            );
+                 RegCreateKeyEx(
+                     hKey,
+                     L"InprocServer32",
+                     0,
+                     NULL,
+                     REG_OPTION_NON_VOLATILE,
+                     KEY_ALL_ACCESS,
+                     NULL,
+                     &hSubkey,
+                     NULL
+                 )
+             );
 
         // The default value for this subkey is the path to the DLL.
         // Get the name of the module ...
         dwFileNameLen = GetModuleFileName(g_hModule,
-            pwszBuffer,
-            MAX_PATH);
+                                          pwszBuffer,
+                                          MAX_PATH);
         if (dwFileNameLen == 0)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -345,9 +350,9 @@ HRESULT RegisterObject(
 
         // ... and set the default key value.
         hr = SetKeyValue(hSubkey,
-            NULL,
-            pwszBuffer
-            );
+                         NULL,
+                         pwszBuffer
+                        );
         if(FAILED(hr))
         {
             break;
@@ -355,14 +360,15 @@ HRESULT RegisterObject(
 
         // Add a new value to the subkey, for "ThreadingModel" = <threading model>
         hr = SetKeyValue(hSubkey,
-            L"ThreadingModel",
-            pwszThreadingModel
-            );
+                         L"ThreadingModel",
+                         pwszThreadingModel
+                        );
         if(FAILED(hr))
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     SAFEREGCLOSEKEY(hSubkey);
     SAFEREGCLOSEKEY(hKey);
@@ -379,24 +385,25 @@ HRESULT UnregisterObject(
     do
     {
         hr = CreateObjectKeyName(guid,
-            pwszBuffer,
-            sizeof(pwszBuffer) / sizeof(pwszBuffer[0])
-            );
+                                 pwszBuffer,
+                                 sizeof(pwszBuffer) / sizeof(pwszBuffer[0])
+                                );
         if(FAILED(hr))
         {
             break;
         }
 
         hr = HRESULT_FROM_WIN32(
-            RegDeleteTree(HKEY_CLASSES_ROOT,
-                pwszBuffer
-                )
-            );
+                 RegDeleteTree(HKEY_CLASSES_ROOT,
+                               pwszBuffer
+                              )
+             );
         if(FAILED(hr))
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -410,18 +417,18 @@ BOOL APIENTRY DllMain(
     DWORD  dwReason,
     LPVOID lpReserved)
 {
-	switch (dwReason)
-	{
-	case DLL_PROCESS_ATTACH:
+    switch (dwReason)
+    {
+    case DLL_PROCESS_ATTACH:
         g_hModule = (HMODULE)hModule;
         break;
     case DLL_THREAD_ATTACH:
-	case DLL_THREAD_DETACH:
+    case DLL_THREAD_DETACH:
         // Nothing to do
-		break;
-	case DLL_PROCESS_DETACH:
-		break;
-	};
+        break;
+    case DLL_PROCESS_DETACH:
+        break;
+    };
 
     return TRUE;
 }
@@ -438,7 +445,8 @@ HRESULT __stdcall DllCanUnloadNow(void)
         }
 
         hr = S_OK;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -497,33 +505,34 @@ HRESULT __stdcall DllRegisterServer(void)
 
         // Register the object with COM
         hr = RegisterObject(CLSID_MYMFT,
-            MY_MFT_NAME,
-            L"Both");
+                            MY_MFT_NAME,
+                            L"Both");
         if(FAILED(hr))
         {
             break;
         }
 
         // Register the MFT with MF
-		hr = MFTRegister(
-                CLSID_MYMFT,
-                MFT_CATEGORY_VIDEO_DECODER, // This MFT acts as a video decoder
-                MY_MFT_NAME,
-                /****************************************
-                ** !!MSFT_TODO: Report as HW MFT
-                ****************************************
-                MFT_ENUM_FLAG_HARDWARE,*/ MFT_ENUM_FLAG_ASYNCMFT,
-                g_dwNumInputTypes,
-                pmftrtiInput,
-                g_dwNumOutputTypes,
-                pmftrtiOutput,
-                pMFTAttributes
-            );
+        hr = MFTRegister(
+                 CLSID_MYMFT,
+                 MFT_CATEGORY_VIDEO_DECODER, // This MFT acts as a video decoder
+                 MY_MFT_NAME,
+                 /****************************************
+                 ** !!MSFT_TODO: Report as HW MFT
+                 ****************************************
+                 MFT_ENUM_FLAG_HARDWARE,*/ MFT_ENUM_FLAG_ASYNCMFT,
+                 g_dwNumInputTypes,
+                 pmftrtiInput,
+                 g_dwNumOutputTypes,
+                 pmftrtiOutput,
+                 pMFTAttributes
+             );
         if(FAILED(hr))
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     SAFEARRAYDELETE(pmftrtiInput);
     SAFEARRAYDELETE(pmftrtiOutput);
@@ -568,7 +577,8 @@ HRESULT __stdcall DllGetClassObject(
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pFactory);
 

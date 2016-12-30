@@ -1,6 +1,6 @@
-//======================================================================
+﻿//======================================================================
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
 // PURPOSE.
 //
@@ -16,8 +16,9 @@
 #include <windows.h>
 #include <stdlib.h>
 
-VOID 
-PrintUsage() {
+VOID
+PrintUsage()
+{
     printf("Usage: ExtendedFileAPIs [-id] targetFile\n\n");
     printf("  Display extended information about the target file or directory\n");
     printf("  using the GetFileInformationByHandleEx API.\n\n");
@@ -30,42 +31,51 @@ PrintUsage() {
 VOID
 PrintFileAttributes(
     ULONG FileAttributes
-    )
+)
 {
-    if (FileAttributes & FILE_ATTRIBUTE_ARCHIVE) {
+    if (FileAttributes & FILE_ATTRIBUTE_ARCHIVE)
+    {
         printf("Archive ");
         FileAttributes &= ~FILE_ATTRIBUTE_ARCHIVE;
     }
-    if (FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+    if (FileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+    {
         printf("Directory ");
         FileAttributes &= ~FILE_ATTRIBUTE_DIRECTORY;
     }
-    if (FileAttributes & FILE_ATTRIBUTE_READONLY) {
+    if (FileAttributes & FILE_ATTRIBUTE_READONLY)
+    {
         printf("Read-Only ");
         FileAttributes &= ~FILE_ATTRIBUTE_READONLY;
     }
-    if (FileAttributes & FILE_ATTRIBUTE_HIDDEN) {
+    if (FileAttributes & FILE_ATTRIBUTE_HIDDEN)
+    {
         printf("Hidden ");
         FileAttributes &= ~FILE_ATTRIBUTE_HIDDEN;
     }
-    if (FileAttributes & FILE_ATTRIBUTE_SYSTEM) {
+    if (FileAttributes & FILE_ATTRIBUTE_SYSTEM)
+    {
         printf("System ");
         FileAttributes &= ~FILE_ATTRIBUTE_SYSTEM;
     }
-    if (FileAttributes & FILE_ATTRIBUTE_NORMAL) {
+    if (FileAttributes & FILE_ATTRIBUTE_NORMAL)
+    {
         printf("Normal ");
         FileAttributes &= ~FILE_ATTRIBUTE_NORMAL;
     }
-    if (FileAttributes & FILE_ATTRIBUTE_TEMPORARY) {
+    if (FileAttributes & FILE_ATTRIBUTE_TEMPORARY)
+    {
         printf("Temporary ");
         FileAttributes &= ~FILE_ATTRIBUTE_TEMPORARY;
     }
-    if (FileAttributes & FILE_ATTRIBUTE_COMPRESSED) {
+    if (FileAttributes & FILE_ATTRIBUTE_COMPRESSED)
+    {
         printf("Compressed ");
         FileAttributes &= ~FILE_ATTRIBUTE_COMPRESSED;
     }
 
-    if (FileAttributes) {
+    if (FileAttributes)
+    {
         printf("  Additional Attributes: %x", FileAttributes);
     }
 
@@ -74,7 +84,7 @@ PrintFileAttributes(
 BOOL
 PrintDate(
     LARGE_INTEGER Date
-    )
+)
 {
     BOOL result;
     FILETIME fileTime;
@@ -86,42 +96,45 @@ PrintDate(
     result = FileTimeToLocalFileTime( &fileTime,
                                       &fileTime );
 
-    if (!result) {
+    if (!result)
+    {
         return result;
     }
 
     result = FileTimeToSystemTime( &fileTime,
-                                  &systemTime );
+                                   &systemTime );
 
-    if (!result) {
+    if (!result)
+    {
         return result;
     }
 
-    printf("%.2d/%.2d/%.4d %.2d:%.2d", 
-           systemTime.wMonth, 
-           systemTime.wDay, 
-           systemTime.wYear, 
-           systemTime.wHour, 
+    printf("%.2d/%.2d/%.4d %.2d:%.2d",
+           systemTime.wMonth,
+           systemTime.wDay,
+           systemTime.wYear,
+           systemTime.wHour,
            systemTime.wMinute);
 
     return true;
 }
 
 BOOL
-DisplayBasicInfo( 
+DisplayBasicInfo(
     HANDLE hFile,
     BOOL * bIsDirectory
-    )
+)
 {
     FILE_BASIC_INFO basicInfo;
     BOOL result;
 
     result = GetFileInformationByHandleEx( hFile,
-                                               FileBasicInfo,
-                                               &basicInfo,
-                                               sizeof(basicInfo));
+                                           FileBasicInfo,
+                                           &basicInfo,
+                                           sizeof(basicInfo));
 
-    if (!result) {
+    if (!result)
+    {
         printf("Failure fetching basic information: %d\n", GetLastError());
         return result;
     }
@@ -132,9 +145,12 @@ DisplayBasicInfo(
 
     result = PrintDate(basicInfo.CreationTime);
 
-    if (result) {
+    if (result)
+    {
         printf("\n");
-    } else {
+    }
+    else
+    {
         printf(" Error retrieving creation time.\n");
     }
 
@@ -142,9 +158,12 @@ DisplayBasicInfo(
 
     result = PrintDate(basicInfo.ChangeTime);
 
-    if (result) {
+    if (result)
+    {
         printf("\n");
-    } else {
+    }
+    else
+    {
         printf(" Error retrieving creation time.\n");
     }
 
@@ -152,9 +171,12 @@ DisplayBasicInfo(
 
     result = PrintDate(basicInfo.LastAccessTime);
 
-    if (result) {
+    if (result)
+    {
         printf("\n");
-    } else {
+    }
+    else
+    {
         printf(" Error retrieving last access time.\n");
     }
 
@@ -162,18 +184,24 @@ DisplayBasicInfo(
 
     result = PrintDate(basicInfo.LastWriteTime);
 
-    if (result) {
+    if (result)
+    {
         printf("\n");
-    } else {
+    }
+    else
+    {
         printf(" Error retrieving last write time.\n");
     }
 
     printf("  File Attributes: ");
     PrintFileAttributes(basicInfo.FileAttributes);
 
-    if (basicInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+    if (basicInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+    {
         *bIsDirectory = true;
-    } else {
+    }
+    else
+    {
         *bIsDirectory = false;
     }
     return result;
@@ -182,7 +210,7 @@ DisplayBasicInfo(
 BOOL
 DisplayStandardInfo(
     HANDLE hFile
-    )
+)
 {
     FILE_STANDARD_INFO standardInfo;
     BOOL result;
@@ -192,7 +220,8 @@ DisplayStandardInfo(
                                            &standardInfo,
                                            sizeof(standardInfo));
 
-    if (!result) {
+    if (!result)
+    {
         printf("Failure fetching standard information: %d\n", GetLastError());
         return result;
     }
@@ -203,15 +232,21 @@ DisplayStandardInfo(
     printf("  End of File: %I64d\n", standardInfo.EndOfFile);
     printf("  Number of Links: %d\n", standardInfo.NumberOfLinks);
     printf("  Delete Pending: ");
-    if (standardInfo.DeletePending) {
+    if (standardInfo.DeletePending)
+    {
         printf("Yes\n");
-    } else {
+    }
+    else
+    {
         printf("No\n");
     }
     printf("  Directory: ");
-    if (standardInfo.Directory) {
+    if (standardInfo.Directory)
+    {
         printf("Yes\n");
-    } else {
+    }
+    else
+    {
         printf("No\n");
     }
 
@@ -221,7 +256,7 @@ DisplayStandardInfo(
 BOOL
 DisplayNameInfo(
     HANDLE hFile
-    )
+)
 {
     PFILE_NAME_INFO nameInfo;
     ULONG nameSize;
@@ -237,24 +272,27 @@ DisplayNameInfo(
 retry:
 
     nameInfo = (PFILE_NAME_INFO) LocalAlloc(LMEM_ZEROINIT,
-                                                nameSize);
+                                            nameSize);
 
 
-    if (nameInfo == NULL) {
+    if (nameInfo == NULL)
+    {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return false;
     }
 
     result = GetFileInformationByHandleEx( hFile,
-                                               FileNameInfo,
-                                               nameInfo,
-                                               nameSize );
+                                           FileNameInfo,
+                                           nameInfo,
+                                           nameSize );
 
-    if (!result) {
+    if (!result)
+    {
         //
         // If our buffer wasn't large enough try again with a larger one.
         //
-        if (GetLastError() == ERROR_MORE_DATA) {
+        if (GetLastError() == ERROR_MORE_DATA)
+        {
             nameSize *= 2;
             goto retry;
         }
@@ -275,7 +313,7 @@ retry:
 BOOL
 DisplayStreamInfo(
     HANDLE hFile
-    )
+)
 {
     PFILE_STREAM_INFO currentStreamInfo;
     BOOL result;
@@ -293,24 +331,27 @@ DisplayStreamInfo(
 retry:
 
     streamInfo = (PFILE_STREAM_INFO) LocalAlloc(LMEM_ZEROINIT,
-                                                    streamInfoSize);
+                 streamInfoSize);
 
 
-    if (streamInfo == NULL) {
+    if (streamInfo == NULL)
+    {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return false;
     }
 
     result = GetFileInformationByHandleEx( hFile,
-                                               FileStreamInfo,
-                                               streamInfo,
-                                               streamInfoSize );
+                                           FileStreamInfo,
+                                           streamInfo,
+                                           streamInfoSize );
 
-    if (!result) {
+    if (!result)
+    {
         //
         // If our buffer wasn't large enough try again with a larger one.
         //
-        if (GetLastError() == ERROR_MORE_DATA) {
+        if (GetLastError() == ERROR_MORE_DATA)
+        {
             streamInfoSize *= 2;
             goto retry;
         }
@@ -324,20 +365,25 @@ retry:
 
     currentStreamInfo = streamInfo;
 
-    do {
+    do
+    {
         printf("  Stream Name: %S\n", currentStreamInfo->StreamName);
         printf("  Stream Size: %I64d\n", currentStreamInfo->StreamSize);
-        printf("  Stream Allocation Size: %I64d\n", 
+        printf("  Stream Allocation Size: %I64d\n",
                currentStreamInfo->StreamAllocationSize);
 
-        if (currentStreamInfo->NextEntryOffset == 0) {
+        if (currentStreamInfo->NextEntryOffset == 0)
+        {
             currentStreamInfo = NULL;
-        } else {
-            currentStreamInfo = 
+        }
+        else
+        {
+            currentStreamInfo =
                 (PFILE_STREAM_INFO) ((PUCHAR)currentStreamInfo +
                                      currentStreamInfo->NextEntryOffset);
         }
-    } while (currentStreamInfo != NULL);
+    }
+    while (currentStreamInfo != NULL);
 
 
     LocalFree(streamInfo);
@@ -347,7 +393,7 @@ retry:
 void
 PrintDirectoryEntry(
     PFILE_ID_BOTH_DIR_INFO entry
-    )
+)
 {
     WCHAR lastChar;
     BOOL result;
@@ -356,20 +402,23 @@ PrintDirectoryEntry(
     // The names aren't necessarily NULL terminated, so we deal with that here.
     //
     lastChar = entry->FileName[(entry->FileNameLength / sizeof(WCHAR))];
-        entry->FileName[(entry->FileNameLength / sizeof(WCHAR))] = L'\0';
+    entry->FileName[(entry->FileNameLength / sizeof(WCHAR))] = L'\0';
 
     printf("\n  %S ", entry->FileName);
 
     entry->FileName[(entry->FileNameLength / sizeof(WCHAR))] = lastChar;
 
-    if (entry->ShortName[0] != L'\0') {
+    if (entry->ShortName[0] != L'\0')
+    {
         lastChar = entry->ShortName[(entry->ShortNameLength / sizeof(WCHAR))];
         entry->ShortName[(entry->ShortNameLength / sizeof(WCHAR))] = L'\0';
 
         printf("[%S]\n\n", entry->ShortName);
 
         entry->ShortName[(entry->ShortNameLength / sizeof(WCHAR))] = lastChar;
-    } else {
+    }
+    else
+    {
         printf("\n\n");
     }
 
@@ -377,9 +426,12 @@ PrintDirectoryEntry(
 
     result = PrintDate(entry->CreationTime);
 
-    if (result) {
+    if (result)
+    {
         printf("\n");
-    } else {
+    }
+    else
+    {
         printf(" Error retrieving creation time.\n");
     }
 
@@ -387,9 +439,12 @@ PrintDirectoryEntry(
 
     result = PrintDate(entry->ChangeTime);
 
-    if (result) {
+    if (result)
+    {
         printf("\n");
-    } else {
+    }
+    else
+    {
         printf(" Error retrieving creation time.\n");
     }
 
@@ -397,9 +452,12 @@ PrintDirectoryEntry(
 
     result = PrintDate(entry->LastAccessTime);
 
-    if (result) {
+    if (result)
+    {
         printf("\n");
-    } else {
+    }
+    else
+    {
         printf(" Error retrieving last access time.\n");
     }
 
@@ -407,9 +465,12 @@ PrintDirectoryEntry(
 
     result = PrintDate(entry->LastWriteTime);
 
-    if (result) {
+    if (result)
+    {
         printf("\n");
-    } else {
+    }
+    else
+    {
         printf(" Error retrieving last write time.\n");
     }
 
@@ -422,8 +483,8 @@ PrintDirectoryEntry(
 
 BOOL
 DisplayFullDirectoryInfo(
-     HANDLE hFile
-     )
+    HANDLE hFile
+)
 {
     PFILE_ID_BOTH_DIR_INFO currentDirInfo;
     PFILE_ID_BOTH_DIR_INFO dirInfo;
@@ -447,28 +508,34 @@ DisplayFullDirectoryInfo(
 retry:
 
     dirInfo = (PFILE_ID_BOTH_DIR_INFO) LocalAlloc(LMEM_ZEROINIT,
-                                             dirInfoSize);
+              dirInfoSize);
 
 
-    if (dirInfo == NULL) {
+    if (dirInfo == NULL)
+    {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return false;
     }
 
-	for (;;) {
+    for (;;)
+    {
         result = GetFileInformationByHandleEx( hFile,
-                                               infoClass,  
+                                               infoClass,
                                                dirInfo,
                                                dirInfoSize );
 
-        if (!result) {
+        if (!result)
+        {
             //
             // If our buffer wasn't large enough try again with a larger one.
             //
-            if (GetLastError() == ERROR_MORE_DATA) {
+            if (GetLastError() == ERROR_MORE_DATA)
+            {
                 dirInfoSize *= 2;
                 goto retry;
-            } else if (GetLastError() == ERROR_NO_MORE_FILES) {
+            }
+            else if (GetLastError() == ERROR_NO_MORE_FILES)
+            {
                 //
                 // Enumeration completed successfully, we simply break out here.
                 //
@@ -478,30 +545,36 @@ retry:
             //
             // A real error occurred.
             //
-            printf("\nFailure fetching directory information: %d\n", 
+            printf("\nFailure fetching directory information: %d\n",
                    GetLastError());
 
             LocalFree(dirInfo);
             return result;
         }
 
-        if (infoClass == FileIdBothDirectoryRestartInfo) {
+        if (infoClass == FileIdBothDirectoryRestartInfo)
+        {
             printf("\n[Full Directory Information]\n\n");
             infoClass = FileIdBothDirectoryInfo;
         }
 
         currentDirInfo = dirInfo;
 
-        do {
+        do
+        {
             PrintDirectoryEntry(currentDirInfo);
-            if (currentDirInfo->NextEntryOffset == 0) {
+            if (currentDirInfo->NextEntryOffset == 0)
+            {
                 currentDirInfo = NULL;
-            } else {
-                currentDirInfo = 
-                    (PFILE_ID_BOTH_DIR_INFO) ((PUCHAR)currentDirInfo + 
+            }
+            else
+            {
+                currentDirInfo =
+                    (PFILE_ID_BOTH_DIR_INFO) ((PUCHAR)currentDirInfo +
                                               currentDirInfo->NextEntryOffset);
             }
-        } while (currentDirInfo != NULL);
+        }
+        while (currentDirInfo != NULL);
 
     }
     LocalFree(dirInfo);
@@ -517,7 +590,8 @@ int __cdecl wmain( __in int argc, __in_ecount(argc) WCHAR* argv[])
     FILE_ID_DESCRIPTOR fileId;
 
 
-    if (argc < 2) {
+    if (argc < 2)
+    {
         PrintUsage();
         return 1;
     }
@@ -529,12 +603,14 @@ int __cdecl wmain( __in int argc, __in_ecount(argc) WCHAR* argv[])
                        NORM_IGNORECASE,
                        argv[1],
                        -1,
-                       L"-id", 
-                       -1) == CSTR_EQUAL) {
+                       L"-id",
+                       -1) == CSTR_EQUAL)
+    {
 
         HANDLE hDir;
-        
-        if (argc < 3) {
+
+        if (argc < 3)
+        {
             PrintUsage();
             return 1;
         }
@@ -545,15 +621,16 @@ int __cdecl wmain( __in int argc, __in_ecount(argc) WCHAR* argv[])
         //
         hDir = CreateFileW(L".",
                            GENERIC_READ,
-                           FILE_SHARE_READ | 
-                           FILE_SHARE_WRITE | 
+                           FILE_SHARE_READ |
+                           FILE_SHARE_WRITE |
                            FILE_SHARE_DELETE,
                            NULL,
                            OPEN_EXISTING,
                            FILE_FLAG_BACKUP_SEMANTICS,
                            NULL);
 
-        if (hDir == INVALID_HANDLE_VALUE) {
+        if (hDir == INVALID_HANDLE_VALUE)
+        {
             printf("Couldn't open current directory.\n");
             return 1;
         }
@@ -568,38 +645,42 @@ int __cdecl wmain( __in int argc, __in_ecount(argc) WCHAR* argv[])
         hFile = OpenFileById(hDir,
                              &fileId,
                              GENERIC_READ,
-                             FILE_SHARE_READ | 
-                             FILE_SHARE_WRITE | 
+                             FILE_SHARE_READ |
+                             FILE_SHARE_WRITE |
                              FILE_SHARE_DELETE,
                              NULL,
                              FILE_FLAG_BACKUP_SEMANTICS);
 
         CloseHandle(hDir);
 
-        if (hFile == INVALID_HANDLE_VALUE) {
-            printf("\nError opening file with ID %s.  Last error was %d.\n", 
-                    argv[2], 
-                    GetLastError());
+        if (hFile == INVALID_HANDLE_VALUE)
+        {
+            printf("\nError opening file with ID %s.  Last error was %d.\n",
+                   argv[2],
+                   GetLastError());
 
             return 1;
         }
 
-    } else {
+    }
+    else
+    {
 
         hFile = CreateFileW(argv[1],
                             GENERIC_READ,
                             FILE_SHARE_READ |
-                            FILE_SHARE_WRITE | 
+                            FILE_SHARE_WRITE |
                             FILE_SHARE_DELETE,
                             NULL,
                             OPEN_EXISTING,
                             FILE_FLAG_BACKUP_SEMANTICS,
                             NULL);
 
-        if (hFile == INVALID_HANDLE_VALUE) {
-            printf("\nError opening file %s.  Last error was %d.\n", 
-                    argv[1], 
-                    GetLastError());
+        if (hFile == INVALID_HANDLE_VALUE)
+        {
+            printf("\nError opening file %s.  Last error was %d.\n",
+                   argv[1],
+                   GetLastError());
 
             return 1;
         }
@@ -612,7 +693,8 @@ int __cdecl wmain( __in int argc, __in_ecount(argc) WCHAR* argv[])
     //
     bResult = DisplayBasicInfo(hFile, &bIsDirectory);
 
-    if (!bResult) {
+    if (!bResult)
+    {
 
         printf("\nError displaying basic information.\n");
         return 1;
@@ -620,7 +702,8 @@ int __cdecl wmain( __in int argc, __in_ecount(argc) WCHAR* argv[])
 
     bResult = DisplayStandardInfo(hFile);
 
-    if (!bResult) {
+    if (!bResult)
+    {
 
         printf("\nError displaying standard information.\n");
         return 1;
@@ -628,7 +711,8 @@ int __cdecl wmain( __in int argc, __in_ecount(argc) WCHAR* argv[])
 
     bResult = DisplayNameInfo(hFile);
 
-    if (!bResult) {
+    if (!bResult)
+    {
 
         printf("\nError displaying name information.\n");
         return 1;
@@ -638,25 +722,30 @@ int __cdecl wmain( __in int argc, __in_ecount(argc) WCHAR* argv[])
     // For directories we query for full directory information, which gives us
     // various pieces of information about each entry in the directory.
     //
-    if (bIsDirectory) {
+    if (bIsDirectory)
+    {
 
         bResult = DisplayFullDirectoryInfo(hFile);
 
-        if (!bResult) {
+        if (!bResult)
+        {
 
             printf("\nError displaying directory information.\n");
             return 1;
         }
 
-    //
-    // Otherwise we query information about the streams associated with the 
-    // file.
-    //
-    } else {
+        //
+        // Otherwise we query information about the streams associated with the
+        // file.
+        //
+    }
+    else
+    {
 
         bResult = DisplayStreamInfo(hFile);
 
-        if (!bResult) {
+        if (!bResult)
+        {
 
             printf("\nError displaying stream information.\n");
             return 1;

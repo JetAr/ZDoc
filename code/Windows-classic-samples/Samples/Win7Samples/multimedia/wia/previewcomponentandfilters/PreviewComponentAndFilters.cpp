@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -18,7 +18,7 @@
 
 //This function changes the brightness and contrast for the item and then updates the preview. Updating of the preview is done
 //by the Image processing filter and no transfer takes place from the scanner.
-HRESULT ChangePropsAndUpdatePreview(IWiaItem2* pWiaItem2 ,IWiaPropertyStorage* pWiaPropertyStorage, IWiaPreview* pWiaPreview, IWiaTransferCallback* pWiaTransferCallback)
+HRESULT ChangePropsAndUpdatePreview(IWiaItem2* pWiaItem2,IWiaPropertyStorage* pWiaPropertyStorage, IWiaPreview* pWiaPreview, IWiaTransferCallback* pWiaTransferCallback)
 {
     HRESULT hr = S_OK;
     if(  (!pWiaItem2) || (!pWiaTransferCallback) || (!pWiaPreview) || (!pWiaPropertyStorage) )
@@ -33,7 +33,7 @@ HRESULT ChangePropsAndUpdatePreview(IWiaItem2* pWiaItem2 ,IWiaPropertyStorage* p
     BSTR bstrFilterString = SysAllocString(WIA_IMAGEPROC_FILTER_STR);
     if(bstrFilterString)
     {
-        //The third argument to CheckExtension() is unused currently 
+        //The third argument to CheckExtension() is unused currently
         hr = pWiaItem2->CheckExtension(0,bstrFilterString,IID_IWiaImageFilter, &bImgFilterExists);
         if(FAILED(hr))
         {
@@ -43,7 +43,7 @@ HRESULT ChangePropsAndUpdatePreview(IWiaItem2* pWiaItem2 ,IWiaPropertyStorage* p
         SysFreeString(bstrFilterString);
         bstrFilterString = NULL;
         if(bImgFilterExists)
-        {  
+        {
             //Set different brightness and contrast for the item
             LONG lbrightness = 0, lcontrast=0;
             hr = GetBrightnessContrast(pWiaPropertyStorage,&lbrightness,&lcontrast);
@@ -52,15 +52,15 @@ HRESULT ChangePropsAndUpdatePreview(IWiaItem2* pWiaItem2 ,IWiaPropertyStorage* p
             {
                 WritePropertyLong(pWiaPropertyStorage,WIA_IPS_BRIGHTNESS,lbrightness);
                 WritePropertyLong(pWiaPropertyStorage,WIA_IPS_CONTRAST,lcontrast);
-                
+
             }
             else
             {
                 ReportError(TEXT("GetBrightnessContrast() failed in ChangePropsAndUpdatePreview(). So brightness and contrast \
-                have not been set to their max value.") ,hr);
+                have not been set to their max value."),hr);
             }
-            //Get the updated preview  
-            //The pWiaItem2 stream that was used for GetNewPreview() will be used for transfer in UpdatePreview() 
+            //Get the updated preview
+            //The pWiaItem2 stream that was used for GetNewPreview() will be used for transfer in UpdatePreview()
             //Hence the file represented by that stream will be overwritten by this call
             hr = pWiaPreview->UpdatePreview(0,pWiaItem2,pWiaTransferCallback);
             if (SUCCEEDED(hr))
@@ -86,8 +86,8 @@ HRESULT ChangePropsAndUpdatePreview(IWiaItem2* pWiaItem2 ,IWiaPropertyStorage* p
 
     return hr;
 }
-            
-// This function sets different brightness and contrast for the item. 
+
+// This function sets different brightness and contrast for the item.
 // Now we have used a formula to get different brightness and contrast from the previous values of brightness and contrast.
 // We are setting these to the average of their respective nominal and min values.
 HRESULT GetBrightnessContrast(IWiaPropertyStorage* pWiaPropertyStorage,LONG* lBrightness, LONG* lContrast)
@@ -107,13 +107,13 @@ HRESULT GetBrightnessContrast(IWiaPropertyStorage* pWiaPropertyStorage,LONG* lBr
     PROPSPEC PropSpec[2] = {0};
     PROPVARIANT PropVar[2];
     PropVariantInit(PropVar);
-    
+
     PropSpec[0].ulKind = PRSPEC_PROPID;
     PropSpec[0].propid = WIA_IPS_BRIGHTNESS;
     PropSpec[1].ulKind = PRSPEC_PROPID;
     PropSpec[1].propid = WIA_IPS_CONTRAST;
     ULONG ulAccessFlags[2] = {0};
-    
+
     HRESULT hr = pWiaPropertyStorage->GetPropertyAttributes(2,PropSpec,ulAccessFlags,PropVar);
     if(SUCCEEDED(hr))
     {
@@ -133,7 +133,7 @@ HRESULT GetBrightnessContrast(IWiaPropertyStorage* pWiaPropertyStorage,LONG* lBr
         {
             *lBrightness = lMin;
         }
-        
+
         lStep = PropVar[1].cal.pElems[WIA_RANGE_STEP];
         lMin = PropVar[1].cal.pElems[WIA_RANGE_MIN];
         lNom = PropVar[1].cal.pElems[WIA_RANGE_NOM];
@@ -146,7 +146,7 @@ HRESULT GetBrightnessContrast(IWiaPropertyStorage* pWiaPropertyStorage,LONG* lBr
         {
             *lContrast = lMin;
         }
-          
+
     }
     else
     {
@@ -156,112 +156,112 @@ HRESULT GetBrightnessContrast(IWiaPropertyStorage* pWiaPropertyStorage,LONG* lBr
 }
 
 
-    //
-    // Constructor and destructor
-    //
-    CWiaTransferCallback::CWiaTransferCallback()
+//
+// Constructor and destructor
+//
+CWiaTransferCallback::CWiaTransferCallback()
+{
+    m_cRef             = 1;
+    m_lPageCount       = 0;
+    m_bstrFileExtension = NULL;
+    m_bstrDirectoryName = NULL;
+    memset(m_szFileName,0,sizeof(m_szFileName));
+}
+
+CWiaTransferCallback::~CWiaTransferCallback()
+{
+    if(m_bstrDirectoryName)
     {
-        m_cRef             = 1;
-        m_lPageCount       = 0;
-        m_bstrFileExtension = NULL;
+        SysFreeString(m_bstrDirectoryName);
         m_bstrDirectoryName = NULL;
-        memset(m_szFileName,0,sizeof(m_szFileName));
     }
-    
-    CWiaTransferCallback::~CWiaTransferCallback()
-    {
-        if(m_bstrDirectoryName)
-        {
-            SysFreeString(m_bstrDirectoryName);
-            m_bstrDirectoryName = NULL;
-        }
-        
-        if(m_bstrFileExtension)
-        {
-            SysFreeString(m_bstrFileExtension);
-            m_bstrFileExtension = NULL;
-        }
 
+    if(m_bstrFileExtension)
+    {
+        SysFreeString(m_bstrFileExtension);
+        m_bstrFileExtension = NULL;
     }
-    
-    //This function initializes various members of class CWiaTransferCallback like directory where images will be downloaded, 
-    //and filename extension.
-    HRESULT CWiaTransferCallback::InitializeCallback(TCHAR* bstrDirectoryName, BSTR bstrExt)
+
+}
+
+//This function initializes various members of class CWiaTransferCallback like directory where images will be downloaded,
+//and filename extension.
+HRESULT CWiaTransferCallback::InitializeCallback(TCHAR* bstrDirectoryName, BSTR bstrExt)
+{
+    HRESULT hr = S_OK;
+
+    if(bstrDirectoryName)
     {
-        HRESULT hr = S_OK;
+        m_bstrDirectoryName = SysAllocString(bstrDirectoryName);
+        if(!m_bstrDirectoryName)
+        {
+            hr = E_OUTOFMEMORY;
+            ReportError(TEXT("Failed to allocate memory for BSTR directory name"),hr);
+            return hr;
+        }
+    }
+    else
+    {
+        _tprintf(TEXT("\nNo directory name was given"));
+        return E_INVALIDARG;
+    }
 
-        if(bstrDirectoryName)
-        {
-            m_bstrDirectoryName = SysAllocString(bstrDirectoryName);
-            if(!m_bstrDirectoryName)
-            {
-                hr = E_OUTOFMEMORY;
-                ReportError(TEXT("Failed to allocate memory for BSTR directory name"),hr);
-                return hr;
-            }
-        }
-        else
-        {
-            _tprintf(TEXT("\nNo directory name was given"));
-            return E_INVALIDARG;
-        }
+    if (bstrExt)
+    {
+        m_bstrFileExtension = bstrExt;
+    }
 
-        if (bstrExt)
-        {
-            m_bstrFileExtension = bstrExt;
-        }
-        
+    return hr;
+}
+
+
+//
+// IUnknown functions
+//
+HRESULT CALLBACK CWiaTransferCallback::QueryInterface( REFIID riid, void **ppvObject )
+{
+    // Validate arguments
+    if (NULL == ppvObject)
+    {
+        HRESULT hr = E_INVALIDARG;
+        ReportError(TEXT("Invalid argument passed to QueryInterface()"),hr);
         return hr;
     }
 
-    
-    //
-    // IUnknown functions
-    //
-    HRESULT CALLBACK CWiaTransferCallback::QueryInterface( REFIID riid, void **ppvObject )
+    // Return the appropropriate interface
+    if (IsEqualIID( riid, IID_IUnknown ))
     {
-        // Validate arguments
-        if (NULL == ppvObject)
-        {
-            HRESULT hr = E_INVALIDARG;
-            ReportError(TEXT("Invalid argument passed to QueryInterface()"),hr);
-            return hr;
-        }
-
-        // Return the appropropriate interface
-        if (IsEqualIID( riid, IID_IUnknown ))
-        {
-            *ppvObject = static_cast<IUnknown*>(this);
-        }
-        else if (IsEqualIID( riid, IID_IWiaTransferCallback ))
-        {
-            *ppvObject = static_cast<IWiaTransferCallback*>(this);
-        }
-        else
-        {
-            *ppvObject = NULL;
-            return (E_NOINTERFACE);
-        }
-
-        // Increment the reference count before we return the interface
-        reinterpret_cast<IUnknown*>(*ppvObject)->AddRef();
-        return S_OK;
+        *ppvObject = static_cast<IUnknown*>(this);
     }
-    
-    ULONG CALLBACK CWiaTransferCallback::AddRef()
+    else if (IsEqualIID( riid, IID_IWiaTransferCallback ))
     {
-        return InterlockedIncrement((long*)&m_cRef);
-    }    
-    ULONG CALLBACK CWiaTransferCallback::Release()
-    {
-        LONG cRef = InterlockedDecrement((long*)&m_cRef);
-        if (0 == cRef)
-        {
-            delete this;
-        }
-        return cRef;
+        *ppvObject = static_cast<IWiaTransferCallback*>(this);
     }
-    
+    else
+    {
+        *ppvObject = NULL;
+        return (E_NOINTERFACE);
+    }
+
+    // Increment the reference count before we return the interface
+    reinterpret_cast<IUnknown*>(*ppvObject)->AddRef();
+    return S_OK;
+}
+
+ULONG CALLBACK CWiaTransferCallback::AddRef()
+{
+    return InterlockedIncrement((long*)&m_cRef);
+}
+ULONG CALLBACK CWiaTransferCallback::Release()
+{
+    LONG cRef = InterlockedDecrement((long*)&m_cRef);
+    if (0 == cRef)
+    {
+        delete this;
+    }
+    return cRef;
+}
+
 //
 // IWiaTransferCallback functions
 //
@@ -269,7 +269,7 @@ HRESULT GetBrightnessContrast(IWiaPropertyStorage* pWiaPropertyStorage,LONG* lBr
 HRESULT STDMETHODCALLTYPE CWiaTransferCallback::TransferCallback(LONG lFlags, WiaTransferParams* pWiaTransferParams)
 {
     HRESULT hr = S_OK;
-    
+
     if(pWiaTransferParams == NULL)
     {
         hr = E_INVALIDARG;
@@ -279,24 +279,24 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::TransferCallback(LONG lFlags, Wi
 
     switch (pWiaTransferParams->lMessage)
     {
-        case WIA_TRANSFER_MSG_STATUS:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_STATUS - %ld%% complete"),pWiaTransferParams->lPercentComplete);
-            }
-            break;
-        case WIA_TRANSFER_MSG_END_OF_STREAM:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_STREAM"));
-            }
-            break;
-        case WIA_TRANSFER_MSG_END_OF_TRANSFER:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_TRANSFER"));
-                _tprintf(TEXT("\nImage Transferred to file %ws"), m_szFileName);
-            }
-            break;
-        default:
-            break;
+    case WIA_TRANSFER_MSG_STATUS:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_STATUS - %ld%% complete"),pWiaTransferParams->lPercentComplete);
+    }
+    break;
+    case WIA_TRANSFER_MSG_END_OF_STREAM:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_STREAM"));
+    }
+    break;
+    case WIA_TRANSFER_MSG_END_OF_TRANSFER:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_TRANSFER"));
+        _tprintf(TEXT("\nImage Transferred to file %ws"), m_szFileName);
+    }
+    break;
+    default:
+        break;
     }
     return hr;
 }
@@ -306,7 +306,7 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::GetNextStream(LONG lFlags, BSTR 
 {
     _tprintf(TEXT("\nGetNextStream"));
     HRESULT hr = S_OK;
-    
+
     if ( (!ppDestination) || (!bstrItemName) || (!m_bstrDirectoryName) )
     {
         hr = E_INVALIDARG;
@@ -315,18 +315,18 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::GetNextStream(LONG lFlags, BSTR 
     }
     //Initialize out variables
     *ppDestination = NULL;
-    
+
     if(m_bstrFileExtension)
     {
         StringCchPrintf(m_szFileName, ARRAYSIZE(m_szFileName), TEXT("%ws\\%ws.%ws"), m_bstrDirectoryName, bstrItemName, m_bstrFileExtension);
     }
-    
+
     else
     {
         // Dont append extension if m_bstrFileExtension = NULL.
         StringCchPrintf(m_szFileName, ARRAYSIZE(m_szFileName), TEXT("%ws\\%ws"), m_bstrDirectoryName, bstrItemName);
     }
-    
+
     hr = SHCreateStreamOnFile(m_szFileName,STGM_CREATE | STGM_READWRITE,ppDestination);
     if (SUCCEEDED(hr))
     {
@@ -374,38 +374,38 @@ HRESULT GetPreview( IWiaItem2 *pWiaItem2)
                 IWiaPropertyStorage* pWiaPropertyStorage = NULL;
                 HRESULT hr = pWiaItem2->QueryInterface( IID_IWiaPropertyStorage, (void**)&pWiaPropertyStorage );
                 if(SUCCEEDED(hr))
-                {   
+                {
                     hr = WritePropertyGuid(pWiaPropertyStorage,WIA_IPA_FORMAT,WiaImgFmt_BMP);
                     if(FAILED(hr))
                     {
                         ReportError(TEXT("WritePropertyGuid() failed in GetPreview().Format couldn't be set to BMP"),hr);
                     }
-           
+
                     //Get the file extension
                     BSTR bstrFileExtension = NULL;
                     ReadPropertyBSTR(pWiaPropertyStorage,WIA_IPA_FILENAME_EXTENSION, &bstrFileExtension);
-            
+
                     //Get the temporary folder path which is the directory where we will download the images
                     TCHAR bufferTempPath[MAX_TEMP_PATH];
-                    GetTempPath(MAX_TEMP_PATH , bufferTempPath);
-            
+                    GetTempPath(MAX_TEMP_PATH, bufferTempPath);
+
                     //Find the item type and item category
                     LONG lItemType = 0;
                     hr = pWiaItem2->GetItemType( &lItemType );
-        
+
                     GUID itemCategory = GUID_NULL;
                     ReadPropertyGuid(pWiaItem2,WIA_IPA_ITEM_CATEGORY,&itemCategory );
-        
+
                     if(IsEqualGUID(itemCategory,WIA_CATEGORY_FEEDER))
                     {
                         //Set the no of pages = 1 since image processing filter can cache only one image at a time
                         WritePropertyLong(pWiaPropertyStorage,WIA_IPS_PAGES,1);
                     }
-                    
-                    //Initialize the callback class with the directory and file extension  
+
+                    //Initialize the callback class with the directory and file extension
                     pWiaClassCallback->InitializeCallback(bufferTempPath,bstrFileExtension);
-        
-                    //call GetNewPreview() to get the unfiltered image from the driver 
+
+                    //call GetNewPreview() to get the unfiltered image from the driver
                     hr = pWiaPreview->GetNewPreview(0,pWiaItem2,pWiaTransferCallback);
                     if (SUCCEEDED(hr))
                     {
@@ -422,10 +422,10 @@ HRESULT GetPreview( IWiaItem2 *pWiaItem2)
                             {
                                 //Invoke the segmentation filter
                                 hr = pWiaPreview->DetectRegions(0);
-                            
+
                                 if(S_OK == hr)
                                 {
-                                    //Its not necessary that child items will be created if DetectRegions() succeeds 
+                                    //Its not necessary that child items will be created if DetectRegions() succeeds
                                     _tprintf(TEXT("\npWiaPreview->DetectRegions() SUCCEEDED for the item"));
                                 }
                                 else if(FAILED( hr))
@@ -433,7 +433,7 @@ HRESULT GetPreview( IWiaItem2 *pWiaItem2)
                                     ReportError(TEXT("pWiaPreview->DetectRegions() failed for the item"),hr);
                                 }
                             }
-                            
+
                         }
                         else if (S_FALSE == hr)
                         {
@@ -446,14 +446,14 @@ HRESULT GetPreview( IWiaItem2 *pWiaItem2)
 
                         // Change properties and get Updated preview for the item
                         hr = ChangePropsAndUpdatePreview(pWiaItem2,pWiaPropertyStorage,pWiaPreview,pWiaTransferCallback);
-            
+
                     }
                     else
                     {
                         ReportError(TEXT("pWiaPreview->GetNewPreview() FAILED for the item"),hr);
                     }
 
-                    //Release pWiaPropertyStorage 
+                    //Release pWiaPropertyStorage
                     pWiaPropertyStorage->Release();
                     pWiaPropertyStorage = NULL;
                 }
@@ -462,7 +462,7 @@ HRESULT GetPreview( IWiaItem2 *pWiaItem2)
                     ReportError(TEXT("QueryInterface failed on IID_IWiaPropertyStorage"),hr);
                 }
 
-                // Release pWiaTransferCallback 
+                // Release pWiaTransferCallback
                 pWiaTransferCallback->Release();
                 pWiaTransferCallback = NULL;
             }
@@ -470,7 +470,7 @@ HRESULT GetPreview( IWiaItem2 *pWiaItem2)
             {
                 ReportError(TEXT("QueryInterface failed on IID_IWiaTransferCallback"));
             }
-            
+
             // Release our class callback.  It should now delete itself.
             pWiaClassCallback->Release();
             pWiaClassCallback = NULL;
@@ -488,7 +488,7 @@ HRESULT GetPreview( IWiaItem2 *pWiaItem2)
     {
         ReportError( TEXT("pWiaItem2->GetPreviewComponent() failed in GetPreview() function") );
     }
-        
+
     return hr;
 }
 
@@ -516,7 +516,7 @@ HRESULT EnumerateAndPreviewItems( IWiaItem2 *pWiaItem2 )
     //Find the item category
     GUID itemCategory = GUID_NULL;
     ReadPropertyGuid(pWiaItem2,WIA_IPA_ITEM_CATEGORY,&itemCategory );
-     
+
     // If this is an transferrable file (except finished files since we can't set brightness,contrast etc for them) , preview it
     // Preview Component cannot be used for folder acquisitions
     if ( (lItemType & WiaItemTypeFile) && (lItemType & WiaItemTypeTransfer) && (itemCategory != WIA_CATEGORY_FINISHED_FILE) )
@@ -612,10 +612,10 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                 {
                     // Read some device properties - Device ID,name and descripion and return Device ID needed for creating Device
                     BSTR bstrDeviceID = NULL;
-                    HRESULT hr1 = ReadWiaPropsAndGetDeviceID( pWiaPropertyStorage ,&bstrDeviceID);
+                    HRESULT hr1 = ReadWiaPropsAndGetDeviceID( pWiaPropertyStorage,&bstrDeviceID);
                     if(SUCCEEDED(hr1))
                     {
-                        // Call a function to create the device using device ID 
+                        // Call a function to create the device using device ID
                         IWiaItem2 *pWiaRootItem2 = NULL;
                         hr1 = pWiaDevMgr2->CreateDevice( 0, bstrDeviceID, &pWiaRootItem2 );
                         if(SUCCEEDED(hr1))
@@ -639,7 +639,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                     {
                         ReportError(TEXT("ReadWiaPropsAndGetDeviceID() failed in EnumerateWiaDevices()"),hr1);
                     }
-                        
+
                     // Release the device's IWiaPropertyStorage*
                     pWiaPropertyStorage->Release();
                     pWiaPropertyStorage = NULL;
@@ -650,7 +650,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                     ReportError( TEXT("Error calling IEnumWIA_DEV_INFO::Next()"), hr );
                 }
             }
-            
+
             //
             // If the result of the enumeration is S_FALSE, since this
             // is normal, we will change it to S_OK.
@@ -681,7 +681,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
 
 
 // The entry function of the application
-extern "C" 
+extern "C"
 int __cdecl _tmain( int, TCHAR *[] )
 {
     // Initialize COM

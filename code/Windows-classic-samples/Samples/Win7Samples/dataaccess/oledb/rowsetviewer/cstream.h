@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -20,52 +20,64 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class CStream
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 class CStream : public CAsynchBase
 {
 public:
-	//Constructors
-	CStream(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CStream();
-	
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //Constructors
+    CStream(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CStream();
+
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
 
-	//Pure Virtual
-	virtual WCHAR*			GetObjectName()			{ return L"Stream";				} 
-	virtual UINT			GetObjectMenu()			{ return IDM_STREAMMENU;		}
-	virtual LONG			GetObjectImage()		{ return IMAGE_STREAM;			}
-	virtual REFIID			GetDefaultInterface()	{ return IID_ISequentialStream;	}
+    //Pure Virtual
+    virtual WCHAR*			GetObjectName()
+    {
+        return L"Stream";
+    }
+    virtual UINT			GetObjectMenu()
+    {
+        return IDM_STREAMMENU;
+    }
+    virtual LONG			GetObjectImage()
+    {
+        return IMAGE_STREAM;
+    }
+    virtual REFIID			GetDefaultInterface()
+    {
+        return IID_ISequentialStream;
+    }
 
-	virtual	void			OnDefOperation();
-	virtual HRESULT			DisplayObject();
+    virtual	void			OnDefOperation();
+    virtual HRESULT			DisplayObject();
 
-	//Helpers
-	virtual HRESULT			ReadBytes(REFIID riid, DBLENGTH ulOffset, DBLENGTH cBytes, DBLENGTH cbMaxSize, void* pBuffer, DBLENGTH* pcbRead = NULL);
-	virtual HRESULT			WriteBytes(REFIID riid, DBLENGTH ulOffset, DBLENGTH cBytes, void* pBuffer, DBLENGTH* pcbWritten = NULL);
+    //Helpers
+    virtual HRESULT			ReadBytes(REFIID riid, DBLENGTH ulOffset, DBLENGTH cBytes, DBLENGTH cbMaxSize, void* pBuffer, DBLENGTH* pcbRead = NULL);
+    virtual HRESULT			WriteBytes(REFIID riid, DBLENGTH ulOffset, DBLENGTH cBytes, void* pBuffer, DBLENGTH* pcbWritten = NULL);
 
-	//Helpers
-	virtual HRESULT			ReadString(REFIID riid, DBLENGTH ulOffset, DBLENGTH cBytes, DBLENGTH ulMaxSize, WCHAR* pwszBuffer, DBLENGTH* pcbRead = NULL);
-	virtual HRESULT			WriteString(REFIID riid, DBLENGTH ulOffset, DBLENGTH cBytes, WCHAR* pwszBuffer, DBLENGTH* pcbWritten = NULL);
+    //Helpers
+    virtual HRESULT			ReadString(REFIID riid, DBLENGTH ulOffset, DBLENGTH cBytes, DBLENGTH ulMaxSize, WCHAR* pwszBuffer, DBLENGTH* pcbRead = NULL);
+    virtual HRESULT			WriteString(REFIID riid, DBLENGTH ulOffset, DBLENGTH cBytes, WCHAR* pwszBuffer, DBLENGTH* pcbWritten = NULL);
 
-	virtual HRESULT			Stat(STATSTG* pSTATSTG);
-	virtual HRESULT			Clone(IStream** ppStream);
-	virtual HRESULT			Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition);
+    virtual HRESULT			Stat(STATSTG* pSTATSTG);
+    virtual HRESULT			Clone(IStream** ppStream);
+    virtual HRESULT			Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition);
 
-	//[MANDATORY]
-	ISequentialStream*		m_pISequentialStream;
+    //[MANDATORY]
+    ISequentialStream*		m_pISequentialStream;
 
-	//[OPTIONAL]
-	IStream*				m_pIStream;
-	IStorage*				m_pIStorage;
-	ILockBytes*				m_pILockBytes;
+    //[OPTIONAL]
+    IStream*				m_pIStream;
+    IStorage*				m_pIStorage;
+    ILockBytes*				m_pILockBytes;
 
-	//Data
-	DBTYPE					m_wType;
+    //Data
+    DBTYPE					m_wType;
 };
 
 
@@ -73,162 +85,162 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class CStorageBuffer
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 class CStorageBuffer : public IStream, /*ISequentialStream*/ public ILockBytes
 {
 public:
-	//Constructors
-	CStorageBuffer();
-	virtual ~CStorageBuffer();
-	
-	//Helpers
-	STDMETHODIMP			Seek(LONG lOffset, DWORD dwOrigin = STREAM_SEEK_SET, ULONG* pulNewPosition = NULL);
-	STDMETHODIMP			ReadBuffer(ULONG ulOffset, void* pv, ULONG cb, ULONG* pcbRead);
-	STDMETHODIMP			WriteBuffer(ULONG ulOffset, const void* pv, ULONG cb, ULONG* pcbRead);
+    //Constructors
+    CStorageBuffer();
+    virtual ~CStorageBuffer();
 
-	//IUnknown
-	STDMETHODIMP_(ULONG)	AddRef();
-	STDMETHODIMP_(ULONG)	Release();
-	STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
-	
-	//ISequentialStream interfaces
-	STDMETHODIMP Read( 
-            /* [out] */		void* pv,
-            /* [in] */		ULONG cb,
-            /* [out] */		ULONG* pcbRead);
-        
-    STDMETHODIMP Write( 
-            /* [in] */		const void* pv,
-            /* [in] */		ULONG cb,
-            /* [out] */		ULONG* pcbWritten);
+    //Helpers
+    STDMETHODIMP			Seek(LONG lOffset, DWORD dwOrigin = STREAM_SEEK_SET, ULONG* pulNewPosition = NULL);
+    STDMETHODIMP			ReadBuffer(ULONG ulOffset, void* pv, ULONG cb, ULONG* pcbRead);
+    STDMETHODIMP			WriteBuffer(ULONG ulOffset, const void* pv, ULONG cb, ULONG* pcbRead);
 
-	//IStream interfaces
-	STDMETHODIMP Seek(  
-							LARGE_INTEGER dlibMove,			//Offset relative to dwOrigin
-							DWORD dwOrigin,					//Specifies the origin for the offset
-							ULARGE_INTEGER * plibNewPosition);
+    //IUnknown
+    STDMETHODIMP_(ULONG)	AddRef();
+    STDMETHODIMP_(ULONG)	Release();
+    STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
 
-	STDMETHODIMP SetSize(	ULARGE_INTEGER libNewSize);		//Specifies the new size of the stream object
+    //ISequentialStream interfaces
+    STDMETHODIMP Read(
+        /* [out] */		void* pv,
+        /* [in] */		ULONG cb,
+        /* [out] */		ULONG* pcbRead);
 
-	STDMETHODIMP CopyTo(	IStream * pstm,					//Points to the destination stream
-							ULARGE_INTEGER cb,				//Specifies the number of bytes to copy
-							ULARGE_INTEGER * pcbRead,		//Pointer to the actual number of bytes read from the source
-							ULARGE_INTEGER * pcbWritten);	//Pointer to the actual number of bytes written to the destination
+    STDMETHODIMP Write(
+        /* [in] */		const void* pv,
+        /* [in] */		ULONG cb,
+        /* [out] */		ULONG* pcbWritten);
 
-	STDMETHODIMP Commit(	DWORD grfCommitFlags);			//Specifies how changes are committed
+    //IStream interfaces
+    STDMETHODIMP Seek(
+        LARGE_INTEGER dlibMove,			//Offset relative to dwOrigin
+        DWORD dwOrigin,					//Specifies the origin for the offset
+        ULARGE_INTEGER * plibNewPosition);
 
-	STDMETHODIMP Revert(	);
+    STDMETHODIMP SetSize(	ULARGE_INTEGER libNewSize);		//Specifies the new size of the stream object
 
-	STDMETHODIMP LockRegion(ULARGE_INTEGER libOffset,		//Specifies the byte offset for the beginning of the range
-							ULARGE_INTEGER cb,				//Specifies the length of the range in bytes
-							DWORD dwLockType);				//Specifies the restriction on accessing the specified range
+    STDMETHODIMP CopyTo(	IStream * pstm,					//Points to the destination stream
+                            ULARGE_INTEGER cb,				//Specifies the number of bytes to copy
+                            ULARGE_INTEGER * pcbRead,		//Pointer to the actual number of bytes read from the source
+                            ULARGE_INTEGER * pcbWritten);	//Pointer to the actual number of bytes written to the destination
 
-	STDMETHODIMP UnlockRegion(  ULARGE_INTEGER libOffset,	//Specifies the byte offset for the beginning of the range
-								ULARGE_INTEGER cb,			//Specifies the length of the range in bytes
-								DWORD dwLockType);			//Specifies the access restriction previously placed on the range);
-	STDMETHODIMP Stat(
-							STATSTG * pstatstg,				//Location for STATSTG structure
-							DWORD grfStatFlag);				//Values taken from the STATFLAG enumeration
+    STDMETHODIMP Commit(	DWORD grfCommitFlags);			//Specifies how changes are committed
 
-	STDMETHODIMP Clone(		IStream ** ppstm );				//Points to location for pointer to the new stream object
- 
+    STDMETHODIMP Revert(	);
 
- 	//ILockBytes interfaces
-	STDMETHODIMP ReadAt( 
-							ULARGE_INTEGER ulOffset,
-            /* [out] */		void* pv,
-            /* [in] */		ULONG cb,
-            /* [out] */		ULONG* pcbRead);
-        
-    STDMETHODIMP WriteAt( 
-							ULARGE_INTEGER ulOffset,
-            /* [in] */		const void* pv,
-            /* [in] */		ULONG cb,
-            /* [out] */		ULONG* pcbWritten);
+    STDMETHODIMP LockRegion(ULARGE_INTEGER libOffset,		//Specifies the byte offset for the beginning of the range
+                            ULARGE_INTEGER cb,				//Specifies the length of the range in bytes
+                            DWORD dwLockType);				//Specifies the restriction on accessing the specified range
 
-	STDMETHODIMP Flush();
+    STDMETHODIMP UnlockRegion(  ULARGE_INTEGER libOffset,	//Specifies the byte offset for the beginning of the range
+                                ULARGE_INTEGER cb,			//Specifies the length of the range in bytes
+                                DWORD dwLockType);			//Specifies the access restriction previously placed on the range);
+    STDMETHODIMP Stat(
+        STATSTG * pstatstg,				//Location for STATSTG structure
+        DWORD grfStatFlag);				//Values taken from the STATFLAG enumeration
+
+    STDMETHODIMP Clone(		IStream ** ppstm );				//Points to location for pointer to the new stream object
+
+
+    //ILockBytes interfaces
+    STDMETHODIMP ReadAt(
+        ULARGE_INTEGER ulOffset,
+        /* [out] */		void* pv,
+        /* [in] */		ULONG cb,
+        /* [out] */		ULONG* pcbRead);
+
+    STDMETHODIMP WriteAt(
+        ULARGE_INTEGER ulOffset,
+        /* [in] */		const void* pv,
+        /* [in] */		ULONG cb,
+        /* [out] */		ULONG* pcbWritten);
+
+    STDMETHODIMP Flush();
 
 protected:
-	//Data
+    //Data
 
 private:
-	ULONG			m_cRef;			// reference count
+    ULONG			m_cRef;			// reference count
 
-	void*			m_pBuffer;		// buffer
-	ULONG			m_cMaxSize;     // Maximum allocated buffer size
-	ULONG			m_iPos;			// current index position in the buffer
+    void*			m_pBuffer;		// buffer
+    ULONG			m_cMaxSize;     // Maximum allocated buffer size
+    ULONG			m_iPos;			// current index position in the buffer
 };
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Class CFileStream
-// 
+//
 // Implementation of stream interface on top of a file
 ///////////////////////////////////////////////////////////////////////////////
 class CFileStream :	public IStream
 {
 public:
-	//constructors
-	CFileStream();
-	virtual ~CFileStream();
+    //constructors
+    CFileStream();
+    virtual ~CFileStream();
 
-	//Helpers
-	HRESULT	OpenFile(WCHAR* pwszFile, WCHAR* pwszMode);
-	HRESULT	CloseFile();
+    //Helpers
+    HRESULT	OpenFile(WCHAR* pwszFile, WCHAR* pwszMode);
+    HRESULT	CloseFile();
 
-	//IUnknown
-	STDMETHODIMP_(ULONG)	AddRef();
-	STDMETHODIMP_(ULONG)	Release();
-	STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
-	
-	//IStream
-	STDMETHODIMP Read( 
-            /* [out] */		void* pv,
-            /* [in] */		ULONG cb,
-            /* [out] */		ULONG* pcbRead);
-        
-    STDMETHODIMP Write( 
-            /* [in] */		const void* pv,
-            /* [in] */		ULONG cb,
-            /* [out] */		ULONG* pcbWritten);
+    //IUnknown
+    STDMETHODIMP_(ULONG)	AddRef();
+    STDMETHODIMP_(ULONG)	Release();
+    STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
 
-	STDMETHODIMP Seek(  
-							LARGE_INTEGER dlibMove,			//Offset relative to dwOrigin
-							DWORD dwOrigin,					//Specifies the origin for the offset
-							ULARGE_INTEGER * plibNewPosition);
+    //IStream
+    STDMETHODIMP Read(
+        /* [out] */		void* pv,
+        /* [in] */		ULONG cb,
+        /* [out] */		ULONG* pcbRead);
 
-	STDMETHODIMP SetSize(	ULARGE_INTEGER libNewSize);		//Specifies the new size of the stream object
+    STDMETHODIMP Write(
+        /* [in] */		const void* pv,
+        /* [in] */		ULONG cb,
+        /* [out] */		ULONG* pcbWritten);
 
-	STDMETHODIMP CopyTo(	IStream * pstm,					//Points to the destination stream
-							ULARGE_INTEGER cb,				//Specifies the number of bytes to copy
-							ULARGE_INTEGER * pcbRead,		//Pointer to the actual number of bytes read from the source
-							ULARGE_INTEGER * pcbWritten);	//Pointer to the actual number of bytes written to the destination
+    STDMETHODIMP Seek(
+        LARGE_INTEGER dlibMove,			//Offset relative to dwOrigin
+        DWORD dwOrigin,					//Specifies the origin for the offset
+        ULARGE_INTEGER * plibNewPosition);
 
-	STDMETHODIMP Commit(	DWORD grfCommitFlags);			//Specifies how changes are committed
+    STDMETHODIMP SetSize(	ULARGE_INTEGER libNewSize);		//Specifies the new size of the stream object
 
-	STDMETHODIMP Revert(	);
+    STDMETHODIMP CopyTo(	IStream * pstm,					//Points to the destination stream
+                            ULARGE_INTEGER cb,				//Specifies the number of bytes to copy
+                            ULARGE_INTEGER * pcbRead,		//Pointer to the actual number of bytes read from the source
+                            ULARGE_INTEGER * pcbWritten);	//Pointer to the actual number of bytes written to the destination
 
-	STDMETHODIMP LockRegion(ULARGE_INTEGER libOffset,		//Specifies the byte offset for the beginning of the range
-							ULARGE_INTEGER cb,				//Specifies the length of the range in bytes
-							DWORD dwLockType);				//Specifies the restriction on accessing the specified range
+    STDMETHODIMP Commit(	DWORD grfCommitFlags);			//Specifies how changes are committed
 
-	STDMETHODIMP UnlockRegion(  ULARGE_INTEGER libOffset,	//Specifies the byte offset for the beginning of the range
-								ULARGE_INTEGER cb,			//Specifies the length of the range in bytes
-								DWORD dwLockType);			//Specifies the access restriction previously placed on the range);
-	STDMETHODIMP Stat(
-							STATSTG * pstatstg,				//Location for STATSTG structure
-							DWORD grfStatFlag);				//Values taken from the STATFLAG enumeration
+    STDMETHODIMP Revert(	);
 
-	STDMETHODIMP Clone(		IStream ** ppstm );				//Points to location for pointer to the new stream object
- 
-	
+    STDMETHODIMP LockRegion(ULARGE_INTEGER libOffset,		//Specifies the byte offset for the beginning of the range
+                            ULARGE_INTEGER cb,				//Specifies the length of the range in bytes
+                            DWORD dwLockType);				//Specifies the restriction on accessing the specified range
+
+    STDMETHODIMP UnlockRegion(  ULARGE_INTEGER libOffset,	//Specifies the byte offset for the beginning of the range
+                                ULARGE_INTEGER cb,			//Specifies the length of the range in bytes
+                                DWORD dwLockType);			//Specifies the access restriction previously placed on the range);
+    STDMETHODIMP Stat(
+        STATSTG * pstatstg,				//Location for STATSTG structure
+        DWORD grfStatFlag);				//Values taken from the STATFLAG enumeration
+
+    STDMETHODIMP Clone(		IStream ** ppstm );				//Points to location for pointer to the new stream object
+
+
 protected:
-	FILE*			m_pFile;
+    FILE*			m_pFile;
 
 private:
-	ULONG			m_cRef;
+    ULONG			m_cRef;
 };
 
-	
+
 #endif //_CSTREAM_H_

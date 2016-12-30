@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,8 +21,8 @@ const HRESULT E_NOTFOUND = HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 class NonCopyAble
 {
 public:
-    NonCopyAble(){}
-    ~NonCopyAble(){}
+    NonCopyAble() {}
+    ~NonCopyAble() {}
 
 private:
     NonCopyAble(const NonCopyAble& other);
@@ -49,7 +49,7 @@ public:
     static HRESULT Construct(
         T *pDest,                   // Pointer to destination element
         const X &xSrc               // Source to assign
-        )
+    )
     {
         // Use placement new to call the copy constructor.  Note that since we
         // don't use exceptions, constructors are not allowed to fail. Objects
@@ -63,7 +63,7 @@ public:
     static HRESULT Assign(
         T *pDest,                   // Pointer to destination element
         const X &xSrc               // Source to assign
-        )
+    )
     {
         // Call the object's assignment operator.  Override this method if
         // with a custom traits class if assignment can fail.
@@ -130,7 +130,7 @@ public:
     template<typename X>
     HRESULT Remove(
         const X &x                  // Element to remove
-        )
+    )
     {
         HRESULT hr = S_OK;
         UINT nIndex = Find(x);
@@ -152,7 +152,7 @@ public:
     template<typename X>
     UINT Find (
         const X &x                  // Element to find
-        ) const
+    ) const
     {
         for (UINT i = 0; i < _nSize; i++)
         {
@@ -173,7 +173,7 @@ public:
     HRESULT InsertAt(
         UINT nIndex,                // Index where to insert
         const X &x                  // Element to insert
-        )
+    )
     {
         HRESULT hr;
         UINT nOldSize = _nSize;
@@ -207,7 +207,7 @@ public:
     template<typename X>
     HRESULT Add(
         const X &x                  // Element to add
-        )
+    )
     {
         HRESULT hr = S_OK;
         if (_nSize == _nAllocSize)
@@ -224,7 +224,7 @@ public:
                 RemoveAt(_nSize - 1);
             }
         }
-       return hr;
+        return hr;
     }
 
     // Set the specified element in the array
@@ -232,7 +232,7 @@ public:
     HRESULT SetAt(
         UINT nIndex,                // Element index to Set
         const X &x                  // Element to assign
-        )
+    )
     {
         if (nIndex < 0 || nIndex >= _nSize)
         {
@@ -250,7 +250,7 @@ public:
     HRESULT AddArray(
         const X *pxSource,          // Array to to copy
         UINT cItems                 // Count of elements to copy
-        )
+    )
     {
         HRESULT hr = S_OK;
         if (cItems < 0)
@@ -272,7 +272,7 @@ public:
     template<typename X, typename Traits>
     HRESULT AddArray(
         const CArray<X, Traits> &other      // Array to add
-        )
+    )
     {
         return AddArray(other.GetData(), other.GetCount());
     }
@@ -297,7 +297,7 @@ const UINT CArray<T, TElementTraits>::NotFound = UINT_MAX;
 //
 template <class T, class TElementTraits>
 CArray<T, TElementTraits>::CArray()
-:
+    :
     _aT(NULL),
     _nSize(0),
     _nAllocSize(0)
@@ -338,7 +338,7 @@ UINT CArray<T, TElementTraits>::GetCapacity() const
 template <class T, class TElementTraits>
 HRESULT CArray<T, TElementTraits>::EnsureCapacity(
     UINT cCapacityDesired           // Capacity count to check and allocate
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -349,7 +349,7 @@ HRESULT CArray<T, TElementTraits>::EnsureCapacity(
 #pragma prefast(disable:6287 "Prefast can't determne that sizeof(T) != 1")
 
         if (_nSize > (UINT_MAX / 2) ||
-            _nSize > (SIZE_MAX / 2 / sizeof(T)))
+                _nSize > (SIZE_MAX / 2 / sizeof(T)))
 #pragma prefast(pop)
 
         {
@@ -395,7 +395,7 @@ HRESULT CArray<T, TElementTraits>::EnsureCapacity(
 template <class T, class TElementTraits>
 HRESULT CArray<T, TElementTraits>::MakeRoomAt(
     UINT nIndex                     // Index to add an empty element
-    )
+)
 {
     HRESULT hr = S_OK;
     if (nIndex < 0)
@@ -439,7 +439,7 @@ HRESULT CArray<T, TElementTraits>::MakeRoomAt(
 template <class T, class TElementTraits>
 HRESULT CArray<T, TElementTraits>::RemoveAt(
     UINT nIndex                     // Index of element to remove
-    )
+)
 {
     HRESULT hr = S_OK;
     SC_ASSERT(nIndex >= 0 && nIndex < _nSize);
@@ -519,7 +519,7 @@ T* CArray<T, TElementTraits>::GetData() const
 template <class T, class TElementTraits>
 HRESULT CArray<T, TElementTraits>::Resize(
     UINT nNewSize                   // Count to resize to
-    )
+)
 {
     HRESULT hr = S_OK;
 

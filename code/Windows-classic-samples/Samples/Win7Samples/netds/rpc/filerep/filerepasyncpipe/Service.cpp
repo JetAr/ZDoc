@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,15 +7,15 @@
 
 
 /*
- 
+
 
     File Replication Sample
     System Service Procedures
 
     FILE: Service.c
-    
+
     PURPOSE: Provides file replication service function definitions.
-    
+
     FUNCTIONS:
         IsLocalSystem - Checks whether the service is running as
       local system.
@@ -164,10 +164,11 @@ BOOL bNoFileIO = FALSE;
 // It listens for replication utilities on local RPC and for
 // remote requests on TCP/IP
 RPC_STR ServerProtocolArray[] = { (RPC_STR)TEXT("ncacn_ip_tcp"),
-                                 (RPC_STR)TEXT("ncalrpc") };
+                                  (RPC_STR)TEXT("ncalrpc")
+                                };
 // Used in RpcServerUseProtseq.
-// Specifies the maximum number of concurrent remote 
-// procedure call requests the server wants to handle. 
+// Specifies the maximum number of concurrent remote
+// procedure call requests the server wants to handle.
 ULONG cMaxCallsListen = 1000; //RPC_C_PROTSEQ_MAX_REQS_DEFAULT;
 
 // Similarly, but for RpcServerListen.
@@ -182,9 +183,9 @@ RPC_BINDING_VECTOR * pBindingVector = NULL;
 RPC_STATUS status;
 
 /*
-  
+
     FUNCTION: GetUserSid
-    
+
     PURPOSE: Obtains a pointer to the SID for the current user
 
     PARAMETERS:
@@ -198,7 +199,8 @@ RPC_STATUS status;
         HeapAlloc and should be freed with HeapFree.
 
 */
-PSID GetUserSID() {
+PSID GetUserSID()
+{
     SID_NAME_USE snuType;
     PSID pUserSID = NULL;
     DWORD cbUserSID = 0;
@@ -226,7 +228,8 @@ PSID GetUserSID() {
     // API should have failed with insufficient buffer.
     ASSERT(!fAPISuccess);
 
-    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
         AddToMessageLogProcFailure(TEXT("GetUserSID: GetUserName"), GetLastError());
         return NULL;
     }
@@ -238,64 +241,70 @@ PSID GetUserSID() {
 
     // Allocate buffer for the name.
     szUserName = (LPTSTR) AutoHeapAlloc(cbUserName * sizeof(TCHAR));
-    if (szUserName == NULL) {
+    if (szUserName == NULL)
+    {
         AddToMessageLog(TEXT("GetUserSID: AutoHeapAlloc failed"));
         return NULL;
     }
-   
+
     // Finally get the name.
     fAPISuccess = GetUserName(szUserName, &cbUserName);
-    if (!fAPISuccess) {
+    if (!fAPISuccess)
+    {
         AutoHeapFree(szUserName);
         AddToMessageLogProcFailure(TEXT("GetUserSID: GetUserName"), GetLastError());
         return NULL;
     }
 
 #ifdef DEBUG2
-    _stprintf_s(Msg, MSG_SIZE, TEXT("GetUserSID: UserName=%s cbUserName=%d\n"), szUserName, cbUserName), 
-    DbgMsgRecord(Msg);
+    _stprintf_s(Msg, MSG_SIZE, TEXT("GetUserSID: UserName=%s cbUserName=%d\n"), szUserName, cbUserName),
+                DbgMsgRecord(Msg);
 #endif
-   
+
     // Do the same for SID.  First get the size and then allocate the buffer
     // and perform the actual call.
     fAPISuccess = LookupAccountName(NULL, szUserName,
                                     pUserSID, &cbUserSID, szDomainName, &cbDomainName, &snuType);
-   
+
     // API should have failed with insufficient buffer.
     ASSERT(!fAPISuccess);
 
-    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
         AutoHeapFree(szUserName);
         AddToMessageLogProcFailure(TEXT("GetUserSID: LookupAccountName"), GetLastError());
         return NULL;
     }
 
 #ifdef DEBUG2
-    _stprintf_s(Msg, MSG_SIZE, TEXT("GetUserSID: cbUserSID=%d\n"), cbUserSID), 
-    DbgMsgRecord(Msg);
+    _stprintf_s(Msg, MSG_SIZE, TEXT("GetUserSID: cbUserSID=%d\n"), cbUserSID),
+                DbgMsgRecord(Msg);
 #endif
 
     // Allocate the SID buffer...
     pUserSID = AutoHeapAlloc(cbUserSID);
-    if (pUserSID == NULL) {
+    if (pUserSID == NULL)
+    {
         AutoHeapFree(szUserName);
         AddToMessageLog(TEXT("GetUserSID: AutoHeapAlloc failed"));
         return NULL;
     }
-   
+
     // And the domain name buffer.
     szDomainName = (LPTSTR) AutoHeapAlloc(cbDomainName * sizeof(TCHAR));
-    if (!szDomainName) {
+    if (!szDomainName)
+    {
         AutoHeapFree(szUserName);
         AutoHeapFree(pUserSID);
         AddToMessageLog(TEXT("GetUserSID: AutoHeapAlloc failed"));
         return NULL;
     }
-   
+
     // Now get the SID.
     fAPISuccess = LookupAccountName(NULL, szUserName,
                                     pUserSID, &cbUserSID, szDomainName, &cbDomainName, &snuType);
-    if (!fAPISuccess) {
+    if (!fAPISuccess)
+    {
         AutoHeapFree(szUserName);
         AutoHeapFree(szDomainName);
         AutoHeapFree(pUserSID);
@@ -307,8 +316,8 @@ PSID GetUserSID() {
     AutoHeapFree(szDomainName);
 
 #ifdef DEBUG2
-    _stprintf_s(Msg, MSG_SIZE,  TEXT("GetUserSID: pUserSID=%p cbUserSID=%d\n"), pUserSID, cbUserSID), 
-    DbgMsgRecord(Msg);
+    _stprintf_s(Msg, MSG_SIZE,  TEXT("GetUserSID: pUserSID=%p cbUserSID=%d\n"), pUserSID, cbUserSID),
+                DbgMsgRecord(Msg);
 #endif
 
 #ifdef DEBUG2
@@ -319,9 +328,9 @@ PSID GetUserSID() {
 }
 
 /*
-  
+
     FUNCTION: GetUserGroups
-    
+
     PURPOSE: Obtains a pointer to the groups that current
     token is member of.
 
@@ -333,40 +342,46 @@ PSID GetUserSID() {
         HeapAlloc and should be freed with HeapFree.
 
 */
-PTOKEN_GROUPS GetUserGroups(VOID) {
+PTOKEN_GROUPS GetUserGroups(VOID)
+{
     DWORD dwSize;
     DWORD dwResult;
     HANDLE hToken;
     PTOKEN_GROUPS pGroupInfo = NULL;
-   
+
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("->GetUserGroups\n"));
 #endif
 
     // Open a handle to the access token for the calling thread.
-    if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken)) {
+    if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
+    {
         AddToMessageLogProcFailure(TEXT("GetUserGroups: OpenProcessToken"), GetLastError());
         return NULL;
     }
 
     // Call GetTokenInformation to get the buffer size.
     dwSize = 0;
-    if(GetTokenInformation(hToken, TokenGroups, NULL, dwSize, &dwSize) == 0) {
+    if(GetTokenInformation(hToken, TokenGroups, NULL, dwSize, &dwSize) == 0)
+    {
         dwResult = GetLastError();
-        if(dwResult != ERROR_INSUFFICIENT_BUFFER ) {
+        if(dwResult != ERROR_INSUFFICIENT_BUFFER )
+        {
             AddToMessageLogProcFailure(TEXT("GetUserGroups: GetTokenInformation"), dwResult);
 
             CloseHandle(hToken);
             return NULL;
         }
     }
-    else {
+    else
+    {
         // We should have returned with an error above.
         ASSERT(TRUE);
     }
 
     // Allocate the buffer.
-    if ((pGroupInfo = (PTOKEN_GROUPS) AutoHeapAlloc(dwSize)) == NULL) {
+    if ((pGroupInfo = (PTOKEN_GROUPS) AutoHeapAlloc(dwSize)) == NULL)
+    {
         AddToMessageLog(TEXT("GetUserGroups: AutoHeapAlloc failed"));
 
         CloseHandle(hToken);
@@ -374,14 +389,15 @@ PTOKEN_GROUPS GetUserGroups(VOID) {
     }
 
     // Call GetTokenInformation again to get the group information.
-    if(GetTokenInformation(hToken, TokenGroups, pGroupInfo, dwSize, &dwSize) == 0) {
+    if(GetTokenInformation(hToken, TokenGroups, pGroupInfo, dwSize, &dwSize) == 0)
+    {
         AddToMessageLogProcFailure(TEXT("GetUserGroups: GetTokenInformation"), GetLastError());
 
         AutoHeapFree(pGroupInfo);
         CloseHandle(hToken);
         return NULL;
     }
-    
+
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("<-GetUserGroups\n"));
 #endif
@@ -391,9 +407,9 @@ PTOKEN_GROUPS GetUserGroups(VOID) {
 }
 
 /*
-  
+
     FUNCTION: IsGroupMember
-    
+
     PURPOSE: Returns true if a given SID is found in a given group.
 
     PARAMETERS:
@@ -401,17 +417,21 @@ PTOKEN_GROUPS GetUserGroups(VOID) {
         pGroupInfo - group to look in.
 
 */
-BOOL IsGroupMember(PSID pSID, PTOKEN_GROUPS pGroupInfo) {
+BOOL IsGroupMember(PSID pSID, PTOKEN_GROUPS pGroupInfo)
+{
 
 #ifdef DEBUG2
     DbgMsgRecord(TEXT("->IsGroupMember\n"));
 #endif
 
     // Loop through the group SIDs looking for the administrator SID.
-    for(UINT i=0; i<pGroupInfo->GroupCount; i++) {
-        if (EqualSid(pSID, pGroupInfo->Groups[i].Sid)) {
+    for(UINT i=0; i<pGroupInfo->GroupCount; i++)
+    {
+        if (EqualSid(pSID, pGroupInfo->Groups[i].Sid))
+        {
             // Find out if the SID is enabled in the token
-            if (pGroupInfo->Groups[i].Attributes & SE_GROUP_ENABLED) {
+            if (pGroupInfo->Groups[i].Attributes & SE_GROUP_ENABLED)
+            {
 
 #ifdef DEBUG2
                 DbgMsgRecord(TEXT("<-IsGroupMember\n"));
@@ -430,43 +450,51 @@ BOOL IsGroupMember(PSID pSID, PTOKEN_GROUPS pGroupInfo) {
 
 PSID pSystemSID = NULL;
 PSID pAdminSID = NULL;
-PSID pAnonSID = NULL;    
+PSID pAnonSID = NULL;
 
-VOID CreateWellKnownSids(VOID) {
+VOID CreateWellKnownSids(VOID)
+{
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
 
     // Generate SID for the system if necessary.
-    if (pSystemSID == NULL) {
+    if (pSystemSID == NULL)
+    {
         if (AllocateAndInitializeSid(&SIDAuth, 1,
                                      SECURITY_LOCAL_SYSTEM_RID,
                                      0, 0, 0, 0, 0, 0, 0,
-                                     &pSystemSID) == 0) {
+                                     &pSystemSID) == 0)
+        {
             AddToMessageLogProcFailure(TEXT("CreateWellKnownSids: AllocateAndInitializeSid"), GetLastError());
         }
     }
 
     // Generate SID for the admin group if necessary.
-    if (pAdminSID == NULL) {
+    if (pAdminSID == NULL)
+    {
         if (AllocateAndInitializeSid(&SIDAuth, 1,
                                      DOMAIN_ALIAS_RID_ADMINS,
                                      0, 0, 0, 0, 0, 0, 0,
-                                     &pAdminSID) == 0) {
+                                     &pAdminSID) == 0)
+        {
             AddToMessageLogProcFailure(TEXT("CreateWellKnownSids: AllocateAndInitializeSid"), GetLastError());
         }
     }
 
     // Generate the anonymous SID if necessary.
-    if (pAnonSID == NULL) {
+    if (pAnonSID == NULL)
+    {
         if (AllocateAndInitializeSid(&SIDAuth, 1,
                                      SECURITY_ANONYMOUS_LOGON_RID,
                                      0, 0, 0, 0, 0, 0, 0,
-                                     &pAnonSID) == 0) {
+                                     &pAnonSID) == 0)
+        {
             AddToMessageLogProcFailure(TEXT("CreateWellKnownSids: AllocateAndInitializeSid"), GetLastError());
         }
     }
 }
 
-VOID DeleteWellKnownSids(VOID) {
+VOID DeleteWellKnownSids(VOID)
+{
     AutoHeapFree(pSystemSID);
     pSystemSID = NULL;
     AutoHeapFree(pAdminSID);
@@ -485,47 +513,54 @@ VOID DeleteWellKnownSids(VOID) {
         2 - system
 
     PARAMETERS:
-        pPri - pointer to the variable that receives the priority. 
+        pPri - pointer to the variable that receives the priority.
 
     RETURN VALUE:  True on success, False on error.
 
     COMMENTS:  Returns 0 on errors.
 
 */
-UINT GetCurrentUserPriority(VOID) {
+UINT GetCurrentUserPriority(VOID)
+{
     PSID pSID;
     PTOKEN_GROUPS pUserGroups;
 
     UINT Pri;
 
     // If well-known sids were not allocated, we can't work.
-    if (pSystemSID == NULL || pAdminSID == NULL || pAnonSID == NULL) {
+    if (pSystemSID == NULL || pAdminSID == NULL || pAnonSID == NULL)
+    {
         return 0;
     }
 
     // The SID gets dynamically allocated inside GetUserSID(), so
     // we need to remember about that.
-    if ((pSID = GetUserSID()) == NULL) {
+    if ((pSID = GetUserSID()) == NULL)
+    {
         return 0;
     }
 
-    if ((pUserGroups = GetUserGroups()) == NULL) {
+    if ((pUserGroups = GetUserGroups()) == NULL)
+    {
         AutoHeapFree(pSID);
         return 0;
     }
 
     // Test if current SID is system SID or it
     // is a member of the administrator group.
-    if (EqualSid(pSID, pSystemSID) || IsGroupMember(pAdminSID, pUserGroups)) {
+    if (EqualSid(pSID, pSystemSID) || IsGroupMember(pAdminSID, pUserGroups))
+    {
         // Return system priority.
         Pri = 2;
     }
     // Test if current SID is anonyous SID.
-    else if (EqualSid(pSID, pAnonSID)) {
+    else if (EqualSid(pSID, pAnonSID))
+    {
         // Return anonymous priority.
         Pri = 0;
     }
-    else {
+    else
+    {
         // We are left with the regular user priority.
         Pri = 1;
     }
@@ -557,31 +592,37 @@ BOOL ReportStatusToSCMgr(SERVICE_STATUS_HANDLE *sshStatusHandle,
                          SERVICE_STATUS *ssStatus,
                          DWORD dwCurrentState,
                          DWORD dwWin32ExitCode,
-                         DWORD dwWaitHint){
+                         DWORD dwWaitHint)
+{
 
     static DWORD dwCheckPoint = 1;
     BOOL fResult = TRUE;
 
-    if (dwCurrentState == SERVICE_START_PENDING) {
+    if (dwCurrentState == SERVICE_START_PENDING)
+    {
         ssStatus->dwControlsAccepted = 0;
     }
-    else {
+    else
+    {
         ssStatus->dwControlsAccepted = SERVICE_ACCEPT_STOP;
     }
-    
+
     ssStatus->dwCurrentState = dwCurrentState;
     ssStatus->dwWin32ExitCode = dwWin32ExitCode;
     ssStatus->dwWaitHint = dwWaitHint;
-    
-    if ((dwCurrentState == SERVICE_RUNNING) || (dwCurrentState == SERVICE_STOPPED)) {
+
+    if ((dwCurrentState == SERVICE_RUNNING) || (dwCurrentState == SERVICE_STOPPED))
+    {
         ssStatus->dwCheckPoint = 0;
     }
-    else {
+    else
+    {
         ssStatus->dwCheckPoint = dwCheckPoint++;
     }
-    
+
     // Report the status of the service to the service control manager.
-    if (!(fResult = SetServiceStatus(*sshStatusHandle, ssStatus))) {
+    if (!(fResult = SetServiceStatus(*sshStatusHandle, ssStatus)))
+    {
         AddToMessageLog(TEXT("ReportStatusToSCMgr: SetServiceStatus failed"));
     }
     return fResult;
@@ -603,22 +644,24 @@ BOOL ReportStatusToSCMgr(SERVICE_STATUS_HANDLE *sshStatusHandle,
     COMMENTS:
 
 */
-VOID AddToMessageLog(LPTSTR szMsg2) {
+VOID AddToMessageLog(LPTSTR szMsg2)
+{
     TCHAR szMsg1[256];
     HANDLE hEventSource;
     LPTSTR lpszStrings[2];
     DWORD dwErr = 0;
 
     dwErr = GetLastError();
-    
+
     // Use event logging to log the error.
     hEventSource = RegisterEventSource(NULL, SERVICENAME);
-    
+
     _stprintf_s(szMsg1, TEXT("%s error: %d"), SERVICENAME, dwErr);
     lpszStrings[0] = szMsg1;
     lpszStrings[1] = szMsg2;
-    
-    if (hEventSource != NULL) {
+
+    if (hEventSource != NULL)
+    {
         ReportEvent(hEventSource, // handle of event source
                     EVENTLOG_ERROR_TYPE, // event type
                     0, // event category
@@ -628,18 +671,20 @@ VOID AddToMessageLog(LPTSTR szMsg2) {
                     0, // no bytes of raw data
                     (LPCTSTR *) lpszStrings, // array of error strings
                     NULL); // no raw data
-        
+
         (VOID) DeregisterEventSource(hEventSource);
     }
 }
 
-VOID AddToMessageLogProcFailure(LPTSTR ProcName, DWORD ErrCode) {
+VOID AddToMessageLogProcFailure(LPTSTR ProcName, DWORD ErrCode)
+{
     TCHAR Msg[MSG_SIZE];
     _stprintf_s(Msg, MSG_SIZE, TEXT("%s failed with code %d"), ProcName, ErrCode);
     AddToMessageLog(Msg);
 }
 
-VOID AddToMessageLogProcFailureEEInfo(LPTSTR ProcName, DWORD ErrCode) {
+VOID AddToMessageLogProcFailureEEInfo(LPTSTR ProcName, DWORD ErrCode)
+{
     TCHAR Msg[MSG_SIZE];
     UINT MsgSize = 0;
 
@@ -651,7 +696,8 @@ VOID AddToMessageLogProcFailureEEInfo(LPTSTR ProcName, DWORD ErrCode) {
     AddToMessageLog(Msg);
 }
 
-VOID AddRpcEEInfo(DWORD Status, LPTSTR Msg) {
+VOID AddRpcEEInfo(DWORD Status, LPTSTR Msg)
+{
     RPC_STATUS rpcstatus;
 
     RPC_EXTENDED_ERROR_INFO ErrorInfo;
@@ -672,7 +718,8 @@ VOID AddRpcEEInfo(DWORD Status, LPTSTR Msg) {
     RpcRaiseException(Status);
 }
 
-VOID AddRpcEEInfoAndRaiseException(DWORD Status, LPTSTR Msg) {
+VOID AddRpcEEInfoAndRaiseException(DWORD Status, LPTSTR Msg)
+{
     AddRpcEEInfo(Status, Msg);
     RpcRaiseException(Status);
 }
@@ -684,7 +731,7 @@ VOID AddRpcEEInfoAndRaiseException(DWORD Status, LPTSTR Msg) {
 
     PARAMETERS:
         Interface - the UUID and version of the interface.
-        Context - server binding handle representing the client. 
+        Context - server binding handle representing the client.
 
     RETURN VALUE:
         Returns RPC_S_OK if the client is allowed to call methods in this
@@ -700,7 +747,7 @@ VOID AddRpcEEInfoAndRaiseException(DWORD Status, LPTSTR Msg) {
         even if the server has called RpcServerRegisterAuthInfo. If the
         server wants to accept only authenticated clients it must then call
         RpcBindingInqAuthClient to retrieve the security level, or attempt
-        to impersonate the client with RpcImpersonateClient. 
+        to impersonate the client with RpcImpersonateClient.
 
         When a server application specifies a security-callback function
         for an interface, the RPC run time automatically rejects
@@ -708,33 +755,36 @@ VOID AddRpcEEInfoAndRaiseException(DWORD Status, LPTSTR Msg) {
         records the interfaces that each client has used. When a client
         makes an RPC to an interface that it has not used during the
         current communication session, the RPC run-time library will
-        call the interface's security-callback function. 
+        call the interface's security-callback function.
 
         In some cases, the RPC run time may call the security-callback
         function more than once per client, per interface.
 
 */
 RPC_STATUS __stdcall RpcServerIfCallback (
-  IN void *Interface,
-  IN void *Context
-) {
+    IN void *Interface,
+    IN void *Context
+)
+{
     ULONG ulAuthnLevel;
     ULONG ulAuthnSvc;
 
     // Get client security info.
     if (RpcBindingInqAuthClient(Context,
-				NULL,
-				NULL,
-				&ulAuthnLevel,
-				&ulAuthnSvc,
-				NULL) != RPC_S_OK) {
-      
+                                NULL,
+                                NULL,
+                                &ulAuthnLevel,
+                                &ulAuthnSvc,
+                                NULL) != RPC_S_OK)
+    {
+
         return RPC_S_ACCESS_DENIED;
     }
 
     // Make sure the client has adequate security measures and uses the expected
     // security provider.
-    if (ulAuthnLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY || ulAuthnSvc != RPC_C_AUTHN_GSS_KERBEROS) {
+    if (ulAuthnLevel != RPC_C_AUTHN_LEVEL_PKT_PRIVACY || ulAuthnSvc != RPC_C_AUTHN_GSS_KERBEROS)
+    {
 
         return RPC_S_ACCESS_DENIED;
     }
@@ -743,8 +793,9 @@ RPC_STATUS __stdcall RpcServerIfCallback (
 };
 
 
-BOOL StartFileRepServer (VOID) {
-  unsigned i;
+BOOL StartFileRepServer (VOID)
+{
+    unsigned i;
 
     // Servere initialization
 
@@ -755,35 +806,40 @@ BOOL StartFileRepServer (VOID) {
     // The RPC run time will automatically reject unauthenticated calls to
     // this interface.
     status = RpcServerRegisterIfEx(s_FileRepServer_v1_0_s_ifspec,
-				   NULL,
-				   NULL,
-				   RPC_IF_ALLOW_SECURE_ONLY,
-				   RPC_C_LISTEN_MAX_CALLS_DEFAULT,
-				   &RpcServerIfCallback);
-    if (status != RPC_S_OK){
-            AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerRegisterIfEx"), status);
+                                   NULL,
+                                   NULL,
+                                   RPC_IF_ALLOW_SECURE_ONLY,
+                                   RPC_C_LISTEN_MAX_CALLS_DEFAULT,
+                                   &RpcServerIfCallback);
+    if (status != RPC_S_OK)
+    {
+        AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerRegisterIfEx"), status);
         return false;
     }
 #else if
     status = RpcServerRegisterIf(s_FileRepServer_v1_0_s_ifspec, NULL, NULL);
-    if (status != RPC_S_OK){
-            AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerRegisterIf(FileRepClient_v1_0_s_ifspec, ...)"), status);
+    if (status != RPC_S_OK)
+    {
+        AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerRegisterIf(FileRepClient_v1_0_s_ifspec, ...)"), status);
         return false;
     }
 #endif
 
     status = RpcServerRegisterIf(FileRepClient_v1_0_s_ifspec, NULL, NULL);
-    if (status != RPC_S_OK){
-            AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerRegisterIf(FileRepClient_v1_0_s_ifspec, ...)"), status);
+    if (status != RPC_S_OK)
+    {
+        AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerRegisterIf(FileRepClient_v1_0_s_ifspec, ...)"), status);
         return false;
     }
 
-    for (i = 0; i < sizeof(ServerProtocolArray)/sizeof(unsigned char *); i++) {
+    for (i = 0; i < sizeof(ServerProtocolArray)/sizeof(unsigned char *); i++)
+    {
 
         // Use the protocol sequences specified in ProtocolArray
         // for receiving RPCs.
         status = RpcServerUseProtseq(ServerProtocolArray[i], cMaxCallsListen, NULL);
-        if (status != RPC_S_OK){
+        if (status != RPC_S_OK)
+        {
             AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerUseProtseq"), status);
             return false;
         }
@@ -791,20 +847,23 @@ BOOL StartFileRepServer (VOID) {
 
     // Obtain a binding vector for the server.
     status = RpcServerInqBindings(&pBindingVector);
-    if (status != RPC_S_OK) {
+    if (status != RPC_S_OK)
+    {
         AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerInqBindings"), status);
         return false;
     }
-    
+
     // Register the the services in the endpoint map
     // of the host computer.
     status = RpcEpRegister(s_FileRepServer_v1_0_s_ifspec, pBindingVector, NULL, NULL);
-    if (status != RPC_S_OK){
+    if (status != RPC_S_OK)
+    {
         AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcEpRegister(s_FileRepServer_v1_0_s_ifspec, ...)"), status);
         return false;
     }
     status = RpcEpRegister(FileRepClient_v1_0_s_ifspec, pBindingVector, NULL, NULL);
-    if (status != RPC_S_OK){
+    if (status != RPC_S_OK)
+    {
         AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcEpRegister(FileRepClient_v1_0_s_ifspec, ...)"), status);
         return false;
     }
@@ -825,7 +884,7 @@ BOOL StartFileRepServer (VOID) {
     TCHAR lpCompDN[128];
     ULONG ulCompDNSize = sizeof(lpCompDN);
 
-	RPC_STR pszServerPrincipalName = NULL;
+    RPC_STR pszServerPrincipalName = NULL;
 
     //
     // Set the security info for the client system service.
@@ -833,7 +892,8 @@ BOOL StartFileRepServer (VOID) {
 
     // Principal name is NULL for local system service.
     status = RpcServerRegisterAuthInfo(NULL, RPC_C_AUTHN_WINNT, NULL, NULL);
-    if (status != RPC_S_OK){
+    if (status != RPC_S_OK)
+    {
         AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerRegisterAuthInfo"), status);
         return false;
     }
@@ -854,7 +914,8 @@ BOOL StartFileRepServer (VOID) {
                       NULL, // No additional instance ports.
                       &ulSpn, // Size of SPN array.
                       &Spn); // Returned SPN(s).
-    if (status != RPC_S_OK){
+    if (status != RPC_S_OK)
+    {
         _stprintf_s(Msg, MSG_SIZE, TEXT("ServiceStart: DsGetSpn failed with code %d\n"), status);
         AddToMessageLog(Msg);
         return false;
@@ -866,43 +927,50 @@ BOOL StartFileRepServer (VOID) {
                              NULL,
                              NULL,
                              DS_RETURN_DNS_NAME,
-                             &pDomainControllerInfo) != NO_ERROR) {
+                             &pDomainControllerInfo) != NO_ERROR)
+    {
         _stprintf_s(Msg, MSG_SIZE, TEXT("ServiceStart: DsGetDcName failed with code %d\n"), GetLastError());
         AddToMessageLog(Msg);
         NoFailure = FALSE;
     }
 
-    if (NoFailure) {
+    if (NoFailure)
+    {
         // Bind to the domain controller for our domain.
         if ((status = DsBind(NULL,
                              pDomainControllerInfo->DomainName,
-                             &hDS)) != ERROR_SUCCESS) {
+                             &hDS)) != ERROR_SUCCESS)
+        {
             _stprintf_s(Msg, MSG_SIZE, TEXT("ServiceStart: DsBind failed with code %d\n"), GetLastError());
             AddToMessageLog(Msg);
             NoFailure = FALSE;
         }
     }
 
-    if (NoFailure) {
-        if ((status = NetApiBufferFree(pDomainControllerInfo)) != NERR_Success) {
+    if (NoFailure)
+    {
+        if ((status = NetApiBufferFree(pDomainControllerInfo)) != NERR_Success)
+        {
             _stprintf_s(Msg, MSG_SIZE, TEXT("ServiceStart: NetApiBufferFree failed with code %d\n"), status);
             AddToMessageLog(Msg);
             return false;
         }
 
-        if (GetComputerObjectName(NameFullyQualifiedDN, lpCompDN, &ulCompDNSize) == 0) {
+        if (GetComputerObjectName(NameFullyQualifiedDN, lpCompDN, &ulCompDNSize) == 0)
+        {
             _stprintf_s(Msg, MSG_SIZE, TEXT("ServiceStart: GetComputerObjectName failed with code %d\n"), GetLastError());
             AddToMessageLog(Msg);
             return false;
-	}
+        }
 
         // We could check whether the SPN is already registered for this
         // computer's DN, but we don't have to.  Modification is performed
-        // permissively by this function, so that adding a value that already 
+        // permissively by this function, so that adding a value that already
         // exists does not return an error.  This way we can opt for the internal
         // check instead of doing it ourselves.
         status = DsWriteAccountSpn(hDS, DS_SPN_ADD_SPN_OP, lpCompDN, ulSpn, (LPCTSTR *)Spn);
-        if (status != NO_ERROR) {
+        if (status != NO_ERROR)
+        {
             _stprintf_s(Msg, MSG_SIZE, TEXT("ServiceStart: DsWriteAccountSpn failed with code %d\n"), status);
             return false;
         }
@@ -913,7 +981,8 @@ BOOL StartFileRepServer (VOID) {
 
     // We use Kerberos for authentication on the server.
     status = RpcServerRegisterAuthInfo(pszServerPrincipalName, RPC_C_AUTHN_GSS_KERBEROS, NULL, NULL);
-    if (status != RPC_S_OK){
+    if (status != RPC_S_OK)
+    {
         AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerRegisterAuthInfo"), status);
         return false;
     }
@@ -924,7 +993,7 @@ BOOL StartFileRepServer (VOID) {
 
     // Create the heap to be used by midl_user_allocate and midl_user_free
     RpcHeap = HeapCreate(0, RPC_HEAP_SIZE_INIT, RPC_HEAP_SIZE_MAX);
-    
+
 #ifdef DEBUG2
     DbgMsgOpenLog(TEXT("c:\\logs\\FileRepService.dbg"));
     fDbgMsgOpenedLog = TRUE;
@@ -935,90 +1004,102 @@ BOOL StartFileRepServer (VOID) {
     fProfOpenedLog = TRUE;
 #endif
 
-    // Create counters to measure the number of concurrent 
+    // Create counters to measure the number of concurrent
     // connections to the server system service.
-    if (CountersCreate(pServerReqCounters, NumPriGroups, (UINT *) ServerReqBounds) == NULL) {
+    if (CountersCreate(pServerReqCounters, NumPriGroups, (UINT *) ServerReqBounds) == NULL)
+    {
         AddToMessageLog(TEXT("ServiceStart: CountersCreate failed\n"));
         return false;
     }
     fServerReqCountersCreated = TRUE;
 
-    // Create the counters and queues for client system service 
+    // Create the counters and queues for client system service
     // to store requests and request numbers.
-    if (CountersCreate(pClientReqCounters, NumPriGroups, (UINT *) ClientReqBounds) == NULL) {
+    if (CountersCreate(pClientReqCounters, NumPriGroups, (UINT *) ClientReqBounds) == NULL)
+    {
         AddToMessageLog(TEXT("ServiceStart: CountersCreate failed\n"));
         return false;
     }
     fClientReqCountersCreated = TRUE;
 
-    if (CountersCreate(pServerActiveReqCounters, NumPriGroups, (UINT *) ServerActiveReqBounds) == NULL) {
+    if (CountersCreate(pServerActiveReqCounters, NumPriGroups, (UINT *) ServerActiveReqBounds) == NULL)
+    {
         AddToMessageLog(TEXT("ServiceStart: CountersCreate failed\n"));
         return false;
     }
     fServerActiveReqCountersCreated = TRUE;
 
-    if (CountersCreate(pClientActiveReqCounters, NumPriGroups, (UINT *) ClientActiveReqBounds) == NULL) {
+    if (CountersCreate(pClientActiveReqCounters, NumPriGroups, (UINT *) ClientActiveReqBounds) == NULL)
+    {
         AddToMessageLog(TEXT("ServiceStart: CountersCreate failed\n"));
-        return false;        
+        return false;
     }
     fClientActiveReqCountersCreated = TRUE;
 
-    if (QueuesCreate(ServerReqQueues, NumPriGroups, FALSE) == FALSE) {
+    if (QueuesCreate(ServerReqQueues, NumPriGroups, FALSE) == FALSE)
+    {
         AddToMessageLog(TEXT("ServiceStart: QueuesCreate failed\n"));
         return false;
     }
     fServerReqQueuesCreated = TRUE;
 
-    if (QueuesCreate(ClientReqQueues, NumPriGroups, FALSE) == FALSE) {
+    if (QueuesCreate(ClientReqQueues, NumPriGroups, FALSE) == FALSE)
+    {
         AddToMessageLog(TEXT("ServiceStart: QueuesCreate failed\n"));
         return false;
     }
     fServerReqQueuesCreated = TRUE;
 
 #ifdef DEBUG1
-    if ((ServerActiveReqQueue = QueueCreate(FALSE)) == NULL) {
+    if ((ServerActiveReqQueue = QueueCreate(FALSE)) == NULL)
+    {
         AddToMessageLog(TEXT("ServiceStart: QueuesCreate failed\n"));
         return false;
     }
     fServerActiveReqQueueCreated = TRUE;
 
-    if ((ClientActiveReqQueue = QueueCreate(FALSE)) == NULL) {
+    if ((ClientActiveReqQueue = QueueCreate(FALSE)) == NULL)
+    {
         AddToMessageLog(TEXT("ServiceStart: QueuesCreate failed\n"));
         return false;
     }
     fClientActiveReqQueueCreated = TRUE;
 #endif
 
-    if (QueuesCreate(ServerActiveReqHashCounters, NumPriGroups, FALSE) == FALSE) {
+    if (QueuesCreate(ServerActiveReqHashCounters, NumPriGroups, FALSE) == FALSE)
+    {
         AddToMessageLog(TEXT("ServiceStart: QueuesCreate failed\n"));
-        return false;        
+        return false;
     }
     fServerActiveReqHashCountersCreated = TRUE;
 
-    if (QueuesCreate(ClientActiveReqHashCounters, NumPriGroups, FALSE) == FALSE) {
+    if (QueuesCreate(ClientActiveReqHashCounters, NumPriGroups, FALSE) == FALSE)
+    {
         AddToMessageLog(TEXT("ServiceStart: QueuesCreate failed\n"));
-        return false;        
+        return false;
     }
     fClientActiveReqHashCountersCreated = TRUE;
 
     CreateWellKnownSids();
 
     if ((ClientCompletionPort = CreateIoCompletionPort (
-	INVALID_HANDLE_VALUE,
-	NULL,
-	0,
-	0)) == INVALID_HANDLE_VALUE) {
+                                    INVALID_HANDLE_VALUE,
+                                    NULL,
+                                    0,
+                                    0)) == INVALID_HANDLE_VALUE)
+    {
         AddToMessageLog(TEXT("ServiceStart: CreateIoCompletionPort failed\n"));
-        return false;        
+        return false;
     }
 
     if ((ServerCompletionPort = CreateIoCompletionPort (
-	INVALID_HANDLE_VALUE,
-	NULL,
-	0,
-	0)) == INVALID_HANDLE_VALUE) {
+                                    INVALID_HANDLE_VALUE,
+                                    NULL,
+                                    0,
+                                    0)) == INVALID_HANDLE_VALUE)
+    {
         AddToMessageLog(TEXT("ServiceStart: CreateIoCompletionPort failed\n"));
-        return false;        
+        return false;
     }
 
     nThreadsAtClientCompletionPort = 0;
@@ -1030,17 +1111,18 @@ BOOL StartFileRepServer (VOID) {
     HMODULE rpc = LoadLibrary(TEXT("rpcrt4.dll"));
 
     if (rpc == 0)
-        {
+    {
         AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: LoadLibrary"), status);
         return false;
-        }
+    }
 
 
     // Start accepting client calls.
     // The last argument's being 1 indicates that RpcServerListen
-    // should return false immediately after completing function processing. 
+    // should return false immediately after completing function processing.
     status = RpcServerListen(cMinimumThreads, cMaxCallsExecute, 1);
-    if (status != RPC_S_OK){
+    if (status != RPC_S_OK)
+    {
         AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerListen"), status);
         return false;
     }
@@ -1062,27 +1144,32 @@ BOOL StartFileRepServer (VOID) {
 
     COMMENTS:
 
-*/        
-VOID ServerStop() {
+*/
+VOID ServerStop()
+{
     RPC_STATUS status;
 
     // Stops the server, wakes up the main thread.
-    if (bServerListening) {
+    if (bServerListening)
+    {
         status = RpcMgmtStopServerListening(NULL);
-        if(status != RPC_S_OK) {
-                    AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcMgmtWaitServerListen"), status);
+        if(status != RPC_S_OK)
+        {
+            AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcMgmtWaitServerListen"), status);
         }
         bServerListening = FALSE;
     }
 
     // Delete the binding vector.
     status = RpcServerUnregisterIf(NULL, NULL, FALSE);
-    if(status != RPC_S_OK){
+    if(status != RPC_S_OK)
+    {
         AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcServerUnregisterIf"), status);
     }
-    
+
     // Tell The SCM that the service is stopped.
-    if(!ReportStatusToSCMgr(&sshStatusHandle, &ssStatus, SERVICE_STOPPED, NO_ERROR, 0)) {
+    if(!ReportStatusToSCMgr(&sshStatusHandle, &ssStatus, SERVICE_STOPPED, NO_ERROR, 0))
+    {
         AddToMessageLogProcFailure(TEXT("ServiceStop: ReportStatusToSCMgr"), GetLastError());
     }
 
@@ -1093,23 +1180,31 @@ VOID ServerStop() {
     // order should prevent race conditions, since
     // pClientActiveReqCounters are incremented before
     // pClientReqCounters are decremented.
-    if (fServerReqCountersCreated) {
-        if (CountersCheckForNonzero(pServerReqCounters, NumPriGroups)) {
+    if (fServerReqCountersCreated)
+    {
+        if (CountersCheckForNonzero(pServerReqCounters, NumPriGroups))
+        {
             Sleep(1000);
         }
     }
-    if (fClientReqCountersCreated) {
-        if (CountersCheckForNonzero(pClientReqCounters, NumPriGroups)) {
+    if (fClientReqCountersCreated)
+    {
+        if (CountersCheckForNonzero(pClientReqCounters, NumPriGroups))
+        {
             Sleep(1000);
         }
     }
-    if (fServerActiveReqCountersCreated) {
-        if (CountersCheckForNonzero(pServerActiveReqCounters, NumPriGroups)) {
+    if (fServerActiveReqCountersCreated)
+    {
+        if (CountersCheckForNonzero(pServerActiveReqCounters, NumPriGroups))
+        {
             Sleep(1000);
         }
     }
-    if (fClientActiveReqCountersCreated) {
-        if (CountersCheckForNonzero(pClientActiveReqCounters, NumPriGroups)) {
+    if (fClientActiveReqCountersCreated)
+    {
+        if (CountersCheckForNonzero(pClientActiveReqCounters, NumPriGroups))
+        {
             Sleep(1000);
         }
     }
@@ -1117,48 +1212,58 @@ VOID ServerStop() {
     DeleteWellKnownSids();
 
     // Delete queues and counters.
-    if (fServerReqCountersCreated) {
+    if (fServerReqCountersCreated)
+    {
         CountersDelete(pServerReqCounters, NumPriGroups);
         fServerReqCountersCreated = FALSE;
     }
-    if (fClientReqCountersCreated) {
+    if (fClientReqCountersCreated)
+    {
         CountersDelete(pClientReqCounters, NumPriGroups);
         fClientReqCountersCreated = FALSE;
     }
-    if (fServerActiveReqCountersCreated) {
+    if (fServerActiveReqCountersCreated)
+    {
         CountersDelete(pServerActiveReqCounters, NumPriGroups);
         fServerActiveReqCountersCreated = FALSE;
     }
-    if (fServerReqQueuesCreated) {
+    if (fServerReqQueuesCreated)
+    {
         QueuesDelete(ServerReqQueues, NumPriGroups);
         fServerReqQueuesCreated = FALSE;
     }
-    if (fServerActiveReqHashCountersCreated) {
+    if (fServerActiveReqHashCountersCreated)
+    {
         QueuesDelete(ServerActiveReqHashCounters, NumPriGroups);
         fServerActiveReqHashCountersCreated = FALSE;
     }
-    if (fClientActiveReqCountersCreated) {
+    if (fClientActiveReqCountersCreated)
+    {
         CountersDelete(pClientActiveReqCounters, NumPriGroups);
         fClientActiveReqCountersCreated = FALSE;
     }
-    if (fClientReqQueuesCreated) {
+    if (fClientReqQueuesCreated)
+    {
         QueuesDelete(ClientReqQueues, NumPriGroups);
         fClientReqQueuesCreated = FALSE;
     }
-    if (fClientActiveReqHashCountersCreated) {
+    if (fClientActiveReqHashCountersCreated)
+    {
         QueuesDelete(ClientActiveReqHashCounters, NumPriGroups);
         fClientActiveReqHashCountersCreated = FALSE;
     }
 
 #ifdef PROF
-    if (fProfOpenedLog) {
+    if (fProfOpenedLog)
+    {
         ProfCloseLog();
         fProfOpenedLog = FALSE;
     }
 #endif
 
 #ifdef DEBUG2
-    if (fDbgMsgOpenedLog) {
+    if (fDbgMsgOpenedLog)
+    {
         DbgMsgCloseLog();
         fDbgMsgOpenedLog = FALSE;
     }
@@ -1174,12 +1279,15 @@ HANDLE RpcHeap;
     MIDL allocate() and free()
 */
 
-VOID __RPC_FAR * __RPC_API midl_user_allocate(size_t len) {
+VOID __RPC_FAR * __RPC_API midl_user_allocate(size_t len)
+{
     return(HeapAlloc(RpcHeap, 0, len));
 }
 
-VOID __RPC_API midl_user_free(VOID __RPC_FAR * ptr) {
-    if(ptr != NULL) {
+VOID __RPC_API midl_user_free(VOID __RPC_FAR * ptr)
+{
+    if(ptr != NULL)
+    {
         HeapFree(RpcHeap, 0, ptr);
     }
 }

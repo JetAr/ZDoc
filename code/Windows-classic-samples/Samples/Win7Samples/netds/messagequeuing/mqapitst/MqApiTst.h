@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -14,7 +14,7 @@
 
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "resource.h"       // main symbols
@@ -29,25 +29,25 @@
 class CTestApp : public CWinApp
 {
 public:
-	CTestApp();
+    CTestApp();
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTestApp)
-	public:
-	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CTestApp)
+public:
+    virtual BOOL InitInstance();
+    //}}AFX_VIRTUAL
 
 // Implementation
 
-	//{{AFX_MSG(CTestApp)
-	afx_msg void OnAppAbout();
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CTestApp)
+    afx_msg void OnAppAbout();
+    // NOTE - the ClassWizard will add and remove member functions here.
+    //    DO NOT EDIT what you see in these blocks of generated code !
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 protected:
-	BOOL IsDsEnabledLocaly();
+    BOOL IsDsEnabledLocaly();
 };
 
 
@@ -66,23 +66,24 @@ protected:
 //
 // A structure for the array of queues that the application handles.
 //
-class ARRAYQ{
+class ARRAYQ
+{
 public:
-	TCHAR szPathName[MAX_Q_PATHNAME_LEN+1];     // holds the Queue path name.
-	TCHAR szFormatName[MAX_Q_FORMATNAME_LEN+1]; // holds the Queue format name.
-	QUEUEHANDLE hHandle;                         // a handle for an open Queue.
-	DWORD dwAccess;                              // access for the queue.
-	BOOL  bFormatNameOnly;						//Is there path name as well, or ARRAYQ instance has only
-												//Format Name.
-	ARRAYQ
-		(
-		):
-		dwAccess(0),
-		bFormatNameOnly(0),
-		hHandle(0)
-		{
-			szPathName[0]=0;
-			szFormatName[0]=0;
-		}		
+    TCHAR szPathName[MAX_Q_PATHNAME_LEN+1];     // holds the Queue path name.
+    TCHAR szFormatName[MAX_Q_FORMATNAME_LEN+1]; // holds the Queue format name.
+    QUEUEHANDLE hHandle;                         // a handle for an open Queue.
+    DWORD dwAccess;                              // access for the queue.
+    BOOL  bFormatNameOnly;						//Is there path name as well, or ARRAYQ instance has only
+    //Format Name.
+    ARRAYQ
+    (
+    ):
+        dwAccess(0),
+        bFormatNameOnly(0),
+        hHandle(0)
+    {
+        szPathName[0]=0;
+        szFormatName[0]=0;
+    }
 };
-	
+

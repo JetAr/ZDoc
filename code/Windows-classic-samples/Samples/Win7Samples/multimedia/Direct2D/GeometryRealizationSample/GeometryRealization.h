@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -71,7 +71,8 @@ typedef enum REALIZATION_RENDER_MODE
 //      efficient rendering of complex primitives.
 //
 //------------------------------------------------------------------------------
-interface REALIZATIONS_DECLARE_INTERFACE("a0b504a9-be04-44a7-ae05-71ac89c1b6a7") IGeometryRealization : public IUnknown
+interface REALIZATIONS_DECLARE_INTERFACE("a0b504a9-be04-44a7-ae05-71ac89c1b6a7") IGeometryRealization :
+public IUnknown
 {
     //
     // Render the fill realization to the render target
@@ -80,7 +81,7 @@ interface REALIZATIONS_DECLARE_INTERFACE("a0b504a9-be04-44a7-ae05-71ac89c1b6a7")
         ID2D1RenderTarget *pRT,
         ID2D1Brush *pBrush,
         REALIZATION_RENDER_MODE mode
-        ) PURE;
+    ) PURE;
 
     //
     // Render the stroke realization to the render target
@@ -89,7 +90,7 @@ interface REALIZATIONS_DECLARE_INTERFACE("a0b504a9-be04-44a7-ae05-71ac89c1b6a7")
         ID2D1RenderTarget *pRT,
         ID2D1Brush *pBrush,
         REALIZATION_RENDER_MODE mode
-        ) PURE;
+    ) PURE;
 
     //
     // Discard the current realization's contents and replace with new contents.
@@ -102,7 +103,7 @@ interface REALIZATIONS_DECLARE_INTERFACE("a0b504a9-be04-44a7-ae05-71ac89c1b6a7")
     //
     // Note: pWorldTransform is the transform that the realization will
     // be optimized for. If, at the time of rendering, the render target's
-    // transform is the same as pWorldTransform, 
+    // transform is the same as pWorldTransform,
     // the realization will appear identical to the unrealized version. Otherwise,
     // quality will be degraded.
     //
@@ -112,7 +113,7 @@ interface REALIZATIONS_DECLARE_INTERFACE("a0b504a9-be04-44a7-ae05-71ac89c1b6a7")
         CONST D2D1_MATRIX_3X2_F *pWorldTransform,
         float strokeWidth,
         ID2D1StrokeStyle *pIStrokeStyle
-        ) PURE;
+    ) PURE;
 };
 
 
@@ -122,7 +123,8 @@ interface REALIZATIONS_DECLARE_INTERFACE("a0b504a9-be04-44a7-ae05-71ac89c1b6a7")
 //      IGeometryRealizationFactory
 //
 //------------------------------------------------------------------------------
-interface REALIZATIONS_DECLARE_INTERFACE("27866d9f-8865-461d-8a10-2531156398b2") IGeometryRealizationFactory : public IUnknown
+interface REALIZATIONS_DECLARE_INTERFACE("27866d9f-8865-461d-8a10-2531156398b2") IGeometryRealizationFactory :
+public IUnknown
 {
     //
     // Create a realization object with no content (should be populated with
@@ -130,7 +132,7 @@ interface REALIZATIONS_DECLARE_INTERFACE("27866d9f-8865-461d-8a10-2531156398b2")
     //
     STDMETHOD(CreateGeometryRealization)(
         IGeometryRealization **ppRealization
-        ) PURE;
+    ) PURE;
 
     //
     // Create a geometry realization.
@@ -148,7 +150,7 @@ interface REALIZATIONS_DECLARE_INTERFACE("27866d9f-8865-461d-8a10-2531156398b2")
         float strokeWidth,
         ID2D1StrokeStyle *pIStrokeStyle,
         IGeometryRealization **ppRealization
-        ) PURE;
+    ) PURE;
 };
 
 //+-----------------------------------------------------------------------------
@@ -161,9 +163,9 @@ HRESULT CreateGeometryRealizationFactory(
     ID2D1RenderTarget *pRT,
     UINT maxRealizationDimension,
     IGeometryRealizationFactory **ppFactory
-    );
+);
 
 HRESULT CreateGeometryRealizationFactory(
     ID2D1RenderTarget *pRT,
     IGeometryRealizationFactory **ppFactory
-    );
+);

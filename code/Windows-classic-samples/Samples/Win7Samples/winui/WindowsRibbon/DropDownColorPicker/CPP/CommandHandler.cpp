@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 #include "Application.h"
 #include "CommandHandler.h"
 
-static COLORREF g_colors[] = 
+static COLORREF g_colors[] =
 {
     RGB(192, 0, 0),     // Dark red.
     RGB(255, 0, 0),     // Red.
@@ -50,10 +50,10 @@ __checkReturn HRESULT CColorPickerHandler::CreateInstance(__deref_out CColorPick
 }
 
 STDMETHODIMP CColorPickerHandler::Execute(UINT nCmdID,
-                       UI_EXECUTIONVERB verb, 
-                       __in_opt const PROPERTYKEY* key,
-                       __in_opt const PROPVARIANT* ppropvarValue,
-                       __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+        UI_EXECUTIONVERB verb,
+        __in_opt const PROPERTYKEY* key,
+        __in_opt const PROPVARIANT* ppropvarValue,
+        __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(nCmdID);
     UNREFERENCED_PARAMETER(key);
@@ -62,7 +62,7 @@ STDMETHODIMP CColorPickerHandler::Execute(UINT nCmdID,
     ColorProperty colorProp;
     UINT color = 0;
     UINT type = UI_SWATCHCOLORTYPE_NOCOLOR;
-    
+
     switch(verb)
     {
     case UI_EXECUTIONVERB_EXECUTE:
@@ -99,16 +99,16 @@ STDMETHODIMP CColorPickerHandler::Execute(UINT nCmdID,
         // Handle the execution event.
         g_renderer.Execute(verb, colorProp);
 
-        break;            
+        break;
     }
 
     return hr;
 }
 
 STDMETHODIMP CColorPickerHandler::UpdateProperty(UINT nCmdID,
-                              __in REFPROPERTYKEY key,
-                              __in_opt const PROPVARIANT* ppropvarCurrentValue,
-                              __out PROPVARIANT* ppropvarNewValue)
+        __in REFPROPERTYKEY key,
+        __in_opt const PROPVARIANT* ppropvarCurrentValue,
+        __out PROPVARIANT* ppropvarNewValue)
 {
     UNREFERENCED_PARAMETER(ppropvarCurrentValue);
 
@@ -258,10 +258,10 @@ __checkReturn HRESULT CButtonHandler::CreateInstance(__deref_out CButtonHandler 
 }
 
 STDMETHODIMP CButtonHandler::Execute(UINT nCmdID,
-                       UI_EXECUTIONVERB verb, 
-                       __in_opt const PROPERTYKEY* key,
-                       __in_opt const PROPVARIANT* ppropvarValue,
-                       __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+                                     UI_EXECUTIONVERB verb,
+                                     __in_opt const PROPERTYKEY* key,
+                                     __in_opt const PROPVARIANT* ppropvarValue,
+                                     __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(key);
     UNREFERENCED_PARAMETER(ppropvarValue);
@@ -290,9 +290,9 @@ STDMETHODIMP CButtonHandler::Execute(UINT nCmdID,
 }
 
 STDMETHODIMP CButtonHandler::UpdateProperty(UINT nCmdID,
-                              __in REFPROPERTYKEY key,
-                              __in_opt const PROPVARIANT* ppropvarCurrentValue,
-                              __out PROPVARIANT* ppropvarNewValue)
+        __in REFPROPERTYKEY key,
+        __in_opt const PROPVARIANT* ppropvarCurrentValue,
+        __out PROPVARIANT* ppropvarNewValue)
 {
     UNREFERENCED_PARAMETER(nCmdID);
     UNREFERENCED_PARAMETER(key);

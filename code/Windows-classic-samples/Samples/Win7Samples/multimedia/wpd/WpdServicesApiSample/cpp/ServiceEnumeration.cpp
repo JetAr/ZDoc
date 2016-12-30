@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -241,7 +241,7 @@ void DisplayDeviceInformation(
         // Retrieve the IPortableDeviceManager interface from IPortableDeviceServiceManager
         hr = pServiceManager->QueryInterface(IID_PPV_ARGS(&pIPortableDeviceManager));
         if (SUCCEEDED(hr))
-        {        
+        {
             DisplayFriendlyName(pIPortableDeviceManager, pPnpDeviceID);
             printf("    ");
             DisplayManufacturer(pIPortableDeviceManager, pPnpDeviceID);
@@ -258,7 +258,7 @@ void DisplayDeviceInformation(
     {
         printf("! Failed to get the device PnP identifier, hr = 0x%lx\n",hr);
     }
-    
+
     CoTaskMemFree(pPnpDeviceID);
 }
 
@@ -282,7 +282,7 @@ void EumerateContactsServices(CAtlArray<PWSTR>& ContactsServicePnpIDs)
     if (FAILED(hr))
     {
         printf("! Failed to CoCreateInstance CLSID_PortableDeviceManager, hr = 0x%lx\n",hr);
-    }        
+    }
 
     // Retrieve the IPortableDeviceServiceManager interface to enumerate device services.
     if (SUCCEEDED(hr))
@@ -317,8 +317,8 @@ void EumerateContactsServices(CAtlArray<PWSTR>& ContactsServicePnpIDs)
 
                 hr = pPortableDeviceManager->GetDevices(pPnpDeviceIDs, &cPnpDeviceIDs);
                 if (SUCCEEDED(hr))
-                {   
-					//<SnippetOpenService1>
+                {
+                    //<SnippetOpenService1>
                     // For each device found, find the contacts service
                     for (dwIndex = 0; dwIndex < cPnpDeviceIDs; dwIndex++)
                     {
@@ -329,9 +329,9 @@ void EumerateContactsServices(CAtlArray<PWSTR>& ContactsServicePnpIDs)
                         // of contacts services (SERVICE_Contacts) found on the device.
                         // To find the total number of all services on the device, use GUID_DEVINTERFACE_WPD_SERVICE.
                         hr = pServiceManager->GetDeviceServices(pPnpDeviceIDs[dwIndex], SERVICE_Contacts, NULL, &cPnpServiceIDs);
-                        
+
                         if (SUCCEEDED(hr) && (cPnpServiceIDs > 0))
-                        {                               
+                        {
                             // For simplicity, we are only using the first contacts service on each device
                             cPnpServiceIDs = 1;
                             hr = pServiceManager->GetDeviceServices(pPnpDeviceIDs[dwIndex], SERVICE_Contacts, &pPnpServiceID, &cPnpServiceIDs);
@@ -355,7 +355,7 @@ void EumerateContactsServices(CAtlArray<PWSTR>& ContactsServicePnpIDs)
                             }
                         }
                     }
-					//</SnippetOpenService1>
+                    //</SnippetOpenService1>
                 }
 
                 // Free all returned PnPDeviceID strings
@@ -369,10 +369,10 @@ void EumerateContactsServices(CAtlArray<PWSTR>& ContactsServicePnpIDs)
             else
             {
                 printf("! Failed to allocate memory for PWSTR array\n");
-            }            
+            }
         }
     }
-    
+
     printf("\n%d Contacts Device Service(s) found on the system\n\n", static_cast<DWORD>(ContactsServicePnpIDs.GetCount()));
 }
 
@@ -384,7 +384,7 @@ void FreeServicePnPIDs(CAtlArray<PWSTR>& ServicePnpIDs)
 
     for (size_t i=0; i<cServicePnPIDs; i++)
     {
-        CoTaskMemFree(ServicePnpIDs[i]);        
+        CoTaskMemFree(ServicePnpIDs[i]);
     }
     ServicePnpIDs.RemoveAll();
 }
@@ -427,7 +427,7 @@ void ChooseDeviceService(IPortableDeviceService** ppService)
     EumerateContactsServices(ContactsServicesArray);
 
     DWORD cServicePnPIDs = static_cast<DWORD>(ContactsServicesArray.GetCount());
-    
+
     if (cServicePnPIDs > 0)
     {
         CComPtr<IPortableDeviceService> pService;
@@ -452,7 +452,7 @@ void ChooseDeviceService(IPortableDeviceService** ppService)
 
         // CoCreate the IPortableDeviceService interface and call Open() with
         // the chosen PnPServiceID string.
-		//<SnippetOpenService2>
+        //<SnippetOpenService2>
         hr = CoCreateInstance(CLSID_PortableDeviceServiceFTM,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -480,7 +480,7 @@ void ChooseDeviceService(IPortableDeviceService** ppService)
                     printf("! Failed to Open the service, hr = 0x%lx\n",hr);
                 }
             }
-			//</SnippetOpenService2>
+            //</SnippetOpenService2>
             if (SUCCEEDED(hr))
             {
                 printf("Successfully opened the selected Contacts service\n");
@@ -488,7 +488,7 @@ void ChooseDeviceService(IPortableDeviceService** ppService)
                 // Successfully opened a service, set the result
                 *ppService = pService.Detach();
             }
-            
+
         }
         else
         {

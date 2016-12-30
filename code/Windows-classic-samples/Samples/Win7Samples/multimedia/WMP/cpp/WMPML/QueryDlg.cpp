@@ -1,4 +1,4 @@
-// QueryDlg.cpp : Implementation of CQueryDlg
+﻿// QueryDlg.cpp : Implementation of CQueryDlg
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -7,7 +7,7 @@
 #include "QueryDlg.h"
 
 // Commonly used metadata names
-WCHAR* g_pszAttrNames[] = 
+WCHAR* g_pszAttrNames[] =
 {
     L"Abstract",
     L"AcquisitionTime",
@@ -124,8 +124,9 @@ WCHAR* g_pszAttrNames[] =
 };
 
 // Supported query operators
-WCHAR* g_pszQueryOperators[] = 
-{\
+WCHAR* g_pszQueryOperators[] =
+{
+    \
     L"BeginsWith",
     L"Contains",
     L"Equals",
@@ -147,7 +148,7 @@ WCHAR* g_pszQueryOperators[] =
 CQueryDlg::CQueryDlg(IWMPMediaCollection2* pMC)
 {
     m_spMC = pMC;
-    
+
     if(m_spMC.p)
     {
         m_spMC->createQuery(&m_spQuery);
@@ -167,11 +168,11 @@ CQueryDlg::~CQueryDlg()
 LRESULT CQueryDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
     m_hQueryList = GetDlgItem(IDC_QUERYLIST);
-    
+
     // Add headers to Query Condition List
     LRESULT     dwStyle = 0;
     LVCOLUMN    lvc;
-    lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM; 
+    lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     lvc.fmt = LVCFMT_LEFT;
     lvc.iSubItem = 0;
     lvc.pszText = L"Logic";
@@ -195,7 +196,7 @@ LRESULT CQueryDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
         ::SendMessage(hQueryName,  CB_ADDSTRING, 0, (LPARAM)g_pszAttrNames[i]);
     }
     ::SendMessage(hQueryName,  CB_SETCURSEL, 46, 0);
-    
+
     // Add query operators to the dropdown lists
     HWND    hQueryOpr = GetDlgItem(IDC_QUERYOPR);
     for(int i = 0; i < sizeof(g_pszQueryOperators) / sizeof(g_pszQueryOperators[0]); i++)
@@ -228,7 +229,7 @@ LRESULT CQueryDlg::OnCancel(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BO
 * Called when use clicks on Add a Condition button
 ***********************************************************************/
 LRESULT CQueryDlg::OnAddCondition(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
-{  
+{
     HRESULT hr = S_OK;
 
     if(m_spQuery)
@@ -241,7 +242,7 @@ LRESULT CQueryDlg::OnAddCondition(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWn
         GetDlgItemText(IDC_QUERYVAL,   bstrValue.m_str);
 
         hr = (m_spQuery)->addCondition(bstrAttr, bstrOperator, bstrValue);
-        
+
         if(SUCCEEDED(hr))
         {
             // Show the new condition
@@ -274,7 +275,7 @@ LRESULT CQueryDlg::OnAddGroup(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl
     if(m_spQuery)
     {
         hr = (m_spQuery)->beginNextGroup();
-        
+
         if(SUCCEEDED(hr))
         {
             // Show the new condition
@@ -294,7 +295,7 @@ LRESULT CQueryDlg::OnAddGroup(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl
 
 /***********************************************************************
 * OnShowSC
-* Called when Show StringCollection button is clicked. 
+* Called when Show StringCollection button is clicked.
 * Close the dialog
 ***********************************************************************/
 LRESULT CQueryDlg::OnShowSC(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
@@ -312,18 +313,18 @@ LRESULT CQueryDlg::OnStartOver(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
     // We basically re-create a new query
     if(m_spQuery.p)
     {
-         m_spQuery.Release();
-         m_spQuery = NULL;
+        m_spQuery.Release();
+        m_spQuery = NULL;
     }
 
     if(m_spMC.p)
     {
         m_spMC->createQuery(&m_spQuery);
     }
-    
+
     // Clean up the condition list
     ListView_DeleteAllItems(m_hQueryList);
-    
+
     return 0;
 }
 

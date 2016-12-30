@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -20,48 +20,48 @@ SHVUIClassFactoryData* g_FactoryData = NULL;
 HWND g_hwndDlg = NULL;
 HINSTANCE g_hInst = NULL;
 
-// Cache of the remote configuration 
+// Cache of the remote configuration
 // or non-default configuration (multi-config)
 BYTE g_config = 0;
 
 //
-// g_fConfigModeMemoryOnly indicates that we are on remote configuration 
+// g_fConfigModeMemoryOnly indicates that we are on remote configuration
 // or non-default configuration (multi-config).
-// Hence instead of reading the configuration settings from registry, read it 
-// from g_config, which a cache of the configuration result, 
-// and the caller (NPS UI) will call SetConfig() or SetConfigToID() to persist it. 
+// Hence instead of reading the configuration settings from registry, read it
+// from g_config, which a cache of the configuration result,
+// and the caller (NPS UI) will call SetConfig() or SetConfigToID() to persist it.
 
-// When configuring the remote machine, the local machine invokes 
-// INapComponentConfig::GetConfig() on remote machine to obtain the remote 
-// machine configuration, it then invokes local UI by calling 
-// INapComponentConfig2::InvokeUIFromConfigBlob() and obtains user's changes. 
-// It sets the new changes to remote machine using 
+// When configuring the remote machine, the local machine invokes
+// INapComponentConfig::GetConfig() on remote machine to obtain the remote
+// machine configuration, it then invokes local UI by calling
+// INapComponentConfig2::InvokeUIFromConfigBlob() and obtains user's changes.
+// It sets the new changes to remote machine using
 // INapComponentConfig::SetConfig().
 //
 
-// When configuring a multi-config configuration, the scenario is similar to 
+// When configuring a multi-config configuration, the scenario is similar to
 // the remote configuration. The only difference is that
-// INapComponentConfig::GetConfig() is replaced with INapComponentConfig3::GetConfigFromID() 
+// INapComponentConfig::GetConfig() is replaced with INapComponentConfig3::GetConfigFromID()
 // and INapComponentConfig::SetConfig() is replaced with INapComponentConfig3::SetConfigToID()
 //
 BOOL g_fConfigModeMemoryOnly = FALSE;
 
 INT_PTR CALLBACK DlgProcSHVPage(
-             HWND hDlg, 
-             UINT message, 
-             WPARAM wParam, 
-             LPARAM //lParam
-             );
+    HWND hDlg,
+    UINT message,
+    WPARAM wParam,
+    LPARAM //lParam
+);
 
 // Caller needs to pass in an array of size of MAX_PATH or bigger to use this function safely.
 void AssembleRegkeyPathWithID (__out_ecount(MAX_PATH) LPTSTR pwszConfigRegkeyWithID, __in UINT32 uConfigID);
 
 int __stdcall wWinMain(
-    __in HINSTANCE hInst, 
+    __in HINSTANCE hInst,
     __in_opt HINSTANCE, // unreferenced hPrevInst
-    __in_opt LPWSTR lpCmdLine, 
+    __in_opt LPWSTR lpCmdLine,
     __in int // unreferenced nCmdShow
-    ) 
+)
 {
     BOOL bExit = FALSE ;
     BOOL bShow = TRUE;
@@ -72,7 +72,7 @@ int __stdcall wWinMain(
 
     WCHAR wszCmd[64];
     int nMax = sizeof(wszCmd)/sizeof(WCHAR);
-    
+
 
     g_hInst = hInst;
 
@@ -94,8 +94,8 @@ int __stdcall wWinMain(
 
     // Check for "/RegServer" or "/UnRegServer" parameters.
     LPWSTR szTokens = L"-/" ;
-	LPWSTR szNextToken = NULL;
-    LPWSTR szToken = wcstok_s(lpCmdLine, szTokens, &szNextToken) ; 
+    LPWSTR szNextToken = NULL;
+    LPWSTR szToken = wcstok_s(lpCmdLine, szTokens, &szNextToken) ;
     while (szToken != NULL)
     {
         LoadString(hInst, IDS_CMD_EMBEDDED, wszCmd, nMax);
@@ -138,33 +138,33 @@ int __stdcall wWinMain(
         while (bContinue)
         {
             dwResult = MsgWaitForMultipleObjects (
-                                1,
-                                NULL,
-                                FALSE,
-                                INFINITE,
-                                QS_ALLINPUT);
+                           1,
+                           NULL,
+                           FALSE,
+                           INFINITE,
+                           QS_ALLINPUT);
             switch (dwResult)
             {
-                case WAIT_OBJECT_0 + 1:
-                    MSG msg;
-                    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+            case WAIT_OBJECT_0 + 1:
+                MSG msg;
+                while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+                {
+                    if (msg.message == WM_QUIT)
                     {
-                        if (msg.message == WM_QUIT)
-                        {
-                            bContinue = FALSE;
-                            PostQuitMessage(0);
-                            break;
-                        }
-                        else
-                        {
-                            TranslateMessage(&msg);
-                            DispatchMessage(&msg);
-                        }
+                        bContinue = FALSE;
+                        PostQuitMessage(0);
+                        break;
                     }
-                    break;
+                    else
+                    {
+                        TranslateMessage(&msg);
+                        DispatchMessage(&msg);
+                    }
+                }
+                break;
 
-                default:
-                    break;
+            default:
+                break;
             }
         }
 
@@ -249,11 +249,11 @@ STDMETHODIMP ShvUI::IsUISupported(BOOL* isSupported)
 STDMETHODIMP ShvUI::InvokeUI(HWND hwndParent)
 {
     DialogBox(
-      g_hInst, 
-      MAKEINTRESOURCE(IDD_SDKSHV_DIALOG),
-      hwndParent,
-      DlgProcSHVPage
-      );
+        g_hInst,
+        MAKEINTRESOURCE(IDD_SDKSHV_DIALOG),
+        hwndParent,
+        DlgProcSHVPage
+    );
 
     return S_OK;
 }
@@ -271,12 +271,12 @@ ShvUI::GetConfig(UINT16 *bCount, BYTE** data)
     DWORD dwIsChecked = TRUE;
 
     result = ShvuiGetRegistryValue(
-                     HKEY_LOCAL_MACHINE,
-                     SDKSHV_DEFAULT_CONFIG_KEY,
-                     SHV_CONFIG_BLOB,
-                     REG_DWORD,
-                     (PVOID*)&dwIsChecked
-                     );
+                 HKEY_LOCAL_MACHINE,
+                 SDKSHV_DEFAULT_CONFIG_KEY,
+                 SHV_CONFIG_BLOB,
+                 REG_DWORD,
+                 (PVOID*)&dwIsChecked
+             );
 
     *bCount = (UINT16) sizeof(BYTE);
     *data = (BYTE*) CoTaskMemAlloc(sizeof(BYTE));
@@ -301,23 +301,23 @@ ShvUI::SetConfig(UINT16 bCount, BYTE* data)
     if (bCount == sizeof(g_config))
     {
         // set the cached data
-        g_config = *data; 
+        g_config = *data;
 
         // commit the cache
         BOOL isChecked = g_config;
         ShvuiSetRegistryValue(
-                        SDKSHV_DEFAULT_CONFIG_KEY,
-                        NULL,
-                        SHV_CONFIG_BLOB,
-                        REG_DWORD,
-                        (PBYTE)&isChecked,
-                        sizeof(DWORD)
-                        );
+            SDKSHV_DEFAULT_CONFIG_KEY,
+            NULL,
+            SHV_CONFIG_BLOB,
+            REG_DWORD,
+            (PBYTE)&isChecked,
+            sizeof(DWORD)
+        );
     }
     return S_OK;
 }
 
-STDMETHODIMP 
+STDMETHODIMP
 ShvUI::IsRemoteConfigSupported(BOOL* isSupported, UINT8* remoteConfigType)
 {
     *isSupported = TRUE;
@@ -325,31 +325,31 @@ ShvUI::IsRemoteConfigSupported(BOOL* isSupported, UINT8* remoteConfigType)
     return S_OK;
 }
 
-STDMETHODIMP 
+STDMETHODIMP
 ShvUI::InvokeUIForMachine(HWND hwndParent, CountedString* machineName)
 {
     MessageBox(hwndParent, L"InvokeUIForMachine", machineName->string, MB_OK);
     return S_OK;
 }
 
-STDMETHODIMP 
+STDMETHODIMP
 ShvUI::InvokeUIFromConfigBlob(
-                                HWND hwndParent,
-                                UINT16 inbCount,
-                                BYTE* inData, 
-                                UINT16* outbCount, 
-                                BYTE** outdata, 
-                                BOOL *fConfigChanged
-                                      )
+    HWND hwndParent,
+    UINT16 inbCount,
+    BYTE* inData,
+    UINT16* outbCount,
+    BYTE** outdata,
+    BOOL *fConfigChanged
+)
 {
     if (inbCount != sizeof(g_config))
     {
-         return E_INVALIDARG;
+        return E_INVALIDARG;
     }
 
     g_fConfigModeMemoryOnly = TRUE;
 
-    // 
+    //
     // We should have set it TRUE only if the results before and after are different.
     // To keep it simple, set it TRUE without comparison.
     //
@@ -358,11 +358,11 @@ ShvUI::InvokeUIFromConfigBlob(
     g_config = *inData;
 
     DialogBox(
-      g_hInst, 
-      MAKEINTRESOURCE(IDD_SDKSHV_DIALOG),
-      hwndParent,
-      DlgProcSHVPage
-      );
+        g_hInst,
+        MAKEINTRESOURCE(IDD_SDKSHV_DIALOG),
+        hwndParent,
+        DlgProcSHVPage
+    );
 
     *outbCount = (UINT16) inbCount;
     *outdata = (BYTE*)CoTaskMemAlloc(*outbCount);
@@ -417,12 +417,12 @@ STDMETHODIMP ShvUI::GetConfigFromID(UINT32 configID, UINT16* bCount, BYTE** outd
     AssembleRegkeyPathWithID(wszConfigRegkeyWithID, configID);
 
     result = ShvuiGetRegistryValue(
-                     HKEY_LOCAL_MACHINE,
-                     wszConfigRegkeyWithID,
-                     SHV_CONFIG_BLOB,
-                     REG_DWORD,
-                     (PVOID*)&dwIsChecked
-                     );
+                 HKEY_LOCAL_MACHINE,
+                 wszConfigRegkeyWithID,
+                 SHV_CONFIG_BLOB,
+                 REG_DWORD,
+                 (PVOID*)&dwIsChecked
+             );
 
     *bCount = (UINT16) sizeof(BYTE);
     *outdata = (BYTE*) CoTaskMemAlloc(sizeof(BYTE));
@@ -454,15 +454,15 @@ STDMETHODIMP ShvUI::SetConfigToID(UINT32 configID, UINT16 bCount, BYTE* outdata)
         // commit the cache
         BOOL isChecked = *outdata;
         ShvuiSetRegistryValue(
-                        wszConfigRegkeyWithID,
-                        NULL,
-                        SHV_CONFIG_BLOB,
-                        REG_DWORD,
-                        (PBYTE)&isChecked,
-                        sizeof(DWORD)
-                        );
+            wszConfigRegkeyWithID,
+            NULL,
+            SHV_CONFIG_BLOB,
+            REG_DWORD,
+            (PBYTE)&isChecked,
+            sizeof(DWORD)
+        );
     }
-    
+
     return S_OK;
 }
 
@@ -475,21 +475,21 @@ ProcessCheckBox(
     BOOL isChecked = FALSE;
 
     isChecked = (BST_CHECKED == (BOOL)IsDlgButtonChecked(
-                                                 hDlg,
-                                                 nIDCheckBox
-                                                 ));
+                     hDlg,
+                     nIDCheckBox
+                 ));
     if(nIDCheckBox == IDC_SDKSHV_FW)
     {
         if (!g_fConfigModeMemoryOnly)
         {
             result = ShvuiSetRegistryValue(
-                SDKSHV_DEFAULT_CONFIG_KEY,
-                NULL,
-                SHV_CONFIG_BLOB,
-                REG_DWORD,
-                (PBYTE)&isChecked,
-                sizeof(DWORD));
-        } 
+                         SDKSHV_DEFAULT_CONFIG_KEY,
+                         NULL,
+                         SHV_CONFIG_BLOB,
+                         REG_DWORD,
+                         (PBYTE)&isChecked,
+                         sizeof(DWORD));
+        }
         else
         {
             if(isChecked)
@@ -510,13 +510,13 @@ DWORD
 OnClickOk(HWND hDlg)
 {
     DWORD result = ERROR_SUCCESS;
-    
+
     result = ProcessCheckBox(
-            hDlg,
-            IDC_SDKSHV_FW);
+                 hDlg,
+                 IDC_SDKSHV_FW);
     DEBUGLOGRESULT(L"OnClickOk-ProcessCheckBox(IDC_SHV_FW)", result);
 
-cleanup:    
+cleanup:
     return result;
 }
 
@@ -529,48 +529,48 @@ InitializeCheckBoxes(HWND hDlg)
 
     if (g_fConfigModeMemoryOnly)
     {
-         dwIsChecked = g_config;
+        dwIsChecked = g_config;
     }
     else
     {
-         result = ShvuiGetRegistryValue(
-                         HKEY_LOCAL_MACHINE,
-                         SDKSHV_DEFAULT_CONFIG_KEY,
-                         SHV_CONFIG_BLOB,
-                         REG_DWORD,
-                         (PVOID*)&dwIsChecked
-                         );
+        result = ShvuiGetRegistryValue(
+                     HKEY_LOCAL_MACHINE,
+                     SDKSHV_DEFAULT_CONFIG_KEY,
+                     SHV_CONFIG_BLOB,
+                     REG_DWORD,
+                     (PVOID*)&dwIsChecked
+                 );
     }
 
-    // if the value is not present, we will try and set a defautl value of 1    
+    // if the value is not present, we will try and set a defautl value of 1
     if (result == ERROR_FILE_NOT_FOUND)
     {
         dwIsChecked = TRUE;
         result = ShvuiSetRegistryValue(
-                        SDKSHV_DEFAULT_CONFIG_KEY,
-                        NULL,
-                        SHV_CONFIG_BLOB,
-                        REG_DWORD,
-                        (PBYTE)&dwIsChecked,
-                        sizeof(DWORD));
+                     SDKSHV_DEFAULT_CONFIG_KEY,
+                     NULL,
+                     SHV_CONFIG_BLOB,
+                     REG_DWORD,
+                     (PBYTE)&dwIsChecked,
+                     sizeof(DWORD));
 
-        DEBUGLOGRESULT(L"SetCheckBox-ShvuiSetRegistryValue", result);        
+        DEBUGLOGRESULT(L"SetCheckBox-ShvuiSetRegistryValue", result);
     }
     else
     {
-        DEBUGLOGRESULT(L"SetCheckBox-ShvuiGetRegistryValue", result);        
+        DEBUGLOGRESULT(L"SetCheckBox-ShvuiGetRegistryValue", result);
     }
 
     if (dwIsChecked == TRUE)
     {
         if (FALSE == CheckDlgButton(
-                hDlg,
-                IDC_SDKSHV_FW,
-                (dwIsChecked == TRUE) ? BST_CHECKED : BST_UNCHECKED
+                    hDlg,
+                    IDC_SDKSHV_FW,
+                    (dwIsChecked == TRUE) ? BST_CHECKED : BST_UNCHECKED
                 ))
-            {
-                result = GetLastError();
-            }
+        {
+            result = GetLastError();
+        }
     }
 
 cleanup:
@@ -582,68 +582,68 @@ static BOOLEAN bInitializing = TRUE;
 
 // DlgProc
 INT_PTR CALLBACK DlgProcSHVPage(
-             HWND hDlg, 
-             UINT message, 
-             WPARAM wParam, 
-             LPARAM //lParam
-             )
-{    
+    HWND hDlg,
+    UINT message,
+    WPARAM wParam,
+    LPARAM //lParam
+)
+{
     DWORD result = ERROR_SUCCESS;
-    
+
     //
     // process message
-    //    
+    //
     switch(message)
     {
 
-        case WM_INITDIALOG:
-            // read from the registries and set the check boxes as appropriate
-            InitializeCheckBoxes(hDlg);
-            bInitializing = FALSE;
+    case WM_INITDIALOG:
+        // read from the registries and set the check boxes as appropriate
+        InitializeCheckBoxes(hDlg);
+        bInitializing = FALSE;
+        return TRUE;
+
+    case WM_COMMAND:
+
+        switch(LOWORD(wParam))
+        {
+        //Ignore check-boxes, these are processed in OnClickOK()
+        case IDC_SDKSHV_FW:
             return TRUE;
 
-        case WM_COMMAND:
-
-            switch(LOWORD(wParam))
+        case IDOK:
+            result = OnClickOk(hDlg);
+            if(ERROR_SUCCESS == result)
             {
-                //Ignore check-boxes, these are processed in OnClickOK()
-                case IDC_SDKSHV_FW:
-                    return TRUE;
-
-                case IDOK:
-                    result = OnClickOk(hDlg);
-                    if(ERROR_SUCCESS == result)
-                    {
-                        EndDialog(hDlg, 0);
-                    }
-                    return TRUE;
-                    
-                case IDAPPLY:
-                    result = OnClickOk(hDlg);
-                    break;
-                    
-                case IDCANCEL:
-                    // end the dialog
-                    EndDialog(hDlg, 0);
-                    return TRUE;
-                    
-                default:
-                    break;
+                EndDialog(hDlg, 0);
             }
+            return TRUE;
+
+        case IDAPPLY:
+            result = OnClickOk(hDlg);
             break;
 
-        case WM_QUIT:
+        case IDCANCEL:
             // end the dialog
-              EndDialog(hDlg, 0);
-		return TRUE;
+            EndDialog(hDlg, 0);
+            return TRUE;
+
         default:
-            break;                
+            break;
+        }
+        break;
+
+    case WM_QUIT:
+        // end the dialog
+        EndDialog(hDlg, 0);
+        return TRUE;
+    default:
+        break;
     }
     return FALSE;
 }
 
 void AssembleRegkeyPathWithID (__out_ecount(MAX_PATH) LPTSTR pwszConfigRegkeyWithID, __in UINT32 uConfigID)
-{    
+{
     ZeroMemory(pwszConfigRegkeyWithID, MAX_PATH);
     WCHAR wszConfigID[20] = {0};
     StringCchPrintf (wszConfigID, 20, L"\\%u", uConfigID);

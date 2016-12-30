@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -137,7 +137,7 @@ DWORD AddAttribute(
     IN     EapAttributeType eaType,
     IN     DWORD dwLength,
     IN     PVOID pValue
-    );
+);
 
 
 /**
@@ -221,7 +221,7 @@ DWORD AllocateandFillEapError(
     IN LPCGUID pHelpLinkGuid,
     IN _In_opt_ LPWSTR pRootCauseString,
     IN _In_opt_ LPWSTR pRepairString
-    );
+);
 
 DWORD CopyWideString(
     IN _In_opt_ LPWSTR pSrcWString,
@@ -235,26 +235,26 @@ DWORD CopyWideString(
 VOID HostToWireFormat32(
     IN     DWORD dwHostFormat,
     IN OUT PBYTE pWireFormat
-    );
+);
 
 /// Convert a 16-bit integer from host format to wire format.
 VOID HostToWireFormat16(
     IN     WORD  wHostFormat,
     IN OUT PBYTE pWireFormat
-    );
+);
 
 /// Convert a 16-bit integer from wire format to host format.
 VOID WireToHostFormat16(
     IN     WORD  wWireFormat,
     IN OUT PBYTE pHostFormat
-    );
+);
 
 /// Get the current working directory and appends dllName (input param) to it.
 DWORD GetFullPath(
-        OUT _Out_ LPWSTR &pathName,
-        IN OUT DWORD &pathNameLength,
-        IN _In_ LPWSTR dllName,
-        IN DWORD sizeofDllNameInBytes);
+    OUT _Out_ LPWSTR &pathName,
+    IN OUT DWORD &pathNameLength,
+    IN _In_ LPWSTR dllName,
+    IN DWORD sizeofDllNameInBytes);
 
 }  // End "namespace SDK_METHOD_SAMPLE_COMMON
 #endif  // __SDKMETHODCOMMON_H__

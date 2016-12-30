@@ -1,4 +1,4 @@
-// CustomBootstrapper.cpp - Implementation of CustomBootstrapper
+﻿// CustomBootstrapper.cpp - Implementation of CustomBootstrapper
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -161,8 +161,8 @@ HRESULT CustomDnsBootStrapper::Init(
 
 
 HRESULT CustomDnsBootStrapper::Attach(
-           const PVOID pvContext
-    )
+    const PVOID pvContext
+)
 {
     CustomDnsBootStrapper* pBootStrapper = (CustomDnsBootStrapper*) pvContext;
     LONG    lInitialValue;
@@ -178,8 +178,8 @@ HRESULT CustomDnsBootStrapper::Attach(
 }
 
 VOID CustomDnsBootStrapper::Detach(
-           const PVOID pvContext
-    )
+    const PVOID pvContext
+)
 
 {
     CustomDnsBootStrapper* pBootStrapper = (CustomDnsBootStrapper*) pvContext;
@@ -199,7 +199,7 @@ HRESULT CustomDnsBootStrapper::InitResolve(
     DWORD dwMaxResults,
     DRT_BOOTSTRAP_RESOLVE_CONTEXT* pResolveContext,
     BOOL* fFatalError
-    )
+)
 {
     HRESULT hr = S_OK;
     *fFatalError = FALSE;
@@ -212,7 +212,7 @@ HRESULT CustomDnsBootStrapper::InitResolve(
         hr = E_INVALIDARG;
         goto exit;
     }
-        
+
     *pResolveContext = NULL;
 
     hr = DRT_E_BOOTSTRAPPROVIDER_NOT_ATTACHED;
@@ -234,7 +234,7 @@ HRESULT CustomDnsBootStrapper::InitResolve(
 
             if(FAILED(hr))
             {
-            
+
                 *pResolveContext = NULL;
                 delete pBSResolveContext;
             }
@@ -246,7 +246,7 @@ HRESULT CustomDnsBootStrapper::InitResolve(
     }
 
 exit:
-    
+
     if FAILED(hr)
     {
         //
@@ -256,7 +256,7 @@ exit:
     }
 
     return (hr);
-}    
+}
 
 const DWORD dwIsatapPrivateV4Marker = 0x00005efe;
 const DWORD dwIsatapPublicV4Marker = 0x02005efe;
@@ -267,7 +267,7 @@ HRESULT CustomDnsBootStrapper::IssueResolve(
     DRT_BOOTSTRAP_RESOLVE_CALLBACK callback,
     DRT_BOOTSTRAP_RESOLVE_CONTEXT ResolveContext,
     BOOL* fFatalError
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -279,7 +279,7 @@ HRESULT CustomDnsBootStrapper::IssueResolve(
     {
         return E_INVALIDARG;
     }
-    
+
     hr = DRT_E_BOOTSTRAPPROVIDER_NOT_ATTACHED;
     if (pBootStrapper->m_lAttachCount != 0)
     {
@@ -288,7 +288,7 @@ HRESULT CustomDnsBootStrapper::IssueResolve(
         hr = pResolveContext->IssueResolve(pvCallbackContext, callback, pBootStrapper->m_szPortString, pBootStrapper->m_Address);
         pResolveContext->Release();
     }
-    
+
     if FAILED(hr)
     {
         //
@@ -301,8 +301,8 @@ HRESULT CustomDnsBootStrapper::IssueResolve(
 
 VOID CustomDnsBootStrapper::EndResolve(
     const PVOID pvContext,
-          DRT_BOOTSTRAP_RESOLVE_CONTEXT ResolveContext
-    )
+    DRT_BOOTSTRAP_RESOLVE_CONTEXT ResolveContext
+)
 {
     CBootStrapResolveContext* pResolveContext=(CBootStrapResolveContext*)ResolveContext;
     CustomDnsBootStrapper *ThisPtr = (CustomDnsBootStrapper *)pvContext;
@@ -317,7 +317,7 @@ VOID CustomDnsBootStrapper::EndResolve(
 HRESULT CustomDnsBootStrapper::Register(
     const PVOID pvContext,
     const SOCKET_ADDRESS_LIST* pAddressList
-    )
+)
 {
     //Custom DNS resolver Register does nothing at this time
     UNREFERENCED_PARAMETER(pvContext);
@@ -327,7 +327,7 @@ HRESULT CustomDnsBootStrapper::Register(
 
 VOID CustomDnsBootStrapper::Unregister(
     const PVOID pvContext
-    )
+)
 {
     //Custom DNS resolver Unregister does nothing at this time
     UNREFERENCED_PARAMETER(pvContext);
@@ -358,9 +358,9 @@ CBootStrapResolveContext::~CBootStrapResolveContext()
 }
 
 HRESULT CBootStrapResolveContext::Init(
-         BOOL fSplitDetect,
-         DWORD dwTimeout,
-         DWORD dwMaxResults)
+    BOOL fSplitDetect,
+    DWORD dwTimeout,
+    DWORD dwMaxResults)
 {
     HRESULT hr = S_OK;
 
@@ -370,19 +370,19 @@ HRESULT CBootStrapResolveContext::Init(
     {
         hr = E_OUTOFMEMORY;
     }
-    
+
     m_fSplitDetect = fSplitDetect;
     m_dwTimeout = dwTimeout;
     m_dwMaxResults = dwMaxResults;
- 
+
     return hr;
 }
 
 HRESULT CBootStrapResolveContext::IssueResolve(
-            __in_opt const PVOID pvCallbackContext,
-            DRT_BOOTSTRAP_RESOLVE_CALLBACK callback,
-            __in_ecount(32)  PCWSTR szPortString,
-             PWSTR address)
+    __in_opt const PVOID pvCallbackContext,
+    DRT_BOOTSTRAP_RESOLVE_CALLBACK callback,
+    __in_ecount(32)  PCWSTR szPortString,
+    PWSTR address)
 {
     HRESULT hr = S_OK;
     SOCKET_ADDRESS_LIST* Addresses = NULL;
@@ -397,7 +397,7 @@ HRESULT CBootStrapResolveContext::IssueResolve(
         PWCHAR      CurrentAddress = address;
         PWCHAR      EndAddress = NULL;
         WCHAR       SavedCharacter;
-        
+
         for(;;)
         {
             if(m_fEndResolve)
@@ -431,7 +431,7 @@ HRESULT CBootStrapResolveContext::IssueResolve(
 
             ADDRINFOW* results = NULL;
             ADDRINFOW* resultsCopy = NULL;
-            
+
             int nStat = GetAddrInfoW( CurrentAddress, szPortString, &addrInf, &results );
             if ( nStat == 0 )
             {
@@ -444,7 +444,7 @@ HRESULT CBootStrapResolveContext::IssueResolve(
                 {
                     *EndAddress=SavedCharacter;
                     hr = E_OUTOFMEMORY;
-                
+
                     goto exit;
                 }
 
@@ -452,7 +452,7 @@ HRESULT CBootStrapResolveContext::IssueResolve(
                 ZeroMemory( psockAddrs, m_dwMaxResults * sizeof(SOCKADDR_IN6) );
 
                 resultsCopy = results;
-                while((NULL != results) && (idx < m_dwMaxResults)) 
+                while((NULL != results) && (idx < m_dwMaxResults))
                 {
                     Addresses->iAddressCount++;
                     if(results->ai_family == AF_INET)
@@ -469,7 +469,7 @@ HRESULT CBootStrapResolveContext::IssueResolve(
 
                         psockAddrs[idx].sin6_family = AF_INET6;
                         psockAddrs[idx].sin6_port = pAddr->sin_port;
-                        
+
                         pTunnel[0] = htonl(0xfe800000);
                         pTunnel[1] = 0x00000000;
                         pTunnel[2] = htonl(fIsPrivate ? dwIsatapPrivateV4Marker : dwIsatapPublicV4Marker);
@@ -501,7 +501,7 @@ HRESULT CBootStrapResolveContext::IssueResolve(
             else
             {
                 //
-                // GetAddrInfoW Failed  
+                // GetAddrInfoW Failed
                 // but there may be more addresses in the string so keep going
                 // otherwise we return E_NO_MORE and retry next cycle
                 //
@@ -551,7 +551,7 @@ CBootStrapResolveContext::EndResolve()
     HANDLE CallbackComplete = NULL;
 
     CallbackComplete = CreateEvent(NULL, TRUE, FALSE, NULL);
-    
+
     EnterCriticalSection(&m_Lock);
     if(m_fResolveInProgress && ( GetCurrentThreadId() != m_CallbackThreadId) )
     {
@@ -577,7 +577,7 @@ CBootStrapResolveContext::EndResolve()
         CloseHandle(CallbackComplete);
         CallbackComplete = NULL;
     }
-    
+
     if(fWaitForCallback && m_hCallbackComplete)
     {
         WaitForSingleObject(m_hCallbackComplete, INFINITE);

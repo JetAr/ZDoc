@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -35,7 +35,7 @@ typedef enum ResourceProfileType
     SampleCMYKPrinter,
     // CMYKPrinter.cdmp included with this sample application
     SampleCRTProfileWithPlugin,
-    // PluginProfile.cdmp included with this sample, which 
+    // PluginProfile.cdmp included with this sample, which
     // references a GUID that will invoke the plugin sample
     // from the seperate WCS plugin sample package if present
     SampleGmmpWithPlugin
@@ -45,40 +45,41 @@ typedef enum ResourceProfileType
 // Base class for classes doing color demonstrations to inherit
 // from in this sample.  This exposes a common method to run
 // the demos and utility methods to load and save images.
-// LIMITATION: The input and output format and header must 
+// LIMITATION: The input and output format and header must
 // be equivalent in this sample!
 //
-class IWcsDemo{
+class IWcsDemo
+{
 public:
     virtual HRESULT RunDemos() = 0;
 
 protected:
-    static HRESULT 
+    static HRESULT
     LoadsRGBImage(
-        __deref_out_bcount(*pcbBitmapData) BYTE **ppaBitmapData, 
+        __deref_out_bcount(*pcbBitmapData) BYTE **ppaBitmapData,
         __out DWORD *pcbBitmapData,
         __out DWORD *pdwWidth,
         __out DWORD *pdwHeight,
         __out DWORD *pdwHorizontalResolution,
         __out DWORD *pdwVerticalResolution
-        );
+    );
 
-    static HRESULT 
+    static HRESULT
     SaveImage(
         __in PCWSTR pwszImageFilename,
         __in SampleBitmapType BitmapType,
-        __in_bcount(cbBitmapData) BYTE *paBitmapData, 
+        __in_bcount(cbBitmapData) BYTE *paBitmapData,
         __in DWORD cbBitmapData,
         __in DWORD dwWidth,
         __in DWORD dwHeight,
         __in DWORD dwHorizontalResolution,
         __in DWORD dwVerticalResolution
-        );
+    );
 
     static HRESULT GetProfileFromResource(
         __in ResourceProfileType ProfileID,
         __out PROFILE *pProfile
-        );
+    );
 
     static PPROFILE GetD50CAMP();
 
@@ -86,10 +87,10 @@ protected:
 
     static HRESULT SavePixelData(
         __in PCWSTR pwszFilename,
-        __in_bcount(cbBitmapData) BYTE *paData, 
+        __in_bcount(cbBitmapData) BYTE *paData,
         __in DWORD cbData
-        );
-    
+    );
+
 };
 
 //
@@ -114,9 +115,9 @@ private:
     HRESULT DemonstrateIccOnlyWcsTransform();
 
     static HRESULT TranslateAndOutputRGBImage(
-        __in HTRANSFORM hTransform, 
+        __in HTRANSFORM hTransform,
         __in PCWSTR pwszOutputFilename
-        );
+    );
 };
 
 //
@@ -140,5 +141,5 @@ private:
         __in ResourceProfileType OutputProfileType,
         __in PPROFILE OutputViewingConditionsProfile,
         __deref_out HTRANSFORM *phTransform
-        );
+    );
 };

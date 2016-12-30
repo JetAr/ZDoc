@@ -1,4 +1,4 @@
-//{{NO_DEPENDENCIES}}
+﻿//{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
 // Used by DMOEnum.rc
 //
@@ -51,7 +51,7 @@
 #define IDC_STATIC_IN_MINBUFFERSIZE2    1038
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129

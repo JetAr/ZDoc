@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -21,19 +21,19 @@
 //
 // Function Declarations
 //
-VOID DeviceControl( 
+VOID DeviceControl(
     __in IFunctionInstance* pFunInst
-    );
+);
 
 LONG GetDesiredTempFromUser();
 
 HRESULT GetDeviceFiFromUser(
     __deref_out IFunctionInstance** ppFunInst
-    );
+);
 
 HRESULT PrintDeviceFiInfo(
     __in IFunctionInstance* pFunInst
-    );
+);
 
 //
 // Globals
@@ -94,9 +94,9 @@ int __cdecl wmain( int argc, __in_ecount(argc) wchar_t* argv[] )
 //      Presents the user with information about the device represented by the
 //      FI. Also allows minimum interaction with the device.
 //------------------------------------------------------------------------------
-VOID DeviceControl( 
+VOID DeviceControl(
     IFunctionInstance* pFunInst
-    )
+)
 {
     HRESULT             hr                  = S_OK;
     ULONG               i                   = 0;
@@ -112,10 +112,10 @@ VOID DeviceControl(
     //
     wprintf( L"Query service on the FI for ISimpleThermostat...\n" );
     hr = pFunInst->QueryService(
-        __uuidof(SimpleThermostatProxy),
-        __uuidof(ISimpleThermostat),
-        reinterpret_cast<void**>(&pSimpleThermostat)
-        );
+             __uuidof(SimpleThermostatProxy),
+             __uuidof(ISimpleThermostat),
+             reinterpret_cast<void**>(&pSimpleThermostat)
+         );
     wprintf( L"Query service for ISimpleThermostat returned...0x%x\n", hr );
 
     //
@@ -128,7 +128,7 @@ VOID DeviceControl(
         wprintf( L"0x%x\n", hr );
     }
 
-    if( S_OK == hr )   
+    if( S_OK == hr )
     {
         wprintf( L"GetValue of PKEY_PNPX_FriendlyName..." );
         hr = pPropStore->GetValue( PKEY_PNPX_FriendlyName, &pvName );
@@ -146,7 +146,7 @@ VOID DeviceControl(
     // Respond to commands from the user until they choose to exit
     //
     while( S_OK == hr &&
-           i != 3 )
+            i != 3 )
     {
         wprintf( L"GetCurrentTemp from thermostat (remote call)..." );
         hr = pSimpleThermostat->GetCurrentTemp( &lCurrentTemp );
@@ -257,7 +257,7 @@ LONG GetDesiredTempFromUser()
 //------------------------------------------------------------------------------
 HRESULT GetDeviceFiFromUser(
     IFunctionInstance** ppFunInst
-    )
+)
 {
     ULONG                               ulCount                     = 0;
     HRESULT                             hr                          = S_OK;
@@ -270,25 +270,25 @@ HRESULT GetDeviceFiFromUser(
 
     wprintf( L"CoCreate the Function Discovery object..." );
     hr = CoCreateInstance(
-        __uuidof(FunctionDiscovery),
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        __uuidof(IFunctionDiscovery),
-        reinterpret_cast<void**>(&pFunDisc)
-        );
+             __uuidof(FunctionDiscovery),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IFunctionDiscovery),
+             reinterpret_cast<void**>(&pFunDisc)
+         );
     wprintf( L"0x%x\n", hr );
 
     if ( S_OK == hr )
     {
         wprintf( L"Create an PnP instance collection query..." );
         hr = pFunDisc->CreateInstanceCollectionQuery(
-            FCTN_CATEGORY_PNP,
-            NULL,
-            FALSE,
-            NULL,
-            NULL,
-            &pFunInstsQuery
-            );
+                 FCTN_CATEGORY_PNP,
+                 NULL,
+                 FALSE,
+                 NULL,
+                 NULL,
+                 &pFunInstsQuery
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -297,9 +297,9 @@ HRESULT GetDeviceFiFromUser(
         wprintf( L"Adding ISimpleThermostat as an interface constraint on the query..." );
         StringFromGUID2( __uuidof(ISimpleThermostat), szInterface, GUID_CCH_LEN );
         hr = pFunInstsQuery->AddQueryConstraint(
-            PROVIDERPNP_QUERYCONSTRAINT_INTERFACECLASS,
-            szInterface
-            );
+                 PROVIDERPNP_QUERYCONSTRAINT_INTERFACECLASS,
+                 szInterface
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -321,7 +321,7 @@ HRESULT GetDeviceFiFromUser(
         wprintf( L"  -  -------------------------  ---------------------------------------------\n" );
 
         if( S_OK == hr &&
-            ulCount < 1 )
+                ulCount < 1 )
         {
             wprintf( L"  No ISimpleThermostat devices found\n" );
             hr = E_FAIL;
@@ -349,13 +349,13 @@ HRESULT GetDeviceFiFromUser(
     }
 
     if( S_OK == hr &&
-        ulCount > 0 )
+            ulCount > 0 )
     {
         wprintf( L"  Select a device> " );
         i = _getche() - '0';
         wprintf( L"\n\n" );
         if( 0 >= i ||
-            ulCount < i )
+                ulCount < i )
         {
             wprintf( L"Invalid selection...\n" );
             hr = E_FAIL;
@@ -408,7 +408,7 @@ HRESULT GetDeviceFiFromUser(
 //------------------------------------------------------------------------------
 HRESULT PrintDeviceFiInfo(
     IFunctionInstance* pFunInst
-    )
+)
 {
     HRESULT         hr          = S_OK;
     PROPVARIANT     pvName      = {0};
@@ -422,7 +422,7 @@ HRESULT PrintDeviceFiInfo(
 
     hr = pFunInst->OpenPropertyStore( STGM_READ, &pPropStore );
 
-    if( S_OK == hr )   
+    if( S_OK == hr )
     {
         hr = pPropStore->GetValue( PKEY_PNPX_FriendlyName, &pvName );
     }
@@ -433,8 +433,8 @@ HRESULT PrintDeviceFiInfo(
     }
 
     if( S_OK == hr &&
-        VT_LPWSTR == pvName.vt &&
-        VT_LPWSTR == pvID.vt )
+            VT_LPWSTR == pvName.vt &&
+            VT_LPWSTR == pvID.vt )
     {
         wprintf( L"%-25.25s  %-45.45s", pvName.pwszVal, pvID.pwszVal );
     }

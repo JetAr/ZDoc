@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -17,18 +17,18 @@
     FUNCTIONS:
 
         wmain() - implements overall command line application
-        WpcsCmplApiUserIsLoggingRequired() - updates out param flag 
+        WpcsCmplApiUserIsLoggingRequired() - updates out param flag
           specifying whether activity logging policy is on for a user
-        WpcsCmplApiUserSettingsChangeTime() - sets out param time of 
+        WpcsCmplApiUserSettingsChangeTime() - sets out param time of
           last change in policy settings for a user
-        WpcsCmplApiUserGetRestrictions() - sets bitfields in out 
+        WpcsCmplApiUserGetRestrictions() - sets bitfields in out
           param DWORD of active restriction silos for a user
-        WpcsCmplApiGamesIsBlocked() - sets out param DWORD reason 
-          code for any blocking of game specified by AppID GUID for 
+        WpcsCmplApiGamesIsBlocked() - sets out param DWORD reason
+          code for any blocking of game specified by AppID GUID for
           a user
-        WpcsCmplApiWebGetSettings() - sets bitfields in out param 
+        WpcsCmplApiWebGetSettings() - sets bitfields in out param
           DWORD of active web restriction policies for a user
-        WpcsCmplApiWebRequestUrlOverride() - specifying a URL and 
+        WpcsCmplApiWebRequestUrlOverride() - specifying a URL and
           optionally a set of associated subURLs, this method fires
           an administrator override request dialog
         CmdLineParse() - helper handling command line input
@@ -45,24 +45,24 @@
 
 
 HRESULT WpcsCmplApiUserIsLoggingRequired(IWindowsParentalControls* pWPC, PCWSTR pcszSID,
-                                         BOOL* pfLoggingRequired);
+        BOOL* pfLoggingRequired);
 
 HRESULT WpcsCmplApiUserSettingsChangeTime(IWindowsParentalControls* pWPC, PCWSTR pcszSID,
-                                          SYSTEMTIME* pLastTime);
+        SYSTEMTIME* pLastTime);
 
 HRESULT WpcsCmplApiUserGetRestrictions(IWindowsParentalControls* pWPC, PCWSTR pcszSID,
                                        DWORD* pdwRestrictions);
 
-HRESULT WpcsCmplApiGamesIsBlocked(IWindowsParentalControls* pWPC, PCWSTR pcszSID, 
+HRESULT WpcsCmplApiGamesIsBlocked(IWindowsParentalControls* pWPC, PCWSTR pcszSID,
                                   GUID guidAppID, DWORD* pdwBlockedReasons);
 
 HRESULT WpcsCmplApiWebGetSettings(IWindowsParentalControls* pWPC, PCWSTR pcszSID,
                                   DWORD* pdwWebSettings);
 
-HRESULT WpcsCmplApiWebRequestUrlOverride(IWindowsParentalControls* pWPC, 
-                                         HWND hAppWindow, PCWSTR pcszSID, PCWSTR pcszUrl, 
-                                         DWORD dwNumSubUrl, PCWSTR* ppcszSubUrl, 
-                                         BOOL* pfChanged);
+HRESULT WpcsCmplApiWebRequestUrlOverride(IWindowsParentalControls* pWPC,
+        HWND hAppWindow, PCWSTR pcszSID, PCWSTR pcszUrl,
+        DWORD dwNumSubUrl, PCWSTR* ppcszSubUrl,
+        BOOL* pfChanged);
 
 
 HRESULT CmdLineParse(int argc, WCHAR* argv[], PARSERESULT* pParseResult);
@@ -108,7 +108,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
         {
             // Obtain Compliance Interface
             IWindowsParentalControls* piWPC;
-            hr = CoCreateInstance(__uuidof(WindowsParentalControls), 0, CLSCTX_INPROC_SERVER, 
+            hr = CoCreateInstance(__uuidof(WindowsParentalControls), 0, CLSCTX_INPROC_SERVER,
                                   __uuidof(IWindowsParentalControls), (LPVOID *)&piWPC);
             if (FAILED(hr))
             {
@@ -121,167 +121,167 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
                 // Perform mode-specific operations
                 switch (stParseResult.eOperation)
                 {
-                    case OPERATION_USER:
+                case OPERATION_USER:
+                {
+                    BOOL fLoggingRequired;
+                    SYSTEMTIME LastTime;
+                    DWORD dwUserRestrictions;
+                    DWORD dwWebSettings;
+                    hr = WpcsCmplApiUserIsLoggingRequired(piWPC, stParseResult.pszSID,
+                                                          &fLoggingRequired);
+                    if (FAILED(hr))
                     {
-                        BOOL fLoggingRequired;
-                        SYSTEMTIME LastTime;
-                        DWORD dwUserRestrictions;
-                        DWORD dwWebSettings;
-                        hr = WpcsCmplApiUserIsLoggingRequired(piWPC, stParseResult.pszSID, 
-                             &fLoggingRequired);
+                        wprintf(L"Error:  WpcsCmplApiUserIsLoggingRequired() failed, hr is %8x.\n", hr);
+                    }
+                    else
+                    {
+                        // Print results
+                        hr = WpcsCmplApiUserSettingsChangeTime(piWPC, stParseResult.pszSID,
+                                                               &LastTime);
                         if (FAILED(hr))
                         {
-                            wprintf(L"Error:  WpcsCmplApiUserIsLoggingRequired() failed, hr is %8x.\n", hr);
+                            wprintf(L"Error:  WpcsCmplApiUserSettingsChangeTime() failed, hr is %8x.\n", hr);
                         }
                         else
                         {
-                            // Print results
-                            hr = WpcsCmplApiUserSettingsChangeTime(piWPC, stParseResult.pszSID, 
-                                &LastTime);
+                            hr = WpcsCmplApiUserGetRestrictions(piWPC, stParseResult.pszSID,
+                                                                &dwUserRestrictions);
                             if (FAILED(hr))
                             {
-                                wprintf(L"Error:  WpcsCmplApiUserSettingsChangeTime() failed, hr is %8x.\n", hr);
+                                wprintf(L"Error:  WpcsCmplApiUserGetRestrictions() failed, hr is %8x.\n", hr);
                             }
                             else
                             {
-                                hr = WpcsCmplApiUserGetRestrictions(piWPC, stParseResult.pszSID, 
-                                    &dwUserRestrictions);
+                                hr = WpcsCmplApiWebGetSettings(piWPC, stParseResult.pszSID, &dwWebSettings);
                                 if (FAILED(hr))
                                 {
-                                    wprintf(L"Error:  WpcsCmplApiUserGetRestrictions() failed, hr is %8x.\n", hr);
+                                    wprintf(L"Error:  WpcsmplApiWebGetSettings() failed, hr is %8x.\n", hr);
                                 }
                                 else
                                 {
-                                    hr = WpcsCmplApiWebGetSettings(piWPC, stParseResult.pszSID, &dwWebSettings);
-                                    if (FAILED(hr))
+                                    wprintf(L"Info:  User IsLoggingRequired is %s\n",
+                                            (fLoggingRequired == TRUE) ? L"TRUE" : L"FALSE");
+
+                                    // Display SYSTEMTIME info
+                                    wprintf(L"Info:  Last settings change time is %4d/%02d/%02d %02d:%02d:%02d.%03d  UTC\n",
+                                            LastTime.wYear, LastTime.wMonth, LastTime.wDay,
+                                            LastTime.wHour, LastTime.wMinute, LastTime.wSecond,
+                                            LastTime.wMilliseconds);
+
+                                    // Print web settings
+                                    wprintf(L"Info:  User web settings:");
+                                    if (dwWebSettings == WPCFLAG_WEB_SETTING_NOTBLOCKED)
                                     {
-                                        wprintf(L"Error:  WpcsmplApiWebGetSettings() failed, hr is %8x.\n", hr);
+                                        wprintf(L"  No blocking\n");
                                     }
                                     else
                                     {
-                                        wprintf(L"Info:  User IsLoggingRequired is %s\n", 
-                                                (fLoggingRequired == TRUE) ? L"TRUE" : L"FALSE");
-
-                                        // Display SYSTEMTIME info
-                                        wprintf(L"Info:  Last settings change time is %4d/%02d/%02d %02d:%02d:%02d.%03d  UTC\n",
-                                                 LastTime.wYear, LastTime.wMonth, LastTime.wDay, 
-                                                 LastTime.wHour, LastTime.wMinute, LastTime.wSecond, 
-                                                 LastTime.wMilliseconds);
-
-                                        // Print web settings
-                                        wprintf(L"Info:  User web settings:");
-                                        if (dwWebSettings == WPCFLAG_WEB_SETTING_NOTBLOCKED)
-                                        {
-                                            wprintf(L"  No blocking\n");
-                                        }
-                                        else
-                                        {
-                                            // Leave room for future expansion
-                                            wprintf(L"\t Download blocking is %s\n", 
+                                        // Leave room for future expansion
+                                        wprintf(L"\t Download blocking is %s\n",
                                                 (dwWebSettings & WPCFLAG_WEB_SETTING_DOWNLOADSBLOCKED) ?
                                                 L"on" : L"off");
-                                        }
-                                        
-                                        // Print user restrictions fields
-                                        wprintf(L"Info:  User restrictions:");
-                                        if (dwUserRestrictions == WPCFLAG_NO_RESTRICTION)
-                                        {
-                                            wprintf(L"\t None\n");
-                                        }
-                                        else
-                                        {
-                                            wprintf(L"\n\t Logging required is %s\n", 
+                                    }
+
+                                    // Print user restrictions fields
+                                    wprintf(L"Info:  User restrictions:");
+                                    if (dwUserRestrictions == WPCFLAG_NO_RESTRICTION)
+                                    {
+                                        wprintf(L"\t None\n");
+                                    }
+                                    else
+                                    {
+                                        wprintf(L"\n\t Logging required is %s\n",
                                                 (dwUserRestrictions & WPCFLAG_LOGGING_REQUIRED) ?
                                                 L"on" : L"off");
-                                            wprintf(L"\t Web restrictions are %s\n", 
+                                        wprintf(L"\t Web restrictions are %s\n",
                                                 (dwUserRestrictions & WPCFLAG_WEB_FILTERED) ?
                                                 L"on" : L"off");
-                                            wprintf(L"\t Hours restrictions are %s\n", 
+                                        wprintf(L"\t Hours restrictions are %s\n",
                                                 (dwUserRestrictions & WPCFLAG_HOURS_RESTRICTED) ?
                                                 L"on" : L"off");
-                                            wprintf(L"\t Games restrictions are %s\n", 
+                                        wprintf(L"\t Games restrictions are %s\n",
                                                 (dwUserRestrictions & WPCFLAG_HOURS_RESTRICTED) ?
                                                 L"on" : L"off");
-                                            wprintf(L"\t Application restrictions are %s\n", 
+                                        wprintf(L"\t Application restrictions are %s\n",
                                                 (dwUserRestrictions & WPCFLAG_APPS_RESTRICTED) ?
                                                 L"on" : L"off");
 
-                                        }
                                     }
                                 }
                             }
                         }
                     }
-                    break;
+                }
+                break;
 
 
                 case OPERATION_ISGAMEBLOCKED:
+                {
+                    DWORD dwBlockedReasons = 0;
+                    hr = WpcsCmplApiGamesIsBlocked(piWPC, stParseResult.pszSID,
+                                                   stParseResult.guidAppID, &dwBlockedReasons);
+                    if (FAILED(hr))
                     {
-                        DWORD dwBlockedReasons = 0;
-                        hr = WpcsCmplApiGamesIsBlocked(piWPC, stParseResult.pszSID, 
-                                                       stParseResult.guidAppID, &dwBlockedReasons);
-                        if (FAILED(hr))
+                        wprintf(L"Error:  WpcsCmplApiGamesIsBlocked() failed, hr is %8x.\n", hr);
+                    }
+                    else
+                    {
+                        // Print games IsBlocked reasons
+                        wprintf(L"Info:  Games IsBlocked reason:\n");
+                        if (dwBlockedReasons == WPCFLAG_ISBLOCKED_NOTBLOCKED)
                         {
-                            wprintf(L"Error:  WpcsCmplApiGamesIsBlocked() failed, hr is %8x.\n", hr);
+                            wprintf(L"\tNot blocked\n");
+                        }
+                        else if (dwBlockedReasons == WPCFLAG_ISBLOCKED_INTERNALERROR)
+                        {
+                            wprintf(L"tInternal error\n");
+                        }
+                        else if (dwBlockedReasons & WPCFLAG_ISBLOCKED_EXPLICITBLOCK)
+                        {
+                            wprintf(L"\tExplicit block\n");
+                        }
+                        else if (dwBlockedReasons & WPCFLAG_ISBLOCKED_RATINGBLOCKED)
+                        {
+                            wprintf(L"\tRating block\n");
+                        }
+                        else if (dwBlockedReasons & WPCFLAG_ISBLOCKED_DESCRIPTORBLOCKED)
+                        {
+                            wprintf(L"\tRating descriptor block\n");
                         }
                         else
                         {
-                            // Print games IsBlocked reasons
-                            wprintf(L"Info:  Games IsBlocked reason:\n");
-                            if (dwBlockedReasons == WPCFLAG_ISBLOCKED_NOTBLOCKED)
-                            {
-                                wprintf(L"\tNot blocked\n");
-                            }
-                            else if (dwBlockedReasons == WPCFLAG_ISBLOCKED_INTERNALERROR)
-                            {
-                                wprintf(L"tInternal error\n");
-                            }
-                            else if (dwBlockedReasons & WPCFLAG_ISBLOCKED_EXPLICITBLOCK)
-                            {
-                                wprintf(L"\tExplicit block\n");
-                            }
-                            else if (dwBlockedReasons & WPCFLAG_ISBLOCKED_RATINGBLOCKED)
-                            {
-                                wprintf(L"\tRating block\n");
-                            } 
-                            else if (dwBlockedReasons & WPCFLAG_ISBLOCKED_DESCRIPTORBLOCKED)
-                            {
-                                wprintf(L"\tRating descriptor block\n");
-                            }
-                            else
-                            {
-                                wprintf(L"\tUnknown reason\n");
-                            }
+                            wprintf(L"\tUnknown reason\n");
                         }
                     }
-                    break;
+                }
+                break;
 
                 case OPERATION_REQUESTURLOVERRIDE:
+                {
+                    BOOL fChanged = FALSE;
+                    // Pass in handle of application main window.  For purposes of this console-based
+                    //  sample, NULL is used
+                    hr = WpcsCmplApiWebRequestUrlOverride(piWPC,
+                                                          NULL,
+                                                          stParseResult.pszSID,
+                                                          stParseResult.stRequestUrlOverride.pszUrl,
+                                                          stParseResult.stRequestUrlOverride.dwNumSubUrl,
+                                                          stParseResult.stRequestUrlOverride.ppcszSubUrl,
+                                                          &fChanged);
+                    if (FAILED(hr))
                     {
-                        BOOL fChanged = FALSE;
-                        // Pass in handle of application main window.  For purposes of this console-based
-                        //  sample, NULL is used
-                        hr = WpcsCmplApiWebRequestUrlOverride(piWPC, 
-                                            NULL,
-                                            stParseResult.pszSID, 
-                                            stParseResult.stRequestUrlOverride.pszUrl, 
-                                            stParseResult.stRequestUrlOverride.dwNumSubUrl, 
-                                            stParseResult.stRequestUrlOverride.ppcszSubUrl, 
-                                            &fChanged);
-                        if (FAILED(hr))
-                        {
-                            wprintf(L"Error:  WpcsCmplApiWebRequestUrlOverride() failed, hr is %8x.\n", hr);
-                        }
-                        else
-                        {
-                            wprintf(L"Info:  User web request URL override changed is %s.\n", 
-                                fChanged ? L"TRUE" : L"FALSE");
-                        }
+                        wprintf(L"Error:  WpcsCmplApiWebRequestUrlOverride() failed, hr is %8x.\n", hr);
                     }
-                    break;
+                    else
+                    {
+                        wprintf(L"Info:  User web request URL override changed is %s.\n",
+                                fChanged ? L"TRUE" : L"FALSE");
+                    }
+                }
+                break;
                 }
                 piWPC->Release();
-            }    
+            }
             WpcuCOMCleanup();
         }
     }
@@ -297,7 +297,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) WCHAR* argv[])
 
 
 HRESULT WpcsCmplApiUserIsLoggingRequired(IWindowsParentalControls* piWPC, PCWSTR pcszSID,
-                                         BOOL* pfLoggingRequired)
+        BOOL* pfLoggingRequired)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -315,12 +315,12 @@ HRESULT WpcsCmplApiUserIsLoggingRequired(IWindowsParentalControls* piWPC, PCWSTR
             piWPCSettings->Release();
         }
     }
-    
+
     return (hr);
 }
 
 HRESULT WpcsCmplApiUserSettingsChangeTime(IWindowsParentalControls* piWPC, PCWSTR pcszSID,
-                                          SYSTEMTIME* pLastTime)
+        SYSTEMTIME* pLastTime)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -338,7 +338,7 @@ HRESULT WpcsCmplApiUserSettingsChangeTime(IWindowsParentalControls* piWPC, PCWST
             piWPCSettings->Release();
         }
     }
-    
+
     return (hr);
 }
 
@@ -360,7 +360,7 @@ HRESULT WpcsCmplApiUserGetRestrictions(IWindowsParentalControls* piWPC, PCWSTR p
             piWPCSettings->Release();
         }
     }
-    
+
     return (hr);
 }
 
@@ -382,7 +382,7 @@ HRESULT WpcsCmplApiGamesIsBlocked(IWindowsParentalControls* piWPC, PCWSTR pcszSI
             piWPCGamesSettings->Release();
         }
     }
-    
+
     return (hr);
 }
 
@@ -404,14 +404,14 @@ HRESULT WpcsCmplApiWebGetSettings(IWindowsParentalControls* piWPC, PCWSTR pcszSI
             piWPCWebSettings->Release();
         }
     }
-    
+
     return (hr);
 }
 
 HRESULT WpcsCmplApiWebRequestUrlOverride(IWindowsParentalControls* piWPC,
-                                         HWND hAppWindow, PCWSTR pcszSID, PCWSTR pcszUrl, 
-                                         DWORD dwNumSubUrl, PCWSTR* ppcszSubUrl, 
-                                         BOOL* pfChanged)
+        HWND hAppWindow, PCWSTR pcszSID, PCWSTR pcszUrl,
+        DWORD dwNumSubUrl, PCWSTR* ppcszSubUrl,
+        BOOL* pfChanged)
 {
     HRESULT hr = E_INVALIDARG;
 
@@ -425,8 +425,8 @@ HRESULT WpcsCmplApiWebRequestUrlOverride(IWindowsParentalControls* piWPC,
         if (SUCCEEDED(hr))
         {
             // Call method
-            hr = piWPCWebSettings->RequestURLOverride(hAppWindow, pcszUrl, dwNumSubUrl, 
-                                                      ppcszSubUrl, pfChanged);
+            hr = piWPCWebSettings->RequestURLOverride(hAppWindow, pcszUrl, dwNumSubUrl,
+                    ppcszSubUrl, pfChanged);
             piWPCWebSettings->Release();
         }
     }
@@ -452,7 +452,7 @@ HRESULT CmdLineParse(int argc, WCHAR* argv[], PARSERESULT* pParseResult)
         BOOL fOperation = FALSE;
         PCWSTR pcszUserName = NULL;
         int i;
-        
+
         // Determine operational mode and check prerequisites
         for (i = 1; !fOperation && i < 3 && i < argc; ++i)
         {
@@ -483,34 +483,34 @@ HRESULT CmdLineParse(int argc, WCHAR* argv[], PARSERESULT* pParseResult)
             hr = S_OK;
             switch (pParseResult->eOperation)
             {
-                case OPERATION_ISGAMEBLOCKED:
-                    if (i == argc)
-                    {
-                        // No app ID
-                        hr = E_INVALIDARG;
-                    }
-                    else
-                    {
-                        hr = CLSIDFromString(argv[i], &(pParseResult->guidAppID));
-                    }
-                    break;
+            case OPERATION_ISGAMEBLOCKED:
+                if (i == argc)
+                {
+                    // No app ID
+                    hr = E_INVALIDARG;
+                }
+                else
+                {
+                    hr = CLSIDFromString(argv[i], &(pParseResult->guidAppID));
+                }
+                break;
 
-                case OPERATION_REQUESTURLOVERRIDE:
-                    if (i == argc)
-                    {
-                        // No URL
-                        hr = E_INVALIDARG;
-                    }
-                    else
-                    {
+            case OPERATION_REQUESTURLOVERRIDE:
+                if (i == argc)
+                {
+                    // No URL
+                    hr = E_INVALIDARG;
+                }
+                else
+                {
                     pParseResult->stRequestUrlOverride.dwNumSubUrl = argc - i -1;
                     pParseResult->stRequestUrlOverride.pszUrl = argv[i];
                     if (pParseResult->stRequestUrlOverride.dwNumSubUrl > 0)
                     {
                         pParseResult->stRequestUrlOverride.ppcszSubUrl = (PCWSTR*)(&(argv[i+1]));
                     }
-                    }
-                    break;
+                }
+                break;
             }
         }
 

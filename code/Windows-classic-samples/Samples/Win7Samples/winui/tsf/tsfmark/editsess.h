@@ -1,4 +1,4 @@
-//
+﻿//
 // editsess.h
 //
 // CEditSessionBase declaration.
@@ -30,7 +30,7 @@ public:
         *ppvObj = NULL;
 
         if (IsEqualIID(riid, IID_IUnknown) ||
-            IsEqualIID(riid, IID_ITfEditSession))
+                IsEqualIID(riid, IID_ITfEditSession))
         {
             *ppvObj = (ITfLangBarItemButton *)this;
         }

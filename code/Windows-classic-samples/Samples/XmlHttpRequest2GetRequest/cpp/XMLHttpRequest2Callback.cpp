@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -164,7 +164,7 @@ Return Value:
 
     hr = pXHR->GetResponseHeader(L"server", &pwszSingleHeader);
     if (FAILED(hr) &&
-        hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+            hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
     {
         goto Exit;
     }
@@ -224,7 +224,7 @@ Return Value:
         hr = pStream->Read(buffer, MAX_BUFFER_LENGTH - 1, &cbRead);
 
         if (FAILED(hr) ||
-            cbRead == 0)
+                cbRead == 0)
         {
             goto Exit;
         }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,8 +12,8 @@
 
 class DECLSPEC_UUID("84600D90-8F09-480f-9275-D71125FCD0C3") FlowLayoutSource
     :   public ComBase<
-            QiListSelf<FlowLayoutSource,
-            QiList<IUnknown
+        QiListSelf<FlowLayoutSource,
+        QiList<IUnknown
         > > >
 {
 public:
@@ -32,9 +32,9 @@ public:
     };
 
     FlowLayoutSource()
-    :   flowShape_(FlowShapeCircle),
-        width_(300),
-        height_(300)
+        :   flowShape_(FlowShapeCircle),
+            width_(300),
+            height_(300)
     {
         Reset();
     }

@@ -1,12 +1,12 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // This file is part of the Windows SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -25,14 +25,14 @@
 //implement filestream that derives from IStream
 class FileStream : public IStream
 {
-    FileStream(HANDLE hFile) 
-    { 
-        _refcount = 1; 
+    FileStream(HANDLE hFile)
+    {
+        _refcount = 1;
         _hFile = hFile;
     }
 
-    ~FileStream() 
-    { 
+    ~FileStream()
+    {
         if (_hFile != INVALID_HANDLE_VALUE)
         {
             ::CloseHandle(_hFile);
@@ -43,16 +43,16 @@ public:
     HRESULT static OpenFile(LPCWSTR pName, IStream ** ppStream, bool fWrite)
     {
         HANDLE hFile = ::CreateFileW(pName, fWrite ? GENERIC_WRITE : GENERIC_READ, FILE_SHARE_READ,
-            NULL, fWrite ? CREATE_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+                                     NULL, fWrite ? CREATE_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
         if (hFile == INVALID_HANDLE_VALUE)
             return HRESULT_FROM_WIN32(GetLastError());
-        
+
         *ppStream = new FileStream(hFile);
-        
+
         if(*ppStream == NULL)
             CloseHandle(hFile);
-            
+
         return S_OK;
     }
 
@@ -63,25 +63,26 @@ public:
         (*ppvObject) = NULL;
 
         if (iid == __uuidof(IUnknown)
-            || iid == __uuidof(IStream)
-            || iid == __uuidof(ISequentialStream))
+                || iid == __uuidof(IStream)
+                || iid == __uuidof(ISequentialStream))
         {
             *ppvObject = static_cast<IStream*>(this);
             AddRef();
             return S_OK;
-        } else
-            return E_NOINTERFACE; 
+        }
+        else
+            return E_NOINTERFACE;
     }
 
-    virtual ULONG STDMETHODCALLTYPE AddRef(void) 
-    { 
-        return (ULONG)InterlockedIncrement(&_refcount); 
+    virtual ULONG STDMETHODCALLTYPE AddRef(void)
+    {
+        return (ULONG)InterlockedIncrement(&_refcount);
     }
 
-    virtual ULONG STDMETHODCALLTYPE Release(void) 
+    virtual ULONG STDMETHODCALLTYPE Release(void)
     {
         ULONG res = (ULONG) InterlockedDecrement(&_refcount);
-        if (res == 0) 
+        if (res == 0)
             delete this;
         return res;
     }
@@ -103,42 +104,42 @@ public:
     // IStream Interface
 public:
     virtual HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER)
-    { 
-        return E_NOTIMPL;   
+    {
+        return E_NOTIMPL;
     }
-    
+
     virtual HRESULT STDMETHODCALLTYPE CopyTo(_In_ IStream*, ULARGE_INTEGER, _Out_opt_ ULARGE_INTEGER*, _Out_opt_ ULARGE_INTEGER*)
-    { 
-        return E_NOTIMPL;   
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE Commit(DWORD)                                      
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE Commit(DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE Revert(void)                                       
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE Revert(void)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)              
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)            
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
+
     virtual HRESULT STDMETHODCALLTYPE Clone(__RPC__deref_out_opt IStream **)
-    { 
-        return E_NOTIMPL;   
+    {
+        return E_NOTIMPL;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER liDistanceToMove, DWORD dwOrigin, _Out_opt_ ULARGE_INTEGER* lpNewFilePointer)
-    { 
+    {
         DWORD dwMoveMethod;
 
         switch(dwOrigin)
@@ -152,7 +153,7 @@ public:
         case STREAM_SEEK_END:
             dwMoveMethod = FILE_END;
             break;
-        default:   
+        default:
             return STG_E_INVALIDFUNCTION;
             break;
         }
@@ -163,7 +164,7 @@ public:
         return S_OK;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Stat(__RPC__out STATSTG* pStatstg, DWORD ) 
+    virtual HRESULT STDMETHODCALLTYPE Stat(__RPC__out STATSTG* pStatstg, DWORD )
     {
         if (GetFileSizeEx(_hFile, (PLARGE_INTEGER) &pStatstg->cbSize) == 0)
             return HRESULT_FROM_WIN32(GetLastError());
@@ -222,10 +223,10 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
     const WCHAR * pubid = NULL;
     const WCHAR * sysid = NULL;
     const WCHAR * subset =
-    L"<!ELEMENT Employees (Employee)+>\n"
-    L"<!ELEMENT Employee EMPTY>\n"
-    L"<!ATTLIST Employee firstname CDATA #REQUIRED>\n"
-    L"<!ENTITY Company 'Microsoft'>\n";
+        L"<!ELEMENT Employees (Employee)+>\n"
+        L"<!ELEMENT Employee EMPTY>\n"
+        L"<!ATTLIST Employee firstname CDATA #REQUIRED>\n"
+        L"<!ENTITY Company 'Microsoft'>\n";
 
     if (FAILED(hr = pWriter->WriteDocType(name, pubid, sysid, subset)))
     {
@@ -234,7 +235,7 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
     }
 
     if (FAILED(hr = pWriter->WriteProcessingInstruction(L"xml-stylesheet",
-        L"href=\"mystyle.css\" title=\"Compact\" type=\"text/css\"")))
+                    L"href=\"mystyle.css\" title=\"Compact\" type=\"text/css\"")))
     {
         wprintf(L"Error, Method: WriteProcessingInstruction, error is %08.8lx", hr);
         HR(hr);

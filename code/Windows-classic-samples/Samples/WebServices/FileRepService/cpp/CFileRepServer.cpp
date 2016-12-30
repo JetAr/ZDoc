@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -38,7 +38,7 @@ HRESULT CFileRepServer::ProcessMessage(
         IfFailedExit(WsGetMessageProperty(requestMessage, WS_MESSAGE_PROPERTY_HEAP, &heap, sizeof(heap), error));
 
         IfFailedExit(WsReadBody(requestMessage, &fileRequestElement, WS_READ_REQUIRED_POINTER,
-            heap, &fileRequest, sizeof(fileRequest), error));
+                                heap, &fileRequest, sizeof(fileRequest), error));
         IfFailedExit(WsReadMessageEnd(channel, requestMessage, NULL, error));
 
         IfFailedExit(ReadAndSendFile(request, fileRequest->fileName, fileRequest->filePosition, error));
@@ -57,9 +57,9 @@ HRESULT CFileRepServer::ProcessMessage(
 // to keep the file open between requests and prevent writing, but in the spirit of web services this app does not maintain
 // state between requests.
 HRESULT CFileRepServer::ReadAndSendFile(
-    _In_ CRequest* request, 
-    _In_ const LPWSTR fileName, 
-    _In_ LONGLONG chunkPosition, 
+    _In_ CRequest* request,
+    _In_ const LPWSTR fileName,
+    _In_ LONGLONG chunkPosition,
     _In_opt_ WS_ERROR* error)
 {
     PrintVerbose(L"Entering CFileRepServer::ReadAndSendFile");
@@ -168,9 +168,9 @@ HRESULT CFileRepServer::ReadAndSendFile(
 
 // The first message of a file transfer is a discovery request byt the client. This function handles such requests.
 HRESULT CFileRepServer::SendFileInfo(
-    _In_ CRequest* request, 
-    _In_z_ const LPWSTR fileName, 
-    _In_ LONGLONG fileLength, 
+    _In_ CRequest* request,
+    _In_z_ const LPWSTR fileName,
+    _In_ LONGLONG fileLength,
     _In_ DWORD chunkSize)
 {
     PrintVerbose(L"Entering CFileRepServer::SendFileInfo");
@@ -191,15 +191,15 @@ HRESULT CFileRepServer::SendFileInfo(
     fileInfoMessageDescription.bodyElementDescription = &fileInfoElement;
 
     hr = WsSendReplyMessage(
-        channel,
-        replyMessage,
-        &fileInfoMessageDescription,
-        WS_WRITE_REQUIRED_VALUE,
-        &fileInfo,
-        sizeof(fileInfo),
-        requestMessage,
-        NULL,
-        error);
+             channel,
+             replyMessage,
+             &fileInfoMessageDescription,
+             WS_WRITE_REQUIRED_VALUE,
+             &fileInfo,
+             sizeof(fileInfo),
+             requestMessage,
+             NULL,
+             error);
 
     if (FAILED(hr))
     {
@@ -217,7 +217,7 @@ HRESULT CFileRepServer::SendFileInfo(
 // reason and with the same alrogithm as DeserializeAndWriteMessage.
 HRESULT CFileRepServer::ReadAndSendChunk(
     _In_ CRequest* request,
-    _In_ long chunkSize, 
+    _In_ long chunkSize,
     _In_ LONGLONG chunkPosition,
     _In_ HANDLE file)
 {
@@ -253,13 +253,13 @@ HRESULT CFileRepServer::ReadAndSendChunk(
 
     // Add the action header
     IfFailedExit(WsSetHeader(
-        replyMessage,
-        WS_ACTION_HEADER,
-        WS_XML_STRING_TYPE,
-        WS_WRITE_REQUIRED_VALUE,
-        &fileReplyAction,
-        sizeof(fileReplyAction),
-        error));
+                     replyMessage,
+                     WS_ACTION_HEADER,
+                     WS_XML_STRING_TYPE,
+                     WS_WRITE_REQUIRED_VALUE,
+                     &fileReplyAction,
+                     sizeof(fileReplyAction),
+                     error));
 
     // Send the message headers
     IfFailedExit(WsWriteMessageStart(channel, replyMessage, NULL, error));
@@ -324,14 +324,14 @@ HRESULT CFileRepServer::ReadAndSendChunk(
     IfFailedExit(WsWriteStartElement(writer, NULL, &errorLocalName, &fileChunkNamespace, error));
     const WCHAR* noError = GlobalStrings::noError;
     IfFailedExit(WsWriteType(
-        writer,
-        WS_ELEMENT_TYPE_MAPPING,
-        WS_WSZ_TYPE,
-        NULL,
-        WS_WRITE_REQUIRED_POINTER,
-        &noError,
-        sizeof(noError),
-        error));
+                     writer,
+                     WS_ELEMENT_TYPE_MAPPING,
+                     WS_WSZ_TYPE,
+                     NULL,
+                     WS_WRITE_REQUIRED_POINTER,
+                     &noError,
+                     sizeof(noError),
+                     error));
 
     // Closing elements;
     IfFailedExit(WsWriteEndElement(writer, error));
@@ -362,7 +362,7 @@ HRESULT CFileRepServer::ReadAndSendChunk(
 
 // Construct an error message containing no data except the error string.
 HRESULT CFileRepServer::SendError(
-    _In_ CRequest* request, 
+    _In_ CRequest* request,
     _In_z_ const WCHAR errorMessage[])
 {
     PrintVerbose(L"Entering CFileRepServer::SendError");
@@ -385,15 +385,15 @@ HRESULT CFileRepServer::SendError(
 
     // As there is no large payload we use the serializer here.
     hr = WsSendReplyMessage(
-        channel,
-        replyMessage,
-        &fileReplyMessageDescription,
-        WS_WRITE_REQUIRED_VALUE,
-        &fileChunk,
-        sizeof(fileChunk),
-        requestMessage,
-        NULL,
-        error);
+             channel,
+             replyMessage,
+             &fileReplyMessageDescription,
+             WS_WRITE_REQUIRED_VALUE,
+             &fileChunk,
+             sizeof(fileChunk),
+             requestMessage,
+             NULL,
+             error);
 
     if (FAILED(hr))
     {

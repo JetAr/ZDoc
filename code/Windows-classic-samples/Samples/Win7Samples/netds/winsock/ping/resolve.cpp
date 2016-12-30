@@ -1,6 +1,6 @@
-// From Network Programming for Microsoft Windows, Second Edition by 
-// Anthony Jones and James Ohlund.  
-// Copyright 2002.   Reproduced by permission of Microsoft Press.  
+﻿// From Network Programming for Microsoft Windows, Second Edition by
+// Anthony Jones and James Ohlund.
+// Copyright 2002.   Reproduced by permission of Microsoft Press.
 // All rights reserved.
 //
 //
@@ -45,14 +45,14 @@ int PrintAddress(SOCKADDR *sa, int salen)
             rc;
 
     rc = getnameinfo(
-            sa,
-            salen,
-            host,
-            hostlen,
-            serv,
-            servlen,
-            NI_NUMERICHOST | NI_NUMERICSERV
-            );
+             sa,
+             salen,
+             host,
+             hostlen,
+             serv,
+             servlen,
+             NI_NUMERICHOST | NI_NUMERICSERV
+         );
     if (rc != 0)
     {
         fprintf(stderr, "%s: getnameinfo failed: %d\n", __FILE__, rc);
@@ -91,14 +91,14 @@ int FormatAddress(SOCKADDR *sa, int salen, char *addrbuf, int addrbuflen)
     HRESULT hRet;
 
     rc = getnameinfo(
-            sa,
-            salen,
-            host,
-            hostlen,
-            serv,
-            servlen,
-            NI_NUMERICHOST | NI_NUMERICSERV
-            );
+             sa,
+             salen,
+             host,
+             hostlen,
+             serv,
+             servlen,
+             NI_NUMERICHOST | NI_NUMERICSERV
+         );
     if (rc != 0)
     {
         fprintf(stderr, "%s: getnameinfo failed: %d\n", __FILE__, rc);
@@ -144,7 +144,7 @@ int FormatAddress(SOCKADDR *sa, int salen, char *addrbuf, int addrbuflen)
 struct addrinfo *ResolveAddress(char *addr, char *port, int af, int type, int proto)
 {
     struct addrinfo hints,
-    *res = NULL;
+               *res = NULL;
     int             rc;
 
     memset(&hints, 0, sizeof(hints));
@@ -154,11 +154,11 @@ struct addrinfo *ResolveAddress(char *addr, char *port, int af, int type, int pr
     hints.ai_protocol = proto;
 
     rc = getaddrinfo(
-            addr,
-            port,
-           &hints,
-           &res
-            );
+             addr,
+             port,
+             &hints,
+             &res
+         );
     if (rc != 0)
     {
         fprintf(stderr, "Invalid address %s, getaddrinfo failed: %d\n", addr, rc);
@@ -180,16 +180,16 @@ int ReverseLookup(SOCKADDR *sa, int salen, char *buf, int buflen)
     int     hostlen=NI_MAXHOST,
             rc;
     HRESULT hRet;
-    
+
     rc = getnameinfo(
-            sa,
-            salen,
-            host,
-            hostlen,
-            NULL,
-            0,
-            0
-            );
+             sa,
+             salen,
+             host,
+             hostlen,
+             NULL,
+             0,
+             0
+         );
     if (rc != 0)
     {
         fprintf(stderr, "getnameinfo failed: %d\n", rc);

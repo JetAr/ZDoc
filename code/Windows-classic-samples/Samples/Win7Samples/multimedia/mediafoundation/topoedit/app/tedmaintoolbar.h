@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,15 +10,15 @@
 #include "tedobj.h"
 #include "trackbarcontrol.h"
 
-class CTedMainToolbar 
+class CTedMainToolbar
     : public CWindowImpl<CTedMainToolbar>
 {
 public:
     CTedMainToolbar();
     ~CTedMainToolbar();
-    
+
     HRESULT Init(HWND parentWnd, _U_MENUorID id);
-    
+
     CTrackbarControl* GetSeekBar();
     CTrackbarControl* GetRateBar();
 
@@ -30,26 +30,26 @@ public:
     void SetTimeLabel(const CAtlStringW& strLabel);
     void UpdateTimeDisplay(MFTIME time, MFTIME duration);
     void UpdateRateDisplay(float flRate);
-    
+
     void MarkResolved(bool fResolved = true);
-    
+
     static const int PLAY_BUTTON;
     static const int STOP_BUTTON;
     static const int PAUSE_BUTTON;
 
     DECLARE_WND_SUPERCLASS(NULL, TOOLBARCLASSNAME)
-    
+
 protected:
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     virtual LRESULT OnVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    virtual LRESULT OnHScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);  
-    
+    virtual LRESULT OnHScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+
     BEGIN_MSG_MAP(CTedMainToolbar)
-        MESSAGE_HANDLER(WM_CREATE, OnCreate)
-        MESSAGE_HANDLER(WM_VSCROLL, OnVScroll)
-        MESSAGE_HANDLER(WM_HSCROLL, OnHScroll)
+    MESSAGE_HANDLER(WM_CREATE, OnCreate)
+    MESSAGE_HANDLER(WM_VSCROLL, OnVScroll)
+    MESSAGE_HANDLER(WM_HSCROLL, OnHScroll)
     END_MSG_MAP()
-    
+
 private:
     TBBUTTON m_buttons[3];
     CSeekerTrackbarControl m_trackBar;
@@ -60,9 +60,9 @@ private:
 
     CStatic m_rateLabel;
     CTrackbarControl m_rateBar;
-    
+
     CStatic m_resolvedLabel;
-    
+
     static const int m_iButtonCount = 3;
     static const int m_iMarginSize = 5;
     static const int m_iToolbarButtonWidth = 75;

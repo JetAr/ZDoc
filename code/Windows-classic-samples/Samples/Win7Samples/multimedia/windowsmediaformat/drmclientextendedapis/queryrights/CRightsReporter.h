@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 //
 // CRightsReporter.h : Contains declarations for the CRightsReporter class.
 //
@@ -17,22 +17,22 @@
 // Description: Encapsulates the process of querying for the rights granted by
 //  licenses on a local machine for a list of Key IDs.
 // Notes: The usage of this class follows a simple, predictable pattern. Before
-//  using any other methods, the application must call Initialize, which 
-//  allocates the rights lists used by the querying methods. Then the 
+//  using any other methods, the application must call Initialize, which
+//  allocates the rights lists used by the querying methods. Then the
 //  application calls SetReportFile and SetKIDStrings (in either order) to set
-//  up the input and output needed for generating the report. Next, the 
-//  application calls CreateRightsReport to generate the report. Finally, the 
+//  up the input and output needed for generating the report. Next, the
+//  application calls CreateRightsReport to generate the report. Finally, the
 //  application calls ShutDown to release all allocated resources.
 //
 // In practical use, this class reports on a single list of KIDs per instance.
 //  However, additional calls to SetKIDStrings and SetReportFile can be made
 //  to accomodate reports for multiple lists.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 class CRightsReporter
 {
 public:
-    CRightsReporter(); 
+    CRightsReporter();
     ~CRightsReporter();
     HRESULT Initialize();
     HRESULT SetReportFile(const WCHAR* pwszFilename);

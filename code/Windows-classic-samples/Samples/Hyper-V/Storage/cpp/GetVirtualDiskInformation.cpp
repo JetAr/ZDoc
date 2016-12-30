@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,12 +25,12 @@ SampleGetVirtualDiskInformation(
     DWORD opStatus;
 
     HANDLE vhdHandle;
-    
+
     UINT32 driveType;
     UINT32 driveFormat;
 
     GUID identifier;
-    
+
     ULONGLONG physicalSize;
     ULONGLONG virtualSize;
     ULONGLONG minInternalSize;
@@ -59,7 +59,7 @@ SampleGetVirtualDiskInformation(
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -72,18 +72,18 @@ SampleGetVirtualDiskInformation(
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
     // OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS indicates the parent chain should not be opened.
     //
-    
+
     memset(&openParameters, 0, sizeof(openParameters));
     openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
     openParameters.Version2.GetInfoOnly = TRUE;
 
     opStatus = OpenVirtualDisk(
-        &storageType,
-        VirtualDiskPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
-        &openParameters,
-        &vhdHandle);
+                   &storageType,
+                   VirtualDiskPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
+                   &openParameters,
+                   &vhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -97,10 +97,10 @@ SampleGetVirtualDiskInformation(
     diskInfo->Version = GET_VIRTUAL_DISK_INFO_PROVIDER_SUBTYPE;
 
     opStatus = GetVirtualDiskInformation(
-        vhdHandle,
-        &diskInfoSize,
-        diskInfo,
-        NULL);
+                   vhdHandle,
+                   &diskInfoSize,
+                   diskInfo,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -127,18 +127,18 @@ SampleGetVirtualDiskInformation(
     {
         wprintf(L"\n");
     }
-    
+
     //
     // Get the VHD/VHDX format.
     //
-    
+
     diskInfo->Version = GET_VIRTUAL_DISK_INFO_VIRTUAL_STORAGE_TYPE;
-    
+
     opStatus = GetVirtualDiskInformation(
-        vhdHandle,
-        &diskInfoSize,
-        diskInfo,
-        NULL);
+                   vhdHandle,
+                   &diskInfoSize,
+                   diskInfo,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -169,10 +169,10 @@ SampleGetVirtualDiskInformation(
     diskInfo->Version = GET_VIRTUAL_DISK_INFO_SIZE;
 
     opStatus = GetVirtualDiskInformation(
-        vhdHandle,
-        &diskInfoSize,
-        diskInfo,
-        NULL);
+                   vhdHandle,
+                   &diskInfoSize,
+                   diskInfo,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -196,10 +196,10 @@ SampleGetVirtualDiskInformation(
     diskInfo->Version = GET_VIRTUAL_DISK_INFO_VHD_PHYSICAL_SECTOR_SIZE;
 
     opStatus = GetVirtualDiskInformation(
-        vhdHandle,
-        &diskInfoSize,
-        diskInfo,
-        NULL);
+                   vhdHandle,
+                   &diskInfoSize,
+                   diskInfo,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -213,26 +213,26 @@ SampleGetVirtualDiskInformation(
     //
     // Get the virtual disk ID.
     //
-    
+
     diskInfo->Version = GET_VIRTUAL_DISK_INFO_IDENTIFIER;
-    
+
     opStatus = GetVirtualDiskInformation(
-        vhdHandle,
-        &diskInfoSize,
-        diskInfo,
-        NULL);
+                   vhdHandle,
+                   &diskInfoSize,
+                   diskInfo,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
         goto Cleanup;
     }
-    
+
     identifier = diskInfo->Identifier;
 
     wprintf(L"identifier = {%08X-%04X-%04X-%02X%02X%02X%02X%02X%02X%02X%02X}\n",
-        identifier.Data1, identifier.Data2, identifier.Data3,
-        identifier.Data4[0], identifier.Data4[1], identifier.Data4[2], identifier.Data4[3],
-        identifier.Data4[4], identifier.Data4[5], identifier.Data4[6], identifier.Data4[7]);
+            identifier.Data1, identifier.Data2, identifier.Data3,
+            identifier.Data4[0], identifier.Data4[1], identifier.Data4[2], identifier.Data4[3],
+            identifier.Data4[4], identifier.Data4[5], identifier.Data4[6], identifier.Data4[7]);
 
     //
     // Get the VHD parent path.
@@ -243,10 +243,10 @@ SampleGetVirtualDiskInformation(
         diskInfo->Version = GET_VIRTUAL_DISK_INFO_PARENT_LOCATION;
 
         opStatus = GetVirtualDiskInformation(
-            vhdHandle,
-            &diskInfoSize,
-            diskInfo,
-            NULL);
+                       vhdHandle,
+                       &diskInfoSize,
+                       diskInfo,
+                       NULL);
 
         if (opStatus != ERROR_SUCCESS)
         {
@@ -267,10 +267,10 @@ SampleGetVirtualDiskInformation(
             diskInfo->Version = GET_VIRTUAL_DISK_INFO_PARENT_LOCATION;
 
             opStatus = GetVirtualDiskInformation(
-                vhdHandle,
-                &diskInfoSize,
-                diskInfo,
-                NULL);
+                           vhdHandle,
+                           &diskInfoSize,
+                           diskInfo,
+                           NULL);
 
             if (opStatus != ERROR_SUCCESS)
             {
@@ -279,9 +279,9 @@ SampleGetVirtualDiskInformation(
         }
 
         parentPath = diskInfo->ParentLocation.ParentLocationBuffer;
-        parentPathSizeRemaining = diskInfoSize - FIELD_OFFSET(GET_VIRTUAL_DISK_INFO, 
-                                                              ParentLocation.ParentLocationBuffer);
-        
+        parentPathSizeRemaining = diskInfoSize - FIELD_OFFSET(GET_VIRTUAL_DISK_INFO,
+                                  ParentLocation.ParentLocationBuffer);
+
         if (diskInfo->ParentLocation.ParentResolved)
         {
             wprintf(L"parentPath = '%s'\n", parentPath);
@@ -291,15 +291,15 @@ SampleGetVirtualDiskInformation(
             //
             // If the parent is not resolved, the buffer is a MULTI_SZ
             //
-            
+
             wprintf(L"parentPath:\n");
 
             while((parentPathSizeRemaining >= sizeof(parentPath[0])) && (*parentPath != 0))
             {
                 stringLengthResult = StringCbLengthW(
-                    parentPath, 
-                    parentPathSizeRemaining,
-                    &parentPathSize);
+                                         parentPath,
+                                         parentPathSizeRemaining,
+                                         &parentPathSize);
 
                 if (FAILED(stringLengthResult))
                 {
@@ -317,30 +317,30 @@ SampleGetVirtualDiskInformation(
         //
         // Get parent ID.
         //
-        
+
         diskInfo->Version = GET_VIRTUAL_DISK_INFO_PARENT_IDENTIFIER;
-        
+
         opStatus = GetVirtualDiskInformation(
-            vhdHandle,
-            &diskInfoSize,
-            diskInfo,
-            NULL);
+                       vhdHandle,
+                       &diskInfoSize,
+                       diskInfo,
+                       NULL);
 
         if (opStatus != ERROR_SUCCESS)
         {
             goto Cleanup;
         }
-        
+
         parentIdentifier = diskInfo->ParentIdentifier;
-        
+
         wprintf(L"parentIdentifier = {%08X-%04X-%04X-%02X%02X%02X%02X%02X%02X%02X%02X}\n",
-            parentIdentifier.Data1, parentIdentifier.Data2, parentIdentifier.Data3,
-            parentIdentifier.Data4[0], parentIdentifier.Data4[1], 
-            parentIdentifier.Data4[2], parentIdentifier.Data4[3],
-            parentIdentifier.Data4[4], parentIdentifier.Data4[5], 
-            parentIdentifier.Data4[6], parentIdentifier.Data4[7]);
+                parentIdentifier.Data1, parentIdentifier.Data2, parentIdentifier.Data3,
+                parentIdentifier.Data4[0], parentIdentifier.Data4[1],
+                parentIdentifier.Data4[2], parentIdentifier.Data4[3],
+                parentIdentifier.Data4[4], parentIdentifier.Data4[5],
+                parentIdentifier.Data4[6], parentIdentifier.Data4[7]);
     }
-    
+
     //
     // Get the VHD minimum internal size.
     //
@@ -348,11 +348,11 @@ SampleGetVirtualDiskInformation(
     diskInfo->Version = GET_VIRTUAL_DISK_INFO_SMALLEST_SAFE_VIRTUAL_SIZE;
 
     opStatus = GetVirtualDiskInformation(
-        vhdHandle,
-        &diskInfoSize,
-        diskInfo,
-        NULL);
-    
+                   vhdHandle,
+                   &diskInfoSize,
+                   diskInfo,
+                   NULL);
+
     if (opStatus == ERROR_SUCCESS)
     {
         minInternalSize = diskInfo->SmallestSafeVirtualSize;
@@ -371,11 +371,11 @@ SampleGetVirtualDiskInformation(
     diskInfo->Version = GET_VIRTUAL_DISK_INFO_FRAGMENTATION;
 
     opStatus = GetVirtualDiskInformation(
-        vhdHandle,
-        &diskInfoSize,
-        diskInfo,
-        NULL);
-    
+                   vhdHandle,
+                   &diskInfoSize,
+                   diskInfo,
+                   NULL);
+
     if (opStatus == ERROR_SUCCESS)
     {
         fragmentationPercentage = diskInfo->FragmentationPercentage;
@@ -397,7 +397,7 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);

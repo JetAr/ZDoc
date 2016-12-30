@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,8 @@
 char msg[80];  /* a temp for building up StringCchPrintf messages in */
 
 #define BLOCKSIZE 25000
-typedef struct blockTag {
+typedef struct blockTag
+{
     struct blockTag * PrevBlock; /* backward link (NULL terminated doubly linked chain of blocks) */
     struct blockTag * NextBlock; /* forward link (pCurrent points to last in chain) */
     HANDLE hMem;     /* memory handle for this block */
@@ -40,20 +41,22 @@ PBLOCK pCurrent = NULL;  /* block currently in use */
 */
 LPVOID
 list_Alloc(
-          SIZE_T size
-          )
+    SIZE_T size
+)
 {
     LPVOID pRet;
     PBLOCK pb;
     EnterCriticalSection(&CritSec);
-    if ((pCurrent==NULL)||(pCurrent->iNext+size>BLOCKSIZE+1)) {
-		pb = pCurrent;
-        pCurrent = (struct blockTag*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY ,(sizeof(BLOCK)));
-        if (pCurrent==NULL) {
+    if ((pCurrent==NULL)||(pCurrent->iNext+size>BLOCKSIZE+1))
+    {
+        pb = pCurrent;
+        pCurrent = (struct blockTag*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,(sizeof(BLOCK)));
+        if (pCurrent==NULL)
+        {
             OutputDebugString("HeapAlloc failed!!\n");
             return NULL;
         }
-        
+
         pCurrent->PrevBlock = pb;
         pCurrent->NextBlock = NULL;
         pCurrent->hMem = pCurrent;
@@ -76,19 +79,22 @@ list_Alloc(
 
 void
 list_Free(
-         PBLOCK pBlock,
-         LPVOID p
-         )
+    PBLOCK pBlock,
+    LPVOID p
+)
 {
     HANDLE hMem;
-	HRESULT hr;
+    HRESULT hr;
 
     EnterCriticalSection(&CritSec);
     --pBlock->iInUse;
-    if (pBlock->iInUse<=0) {if (pBlock->iInUse<0) {
-			hr = StringCchPrintf(msg, sizeof(msg),"List block allocation negative (%d)", pBlock->iInUse);
-			if (FAILED(hr))
-				OutputError(hr, IDS_SAFE_PRINTF);
+    if (pBlock->iInUse<=0)
+    {
+        if (pBlock->iInUse<0)
+        {
+            hr = StringCchPrintf(msg, sizeof(msg),"List block allocation negative (%d)", pBlock->iInUse);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
             TRACE_ERROR(msg, FALSE);
         }
         if (pCurrent==pBlock) pCurrent = pBlock->PrevBlock; /* defend the invariant */
@@ -111,7 +117,8 @@ list_Free(
 |  parameter mechanism demands an extra level of indirection for a
 |  parameter that can be updated.  (Modula-2 VAR parameter).
 */
-typedef struct item_tag {
+typedef struct item_tag
+{
     struct item_tag *pitNext;    /* to next in circular list */
     struct item_tag *pitPrev;    /* to prev in circular list */
     PBLOCK pBlock;               /* to memory block */
@@ -197,7 +204,7 @@ static BOOL bInited = FALSE; /* TRUE <=> iAnchorSize and iHeaderSize are OK*/
 || slightly slower traverse.
 || Within this module, we may sometimes traverse a list with  a cursor
 || that points to the start of an item.  This is called an item cursor.
-�===================================================================*/
+È===================================================================*/
 
 /*------------------------------------------------------------------
 | Set iAnchorSize and iHeaderSize.  Implementation independent!
@@ -205,8 +212,8 @@ static BOOL bInited = FALSE; /* TRUE <=> iAnchorSize and iHeaderSize are OK*/
 void
 APIENTRY
 List_Init(
-         void
-         )
+    void
+)
 {
     LIST P;
     P = (LIST)&P;                  /* really any old address will do */
@@ -221,8 +228,8 @@ List_Init(
 void
 APIENTRY
 List_Term(
-         void
-         )
+    void
+)
 {
     if (pCurrent!=NULL)
         TRACE_ERROR("List storage not cleared out properly", FALSE);
@@ -234,23 +241,25 @@ List_Term(
 void
 APIENTRY
 List_Dump(
-         LPSTR Header,
-         LIST lst
-         )
+    LPSTR Header,
+    LIST lst
+)
 {
     LIST pit;
-	HRESULT hr;
+    HRESULT hr;
     char X_msg[250] = {0};
 
-    OutputDebugString(Header);  OutputDebugString("\n");
+    OutputDebugString(Header);
+    OutputDebugString("\n");
     pit = lst;
-    do {
+    do
+    {
         hr = StringCchPrintf(X_msg, sizeof(X_msg)-1, "%8p %8p %8p %ld %s "
-                 , pit, pit->pitNext, pit->pitPrev, pit->iLen
-                 , (pit->bAnchor ? "Anchor" : "Data")
-                );
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
+                             , pit, pit->pitNext, pit->pitPrev, pit->iLen
+                             , (pit->bAnchor ? "Anchor" : "Data")
+                            );
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
         OutputDebugString(X_msg);
         if (pit->pitNext->pitPrev != pit)
             OutputDebugString(" Next Prev error!!");
@@ -258,7 +267,8 @@ List_Dump(
             OutputDebugString(" Prev Next error!!");
         OutputDebugString("\n");
         pit = pit->pitNext;
-    } while (pit!=lst);
+    }
+    while (pit!=lst);
     OutputDebugString("End of list dump\n");
 }
 
@@ -266,13 +276,13 @@ List_Dump(
 void
 APIENTRY
 List_Show(
-         LIST lst
-         )
+    LIST lst
+)
 {
-    char X_msg[50] = {0};    
-	HRESULT hr = StringCchPrintf(X_msg, sizeof(X_msg)-1, "%p", lst);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_PRINTF);
+    char X_msg[50] = {0};
+    HRESULT hr = StringCchPrintf(X_msg, sizeof(X_msg)-1, "%p", lst);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_PRINTF);
     OutputDebugString(X_msg);
 }
 
@@ -282,16 +292,18 @@ List_Show(
 LIST
 APIENTRY
 List_Create(
-           void
-           )
+    void
+)
 {
     LIST lst;
-    if (!bInited) {
+    if (!bInited)
+    {
         List_Init();            /* prevent some strange errors */
     }
     lst = (LIST)list_Alloc(iAnchorSize);
 
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         return NULL;
     }
     lst->pBlock = pCurrent;
@@ -310,24 +322,27 @@ List_Create(
 void
 APIENTRY
 List_Destroy(
-            PLIST plst
-            )
+    PLIST plst
+)
 {
     LIST pitP;    /* item cursor on * plst */
     LIST pitQ;    /* item cursor runs one step ahead of pitQ */
 
-    if (plst==NULL) {
+    if (plst==NULL)
+    {
         TRACE_ERROR("Bug:Attempt to destroy NULL list.  Continuing...", FALSE);
         return;
     }
 
     /* There is at least an anchor block to destroy */
     pitP = *plst;
-    do {
+    do
+    {
         pitQ = pitP->pitNext;
         list_Free(pitP->pBlock, pitP);
         pitP = pitQ;
-    }while (pitP != *plst);
+    }
+    while (pitP != *plst);
     *plst = NULL;
 }
 
@@ -338,18 +353,20 @@ List_Destroy(
 LPVOID
 APIENTRY
 List_NewFirst(
-             LIST lst,
-             UINT uLen
-             )
+    LIST lst,
+    UINT uLen
+)
 {
     LIST pit;
 
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_NewFirst to bogus list.  Continuing...", FALSE);
         return NULL;
     }
     pit = (LIST)list_Alloc(iHeaderSize+uLen);
-    if (pit==NULL) {
+    if (pit==NULL)
+    {
         lst->bOK = FALSE;
         return NULL;
     }
@@ -370,18 +387,23 @@ List_NewFirst(
 void
 APIENTRY
 List_DeleteFirst(
-                LIST lst
-                )
+    LIST lst
+)
 {
     LIST pit;
 
-    if (lst==NULL) {TRACE_ERROR("Bug: List_DeleteFirst from bogus list.  Continuing...", FALSE);
+    if (lst==NULL)
+    {
+        TRACE_ERROR("Bug: List_DeleteFirst from bogus list.  Continuing...", FALSE);
         return;
     }
     /* attempting to delete the anchor block! */
-    if (lst->pitNext==lst) {
+    if (lst->pitNext==lst)
+    {
         lst->bOK = FALSE;
-    } else {
+    }
+    else
+    {
         pit = lst->pitNext;
         pit->pitNext->pitPrev = pit->pitPrev;
         pit->pitPrev->pitNext = pit->pitNext;
@@ -396,18 +418,20 @@ List_DeleteFirst(
 LPVOID
 APIENTRY
 List_NewLast(
-            LIST lst,
-            UINT uLen
-            )
+    LIST lst,
+    UINT uLen
+)
 {
     LIST pit;
 
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_NewLast in bogus list.  Continuing...", FALSE);
         return NULL;
     }
     pit = (LIST)list_Alloc(iHeaderSize+uLen);
-    if (pit==NULL) {
+    if (pit==NULL)
+    {
         lst->bOK = FALSE;
         return NULL;
     }
@@ -428,19 +452,23 @@ List_NewLast(
 void
 APIENTRY
 List_DeleteLast(
-               LIST lst
-               )
+    LIST lst
+)
 {
     LIST pit;
 
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_DeleteLast from bogus list.  Continuing...", FALSE);
         return;
     }
     /* attempting to delete the anchor block! */
-    if (lst->pitNext==lst) {
+    if (lst->pitNext==lst)
+    {
         lst->bOK = FALSE;
-    } else {
+    }
+    else
+    {
         pit = lst->pitPrev;
         pit->pitNext->pitPrev = pit->pitPrev;
         pit->pitPrev->pitNext = pit->pitNext;
@@ -457,25 +485,30 @@ List_DeleteLast(
 LPVOID
 APIENTRY
 List_NewAfter(
-              LIST lst,
-              LPVOID Curs,
-              UINT uLen
-              )
+    LIST lst,
+    LPVOID Curs,
+    UINT uLen
+)
 {
     LIST pitNew;
     LIST pitAfter;
 
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_NewAfter in bogus list. Continuing...", FALSE);
         return NULL;
     }
-    if (Curs==NULL) {
+    if (Curs==NULL)
+    {
         return List_NewFirst(lst, uLen);
-    } else {
+    }
+    else
+    {
         MOVEBACK(Curs);
         pitAfter = (LIST)Curs;
         pitNew = (LIST)list_Alloc(iHeaderSize+uLen);
-        if (pitNew==NULL) {
+        if (pitNew==NULL)
+        {
             lst->bOK = FALSE;
             return NULL;
         }
@@ -500,25 +533,30 @@ List_NewAfter(
 LPVOID
 APIENTRY
 List_NewBefore(
-               LIST lst,
-               LPVOID Curs,
-               UINT uLen
-               )
+    LIST lst,
+    LPVOID Curs,
+    UINT uLen
+)
 {
     LIST pitNew;
     LIST pitBefore;
 
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_NewBefore in bogus list.  Continuing...", FALSE);
         return NULL;
     }
-    if (Curs==NULL) {
+    if (Curs==NULL)
+    {
         return List_NewLast(lst, uLen);
-    } else {
+    }
+    else
+    {
         MOVEBACK(Curs);
         pitBefore = (LIST)Curs;
         pitNew = (LIST)list_Alloc(iHeaderSize+uLen);
-        if (pitNew==NULL) {
+        if (pitNew==NULL)
+        {
             lst->bOK = FALSE;
             return NULL;
         }
@@ -546,11 +584,12 @@ List_NewBefore(
 void
 APIENTRY
 List_Delete(
-            LPVOID Curs
-            )
+    LPVOID Curs
+)
 {
     LIST pit;
-    if (Curs==NULL) {
+    if (Curs==NULL)
+    {
         TRACE_ERROR("Bug: List_Delete NULL item", FALSE);
         return;
     }
@@ -568,12 +607,13 @@ List_Delete(
 LPVOID
 APIENTRY
 List_DeleteForwards(
-                    LPVOID Curs
-                    )
+    LPVOID Curs
+)
 {
     LIST pitDel;  /* the item to delete */
     LIST pitN;    /* the item after (could be anchor) */
-    if (Curs==NULL) {
+    if (Curs==NULL)
+    {
         TRACE_ERROR("Bug: List_DeleteForwards NULL cursor. Continuing...", FALSE);
         return NULL;
     }
@@ -597,13 +637,14 @@ List_DeleteForwards(
 LPVOID
 APIENTRY
 List_DeleteBackwards(
-                     LPVOID Curs
-                     )
+    LPVOID Curs
+)
 {
     LIST pitDel;  /* the one to delete */
     LIST pitB;    /* the one before */
 
-    if (Curs==NULL) {
+    if (Curs==NULL)
+    {
         TRACE_ERROR("List_DeleteBackwards NULL cursor.  Continuing...", FALSE);
         return NULL;
     }
@@ -625,11 +666,12 @@ List_DeleteBackwards(
 int
 APIENTRY
 List_ItemLength(
-                LPVOID Curs
-                )
+    LPVOID Curs
+)
 {
     LIST pit;
-    if (Curs==NULL) {
+    if (Curs==NULL)
+    {
         TRACE_ERROR("Bug: List_ItemLength NULL cursor.  Continuing...", FALSE);
         return 0;
     }
@@ -645,14 +687,16 @@ List_ItemLength(
 LPVOID
 APIENTRY
 List_First(
-           LIST lst
-           )
+    LIST lst
+)
 {
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_First of bogus list.  Continuing...", FALSE);
         return NULL;
     }
-    if (lst->pitNext==lst) {
+    if (lst->pitNext==lst)
+    {
         return NULL;
     }
     return &(lst->pitNext->Data);
@@ -665,14 +709,16 @@ List_First(
 LPVOID
 APIENTRY
 List_Last(
-          LIST lst
-          )
+    LIST lst
+)
 {
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_Last of bogus list.  Continuing...", FALSE);
         return NULL;
     }
-    if (lst->pitNext==lst) {
+    if (lst->pitNext==lst)
+    {
         return NULL;
     }
     return &(lst->pitPrev->Data);
@@ -685,21 +731,25 @@ List_Last(
 LPVOID
 APIENTRY
 List_Next(
-          LPVOID Curs
-          )
+    LPVOID Curs
+)
 {
     LIST pit;
 
-    if (Curs==NULL) {
+    if (Curs==NULL)
+    {
         TRACE_ERROR("Bug: List_Next of NULL cursor.  Continuing...", FALSE);
         return NULL;
     }
     MOVEBACK(Curs)
     pit = (LIST)Curs;
     pit = pit->pitNext;
-    if (pit->bAnchor) {
+    if (pit->bAnchor)
+    {
         return NULL;
-    } else {
+    }
+    else
+    {
         return &(pit->Data);
     }
 }
@@ -711,21 +761,25 @@ List_Next(
 LPVOID
 APIENTRY
 List_Prev(
-          LPVOID Curs
-          )
+    LPVOID Curs
+)
 {
     LIST pit;
 
-    if (Curs==NULL) {
+    if (Curs==NULL)
+    {
         TRACE_ERROR("Bug: List_Prev of NULL cursor.  Continuing...", FALSE);
         return NULL;
     }
     MOVEBACK(Curs)
     pit = (LIST)Curs;
     pit = pit->pitPrev;
-    if (pit->bAnchor) {
+    if (pit->bAnchor)
+    {
         return NULL;
-    } else {
+    }
+    else
+    {
         return &(pit->Data);
     }
 }
@@ -736,18 +790,21 @@ List_Prev(
 void
 APIENTRY
 List_Clear(
-           LIST lst
-           )
+    LIST lst
+)
 {
     LIST pitP;   /* item cursor on List, points to element starts */
     LIST pitQ;   /* runs one step ahead of pitP                   */
 
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_Clear of bogus list.  Continuing...", FALSE);
         return;
     }
     pitP = lst->pitNext;   /* first element of list proper */
-    while (pitP!=lst) {      /* while not wrapped onto anchor */pitQ = pitP->pitNext;
+    while (pitP!=lst)
+    {
+        /* while not wrapped onto anchor */pitQ = pitP->pitNext;
         list_Free(pitP->pBlock, pitP);
         pitP = pitQ;
     }
@@ -762,9 +819,12 @@ List_Clear(
 BOOL
 APIENTRY
 List_IsEmpty(
-             LIST lst
-             )
-{  if (lst==NULL) {TRACE_ERROR("Bug: List_IsEmpty of bogus list.  Continuing...", FALSE);
+    LIST lst
+)
+{
+    if (lst==NULL)
+    {
+        TRACE_ERROR("Bug: List_IsEmpty of bogus list.  Continuing...", FALSE);
         return TRUE;   /* well it's sort of true isn't it? */
     }
     return lst->pitNext ==lst;
@@ -776,9 +836,9 @@ List_IsEmpty(
 void
 APIENTRY
 SwitchLists(
-            LIST l1,
-            LIST l2
-            )
+    LIST l1,
+    LIST l2
+)
 {
     /* connect l1 to l2's elements, l1 had better be initially empty */
     l1->pitPrev = l2->pitPrev;
@@ -802,22 +862,28 @@ SwitchLists(
 void
 APIENTRY
 List_Join(
-          LIST l1,
-          LIST l2
-          )
+    LIST l1,
+    LIST l2
+)
 {
-    if ((l1==NULL)||(l2==NULL)) {
+    if ((l1==NULL)||(l2==NULL))
+    {
         TRACE_ERROR("Bug: List_Join of bogus list.  Continuing...", FALSE);
         return;
     }
     l1->bOK = l1->bOK &&l2->bOK;  /* result OK if both inputs OK */
     l2->bOK = TRUE;               /* as l2 always becomes empty */
-    if (l2->pitNext==l2) {
+    if (l2->pitNext==l2)
+    {
         /* no elements need moving */
-    } else if (l2->pitNext==l2) {
+    }
+    else if (l2->pitNext==l2)
+    {
         SwitchLists(l1,l2);
         return;
-    } else {
+    }
+    else
+    {
         l2->pitNext->pitPrev = l1->pitPrev;
         l1->pitPrev->pitNext = l2->pitNext;
         l1->pitPrev = l2->pitPrev;
@@ -841,35 +907,44 @@ List_Join(
 void
 APIENTRY
 List_InsertListAfter(
-                     LIST l1,
-                     LIST l2,
-                     LPVOID Curs
-                     )
+    LIST l1,
+    LIST l2,
+    LPVOID Curs
+)
 {
     LIST pitA;     /* The element after Curs, could be anchor */
     LIST pit;      /* The start of the element that Curs points at
                    |  or the anchor block if Curs==NULL
                    */
 
-    if ( (l1==NULL) || (l2==NULL)) {
+    if ( (l1==NULL) || (l2==NULL))
+    {
         TRACE_ERROR("Bug: List_InsertListAfter with bogus list.  Continuing...", FALSE);
         return;
     }
     l1->bOK = l1->bOK && l2->bOK;
     l2->bOK = TRUE;
-    if (l2->pitNext==l2) {
+    if (l2->pitNext==l2)
+    {
         /* no elements need moving */
-    } else if ( l1->pitNext==l1) {
+    }
+    else if ( l1->pitNext==l1)
+    {
         /* the easy way to code this would be simply to switch the two
         |  pointers l1 and l2, but they are value parameters and we don't
         |  want to change that.
         */
         SwitchLists(l1,l2);
         return;
-    } else {
-        if (Curs==NULL) {
+    }
+    else
+    {
+        if (Curs==NULL)
+        {
             pit = l1;
-        } else {
+        }
+        else
+        {
             MOVEBACK(Curs)
             pit = (LIST)Curs;
         }
@@ -899,33 +974,40 @@ List_InsertListAfter(
 void
 APIENTRY
 List_InsertListBefore(
-                      LIST l1,
-                      LIST l2,
-                      LPVOID Curs
-                      )
+    LIST l1,
+    LIST l2,
+    LPVOID Curs
+)
 {
     LIST pitB;     /* The element before Curs, could be anchor */
     LIST pit;      /* The start of the element that Curs points at
                     |  or the anchor block if Curs==NULL
                     */
 
-    if ((l1==NULL) || (l2==NULL)) {
+    if ((l1==NULL) || (l2==NULL))
+    {
         TRACE_ERROR("Bug: List_InsertListBefore with bogus list.  Continuing...", FALSE);
         return;
     }
     l1->bOK = l1->bOK && l2->bOK;
     l2 ->bOK = TRUE;
-    if (l1->pitNext==l1) {
+    if (l1->pitNext==l1)
+    {
         /* the easy way to code this would be simply to switch the two
         |  pointers l1 and l2, but they are value parameters and we don't
         |  want to change that.
         */
         SwitchLists(l1,l2);
         return;
-    } else {
-        if (Curs==NULL) {
+    }
+    else
+    {
+        if (Curs==NULL)
+        {
             pit = l1;
-        } else {
+        }
+        else
+        {
             MOVEBACK(Curs)
             pit = (LIST)Curs;
         }
@@ -955,30 +1037,35 @@ List_InsertListBefore(
 void
 APIENTRY
 List_SplitAfter(
-                LIST l1,
-                LIST l2,
-                LPVOID Curs
-                )
+    LIST l1,
+    LIST l2,
+    LPVOID Curs
+)
 {
     LIST pit;
 
-    if ((l1==NULL) || (l2==NULL)) {
+    if ((l1==NULL) || (l2==NULL))
+    {
         TRACE_ERROR("Bug: List_SplitAfter bogus list.  Continuing...", FALSE);
         return;
     }
-    if (l2->pitNext!=l2) {
+    if (l2->pitNext!=l2)
+    {
         List_Clear(l2);
     };
-    if (Curs!=NULL) {
+    if (Curs!=NULL)
+    {
         MOVEBACK(Curs)
         pit = (LIST)Curs;
         /* Curs had better be an item in l1! l2 had better be created! */
-        if (pit==l1) {
+        if (pit==l1)
+        {
             l1->bOK = FALSE;
             l2->bOK = FALSE;
             return;
         }
-        if (pit->pitNext==l1) {
+        if (pit->pitNext==l1)
+        {
             /* transfer whole of l2 to l1 */
             SwitchLists(l2,l1);
             return;
@@ -1004,30 +1091,35 @@ List_SplitAfter(
 void
 APIENTRY
 List_SplitBefore(
-                 LIST l1,
-                 LIST l2,
-                 LPVOID Curs
-                 )
+    LIST l1,
+    LIST l2,
+    LPVOID Curs
+)
 {
     LIST pit;
 
-    if ((l1==NULL) || (l2==NULL)) {
+    if ((l1==NULL) || (l2==NULL))
+    {
         TRACE_ERROR("Bug: List_SplitBefore bogus list.  Continuing...", FALSE);
         return;
     }
-    if (l2->pitNext!=l2) {
+    if (l2->pitNext!=l2)
+    {
         List_Clear(l2);
     }
-    if (Curs!=NULL) {
+    if (Curs!=NULL)
+    {
         MOVEBACK(Curs)
         pit = (LIST)Curs;
         /* Curs had better be an item in L1! L2 had better be created! */
-        if (pit==l1) {
+        if (pit==l1)
+        {
             l1->bOK = FALSE;
             l2->bOK = FALSE;
             return;
         }
-        if (pit->pitPrev==l1) {
+        if (pit->pitPrev==l1)
+        {
             SwitchLists(l2,l1);
             return;
         }
@@ -1046,19 +1138,21 @@ List_SplitBefore(
 int
 APIENTRY
 List_Card(
-          LIST lst
-          )
+    LIST lst
+)
 {
     LIST pit;     /* item cursor on lst */
     int cit;
 
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_Card of bogus list.  Continuing...", FALSE);
         return 0;    /* well it is sort of 0 */
     }
     pit = lst->pitNext;
     cit = 0;
-    while (pit!=lst) {
+    while (pit!=lst)
+    {
         cit++;
         pit = pit->pitNext;
     }
@@ -1071,10 +1165,11 @@ List_Card(
 BOOL
 APIENTRY
 List_IsOK(
-          LIST lst
-          )
+    LIST lst
+)
 {
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_IsOK of bogus list.  Continuing...", FALSE);
         return FALSE;       /* well it is sick ain't it! */
     }
@@ -1087,10 +1182,11 @@ List_IsOK(
 void
 APIENTRY
 List_MakeOK(
-            LIST lst
-            )
+    LIST lst
+)
 {
-    if (lst==NULL) {
+    if (lst==NULL)
+    {
         TRACE_ERROR("Bug: List_MakeOK of bogus list.  Continuing...", FALSE);
         return;
     }
@@ -1100,8 +1196,8 @@ List_MakeOK(
 BOOL
 APIENTRY
 List_Check(
-           LIST lst
-           )
+    LIST lst
+)
 {
     LIST pel;
     BOOL bOK;
@@ -1114,25 +1210,33 @@ List_Check(
     | turning the Anchor flags off again and checking the Prev pointers.
      -------------------------------------------------------------------*/
     if (lst==NULL)
-        return FALSE;  
+        return FALSE;
     bOK = lst->bAnchor;
     pel = lst->pitNext;
-    while (! pel->bAnchor) {
+    while (! pel->bAnchor)
+    {
         pel->bAnchor = TRUE;
         pel = pel->pitNext;
     }
     bOK = bOK && (pel==lst);
-    if (bOK) {
+    if (bOK)
+    {
         /* Turn all the bAnchor flags off */
         pel = lst;
-        do {pel->bAnchor = FALSE;
+        do
+        {
+            pel->bAnchor = FALSE;
             bOK = bOK & (pel->pitNext->pitPrev==pel);
             pel = pel->pitNext;
-        } while (pel!=lst);
+        }
+        while (pel!=lst);
         lst->bAnchor = TRUE;  /* except the real one */
-    } else { /* just turn off those that we set on */
+    }
+    else     /* just turn off those that we set on */
+    {
         pel = lst->pitNext;
-        while (pel->bAnchor) {
+        while (pel->bAnchor)
+        {
             pel->bAnchor = FALSE;
             pel = pel->pitNext;
         }
@@ -1145,8 +1249,8 @@ List_Check(
 void
 APIENTRY
 List_Recover(
-             PLIST plst
-             )
+    PLIST plst
+)
 {
     LIST Last, P,Q;
     BOOL OK;
@@ -1161,18 +1265,24 @@ List_Recover(
     */
     if (plst==NULL)
         return;
-    if (*plst==NULL) {
+    if (*plst==NULL)
+    {
         *plst = List_Create();
         return;
     }
     (*plst)->bAnchor = TRUE;
     P = (*plst)->pitNext;
     Last = *plst;
-    for (; ; ) {if (P==*plst) break;
+    for (; ; )
+    {
+        if (P==*plst) break;
         Last = P;
-        if (P->pitNext!=*plst) {OK = TRUE;
+        if (P->pitNext!=*plst)
+        {
+            OK = TRUE;
             Q = *plst;
-            for (; ; ) {
+            for (; ; )
+            {
                 OK &= (P->pitNext!=Q);
                 if (Q==P) break;
                 Q = Q->pitNext;
@@ -1182,12 +1292,14 @@ List_Recover(
         P = P->pitNext;
     }
     P = *plst;
-    while (P!=Last) {P->pitNext->pitPrev = P;
+    while (P!=Last)
+    {
+        P->pitNext->pitPrev = P;
         P->bAnchor = FALSE;
         P = P->pitNext;
     }
     Last->pitNext = *plst;
     (*plst)->pitPrev = Last;
     (*plst)->bAnchor = TRUE;
-    (*plst)->bOK = TRUE;   
+    (*plst)->bOK = TRUE;
 }

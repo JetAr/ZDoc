@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright (c) 1996-2002  Microsoft Corporation
 
 This program is released into the public domain for any purpose.
@@ -33,12 +33,12 @@ Abstract:
 
 typedef struct _USER_INFO
 {
-	LIST_ENTRY  ListEntry;  // Double linked list entry
+    LIST_ENTRY  ListEntry;  // Double linked list entry
 
-	CHAR  achUserName[SF_MAX_USERNAME];   // External username and password
-	CHAR  achPassword[SF_MAX_PASSWORD];
-	CHAR  achNTUserName[SF_MAX_USERNAME]; // account and password to map user to
-	CHAR  achNTUserPassword[SF_MAX_PASSWORD];
+    CHAR  achUserName[SF_MAX_USERNAME];   // External username and password
+    CHAR  achPassword[SF_MAX_PASSWORD];
+    CHAR  achNTUserName[SF_MAX_USERNAME]; // account and password to map user to
+    CHAR  achNTUserPassword[SF_MAX_PASSWORD];
 
 } USER_INFO, *PUSER_INFO;
 
@@ -72,16 +72,16 @@ Return Value:
 
 BOOL InitializeCache(VOID)
 {
-	if (fCacheInitialized)
-		return TRUE;
+    if (fCacheInitialized)
+        return TRUE;
 
-	InitializeCriticalSection(&csCacheLock);
+    InitializeCriticalSection(&csCacheLock);
 
-	CacheListHead.Blink = CacheListHead.Flink = &CacheListHead;
+    CacheListHead.Blink = CacheListHead.Flink = &CacheListHead;
 
-	fCacheInitialized = TRUE;
+    fCacheInitialized = TRUE;
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -108,67 +108,67 @@ Return Value:
 
 BOOL LookupUserInCache(CHAR *pszUserName, BOOL *pfFound, CHAR *pszPassword, CHAR *pszNTUser, CHAR *pszNTUserPassword)
 {
-	LIST_ENTRY *pEntry;
-	USER_INFO *pUser;
-	DWORD cPosition = 0;
+    LIST_ENTRY *pEntry;
+    USER_INFO *pUser;
+    DWORD cPosition = 0;
 
-	/* Search the cache for the specified user */
+    /* Search the cache for the specified user */
 
-	EnterCriticalSection(&csCacheLock);
+    EnterCriticalSection(&csCacheLock);
 
-	for (pEntry = CacheListHead.Flink; pEntry != &CacheListHead; pEntry = pEntry->Flink)
-	{
-		pUser = CONTAINING_RECORD(pEntry, USER_INFO, ListEntry);
+    for (pEntry = CacheListHead.Flink; pEntry != &CacheListHead; pEntry = pEntry->Flink)
+    {
+        pUser = CONTAINING_RECORD(pEntry, USER_INFO, ListEntry);
 
-		if (!_stricmp( pszUserName, pUser->achUserName))
-			goto Found;
+        if (!_stricmp( pszUserName, pUser->achUserName))
+            goto Found;
 
-		cPosition++;
-	}
+        cPosition++;
+    }
 
-	LeaveCriticalSection(&csCacheLock);
+    LeaveCriticalSection(&csCacheLock);
 
-	/* Not Found */
+    /* Not Found */
 
-	*pfFound = FALSE;
+    *pfFound = FALSE;
 
-	return TRUE;
+    return TRUE;
 
 Found:
 
-	/* Copy out the user properties */
+    /* Copy out the user properties */
 
-	strcpy_s(pszPassword, sizeof(pszPassword),       pUser->achPassword);
-	strcpy_s(pszNTUser,  sizeof(pszNTUser),        pUser->achNTUserName);
-	strcpy_s(pszNTUserPassword, sizeof(pszNTUserPassword), pUser->achNTUserPassword);
+    strcpy_s(pszPassword, sizeof(pszPassword),       pUser->achPassword);
+    strcpy_s(pszNTUser,  sizeof(pszNTUser),        pUser->achNTUserName);
+    strcpy_s(pszNTUserPassword, sizeof(pszNTUserPassword), pUser->achNTUserPassword);
 
-	/*
-		Move this user entry to the front of the list as we're probably going
-	  to get subsequent requests for this user.  Note we only move it
-	  if it's not already near the front
-	*/
+    /*
+    	Move this user entry to the front of the list as we're probably going
+      to get subsequent requests for this user.  Note we only move it
+      if it's not already near the front
+    */
 
-	if (cPosition > LIST_REORDER_THRESHOLD)
-	{
-		/* Remove from the old position... */
+    if (cPosition > LIST_REORDER_THRESHOLD)
+    {
+        /* Remove from the old position... */
 
-		pEntry->Blink->Flink = pEntry->Flink;
-		pEntry->Flink->Blink = pEntry->Blink;
+        pEntry->Blink->Flink = pEntry->Flink;
+        pEntry->Flink->Blink = pEntry->Blink;
 
-		/* ...and insert it at the beginning of the list */
+        /* ...and insert it at the beginning of the list */
 
-		pEntry->Blink = &CacheListHead;
-		pEntry->Flink = CacheListHead.Flink;
+        pEntry->Blink = &CacheListHead;
+        pEntry->Flink = CacheListHead.Flink;
 
-		CacheListHead.Flink->Blink = pEntry;
-		CacheListHead.Flink = pEntry;
-	}
+        CacheListHead.Flink->Blink = pEntry;
+        CacheListHead.Flink = pEntry;
+    }
 
-	LeaveCriticalSection(&csCacheLock);
+    LeaveCriticalSection(&csCacheLock);
 
-	*pfFound = TRUE;
+    *pfFound = TRUE;
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -190,78 +190,78 @@ Found:
 
 BOOL AddUserToCache(CHAR *pszUserName, CHAR *pszPassword, CHAR *pszNTUser, CHAR *pszNTUserPassword)
 {
-	LIST_ENTRY *pEntry;
-	USER_INFO *pUser;
+    LIST_ENTRY *pEntry;
+    USER_INFO *pUser;
 
-	/* Check our parameters before adding them to the cache */
+    /* Check our parameters before adding them to the cache */
 
-	if (strlen(pszUserName) > SF_MAX_USERNAME ||
-			strlen(pszPassword) > SF_MAX_PASSWORD ||
-			strlen(pszNTUser) > SF_MAX_USERNAME ||
-			strlen(pszNTUserPassword) > SF_MAX_PASSWORD)
-	{
-			SetLastError(ERROR_INVALID_PARAMETER);
-			return FALSE;
-	}
+    if (strlen(pszUserName) > SF_MAX_USERNAME ||
+            strlen(pszPassword) > SF_MAX_PASSWORD ||
+            strlen(pszNTUser) > SF_MAX_USERNAME ||
+            strlen(pszNTUserPassword) > SF_MAX_PASSWORD)
+    {
+        SetLastError(ERROR_INVALID_PARAMETER);
+        return FALSE;
+    }
 
-	/* Search the cache for the specified user to make sure there are no duplicates */
+    /* Search the cache for the specified user to make sure there are no duplicates */
 
-	EnterCriticalSection(&csCacheLock);
+    EnterCriticalSection(&csCacheLock);
 
-	for (pEntry = CacheListHead.Flink; pEntry != &CacheListHead; pEntry = pEntry->Flink)
-	{
-		pUser = CONTAINING_RECORD(pEntry, USER_INFO, ListEntry);
+    for (pEntry = CacheListHead.Flink; pEntry != &CacheListHead; pEntry = pEntry->Flink)
+    {
+        pUser = CONTAINING_RECORD(pEntry, USER_INFO, ListEntry);
 
-		if (!_stricmp(pszUserName, pUser->achUserName))
-			goto Found;
-	}
+        if (!_stricmp(pszUserName, pUser->achUserName))
+            goto Found;
+    }
 
-	/* Allocate a new cache item and put it at the head of the list */
+    /* Allocate a new cache item and put it at the head of the list */
 
-	pUser = (USER_INFO *)LocalAlloc(LPTR, sizeof(USER_INFO));
+    pUser = (USER_INFO *)LocalAlloc(LPTR, sizeof(USER_INFO));
 
-	if (!pUser)
-	{
-		LeaveCriticalSection(&csCacheLock);
+    if (!pUser)
+    {
+        LeaveCriticalSection(&csCacheLock);
 
-		SetLastError(ERROR_NOT_ENOUGH_MEMORY);
-		return FALSE;
-	}
+        SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+        return FALSE;
+    }
 
-	pUser->ListEntry.Flink = CacheListHead.Flink;
-	pUser->ListEntry.Blink = &CacheListHead;
+    pUser->ListEntry.Flink = CacheListHead.Flink;
+    pUser->ListEntry.Blink = &CacheListHead;
 
-	CacheListHead.Flink->Blink = &pUser->ListEntry;
-	CacheListHead.Flink = &pUser->ListEntry;
+    CacheListHead.Flink->Blink = &pUser->ListEntry;
+    CacheListHead.Flink = &pUser->ListEntry;
 
 Found:
 
-	/* Set the various fields */
+    /* Set the various fields */
 
-	strcpy_s(pUser->achUserName, sizeof(pUser->achUserName), pszUserName);
-	strcpy_s(pUser->achPassword, sizeof(pUser->achPassword), pszPassword);
-	strcpy_s(pUser->achNTUserName, sizeof(pUser->achNTUserName), pszNTUser);
-	strcpy_s(pUser->achNTUserPassword, sizeof(pUser->achNTUserPassword), pszNTUserPassword);
+    strcpy_s(pUser->achUserName, sizeof(pUser->achUserName), pszUserName);
+    strcpy_s(pUser->achPassword, sizeof(pUser->achPassword), pszPassword);
+    strcpy_s(pUser->achNTUserName, sizeof(pUser->achNTUserName), pszNTUser);
+    strcpy_s(pUser->achNTUserPassword, sizeof(pUser->achNTUserPassword), pszNTUserPassword);
 
-	cCacheItems++;
+    cCacheItems++;
 
-	/* If there are too many cached users, remove the least recently used one now */
+    /* If there are too many cached users, remove the least recently used one now */
 
-	if (cCacheItems > MAX_CACHED_USERS)
-	{
-		pEntry = CacheListHead.Blink;
+    if (cCacheItems > MAX_CACHED_USERS)
+    {
+        pEntry = CacheListHead.Blink;
 
-		pEntry->Blink->Flink = &CacheListHead;
-		CacheListHead.Blink  = pEntry->Blink;
+        pEntry->Blink->Flink = &CacheListHead;
+        CacheListHead.Blink  = pEntry->Blink;
 
-		LocalFree(CONTAINING_RECORD(pEntry, USER_INFO, ListEntry));
+        LocalFree(CONTAINING_RECORD(pEntry, USER_INFO, ListEntry));
 
-		cCacheItems--;
-	}
+        cCacheItems--;
+    }
 
-	LeaveCriticalSection(&csCacheLock);
+    LeaveCriticalSection(&csCacheLock);
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -272,36 +272,36 @@ Found:
 
 VOID TerminateCache(VOID)
 {
-	LIST_ENTRY *pEntry;
-	LIST_ENTRY *pEntryNext;
-	USER_INFO *pUser;
+    LIST_ENTRY *pEntry;
+    LIST_ENTRY *pEntryNext;
+    USER_INFO *pUser;
 
-	if (!fCacheInitialized)
-		return;
+    if (!fCacheInitialized)
+        return;
 
-	EnterCriticalSection(&csCacheLock);
+    EnterCriticalSection(&csCacheLock);
 
-	/* Free all of the cache entries */
+    /* Free all of the cache entries */
 
-	for (pEntry = CacheListHead.Flink; pEntry != &CacheListHead; pEntry  = pEntryNext)
-	{
-		pUser = CONTAINING_RECORD(pEntry, USER_INFO, ListEntry);
+    for (pEntry = CacheListHead.Flink; pEntry != &CacheListHead; pEntry  = pEntryNext)
+    {
+        pUser = CONTAINING_RECORD(pEntry, USER_INFO, ListEntry);
 
-		pEntryNext = pEntry->Flink;
+        pEntryNext = pEntry->Flink;
 
-		/* Remove this entry from the list and free it */
+        /* Remove this entry from the list and free it */
 
-		pEntry->Blink->Flink = pEntry->Flink;
-		pEntry->Flink->Blink = pEntry->Blink;
+        pEntry->Blink->Flink = pEntry->Flink;
+        pEntry->Flink->Blink = pEntry->Blink;
 
-		LocalFree(pUser);
-	}
+        LocalFree(pUser);
+    }
 
-	cCacheItems = 0;
+    cCacheItems = 0;
 
-	LeaveCriticalSection(&csCacheLock);
+    LeaveCriticalSection(&csCacheLock);
 
-	DeleteCriticalSection(&csCacheLock);
+    DeleteCriticalSection(&csCacheLock);
 
-	fCacheInitialized = FALSE;
+    fCacheInitialized = FALSE;
 }

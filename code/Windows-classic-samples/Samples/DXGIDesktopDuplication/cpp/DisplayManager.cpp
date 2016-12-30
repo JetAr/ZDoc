@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,15 +12,15 @@ using namespace DirectX;
 // Constructor NULLs out vars
 //
 DISPLAYMANAGER::DISPLAYMANAGER() : m_Device(nullptr),
-                                   m_DeviceContext(nullptr),
-                                   m_MoveSurf(nullptr),
-                                   m_VertexShader(nullptr),
-                                   m_PixelShader(nullptr),
-                                   m_InputLayout(nullptr),
-                                   m_RTV(nullptr),
-                                   m_SamplerLinear(nullptr),
-                                   m_DirtyVertexBufferAlloc(nullptr),
-                                   m_DirtyVertexBufferAllocSize(0)
+    m_DeviceContext(nullptr),
+    m_MoveSurf(nullptr),
+    m_VertexShader(nullptr),
+    m_PixelShader(nullptr),
+    m_InputLayout(nullptr),
+    m_RTV(nullptr),
+    m_SamplerLinear(nullptr),
+    m_DirtyVertexBufferAlloc(nullptr),
+    m_DirtyVertexBufferAllocSize(0)
 {
 }
 
@@ -104,62 +104,62 @@ void DISPLAYMANAGER::SetMoveRect(_Out_ RECT* SrcRect, _Out_ RECT* DestRect, _In_
 {
     switch (DeskDesc->Rotation)
     {
-        case DXGI_MODE_ROTATION_UNSPECIFIED:
-        case DXGI_MODE_ROTATION_IDENTITY:
-        {
-            SrcRect->left = MoveRect->SourcePoint.x;
-            SrcRect->top = MoveRect->SourcePoint.y;
-            SrcRect->right = MoveRect->SourcePoint.x + MoveRect->DestinationRect.right - MoveRect->DestinationRect.left;
-            SrcRect->bottom = MoveRect->SourcePoint.y + MoveRect->DestinationRect.bottom - MoveRect->DestinationRect.top;
+    case DXGI_MODE_ROTATION_UNSPECIFIED:
+    case DXGI_MODE_ROTATION_IDENTITY:
+    {
+        SrcRect->left = MoveRect->SourcePoint.x;
+        SrcRect->top = MoveRect->SourcePoint.y;
+        SrcRect->right = MoveRect->SourcePoint.x + MoveRect->DestinationRect.right - MoveRect->DestinationRect.left;
+        SrcRect->bottom = MoveRect->SourcePoint.y + MoveRect->DestinationRect.bottom - MoveRect->DestinationRect.top;
 
-            *DestRect = MoveRect->DestinationRect;
-            break;
-        }
-        case DXGI_MODE_ROTATION_ROTATE90:
-        {
-            SrcRect->left = TexHeight - (MoveRect->SourcePoint.y + MoveRect->DestinationRect.bottom - MoveRect->DestinationRect.top);
-            SrcRect->top = MoveRect->SourcePoint.x;
-            SrcRect->right = TexHeight - MoveRect->SourcePoint.y;
-            SrcRect->bottom = MoveRect->SourcePoint.x + MoveRect->DestinationRect.right - MoveRect->DestinationRect.left;
+        *DestRect = MoveRect->DestinationRect;
+        break;
+    }
+    case DXGI_MODE_ROTATION_ROTATE90:
+    {
+        SrcRect->left = TexHeight - (MoveRect->SourcePoint.y + MoveRect->DestinationRect.bottom - MoveRect->DestinationRect.top);
+        SrcRect->top = MoveRect->SourcePoint.x;
+        SrcRect->right = TexHeight - MoveRect->SourcePoint.y;
+        SrcRect->bottom = MoveRect->SourcePoint.x + MoveRect->DestinationRect.right - MoveRect->DestinationRect.left;
 
-            DestRect->left = TexHeight - MoveRect->DestinationRect.bottom;
-            DestRect->top = MoveRect->DestinationRect.left;
-            DestRect->right = TexHeight - MoveRect->DestinationRect.top;
-            DestRect->bottom = MoveRect->DestinationRect.right;
-            break;
-        }
-        case DXGI_MODE_ROTATION_ROTATE180:
-        {
-            SrcRect->left = TexWidth - (MoveRect->SourcePoint.x + MoveRect->DestinationRect.right - MoveRect->DestinationRect.left);
-            SrcRect->top = TexHeight - (MoveRect->SourcePoint.y + MoveRect->DestinationRect.bottom - MoveRect->DestinationRect.top);
-            SrcRect->right = TexWidth - MoveRect->SourcePoint.x;
-            SrcRect->bottom = TexHeight - MoveRect->SourcePoint.y;
+        DestRect->left = TexHeight - MoveRect->DestinationRect.bottom;
+        DestRect->top = MoveRect->DestinationRect.left;
+        DestRect->right = TexHeight - MoveRect->DestinationRect.top;
+        DestRect->bottom = MoveRect->DestinationRect.right;
+        break;
+    }
+    case DXGI_MODE_ROTATION_ROTATE180:
+    {
+        SrcRect->left = TexWidth - (MoveRect->SourcePoint.x + MoveRect->DestinationRect.right - MoveRect->DestinationRect.left);
+        SrcRect->top = TexHeight - (MoveRect->SourcePoint.y + MoveRect->DestinationRect.bottom - MoveRect->DestinationRect.top);
+        SrcRect->right = TexWidth - MoveRect->SourcePoint.x;
+        SrcRect->bottom = TexHeight - MoveRect->SourcePoint.y;
 
-            DestRect->left = TexWidth - MoveRect->DestinationRect.right;
-            DestRect->top = TexHeight - MoveRect->DestinationRect.bottom;
-            DestRect->right = TexWidth - MoveRect->DestinationRect.left;
-            DestRect->bottom =  TexHeight - MoveRect->DestinationRect.top;
-            break;
-        }
-        case DXGI_MODE_ROTATION_ROTATE270:
-        {
-            SrcRect->left = MoveRect->SourcePoint.x;
-            SrcRect->top = TexWidth - (MoveRect->SourcePoint.x + MoveRect->DestinationRect.right - MoveRect->DestinationRect.left);
-            SrcRect->right = MoveRect->SourcePoint.y + MoveRect->DestinationRect.bottom - MoveRect->DestinationRect.top;
-            SrcRect->bottom = TexWidth - MoveRect->SourcePoint.x;
+        DestRect->left = TexWidth - MoveRect->DestinationRect.right;
+        DestRect->top = TexHeight - MoveRect->DestinationRect.bottom;
+        DestRect->right = TexWidth - MoveRect->DestinationRect.left;
+        DestRect->bottom =  TexHeight - MoveRect->DestinationRect.top;
+        break;
+    }
+    case DXGI_MODE_ROTATION_ROTATE270:
+    {
+        SrcRect->left = MoveRect->SourcePoint.x;
+        SrcRect->top = TexWidth - (MoveRect->SourcePoint.x + MoveRect->DestinationRect.right - MoveRect->DestinationRect.left);
+        SrcRect->right = MoveRect->SourcePoint.y + MoveRect->DestinationRect.bottom - MoveRect->DestinationRect.top;
+        SrcRect->bottom = TexWidth - MoveRect->SourcePoint.x;
 
-            DestRect->left = MoveRect->DestinationRect.top;
-            DestRect->top = TexWidth - MoveRect->DestinationRect.right;
-            DestRect->right = MoveRect->DestinationRect.bottom;
-            DestRect->bottom =  TexWidth - MoveRect->DestinationRect.left;
-            break;
-        }
-        default:
-        {
-            RtlZeroMemory(DestRect, sizeof(RECT));
-            RtlZeroMemory(SrcRect, sizeof(RECT));
-            break;
-        }
+        DestRect->left = MoveRect->DestinationRect.top;
+        DestRect->top = TexWidth - MoveRect->DestinationRect.right;
+        DestRect->right = MoveRect->DestinationRect.bottom;
+        DestRect->bottom =  TexWidth - MoveRect->DestinationRect.left;
+        break;
+    }
+    default:
+    {
+        RtlZeroMemory(DestRect, sizeof(RECT));
+        RtlZeroMemory(SrcRect, sizeof(RECT));
+        break;
+    }
     }
 }
 
@@ -237,73 +237,73 @@ void DISPLAYMANAGER::SetDirtyVert(_Out_writes_(NUMVERTICES) VERTEX* Vertices, _I
     // Set appropriate coordinates compensated for rotation
     switch (DeskDesc->Rotation)
     {
-        case DXGI_MODE_ROTATION_ROTATE90:
-        {
-            DestDirty.left = Width - Dirty->bottom;
-            DestDirty.top = Dirty->left;
-            DestDirty.right = Width - Dirty->top;
-            DestDirty.bottom = Dirty->right;
+    case DXGI_MODE_ROTATION_ROTATE90:
+    {
+        DestDirty.left = Width - Dirty->bottom;
+        DestDirty.top = Dirty->left;
+        DestDirty.right = Width - Dirty->top;
+        DestDirty.bottom = Dirty->right;
 
-            Vertices[0].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[1].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[2].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[5].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
-            break;
-        }
-        case DXGI_MODE_ROTATION_ROTATE180:
-        {
-            DestDirty.left = Width - Dirty->right;
-            DestDirty.top = Height - Dirty->bottom;
-            DestDirty.right = Width - Dirty->left;
-            DestDirty.bottom = Height - Dirty->top;
+        Vertices[0].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[1].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[2].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[5].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
+        break;
+    }
+    case DXGI_MODE_ROTATION_ROTATE180:
+    {
+        DestDirty.left = Width - Dirty->right;
+        DestDirty.top = Height - Dirty->bottom;
+        DestDirty.right = Width - Dirty->left;
+        DestDirty.bottom = Height - Dirty->top;
 
-            Vertices[0].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[1].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[2].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[5].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
-            break;
-        }
-        case DXGI_MODE_ROTATION_ROTATE270:
-        {
-            DestDirty.left = Dirty->top;
-            DestDirty.top = Height - Dirty->right;
-            DestDirty.right = Dirty->bottom;
-            DestDirty.bottom = Height - Dirty->left;
+        Vertices[0].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[1].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[2].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[5].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
+        break;
+    }
+    case DXGI_MODE_ROTATION_ROTATE270:
+    {
+        DestDirty.left = Dirty->top;
+        DestDirty.top = Height - Dirty->right;
+        DestDirty.right = Dirty->bottom;
+        DestDirty.bottom = Height - Dirty->left;
 
-            Vertices[0].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[1].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[2].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[5].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
-            break;
-        }
-        default:
-            assert(false); // drop through
-        case DXGI_MODE_ROTATION_UNSPECIFIED:
-        case DXGI_MODE_ROTATION_IDENTITY:
-        {
-            Vertices[0].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[1].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[2].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
-            Vertices[5].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
-            break;
-        }
+        Vertices[0].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[1].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[2].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[5].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
+        break;
+    }
+    default:
+        assert(false); // drop through
+    case DXGI_MODE_ROTATION_UNSPECIFIED:
+    case DXGI_MODE_ROTATION_IDENTITY:
+    {
+        Vertices[0].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[1].TexCoord = XMFLOAT2(Dirty->left / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[2].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->bottom / static_cast<FLOAT>(ThisDesc->Height));
+        Vertices[5].TexCoord = XMFLOAT2(Dirty->right / static_cast<FLOAT>(ThisDesc->Width), Dirty->top / static_cast<FLOAT>(ThisDesc->Height));
+        break;
+    }
     }
 
     // Set positions
     Vertices[0].Pos = XMFLOAT3((DestDirty.left + DeskDesc->DesktopCoordinates.left - OffsetX - CenterX) / static_cast<FLOAT>(CenterX),
-                             -1 * (DestDirty.bottom + DeskDesc->DesktopCoordinates.top - OffsetY - CenterY) / static_cast<FLOAT>(CenterY),
-                             0.0f);
+                               -1 * (DestDirty.bottom + DeskDesc->DesktopCoordinates.top - OffsetY - CenterY) / static_cast<FLOAT>(CenterY),
+                               0.0f);
     Vertices[1].Pos = XMFLOAT3((DestDirty.left + DeskDesc->DesktopCoordinates.left - OffsetX - CenterX) / static_cast<FLOAT>(CenterX),
-                             -1 * (DestDirty.top + DeskDesc->DesktopCoordinates.top - OffsetY - CenterY) / static_cast<FLOAT>(CenterY),
-                             0.0f);
+                               -1 * (DestDirty.top + DeskDesc->DesktopCoordinates.top - OffsetY - CenterY) / static_cast<FLOAT>(CenterY),
+                               0.0f);
     Vertices[2].Pos = XMFLOAT3((DestDirty.right + DeskDesc->DesktopCoordinates.left - OffsetX - CenterX) / static_cast<FLOAT>(CenterX),
-                             -1 * (DestDirty.bottom + DeskDesc->DesktopCoordinates.top - OffsetY - CenterY) / static_cast<FLOAT>(CenterY),
-                             0.0f);
+                               -1 * (DestDirty.bottom + DeskDesc->DesktopCoordinates.top - OffsetY - CenterY) / static_cast<FLOAT>(CenterY),
+                               0.0f);
     Vertices[3].Pos = Vertices[2].Pos;
     Vertices[4].Pos = Vertices[1].Pos;
     Vertices[5].Pos = XMFLOAT3((DestDirty.right + DeskDesc->DesktopCoordinates.left - OffsetX - CenterX) / static_cast<FLOAT>(CenterX),
-                             -1 * (DestDirty.top + DeskDesc->DesktopCoordinates.top - OffsetY - CenterY) / static_cast<FLOAT>(CenterY),
-                             0.0f);
+                               -1 * (DestDirty.top + DeskDesc->DesktopCoordinates.top - OffsetY - CenterY) / static_cast<FLOAT>(CenterY),
+                               0.0f);
 
     Vertices[3].TexCoord = Vertices[2].TexCoord;
     Vertices[4].TexCoord = Vertices[1].TexCoord;

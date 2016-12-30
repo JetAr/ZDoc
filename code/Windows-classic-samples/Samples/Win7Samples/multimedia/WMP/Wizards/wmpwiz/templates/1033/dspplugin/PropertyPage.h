@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // C[!output Safe_root]PropPage.h : Declaration of C[!output Safe_root]PropPage
 //
@@ -24,26 +24,26 @@ class ATL_NO_VTABLE C[!output Safe_root]PropPage :
     public CDialogImpl<C[!output Safe_root]PropPage>
 {
 public:
-            C[!output Safe_root]PropPage(); 
-    virtual ~C[!output Safe_root]PropPage(); 
-    
+    C[!output Safe_root]PropPage();
+    virtual ~C[!output Safe_root]PropPage();
+
 
     enum {IDD = IDD_[!output SAFE_ROOT]PROPPAGE};
-    
 
-DECLARE_REGISTRY_RESOURCEID(IDR_[!output SAFE_ROOT]PROPPAGE)
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_REGISTRY_RESOURCEID(IDR_[!output SAFE_ROOT]PROPPAGE)
 
-BEGIN_COM_MAP(C[!output Safe_root]PropPage) 
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
+
+    BEGIN_COM_MAP(C[!output Safe_root]PropPage)
     COM_INTERFACE_ENTRY(IPropertyPage)
-END_COM_MAP()
+    END_COM_MAP()
 
-BEGIN_MSG_MAP(C[!output Safe_root]PropPage)
+    BEGIN_MSG_MAP(C[!output Safe_root]PropPage)
     CHAIN_MSG_MAP(IPropertyPageImpl<C[!output Safe_root]PropPage>)
     COMMAND_HANDLER(IDC_SCALEFACTOR, EN_CHANGE, OnChangeScale)
     MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
-END_MSG_MAP()
+    END_MSG_MAP()
 
     STDMETHOD(SetObjects)(ULONG nObjects, IUnknown** ppUnk);
     STDMETHOD(Apply)(void);

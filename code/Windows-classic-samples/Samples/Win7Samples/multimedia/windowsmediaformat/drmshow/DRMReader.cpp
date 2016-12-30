@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -109,13 +109,13 @@ HRESULT STDMETHODCALLTYPE CLicenseViewer::Initialize()
                 break;
             }
         }
-    
+
         //
         // Create a Reader and get the DRM reader interface
         //
         if ( NULL == m_pIWMReader )
         {
-            hr = WMCreateReader( NULL, 0, &m_pIWMReader ); 
+            hr = WMCreateReader( NULL, 0, &m_pIWMReader );
             if ( FAILED( hr ) || NULL == m_pIWMReader )
             {
                 hr = E_FAIL;
@@ -125,7 +125,7 @@ HRESULT STDMETHODCALLTYPE CLicenseViewer::Initialize()
 
             SAFE_RELEASE( m_pIWMDRMReader );
             assert( m_pIWMReader );
-        	hr = m_pIWMReader->QueryInterface( IID_IWMDRMReader, ( void **)&m_pIWMDRMReader );
+            hr = m_pIWMReader->QueryInterface( IID_IWMDRMReader, ( void **)&m_pIWMDRMReader );
             if ( FAILED( hr ) )
             {
                 _tprintf( _T( "Failed to QI for DRM Reader interface 0x%08lX\n" ), hr );
@@ -134,7 +134,7 @@ HRESULT STDMETHODCALLTYPE CLicenseViewer::Initialize()
         }
     }
     while ( FALSE );
-    
+
     return hr;
 }
 
@@ -172,7 +172,7 @@ HRESULT STDMETHODCALLTYPE CLicenseViewer::OnStatus( WMT_STATUS Status, HRESULT h
         SetEvent( m_hEvent );
         break;
     }
-    
+
     return( S_OK );
 }
 
@@ -182,21 +182,21 @@ HRESULT STDMETHODCALLTYPE CLicenseViewer::OnStatus( WMT_STATUS Status, HRESULT h
 HRESULT STDMETHODCALLTYPE CLicenseViewer::QueryInterface( REFIID riid, void **ppvObject )
 {
     HRESULT hr = S_OK;
-    
-	if ( riid == IID_IWMReaderCallback )
+
+    if ( riid == IID_IWMReaderCallback )
     {
-		AddRef();
-		*ppvObject = ( IWMReaderCallback* )this;
+        AddRef();
+        *ppvObject = ( IWMReaderCallback* )this;
     }
     else
-	{
+    {
         *ppvObject = NULL;
         return( E_NOINTERFACE );
     }
 
     return( hr );
 }
-	
+
 ///////////////////////////////////////////////////////////////////////////////
 ULONG STDMETHODCALLTYPE CLicenseViewer::AddRef( void )
 {
@@ -211,7 +211,7 @@ ULONG STDMETHODCALLTYPE CLicenseViewer::Release( void )
         delete this;
         return 0;
     }
-    
+
     return( m_cRef );
 }
 
@@ -241,7 +241,7 @@ HRESULT CLicenseViewer::Open( __in LPWSTR pwszInFile )
     static const DWORD OPEN_WAIT_LENGTH = 30000;
     HRESULT hr = S_OK;
 
-    do 
+    do
     {
         //
         // Create the reader and callback event, if not already done
@@ -249,7 +249,7 @@ HRESULT CLicenseViewer::Open( __in LPWSTR pwszInFile )
         hr = Initialize();
         if ( FAILED( hr ) )
             break;
-            
+
         //
         // Validate input parameter
         //
@@ -264,7 +264,7 @@ HRESULT CLicenseViewer::Open( __in LPWSTR pwszInFile )
         // Open the input file
         //
         assert( m_pIWMReader );
-	    hr = m_pIWMReader->Open( pwszInFile, this, NULL );
+        hr = m_pIWMReader->Open( pwszInFile, this, NULL );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "Failed to open file 0x%08lX\n" ), hr );
@@ -309,7 +309,7 @@ HRESULT CLicenseViewer::Open( __in LPWSTR pwszInFile )
     {
         Cleanup();
     }
-    
+
     return( hr );
 }
 
@@ -323,10 +323,10 @@ HRESULT CLicenseViewer::PrintLicenseStateData( LPCTSTR tszOutputPrefix, DRM_LICE
     HRESULT hr = S_OK;
     DWORD dwCountIndex;
     DWORD dwDateIndex;
-    
+
     assert( tszOutputPrefix );
     assert( pDRMLicenseStateData );
-    
+
     do
     {
         //
@@ -338,47 +338,47 @@ HRESULT CLicenseViewer::PrintLicenseStateData( LPCTSTR tszOutputPrefix, DRM_LICE
         case WM_DRM_LICENSE_STATE_NORIGHT: // No rights to perform this action
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_NORIGHT\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_UNLIM: // Unlimited rights to perform this action
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_UNLIM\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_COUNT: // Action may only be performed a certain number of times
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_COUNT\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_FROM: // Action cannot be performed until a specific date
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_FROM\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_UNTIL: // Action cannot be performed after a certain date
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_UNTIL\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_FROM_UNTIL: // Action can only be performed within a specific range of dates
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_FROM_UNTIL\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_COUNT_FROM: // Action can only be performed a certain number of times, starting from a specific date
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_COUNT_FROM\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_COUNT_UNTIL: // Action can be performed a certain number of times until a specific date
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_COUNT_UNTIL\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_COUNT_FROM_UNTIL: // Action can only be performed a certain number of times, and only is a specific range of dates
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_COUNT_FROM_UNTIL\n" ), tszOutputPrefix );
             break;
-    
+
         case WM_DRM_LICENSE_STATE_EXPIRATION_AFTER_FIRSTUSE: // License restrictions don't occur until after the first use
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: WM_DRM_LICENSE_STATE_EXPIRATION_AFTER_FIRSTUSE\n" ), tszOutputPrefix );
             break;
-            
+
         default:
             _tprintf( _T( "%sDRM_LICENSE_DATA.dwCategory: Unknown! - %d\n" ), tszOutputPrefix, pDRMLicenseStateData->dwCategory );
         }
-        
+
         //
         // If count limited, print the number of times the action can be performed
         //
@@ -391,7 +391,7 @@ HRESULT CLicenseViewer::PrintLicenseStateData( LPCTSTR tszOutputPrefix, DRM_LICE
             }
             _tprintf( _T( "\n" ) );
         }
-        
+
         //
         // If the action is date limited, print the date restriction(s)
         //
@@ -403,19 +403,19 @@ HRESULT CLicenseViewer::PrintLicenseStateData( LPCTSTR tszOutputPrefix, DRM_LICE
                 SYSTEMTIME  SystemTime;
                 WCHAR       wszOn[128];
                 WCHAR       wszAt[128];
-    
+
                 //
                 // Convert the FILETIME to SYSTEMTIME and format into strings
                 //
                 FileTimeToSystemTime( &(pDRMLicenseStateData->datetime[ dwDateIndex ]), &SystemTime );
-    			GetDateFormatW( LOCALE_USER_DEFAULT, 0, &SystemTime, L"ddd',' MMM dd yyyy", wszOn, 128 );
-    			GetTimeFormatW( LOCALE_USER_DEFAULT, 0, &SystemTime, L"hh mm ss tt", wszAt, 128 );
-    
+                GetDateFormatW( LOCALE_USER_DEFAULT, 0, &SystemTime, L"ddd',' MMM dd yyyy", wszOn, 128 );
+                GetTimeFormatW( LOCALE_USER_DEFAULT, 0, &SystemTime, L"hh mm ss tt", wszAt, 128 );
+
                 _tprintf( _T( "  On %ws at %ws" ), wszOn, wszAt );
             }
             _tprintf( _T( "\n" ) );
         }
-        
+
         //
         // If the aggregate license data cannot easily be represented, the "vague" value will be set.
         // This will happen when two or more licenses with different right types (like COUNT and
@@ -427,7 +427,7 @@ HRESULT CLicenseViewer::PrintLicenseStateData( LPCTSTR tszOutputPrefix, DRM_LICE
         _tprintf( _T( "%sDRM_LICENSE_DATA.dwVague: %ld \n" ), tszOutputPrefix, pDRMLicenseStateData->dwVague );
     }
     while ( FALSE );
-    
+
     return hr;
 }
 
@@ -448,7 +448,7 @@ HRESULT CLicenseViewer::ShowRights()
     const DRM_Properties*   pCurrentProperty;
     LPBYTE                  pbProperty = NULL;
     DWORD                   dwStateIndex;
-    
+
     //
     // Validate current state
     //
@@ -457,7 +457,7 @@ HRESULT CLicenseViewer::ShowRights()
         _tprintf( _T( "ShowRights: m_pIWMDRMReader is NULL." ) );
         return E_FAIL;
     }
-    
+
     _tprintf( _T( "ShowRights 0x%08lX\n" ), hr );
 
     //
@@ -468,7 +468,7 @@ HRESULT CLicenseViewer::ShowRights()
     for ( dwPropertyIndex = 0; dwPropertyIndex < NUM_BOOL_PROPERTIES; dwPropertyIndex++ )
     {
         pCurrentProperty = &(g_BoolProperties[ dwPropertyIndex ]);
-        
+
         //
         // Get the next property from the DRM reader
         //
@@ -476,7 +476,7 @@ HRESULT CLicenseViewer::ShowRights()
         cbLength = sizeof( BOOL );
         assert( m_pIWMDRMReader );
         assert( pCurrentProperty );
-    	hr = m_pIWMDRMReader->GetDRMProperty( wszPropertyName, &wmtType, (BYTE *)&fBoolProperty, &cbLength );
+        hr = m_pIWMDRMReader->GetDRMProperty( wszPropertyName, &wmtType, (BYTE *)&fBoolProperty, &cbLength );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "    Couldn't get value for property %ws (hr = 0x%08lX)\n" ), wszPropertyName, hr );
@@ -498,7 +498,7 @@ HRESULT CLicenseViewer::ShowRights()
                 _tprintf( _T( "    Invalid returned property length\n" ) );
                 continue;
             }
-            
+
             //
             // Print the value of the property
             //
@@ -517,11 +517,11 @@ HRESULT CLicenseViewer::ShowRights()
 
         //
         // Get property from DRM reader
-        //        
+        //
         cbLength = pCurrentProperty->cbExpectedLength;
         assert( m_pIWMDRMReader );
         assert( pCurrentProperty );
-    	hr = m_pIWMDRMReader->GetDRMProperty( pCurrentProperty->pwszName, &wmtType, (BYTE *)&LicenseStateData, &cbLength );
+        hr = m_pIWMDRMReader->GetDRMProperty( pCurrentProperty->pwszName, &wmtType, (BYTE *)&LicenseStateData, &cbLength );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "    Couldn't get value for property %ws (hr = 0x%08lX)\n" ), pCurrentProperty->pwszName, hr );
@@ -543,7 +543,7 @@ HRESULT CLicenseViewer::ShowRights()
                 _tprintf( _T( "  Invalid returned property length\n" ) );
                 continue;
             }
-            
+
             //
             // Print each license state
             //
@@ -571,14 +571,14 @@ HRESULT CLicenseViewer::ShowRights()
     for( dwPropertyIndex = 0; dwPropertyIndex < NUM_HEADER_PROPERTIES; dwPropertyIndex++ )
     {
         pCurrentProperty = &(g_HeaderProperties[ dwPropertyIndex ]);
-        
+
         //
         // Get the property from the DRM reader
         //
         cbLength = sizeof( wszTemp );
         assert( m_pIWMDRMReader );
         assert( pCurrentProperty );
-    	hr = m_pIWMDRMReader->GetDRMProperty( pCurrentProperty->pwszName, &wmtType, (BYTE *)&wszTemp[ 0 ], &cbLength );
+        hr = m_pIWMDRMReader->GetDRMProperty( pCurrentProperty->pwszName, &wmtType, (BYTE *)&wszTemp[ 0 ], &cbLength );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "    Couldn't get value for property %ws (hr = 0x%08lX)\n" ), pCurrentProperty->pwszName, hr );
@@ -594,14 +594,14 @@ HRESULT CLicenseViewer::ShowRights()
                 _tprintf( _T( "    Invalid returned property type\n" ) );
                 continue;
             }
-            
+
             //
             // Print the value of the property
             //
             _tprintf( _T( "    %ws: %ws\n" ), pCurrentProperty->pwszName, wszTemp );
         }
     }
-    
+
     SAFE_ARRAYDELETE( pbProperty );
 
     return( hr );
@@ -617,7 +617,7 @@ HRESULT CLicenseViewer::Cleanup()
 
     //
     // Release all resources held in member variables
-    //    
+    //
     SAFE_RELEASE( m_pIWMDRMReader );
     SAFE_RELEASE( m_pIWMReader );
     SAFE_CLOSEHANDLE( m_hEvent );

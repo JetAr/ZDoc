@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,14 +14,15 @@ static const WCHAR RegInfo_Key_ThreadModel[] = L"ThreadingModel";
 
 static const WCHAR TEXTSERVICE_DESC[] = L"Sample IME";
 
-static const GUID SupportCategories[] = {
+static const GUID SupportCategories[] =
+{
     GUID_TFCAT_TIP_KEYBOARD,
     GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER,
-    GUID_TFCAT_TIPCAP_UIELEMENTENABLED, 
+    GUID_TFCAT_TIPCAP_UIELEMENTENABLED,
     GUID_TFCAT_TIPCAP_SECUREMODE,
     GUID_TFCAT_TIPCAP_COMLESS,
     GUID_TFCAT_TIPCAP_INPUTMODECOMPARTMENT,
-    GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT, 
+    GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT,
     GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT,
 };
 //+---------------------------------------------------------------------------
@@ -36,7 +37,7 @@ BOOL RegisterProfiles()
 
     ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = nullptr;
     hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
-        IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
+                          IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
     if (FAILED(hr))
     {
         return FALSE;
@@ -55,13 +56,13 @@ BOOL RegisterProfiles()
         goto Exit;
     }
     hr = pITfInputProcessorProfileMgr->RegisterProfile(Global::SampleIMECLSID,
-        TEXTSERVICE_LANGID,
-        Global::SampleIMEGuidProfile,
-        TEXTSERVICE_DESC,
-        static_cast<ULONG>(lenOfDesc),
-        achIconFile,
-        cchA,
-        (UINT)TEXTSERVICE_ICON_INDEX, NULL, 0, TRUE, 0);
+            TEXTSERVICE_LANGID,
+            Global::SampleIMEGuidProfile,
+            TEXTSERVICE_DESC,
+            static_cast<ULONG>(lenOfDesc),
+            achIconFile,
+            cchA,
+            (UINT)TEXTSERVICE_ICON_INDEX, NULL, 0, TRUE, 0);
 
     if (FAILED(hr))
     {
@@ -89,7 +90,7 @@ void UnregisterProfiles()
 
     ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = nullptr;
     hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
-        IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
+                          IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
     if (FAILED(hr))
     {
         goto Exit;
@@ -158,7 +159,7 @@ void UnregisterCategories()
     {
         pCategoryMgr->UnregisterCategory(Global::SampleIMECLSID, guid, Global::SampleIMECLSID);
     }
-  
+
     pCategoryMgr->Release();
 
     return;

@@ -1,4 +1,4 @@
-//
+﻿//
 // snoop.cpp
 //
 // CSnoopWnd implementation.
@@ -52,7 +52,7 @@ ATOM CSnoopWnd::_atomWndClass = 0;
 CSnoopWnd::CSnoopWnd(CCaseTextService *pCase)
 {
     _pCase = pCase; // no AddRef because CSnoopWnd is contained in the
-                    // pCase lifetime
+    // pCase lifetime
     _hWnd = NULL;
     _cchText = 0;
 }
@@ -236,7 +236,7 @@ void CSnoopWnd::_UpdateText(TfEditCookie ec, ITfContext *pContext, ITfRange *pRa
     {
         // caller wants us to use the selection
         if (pContext->GetSelection(ec, TS_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-            cFetched != 1)
+                cFetched != 1)
         {
             return;
         }
@@ -288,15 +288,15 @@ LRESULT CALLBACK CSnoopWnd::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
 
     switch (uMsg)
     {
-        case WM_CREATE:
-            _SetThis(hWnd, lParam);
-            return 0;
+    case WM_CREATE:
+        _SetThis(hWnd, lParam);
+        return 0;
 
-        case WM_PAINT:
-            hdc = BeginPaint(hWnd, &ps);
-            _GetThis(hWnd)->_OnPaint(hWnd, hdc);
-            EndPaint(hWnd, &ps);
-            return 0;
+    case WM_PAINT:
+        hdc = BeginPaint(hWnd, &ps);
+        _GetThis(hWnd)->_OnPaint(hWnd, hdc);
+        EndPaint(hWnd, &ps);
+        return 0;
     }
 
     return DefWindowProc(hWnd, uMsg, wParam, lParam);

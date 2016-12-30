@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   srengui.h 
+*   srengui.h
 *       This file contains the declaration of the CSrEngineUI class.
 *       This implements ISpTokenUI. This is used by the app to display UI.
 *       The methods here can either be called by the app directly from ISpObjectToken,
@@ -18,9 +18,9 @@
 
 #include "resource.h"
 
-class ATL_NO_VTABLE CSrEngineUI : 
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CSrEngineUI, &CLSID_SampleSREngineUI>,
+class ATL_NO_VTABLE CSrEngineUI :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CSrEngineUI, &CLSID_SampleSREngineUI>,
     public ISpTokenUI
 {
 public:
@@ -30,23 +30,23 @@ public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
     BEGIN_COM_MAP(CSrEngineUI)
-    	COM_INTERFACE_ENTRY(ISpTokenUI)
+    COM_INTERFACE_ENTRY(ISpTokenUI)
     END_COM_MAP()
 
 public:
 
     STDMETHODIMP IsUISupported(
-                    const WCHAR * pszTypeOfUI,
-                    void * pvExtraData,
-                    ULONG cbExtraData,
-                    IUnknown * punkObject,
-                    BOOL *pfSupported);
+        const WCHAR * pszTypeOfUI,
+        void * pvExtraData,
+        ULONG cbExtraData,
+        IUnknown * punkObject,
+        BOOL *pfSupported);
     STDMETHODIMP DisplayUI(
-                    HWND hwndParent,
-                    const WCHAR * pszTitle,
-                    const WCHAR * pszTypeOfUI,
-                    void * pvExtraData,
-                    ULONG cbExtraData,
-                    ISpObjectToken * pToken,
-                    IUnknown * punkObject);
+        HWND hwndParent,
+        const WCHAR * pszTitle,
+        const WCHAR * pszTypeOfUI,
+        void * pvExtraData,
+        ULONG cbExtraData,
+        ISpObjectToken * pToken,
+        IUnknown * punkObject);
 };

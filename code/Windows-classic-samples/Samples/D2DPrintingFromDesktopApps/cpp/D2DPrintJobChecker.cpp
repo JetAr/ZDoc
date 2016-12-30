@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -35,7 +35,7 @@ D2DPrintJobChecker::~D2DPrintJobChecker()
 // This is required before the application can use this print job checker to monitor a print job.
 HRESULT D2DPrintJobChecker::Initialize(
     _In_ IPrintDocumentPackageTarget* documentPackageTarget
-    )
+)
 {
     // Application can only initialize this job checker once.
     if (m_isInitialized)
@@ -54,9 +54,9 @@ HRESULT D2DPrintJobChecker::Initialize(
     if (SUCCEEDED(hr))
     {
         hr = connectionPointContainer->FindConnectionPoint(
-            __uuidof(IPrintDocumentPackageStatusEvent),
-            &m_connectionPoint
-            );
+                 __uuidof(IPrintDocumentPackageStatusEvent),
+                 &m_connectionPoint
+             );
     }
 
     IUnknown* unknownEvent = nullptr;
@@ -74,11 +74,11 @@ HRESULT D2DPrintJobChecker::Initialize(
     if (SUCCEEDED(hr))
     {
         m_completionEvent = ::CreateEvent(
-            nullptr, // The handle cannot be inherited by child processes.
-            TRUE,    // The event object requires the use of the ResetEvent function to set the event state to nonsignaled.
-            FALSE,   // The initial state of the event object is nonsignaled.
-            nullptr  // Name of the event object.
-            );
+                                nullptr, // The handle cannot be inherited by child processes.
+                                TRUE,    // The event object requires the use of the ResetEvent function to set the event state to nonsignaled.
+                                FALSE,   // The initial state of the event object is nonsignaled.
+                                nullptr  // Name of the event object.
+                            );
         hr = (!m_completionEvent) ? HRESULT_FROM_WIN32(::GetLastError()) : hr;
     }
 
@@ -109,10 +109,10 @@ HRESULT STDMETHODCALLTYPE
 D2DPrintJobChecker::QueryInterface(
     REFIID iid,
     _Out_ void** ppvObject
-    )
+)
 {
     if (iid == __uuidof(IUnknown) ||
-        iid == __uuidof(IPrintDocumentPackageStatusEvent))
+            iid == __uuidof(IPrintDocumentPackageStatusEvent))
     {
         *ppvObject = static_cast<IPrintDocumentPackageStatusEvent*>(this);
         AddRef();
@@ -144,7 +144,7 @@ D2DPrintJobChecker::Release()
 
 HRESULT D2DPrintJobChecker::GetTypeInfoCount(
     _Out_ UINT* /* pctinfo */
-    )
+)
 {
     return E_NOTIMPL;
 }
@@ -153,7 +153,7 @@ HRESULT D2DPrintJobChecker::GetTypeInfo(
     UINT /* iTInfo */,
     LCID /* lcid */,
     _Outptr_result_maybenull_ ITypeInfo** /* ppTInfo */
-    )
+)
 {
     return E_NOTIMPL;
 }
@@ -162,9 +162,9 @@ HRESULT D2DPrintJobChecker::GetIDsOfNames(
     _In_                        REFIID     /* riid */,
     _In_reads_(cNames)          LPOLESTR*  /* rgszNames */,
     _In_range_(0, 16384)        UINT       cNames,
-                                LCID       /* lcid */,
+    LCID       /* lcid */,
     __out_ecount_full(cNames)   DISPID*    /* rgDispId */
-    )
+)
 {
     UNREFERENCED_PARAMETER(cNames);
     return E_NOTIMPL;
@@ -179,7 +179,7 @@ HRESULT D2DPrintJobChecker::Invoke(
     VARIANT*        /* pVarResult */,
     EXCEPINFO*      /* pExcepInfo */,
     UINT*           /* puArgErr */
-    )
+)
 {
     return E_NOTIMPL;
 }
@@ -187,7 +187,7 @@ HRESULT D2DPrintJobChecker::Invoke(
 // Callback to indicate that the status of the package has changed.
 STDMETHODIMP D2DPrintJobChecker::PackageStatusUpdated(
     _In_ PrintDocumentPackageStatus* packageStatus
-    )
+)
 {
     HRESULT hr = (packageStatus == nullptr) ? E_INVALIDARG : S_OK;
 
@@ -245,12 +245,12 @@ HRESULT D2DPrintJobChecker::WaitForCompletion()
     while (isWaiting)
     {
         DWORD waitResult = ::MsgWaitForMultipleObjects(
-            1,                  // Number of object handles in the array.
-            &m_completionEvent, // Array of object handles.
-            FALSE,              // Function returns when the state of any one of the objects is set to signaled.
-            INFINITE,           // Function will return only when the specified objects are signaled.
-            QS_ALLINPUT         // Any message is in the queue.
-            );
+                               1,                  // Number of object handles in the array.
+                               &m_completionEvent, // Array of object handles.
+                               FALSE,              // Function returns when the state of any one of the objects is set to signaled.
+                               INFINITE,           // Function will return only when the specified objects are signaled.
+                               QS_ALLINPUT         // Any message is in the queue.
+                           );
         if (waitResult == WAIT_OBJECT_0 + 1)
         {
             // This is not the desired completion event.
@@ -277,7 +277,7 @@ HRESULT D2DPrintJobChecker::WaitForCompletion()
 // Output debug message for the print document package status.
 void D2DPrintJobChecker::OutputPackageStatus(
     _In_ PrintDocumentPackageStatus packageStatus
-    )
+)
 {
     switch (packageStatus.Completion)
     {
@@ -311,7 +311,7 @@ void D2DPrintJobChecker::OutputPackageStatus(
         packageStatus.CurrentPage,
         packageStatus.CurrentPageTotal,
         packageStatus.PackageStatus
-        );
+    );
     OutputDebugString(messageBuffer);
 }
 

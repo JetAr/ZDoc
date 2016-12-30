@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2000 - 2000 Microsoft Corporation.  All Rights Reserved.
 
@@ -55,11 +55,11 @@ ULONG                         gulAdvise;
 INT_PTR
 CALLBACK
 MainDialogProc(
-               HWND hDlg,
-               UINT uMsg,
-               WPARAM wParam,
-               LPARAM lParam
-              );
+    HWND hDlg,
+    UINT uMsg,
+    WPARAM wParam,
+    LPARAM lParam
+);
 
 HRESULT
 RegisterTapiEventInterface(CTAPIEventNotification *pTAPIEventNotification);
@@ -69,8 +69,8 @@ ListenOnAddresses();
 
 HRESULT
 ListenOnThisAddress(
-                    ITAddress * pAddress
-                   );
+    ITAddress * pAddress
+);
 
 HRESULT
 AnswerTheCall();
@@ -83,13 +83,13 @@ ReleaseTheCall();
 
 void
 DoMessage(
-          LPWSTR pszMessage
-         );
+    LPWSTR pszMessage
+);
 
 void
 SetStatusMessage(
-                 LPWSTR pszMessage
-                );
+    LPWSTR pszMessage
+);
 
 HRESULT
 InitializeTapi();
@@ -99,18 +99,18 @@ ShutdownTapi();
 
 void
 EnableButton(
-             int ID
-            );
+    int ID
+);
 void
 DisableButton(
-              int ID
-             );
+    int ID
+);
 
 BOOL
 AddressSupportsMediaType(
-                         ITAddress * pAddress,
-                         long        lMediaType
-                        );
+    ITAddress * pAddress,
+    long        lMediaType
+);
 
 //////////////////////////////////////////////////////////
 //
@@ -124,11 +124,11 @@ AddressSupportsMediaType(
 int
 WINAPI
 WinMain(
-        HINSTANCE hInst,
-        HINSTANCE hPrevInst,
-        LPSTR lpCmdLine,
-        int nCmdShow
-       )
+    HINSTANCE hInst,
+    HINSTANCE hPrevInst,
+    LPSTR lpCmdLine,
+    int nCmdShow
+)
 {
     ghInst = hInst;
 
@@ -156,11 +156,11 @@ WinMain(
     //
 
     DialogBox(
-              ghInst,
-              MAKEINTRESOURCE(IDD_MAINDLG),
-              NULL,
-              MainDialogProc
-             );
+        ghInst,
+        MAKEINTRESOURCE(IDD_MAINDLG),
+        NULL,
+        MainDialogProc
+    );
 
 
     //
@@ -195,12 +195,12 @@ InitializeTapi()
     //
 
     hr = CoCreateInstance(
-                          CLSID_TAPI,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITTAPI,
-                          (LPVOID *)&gpTapi
-                         );
+             CLSID_TAPI,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITTAPI,
+             (LPVOID *)&gpTapi
+         );
 
     if ( FAILED(hr) )
     {
@@ -236,7 +236,7 @@ InitializeTapi()
 
 
     //
-    // no longer need a reference to the callback object. tapi will keep a 
+    // no longer need a reference to the callback object. tapi will keep a
     // reference to it for as long as it is using it.
     //
 
@@ -306,128 +306,128 @@ ShutdownTapi()
 INT_PTR
 CALLBACK
 MainDialogProc(
-               HWND hDlg,
-               UINT uMsg,
-               WPARAM wParam,
-               LPARAM lParam
-              )
+    HWND hDlg,
+    UINT uMsg,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     switch (uMsg)
     {
-        case WM_PRIVATETAPIEVENT:
-        {
-            OnTapiEvent(
-                        (TAPI_EVENT) wParam,
-                        (IDispatch *) lParam
-                       );
+    case WM_PRIVATETAPIEVENT:
+    {
+        OnTapiEvent(
+            (TAPI_EVENT) wParam,
+            (IDispatch *) lParam
+        );
 
-            return 0;
+        return 0;
+    }
+
+    case WM_INITDIALOG:
+    {
+        //
+        // set up dialog
+        //
+
+        ghDlg = hDlg;
+
+        DisableButton( IDC_ANSWER );
+        DisableButton( IDC_DISCONNECT );
+
+        SetStatusMessage( L"Waiting for a call..." );
+
+        return 0;
+    }
+
+    case WM_COMMAND:
+    {
+        if ( LOWORD(wParam) == IDCANCEL )
+        {
+            //
+            // quit
+            //
+
+            EndDialog( hDlg, 0 );
+
+            return 1;
         }
 
-        case WM_INITDIALOG:
+        switch ( LOWORD(wParam) )
+        {
+        case IDC_AUTOANSWER:
         {
             //
-            // set up dialog
+            // auto answer check box was fiddled around with
             //
 
-            ghDlg = hDlg;
+            gfAutoAnswer = !gfAutoAnswer;
+            return 1;
+        }
 
-            DisableButton( IDC_ANSWER );
+        case IDC_ANSWER:
+        {
+            //
+            // answer the call
+            //
+
+            SetStatusMessage(L"Answering...");
+
+            if ( S_OK == AnswerTheCall() )
+            {
+                SetStatusMessage(L"Connected");
+
+                EnableButton( IDC_DISCONNECT );
+                DisableButton( IDC_ANSWER );
+            }
+            else
+            {
+                DisableButton( IDC_ANSWER );
+                DoMessage(L"Answer failed");
+                SetStatusMessage(L"Waiting for a call...");
+            }
+
+            return 1;
+        }
+
+        case IDC_DISCONNECT:
+        {
+            //
+            // disconnect request
+            //
+
+            SetStatusMessage(L"Disconnecting...");
+            if (S_OK != DisconnectTheCall())
+            {
+                DoMessage(L"Disconnect failed");
+            }
+
+            return 1;
+        }
+
+        case IDC_DISCONNECTED:
+        {
+            //
+            // disconnected notification -- release the call
+            //
+
+            ReleaseTheCall();
+
+            EnableButton( IDOK );
             DisableButton( IDC_DISCONNECT );
 
-            SetStatusMessage( L"Waiting for a call..." );
+            SetStatusMessage(L"Waiting for a call...");
 
-            return 0;
-        }
-
-        case WM_COMMAND:
-        {
-            if ( LOWORD(wParam) == IDCANCEL )
-            {
-                //
-                // quit
-                //
-
-                EndDialog( hDlg, 0 );
-
-                return 1;
-            }
-
-            switch ( LOWORD(wParam) )
-            {
-                case IDC_AUTOANSWER:
-                {
-                    //
-                    // auto answer check box was fiddled around with
-                    //
-
-                    gfAutoAnswer = !gfAutoAnswer;
-                    return 1;
-                }
-
-                case IDC_ANSWER:
-                {
-                    //
-                    // answer the call
-                    //
-
-                    SetStatusMessage(L"Answering...");
-
-                    if ( S_OK == AnswerTheCall() )
-                    {
-                        SetStatusMessage(L"Connected");
-
-                        EnableButton( IDC_DISCONNECT );
-                        DisableButton( IDC_ANSWER );
-                    }
-                    else
-                    {
-                        DisableButton( IDC_ANSWER );
-                        DoMessage(L"Answer failed");
-                        SetStatusMessage(L"Waiting for a call...");
-                    }
-
-                    return 1;
-                }
-
-                case IDC_DISCONNECT:
-                {
-                    //
-                    // disconnect request
-                    //
-
-                    SetStatusMessage(L"Disconnecting...");
-                    if (S_OK != DisconnectTheCall())
-                    {
-                        DoMessage(L"Disconnect failed");
-                    }
-
-                    return 1;
-                }
-
-                case IDC_DISCONNECTED:
-                {
-                    //
-                    // disconnected notification -- release the call
-                    //
-
-                    ReleaseTheCall();
-
-                    EnableButton( IDOK );
-                    DisableButton( IDC_DISCONNECT );
-
-                    SetStatusMessage(L"Waiting for a call...");
-
-                    return 1;
-                }
-                default:
-
-                    return 0;
-            }
+            return 1;
         }
         default:
 
             return 0;
+        }
+    }
+    default:
+
+        return 0;
     }
 }
 
@@ -445,9 +445,9 @@ RegisterTapiEventInterface(CTAPIEventNotification *pTAPIEventNotification)
 
 
     hr = gpTapi->QueryInterface(
-                                IID_IConnectionPointContainer,
-                                (void **)&pCPC
-                               );
+             IID_IConnectionPointContainer,
+             (void **)&pCPC
+         );
 
     if ( FAILED(hr) )
     {
@@ -455,9 +455,9 @@ RegisterTapiEventInterface(CTAPIEventNotification *pTAPIEventNotification)
     }
 
     hr = pCPC->FindConnectionPoint(
-                                   IID_ITTAPIEventNotification,
-                                   &pCP
-                                  );
+             IID_ITTAPIEventNotification,
+             &pCP
+         );
 
     pCPC->Release();
 
@@ -467,9 +467,9 @@ RegisterTapiEventInterface(CTAPIEventNotification *pTAPIEventNotification)
     }
 
     hr = pCP->Advise(
-                      pTAPIEventNotification,
-                      &gulAdvise
-                     );
+             pTAPIEventNotification,
+             &gulAdvise
+         );
 
     pCP->Release();
 
@@ -557,8 +557,8 @@ ListenOnAddresses()
 
 HRESULT
 ListenOnThisAddress(
-                    ITAddress * pAddress
-                   )
+    ITAddress * pAddress
+)
 {
 
     //
@@ -580,13 +580,13 @@ ListenOnThisAddress(
     long     lRegister;
 
     hr = gpTapi->RegisterCallNotifications(
-                                           pAddress,
-                                           VARIANT_TRUE,
-                                           VARIANT_TRUE,
-                                           lMediaTypes,
-                                           0,
-                                           &lRegister
-                                          );
+             pAddress,
+             VARIANT_TRUE,
+             VARIANT_TRUE,
+             lMediaTypes,
+             0,
+             &lRegister
+         );
 
     return hr;
 }
@@ -599,14 +599,20 @@ ListenOnThisAddress(
 
 BOOL
 IsVideoCaptureStream(
-                     ITStream * pStream
-                    )
+    ITStream * pStream
+)
 {
     TERMINAL_DIRECTION tdStreamDirection;
     long               lStreamMediaType;
 
-    if ( FAILED( pStream  ->get_Direction(&tdStreamDirection)   ) ) { return FALSE; }
-    if ( FAILED( pStream  ->get_MediaType(&lStreamMediaType)    ) ) { return FALSE; }
+    if ( FAILED( pStream  ->get_Direction(&tdStreamDirection)   ) )
+    {
+        return FALSE;
+    }
+    if ( FAILED( pStream  ->get_MediaType(&lStreamMediaType)    ) )
+    {
+        return FALSE;
+    }
 
     return (tdStreamDirection == TD_CAPTURE) &&
            (lStreamMediaType  == TAPIMEDIATYPE_VIDEO);
@@ -620,9 +626,9 @@ IsVideoCaptureStream(
 /////////////////////////////////////////////////////////
 HRESULT
 GetVideoRenderTerminal(
-                   ITAddress   * pAddress,
-                   ITTerminal ** ppTerminal
-                  )
+    ITAddress   * pAddress,
+    ITTerminal ** ppTerminal
+)
 {
     //
     // Construct a BSTR for the correct IID.
@@ -696,9 +702,9 @@ GetVideoRenderTerminal(
 
 HRESULT
 EnablePreview(
-              ITAddress * pAddress,
-              ITStream * pStream
-             )
+    ITAddress * pAddress,
+    ITStream * pStream
+)
 {
     ITTerminal * pTerminal;
 
@@ -723,10 +729,10 @@ EnablePreview(
 /////////////////////////////////////////////////////////
 HRESULT
 GetTerminal(
-            ITAddress   * pAddress,
-            ITStream    * pStream,
-            ITTerminal ** ppTerminal
-           )
+    ITAddress   * pAddress,
+    ITStream    * pStream,
+    ITTerminal ** ppTerminal
+)
 {
     //
     // Determine the media type and direction of this stream.
@@ -748,7 +754,7 @@ GetTerminal(
     //
 
     if ( ( lMediaType == TAPIMEDIATYPE_VIDEO ) &&
-         ( dir        == TD_RENDER ) )
+            ( dir        == TD_RENDER ) )
     {
         return GetVideoRenderTerminal(pAddress, ppTerminal);
     }
@@ -770,8 +776,8 @@ GetTerminal(
         //
 
         hr = pTerminalSupport->GetDefaultStaticTerminal(lMediaType,
-                                                        dir,
-                                                        ppTerminal);
+                dir,
+                ppTerminal);
 
         pTerminalSupport->Release();
     }
@@ -789,9 +795,9 @@ GetTerminal(
 
 HRESULT
 SelectTerminalsOnCall(
-                     ITAddress * pAddress,
-                     ITBasicCallControl * pCall
-                     )
+    ITAddress * pAddress,
+    ITBasicCallControl * pCall
+)
 {
     HRESULT hr;
 
@@ -987,15 +993,15 @@ ReleaseTheCall()
 
 void
 DoMessage(
-          LPWSTR pszMessage
-         )
+    LPWSTR pszMessage
+)
 {
     MessageBox(
-               ghDlg,
-               pszMessage,
-               gszTapi30,
-               MB_OK
-              );
+        ghDlg,
+        pszMessage,
+        gszTapi30,
+        MB_OK
+    );
 }
 
 
@@ -1005,14 +1011,14 @@ DoMessage(
 
 void
 SetStatusMessage(
-                 LPWSTR pszMessage
-                )
+    LPWSTR pszMessage
+)
 {
     SetDlgItemText(
-                   ghDlg,
-                   IDC_STATUS,
-                   pszMessage
-                  );
+        ghDlg,
+        IDC_STATUS,
+        pszMessage
+    );
 }
 
 ///////////////////////////////////////////////////////////////
@@ -1023,23 +1029,23 @@ SetStatusMessage(
 
 void
 EnableButton(
-             int ID
-            )
+    int ID
+)
 {
     SendDlgItemMessage(
-                       ghDlg,
-                       ID,
-                       BM_SETSTYLE,
-                       BS_DEFPUSHBUTTON,
-                       0
-                      );
+        ghDlg,
+        ID,
+        BM_SETSTYLE,
+        BS_DEFPUSHBUTTON,
+        0
+    );
     EnableWindow(
-                 GetDlgItem( ghDlg, ID ),
-                 TRUE
-                );
+        GetDlgItem( ghDlg, ID ),
+        TRUE
+    );
     SetFocus(
-             GetDlgItem( ghDlg, ID )
-            );
+        GetDlgItem( ghDlg, ID )
+    );
 }
 
 //////////////////////////////////////////////////////////////
@@ -1050,20 +1056,20 @@ EnableButton(
 
 void
 DisableButton(
-              int ID
-             )
+    int ID
+)
 {
     SendDlgItemMessage(
-                       ghDlg,
-                       ID,
-                       BM_SETSTYLE,
-                       BS_PUSHBUTTON,
-                       0
-                      );
+        ghDlg,
+        ID,
+        BM_SETSTYLE,
+        BS_PUSHBUTTON,
+        0
+    );
     EnableWindow(
-                 GetDlgItem( ghDlg, ID ),
-                 FALSE
-                );
+        GetDlgItem( ghDlg, ID ),
+        FALSE
+    );
 }
 
 //////////////////////////////////////////////////////////////
@@ -1075,24 +1081,24 @@ DisableButton(
 
 BOOL
 AddressSupportsMediaType(
-                         ITAddress * pAddress,
-                         long        lMediaType
-                        )
+    ITAddress * pAddress,
+    long        lMediaType
+)
 {
     VARIANT_BOOL     bSupport = VARIANT_FALSE;
     ITMediaSupport * pMediaSupport;
 
     if ( SUCCEEDED( pAddress->QueryInterface( IID_ITMediaSupport,
-                                              (void **)&pMediaSupport ) ) )
+                    (void **)&pMediaSupport ) ) )
     {
         //
         // does it support this media type?
         //
 
         pMediaSupport->QueryMediaType(
-                                      lMediaType,
-                                      &bSupport
-                                     );
+            lMediaType,
+            &bSupport
+        );
 
         pMediaSupport->Release();
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -78,7 +78,7 @@ CTask* CTasksContent::BuildTask(CXmlNode* pNode, int id)
                         dueDate = bstrValue;
                     }
                     else
-                    {                        
+                    {
                         //
                         // We haven't saved the string off, so free it
                         //
@@ -116,7 +116,7 @@ void CTasksContent::LoadTasks()
 {
     CXmlDocument xDoc;
     BOOL fResult = FALSE;
-    
+
     if (0 != m_cTasks)
     {
         return;
@@ -125,7 +125,7 @@ void CTasksContent::LoadTasks()
     //
     // Read task settings (work or/and family tasks)
     //
-    WCHAR wszEnabled[2]={0};
+    WCHAR wszEnabled[2]= {0};
 
     GetPrivateProfileString(TASK_SECTION, SHOW_WORK_TASKS, L"0", wszEnabled, 2, (LPCWSTR)GetConfigFile());
     BOOL fShowWorkTasks = (0 != wcscmp(wszEnabled, L"0"));
@@ -155,9 +155,9 @@ void CTasksContent::LoadTasks()
                 CTask* pTask = BuildTask(pNode, m_cTasks);
 
                 if (NULL != pTask)
-                {                
+                {
                     if (((0 == wcscmp(pTask->GetCategory(), L"Work")) && (TRUE == fShowWorkTasks)) ||
-                        ((0 == wcscmp(pTask->GetCategory(), L"Family")) && (TRUE == fShowFamilyTasks)))
+                            ((0 == wcscmp(pTask->GetCategory(), L"Family")) && (TRUE == fShowFamilyTasks)))
                     {
                         //
                         // Add the task to an array
@@ -205,7 +205,7 @@ LPSTR CTasksContent::BuildMenu()
         pItem->AddAttribute(L"target", m_tasks[nTask]->GetID());
 
         pItem->AddText(m_tasks[nTask]->GetName());
-        
+
         delete pItem;
     }
 
@@ -225,7 +225,7 @@ LPSTR CTasksContent::BuildMenu()
 void CTasksContent::LoadContent(DWORD* pdwSize, BYTE** ppbData)
 {
     if (NULL == pdwSize ||
-        NULL == ppbData)
+            NULL == ppbData)
     {
         return;
     }
@@ -256,7 +256,7 @@ ISideShowContent* CTasksContent::GetTask(CONTENT_ID id)
     // The array index is (CONTENT_ID - 2), so check the bounds
     //
     if (id < 2 || m_cTasks <= 0 || id-2 >= (CONTENT_ID)m_cTasks)
-    {       
+    {
         return NULL;
     }
 

@@ -1,11 +1,11 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            ScriptList.h
 //
-// Abstract:            Interface & implementation for the CScript 
+// Abstract:            Interface & implementation for the CScript
 //                      and CScriptList classes.
 //
 //*****************************************************************************
@@ -18,7 +18,7 @@
 #endif // _MSC_VER > 1000
 
 #ifndef SAFE_RELEASE
-    #define SAFE_RELEASE( x )           \
+#define SAFE_RELEASE( x )           \
         if ( NULL != x )                \
         {                               \
             x->Release( );              \
@@ -27,7 +27,7 @@
 #endif // SAFE_RELEASE
 
 #ifndef SAFE_DELETE
-    #define SAFE_DELETE( x )            \
+#define SAFE_DELETE( x )            \
        if( x )                          \
        {                                \
            delete x;                    \
@@ -36,7 +36,7 @@
 #endif //SAFE_DELETE
 
 #ifndef SAFE_ARRAYDELETE
-    #define SAFE_ARRAYDELETE( x )       \
+#define SAFE_ARRAYDELETE( x )       \
        if( x )                          \
        {                                \
            delete [] x;                 \
@@ -45,7 +45,7 @@
 #endif //SAFE_ARRAYDELETE
 
 #ifndef SAFE_CLOSEHANDLE
-    #define SAFE_CLOSEHANDLE( h )       \
+#define SAFE_CLOSEHANDLE( h )       \
         if( NULL != h )                 \
         {                               \
             CloseHandle( h );           \
@@ -53,17 +53,17 @@
         }
 #endif //SAFE_CLOSEHANDLE
 
-////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////
 // This class stores the type, parameter and time information of the
-// script entry, in a queue-style linked list 
+// script entry, in a queue-style linked list
 //////////////////////////////////////////////////////////////////////////////////
 class CScript
 {
 public:
-    CScript () 
+    CScript ()
     {
         m_pwszType = NULL;
-        m_pwszParameter = NULL;      
+        m_pwszParameter = NULL;
         m_pNextScript = NULL;
     };
 
@@ -102,9 +102,18 @@ public:
         return( S_OK );
     };
 
-    inline WCHAR *      GetType ( ) { return m_pwszType; } ;
-    inline WCHAR *      GetParameter ( ) { return m_pwszParameter; } ;
-    inline QWORD        GetTime ( ) { return m_cnsTime; } ;
+    inline WCHAR *      GetType ( )
+    {
+        return m_pwszType;
+    } ;
+    inline WCHAR *      GetParameter ( )
+    {
+        return m_pwszParameter;
+    } ;
+    inline QWORD        GetTime ( )
+    {
+        return m_cnsTime;
+    } ;
 
     CScript *m_pNextScript;
 
@@ -114,7 +123,7 @@ private:
     QWORD   m_cnsTime;
 };
 
-////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////
 // This class implements the linked list (queue) to store all script data       //
 //////////////////////////////////////////////////////////////////////////////////
 class CScriptList
@@ -171,8 +180,8 @@ public:
     };
 
     //////////////////////////////////////////////////////////////////////////////////
-    // This function returns a list item from the queue. It removes the        
-    // returned item from the queue but does not free the memory. The calling 
+    // This function returns a list item from the queue. It removes the
+    // returned item from the queue but does not free the memory. The calling
     // function is responsible for deleting this memory.
     //////////////////////////////////////////////////////////////////////////////////
     CScript * GetScript( CScript **ppScript )

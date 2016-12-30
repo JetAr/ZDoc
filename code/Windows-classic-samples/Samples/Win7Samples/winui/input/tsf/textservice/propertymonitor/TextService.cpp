@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -108,7 +108,7 @@ STDAPI CPropertyMonitorTextService::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextInputProcessor))
+            IsEqualIID(riid, IID_ITfTextInputProcessor))
     {
         *ppvObj = (ITfTextInputProcessor *)this;
     }
@@ -184,13 +184,13 @@ STDAPI CPropertyMonitorTextService::Activate(ITfThreadMgr *pThreadMgr, TfClientI
     if (!_InitThreadMgrEventSink())
         goto ExitError;
 
-    // 
+    //
     //  If there is the focus document manager already,
     //  we advise the TextEditSink.
-    // 
+    //
     ITfDocumentMgr *pDocMgrFocus;
     if ((_pThreadMgr->GetFocus(&pDocMgrFocus) == S_OK) &&
-        (pDocMgrFocus != NULL))
+            (pDocMgrFocus != NULL))
     {
         _InitTextEditSink(pDocMgrFocus);
         pDocMgrFocus->Release();

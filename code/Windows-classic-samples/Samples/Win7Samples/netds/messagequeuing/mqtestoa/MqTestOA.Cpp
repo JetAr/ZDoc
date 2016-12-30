@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -31,7 +31,7 @@
 // GUID created with the tool "GUIDGEN"
 //
 static WCHAR strGuidMQTestType[] =
-  L"{c30e0960-a2c0-11cf-9785-00608cb3e80c}";
+    L"{c30e0960-a2c0-11cf-9785-00608cb3e80c}";
 //
 // Prototypes
 //
@@ -48,10 +48,10 @@ char mbsMachineName[MAX_COMPUTERNAME_LENGTH + 1];
 
 //-----------------------------------------------------
 //
-// Check whether the local computer is enabled to 
+// Check whether the local computer is enabled to
 // access the directory service (DS-enabled).
 //
-//----------------------------------------------------- 
+//-----------------------------------------------------
 short DetectDsConnection(void)
 {
     IMSMQApplication2 *pqapp = NULL;
@@ -59,20 +59,20 @@ short DetectDsConnection(void)
     HRESULT hresult;
 
     hresult = CoCreateInstance(
-                   CLSID_MSMQApplication,
-                   NULL,      // punkOuter
-                   CLSCTX_SERVER,
-                   IID_IMSMQApplication2,
-                   (LPVOID *)&pqapp);
-     
-    if (FAILED(hresult)) 
-	{
-		printf("The attempt to create an MSMQApplication object failed (0x%X). Exiting...\n", hresult);
-		RELEASE(pqapp);
-		exit(1);
-	}
+                  CLSID_MSMQApplication,
+                  NULL,      // punkOuter
+                  CLSCTX_SERVER,
+                  IID_IMSMQApplication2,
+                  (LPVOID *)&pqapp);
 
-    pqapp->get_IsDsEnabled(&fDsConnection); 
+    if (FAILED(hresult))
+    {
+        printf("The attempt to create an MSMQApplication object failed (0x%X). Exiting...\n", hresult);
+        RELEASE(pqapp);
+        exit(1);
+    }
+
+    pqapp->get_IsDsEnabled(&fDsConnection);
     RELEASE(pqapp);
     return fDsConnection;
 }
@@ -80,7 +80,7 @@ short DetectDsConnection(void)
 
 //-----------------------------------------------------
 //
-//  Allow a DS-enabled client to connect to a 
+//  Allow a DS-enabled client to connect to a
 //  DS-disabled one.
 //
 //-----------------------------------------------------
@@ -88,7 +88,7 @@ bool SetConnectionMode(void)
 {
 
     char cDirectMode;
-    
+
 
     //
     // If the local computer is in a domain and not in workgroup mode,
@@ -99,30 +99,30 @@ bool SetConnectionMode(void)
 
     if(DetectDsConnection() != 0)
     {
-            printf("Do you want to connect to a DS-disabled computer (Y or N) ? ");
-			
-			int iRes = scanf_s("%c", &cDirectMode);
-			if (iRes == 0 || iRes == EOF)
-			{
-				printf("\nInvalid input was entered.\n");
-				exit(1);
-			}
-            
-            switch(tolower(cDirectMode))
-            {
-                case 'y':
-                    return true;
+        printf("Do you want to connect to a DS-disabled computer (Y or N) ? ");
 
-                case 'n':
-                    return false;
+        int iRes = scanf_s("%c", &cDirectMode);
+        if (iRes == 0 || iRes == EOF)
+        {
+            printf("\nInvalid input was entered.\n");
+            exit(1);
+        }
 
-                default:
-                    printf("Bye.\n");
-                    exit(1);
-            }
-            
+        switch(tolower(cDirectMode))
+        {
+        case 'y':
+            return true;
+
+        case 'n':
+            return false;
+
+        default:
+            printf("Bye.\n");
+            exit(1);
+        }
+
     }
-    
+
     return true;     // Local computer is DS-disabled.
 }
 
@@ -155,10 +155,10 @@ HRESULT Receiver(bool fDirectMode)
     BSTR bstrLabel = NULL;
     BSTR bstrMsgLabel = NULL;
     VARIANT varIsTransactional, varIsWorldReadable, varBody, varBody2, varWantDestQueue, varWantBody, varReceiveTimeout;
-    
-	WCHAR wcsPathName[MAX_COMPUTERNAME_LENGTH +100];
 
-	BOOL fQuit = FALSE;
+    WCHAR wcsPathName[MAX_COMPUTERNAME_LENGTH +100];
+
+    BOOL fQuit = FALSE;
     HRESULT hresult = NOERROR;
 
     printf("\nReceiver Mode on Machine: %s\n\n", mbsMachineName);
@@ -167,13 +167,14 @@ HRESULT Receiver(bool fDirectMode)
     // Create an MSMQQueueInfo object.
     //
     hresult = CoCreateInstance(
-                   CLSID_MSMQQueueInfo,
-                   NULL,      // punkOuter
-                   CLSCTX_SERVER,
-                   IID_IMSMQQueueInfo,
-                   (LPVOID *)&pqinfo);
-    if (FAILED(hresult)) {
-      PRINTERROR("The queue cannot be created", hresult);
+                  CLSID_MSMQQueueInfo,
+                  NULL,      // punkOuter
+                  CLSCTX_SERVER,
+                  IID_IMSMQQueueInfo,
+                  (LPVOID *)&pqinfo);
+    if (FAILED(hresult))
+    {
+        PRINTERROR("The queue cannot be created", hresult);
     }
 
     //
@@ -183,36 +184,37 @@ HRESULT Receiver(bool fDirectMode)
     // Set the path name.
     if(fDirectMode)             // Private queue path name
     {
-		if(_snwprintf_s(wcsPathName, sizeof(wcsPathName)/sizeof(wcsPathName[0]), (sizeof(wcsPathName)/sizeof(wcsPathName[0]))-1,
-		L"%S\\private$\\MSMQTest", mbsMachineName) < 0)
-		{
-			// overflow
-			PRINTERROR("Path name creation failed", hresult); 
-		}
-		else
-		{
-			wcsPathName[(sizeof(wcsPathName)/sizeof(wcsPathName[0]))-1] = L'\0';
-		}
- 
+        if(_snwprintf_s(wcsPathName, sizeof(wcsPathName)/sizeof(wcsPathName[0]), (sizeof(wcsPathName)/sizeof(wcsPathName[0]))-1,
+                        L"%S\\private$\\MSMQTest", mbsMachineName) < 0)
+        {
+            // overflow
+            PRINTERROR("Path name creation failed", hresult);
+        }
+        else
+        {
+            wcsPathName[(sizeof(wcsPathName)/sizeof(wcsPathName[0]))-1] = L'\0';
+        }
+
     }
     else                       // Public queue path name
-    {    
-		if(_snwprintf_s(wcsPathName, sizeof(wcsPathName)/sizeof(wcsPathName[0]), (sizeof(wcsPathName)/sizeof(wcsPathName[0]))-1,
-		L"%S\\MSMQTest", mbsMachineName) < 0)
-		{
-			// Overflow occurred.
-			PRINTERROR("Path name creation failed", hresult); 
-		}
-		else
-		{
-			wcsPathName[(sizeof(wcsPathName)/sizeof(wcsPathName[0]))-1] = L'\0';
-		}
-  
+    {
+        if(_snwprintf_s(wcsPathName, sizeof(wcsPathName)/sizeof(wcsPathName[0]), (sizeof(wcsPathName)/sizeof(wcsPathName[0]))-1,
+                        L"%S\\MSMQTest", mbsMachineName) < 0)
+        {
+            // Overflow occurred.
+            PRINTERROR("Path name creation failed", hresult);
+        }
+        else
+        {
+            wcsPathName[(sizeof(wcsPathName)/sizeof(wcsPathName[0]))-1] = L'\0';
+        }
+
     }
 
     bstrPathName = SysAllocString(wcsPathName);
-    if (bstrPathName == NULL) {
-      PRINTERROR("OOM: pathname", E_OUTOFMEMORY);
+    if (bstrPathName == NULL)
+    {
+        PRINTERROR("OOM: pathname", E_OUTOFMEMORY);
     }
     pqinfo->put_PathName(bstrPathName);
 
@@ -221,8 +223,9 @@ HRESULT Receiver(bool fDirectMode)
     // (This property will be used to locate all the queues of this type.)
     //
     bstrServiceType = SysAllocString(strGuidMQTestType);
-    if (bstrServiceType == NULL) {
-      PRINTERROR("OOM: ServiceType", E_OUTOFMEMORY);
+    if (bstrServiceType == NULL)
+    {
+        PRINTERROR("OOM: ServiceType", E_OUTOFMEMORY);
     }
     pqinfo->put_ServiceTypeGuid(bstrServiceType);
 
@@ -231,9 +234,10 @@ HRESULT Receiver(bool fDirectMode)
     // (This property is useful for administration through the MSMQ admin tools.)
     //
     bstrLabel =
-      SysAllocString(L"Sample ActiveX application of MSMQ SDK");
-    if (bstrLabel == NULL) {
-      PRINTERROR("OOM: label ", E_OUTOFMEMORY);
+        SysAllocString(L"Sample ActiveX application of MSMQ SDK");
+    if (bstrLabel == NULL)
+    {
+        PRINTERROR("OOM: label ", E_OUTOFMEMORY);
     }
     pqinfo->put_Label(bstrLabel);
 
@@ -250,12 +254,13 @@ HRESULT Receiver(bool fDirectMode)
     // Create the queue.
     //
     hresult = pqinfo->Create(&varIsTransactional, &varIsWorldReadable);
-    if (FAILED(hresult)) {
-      //
-      // The API failed, but not because the queue exists.
-      //
-      if (hresult != MQ_ERROR_QUEUE_EXISTS) 
-        PRINTERROR("The queue cannot be created", hresult);      
+    if (FAILED(hresult))
+    {
+        //
+        // The API failed, but not because the queue exists.
+        //
+        if (hresult != MQ_ERROR_QUEUE_EXISTS)
+            PRINTERROR("The queue cannot be created", hresult);
     }
 
     //
@@ -266,7 +271,7 @@ HRESULT Receiver(bool fDirectMode)
                            &pqReceive);
 
     //
-    // Things are a little bit tricky. MQCreateQueue succeeded, but in the 
+    // Things are a little bit tricky. MQCreateQueue succeeded, but in the
     // case of a public queue, this does not mean that MQOpenQueue
     // will succeed, because replication delays are possible. The queue is
     // registered in the DS, but it might take a replication interval
@@ -279,99 +284,108 @@ HRESULT Receiver(bool fDirectMode)
     // To be totally on the safe side, we should have put some code
     // to exit the loop after a few retries, but this is just a sample.
     //
-    while (hresult == MQ_ERROR_QUEUE_NOT_FOUND) {
-      printf(".");
+    while (hresult == MQ_ERROR_QUEUE_NOT_FOUND)
+    {
+        printf(".");
 
-      // Wait a bit.
-      Sleep(500);
+        // Wait a bit.
+        Sleep(500);
 
-      // Retry.
-      hresult = pqinfo->Open(MQ_RECEIVE_ACCESS,
-                             MQ_DENY_NONE,
-                             &pqReceive);
+        // Retry.
+        hresult = pqinfo->Open(MQ_RECEIVE_ACCESS,
+                               MQ_DENY_NONE,
+                               &pqReceive);
     }
-    if (FAILED(hresult)) {
-      PRINTERROR("The queue cannot be opened", hresult);
+    if (FAILED(hresult))
+    {
+        PRINTERROR("The queue cannot be opened", hresult);
     }
 
     //
     // Main receiver loop
     //
     printf("\nWaiting for messages...\n");
-    while (!fQuit) {
-      //
-      // Receive the message.
-      //
-      VariantInit(&varWantDestQueue);
-      VariantInit(&varWantBody);
-      VariantInit(&varReceiveTimeout);
-      varWantDestQueue.vt = VT_BOOL;
-      varWantDestQueue.boolVal = TRUE;    // Yes, we want the destination queue.
-      varWantBody.vt = VT_BOOL;
-      varWantBody.boolVal = TRUE;         // Yes, we want the message body.
-      varReceiveTimeout.vt = VT_I4;
-      varReceiveTimeout.lVal = INFINITE;  // Infinite time-out
-      hresult = pqReceive->Receive(
-                  NULL,
-                  &varWantDestQueue,
-                  &varWantBody,
-                  &varReceiveTimeout,
-                  &pmessageReceive);
-      if (FAILED(hresult)) {
-        PRINTERROR("Receive failed", hresult);
-      }
+    while (!fQuit)
+    {
+        //
+        // Receive the message.
+        //
+        VariantInit(&varWantDestQueue);
+        VariantInit(&varWantBody);
+        VariantInit(&varReceiveTimeout);
+        varWantDestQueue.vt = VT_BOOL;
+        varWantDestQueue.boolVal = TRUE;    // Yes, we want the destination queue.
+        varWantBody.vt = VT_BOOL;
+        varWantBody.boolVal = TRUE;         // Yes, we want the message body.
+        varReceiveTimeout.vt = VT_I4;
+        varReceiveTimeout.lVal = INFINITE;  // Infinite time-out
+        hresult = pqReceive->Receive(
+                      NULL,
+                      &varWantDestQueue,
+                      &varWantBody,
+                      &varReceiveTimeout,
+                      &pmessageReceive);
+        if (FAILED(hresult))
+        {
+            PRINTERROR("Receive failed", hresult);
+        }
 
-      //
-      // Display the received message.
-      //
-      pmessageReceive->get_Label(&bstrMsgLabel);
-      VariantInit(&varBody);
-      VariantInit(&varBody2);
-      hresult = pmessageReceive->get_Body(&varBody);
-      if (FAILED(hresult)) {
-        PRINTERROR("The message body cannot be retrieved", hresult);
-      }
-      hresult = VariantChangeType(&varBody2,
-                                  &varBody,
-                                  0,
-                                  VT_BSTR);
-      if (FAILED(hresult)) {
-        PRINTERROR("The message body cannot be converted to a string", hresult);
-      }
-      printf("%S : %s\n", bstrMsgLabel, (char *)V_BSTR(&varBody2));
-      //
-      // Check for a request to end the application.
-      //
-      if (_stricmp((char *)V_BSTR(&varBody2), "quit") == 0) {
-        fQuit = TRUE;
-      }
+        //
+        // Display the received message.
+        //
+        pmessageReceive->get_Label(&bstrMsgLabel);
+        VariantInit(&varBody);
+        VariantInit(&varBody2);
+        hresult = pmessageReceive->get_Body(&varBody);
+        if (FAILED(hresult))
+        {
+            PRINTERROR("The message body cannot be retrieved", hresult);
+        }
+        hresult = VariantChangeType(&varBody2,
+                                    &varBody,
+                                    0,
+                                    VT_BSTR);
+        if (FAILED(hresult))
+        {
+            PRINTERROR("The message body cannot be converted to a string", hresult);
+        }
+        printf("%S : %s\n", bstrMsgLabel, (char *)V_BSTR(&varBody2));
+        //
+        // Check for a request to end the application.
+        //
+        if (_stricmp((char *)V_BSTR(&varBody2), "quit") == 0)
+        {
+            fQuit = TRUE;
+        }
 
-      VariantClear(&varBody);
-      VariantClear(&varBody2);
+        VariantClear(&varBody);
+        VariantClear(&varBody2);
 
-      //
-      // Release the current message.
-      //
-      RELEASE(pmessageReceive);
+        //
+        // Release the current message.
+        //
+        RELEASE(pmessageReceive);
     } /* while (!fQuit) */
 
     //
     // Cleanup: Close the handle to the queue.
     //
     pqReceive->Close();
-    if (FAILED(hresult)) {
-      PRINTERROR("The queue cannot be closed", hresult);
+    if (FAILED(hresult))
+    {
+        PRINTERROR("The queue cannot be closed", hresult);
     }
 
     //
     // In the concluding stage, we delete the queue from the directory
-    // service. (We don't need to do this. In case of a public queue, 
-    // leaving it in the DS enables sender applications to send messages 
+    // service. (We don't need to do this. In case of a public queue,
+    // leaving it in the DS enables sender applications to send messages
     // even if the receiver is not available.)
     //
     hresult = pqinfo->Delete();
-    if (FAILED(hresult)) {
-      PRINTERROR("The queue cannot be deleted", hresult);
+    if (FAILED(hresult))
+    {
+        PRINTERROR("The queue cannot be deleted", hresult);
     }
     // Fall through...
 
@@ -438,13 +452,14 @@ HRESULT StandardSender()
     // Create query object for lookup.
     //
     hresult = CoCreateInstance(
-                   CLSID_MSMQQuery,
-                   NULL,      // punkOuter
-                   CLSCTX_SERVER,
-                   IID_IMSMQQuery,
-                   (LPVOID *)&pquery);
-    if (FAILED(hresult)) {
-      PRINTERROR("A query object cannot be created", hresult);
+                  CLSID_MSMQQuery,
+                  NULL,      // punkOuter
+                  CLSCTX_SERVER,
+                  IID_IMSMQQuery,
+                  (LPVOID *)&pquery);
+    if (FAILED(hresult))
+    {
+        PRINTERROR("A query object cannot be created", hresult);
     }
 
     //
@@ -485,8 +500,9 @@ HRESULT StandardSender()
     V_VT(&varRelCreateTime) = VT_ERROR;
     V_VT(&varRelModifyTime) = VT_ERROR;
     bstrServiceType = SysAllocString(strGuidMQTestType);
-    if (bstrServiceType == NULL) {
-      PRINTERROR("OOM: Service Type GUID", E_OUTOFMEMORY);
+    if (bstrServiceType == NULL)
+    {
+        PRINTERROR("OOM: Service Type GUID", E_OUTOFMEMORY);
     }
     V_VT(&varGuidServiceType) = VT_BSTR;
     V_BSTR(&varGuidServiceType) = bstrServiceType;
@@ -501,16 +517,18 @@ HRESULT StandardSender()
                                   &varRelCreateTime,
                                   &varRelModifyTime,
                                   &pqinfos);
-    if (FAILED(hresult)) {
-      PRINTERROR("LookupQueue failed", hresult);
+    if (FAILED(hresult))
+    {
+        PRINTERROR("LookupQueue failed", hresult);
     }
 
     //
     // Reset the queue collection object.
     //
     hresult = pqinfos->Reset();
-    if (FAILED(hresult)) {
-      PRINTERROR("Reset failed", hresult);
+    if (FAILED(hresult))
+    {
+        PRINTERROR("Reset failed", hresult);
     }
 
     //
@@ -518,36 +536,41 @@ HRESULT StandardSender()
     //
     cQueue = 0;
     hresult = pqinfos->Next(&rgpqinfo[cQueue]);
-    if (FAILED(hresult)) {
-      PRINTERROR("Next failed", hresult);
+    if (FAILED(hresult))
+    {
+        PRINTERROR("Next failed", hresult);
     }
     pqinfo = rgpqinfo[cQueue];
-    while (pqinfo) {
-      //
-      // Open the queue with send access.
-      //
+    while (pqinfo)
+    {
+        //
+        // Open the queue with send access.
+        //
 
-      hresult = pqinfo->Open(
-                  MQ_SEND_ACCESS,
-                  MQ_DENY_NONE,
-                  &rgpqSend[cQueue]);
-      if (FAILED(hresult)) {
-        PRINTERROR("Open failed", hresult);
-      }
-    
-	  cQueue++;
-      hresult = pqinfos->Next(&rgpqinfo[cQueue]);
-      if (FAILED(hresult)) {
-        PRINTERROR("Next failed", hresult);
-      }
-      pqinfo = rgpqinfo[cQueue];
+        hresult = pqinfo->Open(
+                      MQ_SEND_ACCESS,
+                      MQ_DENY_NONE,
+                      &rgpqSend[cQueue]);
+        if (FAILED(hresult))
+        {
+            PRINTERROR("Open failed", hresult);
+        }
+
+        cQueue++;
+        hresult = pqinfos->Next(&rgpqinfo[cQueue]);
+        if (FAILED(hresult))
+        {
+            PRINTERROR("Next failed", hresult);
+        }
+        pqinfo = rgpqinfo[cQueue];
     }
-    
-    if (cQueue == 0) {
-      //
-      // No queue could be found, so exit.
-      //
-      PRINTERROR("No queue is registered", hresult = E_INVALIDARG);
+
+    if (cQueue == 0)
+    {
+        //
+        // No queue could be found, so exit.
+        //
+        PRINTERROR("No queue is registered", hresult = E_INVALIDARG);
     }
     printf("\tQueue(s) found: %d\n", cQueue);
     printf("\nEnter \"quit\" to exit.\n");
@@ -556,16 +579,16 @@ HRESULT StandardSender()
     // Build the message label property.
     //
 
-	if(_snwprintf_s(wcsMsgLabel, sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]), (sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]))-1,
-		L"Message from %S", mbsMachineName) < 0)
-	{
-		// overflow
-		PRINTERROR("Label creation failed", hresult); 
-	}
-	else
-	{
-		wcsMsgLabel[(sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]))-1] = L'\0';
-	}
+    if(_snwprintf_s(wcsMsgLabel, sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]), (sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]))-1,
+                    L"Message from %S", mbsMachineName) < 0)
+    {
+        // overflow
+        PRINTERROR("Label creation failed", hresult);
+    }
+    else
+    {
+        wcsMsgLabel[(sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]))-1] = L'\0';
+    }
 
 
 
@@ -580,71 +603,75 @@ HRESULT StandardSender()
     //
     // Main sender loop
     //
-    while (1) {
-      //
-      // Get a string from the console.
-      //
-      printf("Enter a string: ");
-      if (fgets(szBuffer, MAX_BUFFER - 1, stdin) == NULL)
-        break;
+    while (1)
+    {
+        //
+        // Get a string from the console.
+        //
+        printf("Enter a string: ");
+        if (fgets(szBuffer, MAX_BUFFER - 1, stdin) == NULL)
+            break;
 
-  	  szBuffer[MAX_BUFFER - 1] = '\0';
-
-	  //
-	  // Delete the new-line character from the string.
-	  //
-	  if(szBuffer[strlen(szBuffer) - 1] == '\n')
-	  {
-	  
-		szBuffer[strlen(szBuffer) - 1] = '\0';
-	  
-	  }
-
-
-      //
-      // Create a message object.
-      //
-      hresult = CoCreateInstance(
-                     CLSID_MSMQMessage,
-                     NULL,      // punkOuter
-                     CLSCTX_SERVER,
-                     IID_IMSMQMessage,
-                     (LPVOID *)&pmessage);
-      //
-      // Send the message to all the queues.
-      //
-      for (i = 0; i < cQueue; i++) 
-      {
-        hresult = pmessage->put_Label(bstrLabel);
+        szBuffer[MAX_BUFFER - 1] = '\0';
 
         //
-        // This isn't a "true" Unicode string, of course.
+        // Delete the new-line character from the string.
         //
-        bstrBody = SysAllocStringByteLen(szBuffer, strlen(szBuffer) + 1);
-        if (bstrBody == NULL) {
-          PRINTERROR("OOM: message body", E_OUTOFMEMORY);
-        }
-        VariantInit(&varBody);
-        V_VT(&varBody) = VT_BSTR;
-        V_BSTR(&varBody) = bstrBody;
-        hresult = pmessage->put_Body(varBody);
-        if (FAILED(hresult)) {
-          PRINTERROR("put_body failed", hresult);
-        }
-        hresult = pmessage->Send(rgpqSend[i], NULL);
-        if (FAILED(hresult)) {
-          PRINTERROR("Send failed", hresult);
-        }
-        VariantClear(&varBody);
-        bstrBody = NULL;
-      }
-      RELEASE(pmessage);
+        if(szBuffer[strlen(szBuffer) - 1] == '\n')
+        {
 
-      //
-      // Check for a request to end the application.
-      //
-      if (_stricmp(szBuffer, "quit") == 0)
-        break;
+            szBuffer[strlen(szBuffer) - 1] = '\0';
+
+        }
+
+
+        //
+        // Create a message object.
+        //
+        hresult = CoCreateInstance(
+                      CLSID_MSMQMessage,
+                      NULL,      // punkOuter
+                      CLSCTX_SERVER,
+                      IID_IMSMQMessage,
+                      (LPVOID *)&pmessage);
+        //
+        // Send the message to all the queues.
+        //
+        for (i = 0; i < cQueue; i++)
+        {
+            hresult = pmessage->put_Label(bstrLabel);
+
+            //
+            // This isn't a "true" Unicode string, of course.
+            //
+            bstrBody = SysAllocStringByteLen(szBuffer, strlen(szBuffer) + 1);
+            if (bstrBody == NULL)
+            {
+                PRINTERROR("OOM: message body", E_OUTOFMEMORY);
+            }
+            VariantInit(&varBody);
+            V_VT(&varBody) = VT_BSTR;
+            V_BSTR(&varBody) = bstrBody;
+            hresult = pmessage->put_Body(varBody);
+            if (FAILED(hresult))
+            {
+                PRINTERROR("put_body failed", hresult);
+            }
+            hresult = pmessage->Send(rgpqSend[i], NULL);
+            if (FAILED(hresult))
+            {
+                PRINTERROR("Send failed", hresult);
+            }
+            VariantClear(&varBody);
+            bstrBody = NULL;
+        }
+        RELEASE(pmessage);
+
+        //
+        // Check for a request to end the application.
+        //
+        if (_stricmp(szBuffer, "quit") == 0)
+            break;
     } /* while (1) */
 
 
@@ -653,10 +680,11 @@ Cleanup:
     //
     // Close and release all the queues.
     //
-    for (i = 0; i < cQueue; i++) {
-      rgpqSend[i]->Close();
-      rgpqSend[i]->Release();
-      rgpqinfo[i]->Release();
+    for (i = 0; i < cQueue; i++)
+    {
+        rgpqSend[i]->Close();
+        rgpqSend[i]->Release();
+        rgpqinfo[i]->Release();
     }
     RELEASE(pqinfos);
     RELEASE(pquery);
@@ -682,7 +710,7 @@ HRESULT DirectSender(void)
     WCHAR wcsMsgLabel[MQ_MAX_MSG_LABEL_LEN] = {0};
 
     WCHAR wcsFormat[MAX_BUFFER + 100] = {0};
-	WCHAR wcsReceiverComputer[MAX_BUFFER] = {0};
+    WCHAR wcsReceiverComputer[MAX_BUFFER] = {0};
     BSTR bstrFormat = NULL;
     BSTR bstrServiceType = NULL;
     BSTR bstrLabel = NULL;
@@ -696,47 +724,47 @@ HRESULT DirectSender(void)
     // Get the receiver computer name.
     //
 
-	//
-	// Flushing stdin to get rid of the new-line character entered earlier.
-	//
-	fflush(stdin);
+    //
+    // Flushing stdin to get rid of the new-line character entered earlier.
+    //
+    fflush(stdin);
     printf("\nEnter receiver computer name: ");
 
-	if (fgetws(wcsReceiverComputer, MAX_BUFFER - 1, stdin) == NULL)
+    if (fgetws(wcsReceiverComputer, MAX_BUFFER - 1, stdin) == NULL)
         return E_INVALIDARG;
 
-	if(wcsReceiverComputer[wcslen(wcsReceiverComputer) - 1] == L'\n')
-		wcsReceiverComputer[wcslen(wcsReceiverComputer) - 1] = L'\0';
+    if(wcsReceiverComputer[wcslen(wcsReceiverComputer) - 1] == L'\n')
+        wcsReceiverComputer[wcslen(wcsReceiverComputer) - 1] = L'\0';
 
 
-	if(wcsReceiverComputer[0] == 0)
+    if(wcsReceiverComputer[0] == 0)
     {
         printf("You have entered an incorrect parameter. Exiting...\n");
         return E_INVALIDARG;
     }
 
     hresult = CoCreateInstance(
-               CLSID_MSMQQueueInfo,
-               NULL,      // punkOuter
-               CLSCTX_SERVER,
-               IID_IMSMQQueueInfo,
-               (LPVOID *)&pqinfo);
+                  CLSID_MSMQQueueInfo,
+                  NULL,      // punkOuter
+                  CLSCTX_SERVER,
+                  IID_IMSMQQueueInfo,
+                  (LPVOID *)&pqinfo);
     if (FAILED(hresult))
-      PRINTERROR("The queue cannot be opened", hresult);
+        PRINTERROR("The queue cannot be opened", hresult);
 
-	if(_snwprintf_s(wcsFormat, sizeof(wcsFormat)/sizeof(wcsFormat[0]), (sizeof(wcsFormat)/sizeof(wcsFormat[0])) - 1,
-	L"DIRECT=OS:%s\\private$\\MSMQTest", wcsReceiverComputer) < 0)
-	{
-		// Overflow occurred.
-		PRINTERROR("The receiver format name is too long for the buffer specified", hresult); 
-	}
-	else
-	{
-		wcsFormat[(sizeof(wcsFormat)/sizeof(wcsFormat[0])) - 1] = L'\0';
-	}
+    if(_snwprintf_s(wcsFormat, sizeof(wcsFormat)/sizeof(wcsFormat[0]), (sizeof(wcsFormat)/sizeof(wcsFormat[0])) - 1,
+                    L"DIRECT=OS:%s\\private$\\MSMQTest", wcsReceiverComputer) < 0)
+    {
+        // Overflow occurred.
+        PRINTERROR("The receiver format name is too long for the buffer specified", hresult);
+    }
+    else
+    {
+        wcsFormat[(sizeof(wcsFormat)/sizeof(wcsFormat[0])) - 1] = L'\0';
+    }
 
     bstrFormat = SysAllocString(wcsFormat);
-    hresult = pqinfo->put_FormatName(bstrFormat);    
+    hresult = pqinfo->put_FormatName(bstrFormat);
     if (FAILED(hresult))
         PRINTERROR("Open failed", hresult);
 
@@ -744,11 +772,11 @@ HRESULT DirectSender(void)
     // Open the queue with send access.
     //
     hresult = pqinfo->Open(
-              MQ_SEND_ACCESS,
-              MQ_DENY_NONE,
-              &rgpqSend);
+                  MQ_SEND_ACCESS,
+                  MQ_DENY_NONE,
+                  &rgpqSend);
 
-    
+
     if (FAILED(hresult))
         PRINTERROR("Open failed", hresult);
 
@@ -760,19 +788,19 @@ HRESULT DirectSender(void)
     // Build the message label property.
     //
 
-	if(_snwprintf_s(wcsMsgLabel, sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]), (sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0])) - 1,
-		L"Message from %S", mbsMachineName) < 0)
-	{
-		// Overflow occurred.
-		PRINTERROR("Label creation failed", hresult); 
-	}
-	else
-	{
-		wcsMsgLabel[(sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0])) - 1] = L'\0';
-	}
+    if(_snwprintf_s(wcsMsgLabel, sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0]), (sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0])) - 1,
+                    L"Message from %S", mbsMachineName) < 0)
+    {
+        // Overflow occurred.
+        PRINTERROR("Label creation failed", hresult);
+    }
+    else
+    {
+        wcsMsgLabel[(sizeof(wcsMsgLabel)/sizeof(wcsMsgLabel[0])) - 1] = L'\0';
+    }
 
-	
-	bstrLabel = SysAllocString(wcsMsgLabel);
+
+    bstrLabel = SysAllocString(wcsMsgLabel);
     if (bstrLabel == NULL)
         PRINTERROR("OOM: label", E_OUTOFMEMORY);
 
@@ -781,31 +809,31 @@ HRESULT DirectSender(void)
     //
     // Main sender loop.
     //
-    while (1) 
+    while (1)
     {
         //
         // Get a string from the console.
         //
         printf("Enter a string: ");
-        if (fgets(szBuffer,sizeof(szBuffer) - 1, stdin) == NULL) 
-			break;
-	
-		if(szBuffer[strlen(szBuffer) - 1] == '\n')
-		{
-	  
-			szBuffer[strlen(szBuffer) - 1] = '\0';
-	  
-		}
-        
-		//
+        if (fgets(szBuffer,sizeof(szBuffer) - 1, stdin) == NULL)
+            break;
+
+        if(szBuffer[strlen(szBuffer) - 1] == '\n')
+        {
+
+            szBuffer[strlen(szBuffer) - 1] = '\0';
+
+        }
+
+        //
         // Create a message object.
         //
         hresult = CoCreateInstance(
-                     CLSID_MSMQMessage,
-                     NULL,      // punkOuter
-                     CLSCTX_SERVER,
-                     IID_IMSMQMessage,
-                     (LPVOID *)&pmessage);
+                      CLSID_MSMQMessage,
+                      NULL,      // punkOuter
+                      CLSCTX_SERVER,
+                      IID_IMSMQMessage,
+                      (LPVOID *)&pmessage);
         //
         // Send the message.
         //
@@ -814,18 +842,18 @@ HRESULT DirectSender(void)
 
         bstrBody = SysAllocStringByteLen(szBuffer, strlen(szBuffer) + 1);
         if (bstrBody == NULL)
-          PRINTERROR("OOM: body", E_OUTOFMEMORY);
+            PRINTERROR("OOM: body", E_OUTOFMEMORY);
 
         VariantInit(&varBody);
         V_VT(&varBody) = VT_BSTR;
         V_BSTR(&varBody) = bstrBody;
         hresult = pmessage->put_Body(varBody);
-        if (FAILED(hresult)) 
-          PRINTERROR("put_body failed", hresult);
+        if (FAILED(hresult))
+            PRINTERROR("put_body failed", hresult);
 
         hresult = pmessage->Send(rgpqSend, NULL);
         if (FAILED(hresult))
-          PRINTERROR("Send failed", hresult);
+            PRINTERROR("Send failed", hresult);
 
         VariantClear(&varBody);
         bstrBody = NULL;
@@ -836,16 +864,16 @@ HRESULT DirectSender(void)
         // Check for a request to end teh application.
         //
         if (_stricmp(szBuffer, "quit") == 0)
-        break;
+            break;
     } /* while (1) */
 
 
 
 Cleanup:
-	if(rgpqSend != NULL)
-	{
-		rgpqSend->Close();
-		rgpqSend->Release();
+    if(rgpqSend != NULL)
+    {
+        rgpqSend->Close();
+        rgpqSend->Release();
     }
 
     RELEASE(pqinfo);
@@ -887,21 +915,21 @@ int main(int argc, char * * argv)
     bool fDirectMode;
 
     if (argc != 2)
-      return Syntax();
+        return Syntax();
 
     hresult = OleInitialize(NULL);
-    if (FAILED(hresult)) 
-      PRINTERROR("OLE cannot be initialized", hresult);
+    if (FAILED(hresult))
+        PRINTERROR("OLE cannot be initialized", hresult);
 
     //
     // Retrieve the computer name.
     //
     dwNumChars = MAX_COMPUTERNAME_LENGTH;
     if(!GetComputerNameA(mbsMachineName, &dwNumChars))
-	{
-		printf("The computer name cannot be obtained. Exiting...\n");
-		exit(1);
-	}
+    {
+        printf("The computer name cannot be obtained. Exiting...\n");
+        exit(1);
+    }
     //
     // Detect DS connection and working mode.
     //
@@ -909,13 +937,13 @@ int main(int argc, char * * argv)
 
 
     if (strcmp(argv[1], "-s") == 0)
-      hresult = Sender(fDirectMode);
+        hresult = Sender(fDirectMode);
 
     else if (strcmp(argv[1], "-r") == 0)
-      hresult = Receiver(fDirectMode);
+        hresult = Receiver(fDirectMode);
 
     else
-      hresult = Syntax();
+        hresult = Syntax();
 
     printf("\nOK\n");
 

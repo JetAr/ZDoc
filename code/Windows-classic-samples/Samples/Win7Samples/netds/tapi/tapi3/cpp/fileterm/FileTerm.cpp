@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //
 //  Copyright (c) 1998-2001  Microsoft Corporation
@@ -72,35 +72,35 @@ ULONG                   g_ulAdvise = 0;
 int
 WINAPI
 WinMain(
-        HINSTANCE hInst,
-        HINSTANCE hPrevInst,
-        LPSTR lpCmdLine,
-        int nCmdShow
-       )
+    HINSTANCE hInst,
+    HINSTANCE hPrevInst,
+    LPSTR lpCmdLine,
+    int nCmdShow
+)
 {
-	//
-	// need to coinitialize
-	//
+    //
+    // need to coinitialize
+    //
     if (!SUCCEEDED(CoInitializeEx(NULL, COINIT_MULTITHREADED)))
     {
         return 0;
     }
 
-	//
-	// do all tapi initialization
-	//
+    //
+    // do all tapi initialization
+    //
     if (S_OK == InitializeTapi())
     {
-		//
-		// everything is initialized, so start the main dialog box
-		//
-		DialogBox(
-				  hInst,
-				  MAKEINTRESOURCE(IDD_MAINDLG),
-				  NULL,
-				  MainDialogProc
-				 );
-	}
+        //
+        // everything is initialized, so start the main dialog box
+        //
+        DialogBox(
+            hInst,
+            MAKEINTRESOURCE(IDD_MAINDLG),
+            NULL,
+            MainDialogProc
+        );
+    }
 
     //
     // When EndDialog is called, we get here; clean up and exit.
@@ -115,7 +115,7 @@ WinMain(
 //////////////////////////////////////////////////////////////
 // InitializeTapi
 //
-// Create TAPI object, register callback object, 
+// Create TAPI object, register callback object,
 // register addresses for call notifications
 //
 ///////////////////////////////////////////////////////////////
@@ -125,15 +125,15 @@ InitializeTapi()
     HRESULT         hr;
 
     //
-	// cocreate the TAPI object
-	//
+    // cocreate the TAPI object
+    //
     hr = CoCreateInstance(
-                          CLSID_TAPI,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITTAPI,
-                          (LPVOID *)&g_pTapi
-                         );
+             CLSID_TAPI,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITTAPI,
+             (LPVOID *)&g_pTapi
+         );
 
     if (FAILED(hr))
     {
@@ -142,8 +142,8 @@ InitializeTapi()
     }
 
     //
-	// call initialize.  this must be called before any other tapi functions are called.
-	//
+    // call initialize.  this must be called before any other tapi functions are called.
+    //
     hr = g_pTapi->Initialize();
 
     if (FAILED(hr))
@@ -154,41 +154,41 @@ InitializeTapi()
         return hr;
     }
 
-	//
-	//register event callback object
-	//
+    //
+    //register event callback object
+    //
     hr = RegisterTapiEventInterface();
     if (FAILED(hr))
-	{
+    {
         //
         // shutdown and release TAPI
-        //		
+        //
         g_pTapi->Shutdown();
         g_pTapi->Release();
         g_pTapi = NULL;
         DoMessage(_T("InitializeTapi: RegisterTapiEventInterface failed"));
-        return hr;	
-	}
+        return hr;
+    }
 
     //
-	// put the Event filter to only give us only the events we process
-	//
+    // put the Event filter to only give us only the events we process
+    //
     hr = g_pTapi->put_EventFilter(TE_CALLNOTIFICATION | TE_CALLSTATE | TE_CALLMEDIA | TE_FILETERMINAL);
     if (FAILED(hr))
-	{
+    {
         //
         // unregister callback
         //
-		UnRegisterTapiEventInterface();
+        UnRegisterTapiEventInterface();
         //
         // shutdown and release TAPI
-        //		
+        //
         g_pTapi->Shutdown();
         g_pTapi->Release();
         g_pTapi = NULL;
         DoMessage(_T("InitializeTapi: put_EventFilter failed"));
-        return hr;	
-	}
+        return hr;
+    }
 
 
     // find all address objects that
@@ -200,10 +200,10 @@ InitializeTapi()
         //
         // unregister callback
         //
-		UnRegisterTapiEventInterface();
+        UnRegisterTapiEventInterface();
         //
         // shutdown and release TAPI
-        //		
+        //
         g_pTapi->Shutdown();
         g_pTapi->Release();
         g_pTapi = NULL;
@@ -228,72 +228,72 @@ ShutdownTapi()
     //
     // unregister callback
     //
-	UnRegisterTapiEventInterface();
+    UnRegisterTapiEventInterface();
     //
     // if there is still a call, disconnect and release it
     //
     DisconnectTheCall();
-	//
-	//
-	//
-    ReleaseTheCall();
-	//
-	//wait for TAPI to cool off (2 sec. may be too short)
-	//maybe there was an event sent by PostMessage but not processed yet
     //
-	{
-		//
-		//we need an event for MsgWaitForMultipleObjectsEx
-		//
-		HANDLE hDumbEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-		while(NULL != hDumbEvent)
-		{
-			
-			DWORD dwStatus;
-			MSG msg;
+    //
+    //
+    ReleaseTheCall();
+    //
+    //wait for TAPI to cool off (2 sec. may be too short)
+    //maybe there was an event sent by PostMessage but not processed yet
+    //
+    {
+        //
+        //we need an event for MsgWaitForMultipleObjectsEx
+        //
+        HANDLE hDumbEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+        while(NULL != hDumbEvent)
+        {
 
-			dwStatus=::MsgWaitForMultipleObjectsEx(1,
-										&hDumbEvent,
-										TAPI_TIMEOUT,
-										QS_ALLPOSTMESSAGE,
-										MWMO_ALERTABLE);
-			if(dwStatus != WAIT_TIMEOUT)
-			{
-				while(TRUE == ::PeekMessage(&msg,
-						g_hDlg,//only from post thread
-						NULL,
-						NULL,
-						PM_REMOVE))
-				{
-					//
-					//if not TAPI event translate and dispatch it
-					//
-					if(msg.message != WM_PRIVATETAPIEVENT)
-					{
-						::TranslateMessage(&msg);
-						::DispatchMessage(&msg);
-					}
-					//
-					//TAPI event
-					//
-					else 
-					{
-						if((IDispatch *) msg.lParam != NULL)
-						{
-							//release the event
-							((IDispatch *) msg.lParam)->Release();
-							msg.lParam = NULL;
-						}
-					}
-				}
-			}
-			else
-			{
-				::CloseHandle(hDumbEvent);
-				hDumbEvent = NULL;
-			}
-		}
-	}
+            DWORD dwStatus;
+            MSG msg;
+
+            dwStatus=::MsgWaitForMultipleObjectsEx(1,
+                                                   &hDumbEvent,
+                                                   TAPI_TIMEOUT,
+                                                   QS_ALLPOSTMESSAGE,
+                                                   MWMO_ALERTABLE);
+            if(dwStatus != WAIT_TIMEOUT)
+            {
+                while(TRUE == ::PeekMessage(&msg,
+                                            g_hDlg,//only from post thread
+                                            NULL,
+                                            NULL,
+                                            PM_REMOVE))
+                {
+                    //
+                    //if not TAPI event translate and dispatch it
+                    //
+                    if(msg.message != WM_PRIVATETAPIEVENT)
+                    {
+                        ::TranslateMessage(&msg);
+                        ::DispatchMessage(&msg);
+                    }
+                    //
+                    //TAPI event
+                    //
+                    else
+                    {
+                        if((IDispatch *) msg.lParam != NULL)
+                        {
+                            //release the event
+                            ((IDispatch *) msg.lParam)->Release();
+                            msg.lParam = NULL;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ::CloseHandle(hDumbEvent);
+                hDumbEvent = NULL;
+            }
+        }
+    }
     //
     // release main TAPI object.
     //
@@ -302,7 +302,7 @@ ShutdownTapi()
     {
         g_pTapi->Shutdown();
         g_pTapi->Release();
-		g_pTapi = NULL;
+        g_pTapi = NULL;
 
     }
 }
@@ -317,128 +317,128 @@ ShutdownTapi()
 INT_PTR
 CALLBACK
 MainDialogProc(
-               HWND hDlg,
-               UINT uMsg,
-               WPARAM wParam,
-               LPARAM lParam
-              )
+    HWND hDlg,
+    UINT uMsg,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     switch (uMsg)
     {
-        case WM_PRIVATETAPIEVENT:
-        {
-			//
-			//Process TAPI event
-			//
-	        OnTapiEvent(
-                        (TAPI_EVENT) wParam,
-                        (IDispatch *) lParam
-                       );
+    case WM_PRIVATETAPIEVENT:
+    {
+        //
+        //Process TAPI event
+        //
+        OnTapiEvent(
+            (TAPI_EVENT) wParam,
+            (IDispatch *) lParam
+        );
 
-            return 0;
+        return 0;
+    }
+
+    case WM_INITDIALOG:
+    {
+        //
+        // store dialog window handle
+        //
+        g_hDlg = hDlg;
+
+        SetStatusMessage( _T("Waiting for a call..."));
+
+        return 0;
+    }
+
+    case WM_COMMAND:
+    {
+        if ( LOWORD(wParam) == IDCANCEL )
+        {
+
+            ShutdownTapi();
+            //
+            // quit
+            //
+            EndDialog( hDlg, 0 );
+
+            return 1;
         }
 
-        case WM_INITDIALOG:
+        switch ( LOWORD(wParam) )
+        {
+        //
+        // offering notification
+        //
+        case IDC_ANSWER:
+        {
+            SetStatusMessage(_T("Answering..."));
+            // answer the call
+            if ( S_OK == AnswerTheCall() )
+            {
+                SetStatusMessage(_T("Connecting..."));
+            }
+            else
+            {
+                DoMessage(_T("Answer failed"));
+                SetStatusMessage(_T("Waiting for a call..."));
+            }
+
+            return 1;
+        }
+
+        //
+        // connect notification
+        //
+        case IDC_CONNECTED:
+        {
+            SetStatusMessage(_T("Connected; waiting for file playback terminal to run..."));
+
+            return 1;
+        }
+
+        //
+        // disconnected notification
+        //
+        case IDC_DISCONNECTED:
         {
             //
-			// store dialog window handle
-			//
-            g_hDlg = hDlg;
+            // release internal call objetcs
+            //
+            ReleaseTheCall();
 
-            SetStatusMessage( _T("Waiting for a call..."));
-
-            return 0;
-        }
-
-        case WM_COMMAND:
-        {
-            if ( LOWORD(wParam) == IDCANCEL )
-            {
-
-				ShutdownTapi();
-                //
-                // quit
-                //
-                EndDialog( hDlg, 0 );
-
-                return 1;
-            }
-
-            switch ( LOWORD(wParam) )
-            {
-                //
-				// offering notification
-				//
-                case IDC_ANSWER:
-                {
-                    SetStatusMessage(_T("Answering..."));
-                    // answer the call
-                    if ( S_OK == AnswerTheCall() )
-                    {
-                        SetStatusMessage(_T("Connecting..."));
-                    }
-                    else
-                    {
-                        DoMessage(_T("Answer failed"));
-                        SetStatusMessage(_T("Waiting for a call..."));
-                    }
-
-                    return 1;
-                }
-
-                //
-				// connect notification
-				//
-                case IDC_CONNECTED:
-                {
-                    SetStatusMessage(_T("Connected; waiting for file playback terminal to run..."));
-
-                    return 1;
-                }
-
-                //
-				// disconnected notification
-				//
-                case IDC_DISCONNECTED:
-                {
-                    //
-					// release internal call objetcs
-					//
-                    ReleaseTheCall();
-
-                    SetStatusMessage(_T("Waiting for a call..."));
-
-                    return 1;
-                }
-                default:
-
-                    return 0;
-            }
-        }
-        case WM_TIMER:
-        {
-			//
-			//disconnect the call when maximum record time is reached
-			//it will unselect the terminal too
-			//
-            if ( g_pCall != NULL )
-            {
-                SetStatusMessage(_T("Disconnecting..."));
-
-                //
-				// disconnect the call
-				//
-                if (S_OK != DisconnectTheCall())
-                {
-                    DoMessage(_T("Disconnect failed"));
-                }
-            }
+            SetStatusMessage(_T("Waiting for a call..."));
 
             return 1;
         }
         default:
 
             return 0;
+        }
+    }
+    case WM_TIMER:
+    {
+        //
+        //disconnect the call when maximum record time is reached
+        //it will unselect the terminal too
+        //
+        if ( g_pCall != NULL )
+        {
+            SetStatusMessage(_T("Disconnecting..."));
+
+            //
+            // disconnect the call
+            //
+            if (S_OK != DisconnectTheCall())
+            {
+                DoMessage(_T("Disconnect failed"));
+            }
+        }
+
+        return 1;
+    }
+    default:
+
+        return 0;
     }
 }
 
@@ -447,11 +447,11 @@ MainDialogProc(
 //
 // RegisterTapiEventInterface
 //
-// register call notification object used to receive events 
+// register call notification object used to receive events
 // fired by TAPI object
 //
-// The event notification interface is registered with TAPI 3.1 
-// through the IConnectionPoint mechanism.  
+// The event notification interface is registered with TAPI 3.1
+// through the IConnectionPoint mechanism.
 // For more information on IConnectionPoint, and IConnectiontPointContainer
 // please refer to the COM documentation.
 //
@@ -466,60 +466,60 @@ RegisterTapiEventInterface()
 
 
     hr = g_pTapi->QueryInterface(
-                                IID_IConnectionPointContainer,
-                                (void **)&pCPC
-                               );
+             IID_IConnectionPointContainer,
+             (void **)&pCPC
+         );
 
     if (!SUCCEEDED(hr))
     {
         DoMessage(_T("RegisterTapiEventInterface: ")
-                 _T("Failed to get IConnectionPointContainer on TAPI"));
+                  _T("Failed to get IConnectionPointContainer on TAPI"));
         return hr;
     }
 
     hr = pCPC->FindConnectionPoint(
-                                   IID_ITTAPIEventNotification,
-                                   &pCP
-                                  );
+             IID_ITTAPIEventNotification,
+             &pCP
+         );
     pCPC->Release();
 
     if (!SUCCEEDED(hr))
     {
         DoMessage(_T("RegisterTapiEventInterface: Failed to get a connection point for ")
-                 _T("ITTAPIEventNotification"));
+                  _T("ITTAPIEventNotification"));
         return hr;
     }
 
 
-	//
-	//create event callback object
-	//
+    //
+    //create event callback object
+    //
     CTAPIEventNotification* pTAPIEventNotification = new CTAPIEventNotification;
-	if(NULL == pTAPIEventNotification)
-	{
+    if(NULL == pTAPIEventNotification)
+    {
         DoMessage(_T("RegisterTapiEventInterface: Could not create CTAPIEventNotification"));
         return E_OUTOFMEMORY;
-	}
-	//
-	//advise the callback object - it will be released by Unadvise
-	//
+    }
+    //
+    //advise the callback object - it will be released by Unadvise
+    //
     hr = pCP->Advise(
-                      pTAPIEventNotification,
-                      &g_ulAdvise
-                     );
+             pTAPIEventNotification,
+             &g_ulAdvise
+         );
 
     pCP->Release();
     //
-    // whether Advise failed or succeeded - Advise already addrefed the object, 
-	// we no longer need a reference to the callback object
+    // whether Advise failed or succeeded - Advise already addrefed the object,
+    // we no longer need a reference to the callback object
     //
     pTAPIEventNotification->Release();
-    pTAPIEventNotification = NULL;	
- 
+    pTAPIEventNotification = NULL;
+
     if (FAILED(hr))
-	{
+    {
         DoMessage(_T("RegisterTapiEventInterface: Advise failed"));
-	}
+    }
 
 
     return hr;
@@ -534,8 +534,8 @@ RegisterTapiEventInterface()
 //
 // Unadvise call notification object.
 //
-// The event notification interface was registered with TAPI 3.1 
-// through the IConnectionPoint mechanism.  
+// The event notification interface was registered with TAPI 3.1
+// through the IConnectionPoint mechanism.
 // For more information on IConnectionPoint, and IConnectiontPointContainer
 // please refer to the COM documentation.
 //
@@ -549,15 +549,15 @@ HRESULT UnRegisterTapiEventInterface()
 
     //
     // get connection point container on the tapi object
-    // 
+    //
 
     hr = g_pTapi->QueryInterface(IID_IConnectionPointContainer,
-                                (void **)&pCPC);
+                                 (void **)&pCPC);
 
     if (FAILED(hr))
     {
         DoMessage(_T("UnRegisterTapiEventInterface: ")
-                 _T("Failed to get IConnectionPointContainer on TAPI"));
+                  _T("Failed to get IConnectionPointContainer on TAPI"));
         return hr;
     }
 
@@ -568,7 +568,7 @@ HRESULT UnRegisterTapiEventInterface()
 
 
     hr = pCPC->FindConnectionPoint(IID_ITTAPIEventNotification,
-                                           &pCP);
+                                   &pCP);
 
     pCPC->Release();
     pCPC = NULL;
@@ -576,16 +576,16 @@ HRESULT UnRegisterTapiEventInterface()
     if (FAILED(hr))
     {
         DoMessage(_T("UnRegisterTapiEventInterface: Failed to get a connection point for ")
-                 _T("ITTAPIEventNotification"));
+                  _T("ITTAPIEventNotification"));
 
         return hr;
     }
 
 
-    // 
+    //
     // unregister the callback
     //
-    
+
     hr = pCP->Unadvise(g_ulAdvise);
 
     pCP->Release();
@@ -594,9 +594,9 @@ HRESULT UnRegisterTapiEventInterface()
     g_ulAdvise = 0;
 
     if (FAILED(hr))
-	{
+    {
         DoMessage(_T("UnRegisterTapiEventInterface: Unadvise failed"));
-	}
+    }
 
     return hr;
 }
@@ -617,7 +617,7 @@ ListenOnAddresses()
     ITAddress *         pAddress = NULL;
     ITMediaSupport *    pMediaSupport = NULL;
     VARIANT_BOOL        bSupport = VARIANT_FALSE;
-	BOOL				bAddressFound = FALSE;
+    BOOL				bAddressFound = FALSE;
 
     // enumerate the addresses
     hr = g_pTapi->EnumerateAddresses( &pEnumAddress );
@@ -628,41 +628,41 @@ ListenOnAddresses()
         return hr;
     }
 
-	//
-	// loop for all addresses
-	//
+    //
+    // loop for all addresses
+    //
 
     while ( S_OK == pEnumAddress->Next( 1, &pAddress, NULL ) )
     {
 
         hr = pAddress->QueryInterface( IID_ITMediaSupport, (void **)&pMediaSupport );
-		if(FAILED(hr))
-		{
-	        pAddress->Release();
-			continue;
-		}
+        if(FAILED(hr))
+        {
+            pAddress->Release();
+            continue;
+        }
 
-		//
+        //
         // does it support Audio
-		//
+        //
         hr = pMediaSupport->QueryMediaType(
-                                      TAPIMEDIATYPE_AUDIO,
-                                      &bSupport
-                                     );
+                 TAPIMEDIATYPE_AUDIO,
+                 &bSupport
+             );
 
         pMediaSupport->Release();
 
-		if(FAILED(hr))
-		{
-	        pAddress->Release();
-			continue;
-		}
+        if(FAILED(hr))
+        {
+            pAddress->Release();
+            continue;
+        }
 
         if (bSupport)
         {
             //
-			// If it does support then we'll listen.
-			//
+            // If it does support then we'll listen.
+            //
             hr = ListenOnThisAddress( pAddress );
             if (SUCCEEDED(hr))
             {
@@ -672,21 +672,21 @@ ListenOnAddresses()
         pAddress->Release();
     }
 
-	//
-	//clean up
-	//
+    //
+    //clean up
+    //
 
     pEnumAddress->Release();
 
-	if(!bAddressFound)
-	{
+    if(!bAddressFound)
+    {
         DoMessage(_T("ListenOnAddresses: not address found"));
-		return E_FAIL;
-	}
-	else
-	{
-		return S_OK;
-	}
+        return E_FAIL;
+    }
+    else
+    {
+        return S_OK;
+    }
 
 }
 
@@ -704,7 +704,7 @@ ListenOnAddresses()
 
 HRESULT
 ListenOnThisAddress(
-					IN ITAddress * pAddress)
+    IN ITAddress * pAddress)
 {
 
     //
@@ -717,13 +717,13 @@ ListenOnThisAddress(
     long     lRegister = 0;
 
     return g_pTapi->RegisterCallNotifications(
-                                           pAddress,
-                                           VARIANT_FALSE,
-                                           VARIANT_TRUE,
-                                           TAPIMEDIATYPE_AUDIO,
-                                           0,
-                                           &lRegister
-                                          );
+               pAddress,
+               VARIANT_FALSE,
+               VARIANT_TRUE,
+               TAPIMEDIATYPE_AUDIO,
+               0,
+               &lRegister
+           );
 
 }
 
@@ -739,136 +739,136 @@ HRESULT
 AnswerTheCall()
 {
 
-	//
-	// check if call available
-	//
+    //
+    // check if call available
+    //
     if (NULL == g_pCall)
     {
         DoMessage( _T("AnswerTheCall: call not available"));
         return E_UNEXPECTED;
     }
 
-	//
-	// it should not happen, but if you have already the terminal release it
-	//
+    //
+    // it should not happen, but if you have already the terminal release it
+    //
     if(NULL != g_pPlayFileTerm)
-	{
-		g_pPlayFileTerm->Release();
-		g_pPlayFileTerm = NULL;
-	}
+    {
+        g_pPlayFileTerm->Release();
+        g_pPlayFileTerm = NULL;
+    }
 
     //
-	// prepare to request the terminal - need ITBasicCallControl2 interface
-	//
+    // prepare to request the terminal - need ITBasicCallControl2 interface
+    //
     ITBasicCallControl2*    pITBCC2 = NULL;
     HRESULT hr = g_pCall->QueryInterface( IID_ITBasicCallControl2, (void**)&pITBCC2 );
-	if(FAILED(hr))
-	{
+    if(FAILED(hr))
+    {
         DoMessage( _T("AnswerTheCall: QI ITBasicCallControl2 failed"));
         g_pCall->Disconnect(DC_NORMAL);
-		return hr;
-	}
+        return hr;
+    }
 
     //
-	// prepare to request the terminal - need CLSID BSTR 
-	//
-	BSTR bstrCLSID = NULL;
-	hr = StringFromCLSID(CLSID_FilePlaybackTerminal, &bstrCLSID);
-	if(FAILED(hr))
-	{
-		pITBCC2->Release();
+    // prepare to request the terminal - need CLSID BSTR
+    //
+    BSTR bstrCLSID = NULL;
+    hr = StringFromCLSID(CLSID_FilePlaybackTerminal, &bstrCLSID);
+    if(FAILED(hr))
+    {
+        pITBCC2->Release();
         DoMessage( _T("AnswerTheCall: StringFromCLSID failed"));
         g_pCall->Disconnect(DC_NORMAL);
-		return hr;
-	}
+        return hr;
+    }
 
-	//
-	//request the terminal using right media type and direction
-	//
-	hr = pITBCC2->RequestTerminal(bstrCLSID, 
-									TAPIMEDIATYPE_AUDIO, 
-									TD_CAPTURE, 
-									&g_pPlayFileTerm);
-	//
-	//clean up
-	//
-	::CoTaskMemFree(bstrCLSID);
+    //
+    //request the terminal using right media type and direction
+    //
+    hr = pITBCC2->RequestTerminal(bstrCLSID,
+                                  TAPIMEDIATYPE_AUDIO,
+                                  TD_CAPTURE,
+                                  &g_pPlayFileTerm);
+    //
+    //clean up
+    //
+    ::CoTaskMemFree(bstrCLSID);
 
-	if(FAILED(hr))
-	{
-		pITBCC2->Release();
+    if(FAILED(hr))
+    {
+        pITBCC2->Release();
         DoMessage( _T("AnswerTheCall: RequestTerminal failed"));
         g_pCall->Disconnect(DC_NORMAL);
-		return hr;
-	}
+        return hr;
+    }
 
-	//
-	// prepare to put the file name
-	//
-	BSTR bstrFileName = ::SysAllocString(PLAY_FILENAME);
+    //
+    // prepare to put the file name
+    //
+    BSTR bstrFileName = ::SysAllocString(PLAY_FILENAME);
 
-	if(NULL == bstrFileName)
-	{
-		g_pPlayFileTerm->Release();
-		g_pPlayFileTerm = NULL;
-		pITBCC2->Release();
+    if(NULL == bstrFileName)
+    {
+        g_pPlayFileTerm->Release();
+        g_pPlayFileTerm = NULL;
+        pITBCC2->Release();
         DoMessage( _T("AnswerTheCall: SysAllocString for play list failed"));
         g_pCall->Disconnect(DC_NORMAL);
-		return E_OUTOFMEMORY;
-	}
+        return E_OUTOFMEMORY;
+    }
 
-	//
-	// call helper method for put_PlayList
-	//
-	hr = PutPlayList(g_pPlayFileTerm, bstrFileName);
+    //
+    // call helper method for put_PlayList
+    //
+    hr = PutPlayList(g_pPlayFileTerm, bstrFileName);
 
-	//
-	// free the file name
-	//
-	::SysFreeString(bstrFileName);
+    //
+    // free the file name
+    //
+    ::SysFreeString(bstrFileName);
 
-	if(FAILED(hr))
-	{
-		g_pPlayFileTerm->Release();
-		g_pPlayFileTerm = NULL;
-		pITBCC2->Release();
-		DoMessage( _T("AnswerTheCall: PutPlayList failed"));
-		g_pCall->Disconnect(DC_NORMAL);
-		return hr;
-	}
+    if(FAILED(hr))
+    {
+        g_pPlayFileTerm->Release();
+        g_pPlayFileTerm = NULL;
+        pITBCC2->Release();
+        DoMessage( _T("AnswerTheCall: PutPlayList failed"));
+        g_pCall->Disconnect(DC_NORMAL);
+        return hr;
+    }
 
-	//
-	//select the terminal using ITBasicCallControl2 method
-	//
-	hr = pITBCC2->SelectTerminalOnCall(g_pPlayFileTerm);
-	if(FAILED(hr))
-	{
-		g_pPlayFileTerm->Release();
-		g_pPlayFileTerm = NULL;
-		pITBCC2->Release();
+    //
+    //select the terminal using ITBasicCallControl2 method
+    //
+    hr = pITBCC2->SelectTerminalOnCall(g_pPlayFileTerm);
+    if(FAILED(hr))
+    {
+        g_pPlayFileTerm->Release();
+        g_pPlayFileTerm = NULL;
+        pITBCC2->Release();
         DoMessage( _T("AnswerTheCall: SelectTerminalOnCall failed"));
         g_pCall->Disconnect(DC_NORMAL);
-		return hr;
-	}
+        return hr;
+    }
 
-	//
-	//finally answer the call
-	//
+    //
+    //finally answer the call
+    //
     hr = g_pCall->Answer();
-	if(FAILED(hr))
-	{
-		g_pPlayFileTerm->Release();
-		g_pPlayFileTerm = NULL;
-		pITBCC2->Release();
+    if(FAILED(hr))
+    {
+        g_pPlayFileTerm->Release();
+        g_pPlayFileTerm = NULL;
+        pITBCC2->Release();
         DoMessage( _T("AnswerTheCall: Answer failed"));
         g_pCall->Disconnect(DC_NORMAL);
-		return hr;
-	}
+        return hr;
+    }
 
-	//
-	//if we are here we are OK
-	//
-	pITBCC2->Release();
+    //
+    //if we are here we are OK
+    //
+    pITBCC2->Release();
     return S_OK;
 }
 
@@ -883,14 +883,14 @@ AnswerTheCall()
 HRESULT
 DisconnectTheCall()
 {
-	//
-	//disconnect the call
-	//
+    //
+    //disconnect the call
+    //
     if (NULL != g_pCall)
     {
-		//
-		// we will release the call and terminals on disconnected notification.
-		//
+        //
+        // we will release the call and terminals on disconnected notification.
+        //
         return g_pCall->Disconnect( DC_NORMAL );
 
     }
@@ -908,27 +908,27 @@ DisconnectTheCall()
 void
 ReleaseTheCall()
 {
-	//
-	//do not the timer anymore anymore
-	//
-	KillTimer(g_hDlg, TIMER_ID);
+    //
+    //do not the timer anymore anymore
+    //
+    KillTimer(g_hDlg, TIMER_ID);
 
-	//
-	//release the terminals
-	//
-	if(NULL != g_pPlayFileTerm)
-	{
-		g_pPlayFileTerm->Release();
-		g_pPlayFileTerm = NULL;
-	}
-	if(NULL != g_pRecordFileTerm)
-	{
-		g_pRecordFileTerm->Release();
-		g_pRecordFileTerm = NULL;
-	}
-	//
-	//release the call object - this will unselect all selected terminals
-	//
+    //
+    //release the terminals
+    //
+    if(NULL != g_pPlayFileTerm)
+    {
+        g_pPlayFileTerm->Release();
+        g_pPlayFileTerm = NULL;
+    }
+    if(NULL != g_pRecordFileTerm)
+    {
+        g_pRecordFileTerm->Release();
+        g_pRecordFileTerm = NULL;
+    }
+    //
+    //release the call object - this will unselect all selected terminals
+    //
     if (NULL != g_pCall)
     {
         g_pCall->Release();
@@ -952,149 +952,149 @@ ReleaseTheCall()
 
 void
 DoMessage(
-			IN LPWSTR pszMessage)
+    IN LPWSTR pszMessage)
 {
     ::MessageBox(
-               g_hDlg,
-               pszMessage,
-               MSGBOX_NAME,
-               MB_OK
-              );
+        g_hDlg,
+        pszMessage,
+        MSGBOX_NAME,
+        MB_OK
+    );
 }
 
 
 //////////////////////////////////////////////////////////////////
 //
-// SetStatusMessage - change the status 
+// SetStatusMessage - change the status
 //
 //////////////////////////////////////////////////////////////////
 
 void
 SetStatusMessage(
-			IN LPWSTR pszMessage)
+    IN LPWSTR pszMessage)
 {
     ::SetDlgItemText(
-                   g_hDlg,
-                   IDC_STATUS,
-                   pszMessage
-                  );
+        g_hDlg,
+        IDC_STATUS,
+        pszMessage
+    );
 }
 
 //////////////////////////////////////////////////////////////////
 //
 // PutPlayList - prepare the variant for put_PlayList method
-// and invoke the method 
+// and invoke the method
 //
 //////////////////////////////////////////////////////////////////
 
 HRESULT PutPlayList(
-			IN ITTerminal *pITTerminal, 
-			IN BSTR bstrFileName)
+    IN ITTerminal *pITTerminal,
+    IN BSTR bstrFileName)
 {
-	//
-	//check if really have a terminal
-	//
-	if(NULL == pITTerminal)
-	{
+    //
+    //check if really have a terminal
+    //
+    if(NULL == pITTerminal)
+    {
         DoMessage( _T("PutPlayList: playback terminal NULL"));
-		return E_UNEXPECTED;
-	}
+        return E_UNEXPECTED;
+    }
 
-	//
-    // Get ITMediaPlayback interface - only playback terminal object 
-	// exposes this interface
-	//
+    //
+    // Get ITMediaPlayback interface - only playback terminal object
+    // exposes this interface
+    //
     ITMediaPlayback*    pMediaPlayback = NULL;
 
     HRESULT hr = pITTerminal->QueryInterface(
-										IID_ITMediaPlayback,
-										(void**)&pMediaPlayback);
+                     IID_ITMediaPlayback,
+                     (void**)&pMediaPlayback);
 
 
-	if(FAILED(hr))
-	{
+    if(FAILED(hr))
+    {
         DoMessage( _T("PutPlayList: QI ITMediaPlayback failed"));
-		return hr;
-	}
+        return hr;
+    }
 
-	//
-	//VARIANT to be passed to put_PlayList
-	//
-	VARIANT varPlaylist;
-	VariantInit(&varPlaylist);
+    //
+    //VARIANT to be passed to put_PlayList
+    //
+    VARIANT varPlaylist;
+    VariantInit(&varPlaylist);
 
-	//
-	//Prepare SAFEARRAYBOUND for SAFEARRAY
-	//Put file name into array with one element
-	//
+    //
+    //Prepare SAFEARRAYBOUND for SAFEARRAY
+    //Put file name into array with one element
+    //
     SAFEARRAYBOUND DimensionBounds;
     DimensionBounds.lLbound = 1;
 
-	//
-	//number of files in play list - modify for more files
-	//
+    //
+    //number of files in play list - modify for more files
+    //
     DimensionBounds.cElements = 1;
 
     //
-	// Put file name into array at index 1 - see lLbound
-	//
+    // Put file name into array at index 1 - see lLbound
+    //
     long lArrayPos = 1;
 
-	//
-	//variant that will hold the BSTR - it will be added to SAFEARRAY
-	//
+    //
+    //variant that will hold the BSTR - it will be added to SAFEARRAY
+    //
     VARIANT* pvarArrayEntry = new VARIANT;
     if( pvarArrayEntry == NULL)
     {
         DoMessage( _T("PutPlayList: new VARIANT failed"));
         return E_OUTOFMEMORY;
     }
-	VariantInit(pvarArrayEntry);
+    VariantInit(pvarArrayEntry);
 
     //
-	// Create SAFEARRAY
-	//
+    // Create SAFEARRAY
+    //
     SAFEARRAY *pPlayListArray = NULL;
     pPlayListArray = SafeArrayCreate( VT_VARIANT, 1, &DimensionBounds);
     if( pPlayListArray == NULL)
     {
         DoMessage( _T("PutPlayList: SafeArrayCreate failed"));
-		delete pvarArrayEntry;
+        delete pvarArrayEntry;
         return E_OUTOFMEMORY;
     }
 
-	//
-	//repeat this for each file you want to add
-	//you need to increment lArrayPos
-	//
+    //
+    //repeat this for each file you want to add
+    //you need to increment lArrayPos
+    //
     pvarArrayEntry->vt = VT_BSTR;
     pvarArrayEntry->bstrVal = ::SysAllocString(bstrFileName);
     SafeArrayPutElement( pPlayListArray, &lArrayPos, pvarArrayEntry);
-	VariantClear(pvarArrayEntry);
+    VariantClear(pvarArrayEntry);
 
-	//
-	//prepare the variant for put_PlayList
-	//
+    //
+    //prepare the variant for put_PlayList
+    //
     V_VT(&varPlaylist) = VT_ARRAY | VT_VARIANT;
     V_ARRAY(&varPlaylist) = pPlayListArray;
 
-	//
-	//finally put play list
-	//
+    //
+    //finally put play list
+    //
     hr = pMediaPlayback->put_PlayList(varPlaylist);
     if(FAILED(hr))
     {
         DoMessage( _T("PutPlayList: put_PlayList failed"));
-		delete pvarArrayEntry;
+        delete pvarArrayEntry;
         return E_OUTOFMEMORY;
     }
 
-	//
-	//clean up
-	//
-	delete pvarArrayEntry;
+    //
+    //clean up
+    //
+    delete pvarArrayEntry;
     pMediaPlayback->Release();
-	VariantClear(&varPlaylist);
+    VariantClear(&varPlaylist);
 
     return hr;
 }

@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -14,7 +14,7 @@
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -53,15 +53,15 @@ Exit:
     }
 }
 
-HANDLE closeServer = NULL;  
+HANDLE closeServer = NULL;
 
 
 HRESULT CALLBACK Add(
-    __in const WS_OPERATION_CONTEXT* context, 
-    __in int a, 
-    __in int b, 
-    __out int* result, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in const WS_OPERATION_CONTEXT* context,
+    __in int a,
+    __in int b,
+    __out int* result,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(context);
@@ -75,11 +75,11 @@ HRESULT CALLBACK Add(
 }
 
 HRESULT CALLBACK Subtract(
-    __in const WS_OPERATION_CONTEXT* context, 
-    __in int a, 
-    __in int b, 
-    __out int* result, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in const WS_OPERATION_CONTEXT* context,
+    __in int a,
+    __in int b,
+    __out int* result,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     UNREFERENCED_PARAMETER(context);
@@ -93,7 +93,7 @@ HRESULT CALLBACK Subtract(
 }
 
 HRESULT CALLBACK CloseChannelCallback(
-    __in const WS_OPERATION_CONTEXT* context, 
+    __in const WS_OPERATION_CONTEXT* context,
     __in_opt const WS_ASYNC_CONTEXT* asyncContext)
 {
     UNREFERENCED_PARAMETER(context);
@@ -106,7 +106,7 @@ HRESULT CALLBACK CloseChannelCallback(
 static const DefaultBinding_ICalculatorFunctionTable calculatorFunctions = {Add, Subtract};
 
 // Method contract for the service
-static const WS_SERVICE_CONTRACT calculatorContract = 
+static const WS_SERVICE_CONTRACT calculatorContract =
 {
     &CalculatorService_wsdl.contracts.DefaultBinding_ICalculator, // comes from the generated header.
     NULL, // for not specifying the default contract
@@ -117,25 +117,25 @@ static const WS_SERVICE_CONTRACT calculatorContract =
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_SERVICE_HOST* host = NULL;
     WS_SERVICE_ENDPOINT serviceEndpoint = {};
     const WS_SERVICE_ENDPOINT* serviceEndpoints[1];
     serviceEndpoints[0] = &serviceEndpoint;
-    
+
     WS_ERROR* error = NULL;
-    
-    
+
+
     // declare and initialize an SSL transport security binding
     WS_SSL_TRANSPORT_SECURITY_BINDING sslBinding = {}; // zero out the struct
     sslBinding.binding.bindingType = WS_SSL_TRANSPORT_SECURITY_BINDING_TYPE; // set the binding type
     // NOTE: At the server, the SSL certificate for the listen URI must be
     // registered with http.sys using a tool such as httpcfg.exe.
-    
+
     // declare and initialize the array of all security bindings
     WS_SECURITY_BINDING* securityBindings[1] = { &sslBinding.binding };
-    
+
     // declare and initialize the security description
     WS_SECURITY_DESCRIPTION securityDescription = {}; // zero out the struct
     securityDescription.securityBindings = securityBindings;
@@ -145,8 +145,8 @@ int __cdecl wmain()
     serviceEndpointProperties[0].id = WS_SERVICE_ENDPOINT_PROPERTY_CLOSE_CHANNEL_CALLBACK;
     serviceEndpointProperties[0].value = &closeCallbackProperty;
     serviceEndpointProperties[0].valueSize = sizeof(closeCallbackProperty);
-    
-    
+
+
     // Initialize service endpoint
     serviceEndpoint.address.url.chars = L"https://localhost:8443/example"; // address given as uri
     serviceEndpoint.address.url.length = (ULONG)wcslen(serviceEndpoint.address.url.chars);
@@ -156,44 +156,44 @@ int __cdecl wmain()
     serviceEndpoint.contract = &calculatorContract;  // the contract
     serviceEndpoint.properties = serviceEndpointProperties;
     serviceEndpoint.propertyCount = WsCountOf(serviceEndpointProperties);
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Create Event object for closing the server
     closeServer = CreateEvent(
-        NULL, 
-        TRUE, 
-        FALSE, 
-        NULL);
+                      NULL,
+                      TRUE,
+                      FALSE,
+                      NULL);
     if (closeServer == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
-    }   
+    }
     // Creating a service host
     hr = WsCreateServiceHost(
-        serviceEndpoints, 
-        1, 
-        NULL, 
-        0, 
-        &host, 
-        error);
+             serviceEndpoints,
+             1,
+             NULL,
+             0,
+             &host,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    // WsOpenServiceHost to start the listeners in the service host 
+    // WsOpenServiceHost to start the listeners in the service host
     hr = WsOpenServiceHost(
-        host, 
-        NULL, 
-        error);
+             host,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -205,7 +205,7 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
@@ -216,8 +216,8 @@ Exit:
     {
         WsFreeServiceHost(host);
     }
-    
-    
+
+
     if (error != NULL)
     {
         WsFreeError(error);

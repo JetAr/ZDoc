@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].h : Declaration of C[!output Safe_root]
 //
@@ -7,7 +7,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 /////////////////////////////////////////////////////////////////////////////
-  
+
 #ifndef __C[!output SAFE_ROOT]_H_
 #define __C[!output SAFE_ROOT]_H_
 
@@ -23,7 +23,8 @@ DEFINE_GUID(MEDIATYPE_[!output SAFE_ROOT], [!output MEDIATYPEID]);
 //{[!output CLASSID]}
 DEFINE_GUID(CLSID_[!output Safe_root], [!output DEFINEGUID]);
 
-interface __declspec(uuid("{[!output INTERFACEID]}")) I[!output Safe_root] : IUnknown
+interface __declspec(uuid("{[!output INTERFACEID]}")) I[!output Safe_root] :
+IUnknown
 {
     virtual HRESULT STDMETHODCALLTYPE get_color(DWORD *pVal) = 0;
     virtual HRESULT STDMETHODCALLTYPE put_color(DWORD newVal) = 0;
@@ -44,7 +45,7 @@ const COLORREF rgbWhite =  0x00FFFFFF;
 // C[!output Safe_root]
 /////////////////////////////////////////////////////////////////////////////
 
-class ATL_NO_VTABLE C[!output Safe_root] : 
+class ATL_NO_VTABLE C[!output Safe_root] :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<C[!output Safe_root], &CLSID_[!output Safe_root]>,
     public CWindowImpl<C[!output Safe_root]>,
@@ -62,11 +63,11 @@ public:
     C[!output Safe_root]();
     virtual ~C[!output Safe_root]();
 
-DECLARE_REGISTRY_RESOURCEID(IDR_[!output SAFE_ROOT])
+    DECLARE_REGISTRY_RESOURCEID(IDR_[!output SAFE_ROOT])
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(C[!output Safe_root])
+    BEGIN_COM_MAP(C[!output Safe_root])
     COM_INTERFACE_ENTRY(I[!output Safe_root])
     COM_INTERFACE_ENTRY(ISpecifyPropertyPages)
     COM_INTERFACE_ENTRY(IPropertyBag)
@@ -77,16 +78,16 @@ BEGIN_COM_MAP(C[!output Safe_root])
     COM_INTERFACE_ENTRY(IWMPNodeWindowed)
     COM_INTERFACE_ENTRY(IWMPNodeWindowless)
     COM_INTERFACE_ENTRY(IWMPWindowMessageSink)
-END_COM_MAP()
+    END_COM_MAP()
 
-BEGIN_MSG_MAP(C[!output Safe_root])
+    BEGIN_MSG_MAP(C[!output Safe_root])
     MESSAGE_HANDLER(WM_PAINT, OnPaint)
     MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBackground)
     MESSAGE_RANGE_HANDLER(WM_KEYDOWN, WM_KEYUP, OnPluginWindowMessage)
     MESSAGE_HANDLER(WM_MOUSEACTIVATE, OnPluginWindowMessage)
     MESSAGE_RANGE_HANDLER(WM_MOUSEMOVE, WM_MBUTTONDBLCLK, OnPluginWindowMessage)
     MESSAGE_RANGE_HANDLER(WM_NCMOUSEMOVE, WM_NCMBUTTONDBLCLK, OnPluginWindowMessage)
-END_MSG_MAP()
+    END_MSG_MAP()
 
     // CComCoClass Overrides
     HRESULT FinalConstruct();
@@ -98,107 +99,107 @@ END_MSG_MAP()
     STDMETHOD(LoadResourceImage)(IStream **ppStream);
 
     // IMediaObject methods
-    STDMETHOD( GetStreamCount )( 
-                   DWORD *pcInputStreams,
-                   DWORD *pcOutputStreams
-                   );
-    
-    STDMETHOD( GetInputStreamInfo )( 
-                   DWORD dwInputStreamIndex,
-                   DWORD *pdwFlags
-                   );
-    
-    STDMETHOD( GetOutputStreamInfo )( 
-                   DWORD dwOutputStreamIndex,
-                   DWORD *pdwFlags
-                   );
-    
-    STDMETHOD( GetInputType )( 
-                   DWORD dwInputStreamIndex,
-                   DWORD dwTypeIndex,
-                   DMO_MEDIA_TYPE *pmt
-                   );
-    
-    STDMETHOD( GetOutputType )( 
-                   DWORD dwOutputStreamIndex,
-                   DWORD dwTypeIndex,
-                   DMO_MEDIA_TYPE *pmt
-                   );
-    
-    STDMETHOD( SetInputType )( 
-                   DWORD dwInputStreamIndex,
-                   const DMO_MEDIA_TYPE *pmt,
-                   DWORD dwFlags
-                   );
-    
-    STDMETHOD( SetOutputType )( 
-                   DWORD dwOutputStreamIndex,
-                   const DMO_MEDIA_TYPE *pmt,
-                   DWORD dwFlags
-                   );
-    
-    STDMETHOD( GetInputCurrentType )( 
-                   DWORD dwInputStreamIndex,
-                   DMO_MEDIA_TYPE *pmt
-                   );
-    
-    STDMETHOD( GetOutputCurrentType )( 
-                   DWORD dwOutputStreamIndex,
-                   DMO_MEDIA_TYPE *pmt
-                   );
-    
-    STDMETHOD( GetInputSizeInfo )( 
-                   DWORD dwInputStreamIndex,
-                   DWORD *pcbSize,
-                   DWORD *pcbMaxLookahead,
-                   DWORD *pcbAlignment
-                   );
-    
-    STDMETHOD( GetOutputSizeInfo )( 
-                   DWORD dwOutputStreamIndex,
-                   DWORD *pcbSize,
-                   DWORD *pcbAlignment
-                   );
-    
-    STDMETHOD( GetInputMaxLatency )( 
-                   DWORD dwInputStreamIndex,
-                   REFERENCE_TIME *prtMaxLatency
-                   );
-    
-    STDMETHOD( SetInputMaxLatency )( 
-                   DWORD dwInputStreamIndex,
-                   REFERENCE_TIME rtMaxLatency
-                   );
-    
+    STDMETHOD( GetStreamCount )(
+        DWORD *pcInputStreams,
+        DWORD *pcOutputStreams
+    );
+
+    STDMETHOD( GetInputStreamInfo )(
+        DWORD dwInputStreamIndex,
+        DWORD *pdwFlags
+    );
+
+    STDMETHOD( GetOutputStreamInfo )(
+        DWORD dwOutputStreamIndex,
+        DWORD *pdwFlags
+    );
+
+    STDMETHOD( GetInputType )(
+        DWORD dwInputStreamIndex,
+        DWORD dwTypeIndex,
+        DMO_MEDIA_TYPE *pmt
+    );
+
+    STDMETHOD( GetOutputType )(
+        DWORD dwOutputStreamIndex,
+        DWORD dwTypeIndex,
+        DMO_MEDIA_TYPE *pmt
+    );
+
+    STDMETHOD( SetInputType )(
+        DWORD dwInputStreamIndex,
+        const DMO_MEDIA_TYPE *pmt,
+        DWORD dwFlags
+    );
+
+    STDMETHOD( SetOutputType )(
+        DWORD dwOutputStreamIndex,
+        const DMO_MEDIA_TYPE *pmt,
+        DWORD dwFlags
+    );
+
+    STDMETHOD( GetInputCurrentType )(
+        DWORD dwInputStreamIndex,
+        DMO_MEDIA_TYPE *pmt
+    );
+
+    STDMETHOD( GetOutputCurrentType )(
+        DWORD dwOutputStreamIndex,
+        DMO_MEDIA_TYPE *pmt
+    );
+
+    STDMETHOD( GetInputSizeInfo )(
+        DWORD dwInputStreamIndex,
+        DWORD *pcbSize,
+        DWORD *pcbMaxLookahead,
+        DWORD *pcbAlignment
+    );
+
+    STDMETHOD( GetOutputSizeInfo )(
+        DWORD dwOutputStreamIndex,
+        DWORD *pcbSize,
+        DWORD *pcbAlignment
+    );
+
+    STDMETHOD( GetInputMaxLatency )(
+        DWORD dwInputStreamIndex,
+        REFERENCE_TIME *prtMaxLatency
+    );
+
+    STDMETHOD( SetInputMaxLatency )(
+        DWORD dwInputStreamIndex,
+        REFERENCE_TIME rtMaxLatency
+    );
+
     STDMETHOD( Flush )( void );
-    
-    STDMETHOD( Discontinuity )( 
-                   DWORD dwInputStreamIndex
-                   );
-    
+
+    STDMETHOD( Discontinuity )(
+        DWORD dwInputStreamIndex
+    );
+
     STDMETHOD( AllocateStreamingResources )( void );
-    
+
     STDMETHOD( FreeStreamingResources )( void );
-    
-    STDMETHOD( GetInputStatus )( 
-                   DWORD dwInputStreamIndex,
-                   DWORD *pdwFlags
-                   );
-    
-    STDMETHOD( ProcessInput )( 
-                   DWORD dwInputStreamIndex,
-                   IMediaBuffer *pBuffer,
-                   DWORD dwFlags,
-                   REFERENCE_TIME rtTimestamp,
-                   REFERENCE_TIME rtTimelength
-                   );
-    
-    STDMETHOD( ProcessOutput )( 
-                   DWORD dwFlags,
-                   DWORD cOutputBufferCount,
-                   DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
-                   DWORD *pdwStatus
-                   );
+
+    STDMETHOD( GetInputStatus )(
+        DWORD dwInputStreamIndex,
+        DWORD *pdwFlags
+    );
+
+    STDMETHOD( ProcessInput )(
+        DWORD dwInputStreamIndex,
+        IMediaBuffer *pBuffer,
+        DWORD dwFlags,
+        REFERENCE_TIME rtTimestamp,
+        REFERENCE_TIME rtTimelength
+    );
+
+    STDMETHOD( ProcessOutput )(
+        DWORD dwFlags,
+        DWORD cOutputBufferCount,
+        DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+        DWORD *pdwStatus
+    );
 
     STDMETHOD( Lock )( LONG bLock );
 
@@ -229,36 +230,36 @@ END_MSG_MAP()
 
     //IWMPNodeRealEstate methods
     STDMETHOD ( GetDesiredSize )(
-                    LPSIZE  pSize
-                    );
+        LPSIZE  pSize
+    );
 
     STDMETHOD ( GetFullScreen )(
-                    BOOL*  pfFullScreen
-                    );
+        BOOL*  pfFullScreen
+    );
 
     STDMETHOD ( GetRects )(
-                    RECT*  pSrc,
-                    RECT*  pDest,
-                    RECT*  pClip
-                    );
+        RECT*  pSrc,
+        RECT*  pDest,
+        RECT*  pClip
+    );
 
     STDMETHOD ( GetWindowless )(
-                    BOOL*  pfWindowless
-                    );
+        BOOL*  pfWindowless
+    );
 
     STDMETHOD ( SetFullScreen )(
-                    BOOL  fFullScreen
-                    );
+        BOOL  fFullScreen
+    );
 
     STDMETHOD ( SetRects )(
-                    const RECT*  pSrc,
-                    const RECT*  pDest,
-                    const RECT*  pClip
-                    );
+        const RECT*  pSrc,
+        const RECT*  pDest,
+        const RECT*  pClip
+    );
 
     STDMETHOD ( SetWindowless )(
-                    BOOL  fWindowless
-                    );
+        BOOL  fWindowless
+    );
 
     // IWMPNodeWindowed methods
     STDMETHOD ( SetOwnerWindow )(OLE_HWND hwnd);
@@ -266,64 +267,64 @@ END_MSG_MAP()
 
     // IWMPNodeWindowless methods
     STDMETHOD ( OnWindowMessage )(
-                    UINT uMsg,
-                    WPARAM wparam,
-                    LPARAM lparam,
-                    LRESULT *plRet,
-                    BOOL *pfHandled
-                    );
+        UINT uMsg,
+        WPARAM wparam,
+        LPARAM lparam,
+        LRESULT *plRet,
+        BOOL *pfHandled
+    );
 
     STDMETHOD ( OnDraw )(
-                    OLE_HDC hdc,
-                    const RECT *prcDraw
-                    );
+        OLE_HDC hdc,
+        const RECT *prcDraw
+    );
 
     // IPropertyBag methods
     STDMETHOD ( Read )(
-                    LPCWSTR pwszPropName,
-                    VARIANT *pVar,
-                    IErrorLog *pErrorLog
-                    );
+        LPCWSTR pwszPropName,
+        VARIANT *pVar,
+        IErrorLog *pErrorLog
+    );
 
     STDMETHOD ( Write )(
-                    LPCWSTR pwszPropName,
-                    VARIANT *pVar
-                    );
-    
+        LPCWSTR pwszPropName,
+        VARIANT *pVar
+    );
+
 private:
 
     // Render plug-in window methods
     LRESULT OnEraseBackground(
-                    UINT nMsg,
-                    WPARAM wParam, 
-                    LPARAM lParam,
-                    BOOL& bHandled
-                    );
- 
+        UINT nMsg,
+        WPARAM wParam,
+        LPARAM lParam,
+        BOOL& bHandled
+    );
+
     LRESULT OnPaint(
-                    UINT nMsg,
-                    WPARAM wParam, 
-                    LPARAM lParam,
-                    BOOL& bHandled
-                    );
+        UINT nMsg,
+        WPARAM wParam,
+        LPARAM lParam,
+        BOOL& bHandled
+    );
 
     STDMETHOD ( DoRendering )(
-                    HDC hDC,
-                    const RECT *rc
-                    );
-    
+        HDC hDC,
+        const RECT *rc
+    );
+
     STDMETHOD ( CreateRenderWin )();
     STDMETHOD ( DestroyRenderWin )();
 
     STDMETHOD ( Repaint )( void );
 
     LRESULT ( OnPluginWindowMessage )(
-                    UINT uMsg,
-                    WPARAM wparam,
-                    LPARAM lparam, 
-                    BOOL& bHandled
-                    );
-    
+        UINT uMsg,
+        WPARAM wparam,
+        LPARAM lparam,
+        BOOL& bHandled
+    );
+
     STDMETHOD ( MakeBitmapFromData )( HDC hDC );
 
     CComPtr<IWMPServices>               m_spWMPServices;             // Smart Pointer to WMPServices

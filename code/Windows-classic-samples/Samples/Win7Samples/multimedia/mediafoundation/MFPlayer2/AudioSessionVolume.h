@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // Manages the audio session.
 //
@@ -20,10 +20,10 @@ class CAudioSessionVolume : public IAudioSessionEvents
 {
 public:
     // Static method to create an instance of the object.
-    static HRESULT CreateInstance( 
-        UINT uNotificationMessage, 
-        HWND hwndNotification, 
-        CAudioSessionVolume **ppAudioSessionVolume 
+    static HRESULT CreateInstance(
+        UINT uNotificationMessage,
+        HWND hwndNotification,
+        CAudioSessionVolume **ppAudioSessionVolume
     );
 
     // IUnknown methods.
@@ -33,56 +33,56 @@ public:
 
     // IAudioSessionEvents methods.
 
-    STDMETHODIMP OnSimpleVolumeChanged( 
-        float NewVolume, 
-        BOOL NewMute, 
-        LPCGUID EventContext 
-        );
+    STDMETHODIMP OnSimpleVolumeChanged(
+        float NewVolume,
+        BOOL NewMute,
+        LPCGUID EventContext
+    );
 
-    STDMETHODIMP OnDisplayNameChanged( 
+    STDMETHODIMP OnDisplayNameChanged(
         LPCWSTR /*NewDisplayName*/,
         LPCGUID /*EventContext*/
-        )
+    )
     {
         return S_OK;
     }
-        
+
     STDMETHODIMP OnIconPathChanged(
-        LPCWSTR /*NewIconPath*/, 
+        LPCWSTR /*NewIconPath*/,
         LPCGUID /*EventContext*/
-        )
+    )
     {
         return S_OK;
     }
-        
-    STDMETHODIMP OnChannelVolumeChanged( 
+
+    STDMETHODIMP OnChannelVolumeChanged(
         DWORD /*ChannelCount*/,
         float /*NewChannelVolumeArray*/[],
         DWORD /*ChangedChannel*/,
         LPCGUID /*EventContext*/
-        )
+    )
     {
         return S_OK;
     }
-        
-    STDMETHODIMP OnGroupingParamChanged( 
+
+    STDMETHODIMP OnGroupingParamChanged(
         LPCGUID /*NewGroupingParam*/,
         LPCGUID /*EventContext*/
-        )
+    )
     {
         return S_OK;
     }
-        
+
     STDMETHODIMP OnStateChanged(
         AudioSessionState /*NewState*/
-        )
+    )
     {
         return S_OK;
     }
-        
-    STDMETHODIMP OnSessionDisconnected( 
+
+    STDMETHODIMP OnSessionDisconnected(
         AudioSessionDisconnectReason /*DisconnectReason*/
-        )
+    )
     {
         return S_OK;
     }

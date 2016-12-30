@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 //////////////////////////////////////////////////////////
 // SimpleTelephony.EXE
@@ -24,8 +24,8 @@
 //
 // NOTE: The call-handling sequence in this application is
 // short, so it is fine to make it all the way through to
-// the end of the call even if the caller hung up in the 
-// middle.  If your telephony app involves a lengthy 
+// the end of the call even if the caller hung up in the
+// middle.  If your telephony app involves a lengthy
 // call-handling sequence, you need a separate thread to
 // listen for TAPI's CS_DISCONNECT message; otherwise your
 // app will have no way of being notified of the hang-up,
@@ -44,8 +44,8 @@
 #include <sperror.h>
 #include <sphelper.h>
 #include <tapi3.h>      // In general, you need to have the
-                        // Microsoft Platform SDK installed
-                        // in order to have this file
+// Microsoft Platform SDK installed
+// in order to have this file
 #include "operator.h"
 #include "resource.h"
 
@@ -58,11 +58,11 @@
 *       Main entry point for the application
 ***********************************************************/
 int WINAPI WinMain(
-        __in HINSTANCE hInst,
-        __in_opt HINSTANCE hPrevInst,
-        __in_opt LPSTR lpCmdLine,
-        __in int nCmdShow
-       )
+    __in HINSTANCE hInst,
+    __in_opt HINSTANCE hPrevInst,
+    __in_opt LPSTR lpCmdLine,
+    __in int nCmdShow
+)
 {
     // Initialize COM.
     if (FAILED(::CoInitialize( NULL )))
@@ -87,11 +87,11 @@ int WINAPI WinMain(
     // everything is initialized, so
     // start the main dialog box
     ::DialogBoxParam( hInst,
-              MAKEINTRESOURCE(IDD_MAINDLG),
-              NULL,
-              MainDialogProc,
-              (LPARAM) pOperator
-             );
+                      MAKEINTRESOURCE(IDD_MAINDLG),
+                      NULL,
+                      MainDialogProc,
+                      (LPARAM) pOperator
+                    );
 
     // This does the cleanup of SAPI and TAPI objects
     delete pOperator;
@@ -139,7 +139,7 @@ HRESULT COperator::Initialize()
 *       Various SAPI initializations.
 *   Return:
 *       S_OK if SAPI initialized successfully
-*       Return values of failed SAPI initialization 
+*       Return values of failed SAPI initialization
 *           functions
 ***********************************************************/
 HRESULT COperator::InitializeSapi()
@@ -213,7 +213,7 @@ HRESULT COperator::InitializeSapi()
 
     return S_OK;
 }   /* COperator::InitializeSapi */
-    
+
 
 /**********************************************************
 * COperator::InitializeTapi *
@@ -222,19 +222,19 @@ HRESULT COperator::InitializeSapi()
 *       Various TAPI initializations
 *   Return:
 *       S_OK iff TAPI initialized successfully
-*       Return values of failed TAPI initialization 
+*       Return values of failed TAPI initialization
 *           functions
 ***********************************************************/
 HRESULT COperator::InitializeTapi()
 {
     // Cocreate the TAPI object
     HRESULT hr = CoCreateInstance(
-                          CLSID_TAPI,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITTAPI,
-                          (LPVOID *)&m_pTapi
-                         );
+                     CLSID_TAPI,
+                     NULL,
+                     CLSCTX_INPROC_SERVER,
+                     IID_ITTAPI,
+                     (LPVOID *)&m_pTapi
+                 );
 
     if ( FAILED(hr) )
     {
@@ -262,7 +262,7 @@ HRESULT COperator::InitializeTapi()
         return E_OUTOFMEMORY;
     }
     hr = m_pTAPIEventNotification->Initialize();
-    
+
     if ( SUCCEEDED( hr ) )
     {
         hr = RegisterTapiEventInterface();
@@ -273,13 +273,13 @@ HRESULT COperator::InitializeTapi()
     {
         hr = m_pTapi->put_EventFilter(TE_CALLNOTIFICATION | TE_CALLSTATE);
     }
-    
+
     if ( FAILED( hr ) )
     {
         DoMessage( L"Could not set up TAPI event notifications" );
         return hr;
     }
-    
+
 
     // Find all address objects that we will use to listen for calls on
     hr = ListenOnAddresses();
@@ -345,143 +345,143 @@ void COperator::ShutdownTapi()
 *       Main dialog proc for this sample
 ***********************************************************/
 INT_PTR WINAPI MainDialogProc(
-               HWND hDlg,
-               UINT uMsg,
-               WPARAM wParam,
-               LPARAM lParam
-              )
+    HWND hDlg,
+    UINT uMsg,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     // This is set to be the window long in WM_INITDIALOG
     COperator *pThis = (COperator *)(LONG_PTR) ::GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
     switch (uMsg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
+    {
+        // Get the pointer to the COperator object from the lParam.
+        // Store it in the window long as user data
+        pThis = (COperator *) lParam;
+        ::SetWindowLongPtr( hDlg, GWLP_USERDATA, (LONG_PTR) pThis );
+
+        // Hand the window handle to the event notification object
+        // so that this window will get window messages about incoming calls
+        pThis->m_pTAPIEventNotification->SetHWND( hDlg );
+
+        // Get the window handle
+        pThis->m_hDlg = hDlg;
+
+        // Wait for a call
+        ::EnableWindow( ::GetDlgItem( hDlg, IDC_ANSWER ), FALSE );
+        pThis->SetStatusMessage( L"Waiting for a call..." );
+
+        return 0;
+    }
+
+    case WM_PRIVATETAPIEVENT:
+    {
+        // This message is received whenever a TAPI event occurs
+        pThis->OnTapiEvent( (TAPI_EVENT) wParam,
+                            (IDispatch *) lParam );
+
+        return 0;
+    }
+
+    case WM_COMMAND:
+    {
+        if ( LOWORD(wParam) == IDCANCEL )
         {
-            // Get the pointer to the COperator object from the lParam.
-            // Store it in the window long as user data
-            pThis = (COperator *) lParam;
-            ::SetWindowLongPtr( hDlg, GWLP_USERDATA, (LONG_PTR) pThis );
+            // Quit
+            EndDialog( hDlg, 0 );
 
-            // Hand the window handle to the event notification object
-            // so that this window will get window messages about incoming calls
-            pThis->m_pTAPIEventNotification->SetHWND( hDlg );
-            
-            // Get the window handle
-            pThis->m_hDlg = hDlg;
-            
-            // Wait for a call
-            ::EnableWindow( ::GetDlgItem( hDlg, IDC_ANSWER ), FALSE );
-            pThis->SetStatusMessage( L"Waiting for a call..." );
-
-            return 0;
+            return 1;
         }
 
-        case WM_PRIVATETAPIEVENT:
+        switch ( LOWORD(wParam) )
         {
-            // This message is received whenever a TAPI event occurs
-            pThis->OnTapiEvent( (TAPI_EVENT) wParam,
-                        (IDispatch *) lParam );
-
-            return 0;
+        case IDC_AUTOANSWER:
+        {
+            // Auto answer check box state was changed
+            pThis->m_fAutoAnswer = !pThis->m_fAutoAnswer;
+            return 1;
         }
 
-        case WM_COMMAND:
+        case IDC_ANSWER:
         {
-            if ( LOWORD(wParam) == IDCANCEL )
+            // Answer the call
+
+            pThis->SetStatusMessage(L"Answering...");
+
+            if ( S_OK == pThis->AnswerTheCall() )
             {
-                // Quit
-                EndDialog( hDlg, 0 );
+                pThis->SetStatusMessage(L"Connected");
 
-                return 1;
-            }
+                ::EnableWindow( ::GetDlgItem( hDlg, IDC_ANSWER ), FALSE );
 
-            switch ( LOWORD(wParam) )
-            {
-                case IDC_AUTOANSWER:
+                // Connected: Talk to the caller
+
+                // PLEASE NOTE: This is a single-threaded app, so if the caller
+                // hangs up after the call-handling sequence has started, the
+                // app will not be notified until after the entire call sequence
+                // has finished.
+                // If you want to be able to cut the call-handling short because
+                // the caller hung up, you need to have a separate thread listening
+                // for  TAPI's CS_DISCONNECT notification.
+                HRESULT hrHandleCall = pThis->HandleCall();
+                if ( FAILED( hrHandleCall ) )
                 {
-                    // Auto answer check box state was changed
-                    pThis->m_fAutoAnswer = !pThis->m_fAutoAnswer;
-                    return 1;
-                }
-
-                case IDC_ANSWER:
-                {
-                    // Answer the call
-
-                    pThis->SetStatusMessage(L"Answering...");
-
-                    if ( S_OK == pThis->AnswerTheCall() )
+                    if ( TAPI_E_DROPPED == hrHandleCall )
                     {
-                        pThis->SetStatusMessage(L"Connected");
-
-                        ::EnableWindow( ::GetDlgItem( hDlg, IDC_ANSWER ), FALSE );
-
-                        // Connected: Talk to the caller
-
-                        // PLEASE NOTE: This is a single-threaded app, so if the caller
-                        // hangs up after the call-handling sequence has started, the 
-                        // app will not be notified until after the entire call sequence 
-                        // has finished.  
-                        // If you want to be able to cut the call-handling short because
-                        // the caller hung up, you need to have a separate thread listening
-                        // for  TAPI's CS_DISCONNECT notification.
-                        HRESULT hrHandleCall = pThis->HandleCall();
-                        if ( FAILED( hrHandleCall ) )
-                        {
-                            if ( TAPI_E_DROPPED == hrHandleCall )
-                            {
-                                pThis->SetStatusMessage( L"Caller hung up prematurely" );
-                            }
-                            else
-                            {
-                                pThis->DoMessage( L"Error encountered handling the call" );
-                            }
-                        }
-
-                        // Hang up if we still need to
-                        if ( NULL != pThis->m_pCall )
-                        {
-                            // The caller is still around; hang up on him
-                            pThis->SetStatusMessage(L"Disconnecting...");
-                            if (S_OK != pThis->DisconnectTheCall())
-                            {
-                                pThis->DoMessage(L"Disconnect failed");
-                            }
-                        }
+                        pThis->SetStatusMessage( L"Caller hung up prematurely" );
                     }
                     else
                     {
-                        ::EnableWindow( ::GetDlgItem( hDlg, IDC_ANSWER ), FALSE );
-                        pThis->DoMessage(L"Answer failed");
+                        pThis->DoMessage( L"Error encountered handling the call" );
                     }
-
-                    // Waiting for the next call...
-                    pThis->SetStatusMessage(L"Waiting for a call...");
-
-                    return 1;
                 }
 
-                case IDC_DISCONNECTED:
+                // Hang up if we still need to
+                if ( NULL != pThis->m_pCall )
                 {
-                    // This message is sent from OnTapiEvent()
-                    // Disconnected notification -- release the call
-                    pThis->ReleaseTheCall();
-
-                    ::EnableWindow( ::GetDlgItem( hDlg, IDC_ANSWER ), FALSE );
-
-                    pThis->SetStatusMessage(L"Waiting for a call...");
-                    
-                    return 1;
+                    // The caller is still around; hang up on him
+                    pThis->SetStatusMessage(L"Disconnecting...");
+                    if (S_OK != pThis->DisconnectTheCall())
+                    {
+                        pThis->DoMessage(L"Disconnect failed");
+                    }
                 }
-                default:
-
-                    return 0;
             }
+            else
+            {
+                ::EnableWindow( ::GetDlgItem( hDlg, IDC_ANSWER ), FALSE );
+                pThis->DoMessage(L"Answer failed");
+            }
+
+            // Waiting for the next call...
+            pThis->SetStatusMessage(L"Waiting for a call...");
+
+            return 1;
+        }
+
+        case IDC_DISCONNECTED:
+        {
+            // This message is sent from OnTapiEvent()
+            // Disconnected notification -- release the call
+            pThis->ReleaseTheCall();
+
+            ::EnableWindow( ::GetDlgItem( hDlg, IDC_ANSWER ), FALSE );
+
+            pThis->SetStatusMessage(L"Waiting for a call...");
+
+            return 1;
         }
         default:
 
             return 0;
+        }
+    }
+    default:
+
+        return 0;
     }
 }   /* MainDialogProc */
 
@@ -493,11 +493,11 @@ INT_PTR WINAPI MainDialogProc(
 * COperator::RegisterTapiEventInterface *
 *---------------------------------------*
 *   Description:
-*       Get a unique identifier (m_ulAdvice) for 
+*       Get a unique identifier (m_ulAdvice) for
 *       this connection point.
 *   Return:
 *       S_OK
-*       Failed HRESULTs from QI(), 
+*       Failed HRESULTs from QI(),
 *           IConnectionPointContainer::FindConnectionPoint(),
 *           or IConnectionPoint::Advise()
 ***********************************************************/
@@ -506,18 +506,18 @@ HRESULT COperator::RegisterTapiEventInterface()
     HRESULT                       hr = S_OK;
     IConnectionPointContainer   * pCPC;
     IConnectionPoint            * pCP;
-    
+
 
     hr = m_pTapi->QueryInterface( IID_IConnectionPointContainer,
-                                (void **)&pCPC );
+                                  (void **)&pCPC );
 
     if ( SUCCEEDED( hr ) )
     {
         hr = pCPC->FindConnectionPoint( IID_ITTAPIEventNotification,
-                                       &pCP );
+                                        &pCP );
         pCPC->Release();
     }
-        
+
     if ( SUCCEEDED( hr ) )
     {
         hr = pCP->Advise( m_pTAPIEventNotification,
@@ -537,7 +537,7 @@ HRESULT COperator::RegisterTapiEventInterface()
 *   Return:
 *       S_OK
 *       S_FALSE if there are no addresses to listen on
-*       Failed HRESULT ITTAPI::EnumberateAddresses() 
+*       Failed HRESULT ITTAPI::EnumberateAddresses()
 *           or IEnumAddress::Next()
 ************************************************************/
 HRESULT COperator::ListenOnAddresses()
@@ -568,7 +568,7 @@ HRESULT COperator::ListenOnAddresses()
         {
             // If it does then we'll listen.
             HRESULT hrListen = ListenOnThisAddress( pAddress );
-            
+
             if ( S_OK == hrListen )
             {
                 fAddressExists = true;
@@ -598,11 +598,11 @@ HRESULT COperator::ListenOnAddresses()
 * COperator::ListenOnThisAddress *
 *--------------------------------*
 *   Description:
-*       Call RegisterCallNotifications() to inform TAPI 
-*       that we want notifications of calls on this 
+*       Call RegisterCallNotifications() to inform TAPI
+*       that we want notifications of calls on this
 *       address.  We already registered our notification
 *       interface with TAPI, so now we are just telling
-*       TAPI that we want calls from this address to 
+*       TAPI that we want calls from this address to
 *       trigger our existing notification interface.
 *   Return:
 *       Return value of ITTAPI::RegisterCallNotifications()
@@ -616,20 +616,20 @@ HRESULT COperator::ListenOnThisAddress( ITAddress * pAddress )
 
     long     lRegister;
     return m_pTapi->RegisterCallNotifications(
-                                           pAddress,
-                                           VARIANT_TRUE,
-                                           VARIANT_TRUE,
-                                           lMediaTypes,
-                                           m_ulAdvise,
-                                           &lRegister );
+               pAddress,
+               VARIANT_TRUE,
+               VARIANT_TRUE,
+               lMediaTypes,
+               m_ulAdvise,
+               &lRegister );
 }   /* COperator::ListenOnAddress */
-                    
+
 
 /**********************************************************
 * COperator::AnswerTheCall *
 *--------------------------*
 *   Description:
-*       Called whenever notification is received of an 
+*       Called whenever notification is received of an
 *       incoming call and the app wants to answer it.
 *       Answers and handles the call.
 *   Return:
@@ -644,15 +644,15 @@ HRESULT COperator::AnswerTheCall()
     {
         return E_UNEXPECTED;
     }
-    
-    // Get the LegacyCallMediaControl interface so that we can 
-    // get a device ID to reroute the audio 
+
+    // Get the LegacyCallMediaControl interface so that we can
+    // get a device ID to reroute the audio
     ITLegacyCallMediaControl *pLegacyCallMediaControl;
-    HRESULT hr = m_pCall->QueryInterface( IID_ITLegacyCallMediaControl, 
-                                        (void**)&pLegacyCallMediaControl );
-    
-    
-    // Set the audio for the SAPI objects so that the call 
+    HRESULT hr = m_pCall->QueryInterface( IID_ITLegacyCallMediaControl,
+                                          (void**)&pLegacyCallMediaControl );
+
+
+    // Set the audio for the SAPI objects so that the call
     // can be handled
     if ( SUCCEEDED( hr ) )
     {
@@ -722,7 +722,7 @@ void COperator::ReleaseTheCall()
         m_pCall->Release();
         m_pCall = NULL;
     }
-    
+
     // Let go of the SAPI audio in and audio out objects
     if ( m_cpMMSysAudioOut )
     {
@@ -753,109 +753,109 @@ HRESULT COperator::OnTapiEvent( TAPI_EVENT TapiEvent,
     HRESULT hr;
     switch ( TapiEvent )
     {
-        case TE_CALLNOTIFICATION:
+    case TE_CALLNOTIFICATION:
+    {
+        // TE_CALLNOTIFICATION means that the application is being notified
+        // of a new call.
+        //
+        // Note that we don't answer to call at this point.  The application
+        // should wait for a CS_OFFERING CallState message before answering
+        // the call.
+        //
+        ITCallNotificationEvent         * pNotify;
+        hr = pEvent->QueryInterface( IID_ITCallNotificationEvent, (void **)&pNotify );
+        if (S_OK != hr)
         {
-            // TE_CALLNOTIFICATION means that the application is being notified
-            // of a new call.
-            //
-            // Note that we don't answer to call at this point.  The application
-            // should wait for a CS_OFFERING CallState message before answering
-            // the call.
-            //
-            ITCallNotificationEvent         * pNotify;
-            hr = pEvent->QueryInterface( IID_ITCallNotificationEvent, (void **)&pNotify );
-            if (S_OK != hr)
+            DoMessage( L"Incoming call, but failed to get the interface");
+        }
+        else
+        {
+            CALL_PRIVILEGE          cp;
+            ITCallInfo *            pCall;
+
+            // Get the call
+            hr = pNotify->get_Call( &pCall );
+            pNotify->Release();
+            if ( SUCCEEDED(hr) )
             {
-                DoMessage( L"Incoming call, but failed to get the interface");
+                // Check to see if we own the call
+                hr = pCall->get_Privilege( &cp );
+                if ( FAILED(hr) || (CP_OWNER != cp) )
+                {
+                    // Just ignore it if we don't own it
+                    pCall->Release();
+                    pEvent->Release(); // We addrefed it CTAPIEventNotification::Event()
+                    return S_OK;
+                }
+
+                // Get the ITBasicCallControl interface and save it in our
+                // member variable.
+                hr = pCall->QueryInterface( IID_ITBasicCallControl,
+                                            (void**)&m_pCall );
+                pCall->Release();
+
+                if ( SUCCEEDED(hr) )
+                {
+                    // Update UI
+                    ::EnableWindow( ::GetDlgItem( m_hDlg, IDC_ANSWER ), TRUE );
+                    SetStatusMessage(L"Incoming Owner Call");
+                }
+            }
+        }
+
+        break;
+    }
+
+    case TE_CALLSTATE:
+    {
+        // TE_CALLSTATE is a call state event.  pEvent is
+        // an ITCallStateEvent
+
+        // Get the interface
+        ITCallStateEvent * pCallStateEvent;
+        hr = pEvent->QueryInterface( IID_ITCallStateEvent, (void **)&pCallStateEvent );
+        if ( FAILED(hr) )
+        {
+            break;
+        }
+
+        // Get the CallState that we are being notified of.
+        CALL_STATE         cs;
+        hr = pCallStateEvent->get_State( &cs );
+        pCallStateEvent->Release();
+        if ( FAILED(hr) )
+        {
+            break;
+        }
+
+        // If it's offering to be answered, update our UI
+        if (CS_OFFERING == cs)
+        {
+            if (m_fAutoAnswer)
+            {
+                ::PostMessage(m_hDlg, WM_COMMAND, IDC_ANSWER, 0);
             }
             else
             {
-                CALL_PRIVILEGE          cp;
-                ITCallInfo *            pCall;
-
-                // Get the call
-                hr = pNotify->get_Call( &pCall );
-                pNotify->Release();
-                if ( SUCCEEDED(hr) )
-                {
-                    // Check to see if we own the call
-                    hr = pCall->get_Privilege( &cp );
-                    if ( FAILED(hr) || (CP_OWNER != cp) )
-                    {
-                        // Just ignore it if we don't own it
-                        pCall->Release();
-                        pEvent->Release(); // We addrefed it CTAPIEventNotification::Event()
-                        return S_OK;
-                    }
-
-                    // Get the ITBasicCallControl interface and save it in our
-                    // member variable.
-                    hr = pCall->QueryInterface( IID_ITBasicCallControl,
-                                                (void**)&m_pCall );
-                    pCall->Release();
-                
-                    if ( SUCCEEDED(hr) )
-                    {
-                        // Update UI
-                        ::EnableWindow( ::GetDlgItem( m_hDlg, IDC_ANSWER ), TRUE );
-                        SetStatusMessage(L"Incoming Owner Call");
-                    }
-                }
+                SetStatusMessage(L"Click the Answer button");
             }
-            
-            break;
         }
-        
-        case TE_CALLSTATE:
+        else if (CS_DISCONNECTED == cs)
         {
-            // TE_CALLSTATE is a call state event.  pEvent is
-            // an ITCallStateEvent
-
-            // Get the interface
-            ITCallStateEvent * pCallStateEvent;
-            hr = pEvent->QueryInterface( IID_ITCallStateEvent, (void **)&pCallStateEvent );
-            if ( FAILED(hr) )
-            {
-                break;
-            }
-
-            // Get the CallState that we are being notified of.
-            CALL_STATE         cs;
-            hr = pCallStateEvent->get_State( &cs );
-            pCallStateEvent->Release();
-            if ( FAILED(hr) )
-            {
-                break;
-            }
-
-            // If it's offering to be answered, update our UI
-            if (CS_OFFERING == cs)
-            {
-                if (m_fAutoAnswer)
-                {
-                    ::PostMessage(m_hDlg, WM_COMMAND, IDC_ANSWER, 0); 
-                }
-                else
-                {
-                    SetStatusMessage(L"Click the Answer button");
-                }
-            }
-            else if (CS_DISCONNECTED == cs)
-            {
-                ::PostMessage(m_hDlg, WM_COMMAND, IDC_DISCONNECTED, 0);
-            }
-            else if (CS_CONNECTED == cs)
-            {
-                // Nothing to do -- we handle connection synchronously
-            }
-            break;
+            ::PostMessage(m_hDlg, WM_COMMAND, IDC_DISCONNECTED, 0);
         }
-        default:
-            break;
+        else if (CS_CONNECTED == cs)
+        {
+            // Nothing to do -- we handle connection synchronously
+        }
+        break;
+    }
+    default:
+        break;
     }
 
     pEvent->Release(); // We addrefed it CTAPIEventNotification::Event()
-    
+
     return S_OK;
 }
 
@@ -867,9 +867,9 @@ HRESULT COperator::OnTapiEvent( TAPI_EVENT TapiEvent,
 * COperator::SetAudioOutForCall *
 *-------------------------------*
 *   Description:
-*       Uses the legacy call media control in TAPI to 
+*       Uses the legacy call media control in TAPI to
 *       get the device IDs for audio out.
-*       Uses these device IDs to set up the audio 
+*       Uses these device IDs to set up the audio
 *       for text-to-speech
 *   Return:
 *       S_OK
@@ -877,12 +877,12 @@ HRESULT COperator::OnTapiEvent( TAPI_EVENT TapiEvent,
 *       E_OUTOFMEMORY
 *       SPERR_DEVICE_NOT_SUPPORTED if no supported
 *           formats could be found
-*       Failed return value of QI(), 
+*       Failed return value of QI(),
 *           ITLegacyCallMediaControl::GetID(),
-*           CoCreateInstance(), 
+*           CoCreateInstance(),
 *           ISpMMSysAudio::SetDeviceID(),
 *           ISpMMSysAudio::SetFormat(),
-*           ISpVoice::SetOutput()                                
+*           ISpVoice::SetOutput()
 ************************************************************/
 HRESULT COperator::SetAudioOutForCall( ITLegacyCallMediaControl *pLegacyCallMediaControl )
 {
@@ -906,7 +906,7 @@ HRESULT COperator::SetAudioOutForCall( ITLegacyCallMediaControl *pLegacyCallMedi
     DWORD dwSize = sizeof( puDeviceID );
     HRESULT hr = pLegacyCallMediaControl->GetID( bstrWavOut, &dwSize, (BYTE**) &puDeviceID );
     ::SysFreeString( bstrWavOut );
-    
+
     // Find out what, if any, formats are supported
     GUID guidWave = SPDFID_WaveFormatEx;
     WAVEFORMATEX *pWaveFormatEx = NULL;
@@ -930,8 +930,8 @@ HRESULT COperator::SetAudioOutForCall( ITLegacyCallMediaControl *pLegacyCallMedi
 
             // Get the next format from SAPI and convert it into a WAVEFORMATEX
             enumFmtId = (SPSTREAMFORMAT) (SPSF_8kHz8BitMono + dw);
-            HRESULT hrConvert = SpConvertStreamFormatEnum( 
-                enumFmtId, &guidWave, &pWaveFormatEx );
+            HRESULT hrConvert = SpConvertStreamFormatEnum(
+                                    enumFmtId, &guidWave, &pWaveFormatEx );
 
             if ( SUCCEEDED( hrConvert ) )
             {
@@ -995,9 +995,9 @@ HRESULT COperator::SetAudioOutForCall( ITLegacyCallMediaControl *pLegacyCallMedi
 * COperator::SetAudioInForCall *
 *------------------------------*
 *   Description:
-*       Uses the legacy call media control in TAPI to 
+*       Uses the legacy call media control in TAPI to
 *       get the device IDs for audio input.
-*       Uses these device IDs to set up the audio 
+*       Uses these device IDs to set up the audio
 *       for speech recognition
 *   Return:
 *       S_OK
@@ -1005,9 +1005,9 @@ HRESULT COperator::SetAudioOutForCall( ITLegacyCallMediaControl *pLegacyCallMedi
 *       E_OUTOFMEMORY
 *       SPERR_DEVICE_NOT_SUPPORTED if no supported
 *           formats could be found
-*       Failed return value of QI(), 
+*       Failed return value of QI(),
 *           ITLegacyCallMediaControl::GetID(),
-*           CoCreateInstance(), 
+*           CoCreateInstance(),
 *           ISpMMSysAudio::SetDeviceID(),
 *           ISpMMSysAudio::SetFormat()
 ************************************************************/
@@ -1044,7 +1044,7 @@ HRESULT COperator::SetAudioInForCall( ITLegacyCallMediaControl *pLegacyCallMedia
         // We will take the first one that we find
         SPSTREAMFORMAT enumFmtId;
         MMRESULT mmr = MMSYSERR_ALLOCATED;
-	DWORD dw;
+        DWORD dw;
         for ( dw = 0; (MMSYSERR_NOERROR != mmr) && (dw < SPSF_NUM_FORMATS); dw++ )
         {
             if ( pWaveFormatEx && ( MMSYSERR_NOERROR != mmr ) )
@@ -1056,8 +1056,8 @@ HRESULT COperator::SetAudioInForCall( ITLegacyCallMediaControl *pLegacyCallMedia
 
             // Get the next format from SAPI and convert it into a WAVEFORMATEX
             enumFmtId = (SPSTREAMFORMAT) (SPSF_8kHz8BitMono + dw);
-            HRESULT hrConvert = SpConvertStreamFormatEnum( 
-                enumFmtId, &guidWave, &pWaveFormatEx );
+            HRESULT hrConvert = SpConvertStreamFormatEnum(
+                                    enumFmtId, &guidWave, &pWaveFormatEx );
             if ( SUCCEEDED( hrConvert ) )
             {
                 if ( puDeviceID != NULL )
@@ -1129,16 +1129,16 @@ HRESULT COperator::SetAudioInForCall( ITLegacyCallMediaControl *pLegacyCallMedia
 HRESULT COperator::HandleCall()
 {
     // PLEASE NOTE: This is a single-threaded app, so if the caller
-    // hangs up after the call-handling sequence has started, the 
-    // app will not be notified until after the entire call sequence 
-    // has finished.  
+    // hangs up after the call-handling sequence has started, the
+    // app will not be notified until after the entire call sequence
+    // has finished.
     // If you want to be able to cut the call-handling short because
     // the caller hung up, you need to have a separate thread listening
     // for  TAPI's CS_DISCONNECT notification.
 
     _ASSERTE( m_cpMMSysAudioOut );
     HRESULT hr = S_OK;
-      
+
     // Now that the call is connected, we can start up the audio output
     hr = m_cpOutgoingVoice->Speak( L"Hello, please say something to me", 0, NULL );
 
@@ -1148,7 +1148,7 @@ HRESULT COperator::HandleCall()
         m_cpDictGrammar->SetDictationState( SPRS_ACTIVE );
     }
 
-    // We are expecting a PHRASESTART followed by either a RECOGNITION or a 
+    // We are expecting a PHRASESTART followed by either a RECOGNITION or a
     // FALSERECOGNITION
 
     // Wait for the PHRASE_START
@@ -1163,7 +1163,7 @@ HRESULT COperator::HandleCall()
     // Enter this block only if we have not timed out (the user started speaking)
     if ( ( S_OK == hr ) && ( SPEI_PHRASE_START == event.eEventId ) )
     {
-        // Caller has started to speak, block "forever" until the 
+        // Caller has started to speak, block "forever" until the
         // result (or lack thereof) comes back.
         // This is all right, since every PHRASE_START is guaranteed
         // to be followed up by a RECOGNITION or FALSE_RECOGNITION
@@ -1171,13 +1171,13 @@ HRESULT COperator::HandleCall()
 
         if ( S_OK == hr )
         {
-            // Get the RECOGNITION or FALSE_RECOGNITION 
+            // Get the RECOGNITION or FALSE_RECOGNITION
             hr = event.GetFrom( m_cpIncomingRecoCtxt );
             eLastEventID = event.eEventId;
 
             // This had better be either a RECOGNITION or FALSERECOGNITION!
-            _ASSERTE( (SPEI_RECOGNITION == eLastEventID) || 
-                            (SPEI_FALSE_RECOGNITION == eLastEventID) );
+            _ASSERTE( (SPEI_RECOGNITION == eLastEventID) ||
+                      (SPEI_FALSE_RECOGNITION == eLastEventID) );
         }
     }
 
@@ -1200,7 +1200,7 @@ HRESULT COperator::HandleCall()
         m_cpLocalVoice->Speak( L"I think the person on the phone said", SPF_ASYNC, 0 );
         m_cpLocalVoice->Speak( pwszCoMemText, SPF_ASYNC, 0 );
         m_cpLocalVoice->Speak( L"when he said", SPF_ASYNC, 0 );
-        
+
         // Get the audio so that the local voice can speak it back
         CComPtr<ISpStreamFormat> cpStreamFormat;
         HRESULT hrAudio = pResult->GetAudio( 0, 0, &cpStreamFormat );
@@ -1227,7 +1227,7 @@ HRESULT COperator::HandleCall()
         hr = m_cpMMSysAudioIn->SetState( SPAS_CLOSED, 0 );
     }
 
-    // The caller may have hung up on us, in which case we don't want to do 
+    // The caller may have hung up on us, in which case we don't want to do
     // the following
     if ( m_pCall )
     {
@@ -1309,21 +1309,21 @@ void COperator::SetStatusMessage( LPCWSTR pszMessage )
 * AddressSupportsMediaType *
 *--------------------------*
 *   Return:
-*       TRUE iff the given address supports the given media 
+*       TRUE iff the given address supports the given media
 **************************************************************/
 BOOL AddressSupportsMediaType( ITAddress * pAddress,
-                                long lMediaType )
+                               long lMediaType )
 {
     VARIANT_BOOL     bSupport = VARIANT_FALSE;
     ITMediaSupport * pMediaSupport;
-    
+
     if ( SUCCEEDED( pAddress->QueryInterface( IID_ITMediaSupport,
-                                              (void **)&pMediaSupport ) ) )
+                    (void **)&pMediaSupport ) ) )
     {
         // does it support this media type?
         pMediaSupport->QueryMediaType( lMediaType,
-                                      &bSupport );
-    
+                                       &bSupport );
+
         pMediaSupport->Release();
     }
     return (bSupport == VARIANT_TRUE);

@@ -1,4 +1,4 @@
-//
+﻿//
 // keys.cpp
 //
 // ITfKeyEventSink implementation.
@@ -62,7 +62,7 @@ HRESULT CMarkTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext,
 
     // get the selection
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-        cFetched != 1)
+            cFetched != 1)
     {
         // no selection?
         return S_OK; // eat the keystroke
@@ -77,7 +77,7 @@ HRESULT CMarkTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext,
     if (wParam == VK_LEFT)
     {
         if (tfSelection.range->IsEqualStart(ec, pRangeComposition, TF_ANCHOR_START, &fEqual) == S_OK &&
-            !fEqual)
+                !fEqual)
         {
             tfSelection.range->ShiftStart(ec, -1, &cch, NULL);
         }
@@ -87,7 +87,7 @@ HRESULT CMarkTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext,
     {
         // VK_RIGHT
         if (tfSelection.range->IsEqualEnd(ec, pRangeComposition, TF_ANCHOR_END, &fEqual) == S_OK &&
-            !fEqual)
+                !fEqual)
         {
             tfSelection.range->ShiftEnd(ec, +1, &cch, NULL);
         }
@@ -301,15 +301,15 @@ STDAPI CKeystrokeEditSession::DoEditSession(TfEditCookie ec)
 {
     switch (_wParam)
     {
-        case VK_LEFT:
-        case VK_RIGHT:
-            return _pMark->_HandleArrowKey(ec, _pContext, _wParam);
+    case VK_LEFT:
+    case VK_RIGHT:
+        return _pMark->_HandleArrowKey(ec, _pContext, _wParam);
 
-        case VK_RETURN:
-            return _pMark->_HandleReturn(ec, _pContext);
+    case VK_RETURN:
+        return _pMark->_HandleReturn(ec, _pContext);
 
-        case VK_SPACE:
-            return S_OK;
+    case VK_SPACE:
+        return S_OK;
     }
 
     return _pMark->_HandleKeyDown(ec, _pContext, _wParam);

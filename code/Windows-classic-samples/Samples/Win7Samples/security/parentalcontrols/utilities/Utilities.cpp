@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -54,16 +54,16 @@ HRESULT WpcuCOMInit()
 
         // Set general COM security levels
         hr =  CoInitializeSecurity(
-            NULL, 
-            -1,                          // COM authentication
-            NULL,                        // Authentication services
-            NULL,                        // Reserved
-            RPC_C_AUTHN_LEVEL_DEFAULT,   // Default authentication 
-            RPC_C_IMP_LEVEL_IMPERSONATE, // Default Impersonation  
-            NULL,                        // Authentication info
-            EOAC_NONE,                   // Additional capabilities 
-            NULL                         // Reserved
-            );
+                  NULL,
+                  -1,                          // COM authentication
+                  NULL,                        // Authentication services
+                  NULL,                        // Reserved
+                  RPC_C_AUTHN_LEVEL_DEFAULT,   // Default authentication
+                  RPC_C_IMP_LEVEL_IMPERSONATE, // Default Impersonation
+                  NULL,                        // Authentication info
+                  EOAC_NONE,                   // Additional capabilities
+                  NULL                         // Reserved
+              );
     }
 
     return hr;
@@ -93,8 +93,8 @@ HRESULT WpcuSidStringFromUserName(PCWSTR pcszUserName, PWSTR* ppszSID)
 
         // Call twice, first with null SID buffer.  Retrieves required buffer
         //  size for domain name
-        LookupAccountNameW(NULL, pcszUserName, NULL, &cbSID, NULL, 
-            &cchDomain, &SidNameUse);
+        LookupAccountNameW(NULL, pcszUserName, NULL, &cbSID, NULL,
+                           &cchDomain, &SidNameUse);
         if (!cbSID || !cchDomain)
         {
             hr = E_FAIL;
@@ -102,7 +102,7 @@ HRESULT WpcuSidStringFromUserName(PCWSTR pcszUserName, PWSTR* ppszSID)
         else
         {
             WCHAR* pszDomain = NULL;
-            // Allocate properly sized buffer (with termination character) 
+            // Allocate properly sized buffer (with termination character)
             //  for domain name
             pszDomain = new WCHAR[cchDomain];
             if (!pszDomain)
@@ -122,7 +122,7 @@ HRESULT WpcuSidStringFromUserName(PCWSTR pcszUserName, PWSTR* ppszSID)
                 {
                     // Second call with buffers allocated and sizes set
                     if (!LookupAccountName(NULL, pcszUserName, pSID, &cbSID,
-                        pszDomain, &cchDomain, &SidNameUse))
+                                           pszDomain, &cchDomain, &SidNameUse))
                     {
                         hr = HRESULT_FROM_WIN32(GetLastError());
                     }
@@ -192,7 +192,7 @@ HRESULT WpcuSidStringForCurrentUser(PWSTR* ppszSID)
                 {
                     // Call second time with required buffer
                     if (!GetTokenInformation (hToken, TokenUser, ptokenUser, cbToken,
-                        &cbToken))
+                                              &cbToken))
                     {
                         hr = HRESULT_FROM_WIN32(GetLastError());
                     }
@@ -231,8 +231,8 @@ HRESULT WpcuWmiConnect(PCWSTR pcszWpcNamespace, IWbemServices** ppiWmiServices)
     {
         // Obtain the initial locator to WMI
         IWbemLocator* pLocator = NULL;
-        hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, 
-            IID_IWbemLocator, (LPVOID *) &pLocator);
+        hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
+                              IID_IWbemLocator, (LPVOID *) &pLocator);
         // Set up to connect to the WPC namespace in WMI on the local machine
         if (SUCCEEDED(hr))
         {
@@ -248,14 +248,14 @@ HRESULT WpcuWmiConnect(PCWSTR pcszWpcNamespace, IWbemServices** ppiWmiServices)
                 // the current user and obtain pointer
                 // to make IWbemServices calls.
                 hr = pLocator->ConnectServer(
-                     bstrWpcNamespace,        // Object path of WMI namespace
-                     NULL,                    // User name. NULL = current user
-                     NULL,                    // User password. NULL = current
-                     NULL,                    // Locale. NULL indicates current
-                     NULL,                    // Security flags.
-                     0,                       // Authority (e.g. Kerberos)
-                     NULL,                    // Context object 
-                     ppiWmiServices            // pointer to IWbemServices proxy
+                         bstrWpcNamespace,        // Object path of WMI namespace
+                         NULL,                    // User name. NULL = current user
+                         NULL,                    // User password. NULL = current
+                         NULL,                    // Locale. NULL indicates current
+                         NULL,                    // Security flags.
+                         0,                       // Authority (e.g. Kerberos)
+                         NULL,                    // Context object
+                         ppiWmiServices            // pointer to IWbemServices proxy
                      );
 
                 SysFreeString(bstrWpcNamespace);
@@ -268,7 +268,7 @@ HRESULT WpcuWmiConnect(PCWSTR pcszWpcNamespace, IWbemServices** ppiWmiServices)
 }
 
 
-HRESULT WpcuWmiObjectGet(IWbemServices* piWmiServices, PCWSTR pcszObjectPath, 
+HRESULT WpcuWmiObjectGet(IWbemServices* piWmiServices, PCWSTR pcszObjectPath,
                          IWbemClassObject** ppiWmiObject)
 {
     HRESULT hr = E_INVALIDARG;
@@ -281,8 +281,8 @@ HRESULT WpcuWmiObjectGet(IWbemServices* piWmiServices, PCWSTR pcszObjectPath,
         }
         else
         {
-            hr = piWmiServices->GetObject(bstrObjectPath, WBEM_FLAG_RETURN_WBEM_COMPLETE, 
-                NULL, ppiWmiObject, NULL);
+            hr = piWmiServices->GetObject(bstrObjectPath, WBEM_FLAG_RETURN_WBEM_COMPLETE,
+                                          NULL, ppiWmiObject, NULL);
             SysFreeString(bstrObjectPath);
         }
     }
@@ -291,7 +291,7 @@ HRESULT WpcuWmiObjectGet(IWbemServices* piWmiServices, PCWSTR pcszObjectPath,
 }
 
 
-HRESULT WpcuWmiInstancePutString(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiInstancePutString(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                  PCWSTR pcszValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -317,9 +317,9 @@ HRESULT WpcuWmiInstancePutString(IWbemClassObject* piInstance, PCWSTR pcszProper
 
 // dwNumElements specifies the number of elements in the array referenced by
 //  ppcszValue
-HRESULT WpcuWmiInstancePutStringArray(IWbemClassObject* piInstance, 
-                                      PCWSTR pcszProperty, 
-                                      DWORD dwNumElements, 
+HRESULT WpcuWmiInstancePutStringArray(IWbemClassObject* piInstance,
+                                      PCWSTR pcszProperty,
+                                      DWORD dwNumElements,
                                       PCWSTR* ppcszValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -345,9 +345,9 @@ HRESULT WpcuWmiInstancePutStringArray(IWbemClassObject* piInstance,
             hr = SafeArrayAccessData(var.parray, (void HUGEP**)&pData);
             if (SUCCEEDED(hr))
             {
-                for (DWORD i = 0; 
-                     i < dwNumElements && SUCCEEDED(hr); 
-                     i++)
+                for (DWORD i = 0;
+                        i < dwNumElements && SUCCEEDED(hr);
+                        i++)
                 {
                     // Write array data
                     pData[i] = SysAllocString(ppcszValue[i]);
@@ -370,7 +370,7 @@ HRESULT WpcuWmiInstancePutStringArray(IWbemClassObject* piInstance,
     return hr;
 }
 
-HRESULT WpcuWmiInstancePutDWORD(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiInstancePutDWORD(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                 DWORD dwValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -378,7 +378,7 @@ HRESULT WpcuWmiInstancePutDWORD(IWbemClassObject* piInstance, PCWSTR pcszPropert
     {
         VARIANT var;
         VariantInit(&var);
-        // CIM represents a uint32 type within a VT_I4 automation type, which is 
+        // CIM represents a uint32 type within a VT_I4 automation type, which is
         // referenced as an lVal
         var.lVal = dwValue;
         var.vt = VT_I4;
@@ -391,9 +391,9 @@ HRESULT WpcuWmiInstancePutDWORD(IWbemClassObject* piInstance, PCWSTR pcszPropert
 
 // dwNumElements specifies the number of elements in the array referenced by
 //  pdwValue
-HRESULT WpcuWmiInstancePutDWORDArray(IWbemClassObject* piInstance, 
-                                     PCWSTR pcszProperty, 
-                                     DWORD dwNumElements, 
+HRESULT WpcuWmiInstancePutDWORDArray(IWbemClassObject* piInstance,
+                                     PCWSTR pcszProperty,
+                                     DWORD dwNumElements,
                                      DWORD* pdwValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -438,8 +438,8 @@ HRESULT WpcuWmiInstancePutDWORDArray(IWbemClassObject* piInstance,
     return hr;
 }
 
-HRESULT WpcuWmiInstancePutBOOL(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
-                                BOOL fValue)
+HRESULT WpcuWmiInstancePutBOOL(IWbemClassObject* piInstance, PCWSTR pcszProperty,
+                               BOOL fValue)
 {
     HRESULT hr = E_INVALIDARG;
     if (piInstance && pcszProperty)
@@ -472,7 +472,7 @@ HRESULT WpcuWmiInstancePutNULLVariant(IWbemClassObject* piInstance, PCWSTR pcszP
 
 // Function returns S_OK and *ppszValue = NULL if retrieved string property is
 //  actually a NULL variant
-HRESULT WpcuWmiStringFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiStringFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                   PWSTR* ppszValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -486,15 +486,15 @@ HRESULT WpcuWmiStringFromInstance(IWbemClassObject* piInstance, PCWSTR pcszPrope
         {
             // Only allow BSTR and NULL states
             if (var.vt != VT_BSTR)
-            {  
+            {
                 if (var.vt != VT_NULL)
                 {
                     hr = E_FAIL;
                 }
-				else
-				{
-					hr = S_OK;
-				}
+                else
+                {
+                    hr = S_OK;
+                }
             }
             else
             {
@@ -502,16 +502,16 @@ HRESULT WpcuWmiStringFromInstance(IWbemClassObject* piInstance, PCWSTR pcszPrope
                 hr = StringCchLengthW(var.bstrVal, STRSAFE_MAX_CCH, &cch);
                 if (SUCCEEDED(hr))
                 {
-					// Allocate with null terminator
-					*ppszValue = new WCHAR[++cch];
-					if (!(*ppszValue))
-					{
-						hr = E_OUTOFMEMORY;
-					}
-					else
-					{
-						hr = StringCchCopyW(*ppszValue, cch, var.bstrVal);
-					}
+                    // Allocate with null terminator
+                    *ppszValue = new WCHAR[++cch];
+                    if (!(*ppszValue))
+                    {
+                        hr = E_OUTOFMEMORY;
+                    }
+                    else
+                    {
+                        hr = StringCchCopyW(*ppszValue, cch, var.bstrVal);
+                    }
                 }
             }
         }
@@ -521,11 +521,11 @@ HRESULT WpcuWmiStringFromInstance(IWbemClassObject* piInstance, PCWSTR pcszPrope
     return hr;
 }
 
-// Function returns S_OK and *pppszValue = NULL if retrieved string array property 
+// Function returns S_OK and *pppszValue = NULL if retrieved string array property
 //  is actually a NULL variant
-HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance, 
-                                       PCWSTR pcszProperty, 
-                                       DWORD* pdwNumElements, 
+HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance,
+                                       PCWSTR pcszProperty,
+                                       DWORD* pdwNumElements,
                                        PWSTR** pppszValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -546,10 +546,10 @@ HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance,
                 {
                     hr = E_FAIL;
                 }
-				else
-				{
-					hr = S_OK;
-				}
+                else
+                {
+                    hr = S_OK;
+                }
             }
             else
             {
@@ -570,7 +570,7 @@ HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance,
                         else if (dwNumElements > 0)
                         {
                             BSTR* pData;
-                            hr = SafeArrayAccessData(var.parray, 
+                            hr = SafeArrayAccessData(var.parray,
                                                      (void HUGEP**)(&pData));
                             if (SUCCEEDED(hr))
                             {
@@ -583,12 +583,12 @@ HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance,
                                 else
                                 {
                                     size_t cch;
-                                    for (DWORD i = 0; 
-                                         i < dwNumElements && SUCCEEDED(hr); 
-                                         i++)
+                                    for (DWORD i = 0;
+                                            i < dwNumElements && SUCCEEDED(hr);
+                                            i++)
                                     {
-                                        hr = StringCchLengthW(pData[lLower + i], 
-                                                              STRSAFE_MAX_CCH, 
+                                        hr = StringCchLengthW(pData[lLower + i],
+                                                              STRSAFE_MAX_CCH,
                                                               &cch);
                                         if (SUCCEEDED(hr))
                                         {
@@ -599,8 +599,8 @@ HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance,
                                             }
                                             else
                                             {
-                                                hr = StringCchCopyW((*pppszValue)[i], 
-                                                                    cch, 
+                                                hr = StringCchCopyW((*pppszValue)[i],
+                                                                    cch,
                                                                     pData[lLower + i]);
                                                 if (SUCCEEDED(hr))
                                                 {
@@ -631,7 +631,7 @@ HRESULT WpcuWmiStringArrayFromInstance(IWbemClassObject* piInstance,
 }
 
 
-HRESULT WpcuWmiDWORDFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
+HRESULT WpcuWmiDWORDFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty,
                                  DWORD* pdwValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -649,7 +649,7 @@ HRESULT WpcuWmiDWORDFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProper
             }
             else
             {
-                // CIM represents a uint32 type within a VT_I4 automation 
+                // CIM represents a uint32 type within a VT_I4 automation
                 //  type, which is referenced as an lVal
                 *pdwValue = var.lVal;
             }
@@ -660,11 +660,11 @@ HRESULT WpcuWmiDWORDFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProper
     return hr;
 }
 
-// Function returns S_OK and *ppdwValue = NULL if retrieved DWORD array property 
+// Function returns S_OK and *ppdwValue = NULL if retrieved DWORD array property
 // is actually a NULL variant
-HRESULT WpcuWmiDWORDArrayFromInstance(IWbemClassObject* piInstance, 
-                                      PCWSTR pcszProperty, 
-                                      DWORD* pdwNumElements, 
+HRESULT WpcuWmiDWORDArrayFromInstance(IWbemClassObject* piInstance,
+                                      PCWSTR pcszProperty,
+                                      DWORD* pdwNumElements,
                                       DWORD** ppdwValue)
 {
     HRESULT hr = E_INVALIDARG;
@@ -685,10 +685,10 @@ HRESULT WpcuWmiDWORDArrayFromInstance(IWbemClassObject* piInstance,
                 {
                     hr = E_FAIL;
                 }
-				else
-				{
-					hr = S_OK;
-				}
+                else
+                {
+                    hr = S_OK;
+                }
             }
             else
             {
@@ -709,7 +709,7 @@ HRESULT WpcuWmiDWORDArrayFromInstance(IWbemClassObject* piInstance,
                         else if (*pdwNumElements > 0)
                         {
                             long* pData;
-                            hr = SafeArrayAccessData(var.parray, 
+                            hr = SafeArrayAccessData(var.parray,
                                                      (void HUGEP**)(&pData));
                             if (SUCCEEDED(hr))
                             {
@@ -739,8 +739,8 @@ HRESULT WpcuWmiDWORDArrayFromInstance(IWbemClassObject* piInstance,
     return hr;
 }
 
-HRESULT WpcuWmiBOOLFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty, 
-                                 BOOL* pfValue)
+HRESULT WpcuWmiBOOLFromInstance(IWbemClassObject* piInstance, PCWSTR pcszProperty,
+                                BOOL* pfValue)
 {
     HRESULT hr = E_INVALIDARG;
     if (piInstance && pcszProperty && pfValue)

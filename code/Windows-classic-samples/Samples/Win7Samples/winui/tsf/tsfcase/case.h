@@ -1,4 +1,4 @@
-//
+﻿//
 // case.h
 //
 // CCaseTextService declaration.
@@ -11,10 +11,10 @@ class CLangBarItemButton;
 class CSnoopWnd;
 
 class CCaseTextService : public ITfTextInputProcessor,
-                         public ITfThreadMgrEventSink,
-                         public ITfTextEditSink,
-                         public ITfThreadFocusSink,
-                         public ITfKeyEventSink
+    public ITfThreadMgrEventSink,
+    public ITfTextEditSink,
+    public ITfThreadFocusSink,
+    public ITfKeyEventSink
 {
 public:
     CCaseTextService();
@@ -68,10 +68,22 @@ public:
     static void _Menu_ShowSnoopWnd(CCaseTextService *_this);
     static void _Menu_FlipKeys(CCaseTextService *_this);
 
-    ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
-    TfClientId _GetClientId() { return _tfClientId; }
-    BOOL _IsSnoopWndVisible() { return _fShowSnoop; }
-    BOOL _IsKeyFlipping() { return _fFlipKeys; }
+    ITfThreadMgr *_GetThreadMgr()
+    {
+        return _pThreadMgr;
+    }
+    TfClientId _GetClientId()
+    {
+        return _tfClientId;
+    }
+    BOOL _IsSnoopWndVisible()
+    {
+        return _fShowSnoop;
+    }
+    BOOL _IsKeyFlipping()
+    {
+        return _fFlipKeys;
+    }
 
 private:
     // init methods

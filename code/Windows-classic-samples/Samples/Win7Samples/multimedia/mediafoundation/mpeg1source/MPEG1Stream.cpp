@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // MPEG1Stream.cpp
 // Implements the stream object (IMFMediaStream) for the MPEG-1 source.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -56,13 +56,19 @@ MPEG1Stream::SourceLock::~SourceLock()
 // IUnknown methods
 //-------------------------------------------------------------------
 
-ULONG MPEG1Stream::AddRef() { return RefCountedObject::AddRef(); }
+ULONG MPEG1Stream::AddRef()
+{
+    return RefCountedObject::AddRef();
+}
 
-ULONG MPEG1Stream::Release() { return RefCountedObject::Release(); }
+ULONG MPEG1Stream::Release()
+{
+    return RefCountedObject::Release();
+}
 
 HRESULT MPEG1Stream::QueryInterface(REFIID riid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(MPEG1Stream, IMFMediaEventGenerator),
         QITABENT(MPEG1Stream, IMFMediaStream),
@@ -110,8 +116,9 @@ HRESULT MPEG1Stream::GetEvent(DWORD dwFlags, IMFMediaEvent** ppEvent)
 
     IMFMediaEventQueue *pQueue = NULL;
 
-    { // scope for lock
-      
+    {
+        // scope for lock
+
         SourceLock lock(m_pSource);
 
         // Check shutdown
@@ -170,7 +177,7 @@ HRESULT MPEG1Stream::GetMediaSource(IMFMediaSource** ppMediaSource)
     }
 
     HRESULT hr = S_OK;
-    
+
     CHECK_HR(hr = CheckShutdown());
 
     // QI the source for IMFMediaSource.
@@ -236,7 +243,7 @@ HRESULT MPEG1Stream::RequestSample(IUnknown* pToken)
 
     if (!m_bActive)
     {
-        // If the stream is not active, it should not get sample requests. 
+        // If the stream is not active, it should not get sample requests.
         CHECK_HR(hr = MF_E_INVALIDREQUEST);
     }
 
@@ -268,7 +275,7 @@ done:
 // Public non-interface methods
 //-------------------------------------------------------------------
 
-    
+
 MPEG1Stream::MPEG1Stream(MPEG1Source *pSource, IMFStreamDescriptor *pSD, HRESULT& hr) :
     m_pEventQueue(NULL),
     m_state(STATE_STOPPED),
@@ -338,15 +345,15 @@ HRESULT MPEG1Stream::Start(const PROPVARIANT& varStart)
 
     // Queue the stream-started event.
     CHECK_HR(hr = QueueEvent(
-        MEStreamStarted,
-        GUID_NULL,
-        S_OK,
-        &varStart
-        ));
+                      MEStreamStarted,
+                      GUID_NULL,
+                      S_OK,
+                      &varStart
+                  ));
 
     m_state = STATE_STARTED;
 
-    // If we are restarting from paused, there may be 
+    // If we are restarting from paused, there may be
     // queue sample requests. Dispatch them now.
     CHECK_HR(hr = DispatchSamples());
 
@@ -412,7 +419,7 @@ HRESULT MPEG1Stream::EndOfStream()
 {
     SourceLock lock(m_pSource);
 
-    m_bEOS = TRUE;    
+    m_bEOS = TRUE;
 
     return DispatchSamples();
 }
@@ -452,7 +459,7 @@ HRESULT MPEG1Stream::Shutdown()
     // hold the critical section when checking the shutdown status,
     // which obviously can occur after the stream is shut down.
 
-    // It is OK to hold a ref count on the source after shutdown, 
+    // It is OK to hold a ref count on the source after shutdown,
     // because the source releases its ref count(s) on the streams,
     // which breaks the circular ref count.
 
@@ -493,7 +500,7 @@ HRESULT MPEG1Stream::DeliverPayload(IMFSample *pSample)
 
     // Deliver the sample if there is an outstanding request.
     CHECK_HR(hr = DispatchSamples());
-        
+
 done:
     return hr;
 }
@@ -539,7 +546,7 @@ HRESULT MPEG1Stream::DispatchSamples()
             CHECK_HR(hr = pSample->SetUnknown(MFSampleExtension_Token, pToken));
         }
 
-        CHECK_HR(hr = m_pEventQueue->QueueEventParamUnk(MEMediaSample, GUID_NULL, S_OK, pSample)); 
+        CHECK_HR(hr = m_pEventQueue->QueueEventParamUnk(MEMediaSample, GUID_NULL, S_OK, pSample));
 
         SAFE_RELEASE(pSample);
         SAFE_RELEASE(pToken);

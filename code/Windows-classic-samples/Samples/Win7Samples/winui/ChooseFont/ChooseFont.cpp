@@ -1,4 +1,4 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 //  TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //  PARTICULAR PURPOSE.
@@ -13,7 +13,7 @@
 #define ID_CHECKBOX 200
 #define ID_LABEL    300
 
-HINSTANCE   g_hInst;     
+HINSTANCE   g_hInst;
 HWND        g_hwndApp;   // Owner window
 HWND        g_hwndLabel; // static text window
 
@@ -29,7 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR pszCmdLine, int iCmdShow
     WCHAR const szWindowName[] = L"ChooseFont Sample";
     WCHAR const szWindowClass[] = L"ChooseFontSampleWClass";
 
-    WNDCLASS    wc = {}; 
+    WNDCLASS    wc = {};
     wc.style            = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc      = WndProc;
     wc.hInstance        = hInstance;
@@ -41,8 +41,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR pszCmdLine, int iCmdShow
     RegisterClass(&wc);
 
     g_hwndApp = CreateWindow(szWindowClass, szWindowName,
-        WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
-        490, 120, NULL, NULL, hInstance, NULL);
+                             WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+                             490, 120, NULL, NULL, hInstance, NULL);
     if (g_hwndApp)
     {
         ShowWindow(g_hwndApp, iCmdShow);
@@ -50,11 +50,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR pszCmdLine, int iCmdShow
         while(GetMessage(&msg, NULL, 0, 0))
         {
             TranslateMessage(&msg);
-            DispatchMessage(&msg);    
+            DispatchMessage(&msg);
         }
     }
 
-    return (int)msg.wParam; 
+    return (int)msg.wParam;
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -64,77 +64,77 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch(uMsg)
     {
     case WM_CREATE:
-        {
-            // Create "Choose Font" button
-            CreateWindow(L"button",
-                L"Choose Font",
-                BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE,
-                20, 20,
-                100, 20,
-                hwnd, (HMENU)ID_BUTTON,
-                g_hInst, NULL);
+    {
+        // Create "Choose Font" button
+        CreateWindow(L"button",
+                     L"Choose Font",
+                     BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE,
+                     20, 20,
+                     100, 20,
+                     hwnd, (HMENU)ID_BUTTON,
+                     g_hInst, NULL);
 
-            // Create "Show all fonts?" checkbox
-            CreateWindow(L"button",
-                L"Show all fonts?",
-                BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE,
-                20, 45,
-                120, 20,
-                hwnd, (HMENU)ID_CHECKBOX,
-                g_hInst, NULL);
+        // Create "Show all fonts?" checkbox
+        CreateWindow(L"button",
+                     L"Show all fonts?",
+                     BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE,
+                     20, 45,
+                     120, 20,
+                     hwnd, (HMENU)ID_CHECKBOX,
+                     g_hInst, NULL);
 
-            // Create the static label with our sample text 
-            g_hwndLabel =  CreateWindow(L"static",
-                L"Some words.",
-                SS_CENTER | WS_CHILD | WS_VISIBLE,
-                150, 10,
-                300, 40,
-                hwnd, (HMENU)ID_LABEL,
-                g_hInst, NULL);
-            InitDefaultLF(&lf);
-            break;
-        }
+        // Create the static label with our sample text
+        g_hwndLabel =  CreateWindow(L"static",
+                                    L"Some words.",
+                                    SS_CENTER | WS_CHILD | WS_VISIBLE,
+                                    150, 10,
+                                    300, 40,
+                                    hwnd, (HMENU)ID_LABEL,
+                                    g_hInst, NULL);
+        InitDefaultLF(&lf);
+        break;
+    }
     case WM_COMMAND:
+    {
+        if (LOWORD(wParam) == ID_BUTTON)
         {
-            if (LOWORD(wParam) == ID_BUTTON)
+            CHOOSEFONT cf = { sizeof(cf) };
+            cf.hwndOwner = hwnd;
+            cf.lpLogFont = &lf;
+            if (BST_CHECKED == IsDlgButtonChecked(hwnd, ID_CHECKBOX))
             {
-                CHOOSEFONT cf = { sizeof(cf) };
-                cf.hwndOwner = hwnd;
-                cf.lpLogFont = &lf;
-                if (BST_CHECKED == IsDlgButtonChecked(hwnd, ID_CHECKBOX))
-                {
-                    // show all fonts (ignore auto-activation)
-                    cf.Flags |= CF_INACTIVEFONTS;
-                }
+                // show all fonts (ignore auto-activation)
+                cf.Flags |= CF_INACTIVEFONTS;
+            }
 
-                if (ChooseFont(&cf) == TRUE)
+            if (ChooseFont(&cf) == TRUE)
+            {
+                HFONT hfont = CreateFontIndirect(&lf);
+                if (hfont)
                 {
-                    HFONT hfont = CreateFontIndirect(&lf);
-                    if (hfont)
+                    // delete the old font if being used for the control if there is one
+                    HFONT hfontOld = (HFONT)SendMessage(g_hwndLabel, WM_GETFONT, 0, 0);
+                    if (hfontOld)
                     {
-                        // delete the old font if being used for the control if there is one
-                        HFONT hfontOld = (HFONT)SendMessage(g_hwndLabel, WM_GETFONT, 0, 0);
-                        if (hfontOld)
-                        {
-                            DeleteObject(hfontOld);
-                        }
-                        SendMessage(g_hwndLabel, WM_SETFONT, (WPARAM)hfont,  MAKELPARAM(TRUE, 0));
+                        DeleteObject(hfontOld);
                     }
+                    SendMessage(g_hwndLabel, WM_SETFONT, (WPARAM)hfont,  MAKELPARAM(TRUE, 0));
                 }
             }
-            break;
         }
+        break;
+    }
     case WM_DESTROY:
+    {
+        // cleanup font resoruces created above
+        HFONT hfontOld = (HFONT)SendMessage(g_hwndLabel, WM_GETFONT, 0, 0);
+        if (hfontOld)
         {
-            // cleanup font resoruces created above
-            HFONT hfontOld = (HFONT)SendMessage(g_hwndLabel, WM_GETFONT, 0, 0);
-            if (hfontOld)
-            {
-                DeleteObject(hfontOld);
-            }
-            PostQuitMessage(0);
-            return 0;
+            DeleteObject(hfontOld);
         }
+        PostQuitMessage(0);
+        return 0;
+    }
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

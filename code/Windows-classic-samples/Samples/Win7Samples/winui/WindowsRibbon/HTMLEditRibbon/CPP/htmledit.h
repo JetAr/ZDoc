@@ -1,4 +1,4 @@
-// HTMLEdit.h : main header file for the HTMLEDIT application
+﻿// HTMLEdit.h : main header file for the HTMLEDIT application
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -17,7 +17,7 @@
 #endif // _MSC_VER > 1000
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "resource.h"       // main symbols
@@ -30,7 +30,7 @@
 class CHTMLEditApp : public CWinApp
 {
 public:
-	CHTMLEditApp();
+    CHTMLEditApp();
 
     CRecentFileList& GetRecentFileList()
     {
@@ -38,19 +38,19 @@ public:
     }
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CHTMLEditApp)
-	public:
-	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CHTMLEditApp)
+public:
+    virtual BOOL InitInstance();
+    //}}AFX_VIRTUAL
 
 // Implementation
-	//{{AFX_MSG(CHTMLEditApp)
-	afx_msg void OnAppAbout();
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CHTMLEditApp)
+    afx_msg void OnAppAbout();
+    // NOTE - the ClassWizard will add and remove member functions here.
+    //    DO NOT EDIT what you see in these blocks of generated code !
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 extern CHTMLEditApp theApp;

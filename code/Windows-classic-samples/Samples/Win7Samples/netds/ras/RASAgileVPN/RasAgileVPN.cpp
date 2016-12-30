@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -39,16 +39,16 @@
 
 
 // PrintUsage
-void PrintUsage(__in LPWSTR pszProgName) 
+void PrintUsage(__in LPWSTR pszProgName)
 {
     WCHAR szTempBuf[256] = {0};
 
     if (pszProgName)
     {
-        StringCchPrintf(szTempBuf, 
-            ARRAYSIZE(szTempBuf), 
-            L"Usage\n%s \t-e entry_name -p [destination_ipaddress] -u [username] -z [password] \n\t\t-d [domain] -i [interface_index] -n [new_interface_index]\n", 
-            pszProgName);
+        StringCchPrintf(szTempBuf,
+                        ARRAYSIZE(szTempBuf),
+                        L"Usage\n%s \t-e entry_name -p [destination_ipaddress] -u [username] -z [password] \n\t\t-d [domain] -i [interface_index] -n [new_interface_index]\n",
+                        pszProgName);
 
         wprintf(szTempBuf);
     }
@@ -67,7 +67,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) LPWSTR * argv)
     int                 j = 0;
     DWORD               dwRet = 0;
     DWORD               dwSize = 0;
-    DWORD               dwMaxTickCount = 0;	
+    DWORD               dwMaxTickCount = 0;
     DWORD               dwNewInterfaceIndex = 0;
     DWORD               cb = sizeof(RASDIALPARAMS);
     BOOL                fRequired = FALSE;
@@ -76,7 +76,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) LPWSTR * argv)
 
     (void)HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
 
-    lpRasDialParams = (LPRASDIALPARAMS)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cb); 
+    lpRasDialParams = (LPRASDIALPARAMS)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cb);
     if (NULL == lpRasDialParams)
     {
         dwRet = GetLastError();
@@ -87,13 +87,13 @@ int __cdecl wmain(int argc, __in_ecount(argc) LPWSTR * argv)
     lpRasDialParams->dwSize = sizeof(RASDIALPARAMS);
 
     // Copy command line arguments into the RASDIALPARAMS structure
-    if (argc > 1) 
+    if (argc > 1)
     {
-        for(i = 1; i < (argc - 1); i++) 
+        for(i = 1; i < (argc - 1); i++)
         {
             if (argv[i] && ((argv[i][0] == '-') || (argv[i][0] == '/')))
             {
-                switch(tolower(argv[i][1])) 
+                switch(tolower(argv[i][1]))
                 {
                 case 'e': // Entry name
                     j = ++i;
@@ -270,11 +270,11 @@ int __cdecl wmain(int argc, __in_ecount(argc) LPWSTR * argv)
     // Set the appropriate size
     lpRasConnStatus->dwSize = sizeof(RASCONNSTATUS);
 
-    // Before calling RasUpdateConnection ensure that the client supports Mobile IKE (MOBIKE), it is an IKEv2 
+    // Before calling RasUpdateConnection ensure that the client supports Mobile IKE (MOBIKE), it is an IKEv2
     // connection and the interfaces as specified and different.
     if( fIKEv2Connection && dwNewInterfaceIndex != 0 && lpRasDialParams->dwIfIndex !=0 &&
-        dwNewInterfaceIndex != lpRasDialParams->dwIfIndex &&
-        (lpProjectionInfo->ikev2.dwFlags & RASIKEv2_FLAGS_MOBIKESUPPORTED))
+            dwNewInterfaceIndex != lpRasDialParams->dwIfIndex &&
+            (lpProjectionInfo->ikev2.dwFlags & RASIKEv2_FLAGS_MOBIKESUPPORTED))
     {
 
         // Get the Ras local tunnel end point using RasGetConnectStatus
@@ -318,7 +318,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) LPWSTR * argv)
         {
             wprintf(L"RasUpdateConnection Successful!\n");
         }
-        
+
         ZeroMemory(lpRasConnStatus, sizeof(RASCONNSTATUS));
         lpRasConnStatus->dwSize = sizeof(RASCONNSTATUS);
         // Get the Ras local tunnel end point using RasGetConnectStatus

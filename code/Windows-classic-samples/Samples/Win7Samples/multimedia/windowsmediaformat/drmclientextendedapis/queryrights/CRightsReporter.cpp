@@ -1,6 +1,6 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 //
-// CRightsReporter.cpp : Contains the implementation of the CRightsReporter 
+// CRightsReporter.cpp : Contains the implementation of the CRightsReporter
 //  class.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -82,16 +82,16 @@ HRESULT CRightsReporter::Initialize()
         else
         {
             // Initialize the new array.
-            ZeroMemory((void*)m_IsAllowedRights, 
-                    m_cIsAllowedRights * sizeof(BSTR));
+            ZeroMemory((void*)m_IsAllowedRights,
+                       m_cIsAllowedRights * sizeof(BSTR));
         }
     }
 
     // Set the members to the available "is allowed" rights strings.
 
     if (SUCCEEDED(hr))
-    {       
-        m_IsAllowedRights[0] = 
+    {
+        m_IsAllowedRights[0] =
             SysAllocString(g_wszWMDRM_ActionAllowed_Playback);
 
         if (m_IsAllowedRights[0] == NULL)
@@ -101,8 +101,8 @@ HRESULT CRightsReporter::Initialize()
     }
 
     if (SUCCEEDED(hr))
-    {       
-        m_IsAllowedRights[1] = 
+    {
+        m_IsAllowedRights[1] =
             SysAllocString(g_wszWMDRM_ActionAllowed_Copy);
 
         if (m_IsAllowedRights[1] == NULL)
@@ -112,8 +112,8 @@ HRESULT CRightsReporter::Initialize()
     }
 
     if (SUCCEEDED(hr))
-    {       
-        m_IsAllowedRights[2] = 
+    {
+        m_IsAllowedRights[2] =
             SysAllocString(g_wszWMDRM_ActionAllowed_PlaylistBurn);
 
         if (m_IsAllowedRights[2] == NULL)
@@ -123,8 +123,8 @@ HRESULT CRightsReporter::Initialize()
     }
 
     if (SUCCEEDED(hr))
-    {       
-        m_IsAllowedRights[3] = 
+    {
+        m_IsAllowedRights[3] =
             SysAllocString(g_wszWMDRM_ActionAllowed_CreateThumbnailImage);
 
         if (m_IsAllowedRights[3] == NULL)
@@ -134,8 +134,8 @@ HRESULT CRightsReporter::Initialize()
     }
 
     if (SUCCEEDED(hr))
-    {       
-        m_IsAllowedRights[4] = 
+    {
+        m_IsAllowedRights[4] =
             SysAllocString(g_wszWMDRM_ActionAllowed_CopyToCD);
 
         if (m_IsAllowedRights[4] == NULL)
@@ -174,8 +174,8 @@ HRESULT CRightsReporter::Initialize()
         else
         {
             // Initialize the new array.
-            ZeroMemory((void*)m_LicenseStateRights, 
-                    m_cLicenseStateRights * sizeof(BSTR));
+            ZeroMemory((void*)m_LicenseStateRights,
+                       m_cLicenseStateRights * sizeof(BSTR));
         }
     }
 
@@ -283,7 +283,7 @@ HRESULT CRightsReporter::Initialize()
     // Allocate an array to hold the license state query results.
     if (SUCCEEDED(hr))
     {
-        m_LicenseStateResults = 
+        m_LicenseStateResults =
             new DRM_LICENSE_STATE_DATA[m_cLicenseStateRights];
 
         if (m_LicenseStateResults == NULL)
@@ -369,7 +369,7 @@ HRESULT CRightsReporter::SetReportFile(const WCHAR* pwszFilename)
         }
     }
 
-    // Create/overwrite the file. 
+    // Create/overwrite the file.
     if (SUCCEEDED(hr))
     {
         if(_wfopen_s(&m_pFile, pwszFilename, L"w") != 0)
@@ -393,12 +393,12 @@ HRESULT CRightsReporter::SetReportFile(const WCHAR* pwszFilename)
 //          E_FAIL - The object needs to be initialized.
 //          E_OUTOFMEMORY - Could not copy one of the strings.
 //
-// Notes: If a single string fails to copy, all strings are cleared and an 
+// Notes: If a single string fails to copy, all strings are cleared and an
 //  error code is returned. This method treats all SysAllocString failures as
 //  out of memory errors. However, if one of the KID strings is NULL the same
-//  result occurs. None of the KID strings should be NULL, but if one is it 
+//  result occurs. None of the KID strings should be NULL, but if one is it
 //  will cause an error.
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 HRESULT CRightsReporter::SetKIDStrings(WCHAR** ppKIDStrings, int NumKIDs)
 {
@@ -441,7 +441,7 @@ HRESULT CRightsReporter::SetKIDStrings(WCHAR** ppKIDStrings, int NumKIDs)
     {
         m_NumKIDs = NumKIDs;
         m_KIDStrings = new BSTR[m_NumKIDs];
-        
+
         if (m_KIDStrings == NULL)
         {
             hr = E_OUTOFMEMORY;
@@ -497,11 +497,11 @@ HRESULT CRightsReporter::SetKIDStrings(WCHAR** ppKIDStrings, int NumKIDs)
 HRESULT CRightsReporter::CreateRightsReport()
 {
     HRESULT hr = S_OK;
-    
+
     // Check for initialization conditions.
-    if ((m_pLicenseQuery == NULL) 
-        || (m_KIDStrings == NULL) 
-        || (m_pFile == NULL))
+    if ((m_pLicenseQuery == NULL)
+            || (m_KIDStrings == NULL)
+            || (m_pFile == NULL))
     {
         hr = E_FAIL;
     }
@@ -521,7 +521,7 @@ HRESULT CRightsReporter::CreateRightsReport()
         fwprintf(m_pFile, L"* KID : %s\n", m_KIDStrings[i]);
         fwprintf(m_pFile, L"****************************************");
         fwprintf(m_pFile, L"**********\n");
-        
+
         // Get the "is allowed" rights.
         hr = GetRightsForKID(m_KIDStrings[i]);
 
@@ -619,7 +619,7 @@ void CRightsReporter::ShutDown()
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Method: WriteReportHeader
-// Description: Writes header information to the output file. This method 
+// Description: Writes header information to the output file. This method
 //  should be called only once, before any rights are added tot he report.
 // Parameters: None.
 // Returns: S_OK - Header written properly.
@@ -646,24 +646,24 @@ HRESULT CRightsReporter::WriteReportHeader()
     fwprintf(m_pFile, L"****************************************************");
     fwprintf(m_pFile, L"****************************\n**\n");
     fwprintf(m_pFile, L"** Windows Media DRM Rights Report\n");
-    fwprintf(m_pFile, 
-             L"** Created %02d/%02d/%4d %02d:%02d:%02d\n", 
-             Time.wMonth, 
-             Time.wDay, 
-             Time.wYear, 
-             Time.wHour, 
-             Time.wMinute, 
+    fwprintf(m_pFile,
+             L"** Created %02d/%02d/%4d %02d:%02d:%02d\n",
+             Time.wMonth,
+             Time.wDay,
+             Time.wYear,
+             Time.wHour,
+             Time.wMinute,
              Time.wSecond);
     fwprintf(m_pFile, L"**\n************************************************");
     fwprintf(m_pFile, L"********************************\n\n");
 
-    return hr;    
+    return hr;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Method: GetRightsForKID
-// Description: Prints "is allowed" rights information to a report file for 
+// Description: Prints "is allowed" rights information to a report file for
 //  a given Key ID.
 // Parameters: KID - Key ID string.
 //
@@ -675,11 +675,11 @@ HRESULT CRightsReporter::GetRightsForKID(BSTR KID)
     // Get the rights information.
     if (SUCCEEDED(hr))
     {
-        hr = m_pLicenseQuery->QueryActionAllowed(KID, 
-                                                NULL, 
-                                                m_cIsAllowedRights, 
-                                                m_IsAllowedRights, 
-                                                m_IsAllowedResults);
+        hr = m_pLicenseQuery->QueryActionAllowed(KID,
+                NULL,
+                m_cIsAllowedRights,
+                m_IsAllowedRights,
+                m_IsAllowedResults);
     }
 
     // Print the results to the output file.
@@ -702,94 +702,94 @@ HRESULT CRightsReporter::GetRightsForKID(BSTR KID)
 
                 // If the action is not allowed, check the result against the
                 //  possible failure flags and report the reasons.
-                
+
                 // The DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED flag is set for any
-                //  not allowed result. Only list it if no other reason is 
+                //  not allowed result. Only list it if no other reason is
                 //  provided.
                 if ((m_IsAllowedResults[i] & 0xFFFFFFFF)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED)
                 {
                     fwprintf(m_pFile, L"   Not allowed for an unspecified reason.\n");
                 }
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_LICENSE)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_LICENSE)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_LICENSE)
                 {
                     fwprintf(m_pFile, L"   No license for this KID.\n");
                 }
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_RIGHT)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_RIGHT)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_RIGHT)
                 {
                     fwprintf(m_pFile, L"   License does not grant this right.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_EXHAUSTED)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_EXHAUSTED)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_EXHAUSTED)
                 {
                     fwprintf(m_pFile, L"   Licensed counts for this right exhausted.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_EXPIRED)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_EXPIRED)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_EXPIRED)
                 {
                     fwprintf(m_pFile, L"   License expired.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NOT_STARTED)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NOT_STARTED)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NOT_STARTED)
                 {
                     fwprintf(m_pFile, L"   License is not yet in effect.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_APPSEC_TOO_LOW)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_APPSEC_TOO_LOW)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_APPSEC_TOO_LOW)
                 {
                     fwprintf(m_pFile, L"   Application security level is too low.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_REQ_INDIV)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_REQ_INDIV)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_REQ_INDIV)
                 {
                     fwprintf(m_pFile, L"   License requires security update.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_COPY_OPL_TOO_LOW)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_COPY_OPL_TOO_LOW)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_COPY_OPL_TOO_LOW)
                 {
                     fwprintf(m_pFile, L"   Cannot copy to the configured device.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_COPY_OPL_EXCLUDED)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_COPY_OPL_EXCLUDED)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_COPY_OPL_EXCLUDED)
                 {
                     fwprintf(m_pFile, L"   Configured device excluded from license.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_CLOCK_SUPPORT)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_CLOCK_SUPPORT)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_CLOCK_SUPPORT)
                 {
                     fwprintf(m_pFile, L"   License requires a secure clock.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_METERING_SUPPORT)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_METERING_SUPPORT)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_NO_METERING_SUPPORT)
                 {
                     fwprintf(m_pFile, L"   License requires metering.\n");
                 }
 
 
                 if ((m_IsAllowedResults[i] & DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_CHAIN_DEPTH_TOO_HIGH)
-                    == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_CHAIN_DEPTH_TOO_HIGH)
+                        == DRM_ACTION_ALLOWED_QUERY_NOT_ENABLED_CHAIN_DEPTH_TOO_HIGH)
                 {
                     fwprintf(m_pFile, L"   Incomplete license chain.\n");
                 }
@@ -806,7 +806,7 @@ HRESULT CRightsReporter::GetRightsForKID(BSTR KID)
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Method: GetDetailedRightsForKID
-// Description: Gets license state information for all rights granted for a 
+// Description: Gets license state information for all rights granted for a
 //  Key ID.
 // Parameters: KID - Key ID string.
 //
@@ -825,7 +825,7 @@ HRESULT CRightsReporter::GetDetailedRightsForKID(BSTR KID)
     ZeroMemory(&UntilDate, sizeof(UntilDate));
 
     // Get the license state information.
-    hr = m_pLicenseQuery->QueryLicenseState(KID, 
+    hr = m_pLicenseQuery->QueryLicenseState(KID,
                                             m_cLicenseStateRights,
                                             m_LicenseStateRights,
                                             m_LicenseStateResults);
@@ -838,131 +838,131 @@ HRESULT CRightsReporter::GetDetailedRightsForKID(BSTR KID)
             // Report the right.
             fwprintf(m_pFile, L"%s\n", m_LicenseStateRights[i]);
 
-            // Print data from the license state structure based on the 
+            // Print data from the license state structure based on the
             //  license state category.
             switch (m_LicenseStateResults[i].dwCategory)
             {
             case WM_DRM_LICENSE_STATE_NORIGHT:
-                {
-                    fwprintf(m_pFile, L"   Action not allowed.\n");
-                    break;
-                }
+            {
+                fwprintf(m_pFile, L"   Action not allowed.\n");
+                break;
+            }
             case WM_DRM_LICENSE_STATE_UNLIM:
-                {
-                    fwprintf(m_pFile, L"   Action is allowed without restriction.\n");
-                    break;
-                }
+            {
+                fwprintf(m_pFile, L"   Action is allowed without restriction.\n");
+                break;
+            }
             case WM_DRM_LICENSE_STATE_COUNT:
-                {
-                    fwprintf(m_pFile, 
-                             L"   Action is allowed %d more times.\n", 
-                             m_LicenseStateResults[i].dwCount[0]);
-                    break;
-                }
+            {
+                fwprintf(m_pFile,
+                         L"   Action is allowed %d more times.\n",
+                         m_LicenseStateResults[i].dwCount[0]);
+                break;
+            }
             case WM_DRM_LICENSE_STATE_FROM:
-                {
-                    FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &FromDate);
-                    fwprintf(m_pFile, 
-                             L"   Action is allowed without restriction beginning %02d/%02d/%4d.\n",
-                             FromDate.wMonth, 
-                             FromDate.wDay, 
-                             FromDate.wYear);
-                    break;
-                }
+            {
+                FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &FromDate);
+                fwprintf(m_pFile,
+                         L"   Action is allowed without restriction beginning %02d/%02d/%4d.\n",
+                         FromDate.wMonth,
+                         FromDate.wDay,
+                         FromDate.wYear);
+                break;
+            }
             case WM_DRM_LICENSE_STATE_UNTIL:
-                {
-                    FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &UntilDate);
-                    fwprintf(m_pFile, 
-                             L"   Action is allowed without restriction until %02d/%02d/%4d.\n",
-                             UntilDate.wMonth, 
-                             UntilDate.wDay, 
-                             UntilDate.wYear);
-                    break;
-                }
+            {
+                FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &UntilDate);
+                fwprintf(m_pFile,
+                         L"   Action is allowed without restriction until %02d/%02d/%4d.\n",
+                         UntilDate.wMonth,
+                         UntilDate.wDay,
+                         UntilDate.wYear);
+                break;
+            }
             case WM_DRM_LICENSE_STATE_FROM_UNTIL:
-                {
-                    FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &FromDate);
-                    FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[1]), &UntilDate);
-                    fwprintf(m_pFile, L"   Action is allowed without restriction between ");
-                    fwprintf(m_pFile, 
-                             L"%02d/%02d/%4d and %02d/%02d/%4d.\n",
-                             FromDate.wMonth,
-                             FromDate.wDay,
-                             FromDate.wYear,
-                             UntilDate.wMonth,
-                             UntilDate.wDay,
-                             UntilDate.wYear);
-                    break;
-                }
+            {
+                FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &FromDate);
+                FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[1]), &UntilDate);
+                fwprintf(m_pFile, L"   Action is allowed without restriction between ");
+                fwprintf(m_pFile,
+                         L"%02d/%02d/%4d and %02d/%02d/%4d.\n",
+                         FromDate.wMonth,
+                         FromDate.wDay,
+                         FromDate.wYear,
+                         UntilDate.wMonth,
+                         UntilDate.wDay,
+                         UntilDate.wYear);
+                break;
+            }
             case WM_DRM_LICENSE_STATE_COUNT_FROM:
-                {
-                    FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &FromDate);
-                    fwprintf(m_pFile, 
-                             L"   Action is allowed %d more times beginning %02d/%02d/%4d.\n",
-                             m_LicenseStateResults[i].dwCount[0],
-                             FromDate.wMonth, 
-                             FromDate.wDay, 
-                             FromDate.wYear);
-                    break;
-                }
+            {
+                FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &FromDate);
+                fwprintf(m_pFile,
+                         L"   Action is allowed %d more times beginning %02d/%02d/%4d.\n",
+                         m_LicenseStateResults[i].dwCount[0],
+                         FromDate.wMonth,
+                         FromDate.wDay,
+                         FromDate.wYear);
+                break;
+            }
             case WM_DRM_LICENSE_STATE_COUNT_UNTIL:
-                {
-                    FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &UntilDate);
-                    fwprintf(m_pFile, 
-                             L"   Action is allowed %d more times until %02d/%02d/%4d.\n",
-                             m_LicenseStateResults[i].dwCount[0],
-                             UntilDate.wMonth, 
-                             UntilDate.wDay, 
-                             UntilDate.wYear);
-                    break;
-                }
+            {
+                FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &UntilDate);
+                fwprintf(m_pFile,
+                         L"   Action is allowed %d more times until %02d/%02d/%4d.\n",
+                         m_LicenseStateResults[i].dwCount[0],
+                         UntilDate.wMonth,
+                         UntilDate.wDay,
+                         UntilDate.wYear);
+                break;
+            }
             case WM_DRM_LICENSE_STATE_COUNT_FROM_UNTIL:
-                {
-                    FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &FromDate);
-                    FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[1]), &UntilDate);
-                    fwprintf(m_pFile, 
-                             L"   Action is allowed %d more times between ",
-                             m_LicenseStateResults[i].dwCount[0]);
-                    fwprintf(m_pFile, 
-                             L"%02d/%02d/%4d and %02d/%02d/%4d.\n",
-                             FromDate.wMonth,
-                             FromDate.wDay,
-                             FromDate.wYear,
-                             UntilDate.wMonth,
-                             UntilDate.wDay,
-                             UntilDate.wYear);
-                    break;
-                }
+            {
+                FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[0]), &FromDate);
+                FileTimeToSystemTime(&(m_LicenseStateResults[i].datetime[1]), &UntilDate);
+                fwprintf(m_pFile,
+                         L"   Action is allowed %d more times between ",
+                         m_LicenseStateResults[i].dwCount[0]);
+                fwprintf(m_pFile,
+                         L"%02d/%02d/%4d and %02d/%02d/%4d.\n",
+                         FromDate.wMonth,
+                         FromDate.wDay,
+                         FromDate.wYear,
+                         UntilDate.wMonth,
+                         UntilDate.wDay,
+                         UntilDate.wYear);
+                break;
+            }
             case WM_DRM_LICENSE_STATE_EXPIRATION_AFTER_FIRSTUSE:
-                {
-                    fwprintf(m_pFile, L"   Action expires after the first use.\n");
-                    break;
-                }
+            {
+                fwprintf(m_pFile, L"   Action expires after the first use.\n");
+                break;
+            }
             } // End switch.
 
             // Check for other license information.
-            
+
             LicenseStateFlags = m_LicenseStateResults[i].dwVague;
 
             // Vague.
             if ((LicenseStateFlags & DRM_LICENSE_STATE_DATA_VAGUE)
-                == DRM_LICENSE_STATE_DATA_VAGUE)
+                    == DRM_LICENSE_STATE_DATA_VAGUE)
             {
-                fwprintf(m_pFile, 
-                    L"   Note: License state data aggregated from multiple licenses.\n");
+                fwprintf(m_pFile,
+                         L"   Note: License state data aggregated from multiple licenses.\n");
             }
 
             // OPLs.
             if ((LicenseStateFlags & DRM_LICENSE_STATE_DATA_OPL_PRESENT)
-                == DRM_LICENSE_STATE_DATA_OPL_PRESENT)
+                    == DRM_LICENSE_STATE_DATA_OPL_PRESENT)
             {
-                fwprintf(m_pFile, 
-                    L"   Note: This action is further restricted with Output Protection Levels.\n");
+                fwprintf(m_pFile,
+                         L"   Note: This action is further restricted with Output Protection Levels.\n");
             }
 
             // SAP.
             if ((LicenseStateFlags & DRM_LICENSE_STATE_DATA_SAP_PRESENT)
-                == DRM_LICENSE_STATE_DATA_SAP_PRESENT)
+                    == DRM_LICENSE_STATE_DATA_SAP_PRESENT)
             {
                 fwprintf(m_pFile, L"    Note: This action may only be performed using SAP.\n");
             }

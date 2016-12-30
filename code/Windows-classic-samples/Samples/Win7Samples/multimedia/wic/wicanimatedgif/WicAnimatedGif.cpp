@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -62,32 +62,32 @@ inline LONG RectHeight(RECT rc)
 
 
 //                           Gif Animation Overview
-// In order to play a gif animation, raw frames (which are compressed frames 
-// directly retrieved from the image file) and image metadata are loaded 
-// and used to compose the frames that are actually displayed in the animation 
-// loop (which we call composed frames in this sample).  Composed frames have 
+// In order to play a gif animation, raw frames (which are compressed frames
+// directly retrieved from the image file) and image metadata are loaded
+// and used to compose the frames that are actually displayed in the animation
+// loop (which we call composed frames in this sample).  Composed frames have
 // the same sizes as the global gif image size, while raw frames can have their own sizes.
 //
 // At the highest level, a gif animation contains a fixed or infinite number of animation
-// loops, in which the animation will be displayed repeatedly frame by frame; once all 
-// loops are displayed, the animation will stop and the last frame will be displayed 
+// loops, in which the animation will be displayed repeatedly frame by frame; once all
+// loops are displayed, the animation will stop and the last frame will be displayed
 // from that point.
 //
-// In each loop, first the entire composed frame will be initialized with the background 
-// color retrieved from the image metadata.  The very first raw frame then will be loaded 
-// and directly overlaid onto the previous composed frame (i.e. in this case, the frame 
-// cleared with background color) to produce the first  composed frame, and this frame 
-// will then be displayed for a period that equals its delay.  For any raw frame after 
-// the first raw frame (if there are any), the composed frame will first be disposed based 
-// on the disposal method associated with the previous raw frame. Then the next raw frame 
-// will be loaded and overlaid onto the result (i.e. the composed frame after disposal).  
-// These two steps (i.e. disposing the previous frame and overlaying the current frame) together 
-// 'compose' the next frame to be displayed.  The composed frame then gets displayed.  
+// In each loop, first the entire composed frame will be initialized with the background
+// color retrieved from the image metadata.  The very first raw frame then will be loaded
+// and directly overlaid onto the previous composed frame (i.e. in this case, the frame
+// cleared with background color) to produce the first  composed frame, and this frame
+// will then be displayed for a period that equals its delay.  For any raw frame after
+// the first raw frame (if there are any), the composed frame will first be disposed based
+// on the disposal method associated with the previous raw frame. Then the next raw frame
+// will be loaded and overlaid onto the result (i.e. the composed frame after disposal).
+// These two steps (i.e. disposing the previous frame and overlaying the current frame) together
+// 'compose' the next frame to be displayed.  The composed frame then gets displayed.
 // This process continues until the last frame in a loop is reached.
 //
-// An exception is the zero delay intermediate frames, which are frames with 0 delay 
-// associated with them.  These frames will be used to compose the next frame, but the 
-// difference is that the composed frame will not be displayed unless it's the last frame 
+// An exception is the zero delay intermediate frames, which are frames with 0 delay
+// associated with them.  These frames will be used to compose the next frame, but the
+// difference is that the composed frame will not be displayed unless it's the last frame
 // in the loop (i.e. we move immediately to composing the next composed frame).
 
 
@@ -144,8 +144,8 @@ int WINAPI wWinMain(
 ******************************************************************/
 
 DemoApp::DemoApp()
-:
-    m_hWnd(NULL), 
+    :
+    m_hWnd(NULL),
     m_pD2DFactory(NULL),
     m_pHwndRT(NULL),
     m_pFrameComposeRT(NULL),
@@ -212,27 +212,27 @@ HRESULT DemoApp::Initialize(HINSTANCE hInstance)
     {
         // Create WIC factory
         hr = CoCreateInstance(
-            CLSID_WICImagingFactory,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_PPV_ARGS(&m_pIWICFactory));
+                 CLSID_WICImagingFactory,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_PPV_ARGS(&m_pIWICFactory));
     }
 
     if (SUCCEEDED(hr))
     {
         // Create window
         m_hWnd = CreateWindow(
-            L"WICANIMATEDGIF",
-            L"WIC Animated Gif Sample",
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            NULL,
-            NULL,
-            hInstance,
-            this);
+                     L"WICANIMATEDGIF",
+                     L"WIC Animated Gif Sample",
+                     WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     NULL,
+                     NULL,
+                     hInstance,
+                     this);
 
         hr = (m_hWnd == NULL) ? E_FAIL : S_OK;
     }
@@ -273,7 +273,7 @@ HRESULT DemoApp::CreateDeviceResources()
         if (m_pHwndRT == NULL)
         {
             // Create a D2D hwnd render target
-            D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties 
+            D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties
                 = D2D1::RenderTargetProperties();
 
             // Set the DPI to be the default system DPI to allow direct mapping
@@ -284,12 +284,12 @@ HRESULT DemoApp::CreateDeviceResources()
 
             D2D1_HWND_RENDER_TARGET_PROPERTIES hwndRenderTragetproperties
                 = D2D1::HwndRenderTargetProperties(m_hWnd,
-                    D2D1::SizeU(RectWidth(rcClient), RectHeight(rcClient)));
+                                                   D2D1::SizeU(RectWidth(rcClient), RectHeight(rcClient)));
 
             hr = m_pD2DFactory->CreateHwndRenderTarget(
-                renderTargetProperties,
-                hwndRenderTragetproperties,
-                &m_pHwndRT);
+                     renderTargetProperties,
+                     hwndRenderTragetproperties,
+                     &m_pHwndRT);
         }
         else
         {
@@ -303,14 +303,14 @@ HRESULT DemoApp::CreateDeviceResources()
 
     if (SUCCEEDED(hr))
     {
-        // Create a bitmap render target used to compose frames. Bitmap render 
+        // Create a bitmap render target used to compose frames. Bitmap render
         // targets cannot be resized, so we always recreate it.
         SafeRelease(m_pFrameComposeRT);
         hr = m_pHwndRT->CreateCompatibleRenderTarget(
-            D2D1::SizeF(
-                static_cast<FLOAT>(m_cxGifImage),
-                static_cast<FLOAT>(m_cyGifImage)),
-            &m_pFrameComposeRT);
+                 D2D1::SizeF(
+                     static_cast<FLOAT>(m_cxGifImage),
+                     static_cast<FLOAT>(m_cyGifImage)),
+                 &m_pFrameComposeRT);
     }
 
     return hr;
@@ -373,7 +373,7 @@ HRESULT DemoApp::OnRender()
 *  DemoApp::GetFileOpen                                           *
 *                                                                 *
 *  Creates an open file dialog box and returns the filename       *
-*  of the file selected(if any).                                  *  
+*  of the file selected(if any).                                  *
 *                                                                 *
 ******************************************************************/
 
@@ -424,14 +424,14 @@ HRESULT DemoApp::OnResize(UINT uWidth, UINT uHeight)
 *  DemoApp::s_WndProc                                             *
 *                                                                 *
 *  Static window message handler used to initialize the           *
-*  application object and call the object's member WndProc        * 
+*  application object and call the object's member WndProc        *
 *                                                                 *
 ******************************************************************/
 
 LRESULT CALLBACK DemoApp::s_WndProc(
     HWND hWnd,
-    UINT uMsg, 
-    WPARAM wParam, 
+    UINT uMsg,
+    WPARAM wParam,
     LPARAM lParam)
 {
     DemoApp *pThis = NULL;
@@ -470,9 +470,9 @@ LRESULT CALLBACK DemoApp::s_WndProc(
 ******************************************************************/
 
 LRESULT DemoApp::WndProc(
-    HWND hWnd, 
-    UINT uMsg, 
-    WPARAM wParam, 
+    HWND hWnd,
+    UINT uMsg,
+    WPARAM wParam,
     LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -480,63 +480,63 @@ LRESULT DemoApp::WndProc(
     switch (uMsg)
     {
     case WM_COMMAND:
+    {
+        // Parse the menu selections
+        switch (LOWORD(wParam))
         {
-            // Parse the menu selections
-            switch (LOWORD(wParam))
+        case IDM_FILE:
+            hr = SelectAndDisplayGif();
+            if (FAILED(hr))
             {
-            case IDM_FILE:
-                hr = SelectAndDisplayGif();
-                if (FAILED(hr))
-                {
-                    MessageBox(hWnd, L"Load gif file failed. Exiting application.", L"Error", MB_OK);
-                    PostQuitMessage(1);
-                    return 1;
-                }
-                break;
-
-            case IDM_EXIT:
-                PostMessage(hWnd, WM_CLOSE, 0, 0);
-                break;
+                MessageBox(hWnd, L"Load gif file failed. Exiting application.", L"Error", MB_OK);
+                PostQuitMessage(1);
+                return 1;
             }
+            break;
+
+        case IDM_EXIT:
+            PostMessage(hWnd, WM_CLOSE, 0, 0);
+            break;
         }
-        break;
+    }
+    break;
 
     case WM_SIZE:
-        {
-            UINT uWidth = LOWORD(lParam);
-            UINT uHeight = HIWORD(lParam);
-            hr = OnResize(uWidth, uHeight);
-        }
-        break;
+    {
+        UINT uWidth = LOWORD(lParam);
+        UINT uHeight = HIWORD(lParam);
+        hr = OnResize(uWidth, uHeight);
+    }
+    break;
 
     case WM_PAINT:
-        {
-            hr = OnRender(); 
-            ValidateRect(hWnd, NULL);
-        }
-        break;
+    {
+        hr = OnRender();
+        ValidateRect(hWnd, NULL);
+    }
+    break;
 
     case WM_DISPLAYCHANGE:
-        {
-            InvalidateRect(hWnd, NULL, FALSE);
-        }
-        break;
+    {
+        InvalidateRect(hWnd, NULL, FALSE);
+    }
+    break;
 
     case WM_DESTROY:
-        {
-            PostQuitMessage(0);
-            return 0;
-        }
-        break;
+    {
+        PostQuitMessage(0);
+        return 0;
+    }
+    break;
 
     case WM_TIMER:
-        {
-            // Timer expired, display the next frame and set a new timer
-            // if needed
-            hr = ComposeNextFrame();
-            InvalidateRect(hWnd, NULL, FALSE);
-        }
-        break;
+    {
+        // Timer expired, display the next frame and set a new timer
+        // if needed
+        hr = ComposeNextFrame();
+        InvalidateRect(hWnd, NULL, FALSE);
+    }
+    break;
 
     default:
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -580,7 +580,7 @@ HRESULT DemoApp::GetGlobalMetadata()
     {
         // Create a MetadataQueryReader from the decoder
         hr = m_pDecoder->GetMetadataQueryReader(
-            &pMetadataQueryReader);
+                 &pMetadataQueryReader);
     }
 
     if (SUCCEEDED(hr))
@@ -598,8 +598,8 @@ HRESULT DemoApp::GetGlobalMetadata()
     {
         // Get width
         hr = pMetadataQueryReader->GetMetadataByName(
-            L"/logscrdesc/Width", 
-            &propValue);
+                 L"/logscrdesc/Width",
+                 &propValue);
         if (SUCCEEDED(hr))
         {
             hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL);
@@ -615,8 +615,8 @@ HRESULT DemoApp::GetGlobalMetadata()
     {
         // Get height
         hr = pMetadataQueryReader->GetMetadataByName(
-            L"/logscrdesc/Height",
-            &propValue);
+                 L"/logscrdesc/Height",
+                 &propValue);
         if (SUCCEEDED(hr))
         {
             hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL);
@@ -632,8 +632,8 @@ HRESULT DemoApp::GetGlobalMetadata()
     {
         // Get pixel aspect ratio
         hr = pMetadataQueryReader->GetMetadataByName(
-            L"/logscrdesc/PixelAspectRatio",
-            &propValue);
+                 L"/logscrdesc/PixelAspectRatio",
+                 &propValue);
         if (SUCCEEDED(hr))
         {
             hr = (propValue.vt == VT_UI1 ? S_OK : E_FAIL);
@@ -643,8 +643,8 @@ HRESULT DemoApp::GetGlobalMetadata()
 
                 if (uPixelAspRatio != 0)
                 {
-                    // Need to calculate the ratio. The value in uPixelAspRatio 
-                    // allows specifying widest pixel 4:1 to the tallest pixel of 
+                    // Need to calculate the ratio. The value in uPixelAspRatio
+                    // allows specifying widest pixel 4:1 to the tallest pixel of
                     // 1:4 in increments of 1/64th
                     FLOAT pixelAspRatio = (uPixelAspRatio + 15.f) / 64.f;
 
@@ -678,15 +678,15 @@ HRESULT DemoApp::GetGlobalMetadata()
         // First check to see if the application block in the Application Extension
         // contains "NETSCAPE2.0" and "ANIMEXTS1.0", which indicates the gif animation
         // has looping information associated with it.
-        // 
+        //
         // If we fail to get the looping information, loop the animation infinitely.
         if (SUCCEEDED(pMetadataQueryReader->GetMetadataByName(
-                    L"/appext/application", 
-                    &propValue)) &&
-            propValue.vt == (VT_UI1 | VT_VECTOR) &&
-            propValue.caub.cElems == 11 &&  // Length of the application block
-            (!memcmp(propValue.caub.pElems, "NETSCAPE2.0", propValue.caub.cElems) ||
-             !memcmp(propValue.caub.pElems, "ANIMEXTS1.0", propValue.caub.cElems)))
+                          L"/appext/application",
+                          &propValue)) &&
+                propValue.vt == (VT_UI1 | VT_VECTOR) &&
+                propValue.caub.cElems == 11 &&  // Length of the application block
+                (!memcmp(propValue.caub.pElems, "NETSCAPE2.0", propValue.caub.cElems) ||
+                 !memcmp(propValue.caub.pElems, "ANIMEXTS1.0", propValue.caub.cElems)))
         {
             PropVariantClear(&propValue);
 
@@ -700,16 +700,16 @@ HRESULT DemoApp::GetGlobalMetadata()
                 //  byte 3: loop count (most significant byte)
                 //  byte 4: set to zero
                 if (propValue.vt == (VT_UI1 | VT_VECTOR) &&
-                    propValue.caub.cElems >= 4 &&
-                    propValue.caub.pElems[0] > 0 &&
-                    propValue.caub.pElems[1] == 1)
+                        propValue.caub.cElems >= 4 &&
+                        propValue.caub.pElems[0] > 0 &&
+                        propValue.caub.pElems[1] == 1)
                 {
-                    m_uTotalLoopCount = MAKEWORD(propValue.caub.pElems[2], 
-                        propValue.caub.pElems[3]);
-                    
+                    m_uTotalLoopCount = MAKEWORD(propValue.caub.pElems[2],
+                                                 propValue.caub.pElems[3]);
+
                     // If the total loop count is not zero, we then have a loop count
                     // If it is 0, then we repeat infinitely
-                    if (m_uTotalLoopCount != 0) 
+                    if (m_uTotalLoopCount != 0)
                     {
                         m_fHasLoop = TRUE;
                     }
@@ -739,7 +739,7 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
     IWICFormatConverter *pConverter = NULL;
     IWICBitmapFrameDecode *pWicFrame = NULL;
     IWICMetadataQueryReader *pFrameMetadataQueryReader = NULL;
-    
+
     PROPVARIANT propValue;
     PropVariantInit(&propValue);
 
@@ -754,12 +754,12 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
     if (SUCCEEDED(hr))
     {
         hr = pConverter->Initialize(
-            pWicFrame,
-            GUID_WICPixelFormat32bppPBGRA,
-            WICBitmapDitherTypeNone,
-            NULL,
-            0.f,
-            WICBitmapPaletteTypeCustom);
+                 pWicFrame,
+                 GUID_WICPixelFormat32bppPBGRA,
+                 WICBitmapDitherTypeNone,
+                 NULL,
+                 0.f,
+                 WICBitmapPaletteTypeCustom);
     }
 
     if (SUCCEEDED(hr))
@@ -767,9 +767,9 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
         // Create a D2DBitmap from IWICBitmapSource
         SafeRelease(m_pRawFrame);
         hr = m_pHwndRT->CreateBitmapFromWicBitmap(
-            pConverter,
-            NULL,
-            &m_pRawFrame);
+                 pConverter,
+                 NULL,
+                 &m_pRawFrame);
     }
 
     if (SUCCEEDED(hr))
@@ -784,7 +784,7 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
         hr = pFrameMetadataQueryReader->GetMetadataByName(L"/imgdesc/Left", &propValue);
         if (SUCCEEDED(hr))
         {
-            hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL); 
+            hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL);
             if (SUCCEEDED(hr))
             {
                 m_framePosition.left = static_cast<FLOAT>(propValue.uiVal);
@@ -798,7 +798,7 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
         hr = pFrameMetadataQueryReader->GetMetadataByName(L"/imgdesc/Top", &propValue);
         if (SUCCEEDED(hr))
         {
-            hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL); 
+            hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL);
             if (SUCCEEDED(hr))
             {
                 m_framePosition.top = static_cast<FLOAT>(propValue.uiVal);
@@ -812,11 +812,11 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
         hr = pFrameMetadataQueryReader->GetMetadataByName(L"/imgdesc/Width", &propValue);
         if (SUCCEEDED(hr))
         {
-            hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL); 
+            hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL);
             if (SUCCEEDED(hr))
             {
-                m_framePosition.right = static_cast<FLOAT>(propValue.uiVal) 
-                    + m_framePosition.left;
+                m_framePosition.right = static_cast<FLOAT>(propValue.uiVal)
+                                        + m_framePosition.left;
             }
             PropVariantClear(&propValue);
         }
@@ -831,7 +831,7 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
             if (SUCCEEDED(hr))
             {
                 m_framePosition.bottom = static_cast<FLOAT>(propValue.uiVal)
-                    + m_framePosition.top;
+                                         + m_framePosition.top;
             }
             PropVariantClear(&propValue);
         }
@@ -841,10 +841,10 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
     {
         // Get delay from the optional Graphic Control Extension
         if (SUCCEEDED(pFrameMetadataQueryReader->GetMetadataByName(
-            L"/grctlext/Delay", 
-            &propValue)))
+                          L"/grctlext/Delay",
+                          &propValue)))
         {
-            hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL); 
+            hr = (propValue.vt == VT_UI2 ? S_OK : E_FAIL);
             if (SUCCEEDED(hr))
             {
                 // Convert the delay retrieved in 10 ms units to a delay in 1 ms units
@@ -862,11 +862,11 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
         if (SUCCEEDED(hr))
         {
             // Insert an artificial delay to ensure rendering for gif with very small
-            // or 0 delay.  This delay number is picked to match with most browsers' 
+            // or 0 delay.  This delay number is picked to match with most browsers'
             // gif display speed.
             //
-            // This will defeat the purpose of using zero delay intermediate frames in 
-            // order to preserve compatibility. If this is removed, the zero delay 
+            // This will defeat the purpose of using zero delay intermediate frames in
+            // order to preserve compatibility. If this is removed, the zero delay
             // intermediate frames will not be visible.
             if (m_uFrameDelay < 90)
             {
@@ -878,8 +878,8 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
     if (SUCCEEDED(hr))
     {
         if (SUCCEEDED(pFrameMetadataQueryReader->GetMetadataByName(
-                L"/grctlext/Disposal", 
-                &propValue)))
+                          L"/grctlext/Disposal",
+                          &propValue)))
         {
             hr = (propValue.vt == VT_UI1) ? S_OK : E_FAIL;
             if (SUCCEEDED(hr))
@@ -889,7 +889,7 @@ HRESULT DemoApp::GetRawFrame(UINT uFrameIndex)
         }
         else
         {
-            // Failed to get the disposal method, use default. Possibly a 
+            // Failed to get the disposal method, use default. Possibly a
             // non-animated gif.
             m_uFrameDisposal = DM_UNDEFINED;
         }
@@ -925,8 +925,8 @@ HRESULT DemoApp::GetBackgroundColor(
 
     // If we have a global palette, get the palette and background color
     HRESULT hr = pMetadataQueryReader->GetMetadataByName(
-        L"/logscrdesc/GlobalColorTableFlag",
-        &propVariant);
+                     L"/logscrdesc/GlobalColorTableFlag",
+                     &propVariant);
     if (SUCCEEDED(hr))
     {
         hr = (propVariant.vt != VT_BOOL || !propVariant.boolVal) ? E_FAIL : S_OK;
@@ -937,8 +937,8 @@ HRESULT DemoApp::GetBackgroundColor(
     {
         // Background color index
         hr = pMetadataQueryReader->GetMetadataByName(
-            L"/logscrdesc/BackgroundColorIndex", 
-            &propVariant);
+                 L"/logscrdesc/BackgroundColorIndex",
+                 &propVariant);
         if (SUCCEEDED(hr))
         {
             hr = (propVariant.vt != VT_UI1) ? E_FAIL : S_OK;
@@ -965,14 +965,14 @@ HRESULT DemoApp::GetBackgroundColor(
     if (SUCCEEDED(hr))
     {
         hr = pWicPalette->GetColors(
-            ARRAYSIZE(rgColors),
-            rgColors,
-            &cColorsCopied);
+                 ARRAYSIZE(rgColors),
+                 rgColors,
+                 &cColorsCopied);
     }
 
     if (SUCCEEDED(hr))
     {
-        // Check whether background color is outside range 
+        // Check whether background color is outside range
         hr = (backgroundIndex >= cColorsCopied) ? E_FAIL : S_OK;
     }
 
@@ -981,7 +981,7 @@ HRESULT DemoApp::GetBackgroundColor(
         // Get the color in ARGB format
         dwBGColor = rgColors[backgroundIndex];
 
-        // The background color is in ARGB format, and we want to 
+        // The background color is in ARGB format, and we want to
         // extract the alpha value and convert it in FLOAT
         FLOAT alpha = (dwBGColor >> 24) / 255.f;
         m_backgroundColor = D2D1::ColorF(dwBGColor, alpha);
@@ -1024,7 +1024,7 @@ HRESULT DemoApp::CalculateDrawRectangle(D2D1_RECT_F &drawRect)
         // If the client area is resized to be smaller than the image size, scale
         // the image, and preserve the aspect ratio
         FLOAT aspectRatio = static_cast<FLOAT>(m_cxGifImagePixel) /
-            static_cast<FLOAT>(m_cyGifImagePixel);
+                            static_cast<FLOAT>(m_cyGifImagePixel);
 
         if (drawRect.left < 0)
         {
@@ -1054,7 +1054,7 @@ HRESULT DemoApp::CalculateDrawRectangle(D2D1_RECT_F &drawRect)
 *                                                                 *
 *  DemoApp::RestoreSavedFrame()                                   *
 *                                                                 *
-*  Copys the saved frame to the frame in the bitmap render        * 
+*  Copys the saved frame to the frame in the bitmap render        *
 *  target.                                                        *
 *                                                                 *
 ******************************************************************/
@@ -1099,7 +1099,7 @@ HRESULT DemoApp::ClearCurrentFrameArea()
 
     // Clip the render target to the size of the raw frame
     m_pFrameComposeRT->PushAxisAlignedClip(
-        &m_framePosition, 
+        &m_framePosition,
         D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
 
     m_pFrameComposeRT->Clear(m_backgroundColor);
@@ -1192,8 +1192,8 @@ HRESULT DemoApp::OverlayNextFrame()
         hr = m_pFrameComposeRT->EndDraw();
     }
 
-    // To improve performance and avoid decoding/composing this frame in the 
-    // following animation loops, the composed frame can be cached here in system 
+    // To improve performance and avoid decoding/composing this frame in the
+    // following animation loops, the composed frame can be cached here in system
     // or video memory.
 
     if (SUCCEEDED(hr))
@@ -1224,7 +1224,7 @@ HRESULT DemoApp::SaveComposedFrame()
     hr = m_pFrameComposeRT->GetBitmap(&pFrameToBeSaved);
     if (SUCCEEDED(hr))
     {
-        // Create the temporary bitmap if it hasn't been created yet 
+        // Create the temporary bitmap if it hasn't been created yet
         if (m_pSavedFrame == NULL)
         {
             D2D1_SIZE_U bitmapSize = pFrameToBeSaved->GetPixelSize();
@@ -1233,9 +1233,9 @@ HRESULT DemoApp::SaveComposedFrame()
             bitmapProp.pixelFormat = pFrameToBeSaved->GetPixelFormat();
 
             hr = m_pFrameComposeRT->CreateBitmap(
-                bitmapSize,
-                bitmapProp,
-                &m_pSavedFrame);
+                     bitmapSize,
+                     bitmapProp,
+                     &m_pSavedFrame);
         }
     }
 
@@ -1274,16 +1274,16 @@ HRESULT DemoApp::SelectAndDisplayGif()
         m_uFrameDisposal = DM_NONE;  // No previous frame, use disposal none
         m_uLoopNumber = 0;
         m_fHasLoop = FALSE;
-        SafeRelease(m_pSavedFrame); 
+        SafeRelease(m_pSavedFrame);
 
         // Create a decoder for the gif file
         SafeRelease(m_pDecoder);
         hr = m_pIWICFactory->CreateDecoderFromFilename(
-            szFileName,
-            NULL,
-            GENERIC_READ,
-            WICDecodeMetadataCacheOnLoad,
-            &m_pDecoder);
+                 szFileName,
+                 NULL,
+                 GENERIC_READ,
+                 WICDecodeMetadataCacheOnLoad,
+                 &m_pDecoder);
         if (SUCCEEDED(hr))
         {
             hr = GetGlobalMetadata();
@@ -1294,7 +1294,7 @@ HRESULT DemoApp::SelectAndDisplayGif()
             rcClient.right = m_cxGifImagePixel;
             rcClient.bottom = m_cyGifImagePixel;
 
-            if (!AdjustWindowRect(&rcClient, WS_OVERLAPPEDWINDOW, TRUE)) 
+            if (!AdjustWindowRect(&rcClient, WS_OVERLAPPEDWINDOW, TRUE))
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
             }
@@ -1303,7 +1303,7 @@ HRESULT DemoApp::SelectAndDisplayGif()
         if (SUCCEEDED(hr))
         {
             // Get the upper left corner of the current window
-            if (!GetWindowRect(m_hWnd, &rcWindow)) 
+            if (!GetWindowRect(m_hWnd, &rcWindow))
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
             }
@@ -1312,7 +1312,7 @@ HRESULT DemoApp::SelectAndDisplayGif()
         if (SUCCEEDED(hr))
         {
             // Resize the window to fit the gif
-            MoveWindow(          
+            MoveWindow(
                 m_hWnd,
                 rcWindow.left,
                 rcWindow.top,
@@ -1322,7 +1322,7 @@ HRESULT DemoApp::SelectAndDisplayGif()
 
             hr = CreateDeviceResources();
         }
-        
+
         if (SUCCEEDED(hr))
         {
             // If we have at least one frame, start playing

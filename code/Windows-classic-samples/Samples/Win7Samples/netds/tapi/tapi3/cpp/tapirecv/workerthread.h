@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
@@ -19,9 +19,9 @@ Abstract:
 
 
 //
-// worker whose purpose is to asynchronously process messages received 
+// worker whose purpose is to asynchronously process messages received
 // from TAPI
-// 
+//
 
 class CWorkerThread
 {
@@ -35,7 +35,7 @@ public:
     BOOL PostMessage(UINT Msg,       // message to post
                      WPARAM wParam,  // first message parameter
                      LPARAM lParam   // second message parameter
-                     );
+                    );
 
 public:
 
@@ -55,14 +55,14 @@ public:
 
     CWorkerThread()
         :m_hThreadHandle(NULL),
-        m_nThreadID(0)
+         m_nThreadID(0)
     {}
 
 
     virtual ~CWorkerThread();
 
 protected:
-    
+
     //
     // the actual thread function
     //

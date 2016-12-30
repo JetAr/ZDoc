@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation
+﻿// Copyright (c) Microsoft Corporation
 //
 #include <windows.h>
 #include <ole2.h>
@@ -11,7 +11,7 @@
 #include "TextAreaProvider.h"
 
 // A helper function to create a SafeArray Version of an int array of a specified length
-SAFEARRAY * BuildIntSafeArray(_In_reads_(length) const int * data, _In_ int length) 
+SAFEARRAY * BuildIntSafeArray(_In_reads_(length) const int * data, _In_ int length)
 {
     SAFEARRAY *sa = SafeArrayCreateVector(VT_I4, 0, length);
     if (sa == NULL)
@@ -113,11 +113,11 @@ HRESULT STDMETHODCALLTYPE FrameProvider::GetPropertyValue(PROPERTYID idProp, _Ou
     }
     else if (idProp == UIA_AutomationIdPropertyId)
     {
-         retVal->bstrVal = SysAllocString(L"AnnotatedTextControl");
-         if (retVal->bstrVal != NULL)
-         {
+        retVal->bstrVal = SysAllocString(L"AnnotatedTextControl");
+        if (retVal->bstrVal != NULL)
+        {
             retVal->vt = VT_BSTR;
-         } 
+        }
     }
     else if (idProp == UIA_IsControlElementPropertyId)
     {
@@ -154,7 +154,7 @@ HRESULT STDMETHODCALLTYPE FrameProvider::get_HostRawElementProvider(_Outptr_resu
         return UIA_E_ELEMENTNOTAVAILABLE;
     }
 
-    return UiaHostProviderFromHwnd(_hwnd, retVal); 
+    return UiaHostProviderFromHwnd(_hwnd, retVal);
 }
 
 HRESULT STDMETHODCALLTYPE FrameProvider::Navigate(NavigateDirection direction, _Outptr_result_maybenull_ IRawElementProviderFragment ** retVal)
@@ -166,7 +166,7 @@ HRESULT STDMETHODCALLTYPE FrameProvider::Navigate(NavigateDirection direction, _
     *retVal = NULL;
 
     if (direction == NavigateDirection_FirstChild ||
-        (direction == NavigateDirection_LastChild && _control->GetAnnotationCount() == 0))
+            (direction == NavigateDirection_LastChild && _control->GetAnnotationCount() == 0))
     {
         *retVal = new TextAreaProvider(_hwnd, _control);
         if (*retVal == NULL)

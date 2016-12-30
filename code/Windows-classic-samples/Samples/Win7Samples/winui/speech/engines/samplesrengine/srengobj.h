@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   srengobj.h 
+*   srengobj.h
 *       This file contains the declaration of the CSrEngine class.
 *       This implements ISpSREngine, ISpSREngine2 and ISpObjectWithToken.
 *       This is the main recognition object
@@ -28,7 +28,7 @@ public:
         return (m_hSapiContext == hContext);
     }
 
-    CContext(SPRECOCONTEXTHANDLE hSapiContext) : 
+    CContext(SPRECOCONTEXTHANDLE hSapiContext) :
         m_hSapiContext(hSapiContext)
     {}
 
@@ -47,7 +47,7 @@ public:
     ULONG m_cchText;                // The size of the word sequence buffer
     SPTEXTSELECTIONINFO* m_pInfo; // The text selection of the word sequence buffer
 
-    CDrvGrammar(SPGRAMMARHANDLE hSapiGrammar) : 
+    CDrvGrammar(SPGRAMMARHANDLE hSapiGrammar) :
         m_hSapiGrammar(hSapiGrammar),
         m_SLMLoaded(FALSE),
         m_SLMActive(FALSE),
@@ -80,7 +80,7 @@ public:
 // The RecognizeStream thread read audio data in blocks. For each block
 // it decides if the data is speech or silence and adds that value to this queue.
 // The decoder thread reads these and processes them.
-// A critical section is used to make the queue thread-safe, and an event is used to 
+// A critical section is used to make the queue thread-safe, and an event is used to
 // show if the buffer has space or not.
 // This very roughtly simulates the idea of doing features extraction on
 // one thread and passes the feature stream to the decoder.
@@ -165,7 +165,7 @@ public:
 
 // The main CSrEngine class
 
-class ATL_NO_VTABLE CSrEngine : 
+class ATL_NO_VTABLE CSrEngine :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSrEngine, &CLSID_SampleSREngine>,
     public ISpSREngine2,
@@ -181,22 +181,22 @@ public:
         m_hQueueHasRoom(NULL),
         m_hRequestSync(NULL),
         m_LangID(0)
-        {}
+    {}
 
-DECLARE_REGISTRY_RESOURCEID(IDR_SRENG)
+    DECLARE_REGISTRY_RESOURCEID(IDR_SRENG)
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CSrEngine)
+    BEGIN_COM_MAP(CSrEngine)
     COM_INTERFACE_ENTRY(ISpSREngine)
     COM_INTERFACE_ENTRY(ISpSREngine2)
     COM_INTERFACE_ENTRY(ISpObjectWithToken)
-END_COM_MAP()
+    END_COM_MAP()
 
 private:
     HANDLE                          m_hRequestSync;
     CFrameQueue                     m_FrameQueue;
-    ULONG                           m_cBlahBlah;    
+    ULONG                           m_cBlahBlah;
     CSpBasicQueue<CDrvGrammar>      m_GrammarList;
     CSpBasicQueue<CContext>         m_ContextList;
     ULONG                           m_ulNextGrammarIndex;
@@ -281,17 +281,17 @@ public:
         return E_NOTIMPL;
     }
 
-    STDMETHODIMP SetProprietaryRuleState(void * pvEngineGrammar, 
-                                    const WCHAR * pszName,
-                                    void * pvReserved,
-                                    SPRULESTATE NewState,
-                                    ULONG * pcRulesChanged)
+    STDMETHODIMP SetProprietaryRuleState(void * pvEngineGrammar,
+                                         const WCHAR * pszName,
+                                         void * pvReserved,
+                                         SPRULESTATE NewState,
+                                         ULONG * pcRulesChanged)
     {
         return E_NOTIMPL;
     }
-    STDMETHODIMP SetProprietaryRuleIdState(void * pvEngineGrammar, 
-                                      DWORD dwRuleId,
-                                      SPRULESTATE NewState)
+    STDMETHODIMP SetProprietaryRuleIdState(void * pvEngineGrammar,
+                                           DWORD dwRuleId,
+                                           SPRULESTATE NewState)
     {
         return E_NOTIMPL;
     }
@@ -318,7 +318,7 @@ public:
     STDMETHODIMP IsPronounceable(void *pDrvGrammar, const WCHAR *pszWord, SPWORDPRONOUNCEABLE * pWordPronounceable);
     STDMETHODIMP SetWordSequenceData(void * pvEngineGrammar, const WCHAR * pText, ULONG cchText, const SPTEXTSELECTIONINFO * pInfo);
     STDMETHODIMP SetTextSelection(void * pvEngineGrammar, const SPTEXTSELECTIONINFO * pInfo);
-    STDMETHODIMP SetAdaptationData(void * pvEngineCtxtCookie, const WCHAR * pText, const ULONG cch);    
+    STDMETHODIMP SetAdaptationData(void * pvEngineCtxtCookie, const WCHAR * pText, const ULONG cch);
 
     // Property methods
     STDMETHODIMP SetPropertyNum( SPPROPSRC eSrc, void* pvSrcObj, const WCHAR* pName, LONG lValue );
@@ -329,9 +329,9 @@ public:
 
     // The main recognition method
     STDMETHODIMP RecognizeStream(REFGUID rguidFmtId, const WAVEFORMATEX * pWaveFormatEx,
-                            HANDLE hRequestSync, HANDLE hDataAvailable,
-                            HANDLE hExit, BOOL fNewAudioStream, BOOL fRealTimeAudio,
-                            ISpObjectToken * pAudioObjectToken);
+                                 HANDLE hRequestSync, HANDLE hDataAvailable,
+                                 HANDLE hExit, BOOL fNewAudioStream, BOOL fRealTimeAudio,
+                                 ISpObjectToken * pAudioObjectToken);
 
     STDMETHODIMP PrivateCall(void * pvEngineContext, void * pCallFrame, ULONG ulCallFrameSize);
     STDMETHODIMP PrivateCallEx(void * pvEngineContext, const void * pInCallFrame, ULONG ulCallFrameSize,
@@ -351,57 +351,57 @@ public:
     STDMETHODIMP ThreadProc( void *pvTaskData, HANDLE hExitThreadEvent, HANDLE hNotifyEvent, HWND hwndWorker, volatile const BOOL * pfContinueProcessing );
 
     // ISpSREngine2 methods
-    STDMETHODIMP PrivateCallImmediate( 
-            void *pvEngineContext,
-            const void *pInCallFrame,
-            ULONG ulInCallFrameSize,
-            void **ppvCoMemResponse,
-            ULONG *pulResponseSize);
-        
-    STDMETHODIMP SetAdaptationData2( 
-            void *pvEngineContext,
-            __in_ecount(cch)  const WCHAR *pAdaptationData,
-            const ULONG cch,
-            LPCWSTR pTopicName,
-            SPADAPTATIONSETTINGS eSettings,
-            SPADAPTATIONRELEVANCE eRelevance);
-        
-    STDMETHODIMP SetGrammarPrefix( 
-            void *pvEngineGrammar,
-            __in_opt  LPCWSTR pszPrefix,
-            BOOL fIsPrefixRequired);
-        
-    STDMETHODIMP SetRulePriority( 
-            SPRULEHANDLE hRule,
-            void *pvClientRuleContext,
-            int nRulePriority);
-        
-    STDMETHODIMP EmulateRecognition( 
-            ISpPhrase *pPhrase,
-            DWORD dwCompareFlags);
-        
-    STDMETHODIMP SetSLMWeight( 
-            void *pvEngineGrammar,
-            float flWeight);
-        
-    STDMETHODIMP SetRuleWeight( 
-            SPRULEHANDLE hRule,
-            void *pvClientRuleContext,
-            float flWeight);
-        
-    STDMETHODIMP SetTrainingState( 
-            BOOL fDoingTraining,
-            BOOL fAdaptFromTrainingData);
-        
+    STDMETHODIMP PrivateCallImmediate(
+        void *pvEngineContext,
+        const void *pInCallFrame,
+        ULONG ulInCallFrameSize,
+        void **ppvCoMemResponse,
+        ULONG *pulResponseSize);
+
+    STDMETHODIMP SetAdaptationData2(
+        void *pvEngineContext,
+        __in_ecount(cch)  const WCHAR *pAdaptationData,
+        const ULONG cch,
+        LPCWSTR pTopicName,
+        SPADAPTATIONSETTINGS eSettings,
+        SPADAPTATIONRELEVANCE eRelevance);
+
+    STDMETHODIMP SetGrammarPrefix(
+        void *pvEngineGrammar,
+        __in_opt  LPCWSTR pszPrefix,
+        BOOL fIsPrefixRequired);
+
+    STDMETHODIMP SetRulePriority(
+        SPRULEHANDLE hRule,
+        void *pvClientRuleContext,
+        int nRulePriority);
+
+    STDMETHODIMP EmulateRecognition(
+        ISpPhrase *pPhrase,
+        DWORD dwCompareFlags);
+
+    STDMETHODIMP SetSLMWeight(
+        void *pvEngineGrammar,
+        float flWeight);
+
+    STDMETHODIMP SetRuleWeight(
+        SPRULEHANDLE hRule,
+        void *pvClientRuleContext,
+        float flWeight);
+
+    STDMETHODIMP SetTrainingState(
+        BOOL fDoingTraining,
+        BOOL fAdaptFromTrainingData);
+
     STDMETHODIMP ResetAcousticModelAdaptation( void);
-        
-    STDMETHODIMP OnLoadCFG( 
-            void *pvEngineGrammar,
-            const SPBINARYGRAMMAR *pGrammarData,
-            ULONG ulGrammarID);
-        
-    STDMETHODIMP OnUnloadCFG( 
-            void *pvEngineGrammar,
-            ULONG ulGrammarID);
+
+    STDMETHODIMP OnLoadCFG(
+        void *pvEngineGrammar,
+        const SPBINARYGRAMMAR *pGrammarData,
+        ULONG ulGrammarID);
+
+    STDMETHODIMP OnUnloadCFG(
+        void *pvEngineGrammar,
+        ULONG ulGrammarID);
 };
 

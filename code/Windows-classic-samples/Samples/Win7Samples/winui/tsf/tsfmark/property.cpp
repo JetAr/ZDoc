@@ -1,4 +1,4 @@
-//
+﻿//
 // property.cpp
 //
 // Property code.
@@ -37,18 +37,18 @@ public:
     {
         switch (_ulCallback)
         {
-            case VIEW_CASE_PROPERTY:
-                _pMark->_ViewCaseProperty(ec, _pContext);
-                break;
-            case SET_CASE_PROPERTY:
-                _pMark->_SetCaseProperty(ec, _pContext);
-                break;
-            case VIEW_CUSTOM_PROPERTY:
-                _pMark->_ViewCustomProperty(ec, _pContext);
-                break;
-            case SET_CUSTOM_PROPERTY:
-                _pMark->_SetCustomProperty(ec, _pContext);
-                break;
+        case VIEW_CASE_PROPERTY:
+            _pMark->_ViewCaseProperty(ec, _pContext);
+            break;
+        case SET_CASE_PROPERTY:
+            _pMark->_SetCaseProperty(ec, _pContext);
+            break;
+        case VIEW_CUSTOM_PROPERTY:
+            _pMark->_ViewCustomProperty(ec, _pContext);
+            break;
+        case SET_CUSTOM_PROPERTY:
+            _pMark->_SetCustomProperty(ec, _pContext);
+            break;
         }
         return S_OK;
     }
@@ -125,7 +125,7 @@ void CMarkTextService::_SetCaseProperty(TfEditCookie ec, ITfContext *pContext)
 
     // get the selection
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-        cFetched != 1)
+            cFetched != 1)
     {
         // no selection or something went wrong
         tfSelection.range = NULL;
@@ -162,7 +162,7 @@ void CMarkTextService::_SetCaseProperty(TfEditCookie ec, ITfContext *pContext)
         if (pRangeChar->Collapse(ec, TF_ANCHOR_END) != S_OK)
             break;
     }
-    
+
     pRangeChar->Release();
 
 Exit:
@@ -181,7 +181,7 @@ Exit:
 //
 //      static compact, per character
 //      VT_I4, !0 => character is within 'A' - 'Z', 0 => anything else.
-//      
+//
 //----------------------------------------------------------------------------
 
 /* static */
@@ -212,7 +212,7 @@ void CMarkTextService::_ViewCaseProperty(TfEditCookie ec, ITfContext *pContext)
 
     // get the selection
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-        cFetched != 1)
+            cFetched != 1)
     {
         // no selection or something went wrong
         tfSelection.range = NULL;
@@ -240,22 +240,22 @@ void CMarkTextService::_ViewCaseProperty(TfEditCookie ec, ITfContext *pContext)
 
         switch (pCaseProperty->GetValue(ec, tfSelection.range, &varValue))
         {
-            case S_OK:
-                // the property value has been set, use it
-                // 'U' --> uppercase
-                // 'L' --> lowercase
-                _achDisplayPropertyText[i] = varValue.lVal ? 'U' : 'L';
-                break;
-            case S_FALSE:
-                // no property value set, varValue.vt == VT_EMPTY
-                // '?' --> no value
-                _achDisplayPropertyText[i] = '?';
-                break;
-            default:
-                // error
-                // '!' --> error
-                _achDisplayPropertyText[i] = '!';
-                break;
+        case S_OK:
+            // the property value has been set, use it
+            // 'U' --> uppercase
+            // 'L' --> lowercase
+            _achDisplayPropertyText[i] = varValue.lVal ? 'U' : 'L';
+            break;
+        case S_FALSE:
+            // no property value set, varValue.vt == VT_EMPTY
+            // '?' --> no value
+            _achDisplayPropertyText[i] = '?';
+            break;
+        default:
+            // error
+            // '!' --> error
+            _achDisplayPropertyText[i] = '!';
+            break;
         }
     }
     for (; i<cchRead; i++) // error case
@@ -315,7 +315,7 @@ void CMarkTextService::_ViewCustomProperty(TfEditCookie ec, ITfContext *pContext
 
     // get the selection
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-        cFetched != 1)
+            cFetched != 1)
     {
         // no selection or something went wrong
         pSelRange = NULL;
@@ -340,33 +340,33 @@ void CMarkTextService::_ViewCustomProperty(TfEditCookie ec, ITfContext *pContext
 
     switch (hr)
     {
-        case S_OK:
-            // there's a value at the selection start anchor
-            // let's find out exactly what text is covered
-            _achDisplayText[0] = '\0';
-            if (pCustomProperty->FindRange(ec, pSelRange, &pPropertySpanRange, TF_ANCHOR_START) == S_OK)
+    case S_OK:
+        // there's a value at the selection start anchor
+        // let's find out exactly what text is covered
+        _achDisplayText[0] = '\0';
+        if (pCustomProperty->FindRange(ec, pSelRange, &pPropertySpanRange, TF_ANCHOR_START) == S_OK)
+        {
+            if (pPropertySpanRange->GetText(ec, 0, _achDisplayText, ARRAYSIZE(_achDisplayText)-1, &cchRead) != S_OK)
             {
-                if (pPropertySpanRange->GetText(ec, 0, _achDisplayText, ARRAYSIZE(_achDisplayText)-1, &cchRead) != S_OK)
-                {
-                    cchRead = 0;
-                }
-                _achDisplayText[cchRead] = '\0';
-                // let's update the selection to give the user feedback
-                tfSelection.range = pPropertySpanRange;
-                pContext->SetSelection(ec, 1, &tfSelection);
-                pPropertySpanRange->Release();
+                cchRead = 0;
             }
-            // write the value
-            swprintf_s(_achDisplayPropertyText, ARRAYSIZE(_achDisplayPropertyText), L"%i", varValue.lVal);
-            break;
+            _achDisplayText[cchRead] = '\0';
+            // let's update the selection to give the user feedback
+            tfSelection.range = pPropertySpanRange;
+            pContext->SetSelection(ec, 1, &tfSelection);
+            pPropertySpanRange->Release();
+        }
+        // write the value
+        swprintf_s(_achDisplayPropertyText, ARRAYSIZE(_achDisplayPropertyText), L"%i", varValue.lVal);
+        break;
 
-        case S_FALSE:
-            // the property has no value, varValue.vt == VT_EMPTY
-            _achDisplayText[0] = '\0';
-            wcscpy_s(_achDisplayPropertyText, ARRAYSIZE(_achDisplayPropertyText), L"- No Value -");
-            break;
-        default:
-            goto Exit; // error
+    case S_FALSE:
+        // the property has no value, varValue.vt == VT_EMPTY
+        _achDisplayText[0] = '\0';
+        wcscpy_s(_achDisplayPropertyText, ARRAYSIZE(_achDisplayPropertyText), L"- No Value -");
+        break;
+    default:
+        goto Exit; // error
     }
 
     // we can't change the focus while holding a lock
@@ -449,36 +449,36 @@ LRESULT CALLBACK CMarkTextService::_WorkerWndProc(HWND hWnd, UINT uMsg, WPARAM w
 
     switch (uMsg)
     {
-        case WM_CREATE:
-            // save the this pointer we originally passed into CreateWindow
-            SetWindowLongPtr(hWnd, GWLP_USERDATA, 
-                             (LONG_PTR)((CREATESTRUCT *)lParam)->lpCreateParams);
-            return 0;
+    case WM_CREATE:
+        // save the this pointer we originally passed into CreateWindow
+        SetWindowLongPtr(hWnd, GWLP_USERDATA,
+                         (LONG_PTR)((CREATESTRUCT *)lParam)->lpCreateParams);
+        return 0;
 
-        case WM_DISPLAY_PROPERTY:
-            _this = (CMarkTextService *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+    case WM_DISPLAY_PROPERTY:
+        _this = (CMarkTextService *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-            // bring up a message box with the contents of _achDisplayText
-            
-            // first, convert from unicode
-            cch = WideCharToMultiByte(CP_ACP, 0, _this->_achDisplayText, wcslen(_this->_achDisplayText),
-                                      achText, ARRAYSIZE(achText)-1, NULL, NULL);
+        // bring up a message box with the contents of _achDisplayText
 
-            if (cch < ARRAYSIZE(achText) - 1)
-            {
-                achText[cch++] = '\n';
-            }
-            if (cch < ARRAYSIZE(achText) - 1)
-            {
-                cch += WideCharToMultiByte(CP_ACP, 0, _this->_achDisplayPropertyText, wcslen(_this->_achDisplayPropertyText),
-                                           achText+cch, ARRAYSIZE(achText)-cch-1, NULL, NULL);
-            }
-            achText[cch] = '\0';
+        // first, convert from unicode
+        cch = WideCharToMultiByte(CP_ACP, 0, _this->_achDisplayText, wcslen(_this->_achDisplayText),
+                                  achText, ARRAYSIZE(achText)-1, NULL, NULL);
 
-            // bring up the display
-            MessageBoxA(NULL, achText, "Property View", MB_OK);
+        if (cch < ARRAYSIZE(achText) - 1)
+        {
+            achText[cch++] = '\n';
+        }
+        if (cch < ARRAYSIZE(achText) - 1)
+        {
+            cch += WideCharToMultiByte(CP_ACP, 0, _this->_achDisplayPropertyText, wcslen(_this->_achDisplayPropertyText),
+                                       achText+cch, ARRAYSIZE(achText)-cch-1, NULL, NULL);
+        }
+        achText[cch] = '\0';
 
-            return 0;
+        // bring up the display
+        MessageBoxA(NULL, achText, "Property View", MB_OK);
+
+        return 0;
     }
 
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -517,7 +517,7 @@ void CMarkTextService::_SetCustomProperty(TfEditCookie ec, ITfContext *pContext)
 
     // get the selection
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-        cFetched != 1)
+            cFetched != 1)
     {
         // no selection or something went wrong
         tfSelection.range = NULL;

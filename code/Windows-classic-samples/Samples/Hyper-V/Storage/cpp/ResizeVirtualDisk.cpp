@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@
 // This sample demonstrates how to resize (shrink or expand) a VHD/VHDX.
 //
 // The VHD/VHDX can not be in use while performing this operation.
-// 
+//
 
 DWORD
 SampleResizeVirtualDisk(
@@ -36,7 +36,7 @@ SampleResizeVirtualDisk(
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -48,17 +48,17 @@ SampleResizeVirtualDisk(
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
     // OPEN_VIRTUAL_DISK_FLAG_NONE bypasses any special handling of the open.
     //
-    
+
     memset(&openParameters, 0, sizeof(openParameters));
     openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
-    
+
     opStatus = OpenVirtualDisk(
-        &storageType,
-        VirtualDiskPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NONE,
-        &openParameters,
-        &vhdHandle);
+                   &storageType,
+                   VirtualDiskPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NONE,
+                   &openParameters,
+                   &vhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -79,10 +79,10 @@ SampleResizeVirtualDisk(
     resizeParameters.Version1.NewSize = FileSize;
 
     opStatus = ResizeVirtualDisk(
-        vhdHandle,
-        RESIZE_VIRTUAL_DISK_FLAG_NONE,
-        &resizeParameters,
-        NULL);
+                   vhdHandle,
+                   RESIZE_VIRTUAL_DISK_FLAG_NONE,
+                   &resizeParameters,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -99,11 +99,11 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);
     }
 
     return opStatus;
- }
+}

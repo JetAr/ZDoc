@@ -26,8 +26,8 @@ class RenderTarget;
 // Intermediate render target for UI to draw to either a D2D or GDI surface.
 class DECLSPEC_UUID("4327AC14-3172-4807-BF40-02C7475A2520") RenderTarget
     :   public ComBase<
-            QiListSelf<RenderTarget,
-            QiList<IDWriteTextRenderer>
+        QiListSelf<RenderTarget,
+        QiList<IDWriteTextRenderer>
         > >
 {
 public:
@@ -47,7 +47,7 @@ public:
     virtual void DrawTextLayout(
         IDWriteTextLayout* textLayout,
         const RectF& rect
-        ) = NULL;
+    ) = NULL;
 
     // Draws a single image, from the given coordinates, to the given coordinates.
     // If the height and width differ, they will be scaled, but mirroring must be
@@ -56,12 +56,12 @@ public:
         IWICBitmapSource* image,
         const RectF& sourceRect,  // where in source atlas texture
         const RectF& destRect     // where on display to draw it
-        ) = NULL;
+    ) = NULL;
 
     virtual void FillRectangle(
         const RectF& destRect,
         const DrawingEffect& drawingEffect
-        ) = NULL;
+    ) = NULL;
 
 protected:
     // This context is not persisted, only existing on the stack as it
@@ -71,8 +71,8 @@ protected:
     struct Context
     {
         Context(RenderTarget* initialTarget, IUnknown* initialDrawingEffect)
-        :   target(initialTarget),
-            drawingEffect(initialDrawingEffect)
+            :   target(initialTarget),
+                drawingEffect(initialDrawingEffect)
         { }
 
         // short lived weak pointers
@@ -115,18 +115,18 @@ public:
     virtual void DrawTextLayout(
         IDWriteTextLayout* textLayout,
         const RectF& rect
-        );
+    );
 
     virtual void DrawImage(
         IWICBitmapSource* image,
         const RectF& sourceRect,  // where in source atlas texture
         const RectF& destRect     // where on display to draw it
-        );
+    );
 
     void FillRectangle(
         const RectF& destRect,
         const DrawingEffect& drawingEffect
-        );
+    );
 
     // IDWriteTextRenderer implementation
 
@@ -138,7 +138,7 @@ public:
         const DWRITE_GLYPH_RUN* glyphRun,
         const DWRITE_GLYPH_RUN_DESCRIPTION* glyphRunDescription,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawUnderline)(
         void* clientDrawingContext,
@@ -146,7 +146,7 @@ public:
         FLOAT baselineOriginY,
         const DWRITE_UNDERLINE* underline,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawStrikethrough)(
         void* clientDrawingContext,
@@ -154,7 +154,7 @@ public:
         FLOAT baselineOriginY,
         const DWRITE_STRIKETHROUGH* strikethrough,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawInlineObject)(
         void* clientDrawingContext,
@@ -164,30 +164,30 @@ public:
         BOOL isSideways,
         BOOL isRightToLeft,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(IsPixelSnappingDisabled)(
         void* clientDrawingContext,
         OUT BOOL* isDisabled
-        );
+    );
 
     IFACEMETHOD(GetCurrentTransform)(
         void* clientDrawingContext,
         OUT DWRITE_MATRIX* transform
-        );
+    );
 
     IFACEMETHOD(GetPixelsPerDip)(
         void* clientDrawingContext,
         OUT FLOAT* pixelsPerDip
-        );
+    );
 
 public:
     // For cached images, to avoid needing to recreate the textures each draw call.
     struct ImageCacheEntry
     {
         ImageCacheEntry(IWICBitmapSource* initialOriginal, ID2D1Bitmap* initialConverted)
-        :   original(SafeAcquire(initialOriginal)),
-            converted(SafeAcquire(initialConverted))
+            :   original(SafeAcquire(initialOriginal)),
+                converted(SafeAcquire(initialConverted))
         { }
 
         ImageCacheEntry(const ImageCacheEntry& b)
@@ -259,18 +259,18 @@ public:
     virtual void DrawTextLayout(
         IDWriteTextLayout* textLayout,
         const RectF& rect
-        );
+    );
 
     virtual void DrawImage(
         IWICBitmapSource* image,
         const RectF& sourceRect,  // where in source atlas texture
         const RectF& destRect     // where on display to draw it
-        );
+    );
 
     void FillRectangle(
         const RectF& destRect,
         const DrawingEffect& drawingEffect
-        );
+    );
 
     // IDWriteTextRenderer implementation
 
@@ -282,7 +282,7 @@ public:
         const DWRITE_GLYPH_RUN* glyphRun,
         const DWRITE_GLYPH_RUN_DESCRIPTION* glyphRunDescription,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawUnderline)(
         void* clientDrawingContext,
@@ -290,7 +290,7 @@ public:
         FLOAT baselineOriginY,
         const DWRITE_UNDERLINE* underline,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawStrikethrough)(
         void* clientDrawingContext,
@@ -298,7 +298,7 @@ public:
         FLOAT baselineOriginY,
         const DWRITE_STRIKETHROUGH* strikethrough,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(DrawInlineObject)(
         void* clientDrawingContext,
@@ -308,30 +308,30 @@ public:
         BOOL isSideways,
         BOOL isRightToLeft,
         IUnknown* clientDrawingEffect
-        );
+    );
 
     IFACEMETHOD(IsPixelSnappingDisabled)(
         void* clientDrawingContext,
         OUT BOOL* isDisabled
-        );
+    );
 
     IFACEMETHOD(GetCurrentTransform)(
         void* clientDrawingContext,
         OUT DWRITE_MATRIX* transform
-        );
+    );
 
     IFACEMETHOD(GetPixelsPerDip)(
         void* clientDrawingContext,
         OUT FLOAT* pixelsPerDip
-        );
+    );
 
 public:
     // For cached images, to avoid creating device dependent bitmaps each time.
     struct ImageCacheEntry
     {
         ImageCacheEntry(IWICBitmapSource* initialOriginal, HBITMAP initialConverted)
-        :   original(SafeAcquire(initialOriginal)),
-            converted(initialConverted)
+            :   original(SafeAcquire(initialOriginal)),
+                converted(initialConverted)
         { }
 
         ImageCacheEntry(const ImageCacheEntry& b)
@@ -372,7 +372,7 @@ protected:
         float offset,
         float thickness,
         IUnknown* clientDrawingEffect
-        );
+    );
 
 protected:
     IDWriteFactory* dwriteFactory_;

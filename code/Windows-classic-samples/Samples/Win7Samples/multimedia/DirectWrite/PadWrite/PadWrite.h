@@ -12,7 +12,7 @@
 
 
 class MainWindow
-:   public ComBase<QiList<IUnknown> >
+    :   public ComBase<QiList<IUnknown> >
 {
 public:
     MainWindow();
@@ -37,13 +37,13 @@ public:
     STDMETHODIMP CreateFontFromLOGFONT(
         const LOGFONT& logFont,
         OUT IDWriteFont** font
-        );
+    );
 
     STDMETHODIMP GetFontFamilyName(
         IDWriteFont* font,
         OUT wchar_t* fontFamilyName,
         UINT32 fontFamilyNameLength
-        );
+    );
 
 protected:
     enum RenderTargetType

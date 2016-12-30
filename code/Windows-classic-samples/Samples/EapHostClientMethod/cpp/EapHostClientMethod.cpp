@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -25,102 +25,102 @@ extern HINSTANCE  g_hInstance;
 
 VOID WINAPI EapPeerFreeErrorMemory(_In_ EAP_ERROR* pEapError)
 {
-        //Sanity Check
-        if(!pEapError)
-        {
-                // Nothing to do; exit cleanly.
-                EapTrace("EapPeerFreeErrorMemory() --- Input Parameter is NULL, exiting.");
-                goto Cleanup;
-        }
+    //Sanity Check
+    if(!pEapError)
+    {
+        // Nothing to do; exit cleanly.
+        EapTrace("EapPeerFreeErrorMemory() --- Input Parameter is NULL, exiting.");
+        goto Cleanup;
+    }
 
-        //
-        //If RootCauseString in EapError, free it.
-        //
-        if(pEapError->pRootCauseString)
-                FreeMemory((PVOID *)&(pEapError->pRootCauseString));
+    //
+    //If RootCauseString in EapError, free it.
+    //
+    if(pEapError->pRootCauseString)
+        FreeMemory((PVOID *)&(pEapError->pRootCauseString));
 
-        //
-        //If error string in EapError, free it.
-        //
-        if(pEapError->pRepairString)
-                FreeMemory((PVOID *)&(pEapError->pRepairString));
+    //
+    //If error string in EapError, free it.
+    //
+    if(pEapError->pRepairString)
+        FreeMemory((PVOID *)&(pEapError->pRepairString));
 
-        //
-        //Finally, free the EapError structure.
-        //
-        FreeMemory((PVOID *)&pEapError);
+    //
+    //Finally, free the EapError structure.
+    //
+    FreeMemory((PVOID *)&pEapError);
 
 Cleanup:
-        return;
+    return;
 }
 
 DWORD WINAPI EapPeerGetInfo(
-         _In_ EAP_TYPE* pEapType,
-         _Out_ EAP_PEER_METHOD_ROUTINES* pEapInfo,
-         _Out_opt_ EAP_ERROR** ppEapError
-         )
+    _In_ EAP_TYPE* pEapType,
+    _Out_ EAP_PEER_METHOD_ROUTINES* pEapInfo,
+    _Out_opt_ EAP_ERROR** ppEapError
+)
 {
-        DWORD retCode = NO_ERROR;
+    DWORD retCode = NO_ERROR;
 
-        if (!pEapInfo)
-        {
-            EapTrace("EapPeerGetInfo() --- pEapInfo paramters is NULL");
-            retCode = ERROR_INVALID_PARAMETER;
-            goto Cleanup;
-        }
-        ZeroMemory(pEapInfo, sizeof(EAP_PEER_METHOD_ROUTINES));
-        
-        if (!ppEapError)
-        {
-            EapTrace("EapPeerGetInfo() --- ppEapError paramters is NULL");
-            retCode = ERROR_INVALID_PARAMETER;
-            goto Cleanup;
-        }
-        *ppEapError = NULL;
-        
-        //Sanity Check
-        if(!pEapType)
-        {
-            EapTrace("EapPeerGetInfo() --- pEapType paramters is NULL");
-            retCode = ERROR_INVALID_PARAMETER;
-            goto Cleanup;
-        }
+    if (!pEapInfo)
+    {
+        EapTrace("EapPeerGetInfo() --- pEapInfo paramters is NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
+    ZeroMemory(pEapInfo, sizeof(EAP_PEER_METHOD_ROUTINES));
 
-        
-        //
-        // Verify if pEapType passed by EapHost correctly matches the EapType of this DLL.
-        //
-        if (pEapType->type != EAPTYPE)
-        {
-                EapTrace("EapPeerGetInfo() --- Input Eap Type Info does not match the supported Eap Type");
-                retCode = ERROR_NOT_SUPPORTED;
-                goto Cleanup;
-        }
+    if (!ppEapError)
+    {
+        EapTrace("EapPeerGetInfo() --- ppEapError paramters is NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
+    *ppEapError = NULL;
+
+    //Sanity Check
+    if(!pEapType)
+    {
+        EapTrace("EapPeerGetInfo() --- pEapType paramters is NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
 
 
-        //
-        // Fill the function pointers inside pEapInfo structure.
-        //
-        pEapInfo->dwVersion = VERSION;
-        //pEapInfo->pEapType = ;
-        pEapInfo->EapPeerInitialize = SdkEapPeerInitialize;
-        pEapInfo->EapPeerBeginSession = SdkEapPeerBeginSession;
+    //
+    // Verify if pEapType passed by EapHost correctly matches the EapType of this DLL.
+    //
+    if (pEapType->type != EAPTYPE)
+    {
+        EapTrace("EapPeerGetInfo() --- Input Eap Type Info does not match the supported Eap Type");
+        retCode = ERROR_NOT_SUPPORTED;
+        goto Cleanup;
+    }
 
-        // A method exports either EapPeerGetIdentity or EapPeerSetCredentials (either one of them).
-        // If EapPeerGetIdentity is exported, then EapPeerInvokeIdentityUI should also be implemented.
-        pEapInfo->EapPeerGetIdentity = SdkEapPeerGetIdentity;
-        // If EapPeerSetCredentials is exported, InvokeUserNameDlg regkey should be set.
-        pEapInfo->EapPeerSetCredentials = NULL;
 
-        pEapInfo->EapPeerProcessRequestPacket = SdkEapPeerProcessRequestPacket;
-        pEapInfo->EapPeerGetResponsePacket = SdkEapPeerGetResponsePacket;
-        pEapInfo->EapPeerGetResult = SdkEapPeerGetResult;
-        pEapInfo->EapPeerGetUIContext = SdkEapPeerGetUIContext;
-        pEapInfo->EapPeerSetUIContext = SdkEapPeerSetUIContext;
-        pEapInfo->EapPeerGetResponseAttributes = SdkEapPeerGetResponseAttributes;
-        pEapInfo->EapPeerSetResponseAttributes = SdkEapPeerSetResponseAttributes;
-        pEapInfo->EapPeerEndSession = SdkEapPeerEndSession;
-        pEapInfo->EapPeerShutdown = SdkEapPeerShutdown;
+    //
+    // Fill the function pointers inside pEapInfo structure.
+    //
+    pEapInfo->dwVersion = VERSION;
+    //pEapInfo->pEapType = ;
+    pEapInfo->EapPeerInitialize = SdkEapPeerInitialize;
+    pEapInfo->EapPeerBeginSession = SdkEapPeerBeginSession;
+
+    // A method exports either EapPeerGetIdentity or EapPeerSetCredentials (either one of them).
+    // If EapPeerGetIdentity is exported, then EapPeerInvokeIdentityUI should also be implemented.
+    pEapInfo->EapPeerGetIdentity = SdkEapPeerGetIdentity;
+    // If EapPeerSetCredentials is exported, InvokeUserNameDlg regkey should be set.
+    pEapInfo->EapPeerSetCredentials = NULL;
+
+    pEapInfo->EapPeerProcessRequestPacket = SdkEapPeerProcessRequestPacket;
+    pEapInfo->EapPeerGetResponsePacket = SdkEapPeerGetResponsePacket;
+    pEapInfo->EapPeerGetResult = SdkEapPeerGetResult;
+    pEapInfo->EapPeerGetUIContext = SdkEapPeerGetUIContext;
+    pEapInfo->EapPeerSetUIContext = SdkEapPeerSetUIContext;
+    pEapInfo->EapPeerGetResponseAttributes = SdkEapPeerGetResponseAttributes;
+    pEapInfo->EapPeerSetResponseAttributes = SdkEapPeerSetResponseAttributes;
+    pEapInfo->EapPeerEndSession = SdkEapPeerEndSession;
+    pEapInfo->EapPeerShutdown = SdkEapPeerShutdown;
 
 Cleanup:
     if(retCode != ERROR_SUCCESS)
@@ -130,176 +130,176 @@ Cleanup:
         {
             DWORD errCode = ERROR_SUCCESS;
             errCode = AllocateandFillEapError(ppEapError,
-                                        retCode,
-                                        0,
-                                        NULL, NULL, NULL,
-                                        NULL, NULL
-                                        );
+                                              retCode,
+                                              0,
+                                              NULL, NULL, NULL,
+                                              NULL, NULL
+                                             );
             if(errCode != ERROR_SUCCESS)
             {
                 //Report Error
             }
         }
     }
-        return retCode;
+    return retCode;
 }
 
 
 DWORD WINAPI SdkEapPeerInitialize(OUT EAP_ERROR** ppEapError)
 {
-        DWORD retCode = NO_ERROR;
+    DWORD retCode = NO_ERROR;
 
-        //Sanity Check
-        if( !ppEapError)
-        {
-                EapTrace("SdkEapPeerInitialize() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                goto Cleanup;
-        }
+    //Sanity Check
+    if( !ppEapError)
+    {
+        EapTrace("SdkEapPeerInitialize() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
 
-        //
-        // Initialize any resources which is required as long as this method DLL is loaded.
-        //
+    //
+    // Initialize any resources which is required as long as this method DLL is loaded.
+    //
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 DWORD WINAPI SdkEapPeerBeginSession(
-         IN DWORD dwFlags,
-         IN const EapAttributes* const pAttributeArray,
-         IN HANDLE hTokenImpersonateUser,
-         IN DWORD dwSizeofConnectionData,
-         IN BYTE* pConnectionData,
-         IN DWORD dwSizeofUserData,
-         IN BYTE* pUserData,
-         IN DWORD dwMaxSendPacketSize,
-         OUT EAP_SESSION_HANDLE* pSessionHandle,
-         OUT EAP_ERROR** ppEapError
-         )
+    IN DWORD dwFlags,
+    IN const EapAttributes* const pAttributeArray,
+    IN HANDLE hTokenImpersonateUser,
+    IN DWORD dwSizeofConnectionData,
+    IN BYTE* pConnectionData,
+    IN DWORD dwSizeofUserData,
+    IN BYTE* pUserData,
+    IN DWORD dwMaxSendPacketSize,
+    OUT EAP_SESSION_HANDLE* pSessionHandle,
+    OUT EAP_ERROR** ppEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        EAPCB* pwb    = NULL;
-        DWORD attribCount = 0;
-        EapAttribute *pEapAttrib = NULL;
-        USER_DATA_BLOB *pUserBlob = NULL;
+    DWORD retCode = NO_ERROR;
+    EAPCB* pwb    = NULL;
+    DWORD attribCount = 0;
+    EapAttribute *pEapAttrib = NULL;
+    USER_DATA_BLOB *pUserBlob = NULL;
 
-        // The user data should contain User Name and Password.
-        WCHAR* pPassword = NULL;
-        WCHAR* pUserIdentity = NULL;
+    // The user data should contain User Name and Password.
+    WCHAR* pPassword = NULL;
+    WCHAR* pUserIdentity = NULL;
 
-        //Sanity Check
-        if( !pSessionHandle || !ppEapError)
+    //Sanity Check
+    if( !pSessionHandle || !ppEapError)
+    {
+        EapTrace("EapPeerBeginSession() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
+
+    //
+    // Allocate work buffer. This will remain for the entire session. In each API after BeginSession,
+    // the buffer will be passed as EAP_SESSION_HANDLE.
+    //
+    retCode = AllocateMemory(sizeof(EAPCB), (PVOID*)&pwb);
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
+
+    //
+    // Save information passed in, will be used later
+    //
+    pwb->pWorkBuffer      = (PVOID)pwb;
+    pwb->fFlags                = dwFlags;
+    pwb->EapState           = MYSTATE_Initial;
+    pwb->hTokenImpersonateUser = hTokenImpersonateUser;
+    pwb->dwMaxSendPacketSize = dwMaxSendPacketSize;
+    pwb->ClientOK = FALSE;
+
+    //
+    // Save the Connection Data.
+    //
+    if(pConnectionData != NULL)
+    {
+        pwb->dwSizeofConnectionData = dwSizeofConnectionData;
+        retCode = AllocateMemory(dwSizeofConnectionData, (PVOID *)&(pwb->pConnectionData));
+        if(retCode != NO_ERROR)
         {
-                EapTrace("EapPeerBeginSession() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
+            goto Cleanup;
+        }
+        CopyMemory(pwb->pConnectionData, pConnectionData, dwSizeofConnectionData);
+    }
+
+    // Save the User Data in
+    if ((NULL != pUserData) && (sizeof(USER_DATA_BLOB) == dwSizeofUserData))
+    {
+        pUserBlob = (USER_DATA_BLOB*)pUserData;
+        pUserIdentity = pUserBlob->eapUserNamePassword.awszIdentity;
+        pPassword = pUserBlob->eapUserNamePassword.awszPassword;
+
+        pwb->dwSizeofUserData = dwSizeofUserData;
+        retCode = AllocateMemory(dwSizeofUserData, (PVOID *)&(pwb->pUserData));
+        if(retCode != NO_ERROR)
+        {
+            // allocate memory failed. Need to fill the EapError.
+            goto Cleanup;
+        }
+        CopyMemory(pwb->pUserData, pUserData, dwSizeofUserData);
+    }
+
+    // If username field is present, store it.
+    if (pUserIdentity)
+    {
+        WideCharToMultiByte(
+            CP_ACP,
+            NO_FLAGS,
+            pUserIdentity,
+            AUTOMATIC_STRING_LENGTH,
+            pwb->aszIdentity,
+            UNLEN + 1,
+            NULL,
+            NULL );
+    }
+
+    // If password field is present, store it.
+    if (pPassword)
+    {
+        WideCharToMultiByte(
+            CP_ACP,
+            NO_FLAGS,
+            pPassword,
+            AUTOMATIC_STRING_LENGTH,
+            pwb->aszPassword,
+            PWLEN + 1,
+            NULL,
+            NULL );
+    }
+
+    if(pAttributeArray != NULL)
+    {
+        retCode = AllocateAttributes(pAttributeArray->dwNumberOfAttributes, &(pwb->pEapAttributes));
+        if(retCode != NO_ERROR)
+        {
+            // AllocateAttributes() reported the error. Need to fill the EapError.
+            goto Cleanup;
+        }
+
+        for(attribCount = 0; attribCount < pwb->pEapAttributes->dwNumberOfAttributes; attribCount++)
+        {
+            pEapAttrib = &((pAttributeArray->pAttribs)[attribCount]);
+            retCode = AddAttribute(pwb->pEapAttributes, pEapAttrib->eaType, pEapAttrib->dwLength, pEapAttrib->pValue);
+            if(retCode != NO_ERROR)
+            {
+                // AddAttribute() reported the error. Need to fill the EapError.
                 goto Cleanup;
+            }
         }
+    }
 
-        //
-        // Allocate work buffer. This will remain for the entire session. In each API after BeginSession,
-        // the buffer will be passed as EAP_SESSION_HANDLE.
-        //
-        retCode = AllocateMemory(sizeof(EAPCB), (PVOID*)&pwb);
-        if (retCode != NO_ERROR)
-        {
-                goto Cleanup;
-        }
-
-        //
-        // Save information passed in, will be used later
-        //
-        pwb->pWorkBuffer      = (PVOID)pwb;
-        pwb->fFlags                = dwFlags;
-        pwb->EapState           = MYSTATE_Initial;
-        pwb->hTokenImpersonateUser = hTokenImpersonateUser;
-        pwb->dwMaxSendPacketSize = dwMaxSendPacketSize;
-        pwb->ClientOK = FALSE;
-
-        //
-        // Save the Connection Data.
-        //
-        if(pConnectionData != NULL)
-        {
-                pwb->dwSizeofConnectionData = dwSizeofConnectionData;
-                retCode = AllocateMemory(dwSizeofConnectionData, (PVOID *)&(pwb->pConnectionData));
-                if(retCode != NO_ERROR)
-                {
-                        goto Cleanup;
-                }
-                CopyMemory(pwb->pConnectionData, pConnectionData, dwSizeofConnectionData);
-        }
-
-        // Save the User Data in
-        if ((NULL != pUserData) && (sizeof(USER_DATA_BLOB) == dwSizeofUserData))
-        {
-                pUserBlob = (USER_DATA_BLOB*)pUserData;
-                pUserIdentity = pUserBlob->eapUserNamePassword.awszIdentity;
-                pPassword = pUserBlob->eapUserNamePassword.awszPassword;
-
-                pwb->dwSizeofUserData = dwSizeofUserData;
-                retCode = AllocateMemory(dwSizeofUserData, (PVOID *)&(pwb->pUserData));
-                if(retCode != NO_ERROR)
-                {
-                        // allocate memory failed. Need to fill the EapError.
-                        goto Cleanup;
-                }
-                CopyMemory(pwb->pUserData, pUserData, dwSizeofUserData);
-        }
-
-        // If username field is present, store it.
-        if (pUserIdentity)
-        {
-                WideCharToMultiByte(
-                                        CP_ACP,
-                                        NO_FLAGS,
-                                        pUserIdentity,
-                                        AUTOMATIC_STRING_LENGTH,
-                                        pwb->aszIdentity,
-                                        UNLEN + 1,
-                                        NULL,
-                                        NULL );
-        }
-
-        // If password field is present, store it.
-        if (pPassword)
-        {
-                WideCharToMultiByte(
-                                        CP_ACP,
-                                        NO_FLAGS,
-                                        pPassword,
-                                        AUTOMATIC_STRING_LENGTH,
-                                        pwb->aszPassword,
-                                        PWLEN + 1,
-                                        NULL,
-                                        NULL );
-        }
-
-        if(pAttributeArray != NULL)
-        {
-                retCode = AllocateAttributes(pAttributeArray->dwNumberOfAttributes, &(pwb->pEapAttributes));
-                if(retCode != NO_ERROR)
-                {
-                        // AllocateAttributes() reported the error. Need to fill the EapError.
-                        goto Cleanup;
-                }
-
-                for(attribCount = 0; attribCount < pwb->pEapAttributes->dwNumberOfAttributes; attribCount++)
-                {
-                        pEapAttrib = &((pAttributeArray->pAttribs)[attribCount]);
-                        retCode = AddAttribute(pwb->pEapAttributes, pEapAttrib->eaType, pEapAttrib->dwLength, pEapAttrib->pValue);
-                        if(retCode != NO_ERROR)
-                        {
-                                // AddAttribute() reported the error. Need to fill the EapError.
-                                goto Cleanup;
-                        }
-                }
-        }
-
-        // Return the Session Handle.
-        *pSessionHandle = (VOID *)pwb;
+    // Return the Session Handle.
+    *pSessionHandle = (VOID *)pwb;
 
 Cleanup:
-        if(retCode != ERROR_SUCCESS)
+    if(retCode != ERROR_SUCCESS)
     {
         if(pwb)
         {
@@ -314,11 +314,11 @@ Cleanup:
         {
             DWORD errCode = ERROR_SUCCESS;
             errCode = AllocateandFillEapError(ppEapError,
-                                        retCode,
-                                        0,
-                                        NULL, NULL, NULL,
-                                        NULL, NULL
-                                        );
+                                              retCode,
+                                              0,
+                                              NULL, NULL, NULL,
+                                              NULL, NULL
+                                             );
             if(errCode != ERROR_SUCCESS)
             {
                 //Report Error
@@ -326,353 +326,353 @@ Cleanup:
         }
     }
 
-        return retCode;
+    return retCode;
 }
 
 DWORD WINAPI SdkEapPeerGetIdentity(
-        IN    DWORD flags,
-        IN    DWORD dwSizeofConnectionData,
-        IN    const BYTE* pConnectionData,
-        IN    DWORD dwSizeofUserData,
-        IN    const BYTE* pUserData,
-        IN HANDLE hTokenImpersonateUser,
-        OUT BOOL* pfInvokeUI,
-        IN OUT DWORD* pdwSizeOfUserDataOut,
-        OUT BYTE** ppUserDataOut,
-        OUT _Out_opt_ LPWSTR* ppwszIdentity,
-        OUT EAP_ERROR** ppEapError
-         )
+    IN    DWORD flags,
+    IN    DWORD dwSizeofConnectionData,
+    IN    const BYTE* pConnectionData,
+    IN    DWORD dwSizeofUserData,
+    IN    const BYTE* pUserData,
+    IN HANDLE hTokenImpersonateUser,
+    OUT BOOL* pfInvokeUI,
+    IN OUT DWORD* pdwSizeOfUserDataOut,
+    OUT BYTE** ppUserDataOut,
+    OUT _Out_opt_ LPWSTR* ppwszIdentity,
+    OUT EAP_ERROR** ppEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        USER_DATA_BLOB* pUserBlob = NULL;
-        size_t  lenIdentity = 0;
-        WCHAR* pwszIdentity    = NULL;
-        HRESULT hr = S_OK;
+    DWORD retCode = NO_ERROR;
+    USER_DATA_BLOB* pUserBlob = NULL;
+    size_t  lenIdentity = 0;
+    WCHAR* pwszIdentity    = NULL;
+    HRESULT hr = S_OK;
 
-        if (!ppwszIdentity)
-        {
-            EapTrace("SdkEapPeerGetIdentity() --- ppwszIdentity paramters is NULL");
-            retCode = ERROR_INVALID_PARAMETER;
-            // Need to fill the EapError
-            goto Cleanup;
-        }
-        *ppwszIdentity = NULL;
-        
-        if(!pfInvokeUI || !ppEapError)
-        {
-                EapTrace("SdkEapPeerGetIdentity() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    if (!ppwszIdentity)
+    {
+        EapTrace("SdkEapPeerGetIdentity() --- ppwszIdentity paramters is NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+    *ppwszIdentity = NULL;
 
-        UNREFERENCED_PARAMETER(flags);
-        UNREFERENCED_PARAMETER(dwSizeofConnectionData);
-        UNREFERENCED_PARAMETER(pConnectionData);
-        //
-        // hTokenImpersonateUser can be used for retreiving the user related information.
-        // Sample Eap Method does not use this parameter as it does not require any impersonation.
-        //
-        UNREFERENCED_PARAMETER(hTokenImpersonateUser);
+    if(!pfInvokeUI || !ppEapError)
+    {
+        EapTrace("SdkEapPeerGetIdentity() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+
+    UNREFERENCED_PARAMETER(flags);
+    UNREFERENCED_PARAMETER(dwSizeofConnectionData);
+    UNREFERENCED_PARAMETER(pConnectionData);
+    //
+    // hTokenImpersonateUser can be used for retreiving the user related information.
+    // Sample Eap Method does not use this parameter as it does not require any impersonation.
+    //
+    UNREFERENCED_PARAMETER(hTokenImpersonateUser);
 
 
-        //
-        // If UserData is not present, need to ask EapHost to raise the IdentityUI.
-        // Therefore, set pfInvokeUI = true.
-        //
-        if(dwSizeofUserData == 0)
-        {
-            *pfInvokeUI = TRUE;
-            goto Cleanup;
-        }
+    //
+    // If UserData is not present, need to ask EapHost to raise the IdentityUI.
+    // Therefore, set pfInvokeUI = true.
+    //
+    if(dwSizeofUserData == 0)
+    {
+        *pfInvokeUI = TRUE;
+        goto Cleanup;
+    }
 
-        //
-        // Size of UserData should be equal to sizeof(USER_DATA_BLOB), else incorrect
-        // user data.
-        //
-        if((pUserData == NULL) || (dwSizeofUserData != sizeof(USER_DATA_BLOB)))
-        {
-                EapTrace("SdkEapPeerGetIdentity() --- Incorrect Input User Blob");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    //
+    // Size of UserData should be equal to sizeof(USER_DATA_BLOB), else incorrect
+    // user data.
+    //
+    if((pUserData == NULL) || (dwSizeofUserData != sizeof(USER_DATA_BLOB)))
+    {
+        EapTrace("SdkEapPeerGetIdentity() --- Incorrect Input User Blob");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        //
-        // Allocate Memory for OUT parameters.
-        //
-        retCode = AllocateMemory(sizeof(USER_DATA_BLOB), (PVOID*)&pUserBlob);
-        if (retCode != NO_ERROR)
-        {
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    //
+    // Allocate Memory for OUT parameters.
+    //
+    retCode = AllocateMemory(sizeof(USER_DATA_BLOB), (PVOID*)&pUserBlob);
+    if (retCode != NO_ERROR)
+    {
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        lenIdentity = (UNLEN+1) * sizeof(WCHAR);
-        retCode = AllocateMemory((DWORD)lenIdentity, (PVOID*)&pwszIdentity);
-        if (retCode != NO_ERROR)
-        {
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    lenIdentity = (UNLEN+1) * sizeof(WCHAR);
+    retCode = AllocateMemory((DWORD)lenIdentity, (PVOID*)&pwszIdentity);
+    if (retCode != NO_ERROR)
+    {
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        //
-        // Assign the output parameters their respective values.
-        //
-        CopyMemory(pUserBlob, pUserData, sizeof(USER_DATA_BLOB));
-        hr = StringCbCopyW(pwszIdentity,
-                           lenIdentity,
-                           pUserBlob->eapUserNamePassword.awszIdentity);
-        if (FAILED(hr))
-        {
-                retCode = HRESULT_CODE(hr);
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    //
+    // Assign the output parameters their respective values.
+    //
+    CopyMemory(pUserBlob, pUserData, sizeof(USER_DATA_BLOB));
+    hr = StringCbCopyW(pwszIdentity,
+                       lenIdentity,
+                       pUserBlob->eapUserNamePassword.awszIdentity);
+    if (FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        //
-        // Set the OUT paramters
-        //
-        *ppUserDataOut = (BYTE *)pUserBlob;
-        *pdwSizeOfUserDataOut = sizeof(USER_DATA_BLOB);
-        *ppwszIdentity = pwszIdentity;
+    //
+    // Set the OUT paramters
+    //
+    *ppUserDataOut = (BYTE *)pUserBlob;
+    *pdwSizeOfUserDataOut = sizeof(USER_DATA_BLOB);
+    *ppwszIdentity = pwszIdentity;
 
-        //
-        // We mustn't free OUT parameters.
-        //
-        pUserBlob = NULL;
-        pwszIdentity = NULL;
+    //
+    // We mustn't free OUT parameters.
+    //
+    pUserBlob = NULL;
+    pwszIdentity = NULL;
 
 Cleanup:
-        if(retCode != NO_ERROR)
-        {
-            if (pUserBlob != NULL)
-                FreeMemory((PVOID*)&pUserBlob);
-            if (pwszIdentity != NULL)
-                FreeMemory((PVOID*)&pwszIdentity);
-        }
-        return retCode;
+    if(retCode != NO_ERROR)
+    {
+        if (pUserBlob != NULL)
+            FreeMemory((PVOID*)&pUserBlob);
+        if (pwszIdentity != NULL)
+            FreeMemory((PVOID*)&pwszIdentity);
+    }
+    return retCode;
 }
 
 
 DWORD WINAPI SdkEapPeerSetCredentials(
-         IN EAP_SESSION_HANDLE sessionHandle,
-         IN _In_ LPWSTR pwszIdentity,
-         IN _In_ LPWSTR pwszPassword,
-         OUT EAP_ERROR** pEapError
-         )
+    IN EAP_SESSION_HANDLE sessionHandle,
+    IN _In_ LPWSTR pwszIdentity,
+    IN _In_ LPWSTR pwszPassword,
+    OUT EAP_ERROR** pEapError
+)
 {
-        DWORD retCode = NO_ERROR;
+    DWORD retCode = NO_ERROR;
 
-        UNREFERENCED_PARAMETER(sessionHandle);
-        UNREFERENCED_PARAMETER(pwszIdentity);
-        UNREFERENCED_PARAMETER(pwszPassword);
-        UNREFERENCED_PARAMETER(pEapError);
+    UNREFERENCED_PARAMETER(sessionHandle);
+    UNREFERENCED_PARAMETER(pwszIdentity);
+    UNREFERENCED_PARAMETER(pwszPassword);
+    UNREFERENCED_PARAMETER(pEapError);
 
-        return retCode;
+    return retCode;
 }
 
 DWORD WINAPI SdkEapPeerProcessRequestPacket(
-         IN EAP_SESSION_HANDLE sessionHandle,
-         IN DWORD cbReceivePacket,
-         IN EapPacket* pReceivePacket,
-         OUT EapPeerMethodOutput* pEapOutput,
-         OUT EAP_ERROR** pEapError
-         )
+    IN EAP_SESSION_HANDLE sessionHandle,
+    IN DWORD cbReceivePacket,
+    IN EapPacket* pReceivePacket,
+    OUT EapPeerMethodOutput* pEapOutput,
+    OUT EAP_ERROR** pEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        EAPCB*  pwb = NULL;
-        DWORD   cbPacket = 0;
+    DWORD retCode = NO_ERROR;
+    EAPCB*  pwb = NULL;
+    DWORD   cbPacket = 0;
 
-        if(!sessionHandle || !pReceivePacket || !pEapOutput  || !pEapError)
-        {
-                EapTrace("EapPeerProcessRequestPacket() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    if(!sessionHandle || !pReceivePacket || !pEapOutput  || !pEapError)
+    {
+        EapTrace("EapPeerProcessRequestPacket() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        pwb = (EAPCB*)sessionHandle;
-        cbPacket = cbReceivePacket;
+    pwb = (EAPCB*)sessionHandle;
+    cbPacket = cbReceivePacket;
 
-        pwb->bRecvPacketId = pReceivePacket->Id;
+    pwb->bRecvPacketId = pReceivePacket->Id;
+
+    //
+    // Main state machine.
+    //
+    switch(pwb->EapState)
+    {
+    case MYSTATE_Initial:
+
+        EapTrace("Authenticatee state: MYSTATE_Initial");
 
         //
-        // Main state machine.
+        // The received packet can contain certain Attributes that the method cannot process.
+        // Either those attributes need to be consumed by EapHost (SoH Attribute) or Supplicant.
         //
-        switch(pwb->EapState)
+
+        //
+        // Following is just an example. It creates an EapAttributes (assuming it receives from the
+        // EapPacket) and set the action = EapPeerMethodResponseActionRespond so that supplicant
+        // on receiving the action can call GetResponseAttributes.
+        //
+
+        //
+        // Allocate Memory for pwb->pFakeAttribute attribute.
+        //
+        retCode = AllocateMemory(sizeof(EapAttribute), (PVOID *)&(pwb->pFakeAttribute));
+        if(retCode != ERROR_SUCCESS)
         {
-                case MYSTATE_Initial:
-
-                        EapTrace("Authenticatee state: MYSTATE_Initial");
-
-                        //
-                        // The received packet can contain certain Attributes that the method cannot process.
-                        // Either those attributes need to be consumed by EapHost (SoH Attribute) or Supplicant.
-                        //
-
-                        //
-                        // Following is just an example. It creates an EapAttributes (assuming it receives from the
-                        // EapPacket) and set the action = EapPeerMethodResponseActionRespond so that supplicant
-                        // on receiving the action can call GetResponseAttributes.
-                        //
-
-                        //
-                        // Allocate Memory for pwb->pFakeAttribute attribute.
-                        //
-                        retCode = AllocateMemory(sizeof(EapAttribute), (PVOID *)&(pwb->pFakeAttribute));
-                        if(retCode != ERROR_SUCCESS)
-                        {
-                                EapTrace("SdkEapPeerGetResponseAttributes() --- AllocateMemory (pwb->pFakeAttribute) failed");
-                                // Need to fill the EapError
-                                goto Cleanup;
-                        }
-
-                        //
-                        // Populate the pwb->pFakeAttribute attribute.
-                        //
-                        pwb->pFakeAttribute->eaType = (EapAttributeType)1;
-                        pwb->pFakeAttribute->dwLength = 4;
-                        retCode = AllocateMemory(pwb->pFakeAttribute->dwLength, (PVOID *)&pwb->pFakeAttribute->pValue);
-                        if(retCode != ERROR_SUCCESS)
-                        {
-                                EapTrace("SdkEapPeerGetResponseAttributes() --- AllocateMemory (pwb->pFakeAttribute->pValue) failed");
-                                // Free the earlier allocated memory for pwb->pFakeAttribute.
-                                FreeMemory((PVOID *)&(pwb->pFakeAttribute));
-                                // Need to fill the EapError
-                                goto Cleanup;
-                        }
-                        {
-                                DWORD eapType = EAPTYPE;
-                                CopyMemory(pwb->pFakeAttribute->pValue, (BYTE *)&eapType, pwb->pFakeAttribute->dwLength);
-                        }
-
-                        //
-                        // Set the action that supplicant needs to take.
-                        //
-                        pEapOutput->action = EapPeerMethodResponseActionRespond;
-                        pEapOutput->fAllowNotifications = TRUE; //??
-
-                        break;
-
-                default:
-                        //
-                        // Peer has to be in MYSTATE_Initial when SdkEapPeerProcessRequestPacket is called.
-                        // Any other state is not acceptable according to the state machine of this Eap Method.
-                        //
-                        EapTrace("SdkEapPeerProcessRequestPacket --- Peer state: [default] Present State = %d",
-                                        pwb->EapState);
-                        // Need to fill the EapError
-                        retCode = ERROR_INVALID_STATE;
-                break;
+            EapTrace("SdkEapPeerGetResponseAttributes() --- AllocateMemory (pwb->pFakeAttribute) failed");
+            // Need to fill the EapError
+            goto Cleanup;
         }
+
+        //
+        // Populate the pwb->pFakeAttribute attribute.
+        //
+        pwb->pFakeAttribute->eaType = (EapAttributeType)1;
+        pwb->pFakeAttribute->dwLength = 4;
+        retCode = AllocateMemory(pwb->pFakeAttribute->dwLength, (PVOID *)&pwb->pFakeAttribute->pValue);
+        if(retCode != ERROR_SUCCESS)
+        {
+            EapTrace("SdkEapPeerGetResponseAttributes() --- AllocateMemory (pwb->pFakeAttribute->pValue) failed");
+            // Free the earlier allocated memory for pwb->pFakeAttribute.
+            FreeMemory((PVOID *)&(pwb->pFakeAttribute));
+            // Need to fill the EapError
+            goto Cleanup;
+        }
+        {
+            DWORD eapType = EAPTYPE;
+            CopyMemory(pwb->pFakeAttribute->pValue, (BYTE *)&eapType, pwb->pFakeAttribute->dwLength);
+        }
+
+        //
+        // Set the action that supplicant needs to take.
+        //
+        pEapOutput->action = EapPeerMethodResponseActionRespond;
+        pEapOutput->fAllowNotifications = TRUE; //??
+
+        break;
+
+    default:
+        //
+        // Peer has to be in MYSTATE_Initial when SdkEapPeerProcessRequestPacket is called.
+        // Any other state is not acceptable according to the state machine of this Eap Method.
+        //
+        EapTrace("SdkEapPeerProcessRequestPacket --- Peer state: [default] Present State = %d",
+                 pwb->EapState);
+        // Need to fill the EapError
+        retCode = ERROR_INVALID_STATE;
+        break;
+    }
 
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 DWORD WINAPI SdkEapPeerGetResponsePacket(
-         IN EAP_SESSION_HANDLE sessionHandle,
-         IN OUT DWORD* pcbSendPacket,
-         OUT EapPacket* pSendPacket,
-         OUT EAP_ERROR** ppEapError
-         )
+    IN EAP_SESSION_HANDLE sessionHandle,
+    IN OUT DWORD* pcbSendPacket,
+    OUT EapPacket* pSendPacket,
+    OUT EAP_ERROR** ppEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        EAPCB*  pwb = NULL;
+    DWORD retCode = NO_ERROR;
+    EAPCB*  pwb = NULL;
 
-        //Sanity Check
-        if(!sessionHandle || !pcbSendPacket  || !pSendPacket || !ppEapError)
-        {
-                EapTrace("EapPeerGetResponsePacket() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    //Sanity Check
+    if(!sessionHandle || !pcbSendPacket  || !pSendPacket || !ppEapError)
+    {
+        EapTrace("EapPeerGetResponsePacket() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        pwb = (EAPCB*)sessionHandle;
+    pwb = (EAPCB*)sessionHandle;
 
+    //
+    // Main state machine.
+    //
+    switch(pwb->EapState)
+    {
+    case MYSTATE_AfterUserOK:
         //
-        // Main state machine.
+        // Make the EAP-Challenge Response Message.
         //
-        switch(pwb->EapState)
+        retCode = MakeResponseMessage(pwb, pcbSendPacket, pSendPacket);
+        if(retCode != NO_ERROR)
         {
-                case MYSTATE_AfterUserOK:
-                        //
-                        // Make the EAP-Challenge Response Message.
-                        //
-                        retCode = MakeResponseMessage(pwb, pcbSendPacket, pSendPacket);
-                        if(retCode != NO_ERROR)
-                        {
-                                // Report Error
-                                goto Cleanup;
-                        }
-                        //
-                        // We are done (i.e., no more processing is required on Peer side).
-                        // Peer Side just waits for the authentication result after sending this message to the authenticator.
-                        // So EapState is changed to MYSTATE_Done.
-                        //
-                        pwb->EapState = MYSTATE_Done;
-                        pwb->ClientOK = TRUE;
-
-                        break;
-
-                default:
-                        //
-                        // Peer Method has to be in MYSTATE_AfterUserOK state when SdkEapPeerGetResponsePacket
-                        // is called. Any other state is not acceptable according to the state machine of this Eap Method.
-                        //
-                        EapTrace("SdkEapPeerGetResponsePacket --- Peer state: [default] Present State = %d",
-                                        pwb->EapState);
-                        // Need to fill the EapError
-                        retCode = ERROR_INVALID_STATE;
-                        break;
+            // Report Error
+            goto Cleanup;
         }
+        //
+        // We are done (i.e., no more processing is required on Peer side).
+        // Peer Side just waits for the authentication result after sending this message to the authenticator.
+        // So EapState is changed to MYSTATE_Done.
+        //
+        pwb->EapState = MYSTATE_Done;
+        pwb->ClientOK = TRUE;
+
+        break;
+
+    default:
+        //
+        // Peer Method has to be in MYSTATE_AfterUserOK state when SdkEapPeerGetResponsePacket
+        // is called. Any other state is not acceptable according to the state machine of this Eap Method.
+        //
+        EapTrace("SdkEapPeerGetResponsePacket --- Peer state: [default] Present State = %d",
+                 pwb->EapState);
+        // Need to fill the EapError
+        retCode = ERROR_INVALID_STATE;
+        break;
+    }
 
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 // This will get called either when a method says that it has completed auth.
 // or when the lower layer receives an alternative result.
 DWORD WINAPI SdkEapPeerGetResult(
-         IN EAP_SESSION_HANDLE sessionHandle,
-         IN EapPeerMethodResultReason reason,
-         OUT EapPeerMethodResult* pResult,
-         OUT EAP_ERROR** pEapError
-         )
+    IN EAP_SESSION_HANDLE sessionHandle,
+    IN EapPeerMethodResultReason reason,
+    OUT EapPeerMethodResult* pResult,
+    OUT EAP_ERROR** pEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        EAPCB*  pwb = NULL;
+    DWORD retCode = NO_ERROR;
+    EAPCB*  pwb = NULL;
 
-        //Sanity Check
-        if(!sessionHandle || !pResult || !pEapError)
-        {
-                EapTrace("EapPeerGetInfo() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    //Sanity Check
+    if(!sessionHandle || !pResult || !pEapError)
+    {
+        EapTrace("EapPeerGetInfo() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        pwb = (EAPCB*)sessionHandle;
+    pwb = (EAPCB*)sessionHandle;
 
-        //
-        // Copy the data store in Working Buffer to the output parameter --- pResult
-        //
+    //
+    // Copy the data store in Working Buffer to the output parameter --- pResult
+    //
 
-        //
-        // The final result decision should be based on both the result it obtains from authenticator
-        // as well as its internal state machine.
-        //
-        if(reason == EapPeerMethodResultSuccess)
-        {
-                if(pwb->ClientOK == TRUE)
-                        pResult->fIsSuccess = TRUE;
-                else
-                        pResult->fIsSuccess = FALSE;
-        }
+    //
+    // The final result decision should be based on both the result it obtains from authenticator
+    // as well as its internal state machine.
+    //
+    if(reason == EapPeerMethodResultSuccess)
+    {
+        if(pwb->ClientOK == TRUE)
+            pResult->fIsSuccess = TRUE;
         else
-                pResult->fIsSuccess = FALSE;
+            pResult->fIsSuccess = FALSE;
+    }
+    else
+        pResult->fIsSuccess = FALSE;
 
     if(pResult->fIsSuccess == TRUE)
     {
@@ -713,11 +713,11 @@ DWORD WINAPI SdkEapPeerGetResult(
         // Fill the EAP_ERROR
         //
         retCode = AllocateandFillEapError(&(pResult->pEapError),
-                                    1,  ///> Exact Cause of Authentication Failure
-                                    0,
-                                    NULL, NULL, NULL,
-                                    NULL, NULL
-                                    );
+                                          1,  ///> Exact Cause of Authentication Failure
+                                          0,
+                                          NULL, NULL, NULL,
+                                          NULL, NULL
+                                         );
         if(retCode != ERROR_SUCCESS)
         {
             //Report Error
@@ -726,371 +726,371 @@ DWORD WINAPI SdkEapPeerGetResult(
     }
 
 Cleanup:
-        if((retCode != NO_ERROR) &&
+    if((retCode != NO_ERROR) &&
             (pResult != NULL))
-        {
-            if (pResult->pConnectionData)
-                FreeMemory((PVOID*)&(pResult->pConnectionData));
-            if (pResult->pUserData)
-                FreeMemory((PVOID*)&(pResult->pUserData));
-        }
-        return retCode;
+    {
+        if (pResult->pConnectionData)
+            FreeMemory((PVOID*)&(pResult->pConnectionData));
+        if (pResult->pUserData)
+            FreeMemory((PVOID*)&(pResult->pUserData));
+    }
+    return retCode;
 }
 
 DWORD WINAPI SdkEapPeerGetUIContext(
-         IN EAP_SESSION_HANDLE sessionHandle,
-         OUT DWORD* dwSizeOfUIContextData,
-         OUT BYTE** pUIContextData,
-         OUT EAP_ERROR** ppEapError
-      )
+    IN EAP_SESSION_HANDLE sessionHandle,
+    OUT DWORD* dwSizeOfUIContextData,
+    OUT BYTE** pUIContextData,
+    OUT EAP_ERROR** ppEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        EAPCB*  pwb = NULL;
+    DWORD retCode = NO_ERROR;
+    EAPCB*  pwb = NULL;
 
-        //Sanity Check
-        if(!sessionHandle || !dwSizeOfUIContextData || !pUIContextData || !ppEapError)
-        {
-                EapTrace("EapPeerGetUIContext() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
-
-        pwb = (EAPCB*)sessionHandle;
-
-        if(pwb->pUIContext != NULL)
-        {
-                *dwSizeOfUIContextData = pwb->dwSizeOfUIContext;
-                *pUIContextData = pwb->pUIContext;
-        }
-        else
-        {
-                *dwSizeOfUIContextData = 0;
-        }
-
-Cleanup:
-        return retCode;
-}
-
-DWORD WINAPI SdkEapPeerSetUIContext(
-        IN EAP_SESSION_HANDLE sessionHandle,
-        IN DWORD dwSizeOfUIContextData,
-        IN const BYTE* pUIContextData,
-        OUT EapPeerMethodOutput* pEapOutput,
-        OUT EAP_ERROR** ppEapError
-     )
-{
-        DWORD retCode = NO_ERROR;
-        EAPCB*  pwb = NULL;
-
-        //Sanity Check
-        if(!sessionHandle || !pEapOutput || !pUIContextData || !ppEapError)
-        {
-                EapTrace("EapPeerSetUIContext() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
-
-        pwb = (EAPCB*)sessionHandle;
-
-        //
-        // Main state machine.
-        //
-
-        switch(pwb->EapState)
-        {
-                //
-                // if the function is called after InvokeInteractiveUI.
-                //
-                case MYSTATE_InteractiveUI:
-                        // Free the Interactive UI if already stored.
-                        retCode = FreeMemory((PVOID*)&(pwb->pDataFromInteractiveUI));
-                        if (retCode != NO_ERROR)
-                        {
-                                goto Cleanup;
-                        }
-                        //
-                        // Look if the answer is "OK".
-                        //
-                        if(dwSizeOfUIContextData != STRING_LENGTH_UI_SUCCESS)
-                        {
-                                //Error
-                                goto Cleanup;
-                        }
-                        else
-                        {
-                                if(memcmp((void *)STRING_UI_SUCCESS, pUIContextData,
-                                        STRING_LENGTH_UI_SUCCESS)  != 0)
-                                {
-                                        //Error
-                                        goto Cleanup;
-                                }
-                                //
-                                // If the user has agreed to use the Sample Eap, then the supplicant should send
-                                // response to the EAP-Challenge (i.e., the password). The peer already has the
-                                // password stored (from InvokeIdentityUI). Everything is ready for sending the
-                                // EAP-Challenge response. Therefore, the action = ResponseActionSend.
-                                //
-                                pEapOutput->action = EapPeerMethodResponseActionSend;
-                                pEapOutput->fAllowNotifications = FALSE; //??
-                                //
-                                // EapState changes to WaitForRequest signifying user agreed to use Sample Eap.
-                                //
-                                pwb->EapState = MYSTATE_AfterUserOK;
-                        }
-                break;
-
-                default:
-                        //
-                        // Peer Method has to be in MYSTATE_InteractiveUI state when SdkEapPeerSetUIContext
-                        // is called. Any other state is not acceptable according to the state machine of this Eap Method.
-                        //
-                        EapTrace("SdkEapPeerSetUIContext --- Peer state: [default] Present State = %d",
-                                        pwb->EapState);
-                        // Need to fill the EapError
-                        retCode = ERROR_INVALID_STATE;
-                break;
-        }
-
-Cleanup:
-        return retCode;
-}
-
-DWORD WINAPI SdkEapPeerGetResponseAttributes(
-        IN EAP_SESSION_HANDLE sessionHandle,
-        OUT EapAttributes* pAttribs,
-        OUT EAP_ERROR** ppEapError
-     )
-{
-        DWORD retCode = ERROR_SUCCESS;
-        EAPCB*  pwb = NULL;
-
-        if(!sessionHandle || !pAttribs || !ppEapError)
-        {
-                EapTrace("SdkEapPeerGetResponseAttributes() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
-
-        pwb = (EAPCB*)sessionHandle;
-
-        //
-        // Fill the pAttribs Structure
-        //
-        pAttribs->dwNumberOfAttributes = 1;
-        pAttribs->pAttribs = pwb->pFakeAttribute;
-
-Cleanup:
-        return retCode;
-}
-
-DWORD WINAPI SdkEapPeerSetResponseAttributes(
-         IN EAP_SESSION_HANDLE sessionHandle,
-         IN EapAttributes* pAttribs,
-         OUT EapPeerMethodOutput* pEapOutput,
-         OUT EAP_ERROR** ppEapError
-      )
-{
-        DWORD retCode = NO_ERROR;
-        HRESULT hr = S_OK;
-        EAPCB*  pwb = NULL;
-        DWORD numAttributes = 0;
-        DWORD numAttrCtr = 0;
-        EapAttribute *pEapAttribute = NULL;
-
-        if(!sessionHandle || !pAttribs || !pEapOutput || !ppEapError)
-        {
-                EapTrace("SdkEapPeerSetResponseAttributes() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
-
-        pwb = (EAPCB*)sessionHandle;
-
-        //
-        // We need to process the attributes that is received.
-        //
-
-        numAttributes = pAttribs->dwNumberOfAttributes;
-
-        for(numAttrCtr = 0; numAttrCtr < numAttributes; numAttrCtr++)
-        {
-                pEapAttribute = (pAttribs->pAttribs) + numAttrCtr;
-
-                //
-                // Except only AttributeType = 2 in response.
-                //
-                switch(pEapAttribute->eaType)
-                {
-                        case 2:
-                                //
-                                // Expected Attribute ---- eaType = 2; dwLength = 4; pValue = 0 or 1
-                                //
-                                {
-                                        DWORD attrLength = 0;
-                                        DWORD attrValue = 0;
-                                        attrLength = pEapAttribute->dwLength;
-
-                                        if(attrLength != sizeof(DWORD))
-                                        {
-                                                EapTrace("Sdk Peer Method expects length = 4.");
-                                        }
-
-                                        attrValue = *((DWORD *)pEapAttribute->pValue);
-
-                                        if(attrValue != 1 && attrValue != 0)
-                                        {
-                                                EapTrace("Sdk Peer Method expects attrValue to be either 1 or 0");
-                                        }
-                                }
-                        break;
-
-                        default:
-                                EapTrace("Sdk Peer Method does not process attributes except EapAttrType = 2");
-                        break;
-                }
-        }
-
-        //
-        // Fill the output
-        //
-
-        //
-        // Check for EAP_FLAG_SUPRESS_UI flag.
-        // If this flag is set, we should not raise an interactive UI and go striaght to
-        // sending the packet that contains user password.
-        // This is used in SSO(Single Sign On) scenario where MS supplicant does not
-        // expect any UI to raised.
-        //
-    if(pwb->fFlags & EAP_FLAG_SUPRESS_UI)
+    //Sanity Check
+    if(!sessionHandle || !dwSizeOfUIContextData || !pUIContextData || !ppEapError)
     {
-            pEapOutput->action = EapPeerMethodResponseActionSend;
-            pEapOutput->fAllowNotifications = FALSE;
-            //
-            // EapState changes to MYSTATE_AfterUserOK signifying user agreed to use Sample Eap.
-            //
-            pwb->EapState = MYSTATE_AfterUserOK;
+        EapTrace("EapPeerGetUIContext() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+
+    pwb = (EAPCB*)sessionHandle;
+
+    if(pwb->pUIContext != NULL)
+    {
+        *dwSizeOfUIContextData = pwb->dwSizeOfUIContext;
+        *pUIContextData = pwb->pUIContext;
     }
     else
     {
-            //
-            // Bring up interactive UI to notify user that he/she is being
-            // authenticated via the sample EAP
-            //
-            pEapOutput->action = EapPeerMethodResponseActionInvokeUI;
-            pEapOutput->fAllowNotifications = TRUE;
-
-            if (NULL == pwb->pDataFromInteractiveUI)
-            {
-                    pwb->dwSizeOfUIContext = (DWORD)STRING_LENGTH_UI_ALLOW_AUTH;
-
-                    retCode = AllocateMemory(pwb->dwSizeOfUIContext, (PVOID*)&(pwb->pUIContext));
-                    if (retCode != NO_ERROR)
-                    {
-                            goto Cleanup;
-                    }
-
-                    hr = StringCbCopyW((WCHAR*)pwb->pUIContext, pwb->dwSizeOfUIContext, STRING_UI_ALLOW_AUTH);
-                    if (FAILED(hr))
-                    {
-                            retCode = HRESULT_CODE(hr);
-                            EapTrace("Error while copying UI data to be displayed! (error %d)",retCode);
-                            goto Cleanup;
-                    }
-
-                    pwb->EapState = MYSTATE_InteractiveUI;
-            }
+        *dwSizeOfUIContextData = 0;
     }
 
 Cleanup:
-        if((retCode != NO_ERROR) &&
+    return retCode;
+}
+
+DWORD WINAPI SdkEapPeerSetUIContext(
+    IN EAP_SESSION_HANDLE sessionHandle,
+    IN DWORD dwSizeOfUIContextData,
+    IN const BYTE* pUIContextData,
+    OUT EapPeerMethodOutput* pEapOutput,
+    OUT EAP_ERROR** ppEapError
+)
+{
+    DWORD retCode = NO_ERROR;
+    EAPCB*  pwb = NULL;
+
+    //Sanity Check
+    if(!sessionHandle || !pEapOutput || !pUIContextData || !ppEapError)
+    {
+        EapTrace("EapPeerSetUIContext() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+
+    pwb = (EAPCB*)sessionHandle;
+
+    //
+    // Main state machine.
+    //
+
+    switch(pwb->EapState)
+    {
+    //
+    // if the function is called after InvokeInteractiveUI.
+    //
+    case MYSTATE_InteractiveUI:
+        // Free the Interactive UI if already stored.
+        retCode = FreeMemory((PVOID*)&(pwb->pDataFromInteractiveUI));
+        if (retCode != NO_ERROR)
+        {
+            goto Cleanup;
+        }
+        //
+        // Look if the answer is "OK".
+        //
+        if(dwSizeOfUIContextData != STRING_LENGTH_UI_SUCCESS)
+        {
+            //Error
+            goto Cleanup;
+        }
+        else
+        {
+            if(memcmp((void *)STRING_UI_SUCCESS, pUIContextData,
+                      STRING_LENGTH_UI_SUCCESS)  != 0)
+            {
+                //Error
+                goto Cleanup;
+            }
+            //
+            // If the user has agreed to use the Sample Eap, then the supplicant should send
+            // response to the EAP-Challenge (i.e., the password). The peer already has the
+            // password stored (from InvokeIdentityUI). Everything is ready for sending the
+            // EAP-Challenge response. Therefore, the action = ResponseActionSend.
+            //
+            pEapOutput->action = EapPeerMethodResponseActionSend;
+            pEapOutput->fAllowNotifications = FALSE; //??
+            //
+            // EapState changes to WaitForRequest signifying user agreed to use Sample Eap.
+            //
+            pwb->EapState = MYSTATE_AfterUserOK;
+        }
+        break;
+
+    default:
+        //
+        // Peer Method has to be in MYSTATE_InteractiveUI state when SdkEapPeerSetUIContext
+        // is called. Any other state is not acceptable according to the state machine of this Eap Method.
+        //
+        EapTrace("SdkEapPeerSetUIContext --- Peer state: [default] Present State = %d",
+                 pwb->EapState);
+        // Need to fill the EapError
+        retCode = ERROR_INVALID_STATE;
+        break;
+    }
+
+Cleanup:
+    return retCode;
+}
+
+DWORD WINAPI SdkEapPeerGetResponseAttributes(
+    IN EAP_SESSION_HANDLE sessionHandle,
+    OUT EapAttributes* pAttribs,
+    OUT EAP_ERROR** ppEapError
+)
+{
+    DWORD retCode = ERROR_SUCCESS;
+    EAPCB*  pwb = NULL;
+
+    if(!sessionHandle || !pAttribs || !ppEapError)
+    {
+        EapTrace("SdkEapPeerGetResponseAttributes() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+
+    pwb = (EAPCB*)sessionHandle;
+
+    //
+    // Fill the pAttribs Structure
+    //
+    pAttribs->dwNumberOfAttributes = 1;
+    pAttribs->pAttribs = pwb->pFakeAttribute;
+
+Cleanup:
+    return retCode;
+}
+
+DWORD WINAPI SdkEapPeerSetResponseAttributes(
+    IN EAP_SESSION_HANDLE sessionHandle,
+    IN EapAttributes* pAttribs,
+    OUT EapPeerMethodOutput* pEapOutput,
+    OUT EAP_ERROR** ppEapError
+)
+{
+    DWORD retCode = NO_ERROR;
+    HRESULT hr = S_OK;
+    EAPCB*  pwb = NULL;
+    DWORD numAttributes = 0;
+    DWORD numAttrCtr = 0;
+    EapAttribute *pEapAttribute = NULL;
+
+    if(!sessionHandle || !pAttribs || !pEapOutput || !ppEapError)
+    {
+        EapTrace("SdkEapPeerSetResponseAttributes() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+
+    pwb = (EAPCB*)sessionHandle;
+
+    //
+    // We need to process the attributes that is received.
+    //
+
+    numAttributes = pAttribs->dwNumberOfAttributes;
+
+    for(numAttrCtr = 0; numAttrCtr < numAttributes; numAttrCtr++)
+    {
+        pEapAttribute = (pAttribs->pAttribs) + numAttrCtr;
+
+        //
+        // Except only AttributeType = 2 in response.
+        //
+        switch(pEapAttribute->eaType)
+        {
+        case 2:
+            //
+            // Expected Attribute ---- eaType = 2; dwLength = 4; pValue = 0 or 1
+            //
+        {
+            DWORD attrLength = 0;
+            DWORD attrValue = 0;
+            attrLength = pEapAttribute->dwLength;
+
+            if(attrLength != sizeof(DWORD))
+            {
+                EapTrace("Sdk Peer Method expects length = 4.");
+            }
+
+            attrValue = *((DWORD *)pEapAttribute->pValue);
+
+            if(attrValue != 1 && attrValue != 0)
+            {
+                EapTrace("Sdk Peer Method expects attrValue to be either 1 or 0");
+            }
+        }
+        break;
+
+        default:
+            EapTrace("Sdk Peer Method does not process attributes except EapAttrType = 2");
+            break;
+        }
+    }
+
+    //
+    // Fill the output
+    //
+
+    //
+    // Check for EAP_FLAG_SUPRESS_UI flag.
+    // If this flag is set, we should not raise an interactive UI and go striaght to
+    // sending the packet that contains user password.
+    // This is used in SSO(Single Sign On) scenario where MS supplicant does not
+    // expect any UI to raised.
+    //
+    if(pwb->fFlags & EAP_FLAG_SUPRESS_UI)
+    {
+        pEapOutput->action = EapPeerMethodResponseActionSend;
+        pEapOutput->fAllowNotifications = FALSE;
+        //
+        // EapState changes to MYSTATE_AfterUserOK signifying user agreed to use Sample Eap.
+        //
+        pwb->EapState = MYSTATE_AfterUserOK;
+    }
+    else
+    {
+        //
+        // Bring up interactive UI to notify user that he/she is being
+        // authenticated via the sample EAP
+        //
+        pEapOutput->action = EapPeerMethodResponseActionInvokeUI;
+        pEapOutput->fAllowNotifications = TRUE;
+
+        if (NULL == pwb->pDataFromInteractiveUI)
+        {
+            pwb->dwSizeOfUIContext = (DWORD)STRING_LENGTH_UI_ALLOW_AUTH;
+
+            retCode = AllocateMemory(pwb->dwSizeOfUIContext, (PVOID*)&(pwb->pUIContext));
+            if (retCode != NO_ERROR)
+            {
+                goto Cleanup;
+            }
+
+            hr = StringCbCopyW((WCHAR*)pwb->pUIContext, pwb->dwSizeOfUIContext, STRING_UI_ALLOW_AUTH);
+            if (FAILED(hr))
+            {
+                retCode = HRESULT_CODE(hr);
+                EapTrace("Error while copying UI data to be displayed! (error %d)",retCode);
+                goto Cleanup;
+            }
+
+            pwb->EapState = MYSTATE_InteractiveUI;
+        }
+    }
+
+Cleanup:
+    if((retCode != NO_ERROR) &&
             (pwb != NULL) &&
             (pwb->pUIContext != NULL))
-            FreeMemory((PVOID*)&(pwb->pUIContext));
+        FreeMemory((PVOID*)&(pwb->pUIContext));
 
-        return retCode;
+    return retCode;
 }
 
 DWORD WINAPI SdkEapPeerEndSession(
-        IN EAP_SESSION_HANDLE sessionHandle,
-         OUT EAP_ERROR** ppEapError
-         )
+    IN EAP_SESSION_HANDLE sessionHandle,
+    OUT EAP_ERROR** ppEapError
+)
 {
-        DWORD  retCode = NO_ERROR;
-        EAPCB* pwb = NULL;
+    DWORD  retCode = NO_ERROR;
+    EAPCB* pwb = NULL;
 
-        // Sanity check.
-        if (!sessionHandle || !ppEapError)
-        {
-                EapTrace("SdkEapPeerEndSession() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    // Sanity check.
+    if (!sessionHandle || !ppEapError)
+    {
+        EapTrace("SdkEapPeerEndSession() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        pwb = (EAPCB *)sessionHandle;
+    pwb = (EAPCB *)sessionHandle;
 
-        //
-        // Free up the MPPE Key Attributes
-        //
-        FreeAttributes(&(pwb->pMPPEKeyAttributes));
+    //
+    // Free up the MPPE Key Attributes
+    //
+    FreeAttributes(&(pwb->pMPPEKeyAttributes));
 
-        //
-        // Free the Connection Data.
-        //
-        FreeMemory((PVOID*)&(pwb->pConnectionData));
+    //
+    // Free the Connection Data.
+    //
+    FreeMemory((PVOID*)&(pwb->pConnectionData));
 
-        //
-        // Free the User Data.
-        //
-        SecureZeroMemory(pwb->pUserData, pwb->dwSizeofUserData);
-        FreeMemory((PVOID*)&(pwb->pUserData));
+    //
+    // Free the User Data.
+    //
+    SecureZeroMemory(pwb->pUserData, pwb->dwSizeofUserData);
+    FreeMemory((PVOID*)&(pwb->pUserData));
 
-        //
-        // Free the UI Context Data.
-        //
-        FreeMemory((PVOID*)&(pwb->pUIContext));
+    //
+    // Free the UI Context Data.
+    //
+    FreeMemory((PVOID*)&(pwb->pUIContext));
 
-        //
-        // Free the Input Attributes.
-        //
-        FreeAttributes(&(pwb->pEapAttributes));
+    //
+    // Free the Input Attributes.
+    //
+    FreeAttributes(&(pwb->pEapAttributes));
 
-        // Free the Fake Attribute.
-        FreeMemory((PVOID *)&(pwb->pFakeAttribute->pValue));
-        FreeMemory((PVOID *)&(pwb->pFakeAttribute));
+    // Free the Fake Attribute.
+    FreeMemory((PVOID *)&(pwb->pFakeAttribute->pValue));
+    FreeMemory((PVOID *)&(pwb->pFakeAttribute));
 
-        // Use SecureZeroMemory() here, to ensure that any authentication data is
-        // initialized safely, before the memory block is freed back to the system.
-        SecureZeroMemory(pwb, sizeof(EAPCB));
-        FreeMemory((PVOID*)&pwb);
+    // Use SecureZeroMemory() here, to ensure that any authentication data is
+    // initialized safely, before the memory block is freed back to the system.
+    SecureZeroMemory(pwb, sizeof(EAPCB));
+    FreeMemory((PVOID*)&pwb);
 
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 DWORD WINAPI SdkEapPeerShutdown(OUT EAP_ERROR** ppEapError)
 {
-        DWORD retCode = NO_ERROR;
+    DWORD retCode = NO_ERROR;
 
-        //Sanity Check
-        if( !ppEapError)
-        {
-                EapTrace("SdkEapPeerShutdown() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    //Sanity Check
+    if( !ppEapError)
+    {
+        EapTrace("SdkEapPeerShutdown() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        //
-        // Clear up any resources as this dll will get unloaded.
-        //
+    //
+    // Clear up any resources as this dll will get unloaded.
+    //
 
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 
@@ -1099,607 +1099,607 @@ Cleanup:
 //
 
 DWORD WINAPI EapPeerInvokeConfigUI(
-         IN EAP_METHOD_TYPE* pEapType,
-         IN HWND hwndParent,
-         IN DWORD dwFlags,
-         IN DWORD dwSizeOfConnectionDataIn,
-         IN BYTE* pConnectionDataIn,
-         OUT DWORD* dwSizeOfConnectionDataOut,
-         OUT BYTE** ppConnectionDataOut,
-         OUT EAP_ERROR** pEapError
-         )
+    IN EAP_METHOD_TYPE* pEapType,
+    IN HWND hwndParent,
+    IN DWORD dwFlags,
+    IN DWORD dwSizeOfConnectionDataIn,
+    IN BYTE* pConnectionDataIn,
+    OUT DWORD* dwSizeOfConnectionDataOut,
+    OUT BYTE** ppConnectionDataOut,
+    OUT EAP_ERROR** pEapError
+)
 {
-        DWORD retCode = NO_ERROR;
+    DWORD retCode = NO_ERROR;
 
-        UNREFERENCED_PARAMETER(pEapType);
-        if(!pEapType || !dwSizeOfConnectionDataOut || !ppConnectionDataOut || !pEapError)
-        {
-                EapTrace("EapPeerInvokeConfigUI() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    UNREFERENCED_PARAMETER(pEapType);
+    if(!pEapType || !dwSizeOfConnectionDataOut || !ppConnectionDataOut || !pEapError)
+    {
+        EapTrace("EapPeerInvokeConfigUI() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        if ((pEapType->eapType.type != EAPTYPE) ||
-             (pEapType->dwAuthorId != AUTHOR_ID))
-        {
-                EapTrace("EapPeerInvokeConfigUI() --- Input Eap Type Info does not match the supported Eap Type");
-                retCode = ERROR_NOT_SUPPORTED;
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    if ((pEapType->eapType.type != EAPTYPE) ||
+            (pEapType->dwAuthorId != AUTHOR_ID))
+    {
+        EapTrace("EapPeerInvokeConfigUI() --- Input Eap Type Info does not match the supported Eap Type");
+        retCode = ERROR_NOT_SUPPORTED;
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
-        UNREFERENCED_PARAMETER(dwFlags);
+    UNREFERENCED_PARAMETER(dwFlags);
 
-        retCode = GetConfigData(hwndParent,
-                                              pConnectionDataIn,
-                                              dwSizeOfConnectionDataIn,
-                                              ppConnectionDataOut,
-                                              dwSizeOfConnectionDataOut);
-        if(retCode != ERROR_SUCCESS)
-        {
-                EapTrace("EapPeerInvokeConfigUI() --- GetConfigData returned with retCode = %d", retCode);
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    retCode = GetConfigData(hwndParent,
+                            pConnectionDataIn,
+                            dwSizeOfConnectionDataIn,
+                            ppConnectionDataOut,
+                            dwSizeOfConnectionDataOut);
+    if(retCode != ERROR_SUCCESS)
+    {
+        EapTrace("EapPeerInvokeConfigUI() --- GetConfigData returned with retCode = %d", retCode);
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 
 DWORD WINAPI EapPeerConfigXml2Blob(
-                    IN DWORD dwFlags,
-                    IN EAP_METHOD_TYPE eapMethodType,
-                    IN IXMLDOMDocument2* pConfigDoc,
-                    OUT _Out_writes_(*pdwSizeOfConfigOut) BYTE** ppConfigOut,
-                    OUT DWORD* pdwSizeOfConfigOut,
-                    OUT EAP_ERROR** ppEapError
-                    )
+    IN DWORD dwFlags,
+    IN EAP_METHOD_TYPE eapMethodType,
+    IN IXMLDOMDocument2* pConfigDoc,
+    OUT _Out_writes_(*pdwSizeOfConfigOut) BYTE** ppConfigOut,
+    OUT DWORD* pdwSizeOfConfigOut,
+    OUT EAP_ERROR** ppEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        BSTR elementValue = NULL;
-        CONN_DATA_BLOB*  pEapConfigData  = NULL;
+    DWORD retCode = NO_ERROR;
+    BSTR elementValue = NULL;
+    CONN_DATA_BLOB*  pEapConfigData  = NULL;
 
-        if(!ppConfigOut || !pdwSizeOfConfigOut || !pConfigDoc || !ppEapError)
-        {
-                EapTrace("EapPeerConfigXml2Blob() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError, if ppEapError != NULL else just return
-                goto Cleanup;
-        }
+    if(!ppConfigOut || !pdwSizeOfConfigOut || !pConfigDoc || !ppEapError)
+    {
+        EapTrace("EapPeerConfigXml2Blob() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError, if ppEapError != NULL else just return
+        goto Cleanup;
+    }
 
-        if ((eapMethodType.eapType.type != EAPTYPE) ||
-             (eapMethodType.dwAuthorId != AUTHOR_ID))
-        {
-                EapTrace("EapPeerConfigXml2Blob() --- Input Eap Type Info does not match the supported Eap Type");
-                retCode = ERROR_NOT_SUPPORTED;
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    if ((eapMethodType.eapType.type != EAPTYPE) ||
+            (eapMethodType.dwAuthorId != AUTHOR_ID))
+    {
+        EapTrace("EapPeerConfigXml2Blob() --- Input Eap Type Info does not match the supported Eap Type");
+        retCode = ERROR_NOT_SUPPORTED;
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
-        UNREFERENCED_PARAMETER(dwFlags);
+    UNREFERENCED_PARAMETER(dwFlags);
 
-        //
-        // Allocate memory for OUT parameters
-        //
-        retCode = AllocateMemory(sizeof(CONN_DATA_BLOB), (PVOID*)&pEapConfigData);
-        if (retCode != NO_ERROR)
-        {
-                goto Cleanup;
-        }
+    //
+    // Allocate memory for OUT parameters
+    //
+    retCode = AllocateMemory(sizeof(CONN_DATA_BLOB), (PVOID*)&pEapConfigData);
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
 
-        //
-        // Process the pConfigDoc to get the Connection BLOB.
-        //
-        //
-        // Sample Eap Method expects ---
-        // <EapType>40</EapType><ConfigData>MethodSpecificConfigData</ConfigData>
-        // Therefore, reads the two elements -- EapType and ConfigData
-        //
+    //
+    // Process the pConfigDoc to get the Connection BLOB.
+    //
+    //
+    // Sample Eap Method expects ---
+    // <EapType>40</EapType><ConfigData>MethodSpecificConfigData</ConfigData>
+    // Therefore, reads the two elements -- EapType and ConfigData
+    //
 
-        // Read the EapType element from XML
-        retCode = GetXmlElementValue(pConfigDoc, L"EapType", CONNECTION_PROPERTIES, elementValue);
-        if((retCode != ERROR_SUCCESS) || (elementValue == NULL))
-        {
-                //Need to fill EapError
-                goto Cleanup;
-        }
+    // Read the EapType element from XML
+    retCode = GetXmlElementValue(pConfigDoc, L"EapType", CONNECTION_PROPERTIES, elementValue);
+    if((retCode != ERROR_SUCCESS) || (elementValue == NULL))
+    {
+        //Need to fill EapError
+        goto Cleanup;
+    }
 
-        // Set the EapTypeId of CONN_DATA_BLOB
-        pEapConfigData->eapTypeId = _wtol((WCHAR*)elementValue);
-        SysFreeString(elementValue);
+    // Set the EapTypeId of CONN_DATA_BLOB
+    pEapConfigData->eapTypeId = _wtol((WCHAR*)elementValue);
+    SysFreeString(elementValue);
 
-        // Read the ConfigData element from XML
-        retCode = GetXmlElementValue(pConfigDoc, L"ConfigData", CONNECTION_PROPERTIES, elementValue);
-        if(retCode != ERROR_SUCCESS)
-        {
-                //Need to fill EapError
-                goto Cleanup;
-        }
+    // Read the ConfigData element from XML
+    retCode = GetXmlElementValue(pConfigDoc, L"ConfigData", CONNECTION_PROPERTIES, elementValue);
+    if(retCode != ERROR_SUCCESS)
+    {
+        //Need to fill EapError
+        goto Cleanup;
+    }
 
-        // Set the awszData of CONN_DATA_BLOB
-        CopyMemory(pEapConfigData->awszData, (BYTE *)elementValue,
-                                         ((SysStringLen(elementValue) + 1) * sizeof(wchar_t)));
-        SysFreeString(elementValue);
+    // Set the awszData of CONN_DATA_BLOB
+    CopyMemory(pEapConfigData->awszData, (BYTE *)elementValue,
+               ((SysStringLen(elementValue) + 1) * sizeof(wchar_t)));
+    SysFreeString(elementValue);
 
-        //
-        // Set the output parameters.
-        //
-        *ppConfigOut = (BYTE *)pEapConfigData;
-        *pdwSizeOfConfigOut = sizeof(CONN_DATA_BLOB);
+    //
+    // Set the output parameters.
+    //
+    *ppConfigOut = (BYTE *)pEapConfigData;
+    *pdwSizeOfConfigOut = sizeof(CONN_DATA_BLOB);
 
-        pEapConfigData = NULL;
+    pEapConfigData = NULL;
 
 Cleanup:
-        if((retCode != ERROR_SUCCESS) && (pEapConfigData != NULL))
-            FreeMemory((PVOID*)&pEapConfigData);
+    if((retCode != ERROR_SUCCESS) && (pEapConfigData != NULL))
+        FreeMemory((PVOID*)&pEapConfigData);
 
-        return retCode;
+    return retCode;
 }
 
 
 
 DWORD WINAPI EapPeerCredentialsXml2Blob(
-                    IN DWORD dwFlags,
-                    IN EAP_METHOD_TYPE eapMethodType,
-                    IN IXMLDOMDocument2* pCredentialsDoc,
-                    IN _In_reads_(dwSizeOfConfigIn) const BYTE* pConfigIn,
-                    IN DWORD dwSizeOfConfigIn,
-                    OUT _Out_writes_(*pdwSizeOfCredentialsOut) BYTE** ppCredentialsOut,
-                    OUT DWORD* pdwSizeOfCredentialsOut,
-                    OUT EAP_ERROR** ppEapError
-                    )
+    IN DWORD dwFlags,
+    IN EAP_METHOD_TYPE eapMethodType,
+    IN IXMLDOMDocument2* pCredentialsDoc,
+    IN _In_reads_(dwSizeOfConfigIn) const BYTE* pConfigIn,
+    IN DWORD dwSizeOfConfigIn,
+    OUT _Out_writes_(*pdwSizeOfCredentialsOut) BYTE** ppCredentialsOut,
+    OUT DWORD* pdwSizeOfCredentialsOut,
+    OUT EAP_ERROR** ppEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        BSTR elementValue = NULL;
-        USER_DATA_BLOB*  pEapUserData  = NULL;
+    DWORD retCode = NO_ERROR;
+    BSTR elementValue = NULL;
+    USER_DATA_BLOB*  pEapUserData  = NULL;
 
-        if(!ppCredentialsOut || !pdwSizeOfCredentialsOut || !pCredentialsDoc || !ppEapError)
-        {
-                EapTrace("EapPeerCredentialsXml2Blob() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError, if ppEapError != NULL else just return
-                goto Cleanup;
-        }
+    if(!ppCredentialsOut || !pdwSizeOfCredentialsOut || !pCredentialsDoc || !ppEapError)
+    {
+        EapTrace("EapPeerCredentialsXml2Blob() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError, if ppEapError != NULL else just return
+        goto Cleanup;
+    }
 
-        if ((eapMethodType.eapType.type != EAPTYPE) ||
-             (eapMethodType.dwAuthorId != AUTHOR_ID))
-        {
-                EapTrace("EapPeerCredentialsXml2Blob() --- Input Eap Type Info does not match the supported Eap Type");
-                retCode = ERROR_NOT_SUPPORTED;
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    if ((eapMethodType.eapType.type != EAPTYPE) ||
+            (eapMethodType.dwAuthorId != AUTHOR_ID))
+    {
+        EapTrace("EapPeerCredentialsXml2Blob() --- Input Eap Type Info does not match the supported Eap Type");
+        retCode = ERROR_NOT_SUPPORTED;
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
-        UNREFERENCED_PARAMETER(dwFlags);
-        UNREFERENCED_PARAMETER(pConfigIn);
-        UNREFERENCED_PARAMETER(dwSizeOfConfigIn);
+    UNREFERENCED_PARAMETER(dwFlags);
+    UNREFERENCED_PARAMETER(pConfigIn);
+    UNREFERENCED_PARAMETER(dwSizeOfConfigIn);
 
-        //
-        // Allocate memory for OUT parameters
-        //
-        retCode = AllocateMemory(sizeof(USER_DATA_BLOB), (PVOID*)&pEapUserData);
-        if (retCode != NO_ERROR)
-        {
-                goto Cleanup;
-        }
+    //
+    // Allocate memory for OUT parameters
+    //
+    retCode = AllocateMemory(sizeof(USER_DATA_BLOB), (PVOID*)&pEapUserData);
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
 
-        //
-        // Process the pCredentialsDoc to get the User BLOB.
-        //
-        // Sample Eap Method expects ---
-        // <EapType>40</EapType><Identity>IdentityInformation</Identity><Password>PasswordInformation</Password>
-        // Therefore, reads the three elements -- EapType, Identity and Password
-        //
+    //
+    // Process the pCredentialsDoc to get the User BLOB.
+    //
+    // Sample Eap Method expects ---
+    // <EapType>40</EapType><Identity>IdentityInformation</Identity><Password>PasswordInformation</Password>
+    // Therefore, reads the three elements -- EapType, Identity and Password
+    //
 
-        // Read the EapType element from XML
-        retCode = GetXmlElementValue(pCredentialsDoc, L"EapType", USER_PROPERTIES, elementValue);
-        if((retCode != ERROR_SUCCESS) || (elementValue == NULL))
-        {
-                //Need to fill EapError
-                goto Cleanup;
-        }
+    // Read the EapType element from XML
+    retCode = GetXmlElementValue(pCredentialsDoc, L"EapType", USER_PROPERTIES, elementValue);
+    if((retCode != ERROR_SUCCESS) || (elementValue == NULL))
+    {
+        //Need to fill EapError
+        goto Cleanup;
+    }
 
-        // Set the EapTypeId of USER_DATA_BLOB
-        pEapUserData->eapTypeId = _wtol((WCHAR*)elementValue);
-        SysFreeString(elementValue);
+    // Set the EapTypeId of USER_DATA_BLOB
+    pEapUserData->eapTypeId = _wtol((WCHAR*)elementValue);
+    SysFreeString(elementValue);
 
-        // Read the Identity element from XML
-        retCode = GetXmlElementValue(pCredentialsDoc, L"Identity", USER_PROPERTIES, elementValue);
-        if(retCode != ERROR_SUCCESS)
-        {
-                //Need to fill EapError
-                goto Cleanup;
-        }
+    // Read the Identity element from XML
+    retCode = GetXmlElementValue(pCredentialsDoc, L"Identity", USER_PROPERTIES, elementValue);
+    if(retCode != ERROR_SUCCESS)
+    {
+        //Need to fill EapError
+        goto Cleanup;
+    }
 
-        // Set the awszIdentity of USER_DATA_BLOB
-        CopyMemory(pEapUserData->eapUserNamePassword.awszIdentity,
-                              (BYTE *)elementValue,
-                              ((SysStringLen(elementValue) + 1) * sizeof(wchar_t)));
-        SysFreeString(elementValue);
+    // Set the awszIdentity of USER_DATA_BLOB
+    CopyMemory(pEapUserData->eapUserNamePassword.awszIdentity,
+               (BYTE *)elementValue,
+               ((SysStringLen(elementValue) + 1) * sizeof(wchar_t)));
+    SysFreeString(elementValue);
 
-        // Read the Password element from XML
-        retCode = GetXmlElementValue(pCredentialsDoc, L"Password", USER_PROPERTIES, elementValue);
-        if(retCode != ERROR_SUCCESS)
-        {
-                //Need to fill EapError
-                goto Cleanup;
-        }
+    // Read the Password element from XML
+    retCode = GetXmlElementValue(pCredentialsDoc, L"Password", USER_PROPERTIES, elementValue);
+    if(retCode != ERROR_SUCCESS)
+    {
+        //Need to fill EapError
+        goto Cleanup;
+    }
 
-        // Set the awszPassword of USER_DATA_BLOB
-        CopyMemory(pEapUserData->eapUserNamePassword.awszPassword,
-                               (BYTE *)elementValue,
-                              ((SysStringLen(elementValue) + 1) * sizeof(wchar_t)));
-        SysFreeString(elementValue);
+    // Set the awszPassword of USER_DATA_BLOB
+    CopyMemory(pEapUserData->eapUserNamePassword.awszPassword,
+               (BYTE *)elementValue,
+               ((SysStringLen(elementValue) + 1) * sizeof(wchar_t)));
+    SysFreeString(elementValue);
 
 
-        //
-        // Set the output parameters.
-        //
-        *ppCredentialsOut = (BYTE *)pEapUserData;
-        *pdwSizeOfCredentialsOut = sizeof(USER_DATA_BLOB);
+    //
+    // Set the output parameters.
+    //
+    *ppCredentialsOut = (BYTE *)pEapUserData;
+    *pdwSizeOfCredentialsOut = sizeof(USER_DATA_BLOB);
 
-        pEapUserData = NULL;
+    pEapUserData = NULL;
 
 Cleanup:
-        if(retCode != ERROR_SUCCESS)
-                FreeMemory((PVOID*)&pEapUserData);
+    if(retCode != ERROR_SUCCESS)
+        FreeMemory((PVOID*)&pEapUserData);
 
-        return retCode;
+    return retCode;
 }
 
 
 
 DWORD WINAPI EapPeerConfigBlob2Xml(
-                 IN DWORD dwFlags,
-                 IN EAP_METHOD_TYPE eapMethodType,
-                 IN _In_reads_(dwSizeOfConfigIn) const BYTE* pConfigIn,
-                 IN DWORD dwSizeOfConfigIn,
-                 OUT IXMLDOMDocument2** ppConfigDoc,
-                 OUT EAP_ERROR** ppEapError
-                 )
+    IN DWORD dwFlags,
+    IN EAP_METHOD_TYPE eapMethodType,
+    IN _In_reads_(dwSizeOfConfigIn) const BYTE* pConfigIn,
+    IN DWORD dwSizeOfConfigIn,
+    OUT IXMLDOMDocument2** ppConfigDoc,
+    OUT EAP_ERROR** ppEapError
+)
 {
-       DWORD retCode = ERROR_SUCCESS;
-       IXMLDOMDocument2 *pXmlDoc = NULL;
+    DWORD retCode = ERROR_SUCCESS;
+    IXMLDOMDocument2 *pXmlDoc = NULL;
 
-       // pConfigIn can be NULL. If it is, use the default configuration of the method.
-       if(!ppConfigDoc || !ppEapError)
-       {
-                EapTrace("EapPeerConfigBlob2Xml() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError, if ppEapError != NULL else just return
-                goto Cleanup;
-       }
+    // pConfigIn can be NULL. If it is, use the default configuration of the method.
+    if(!ppConfigDoc || !ppEapError)
+    {
+        EapTrace("EapPeerConfigBlob2Xml() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError, if ppEapError != NULL else just return
+        goto Cleanup;
+    }
 
-        if ((eapMethodType.eapType.type != EAPTYPE) ||
-             (eapMethodType.dwAuthorId != AUTHOR_ID))
-        {
-                EapTrace("EapPeerConfigBlob2Xml() --- Input Eap Type Info does not match the supported Eap Type");
-                retCode = ERROR_NOT_SUPPORTED;
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    if ((eapMethodType.eapType.type != EAPTYPE) ||
+            (eapMethodType.dwAuthorId != AUTHOR_ID))
+    {
+        EapTrace("EapPeerConfigBlob2Xml() --- Input Eap Type Info does not match the supported Eap Type");
+        retCode = ERROR_NOT_SUPPORTED;
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
-        UNREFERENCED_PARAMETER(dwFlags);
-        UNREFERENCED_PARAMETER(pConfigIn);
-        UNREFERENCED_PARAMETER(dwSizeOfConfigIn);
+    UNREFERENCED_PARAMETER(dwFlags);
+    UNREFERENCED_PARAMETER(pConfigIn);
+    UNREFERENCED_PARAMETER(dwSizeOfConfigIn);
 
-        HRESULT hr = CoCreateInstance(CLSID_DOMDocument60,
-                                      NULL,
-                                      CLSCTX_INPROC_SERVER,
-                                      IID_IXMLDOMDocument2,
-                                      reinterpret_cast<void**>(&pXmlDoc)
-                                      );
-        if(FAILED(hr))
-        {
-              retCode = HRESULT_CODE(hr);
-              EapTrace("EapPeerConfigBlob2Xml() --- Unable to CoCreate XMLDOMDocument2: retCode = %d", retCode);
-              // Need to fill EapError
-              goto Cleanup;
-        }
+    HRESULT hr = CoCreateInstance(CLSID_DOMDocument60,
+                                  NULL,
+                                  CLSCTX_INPROC_SERVER,
+                                  IID_IXMLDOMDocument2,
+                                  reinterpret_cast<void**>(&pXmlDoc)
+                                 );
+    if(FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        EapTrace("EapPeerConfigBlob2Xml() --- Unable to CoCreate XMLDOMDocument2: retCode = %d", retCode);
+        // Need to fill EapError
+        goto Cleanup;
+    }
 
-        hr = pXmlDoc->put_async(VARIANT_FALSE);
-        if (FAILED(hr))
-        {
-             retCode = HRESULT_CODE(hr);
-             EapTrace("EapPeerConfigBlob2Xml() --- put_async failed: retCode = %d", retCode);
-             // Need to fill EapError
-             goto Cleanup;
-        }
+    hr = pXmlDoc->put_async(VARIANT_FALSE);
+    if (FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        EapTrace("EapPeerConfigBlob2Xml() --- put_async failed: retCode = %d", retCode);
+        // Need to fill EapError
+        goto Cleanup;
+    }
 
-        //
-        // One is expected to read the pConfigIn and then decide what should be the content of XML Doc.
-        // For simplicity, we have hardcoded the XML Doc that is sent in response.
-        //
-        BSTR xml = L"<ConfigBlob xmlns='http://www.microsoft.com/provisioning/EapHostConfig'>2800000061006E0075006A006B000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</ConfigBlob>";
-        VARIANT_BOOL isSuccess = VARIANT_FALSE;
-        hr = pXmlDoc->loadXML(xml, &isSuccess);
-        if (FAILED(hr) || (isSuccess != VARIANT_TRUE))
-        {
-             retCode = HRESULT_CODE(hr);
-             EapTrace("EapPeerConfigBlob2Xml() --- loadXML failed: retCode = %d", retCode);
-             // Need to fill EapError
-             goto Cleanup;
-        }
+    //
+    // One is expected to read the pConfigIn and then decide what should be the content of XML Doc.
+    // For simplicity, we have hardcoded the XML Doc that is sent in response.
+    //
+    BSTR xml = L"<ConfigBlob xmlns='http://www.microsoft.com/provisioning/EapHostConfig'>2800000061006E0075006A006B000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000</ConfigBlob>";
+    VARIANT_BOOL isSuccess = VARIANT_FALSE;
+    hr = pXmlDoc->loadXML(xml, &isSuccess);
+    if (FAILED(hr) || (isSuccess != VARIANT_TRUE))
+    {
+        retCode = HRESULT_CODE(hr);
+        EapTrace("EapPeerConfigBlob2Xml() --- loadXML failed: retCode = %d", retCode);
+        // Need to fill EapError
+        goto Cleanup;
+    }
 
-        //
-        // Set the output parameters.
-        //
-        *ppConfigDoc = pXmlDoc;
+    //
+    // Set the output parameters.
+    //
+    *ppConfigDoc = pXmlDoc;
 
-        pXmlDoc = NULL;
+    pXmlDoc = NULL;
 
 Cleanup:
 
-        if(pXmlDoc)
-            pXmlDoc->Release();
+    if(pXmlDoc)
+        pXmlDoc->Release();
 
-        return retCode;
+    return retCode;
 }
 
 
 DWORD WINAPI EapPeerInvokeInteractiveUI(
-         IN EAP_METHOD_TYPE* pEapType,
-         IN HWND hwndParent,
-         IN DWORD dwSizeofUIContextData,
-         IN BYTE* pUIContextData,
-         OUT DWORD* pdwSizeOfDataFromInteractiveUI,
-         OUT BYTE** ppDataFromInteractiveUI,
-         OUT EAP_ERROR** ppEapError
-         )
+    IN EAP_METHOD_TYPE* pEapType,
+    IN HWND hwndParent,
+    IN DWORD dwSizeofUIContextData,
+    IN BYTE* pUIContextData,
+    OUT DWORD* pdwSizeOfDataFromInteractiveUI,
+    OUT BYTE** ppDataFromInteractiveUI,
+    OUT EAP_ERROR** ppEapError
+)
 {
-        DWORD retCode = NO_ERROR;
-        HRESULT hr = S_OK;
+    DWORD retCode = NO_ERROR;
+    HRESULT hr = S_OK;
 
-        if (! pUIContextData || !ppDataFromInteractiveUI || !pdwSizeOfDataFromInteractiveUI || !ppEapError)
+    if (! pUIContextData || !ppDataFromInteractiveUI || !pdwSizeOfDataFromInteractiveUI || !ppEapError)
+    {
+        EapTrace("EapPeerInvokeInteractiveUI() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+
+    if ((pEapType->eapType.type != EAPTYPE) ||
+            (pEapType->dwAuthorId != AUTHOR_ID))
+    {
+        EapTrace("EapPeerInvokeInteractiveUI() --- Input Eap Type Info does not match the supported Eap Type");
+        retCode = ERROR_NOT_SUPPORTED;
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
+
+    UNREFERENCED_PARAMETER(dwSizeofUIContextData);
+    UNREFERENCED_PARAMETER(hwndParent);
+
+    if (MessageBox(hwndParent, (WCHAR*)pUIContextData,
+                   STRING_INTERACTIVE_UI_TITLE,
+                   MB_OKCANCEL) == IDOK)
+    {
+        //
+        // If the user presses OK on the Message Box, then he/she agrees to use the EAP Sample.
+        //
+        //
+        // Populate the output parameters -- pdwSizeOfDataFromInteractiveUI & ppDataFromInteractiveUI
+        //
+        *pdwSizeOfDataFromInteractiveUI = (DWORD)STRING_LENGTH_UI_SUCCESS;
+
+        retCode = AllocateMemory(*pdwSizeOfDataFromInteractiveUI,
+                                 (PVOID*)ppDataFromInteractiveUI);
+        if (retCode != NO_ERROR)
         {
-                EapTrace("EapPeerInvokeInteractiveUI() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-               goto Cleanup;
+            goto Cleanup;
         }
 
-        if ((pEapType->eapType.type != EAPTYPE) ||
-             (pEapType->dwAuthorId != AUTHOR_ID))
-        {
-                EapTrace("EapPeerInvokeInteractiveUI() --- Input Eap Type Info does not match the supported Eap Type");
-                retCode = ERROR_NOT_SUPPORTED;
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
-
-        UNREFERENCED_PARAMETER(dwSizeofUIContextData);
-        UNREFERENCED_PARAMETER(hwndParent);
-
-        if (MessageBox(hwndParent, (WCHAR*)pUIContextData,
-                                 STRING_INTERACTIVE_UI_TITLE,
-                                 MB_OKCANCEL) == IDOK)
-        {
-                //
-                // If the user presses OK on the Message Box, then he/she agrees to use the EAP Sample.
-                //
-                //
-                // Populate the output parameters -- pdwSizeOfDataFromInteractiveUI & ppDataFromInteractiveUI
-                //
-                *pdwSizeOfDataFromInteractiveUI = (DWORD)STRING_LENGTH_UI_SUCCESS;
-
-                retCode = AllocateMemory(*pdwSizeOfDataFromInteractiveUI,
-                               (PVOID*)ppDataFromInteractiveUI);
-                if (retCode != NO_ERROR)
-                {
-                        goto Cleanup;
-                }
-
-                //
-                // Safely copy the UI data into our output buffer.
-                //
-                hr = StringCbCopyW((WCHAR*)*ppDataFromInteractiveUI,
+        //
+        // Safely copy the UI data into our output buffer.
+        //
+        hr = StringCbCopyW((WCHAR*)*ppDataFromInteractiveUI,
                            *pdwSizeOfDataFromInteractiveUI,
                            STRING_UI_SUCCESS);
-                if (FAILED(hr))
-                {
-                        retCode = HRESULT_CODE(hr);
-                        EapTrace("Error while copying UI data! (error %d)",retCode);
-                        goto Cleanup;
-                }
-        }
-        else
+        if (FAILED(hr))
         {
-                *ppDataFromInteractiveUI         = NULL;
-                *pdwSizeOfDataFromInteractiveUI = 0;
+            retCode = HRESULT_CODE(hr);
+            EapTrace("Error while copying UI data! (error %d)",retCode);
+            goto Cleanup;
         }
+    }
+    else
+    {
+        *ppDataFromInteractiveUI         = NULL;
+        *pdwSizeOfDataFromInteractiveUI = 0;
+    }
 
 Cleanup:
-        if (retCode != NO_ERROR && ppDataFromInteractiveUI != NULL)
-        {
-                FreeMemory((PVOID*)ppDataFromInteractiveUI);
+    if (retCode != NO_ERROR && ppDataFromInteractiveUI != NULL)
+    {
+        FreeMemory((PVOID*)ppDataFromInteractiveUI);
 
-                if (pdwSizeOfDataFromInteractiveUI)
-                        *pdwSizeOfDataFromInteractiveUI = 0;
-        }
+        if (pdwSizeOfDataFromInteractiveUI)
+            *pdwSizeOfDataFromInteractiveUI = 0;
+    }
 
-        return retCode;
+    return retCode;
 }
 
 DWORD WINAPI EapPeerInvokeIdentityUI(
-         IN EAP_METHOD_TYPE* pEapType,
-         IN DWORD dwFlags,
-         IN HWND hwndParent,
-         IN DWORD dwSizeOfConnectionData,
-         IN const BYTE* pConnectionData,
-         IN DWORD dwSizeOfUserData,
-         IN const BYTE* pUserData,
-         OUT DWORD* pdwSizeOfUserDataOut,
-         OUT BYTE** ppUserDataOut,
-         OUT _Outptr_ LPWSTR* ppwszIdentity,
-         OUT EAP_ERROR** pEapError
-         )
+    IN EAP_METHOD_TYPE* pEapType,
+    IN DWORD dwFlags,
+    IN HWND hwndParent,
+    IN DWORD dwSizeOfConnectionData,
+    IN const BYTE* pConnectionData,
+    IN DWORD dwSizeOfUserData,
+    IN const BYTE* pUserData,
+    OUT DWORD* pdwSizeOfUserDataOut,
+    OUT BYTE** ppUserDataOut,
+    OUT _Outptr_ LPWSTR* ppwszIdentity,
+    OUT EAP_ERROR** pEapError
+)
 {
-        DWORD retCode = NO_ERROR;
+    DWORD retCode = NO_ERROR;
 
-        if (!ppwszIdentity)
-        {
-            EapTrace("SdkEapPeerGetIdentity() --- ppwszIdentity paramters is NULL");
-            retCode = ERROR_INVALID_PARAMETER;
-            // Need to fill the EapError
-            goto Cleanup;
-        }
-        *ppwszIdentity = L"";
+    if (!ppwszIdentity)
+    {
+        EapTrace("SdkEapPeerGetIdentity() --- ppwszIdentity paramters is NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+    *ppwszIdentity = L"";
 
-        if(!pEapType || !pdwSizeOfUserDataOut || !ppUserDataOut || !pEapError)
-        {
-                EapTrace("EapPeerInvokeIdentityUI() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
-        
-        if ((pEapType->eapType.type != EAPTYPE) ||
-             (pEapType->dwAuthorId != AUTHOR_ID))
-        {
-                EapTrace("EapPeerInvokeIdentityUI() --- Input Eap Type Info does not match the supported Eap Type");
-                retCode = ERROR_NOT_SUPPORTED;
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    if(!pEapType || !pdwSizeOfUserDataOut || !ppUserDataOut || !pEapError)
+    {
+        EapTrace("EapPeerInvokeIdentityUI() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        UNREFERENCED_PARAMETER(dwFlags);
-        UNREFERENCED_PARAMETER(dwSizeOfConnectionData);
-        UNREFERENCED_PARAMETER(pConnectionData);
+    if ((pEapType->eapType.type != EAPTYPE) ||
+            (pEapType->dwAuthorId != AUTHOR_ID))
+    {
+        EapTrace("EapPeerInvokeIdentityUI() --- Input Eap Type Info does not match the supported Eap Type");
+        retCode = ERROR_NOT_SUPPORTED;
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
-        retCode = GetIdentity(
-                hwndParent,
-                (BYTE *)pUserData,
-                dwSizeOfUserData,
-                ppUserDataOut,
-                pdwSizeOfUserDataOut,
-                ppwszIdentity);
+    UNREFERENCED_PARAMETER(dwFlags);
+    UNREFERENCED_PARAMETER(dwSizeOfConnectionData);
+    UNREFERENCED_PARAMETER(pConnectionData);
+
+    retCode = GetIdentity(
+                  hwndParent,
+                  (BYTE *)pUserData,
+                  dwSizeOfUserData,
+                  ppUserDataOut,
+                  pdwSizeOfUserDataOut,
+                  ppwszIdentity);
 
 Cleanup:
 
-        return retCode;
+    return retCode;
 }
 
 
 DWORD WINAPI EapPeerQueryCredentialInputFields(
-         IN  HANDLE                        hUserToken,
-         IN  EAP_METHOD_TYPE               eapType,
-         IN  DWORD                         dwFlags,
-         IN  DWORD                         dwEapConnDataSize,
-         IN  _In_reads_(dwEapConnDataSize)PBYTE                         pbEapConnData,
-         OUT EAP_CONFIG_INPUT_FIELD_ARRAY *pEapConfigFieldsArray,
-         OUT EAP_ERROR                   **ppEapError
-         ) throw()
+    IN  HANDLE                        hUserToken,
+    IN  EAP_METHOD_TYPE               eapType,
+    IN  DWORD                         dwFlags,
+    IN  DWORD                         dwEapConnDataSize,
+    IN  _In_reads_(dwEapConnDataSize)PBYTE                         pbEapConnData,
+    OUT EAP_CONFIG_INPUT_FIELD_ARRAY *pEapConfigFieldsArray,
+    OUT EAP_ERROR                   **ppEapError
+) throw()
 {
-        DWORD retval = NO_ERROR;
+    DWORD retval = NO_ERROR;
 
-        UNREFERENCED_PARAMETER(hUserToken);
-        UNREFERENCED_PARAMETER(dwFlags);
-        UNREFERENCED_PARAMETER(dwEapConnDataSize);
-        UNREFERENCED_PARAMETER(pbEapConnData);
+    UNREFERENCED_PARAMETER(hUserToken);
+    UNREFERENCED_PARAMETER(dwFlags);
+    UNREFERENCED_PARAMETER(dwEapConnDataSize);
+    UNREFERENCED_PARAMETER(pbEapConnData);
 
-        if (! pEapConfigFieldsArray ||
+    if (! pEapConfigFieldsArray ||
             ! ppEapError)
-        {
-                retval = ERROR_INVALID_PARAMETER;
-                EapTrace("QueryCredentalInputFields(): Error: Output pointer was NULL!");
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    {
+        retval = ERROR_INVALID_PARAMETER;
+        EapTrace("QueryCredentalInputFields(): Error: Output pointer was NULL!");
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
-        //
-        // Verify if eapType passed by EapHost correctly matches the EapType of this DLL.
-        //
-        if ((eapType.eapType.type != EAPTYPE) ||
-             (eapType.dwAuthorId != AUTHOR_ID))
-        {
-                EapTrace("EapPeerQueryCredentialInputFields() --- Input Eap Type Info does not match the supported Eap Type");
-                retval = ERROR_NOT_SUPPORTED;
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    //
+    // Verify if eapType passed by EapHost correctly matches the EapType of this DLL.
+    //
+    if ((eapType.eapType.type != EAPTYPE) ||
+            (eapType.dwAuthorId != AUTHOR_ID))
+    {
+        EapTrace("EapPeerQueryCredentialInputFields() --- Input Eap Type Info does not match the supported Eap Type");
+        retval = ERROR_NOT_SUPPORTED;
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
-        // Copy this method's default credential input field array, and pass it
-        // back to the caller.
-        retval = CopyCredentialInputArray(pEapConfigFieldsArray,
-                                          &defaultCredentialInputArray);
-        if (retval != NO_ERROR)
-        {
-                EapTrace("QueryCredentalInputFields(): Hit error %d while copying credential field array!",
-                         retval);
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    // Copy this method's default credential input field array, and pass it
+    // back to the caller.
+    retval = CopyCredentialInputArray(pEapConfigFieldsArray,
+                                      &defaultCredentialInputArray);
+    if (retval != NO_ERROR)
+    {
+        EapTrace("QueryCredentalInputFields(): Hit error %d while copying credential field array!",
+                 retval);
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
 
- Cleanup:
-        return retval;
+Cleanup:
+    return retval;
 }
 
 
 DWORD WINAPI EapPeerQueryUserBlobFromCredentialInputFields(
-         IN  HANDLE                        hUserToken,
-         IN  EAP_METHOD_TYPE               eapType,
-         IN  DWORD                         dwFlags,
-         IN  DWORD                         dwEapConnDataSize,
-         IN  PBYTE                         pbEapConnData,
-         IN  EAP_CONFIG_INPUT_FIELD_ARRAY *pEapConfigFieldsArray,
-         OUT DWORD                        *pdwUserBlobSize,
-         OUT PBYTE                        *ppbUserBlob,
-         OUT EAP_ERROR                   **ppEapError
-         ) throw()
+    IN  HANDLE                        hUserToken,
+    IN  EAP_METHOD_TYPE               eapType,
+    IN  DWORD                         dwFlags,
+    IN  DWORD                         dwEapConnDataSize,
+    IN  PBYTE                         pbEapConnData,
+    IN  EAP_CONFIG_INPUT_FIELD_ARRAY *pEapConfigFieldsArray,
+    OUT DWORD                        *pdwUserBlobSize,
+    OUT PBYTE                        *ppbUserBlob,
+    OUT EAP_ERROR                   **ppEapError
+) throw()
 {
-        DWORD retval = NO_ERROR;
+    DWORD retval = NO_ERROR;
 
-        UNREFERENCED_PARAMETER(hUserToken);
-        UNREFERENCED_PARAMETER(dwFlags);
-        UNREFERENCED_PARAMETER(dwEapConnDataSize);
-        UNREFERENCED_PARAMETER(pbEapConnData);
+    UNREFERENCED_PARAMETER(hUserToken);
+    UNREFERENCED_PARAMETER(dwFlags);
+    UNREFERENCED_PARAMETER(dwEapConnDataSize);
+    UNREFERENCED_PARAMETER(pbEapConnData);
 
 
-        if (! pEapConfigFieldsArray ||
+    if (! pEapConfigFieldsArray ||
             ! pdwUserBlobSize ||
             ! ppbUserBlob ||
             ! ppEapError)
-        {
-                retval = ERROR_INVALID_PARAMETER;
-                EapTrace("QueryUserBlobFromCredentialInputFields(): Error: One or more input/output pointers were NULL!");
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    {
+        retval = ERROR_INVALID_PARAMETER;
+        EapTrace("QueryUserBlobFromCredentialInputFields(): Error: One or more input/output pointers were NULL!");
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
 
-        //
-        // Verify if eapType passed by EapHost correctly matches the EapType of this DLL.
-        //
-        if ((eapType.eapType.type != EAPTYPE) ||
-             (eapType.dwAuthorId != AUTHOR_ID))
-        {
-                retval = ERROR_NOT_SUPPORTED;
-                EapTrace("EapPeerQueryUserBlobFromCredentialInputFields() --- Input Eap Type Info does not match the supported Eap Type");
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    //
+    // Verify if eapType passed by EapHost correctly matches the EapType of this DLL.
+    //
+    if ((eapType.eapType.type != EAPTYPE) ||
+            (eapType.dwAuthorId != AUTHOR_ID))
+    {
+        retval = ERROR_NOT_SUPPORTED;
+        EapTrace("EapPeerQueryUserBlobFromCredentialInputFields() --- Input Eap Type Info does not match the supported Eap Type");
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
-        // Generate a User Data blob that corresponds to the credential input field
-        // data received.
-        retval = ConstructUserBlobFromCredentialInputArray(
-                                         &eapType,
-                                         pEapConfigFieldsArray,
-                                         pdwUserBlobSize,
-                                         ppbUserBlob);
-        if (retval != NO_ERROR)
-        {
-                EapTrace("QueryUserBlobFromCredentialInputFields(): Hit error %d while copying credential field array!",
-                         retval);
-                // Need to fill the EapError.
-                goto Cleanup;
-        }
+    // Generate a User Data blob that corresponds to the credential input field
+    // data received.
+    retval = ConstructUserBlobFromCredentialInputArray(
+                 &eapType,
+                 pEapConfigFieldsArray,
+                 pdwUserBlobSize,
+                 ppbUserBlob);
+    if (retval != NO_ERROR)
+    {
+        EapTrace("QueryUserBlobFromCredentialInputFields(): Hit error %d while copying credential field array!",
+                 retval);
+        // Need to fill the EapError.
+        goto Cleanup;
+    }
 
 
- Cleanup:
-        return retval;
+Cleanup:
+    return retval;
 }
 
 
@@ -1708,15 +1708,15 @@ DWORD WINAPI EapPeerQueryUserBlobFromCredentialInputFields(
 // and user blob to be used during the method discovery
 //
 DWORD WINAPI EapPeerGetConfigBlobAndUserBlob(
-        IN      DWORD           dwFlags,
-        IN      EAP_METHOD_TYPE eapMethodType,
-        IN      EapCredential   eapCred,
-        OUT     DWORD*          pdwConfigBlobSize,
-        OUT     BYTE**          ppConfigBlob,
-        OUT     DWORD*          pdwUserBlobSize,
-        OUT     BYTE**          ppUserBlob,
-        OUT     EAP_ERROR**     ppEapError
-        )
+    IN      DWORD           dwFlags,
+    IN      EAP_METHOD_TYPE eapMethodType,
+    IN      EapCredential   eapCred,
+    OUT     DWORD*          pdwConfigBlobSize,
+    OUT     BYTE**          ppConfigBlob,
+    OUT     DWORD*          pdwUserBlobSize,
+    OUT     BYTE**          ppUserBlob,
+    OUT     EAP_ERROR**     ppEapError
+)
 {
     UNREFERENCED_PARAMETER(dwFlags);
     UNREFERENCED_PARAMETER(eapMethodType);
@@ -1769,10 +1769,10 @@ Cleanup:
 
 
 VOID WINAPI EapPeerFreeMemory(
-        _In_ void* pUIContextData
-        )
+    _In_ void* pUIContextData
+)
 {
-        FreeMemory((PVOID*)&pUIContextData);
+    FreeMemory((PVOID*)&pUIContextData);
 }
 
 
@@ -1805,94 +1805,94 @@ MakeResponseMessage(
     OUT EapPacket * pSendBuf
 )
 {
-        DWORD retCode = ERROR_SUCCESS;
-        BYTE*   pcbPassword  = NULL;
-        CHAR*   pszPassword  = NULL;
-        size_t  sizePassword = 0;
-        HRESULT hr           = S_OK;
-        DWORD packetSize = 0;
+    DWORD retCode = ERROR_SUCCESS;
+    BYTE*   pcbPassword  = NULL;
+    CHAR*   pszPassword  = NULL;
+    size_t  sizePassword = 0;
+    HRESULT hr           = S_OK;
+    DWORD packetSize = 0;
 
-        if(!pwb || !pcbSendBuf || !pSendBuf)
-        {
-                EapTrace("MakeResponseMessage() --- One/Some of the paramters is/are NULL");
-                retCode = ERROR_INVALID_PARAMETER;
-                // Need to fill the EapError
-                goto Cleanup;
-        }
+    if(!pwb || !pcbSendBuf || !pSendBuf)
+    {
+        EapTrace("MakeResponseMessage() --- One/Some of the paramters is/are NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
 
-        //
-        //  Packet Structure
-        //  Code - 1 Byte
-        //  Id - 1 Byte
-        //  Length - 2 Bytes
-        //  Data[0] - EAPTYPE
-        //  Data[1] - Length of Password (X).
-        //  Data[2] to Data[X+1] - Password
-        //
+    //
+    //  Packet Structure
+    //  Code - 1 Byte
+    //  Id - 1 Byte
+    //  Length - 2 Bytes
+    //  Data[0] - EAPTYPE
+    //  Data[1] - Length of Password (X).
+    //  Data[2] to Data[X+1] - Password
+    //
 
-        //
-        // Fill in the password.
-        //
+    //
+    // Fill in the password.
+    //
 
-        pcbPassword = pSendBuf->Data + 1;
+    pcbPassword = pSendBuf->Data + 1;
 
-        // Note: StringCbLength() does not include room for the trailing NULL. This
-        // is valid for the packet (which doesn't need the NULL), but calls to any
-        // length-based string copy functions will need to add room for the NULL.
-        hr = StringCbLengthA(pwb->aszPassword, (size_t)(PWLEN + 1), &sizePassword);
-        if (FAILED(hr))
-        {
-            retCode = HRESULT_CODE(hr);
-            EapTrace("Error while calculating password length! (error %d)", retCode);
-            goto Cleanup;
-        }
+    // Note: StringCbLength() does not include room for the trailing NULL. This
+    // is valid for the packet (which doesn't need the NULL), but calls to any
+    // length-based string copy functions will need to add room for the NULL.
+    hr = StringCbLengthA(pwb->aszPassword, (size_t)(PWLEN + 1), &sizePassword);
+    if (FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        EapTrace("Error while calculating password length! (error %d)", retCode);
+        goto Cleanup;
+    }
 
-        *pcbPassword = (BYTE)sizePassword;
+    *pcbPassword = (BYTE)sizePassword;
 
-        pszPassword = (PCHAR)(pcbPassword + 1);
+    pszPassword = (PCHAR)(pcbPassword + 1);
 
-        // This function needs the length parameter to include room for the NULL.
-        hr = StringCbCopyA(pszPassword, (*pcbPassword)+1, pwb->aszPassword);
-        if (FAILED(hr))
-        {
-                retCode = HRESULT_CODE(hr);
-                EapTrace("Error while copying password into response message! (error %d)",
-                         retCode);
-                goto Cleanup;
-        }
+    // This function needs the length parameter to include room for the NULL.
+    hr = StringCbCopyA(pszPassword, (*pcbPassword)+1, pwb->aszPassword);
+    if (FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        EapTrace("Error while copying password into response message! (error %d)",
+                 retCode);
+        goto Cleanup;
+    }
 
-        packetSize = EAP_PACKET_HDR_LEN+1+*pcbPassword+1;
+    packetSize = EAP_PACKET_HDR_LEN+1+*pcbPassword+1;
 
-        if(packetSize > *pcbSendBuf)
-        {
-                // Error
-                goto Cleanup;
-        }
-        else
-                *pcbSendBuf = packetSize;
+    if(packetSize > *pcbSendBuf)
+    {
+        // Error
+        goto Cleanup;
+    }
+    else
+        *pcbSendBuf = packetSize;
 
-        //
-        // Set the response code
-        //
-        pSendBuf->Code = (BYTE)EapCodeResponse;
+    //
+    // Set the response code
+    //
+    pSendBuf->Code = (BYTE)EapCodeResponse;
 
-        //
-        // The Reponse packet Id MUST match the Request packet Id.
-        //
-        pSendBuf->Id = pwb->bRecvPacketId;
+    //
+    // The Reponse packet Id MUST match the Request packet Id.
+    //
+    pSendBuf->Id = pwb->bRecvPacketId;
 
-        //
-        // Set the EAP type ID
-        //
-        pSendBuf->Data[0] = (BYTE)EAPTYPE;
+    //
+    // Set the EAP type ID
+    //
+    pSendBuf->Data[0] = (BYTE)EAPTYPE;
 
-        //
-        // Set the length of the packet
-        //
-        HostToWireFormat16((WORD)packetSize, pSendBuf->Length);
+    //
+    // Set the length of the packet
+    //
+    HostToWireFormat16((WORD)packetSize, pSendBuf->Length);
 
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 
@@ -1934,104 +1934,104 @@ GetIdentity(
     OUT _Out_ LPWSTR* ppwszIdentityOut
 )
 {
-       USER_DATA_BLOB* pEapUserData = NULL;
-        DWORD  retCode  = NO_ERROR;
-        size_t  lenIdentity     = 0;
-        WCHAR* pwszIdentity    = NULL;
-        HRESULT hr           = S_OK;
+    USER_DATA_BLOB* pEapUserData = NULL;
+    DWORD  retCode  = NO_ERROR;
+    size_t  lenIdentity     = 0;
+    WCHAR* pwszIdentity    = NULL;
+    HRESULT hr           = S_OK;
 
 
-        if (!ppwszIdentityOut)
-        {
-            EapTrace("SdkEapPeerGetIdentity() --- ppwszIdentityOut paramters is NULL");
-            retCode = ERROR_INVALID_PARAMETER;
-            // Need to fill the EapError
-            goto Cleanup;
-        }
-        *ppwszIdentityOut = NULL;
-        
-        // Sanity checks.
-        if (! ppUserDataOut || ! pdwSizeOfUserDataOut)
-        {
-                EapTrace("Error -- one or more output pointers is NULL!");
-                retCode = ERROR_INVALID_PARAMETER;
-                goto Cleanup;
-        }
+    if (!ppwszIdentityOut)
+    {
+        EapTrace("SdkEapPeerGetIdentity() --- ppwszIdentityOut paramters is NULL");
+        retCode = ERROR_INVALID_PARAMETER;
+        // Need to fill the EapError
+        goto Cleanup;
+    }
+    *ppwszIdentityOut = NULL;
 
-        UNREFERENCED_PARAMETER(dwSizeOfUserDataIn);
-        UNREFERENCED_PARAMETER(hwndParent);
+    // Sanity checks.
+    if (! ppUserDataOut || ! pdwSizeOfUserDataOut)
+    {
+        EapTrace("Error -- one or more output pointers is NULL!");
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
 
+    UNREFERENCED_PARAMETER(dwSizeOfUserDataIn);
+    UNREFERENCED_PARAMETER(hwndParent);
+
+    //
+    // Allocate memory for OUT parameters
+    //
+
+    retCode = AllocateMemory(sizeof(USER_DATA_BLOB), (PVOID*)&pEapUserData);
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
+
+    lenIdentity = (UNLEN+1) * sizeof(WCHAR);
+    retCode = AllocateMemory((DWORD)lenIdentity, (PVOID*)&pwszIdentity);
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
+
+    if (NULL != pUserDataIn)
+    {
         //
-        // Allocate memory for OUT parameters
+        // Use the saved credentials if they exist
         //
 
-        retCode = AllocateMemory(sizeof(USER_DATA_BLOB), (PVOID*)&pEapUserData);
-        if (retCode != NO_ERROR)
-        {
-                goto Cleanup;
-        }
+        CopyMemory(pEapUserData, pUserDataIn, sizeof(USER_DATA_BLOB));
+    }
+    else
+    {
+        //
+        // Else prompt for username and password
+        //
 
-        lenIdentity = (UNLEN+1) * sizeof(WCHAR);
-        retCode = AllocateMemory((DWORD)lenIdentity, (PVOID*)&pwszIdentity);
-        if (retCode != NO_ERROR)
-        {
-                goto Cleanup;
-        }
+        GetUsernameAndPassword(hwndParent, pEapUserData);
+    }
 
-        if (NULL != pUserDataIn)
-        {
-                //
-                // Use the saved credentials if they exist
-                //
+    pEapUserData->eapTypeId = EAPTYPE;
 
-                CopyMemory(pEapUserData, pUserDataIn, sizeof(USER_DATA_BLOB));
-        }
-        else
-        {
-                //
-                // Else prompt for username and password
-                //
-
-                GetUsernameAndPassword(hwndParent, pEapUserData);
-        }
-
-        pEapUserData->eapTypeId = EAPTYPE;
-
-       // Safely copy the UI data into our output buffer.
+    // Safely copy the UI data into our output buffer.
     hr = StringCbCopy(pwszIdentity,
-                           lenIdentity,
-                           pEapUserData->eapUserNamePassword.awszIdentity);
-        if (FAILED(hr))
-        {
-                retCode = HRESULT_CODE(hr);
-                goto Cleanup;
-        }
+                      lenIdentity,
+                      pEapUserData->eapUserNamePassword.awszIdentity);
+    if (FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        goto Cleanup;
+    }
 
-        //
-        // Set the OUT paramters
-        //
+    //
+    // Set the OUT paramters
+    //
 
-        *ppUserDataOut = (BYTE*)pEapUserData;
-        *pdwSizeOfUserDataOut = sizeof(USER_DATA_BLOB);
-        *ppwszIdentityOut = pwszIdentity;
+    *ppUserDataOut = (BYTE*)pEapUserData;
+    *pdwSizeOfUserDataOut = sizeof(USER_DATA_BLOB);
+    *ppwszIdentityOut = pwszIdentity;
 
-        //
-        // We mustn't free OUT parameters.
-        //
+    //
+    // We mustn't free OUT parameters.
+    //
 
-        pEapUserData = NULL;
-        pwszIdentity = NULL;
+    pEapUserData = NULL;
+    pwszIdentity = NULL;
 
 Cleanup:
-        if(retCode != NO_ERROR)
-        {
-            if (pEapUserData != NULL)
-                FreeMemory((PVOID*)&pEapUserData);
-            if (pwszIdentity != NULL)
-                FreeMemory((PVOID*)&pwszIdentity);
-        }
+    if(retCode != NO_ERROR)
+    {
+        if (pEapUserData != NULL)
+            FreeMemory((PVOID*)&pEapUserData);
+        if (pwszIdentity != NULL)
+            FreeMemory((PVOID*)&pwszIdentity);
+    }
 
-        return retCode;
+    return retCode;
 }
 
 
@@ -2070,11 +2070,11 @@ GetUsernameAndPassword(
     int   result = 0;
 
     result = (int)DialogBoxParam(
-                     g_hInstance,
-                     MAKEINTRESOURCE(IDD_IDENTITY_DIALOG),
-                     hwndParent,
-                     UsernameDialogProc,
-                     (LPARAM)pEapUserData);
+                 g_hInstance,
+                 MAKEINTRESOURCE(IDD_IDENTITY_DIALOG),
+                 hwndParent,
+                 UsernameDialogProc,
+                 (LPARAM)pEapUserData);
 
     if (result < 0)
     {
@@ -2241,7 +2241,7 @@ UsernameCommand(
 
         GetWindowText(hWnd, pEapUserData->eapUserNamePassword.awszPassword, PWLEN + 1);
 
-        // Fall through
+    // Fall through
 
     case IDCANCEL:
 
@@ -2251,7 +2251,7 @@ UsernameCommand(
         break;
     }
 
- LDone:
+LDone:
     return fOk;
 }
 
@@ -2264,56 +2264,56 @@ DWORD GetConfigData(
     OUT DWORD*  dwSizeOfConnectionDataOut
 )
 {
-        CONN_DATA_BLOB*  pEapConfigData  = NULL;
-        DWORD  retCode  = NO_ERROR;
+    CONN_DATA_BLOB*  pEapConfigData  = NULL;
+    DWORD  retCode  = NO_ERROR;
 
 
-        // Sanity checks.
-        if (! ppConnectionDataOut || ! dwSizeOfConnectionDataOut)
-        {
-                EapTrace("Error -- one or more output pointers is NULL!");
-                retCode = ERROR_INVALID_PARAMETER;
-                goto Cleanup;
-        }
+    // Sanity checks.
+    if (! ppConnectionDataOut || ! dwSizeOfConnectionDataOut)
+    {
+        EapTrace("Error -- one or more output pointers is NULL!");
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
 
-        UNREFERENCED_PARAMETER(pConnectionDataIn);
-        UNREFERENCED_PARAMETER(dwSizeOfConnectionDataIn);
+    UNREFERENCED_PARAMETER(pConnectionDataIn);
+    UNREFERENCED_PARAMETER(dwSizeOfConnectionDataIn);
 
-        //
-        // Allocate memory for OUT parameters
-        //
+    //
+    // Allocate memory for OUT parameters
+    //
 
-        retCode = AllocateMemory(sizeof(CONN_DATA_BLOB), (PVOID*)&pEapConfigData);
-        if (retCode != NO_ERROR)
-        {
-                goto Cleanup;
-        }
+    retCode = AllocateMemory(sizeof(CONN_DATA_BLOB), (PVOID*)&pEapConfigData);
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
 
-        //
-        // Prompt for config data from UI. Sets the awszData within CONN_DATA_BLOB
-        //
-        GetConnectionData(hwndParent, pEapConfigData);
+    //
+    // Prompt for config data from UI. Sets the awszData within CONN_DATA_BLOB
+    //
+    GetConnectionData(hwndParent, pEapConfigData);
 
-        //
-        // Set the EapType within CONN_DATA_BLOB.
-        //
-        pEapConfigData->eapTypeId = EAPTYPE;
+    //
+    // Set the EapType within CONN_DATA_BLOB.
+    //
+    pEapConfigData->eapTypeId = EAPTYPE;
 
-        //
-        // Set the OUT paramters
-        //
+    //
+    // Set the OUT paramters
+    //
 
-        *ppConnectionDataOut = (BYTE*)pEapConfigData;
-        *dwSizeOfConnectionDataOut = sizeof(CONN_DATA_BLOB);
+    *ppConnectionDataOut = (BYTE*)pEapConfigData;
+    *dwSizeOfConnectionDataOut = sizeof(CONN_DATA_BLOB);
 
-        //
-        // We mustn't free OUT parameters.
-        //
+    //
+    // We mustn't free OUT parameters.
+    //
 
-        pEapConfigData = NULL;
+    pEapConfigData = NULL;
 
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 DWORD
@@ -2322,23 +2322,23 @@ GetConnectionData(
     IN  CONN_DATA_BLOB*    pEapConfigData
 )
 {
-        DWORD dwErr  = NO_ERROR;
-        int   result = 0;
+    DWORD dwErr  = NO_ERROR;
+    int   result = 0;
 
-        result = (int)DialogBoxParam(
-                                 g_hInstance,
-                                 MAKEINTRESOURCE(IDD_CONFIG_DIALOG),
-                                 hwndParent,
-                                 ConnectionDialogProc,
-                                 (LPARAM)pEapConfigData);
-        if (result < 0)
-        {
-                dwErr = GetLastError();
-                EapTrace("Hit error %d while displaying Connection dialog!",
-                     dwErr);
-        }
+    result = (int)DialogBoxParam(
+                 g_hInstance,
+                 MAKEINTRESOURCE(IDD_CONFIG_DIALOG),
+                 hwndParent,
+                 ConnectionDialogProc,
+                 (LPARAM)pEapConfigData);
+    if (result < 0)
+    {
+        dwErr = GetLastError();
+        EapTrace("Hit error %d while displaying Connection dialog!",
+                 dwErr);
+    }
 
-        return(dwErr);
+    return(dwErr);
 }
 
 INT_PTR CALLBACK
@@ -2349,26 +2349,26 @@ ConnectionDialogProc(
     IN  LPARAM  lParam
 )
 {
-        DWORD dwErr = FALSE;        // By default, return FALSE.
-        CONN_DATA_BLOB*    pEapConfigData = NULL;
+    DWORD dwErr = FALSE;        // By default, return FALSE.
+    CONN_DATA_BLOB*    pEapConfigData = NULL;
 
-        switch (unMsg)
-        {
-                case WM_INITDIALOG:
+    switch (unMsg)
+    {
+    case WM_INITDIALOG:
 
-                dwErr = InitConnectionDialog(hWnd, lParam);
+        dwErr = InitConnectionDialog(hWnd, lParam);
 
-                break;
+        break;
 
-                case WM_COMMAND:
+    case WM_COMMAND:
 
-                pEapConfigData = (CONN_DATA_BLOB*)((LONG_PTR)GetWindowLongPtr(hWnd, DWLP_USER));
-                dwErr = ConnectionCommand(pEapConfigData, LOWORD(wParam), hWnd);
+        pEapConfigData = (CONN_DATA_BLOB*)((LONG_PTR)GetWindowLongPtr(hWnd, DWLP_USER));
+        dwErr = ConnectionCommand(pEapConfigData, LOWORD(wParam), hWnd);
 
-                break;
-        }
+        break;
+    }
 
-        return(dwErr);
+    return(dwErr);
 }
 
 BOOL
@@ -2377,9 +2377,9 @@ InitConnectionDialog(
     IN  LPARAM  lParam
 )
 {
-        SetWindowLongPtr(hWnd, DWLP_USER, (LONG)lParam);
+    SetWindowLongPtr(hWnd, DWLP_USER, (LONG)lParam);
 
-        return(FALSE);
+    return(FALSE);
 }
 
 
@@ -2390,47 +2390,47 @@ ConnectionCommand(
     IN  HWND                hWndDlg
 )
 {
-        BOOL fOk  = FALSE;
-        HWND hWnd = NULL;
+    BOOL fOk  = FALSE;
+    HWND hWnd = NULL;
 
 
-        // Sanity checks.
-        if (! pEapConfigData)
+    // Sanity checks.
+    if (! pEapConfigData)
+    {
+        EapTrace("Error -- input dialog pointer is NULL!");
+        goto LDone;
+    }
+
+    switch(wId)
+    {
+    case IDOK:
+
+        //
+        // Save whatever the user typed in as the user name
+        //
+
+        hWnd = GetDlgItem(hWndDlg, IDC_EDIT_CONFIG_NAME);
+        if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
         {
-                EapTrace("Error -- input dialog pointer is NULL!");
-                goto LDone;
+            EapTrace("Error -- couldn't get config value! (error %d)",
+                     GetLastError());
+            goto LDone;
         }
 
-        switch(wId)
-        {
-                case IDOK:
+        GetWindowText(hWnd, pEapConfigData->awszData, PATHLEN + 1);
 
-                        //
-                        // Save whatever the user typed in as the user name
-                        //
+    // Fall through
 
-                        hWnd = GetDlgItem(hWndDlg, IDC_EDIT_CONFIG_NAME);
-                        if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
-                        {
-                                EapTrace("Error -- couldn't get config value! (error %d)",
-                                         GetLastError());
-                                goto LDone;
-                        }
+    case IDCANCEL:
 
-                        GetWindowText(hWnd, pEapConfigData->awszData, PATHLEN + 1);
+        EndDialog(hWndDlg, wId);
+        fOk = TRUE;
 
-                        // Fall through
-
-                case IDCANCEL:
-
-                        EndDialog(hWndDlg, wId);
-                        fOk = TRUE;
-
-                break;
-        }
+        break;
+    }
 
 LDone:
-        return fOk;
+    return fOk;
 }
 
 /**
@@ -2450,71 +2450,71 @@ MakeMPPEKeyAttributes(
     IN EAPCB *  pwb
 )
 {
-        DWORD   retCode         = NO_ERROR;
-        DWORD   dwSendPattern = 0;
-        DWORD   dwRecvPattern = 0;
-        BYTE*   pByte         = NULL;
+    DWORD   retCode         = NO_ERROR;
+    DWORD   dwSendPattern = 0;
+    DWORD   dwRecvPattern = 0;
+    BYTE*   pByte         = NULL;
 
-        EapAttribute keyAttrib = {eatMinimum, 0, 0};
+    EapAttribute keyAttrib = {eatMinimum, 0, 0};
 
-        // Sanity checks.
-        if (! pwb)
-        {
-                retCode = ERROR_INVALID_PARAMETER;
-                goto Cleanup;
-        }
+    // Sanity checks.
+    if (! pwb)
+    {
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
 
-        //
-        // Free any prior MPPE key attributes.
-        //
-        retCode = FreeAttributes(&(pwb->pMPPEKeyAttributes));
-        if (retCode != NO_ERROR)
-        {
-                goto Cleanup;
-        }
+    //
+    // Free any prior MPPE key attributes.
+    //
+    retCode = FreeAttributes(&(pwb->pMPPEKeyAttributes));
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
 
-        //
-        // Set up a scratch buffer to use when constructing keys.
-        //
-        retCode = AllocateMemory(MPPE_KEY_LENGTH, (PVOID*)&pByte);
-        if (retCode != NO_ERROR)
-                goto Cleanup;
+    //
+    // Set up a scratch buffer to use when constructing keys.
+    //
+    retCode = AllocateMemory(MPPE_KEY_LENGTH, (PVOID*)&pByte);
+    if (retCode != NO_ERROR)
+        goto Cleanup;
 
-        //
-        // The "keys" used by this Sample EAP provider are simple values XOR'ed
-        // with these values.  When implementing a real EAP protocol, a much
-        // stronger key generation mechanism should be used.
-        //
+    //
+    // The "keys" used by this Sample EAP provider are simple values XOR'ed
+    // with these values.  When implementing a real EAP protocol, a much
+    // stronger key generation mechanism should be used.
+    //
 
-        dwSendPattern = 0xCD;
-        dwRecvPattern = 0xAB;
+    dwSendPattern = 0xCD;
+    dwRecvPattern = 0xAB;
 
-        //
-        // Construct the MPPE Send key.
-        //
+    //
+    // Construct the MPPE Send key.
+    //
 
-        retCode = FillMppeKeyAttribute(pwb, pByte, dwSendPattern, MS_MPPE_SEND_KEY, keyAttrib);
-        if (retCode != NO_ERROR)
-                goto Cleanup;
+    retCode = FillMppeKeyAttribute(pwb, pByte, dwSendPattern, MS_MPPE_SEND_KEY, keyAttrib);
+    if (retCode != NO_ERROR)
+        goto Cleanup;
 
-        //
-        // Construct the MPPE Recv key.
-        //
+    //
+    // Construct the MPPE Recv key.
+    //
 
-        retCode = FillMppeKeyAttribute(pwb, pByte, dwRecvPattern, MS_MPPE_RECV_KEY, keyAttrib);
-        if (retCode != NO_ERROR)
-                goto Cleanup;
+    retCode = FillMppeKeyAttribute(pwb, pByte, dwRecvPattern, MS_MPPE_RECV_KEY, keyAttrib);
+    if (retCode != NO_ERROR)
+        goto Cleanup;
 
 Cleanup:
-        FreeMemory((PVOID*)&pByte);
+    FreeMemory((PVOID*)&pByte);
 
-        if (NO_ERROR != retCode)
-        {
-                if (pwb)
-                        FreeAttributes(&(pwb->pMPPEKeyAttributes));
-        }
+    if (NO_ERROR != retCode)
+    {
+        if (pwb)
+            FreeAttributes(&(pwb->pMPPEKeyAttributes));
+    }
 
-        return(retCode);
+    return(retCode);
 }
 
 
@@ -2530,36 +2530,36 @@ DWORD FillMppeKeyAttribute(IN EAPCB *pwb,
                            IN BYTE bKeyDirection,
                            IN OUT EapAttribute &pAttrib)
 {
-        DWORD retCode = ERROR_SUCCESS;
-        DWORD dwIndex = 0;
+    DWORD retCode = ERROR_SUCCESS;
+    DWORD dwIndex = 0;
 
-        CopyMemory(bBuffer, pwb->aszPassword, MPPE_KEY_LENGTH);
-        for (dwIndex = 0; dwIndex < MPPE_KEY_LENGTH; dwIndex++)
-        {
-                bBuffer[dwIndex] ^= pattern;
-        }
+    CopyMemory(bBuffer, pwb->aszPassword, MPPE_KEY_LENGTH);
+    for (dwIndex = 0; dwIndex < MPPE_KEY_LENGTH; dwIndex++)
+    {
+        bBuffer[dwIndex] ^= pattern;
+    }
 
-        retCode = ConstructMppeKeyAttribute(bKeyDirection,
-                              bBuffer, MPPE_KEY_LENGTH, &pAttrib);
-        if (retCode != NO_ERROR)
-                goto Cleanup;
+    retCode = ConstructMppeKeyAttribute(bKeyDirection,
+                                        bBuffer, MPPE_KEY_LENGTH, &pAttrib);
+    if (retCode != NO_ERROR)
+        goto Cleanup;
 
-        //
-        // Add the newly-constructed attribute to the list of attribs.
-        //
-        retCode = AppendAttributeToList(&(pwb->pMPPEKeyAttributes),
-                          pAttrib.eaType, pAttrib.dwLength,
-                          pAttrib.pValue);
-        if (retCode != NO_ERROR)
-                goto Cleanup;
+    //
+    // Add the newly-constructed attribute to the list of attribs.
+    //
+    retCode = AppendAttributeToList(&(pwb->pMPPEKeyAttributes),
+                                    pAttrib.eaType, pAttrib.dwLength,
+                                    pAttrib.pValue);
+    if (retCode != NO_ERROR)
+        goto Cleanup;
 
-        // Cleanup.
-        retCode = FreeMemory((PVOID*)&(pAttrib.pValue));
-        if (retCode != NO_ERROR)
-                goto Cleanup;
+    // Cleanup.
+    retCode = FreeMemory((PVOID*)&(pAttrib.pValue));
+    if (retCode != NO_ERROR)
+        goto Cleanup;
 
 Cleanup:
-        return retCode;
+    return retCode;
 }
 
 
@@ -2586,186 +2586,186 @@ ConstructMppeKeyAttribute(
     IN OUT EapAttribute *pAttrib
 )
 {
-        DWORD retCode = NO_ERROR;
+    DWORD retCode = NO_ERROR;
 
-        PBYTE pByte = NULL;
-        BYTE  cbAttribValue = 0;
+    PBYTE pByte = NULL;
+    BYTE  cbAttribValue = 0;
 
-        // Sanity check.
-        if (! pAttrib)
-        {
-                retCode = ERROR_INVALID_PARAMETER;
-                goto Cleanup;
-        }
+    // Sanity check.
+    if (! pAttrib)
+    {
+        retCode = ERROR_INVALID_PARAMETER;
+        goto Cleanup;
+    }
 
-        //
-        // Bytes needed:
-        //      4: Vendor-Id
-        //      1: Vendor-Type
-        //      1: Vendor-Length
-        //      2: Salt
-        //      1: Key-Length
-        //     NN: Key (default = 32 bytes)
-        //     pp: Padding (so Key-Length + Key + Padding = multiple of 16 bytes)
-        //     -----------------
-        //     tt: Total (i.e. key = 32 bytes, padding = 15, overall total = 56)
-        //
+    //
+    // Bytes needed:
+    //      4: Vendor-Id
+    //      1: Vendor-Type
+    //      1: Vendor-Length
+    //      2: Salt
+    //      1: Key-Length
+    //     NN: Key (default = 32 bytes)
+    //     pp: Padding (so Key-Length + Key + Padding = multiple of 16 bytes)
+    //     -----------------
+    //     tt: Total (i.e. key = 32 bytes, padding = 15, overall total = 56)
+    //
 
-        //
-        // Choose an appropriate key buffer size.
-        //
-        cbAttribValue = (BYTE)(cbMppeKeyData + 1);  // Add leading "key-length" byte.
+    //
+    // Choose an appropriate key buffer size.
+    //
+    cbAttribValue = (BYTE)(cbMppeKeyData + 1);  // Add leading "key-length" byte.
 
-        // If key length isn't a multiple of 16, pad it out accordingly.
-        if (cbAttribValue % MPPE_KEY_BLOCK_LENGTH)
+    // If key length isn't a multiple of 16, pad it out accordingly.
+    if (cbAttribValue % MPPE_KEY_BLOCK_LENGTH)
         cbAttribValue += MPPE_KEY_BLOCK_LENGTH - ( cbAttribValue %
-                                       MPPE_KEY_BLOCK_LENGTH );
+                         MPPE_KEY_BLOCK_LENGTH );
 
-        // Include room for the vendor-attribute header & the Salt field (above).
-        cbAttribValue = cbAttribValue + VENDOR_ATTRIBUTE_HEADER_LENGTH
-                      + MPPE_KEY_SALT_LENGTH;
+    // Include room for the vendor-attribute header & the Salt field (above).
+    cbAttribValue = cbAttribValue + VENDOR_ATTRIBUTE_HEADER_LENGTH
+                    + MPPE_KEY_SALT_LENGTH;
 
-        retCode = AllocateMemory(cbAttribValue, (PVOID*)&(pAttrib->pValue));
-        if (retCode != NO_ERROR)
-                goto Cleanup;
+    retCode = AllocateMemory(cbAttribValue, (PVOID*)&(pAttrib->pValue));
+    if (retCode != NO_ERROR)
+        goto Cleanup;
 
-        pByte = (PBYTE)(pAttrib->pValue);
+    pByte = (PBYTE)(pAttrib->pValue);
 
-        //
-        // Populate the EAP vendor attribute's values.
-        //
-        HostToWireFormat32(VENDOR_ID_MICROSOFT, pByte); // Vendor-Id
-        pByte[4] = bKeyDirection;                       // Vendor-Type (ie, MS-MPPE-Recv-Key)
-        pByte[5] = cbAttribValue - sizeof(DWORD);       // Vendor-Length (all except Vendor-Id)
-        // pByte[6-7] is the zero-filled salt field
-        pByte[8] = (BYTE)cbMppeKeyData;                 // Key-Length
+    //
+    // Populate the EAP vendor attribute's values.
+    //
+    HostToWireFormat32(VENDOR_ID_MICROSOFT, pByte); // Vendor-Id
+    pByte[4] = bKeyDirection;                       // Vendor-Type (ie, MS-MPPE-Recv-Key)
+    pByte[5] = cbAttribValue - sizeof(DWORD);       // Vendor-Length (all except Vendor-Id)
+    // pByte[6-7] is the zero-filled salt field
+    pByte[8] = (BYTE)cbMppeKeyData;                 // Key-Length
 
-        //
-        // Fill in the MPPE key, starting after the vendor attrib header, the
-        // Salt field, and the MPPE key length subfield (1 byte).
-        //
-        CopyMemory(pByte + VENDOR_ATTRIBUTE_HEADER_LENGTH
-         + MPPE_KEY_SALT_LENGTH + 1,
-        pMppeKeyData, cbMppeKeyData);
+    //
+    // Fill in the MPPE key, starting after the vendor attrib header, the
+    // Salt field, and the MPPE key length subfield (1 byte).
+    //
+    CopyMemory(pByte + VENDOR_ATTRIBUTE_HEADER_LENGTH
+               + MPPE_KEY_SALT_LENGTH + 1,
+               pMppeKeyData, cbMppeKeyData);
 
-        //
-        // Fill in the rest of the EAP attribute data.
-        //
-        pAttrib->eaType  = eatVendorSpecific;
-        pAttrib->dwLength = cbAttribValue;
+    //
+    // Fill in the rest of the EAP attribute data.
+    //
+    pAttrib->eaType  = eatVendorSpecific;
+    pAttrib->dwLength = cbAttribValue;
 
 Cleanup:
-        if (retCode != NO_ERROR && pAttrib != NULL)
-                FreeMemory((PVOID*)&(pAttrib->pValue));
+    if (retCode != NO_ERROR && pAttrib != NULL)
+        FreeMemory((PVOID*)&(pAttrib->pValue));
 
-        return retCode;
+    return retCode;
 }
 
 
 DWORD GetXmlElementValue(
-        IXMLDOMDocument2 *pXmlDoc,
-        _In_ LPWSTR pElementName,
-        DWORD dwTypeOfDoc,
-        BSTR &pElementValue
+    IXMLDOMDocument2 *pXmlDoc,
+    _In_ LPWSTR pElementName,
+    DWORD dwTypeOfDoc,
+    BSTR &pElementValue
 )
 {
-        DWORD retCode = ERROR_SUCCESS;
-        IXMLDOMNode      *pDOMNode   = NULL;
-        HRESULT hr = S_OK;
-        WCHAR  *fullNodeName = NULL;
-        VARIANT var = {0};
+    DWORD retCode = ERROR_SUCCESS;
+    IXMLDOMNode      *pDOMNode   = NULL;
+    HRESULT hr = S_OK;
+    WCHAR  *fullNodeName = NULL;
+    VARIANT var = {0};
 
-        var.vt = VT_EMPTY;
-        if(dwTypeOfDoc == CONNECTION_PROPERTIES)
-            var.bstrVal = SysAllocString(L"xmlns:SDKEapClientMethod='http://www.microsoft.com/provisioning/EapHostConfig'");
-        else
-            var.bstrVal = SysAllocString(L"xmlns:SDKEapClientMethod='http://www.microsoft.com/provisioning/EapHostUserCredentials'");
-        if (var.bstrVal == NULL)
-        {
-             retCode = ERROR_NOT_ENOUGH_MEMORY;
-             goto Cleanup;
-        }
-        var.vt = VT_BSTR;
+    var.vt = VT_EMPTY;
+    if(dwTypeOfDoc == CONNECTION_PROPERTIES)
+        var.bstrVal = SysAllocString(L"xmlns:SDKEapClientMethod='http://www.microsoft.com/provisioning/EapHostConfig'");
+    else
+        var.bstrVal = SysAllocString(L"xmlns:SDKEapClientMethod='http://www.microsoft.com/provisioning/EapHostUserCredentials'");
+    if (var.bstrVal == NULL)
+    {
+        retCode = ERROR_NOT_ENOUGH_MEMORY;
+        goto Cleanup;
+    }
+    var.vt = VT_BSTR;
 
-       hr = pXmlDoc->setProperty((BSTR)L"SelectionNamespaces", var);
-       if(FAILED(hr))
-       {
-            retCode = HRESULT_CODE(hr);
-            EapTrace("GetXmlElementValue --- setProperty returned error (for Element = %s) = %d \n",
-                                       pElementName,
-                                       retCode);
-            goto Cleanup;
-       }
+    hr = pXmlDoc->setProperty((BSTR)L"SelectionNamespaces", var);
+    if(FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        EapTrace("GetXmlElementValue --- setProperty returned error (for Element = %s) = %d \n",
+                 pElementName,
+                 retCode);
+        goto Cleanup;
+    }
 
+    //
+    // Get the size of ElementName.
+    //
+    WCHAR initialNodeName[] = L"//SDKEapClientMethod:";
+    DWORD initailNodeNameSize = sizeof(initialNodeName);    // length includes null terminated character
+
+    size_t elementNameSize = 0;
+    hr = StringCbLengthW(pElementName, (size_t)(STRSAFE_MAX_CCH * sizeof(wchar_t)), &elementNameSize);
+    if (FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        EapTrace("CopyPCWSTR -- StringCbLengthW :  retCode = %d", retCode);
+        goto Cleanup;
+    }
+
+
+    size_t fullNodeNameSize = elementNameSize + initailNodeNameSize;
+
+    retCode = AllocateMemory((DWORD)fullNodeNameSize, (PVOID*)&fullNodeName);
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
+
+    CopyMemory(fullNodeName, initialNodeName, initailNodeNameSize);
+    CopyMemory(((BYTE *)fullNodeName) + (initailNodeNameSize - sizeof(wchar_t)), pElementName, elementNameSize);
+
+    //
+    // Selecting the node we are interested in.
+    //
+    hr = pXmlDoc->selectSingleNode((BSTR)fullNodeName, &pDOMNode);
+    if(FAILED(hr))
+    {
+        retCode = HRESULT_CODE(hr);
+        EapTrace("GetXmlElementValue --- Invalid Node returned error (for Element = %s) = %d \n",
+                 pElementName,
+                 retCode);
+        goto Cleanup;
+    }
+
+    if ( pDOMNode != NULL )
+    {
         //
-        // Get the size of ElementName.
+        // Get the content of the node as BSTR.
         //
-        WCHAR initialNodeName[] = L"//SDKEapClientMethod:";
-        DWORD initailNodeNameSize = sizeof(initialNodeName);    // length includes null terminated character
-
-        size_t elementNameSize = 0;
-        hr = StringCbLengthW(pElementName, (size_t)(STRSAFE_MAX_CCH * sizeof(wchar_t)), &elementNameSize);
-        if (FAILED(hr))
+        hr = pDOMNode->get_text(&pElementValue);
+        if(FAILED(hr))
         {
             retCode = HRESULT_CODE(hr);
-            EapTrace("CopyPCWSTR -- StringCbLengthW :  retCode = %d", retCode);
+            EapTrace("GetXmlElementValue --- get_text returned error (for Element = %s) = %d \n",
+                     pElementName,
+                     retCode);
             goto Cleanup;
         }
-
-
-        size_t fullNodeNameSize = elementNameSize + initailNodeNameSize;
-
-        retCode = AllocateMemory((DWORD)fullNodeNameSize, (PVOID*)&fullNodeName);
-        if (retCode != NO_ERROR)
-        {
-                goto Cleanup;
-        }
-
-        CopyMemory(fullNodeName, initialNodeName, initailNodeNameSize);
-        CopyMemory(((BYTE *)fullNodeName) + (initailNodeNameSize - sizeof(wchar_t)), pElementName, elementNameSize);
-
-       //
-       // Selecting the node we are interested in.
-       //
-       hr = pXmlDoc->selectSingleNode((BSTR)fullNodeName, &pDOMNode);
-       if(FAILED(hr))
-       {
-            retCode = HRESULT_CODE(hr);
-            EapTrace("GetXmlElementValue --- Invalid Node returned error (for Element = %s) = %d \n",
-                                       pElementName,
-                                       retCode);
-            goto Cleanup;
-       }
-
-       if ( pDOMNode != NULL )
-       {
-            //
-            // Get the content of the node as BSTR.
-            //
-            hr = pDOMNode->get_text(&pElementValue);
-            if(FAILED(hr))
-            {
-                  retCode = HRESULT_CODE(hr);
-                  EapTrace("GetXmlElementValue --- get_text returned error (for Element = %s) = %d \n",
-                                             pElementName,
-                                             retCode);
-                  goto Cleanup;
-            }
-       }
+    }
 
 
 Cleanup:
-        if(pDOMNode != NULL)
-        {
-            pDOMNode->Release();
-            pDOMNode = NULL;
-        }
-        if(fullNodeName != NULL)
-            FreeMemory((PVOID *)&fullNodeName);
-        if(var.bstrVal)
-            SysFreeString(var.bstrVal);
+    if(pDOMNode != NULL)
+    {
+        pDOMNode->Release();
+        pDOMNode = NULL;
+    }
+    if(fullNodeName != NULL)
+        FreeMemory((PVOID *)&fullNodeName);
+    if(var.bstrVal)
+        SysFreeString(var.bstrVal);
 
-        return retCode;
+    return retCode;
 }
 
 
@@ -2818,7 +2818,7 @@ LPWSTR NewString(IN const _In_ LPWSTR pInput)
         goto Cleanup;
     }
 
- Cleanup:
+Cleanup:
     if (result != NO_ERROR)
     {
         EapTrace("NewString(): Hit error %d (hr = %#x)!",
@@ -2835,7 +2835,7 @@ LPWSTR NewString(IN const _In_ LPWSTR pInput)
 DWORD CopyCredentialInputArray(
     OUT      EAP_CONFIG_INPUT_FIELD_ARRAY  *pDest,
     IN const EAP_CONFIG_INPUT_FIELD_ARRAY  *pSrc
-    ) throw()
+) throw()
 {
     DWORD retval = NO_ERROR;
     DWORD i      = 0;
@@ -2859,7 +2859,7 @@ DWORD CopyCredentialInputArray(
 
 
     retval = AllocateMemory(pSrc->dwNumberOfFields
-                               * sizeof(EAP_CONFIG_INPUT_FIELD_DATA),
+                            * sizeof(EAP_CONFIG_INPUT_FIELD_DATA),
                             (PVOID*)&(pDest->pFields));
     if (retval != NO_ERROR)
     {
@@ -2870,7 +2870,7 @@ DWORD CopyCredentialInputArray(
 
     // Sanity check.
     if (pSrc->dwNumberOfFields > 0 &&
-        pSrc->pFields == NULL)
+            pSrc->pFields == NULL)
     {
         retval = ERROR_INVALID_PARAMETER;
         goto Cleanup;
@@ -2888,7 +2888,7 @@ DWORD CopyCredentialInputArray(
         pWalkerDest->pwszData  = NewString(pWalkerSrc->pwszData);
 
         if (! pWalkerDest->pwszLabel ||
-            ! pWalkerDest->pwszData    )
+                ! pWalkerDest->pwszData    )
         {
             retval = ERROR_NOT_ENOUGH_MEMORY;
             goto Cleanup;
@@ -2908,7 +2908,7 @@ DWORD CopyCredentialInputArray(
 
 Cleanup:
     if (retval != NO_ERROR &&
-        pDest  != NULL)
+            pDest  != NULL)
     {
         FreeCredentialInputArray(pDest);
     }
@@ -2931,8 +2931,8 @@ void FreeCredentialInputArray(IN OUT EAP_CONFIG_INPUT_FIELD_ARRAY *pArray) throw
     numElements = pArray->dwNumberOfFields;
 
     for (i = 0, pWalker = pArray->pFields;
-         i < numElements;
-         i++, pWalker++)
+            i < numElements;
+            i++, pWalker++)
     {
         FreeMemory((PVOID*)&(pWalker->pwszLabel));
         FreeMemory((PVOID*)&(pWalker->pwszData));
@@ -2951,7 +2951,7 @@ DWORD ConstructUserBlobFromCredentialInputArray(
     IN const EAP_CONFIG_INPUT_FIELD_ARRAY *pEapConfigFieldsArray,
     IN OUT   DWORD *pdwUserBlobSize,
     OUT      PBYTE *ppbUserBlob
-    ) throw()
+) throw()
 {
     DWORD   retval    = NO_ERROR;
     HRESULT hr        = S_OK;
@@ -2964,8 +2964,8 @@ DWORD ConstructUserBlobFromCredentialInputArray(
 
 
     if (! pEapConfigFieldsArray ||
-        ! pdwUserBlobSize ||
-        ! ppbUserBlob)
+            ! pdwUserBlobSize ||
+            ! ppbUserBlob)
     {
         retval = ERROR_INVALID_PARAMETER;
         EapTrace("ConstructUserBlobFromCredentialInputArray(): Error: One or more input/output pointers were NULL!");
@@ -2982,7 +2982,7 @@ DWORD ConstructUserBlobFromCredentialInputArray(
                                         EapConfigInputPassword);
 
     if (! pIdentity ||
-        ! pPassword   )
+            ! pPassword   )
     {
         retval = ERROR_INVALID_DATA;
         goto Cleanup;
@@ -3044,7 +3044,7 @@ LPWSTR GetCredentialInputValue(
     IN const EAP_CONFIG_INPUT_FIELD_ARRAY  *pSrc,
     IN const DWORD                          valueType,
     IN const _In_opt_ LPWSTR                         pValueLabel
-    ) throw()
+) throw()
 {
     DWORD   result      = ERROR_NOT_FOUND;
     HRESULT hr          = S_OK;
@@ -3078,14 +3078,14 @@ LPWSTR GetCredentialInputValue(
     pWalker     = pSrc->pFields;
 
     for (i = 0, pWalker = pSrc->pFields;
-         i < numElements;
-         i++, pWalker++)
+            i < numElements;
+            i++, pWalker++)
     {
         if (pWalker->Type != (int)valueType)
             continue;
 
         if (pValueLabel != NULL &&
-            memcmp(pWalker->pwszLabel, pValueLabel, sizeLabel) != 0)
+                memcmp(pWalker->pwszLabel, pValueLabel, sizeLabel) != 0)
             continue;
 
         // All filters passed; we've found it!

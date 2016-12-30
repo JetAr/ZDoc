@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,18 +26,18 @@ class CTedContentProtectionManager;
 
 extern HINSTANCE g_hInst;
 
-class CStatic : public CWindowImpl<CStatic> 
+class CStatic : public CWindowImpl<CStatic>
 {
 public:
 
     DECLARE_WND_SUPERCLASS(NULL, WC_STATIC);
-    
+
 protected:
     BEGIN_MSG_MAP(CStatic)
     END_MSG_MAP()
 };
 
-class CButton : public CWindowImpl<CButton> 
+class CButton : public CWindowImpl<CButton>
 {
 public:
     DECLARE_WND_SUPERCLASS(NULL, WC_BUTTON);
@@ -54,10 +54,10 @@ public:
     CToolTipControl()
     {
     }
-    
+
     DECLARE_WND_SUPERCLASS(NULL, TOOLTIPS_CLASS);
-    
-    
+
+
     HRESULT AddTool(HWND hWndParent, CAtlString strToolText, RECT rectTool, UINT nID)
     {
         TOOLINFO ToolInfo;
@@ -80,43 +80,46 @@ public:
         {
             return E_FAIL;
         }
-        
+
         return S_OK;
     }
-    
+
 protected:
     BEGIN_MSG_MAP(CToolTipControl)
     END_MSG_MAP()
 };
 
-class CEdit : public CWindowImpl<CEdit> 
+class CEdit : public CWindowImpl<CEdit>
 {
 public:
     DECLARE_WND_SUPERCLASS(NULL, WC_EDIT);
 
-    void SetToolTipControl(CToolTipControl* pToolTipControl) { m_pToolTipControl = pToolTipControl; }
+    void SetToolTipControl(CToolTipControl* pToolTipControl)
+    {
+        m_pToolTipControl = pToolTipControl;
+    }
 protected:
     LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
         bHandled = FALSE;
         return RelayMessageToTooltipControl(uMsg, wParam, lParam);
     }
-    
+
     LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
         bHandled = FALSE;
         return RelayMessageToTooltipControl(uMsg, wParam, lParam);
     }
-    
+
     BEGIN_MSG_MAP(CEdit)
-        MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
-        MESSAGE_HANDLER(WM_LBUTTONDOWN, OnLButtonDown)
+    MESSAGE_HANDLER(WM_MOUSEMOVE, OnMouseMove)
+    MESSAGE_HANDLER(WM_LBUTTONDOWN, OnLButtonDown)
     END_MSG_MAP()
-    
+
     LRESULT RelayMessageToTooltipControl(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         if(!m_pToolTipControl) return 0;
-        
+
         MSG msg;
         msg.hwnd = m_hWnd;
         msg.message = uMsg;

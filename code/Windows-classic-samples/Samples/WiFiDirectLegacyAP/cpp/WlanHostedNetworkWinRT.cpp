@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // This code is licensed under the MIT License (MIT).
@@ -63,7 +63,7 @@ void WlanHostedNetworkHelper::Start()
 
     // Add event handler for advertisement StatusChanged
     hr = _publisher->add_StatusChanged(
-        Callback<StatusChangedHandler>([this](IWiFiDirectAdvertisementPublisher* sender, IWiFiDirectAdvertisementPublisherStatusChangedEventArgs* args) -> HRESULT
+             Callback<StatusChangedHandler>([this](IWiFiDirectAdvertisementPublisher* sender, IWiFiDirectAdvertisementPublisherStatusChangedEventArgs* args) -> HRESULT
     {
         HRESULT hr = S_OK;
         WiFiDirectAdvertisementPublisherStatus status;
@@ -79,58 +79,58 @@ void WlanHostedNetworkHelper::Start()
 
             switch (status)
             {
-                case WiFiDirectAdvertisementPublisherStatus_Started:
+            case WiFiDirectAdvertisementPublisherStatus_Started:
+            {
+                // Begin listening for connections and notify listener that the advertisement started
+                StartListener();
+
+                if (_listener != nullptr)
                 {
-                    // Begin listening for connections and notify listener that the advertisement started
-                    StartListener();
-
-                    if (_listener != nullptr)
-                    {
-                        _listener->OnAdvertisementStarted();
-                    }
-                    break;
+                    _listener->OnAdvertisementStarted();
                 }
-                case WiFiDirectAdvertisementPublisherStatus_Aborted:
+                break;
+            }
+            case WiFiDirectAdvertisementPublisherStatus_Aborted:
+            {
+                // Check error and notify listener that the advertisement stopped
+                hr = args->get_Error(&error);
+                if (FAILED(hr))
                 {
-                    // Check error and notify listener that the advertisement stopped
-                    hr = args->get_Error(&error);
-                    if (FAILED(hr))
-                    {
-                        throw WlanHostedNetworkException("Get Error for AdvertisementPubliserStatusChangedEventArgs failed", hr);
-                    }
-
-                    if (_listener != nullptr)
-                    {
-                        std::wstring message;
-
-                        switch (error)
-                        {
-                        case WiFiDirectError_RadioNotAvailable:
-                            message = L"Advertisement aborted, Wi-Fi radio is turned off";
-                            break;
-
-                        case WiFiDirectError_ResourceInUse:
-                            message = L"Advertisement aborted, Resource In Use";
-                            break;
-
-                        default:
-                            message = L"Advertisement aborted, unknown reason";
-                            break;
-                        }
-
-                        _listener->OnAdvertisementAborted(message);
-                    }
-                    break;
+                    throw WlanHostedNetworkException("Get Error for AdvertisementPubliserStatusChangedEventArgs failed", hr);
                 }
-                case WiFiDirectAdvertisementPublisherStatus_Stopped:
+
+                if (_listener != nullptr)
                 {
-                    // Notify listener that the advertisement is stopped
-                    if (_listener != nullptr)
+                    std::wstring message;
+
+                    switch (error)
                     {
-                        _listener->OnAdvertisementStopped(L"Advertisement stopped");
+                    case WiFiDirectError_RadioNotAvailable:
+                        message = L"Advertisement aborted, Wi-Fi radio is turned off";
+                        break;
+
+                    case WiFiDirectError_ResourceInUse:
+                        message = L"Advertisement aborted, Resource In Use";
+                        break;
+
+                    default:
+                        message = L"Advertisement aborted, unknown reason";
+                        break;
                     }
-                    break;
+
+                    _listener->OnAdvertisementAborted(message);
                 }
+                break;
+            }
+            case WiFiDirectAdvertisementPublisherStatus_Stopped:
+            {
+                // Notify listener that the advertisement is stopped
+                if (_listener != nullptr)
+                {
+                    _listener->OnAdvertisementStopped(L"Advertisement stopped");
+                }
+                break;
+            }
             }
         }
         catch (WlanHostedNetworkException& e)
@@ -278,7 +278,7 @@ void WlanHostedNetworkHelper::StartListener()
     }
 
     hr = _connectionListener->add_ConnectionRequested(
-        Callback<ConnectionRequestedHandler>([this](IWiFiDirectConnectionListener* sender, IWiFiDirectConnectionRequestedEventArgs* args) -> HRESULT
+             Callback<ConnectionRequestedHandler>([this](IWiFiDirectConnectionListener* sender, IWiFiDirectConnectionRequestedEventArgs* args) -> HRESULT
     {
         HRESULT hr = S_OK;
         ComPtr<IWiFiDirectConnectionRequest> request;
@@ -304,7 +304,7 @@ void WlanHostedNetworkHelper::StartListener()
             {
                 throw WlanHostedNetworkException("Get connection request for ConnectionRequestedEventArgs failed", hr);
             }
-            
+
             if (acceptConnection)
             {
                 hr = request->get_DeviceInformation(deviceInformation.GetAddressOf());

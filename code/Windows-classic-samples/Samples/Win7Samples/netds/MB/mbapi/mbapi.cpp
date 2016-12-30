@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2008 Microsoft Corporation
 
@@ -20,7 +20,7 @@ Environment:
 --*/
 
 #include <atlbase.h>
-// headers needed to use Mobile Broadband APIs 
+// headers needed to use Mobile Broadband APIs
 #include "mbnapi.h"
 
 #define MAX_NOTIFICATION_EVENTS     1
@@ -34,7 +34,7 @@ HRESULT InitApp()
     //MB API supports both MTA and STA, this example however exhibits
     //the use of MTA
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-    return hr;    
+    return hr;
 }
 
 HRESULT InitInterfaceMgr()
@@ -43,10 +43,10 @@ HRESULT InitInterfaceMgr()
 
     //Initialize Interface Manager
     hr = CoCreateInstance(CLSID_MbnInterfaceManager,
-        NULL, 
-        CLSCTX_ALL, 
-        IID_IMbnInterfaceManager, 
-        (void**)&g_InterfaceMgr);
+                          NULL,
+                          CLSCTX_ALL,
+                          IID_IMbnInterfaceManager,
+                          (void**)&g_InterfaceMgr);
 
     return hr;
 }
@@ -67,8 +67,8 @@ HANDLE g_Event = NULL;
 // all event interfaces for which application wants to register for event notifications e.g.
 // it extends IMbnRadioEvents for registering to Radio events notifications. If application
 // requires to register for Signal events notifications as well, it should extend IMbnSignalEvents
-// too. It then implements all the members of corresponding event interface say OnRadioStateChange, 
-// OnSetSoftwareRadioStateComplete for IMbnRadioEvents. Had it extended the IMbnSignalEvents to 
+// too. It then implements all the members of corresponding event interface say OnRadioStateChange,
+// OnSetSoftwareRadioStateComplete for IMbnRadioEvents. Had it extended the IMbnSignalEvents to
 // register for Signal events notifications, it would have implemented the OnSignalStateChange member
 // of IMbnSignalEvents too.
 
@@ -83,9 +83,9 @@ public:
     //IMbnRadioEvents
     HRESULT STDMETHODCALLTYPE OnRadioStateChange(__in IMbnRadio* Radio);
 
-    HRESULT STDMETHODCALLTYPE OnSetSoftwareRadioStateComplete(__in IMbnRadio* Radio, 
-                                    __in ULONG requestID, 
-                                    __in HRESULT Status);
+    HRESULT STDMETHODCALLTYPE OnSetSoftwareRadioStateComplete(__in IMbnRadio* Radio,
+            __in ULONG requestID,
+            __in HRESULT Status);
 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppv);
 
@@ -99,14 +99,14 @@ public:
 //
 
 // This function takes the safearray of IMbnInterface objects as input and copies
-// the interface guids to the pointer to the list of guids.  
+// the interface guids to the pointer to the list of guids.
 HRESULT CopyArrayOfInterfaces(SAFEARRAY* psaObjects, UINT* pCount, GUID** ppGuidList)
 {
     if (NULL == psaObjects || NULL == ppGuidList || NULL == pCount)
     {
         return E_POINTER;
     }
-    
+
     *ppGuidList = NULL;
     *pCount = 0;
 
@@ -120,14 +120,14 @@ HRESULT CopyArrayOfInterfaces(SAFEARRAY* psaObjects, UINT* pCount, GUID** ppGuid
     {
         return hr;
     }
-    
+
     hr = SafeArrayGetUBound(psaObjects, 1, &lUpper);
     if(FAILED(hr))
     {
         return hr;
     }
 
-    LONG Num = lUpper - lLower + 1; 
+    LONG Num = lUpper - lLower + 1;
 
     if(Num > 0)
     {
@@ -193,16 +193,16 @@ PrintStatusMsg(
             wprintf(L"Please use \"help %s\" to check the usage of the command.\n", strCommand);
         }
         else
-        {	
+        {
             wprintf(L"Got error 0x%x  for command \"%s\"\n", hr, strCommand);
         }
     }
 }
 
 // enumerates mobile broadband interfaces
-VOID 
+VOID
 EnumInterface(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -211,7 +211,7 @@ EnumInterface(
     GUID *pList = NULL;
     BOOL isInitAppSuccess = FALSE;
     BOOL isModeSet = TRUE;
-    
+
     do
     {
         if (argc != 1)
@@ -223,20 +223,20 @@ EnumInterface(
         hr = InitApp();
         if(FAILED(hr) && hr != RPC_E_CHANGED_MODE)
         {
-            break;            
+            break;
         }
         isInitAppSuccess = TRUE;
         if (RPC_E_CHANGED_MODE == hr)
         {
-            isModeSet = FALSE;          
+            isModeSet = FALSE;
         }
-        
+
         hr = InitInterfaceMgr();
         if(FAILED(hr))
         {
             break;
         }
-        
+
         hr = g_InterfaceMgr->GetInterfaces(&psa);
         if(FAILED(hr))
         {
@@ -266,43 +266,44 @@ EnumInterface(
             }
         }
 
-    } while(FALSE);
+    }
+    while(FALSE);
 
     //cleanup
     if(psa)
     {
         SafeArrayDestroy(psa);
     }
-    
+
     if(pList)
     {
         free(pList);
     }
-    
+
     if(g_InterfaceMgr)
     {
         DeInitInterfaceMgr();
     }
-    
+
     if(isInitAppSuccess && isModeSet)
     {
         DeInitApp();
     }
-    
+
     PrintStatusMsg(argv[0], hr);
 }
 
 // get interface capability
-VOID 
+VOID
 GetInterfaceCapability(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
     HRESULT hr = S_OK;
     BOOL isInitAppSuccess = FALSE;
     BOOL isModeSet = TRUE;
-    
+
     do
     {
         if (argc != 2)
@@ -310,17 +311,17 @@ GetInterfaceCapability(
             hr = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
             break;
         }
-        
+
         hr = InitApp();
         if(FAILED(hr) && hr != RPC_E_CHANGED_MODE)
         {
-            break;            
+            break;
         }
         isInitAppSuccess = TRUE;
         if (RPC_E_CHANGED_MODE == hr)
         {
-            isModeSet = FALSE;          
-        }        
+            isModeSet = FALSE;
+        }
 
         hr = InitInterfaceMgr();
         if(FAILED(hr))
@@ -353,14 +354,15 @@ GetInterfaceCapability(
         SysFreeString(InterfaceCaps.model);
         SysFreeString(InterfaceCaps.firmwareInfo);
 
-    } while(FALSE);
+    }
+    while(FALSE);
 
     //cleanup
     if(g_InterfaceMgr)
     {
         DeInitInterfaceMgr();
     }
-    
+
     if(isInitAppSuccess && isModeSet)
     {
         DeInitApp();
@@ -371,16 +373,16 @@ GetInterfaceCapability(
 }
 
 // get radio state
-VOID 
+VOID
 GetRadioState(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
     HRESULT hr = S_OK;
     BOOL isInitAppSuccess = FALSE;
     BOOL isModeSet = TRUE;
-    
+
     do
     {
         if (argc != 2)
@@ -392,13 +394,13 @@ GetRadioState(
         hr = InitApp();
         if(FAILED(hr) && hr != RPC_E_CHANGED_MODE)
         {
-            break;            
+            break;
         }
         isInitAppSuccess = TRUE;
         if (RPC_E_CHANGED_MODE == hr)
         {
-            isModeSet = FALSE;          
-        }        
+            isModeSet = FALSE;
+        }
 
         hr = InitInterfaceMgr();
         if(FAILED(hr))
@@ -435,7 +437,7 @@ GetRadioState(
         else if (MBN_RADIO_ON == SoftwareRadioState)
         {
             wprintf(L"\t SoftwareRadioState \tOn\n");
-        }    
+        }
 
         hr = pMbnRadio->get_HardwareRadioState(&HardwareRadioState);
         if(FAILED(hr))
@@ -451,7 +453,7 @@ GetRadioState(
         {
             wprintf(L"\t HardwareRadioState \tOn\n");
         }
-    
+
     }
     while(FALSE);
 
@@ -460,7 +462,7 @@ GetRadioState(
     {
         DeInitInterfaceMgr();
     }
-    
+
     if(isInitAppSuccess && isModeSet)
     {
         DeInitApp();
@@ -471,20 +473,20 @@ GetRadioState(
 }
 
 // set the radio state
-VOID 
+VOID
 SetRadioState(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
-    HRESULT hr = S_OK;    
+    HRESULT hr = S_OK;
     CMbnSinks *pCMbnSinks          = NULL;
     BOOL isInitAppSuccess = FALSE;
     BOOL isModeSet = TRUE;
-    BOOL isAdviseDone = FALSE;    
+    BOOL isAdviseDone = FALSE;
     IConnectionPoint *pcp;
     DWORD dwCookie = 0;
-    
+
     do
     {
         if (argc != 3)
@@ -511,13 +513,13 @@ SetRadioState(
         hr = InitApp();
         if(FAILED(hr) && hr != RPC_E_CHANGED_MODE)
         {
-            break;            
+            break;
         }
         isInitAppSuccess = TRUE;
         if (RPC_E_CHANGED_MODE == hr)
         {
-            isModeSet = FALSE;          
-        }        
+            isModeSet = FALSE;
+        }
 
         hr = InitInterfaceMgr();
         if(FAILED(hr))
@@ -532,20 +534,20 @@ SetRadioState(
             hr = HRESULT_FROM_WIN32(GetLastError());
             break;
         }
-        
+
         // registering for notifications, following steps need to be performed
         IUnknown* pUnkSink;
         CComPtr<IConnectionPointContainer>  pcpc;
 
-        // 1.Get an IConnectionPointContainer interface by calling QueryInterface 
-        //   on corresponding IMbnXXXManager object say IMbnInterfaceManager for IMbnRadioEvents.  
+        // 1.Get an IConnectionPointContainer interface by calling QueryInterface
+        //   on corresponding IMbnXXXManager object say IMbnInterfaceManager for IMbnRadioEvents.
         hr = g_InterfaceMgr->QueryInterface(IID_IConnectionPointContainer, reinterpret_cast<VOID**>(&pcpc));
         if(FAILED(hr))
         {
             break;
         }
 
-        // 2.Call FindConnectionPoint on the returned interface and pass corresponding 
+        // 2.Call FindConnectionPoint on the returned interface and pass corresponding
         //   IID_IMbnXXXEvents to riid say IID_IMbnRadioEvents.
         hr = pcpc->FindConnectionPoint(IID_IMbnRadioEvents, &pcp);
         if(FAILED(hr))
@@ -553,13 +555,13 @@ SetRadioState(
             break;
         }
 
-        // 3.Call Advise on the returned connection point and pass a pointer to an IUnknown 
+        // 3.Call Advise on the returned connection point and pass a pointer to an IUnknown
         //   interface on an object that implements IMbnXXXEvents to pUnk.
         pCMbnSinks = new CMbnSinks;
         if (pCMbnSinks)
         {
-            //QI will do AddRef on pCMbnSinks   
-            pCMbnSinks->QueryInterface(IID_IUnknown, (LPVOID *)&pUnkSink ); 
+            //QI will do AddRef on pCMbnSinks
+            pCMbnSinks->QueryInterface(IID_IUnknown, (LPVOID *)&pUnkSink );
             hr = pcp->Advise(pUnkSink, &dwCookie);
         }
         if(FAILED(hr))
@@ -567,7 +569,7 @@ SetRadioState(
             break;
         }
         isAdviseDone = TRUE;
-        
+
         //QI MbnRadio object to perform the SetSoftwareRadioState operation
         CComPtr<IMbnInterface> pMbnInterface;
         hr = g_InterfaceMgr->GetInterface(argv[1], &pMbnInterface);
@@ -591,13 +593,13 @@ SetRadioState(
         }
         wprintf(L"\t SetSoftwareRadioState call successful requestID = %d\n", requestID);
 
-        //Now waiting for set request to get completed		
+        //Now waiting for set request to get completed
         DWORD waitObject;
 
         waitObject = WaitForSingleObject(
-                        g_Event,
-                        INFINITE);
-                
+                         g_Event,
+                         INFINITE);
+
         if (WAIT_OBJECT_0 == waitObject)
         {
             // g_Event is triggerred
@@ -609,7 +611,7 @@ SetRadioState(
             {
                 break;
             }
-            
+
             if (MBN_RADIO_OFF == NewSoftwareRadioState)
             {
                 wprintf(L"\t New SoftwareRadioState \tOff\n");
@@ -617,11 +619,12 @@ SetRadioState(
             else if (MBN_RADIO_ON == NewSoftwareRadioState)
             {
                 wprintf(L"\t New SoftwareRadioState \tOn\n");
-            }      
-            
+            }
+
         }
-    
-    } while(FALSE);
+
+    }
+    while(FALSE);
 
     //cleanup
     if(isAdviseDone)
@@ -629,25 +632,25 @@ SetRadioState(
         pcp->Unadvise(dwCookie);
         pcp->Release();
     }
-    
+
     if (g_Event)
     {
         CloseHandle(g_Event);
         g_Event = NULL;
     }
-    
+
     if (pCMbnSinks)
     {
         pCMbnSinks->Release();
     }
-    
+
     g_MbnRadio = NULL;
-    
+
     if(g_InterfaceMgr)
     {
         DeInitInterfaceMgr();
     }
-    
+
     if(isInitAppSuccess && isModeSet)
     {
         DeInitApp();
@@ -657,14 +660,15 @@ SetRadioState(
 }
 
 // show help messages
-VOID 
+VOID
 Help(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 );
 
 typedef VOID (*WLSAMPLE_FUNCTION) (int argc, LPWSTR argv[]);
-typedef struct _WLSAMPLE_COMMAND {
+typedef struct _WLSAMPLE_COMMAND
+{
     LPWSTR strCommandName;           // command name
     LPWSTR strShortHand;             // a shorthand for the command
     WLSAMPLE_FUNCTION Func;         // pointer to the function
@@ -674,7 +678,8 @@ typedef struct _WLSAMPLE_COMMAND {
     LPWSTR strRemarks;              // remarks
 } WLSAMPLE_COMMAND, *PWLSAMPLE_COMMAND;
 
-WLSAMPLE_COMMAND g_Commands[] = {
+WLSAMPLE_COMMAND g_Commands[] =
+{
     // interface related commands
     {
         L"EnumInterface",
@@ -724,9 +729,9 @@ WLSAMPLE_COMMAND g_Commands[] = {
 };
 
 // show help messages
-VOID 
+VOID
 Help(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -739,8 +744,8 @@ Help(
         wprintf(L"The following commands are available. Use \"help xyz\" to show the description of command xyz.\n");
         for (i=0; i < ARRAYSIZE(g_Commands); i++)
         {
-                wprintf(L"\t %s", g_Commands[i].strCommandName);
-                wprintf(L"(%s)\n", g_Commands[i].strShortHand);
+            wprintf(L"\t %s", g_Commands[i].strCommandName);
+            wprintf(L"(%s)\n", g_Commands[i].strShortHand);
         }
     }
     else if (argc == 2)
@@ -772,9 +777,9 @@ Help(
 }
 
 // command is stored in the global variable
-void 
+void
 ExecuteCommand(
-    __in int argc, 
+    __in int argc,
     __in_ecount(argc) LPWSTR argv[]
 )
 {
@@ -784,7 +789,7 @@ ExecuteCommand(
     {
         // find the command and call the function
         if (_wcsicmp(argv[0], g_Commands[i].strCommandName) == 0 ||
-            _wcsicmp(argv[0], g_Commands[i].strShortHand) == 0)
+                _wcsicmp(argv[0], g_Commands[i].strShortHand) == 0)
         {
             g_Commands[i].Func(argc, argv);
             break;
@@ -794,7 +799,7 @@ ExecuteCommand(
     if (i == ARRAYSIZE(g_Commands))
     {
         wprintf(L"Invalid command %s !\n", argv[0]);
-        
+
     }
 }
 
@@ -803,7 +808,7 @@ int _cdecl
 wmain(__in int argc, __in_ecount(argc) LPWSTR argv[])
 {
     DWORD dwRetCode = ERROR_SUCCESS;
-    
+
     if (argc == 1)
     {
         wprintf(L"Please type \"%s ?\" for help.\n", argv[0]);
@@ -820,7 +825,7 @@ wmain(__in int argc, __in_ecount(argc) LPWSTR argv[])
 
 CMbnSinks::CMbnSinks()
 {
-    m_lRef = 0;    
+    m_lRef = 0;
 }
 
 CMbnSinks::~CMbnSinks()
@@ -834,40 +839,40 @@ CMbnSinks::~CMbnSinks()
 
 HRESULT STDMETHODCALLTYPE CMbnSinks::QueryInterface(REFIID riid, void **ppv)
 {
-        if ( !ppv )
-        {
-            return E_POINTER;
-        }
+    if ( !ppv )
+    {
+        return E_POINTER;
+    }
 
-        HRESULT hr = E_NOINTERFACE;
+    HRESULT hr = E_NOINTERFACE;
 
-        *ppv = NULL;
+    *ppv = NULL;
 
-        if (riid == IID_IUnknown)
-        {
-            *ppv = this;
-        }
-        else if(riid == IID_IMbnRadioEvents)
-        {
-            *ppv = (IMbnRadioEvents *)this;
-        }
-        else
-        {
-            hr = E_NOINTERFACE;
-        }
+    if (riid == IID_IUnknown)
+    {
+        *ppv = this;
+    }
+    else if(riid == IID_IMbnRadioEvents)
+    {
+        *ppv = (IMbnRadioEvents *)this;
+    }
+    else
+    {
+        hr = E_NOINTERFACE;
+    }
 
-        if (*ppv)
-        {
-            reinterpret_cast<IUnknown *>(*ppv)->AddRef();
-            hr = S_OK;
-        }
+    if (*ppv)
+    {
+        reinterpret_cast<IUnknown *>(*ppv)->AddRef();
+        hr = S_OK;
+    }
 
-        return hr;
+    return hr;
 }
 
 ULONG STDMETHODCALLTYPE CMbnSinks::AddRef()
 {
-      return InterlockedIncrement( (LONG *)&m_lRef );
+    return InterlockedIncrement( (LONG *)&m_lRef );
 }
 
 ULONG STDMETHODCALLTYPE CMbnSinks::Release()
@@ -887,13 +892,13 @@ HRESULT STDMETHODCALLTYPE CMbnSinks::OnRadioStateChange(__in IMbnRadio* Radio)
     return(S_OK);
 }
 
-HRESULT STDMETHODCALLTYPE CMbnSinks::OnSetSoftwareRadioStateComplete(__in IMbnRadio* Radio, 
-                                             __in ULONG requestID, 
-                                             __in HRESULT Status)
+HRESULT STDMETHODCALLTYPE CMbnSinks::OnSetSoftwareRadioStateComplete(__in IMbnRadio* Radio,
+        __in ULONG requestID,
+        __in HRESULT Status)
 {
-    
+
     wprintf(L"***Received OnSetSoftwareRadioStateComplete Event for requestID = %d\n", requestID);
-    g_MbnRadio = Radio;     
+    g_MbnRadio = Radio;
     SetEvent(g_Event);
     return(S_OK);
 }

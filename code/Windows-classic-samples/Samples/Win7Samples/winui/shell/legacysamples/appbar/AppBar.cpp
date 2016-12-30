@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -117,21 +117,21 @@ void AppBar_QueryPos(HWND hwnd, LPRECT lprc)
 
     switch (abd.uEdge)
     {
-        case ABE_LEFT:
-            abd.rc.right = abd.rc.left + iWidth;
-            break;
+    case ABE_LEFT:
+        abd.rc.right = abd.rc.left + iWidth;
+        break;
 
-        case ABE_RIGHT:
-            abd.rc.left = abd.rc.right - iWidth;
-            break;
+    case ABE_RIGHT:
+        abd.rc.left = abd.rc.right - iWidth;
+        break;
 
-        case ABE_TOP:
-            abd.rc.bottom = abd.rc.top + iHeight;
-            break;
+    case ABE_TOP:
+        abd.rc.bottom = abd.rc.top + iHeight;
+        break;
 
-        case ABE_BOTTOM:
-            abd.rc.top = abd.rc.bottom - iHeight;
-            break;
+    case ABE_BOTTOM:
+        abd.rc.top = abd.rc.bottom - iHeight;
+        break;
     }
 
     *lprc = abd.rc;
@@ -219,21 +219,21 @@ void AppBar_PosChanged(PAPPBARDATA pabd)
         g_rcAppBar = rc;
         switch (pOpt->uSide)
         {
-            case ABE_TOP:
-                g_rcAppBar.bottom = g_rcAppBar.top + g_cyHeight;
-                break;
+        case ABE_TOP:
+            g_rcAppBar.bottom = g_rcAppBar.top + g_cyHeight;
+            break;
 
-            case ABE_BOTTOM:
-                g_rcAppBar.top = g_rcAppBar.bottom - g_cyHeight;
-                break;
+        case ABE_BOTTOM:
+            g_rcAppBar.top = g_rcAppBar.bottom - g_cyHeight;
+            break;
 
-            case ABE_LEFT:
-                g_rcAppBar.right = g_rcAppBar.left + g_cxWidth;
-                break;
+        case ABE_LEFT:
+            g_rcAppBar.right = g_rcAppBar.left + g_cxWidth;
+            break;
 
-            case ABE_RIGHT:
-                g_rcAppBar.left = g_rcAppBar.right - g_cxWidth;
-                break;
+        case ABE_RIGHT:
+            g_rcAppBar.left = g_rcAppBar.right - g_cxWidth;
+            break;
         }
     }
 
@@ -247,21 +247,21 @@ void AppBar_PosChanged(PAPPBARDATA pabd)
     // the window
     switch (pOpt->uSide)
     {
-        case ABE_TOP:
-            rc.bottom = rc.top + iHeight;
-            break;
+    case ABE_TOP:
+        rc.bottom = rc.top + iHeight;
+        break;
 
-        case ABE_BOTTOM:
-            rc.top = rc.bottom - iHeight;
-            break;
+    case ABE_BOTTOM:
+        rc.top = rc.bottom - iHeight;
+        break;
 
-        case ABE_LEFT:
-            rc.right = rc.left + iWidth;
-            break;
+    case ABE_LEFT:
+        rc.right = rc.left + iWidth;
+        break;
 
-        case ABE_RIGHT:
-            rc.left = rc.right - iWidth;
-            break;
+    case ABE_RIGHT:
+        rc.left = rc.right - iWidth;
+        break;
     }
 
     // Move the appbar.
@@ -292,50 +292,50 @@ void AppBar_Callback(HWND hwnd, UINT /* uMsg */, WPARAM wParam, LPARAM lParam)
 
     switch (wParam)
     {
-        // Notifies the appbar that the taskbar's autohide or always-on-top
-        // state has changed.  The appbar can use this to conform to the settings
-        // of the system taskbar.
-        case ABN_STATECHANGE:
-            break;
+    // Notifies the appbar that the taskbar's autohide or always-on-top
+    // state has changed.  The appbar can use this to conform to the settings
+    // of the system taskbar.
+    case ABN_STATECHANGE:
+        break;
 
-        // Notifies the appbar when a full screen application is opening or
-        // closing.  When a full screen app is opening, the appbar must drop
-        // to the bottom of the Z-Order.  When the app is closing, we should
-        // restore our Z-order position.
-        case ABN_FULLSCREENAPP:
-            if (lParam)
-            {
-                // A full screen app is opening.  Move us to the bottom of the
-                // Z-Order.
+    // Notifies the appbar when a full screen application is opening or
+    // closing.  When a full screen app is opening, the appbar must drop
+    // to the bottom of the Z-Order.  When the app is closing, we should
+    // restore our Z-order position.
+    case ABN_FULLSCREENAPP:
+        if (lParam)
+        {
+            // A full screen app is opening.  Move us to the bottom of the
+            // Z-Order.
 
-                // First get the window that we're underneath so we can correctly
-                // restore our position
-                hwndZOrder = GetWindow(hwnd, GW_HWNDPREV);
+            // First get the window that we're underneath so we can correctly
+            // restore our position
+            hwndZOrder = GetWindow(hwnd, GW_HWNDPREV);
 
-                // Now move ourselves to the bottom of the Z-Order
-                SetWindowPos(hwnd, HWND_BOTTOM, 0, 0, 0, 0,
-                             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-            }
-            else
-            {
-                // The app is closing.  Restore the Z-order
-                POPTIONS pOpt = GetAppbarData(hwnd);
-                SetWindowPos(hwnd, pOpt->fOnTop ? HWND_TOPMOST : hwndZOrder,
-                             0, 0, 0, 0,
-                             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            // Now move ourselves to the bottom of the Z-Order
+            SetWindowPos(hwnd, HWND_BOTTOM, 0, 0, 0, 0,
+                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        }
+        else
+        {
+            // The app is closing.  Restore the Z-order
+            POPTIONS pOpt = GetAppbarData(hwnd);
+            SetWindowPos(hwnd, pOpt->fOnTop ? HWND_TOPMOST : hwndZOrder,
+                         0, 0, 0, 0,
+                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-                hwndZOrder = NULL;
-            }
-            break;
+            hwndZOrder = NULL;
+        }
+        break;
 
-        // Notifies the appbar when an event has occured that may effect the
-        // appbar's size and position.  These events include changes in the
-        // taskbar's size, position, and visiblity as well as adding, removing,
-        // or resizing another appbar on the same side of the screen.
-        case ABN_POSCHANGED:
-            // Update our position in response to the system change
-            AppBar_PosChanged(&abd);
-            break;
+    // Notifies the appbar when an event has occured that may effect the
+    // appbar's size and position.  These events include changes in the
+    // taskbar's size, position, and visiblity as well as adding, removing,
+    // or resizing another appbar on the same side of the screen.
+    case ABN_POSCHANGED:
+        // Update our position in response to the system change
+        AppBar_PosChanged(&abd);
+        break;
     }
 }
 
@@ -471,18 +471,18 @@ BOOL AppBar_AutoHide(HWND hwnd)
         rc = g_rcAppBar;
         switch (pOpt->uSide)
         {
-            case ABE_TOP:
-                rc.bottom = rc.top + 2;
-                break;
-            case ABE_BOTTOM:
-                rc.top = rc.bottom - 2;
-                break;
-            case ABE_LEFT:
-                rc.right = rc.left + 2;
-                break;
-            case ABE_RIGHT:
-                rc.left = rc.right - 2;
-                break;
+        case ABE_TOP:
+            rc.bottom = rc.top + 2;
+            break;
+        case ABE_BOTTOM:
+            rc.top = rc.bottom - 2;
+            break;
+        case ABE_LEFT:
+            rc.right = rc.left + 2;
+            break;
+        case ABE_RIGHT:
+            rc.left = rc.right - 2;
+            break;
         }
 
         AppBar_QuerySetPos(pOpt->uSide, &rc, &abd, TRUE);
@@ -597,18 +597,18 @@ BOOL AppBar_SetSide(HWND hwnd, UINT uSide)
     // side we want.
     switch (uSide)
     {
-        case ABE_TOP:
-            rc.bottom = rc.top + pOpt->cyHeight;
-            break;
-        case ABE_BOTTOM:
-            rc.top = rc.bottom - pOpt->cyHeight;
-            break;
-        case ABE_LEFT:
-            rc.right = rc.left + pOpt->cxWidth;
-            break;
-        case ABE_RIGHT:
-            rc.left = rc.right - pOpt->cxWidth;
-            break;
+    case ABE_TOP:
+        rc.bottom = rc.top + pOpt->cyHeight;
+        break;
+    case ABE_BOTTOM:
+        rc.top = rc.bottom - pOpt->cyHeight;
+        break;
+    case ABE_LEFT:
+        rc.right = rc.left + pOpt->cxWidth;
+        break;
+    case ABE_RIGHT:
+        rc.left = rc.right - pOpt->cxWidth;
+        break;
     }
 
     // Move the appbar to the new screen space.
@@ -676,18 +676,18 @@ void AppBar_Hide(HWND hwnd)
     RECT rc = g_rcAppBar;
     switch (pOpt->uSide)
     {
-        case ABE_TOP:
-            rc.bottom = rc.top + 2;
-            break;
-        case ABE_BOTTOM:
-            rc.top = rc.bottom - 2;
-            break;
-        case ABE_LEFT:
-            rc.right = rc.left + 2;
-            break;
-        case ABE_RIGHT:
-            rc.left = rc.right - 2;
-            break;
+    case ABE_TOP:
+        rc.bottom = rc.top + 2;
+        break;
+    case ABE_BOTTOM:
+        rc.top = rc.bottom - 2;
+        break;
+    case ABE_LEFT:
+        rc.right = rc.left + 2;
+        break;
+    case ABE_RIGHT:
+        rc.left = rc.right - 2;
+        break;
     }
 
     pOpt->fHiding = TRUE;
@@ -814,8 +814,8 @@ void SlideWindow(HWND hwnd, LPRECT prc)
         rcOld = rcNew;
         OffsetRect(&rcOld, -dx, -dy);
         SetWindowPos(hwnd, NULL, rcOld.left, rcOld.top,
-                rcOld.right - rcOld.left, rcOld.bottom - rcOld.top,
-                SWP_NOZORDER | SWP_NOACTIVATE | SWP_DRAWFRAME);
+                     rcOld.right - rcOld.left, rcOld.bottom - rcOld.top,
+                     SWP_NOZORDER | SWP_NOACTIVATE | SWP_DRAWFRAME);
 
         dt = g_dtSlideShow;
     }
@@ -867,13 +867,13 @@ void ErrorHandlerEx( INT wLine, LPSTR pszFile )
     // Get the text of the error message
     LPWSTR pszMessage;
     DWORD dwError = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                            FORMAT_MESSAGE_FROM_SYSTEM,
-                            NULL,
-                            GetLastError(),
-                            MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
-                            (LPWSTR)&pszMessage,
-                            0,
-                            NULL);
+                                  FORMAT_MESSAGE_FROM_SYSTEM,
+                                  NULL,
+                                  GetLastError(),
+                                  MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
+                                  (LPWSTR)&pszMessage,
+                                  0,
+                                  NULL);
 
     // Check to see if an error occured calling FormatMessage()
     WCHAR szBuffer[256];
@@ -922,26 +922,26 @@ int PASCAL wWinMain(HINSTANCE hInstance,
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
     wcex.lpszClassName = szWindowClass;
     wcex.hIconSm = (HICON)LoadImage(g_hInstance, MAKEINTRESOURCE(IDI_APPICON),
-                                  IMAGE_ICON,
-                                  GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON),
-                                  0);
+                                    IMAGE_ICON,
+                                    GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON),
+                                    0);
 
     RegisterClassEx(&wcex);
 
     // Create a main window for this application instance
     HWND hwnd = CreateWindowEx(WS_EX_CLIENTEDGE | WS_EX_TOOLWINDOW,
-                            szWindowClass,
-                            L"Win32 Sample AppBar",
-                            WS_POPUP | WS_THICKFRAME | WS_CLIPCHILDREN,
-                            CW_USEDEFAULT,
-                            CW_USEDEFAULT,
-                            400,
-                            200,
-                            NULL,
-                            NULL,
-                            hInstance,
-                            NULL
-                            );
+                               szWindowClass,
+                               L"Win32 Sample AppBar",
+                               WS_POPUP | WS_THICKFRAME | WS_CLIPCHILDREN,
+                               CW_USEDEFAULT,
+                               CW_USEDEFAULT,
+                               400,
+                               200,
+                               NULL,
+                               NULL,
+                               hInstance,
+                               NULL
+                              );
 
     // If the window was successfully created, make the window visible,
     // update its client area, and return "success".  If the window

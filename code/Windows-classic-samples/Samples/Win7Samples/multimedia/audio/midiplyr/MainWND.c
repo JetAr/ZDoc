@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -168,7 +168,7 @@ PRIVATE VOID FNLOCAL InitStatusBar(
             ReleaseDC(hWndDesktop, hDC);
 
         ResizeStatusBar(hWnd);
-        
+
         FORWARD_WM_COMMAND(hWnd, gnTimeFormat, 0, 0, SendMessage);
         ShowWindow(ghWndStatus, SW_RESTORE);
     }
@@ -213,7 +213,7 @@ PRIVATE VOID FNLOCAL ResizeStatusBar(
 *
 * Bring all UI elements into sync with the state of the sequencer
 *
-* HWND hWnd                 - Application main window 
+* HWND hWnd                 - Application main window
 *
 * Build a flag word of the actions which are allowed from the current state.
 * Set the menu items and toolbar buttons for each action appropriately.
@@ -237,7 +237,7 @@ PRIVATE VOID FNLOCAL SyncUI(
 
     wActionFlags = 0;
     uState = SEQ_S_NOFILE;
-    
+
     if (gpSeq != NULL)
     {
         uState = gpSeq->uState;
@@ -265,7 +265,7 @@ PRIVATE VOID FNLOCAL SyncUI(
             break;
         }
     }
-    
+
     fPress = (gpSeq->uState == SEQ_S_PAUSED);
     SendMessage(ghWndToolbar,
                 TB_PRESSBUTTON,
@@ -335,17 +335,17 @@ PRIVATE VOID FNLOCAL AttemptFileOpen(
 {
     MMRESULT                mmrc;
     PSTR                    pStrFile    = gszUntitled;
-    
+
     /* Stop, close, etc. if we're still playing
     */
     DPF(1, "AttemptFileOpen: Calling seqStop(); state = %u", gpSeq->uState);
-    
+
     mmrc = seqStop(gpSeq);
-	if (mmrc != MMSYSERR_NOERROR)
-	{
-		Error(hWnd, IDS_STOPFAILED, mmrc);
-		return;
-	}
+    if (mmrc != MMSYSERR_NOERROR)
+    {
+        Error(hWnd, IDS_STOPFAILED, mmrc);
+        return;
+    }
 
     DPF(1, "Calling seqCloseFile(); state = %u", gpSeq->uState);
     seqCloseFile(gpSeq);
@@ -386,19 +386,19 @@ PRIVATE BOOL FNLOCAL PrerollAndWait(
 {
     PREROLL                 preroll;
     MMRESULT                mmrc;
-    
+
     preroll.tkBase = 0;
     preroll.tkEnd  = gpSeq->tkLength;
 
     gpSeq->uDeviceID = guDevice;
 
     if (MMSYSERR_NOERROR != (mmrc = seqPreroll(gpSeq, &preroll)))
-	{
+    {
         Error(hWnd, IDS_PREROLLFAILED, mmrc);
         return FALSE;
-	}
+    }
 
-	return TRUE;
+    return TRUE;
 }
 
 /*****************************************************************************
@@ -438,13 +438,13 @@ PRIVATE BOOL FNLOCAL MWnd_OnCreate(
 
     InitToolbar(hWnd);
     InitStatusBar(hWnd);
-    
+
     hMenu = GetMenu(hWnd);
     hMenuOptions = GetSubMenu(hMenu, POS_OPTIONS);
     hMenuPlayThru = GetSubMenu(hMenu, POS_PLAYTHRU);
 
     AppendMenu(hMenuOptions, MF_SEPARATOR, 0, NULL);
-    
+
     for (idx = 0; idx < N_TIME_FORMATS; idx++)
     {
         AppendMenu(hMenuOptions,
@@ -456,7 +456,7 @@ PRIVATE BOOL FNLOCAL MWnd_OnCreate(
     cDevs = midiOutGetNumDevs();
     if (cDevs)
         AppendMenu(hMenuPlayThru, MF_SEPARATOR, 0, NULL);
-    
+
     for (idx = 0; idx < cDevs; idx++)
     {
         if (midiOutGetDevCaps(idx, &moutCaps, sizeof(moutCaps)) == MMSYSERR_NOERROR)
@@ -467,25 +467,25 @@ PRIVATE BOOL FNLOCAL MWnd_OnCreate(
                        moutCaps.szPname);
         }
     }
-    
+
     CheckMenuItem(hMenu, IDM_TOOLBAR, MF_BYCOMMAND|MF_CHECKED);
     CheckMenuItem(hMenu, IDM_STATUS,  MF_BYCOMMAND|MF_CHECKED);
     CheckMenuItem(hMenu, IDM_AUTOPLAY,MF_BYCOMMAND|MF_CHECKED);
     CheckMenuItem(hMenu, gnTimeFormat,MF_BYCOMMAND|MF_CHECKED);
-    CheckMenuItem(hMenu, IDM_DEVICES,  MF_BYCOMMAND|MF_CHECKED);  
+    CheckMenuItem(hMenu, IDM_DEVICES,  MF_BYCOMMAND|MF_CHECKED);
 
     GetClientRect(hWnd, &rc);
 
     ghWndTime = CreateWindow(
-        gszTWndClass,
-        NULL,
-        WS_CHILD,
-        rc.left, rc.top,
-        rc.right-rc.left, rc.bottom-rc.top,
-        hWnd,
-        NULL,
-        lpCreateStruct->hInstance,
-        NULL);
+                    gszTWndClass,
+                    NULL,
+                    WS_CHILD,
+                    rc.left, rc.top,
+                    rc.right-rc.left, rc.bottom-rc.top,
+                    hWnd,
+                    NULL,
+                    lpCreateStruct->hInstance,
+                    NULL);
 
     ShowWindow(ghWndTime, SW_RESTORE);
 
@@ -498,7 +498,7 @@ PRIVATE BOOL FNLOCAL MWnd_OnCreate(
 
     return TRUE;
 }
-                      
+
 /*****************************************************************************
 *
 * MWnd_OnGetMinMaxSize
@@ -514,7 +514,7 @@ PRIVATE BOOL FNLOCAL MWnd_OnCreate(
 * the window can be resized to.
 *
 * We don't allow resizing small enough to cause the status bar and toolbar
-* to overlap so they don't try to draw over each other. 
+* to overlap so they don't try to draw over each other.
 *
 *****************************************************************************/
 PRIVATE VOID FNLOCAL MWnd_OnGetMinMaxInfo(
@@ -529,7 +529,7 @@ PRIVATE VOID FNLOCAL MWnd_OnGetMinMaxInfo(
     */
     lpMinMaxInfo->ptMinTrackSize.y =
         (rc.bottom - rc.top) -
-        (grcTWnd.bottom - grcTWnd.top);                                      
+        (grcTWnd.bottom - grcTWnd.top);
 }
 
 /*****************************************************************************
@@ -565,7 +565,7 @@ PRIVATE VOID FNLOCAL MWnd_OnSize(
         /* Cause the toolbar to be aware of the size change
         */
         FORWARD_WM_SIZE(ghWndToolbar, SIZE_RESTORED, 0, 0, SendMessage);
-        
+
         GetWindowRect(ghWndToolbar, &rc);
         rcClient.top += (rc.bottom - rc.top);
     }
@@ -573,11 +573,11 @@ PRIVATE VOID FNLOCAL MWnd_OnSize(
     if (ghWndStatus != NULL)
     {
         ResizeStatusBar(hWnd);
-        
+
         /* Cause the status bar to be aware of the size change
         */
         FORWARD_WM_SIZE(ghWndStatus, SIZE_RESTORED, 0, 0, SendMessage);
-        
+
         GetWindowRect(ghWndStatus, &rc);
         rcClient.bottom -= (rc.bottom - rc.top);
     }
@@ -654,7 +654,7 @@ PRIVATE VOID FNLOCAL MWnd_OnDropFiles(
     HDROP                   hDrop)
 {
     PSTR                    pStr;
-    
+
     /* For multiple selections, we only accept the first file
     */
     DragQueryFile(hDrop, 0, gszOpenName, sizeof(gszOpenName));
@@ -696,23 +696,23 @@ PRIVATE VOID FNLOCAL MWnd_OnFileOpen(
     OPENFILENAME            ofn;
 
     *gszOpenName = '\0';
-    
-	ofn.lStructSize			= sizeof(OPENFILENAME);
-	ofn.hwndOwner			= hWnd;
-	ofn.lpstrFilter			= gszFilter;
-	ofn.lpstrCustomFilter	= (LPSTR)NULL;
-	ofn.nMaxCustFilter		= 0L;
-	ofn.nFilterIndex		= 1L;
-	ofn.lpstrFile			= gszOpenName;
-	ofn.nMaxFile			= MAX_FILEPATH;
-	ofn.lpstrFileTitle		= gszOpenTitle;
-	ofn.nMaxFileTitle		= MAX_FILEPATH;
-	ofn.lpstrTitle			= (LPSTR)NULL;
-	ofn.lpstrInitialDir		= (LPSTR)NULL;
-	ofn.Flags				= OFN_HIDEREADONLY|OFN_FILEMUSTEXIST;
-	ofn.nFileOffset			= 0;
-	ofn.nFileExtension		= 0;
-	ofn.lpstrDefExt			= gszDefExtension;
+
+    ofn.lStructSize			= sizeof(OPENFILENAME);
+    ofn.hwndOwner			= hWnd;
+    ofn.lpstrFilter			= gszFilter;
+    ofn.lpstrCustomFilter	= (LPSTR)NULL;
+    ofn.nMaxCustFilter		= 0L;
+    ofn.nFilterIndex		= 1L;
+    ofn.lpstrFile			= gszOpenName;
+    ofn.nMaxFile			= MAX_FILEPATH;
+    ofn.lpstrFileTitle		= gszOpenTitle;
+    ofn.nMaxFileTitle		= MAX_FILEPATH;
+    ofn.lpstrTitle			= (LPSTR)NULL;
+    ofn.lpstrInitialDir		= (LPSTR)NULL;
+    ofn.Flags				= OFN_HIDEREADONLY|OFN_FILEMUSTEXIST;
+    ofn.nFileOffset			= 0;
+    ofn.nFileExtension		= 0;
+    ofn.lpstrDefExt			= gszDefExtension;
 
     if (!GetOpenFileName(&ofn))
         return;
@@ -738,13 +738,13 @@ PRIVATE VOID FNLOCAL MWnd_OnFileOpen(
 *
 *****************************************************************************/
 PRIVATE VOID FNLOCAL MWnd_OnCommandToggleChild(
-    HWND                    hWnd,                                      
+    HWND                    hWnd,
     UINT                    id)
 {
     HMENU                   hMenu;
     UINT                    uState;
     HWND*                   phWnd;
-    
+
     phWnd = (id == IDM_TOOLBAR) ? &ghWndToolbar : &ghWndStatus;
 
     hMenu = GetMenu(hWnd);
@@ -770,8 +770,8 @@ PRIVATE VOID FNLOCAL MWnd_OnCommandToggleChild(
 
     SyncUI(hWnd);
 }
-                                          
-                            
+
+
 /*****************************************************************************
 *
 * MWnd_OnCommand
@@ -799,7 +799,7 @@ PRIVATE VOID FNLOCAL MWnd_OnCommand(
     HMENU                   hMenu;
     int                     nIdxFormat;
     LPSTR                   lpstr;
-    
+
     if (id >= IDS_TF_FIRST && id <= IDS_TF_LAST)
     {
         if (NULL != ghWndStatus)
@@ -807,7 +807,7 @@ PRIVATE VOID FNLOCAL MWnd_OnCommand(
             nIdxFormat = id - IDS_TF_FIRST;
 
             lpstr = (LPSTR)(grgszTimeFormats[nIdxFormat]);
-            
+
             SendMessage(ghWndStatus,
                         SB_SETTEXT,
                         SB_PANE_TFMT,
@@ -821,27 +821,27 @@ PRIVATE VOID FNLOCAL MWnd_OnCommand(
         CheckMenuItem(hMenu, id, MF_CHECKED|MF_BYCOMMAND);
 
         gnTimeFormat = id;
-        
+
         /* Force time window to update font and repaint entire time string
          */
-        
+
         if(ghWndTime)	// for when WM_COMMAND is called before WM_CREATE
-        	FORWARD_WM_SIZE(ghWndTime, SIZE_RESTORED, 0, 0, SendMessage);
+            FORWARD_WM_SIZE(ghWndTime, SIZE_RESTORED, 0, 0, SendMessage);
     }
     else if (id >= IDM_DEVMIN && id <= IDM_DEVMAX)
     {
         hMenu = GetMenu(hWnd);
-                
+
         CheckMenuItem(hMenu, guDevice + IDM_DEVICES, MF_UNCHECKED|MF_BYCOMMAND);
         guDevice = id - IDM_DEVICES;
         CheckMenuItem(hMenu, guDevice + IDM_DEVICES, MF_CHECKED|MF_BYCOMMAND);
     }
     else switch(id)
-    {
+        {
         case IDM_OPEN:
             MWnd_OnFileOpen(hWnd);
             break;
-        
+
         case IDM_TOOLBAR:
         case IDM_STATUS:
             MWnd_OnCommandToggleChild(hWnd, id);
@@ -856,12 +856,12 @@ PRIVATE VOID FNLOCAL MWnd_OnCommand(
 
         case IDM_PLAY:
             FORWARD_WM_COMMAND(ghWndTime, IDM_PLAY, 0, 0, SendMessage);
-        
-			if (gpSeq->uState != SEQ_S_OPENED)
-				DPF(1, "IDM_PLAY: State %u", gpSeq->uState);
-				        	    
-            if (PrerollAndWait(hWnd))                   
-            	seqStart(gpSeq);
+
+            if (gpSeq->uState != SEQ_S_OPENED)
+                DPF(1, "IDM_PLAY: State %u", gpSeq->uState);
+
+            if (PrerollAndWait(hWnd))
+                seqStart(gpSeq);
 
             SyncUI(hWnd);
             break;
@@ -889,13 +889,13 @@ PRIVATE VOID FNLOCAL MWnd_OnCommand(
         case IDM_SYNCUI:
             SyncUI(hWnd);
             break;
-            
+
         case IDM_EXIT:
             SendMessage(hWnd, WM_CLOSE, 0, 0L);
             break;
-    }
+        }
 }
-                                   
+
 /*****************************************************************************
 *
 * MWnd_OnDestroy
@@ -951,17 +951,17 @@ LRESULT CALLBACK MWnd_WndProc(
         HANDLE_MSG(hWnd, WM_COMMAND,        MWnd_OnCommand);
         HANDLE_MSG(hWnd, WM_DESTROY,        MWnd_OnDestroy);
 
-        case MMSG_DONE:
-            FORWARD_WM_COMMAND(ghWndTime, IDM_STOP, 0, 0, SendMessage);
-            
-			if (gpSeq->uState != SEQ_S_OPENED)
-				DPF(1, "MMSG_DONE and state %u", gpSeq->uState);
+    case MMSG_DONE:
+        FORWARD_WM_COMMAND(ghWndTime, IDM_STOP, 0, 0, SendMessage);
 
-            SyncUI(hWnd);
-            break;
+        if (gpSeq->uState != SEQ_S_OPENED)
+            DPF(1, "MMSG_DONE and state %u", gpSeq->uState);
 
-        default:
-            return DefWindowProc(hWnd, msg, wParam, lParam);
+        SyncUI(hWnd);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, msg, wParam, lParam);
     }
 
     return 0;

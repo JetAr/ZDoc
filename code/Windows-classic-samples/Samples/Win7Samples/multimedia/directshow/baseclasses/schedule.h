@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Schedule.h
 //
 // Desc: DirectShow base classes.
@@ -31,7 +31,10 @@ public:
     REFERENCE_TIME Advise( const REFERENCE_TIME & rtTime );
 
     // Get the event handle which will be set if advise time requires re-evaluation.
-    HANDLE GetEvent() const { return m_ev; }
+    HANDLE GetEvent() const
+    {
+        return m_ev;
+    }
 
 private:
     // We define the nodes that will be used in our singly linked list
@@ -60,7 +63,9 @@ private:
         }
 
         int IsZ() const // That is, is it the node that represents the end of the list
-        { return m_next == 0; }
+        {
+            return m_next == 0;
+        }
 
         CAdvisePacket * RemoveNext()
         {
@@ -83,7 +88,9 @@ private:
         }
 
         DWORD_PTR Cookie() const
-        { return m_dwAdviseCookie; }
+        {
+            return m_dwAdviseCookie;
+        }
     };
 
     // Structure is:

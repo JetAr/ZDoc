@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -156,7 +156,9 @@ public:
     }
 
     IFACEMETHODIMP SetParameters(PCWSTR /* pszParameters */)
-    { return S_OK; }
+    {
+        return S_OK;
+    }
 
     IFACEMETHODIMP SetPosition(POINT /* pt */)
     {
@@ -165,13 +167,19 @@ public:
     }
 
     IFACEMETHODIMP SetShowWindow(int /* nShow */)
-    { return S_OK; }
+    {
+        return S_OK;
+    }
 
     IFACEMETHODIMP SetNoShowUI(BOOL /* fNoShowUI */)
-    { return S_OK; }
+    {
+        return S_OK;
+    }
 
     IFACEMETHODIMP SetDirectory(PCWSTR /* pszDirectory */)
-    { return S_OK; }
+    {
+        return S_OK;
+    }
 
     IFACEMETHODIMP Execute()
     {
@@ -189,12 +197,12 @@ public:
                 hr = IUnknown_QueryService(_punkSite, SID_SFolderView, IID_PPV_ARGS(&psv));
 
                 DWORD const walkFlags = (_flags & AVF_ONE_IMPLIES_ALL) ?
-                    NSWF_ONE_IMPLIES_ALL | NSWF_DONT_ACCUMULATE_RESULT | NSWF_ASYNC | NSWF_FLAG_VIEWORDER :
-                                           NSWF_DONT_ACCUMULATE_RESULT | NSWF_ASYNC | NSWF_FLAG_VIEWORDER;
+                                        NSWF_ONE_IMPLIES_ALL | NSWF_DONT_ACCUMULATE_RESULT | NSWF_ASYNC | NSWF_FLAG_VIEWORDER :
+                                        NSWF_DONT_ACCUMULATE_RESULT | NSWF_ASYNC | NSWF_FLAG_VIEWORDER;
                 UINT const walkDepth = /* psv ? 0 : */ 8;
 
                 hr = pnsw->Walk(psv ? static_cast<IUnknown*>(psv) : _psia,
-                    walkFlags, walkDepth, this);
+                                walkFlags, walkDepth, this);
 
                 SafeRelease(&psv);  // optional
 
@@ -295,7 +303,7 @@ public:
     void Register()
     {
         CoRegisterClassObject(__uuidof(TVerb), static_cast<IClassFactory *>(this),
-            CLSCTX_LOCAL_SERVER, REGCLS_MULTIPLEUSE, &_dwRegisterClass);
+                              CLSCTX_LOCAL_SERVER, REGCLS_MULTIPLEUSE, &_dwRegisterClass);
     }
 
     // calls this on shutdown to revoke the verb registration
@@ -310,7 +318,10 @@ public:
 
     // used in the verb implementations to get a ref to the app
     // the verb calls methods on the app to do its work
-    TApplication *GetApp() const { return _pApp; }
+    TApplication *GetApp() const
+    {
+        return _pApp;
+    }
 
     // call this in the constructor of the application to enable the verb to
     // access the application
@@ -319,7 +330,10 @@ public:
         _pApp = ptApp; // weak reference to application
     }
 
-    DWORD GetKeyState() const { return _grfKeyState; }
+    DWORD GetKeyState() const
+    {
+        return _grfKeyState;
+    }
 
     virtual ~CApplicationVerb()
     {
@@ -349,7 +363,10 @@ private:
 
     // as the items are being discovered this method is called to see
     // if the discovery should continue
-    virtual bool ShouldContinue() const { return _dwRegisterClass != 0; }
+    virtual bool ShouldContinue() const
+    {
+        return _dwRegisterClass != 0;
+    }
 
     // this method is called with each item when async discovery of the
     // items is enabled

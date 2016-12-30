@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -45,7 +45,7 @@ inline HRESULT CoTaskStringAlloc(_In_ PCWSTR input, _Outptr_result_nullonfailure
     size_t inputSize = wcslen(input);
     *output = reinterpret_cast<PWSTR>(CoTaskMemAlloc(sizeof(wchar_t) * (inputSize + 1)));
     HRESULT hr = (nullptr == *output) ? E_OUTOFMEMORY : S_OK;
-    
+
     if (SUCCEEDED(hr))
     {
         hr = StringCchCopy(*output, inputSize + 1, input);

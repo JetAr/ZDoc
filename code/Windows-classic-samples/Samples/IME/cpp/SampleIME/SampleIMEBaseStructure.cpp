@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,7 +13,8 @@
 //
 //---------------------------------------------------------------------
 
-const BYTE GuidSymbols[] = {
+const BYTE GuidSymbols[] =
+{
     3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15
 };
 
@@ -123,8 +124,8 @@ CStringRange::CStringRange()
     _pStringBuf = nullptr;
 }
 
-CStringRange::~CStringRange() 
-{ 
+CStringRange::~CStringRange()
+{
 }
 
 const WCHAR *CStringRange::Get() const
@@ -188,12 +189,12 @@ void CStringRange::CharNext(_Inout_ CStringRange* pCharNext)
 
 int CStringRange::Compare(LCID locale, _In_ CStringRange* pString1, _In_ CStringRange* pString2)
 {
-    return CompareString(locale, 
-        NORM_IGNORECASE, 
-        pString1->Get(), 
-        (DWORD)pString1->GetLength(), 
-        pString2->Get(), 
-        (DWORD)pString2->GetLength());
+    return CompareString(locale,
+                         NORM_IGNORECASE,
+                         pString1->Get(),
+                         (DWORD)pString1->GetLength(),
+                         pString2->Get(),
+                         (DWORD)pString2->GetLength());
 }
 
 BOOL CStringRange::WildcardCompare(LCID locale, _In_ CStringRange* stringWithWildcard, _In_ CStringRange* targetString)
@@ -221,11 +222,11 @@ BOOL CStringRange::WildcardCompare(LCID locale, _In_ CStringRange* stringWithWil
     BOOL isSurrogate2 = (IS_HIGH_SURROGATE(*targetString->Get()) || IS_LOW_SURROGATE(*targetString->Get()));
 
     return ((CompareString(locale,
-        NORM_IGNORECASE,
-        stringWithWildcard->Get(),
-        (isSurrogate1 ? 2 : 1),
-        targetString->Get(),
-        (isSurrogate2 ? 2 : 1)) == CSTR_EQUAL) && WildcardCompare(locale, &stringWithWildcard_next, &targetString_next));
+                           NORM_IGNORECASE,
+                           stringWithWildcard->Get(),
+                           (isSurrogate1 ? 2 : 1),
+                           targetString->Get(),
+                           (isSurrogate2 ? 2 : 1)) == CSTR_EQUAL) && WildcardCompare(locale, &stringWithWildcard_next, &targetString_next));
 }
 
 CCandidateRange::CCandidateRange(void)
@@ -310,9 +311,10 @@ CPunctuationNestPair::CPunctuationNestPair()
 }
 
 CPunctuationNestPair::CPunctuationNestPair(WCHAR codeBegin, WCHAR punctuationBegin, WCHAR pairBegin,
-    WCHAR codeEnd,   WCHAR punctuationEnd,   WCHAR pairEnd)
+        WCHAR codeEnd,   WCHAR punctuationEnd,   WCHAR pairEnd)
 {
-	pairEnd;punctuationEnd;
+    pairEnd;
+    punctuationEnd;
     _punctuation_begin._Code = codeBegin;
     _punctuation_begin._Punctuation = punctuationBegin;
     _pairPunctuation_begin = pairBegin;

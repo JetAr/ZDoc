@@ -1,4 +1,4 @@
-#include <initguid.h>
+﻿#include <initguid.h>
 #include "Common.h"
 #include "Activate.h"
 #include "ClassFactory.h"
@@ -200,15 +200,15 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserv
 {
     switch (ul_reason_for_call)
     {
-        case DLL_PROCESS_ATTACH:
-        {
-            g_hModule = static_cast<HMODULE>(hModule);
-            break;
-        }
-        default:
-        {
-            break;
-        }
+    case DLL_PROCESS_ATTACH:
+    {
+        g_hModule = static_cast<HMODULE>(hModule);
+        break;
+    }
+    default:
+    {
+        break;
+    }
     }
 
     return TRUE;
@@ -233,16 +233,16 @@ STDAPI DllRegisterServer(void)
         }
 
         hr = MFTRegister(
-            CLSID_DX11VideoRenderer,    // CLSID
-            MFT_CATEGORY_OTHER,         // Category
-            L"DX11 Video Renderer",     // Friendly name
-            0,                          // Reserved, must be zero.
-            0,
-            NULL,
-            0,
-            NULL,
-            NULL
-            );
+                 CLSID_DX11VideoRenderer,    // CLSID
+                 MFT_CATEGORY_OTHER,         // Category
+                 L"DX11 Video Renderer",     // Friendly name
+                 0,                          // Reserved, must be zero.
+                 0,
+                 NULL,
+                 0,
+                 NULL,
+                 NULL
+             );
     }
     while (FALSE);
 

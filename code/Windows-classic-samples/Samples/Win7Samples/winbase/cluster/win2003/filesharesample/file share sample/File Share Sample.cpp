@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -98,110 +98,110 @@ FileShareSampleResourcePrivateProperties[] =
 
 RESID WINAPI
 FileShareSampleOpen(
-      LPCWSTR           pwszResourceNameIn
+    LPCWSTR           pwszResourceNameIn
     , HKEY              hkeyResourceKeyIn
     , RESOURCE_HANDLE   hResourceHandleIn
-    );
+);
 
 void WINAPI
 FileShareSampleClose(
     RESID residIn
-    );
+);
 
 DWORD WINAPI
 FileShareSampleOnline(
-      RESID     residIn
+    RESID     residIn
     , PHANDLE   phEventHandleInout
-    );
+);
 
 DWORD WINAPI
 FileShareSampleOnlineThread(
-      PCLUS_WORKER              pWorkerIn
+    PCLUS_WORKER              pWorkerIn
     , PFILESHARESAMPLE_RESOURCE pResourceEntryIn
-    );
+);
 
 DWORD WINAPI
 FileShareSampleOffline(
     RESID residIn
-    );
+);
 
 DWORD WINAPI
 FileShareSampleOfflineThread(
-      PCLUS_WORKER              pWorkerIn
+    PCLUS_WORKER              pWorkerIn
     , PFILESHARESAMPLE_RESOURCE pResourceEntryIn
-    );
+);
 
 void WINAPI
 FileShareSampleTerminate(
     RESID residIn
-    );
+);
 
 BOOL WINAPI
 FileShareSampleLooksAlive(
     RESID residIn
-    );
+);
 
 BOOL WINAPI
 FileShareSampleIsAlive(
     RESID residIn
-    );
+);
 
 BOOL
 FileShareSampleCheckIsAlive(
-      PFILESHARESAMPLE_RESOURCE pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE pResourceEntryIn
     , BOOL                      fFullCheckIn
-    );
+);
 
 DWORD WINAPI
 FileShareSampleResourceControl(
-      RESID     residIn
+    RESID     residIn
     , DWORD     nControlCodeIn
     , PVOID     pInBufferIn
     , DWORD     cbInBufferSizeIn
     , PVOID     pOutBufferOut
     , DWORD     cbOutBufferSizeIn
     , LPDWORD   pcbBytesReturnedOut
-    );
+);
 
 DWORD WINAPI
 FileShareSampleResourceTypeControl(
-      LPCWSTR   pwszResourceTypeNameIn
+    LPCWSTR   pwszResourceTypeNameIn
     , DWORD     nControlCodeIn
     , PVOID     pInBufferIn
     , DWORD     cbInBufferSizeIn
     , PVOID     pOutBufferOut
     , DWORD     cbOutBufferSizeIn
     , LPDWORD   pcbBytesReturnedOut
-    );
+);
 
 DWORD
 FileShareSampleGetPrivateResProperties(
-      PFILESHARESAMPLE_RESOURCE pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE pResourceEntryIn
     , PVOID                     pOutBufferOut
     , DWORD                     cbOutBufferSizeIn
     , LPDWORD                   pcbBytesReturnedOut
-    );
+);
 
 DWORD
 FileShareSampleValidatePrivateResProperties(
-      PFILESHARESAMPLE_RESOURCE pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE pResourceEntryIn
     , const PVOID               pInBufferIn
     , DWORD                     cbInBufferSizeIn
     , PFILESHARESAMPLE_PROPS    pPropsOut
-    );
+);
 
 DWORD
 FileShareSampleSetPrivateResProperties(
-      PFILESHARESAMPLE_RESOURCE pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE pResourceEntryIn
     , const PVOID               pInBufferIn
     , DWORD                     cbInBufferSizeIn
-    );
+);
 
 DWORD
 FileShareSampleSetNameHandler(
-      PFILESHARESAMPLE_RESOURCE pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE pResourceEntryIn
     , LPWSTR                    pwszNameIn
-    );
+);
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -233,10 +233,10 @@ FileShareSampleSetNameHandler(
 /////////////////////////////////////////////////////////////////////////////
 BOOL WINAPI
 FileShareSampleDllMain(
-      HINSTANCE hDllHandleIn
+    HINSTANCE hDllHandleIn
     , DWORD     nReasonIn
     , LPVOID    ReservedIn
-    )
+)
 {
     BOOL    fSuccess = TRUE;
 
@@ -245,11 +245,11 @@ FileShareSampleDllMain(
 
     switch ( nReasonIn )
     {
-        case DLL_PROCESS_ATTACH:
-            break;
+    case DLL_PROCESS_ATTACH:
+        break;
 
-        case DLL_PROCESS_DETACH:
-            break;
+    case DLL_PROCESS_DETACH:
+        break;
 
     } // switch: nReason
 
@@ -323,13 +323,13 @@ FileShareSampleDllMain(
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 FileShareSampleStartup(
-      LPCWSTR                       pwszResourceTypeIn
+    LPCWSTR                       pwszResourceTypeIn
     , DWORD                         nMinVersionSupportedIn
     , DWORD                         nMaxVersionSupportedIn
     , PSET_RESOURCE_STATUS_ROUTINE  pfnSetResourceStatusIn
     , PLOG_EVENT_ROUTINE            pfnLogEventIn
     , PCLRES_FUNCTION_TABLE *       pFunctionTableOut
-    )
+)
 {
     DWORD sc = ERROR_SUCCESS;
 
@@ -338,18 +338,18 @@ FileShareSampleStartup(
     UNREFERENCED_PARAMETER( pfnLogEventIn );
 
     if (   (nMinVersionSupportedIn > CLRES_VERSION_V1_00)
-        || (nMaxVersionSupportedIn < CLRES_VERSION_V1_00) )
+            || (nMaxVersionSupportedIn < CLRES_VERSION_V1_00) )
     {
         sc = ERROR_REVISION_MISMATCH;
     } // if: version not supported
     else if ( 0 == CompareStringW(
-                        LOCALE_SYSTEM_DEFAULT,
-                        NORM_IGNORECASE,
-                        pwszResourceTypeIn,
-                        -1,
-                        RESTYPE_NAME,
-                        -1
-                        )
+                  LOCALE_SYSTEM_DEFAULT,
+                  NORM_IGNORECASE,
+                  pwszResourceTypeIn,
+                  -1,
+                  RESTYPE_NAME,
+                  -1
+              )
             )
     {
         *pFunctionTableOut = &g_FileShareSampleFunctionTable;
@@ -409,10 +409,10 @@ FileShareSampleStartup(
 /////////////////////////////////////////////////////////////////////////////
 RESID WINAPI
 FileShareSampleOpen(
-      LPCWSTR           pwszResourceNameIn
+    LPCWSTR           pwszResourceNameIn
     , HKEY              hkeyResourceKeyIn
     , RESOURCE_HANDLE   hResourceHandleIn
-    )
+)
 {
     DWORD                   sc = ERROR_SUCCESS;
     size_t                  cchBuffer = 0;
@@ -427,19 +427,19 @@ FileShareSampleOpen(
     //
 
     sc = ClusterRegOpenKey(
-              hkeyResourceKeyIn
-            , L"Parameters"
-            , KEY_ALL_ACCESS
-            , &hkeyParameters
-            );
+             hkeyResourceKeyIn
+             , L"Parameters"
+             , KEY_ALL_ACCESS
+             , &hkeyParameters
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to open Parameters key. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error creating the Parameters key for the resource
 
@@ -452,11 +452,11 @@ FileShareSampleOpen(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to allocate resource entry structure. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error allocating memory for the resource
 
@@ -481,11 +481,11 @@ FileShareSampleOpen(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to allocate the resource name buffer. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error allocating memory for the name.
 
@@ -494,11 +494,11 @@ FileShareSampleOpen(
     {
         sc = HRESULT_CODE( hr );
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to allocate the resource name buffer. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if:
 
@@ -511,11 +511,11 @@ FileShareSampleOpen(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to open the cluster. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error opening the cluster
 
@@ -528,11 +528,11 @@ FileShareSampleOpen(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: Unable to open the resource. Error: %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error opening the resource
 
@@ -554,11 +554,11 @@ FileShareSampleOpen(
         //
 
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: failed to retrieve the computer name with error %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: GetComputerNameEx failed
 
@@ -567,27 +567,27 @@ FileShareSampleOpen(
     {
         sc = ERROR_OUTOFMEMORY;
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: failed to allocate computer name buffer with error %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: buffer allocation failed
 
     if ( GetComputerNameEx(
-                  ComputerNamePhysicalDnsHostname
+                ComputerNamePhysicalDnsHostname
                 , pResourceEntry->pwszComputerName
                 , &cchComputerName
-                ) == 0 )
+            ) == 0 )
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: failed to retrieve the computer name with error %1!u!.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if: GetComputerNameEx failed
 
@@ -602,11 +602,11 @@ Cleanup:
         assert( sc != ERROR_SUCCESS );
 
         (g_pfnLogEvent)(
-              hResourceHandleIn
+            hResourceHandleIn
             , LOG_ERROR
             , L"Open: failed with error %1!u!.\n"
             , sc
-            );
+        );
 
         if ( hkeyParameters != NULL )
         {
@@ -664,7 +664,7 @@ Cleanup:
 void WINAPI
 FileShareSampleClose(
     RESID residIn
-    )
+)
 {
     PFILESHARESAMPLE_RESOURCE pResourceEntry = NULL;
     DWORD                   sc = ERROR_SUCCESS;
@@ -684,11 +684,11 @@ FileShareSampleClose(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Close resource sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
     } // if: invalid resource ID
@@ -696,20 +696,20 @@ FileShareSampleClose(
     if ( pResourceEntry->pwszResourceName == NULL )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_INFORMATION
             , L"Close request for resource with resid 0x%1!08x!.\n"
             , residIn
-            );
+        );
     } // if: resource name is null...
     else
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_INFORMATION
             , L"Close request for resource '%1!s!'.\n"
             , pResourceEntry->pwszResourceName
-            );
+        );
     } // else: resource name is not null...
 
     //
@@ -829,9 +829,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 FileShareSampleOnline(
-      RESID     residIn
+    RESID     residIn
     , PHANDLE   phEventHandleOut
-    )
+)
 {
     PFILESHARESAMPLE_RESOURCE pResourceEntry = NULL;
     DWORD                   sc = ERROR_SUCCESS;
@@ -852,19 +852,19 @@ FileShareSampleOnline(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Online sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return ERROR_RESOURCE_NOT_FOUND;
     } // if: invalid resource ID
 
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"Online request.\n"
-        );
+    );
 
     //
     // Start the Online thread to perform the online operation.
@@ -873,19 +873,19 @@ FileShareSampleOnline(
     pResourceEntry->state = ClusterResourceOnlinePending;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     sc = ClusWorkerCreate(
-                  &pResourceEntry->cwWorkerThread
-                , reinterpret_cast< PWORKER_START_ROUTINE >( FileShareSampleOnlineThread )
-                , pResourceEntry
-                );
+             &pResourceEntry->cwWorkerThread
+             , reinterpret_cast< PWORKER_START_ROUTINE >( FileShareSampleOnlineThread )
+             , pResourceEntry
+         );
     if ( sc != ERROR_SUCCESS )
     {
         pResourceEntry->state = ClusterResourceFailed;
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Online: Unable to start thread. Error: %1!u!.\n"
             , sc
-            );
+        );
     } // if: error creating the worker thread
     else
     {
@@ -933,9 +933,9 @@ FileShareSampleOnline(
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 FileShareSampleOnlineThread(
-      PCLUS_WORKER              pWorkerIn
+    PCLUS_WORKER              pWorkerIn
     , PFILESHARESAMPLE_RESOURCE   pResourceEntryIn
-    )
+)
 {
     RESOURCE_STATUS resourceStatus;
     DWORD           sc = ERROR_SUCCESS;
@@ -965,21 +965,21 @@ FileShareSampleOnlineThread(
     //
 
     sc = ResUtilGetPropertiesToParameterBlock(
-              pResourceEntryIn->hkeyParameters
-            , FileShareSampleResourcePrivateProperties
-            , reinterpret_cast< LPBYTE >( &pResourceEntryIn->propsActive )
-            , TRUE // CheckForRequiredProperties
-            , &pwszNameOfPropInError
-            );
+             pResourceEntryIn->hkeyParameters
+             , FileShareSampleResourcePrivateProperties
+             , reinterpret_cast< LPBYTE >( &pResourceEntryIn->propsActive )
+             , TRUE // CheckForRequiredProperties
+             , &pwszNameOfPropInError
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Unable to read the '%1!s!' property. Error: %2!u!.\n"
             , (pwszNameOfPropInError == NULL ? L"" : pwszNameOfPropInError)
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error getting properties
 
@@ -1003,12 +1003,12 @@ FileShareSampleOnlineThread(
     else if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Failed to bring required service '%1!s!' online.  Error: %2!u!.\n"
             , FILESHARESAMPLE_SVCNAME
             , sc
-            );
+        );
         goto Cleanup;
     } // else if: error starting the service
 
@@ -1034,13 +1034,13 @@ FileShareSampleOnlineThread(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Error %1!u! expanding path '%2!ws!' for share '%3!ws!'.\n"
             , sc
             , pResourceEntryIn->propsActive.pwszPath
             , pResourceEntryIn->propsActive.pwszShareName
-            );
+        );
         goto Cleanup;
     } // if:
 
@@ -1048,7 +1048,7 @@ FileShareSampleOnlineThread(
     // Make sure the path doesn't end in a trailing backslash or it will fail to come online.
     // Accept paths such as E:\ though.
     //
-    
+
     cch = wcslen( pResourceEntryIn->pwszExpandedPath );
     if ( ( cch > 3 ) && (pResourceEntryIn->pwszExpandedPath[ cch - 1 ] == L'\\' ) )
     {
@@ -1070,13 +1070,13 @@ FileShareSampleOnlineThread(
     if ( sc != NERR_Success )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Error %1!u! creating share '%2!ws!' for path '%3!ws!'.\n"
             , sc
             , pResourceEntryIn->propsActive.pwszShareName
             , pResourceEntryIn->pwszExpandedPath
-            );
+        );
         goto Cleanup;
     } // if: error creating share
 
@@ -1092,36 +1092,36 @@ FileShareSampleOnlineThread(
     {
         sc = ERROR_OUTOFMEMORY;
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Error %1!u! allocating memory for local path.\n"
             , sc
-            );
+        );
         goto Cleanup;
     } // if:
 
     // Format the path into pwszUNCSharedPath.
     hr = StringCchPrintf(
-              pResourceEntryIn->pwszUNCSharedPath
-            , cch
-            , L"\\\\%ws\\%ws\\*.*"
-            , pResourceEntryIn->pwszComputerName
-            , pResourceEntryIn->propsActive.pwszShareName
-            );
+             pResourceEntryIn->pwszUNCSharedPath
+             , cch
+             , L"\\\\%ws\\%ws\\*.*"
+             , pResourceEntryIn->pwszComputerName
+             , pResourceEntryIn->propsActive.pwszShareName
+         );
     if ( FAILED( hr ) )
     {
         sc = SCODE( hr );
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Error %1!u! formatting share path from computer name '%2!s!' and share name '%3!s!'.\n"
             , sc
             , pResourceEntryIn->pwszComputerName
             , pResourceEntryIn->propsActive.pwszShareName
-            );
+        );
         goto Cleanup;
     } // if:
-                
+
     sc = ERROR_SUCCESS;
     resourceStatus.ResourceState = ClusterResourceOnline;
 
@@ -1130,11 +1130,11 @@ Cleanup:
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OnlineThread: Error %1!u! bringing resource online.\n"
             , sc
-            );
+        );
     } // if: error occurred
 
     pResourceEntryIn->state = resourceStatus.ResourceState;
@@ -1199,7 +1199,7 @@ Cleanup:
 DWORD WINAPI
 FileShareSampleOffline(
     RESID residIn
-    )
+)
 {
     PFILESHARESAMPLE_RESOURCE pResourceEntry = NULL;
     DWORD                   sc = ERROR_SUCCESS;
@@ -1219,20 +1219,20 @@ FileShareSampleOffline(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Offline resource sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         sc = ERROR_RESOURCE_NOT_FOUND;
         goto Cleanup;
     } // if: invalid resource ID
 
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"Offline request.\n"
-        );
+    );
 
     //
     // Start the Offline thread to perform the offline operation.
@@ -1241,19 +1241,19 @@ FileShareSampleOffline(
     pResourceEntry->state = ClusterResourceOfflinePending;
     ClusWorkerTerminate( &pResourceEntry->cwWorkerThread );
     sc = ClusWorkerCreate(
-                  &pResourceEntry->cwWorkerThread
-                , reinterpret_cast< PWORKER_START_ROUTINE >( FileShareSampleOfflineThread )
-                , pResourceEntry
-                );
+             &pResourceEntry->cwWorkerThread
+             , reinterpret_cast< PWORKER_START_ROUTINE >( FileShareSampleOfflineThread )
+             , pResourceEntry
+         );
     if ( sc != ERROR_SUCCESS )
     {
         pResourceEntry->state = ClusterResourceFailed;
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Offline: Unable to start thread. Error: %1!u!.\n"
             , sc
-            );
+        );
     } // if: error creating the worker thread
     else
     {
@@ -1303,9 +1303,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 FileShareSampleOfflineThread(
-      PCLUS_WORKER              pWorkerIn
+    PCLUS_WORKER              pWorkerIn
     , PFILESHARESAMPLE_RESOURCE pResourceEntryIn
-    )
+)
 {
     RESOURCE_STATUS     resourceStatus;
     DWORD               sc = ERROR_SUCCESS;
@@ -1334,12 +1334,12 @@ FileShareSampleOfflineThread(
     if ( (sc != NERR_Success) && (sc != NERR_NetNameNotFound) )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"OfflineThread: Error %1!u! taking share '%2!s!' offline.\n"
             , sc
             , pResourceEntryIn->propsActive.pwszShareName
-            );
+        );
         goto Cleanup;
     } // if: error taking the resource offline
 
@@ -1389,7 +1389,7 @@ Cleanup:
 void WINAPI
 FileShareSampleTerminate(
     RESID residIn
-    )
+)
 {
     DWORD                       sc = ERROR_SUCCESS;
     PFILESHARESAMPLE_RESOURCE   pResourceEntry = NULL;
@@ -1408,19 +1408,19 @@ FileShareSampleTerminate(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Terminate resource sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return;
     } // if: invalid resource ID
 
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"Terminate request.\n"
-        );
+    );
 
     //
     // Kill off any pending threads.
@@ -1436,12 +1436,12 @@ FileShareSampleTerminate(
     if ( sc != NERR_Success && sc != NERR_NetNameNotFound )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"Terminate: Error %1!u! removing share '%2!ws!'.\n"
             , sc
             , pResourceEntry->propsActive.pwszShareName
-            );
+        );
     } // if:  error taking the resource offline
 
     pResourceEntry->state = ClusterResourceFailed;
@@ -1489,7 +1489,7 @@ FileShareSampleTerminate(
 BOOL WINAPI
 FileShareSampleLooksAlive(
     RESID residIn
-    )
+)
 {
     PFILESHARESAMPLE_RESOURCE   pResourceEntry = NULL;
     BOOL                        fRet = FALSE;
@@ -1508,20 +1508,20 @@ FileShareSampleLooksAlive(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"LooksAlive sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return FALSE;
     } // if: invalid resource ID
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"LooksAlive request.\n"
-        );
+    );
 #endif
 
     //
@@ -1600,7 +1600,7 @@ FileShareSampleLooksAlive(
 BOOL WINAPI
 FileShareSampleIsAlive(
     RESID residIn
-    )
+)
 {
     PFILESHARESAMPLE_RESOURCE pResourceEntry = NULL;
 
@@ -1618,20 +1618,20 @@ FileShareSampleIsAlive(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"IsAlive sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return FALSE;
     } // if: invalid resource ID
 
 #ifdef LOG_VERBOSE
     (g_pfnLogEvent)(
-          pResourceEntry->hResourceHandle
+        pResourceEntry->hResourceHandle
         , LOG_INFORMATION
         , L"IsAlive request.\n"
-        );
+    );
 #endif
 
     //
@@ -1680,9 +1680,9 @@ FileShareSampleIsAlive(
 /////////////////////////////////////////////////////////////////////////////
 BOOL
 FileShareSampleCheckIsAlive(
-      PFILESHARESAMPLE_RESOURCE pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE pResourceEntryIn
     , BOOL                      fFullCheckIn
-    )
+)
 {
     BOOL            fIsAlive = FALSE;
     DWORD           sc = ERROR_SUCCESS;
@@ -1703,30 +1703,30 @@ FileShareSampleCheckIsAlive(
     //
 
     sc = NetShareGetInfo(
-              NULL
-            , pResourceEntryIn->propsActive.pwszShareName
-            , 2     // return a SHARE_INFO_2 structure
-            , reinterpret_cast< LPBYTE * >( &pshareInfo )
-            );
+             NULL
+             , pResourceEntryIn->propsActive.pwszShareName
+             , 2     // return a SHARE_INFO_2 structure
+             , reinterpret_cast< LPBYTE * >( &pshareInfo )
+         );
     if ( sc == NERR_NetNameNotFound )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"CheckIsAlive: Error, share '%1!ws!' went away.\n"
             , pResourceEntryIn->propsActive.pwszShareName
-            );
+        );
         goto Cleanup;
     } // if:  share name not found
     else if ( sc != NERR_Success )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"CheckIsAlive: Error %1!u! checking for share '%2!ws!'.\n"
             , sc
             , pResourceEntryIn->propsActive.pwszShareName
-            );
+        );
         goto Cleanup;
     } // else if: error getting share info
 
@@ -1757,15 +1757,15 @@ FileShareSampleCheckIsAlive(
         sc = GetLastError();
 
         if (    ( hFile == INVALID_HANDLE_VALUE )
-             && ( sc    != ERROR_FILE_NOT_FOUND )
-             && ( sc    != ERROR_ACCESS_DENIED )
+                && ( sc    != ERROR_FILE_NOT_FOUND )
+                && ( sc    != ERROR_ACCESS_DENIED )
            )
         {
             (g_pfnLogEvent)(
-                  pResourceEntryIn->hResourceHandle
+                pResourceEntryIn->hResourceHandle
                 , LOG_ERROR
                 , L"CheckIsAlive: Share has gone offline!\n"
-                );
+            );
         } // if:  error finding the file
         else
         {
@@ -1847,14 +1847,14 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 FileShareSampleResourceControl(
-      RESID     residIn
+    RESID     residIn
     , DWORD     nControlCodeIn
     , PVOID     pInBufferIn
     , DWORD     cbInBufferSizeIn
     , PVOID     pOutBufferOut
     , DWORD     cbOutBufferSizeIn
     , LPDWORD   pcbBytesReturnedOut
-    )
+)
 {
     DWORD               sc = ERROR_SUCCESS;
     PFILESHARESAMPLE_RESOURCE pResourceEntry = NULL;
@@ -1872,117 +1872,117 @@ FileShareSampleResourceControl(
     if ( pResourceEntry->resid != residIn )
     {
         (g_pfnLogEvent)(
-              pResourceEntry->hResourceHandle
+            pResourceEntry->hResourceHandle
             , LOG_ERROR
             , L"ResourceControl sanity check failed! resid = 0x%1!08x!.\n"
             , residIn
-            );
+        );
         return ERROR_RESOURCE_NOT_FOUND;
     } // if: invalid resource ID
 
     switch ( nControlCodeIn )
     {
-        case CLUSCTL_RESOURCE_UNKNOWN:
-            *pcbBytesReturnedOut = 0;
-            sc = ERROR_SUCCESS;
-            break;
+    case CLUSCTL_RESOURCE_UNKNOWN:
+        *pcbBytesReturnedOut = 0;
+        sc = ERROR_SUCCESS;
+        break;
 
-        case CLUSCTL_RESOURCE_ENUM_PRIVATE_PROPERTIES:
+    case CLUSCTL_RESOURCE_ENUM_PRIVATE_PROPERTIES:
+    {
+        DWORD cbRequired = 0;
+        sc = ResUtilEnumProperties(
+                 FileShareSampleResourcePrivateProperties
+                 , static_cast< LPWSTR >( pOutBufferOut )
+                 , cbOutBufferSizeIn
+                 , pcbBytesReturnedOut
+                 , &cbRequired
+             );
+        if ( sc == ERROR_MORE_DATA )
         {
-            DWORD cbRequired = 0;
-            sc = ResUtilEnumProperties(
-                      FileShareSampleResourcePrivateProperties
-                    , static_cast< LPWSTR >( pOutBufferOut )
-                    , cbOutBufferSizeIn
-                    , pcbBytesReturnedOut
-                    , &cbRequired
-                    );
-            if ( sc == ERROR_MORE_DATA )
-            {
-                *pcbBytesReturnedOut = cbRequired;
-            } // if: output buffer is too small
-            break;
-        }
+            *pcbBytesReturnedOut = cbRequired;
+        } // if: output buffer is too small
+        break;
+    }
 
-        case CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES:
-            sc = FileShareSampleGetPrivateResProperties(
-                      pResourceEntry
-                    , pOutBufferOut
-                    , cbOutBufferSizeIn
-                    , pcbBytesReturnedOut
-                    );
-            break;
+    case CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES:
+        sc = FileShareSampleGetPrivateResProperties(
+                 pResourceEntry
+                 , pOutBufferOut
+                 , cbOutBufferSizeIn
+                 , pcbBytesReturnedOut
+             );
+        break;
 
-        case CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES:
-            sc = FileShareSampleValidatePrivateResProperties(
-                      pResourceEntry
-                    , pInBufferIn
-                    , cbInBufferSizeIn
-                    , NULL
-                    );
-            break;
+    case CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES:
+        sc = FileShareSampleValidatePrivateResProperties(
+                 pResourceEntry
+                 , pInBufferIn
+                 , cbInBufferSizeIn
+                 , NULL
+             );
+        break;
 
-        case CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES:
-            sc = FileShareSampleSetPrivateResProperties(
-                      pResourceEntry
-                    , pInBufferIn
-                    , cbInBufferSizeIn
-                    );
-            break;
+    case CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES:
+        sc = FileShareSampleSetPrivateResProperties(
+                 pResourceEntry
+                 , pInBufferIn
+                 , cbInBufferSizeIn
+             );
+        break;
 
-        case CLUSCTL_RESOURCE_SET_NAME:
-            sc = FileShareSampleSetNameHandler( pResourceEntry, static_cast< LPWSTR >( pInBufferIn ) );
-            break;
+    case CLUSCTL_RESOURCE_SET_NAME:
+        sc = FileShareSampleSetNameHandler( pResourceEntry, static_cast< LPWSTR >( pInBufferIn ) );
+        break;
 
-        case CLUSCTL_RESOURCE_FILESHARESAMPLE_CALL_ISALIVE:
+    case CLUSCTL_RESOURCE_FILESHARESAMPLE_CALL_ISALIVE:
 
-            //
-            // This has the same effect as the periodic IsAlive check.
-            //
+        //
+        // This has the same effect as the periodic IsAlive check.
+        //
 
-            if ( pResourceEntry->state != ClusterResourceOnline )
-            {
-                sc = ERROR_CLUSTER_INVALID_REQUEST;
-            } // if:
-            else if ( FileShareSampleCheckIsAlive( pResourceEntry, TRUE ) == FALSE )
-            {
-                sc = ERROR_RESOURCE_FAILED;
-                pResourceEntry->fIsAliveFailed = TRUE;
-                (g_pfnLogEvent)(
-                      pResourceEntry->hResourceHandle
-                    , LOG_ERROR
-                    , L"ResourceControl CALL_ISALIVE failed.\n"
-                    );
-            } // else if:
-            else
-            {
-                sc = ERROR_SUCCESS;
-                (g_pfnLogEvent)(
-                      pResourceEntry->hResourceHandle
-                    , LOG_INFORMATION
-                    , L"ResourceControl CALL_ISALIVE succeeded.\n"
-                    );
-            } // else:
+        if ( pResourceEntry->state != ClusterResourceOnline )
+        {
+            sc = ERROR_CLUSTER_INVALID_REQUEST;
+        } // if:
+        else if ( FileShareSampleCheckIsAlive( pResourceEntry, TRUE ) == FALSE )
+        {
+            sc = ERROR_RESOURCE_FAILED;
+            pResourceEntry->fIsAliveFailed = TRUE;
+            (g_pfnLogEvent)(
+                pResourceEntry->hResourceHandle
+                , LOG_ERROR
+                , L"ResourceControl CALL_ISALIVE failed.\n"
+            );
+        } // else if:
+        else
+        {
+            sc = ERROR_SUCCESS;
+            (g_pfnLogEvent)(
+                pResourceEntry->hResourceHandle
+                , LOG_INFORMATION
+                , L"ResourceControl CALL_ISALIVE succeeded.\n"
+            );
+        } // else:
 
-            break;
+        break;
 
-        case CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES:
-        case CLUSCTL_RESOURCE_GET_CHARACTERISTICS:
-        case CLUSCTL_RESOURCE_GET_CLASS_INFO:
-        case CLUSCTL_RESOURCE_STORAGE_GET_DISK_INFO:
-        case CLUSCTL_RESOURCE_STORAGE_IS_PATH_VALID:
-        case CLUSCTL_RESOURCE_DELETE:
-        case CLUSCTL_RESOURCE_INSTALL_NODE:
-        case CLUSCTL_RESOURCE_EVICT_NODE:
-        case CLUSCTL_RESOURCE_ADD_DEPENDENCY:
-        case CLUSCTL_RESOURCE_REMOVE_DEPENDENCY:
-        case CLUSCTL_RESOURCE_ADD_OWNER:
-        case CLUSCTL_RESOURCE_REMOVE_OWNER:
-        case CLUSCTL_RESOURCE_CLUSTER_NAME_CHANGED:
-        case CLUSCTL_RESOURCE_CLUSTER_VERSION_CHANGED:
-        default:
-            sc = ERROR_INVALID_FUNCTION;
-            break;
+    case CLUSCTL_RESOURCE_GET_REQUIRED_DEPENDENCIES:
+    case CLUSCTL_RESOURCE_GET_CHARACTERISTICS:
+    case CLUSCTL_RESOURCE_GET_CLASS_INFO:
+    case CLUSCTL_RESOURCE_STORAGE_GET_DISK_INFO:
+    case CLUSCTL_RESOURCE_STORAGE_IS_PATH_VALID:
+    case CLUSCTL_RESOURCE_DELETE:
+    case CLUSCTL_RESOURCE_INSTALL_NODE:
+    case CLUSCTL_RESOURCE_EVICT_NODE:
+    case CLUSCTL_RESOURCE_ADD_DEPENDENCY:
+    case CLUSCTL_RESOURCE_REMOVE_DEPENDENCY:
+    case CLUSCTL_RESOURCE_ADD_OWNER:
+    case CLUSCTL_RESOURCE_REMOVE_OWNER:
+    case CLUSCTL_RESOURCE_CLUSTER_NAME_CHANGED:
+    case CLUSCTL_RESOURCE_CLUSTER_VERSION_CHANGED:
+    default:
+        sc = ERROR_INVALID_FUNCTION;
+        break;
     } // switch: nControlCodeIn
 
     return sc;
@@ -2044,14 +2044,14 @@ FileShareSampleResourceControl(
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 FileShareSampleResourceTypeControl(
-      LPCWSTR   pwszResourceTypeNameIn
+    LPCWSTR   pwszResourceTypeNameIn
     , DWORD     nControlCodeIn
     , PVOID     pInBufferIn
     , DWORD     cbInBufferSizeIn
     , PVOID     pOutBufferOut
     , DWORD     cbOutBufferSizeIn
     , LPDWORD   pcbBytesReturnedOut
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -2062,37 +2062,37 @@ FileShareSampleResourceTypeControl(
     switch ( nControlCodeIn )
     {
 
-        case CLUSCTL_RESOURCE_TYPE_UNKNOWN:
-            *pcbBytesReturnedOut = 0;
-            sc = ERROR_SUCCESS;
-            break;
+    case CLUSCTL_RESOURCE_TYPE_UNKNOWN:
+        *pcbBytesReturnedOut = 0;
+        sc = ERROR_SUCCESS;
+        break;
 
-        case CLUSCTL_RESOURCE_TYPE_ENUM_PRIVATE_PROPERTIES:
+    case CLUSCTL_RESOURCE_TYPE_ENUM_PRIVATE_PROPERTIES:
+    {
+        DWORD cbRequired = 0;
+        sc = ResUtilEnumProperties(
+                 FileShareSampleResourcePrivateProperties
+                 , static_cast< LPWSTR >( pOutBufferOut )
+                 , cbOutBufferSizeIn
+                 , pcbBytesReturnedOut
+                 , &cbRequired
+             );
+        if ( sc == ERROR_MORE_DATA )
         {
-            DWORD cbRequired = 0;
-            sc = ResUtilEnumProperties(
-                      FileShareSampleResourcePrivateProperties
-                    , static_cast< LPWSTR >( pOutBufferOut )
-                    , cbOutBufferSizeIn
-                    , pcbBytesReturnedOut
-                    , &cbRequired
-                    );
-            if ( sc == ERROR_MORE_DATA )
-            {
-                *pcbBytesReturnedOut = cbRequired;
-            } // if: output buffer is too small
-            break;
-        }
+            *pcbBytesReturnedOut = cbRequired;
+        } // if: output buffer is too small
+        break;
+    }
 
-        case CLUSCTL_RESOURCE_TYPE_GET_REQUIRED_DEPENDENCIES:
-        case CLUSCTL_RESOURCE_TYPE_GET_CHARACTERISTICS:
-        case CLUSCTL_RESOURCE_TYPE_GET_CLASS_INFO:
-        case CLUSCTL_RESOURCE_TYPE_STORAGE_GET_AVAILABLE_DISKS:
-        case CLUSCTL_RESOURCE_TYPE_INSTALL_NODE:
-        case CLUSCTL_RESOURCE_TYPE_EVICT_NODE:
-        default:
-            sc = ERROR_INVALID_FUNCTION;
-            break;
+    case CLUSCTL_RESOURCE_TYPE_GET_REQUIRED_DEPENDENCIES:
+    case CLUSCTL_RESOURCE_TYPE_GET_CHARACTERISTICS:
+    case CLUSCTL_RESOURCE_TYPE_GET_CLASS_INFO:
+    case CLUSCTL_RESOURCE_TYPE_STORAGE_GET_AVAILABLE_DISKS:
+    case CLUSCTL_RESOURCE_TYPE_INSTALL_NODE:
+    case CLUSCTL_RESOURCE_TYPE_EVICT_NODE:
+    default:
+        sc = ERROR_INVALID_FUNCTION;
+        break;
     } // switch: nControlCode
 
     return sc;
@@ -2146,23 +2146,23 @@ FileShareSampleResourceTypeControl(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 FileShareSampleGetPrivateResProperties(
-      PFILESHARESAMPLE_RESOURCE   pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE   pResourceEntryIn
     , PVOID                     pOutBufferOut
     , DWORD                     cbOutBufferSizeIn
     , LPDWORD                   pcbBytesReturnedOut
-    )
+)
 {
     DWORD   sc;
     DWORD   cbRequired = 0;
 
     sc = ResUtilGetAllProperties(
-              pResourceEntryIn->hkeyParameters
-            , FileShareSampleResourcePrivateProperties
-            , pOutBufferOut
-            , cbOutBufferSizeIn
-            , pcbBytesReturnedOut
-            , &cbRequired
-            );
+             pResourceEntryIn->hkeyParameters
+             , FileShareSampleResourcePrivateProperties
+             , pOutBufferOut
+             , cbOutBufferSizeIn
+             , pcbBytesReturnedOut
+             , &cbRequired
+         );
     if ( sc == ERROR_MORE_DATA )
     {
         *pcbBytesReturnedOut = cbRequired;
@@ -2212,11 +2212,11 @@ FileShareSampleGetPrivateResProperties(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 FileShareSampleValidatePrivateResProperties(
-      PFILESHARESAMPLE_RESOURCE   pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE   pResourceEntryIn
     , PVOID                     pInBufferIn
     , DWORD                     cbInBufferSizeIn
     , PFILESHARESAMPLE_PROPS      pPropsOut
-    )
+)
 {
     DWORD                   sc = ERROR_SUCCESS;
     FILESHARESAMPLE_PROPS   propsCurrent;
@@ -2230,7 +2230,7 @@ FileShareSampleValidatePrivateResProperties(
     //
 
     if (    (pInBufferIn == NULL)
-        ||  (cbInBufferSizeIn < sizeof( DWORD )) )
+            ||  (cbInBufferSizeIn < sizeof( DWORD )) )
     {
         sc = ERROR_INVALID_DATA;
         goto Cleanup;
@@ -2244,21 +2244,21 @@ FileShareSampleValidatePrivateResProperties(
     ZeroMemory( &propsCurrent, sizeof( propsCurrent ) );
 
     sc = ResUtilGetPropertiesToParameterBlock(
-               pResourceEntryIn->hkeyParameters
+             pResourceEntryIn->hkeyParameters
              , FileShareSampleResourcePrivateProperties
              , reinterpret_cast< LPBYTE >( &propsCurrent )
              , FALSE /*CheckForRequiredProperties*/
              , &pwszNameOfPropInError
-             );
+         );
     if ( sc != ERROR_SUCCESS )
     {
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"Unable to read the '%1!s!' property. Error: %2!u!.\n"
             , (pwszNameOfPropInError == NULL ? L"" : pwszNameOfPropInError)
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error getting properties
     fRetrievedProps = TRUE;
@@ -2279,10 +2279,10 @@ FileShareSampleValidatePrivateResProperties(
     ZeroMemory( pLocalProps, sizeof( *pLocalProps ) );
 
     sc = ResUtilDupParameterBlock(
-              reinterpret_cast< LPBYTE >( pLocalProps )
-            , reinterpret_cast< LPBYTE >( &propsCurrent )
-            , FileShareSampleResourcePrivateProperties
-            );
+             reinterpret_cast< LPBYTE >( pLocalProps )
+             , reinterpret_cast< LPBYTE >( &propsCurrent )
+             , FileShareSampleResourcePrivateProperties
+         );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
@@ -2293,13 +2293,13 @@ FileShareSampleValidatePrivateResProperties(
     //
 
     sc = ResUtilVerifyPropertyTable(
-              FileShareSampleResourcePrivateProperties
-            , NULL
-            , TRUE // AllowUnknownProperties
-            , pInBufferIn
-            , cbInBufferSizeIn
-            , reinterpret_cast< LPBYTE >( pLocalProps )
-            );
+             FileShareSampleResourcePrivateProperties
+             , NULL
+             , TRUE // AllowUnknownProperties
+             , pInBufferIn
+             , cbInBufferSizeIn
+             , reinterpret_cast< LPBYTE >( pLocalProps )
+         );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
@@ -2320,25 +2320,25 @@ Cleanup:
     //
 
     if (    ( pLocalProps == &propsNew )
-        ||  (   ( sc != ERROR_SUCCESS)
-            &&  ( pLocalProps != NULL )
-            )
+            ||  (   ( sc != ERROR_SUCCESS)
+                    &&  ( pLocalProps != NULL )
+                )
        )
     {
         ResUtilFreeParameterBlock(
-              reinterpret_cast< LPBYTE >( pLocalProps )
+            reinterpret_cast< LPBYTE >( pLocalProps )
             , reinterpret_cast< LPBYTE >( &propsCurrent )
             , FileShareSampleResourcePrivateProperties
-            );
+        );
     } // if: we duplicated the parameter block
 
     if ( fRetrievedProps )
     {
         ResUtilFreeParameterBlock(
-              reinterpret_cast< LPBYTE >( &propsCurrent )
+            reinterpret_cast< LPBYTE >( &propsCurrent )
             , NULL
             , FileShareSampleResourcePrivateProperties
-            );
+        );
     } // if: properties were retrieved
 
     return sc;
@@ -2382,10 +2382,10 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 FileShareSampleSetPrivateResProperties(
-      PFILESHARESAMPLE_RESOURCE pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE pResourceEntryIn
     , PVOID                     pInBufferIn
     , DWORD                     cbInBufferSizeIn
-    )
+)
 {
     DWORD                   sc = ERROR_SUCCESS;
     FILESHARESAMPLE_PROPS   props;
@@ -2410,30 +2410,30 @@ FileShareSampleSetPrivateResProperties(
     //
 
     if (   (    ( pResourceEntryIn->props.pwszShareName != NULL )
-             && ( 0 != CompareStringW(
-                                    LOCALE_SYSTEM_DEFAULT,
-                                    NORM_IGNORECASE,
-                                    props.pwszShareName,
-                                    -1,
-                                    pResourceEntryIn->props.pwszShareName,
-                                    -1
-                                    )
-                )
+                && ( 0 != CompareStringW(
+                         LOCALE_SYSTEM_DEFAULT,
+                         NORM_IGNORECASE,
+                         props.pwszShareName,
+                         -1,
+                         pResourceEntryIn->props.pwszShareName,
+                         -1
+                     )
+                   )
            )
-        || (    ( pResourceEntryIn->props.pwszPath != NULL )
-             && ( 0 != CompareStringW(
-                                    LOCALE_SYSTEM_DEFAULT,
-                                    NORM_IGNORECASE,
-                                    props.pwszPath,
-                                    -1,
-                                    pResourceEntryIn->props.pwszPath,
-                                    -1
-                                    )
-                )
-           )
+            || (    ( pResourceEntryIn->props.pwszPath != NULL )
+                    && ( 0 != CompareStringW(
+                             LOCALE_SYSTEM_DEFAULT,
+                             NORM_IGNORECASE,
+                             props.pwszPath,
+                             -1,
+                             pResourceEntryIn->props.pwszPath,
+                             -1
+                         )
+                       )
+               )
        )
     {
-        fAllowDynamicChanges = FALSE; 
+        fAllowDynamicChanges = FALSE;
     } // if: share or path changed
     else
     {
@@ -2445,20 +2445,20 @@ FileShareSampleSetPrivateResProperties(
     //
 
     sc = ResUtilSetPropertyParameterBlock(
-              pResourceEntryIn->hkeyParameters
-            , FileShareSampleResourcePrivateProperties
-            , NULL
-            , reinterpret_cast< LPBYTE >( &props )
-            , pInBufferIn
-            , cbInBufferSizeIn
-            , reinterpret_cast< LPBYTE >( &pResourceEntryIn->props )
-            );
+             pResourceEntryIn->hkeyParameters
+             , FileShareSampleResourcePrivateProperties
+             , NULL
+             , reinterpret_cast< LPBYTE >( &props )
+             , pInBufferIn
+             , cbInBufferSizeIn
+             , reinterpret_cast< LPBYTE >( &pResourceEntryIn->props )
+         );
 
     ResUtilFreeParameterBlock(
-              reinterpret_cast< LPBYTE >( &props )
-            , reinterpret_cast< LPBYTE >( &pResourceEntryIn->props )
-            , FileShareSampleResourcePrivateProperties
-            );
+        reinterpret_cast< LPBYTE >( &props )
+        , reinterpret_cast< LPBYTE >( &pResourceEntryIn->props )
+        , FileShareSampleResourcePrivateProperties
+    );
 
     if ( sc != ERROR_SUCCESS )
     {
@@ -2470,7 +2470,7 @@ FileShareSampleSetPrivateResProperties(
     //
 
     if (    ( pResourceEntryIn->state == ClusterResourceOnline )
-         && ( fAllowDynamicChanges == TRUE )
+            && ( fAllowDynamicChanges == TRUE )
        )
     {
         //
@@ -2478,11 +2478,11 @@ FileShareSampleSetPrivateResProperties(
         //
 
         sc = NetShareGetInfo(
-                      NULL      // pwszServer
-                    , pResourceEntryIn->props.pwszShareName
-                    , 2         // level
-                    , reinterpret_cast< LPBYTE * >( &psiOld )
-                    );
+                 NULL      // pwszServer
+                 , pResourceEntryIn->props.pwszShareName
+                 , 2         // level
+                 , reinterpret_cast< LPBYTE * >( &psiOld )
+             );
         if ( sc != NERR_Success )
         {
             sc = ERROR_RESOURCE_PROPERTIES_STORED;
@@ -2502,22 +2502,22 @@ FileShareSampleSetPrivateResProperties(
         siNew.shi2_max_uses =   pResourceEntryIn->props.nMaxUsers;
 
         sc = NetShareSetInfo(
-                      NULL      // pwszServer
-                    , pResourceEntryIn->props.pwszShareName
-                    , 2         // level
-                    , reinterpret_cast< LPBYTE >( &siNew )
-                    , &nInvalidParam
-                    );
+                 NULL      // pwszServer
+                 , pResourceEntryIn->props.pwszShareName
+                 , 2         // level
+                 , reinterpret_cast< LPBYTE >( &siNew )
+                 , &nInvalidParam
+             );
         if ( sc != NERR_Success )
         {
             (g_pfnLogEvent)(
-                  pResourceEntryIn->hResourceHandle
+                pResourceEntryIn->hResourceHandle
                 , LOG_ERROR
                 , L"SetPrivateProps: Error setting info on share '%1!ws!'. Error %2!u!, property # %3!d!.\n"
                 , pResourceEntryIn->props.pwszShareName
                 , sc
                 , nInvalidParam
-                );
+            );
             sc = ERROR_RESOURCE_PROPERTIES_STORED;
             goto Cleanup;
         } // if:  error setting new share info
@@ -2526,7 +2526,7 @@ FileShareSampleSetPrivateResProperties(
 
     } // if: resource is currently online
     else if (    ( pResourceEntryIn->state == ClusterResourceOnline )
-              || ( pResourceEntryIn->state == ClusterResourceOnlinePending )
+                 || ( pResourceEntryIn->state == ClusterResourceOnlinePending )
             )
     {
         sc = ERROR_RESOURCE_PROPERTIES_STORED;
@@ -2575,9 +2575,9 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 FileShareSampleSetNameHandler(
-      PFILESHARESAMPLE_RESOURCE   pResourceEntryIn
+    PFILESHARESAMPLE_RESOURCE   pResourceEntryIn
     , LPWSTR                    pwszNameIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     DWORD   cchNameBuffer = 0;
@@ -2594,12 +2594,12 @@ FileShareSampleSetNameHandler(
     {
         sc = GetLastError();
         (g_pfnLogEvent)(
-              pResourceEntryIn->hResourceHandle
+            pResourceEntryIn->hResourceHandle
             , LOG_ERROR
             , L"Failed to allocate memory for the new resource name '%1!s!'. Error: %2!u!.\n"
             , pwszNameIn
             , sc
-            );
+        );
         goto Cleanup;
     } // if: error allocating memory for the name.
 
@@ -2645,4 +2645,4 @@ CLRES_V1_FUNCTION_TABLE(
     NULL,                               // Release
     FileShareSampleResourceControl,       // ResControl
     FileShareSampleResourceTypeControl    // ResTypeControl
-    );
+);

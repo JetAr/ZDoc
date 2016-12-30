@@ -1,4 +1,4 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+﻿/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
 #pragma once
 #ifndef _IMAPI2TEST_ERASE2_EVENTS_
@@ -23,11 +23,11 @@ class  CTestErase2Event :
 
     // This is the list of all interfaces supported by the object
     BEGIN_COM_MAP(CTestErase2Event)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
     BEGIN_SINK_MAP(CTestErase2Event)
-        SINK_ENTRY_INFO(1, IID_DDiscFormat2EraseEvents, DISPID_IDISCFORMAT2ERASEEVENTS_UPDATE, &Update, &g_EraseIDispatchEventInfo)
+    SINK_ENTRY_INFO(1, IID_DDiscFormat2EraseEvents, DISPID_IDISCFORMAT2ERASEEVENTS_UPDATE, &Update, &g_EraseIDispatchEventInfo)
     END_SINK_MAP()
 
 public: // DDiscFormat2EraseEvents

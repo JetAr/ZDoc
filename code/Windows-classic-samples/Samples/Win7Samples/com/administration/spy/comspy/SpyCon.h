@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,10 +12,10 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // CSpyCon
-class ATL_NO_VTABLE CSpyCon : 
+class ATL_NO_VTABLE CSpyCon :
     public CComObjectRoot,
     public CComCoClass<CSpyCon, &CLSID_SpyCon>,
-    public ISpyCon, 
+    public ISpyCon,
     public CWindowImpl<CSpyCon>,
     public IOleClientSite,
     public IOleInPlaceSite
@@ -24,7 +24,7 @@ class ATL_NO_VTABLE CSpyCon :
 private:
     WINDOWPLACEMENT m_wp;
     CComPtr<IOleObject> m_spOleObject;
-    CComPtr<IComSpy> m_spSpy;    
+    CComPtr<IComSpy> m_spSpy;
     bool m_bInPlaceActive;
     bool m_bAlwaysOnTop;
     bool m_bSaveOnExit;
@@ -49,18 +49,18 @@ protected:
 
 public:
 
-DECLARE_REGISTRY_RESOURCEID(IDR_SPYCON)
-DECLARE_NOT_AGGREGATABLE(CSpyCon)
+    DECLARE_REGISTRY_RESOURCEID(IDR_SPYCON)
+    DECLARE_NOT_AGGREGATABLE(CSpyCon)
 
-BEGIN_COM_MAP(CSpyCon)
+    BEGIN_COM_MAP(CSpyCon)
     COM_INTERFACE_ENTRY(ISpyCon)
     COM_INTERFACE_ENTRY(IOleClientSite)
     COM_INTERFACE_ENTRY(IOleWindow)
     COM_INTERFACE_ENTRY(IOleInPlaceSite)
-END_COM_MAP()
+    END_COM_MAP()
 
-BEGIN_MSG_MAP(CSpyCon)
-    MESSAGE_HANDLER(WM_NCDESTROY, OnNCDestroy)    
+    BEGIN_MSG_MAP(CSpyCon)
+    MESSAGE_HANDLER(WM_NCDESTROY, OnNCDestroy)
     MESSAGE_HANDLER(WM_SIZE, OnSize)
     MESSAGE_HANDLER(WM_ERASEBKGND, OnErase)
     MESSAGE_HANDLER(WM_INITMENU, OnInitMenu)
@@ -79,7 +79,7 @@ BEGIN_MSG_MAP(CSpyCon)
     COMMAND_ID_HANDLER(ID_SHOW_ON_SCREEN, OnToggleShowOnScreen)
     COMMAND_ID_HANDLER(ID_SAVE_ON_EXIT, OnToggleSaveOnExit)
     COMMAND_ID_HANDLER(ID_SAVE_NOW, OnSaveNow)
-END_MSG_MAP()
+    END_MSG_MAP()
 
 protected:
     LRESULT OnSaveNow(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -163,7 +163,7 @@ public:
         return S_OK;
     }
     STDMETHOD(GetWindowContext)(IOleInPlaceFrame **ppFrame, IOleInPlaceUIWindow **ppDoc,
-        LPRECT lprcPosRect, LPRECT lprcClipRect, LPOLEINPLACEFRAMEINFO lpFrameInfo)
+                                LPRECT lprcPosRect, LPRECT lprcClipRect, LPOLEINPLACEFRAMEINFO lpFrameInfo)
     {
         GetClientRect(lprcPosRect);
         GetClientRect(lprcClipRect);

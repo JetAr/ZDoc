@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,11 +28,11 @@
 // Exception handler macro
 #define DO_EXCEPTION        1       // Execute the exception block
 
-// Macro for printing out error message and exit the program if an      
-// error occured                                                        
+// Macro for printing out error message and exit the program if an
+// error occured
 #define EXIT_IF_FAIL(x, string){	\
     ((x) != RPC_S_OK)?_tprintf(TEXT("%s returned with error: %d\n"), \
-    TEXT(string), (x)),exit(x):0;} 
+    TEXT(string), (x)),exit(x):0;}
 
 // Common type definition and defines used in the program
 #define PROTOCOL_SEQUENCE   TEXT("ncacn_ip_tcp")

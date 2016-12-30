@@ -1,4 +1,4 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+﻿/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
 #include "consoleUtil.h"
 
@@ -11,26 +11,27 @@ VOID DeleteCurrentLine()
            "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
            "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
            "\b\b\b\b\b\b\b"
-           );
+          );
     return;
 }
 VOID OverwriteCurrentLine()
 {
     printf("                                        "
            "                                        "
-           );
+          );
     return;
 }
 VOID
 UpdatePercentageDisplay(
     IN ULONG Numerator,
     IN ULONG Denominator
-    )
+)
 {
     ULONG percent;
     ULONG i;
 
-    if (Numerator > Denominator) {
+    if (Numerator > Denominator)
+    {
         return;
     }
 
@@ -40,14 +41,20 @@ UpdatePercentageDisplay(
 
     // each block is 2%
     // ----=----1----=----2----=----3----=----4----=----5----=----6----=----7----=----8
-    // �.....................
+    // ±.....................
 
-    for (i=1; i<100; i+=2) {
-        if (i < percent) {
+    for (i=1; i<100; i+=2)
+    {
+        if (i < percent)
+        {
             putchar(178);
-        } else if (i == percent) {
+        }
+        else if (i == percent)
+        {
             putchar(177);
-        } else {
+        }
+        else
+        {
             putchar(176);
         }
     }

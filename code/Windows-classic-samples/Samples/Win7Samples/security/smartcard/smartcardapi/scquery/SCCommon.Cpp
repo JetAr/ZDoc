@@ -1,4 +1,4 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+﻿/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
  EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
@@ -689,7 +689,8 @@ static LONG scSelectFile (IN SCARDHANDLE hCard,
     BYTE  status[2];
     DWORD dwStatusLength = sizeof(status);
     BYTE apdu[7] = {(BYTE) dwClassCode, 0xa4, 0x00, 0x00, 0x02,
-        *lpbFileName, *(lpbFileName + 1)};
+                    *lpbFileName, *(lpbFileName + 1)
+                   };
 
     //
     // Send APDU to card

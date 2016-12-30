@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
 
    File:          EnumDesk.h
 
-   Description:   
+   Description:
 
 **************************************************************************/
 
@@ -22,11 +22,11 @@
 #include <windows.h>
 
 typedef struct
-   {
-   LPSHELLFOLDER  pParentFolder;
-   LPITEMIDLIST   pidlFQ;
-   LPITEMIDLIST   pidlRel;
-   }ITEMINFO, FAR *LPITEMINFO;
+{
+    LPSHELLFOLDER  pParentFolder;
+    LPITEMIDLIST   pidlFQ;
+    LPITEMIDLIST   pidlRel;
+} ITEMINFO, FAR *LPITEMINFO;
 
 /**************************************************************************
    function prototypes

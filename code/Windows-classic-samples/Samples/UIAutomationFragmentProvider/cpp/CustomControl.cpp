@@ -1,20 +1,20 @@
-/*************************************************************************************************
+﻿/*************************************************************************************************
 * Description: Implementation of the custom list control.
-* 
+*
 * See EntryPoint.cpp for a full description of this sample.
-*   
+*
 *
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 *************************************************************************************************/
 #include "CustomControl.h"
 #include "UIAProviders.h"
@@ -60,7 +60,7 @@ bool CustomListControl::AddItem(ContactStatus status, PCWSTR name)
         newItem->SetStatus(status);
 
         // Add to collection.
-        m_itemCollection.push_back(newItem);  
+        m_itemCollection.push_back(newItem);
         SelectItem(0);
 
         // Raise UI Automation event.
@@ -96,9 +96,9 @@ bool CustomListControl::RemoveSelected()
     // Delete object.
     delete pItem;
 
-    // Select at the same index; if we deleted the bottom item, 
+    // Select at the same index; if we deleted the bottom item,
     // the index will be decremented.
-    SelectItem(index);   
+    SelectItem(index);
     return true;
 }
 
@@ -114,7 +114,7 @@ ListProvider* CustomListControl::GetListProvider()
 {
     if (m_pListProvider == NULL)
     {
-        m_pListProvider = new (std::nothrow) ListProvider(this);   
+        m_pListProvider = new (std::nothrow) ListProvider(this);
     }
     return m_pListProvider;
 }
@@ -138,7 +138,7 @@ void CustomListControl::SelectItem(int index)
     m_selectedIndex = index;
     if (m_selectedIndex >= static_cast<int>(m_itemCollection.size()))
     {
-        m_selectedIndex = static_cast<int>(m_itemCollection.size()) - 1;  
+        m_selectedIndex = static_cast<int>(m_itemCollection.size()) - 1;
     }
     InvalidateRect(m_controlHwnd, NULL, false);
 
@@ -222,246 +222,246 @@ CustomListControl* GetControl(HWND hwnd)
 //
 LRESULT CALLBACK ControlWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) 
+    switch (message)
     {
     case WM_CREATE:
-        {
-            // Create the control object.
-            CustomListControl* pCustomList = new (std::nothrow) CustomListControl(hwnd);
+    {
+        // Create the control object.
+        CustomListControl* pCustomList = new (std::nothrow) CustomListControl(hwnd);
 
-            // Save the class instance as window data so that its members 
-            // can be accessed from within this function.
-            SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pCustomList));
-            break;
-        }
+        // Save the class instance as window data so that its members
+        // can be accessed from within this function.
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pCustomList));
+        break;
+    }
 
     case WM_DESTROY:
-        {
-            // Destroy the control so interfaces are released.
-            CustomListControl* pCustomList = GetControl(hwnd);
-            delete pCustomList;
-            break;
-        }
+    {
+        // Destroy the control so interfaces are released.
+        CustomListControl* pCustomList = GetControl(hwnd);
+        delete pCustomList;
+        break;
+    }
 
     case WM_GETOBJECT:
+    {
+        // Register the control with UI Automation.
+        // If the lParam matches the RootObjectId, send back the list provider.
+        if (static_cast<long>(lParam) == static_cast<long>(UiaRootObjectId))
         {
-            // Register the control with UI Automation.
-            // If the lParam matches the RootObjectId, send back the list provider.
-            if (static_cast<long>(lParam) == static_cast<long>(UiaRootObjectId))
-            {
-                // Get the control.
-                CustomListControl* pCustomList = GetControl(hwnd);
-                // Return its associated UI Automation provider.
-                LRESULT lresult = UiaReturnRawElementProvider(
-                    hwnd, wParam, lParam, pCustomList->GetListProvider());
-                return lresult;
-            }
-            return 0;
+            // Get the control.
+            CustomListControl* pCustomList = GetControl(hwnd);
+            // Return its associated UI Automation provider.
+            LRESULT lresult = UiaReturnRawElementProvider(
+                                  hwnd, wParam, lParam, pCustomList->GetListProvider());
+            return lresult;
         }
+        return 0;
+    }
 
     case WM_PAINT:
+    {
+        // Retrieve the control.
+        CustomListControl* pCustomList = GetControl(hwnd);
+
+        // Set up graphics context.
+        PAINTSTRUCT paintStruct;
+        HDC hdc = BeginPaint(hwnd, &paintStruct);
+        RECT clientRect;
+        GetClientRect(hwnd, &clientRect);
+
+        // Save the context.
+        HGDIOBJ oldHgdi = SelectObject(hdc, GetStockObject(BLACK_PEN));
+
+        // Draw items.
+        // Create and select a null pen so the rectangle isn't outlined.
+        HPEN nullPen = CreatePen(PS_NULL, 1, RGB(0,0,0));
+        SelectObject(hdc, nullPen);
+
+        // Erase the whole window.
+        Rectangle(hdc, clientRect.left, clientRect.top, clientRect.right,
+                  clientRect.bottom);
+
+        // Create and select the font.
+        HFONT font = GetFont(hwnd, -11);
+        HGDIOBJ oldFont = SelectObject(hdc, font);
+
+        // Set transparency for text.
+        SetBkMode(hdc, TRANSPARENT);
+
+        int ItemHeight = pCustomList->ItemHeight;
+
+        // Create brushes
+        HBRUSH unfocusedFillBrush  = GetSysColorBrush(COLOR_BTNFACE);
+        HBRUSH focusedFillBrush = GetSysColorBrush(COLOR_HIGHLIGHT);
+
+        HBRUSH onlineFillBrush = CreateSolidBrush(RGB(0, 192, 0));  // Green.
+        HBRUSH offlineFillBrush = CreateSolidBrush(RGB(255, 0, 0)); // Red.
+
+        if (pCustomList->GetCount() > 0)
         {
-            // Retrieve the control.
-            CustomListControl* pCustomList = GetControl(hwnd);
-
-            // Set up graphics context.
-            PAINTSTRUCT paintStruct;
-            HDC hdc = BeginPaint(hwnd, &paintStruct);
-            RECT clientRect;
-            GetClientRect(hwnd, &clientRect);
-
-            // Save the context.
-            HGDIOBJ oldHgdi = SelectObject(hdc, GetStockObject(BLACK_PEN)); 
-
-            // Draw items.
-            // Create and select a null pen so the rectangle isn't outlined.
-            HPEN nullPen = CreatePen(PS_NULL, 1, RGB(0,0,0));
-            SelectObject(hdc, nullPen);
-
-            // Erase the whole window.
-            Rectangle(hdc, clientRect.left, clientRect.top, clientRect.right, 
-                clientRect.bottom);
-
-            // Create and select the font.
-            HFONT font = GetFont(hwnd, -11);
-            HGDIOBJ oldFont = SelectObject(hdc, font);
-
-            // Set transparency for text.
-            SetBkMode(hdc, TRANSPARENT); 
-
-            int ItemHeight = pCustomList->ItemHeight;
-
-            // Create brushes
-            HBRUSH unfocusedFillBrush  = GetSysColorBrush(COLOR_BTNFACE);
-            HBRUSH focusedFillBrush = GetSysColorBrush(COLOR_HIGHLIGHT);
-
-            HBRUSH onlineFillBrush = CreateSolidBrush(RGB(0, 192, 0));  // Green.
-            HBRUSH offlineFillBrush = CreateSolidBrush(RGB(255, 0, 0)); // Red.
-
-            if (pCustomList->GetCount() > 0)
+            for (int i = 0; i < pCustomList->GetCount(); i++)
             {
-                for (int i = 0; i < pCustomList->GetCount(); i++)              
+                // Get the rectangle for the item.
+                RECT itemRect;
+                itemRect.left = clientRect.left + 2;
+                itemRect.top = clientRect.top + 2 + ItemHeight * i;
+                itemRect.right = clientRect.right - 2;
+                itemRect.bottom = itemRect.top + ItemHeight;
+
+                // Set the default text color.
+                SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
+
+                // Set up the appearance of the focused item.
+                // It's different depending on whether the list control has focus.
+                if (i == pCustomList->GetSelectedIndex())
                 {
-                    // Get the rectangle for the item.
-                    RECT itemRect;
-                    itemRect.left = clientRect.left + 2;
-                    itemRect.top = clientRect.top + 2 + ItemHeight * i;
-                    itemRect.right = clientRect.right - 2;
-                    itemRect.bottom = itemRect.top + ItemHeight;
-
-                    // Set the default text color.
-                    SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
-
-                    // Set up the appearance of the focused item.
-                    // It's different depending on whether the list control has focus.
-                    if (i == pCustomList->GetSelectedIndex())
+                    if (pCustomList->GetIsFocused())
                     {
-                        if (pCustomList->GetIsFocused())
-                        {
-                            SetTextColor(hdc, GetSysColor(COLOR_HIGHLIGHTTEXT));
-                            HGDIOBJ oldBrush = SelectObject(hdc, focusedFillBrush);
-                            Rectangle(hdc, itemRect.left+1, itemRect.top+1, 
-                                itemRect.right, itemRect.bottom);
-                            SelectObject(hdc, oldBrush);
-                        }
-                        else
-                        {
-                            HGDIOBJ oldBrush = SelectObject(hdc, unfocusedFillBrush);
-                            Rectangle(hdc, itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
-                            SelectObject(hdc, oldBrush);
-                        }
-                        DrawFocusRect(hdc, &itemRect); 
-                    }
-                    // Get the item.
-                    LISTITERATOR item = pCustomList->GetItemAt(i);
-                    CustomListItem* pItem = static_cast<CustomListItem*>(*item);
-
-                    // Draw the text.
-                    TextOut(hdc, itemRect.left + pCustomList->ImageWidth + 5, itemRect.top + 2, 
-                        pItem->GetName(), static_cast<int>(wcslen(pItem->GetName())));
-
-                    // Draw the status icon.
-                    if (pItem->GetStatus() == Status_Online)
-                    {
-                        SelectObject(hdc, onlineFillBrush);
-                        Rectangle(hdc, itemRect.left + 2, itemRect.top + 3,
-                            itemRect.left + pCustomList->ImageWidth + 2, itemRect.top + 3 + pCustomList->ImageHeight);
+                        SetTextColor(hdc, GetSysColor(COLOR_HIGHLIGHTTEXT));
+                        HGDIOBJ oldBrush = SelectObject(hdc, focusedFillBrush);
+                        Rectangle(hdc, itemRect.left+1, itemRect.top+1,
+                                  itemRect.right, itemRect.bottom);
+                        SelectObject(hdc, oldBrush);
                     }
                     else
                     {
-                        SelectObject(hdc, offlineFillBrush);
-                        Ellipse(hdc, itemRect.left + 2, itemRect.top + 3,
-                            itemRect.left + pCustomList->ImageWidth + 2, itemRect.top + 3 + pCustomList->ImageHeight);
+                        HGDIOBJ oldBrush = SelectObject(hdc, unfocusedFillBrush);
+                        Rectangle(hdc, itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
+                        SelectObject(hdc, oldBrush);
                     }
-                }  // for each item.
-            }
+                    DrawFocusRect(hdc, &itemRect);
+                }
+                // Get the item.
+                LISTITERATOR item = pCustomList->GetItemAt(i);
+                CustomListItem* pItem = static_cast<CustomListItem*>(*item);
 
-            EndPaint(hwnd, &paintStruct);
-            // Restore context.
-            SelectObject(hdc, oldFont);
-            SelectObject(hdc, oldHgdi);
-            // Clean brushes.
-            DeleteObject(font);
-            DeleteObject(nullPen);
-            DeleteObject(focusedFillBrush);
-            DeleteObject(unfocusedFillBrush);
-            DeleteObject(onlineFillBrush);
-            DeleteObject(offlineFillBrush);
-            break;
+                // Draw the text.
+                TextOut(hdc, itemRect.left + pCustomList->ImageWidth + 5, itemRect.top + 2,
+                        pItem->GetName(), static_cast<int>(wcslen(pItem->GetName())));
+
+                // Draw the status icon.
+                if (pItem->GetStatus() == Status_Online)
+                {
+                    SelectObject(hdc, onlineFillBrush);
+                    Rectangle(hdc, itemRect.left + 2, itemRect.top + 3,
+                              itemRect.left + pCustomList->ImageWidth + 2, itemRect.top + 3 + pCustomList->ImageHeight);
+                }
+                else
+                {
+                    SelectObject(hdc, offlineFillBrush);
+                    Ellipse(hdc, itemRect.left + 2, itemRect.top + 3,
+                            itemRect.left + pCustomList->ImageWidth + 2, itemRect.top + 3 + pCustomList->ImageHeight);
+                }
+            }  // for each item.
         }
+
+        EndPaint(hwnd, &paintStruct);
+        // Restore context.
+        SelectObject(hdc, oldFont);
+        SelectObject(hdc, oldHgdi);
+        // Clean brushes.
+        DeleteObject(font);
+        DeleteObject(nullPen);
+        DeleteObject(focusedFillBrush);
+        DeleteObject(unfocusedFillBrush);
+        DeleteObject(onlineFillBrush);
+        DeleteObject(offlineFillBrush);
+        break;
+    }
 
     case WM_SETFOCUS:
+    {
+        CustomListControl* pCustomList = GetControl(hwnd);
+        if (pCustomList != NULL)
         {
-            CustomListControl* pCustomList = GetControl(hwnd);
-            if (pCustomList != NULL)
-            {
-                pCustomList->SetIsFocused(true);
-                InvalidateRect(hwnd, NULL, TRUE);
-            }
-            break;        
-        }
-    case WM_KILLFOCUS:
-        {
-            CustomListControl* pCustomList = GetControl(hwnd);
-            pCustomList->SetIsFocused(false); 
+            pCustomList->SetIsFocused(true);
             InvalidateRect(hwnd, NULL, TRUE);
-            break;
         }
+        break;
+    }
+    case WM_KILLFOCUS:
+    {
+        CustomListControl* pCustomList = GetControl(hwnd);
+        pCustomList->SetIsFocused(false);
+        InvalidateRect(hwnd, NULL, TRUE);
+        break;
+    }
 
     case CUSTOMLB_REMOVEITEM:
-        {
-            CustomListControl* pCustomList = GetControl(hwnd);
-            pCustomList->RemoveSelected();
-            break;
-        }
+    {
+        CustomListControl* pCustomList = GetControl(hwnd);
+        pCustomList->RemoveSelected();
+        break;
+    }
 
     case CUSTOMLB_ADDITEM:
-        {
-            CustomListControl* pCustomList = GetControl(hwnd);
-            pCustomList->AddItem((ContactStatus)wParam, (WCHAR*)lParam);
-            break;
-        }
+    {
+        CustomListControl* pCustomList = GetControl(hwnd);
+        pCustomList->AddItem((ContactStatus)wParam, (WCHAR*)lParam);
+        break;
+    }
 
     case WM_GETDLGCODE:
-        {
-            // Trap arrow keys.
-            return DLGC_WANTARROWS | DLGC_WANTCHARS;
-            break;
-        }
+    {
+        // Trap arrow keys.
+        return DLGC_WANTARROWS | DLGC_WANTCHARS;
+        break;
+    }
 
     case WM_LBUTTONDOWN:
+    {
+        // Retrieve the control.
+        CustomListControl* pCustomList = GetControl(hwnd);
+
+        // Get the item under the cursor. This is -1 if the user clicked on a blank space.
+        int y = HIWORD(lParam);
+        int newItem = pCustomList->IndexFromY(y);
+
+        // Set the focus to the control regardless of whether the selection is valid.
+        SetFocus(hwnd);
+        if (newItem >= 0)
         {
-            // Retrieve the control.
-            CustomListControl* pCustomList = GetControl(hwnd);
-
-            // Get the item under the cursor. This is -1 if the user clicked on a blank space.
-            int y = HIWORD(lParam);
-            int newItem = pCustomList->IndexFromY(y);
-
-            // Set the focus to the control regardless of whether the selection is valid.
-            SetFocus(hwnd);
-            if (newItem >= 0)
-            {
-                pCustomList->SelectItem(newItem);
-            }
-
-            break;
+            pCustomList->SelectItem(newItem);
         }
+
+        break;
+    }
 
     case WM_KEYDOWN:
         // Move the selection with up/down arrows.
+    {
+        // Retrieve the control.
+        CustomListControl* pCustomList = GetControl(hwnd);
+
+        // Ignore keystrokes if listbox does not have focus.
+        switch (wParam)
         {
-            // Retrieve the control.
-            CustomListControl* pCustomList = GetControl(hwnd);
-
-            // Ignore keystrokes if listbox does not have focus.
-            switch (wParam)
+        case VK_UP:
+            if (pCustomList->GetSelectedIndex() > 0)
             {
-            case VK_UP:
-                if (pCustomList->GetSelectedIndex() > 0) 
-                {
-                    pCustomList->SelectItem(pCustomList->GetSelectedIndex() - 1);
-                }
-                return 0;
-                break;
-
-            case VK_DOWN:
-                if (pCustomList->GetSelectedIndex() < pCustomList->GetCount() - 1)          
-                {
-                    pCustomList->SelectItem(pCustomList->GetSelectedIndex() + 1);  
-                }
-                return 0;
-                break;
+                pCustomList->SelectItem(pCustomList->GetSelectedIndex() - 1);
             }
-            break; // WM_KEYDOWN
+            return 0;
+            break;
+
+        case VK_DOWN:
+            if (pCustomList->GetSelectedIndex() < pCustomList->GetCount() - 1)
+            {
+                pCustomList->SelectItem(pCustomList->GetSelectedIndex() + 1);
+            }
+            return 0;
+            break;
         }
+        break; // WM_KEYDOWN
+    }
     }  // switch (message)
 
     return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
 
-// CustomListItem class 
+// CustomListItem class
 //
 // Constructor.
 CustomListItem::CustomListItem(CustomListControl* pOwner, int id, PCWSTR name)
@@ -505,7 +505,7 @@ ListItemProvider* CustomListItem::GetListItemProvider()
 {
     if (m_pListItemProvider == NULL)
     {
-        m_pListItemProvider = new (std::nothrow) ListItemProvider(this);  
+        m_pListItemProvider = new (std::nothrow) ListItemProvider(this);
     }
     return m_pListItemProvider;
 }
@@ -546,12 +546,12 @@ int CustomListItem::GetId()
 }
 
 
-// Helper functions. 
+// Helper functions.
 //
 // Retrieves a font for list items.
 //
-HFONT GetFont(HWND hwnd, LONG height) 
-{ 
+HFONT GetFont(HWND hwnd, LONG height)
+{
     // Query the font metrics data for the message box font
     static LOGFONT lf;
     HTHEME hTheme = OpenThemeData(hwnd, L"WINDOW");
@@ -561,11 +561,11 @@ HFONT GetFont(HWND hwnd, LONG height)
     // Change the font size.
     lf.lfHeight = height;
 
-    // Create the font and return its handle.  
-    return CreateFont(lf.lfHeight, lf.lfWidth, 
-        lf.lfEscapement, lf.lfOrientation, lf.lfWeight, 
-        lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet, 
-        lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality, 
-        lf.lfPitchAndFamily, lf.lfFaceName); 
-} 
+    // Create the font and return its handle.
+    return CreateFont(lf.lfHeight, lf.lfWidth,
+                      lf.lfEscapement, lf.lfOrientation, lf.lfWeight,
+                      lf.lfItalic, lf.lfUnderline, lf.lfStrikeOut, lf.lfCharSet,
+                      lf.lfOutPrecision, lf.lfClipPrecision, lf.lfQuality,
+                      lf.lfPitchAndFamily, lf.lfFaceName);
+}
 

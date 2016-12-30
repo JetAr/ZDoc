@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /*******************************************************************************
 * TtsEngObj.cpp *
@@ -71,8 +71,8 @@ void CTTSEngObj::FinalRelease()
 *   assumes that m_cpToken has been initialized.
 *****************************************************************************/
 HRESULT CTTSEngObj::MapFile( const WCHAR * pszTokenVal,  // Value that contains file path
-                            HANDLE * phMapping,          // Pointer to file mapping handle
-                            void ** ppvData )            // Pointer to the data
+                             HANDLE * phMapping,          // Pointer to file mapping handle
+                             void ** ppvData )            // Pointer to the data
 {
     HRESULT hr = S_OK;
     CSpDynamicString dstrFilePath;
@@ -158,7 +158,7 @@ STDMETHODIMP CTTSEngObj::SetObjectToken(ISpObjectToken * pToken)
             hr = E_INVALIDARG;
             _ASSERT(0);
         }
-    
+
         //--- Get number of words
         if( SUCCEEDED( hr ) )
         {
@@ -225,7 +225,7 @@ STDMETHODIMP CTTSEngObj::SetObjectToken(ISpObjectToken * pToken)
 *   Return Values
 *       S_OK - This should be returned after successful rendering or if
 *              rendering was interrupted because *pfContinue changed to FALSE.
-*       E_INVALIDARG 
+*       E_INVALIDARG
 *       E_OUTOFMEMORY
 *
 *****************************************************************************/
@@ -240,7 +240,7 @@ STDMETHODIMP CTTSEngObj::Speak( DWORD dwSpeakFlags,
 
     //--- Check args
     if( SP_IS_BAD_INTERFACE_PTR( pOutputSite ) ||
-        SP_IS_BAD_READ_PTR( pTextFragList )  )
+            SP_IS_BAD_READ_PTR( pTextFragList )  )
     {
         hr = E_INVALIDARG;
     }
@@ -277,7 +277,7 @@ STDMETHODIMP CTTSEngObj::Speak( DWORD dwSpeakFlags,
             //--- Build the text item list
             if( SUCCEEDED( hr ) && (hr = GetNextSentence( ItemList )) != S_OK )
             {
-                break;                
+                break;
             }
 
             //--- We aren't going to do any part of speech determination,
@@ -298,8 +298,8 @@ STDMETHODIMP CTTSEngObj::Speak( DWORD dwSpeakFlags,
                 Event.ullAudioStreamOffset = m_ullAudioOff;
                 Event.lParam               = (LPARAM)FirstItem.ulItemSrcOffset;
                 Event.wParam               = (WPARAM)LastItem.ulItemSrcOffset +
-                                                     LastItem.ulItemSrcLen -
-                                                     FirstItem.ulItemSrcOffset;
+                                             LastItem.ulItemSrcLen -
+                                             FirstItem.ulItemSrcOffset;
                 hr = pOutputSite->AddEvents( &Event, 1 );
 
                 //--- Output
@@ -339,18 +339,18 @@ HRESULT CTTSEngObj::OutputSentence( CItemList& ItemList, ISpTTSEngineSite* pOutp
         //--- Process sentence items
         switch( Item.pXmlState->eAction )
         {
-          //--- Speak some text ---------------------------------------
-          case SPVA_Speak:
-          {
+        //--- Speak some text ---------------------------------------
+        case SPVA_Speak:
+        {
             //--- We don't say anything for punctuation or control characters
-            //    in this sample. 
+            //    in this sample.
             if( iswalpha( Item.pItem[0] ) || iswdigit( Item.pItem[0] ) )
             {
                 //--- Lookup the word, if we can't find it just use the first one
                 for( WordIndex = 0; WordIndex < m_ulNumWords; ++WordIndex )
                 {
                     if( ( m_pWordList[WordIndex].ulTextLen == Item.ulItemLen ) &&
-                        ( !_wcsnicmp( m_pWordList[WordIndex].pText, Item.pItem, Item.ulItemLen )) )
+                            ( !_wcsnicmp( m_pWordList[WordIndex].pText, Item.pItem, Item.ulItemLen )) )
                     {
                         break;
                     }
@@ -377,12 +377,12 @@ HRESULT CTTSEngObj::OutputSentence( CItemList& ItemList, ISpTTSEngineSite* pOutp
                 //--- Update the audio offset
                 m_ullAudioOff += m_pWordList[WordIndex].ulNumAudioBytes;
             }
-          }
-          break;
+        }
+        break;
 
-          //--- Output some silence for a pause -----------------------
-          case SPVA_Silence:
-          {
+        //--- Output some silence for a pause -----------------------
+        case SPVA_Silence:
+        {
             BYTE Buff[1000];
             memset( Buff, 0, 1000 );
             ULONG NumSilenceBytes = Item.pXmlState->SilenceMSecs * 22;
@@ -405,12 +405,12 @@ HRESULT CTTSEngObj::OutputSentence( CItemList& ItemList, ISpTTSEngineSite* pOutp
 
             //--- Update the audio offset
             m_ullAudioOff += NumSilenceBytes;
-          }
-          break;
+        }
+        break;
 
-          //--- Fire a bookmark event ---------------------------------
-          case SPVA_Bookmark:
-          {
+        //--- Fire a bookmark event ---------------------------------
+        case SPVA_Bookmark:
+        {
             //--- The bookmark is NOT a null terminated string in the Item, but we need
             //--- to convert it to one.  Allocate enough space for the string.
             WCHAR * pszBookmark = (WCHAR *)_malloca((Item.ulItemLen + 1) * sizeof(WCHAR));
@@ -426,16 +426,16 @@ HRESULT CTTSEngObj::OutputSentence( CItemList& ItemList, ISpTTSEngineSite* pOutp
             hr = pOutputSite->AddEvents( &Event, 1 );
             //--- Free the space for the string.
             _freea(pszBookmark);
-          }
-          break;
+        }
+        break;
 
-          case SPVA_Pronounce:
+        case SPVA_Pronounce:
             //--- Our sample engine doesn't handle this. If it
             //    did, you would use the associated pronunciation in
             //    the XmlState structure instead of the lexicon.
             break;
 
-          case SPVA_ParseUnknownTag:
+        case SPVA_ParseUnknownTag:
             //--- This will reference an XML tag that is unknown to SAPI
             //    if your engine has private tags to control state, you
             //    would examine these tags and see if you recognize it. This
@@ -457,7 +457,7 @@ HRESULT CTTSEngObj::OutputSentence( CItemList& ItemList, ISpTTSEngineSite* pOutp
 *   starting at 0.
 *****************************************************************************/
 STDMETHODIMP CTTSEngObj::GetOutputFormat( const GUID * pTargetFormatId, const WAVEFORMATEX * pTargetWaveFormatEx,
-                                          GUID * pDesiredFormatId, WAVEFORMATEX ** ppCoMemDesiredWaveFormatEx )
+        GUID * pDesiredFormatId, WAVEFORMATEX ** ppCoMemDesiredWaveFormatEx )
 {
 
     HRESULT hr = S_OK;
@@ -568,8 +568,8 @@ static const WCHAR* SkipWhiteSpace( const WCHAR* pPos )
 *---------------*
 *   Locates the next space delimited token in the stream
 ****************************************************************************/
-static const WCHAR* 
-    FindNextToken( const WCHAR* pStart, const WCHAR* pEnd, const WCHAR*& pNext )
+static const WCHAR*
+FindNextToken( const WCHAR* pStart, const WCHAR* pEnd, const WCHAR*& pNext )
 {
     const WCHAR* pPos = SkipWhiteSpace( pStart );
     pNext = pPos;
@@ -711,7 +711,7 @@ BOOL CTTSEngObj::AddNextSentItem( CItemList& ItemList )
             EOSItem.pXmlState       = &m_pCurrFrag->State;
             EOSItem.ulItemSrcLen    = EOSItem.ulItemLen;
             EOSItem.ulItemSrcOffset = m_pCurrFrag->ulTextSrcOffset +
-                                    (ULONG)( (m_pNextChar-1) - m_pCurrFrag->pTextStart );
+                                      (ULONG)( (m_pNextChar-1) - m_pCurrFrag->pTextStart );
             ItemList.AddTail( EOSItem );
         }
     }
@@ -721,7 +721,7 @@ BOOL CTTSEngObj::AddNextSentItem( CItemList& ItemList )
         //    It might be an abreviation. That's a hard problem that
         //    we are not going to attempt here.
     }
-    
+
     //--- Substitute underscore for apostrophe
     for( ULONG i = 0; i < TokenLen; ++i )
     {

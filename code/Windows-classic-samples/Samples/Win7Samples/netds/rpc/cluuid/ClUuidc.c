@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 						Microsoft RPC
-           
+
                        Cluuid Example
 
     FILE:        cluuidc.c
@@ -16,7 +16,7 @@
     USAGE:       cluuidc  -n network_address
                           -p protocol_sequence
                           -e endpoint
-                          -a server principal name                          
+                          -a server principal name
                           -o options
                           -s string_displayed_on_server
                           -u client object uuid
@@ -27,7 +27,7 @@
 
     COMMENTS:    This distributed application prints a string such as
                  "hello, world" on the server. The client manages its
-                 connection to the server. 
+                 connection to the server.
 
 ****************************************************************************/
 
@@ -43,7 +43,7 @@ void Usage(char * pszProgramName)
     fprintf_s(stderr, " -p protocol_sequence\n");
     fprintf_s(stderr, " -n network_address\n");
     fprintf_s(stderr, " -e endpoint\n");
-    fprintf_s(stderr, " -a server principal name\n");	
+    fprintf_s(stderr, " -a server principal name\n");
     fprintf_s(stderr, " -o options\n");
     fprintf_s(stderr, " -s string\n");
     fprintf_s(stderr, " -u uuid\n");
@@ -56,31 +56,34 @@ void __cdecl main(int argc, char **argv)
     unsigned char * pszUuid             = NULL;
     unsigned char * pszProtocolSequence = "ncacn_ip_tcp";
     unsigned char * pszNetworkAddress   = NULL;
-    unsigned char * pszSpn              = NULL;	
+    unsigned char * pszSpn              = NULL;
     unsigned char * pszEndpoint         = "8765";
     unsigned char * pszOptions          = NULL;
     unsigned char * pszStringBinding    = NULL;
     unsigned char * pszString           = "hello, world";
-	RPC_SECURITY_QOS SecQos;
+    RPC_SECURITY_QOS SecQos;
     unsigned long ulCode;
     int i;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
             case 'n':  // network address
                 pszNetworkAddress = argv[++i];
                 break;
-            case 'e': 
+            case 'e':
                 pszEndpoint = argv[++i];
                 break;
-            case 'a':  
+            case 'a':
                 pszSpn = argv[++i];
-                break;				
+                break;
             case 'o':
                 pszOptions = argv[++i];
                 break;
@@ -110,7 +113,8 @@ void __cdecl main(int argc, char **argv)
                                      &pszStringBinding);
     printf_s("RpcStringBindingCompose returned 0x%x\n", status);
     printf_s("pszStringBinding = %s\n", pszStringBinding);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -118,12 +122,14 @@ void __cdecl main(int argc, char **argv)
     status = RpcBindingFromStringBinding(pszStringBinding,
                                          &cluuid_ClientIfHandle);
     printf_s("RpcBindingFromStringBinding returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
-	
+
     /* User did not specify spn, construct one.*/
-    if (pszSpn == NULL) {
+    if (pszSpn == NULL)
+    {
         MakeSpn(&pszSpn);
     }
 
@@ -141,33 +147,36 @@ void __cdecl main(int argc, char **argv)
                                      NULL,
                                      RPC_C_AUTHZ_NONE,
                                      &SecQos);
-	
+
     printf_s("RpcBindingSetAuthInfoEx returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
-    }	
-	
+    }
+
     printf_s("Calling the remote procedure 'HelloProc'\n");
     printf_s("  print the string '%s' on the server\n", pszString);
 
-    RpcTryExcept {
+    RpcTryExcept
+    {
         HelloProc(cluuid_ClientIfHandle,pszString);  /* make call with user message */
         printf_s("Calling the remote procedure 'Shutdown'\n");
         Shutdown(cluuid_ClientIfHandle);             // shut down the server side
     }
     RpcExcept(( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
-                   (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
-                   (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
-                   (RpcExceptionCode() != STATUS_BREAKPOINT) &&
-                   (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
-                   (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
-                   (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
-                    )
-                    ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )) {
+                  (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
+                  (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
+                  (RpcExceptionCode() != STATUS_BREAKPOINT) &&
+                  (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
+                  (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
+                  (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
+                )
+                ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ))
+    {
         ulCode = RpcExceptionCode();
         printf_s("Runtime reported exception 0x%lx = %ld\n", ulCode, ulCode);
 
-	}
+    }
     RpcEndExcept
 
     /*  The calls to the remote procedures are complete. */
@@ -175,13 +184,15 @@ void __cdecl main(int argc, char **argv)
 
     status = RpcStringFree(&pszStringBinding);  // remote calls done; unbind
     printf_s("RpcStringFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     status = RpcBindingFree(&cluuid_ClientIfHandle);  // remote calls done; unbind
     printf_s("RpcBindingFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 

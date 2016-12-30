@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Dialogs.cpp
 //
 // Desc: This file contains the implementation for the various dialog wrapper
@@ -18,7 +18,7 @@
 // Name: struct LANGINFO
 // Desc: An easy way of getting the lang code from the DVD_SubpictureATR data
 //------------------------------------------------------------------------------
-struct LANGINFO 
+struct LANGINFO
 {
     WORD  wRes1 ;  // don't care, just skip 2 bytes
     WORD  wLang ;  // lang code as a WORD value
@@ -65,12 +65,12 @@ bool CAboutDlg::DoModal()
 
     int retVal;
 
-    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_ABOUT), m_hWnd, 
-        (DLGPROC) CAboutDlg::AboutDlgProc, reinterpret_cast<LPARAM>(this));
+    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_ABOUT), m_hWnd,
+                                  (DLGPROC) CAboutDlg::AboutDlgProc, reinterpret_cast<LPARAM>(this));
 
     if (TRUE == retVal)
         return true;
-    else 
+    else
         return false;
 }
 
@@ -87,19 +87,19 @@ BOOL CALLBACK CAboutDlg::AboutDlgProc(HWND hDlg, UINT message, WPARAM wParam, LP
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            // get a pointer to the calling object
-            pThis = reinterpret_cast<CAboutDlg *>(lParam); 
-            return TRUE;
+    case WM_INITDIALOG:
+        // get a pointer to the calling object
+        pThis = reinterpret_cast<CAboutDlg *>(lParam);
+        return TRUE;
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                    EndDialog(hDlg, TRUE);
-                    return TRUE;
-            }
-            break;
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+            EndDialog(hDlg, TRUE);
+            return TRUE;
+        }
+        break;
     }
     return FALSE;
 }
@@ -144,12 +144,12 @@ bool CSPLangDlg::DoModal()
     DbgLog((LOG_TRACE, 5, TEXT("CSPLangDlg::DoModal()"))) ;
     int retVal;
 
-    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_SPDLG), m_hWnd, 
-        (DLGPROC) CSPLangDlg::SPDlgProc, reinterpret_cast<LPARAM>(this));
+    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_SPDLG), m_hWnd,
+                                  (DLGPROC) CSPLangDlg::SPDlgProc, reinterpret_cast<LPARAM>(this));
 
     if (TRUE == retVal)
         return true;
-    else 
+    else
         return false;
 }
 
@@ -162,59 +162,59 @@ bool CSPLangDlg::DoModal()
 
 BOOL CALLBACK CSPLangDlg::SPDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static CSPLangDlg * pThis; 
+    static CSPLangDlg * pThis;
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            // get a pointer to the calling object
-            pThis = reinterpret_cast<CSPLangDlg *>(lParam); 
-            if (0 < pThis->MakeSPStreamList(hDlg, IDC_SPLANG))
-                return TRUE;
+    case WM_INITDIALOG:
+        // get a pointer to the calling object
+        pThis = reinterpret_cast<CSPLangDlg *>(lParam);
+        if (0 < pThis->MakeSPStreamList(hDlg, IDC_SPLANG))
+            return TRUE;
+        else
+        {
+            EndDialog(hDlg, FALSE);
+            return FALSE;
+        }
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+        {
+            HRESULT hr;
+
+            // Set the SP state specified by the user
+            pThis->m_bSPOn = IsDlgButtonChecked(hDlg, IDC_SHOWSP) ;
+            hr = g_App.m_pDvdCore->m_pIDvdC2->SetSubpictureState(pThis->m_bSPOn, 0, NULL);
+            ASSERT(SUCCEEDED(hr)) ;
+
+            // Set the SP stream specific by the user
+            LONG lStream;
+            lStream = (LONG) SendDlgItemMessage(hDlg, IDC_SPLANG, CB_GETCURSEL,
+                                                static_cast<WPARAM>(0), static_cast<LPARAM>(0));
+            if (CB_ERR == lStream)
+                DbgLog((LOG_ERROR, 1,
+                        TEXT("WARNING: Couldn't get selected SP stream id (Error %d)"), lStream)) ;
             else
             {
-                EndDialog(hDlg, FALSE);
-                return FALSE;
+                pThis->m_ulSPStream = lStream;
+                hr = g_App.m_pDvdCore->m_pIDvdC2->SelectSubpictureStream(pThis->m_ulSPStream,
+                        0, NULL) ;
+                ASSERT(SUCCEEDED(hr)) ;
             }
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                {
-                    HRESULT hr;
+            EndDialog(hDlg, TRUE);
+            return TRUE;
 
-                    // Set the SP state specified by the user
-                    pThis->m_bSPOn = IsDlgButtonChecked(hDlg, IDC_SHOWSP) ;
-                    hr = g_App.m_pDvdCore->m_pIDvdC2->SetSubpictureState(pThis->m_bSPOn, 0, NULL);
-                    ASSERT(SUCCEEDED(hr)) ;
-
-                    // Set the SP stream specific by the user
-                    LONG lStream;
-                    lStream = (LONG) SendDlgItemMessage(hDlg, IDC_SPLANG, CB_GETCURSEL, 
-                        static_cast<WPARAM>(0), static_cast<LPARAM>(0));
-                    if (CB_ERR == lStream)
-                        DbgLog((LOG_ERROR, 1, 
-                        TEXT("WARNING: Couldn't get selected SP stream id (Error %d)"), lStream)) ;
-                    else
-                    {
-                        pThis->m_ulSPStream = lStream;
-                        hr = g_App.m_pDvdCore->m_pIDvdC2->SelectSubpictureStream(pThis->m_ulSPStream,
-                            0, NULL) ;
-                        ASSERT(SUCCEEDED(hr)) ;
-                    }
-
-                    EndDialog(hDlg, TRUE);
-                    return TRUE;
-
-                } // end of case brackets
+        } // end of case brackets
 
 
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    return TRUE;
-            }
-            break;
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            return TRUE;
+        }
+        break;
     }
 
     return FALSE;
@@ -230,8 +230,8 @@ BOOL CALLBACK CSPLangDlg::SPDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPAR
 
 int CSPLangDlg::MakeSPStreamList(HWND hDlg, int iListID)
 {
-    DbgLog((LOG_TRACE, 5, TEXT("CSPLangDlg::MakeSPStreamList(0x%lx, %d)"), 
-        hDlg, iListID)) ;
+    DbgLog((LOG_TRACE, 5, TEXT("CSPLangDlg::MakeSPStreamList(0x%lx, %d)"),
+            hDlg, iListID)) ;
 
     if (Uninitialized == g_App.m_pDvdCore->GetState())
     {
@@ -240,14 +240,14 @@ int CSPLangDlg::MakeSPStreamList(HWND hDlg, int iListID)
     }
 
     // First clear the list box of all SP stream names
-    SendDlgItemMessage(hDlg, iListID, CB_RESETCONTENT, static_cast<WPARAM>(0), 
+    SendDlgItemMessage(hDlg, iListID, CB_RESETCONTENT, static_cast<WPARAM>(0),
                        static_cast<LPARAM>(0)) ;
 
     // Find out how many SP streams are there and what's the current lang.
-    // This is our chance to find out if someone changed the SP lang through 
+    // This is our chance to find out if someone changed the SP lang through
     // DVD menu so that we can synch up our SP stream value now.
-    HRESULT hr = g_App.m_pDvdCore->m_pIDvdI2->GetCurrentSubpicture(&m_ulNumLang, &m_ulSPStream, 
-        &m_bSPOn) ;
+    HRESULT hr = g_App.m_pDvdCore->m_pIDvdI2->GetCurrentSubpicture(&m_ulNumLang, &m_ulSPStream,
+                 &m_bSPOn) ;
     if (FAILED(hr))
     {
         MessageBox(m_hWnd, TEXT("Not ready to find language information"), TEXT("Warning"), MB_OK) ;
@@ -267,27 +267,27 @@ int CSPLangDlg::MakeSPStreamList(HWND hDlg, int iListID)
             return 0 ;
         }
 
-        if (0 == lcid || 0 == GetLocaleInfo(lcid, LOCALE_SLANGUAGE, 
-            szLang, sizeof(szLang)/sizeof(szLang[0]))) 
-        // 0 is the failure code for GetLocaleInfo
+        if (0 == lcid || 0 == GetLocaleInfo(lcid, LOCALE_SLANGUAGE,
+                                            szLang, sizeof(szLang)/sizeof(szLang[0])))
+            // 0 is the failure code for GetLocaleInfo
         {
             GetSPLang(ulStream, szLang, sizeof(szLang));
         }
 
         // Add the language to the listbox
         SendDlgItemMessage(hDlg, iListID, CB_ADDSTRING, static_cast<WPARAM>(0),
-            reinterpret_cast<LPARAM>(static_cast<PVOID>(szLang)));
+                           reinterpret_cast<LPARAM>(static_cast<PVOID>(szLang)));
     }
 
     // set the current stream as the selected item
     if (m_ulNumLang > 0) // if there are any streams
     {
-        int iRes = (int) SendDlgItemMessage(hDlg, iListID, CB_SETCURSEL, 
-            static_cast<WPARAM>(m_ulSPStream), static_cast<LPARAM>(0)) ;
+        int iRes = (int) SendDlgItemMessage(hDlg, iListID, CB_SETCURSEL,
+                                            static_cast<WPARAM>(m_ulSPStream), static_cast<LPARAM>(0)) ;
         if (CB_ERR == iRes)
-            DbgLog((LOG_ERROR, 1, 
-            TEXT("WARNING: Couldn't set %ld as selected SP stream id (Error %d)"),
-            m_ulSPStream, iRes)) ;
+            DbgLog((LOG_ERROR, 1,
+                    TEXT("WARNING: Couldn't set %ld as selected SP stream id (Error %d)"),
+                    m_ulSPStream, iRes)) ;
     }
 
     // set the checkbox to refect the current SP state
@@ -354,12 +354,12 @@ bool CAudioLangDlg::DoModal()
     DbgLog((LOG_TRACE, 5, TEXT("CAudioLangDlg::DoModal()"))) ;
     int retVal;
 
-    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_AUDIODLG), m_hWnd, 
-        (DLGPROC) CAudioLangDlg::AudioDlgProc, reinterpret_cast<LPARAM>(this));
+    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_AUDIODLG), m_hWnd,
+                                  (DLGPROC) CAudioLangDlg::AudioDlgProc, reinterpret_cast<LPARAM>(this));
 
     if (TRUE == retVal)
         return true;
-    else 
+    else
         return false;
 }
 
@@ -372,53 +372,53 @@ bool CAudioLangDlg::DoModal()
 
 BOOL CALLBACK CAudioLangDlg::AudioDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static CAudioLangDlg * pThis; 
+    static CAudioLangDlg * pThis;
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            pThis = reinterpret_cast<CAudioLangDlg *>(lParam); // get a pointer to the calling object
-            if (0 < pThis->MakeAudioStreamList(hDlg, IDC_AUDIOLANG))
-                return TRUE;
+    case WM_INITDIALOG:
+        pThis = reinterpret_cast<CAudioLangDlg *>(lParam); // get a pointer to the calling object
+        if (0 < pThis->MakeAudioStreamList(hDlg, IDC_AUDIOLANG))
+            return TRUE;
+        else
+        {
+            EndDialog(hDlg, FALSE);
+            return FALSE;
+        }
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+        {
+            HRESULT hr;
+
+            // Set the audio stream specific by the user
+            LONG lStream;
+            lStream = (LONG) SendDlgItemMessage(hDlg, IDC_AUDIOLANG, CB_GETCURSEL,
+                                                static_cast<WPARAM>(0), static_cast<LPARAM>(0));
+            if (CB_ERR == lStream)
+                DbgLog((LOG_ERROR, 1,
+                        TEXT("WARNING: Couldn't get selected Audio stream ID (Error %d)"), lStream)) ;
             else
             {
-                EndDialog(hDlg, FALSE);
-                return FALSE;
+                pThis->m_ulAudioStream = lStream;
+                hr = g_App.m_pDvdCore->m_pIDvdC2->SelectAudioStream(pThis->m_ulAudioStream,
+                        0, NULL) ;
+                ASSERT(SUCCEEDED(hr)) ;
             }
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                {
-                    HRESULT hr;
+            EndDialog(hDlg, TRUE);
+            return TRUE;
 
-                    // Set the audio stream specific by the user
-                    LONG lStream;
-                    lStream = (LONG) SendDlgItemMessage(hDlg, IDC_AUDIOLANG, CB_GETCURSEL, 
-                        static_cast<WPARAM>(0), static_cast<LPARAM>(0));
-                    if (CB_ERR == lStream)
-                        DbgLog((LOG_ERROR, 1, 
-                        TEXT("WARNING: Couldn't get selected Audio stream ID (Error %d)"), lStream)) ;
-                    else
-                    {
-                        pThis->m_ulAudioStream = lStream;
-                        hr = g_App.m_pDvdCore->m_pIDvdC2->SelectAudioStream(pThis->m_ulAudioStream,
-                            0, NULL) ;
-                        ASSERT(SUCCEEDED(hr)) ;
-                    }
-
-                    EndDialog(hDlg, TRUE);
-                    return TRUE;
-
-                } // end of case brackets
+        } // end of case brackets
 
 
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    return TRUE;
-            }
-            break;
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            return TRUE;
+        }
+        break;
     }
 
     return FALSE;
@@ -434,8 +434,8 @@ BOOL CALLBACK CAudioLangDlg::AudioDlgProc(HWND hDlg, UINT message, WPARAM wParam
 
 int CAudioLangDlg::MakeAudioStreamList(HWND hDlg, int iListID)
 {
-    DbgLog((LOG_TRACE, 5, TEXT("CAudioLangDlg::MakeAudioStreamList(0x%lx, %d)"), 
-        (ULONG) hDlg, iListID)) ;
+    DbgLog((LOG_TRACE, 5, TEXT("CAudioLangDlg::MakeAudioStreamList(0x%lx, %d)"),
+            (ULONG) hDlg, iListID)) ;
 
     if (Uninitialized == g_App.m_pDvdCore->GetState())
     {
@@ -444,11 +444,11 @@ int CAudioLangDlg::MakeAudioStreamList(HWND hDlg, int iListID)
     }
 
     // First clear the list box of all audio stream names
-    SendDlgItemMessage(hDlg, iListID, CB_RESETCONTENT, static_cast<WPARAM>(0), 
-        static_cast<LPARAM>(0)) ;
+    SendDlgItemMessage(hDlg, iListID, CB_RESETCONTENT, static_cast<WPARAM>(0),
+                       static_cast<LPARAM>(0)) ;
 
     // Find out how many audio streams are there and what's the current lang.
-    // This is our chance to find out if someone changed the audio lang through 
+    // This is our chance to find out if someone changed the audio lang through
     // DVD menu so that we can synch up our audio stream value now.
     HRESULT hr = g_App.m_pDvdCore->m_pIDvdI2->GetCurrentAudio(&m_ulNumLang, &m_ulAudioStream) ;
     if (FAILED(hr))
@@ -469,27 +469,27 @@ int CAudioLangDlg::MakeAudioStreamList(HWND hDlg, int iListID)
             return 0 ;
         }
 
-        if (0 == lcid || 0 == GetLocaleInfo(lcid, LOCALE_SLANGUAGE, 
-            szLang, sizeof(szLang)/sizeof(szLang[0]))) 
-        // 0 is the failure code for GetLocaleInfo
+        if (0 == lcid || 0 == GetLocaleInfo(lcid, LOCALE_SLANGUAGE,
+                                            szLang, sizeof(szLang)/sizeof(szLang[0])))
+            // 0 is the failure code for GetLocaleInfo
         {
             GetAudioLang(ulStream, szLang, sizeof(szLang));
         }
 
         // Add the language to the listbox
         SendDlgItemMessage(hDlg, iListID, CB_ADDSTRING, static_cast<WPARAM>(0),
-            reinterpret_cast<LPARAM>(static_cast<PVOID>(szLang)));
+                           reinterpret_cast<LPARAM>(static_cast<PVOID>(szLang)));
     }
 
     // set the current stream as the selected item
     if (m_ulNumLang > 0) // if there are any streams
     {
-        int iRes = (int) SendDlgItemMessage(hDlg, iListID, CB_SETCURSEL, 
-            static_cast<WPARAM>(m_ulAudioStream), static_cast<LPARAM>(0)) ;
+        int iRes = (int) SendDlgItemMessage(hDlg, iListID, CB_SETCURSEL,
+                                            static_cast<WPARAM>(m_ulAudioStream), static_cast<LPARAM>(0)) ;
         if (CB_ERR == iRes)
-            DbgLog((LOG_ERROR, 1, 
-            TEXT("WARNING: Couldn't set %ld as selected audio stream ID (Error %d)"),
-            m_ulAudioStream, iRes)) ;
+            DbgLog((LOG_ERROR, 1,
+                    TEXT("WARNING: Couldn't set %ld as selected audio stream ID (Error %d)"),
+                    m_ulAudioStream, iRes)) ;
     }
 
     return m_ulNumLang;
@@ -555,12 +555,12 @@ bool CAngleDlg::DoModal()
     DbgLog((LOG_TRACE, 5, TEXT("CAngleDlg::DoModal()"))) ;
     int retVal;
 
-    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_ANGLEDLG), m_hWnd, 
-        (DLGPROC) CAngleDlg::AngleDlgProc, reinterpret_cast<LPARAM>(this));
+    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_ANGLEDLG), m_hWnd,
+                                  (DLGPROC) CAngleDlg::AngleDlgProc, reinterpret_cast<LPARAM>(this));
 
     if (TRUE == retVal)
         return true;
-    else 
+    else
         return false;
 }
 
@@ -572,54 +572,54 @@ bool CAngleDlg::DoModal()
 
 BOOL CALLBACK CAngleDlg::AngleDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static CAngleDlg * pThis; 
+    static CAngleDlg * pThis;
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            // get a pointer to the calling object
-            pThis = reinterpret_cast<CAngleDlg *>(lParam); 
-            if (0 < pThis->MakeAngleList(hDlg, IDC_ANGLE))
-                return TRUE;
+    case WM_INITDIALOG:
+        // get a pointer to the calling object
+        pThis = reinterpret_cast<CAngleDlg *>(lParam);
+        if (0 < pThis->MakeAngleList(hDlg, IDC_ANGLE))
+            return TRUE;
+        else
+        {
+            EndDialog(hDlg, FALSE);
+            return FALSE;
+        }
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+        {
+            HRESULT hr;
+
+            // Set the Angle specific by the user
+            LONG lAngle;
+            lAngle = (LONG) SendDlgItemMessage(hDlg, IDC_ANGLE, CB_GETCURSEL,
+                                               static_cast<WPARAM>(0), static_cast<LPARAM>(0));
+            lAngle += 1; // angles start count at 1 so we have to account for that
+            if (CB_ERR == lAngle)
+                DbgLog((LOG_ERROR, 1,
+                        TEXT("WARNING: Couldn't get selected angle ID (Error %d)"), lAngle)) ;
             else
             {
-                EndDialog(hDlg, FALSE);
-                return FALSE;
+                pThis->m_ulAngle = lAngle;
+                hr = g_App.m_pDvdCore->m_pIDvdC2->SelectAngle(pThis->m_ulAngle, 0, NULL) ;
+                ASSERT(SUCCEEDED(hr)) ;
             }
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                {
-                    HRESULT hr;
+            EndDialog(hDlg, TRUE);
+            return TRUE;
 
-                    // Set the Angle specific by the user
-                    LONG lAngle;
-                    lAngle = (LONG) SendDlgItemMessage(hDlg, IDC_ANGLE, CB_GETCURSEL, 
-                        static_cast<WPARAM>(0), static_cast<LPARAM>(0));
-                    lAngle += 1; // angles start count at 1 so we have to account for that
-                    if (CB_ERR == lAngle)
-                        DbgLog((LOG_ERROR, 1, 
-                        TEXT("WARNING: Couldn't get selected angle ID (Error %d)"), lAngle)) ;
-                    else
-                    {
-                        pThis->m_ulAngle = lAngle;
-                        hr = g_App.m_pDvdCore->m_pIDvdC2->SelectAngle(pThis->m_ulAngle, 0, NULL) ;
-                        ASSERT(SUCCEEDED(hr)) ;
-                    }
-
-                    EndDialog(hDlg, TRUE);
-                    return TRUE;
-
-                } // end of case brackets
+        } // end of case brackets
 
 
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    return TRUE;
-            }
-            break;
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            return TRUE;
+        }
+        break;
     }
     return FALSE;
 }
@@ -633,8 +633,8 @@ BOOL CALLBACK CAngleDlg::AngleDlgProc(HWND hDlg, UINT message, WPARAM wParam, LP
 
 int CAngleDlg::MakeAngleList(HWND hDlg, int iListID)
 {
-    DbgLog((LOG_TRACE, 5, TEXT("CAngleDlg::MakeAngleList(0x%lx, %d)"), 
-        hDlg, iListID)) ;
+    DbgLog((LOG_TRACE, 5, TEXT("CAngleDlg::MakeAngleList(0x%lx, %d)"),
+            hDlg, iListID)) ;
 
     if (Uninitialized == g_App.m_pDvdCore->GetState())
     {
@@ -643,11 +643,11 @@ int CAngleDlg::MakeAngleList(HWND hDlg, int iListID)
     }
 
     // First clear the list box of all angle names
-    SendDlgItemMessage(hDlg, iListID, CB_RESETCONTENT, static_cast<WPARAM>(0), 
-        static_cast<LPARAM>(0)) ;
+    SendDlgItemMessage(hDlg, iListID, CB_RESETCONTENT, static_cast<WPARAM>(0),
+                       static_cast<LPARAM>(0)) ;
 
     // Find out how many angles are there and what is the current angle.
-    // This is our chance to find out if someone changed the angle through 
+    // This is our chance to find out if someone changed the angle through
     // DVD menu so that we can synch up our angle value now.
     HRESULT hr = g_App.m_pDvdCore->m_pIDvdI2->GetCurrentAngle(&m_ulNumAngle, &m_ulAngle) ;
     if (FAILED(hr))
@@ -665,20 +665,20 @@ int CAngleDlg::MakeAngleList(HWND hDlg, int iListID)
 
         // Add the language to the listbox
         SendDlgItemMessage(hDlg, iListID, CB_ADDSTRING, static_cast<WPARAM>(0),
-            reinterpret_cast<LPARAM>(static_cast<PVOID>(szAngle)));
+                           reinterpret_cast<LPARAM>(static_cast<PVOID>(szAngle)));
     }
 
     // set the current angle as the selected item
     if (m_ulNumAngle > 0) // if there are any angles
     {
-        // angles start at 1 so we have to subtract 1 from the angle number to match the 
+        // angles start at 1 so we have to subtract 1 from the angle number to match the
         // correct angle
-        int iRes = (int) SendDlgItemMessage(hDlg, iListID, CB_SETCURSEL, 
-            static_cast<WPARAM>(m_ulAngle - 1), static_cast<LPARAM>(0)) ;  
+        int iRes = (int) SendDlgItemMessage(hDlg, iListID, CB_SETCURSEL,
+                                            static_cast<WPARAM>(m_ulAngle - 1), static_cast<LPARAM>(0)) ;
         if (CB_ERR == iRes)
-            DbgLog((LOG_ERROR, 1, 
-            TEXT("WARNING: Couldn't set %ld as selected angle ID (Error %d)"),
-            m_ulAngle, iRes)) ;
+            DbgLog((LOG_ERROR, 1,
+                    TEXT("WARNING: Couldn't set %ld as selected angle ID (Error %d)"),
+                    m_ulAngle, iRes)) ;
     }
 
     return m_ulNumAngle;
@@ -726,12 +726,12 @@ bool CChapterDlg::DoModal()
     DbgLog((LOG_TRACE, 5, TEXT("CChapterDlg::DoModal()"))) ;
     int retVal;
 
-    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_CHAPTERDLG), m_hWnd, 
-        (DLGPROC) CChapterDlg::ChapterDlgProc, reinterpret_cast<LPARAM>(this));
+    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_CHAPTERDLG), m_hWnd,
+                                  (DLGPROC) CChapterDlg::ChapterDlgProc, reinterpret_cast<LPARAM>(this));
 
     if (TRUE == retVal)
         return true;
-    else 
+    else
         return false;
 }
 
@@ -743,46 +743,46 @@ bool CChapterDlg::DoModal()
 
 BOOL CALLBACK CChapterDlg::ChapterDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static CChapterDlg * pThis; 
+    static CChapterDlg * pThis;
 
     switch (message)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
+    {
+        pThis = reinterpret_cast<CChapterDlg *>(lParam); // get a pointer to the calling object
+
+        // set default value
+        TCHAR buf[10];
+        HRESULT hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_ulChapter);
+        SetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf);
+
+        //set up spin control
+        HWND hEBox = GetDlgItem(hDlg, IDC_PLAYCHAPTER);
+        CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT,
+                            10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 999, 1, 1);
+        return TRUE;
+    }
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
         {
-            pThis = reinterpret_cast<CChapterDlg *>(lParam); // get a pointer to the calling object
-        
-            // set default value
+        case IDOK:
+        {
+            // Set the Chapter specified by the user
             TCHAR buf[10];
-            HRESULT hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_ulChapter); 
-            SetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf);
-        
-            //set up spin control
-            HWND hEBox = GetDlgItem(hDlg, IDC_PLAYCHAPTER);
-            CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT, 
-                10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 999, 1, 1);
+            GetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf, sizeof(buf)/sizeof(TCHAR));
+
+            pThis->m_ulChapter = _ttoi(buf);
+
+            EndDialog(hDlg, TRUE);
             return TRUE;
         }
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                {
-                    // Set the Chapter specified by the user
-                    TCHAR buf[10];
-                    GetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf, sizeof(buf)/sizeof(TCHAR));
-
-                    pThis->m_ulChapter = _ttoi(buf);
-
-                    EndDialog(hDlg, TRUE);
-                    return TRUE;
-                }
-
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    return TRUE;
-            }
-            break;
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            return TRUE;
+        }
+        break;
     }
 
     return FALSE;
@@ -805,7 +805,7 @@ CTitleDlg::CTitleDlg(HINSTANCE hInstance, HWND hWnd):
     DbgLog((LOG_TRACE, 5, TEXT("CTitleDlg::CTitleDlg"))) ;
 
     m_ulTitle = 1; // default value
-    m_ulChapter = 1; 
+    m_ulChapter = 1;
 }
 
 
@@ -830,12 +830,12 @@ bool CTitleDlg::DoModal()
     DbgLog((LOG_TRACE, 5, TEXT("CTitleDlg::DoModal"))) ;
     int retVal;
 
-    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_TITLEDLG), m_hWnd, 
-        (DLGPROC) CTitleDlg::TitleDlgProc, reinterpret_cast<LPARAM>(this));
+    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_TITLEDLG), m_hWnd,
+                                  (DLGPROC) CTitleDlg::TitleDlgProc, reinterpret_cast<LPARAM>(this));
 
     if (TRUE == retVal)
         return true;
-    else 
+    else
         return false;
 }
 
@@ -847,55 +847,55 @@ bool CTitleDlg::DoModal()
 
 BOOL CALLBACK CTitleDlg::TitleDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static CTitleDlg * pThis; 
+    static CTitleDlg * pThis;
 
     switch (message)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
+    {
+        pThis = reinterpret_cast<CTitleDlg *>(lParam); // get a pointer to the calling object
+
+        // set default values
+        TCHAR buf[10];
+        HRESULT hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_ulTitle);
+        SetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf);
+        hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_ulChapter);
+        SetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf);
+
+        //set up spin control
+        HWND hEBox = GetDlgItem(hDlg, IDC_PLAYCHAPTER);
+        CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT,
+                            10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 999, 1, 1);
+
+        hEBox = GetDlgItem(hDlg, IDC_PLAYTITLE);
+        CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT,
+                            10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 99, 1, 1);
+
+        return TRUE;
+    }
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
         {
-            pThis = reinterpret_cast<CTitleDlg *>(lParam); // get a pointer to the calling object
-        
-            // set default values
+        case IDOK:
+        {
+            // Set the Title specified by the user
             TCHAR buf[10];
-            HRESULT hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_ulTitle); 
-            SetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf);
-            hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_ulChapter); 
-            SetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf);
-        
-            //set up spin control
-            HWND hEBox = GetDlgItem(hDlg, IDC_PLAYCHAPTER);
-            CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT,
-                10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 999, 1, 1);
+            GetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf, sizeof(buf)/sizeof(TCHAR));
+            pThis->m_ulChapter = _ttoi(buf);
 
-            hEBox = GetDlgItem(hDlg, IDC_PLAYTITLE);
-            CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT,
-                10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 99, 1, 1);
+            GetDlgItemText(hDlg, IDC_PLAYTITLE, buf, sizeof(buf)/sizeof(TCHAR));
+            pThis->m_ulTitle = _ttoi(buf);
 
+            EndDialog(hDlg, TRUE);
             return TRUE;
         }
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                {
-                    // Set the Title specified by the user
-                    TCHAR buf[10];
-                    GetDlgItemText(hDlg, IDC_PLAYCHAPTER, buf, sizeof(buf)/sizeof(TCHAR));
-                    pThis->m_ulChapter = _ttoi(buf);
-
-                    GetDlgItemText(hDlg, IDC_PLAYTITLE, buf, sizeof(buf)/sizeof(TCHAR));
-                    pThis->m_ulTitle = _ttoi(buf);
-
-                    EndDialog(hDlg, TRUE);
-                    return TRUE;
-                }
-
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    return TRUE;
-            }
-            break;
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            return TRUE;
+        }
+        break;
     }
 
     return FALSE;
@@ -943,12 +943,12 @@ bool CTimeDlg::DoModal()
     DbgLog((LOG_TRACE, 5, TEXT("CTimeDlg::DoModal"))) ;
     int retVal;
 
-    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_TIMEDLG), m_hWnd, 
-        (DLGPROC) CTimeDlg::TimeDlgProc, reinterpret_cast<LPARAM>(this));
+    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_TIMEDLG), m_hWnd,
+                                  (DLGPROC) CTimeDlg::TimeDlgProc, reinterpret_cast<LPARAM>(this));
 
     if (TRUE == retVal)
         return true;
-    else 
+    else
         return false;
 }
 
@@ -960,65 +960,65 @@ bool CTimeDlg::DoModal()
 
 BOOL CALLBACK CTimeDlg::TimeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static CTimeDlg * pThis; 
+    static CTimeDlg * pThis;
 
     switch (message)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
+    {
+        // get a pointer to the calling object
+        pThis = reinterpret_cast<CTimeDlg *>(lParam);
+
+        // set default values
+        TCHAR buf[10];
+        HRESULT hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_Time.bHours);
+        SetDlgItemText(hDlg, IDC_HOURS, buf);
+        hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_Time.bMinutes);
+        SetDlgItemText(hDlg, IDC_MINUTES, buf);
+        hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_Time.bSeconds);
+        SetDlgItemText(hDlg, IDC_SECONDS, buf);
+
+        //set up spin controls
+        HWND hEBox = GetDlgItem(hDlg, IDC_HOURS);
+        CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT,
+                            10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 99, 0,
+                            pThis->m_Time.bHours);
+        hEBox = GetDlgItem(hDlg, IDC_MINUTES);
+        CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT,
+                            10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 60, 0,
+                            pThis->m_Time.bMinutes);
+        hEBox = GetDlgItem(hDlg, IDC_SECONDS);
+        CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT,
+                            10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 60, 0,
+                            pThis->m_Time.bSeconds);
+        return TRUE;
+    }
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
         {
-            // get a pointer to the calling object
-            pThis = reinterpret_cast<CTimeDlg *>(lParam); 
-        
-            // set default values
+        case IDOK:
+        {
+            // Set the Time specified by the user
             TCHAR buf[10];
-            HRESULT hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_Time.bHours); 
-            SetDlgItemText(hDlg, IDC_HOURS, buf);
-            hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_Time.bMinutes); 
-            SetDlgItemText(hDlg, IDC_MINUTES, buf);
-            hr = StringCchPrintf(buf, NUMELMS(buf), TEXT("%u\0"), pThis->m_Time.bSeconds); 
-            SetDlgItemText(hDlg, IDC_SECONDS, buf);
-        
-            //set up spin controls
-            HWND hEBox = GetDlgItem(hDlg, IDC_HOURS);
-            CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT, 
-                10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 99, 0, 
-                pThis->m_Time.bHours);
-            hEBox = GetDlgItem(hDlg, IDC_MINUTES);
-            CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT, 
-                10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 60, 0, 
-                pThis->m_Time.bMinutes);
-            hEBox = GetDlgItem(hDlg, IDC_SECONDS);
-            CreateUpDownControl(WS_CHILD | WS_BORDER | WS_VISIBLE | UDS_SETBUDDYINT | UDS_ALIGNRIGHT, 
-                10, 10, 50, 50, hDlg, ID_SPINCONTROL, pThis->m_hInstance, hEBox, 60, 0, 
-                pThis->m_Time.bSeconds);
+            GetDlgItemText(hDlg, IDC_HOURS, buf, sizeof(buf)/sizeof(TCHAR));
+            pThis->m_Time.bHours = (BYTE) _ttoi(buf);
+
+            GetDlgItemText(hDlg, IDC_MINUTES, buf, sizeof(buf)/sizeof(TCHAR));
+            pThis->m_Time.bMinutes = (BYTE) _ttoi(buf);
+
+            GetDlgItemText(hDlg, IDC_SECONDS, buf, sizeof(buf)/sizeof(TCHAR));
+            pThis->m_Time.bSeconds = (BYTE) _ttoi(buf);
+
+            EndDialog(hDlg, TRUE);
             return TRUE;
         }
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                {
-                    // Set the Time specified by the user
-                    TCHAR buf[10];
-                    GetDlgItemText(hDlg, IDC_HOURS, buf, sizeof(buf)/sizeof(TCHAR));
-                    pThis->m_Time.bHours = (BYTE) _ttoi(buf);
-
-                    GetDlgItemText(hDlg, IDC_MINUTES, buf, sizeof(buf)/sizeof(TCHAR));
-                    pThis->m_Time.bMinutes = (BYTE) _ttoi(buf);
-
-                    GetDlgItemText(hDlg, IDC_SECONDS, buf, sizeof(buf)/sizeof(TCHAR));
-                    pThis->m_Time.bSeconds = (BYTE) _ttoi(buf);
-
-                    EndDialog(hDlg, TRUE);
-                    return TRUE;
-                }
-
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    return TRUE;
-            }
-            break;
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
+            return TRUE;
+        }
+        break;
     }
     return FALSE;
 }
@@ -1063,8 +1063,8 @@ CKaraokeDlg::~CKaraokeDlg()
 //       in CDvdCore which does the mixing, but we will violate encapsulation here to
 //       make it easier to understand.
 //
-//       This method mixes a given channel into both speakers.  This can be controlled on 
-//       a per-speaker basis if so desired. 
+//       This method mixes a given channel into both speakers.  This can be controlled on
+//       a per-speaker basis if so desired.
 //------------------------------------------------------------------------------
 
 bool CKaraokeDlg::DoModal()
@@ -1082,10 +1082,10 @@ bool CKaraokeDlg::DoModal()
         return false;
     }
 
-    if( DVD_AudioMode_Karaoke != audioAtr.AppMode ) 
+    if( DVD_AudioMode_Karaoke != audioAtr.AppMode )
     {
-        MessageBox(m_hWnd, TEXT("There is no Karaoke Data In This Audio Stream"), 
-            TEXT("Error!"), MB_OK);
+        MessageBox(m_hWnd, TEXT("There is no Karaoke Data In This Audio Stream"),
+                   TEXT("Error!"), MB_OK);
         return false;
     }
 
@@ -1104,8 +1104,8 @@ bool CKaraokeDlg::DoModal()
     m_pszChannel4 = KaraokeAsStr(karaokeAtr.wChannelContents[4]);
 
     int retVal;
-    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_KARAOKEDLG), m_hWnd, 
-        (DLGPROC) CKaraokeDlg::KaraokeDlgProc, reinterpret_cast<LPARAM>(this));
+    retVal = (int) DialogBoxParam(m_hInstance, MAKEINTRESOURCE(IDD_KARAOKEDLG), m_hWnd,
+                                  (DLGPROC) CKaraokeDlg::KaraokeDlgProc, reinterpret_cast<LPARAM>(this));
     if (FALSE == retVal)
     {
         return false;
@@ -1153,32 +1153,32 @@ bool CKaraokeDlg::DoModal()
 
 BOOL CALLBACK CKaraokeDlg::KaraokeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static CKaraokeDlg * pThis; 
+    static CKaraokeDlg * pThis;
 
     switch (message)
     {
-        case WM_INITDIALOG:
-        {
-            pThis = reinterpret_cast<CKaraokeDlg *>(lParam); // get a pointer to the calling object
+    case WM_INITDIALOG:
+    {
+        pThis = reinterpret_cast<CKaraokeDlg *>(lParam); // get a pointer to the calling object
 
-            SetDlgItemText(hDlg, IDC_CHANNEL2, pThis->m_pszChannel2);
-            SetDlgItemText(hDlg, IDC_CHANNEL3, pThis->m_pszChannel3);
-            SetDlgItemText(hDlg, IDC_CHANNEL4, pThis->m_pszChannel4);
+        SetDlgItemText(hDlg, IDC_CHANNEL2, pThis->m_pszChannel2);
+        SetDlgItemText(hDlg, IDC_CHANNEL3, pThis->m_pszChannel3);
+        SetDlgItemText(hDlg, IDC_CHANNEL4, pThis->m_pszChannel4);
+        return TRUE;
+    }
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+            EndDialog(hDlg, TRUE);
+            return TRUE;
+
+        case IDCANCEL:
+            EndDialog(hDlg, FALSE);
             return TRUE;
         }
-
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                    EndDialog(hDlg, TRUE);
-                    return TRUE;
-
-                case IDCANCEL:
-                    EndDialog(hDlg, FALSE);
-                    return TRUE;
-            }
-            break;
+        break;
     }
 
     return FALSE;

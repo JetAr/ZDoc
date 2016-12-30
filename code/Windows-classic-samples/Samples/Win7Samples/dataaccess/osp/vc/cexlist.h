@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1991 - 1999 By Microsoft Corporation.
 //
@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 #ifndef _CEXLIST_H_
 #define _CEXLIST_H_
-			
+
 /////////////////////////////////////////////////////////////////////////////
 // Includes
 //
@@ -30,13 +30,13 @@ typedef void* POS;
 template <class TYPE> class CNode
 {
 public:
-	// constructors
-	CNode(TYPE val, CNode* pPrevNode, CNode* pNextNode);
+    // constructors
+    CNode(TYPE val, CNode* pPrevNode, CNode* pNextNode);
 
-	// members
-	TYPE     m_data;       // element data
-	CNode*   m_pNextNode;  // next CNode
-	CNode*   m_pPrevNode;  // prev CNode
+    // members
+    TYPE     m_data;       // element data
+    CNode*   m_pNextNode;  // next CNode
+    CNode*   m_pPrevNode;  // prev CNode
 };
 
 
@@ -46,10 +46,10 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 template <class TYPE> CNode<TYPE>::CNode(TYPE data, CNode* pPrevNode, CNode* pNextNode)
 {
-	//Constructor
-	m_data = data;
-	m_pPrevNode = pPrevNode;
-	m_pNextNode = pNextNode;
+    //Constructor
+    m_data = data;
+    m_pPrevNode = pPrevNode;
+    m_pNextNode = pNextNode;
 }
 
 
@@ -62,52 +62,52 @@ template <class TYPE> class CExList
 {
 public:
 
-	//constructors
-	CExList();
-	virtual ~CExList();
+    //constructors
+    CExList();
+    virtual ~CExList();
 
-	//members
-	
-	//list modifying operations
-	virtual POS		AddHead(TYPE element);		// Add to Head
-	virtual POS		AddTail(TYPE element);		// Add to Tail
-					
-	virtual POS		InsertBefore(POS position, TYPE element);	// Add before position
-	virtual POS		InsertAfter(POS position, TYPE element);	// Add after position
+    //members
 
-	virtual TYPE	RemoveHead();				// Remove from Head
-	virtual TYPE	RemoveTail();				// Remove from Tail
-	virtual TYPE	RemoveAt(POS position);		// RemoveAt position
-	virtual void	RemoveAll();				// Remove all elements
+    //list modifying operations
+    virtual POS		AddHead(TYPE element);		// Add to Head
+    virtual POS		AddTail(TYPE element);		// Add to Tail
 
-	//Seeking methods
-	virtual POS		Find(TYPE element);	        // Find element
+    virtual POS		InsertBefore(POS position, TYPE element);	// Add before position
+    virtual POS		InsertAfter(POS position, TYPE element);	// Add after position
 
-	//Peek methods
-	virtual POS		GetHeadPosition();			// Head Position
-	virtual POS		GetTailPosition();			// Tail Position
+    virtual TYPE	RemoveHead();				// Remove from Head
+    virtual TYPE	RemoveTail();				// Remove from Tail
+    virtual TYPE	RemoveAt(POS position);		// RemoveAt position
+    virtual void	RemoveAll();				// Remove all elements
 
-	virtual TYPE	GetHead();					// Head element
-	virtual TYPE	GetTail();					// Tail element
-	virtual TYPE	GetNext(POS& position);		// Next element
-	virtual TYPE	GetPrev(POS& position);		// Prev element
+    //Seeking methods
+    virtual POS		Find(TYPE element);	        // Find element
 
-	//Data methods
-	virtual TYPE	GetAt(POS position) const;			//Get element value
-	virtual TYPE	SetAt(POS position, TYPE element);	//Set element value
+    //Peek methods
+    virtual POS		GetHeadPosition();			// Head Position
+    virtual POS		GetTailPosition();			// Tail Position
 
-	//Array-like methods
-	virtual POS		FindIndex(ULONG iIndex);	//Index element
+    virtual TYPE	GetHead();					// Head element
+    virtual TYPE	GetTail();					// Tail element
+    virtual TYPE	GetNext(POS& position);		// Next element
+    virtual TYPE	GetPrev(POS& position);		// Prev element
 
-	//informational methods
-	virtual BOOL	IsEmpty();					// IsEmpty
-	virtual ULONG	GetCount();					// Elements in the list
+    //Data methods
+    virtual TYPE	GetAt(POS position) const;			//Get element value
+    virtual TYPE	SetAt(POS position, TYPE element);	//Set element value
+
+    //Array-like methods
+    virtual POS		FindIndex(ULONG iIndex);	//Index element
+
+    //informational methods
+    virtual BOOL	IsEmpty();					// IsEmpty
+    virtual ULONG	GetCount();					// Elements in the list
 
 private:
-	//data
-	CNode<TYPE>*	m_pHeadNode;				// Head of CExList
-	CNode<TYPE>*	m_pTailNode;				// Tail of CExList
-	ULONG			m_ulElements;				// Elements in the list
+    //data
+    CNode<TYPE>*	m_pHeadNode;				// Head of CExList
+    CNode<TYPE>*	m_pTailNode;				// Tail of CExList
+    ULONG			m_ulElements;				// Elements in the list
 };
 
 
@@ -117,20 +117,20 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 template <class TYPE> CExList<TYPE>::CExList()
 {
-	//constructor
-	m_pHeadNode = NULL;
-	m_pTailNode = NULL;
-	m_ulElements = 0;
+    //constructor
+    m_pHeadNode = NULL;
+    m_pTailNode = NULL;
+    m_ulElements = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CExList::~CExList
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> CExList<TYPE>::~CExList() 
+template <class TYPE> CExList<TYPE>::~CExList()
 {
-	//Remove all elements
-	RemoveAll();
+    //Remove all elements
+    RemoveAll();
 }
 
 
@@ -138,22 +138,22 @@ template <class TYPE> CExList<TYPE>::~CExList()
 // CExList::AddHead
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> POS CExList<TYPE>::AddHead(TYPE element) 
+template <class TYPE> POS CExList<TYPE>::AddHead(TYPE element)
 {
-	//Add to the Head of the CExList, (stack)
-	CNode<TYPE>* pHeadNode = new CNode<TYPE>(element, NULL, m_pHeadNode);
+    //Add to the Head of the CExList, (stack)
+    CNode<TYPE>* pHeadNode = new CNode<TYPE>(element, NULL, m_pHeadNode);
 
-	//If there was a list hook the head->prev to the new head
-	if(m_pHeadNode) 
-	  m_pHeadNode->m_pPrevNode = pHeadNode;
+    //If there was a list hook the head->prev to the new head
+    if(m_pHeadNode)
+        m_pHeadNode->m_pPrevNode = pHeadNode;
 
-	//If there isn't a tail element, hook it to the head
-	if(!m_pTailNode)
-	  m_pTailNode = pHeadNode;
+    //If there isn't a tail element, hook it to the head
+    if(!m_pTailNode)
+        m_pTailNode = pHeadNode;
 
-	m_pHeadNode = pHeadNode;
-	m_ulElements++;
-	return m_pHeadNode;
+    m_pHeadNode = pHeadNode;
+    m_ulElements++;
+    return m_pHeadNode;
 }
 
 
@@ -161,20 +161,20 @@ template <class TYPE> POS CExList<TYPE>::AddHead(TYPE element)
 // CExList::AddTail
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> POS CExList<TYPE>::AddTail(TYPE element) 
+template <class TYPE> POS CExList<TYPE>::AddTail(TYPE element)
 {
-	//Add to the m_pTailNode of the CExList
-	CNode<TYPE>* pTailNode = new CNode<TYPE>(element, m_pTailNode, 0);
+    //Add to the m_pTailNode of the CExList
+    CNode<TYPE>* pTailNode = new CNode<TYPE>(element, m_pTailNode, 0);
 
-	//if previously empty
-	if(!m_pHeadNode)
-		m_pHeadNode = pTailNode;
-	else
-		m_pTailNode->m_pNextNode = pTailNode;
+    //if previously empty
+    if(!m_pHeadNode)
+        m_pHeadNode = pTailNode;
+    else
+        m_pTailNode->m_pNextNode = pTailNode;
 
-	m_pTailNode = pTailNode;
-	m_ulElements++;
-	return m_pTailNode;
+    m_pTailNode = pTailNode;
+    m_ulElements++;
+    return m_pTailNode;
 }
 
 
@@ -183,40 +183,40 @@ template <class TYPE> POS CExList<TYPE>::AddTail(TYPE element)
 // CExList::GetHeadPosition
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> inline POS CExList<TYPE>::GetHeadPosition() 
+template <class TYPE> inline POS CExList<TYPE>::GetHeadPosition()
 {
-	//return Head element Position
-	return m_pHeadNode;
+    //return Head element Position
+    return m_pHeadNode;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CExList::GetTailPosition
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> inline POS CExList<TYPE>::GetTailPosition() 
+template <class TYPE> inline POS CExList<TYPE>::GetTailPosition()
 {
-	//return Tail element Position
-	return m_pTailNode;
+    //return Tail element Position
+    return m_pTailNode;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CExList::GetHead
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> inline TYPE CExList<TYPE>::GetHead() 
+template <class TYPE> inline TYPE CExList<TYPE>::GetHead()
 {
-	//return Head element value
-	return m_pHeadNode->m_data;
+    //return Head element value
+    return m_pHeadNode->m_data;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CExList::AddTail
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> inline TYPE CExList<TYPE>::GetTail() 
+template <class TYPE> inline TYPE CExList<TYPE>::GetTail()
 {
-	// return Tail element value
-	return m_pTailNode->m_data;
+    // return Tail element value
+    return m_pTailNode->m_data;
 }
 
 
@@ -224,14 +224,14 @@ template <class TYPE> inline TYPE CExList<TYPE>::GetTail()
 // CExList::GetNext
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> inline TYPE CExList<TYPE>::GetNext(POS& position) 
+template <class TYPE> inline TYPE CExList<TYPE>::GetNext(POS& position)
 {
-	//Set position to the next element
-	CNode<TYPE>* pNode = (CNode<TYPE>*)position;
-	position = pNode->m_pNextNode;
+    //Set position to the next element
+    CNode<TYPE>* pNode = (CNode<TYPE>*)position;
+    position = pNode->m_pNextNode;
 
-	//return the current element
-	return pNode->m_data;
+    //return the current element
+    return pNode->m_data;
 }
 
 
@@ -239,14 +239,14 @@ template <class TYPE> inline TYPE CExList<TYPE>::GetNext(POS& position)
 // CExList::GetPrev
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> inline TYPE CExList<TYPE>::GetPrev(POS& position) 
+template <class TYPE> inline TYPE CExList<TYPE>::GetPrev(POS& position)
 {
-	//Set position to the next element
-	CNode<TYPE>* pNode = (CNode<TYPE>*)position;
-	position = pNode->m_pPrevNode;
-	
-	//return the current element
-	return pNode->m_data;
+    //Set position to the next element
+    CNode<TYPE>* pNode = (CNode<TYPE>*)position;
+    position = pNode->m_pPrevNode;
+
+    //return the current element
+    return pNode->m_data;
 }
 
 
@@ -256,7 +256,7 @@ template <class TYPE> inline TYPE CExList<TYPE>::GetPrev(POS& position)
 /////////////////////////////////////////////////////////////////////////////
 template <class TYPE> inline TYPE CExList<TYPE>::GetAt(POS position) const
 {
-	return ((CNode<TYPE>*)position)->m_data;
+    return ((CNode<TYPE>*)position)->m_data;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -265,15 +265,15 @@ template <class TYPE> inline TYPE CExList<TYPE>::GetAt(POS position) const
 /////////////////////////////////////////////////////////////////////////////
 template <class TYPE> inline TYPE CExList<TYPE>::SetAt(POS position, TYPE element)
 {
-	//Save the old data
-	CNode<TYPE>* pNode = (CNode<TYPE>*)position;
-	TYPE oldData = pNode->m_data;
+    //Save the old data
+    CNode<TYPE>* pNode = (CNode<TYPE>*)position;
+    TYPE oldData = pNode->m_data;
 
-	//Store new data
-	pNode->m_data = element;
+    //Store new data
+    pNode->m_data = element;
 
-	//return olddata
-	return oldData;
+    //return olddata
+    return oldData;
 }
 
 
@@ -281,14 +281,14 @@ template <class TYPE> inline TYPE CExList<TYPE>::SetAt(POS position, TYPE elemen
 // CExList::Find
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> POS CExList<TYPE>::Find(TYPE element) 
+template <class TYPE> POS CExList<TYPE>::Find(TYPE element)
 {
-	//return pointer to found element
-	for(CNode<TYPE>* p = m_pHeadNode; p; p = p->m_pNextNode)
-	  if(p->m_data == element)
-		return p;   // return position to found CNode
+    //return pointer to found element
+    for(CNode<TYPE>* p = m_pHeadNode; p; p = p->m_pNextNode)
+        if(p->m_data == element)
+            return p;   // return position to found CNode
 
-	return NULL;  // return NULL if not found
+    return NULL;  // return NULL if not found
 }
 
 
@@ -296,10 +296,10 @@ template <class TYPE> POS CExList<TYPE>::Find(TYPE element)
 // CExList::IsEmpty
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> inline BOOL CExList<TYPE>::IsEmpty() 
+template <class TYPE> inline BOOL CExList<TYPE>::IsEmpty()
 {
-	// returns TRUE if Empty
-	return m_ulElements == 0;
+    // returns TRUE if Empty
+    return m_ulElements == 0;
 }
 
 
@@ -308,21 +308,21 @@ template <class TYPE> inline BOOL CExList<TYPE>::IsEmpty()
 // CExList::RemoveHead
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> TYPE CExList<TYPE>::RemoveHead() 
+template <class TYPE> TYPE CExList<TYPE>::RemoveHead()
 {
-	//Remove and return from the Head of the List
-	CNode<TYPE>* pHeadNode = m_pHeadNode;	// pointer to the Removed node
-	TYPE element = GetHead();				//make a copy, before deleteing
+    //Remove and return from the Head of the List
+    CNode<TYPE>* pHeadNode = m_pHeadNode;	// pointer to the Removed node
+    TYPE element = GetHead();				//make a copy, before deleteing
 
-	m_pHeadNode = pHeadNode->m_pNextNode;		// reroute Head to exclude the first element
-	if(m_pHeadNode)
-		m_pHeadNode->m_pPrevNode = NULL;
-	else
-		m_pTailNode = NULL;
+    m_pHeadNode = pHeadNode->m_pNextNode;		// reroute Head to exclude the first element
+    if(m_pHeadNode)
+        m_pHeadNode->m_pPrevNode = NULL;
+    else
+        m_pTailNode = NULL;
 
-	m_ulElements--;
-	delete pHeadNode;						// delete head
-	return element;
+    m_ulElements--;
+    delete pHeadNode;						// delete head
+    return element;
 }
 
 
@@ -330,21 +330,21 @@ template <class TYPE> TYPE CExList<TYPE>::RemoveHead()
 // CExList::RemoveTail
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> TYPE CExList<TYPE>::RemoveTail() 
+template <class TYPE> TYPE CExList<TYPE>::RemoveTail()
 {
-	//Remove and return from the m_pTailNode of the CExList
-	CNode<TYPE>* pTailNode = m_pTailNode->m_pPrevNode;
-	TYPE element = GetTail();  //make a copy before deleteing
+    //Remove and return from the m_pTailNode of the CExList
+    CNode<TYPE>* pTailNode = m_pTailNode->m_pPrevNode;
+    TYPE element = GetTail();  //make a copy before deleteing
 
-	m_pTailNode = pTailNode;
-	if(m_pTailNode)
-		m_pTailNode->m_pNextNode = NULL;
-	else
-		m_pHeadNode = NULL;
+    m_pTailNode = pTailNode;
+    if(m_pTailNode)
+        m_pTailNode->m_pNextNode = NULL;
+    else
+        m_pHeadNode = NULL;
 
-	m_ulElements--;
-	delete m_pTailNode;
-	return element;
+    m_ulElements--;
+    delete m_pTailNode;
+    return element;
 }
 
 
@@ -354,25 +354,25 @@ template <class TYPE> TYPE CExList<TYPE>::RemoveTail()
 /////////////////////////////////////////////////////////////////////////////
 template <class TYPE> TYPE CExList<TYPE>::RemoveAt(POS position)
 {
-	//Remove CExList[position]
-	CNode<TYPE>* pNode = (CNode<TYPE>*)position;
-	TYPE oldData = pNode->m_data;
+    //Remove CExList[position]
+    CNode<TYPE>* pNode = (CNode<TYPE>*)position;
+    TYPE oldData = pNode->m_data;
 
-	// If removing the head
-	if (pNode == m_pHeadNode)
-		m_pHeadNode = pNode->m_pNextNode;
-	else
-		pNode->m_pPrevNode->m_pNextNode = pNode->m_pNextNode;
-	
-	//If removing the tail
-	if (pNode == m_pTailNode)
-		m_pTailNode = pNode->m_pPrevNode;
-	else
-		pNode->m_pNextNode->m_pPrevNode = pNode->m_pPrevNode;
+    // If removing the head
+    if (pNode == m_pHeadNode)
+        m_pHeadNode = pNode->m_pNextNode;
+    else
+        pNode->m_pPrevNode->m_pNextNode = pNode->m_pNextNode;
 
-	m_ulElements--;
-	delete pNode;
-	return oldData;
+    //If removing the tail
+    if (pNode == m_pTailNode)
+        m_pTailNode = pNode->m_pPrevNode;
+    else
+        pNode->m_pNextNode->m_pPrevNode = pNode->m_pPrevNode;
+
+    m_ulElements--;
+    delete pNode;
+    return oldData;
 }
 
 
@@ -380,20 +380,20 @@ template <class TYPE> TYPE CExList<TYPE>::RemoveAt(POS position)
 // CExList::RemoveAll
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> void CExList<TYPE>::RemoveAll() 
+template <class TYPE> void CExList<TYPE>::RemoveAll()
 {
-	// Remove all items from the CExList
-	CNode<TYPE>* pNode = m_pHeadNode;
-	while(pNode)
-	{
-		CNode<TYPE>* pTemp = pNode;
-		pNode = pNode->m_pNextNode; 	
-		delete pTemp;
-	}
+    // Remove all items from the CExList
+    CNode<TYPE>* pNode = m_pHeadNode;
+    while(pNode)
+    {
+        CNode<TYPE>* pTemp = pNode;
+        pNode = pNode->m_pNextNode;
+        delete pTemp;
+    }
 
-	m_pHeadNode   = NULL;
-	m_pTailNode   = NULL;
-	m_ulElements  = 0;
+    m_pHeadNode   = NULL;
+    m_pTailNode   = NULL;
+    m_ulElements  = 0;
 }
 
 
@@ -401,37 +401,37 @@ template <class TYPE> void CExList<TYPE>::RemoveAll()
 // CExList::GetCount
 //
 /////////////////////////////////////////////////////////////////////////////
-template <class TYPE> inline ULONG CExList<TYPE>::GetCount() 
+template <class TYPE> inline ULONG CExList<TYPE>::GetCount()
 {
-	// return the Length
-	return m_ulElements;
+    // return the Length
+    return m_ulElements;
 }
 
-				   
+
 /////////////////////////////////////////////////////////////////////////////
 // CExList::InsertBefore
 //
 /////////////////////////////////////////////////////////////////////////////
 template <class TYPE> POS CExList<TYPE>::InsertBefore(POS position, TYPE element)
 {
-	//insert before the position
-	if(position == m_pHeadNode)    // Add before Head
-	  return AddHead(element);
+    //insert before the position
+    if(position == m_pHeadNode)    // Add before Head
+        return AddHead(element);
 
-	CNode<TYPE>* pOldNode = (CNode<TYPE>*)position;
+    CNode<TYPE>* pOldNode = (CNode<TYPE>*)position;
 
-	//otherwise a little more difficult
-	CNode<TYPE>* pNewNode = new CNode<TYPE>(element, pOldNode->m_pPrevNode, pOldNode);
-	
-	//Create the new node
-	pNewNode->m_pNextNode = new CNode<TYPE>(element, pOldNode->m_pPrevNode, pOldNode->m_pNextNode);
+    //otherwise a little more difficult
+    CNode<TYPE>* pNewNode = new CNode<TYPE>(element, pOldNode->m_pPrevNode, pOldNode);
 
-	//Hook up before after nodes to it
-	pOldNode->m_pPrevNode->m_pNextNode = pNewNode;
-	pOldNode->m_pPrevNode = pNewNode;
+    //Create the new node
+    pNewNode->m_pNextNode = new CNode<TYPE>(element, pOldNode->m_pPrevNode, pOldNode->m_pNextNode);
 
-	m_ulElements++;
-	return pNewNode;
+    //Hook up before after nodes to it
+    pOldNode->m_pPrevNode->m_pNextNode = pNewNode;
+    pOldNode->m_pPrevNode = pNewNode;
+
+    m_ulElements++;
+    return pNewNode;
 }
 
 
@@ -442,21 +442,21 @@ template <class TYPE> POS CExList<TYPE>::InsertBefore(POS position, TYPE element
 /////////////////////////////////////////////////////////////////////////////
 template <class TYPE> POS CExList<TYPE>::InsertAfter(POS position, TYPE element)
 {
-	//insert after the position
-	if(position == m_pTailNode)     // Add after the m_pTailNode
-	  return AddTail(element);
-	
-	CNode<TYPE>* pOldNode = (CNode<TYPE>*)position;
+    //insert after the position
+    if(position == m_pTailNode)     // Add after the m_pTailNode
+        return AddTail(element);
 
-	//other wise a little more difficult
-	CNode<TYPE>* pNewNode = new CNode<TYPE>(element, pOldNode, pOldNode->m_pNextNode);
-	
-	//Hook up before after nodes to it
-	pOldNode->m_pNextNode->m_pPrevNode = pNewNode;
-	pOldNode->m_pNextNode = pNewNode;
+    CNode<TYPE>* pOldNode = (CNode<TYPE>*)position;
 
-	m_ulElements++;
-	return pNewNode;
+    //other wise a little more difficult
+    CNode<TYPE>* pNewNode = new CNode<TYPE>(element, pOldNode, pOldNode->m_pNextNode);
+
+    //Hook up before after nodes to it
+    pOldNode->m_pNextNode->m_pPrevNode = pNewNode;
+    pOldNode->m_pNextNode = pNewNode;
+
+    m_ulElements++;
+    return pNewNode;
 }
 
 
@@ -466,13 +466,13 @@ template <class TYPE> POS CExList<TYPE>::InsertAfter(POS position, TYPE element)
 /////////////////////////////////////////////////////////////////////////////
 template <class TYPE> POS CExList<TYPE>::FindIndex(ULONG iIndex)
 {
-	CNode<TYPE>* pNode = m_pHeadNode;
+    CNode<TYPE>* pNode = m_pHeadNode;
 
-	//Find the specified index
-	while(iIndex--)
-		pNode = pNode->m_pNextNode;
+    //Find the specified index
+    while(iIndex--)
+        pNode = pNode->m_pNextNode;
 
-	return (POS)pNode;
+    return (POS)pNode;
 }
 
 #endif //_LIST_H_

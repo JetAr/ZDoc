@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //
 //  Microsoft Active Directory 2.5 Sample Code
 //
@@ -6,7 +6,7 @@
 //
 //  File:       ADQI.cxx
 //
-//  Contents:   ADQI Main 
+//  Contents:   ADQI Main
 //
 //
 //----------------------------------------------------------------------------
@@ -30,11 +30,11 @@ static char THIS_FILE[] = __FILE__;
 // CADQIApp
 
 BEGIN_MESSAGE_MAP(CADQIApp, CWinApp)
-	//{{AFX_MSG_MAP(CADQIApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
+    //{{AFX_MSG_MAP(CADQIApp)
+    // NOTE - the ClassWizard will add and remove mapping macros here.
+    //    DO NOT EDIT what you see in these blocks of generated code!
+    //}}AFX_MSG
+    ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -42,28 +42,28 @@ END_MESSAGE_MAP()
 
 CADQIApp::CADQIApp()
 {
-	m_dwFlag = 0;
-	m_sUserName.Empty();
+    m_dwFlag = 0;
+    m_sUserName.Empty();
 }
 
 
 HRESULT CADQIApp::ADsOpenObject( LPWSTR pszPath, REFIID riid, void**pUnk )
 {
 
-	if ( m_sUserName.Length() )
-	{
-		return ::ADsOpenObject( pszPath, m_sUserName, NULL, m_dwFlag, riid, pUnk );
-	}
-	else
-	{
-		return ADsGetObject( pszPath, riid, pUnk );
-	}
+    if ( m_sUserName.Length() )
+    {
+        return ::ADsOpenObject( pszPath, m_sUserName, NULL, m_dwFlag, riid, pUnk );
+    }
+    else
+    {
+        return ADsGetObject( pszPath, riid, pUnk );
+    }
 }
 
 void CADQIApp::SetCredentials( LPCTSTR pszUserName, DWORD dwFlag )
 {
-	m_sUserName = pszUserName;
-	m_dwFlag    = dwFlag;
+    m_sUserName = pszUserName;
+    m_dwFlag    = dwFlag;
 
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -76,23 +76,23 @@ CADQIApp theApp;
 
 BOOL CADQIApp::InitInstance()
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+    // Standard initialization
+    // If you are not using these features and wish to reduce the size
+    //  of your final executable, you should remove from the following
+    //  the specific initialization routines you do not need.
 
-	CADQIDlg dlg;
-	AfxOleInit();
-	m_pMainWnd = &dlg;
-	int nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
-	}
-	else if (nResponse == IDCANCEL)
-	{
-	}
+    CADQIDlg dlg;
+    AfxOleInit();
+    m_pMainWnd = &dlg;
+    int nResponse = dlg.DoModal();
+    if (nResponse == IDOK)
+    {
+    }
+    else if (nResponse == IDCANCEL)
+    {
+    }
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
-	return FALSE;
+    // Since the dialog has been closed, return FALSE so that we exit the
+    //  application, rather than start the application's message pump.
+    return FALSE;
 }

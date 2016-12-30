@@ -1,4 +1,4 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+﻿/* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
 /* File created by MIDL compiler version 5.01.0158 */
@@ -6,7 +6,7 @@
  */
 /* Compiler settings for svcintfs.idl:
     Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
+    error checks: allocation ref bounds_check enum stub_data
 */
 //@@MIDL_FILE_HEADING(  )
 
@@ -32,8 +32,8 @@
 #define __svcintfs_h__
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 #ifndef __IDispenserManagerShutdownGuarantee_FWD_DEFINED__
 #define __IDispenserManagerShutdownGuarantee_FWD_DEFINED__
@@ -42,7 +42,7 @@ typedef interface IDispenserManagerShutdownGuarantee IDispenserManagerShutdownGu
 
 
 /* interface __MIDL_itf_svcintfs_0500 */
-/* [local] */ 
+/* [local] */
 
 //
 // IDispenserManagerShutdownGuarantee
@@ -58,52 +58,53 @@ extern RPC_IF_HANDLE __MIDL_itf_svcintfs_0500_v0_0_s_ifspec;
 #define __IDispenserManagerShutdownGuarantee_INTERFACE_DEFINED__
 
 /* interface IDispenserManagerShutdownGuarantee */
-/* [unique][hidden][local][helpstring][uuid][object] */ 
+/* [unique][hidden][local][helpstring][uuid][object] */
 
 
 EXTERN_C const IID IID_IDispenserManagerShutdownGuarantee;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("5cb31e11-2b5f-11cf-be10-00aa00a2fa25")
-    IDispenserManagerShutdownGuarantee : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE ShutdownGuarantee( 
-            /* [out] */ BOOL __RPC_FAR *pfShutdownIsGuaranteed) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("5cb31e11-2b5f-11cf-be10-00aa00a2fa25")
+IDispenserManagerShutdownGuarantee :
+public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE ShutdownGuarantee(
+        /* [out] */ BOOL __RPC_FAR *pfShutdownIsGuaranteed) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IDispenserManagerShutdownGuaranteeVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDispenserManagerShutdownGuarantee __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDispenserManagerShutdownGuarantee __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDispenserManagerShutdownGuarantee __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShutdownGuarantee )( 
-            IDispenserManagerShutdownGuarantee __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfShutdownIsGuaranteed);
-        
-        END_INTERFACE
-    } IDispenserManagerShutdownGuaranteeVtbl;
+typedef struct IDispenserManagerShutdownGuaranteeVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IDispenserManagerShutdownGuarantee
-    {
-        CONST_VTBL struct IDispenserManagerShutdownGuaranteeVtbl __RPC_FAR *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )(
+        IDispenserManagerShutdownGuarantee __RPC_FAR * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )(
+        IDispenserManagerShutdownGuarantee __RPC_FAR * This);
+
+    ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )(
+        IDispenserManagerShutdownGuarantee __RPC_FAR * This);
+
+    HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShutdownGuarantee )(
+        IDispenserManagerShutdownGuarantee __RPC_FAR * This,
+        /* [out] */ BOOL __RPC_FAR *pfShutdownIsGuaranteed);
+
+    END_INTERFACE
+} IDispenserManagerShutdownGuaranteeVtbl;
+
+interface IDispenserManagerShutdownGuarantee
+{
+    CONST_VTBL struct IDispenserManagerShutdownGuaranteeVtbl __RPC_FAR *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
@@ -128,7 +129,7 @@ EXTERN_C const IID IID_IDispenserManagerShutdownGuarantee;
 
 
 
-HRESULT STDMETHODCALLTYPE IDispenserManagerShutdownGuarantee_ShutdownGuarantee_Proxy( 
+HRESULT STDMETHODCALLTYPE IDispenserManagerShutdownGuarantee_ShutdownGuarantee_Proxy(
     IDispenserManagerShutdownGuarantee __RPC_FAR * This,
     /* [out] */ BOOL __RPC_FAR *pfShutdownIsGuaranteed);
 

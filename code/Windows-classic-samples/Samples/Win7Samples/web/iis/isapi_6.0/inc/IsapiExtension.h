@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -35,18 +35,18 @@ public:
     BOOL
     Initialize(
         LPSTR   szModuleName
-        );
+    );
 
     BOOL
     InitOnce(
         PFN_FIRST_HIT_INIT          pfnInit,
         VOID *                      pContext
-        );
+    );
 
     CHAR *
     QueryModulePath(
         VOID
-        );
+    );
 
 private:
 

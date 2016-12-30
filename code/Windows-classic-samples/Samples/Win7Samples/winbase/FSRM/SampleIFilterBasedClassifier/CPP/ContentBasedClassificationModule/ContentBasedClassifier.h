@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,31 +43,31 @@ Description:
 class CFsrmClassificationRule
 {
 public:
-	
-	// The classification property's name
-	CComBSTR  m_strPropName;
 
-	// The classification property's value that will be applied
-	CComBSTR m_strPropValue;
+    // The classification property's name
+    CComBSTR  m_strPropName;
 
-	// The additional classification parameters specified in the classification rule
-	SAFEARRAY* m_saParams;
+    // The classification property's value that will be applied
+    CComBSTR m_strPropValue;
 
-	CFsrmClassificationRule(
-		)
-	{
-	}
+    // The additional classification parameters specified in the classification rule
+    SAFEARRAY* m_saParams;
 
-	CFsrmClassificationRule(
-		LPCWSTR     pwszPropName,
-		LPCWSTR     pwszPropValue,
-		SAFEARRAY** psaParams
-		)
-	{
-		m_strPropName = pwszPropName;
-		m_strPropValue = pwszPropValue;
-		m_saParams = *psaParams;
-	}
+    CFsrmClassificationRule(
+    )
+    {
+    }
+
+    CFsrmClassificationRule(
+        LPCWSTR     pwszPropName,
+        LPCWSTR     pwszPropValue,
+        SAFEARRAY** psaParams
+    )
+    {
+        m_strPropName = pwszPropName;
+        m_strPropValue = pwszPropValue;
+        m_saParams = *psaParams;
+    }
 
 };
 
@@ -91,104 +91,104 @@ typedef std::map < FSRM_OBJECT_ID, CFsrmClassificationRule > FsrmClassificationR
 Description:
 
     This is the ATL wizard added class for the ATL object.
-	It implements the IFsrmClassifierModuleImplementation interface methods.	
+	It implements the IFsrmClassifierModuleImplementation interface methods.
 
 --*/
 
 class ATL_NO_VTABLE CContentBasedClassifier :
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CContentBasedClassifier, &CLSID_ContentBasedClassifier>,
-	public IDispatchImpl<IFsrmClassifierModuleImplementation, &__uuidof(IFsrmClassifierModuleImplementation), &LIBID_FsrmLib, /* wMajor = */ 1>
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CContentBasedClassifier, &CLSID_ContentBasedClassifier>,
+    public IDispatchImpl<IFsrmClassifierModuleImplementation, &__uuidof(IFsrmClassifierModuleImplementation), &LIBID_FsrmLib, /* wMajor = */ 1>
 {
 public:
-	CContentBasedClassifier()
-	{
-	}
+    CContentBasedClassifier()
+    {
+    }
 
-	DECLARE_REGISTRY_RESOURCEID(IDR_CONTENTBASEDCLASSIFIER)
+    DECLARE_REGISTRY_RESOURCEID(IDR_CONTENTBASEDCLASSIFIER)
 
-	DECLARE_NOT_AGGREGATABLE(CContentBasedClassifier)
+    DECLARE_NOT_AGGREGATABLE(CContentBasedClassifier)
 
-	DECLARE_GET_CONTROLLING_UNKNOWN()
+    DECLARE_GET_CONTROLLING_UNKNOWN()
 
-	BEGIN_COM_MAP(CContentBasedClassifier)
-		COM_INTERFACE_ENTRY(IFsrmClassifierModuleImplementation)
-		COM_INTERFACE_ENTRY(IFsrmPipelineModuleImplementation)
-		COM_INTERFACE_ENTRY(IDispatch)
-	END_COM_MAP()
+    BEGIN_COM_MAP(CContentBasedClassifier)
+    COM_INTERFACE_ENTRY(IFsrmClassifierModuleImplementation)
+    COM_INTERFACE_ENTRY(IFsrmPipelineModuleImplementation)
+    COM_INTERFACE_ENTRY(IDispatch)
+    END_COM_MAP()
 
 
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	HRESULT FinalConstruct()
-	{
-		return S_OK;
-	}
+    HRESULT FinalConstruct()
+    {
+        return S_OK;
+    }
 
-	void FinalRelease()
-	{
-	}
+    void FinalRelease()
+    {
+    }
 
 public:
 
 
-	// IFsrmClassifierModuleImplementation Methods
+    // IFsrmClassifierModuleImplementation Methods
 public:
-	STDMETHOD(get_LastModified)(
-		VARIANT * LastModified
-		);
+    STDMETHOD(get_LastModified)(
+        VARIANT * LastModified
+    );
 
-	STDMETHOD(UseRulesAndDefinitions)(
-		IFsrmCollection * Rules, 
-		IFsrmCollection * propertyDefinitions
-		);
+    STDMETHOD(UseRulesAndDefinitions)(
+        IFsrmCollection * Rules,
+        IFsrmCollection * propertyDefinitions
+    );
 
-	STDMETHOD(OnBeginFile)(
-		IFsrmPropertyBag * propertyBag,
-                SAFEARRAY           *psaRuleIds
-		);
+    STDMETHOD(OnBeginFile)(
+        IFsrmPropertyBag * propertyBag,
+        SAFEARRAY           *psaRuleIds
+    );
 
-	STDMETHOD(DoesPropertyValueApply)(
-		BSTR property, 
-		BSTR Value, 
-		VARIANT_BOOL * applyValue, 
-		GUID idRule, 
-		GUID idPropDef
-		);
+    STDMETHOD(DoesPropertyValueApply)(
+        BSTR property,
+        BSTR Value,
+        VARIANT_BOOL * applyValue,
+        GUID idRule,
+        GUID idPropDef
+    );
 
-	STDMETHOD(GetPropertyValueToApply)(
-		BSTR property, 
-		BSTR * Value, 
-		GUID idRule, 
-		GUID idPropDef
-		);
-	
-	STDMETHOD(OnEndFile)(
-		);
+    STDMETHOD(GetPropertyValueToApply)(
+        BSTR property,
+        BSTR * Value,
+        GUID idRule,
+        GUID idPropDef
+    );
 
-	// IFsrmPipelineModuleImplementation Methods
+    STDMETHOD(OnEndFile)(
+    );
+
+    // IFsrmPipelineModuleImplementation Methods
 public:
-	STDMETHOD(OnLoad)(
-		IFsrmPipelineModuleDefinition * moduleDefinition, 
-		IFsrmPipelineModuleConnector * * moduleConnector
-		);
-	
-	STDMETHOD(OnUnload)(
-		);
+    STDMETHOD(OnLoad)(
+        IFsrmPipelineModuleDefinition * moduleDefinition,
+        IFsrmPipelineModuleConnector * * moduleConnector
+    );
+
+    STDMETHOD(OnUnload)(
+    );
 
 
 private:
-	// to hold a reference to the Fsrm pipeline module
-	CComPtr<IFsrmPipelineModuleDefinition> m_spDefinition;
+    // to hold a reference to the Fsrm pipeline module
+    CComPtr<IFsrmPipelineModuleDefinition> m_spDefinition;
 
-	// map to hold all classification rules' property/value pairs
-	FsrmClassificationRulesMap	m_mapFsrmClassificationRules;
+    // map to hold all classification rules' property/value pairs
+    FsrmClassificationRulesMap	m_mapFsrmClassificationRules;
 
-	// TextTokenizer object that reads the stream into a registered IFilter
-	// based on the file's extension and uses it for searching contents
-	CComPtr<ITextTokenizer> m_pTextTokenizer;
-	
+    // TextTokenizer object that reads the stream into a registered IFilter
+    // based on the file's extension and uses it for searching contents
+    CComPtr<ITextTokenizer> m_pTextTokenizer;
+
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ContentBasedClassifier), CContentBasedClassifier)

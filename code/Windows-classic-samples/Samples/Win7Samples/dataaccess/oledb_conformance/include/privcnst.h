@@ -1,11 +1,11 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Testing
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
-// @module Privcnst.h | This module contains consts and defines for the 
+// @module Privcnst.h | This module contains consts and defines for the
 //						private library
 //
 // @comm
@@ -13,13 +13,13 @@
 //
 // <nl><nl>
 // Revision History:<nl>
-//	
+//
 //	[00] MM-DD-YY	EMAIL_NAME	ACTION PERFORMED... <nl>
 //	[01] 10-16-95	Microsoft		Created - renamed from privlib.h <nl>
 //	[02] 12-01-96	Microsoft	Updated for release <nl>
-//	
+//
 // @head3 PRIVCNST Elements|
-//	
+//
 //---------------------------------------------------------------------------
 
 #ifndef _PRIVCNST_H_
@@ -34,7 +34,7 @@
 #include <limits.h>			// MAX_PTR
 #include <stdio.h>			// sprintf
 #include <stddef.h> 		// For offsetof macro
-							
+
 
 //////////////////////////////////////////////////////////////////////////////
 // Defines
@@ -55,7 +55,7 @@ inline DWORD IsWarning(HRESULT hrActual, HRESULT hrExpected);
 extern BOOL TESTB;
 
 //Output (odtLog macros)
-#define TOUTPUT_(str)		odtLog << str 
+#define TOUTPUT_(str)		odtLog << str
 #define TOUTPUT(str)		TOUTPUT_(str) << ENDL
 #define TOUTPUT_LINE(str)	TOUTPUT(str << "   <File:" << __FILE__ << ">   Line:" << __LINE__)
 #define TWARNING(str)		{ TOUTPUT_LINE("Warning: " << str); }
@@ -73,9 +73,9 @@ extern BOOL TESTB;
 #define	WIDESTRING(str)					L##str
 
 #ifdef	_TRACING
-	#define TRACE_CALL(str)		PRVTRACE(str)
+#define TRACE_CALL(str)		PRVTRACE(str)
 #else
-	#define TRACE_CALL(str)		if(0) PRVTRACE(str)
+#define TRACE_CALL(str)		if(0) PRVTRACE(str)
 #endif
 
 //Check MACRO - now incorporates warnings
@@ -141,13 +141,13 @@ extern BOOL TESTB;
 #define CHECK_MEMORY_HR(pv)				if(!pv) {hr = E_OUTOFMEMORY; goto CLEANUP;}
 #define SAFE_ALLOC(pv, type, cb)		{ pv = (type*)PROVIDER_ALLOC((cb)*sizeof(type)); CHECK_MEMORY(pv);			}
 #define SAFE_REALLOC(pv, type, cb)		{ pv = (type*)PROVIDER_REALLOC(pv, (cb)*sizeof(type)); CHECK_MEMORY(pv);	}
-#define SAFE_SYSALLOC(pv, bstr)			{ pv = SysAllocString(bstr); CHECK_MEMORY(pv);								}		
+#define SAFE_SYSALLOC(pv, bstr)			{ pv = SysAllocString(bstr); CHECK_MEMORY(pv);								}
 #define SAFE_FREE(pv)					{ PROVIDER_FREE(pv);										}
 #define SAFE_SYSFREE(bstr)				{ SYSSTRING_FREE(bstr); 									}
-					 
-#define SAFE_RELEASE(pv)  { if(pv) (pv)->Release(); pv = NULL;				} 
-#define SAFE_RELEASE_(pv) { if(pv) GCOMPARE((pv)->Release(), 0); pv = NULL;	} 
-#define SAFE_ADDREF(pv)	  { if(pv) (pv)->AddRef();							} 
+
+#define SAFE_RELEASE(pv)  { if(pv) (pv)->Release(); pv = NULL;				}
+#define SAFE_RELEASE_(pv) { if(pv) GCOMPARE((pv)->Release(), 0); pv = NULL;	}
+#define SAFE_ADDREF(pv)	  { if(pv) (pv)->AddRef();							}
 #define SAFE_DELETE(pv)   { if(pv) delete (pv); pv = NULL;					}
 
 #define INVALID(type)	  ((type)0x12345678)
@@ -177,7 +177,7 @@ extern BOOL TESTB;
 
 
 ///////////////////////////////////////////////////////////////////
-// Accessor / Binding 
+// Accessor / Binding
 //
 ///////////////////////////////////////////////////////////////////
 //STATUS helpers, for locating obStatus offsets in the bindings
@@ -202,11 +202,11 @@ extern BOOL TESTB;
 #define		MAX_PTR		-1
 
 #ifdef _WIN64
-	#define MAXDBCOUNTITEM	_UI64_MAX
-	#define	MAXDBROWCOUNT	_I64_MAX
+#define MAXDBCOUNTITEM	_UI64_MAX
+#define	MAXDBROWCOUNT	_I64_MAX
 #else
-	#define MAXDBCOUNTITEM	ULONG_MAX
-	#define	MAXDBROWCOUNT		LONG_MAX
+#define MAXDBCOUNTITEM	ULONG_MAX
+#define	MAXDBROWCOUNT		LONG_MAX
 #endif
 
 ///////////////////////////////////////////////////////////////////
@@ -249,19 +249,19 @@ typedef DWORD BLOBTYPE;
 // Data Structures
 //-----------------------------------------------------------------------------
 // @struct DATA | structure used for IRowset->GetData
-struct DATA 
+struct DATA
 {
-	DBSTATUS sStatus;			// @field SHORT | sStatus  | Status of bound value
-	DBLENGTH ulLength;			// @field ULONG | ulLength | On read: Total length of value, On Write, length to use
-	union
-	{
-		BYTE bValue[1];		// @field BYTE[1] | bValue | Data Value 
-		DBLENGTH alignField;	// @field ULONG | alignField | Union member in existence
-							// only to ensure that bValue is placed on a ULONG byte
-							// alignment, so regardless of what type is accessed
-							// at bValue, an alignment fault will not occur.
-	};
-}; 
+    DBSTATUS sStatus;			// @field SHORT | sStatus  | Status of bound value
+    DBLENGTH ulLength;			// @field ULONG | ulLength | On read: Total length of value, On Write, length to use
+    union
+    {
+        BYTE bValue[1];		// @field BYTE[1] | bValue | Data Value
+        DBLENGTH alignField;	// @field ULONG | alignField | Union member in existence
+        // only to ensure that bValue is placed on a ULONG byte
+        // alignment, so regardless of what type is accessed
+        // at bValue, an alignment fault will not occur.
+    };
+};
 
 //-----------------------------------------------------------------------------
 // ENUM
@@ -269,258 +269,258 @@ struct DATA
 // @enum ECOLUMNORDER|Ordering of the Columns in a query. Used inside the CTable functions.
 enum ECOLUMNORDER
 {
-	FORWARD,	// @emem FORWARD | Columns ordering for query is forward.
-	REVERSE		// @emem REVERSE | Columns ordering for query is reverse.
+    FORWARD,	// @emem FORWARD | Columns ordering for query is forward.
+    REVERSE		// @emem REVERSE | Columns ordering for query is reverse.
 };
 
-// @enum EVALUE|Original value or the second value for the field. 
+// @enum EVALUE|Original value or the second value for the field.
 // Used in the MakeData function of CTable.
-enum EVALUE 
+enum EVALUE
 {
-	PRIMARY,	// @emem  PRIMARY |The primary value will be used for this row and column.
-	SECONDARY	// @emem SECONDARY | The secondary value will be used for this row and column.
+    PRIMARY,	// @emem  PRIMARY |The primary value will be used for this row and column.
+    SECONDARY	// @emem SECONDARY | The secondary value will be used for this row and column.
 };
 
 // @enum EINDEXTYPE|Uniqueness of data. Used in a member data of CCol.
 enum EINDEXTYPE
 {
-	UNIQUE,		// @emem  UNIQUE |the primary value will be used for this row and column.
-	NONUNIQUE	// @emem  NONUNIQUE |the secondary value will be used for this row and column.
+    UNIQUE,		// @emem  UNIQUE |the primary value will be used for this row and column.
+    NONUNIQUE	// @emem  NONUNIQUE |the secondary value will be used for this row and column.
 };
 
 // @enum EDATATYPES|Column data types. Used in the CreateTable functions of
 // CTable.
 enum EDATATYPES
 {
-	ALLTYPES,	// @emem  ALLTYPES |the table will be created will all the supported data types.
-	NATIVETYPES,// @emem  NATIVETYPES |the table will be created with the native types listed.
-	DBDATATYPES	// @emem  DBDATATYPES |the table will be created with the DBDATATYPEENUM types listed.
+    ALLTYPES,	// @emem  ALLTYPES |the table will be created will all the supported data types.
+    NATIVETYPES,// @emem  NATIVETYPES |the table will be created with the native types listed.
+    DBDATATYPES	// @emem  DBDATATYPES |the table will be created with the DBDATATYPEENUM types listed.
 };
 
 // @enum EMARKOBJECT|Clear or set object.
 enum EMARKOBJECT
 {
-	CLEAR,		//@emem CLEAR|Clears an object.
-	SET			//@emem SET|Sets an object.
+    CLEAR,		//@emem CLEAR|Clears an object.
+    SET			//@emem SET|Sets an object.
 };
 
 // @enum ENULL|Nullability of data. Used in a member data of CCol.
-enum ENULL 
+enum ENULL
 {
-	NONULLS,			// @emem  NONULLS |the data will not be null.
-	USENULLS,			// @emem USENULLS |data will be null if the row and col numbers are equal and the type is nullable.
-	NULLABLE,			// @emem NULLABLE |column can be nullable.
-	NULLABLE_UNKNOWN	// @emem NULLABLE_UNKNOWN |from sqlcolinfo.
+    NONULLS,			// @emem  NONULLS |the data will not be null.
+    USENULLS,			// @emem USENULLS |data will be null if the row and col numbers are equal and the type is nullable.
+    NULLABLE,			// @emem NULLABLE |column can be nullable.
+    NULLABLE_UNKNOWN	// @emem NULLABLE_UNKNOWN |from sqlcolinfo.
 };
 
-// @enum ECOLS_IN_BINDINGS. Used in GetAccessorAndBindings to determine which columns to bind to. 
+// @enum ECOLS_IN_BINDINGS. Used in GetAccessorAndBindings to determine which columns to bind to.
 enum	ECOLS_BOUND
 {
-	ALL_COLS_BOUND					= 0x00000001,	//@emem ALL_COLS | All columns in rowset will be bound
-	ODD_COLS_BOUND					= 0x00000002,	//@emem ODD_COLS | Only odd numbered columns in rowset will be bound
-	EVEN_COLS_BOUND					= 0x00000004,	//@emem EVEN_COLS | Only even numbered columns in rowset will be bound.  
-	USE_COLS_TO_BIND_ARRAY			= 0x00000008,	//@emem USE_COLS_TO_BIND_ARRAY | Only columns specified in the rgColsToBind parameter are bound
-	
-	FIXED_LEN_COLS_BOUND			= 0x00000010,	//@emem FIXED_LEN_TYPE_COLS | Only Fixed length type columns are bound
-	VARIABLE_LEN_COLS_BOUND			= 0x00000020,	//@emem VARIABLE_LEN_TYPE_COLS | Only Variable length type columns are bound
-	BLOB_COLS_BOUND					= 0x00000040,	//@emem BLOB_COLS | Only BLOB columns are bound
-	UPDATEABLE_COLS_BOUND			= 0x00000080,	//@emem UPDATEABLE_COLS_BOUND | Only Updateable (writeable) columns are bound
-	
-	NONINDEX_COLS_BOUND				= 0x00000100,	//@emem UPDATEABLE_NONINDEX_COLS_BOUND | Only Updateable (writeable) columns excluding the index column are bound
-	NONNULLABLE_COLS_BOUND			= 0x00000200,	//@emem NONNULLABLE_COLS_BOUND | Only Non-Nullable columns are bound
-	NOBOOKMARK_COLS_BOUND			= 0x00000400,	//@emem ALL_COLS | All columns in rowset will be bound except the Bookmark Column
-	NULLABLE_COLS_BOUND				= 0x00000800,	//@emem NONNULLABLE_COLS_BOUND | Only Non-Nullable columns are bound
+    ALL_COLS_BOUND					= 0x00000001,	//@emem ALL_COLS | All columns in rowset will be bound
+    ODD_COLS_BOUND					= 0x00000002,	//@emem ODD_COLS | Only odd numbered columns in rowset will be bound
+    EVEN_COLS_BOUND					= 0x00000004,	//@emem EVEN_COLS | Only even numbered columns in rowset will be bound.
+    USE_COLS_TO_BIND_ARRAY			= 0x00000008,	//@emem USE_COLS_TO_BIND_ARRAY | Only columns specified in the rgColsToBind parameter are bound
 
-	VECTOR_COLS_BOUND				= 0x00001000,	//@emem Only Vector columns are bound
-	NOVECTOR_COLS_BOUND				= 0x00002000,	//@emem All columns except Vectors
+    FIXED_LEN_COLS_BOUND			= 0x00000010,	//@emem FIXED_LEN_TYPE_COLS | Only Fixed length type columns are bound
+    VARIABLE_LEN_COLS_BOUND			= 0x00000020,	//@emem VARIABLE_LEN_TYPE_COLS | Only Variable length type columns are bound
+    BLOB_COLS_BOUND					= 0x00000040,	//@emem BLOB_COLS | Only BLOB columns are bound
+    UPDATEABLE_COLS_BOUND			= 0x00000080,	//@emem UPDATEABLE_COLS_BOUND | Only Updateable (writeable) columns are bound
 
-	//Backward compatible flags
-	ALL_COLS_EXCEPTBOOKMARK			= (ALL_COLS_BOUND | NOBOOKMARK_COLS_BOUND),
-	UPDATEABLE_NONINDEX_COLS_BOUND  = (UPDATEABLE_COLS_BOUND | NONINDEX_COLS_BOUND),
+    NONINDEX_COLS_BOUND				= 0x00000100,	//@emem UPDATEABLE_NONINDEX_COLS_BOUND | Only Updateable (writeable) columns excluding the index column are bound
+    NONNULLABLE_COLS_BOUND			= 0x00000200,	//@emem NONNULLABLE_COLS_BOUND | Only Non-Nullable columns are bound
+    NOBOOKMARK_COLS_BOUND			= 0x00000400,	//@emem ALL_COLS | All columns in rowset will be bound except the Bookmark Column
+    NULLABLE_COLS_BOUND				= 0x00000800,	//@emem NONNULLABLE_COLS_BOUND | Only Non-Nullable columns are bound
+
+    VECTOR_COLS_BOUND				= 0x00001000,	//@emem Only Vector columns are bound
+    NOVECTOR_COLS_BOUND				= 0x00002000,	//@emem All columns except Vectors
+
+    //Backward compatible flags
+    ALL_COLS_EXCEPTBOOKMARK			= (ALL_COLS_BOUND | NOBOOKMARK_COLS_BOUND),
+    UPDATEABLE_NONINDEX_COLS_BOUND  = (UPDATEABLE_COLS_BOUND | NONINDEX_COLS_BOUND),
 };
 
 // @enum ECOLS_IN_LIST. Used in CreateColList to determine which columns to put in list.
 enum	ECOLS_IN_LIST
 {
-	ALL_COLS_IN_LIST,			//@emem ALL_COLS | All columns in rowset will be in list		
-	UPDATEABLE_COLS_IN_LIST,	//@emem UPDATEABLE_COLS_IN_LIST | Only Updateable (writeable) columns are in the list
-	SEARCHABLE_COLS_IN_LIST,	//@emem SEARCHABLE_COLS_IN_LIST | Only searchable columns are in the list
-	SEARCHABLE_AND_UPDATEABLE_COLS_IN_LIST, // @emem SEARCHABLE_AND_UPDATEABLE_COLS_IN_LIST | All columns which and searchable and updateable.
-	INDEX_COL_IN_LIST,
-	ECOLS_LAST					// Must remain last enum in list
+    ALL_COLS_IN_LIST,			//@emem ALL_COLS | All columns in rowset will be in list
+    UPDATEABLE_COLS_IN_LIST,	//@emem UPDATEABLE_COLS_IN_LIST | Only Updateable (writeable) columns are in the list
+    SEARCHABLE_COLS_IN_LIST,	//@emem SEARCHABLE_COLS_IN_LIST | Only searchable columns are in the list
+    SEARCHABLE_AND_UPDATEABLE_COLS_IN_LIST, // @emem SEARCHABLE_AND_UPDATEABLE_COLS_IN_LIST | All columns which and searchable and updateable.
+    INDEX_COL_IN_LIST,
+    ECOLS_LAST					// Must remain last enum in list
 };
 
 // @enum ECOLS_BY_REF. Used in CTable.
-enum	ECOLS_BY_REF		
+enum	ECOLS_BY_REF
 {
-	ALL_COLS_BY_REF,					//@emem ALL_COLS | All columns in the accessor will be bound by reference
-	NO_COLS_BY_REF,						//@emem NO_COLS | No columns in the accessor will be bound by reference
-	FIXED_LEN_COLS_BY_REF,				//@emem FIXED_LEN_TYPE_COLS | Only columns with fixed 
-											//length types will be bound by reference
-	VARIABLE_LEN_COLS_BY_REF,			//@emem VARIABLE_LEN_TYPE_COLS | Only columns with variable
-											//length types will be bound by reference
-	SUPPORTED_COLS_BY_REF,				//@emem SUPPORTED_COLS | Supported columns in the accessor will be bound by reference
-	SUPPORTED_FIXED_LEN_COLS_BY_REF		//@emem SUPPORTED_FIXED_LEN_TYPE_COLS | Only supported columns with fixed 
-											//length types will be bound by reference
+    ALL_COLS_BY_REF,					//@emem ALL_COLS | All columns in the accessor will be bound by reference
+    NO_COLS_BY_REF,						//@emem NO_COLS | No columns in the accessor will be bound by reference
+    FIXED_LEN_COLS_BY_REF,				//@emem FIXED_LEN_TYPE_COLS | Only columns with fixed
+    //length types will be bound by reference
+    VARIABLE_LEN_COLS_BY_REF,			//@emem VARIABLE_LEN_TYPE_COLS | Only columns with variable
+    //length types will be bound by reference
+    SUPPORTED_COLS_BY_REF,				//@emem SUPPORTED_COLS | Supported columns in the accessor will be bound by reference
+    SUPPORTED_FIXED_LEN_COLS_BY_REF		//@emem SUPPORTED_FIXED_LEN_TYPE_COLS | Only supported columns with fixed
+    //length types will be bound by reference
 };
 
 // @enum ECOLS_MEM_PROV_OWNED. Used in CTable.
-enum	ECOLS_MEM_PROV_OWNED		
+enum	ECOLS_MEM_PROV_OWNED
 {
-	NO_COLS_OWNED_BY_PROV,		//@emem NO_COLS_OWNED_BY_PROV | All columns' bMemOwner is DBMEMOWNER_CLIENTOWNED
-	SUPPORTED_COLS_OWNED_BY_PROV,//@emem SUPPORTED_COLS_OWNED_BY_PROV | Supported columns' bMemOwner is DBMEMOWNER_PROVIDEROWNED
-	ALL_COLS_OWNED_BY_PROV		//@emem NO_COLS_OWNED_BY_PROV | All columns' bMemOwner is DBMEMOWNER_PROVIDEROWNED	
+    NO_COLS_OWNED_BY_PROV,		//@emem NO_COLS_OWNED_BY_PROV | All columns' bMemOwner is DBMEMOWNER_CLIENTOWNED
+    SUPPORTED_COLS_OWNED_BY_PROV,//@emem SUPPORTED_COLS_OWNED_BY_PROV | Supported columns' bMemOwner is DBMEMOWNER_PROVIDEROWNED
+    ALL_COLS_OWNED_BY_PROV		//@emem NO_COLS_OWNED_BY_PROV | All columns' bMemOwner is DBMEMOWNER_PROVIDEROWNED
 };
 
 // @enum EEXECUTE|When to execute the SQL statement in CTable.
 enum EEXECUTE
 {
-	EXECUTE_NEVER,		//@emem  EXECUTE_NEVER |Never call ICommand::Execute
-	EXECUTE_ALWAYS,		//@emem  EXECUTE_ALWAYS |Always call ICommand::Execute
-						//even if some of the properties do not get set
-	EXECUTE_IFNOERROR	//@emem  EXECUTE_IFNOERROR |Call ICommand::Execute
-						//only if ALL the properties passed in by the user get set
-						//If there are no properties to set them always execute.fs
+    EXECUTE_NEVER,		//@emem  EXECUTE_NEVER |Never call ICommand::Execute
+    EXECUTE_ALWAYS,		//@emem  EXECUTE_ALWAYS |Always call ICommand::Execute
+    //even if some of the properties do not get set
+    EXECUTE_IFNOERROR	//@emem  EXECUTE_IFNOERROR |Call ICommand::Execute
+    //only if ALL the properties passed in by the user get set
+    //If there are no properties to set them always execute.fs
 };
 
 // @enum EQUERY|Available SQL statements that can be generated.
-// Note that the Schema tables can only be used in the CRowset class. 
+// Note that the Schema tables can only be used in the CRowset class.
 enum EQUERY
 {
-	USE_OPENROWSET,								//@emem Uses IOpenRowset::OpenRowset, which is essentially "select * from <tbl>"
-	USE_SUPPORTED_SELECT_ALLFROMTBL,			//@emem Uses command to execute "select * from <tbl>" if supported, else
-												// uses IOpenRowset::OpenRowset to accomplish "select * from <tbl>"
+    USE_OPENROWSET,								//@emem Uses IOpenRowset::OpenRowset, which is essentially "select * from <tbl>"
+    USE_SUPPORTED_SELECT_ALLFROMTBL,			//@emem Uses command to execute "select * from <tbl>" if supported, else
+    // uses IOpenRowset::OpenRowset to accomplish "select * from <tbl>"
 
-	SELECT_ALLFROMTBL,							//@emem Uses command to execute "SELECT * FROM <tbl>"	
-	SELECT_SEARCHABLE,
-	SELECT_UPDATEABLE,
-	SELECT_ABCANDCOLLIST,						//@emem Uses command to execute "Select 'ABC', <col list> from <tbl>"
-	SELECT_DISTINCTCOLLISTORDERBY,				//@emem Uses command to execute "Select DISTINCT <col list> from <tbl> order by <col one> DESC"
-	SELECT_REVCOLLIST,							//@emem Uses command to execute "Select <reverse col list> from <tbl>"
-	SELECT_COLLISTGROUPBY,						//@emem Uses command to execute "Select <col one> from <tbl> GROUP BY <col one> HAVING <col one> is not null"
-	SELECT_COLLISTWHERELASTCOLINSELECT,			//@emem Uses command to execute "Select <col list> from <tbl> where <last col> in (Select <last col> from <tbl>)"
-	SELECT_REVCOLLISTFROMVIEW,					//@emem Uses command to execute "Select <reverse col list> from <view>"
-	SELECT_COUNT,								//@emem Uses command to execute "Select count(<col one>) from <tbl>"
-	SELECT_COLLISTSELECTREVCOLLIST,				//@emem Uses command to execute "Select <col list> from <tbl>; Select <reverse col list> from <tbl>"
-	SELECT_EMPTYROWSET,							//@emem Uses command to execute "Select <col list> from <tbl> where 0=1"
-	SELECT_COLLISTFROMTBL,						//@emem Uses command to execute "Select <col list> from <tbl>"
-	SELECT_COLLISTTBLUNIONTBL,					//@emem Uses command to execute "Select <col list> from <tbl> UNION select <col list> from <tbl>"
-	SELECT_COLLISTORDERBYCOLONECOMPUTE,			//@emem Uses command to execute "Select <col list> from <tbl> ORDER BY <col one> COMPUTE SUM(<col one>)"
-	SELECT_COLLISTORDERBYCOLONECOMPUTEBY,		//@emem Uses command to execute "Select <col list> from <tbl> ORDER BY <col one> COMPUTE SUM(<col one>) by <col one>"
-	SELECT_CROSSPRODUCT,						//@emem Uses command to execute "Select * from  <tbl1>, <tbl2>"
-	SELECT_LEFTOUTERJOIN,						//@emem Uses command to execute "Select * from <tbl1> LEFT OUTER JOIN <tbl2> on <tbl1.col1> = <tbl2.col1>"
-	SELECT_RIGHTOUTERJOIN,						//@emem Uses command to execute "Select * from <tbl1> RIGHT OUTER JOIN <tbl2> on <tbl1.col1> = <tbl2.col1>"
-	SELECT_LEFTOUTERJOIN_ESC,					//@emem Uses command to execute "Select * from {oj <tbl1> LEFT OUTER JOIN <tbl2> on <tbl1.col1> = <tbl2.col1>}"
-	SELECT_RIGHTOUTERJOIN_ESC,					//@emem Uses command to execute "Select * from {oj <tbl1> RIGHT OUTER JOIN <tbl2> on <tbl1.col1> = <tbl2.col1>}"
-	SELECT_FROMTBLWITHPARAMS,					//@emem Uses command to execute "Select <col list> from <tbl> where <parm col list>"
-	SELECT_CHANGECOLNAME,						//@emem Uses command to execute "Select col1X=col1, col2X=col2, ... from <tbl>
-	SELECT_DUPLICATECOLUMNS,					//@emem Uses command to execute "Select <col list> , <col list> from tbl"
-	SELECT_REVERSEDUPLICATECOLUMNS,				//@emem Uses command to execute "Select <reverse col list> , <reverse col list> from <tbl>
-	SELECT_MAXCOLINQUERY,						//@emem Not currently working.
-	SELECT_COMPUTEDCOLLIST,						//@emem Uses command to execute "Select colx, colx-colx from <tbl>"  colx is first numeric col
-	SELECT_UPDATEABLEALLROWS,					//@emem Uses command to execute "Select colx, coly from <tbl>"  colx and coly are all updateable columns
-	SELECT_ORDERBYNUMERIC,						//@emem Uses command to execute "select * from <tbl> order by colx"  colx is the first numeric col
-	SELECT_DBSCHEMA_ASSERTIONS,					//@emem Uses IDBSchemaRowset::GetRowset to generate Assertions Schema
-	SELECT_DBSCHEMA_CATALOGS,					//@emem Uses IDBSchemaRowset::GetRowset to generate Catalogs Schema
-	SELECT_DBSCHEMA_CHARACTER_SETS,				//@emem Uses IDBSchemaRowset::GetRowset to generate character sets Schema
-	SELECT_DBSCHEMA_CHECK_CONSTRAINTS,			//@emem Uses IDBSchemaRowset::GetRowset to generate Check constraints Schema
-	SELECT_DBSCHEMA_COLLATIONS,					//@emem Uses IDBSchemaRowset::GetRowset to generate collations	Schema
-	SELECT_DBSCHEMA_COLUMN_DOMAIN_USAGE,		//@emem Uses IDBSchemaRowset::GetRowset to generate Column Domain Usage Schem
-	SELECT_DBSCHEMA_COLUMN_PRIVILEGES,			//@emem Uses IDBSchemaRowset::GetRowset to generate Column privileges Schema
-	SELECT_DBSCHEMA_COLUMNS,					//@emem Uses IDBSchemaRowset::GetRowset to generate Columns Schema
-	SELECT_DBSCHEMA_CONSTRAINT_COLUMN_USAGE,	//@emem Uses IDBSchemaRowset::GetRowset to generate Constraint column usage Schema
-	SELECT_DBSCHEMA_CONSTRAINT_TABLE_USAGE,		//@emem Uses IDBSchemaRowset::GetRowset to generate Constraint table usage Schema
-	SELECT_DBSCHEMA_FOREIGN_KEYS,				//@emem Uses IDBSchemaRowset::GetRowset to generate Foreign Keys
-	SELECT_DBSCHEMA_INDEXES,					//@emem Uses IDBSchemaRowset::GetRowset to generate Indexes Schema
-	SELECT_DBSCHEMA_KEY_COLUMN_USAGE,			//@emem Uses IDBSchemaRowset::GetRowset to generate Key Column Usage Schema
-	SELECT_DBSCHEMA_PRIMARY_KEYS,				//@emem Uses IDBSchemaRowset::GetRowset to generate Primary Keys
-	SELECT_DBSCHEMA_PROCEDURE_PARAMETERS,		//@emem Uses IDBSchemaRowset::GetRowset to generate Procedures Parameters Schema
-	SELECT_DBSCHEMA_PROCEDURES,					//@emem Uses IDBSchemaRowset::GetRowset to generate Procedures Schema
-	SELECT_DBSCHEMA_PROVIDER_TYPES,				//@emem Uses IDBSchemaRowset::GetRowset to generate Provider Types
-	SELECT_DBSCHEMA_REFERENTIAL_CONSTRAINTS,	//@emem Uses IDBSchemaRowset::GetRowset to generate Constraints Schema
-	SELECT_DBSCHEMA_SCHEMATA,					//@emem Uses IDBSchemaRowset::GetRowset to generate Schemata Schema
-	SELECT_DBSCHEMA_SQL_LANGUAGES,				//@emem Uses IDBSchemaRowset::GetRowset to generate Sql Languages Schema
-	SELECT_DBSCHEMA_STATISTICS,					//@emem Uses IDBSchemaRowset::GetRowset to generate Statistics Schema
-	SELECT_DBSCHEMA_TABLE_CONSTRAINTS,			//@emem Uses IDBSchemaRowset::GetRowset to generate Table Constraints Schema
-	SELECT_DBSCHEMA_TABLE_PRIVILEGES,			//@emem Uses IDBSchemaRowset::GetRowset to generate Table Privileges Schema
-	SELECT_DBSCHEMA_TABLE,						//@emem Uses IDBSchemaRowset::GetRowset to generate Table Schema
-	SELECT_DBSCHEMA_TRANSLATIONS,				//@emem Uses IDBSchemaRowset::GetRowset to generate Translations Schema
-	SELECT_DBSCHEMA_USAGE_PRIVILEGES,			//@emem Uses IDBSchemaRowset::GetRowset to generate Usage Privileges Schema
-	SELECT_DBSCHEMA_VIEW_COLUMN_USAGE,			//@emem Uses IDBSchemaRowset::GetRowset to generate View Column Usage Schema
-	SELECT_DBSCHEMA_VIEW_TABLE_USAGE,			//@emem Uses IDBSchemaRowset::GetRowset to generate View Table Usage Schema
-	SELECT_DBSCHEMA_VIEWS,						//@emem Uses IDBSchemaRowset::GetRowset to generate Views Schema
-	INSERT_1ROW,								//@emem Inserts 1 row of data, may use IRowsetChange - caution, IRowsetChange won't return command text
-	INSERT_ROW_WITH_LITERALS,					//@emem Inserts 1 row of data using literals
-	INSERT_ALLWITHPARAMS,						//@emem Uses command to execute Parameterized Insert statement with all updateable columns
-	SELECT_ALL_WITH_SEARCHABLE_AND_UPDATEABLE,	//@emem Uses command to execute Select statament have searchable and updateable cols in LIST.where params
-	SELECT_ALL_WITH_BLOB_AT_END,				//@emem Uses normal select all but moves blob to last column
-	NO_QUERY,
-	SELECT_ALL_WITH_FOR_BROWSE,					//@emem sql server only for dev bug 2358
-	SELECT_ALL_WITH_FOR_UPDATE,					//@emem Uses command to execute "Select * from <tbl> for update"
-	CREATE_VIEW,								//@emem Uses command to execute "Create View <view-name> as select * from <table-name>"
-	DROP_VIEW,									//@emem Uses command to execute "Drop View <view-name>"
-	CREATE_INDEX,								//@emem Uses command to execute "Create index %s on %s (%s)"
-	DROP_INDEX,									//@emem Uses command to execute "Drop Index %s.%s"
-	ALTER_TABLE_DROP_COLUMN,					//@emem Uses command to execute "Alter table %s drop column %s"
-	ALTER_TABLE_ADD,							//@emem Uses command to execute "Alter table %s add %s"
-	ALTER_TABLE_ADD_EX,							//@emem Uses command to execute "Alter table %s add %s %s" - extended
-	SELECT_ROW_WITH_LITERALS,					//@emem Uses command to execute "Select <col list> from <tbl> where <searchable and updateable literal col list>"
-	USE_ENUMERATOR,								//@emem Uses ISourcesRowset on the Enumerator specified with ENUMERATOR initstring
-	USE_COLUMNSROWSET,							//@emem Uses IColumnsRowset
-	CREATE_PROC,								//@emem Uses command to execute "Create Procedure <proc-name> as select * from <table-name>"
-	DROP_PROC,									//@emem Uses command to execute "Drop Procedure <proc-name>"
-	EXEC_PROC,									//@emem Uses command to execute "{call proc-name}"
-	DROP_TABLE,									//@emem Uses command to execute "Drop table <table-name>"
-	SELECT_NO_TABLE,							//@emem Uses command to execute "select * from" leaving off table name
-	INSERT_NO_TABLE,							//@emem Uses command to execute "insert into" leaving off table name
-	SELECT_INVALIDGROUPBY,						//@emem Uses command to execute "select * from <table-name> group by <column_name>"
-	UPDATE_WITH_PARAMS_WHERE,					//@emem Uses command to execute "update <table-name> set col1 = ?, col2 = ? ... where col1 = ? and col2 = ? ..."
+    SELECT_ALLFROMTBL,							//@emem Uses command to execute "SELECT * FROM <tbl>"
+    SELECT_SEARCHABLE,
+    SELECT_UPDATEABLE,
+    SELECT_ABCANDCOLLIST,						//@emem Uses command to execute "Select 'ABC', <col list> from <tbl>"
+    SELECT_DISTINCTCOLLISTORDERBY,				//@emem Uses command to execute "Select DISTINCT <col list> from <tbl> order by <col one> DESC"
+    SELECT_REVCOLLIST,							//@emem Uses command to execute "Select <reverse col list> from <tbl>"
+    SELECT_COLLISTGROUPBY,						//@emem Uses command to execute "Select <col one> from <tbl> GROUP BY <col one> HAVING <col one> is not null"
+    SELECT_COLLISTWHERELASTCOLINSELECT,			//@emem Uses command to execute "Select <col list> from <tbl> where <last col> in (Select <last col> from <tbl>)"
+    SELECT_REVCOLLISTFROMVIEW,					//@emem Uses command to execute "Select <reverse col list> from <view>"
+    SELECT_COUNT,								//@emem Uses command to execute "Select count(<col one>) from <tbl>"
+    SELECT_COLLISTSELECTREVCOLLIST,				//@emem Uses command to execute "Select <col list> from <tbl>; Select <reverse col list> from <tbl>"
+    SELECT_EMPTYROWSET,							//@emem Uses command to execute "Select <col list> from <tbl> where 0=1"
+    SELECT_COLLISTFROMTBL,						//@emem Uses command to execute "Select <col list> from <tbl>"
+    SELECT_COLLISTTBLUNIONTBL,					//@emem Uses command to execute "Select <col list> from <tbl> UNION select <col list> from <tbl>"
+    SELECT_COLLISTORDERBYCOLONECOMPUTE,			//@emem Uses command to execute "Select <col list> from <tbl> ORDER BY <col one> COMPUTE SUM(<col one>)"
+    SELECT_COLLISTORDERBYCOLONECOMPUTEBY,		//@emem Uses command to execute "Select <col list> from <tbl> ORDER BY <col one> COMPUTE SUM(<col one>) by <col one>"
+    SELECT_CROSSPRODUCT,						//@emem Uses command to execute "Select * from  <tbl1>, <tbl2>"
+    SELECT_LEFTOUTERJOIN,						//@emem Uses command to execute "Select * from <tbl1> LEFT OUTER JOIN <tbl2> on <tbl1.col1> = <tbl2.col1>"
+    SELECT_RIGHTOUTERJOIN,						//@emem Uses command to execute "Select * from <tbl1> RIGHT OUTER JOIN <tbl2> on <tbl1.col1> = <tbl2.col1>"
+    SELECT_LEFTOUTERJOIN_ESC,					//@emem Uses command to execute "Select * from {oj <tbl1> LEFT OUTER JOIN <tbl2> on <tbl1.col1> = <tbl2.col1>}"
+    SELECT_RIGHTOUTERJOIN_ESC,					//@emem Uses command to execute "Select * from {oj <tbl1> RIGHT OUTER JOIN <tbl2> on <tbl1.col1> = <tbl2.col1>}"
+    SELECT_FROMTBLWITHPARAMS,					//@emem Uses command to execute "Select <col list> from <tbl> where <parm col list>"
+    SELECT_CHANGECOLNAME,						//@emem Uses command to execute "Select col1X=col1, col2X=col2, ... from <tbl>
+    SELECT_DUPLICATECOLUMNS,					//@emem Uses command to execute "Select <col list> , <col list> from tbl"
+    SELECT_REVERSEDUPLICATECOLUMNS,				//@emem Uses command to execute "Select <reverse col list> , <reverse col list> from <tbl>
+    SELECT_MAXCOLINQUERY,						//@emem Not currently working.
+    SELECT_COMPUTEDCOLLIST,						//@emem Uses command to execute "Select colx, colx-colx from <tbl>"  colx is first numeric col
+    SELECT_UPDATEABLEALLROWS,					//@emem Uses command to execute "Select colx, coly from <tbl>"  colx and coly are all updateable columns
+    SELECT_ORDERBYNUMERIC,						//@emem Uses command to execute "select * from <tbl> order by colx"  colx is the first numeric col
+    SELECT_DBSCHEMA_ASSERTIONS,					//@emem Uses IDBSchemaRowset::GetRowset to generate Assertions Schema
+    SELECT_DBSCHEMA_CATALOGS,					//@emem Uses IDBSchemaRowset::GetRowset to generate Catalogs Schema
+    SELECT_DBSCHEMA_CHARACTER_SETS,				//@emem Uses IDBSchemaRowset::GetRowset to generate character sets Schema
+    SELECT_DBSCHEMA_CHECK_CONSTRAINTS,			//@emem Uses IDBSchemaRowset::GetRowset to generate Check constraints Schema
+    SELECT_DBSCHEMA_COLLATIONS,					//@emem Uses IDBSchemaRowset::GetRowset to generate collations	Schema
+    SELECT_DBSCHEMA_COLUMN_DOMAIN_USAGE,		//@emem Uses IDBSchemaRowset::GetRowset to generate Column Domain Usage Schem
+    SELECT_DBSCHEMA_COLUMN_PRIVILEGES,			//@emem Uses IDBSchemaRowset::GetRowset to generate Column privileges Schema
+    SELECT_DBSCHEMA_COLUMNS,					//@emem Uses IDBSchemaRowset::GetRowset to generate Columns Schema
+    SELECT_DBSCHEMA_CONSTRAINT_COLUMN_USAGE,	//@emem Uses IDBSchemaRowset::GetRowset to generate Constraint column usage Schema
+    SELECT_DBSCHEMA_CONSTRAINT_TABLE_USAGE,		//@emem Uses IDBSchemaRowset::GetRowset to generate Constraint table usage Schema
+    SELECT_DBSCHEMA_FOREIGN_KEYS,				//@emem Uses IDBSchemaRowset::GetRowset to generate Foreign Keys
+    SELECT_DBSCHEMA_INDEXES,					//@emem Uses IDBSchemaRowset::GetRowset to generate Indexes Schema
+    SELECT_DBSCHEMA_KEY_COLUMN_USAGE,			//@emem Uses IDBSchemaRowset::GetRowset to generate Key Column Usage Schema
+    SELECT_DBSCHEMA_PRIMARY_KEYS,				//@emem Uses IDBSchemaRowset::GetRowset to generate Primary Keys
+    SELECT_DBSCHEMA_PROCEDURE_PARAMETERS,		//@emem Uses IDBSchemaRowset::GetRowset to generate Procedures Parameters Schema
+    SELECT_DBSCHEMA_PROCEDURES,					//@emem Uses IDBSchemaRowset::GetRowset to generate Procedures Schema
+    SELECT_DBSCHEMA_PROVIDER_TYPES,				//@emem Uses IDBSchemaRowset::GetRowset to generate Provider Types
+    SELECT_DBSCHEMA_REFERENTIAL_CONSTRAINTS,	//@emem Uses IDBSchemaRowset::GetRowset to generate Constraints Schema
+    SELECT_DBSCHEMA_SCHEMATA,					//@emem Uses IDBSchemaRowset::GetRowset to generate Schemata Schema
+    SELECT_DBSCHEMA_SQL_LANGUAGES,				//@emem Uses IDBSchemaRowset::GetRowset to generate Sql Languages Schema
+    SELECT_DBSCHEMA_STATISTICS,					//@emem Uses IDBSchemaRowset::GetRowset to generate Statistics Schema
+    SELECT_DBSCHEMA_TABLE_CONSTRAINTS,			//@emem Uses IDBSchemaRowset::GetRowset to generate Table Constraints Schema
+    SELECT_DBSCHEMA_TABLE_PRIVILEGES,			//@emem Uses IDBSchemaRowset::GetRowset to generate Table Privileges Schema
+    SELECT_DBSCHEMA_TABLE,						//@emem Uses IDBSchemaRowset::GetRowset to generate Table Schema
+    SELECT_DBSCHEMA_TRANSLATIONS,				//@emem Uses IDBSchemaRowset::GetRowset to generate Translations Schema
+    SELECT_DBSCHEMA_USAGE_PRIVILEGES,			//@emem Uses IDBSchemaRowset::GetRowset to generate Usage Privileges Schema
+    SELECT_DBSCHEMA_VIEW_COLUMN_USAGE,			//@emem Uses IDBSchemaRowset::GetRowset to generate View Column Usage Schema
+    SELECT_DBSCHEMA_VIEW_TABLE_USAGE,			//@emem Uses IDBSchemaRowset::GetRowset to generate View Table Usage Schema
+    SELECT_DBSCHEMA_VIEWS,						//@emem Uses IDBSchemaRowset::GetRowset to generate Views Schema
+    INSERT_1ROW,								//@emem Inserts 1 row of data, may use IRowsetChange - caution, IRowsetChange won't return command text
+    INSERT_ROW_WITH_LITERALS,					//@emem Inserts 1 row of data using literals
+    INSERT_ALLWITHPARAMS,						//@emem Uses command to execute Parameterized Insert statement with all updateable columns
+    SELECT_ALL_WITH_SEARCHABLE_AND_UPDATEABLE,	//@emem Uses command to execute Select statament have searchable and updateable cols in LIST.where params
+    SELECT_ALL_WITH_BLOB_AT_END,				//@emem Uses normal select all but moves blob to last column
+    NO_QUERY,
+    SELECT_ALL_WITH_FOR_BROWSE,					//@emem sql server only for dev bug 2358
+    SELECT_ALL_WITH_FOR_UPDATE,					//@emem Uses command to execute "Select * from <tbl> for update"
+    CREATE_VIEW,								//@emem Uses command to execute "Create View <view-name> as select * from <table-name>"
+    DROP_VIEW,									//@emem Uses command to execute "Drop View <view-name>"
+    CREATE_INDEX,								//@emem Uses command to execute "Create index %s on %s (%s)"
+    DROP_INDEX,									//@emem Uses command to execute "Drop Index %s.%s"
+    ALTER_TABLE_DROP_COLUMN,					//@emem Uses command to execute "Alter table %s drop column %s"
+    ALTER_TABLE_ADD,							//@emem Uses command to execute "Alter table %s add %s"
+    ALTER_TABLE_ADD_EX,							//@emem Uses command to execute "Alter table %s add %s %s" - extended
+    SELECT_ROW_WITH_LITERALS,					//@emem Uses command to execute "Select <col list> from <tbl> where <searchable and updateable literal col list>"
+    USE_ENUMERATOR,								//@emem Uses ISourcesRowset on the Enumerator specified with ENUMERATOR initstring
+    USE_COLUMNSROWSET,							//@emem Uses IColumnsRowset
+    CREATE_PROC,								//@emem Uses command to execute "Create Procedure <proc-name> as select * from <table-name>"
+    DROP_PROC,									//@emem Uses command to execute "Drop Procedure <proc-name>"
+    EXEC_PROC,									//@emem Uses command to execute "{call proc-name}"
+    DROP_TABLE,									//@emem Uses command to execute "Drop table <table-name>"
+    SELECT_NO_TABLE,							//@emem Uses command to execute "select * from" leaving off table name
+    INSERT_NO_TABLE,							//@emem Uses command to execute "insert into" leaving off table name
+    SELECT_INVALIDGROUPBY,						//@emem Uses command to execute "select * from <table-name> group by <column_name>"
+    UPDATE_WITH_PARAMS_WHERE,					//@emem Uses command to execute "update <table-name> set col1 = ?, col2 = ? ... where col1 = ? and col2 = ? ..."
 
-	DEEP_SELECT_SUBTREE,						//@emem Uses row scoped command to retrieve all child nodes of a row object(similar to IScopedOperations::OpenRowset);
-	SHALLOW_SCOPED_SELECT,						//@emem Uses row scoped command to retrieve all direct child nodes of a row object
-	INSERT_INVALID_KEYWORD,						//@emem Builds a statement of the form "insert inot ..." to generate a syntax error
-	CREATE_INDEX_DESC,							//@emem Uses command to execute "Create index %s on %s (%s DESC)"
-	CHANGE_CURRENT_CATALOG,						//@emem Uses command to change the current catalog (e.g "use pubs")
-	DELETE_ALLWITHPARAMS,						//@emem Uses command to execute Parameterized Delete statement with all updateable columns
-	SELECT_ALL_BYINDEX_WITHPARAMS,				//@emem Uses command to execute Parameterized select using index column in where clause
-	RPC_SELECT_ALL_BYINDEX_WITHPARAMS,
-	CALL_RPC,	
+    DEEP_SELECT_SUBTREE,						//@emem Uses row scoped command to retrieve all child nodes of a row object(similar to IScopedOperations::OpenRowset);
+    SHALLOW_SCOPED_SELECT,						//@emem Uses row scoped command to retrieve all direct child nodes of a row object
+    INSERT_INVALID_KEYWORD,						//@emem Builds a statement of the form "insert inot ..." to generate a syntax error
+    CREATE_INDEX_DESC,							//@emem Uses command to execute "Create index %s on %s (%s DESC)"
+    CHANGE_CURRENT_CATALOG,						//@emem Uses command to change the current catalog (e.g "use pubs")
+    DELETE_ALLWITHPARAMS,						//@emem Uses command to execute Parameterized Delete statement with all updateable columns
+    SELECT_ALL_BYINDEX_WITHPARAMS,				//@emem Uses command to execute Parameterized select using index column in where clause
+    RPC_SELECT_ALL_BYINDEX_WITHPARAMS,
+    CALL_RPC,
 
-	SELECT_INVALIDTBLNAME,						//@emem Uses command to execute "select * from Xxxxx" where Xxxxx is not valid table name
-	SELECT_VALIDATIONORDER,						//@emem Used to execute select * from <table-name> order by numeric in case of backends where the validation order is 
-												//@emem not deterministic and excludes the order by clause for providers that return the query results in deterministic order
+    SELECT_INVALIDTBLNAME,						//@emem Uses command to execute "select * from Xxxxx" where Xxxxx is not valid table name
+    SELECT_VALIDATIONORDER,						//@emem Used to execute select * from <table-name> order by numeric in case of backends where the validation order is
+    //@emem not deterministic and excludes the order by clause for providers that return the query results in deterministic order
 
-	SELECT_DISTINCTCOLLIST,						//@emem Uses command to execute "Select DISTINCT <col list> from <tbl>"
+    SELECT_DISTINCTCOLLIST,						//@emem Uses command to execute "Select DISTINCT <col list> from <tbl>"
 
-	
-	//Queries that will successfully Execute when set on
-	//ICommandStream with DBGUID_DEFAULT.
-	SETCMDSTREAM_QUERY1,			
-	SETCMDSTREAM_QUERY2,
 
-	LASTENUM,									//@emem Used in the allocation of the structure, always last
+    //Queries that will successfully Execute when set on
+    //ICommandStream with DBGUID_DEFAULT.
+    SETCMDSTREAM_QUERY1,
+    SETCMDSTREAM_QUERY2,
+
+    LASTENUM,									//@emem Used in the allocation of the structure, always last
 };
 
 // @enum EINTERFACE | CoClass
 enum	EINTERFACE
 {
-	UNKNOWN_INTERFACE,				//@emem TUnknown
-	ENUMERATOR_INTERFACE,			//@emem TEnumerator 
-	DATASOURCE_INTERFACE,			//@emem TDataSource
-	SESSION_INTERFACE,				//@emem	TSession
-	COMMAND_INTERFACE,				//@emem	TCommand
-	ROWSET_INTERFACE,				//@emem	TRowset
-	VIEW_INTERFACE,					//@emem	TView
-	MULTIPLERESULTS_INTERFACE,		//@emem	TMultipleResults
-	INDEX_INTERFACE,				//@emem	TIndex
-	TRANSACTION_INTERFACE,			//@emem	TTransaction
-	TRANSACTIONOPTIONS_INTERFACE,	//@emem	TTransactionOptions
-	ERROR_INTERFACE,				//@emem	TErrorObject
-	CUSTOMERROR_INTERFACE,			//@emem	TCustomErrorObject
-	ROW_INTERFACE,					//@emem	TRow
-	STREAM_INTERFACE,				//@emem	TStream		
-	BINDER_INTERFACE,				//@emem	TBinder		
-	INVALID_INTERFACE,				//@emem	Always the last element in the list
+    UNKNOWN_INTERFACE,				//@emem TUnknown
+    ENUMERATOR_INTERFACE,			//@emem TEnumerator
+    DATASOURCE_INTERFACE,			//@emem TDataSource
+    SESSION_INTERFACE,				//@emem	TSession
+    COMMAND_INTERFACE,				//@emem	TCommand
+    ROWSET_INTERFACE,				//@emem	TRowset
+    VIEW_INTERFACE,					//@emem	TView
+    MULTIPLERESULTS_INTERFACE,		//@emem	TMultipleResults
+    INDEX_INTERFACE,				//@emem	TIndex
+    TRANSACTION_INTERFACE,			//@emem	TTransaction
+    TRANSACTIONOPTIONS_INTERFACE,	//@emem	TTransactionOptions
+    ERROR_INTERFACE,				//@emem	TErrorObject
+    CUSTOMERROR_INTERFACE,			//@emem	TCustomErrorObject
+    ROW_INTERFACE,					//@emem	TRow
+    STREAM_INTERFACE,				//@emem	TStream
+    BINDER_INTERFACE,				//@emem	TBinder
+    INVALID_INTERFACE,				//@emem	Always the last element in the list
 };
 
 
@@ -532,17 +532,17 @@ enum	EINTERFACE
 //commands and is updateable.
 enum ECONFLEVEL
 {
-	//Levels
-	CONF_LEVEL_0		= 0x00000000,
-	CONF_LEVEL_1		= (CONF_LEVEL_0 | 0x10000000),
-	CONF_LEVEL_2		= (CONF_LEVEL_1 | 0x20000000),
-	
-	//Additional Functionality
-	CONF_UPDATEABLE		= 0x00000001,
-	CONF_TRANSACTIONS   = 0x00000002,
-	CONF_COMMANDS		= 0x00000004,
-	CONF_FILTERS		= 0x00000008,
-	CONF_INDEXES		= 0x00000010,
+    //Levels
+    CONF_LEVEL_0		= 0x00000000,
+    CONF_LEVEL_1		= (CONF_LEVEL_0 | 0x10000000),
+    CONF_LEVEL_2		= (CONF_LEVEL_1 | 0x20000000),
+
+    //Additional Functionality
+    CONF_UPDATEABLE		= 0x00000001,
+    CONF_TRANSACTIONS   = 0x00000002,
+    CONF_COMMANDS		= 0x00000004,
+    CONF_FILTERS		= 0x00000008,
+    CONF_INDEXES		= 0x00000010,
 };
 
 #define CONF_LEVEL(dwLevel)				((dwLevel) & 0x10000000)
@@ -557,69 +557,72 @@ enum ECONFLEVEL
 // @enum EROWSETGENERATED| Used in the Transaction class.
 enum	EROWSETGENERATED
 {
-	OPENROWSET_GENERATED,	//@emem IOpenRowset::OpenRowset should be used to generate rowset
-	COMMAND_GENERATED,		//@emem	A Command object should be used to generate the rowset
-	EITHER_GENERATED		//@emem If commands are supported, they are used, else IOpenRowset is used
+    OPENROWSET_GENERATED,	//@emem IOpenRowset::OpenRowset should be used to generate rowset
+    COMMAND_GENERATED,		//@emem	A Command object should be used to generate the rowset
+    EITHER_GENERATED		//@emem If commands are supported, they are used, else IOpenRowset is used
 };
 
 // @enum EREINITIALIZE| Used in the COLEDB class.
 enum	EREINITIALIZE
 {
-	REINITIALIZE_YES,		//@emem	Reinitialize if already initialized
-	REINITIALIZE_NO			//@emem	Don't Reinitialize if already initialized
+    REINITIALIZE_YES,		//@emem	Reinitialize if already initialized
+    REINITIALIZE_NO			//@emem	Don't Reinitialize if already initialized
 };
 
 // @enum EDELETETABLE| Used in the COLEDB class.
 enum	EDELETETABLE
-{	
-	DELETETABLE_YES,		//@emem	Table is deleted by object when release is called
-	DELETETABLE_NO			//@emem	Table is not deleted by the object
+{
+    DELETETABLE_YES,		//@emem	Table is deleted by object when release is called
+    DELETETABLE_NO			//@emem	Table is not deleted by the object
 };
 
 // @enum COLMETADATA_INDEX
-enum COLMETADATA_INDEX { 
-	COL_NAME=0,
-	COL_NUMBER,
-	COL_DBTYPE,
-	COL_SIZE,
-	COL_PRECISION,
-	COL_SCALE,
-	COL_FLAGS,
-	COL_IDKIND,
-	COL_IDGUID,
-	COL_IDNAME,
-	COL_PREFIX,
-	COL_SUFFIX
+enum COLMETADATA_INDEX
+{
+    COL_NAME=0,
+    COL_NUMBER,
+    COL_DBTYPE,
+    COL_SIZE,
+    COL_PRECISION,
+    COL_SCALE,
+    COL_FLAGS,
+    COL_IDKIND,
+    COL_IDGUID,
+    COL_IDNAME,
+    COL_PREFIX,
+    COL_SUFFIX
 };
 
 // @enum LIST_TYPE
-enum ELIST_TYPE { 
-	LT_COLNAME,				// List of comma separated column names
-	LT_PARAM,				// List of comma separated parameter markers (?)
-	LT_LITERAL,				// List of comma separated literal values (value1, ...)
-	LT_PARAM_SEARCH,		// List of column names = param marker (col1 = ? and ...)
-	LT_PARAM_UPDATE,		// List of column names = param marker (col1 = ?,  ...)
-	LT_LITERAL_SEARCH,		// List of column names = literal (col1 = value1 and ...)
-	LT_PARAM_OUT,			// List of comma separated out params (? = col1, ? = col2, ...)
-	LT_RPC_PARAM_DEF,		// List of rpc param definitions (@picol1 <type>(len), @picol22 <type>(len), ...)
-	LT_RPC_OUT_PARAM_DEF,	// List of rpc param definitions (@piocol11 <type>(len) out, @piocol2 <type>(len) out, ...)
-	LT_RPC_PARAM_OUT,		// List of rpc out params (@piocol1 = col1, @piocol2 = col2, ...)
-	LT_RPC_PARAM_SEARCH,	// List of rpc search params (col1 = @picol1 and col2 = @picol2 ...)
-	LT_LAST	
+enum ELIST_TYPE
+{
+    LT_COLNAME,				// List of comma separated column names
+    LT_PARAM,				// List of comma separated parameter markers (?)
+    LT_LITERAL,				// List of comma separated literal values (value1, ...)
+    LT_PARAM_SEARCH,		// List of column names = param marker (col1 = ? and ...)
+    LT_PARAM_UPDATE,		// List of column names = param marker (col1 = ?,  ...)
+    LT_LITERAL_SEARCH,		// List of column names = literal (col1 = value1 and ...)
+    LT_PARAM_OUT,			// List of comma separated out params (? = col1, ? = col2, ...)
+    LT_RPC_PARAM_DEF,		// List of rpc param definitions (@picol1 <type>(len), @picol22 <type>(len), ...)
+    LT_RPC_OUT_PARAM_DEF,	// List of rpc param definitions (@piocol11 <type>(len) out, @piocol2 <type>(len) out, ...)
+    LT_RPC_PARAM_OUT,		// List of rpc out params (@piocol1 = col1, @piocol2 = col2, ...)
+    LT_RPC_PARAM_SEARCH,	// List of rpc search params (col1 = @picol1 and col2 = @picol2 ...)
+    LT_LAST
 };
 
 // @enum CREATE_PK
-enum ECREATE_PK { 
-	CREATENEVER_PK,				// Primary key will never be created on a table (ex: in case of SQL Server backend xml column will not be included in a table)
-	CREATEALWAYS_PK,			// Primary key will be always created
-	CREATEIFNEEDED_PK,			// Primary key will be created if it's needed (ex: SQL Server backend and a table contatins xml column)
+enum ECREATE_PK
+{
+    CREATENEVER_PK,				// Primary key will never be created on a table (ex: in case of SQL Server backend xml column will not be included in a table)
+    CREATEALWAYS_PK,			// Primary key will be always created
+    CREATEIFNEEDED_PK,			// Primary key will be created if it's needed (ex: SQL Server backend and a table contatins xml column)
 };
 
 //-----------------------------------------------------------------------------
 // Non string constants
 //-----------------------------------------------------------------------------
 // US English LCID
-const ULONG LOCALE_ENGLISH_US = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT); 
+const ULONG LOCALE_ENGLISH_US = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
 
 //-----------------------------------------------------------------------------
 // String constants

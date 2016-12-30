@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -15,7 +15,7 @@
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -57,7 +57,7 @@ Exit:
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_SERVICE_PROXY* proxy = NULL;
@@ -66,83 +66,83 @@ int __cdecl wmain()
     WS_ENDPOINT_ADDRESS address = {};
     static const WS_STRING serviceUrl = WS_STRING_VALUE(L"http://131.107.72.15/Example_HelloWorld_Service_Indigo/HelloWorld.svc");
     WCHAR* greeting = NULL;
-    
+
     WS_ADDRESSING_VERSION addressingVersion = WS_ADDRESSING_VERSION_TRANSPORT;
     channelProperties[0].id = WS_CHANNEL_PROPERTY_ADDRESSING_VERSION;
     channelProperties[0].value = &addressingVersion;
     channelProperties[0].valueSize = sizeof(addressingVersion);
-    
+
     WS_ENVELOPE_VERSION envelopeVersion = WS_ENVELOPE_VERSION_SOAP_1_1;
     channelProperties[1].id = WS_CHANNEL_PROPERTY_ENVELOPE_VERSION;
     channelProperties[1].value = &envelopeVersion;
     channelProperties[1].valueSize = sizeof(envelopeVersion);
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateServiceProxy(
-        WS_CHANNEL_TYPE_REQUEST, 
-        WS_HTTP_CHANNEL_BINDING, 
-        NULL, 
-        NULL, 
-        0, 
-        channelProperties,
-        WsCountOf(channelProperties),
-        &proxy, 
-        error);
+             WS_CHANNEL_TYPE_REQUEST,
+             WS_HTTP_CHANNEL_BINDING,
+             NULL,
+             NULL,
+             0,
+             channelProperties,
+             WsCountOf(channelProperties),
+             &proxy,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     address.url = serviceUrl;
     // Open channel to address
     hr = WsOpenServiceProxy(
-        proxy, 
-        &address, 
-        NULL, 
-        error);
+             proxy,
+             &address,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = BasicHttpBinding_IHelloWorldService_PersonalizedGreeting(
-        proxy,
-        L"Native Web Services",
-        &greeting,
-        heap,
-        NULL,
-        0,
-        NULL,
-        error);
+             proxy,
+             L"Native Web Services",
+             &greeting,
+             heap,
+             NULL,
+             0,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    wprintf(L"%s\n", 
-        greeting);
-    
+
+    wprintf(L"%s\n",
+            greeting);
+
 Exit:
     if (FAILED(hr))
     {
@@ -152,10 +152,10 @@ Exit:
     if (proxy != NULL)
     {
         WsCloseServiceProxy(
-            proxy, 
-            NULL, 
+            proxy,
+            NULL,
             NULL);
-    
+
         WsFreeServiceProxy(
             proxy);
     }

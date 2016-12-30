@@ -1,4 +1,4 @@
-
+﻿
 /*
 
 Copyright (c) 1999  Microsoft Corporation
@@ -13,10 +13,10 @@ Abstract:
 
     This sample illustrates use of Media Streaming Terminal for sending audio.
 
-    The application makes a TAPI call to the address specified in the command 
-    line and uses Media Streaming Terminal to send the media content of a wav 
+    The application makes a TAPI call to the address specified in the command
+    line and uses Media Streaming Terminal to send the media content of a wav
     file, also specified in the command line, to the remote machibe.
- 
+
 */
 
 
@@ -42,27 +42,29 @@ BOOL g_bExitRequested = FALSE;
 // possible address types strings and corresponding LINEADDRESSTYPE_ constants
 //
 
-char *g_szAddressTypes[] = 
-            {"PHONENUMBER", "CONFERENCE", "EMAIL", "MACHINE", "IP"};
+char *g_szAddressTypes[] =
+{"PHONENUMBER", "CONFERENCE", "EMAIL", "MACHINE", "IP"};
 
 
-long g_nAddressTypeConstants[] = 
-            { LINEADDRESSTYPE_PHONENUMBER,
-              LINEADDRESSTYPE_SDP,
-              LINEADDRESSTYPE_EMAILNAME,
-              LINEADDRESSTYPE_DOMAINNAME,
-              LINEADDRESSTYPE_IPADDRESS };
+long g_nAddressTypeConstants[] =
+{
+    LINEADDRESSTYPE_PHONENUMBER,
+    LINEADDRESSTYPE_SDP,
+    LINEADDRESSTYPE_EMAILNAME,
+    LINEADDRESSTYPE_DOMAINNAME,
+    LINEADDRESSTYPE_IPADDRESS
+};
 
 //
 // number of different address types
 //
 
-const UINT g_nNumberOfAddressTypes = 
-                    sizeof(g_szAddressTypes)/sizeof(g_szAddressTypes[0]);
+const UINT g_nNumberOfAddressTypes =
+    sizeof(g_szAddressTypes)/sizeof(g_szAddressTypes[0]);
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // LogMessage
 //
 //
@@ -72,14 +74,14 @@ const UINT g_nNumberOfAddressTypes =
 
 void LogMessage(IN CHAR *pszFormat, ... )
 {
-    
+
     //
     // output buffer -- note: hardcoded limit
     //
 
     static int  const BUFFER_SIZE = 1280;
 
-    char szBuffer[BUFFER_SIZE]; 
+    char szBuffer[BUFFER_SIZE];
 
 
     //
@@ -90,17 +92,17 @@ void LogMessage(IN CHAR *pszFormat, ... )
 
     GetLocalTime(&SystemTime);
 
-    
+
     //
     // format thread id and time
     //
 
     StringCbPrintf( szBuffer, BUFFER_SIZE, "[%lx]:[%02u:%02u:%02u.%03u]::",
-             GetCurrentThreadId(),
-             SystemTime.wHour,
-             SystemTime.wMinute,
-             SystemTime.wSecond,
-             SystemTime.wMilliseconds);
+                    GetCurrentThreadId(),
+                    SystemTime.wHour,
+                    SystemTime.wMinute,
+                    SystemTime.wSecond,
+                    SystemTime.wMilliseconds);
 
 
     size_t iStringLength = 0;
@@ -109,7 +111,7 @@ void LogMessage(IN CHAR *pszFormat, ... )
 
     if (FAILED(hr))
     {
-        // either this code is wrong, or someone else in the process corrupted 
+        // either this code is wrong, or someone else in the process corrupted
         // our memory.
         return;
     }
@@ -145,7 +147,7 @@ void LogMessage(IN CHAR *pszFormat, ... )
 
     if (FAILED(hr))
     {
-        // either this code is wrong, or someone else in the process corrupted 
+        // either this code is wrong, or someone else in the process corrupted
         // our memory.
         return;
     }
@@ -153,7 +155,7 @@ void LogMessage(IN CHAR *pszFormat, ... )
     iBytesLeft = BUFFER_SIZE - iStringLength;
 
     //
-    // append a carriage return to the string. ignore the result code, the 
+    // append a carriage return to the string. ignore the result code, the
     // result string will be null-terminated no matter what.
     //
 
@@ -161,7 +163,7 @@ void LogMessage(IN CHAR *pszFormat, ... )
 
 
     //
-    // log the buffer 
+    // log the buffer
     //
 
     printf(szBuffer);
@@ -172,7 +174,7 @@ void LogMessage(IN CHAR *pszFormat, ... )
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // LogFormat
 //
 // use LogMessage to log wave format
@@ -202,7 +204,7 @@ void LogFormat(IN WAVEFORMATEX *pWaveFormat)
 
 void *AllocateMemory(SIZE_T nMemorySize)
 {
-    
+
 
     //
     // use HeapAlloc to allocate and clear memory
@@ -223,7 +225,7 @@ void *AllocateMemory(SIZE_T nMemorySize)
 
 void FreeMemory(void *pMemory)
 {
-    
+
     //
     // get size of the allocated memory
     //
@@ -243,10 +245,10 @@ void FreeMemory(void *pMemory)
     else
     {
         //
-        // fill memory with 0xdd's before freeing, so it is easier to debug 
+        // fill memory with 0xdd's before freeing, so it is easier to debug
         // failures caused by using pointer to deallocated memory
         //
-        
+
         if (0 != pMemory)
         {
             FillMemory(pMemory, nMemorySize, 0xdd);
@@ -259,7 +261,7 @@ void FreeMemory(void *pMemory)
     // use HeapFree to free memory. use return code to log the result, but
     // do not return it to the caller
     //
-    
+
     BOOL bFreeSuccess = HeapFree(GetProcessHeap(), 0, pMemory);
 
     if (FALSE == bFreeSuccess)
@@ -267,7 +269,7 @@ void FreeMemory(void *pMemory)
         LogError("FreeMemory: HeapFree failed");
 
         //
-        // if this assertion fires, it is likely there is a problem with the 
+        // if this assertion fires, it is likely there is a problem with the
         // memory we are trying to deallocate. Was it allocated using heapalloc
         // and on the same heap? Is this a valid pointer?
         //
@@ -279,7 +281,7 @@ void FreeMemory(void *pMemory)
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // InitializeTAPI()
 //
 // create and initialize the TAPI object
@@ -288,23 +290,23 @@ void FreeMemory(void *pMemory)
 
 HRESULT InitializeTAPI()
 {
-    
+
     HRESULT hr = E_FAIL;
 
     LogMessage("InitializeTAPI: started");
-    
-    
+
+
     //
     // create the TAPI object
     //
 
     hr = CoCreateInstance(
-                          CLSID_TAPI,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITTAPI,
-                          (LPVOID *)&g_pTapi
-                         );
+             CLSID_TAPI,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITTAPI,
+             (LPVOID *)&g_pTapi
+         );
 
     if (FAILED(hr))
     {
@@ -313,11 +315,11 @@ HRESULT InitializeTAPI()
         return hr;
     }
 
-    
+
     //
     // must initialize tapi object before using it
     //
-    
+
     LogMessage("InitializeTAPI: calling ITTAPI::Initialize()");
 
     hr = g_pTapi->Initialize();
@@ -328,16 +330,16 @@ HRESULT InitializeTAPI()
 
         g_pTapi->Release();
         g_pTapi = NULL;
-        
+
         return hr;
     }
 
-    
+
     //
-    // setting event filtering -- this is required for synchronous 
+    // setting event filtering -- this is required for synchronous
     // ITBasicCallControl->Connect to work
     //
-    
+
     LogMessage("InitializeTAPI: calling ITTAPI::put_EventFilter()");
 
     hr = g_pTapi->put_EventFilter(TE_CALLSTATE);
@@ -350,43 +352,43 @@ HRESULT InitializeTAPI()
 
         g_pTapi->Release();
         g_pTapi = NULL;
-        
+
         return hr;
     }
 
 
-    
+
     LogMessage("InitializeTAPI: succeeded");
-    
+
     return S_OK;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // ShutdownTAPI
 //
 // shutdown and release the tapi object
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 void ShutdownTAPI()
 {
-    
+
     LogMessage("ShutdownTAPI: started");
 
 
     if (NULL != g_pTapi)
     {
-        
+
         g_pTapi->Shutdown();
-        
+
         g_pTapi->Release();
         g_pTapi = NULL;
     }
 
-    
+
     LogMessage("ShutdownTAPI: completed");
 
 }
@@ -396,7 +398,7 @@ void ShutdownTAPI()
 //
 //  IsValidAudioFile
 //
-// returns TRUE if the file specified by pszFileName 
+// returns TRUE if the file specified by pszFileName
 // exists and is a valid audio file
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -407,7 +409,7 @@ BOOL IsValidAudioFile(IN char *pszFileName)
     //
     // open the file
     //
-    
+
     CAVIFileReader FileReader;
 
     HRESULT hr = FileReader.Initialize(pszFileName);
@@ -426,8 +428,8 @@ BOOL IsValidAudioFile(IN char *pszFileName)
     }
     else
     {
-        LogMessage("IsValidAudioFile: file [%s] is a valid audio file", 
-                    pszFileName);
+        LogMessage("IsValidAudioFile: file [%s] is a valid audio file",
+                   pszFileName);
 
         return TRUE;
     }
@@ -439,7 +441,7 @@ BOOL IsValidAudioFile(IN char *pszFileName)
 //
 // FindAddress
 //
-// find an address of the requested type that supports audio. returns S_OK 
+// find an address of the requested type that supports audio. returns S_OK
 // if address found, failure otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -454,7 +456,7 @@ HRESULT FindAddress(IN  long nAddressType,
     //
     // don't return garbage even if we fail
     //
-    
+
     *ppAddress = NULL;
 
 
@@ -463,9 +465,9 @@ HRESULT FindAddress(IN  long nAddressType,
     //
 
     IEnumAddress *pEnumAddress = NULL;
-    
+
     hr = g_pTapi->EnumerateAddresses(&pEnumAddress);
-    
+
     if (FAILED(hr))
     {
         LogError("FindAddress: Failed to enumerate addresses");
@@ -476,14 +478,14 @@ HRESULT FindAddress(IN  long nAddressType,
 
     //
     // walk through the enumeration of addresses and look for those which are
-    // of requested type and supports audio 
+    // of requested type and supports audio
     //
 
     while (TRUE)
     {
-        //        
+        //
         // get the next address from the enumeration
-        // 
+        //
 
         ITAddress *pAddress = NULL;
 
@@ -500,15 +502,15 @@ HRESULT FindAddress(IN  long nAddressType,
 
             break;
         }
-        
+
 
         //
         // we got an address. check its capabilities
         //
-        
+
         ITAddressCapabilities *pAddressCaps = NULL;
 
-        hr = pAddress->QueryInterface( IID_ITAddressCapabilities, 
+        hr = pAddress->QueryInterface( IID_ITAddressCapabilities,
                                        (void**)&pAddressCaps );
 
         if (FAILED(hr))
@@ -519,7 +521,7 @@ HRESULT FindAddress(IN  long nAddressType,
 
             //
             // just continue to the next address
-            // 
+            //
 
             pAddress->Release();
             pAddress = NULL;
@@ -531,11 +533,11 @@ HRESULT FindAddress(IN  long nAddressType,
         //
         // is this the right address type?
         //
-    
+
         long nType = 0;
 
         hr = pAddressCaps->get_AddressCapability(AC_ADDRESSTYPES, &nType);
- 
+
 
         pAddressCaps->Release();
         pAddressCaps = NULL;
@@ -554,7 +556,7 @@ HRESULT FindAddress(IN  long nAddressType,
 
         if (nType & nAddressType)
         {
-            
+
             //
             // this address is of the right type. does it support audio?
             //
@@ -562,7 +564,7 @@ HRESULT FindAddress(IN  long nAddressType,
             ITMediaSupport *pMediaSupport = NULL;
 
             hr = pAddress->QueryInterface(IID_ITMediaSupport,
-                                           (void **)&pMediaSupport);
+                                          (void **)&pMediaSupport);
 
             if (FAILED(hr))
             {
@@ -580,15 +582,15 @@ HRESULT FindAddress(IN  long nAddressType,
                 continue;
             }
 
-            
+
             VARIANT_BOOL bAudioSupported = VARIANT_FALSE;
 
-            hr = pMediaSupport->QueryMediaType(TAPIMEDIATYPE_AUDIO, 
+            hr = pMediaSupport->QueryMediaType(TAPIMEDIATYPE_AUDIO,
                                                &bAudioSupported);
 
             pMediaSupport->Release();
             pMediaSupport = NULL;
-            
+
             if (SUCCEEDED(hr) && (VARIANT_TRUE == bAudioSupported))
             {
 
@@ -598,9 +600,9 @@ HRESULT FindAddress(IN  long nAddressType,
                 //
                 // log the name of this address
                 //
-                
+
                 BSTR bstrAddressName = NULL;
-                
+
                 hr = pAddress->get_AddressName(&bstrAddressName);
 
                 if (FAILED(hr))
@@ -635,7 +637,7 @@ HRESULT FindAddress(IN  long nAddressType,
 
     }
 
-    
+
     //
     // done with the enumeration. release.
     //
@@ -675,10 +677,10 @@ HRESULT FindAddress(IN  long nAddressType,
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HRESULT GetAddressType(IN char *pszRequestedAddressType, 
+HRESULT GetAddressType(IN char *pszRequestedAddressType,
                        IN OUT long *pnAddressType)
 {
-    
+
     //
     // match address type specified by the user to one of the known
     // address types
@@ -692,7 +694,7 @@ HRESULT GetAddressType(IN char *pszRequestedAddressType,
 
         if (0 == _stricmp(g_szAddressTypes[i], pszRequestedAddressType))
         {
-            
+
             //
             // get the address type constant corresponding to the string
             //
@@ -700,7 +702,7 @@ HRESULT GetAddressType(IN char *pszRequestedAddressType,
             *pnAddressType =  g_nAddressTypeConstants[i];
 
             LogMessage("GetAddressType: "
-                       "matched address type [%s] to address type [%d]", 
+                       "matched address type [%s] to address type [%d]",
                        pszRequestedAddressType, *pnAddressType);
 
             return S_OK;
@@ -709,8 +711,8 @@ HRESULT GetAddressType(IN char *pszRequestedAddressType,
 
     }
 
-    LogError("GetAddressType: unrecognized address type [%s]", 
-              pszRequestedAddressType);
+    LogError("GetAddressType: unrecognized address type [%s]",
+             pszRequestedAddressType);
 
     return E_FAIL;
 }
@@ -720,9 +722,9 @@ HRESULT GetAddressType(IN char *pszRequestedAddressType,
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CreateBSTRfromString
-// 
+//
 // create a bstr from a string supplied. the caller is responsible for
-// freeng the returned string by calling SysFreeString. 
+// freeng the returned string by calling SysFreeString.
 //
 // returns the allocated string or NULL if failed.
 //
@@ -736,7 +738,7 @@ BSTR CreateBSTRfromString(IN char *pszString)
     //
     // allocate buffer for resulting string of wchars
     //
-    
+
     size_t nStringLength = strlen(pszString) + 1;
 
     WCHAR *pwsString = (WCHAR *)AllocateMemory(sizeof(WCHAR) *  nStringLength);
@@ -754,11 +756,11 @@ BSTR CreateBSTRfromString(IN char *pszString)
     // convert to wchar
     //
 
-    int rc = MultiByteToWideChar(CP_ACP, 
-                                 0, 
-                                 pszString, 
-                                 -1, 
-                                 pwsString, 
+    int rc = MultiByteToWideChar(CP_ACP,
+                                 0,
+                                 pszString,
+                                 -1,
+                                 pwsString,
                                  (int)nStringLength);
 
     if (0 == rc)
@@ -809,7 +811,7 @@ HRESULT CreateAndConnectCall(IN  ITAddress *pAddress,
 
     HRESULT hr = E_FAIL;
 
-    
+
     //
     // don't return garbage
     //
@@ -822,7 +824,7 @@ HRESULT CreateAndConnectCall(IN  ITAddress *pAddress,
     //
 
     BSTR bstrDestinationAddress = CreateBSTRfromString(pszDestinationAddress);
-    
+
     ITBasicCallControl *pCall = NULL;
 
     hr = pAddress->CreateCall(bstrDestinationAddress,
@@ -892,7 +894,7 @@ HRESULT CreateAndConnectCall(IN  ITAddress *pAddress,
 // of the requested type that supports audio
 //
 // if successful, returns S_OK and connected call, error otherwise
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 HRESULT Call(IN char *szDestinationAddress,
@@ -901,7 +903,7 @@ HRESULT Call(IN char *szDestinationAddress,
 {
     HRESULT hr = E_FAIL;
 
-    
+
     //
     // we don't want to return garbage even if we fail
     //
@@ -914,7 +916,7 @@ HRESULT Call(IN char *szDestinationAddress,
     //
 
     long nAddressType = 0;
-    
+
     hr = GetAddressType(szAddressType, &nAddressType);
 
     if (FAILED(hr))
@@ -924,18 +926,18 @@ HRESULT Call(IN char *szDestinationAddress,
         return hr;
     }
 
-    
+
     //
     // find an address for this address type that supports audio
     //
-    
+
     ITAddress *pAddress = NULL;
 
     hr = FindAddress(nAddressType, &pAddress);
 
     if (FAILED(hr))
     {
-        LogError("Call: failed to find an address with audio for type %s", 
+        LogError("Call: failed to find an address with audio for type %s",
                  szAddressType);
 
         return hr;
@@ -955,7 +957,7 @@ HRESULT Call(IN char *szDestinationAddress,
 
     pAddress->Release();
     pAddress = NULL;
-    
+
     if (FAILED(hr))
     {
         LogError("Call: Failed to create and connect call");
@@ -979,19 +981,19 @@ HRESULT Call(IN char *szDestinationAddress,
 ///////////////////////////////////////////////////////////////////////////////
 //
 // FindAudioStream
-// 
+//
 // given a call, return the first outgoing audio stream.
 //
 // returns S_OK if successful, error otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HRESULT FindAudioStream( IN  ITBasicCallControl *pCall, 
+HRESULT FindAudioStream( IN  ITBasicCallControl *pCall,
                          OUT ITStream **ppStream)
 {
-    
+
     HRESULT hr = E_FAIL;
-    
+
     LogMessage("FindAudioStream: started");
 
 
@@ -1015,7 +1017,7 @@ HRESULT FindAudioStream( IN  ITBasicCallControl *pCall,
     ITStreamControl *pStreamControl = NULL;
 
     hr = pCall->QueryInterface(IID_ITStreamControl,
-                                (void **) &pStreamControl);
+                               (void **) &pStreamControl);
 
     if (FAILED(hr))
     {
@@ -1030,25 +1032,25 @@ HRESULT FindAudioStream( IN  ITBasicCallControl *pCall,
     //
 
     IEnumStream *pEnumStreams = NULL;
-    
+
     hr = pStreamControl->EnumerateStreams(&pEnumStreams);
-    
+
     pStreamControl->Release();
     pStreamControl = NULL;
 
     if (FAILED(hr))
     {
         LogError("CreateAndSelectMST: failed to enumerate streams on call");
-        
+
         return hr;
     }
 
-    
+
     //
     // walk through the streams on the call
     // return the first outgoing audio stream
     //
-  
+
     while (TRUE)
     {
         ITStream *pStream = NULL;
@@ -1076,10 +1078,10 @@ HRESULT FindAudioStream( IN  ITBasicCallControl *pCall,
         if (FAILED(hr))
         {
             LogError("CreateAndSelectMST: Failed to get stream direction");
-            
+
             pStream->Release();
             pStream = NULL;
-            
+
 
             //
             // proceed to the next stream, if any
@@ -1097,9 +1099,9 @@ HRESULT FindAudioStream( IN  ITBasicCallControl *pCall,
         {
 
             //
-            // incoming stream. we need outgoing. 
+            // incoming stream. we need outgoing.
             // release the stream and continue
-            // 
+            //
 
             pStream->Release();
             pStream = NULL;
@@ -1122,7 +1124,7 @@ HRESULT FindAudioStream( IN  ITBasicCallControl *pCall,
 
             pStream->Release();
             pStream = NULL;
-            
+
             continue;
         }
 
@@ -1193,12 +1195,12 @@ HRESULT FindAudioStream( IN  ITBasicCallControl *pCall,
 
 ITTerminal *CreateCaptureMediaStreamingTerminal(IN ITBasicCallControl *pCall)
 {
-    
+
     HRESULT hr = E_FAIL;
 
 
     //
-    // get the call's call info so we can get the call's address 
+    // get the call's call info so we can get the call's address
     //
 
     ITCallInfo *pCallInfo = NULL;
@@ -1221,7 +1223,7 @@ ITTerminal *CreateCaptureMediaStreamingTerminal(IN ITBasicCallControl *pCall)
     ITAddress *pAddress = NULL;
 
     hr = pCallInfo->get_Address(&pAddress);
-    
+
     pCallInfo->Release();
     pCallInfo = NULL;
 
@@ -1232,17 +1234,17 @@ ITTerminal *CreateCaptureMediaStreamingTerminal(IN ITBasicCallControl *pCall)
         return NULL;
     }
 
-    
+
     //
     // get the terminal support interface
     //
 
     ITTerminalSupport *pTerminalSupport = NULL;
 
-    hr = pAddress->QueryInterface( IID_ITTerminalSupport, 
+    hr = pAddress->QueryInterface( IID_ITTerminalSupport,
                                    (void **)&pTerminalSupport );
 
-    
+
     pAddress->Release();
     pAddress = NULL;
 
@@ -1255,7 +1257,7 @@ ITTerminal *CreateCaptureMediaStreamingTerminal(IN ITBasicCallControl *pCall)
         return NULL;
     }
 
-    
+
     //
     // get string for the terminal's class id
     //
@@ -1303,12 +1305,12 @@ ITTerminal *CreateCaptureMediaStreamingTerminal(IN ITBasicCallControl *pCall)
         return NULL;
     }
 
-    
+
 
     //
     // create media streaming terminal
     //
-    
+
     ITTerminal *pTerminal = NULL;
 
     hr = pTerminalSupport->CreateTerminal(bstrTerminalClass,
@@ -1316,7 +1318,7 @@ ITTerminal *CreateCaptureMediaStreamingTerminal(IN ITBasicCallControl *pCall)
                                           TD_CAPTURE,
                                           &pTerminal);
 
-    
+
     //
     // release resources no longer needed
     //
@@ -1357,7 +1359,7 @@ ITTerminal *CreateCaptureMediaStreamingTerminal(IN ITBasicCallControl *pCall)
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HRESULT SetTerminalFormat(IN ITTerminal *pTerminal, 
+HRESULT SetTerminalFormat(IN ITTerminal *pTerminal,
                           IN WAVEFORMATEX *pWaveFormat)
 {
 
@@ -1371,23 +1373,23 @@ HRESULT SetTerminalFormat(IN ITTerminal *pTerminal,
     LogMessage("SetTerminalFormat: starting.");
     LogFormat(pWaveFormat);
 
-    
+
     ITAMMediaFormat *pIMediaFormat = NULL;
-    
-    hr = pTerminal->QueryInterface(IID_ITAMMediaFormat, 
+
+    hr = pTerminal->QueryInterface(IID_ITAMMediaFormat,
                                    (void **)&pIMediaFormat);
 
-    if (FAILED(hr)) 
-    { 
-    
+    if (FAILED(hr))
+    {
+
         LogError("SetTerminalFormat: Failed to set terminal format");
 
-        return hr; 
+        return hr;
     }
 
 
     //
-    // fill the media format structure 
+    // fill the media format structure
     //
 
     AM_MEDIA_TYPE MediaType;
@@ -1402,18 +1404,18 @@ HRESULT SetTerminalFormat(IN ITTerminal *pTerminal,
     MediaType.formattype           = FORMAT_WaveFormatEx;
     MediaType.pUnk                 = NULL;
 
-    MediaType.cbFormat             = sizeof(WAVEFORMATEX) + 
+    MediaType.cbFormat             = sizeof(WAVEFORMATEX) +
                                      pWaveFormat->cbSize;
 
     MediaType.pbFormat             = (BYTE*)pWaveFormat;
 
-    
+
     //
-    // set the requested format 
+    // set the requested format
     //
 
     hr = pIMediaFormat->put_MediaFormat(&MediaType);
-    
+
     if (FAILED(hr))
     {
 
@@ -1442,7 +1444,7 @@ HRESULT SetTerminalFormat(IN ITTerminal *pTerminal,
                 LogFormat((WAVEFORMATEX*) pMediaFormat->pbFormat);
 
             }
-            else 
+            else
             {
 
                 LogError("SetTerminalFormat: "
@@ -1472,7 +1474,7 @@ HRESULT SetTerminalFormat(IN ITTerminal *pTerminal,
     pIMediaFormat = NULL;
 
     LogMessage("SetTerminalFormat: completed");
-    
+
     return hr;
 }
 
@@ -1491,27 +1493,27 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
     //
     // different buffer sizes may produce different sound quality, depending
     // on the underlying transport that is being used.
-    // 
+    //
     // this function illustrates how an app can control the number and size of
     // buffers. A multiple of 30 ms (480 bytes at 16-bit 8 KHz PCM) is the most
     // appropriate sample size for IP (especailly G.723.1).
     //
     // However, small buffers can cause poor audio quality on some voice boards.
     //
-    // If this method is not called, the allocator properties suggested by the 
+    // If this method is not called, the allocator properties suggested by the
     // connecting filter will be used.
     //
     // Note: do not set allocator properties in the applications unless you are
     // sure that sound quality will not degrade as a result. Some MSPs can have
-    // their own preferred allocator properties, and will not be able to 
-    // provide the best quality if the app sets its own properties, different 
+    // their own preferred allocator properties, and will not be able to
+    // provide the best quality if the app sets its own properties, different
     // from what is preferred by the msp.
     //
     // Also note that ITAllocatorProperties::SetBufferSize allows the app to
-    // specify preferred size of the buffer allocated to the application 
+    // specify preferred size of the buffer allocated to the application
     // without affecting terminal's allocator properties.
     //
-    
+
     LogMessage("SetAllocatorProperties: starting.");
 
 
@@ -1525,7 +1527,7 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
     ITAllocatorProperties *pITAllocatorProperties = NULL;
 
 
-    hr = pTerminal->QueryInterface(IID_ITAllocatorProperties, 
+    hr = pTerminal->QueryInterface(IID_ITAllocatorProperties,
                                    (void **)&pITAllocatorProperties);
 
 
@@ -1537,19 +1539,19 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
         return hr;
     }
 
-    
+
     //
     // configure allocator properties
     //
 
     ALLOCATOR_PROPERTIES AllocProps;
-    
+
     AllocProps.cbBuffer   = 4800;
     AllocProps.cBuffers   = 5;
     AllocProps.cbAlign    = 1;
     AllocProps.cbPrefix   = 0;
 
-    
+
     hr = pITAllocatorProperties->SetAllocatorProperties(&AllocProps);
 
     if (FAILED(hr))
@@ -1563,10 +1565,10 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
         return hr;
     }
 
-    
+
     //
-    // ask media streaming terminal to allocate buffers for us. 
-    // TRUE is the default, so strictly speaking, we didn't have to call 
+    // ask media streaming terminal to allocate buffers for us.
+    // TRUE is the default, so strictly speaking, we didn't have to call
     // this method.
     //
 
@@ -1576,7 +1578,7 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
     pITAllocatorProperties->Release();
     pITAllocatorProperties = NULL;
 
-    
+
     if (FAILED(hr))
     {
         LogError("SetAllocatorProperties: failed to SetAllocateBuffers, "
@@ -1601,16 +1603,16 @@ HRESULT SetAllocatorProperties(IN ITTerminal *pTerminal)
 // ReadFileIntoTerminal
 //
 // read data from the file and submit it to media streaming terminal
-// 
-// exit when finished reading the file, user requested exit by pressing 
+//
+// exit when finished reading the file, user requested exit by pressing
 // ctrl+break, or the connection broke
 //
-// returns S_FALSE when finished streaming the file, S_OK if user requested 
+// returns S_FALSE when finished streaming the file, S_OK if user requested
 // exit, failure otherwise
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader, 
+HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
                              IN ITTerminal *pPlaybackTerminal)
 {
 
@@ -1628,7 +1630,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
     IMediaStream *pTerminalMediaStream = NULL;
 
-    hr = pPlaybackTerminal->QueryInterface(IID_IMediaStream, 
+    hr = pPlaybackTerminal->QueryInterface(IID_IMediaStream,
                                            (void**)&pTerminalMediaStream);
 
     if (FAILED(hr))
@@ -1639,23 +1641,23 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
         return hr;
     }
 
-    
+
     //
-    // create a queue (STL deque) that will hold all the samples that we ever 
+    // create a queue (STL deque) that will hold all the samples that we ever
     // submitted to media streaming terminal
     //
-    // we need this so when we are finished reading the file, we can go through 
-    // the list of all the samples that we have submitted and make sure mst 
+    // we need this so when we are finished reading the file, we can go through
+    // the list of all the samples that we have submitted and make sure mst
     // is finished processing them
     //
-    // note that samples get reused, the same samples will be put in the queue 
-    // more than once. so the size of the queue will be proportional to the 
+    // note that samples get reused, the same samples will be put in the queue
+    // more than once. so the size of the queue will be proportional to the
     // size of the file being played. this might cause problems if
     // the file is big or the source of the samples is unlimited (live audio
     // feed). In this case, the logic can be modified to only enqueue each
     // sample once, by comparing against existing queue entries.
-    // 
-    
+    //
+
     std::deque<IStreamSample*> SampleQ;
 
 
@@ -1665,7 +1667,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
     ULONG nSampleCount = 0;
 
-    
+
     //
     // keep reading samples from file and sending them.
     // (until user requests exit, there is no more data, or failure)
@@ -1673,14 +1675,14 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
     while (!g_bExitRequested)
     {
-       
+
         //
         // allocate a sample on the terminal's media stream
         //
-        // Note: the call to AllocateSample() will block if we filled all the 
-        // samples with data, and there are no more samples for us to fill 
+        // Note: the call to AllocateSample() will block if we filled all the
+        // samples with data, and there are no more samples for us to fill
         // (waiting for media streaming terminal to process samples we have
-        // submitted). When MST is is done with at least one sample, the call 
+        // submitted). When MST is is done with at least one sample, the call
         // will return. This logic will ensure that MST always has work and is
         // never starved for samples.
         //
@@ -1699,13 +1701,13 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
 
         //
-        // get IMemoryData on the sample so we can get to the sample's memory 
+        // get IMemoryData on the sample so we can get to the sample's memory
         // data
         //
 
         IMemoryData *pSampleMemoryData = NULL;
 
-        hr = pStreamSample->QueryInterface(IID_IMemoryData, 
+        hr = pStreamSample->QueryInterface(IID_IMemoryData,
                                            (void**)&pSampleMemoryData);
 
         if (FAILED(hr))
@@ -1752,7 +1754,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
         //
 
         LONG nBytesRead = 0;
-        
+
         hr = pFileReader->Read(pBuffer, nBufferSize, &nBytesRead);
 
         if (FAILED(hr))
@@ -1786,11 +1788,11 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
         }
 
 
-        
+
         //
         // tell the sample how many useful bytes are in the sample's buffer
         //
-        
+
         hr = pSampleMemoryData->SetActual(nBytesRead);
 
         pSampleMemoryData->Release();
@@ -1809,11 +1811,11 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
         }
 
-        
+
         //
-        // we are done with the sample. now let media streaming terminal 
-        // process it asynchronously. when the terminal is finished with 
-        // the sample, this sample will be returned to us from the call 
+        // we are done with the sample. now let media streaming terminal
+        // process it asynchronously. when the terminal is finished with
+        // the sample, this sample will be returned to us from the call
         // to AllocateSample()
         //
 
@@ -1828,24 +1830,24 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
         // attempting to use the stream before the stream is active would
         // result in the Update() returning error VFW_E_NOT_COMMITTED.
         //
-        // Usually an application would not start using the stream until 
+        // Usually an application would not start using the stream until
         // it gets media event CME_STREAM_ACTIVE. This requires the app
-        // to register a callback interface by calling 
-        // ITTAPI::RegisterCallNotifications. Refer to documentation and other 
+        // to register a callback interface by calling
+        // ITTAPI::RegisterCallNotifications. Refer to documentation and other
         // samples for more details on how this is done.
         //
         // To keep things simple, this sample doesn't do event processing.
-        // To deal with the problem of using the stream before it becomes 
+        // To deal with the problem of using the stream before it becomes
         // active, we retry Update() until we succeed.
         //
-        // Note that there is still a danger that the stream becomes 
+        // Note that there is still a danger that the stream becomes
         // disconnected before we process the first sample, in which case
         // we will be stuck in a loop, which can be exited when the user
         // presses ctrl+break
         //
 
         while ( (hr == VFW_E_NOT_COMMITTED)
-                && (0 == nSampleCount) 
+                && (0 == nSampleCount)
                 && !g_bExitRequested )
         {
             LogMessage("ReadFileIntoTerminal: "
@@ -1868,7 +1870,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
         }
 
-        
+
         //
         // the sample was submitted successfully. update count
         //
@@ -1877,7 +1879,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
         if (nSampleCount == 300)
         {
-            
+
             LogError("ReadFileIntoTerminal: sleeping 10 seconds");
 
             Sleep(30000);
@@ -1886,7 +1888,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
         }
 
         //
-        // keep the sample we have just submitted. on exit, we will wait 
+        // keep the sample we have just submitted. on exit, we will wait
         // for it to be processed by mst
         //
 
@@ -1897,17 +1899,17 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
     LogMessage("ReadFileIntoTerminal: processed %lu samples", nSampleCount);
 
-    
+
     //
-    // walk through the list of all the samples we have submitted and wait for 
+    // walk through the list of all the samples we have submitted and wait for
     // each sample to be done
     //
-    
+
     while (!SampleQ.empty())
     {
 
         //
-        // get and remove a sample from the queue 
+        // get and remove a sample from the queue
         //
 
         IStreamSample *pStreamSample = SampleQ.front();
@@ -1916,7 +1918,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
 
         //
-        // wait for the Media Streaming Terminal to finish 
+        // wait for the Media Streaming Terminal to finish
         // processing the sample
         //
 
@@ -1935,7 +1937,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
     LogMessage("ReadFileIntoTerminal: released all submitted samples");
 
-    
+
     //
     // tell media streaming terminal's stream that there is no more data
     //
@@ -1953,7 +1955,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
     //
     // if we disconnect the call right away, the call may be dropped before
-    // receiver gets all the samples. An application should wait for 
+    // receiver gets all the samples. An application should wait for
     // STREAM_INACTIVE media event before disconnecting the call.
     //
     // Since, for simplicity, we are not processing events in this sample,
@@ -1968,7 +1970,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 
 
     LogMessage("ReadFileIntoTerminal: completed");
-   
+
     return hr;
 }
 
@@ -1978,7 +1980,7 @@ HRESULT ReadFileIntoTerminal(IN CAVIFileReader *pFileReader,
 // CreateAndSelectTerminal
 //
 // creates a media streaming terminal for capture, sets requested format,
-// sets allocator properties, and selects the terminal on the call's first 
+// sets allocator properties, and selects the terminal on the call's first
 // outgoing audio stream.
 //
 // returns S_OK and terminal if success
@@ -1993,7 +1995,7 @@ HRESULT CreateAndSelectTerminal(IN ITBasicCallControl *pCall,
 
     HRESULT hr = E_FAIL;
 
-    
+
     //
     // don't return garbage
     //
@@ -2021,7 +2023,7 @@ HRESULT CreateAndSelectTerminal(IN ITBasicCallControl *pCall,
     //
     // create media streaming terminal
     //
-    
+
     ITTerminal *pTerminal = NULL;
 
     pTerminal = CreateCaptureMediaStreamingTerminal(pCall);
@@ -2041,7 +2043,7 @@ HRESULT CreateAndSelectTerminal(IN ITBasicCallControl *pCall,
 
 
     //
-    // tell media streaming terminal format of the data 
+    // tell media streaming terminal format of the data
     // we are going to send. If the terminal cannot handle this format
     // return an error
     //
@@ -2052,7 +2054,7 @@ HRESULT CreateAndSelectTerminal(IN ITBasicCallControl *pCall,
     {
         LogMessage("CreateAndSelectTerminal: "
                    "terminal does not support requested format");
-    
+
         pStream->Release();
         pStream = NULL;
 
@@ -2064,17 +2066,17 @@ HRESULT CreateAndSelectTerminal(IN ITBasicCallControl *pCall,
 
 
     //
-    // set allocator properties. 
+    // set allocator properties.
     //
-    // calling ITAllocatorProperties::SetAllocatorProperties with the 
+    // calling ITAllocatorProperties::SetAllocatorProperties with the
     // properties that are not optimal for the MSP in use can result
     // in loss of sound quality.
     //
     // So make sure that you only call this function if you know you
     // need it.
-    // 
+    //
     // Do not use ITAllocatorProperties::SetAllocatorProperties to set
-    // the size of the buffer you want to get when you fill samples, 
+    // the size of the buffer you want to get when you fill samples,
     // ITAllocatorProperties::SetBufferSize will accomplish that without
     // affecting terminal's allocator properties.
     //
@@ -2106,7 +2108,7 @@ HRESULT CreateAndSelectTerminal(IN ITBasicCallControl *pCall,
 
     pStream->Release();
     pStream = NULL;
-    
+
 
     if (FAILED(hr))
     {
@@ -2117,16 +2119,16 @@ HRESULT CreateAndSelectTerminal(IN ITBasicCallControl *pCall,
 
     }
 
-    
+
     //
-    // if everything went smoothly pTerminal has a pointer to configured 
-    // and selected terminal. otherwise pTerminal is null and all resources 
+    // if everything went smoothly pTerminal has a pointer to configured
+    // and selected terminal. otherwise pTerminal is null and all resources
     // have been released
     //
 
     *ppTerminal = pTerminal;
 
-    
+
     return hr;
 
 }
@@ -2140,16 +2142,16 @@ HRESULT CreateAndSelectTerminal(IN ITBasicCallControl *pCall,
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HRESULT StreamFile(IN char *szFileName, 
-                   IN char *szAddressString, 
+HRESULT StreamFile(IN char *szFileName,
+                   IN char *szAddressString,
                    IN char *szAddressType)
 {
 
     HRESULT hr = E_FAIL;
 
 
-    LogMessage("StreamFile: file [%s] address [%s] address type [%s]", 
-                szFileName, szAddressString, szAddressType);
+    LogMessage("StreamFile: file [%s] address [%s] address type [%s]",
+               szFileName, szAddressString, szAddressType);
 
 
     //
@@ -2203,17 +2205,17 @@ HRESULT StreamFile(IN char *szFileName,
             // construct the file reader object
             // to be used to read file's data
             //
-            // note: If you want to play more than one file in one call, reuse 
-            // the same terminal for the duration of the call. Under 
+            // note: If you want to play more than one file in one call, reuse
+            // the same terminal for the duration of the call. Under
             // Windows 2000, all data submitted via the Media Streaming Terminal
-            // during the call must have the same format. Changing a Media 
-            // Streaming Terminal's format after it is initially configured will 
-            // always return an error code, regardless of the OS version. 
+            // during the call must have the same format. Changing a Media
+            // Streaming Terminal's format after it is initially configured will
+            // always return an error code, regardless of the OS version.
             // Unselecting a Media Streaming Terminal and creating and selecting
-            // a new terminal on the same stream from the same call with a 
-            // different format is not supported on Windows 2000. This may, 
-            // however, be supported on other versions of Windows. For the latest 
-            // information on which versions of Windows support this, please 
+            // a new terminal on the same stream from the same call with a
+            // different format is not supported on Windows 2000. This may,
+            // however, be supported on other versions of Windows. For the latest
+            // information on which versions of Windows support this, please
             // refer to the latest Platform SDK documentation.
             //
 
@@ -2228,8 +2230,8 @@ HRESULT StreamFile(IN char *szFileName,
 
             WAVEFORMATEX *pWaveFormat = NULL;
 
-            if (SUCCEEDED(hr) && 
-                SUCCEEDED(hr = FileReader.GetFormat(&pWaveFormat)))
+            if (SUCCEEDED(hr) &&
+                    SUCCEEDED(hr = FileReader.GetFormat(&pWaveFormat)))
             {
 
                 //
@@ -2293,7 +2295,7 @@ HRESULT StreamFile(IN char *szFileName,
 
 
             //
-            // there is not much we can do if disconnect fails, 
+            // there is not much we can do if disconnect fails,
             // so ignore its return code
             //
 
@@ -2305,7 +2307,7 @@ HRESULT StreamFile(IN char *szFileName,
         }   // call connected
         else
         {
-        
+
             LogError("StreamFile: failed to connect to %s", szAddressString);
 
         }
@@ -2327,7 +2329,7 @@ HRESULT StreamFile(IN char *szFileName,
 
 
     CoUninitialize();
-        
+
     return hr;
 }
 
@@ -2345,8 +2347,8 @@ void HelpScreen()
 {
 
     printf("Usage:\n\n"
-               "  TAPISend filename address addresstype\n\n"
-               "  where addresstype is [ ");
+           "  TAPISend filename address addresstype\n\n"
+           "  where addresstype is [ ");
 
     int i=0;
     for ( i = 0; i < g_nNumberOfAddressTypes - 1; ++i)
@@ -2360,16 +2362,16 @@ void HelpScreen()
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // CtrlHandler
 //
-// handler for ctrl+break, close, logoff and shutdown. 
+// handler for ctrl+break, close, logoff and shutdown.
 //
 // sets g_bExitRequested flag signaling shutdown. this ensures graceful exit
-// 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
-BOOL CtrlHandler(DWORD nEventType) 
+BOOL CtrlHandler(DWORD nEventType)
 {
 
     //
@@ -2389,23 +2391,23 @@ BOOL CtrlHandler(DWORD nEventType)
     // is a signal for the application to exit.
     //
 
-    switch (nEventType) 
-    { 
- 
-        case CTRL_C_EVENT: 
-        case CTRL_CLOSE_EVENT:
-        case CTRL_BREAK_EVENT:
-        case CTRL_LOGOFF_EVENT:
-        case CTRL_SHUTDOWN_EVENT:
+    switch (nEventType)
+    {
 
-            LogMessage("CtrlHandler: Initiating shutdown.");
+    case CTRL_C_EVENT:
+    case CTRL_CLOSE_EVENT:
+    case CTRL_BREAK_EVENT:
+    case CTRL_LOGOFF_EVENT:
+    case CTRL_SHUTDOWN_EVENT:
+
+        LogMessage("CtrlHandler: Initiating shutdown.");
 
 
-            //
-            // signal shutdown
-            //
+        //
+        // signal shutdown
+        //
 
-            g_bExitRequested = TRUE;
+        g_bExitRequested = TRUE;
 
 
     }
@@ -2416,10 +2418,10 @@ BOOL CtrlHandler(DWORD nEventType)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// main 
+// main
 //
 // usage: TAPISend filename address addresstype
-// 
+//
 // returns 0 if success, 1 if failure
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -2462,7 +2464,7 @@ int __cdecl main(int argc, char* argv[])
     //
     // exiting... we no longer want to handle ctrl+c and ctrl+break
     //
-    
+
     SetConsoleCtrlHandler( (PHANDLER_ROUTINE) CtrlHandler, FALSE);
 
 

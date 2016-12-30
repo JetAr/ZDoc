@@ -1,7 +1,7 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: SysClock.cpp
 //
-// Desc: DirectShow base classes - implements a system clock based on 
+// Desc: DirectShow base classes - implements a system clock based on
 //       IReferenceClock.
 //
 // Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
@@ -19,7 +19,8 @@
    being created. The class factory will call the static CreateInstance
    function when it is asked to create a CLSID_SystemClock object */
 
-CFactoryTemplate g_Templates[1] = {
+CFactoryTemplate g_Templates[1] =
+{
     {&CLSID_SystemClock, CSystemClock::CreateInstance}
 };
 
@@ -67,7 +68,7 @@ CSystemClock::GetClassID(__out CLSID *pClsID)
 }
 
 
-STDMETHODIMP 
+STDMETHODIMP
 CSystemClock::SetClockDelta(REFERENCE_TIME rtDelta)
 {
     return SetTimeDelta(rtDelta);

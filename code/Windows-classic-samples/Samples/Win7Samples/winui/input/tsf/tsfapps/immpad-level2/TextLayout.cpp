@@ -1,4 +1,4 @@
-
+﻿
 
 #include "private.h"
 #include "TextLayout.h"
@@ -21,15 +21,15 @@ BOOL CTextLayout::Layout(HDC hdc, const WCHAR *psz,  UINT nCnt)
     {
         switch (psz[i])
         {
-            case 0x0d:
-            case 0x0a:
-                bNewLine = TRUE;
-                break;
-            default:
-                if (bNewLine)
-                    _nLineCnt++;
-                bNewLine = FALSE;
-                break;
+        case 0x0d:
+        case 0x0a:
+            bNewLine = TRUE;
+            break;
+        default:
+            if (bNewLine)
+                _nLineCnt++;
+            bNewLine = FALSE;
+            break;
         }
     }
 
@@ -44,23 +44,23 @@ BOOL CTextLayout::Layout(HDC hdc, const WCHAR *psz,  UINT nCnt)
     {
         switch (psz[i])
         {
-            case 0x0d:
-            case 0x0a:
-                bNewLine = TRUE;
-                break;
-            default:
-                if (bNewLine)
-                {
-                    nCurrentLine++;
-                    _prgLines[nCurrentLine].nPos = i;
-                    _prgLines[nCurrentLine].nCnt = 1;
-                }
-                else
-                {
-                    _prgLines[nCurrentLine].nCnt++;
-                }
-                bNewLine = FALSE;
-                break;
+        case 0x0d:
+        case 0x0a:
+            bNewLine = TRUE;
+            break;
+        default:
+            if (bNewLine)
+            {
+                nCurrentLine++;
+                _prgLines[nCurrentLine].nPos = i;
+                _prgLines[nCurrentLine].nCnt = 1;
+            }
+            else
+            {
+                _prgLines[nCurrentLine].nCnt++;
+            }
+            bNewLine = FALSE;
+            break;
         }
     }
 
@@ -122,16 +122,16 @@ BOOL CTextLayout::Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, 
     {
         if (_prgLines[i].nCnt)
         {
-            TextOut(hdc, 
-                    ptCurrent.x, 
-                    ptCurrent.y, 
-                    psz + _prgLines[i].nPos, 
+            TextOut(hdc,
+                    ptCurrent.x,
+                    ptCurrent.y,
+                    psz + _prgLines[i].nPos,
                     _prgLines[i].nCnt);
         }
         ptCurrent.x = 0;
         ptCurrent.y += _nLineHeight;
     }
-   
+
     _fCaret = FALSE;
 
     // Render selection/caret
@@ -141,7 +141,7 @@ BOOL CTextLayout::Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, 
         for (UINT i = 0; i < _nLineCnt; i++)
         {
             if ((nSelEnd >= _prgLines[i].nPos) &&
-                (nSelStart <= _prgLines[i].nPos + _prgLines[i].nCnt))
+                    (nSelStart <= _prgLines[i].nPos + _prgLines[i].nCnt))
             {
                 UINT nSelStartInLine = 0;
                 UINT nSelEndInLine = _prgLines[i].nCnt;
@@ -151,7 +151,7 @@ BOOL CTextLayout::Render(HDC hdc, const WCHAR *psz,  UINT nCnt, UINT nSelStart, 
 
                 if (nSelEnd < _prgLines[i].nPos + _prgLines[i].nCnt)
                     nSelEndInLine = nSelEnd - _prgLines[i].nPos;
-    
+
                 if (nSelStartInLine != nSelEndInLine)
                 {
                     for (UINT j = nSelStartInLine; j < nSelEndInLine; j++)
@@ -219,23 +219,23 @@ BOOL CTextLayout::RectFromCharPos(UINT nPos, RECT *prc)
     for (UINT i = 0; i < _nLineCnt; i++)
     {
         if (nPos < _prgLines[i].nPos)
-           continue;
+            continue;
 
         if (nPos >= _prgLines[i].nPos + _prgLines[i].nCnt)
         {
-           if (((nPos -_prgLines[i].nPos) > 0) && (nPos == _prgLines[i].nPos + _prgLines[i].nCnt))
-           {
-               *prc = _prgLines[i].prgCharInfo[nPos - _prgLines[i].nPos - 1].rc;
-               prc->left = prc->right;
-               return TRUE;
-           }
-           continue;
+            if (((nPos -_prgLines[i].nPos) > 0) && (nPos == _prgLines[i].nPos + _prgLines[i].nCnt))
+            {
+                *prc = _prgLines[i].prgCharInfo[nPos - _prgLines[i].nPos - 1].rc;
+                prc->left = prc->right;
+                return TRUE;
+            }
+            continue;
         }
-        
+
         *prc = _prgLines[i].prgCharInfo[nPos - _prgLines[i].nPos].rc;
         return TRUE;
     }
-    
+
     prc->top = _nLineCnt * _nLineHeight;
     prc->bottom = prc->top + _nLineHeight;
     return TRUE;
@@ -278,7 +278,7 @@ UINT CTextLayout::FineFirstEndCharPosInLine(UINT uCurPos, BOOL bFirst)
     for (UINT i = 0; i < _nLineCnt; i++)
     {
         if ((_prgLines[i].nPos <= uCurPos) &&
-            (_prgLines[i].nPos + _prgLines[i].nCnt >= uCurPos))
+                (_prgLines[i].nPos + _prgLines[i].nCnt >= uCurPos))
         {
             if (bFirst)
             {

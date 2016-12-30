@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // BasicPlayback.h: Main header for the application.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -12,7 +12,7 @@
 
 #pragma once
 
-#define WINVER 0x0501       
+#define WINVER 0x0501
 #define _WIN32_WINNT 0x0501
 
 // Windows Header Files:

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -51,7 +51,8 @@ wmain (
     // Have we been launched as part of a restart?
     //
     if (argc >= 2 &&
-        0 == _wcsicmp (argv[1], L"/restarted")) {
+            0 == _wcsicmp (argv[1], L"/restarted"))
+    {
 
         wprintf (L"The application has been restarted.\n");
         wprintf (L"Press ENTER to exit.\n");
@@ -69,7 +70,8 @@ wmain (
     hr = RegisterApplicationRestart (L"/restarted",
                                      0);
 
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"RegisterApplicationRestart failed with 0x%08X\n", hr);
         return -1;
     }
@@ -81,7 +83,8 @@ wmain (
     //
     wprintf (L"Waiting 62 seconds...");
 
-    for (i = 0; i < 62; ++i) {
+    for (i = 0; i < 62; ++i)
+    {
         wprintf (L" %d", i);
 
         Sleep (1000);

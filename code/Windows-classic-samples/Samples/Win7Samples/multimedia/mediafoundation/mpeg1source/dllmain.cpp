@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // dllmain.cpp : Implements DLL exports and COM class factory
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -31,8 +31,8 @@
 #include <initguid.h>
 
 // {EFE6208A-0A2C-49fa-8A01-3768B559B6DA}
-DEFINE_GUID(CLSID_MFSampleMPEG1ByteStreamHandler, 
-0xefe6208a, 0xa2c, 0x49fa, 0x8a, 0x1, 0x37, 0x68, 0xb5, 0x59, 0xb6, 0xda);
+DEFINE_GUID(CLSID_MFSampleMPEG1ByteStreamHandler,
+            0xefe6208a, 0xa2c, 0x49fa, 0x8a, 0x1, 0x37, 0x68, 0xb5, 0x59, 0xb6, 0xda);
 
 HMODULE g_hModule;      // DLL module handle
 
@@ -46,7 +46,7 @@ ClassFactoryData g_ClassFactories[] =
 {
     {   &CLSID_MFSampleMPEG1ByteStreamHandler,      MPEG1ByteStreamHandler::CreateInstance }
 };
-      
+
 DWORD g_numClassFactories = ARRAYSIZE(g_ClassFactories);
 
 // Text strings
@@ -58,8 +58,8 @@ const TCHAR* sByteStreamHandlerDescription = TEXT("MPEG1 Source ByteStreamHandle
 const TCHAR* sFileExtension = TEXT(".mpg");
 
 // Registry location for bytestream handlers.
-const TCHAR* REGKEY_MF_BYTESTREAM_HANDLERS 
-                = TEXT("Software\\Microsoft\\Windows Media Foundation\\ByteStreamHandlers");
+const TCHAR* REGKEY_MF_BYTESTREAM_HANDLERS
+    = TEXT("Software\\Microsoft\\Windows Media Foundation\\ByteStreamHandlers");
 
 
 // Forward declarations
@@ -72,8 +72,8 @@ HRESULT UnregisterByteStreamHandler(const GUID& guid, const TCHAR *sFileExtensio
 // Misc Registry helpers
 HRESULT SetKeyValue(HKEY hKey, const TCHAR *sName, const TCHAR *sValue);
 
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  ul_reason_for_call, 
+BOOL APIENTRY DllMain( HANDLE hModule,
+                       DWORD  ul_reason_for_call,
                        LPVOID lpReserved
                      )
 {
@@ -114,18 +114,18 @@ STDAPI DllRegisterServer()
 
     // Register the bytestream handler's CLSID as a COM object.
     CHECK_HR(hr = RegisterObject(
-            g_hModule,                              // Module handle
-            CLSID_MFSampleMPEG1ByteStreamHandler,   // CLSID 
-            sByteStreamHandlerDescription,          // Description
-            TEXT("Both")                            // Threading model
-            ));
+                      g_hModule,                              // Module handle
+                      CLSID_MFSampleMPEG1ByteStreamHandler,   // CLSID
+                      sByteStreamHandlerDescription,          // Description
+                      TEXT("Both")                            // Threading model
+                  ));
 
     // Register the bytestream handler as the handler for the MPEG-1 file extension.
     CHECK_HR(hr = RegisterByteStreamHandler(
-        CLSID_MFSampleMPEG1ByteStreamHandler,       // CLSID 
-        sFileExtension,                             // Supported file extension
-        sByteStreamHandlerDescription               // Description
-        ));
+                      CLSID_MFSampleMPEG1ByteStreamHandler,       // CLSID
+                      sFileExtension,                             // Supported file extension
+                      sByteStreamHandlerDescription               // Description
+                  ));
 
 done:
     return hr;
@@ -187,16 +187,16 @@ HRESULT CreateRegistryKey(HKEY hKey, LPCTSTR subkey, HKEY *phKey)
     assert(phKey != NULL);
 
     LONG lreturn = RegCreateKeyEx(
-        hKey,                 // parent key
-        subkey,               // name of subkey
-        0,                    // reserved
-        NULL,                 // class string (can be NULL)
-        REG_OPTION_NON_VOLATILE,
-        KEY_ALL_ACCESS,
-        NULL,                 // security attributes
-        phKey,
-        NULL                  // receives the "disposition" (is it a new or existing key)
-        );
+                       hKey,                 // parent key
+                       subkey,               // name of subkey
+                       0,                    // reserved
+                       NULL,                 // class string (can be NULL)
+                       REG_OPTION_NON_VOLATILE,
+                       KEY_ALL_ACCESS,
+                       NULL,                 // security attributes
+                       phKey,
+                       NULL                  // receives the "disposition" (is it a new or existing key)
+                   );
 
     return HRESULT_FROM_WIN32(lreturn);
 }
@@ -220,7 +220,7 @@ HRESULT RegisterByteStreamHandler(const GUID& guid, const TCHAR *sFileExtension,
     HRESULT hr = S_OK;
 
     // Open HKCU/<byte stream handlers>/<file extension>
-    
+
     // Create {clsid} = <description> key
 
     HKEY    hKey = NULL;
@@ -230,7 +230,7 @@ HRESULT RegisterByteStreamHandler(const GUID& guid, const TCHAR *sFileExtension,
 
     size_t  cchDescription = 0;
     hr = StringCchLength(sDescription, STRSAFE_MAX_CCH, &cchDescription);
-    
+
     if (SUCCEEDED(hr))
     {
         hr = StringFromGUID2(guid, szCLSID, CHARS_IN_GUID);
@@ -249,13 +249,13 @@ HRESULT RegisterByteStreamHandler(const GUID& guid, const TCHAR *sFileExtension,
     if (SUCCEEDED(hr))
     {
         hr = RegSetValueEx(
-            hSubKey,
-            szCLSID,
-            0,
-            REG_SZ,
-            (BYTE*)sDescription,
-            static_cast<DWORD>((cchDescription + 1) * sizeof(TCHAR))
-            );
+                 hSubKey,
+                 szCLSID,
+                 0,
+                 REG_SZ,
+                 (BYTE*)sDescription,
+                 static_cast<DWORD>((cchDescription + 1) * sizeof(TCHAR))
+             );
     }
 
     if (hSubKey != NULL)
@@ -282,13 +282,13 @@ HRESULT UnregisterByteStreamHandler(const GUID& guid, const TCHAR *sFileExtensio
 
     // Create the subkey name.
     CHECK_HR(hr = StringCchPrintf(
-        szKey, MAX_PATH, TEXT("%s\\%s"), REGKEY_MF_BYTESTREAM_HANDLERS, sFileExtension));
+                      szKey, MAX_PATH, TEXT("%s\\%s"), REGKEY_MF_BYTESTREAM_HANDLERS, sFileExtension));
 
     // Create the CLSID name in canonical form.
     CHECK_HR(hr = StringFromGUID2(guid, szCLSID, CHARS_IN_GUID));
 
-    // Delete the CLSID entry under the subkey. 
-    // Note: There might be multiple entries for this file extension, so we should not delete 
+    // Delete the CLSID entry under the subkey.
+    // Note: There might be multiple entries for this file extension, so we should not delete
     // the entire subkey, just the entry for this CLSID.
     result = RegDeleteKeyValue(HKEY_LOCAL_MACHINE, szKey, szCLSID);
     if (result != ERROR_SUCCESS)

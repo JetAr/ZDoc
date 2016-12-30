@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 //    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
 //    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,8 +11,8 @@
 //
 //    File:          stdafx.cpp
 //
-//    Description: Source file that includes just the standard includes 
-//    PropSheetHost.pch will be the pre-compiled header stdafx.obj will 
+//    Description: Source file that includes just the standard includes
+//    PropSheetHost.pch will be the pre-compiled header stdafx.obj will
 //    contain the pre-compiled type information
 //
 //***************************************************************************

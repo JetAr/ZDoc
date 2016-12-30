@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -13,11 +13,11 @@ CLinearEaseInOutAnimation::CLinearEaseInOutAnimation()
 }
 
 CLinearEaseInOutAnimation::CLinearEaseInOutAnimation(
-    _In_    float begin, 
-    _In_    float change, 
-    _In_    float duration, 
+    _In_    float begin,
+    _In_    float change,
+    _In_    float duration,
     _In_    bool infinite
-    )
+)
 {
     m_currentTime = 0.0F;
     m_currentValue = 0.0F;
@@ -36,24 +36,24 @@ CLinearEaseInOutAnimation::~CLinearEaseInOutAnimation()
 // <summary>
 // This function causes a linear fade in/out for animations.
 // </summary>
-float 
+float
 CLinearEaseInOutAnimation::LinearEaseInOut(
-    _In_    float time, 
-    _In_    float begin, 
-    _In_    float change, 
+    _In_    float time,
+    _In_    float begin,
+    _In_    float change,
     _In_    float duration
-    )
+)
 {
     return(((time * change) / duration) + begin);
 }
 
-float 
+float
 CLinearEaseInOutAnimation::GetCurrentValue()
 {
     return m_currentValue;
 }
 
-void 
+void
 CLinearEaseInOutAnimation::Tick()
 {
     if (m_currentTime == m_duration)
@@ -65,7 +65,7 @@ CLinearEaseInOutAnimation::Tick()
         else
         {
             m_complete = true;
-        } 
+        }
     }
     else if (m_currentTime == 0.0F)
     {
@@ -75,7 +75,7 @@ CLinearEaseInOutAnimation::Tick()
     if (!m_goBackwards && m_currentTime < m_duration)
     {
         m_currentTime += 1;
-        m_currentValue = LinearEaseInOut(m_currentTime, m_begin ,m_change, m_duration);
+        m_currentValue = LinearEaseInOut(m_currentTime, m_begin,m_change, m_duration);
     }
     else if (m_goBackwards && m_currentTime >= 0)
     {
@@ -84,7 +84,7 @@ CLinearEaseInOutAnimation::Tick()
     }
 }
 
-bool 
+bool
 CLinearEaseInOutAnimation::IsComplete()
 {
     return m_complete;

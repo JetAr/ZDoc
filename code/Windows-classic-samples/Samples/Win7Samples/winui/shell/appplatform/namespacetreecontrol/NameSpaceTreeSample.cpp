@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -57,7 +57,7 @@ HRESULT SetItemImageImageInStaticControl(HWND hwndStatic, IShellItem *psi)
 HINSTANCE g_hinst = 0;
 
 class CNameSpaceTreeHost : public IServiceProvider,
-                           public INameSpaceTreeControlEvents
+    public INameSpaceTreeControlEvents
 {
 public:
     CNameSpaceTreeHost() : _cRef(1), _hdlg(NULL), _pnstc(NULL), _pnstc2(NULL), _dwAdviseCookie(0)
@@ -104,10 +104,22 @@ public:
     }
 
     // INameSpaceTreeControlEvents
-    IFACEMETHODIMP OnItemClick(IShellItem * /*psi*/, NSTCEHITTEST /*nstceHitTest*/, NSTCECLICKTYPE /*nstceClickType*/) { return S_FALSE;  }
-    IFACEMETHODIMP OnPropertyItemCommit(IShellItem * /*psi*/) { return S_FALSE; }
-    IFACEMETHODIMP OnItemStateChanging(IShellItem * /*psi*/, NSTCITEMSTATE /*nstcisMask*/, NSTCITEMSTATE /*nstcisState*/) {  return S_OK;  }
-    IFACEMETHODIMP OnItemStateChanged(IShellItem * /*psi*/, NSTCITEMSTATE /*nstcisMask*/, NSTCITEMSTATE /*nstcisState*/) { return S_OK; }
+    IFACEMETHODIMP OnItemClick(IShellItem * /*psi*/, NSTCEHITTEST /*nstceHitTest*/, NSTCECLICKTYPE /*nstceClickType*/)
+    {
+        return S_FALSE;
+    }
+    IFACEMETHODIMP OnPropertyItemCommit(IShellItem * /*psi*/)
+    {
+        return S_FALSE;
+    }
+    IFACEMETHODIMP OnItemStateChanging(IShellItem * /*psi*/, NSTCITEMSTATE /*nstcisMask*/, NSTCITEMSTATE /*nstcisState*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnItemStateChanged(IShellItem * /*psi*/, NSTCITEMSTATE /*nstcisMask*/, NSTCITEMSTATE /*nstcisState*/)
+    {
+        return S_OK;
+    }
     IFACEMETHODIMP OnSelectionChanged(IShellItemArray *psiaSelection)
     {
         IShellItem *psi;
@@ -125,19 +137,60 @@ public:
         }
         return S_OK;
     }
-    IFACEMETHODIMP OnKeyboardInput(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/)  { return S_FALSE; }
-    IFACEMETHODIMP OnBeforeExpand(IShellItem * /*psi*/) { return S_OK; }
-    IFACEMETHODIMP OnAfterExpand(IShellItem * /*psi*/) { return S_OK; }
-    IFACEMETHODIMP OnBeginLabelEdit(IShellItem * /*psi*/) { return S_OK; }
-    IFACEMETHODIMP OnEndLabelEdit(IShellItem * /*psi*/) { return S_OK; }
-    IFACEMETHODIMP OnGetToolTip(IShellItem * /*psi*/, LPWSTR /*pszTip*/, int /*cchTip*/) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnBeforeItemDelete(IShellItem * /*psi*/) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnItemAdded(IShellItem * /*psi*/, BOOL /*fIsRoot*/) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnItemDeleted(IShellItem * /*psi*/, BOOL /*fIsRoot*/) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnBeforeContextMenu(IShellItem * /*psi*/, REFIID /*riid*/, void **ppv) {  *ppv = NULL; return E_NOTIMPL; }
-    IFACEMETHODIMP OnAfterContextMenu(IShellItem * /*psi*/, IContextMenu * /*pcmIn*/, REFIID /*riid*/, void **ppv) { *ppv = NULL; return E_NOTIMPL; }
-    IFACEMETHODIMP OnBeforeStateImageChange(IShellItem * /*psi*/) { return S_OK; }
-    IFACEMETHODIMP OnGetDefaultIconIndex(IShellItem * /*psi*/, int * /*piDefaultIcon*/, int * /*piOpenIcon*/) { return E_NOTIMPL; }
+    IFACEMETHODIMP OnKeyboardInput(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/)
+    {
+        return S_FALSE;
+    }
+    IFACEMETHODIMP OnBeforeExpand(IShellItem * /*psi*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnAfterExpand(IShellItem * /*psi*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnBeginLabelEdit(IShellItem * /*psi*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnEndLabelEdit(IShellItem * /*psi*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnGetToolTip(IShellItem * /*psi*/, LPWSTR /*pszTip*/, int /*cchTip*/)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnBeforeItemDelete(IShellItem * /*psi*/)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnItemAdded(IShellItem * /*psi*/, BOOL /*fIsRoot*/)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnItemDeleted(IShellItem * /*psi*/, BOOL /*fIsRoot*/)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnBeforeContextMenu(IShellItem * /*psi*/, REFIID /*riid*/, void **ppv)
+    {
+        *ppv = NULL;
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnAfterContextMenu(IShellItem * /*psi*/, IContextMenu * /*pcmIn*/, REFIID /*riid*/, void **ppv)
+    {
+        *ppv = NULL;
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnBeforeStateImageChange(IShellItem * /*psi*/)
+    {
+        return S_OK;
+    }
+    IFACEMETHODIMP OnGetDefaultIconIndex(IShellItem * /*psi*/, int * /*piDefaultIcon*/, int * /*piOpenIcon*/)
+    {
+        return E_NOTIMPL;
+    }
 
 private:
     ~CNameSpaceTreeHost()
@@ -437,7 +490,11 @@ HRESULT ShellAttributesToString(SFGAOF sfgaof, PWSTR *ppsz)
 {
     *ppsz = NULL;
 
-    static const struct { PCWSTR pszName; SFGAOF sfgaof; } c_rgItemAttributes[] =
+    static const struct
+    {
+        PCWSTR pszName;
+        SFGAOF sfgaof;
+    } c_rgItemAttributes[] =
     {
         // note, SFGAO_HASSUBFOLDER is too expensive to compute
         // and has been excluded from this list

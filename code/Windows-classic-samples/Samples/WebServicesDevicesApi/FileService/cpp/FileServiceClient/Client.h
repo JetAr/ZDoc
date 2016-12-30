@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -37,10 +37,10 @@ public:
     // Methods to make this class act like a COM object
     //////////////////////////////////////////////////////////////////////////
     HRESULT STDMETHODCALLTYPE QueryInterface(
-        REFIID riid, 
+        REFIID riid,
         void **ppvObject)
     {
-        if (NULL == ppvObject) 
+        if (NULL == ppvObject)
         {
             return E_POINTER;
         }
@@ -49,7 +49,7 @@ public:
         *ppvObject = NULL;
 
         if ((__uuidof(IFileServiceEventNotify) == riid ) ||
-            ( __uuidof(IUnknown) == riid)) 
+                ( __uuidof(IUnknown) == riid))
         {
             *ppvObject = this;
         }
@@ -73,9 +73,9 @@ public:
 
     ULONG STDMETHODCALLTYPE Release()
     {
-        ULONG ulNewRefCount = 
+        ULONG ulNewRefCount =
             (ULONG)InterlockedDecrement((LONG *)&m_cRef);
-        
+
         if (0 == ulNewRefCount)
         {
             delete this;
@@ -122,10 +122,10 @@ public:
     // Methods to make this class act like a COM object
     //////////////////////////////////////////////////////////////////////////
     HRESULT STDMETHODCALLTYPE QueryInterface(
-        REFIID riid, 
+        REFIID riid,
         void **ppvObject)
     {
-        if (NULL == ppvObject) 
+        if (NULL == ppvObject)
         {
             return E_POINTER;
         }
@@ -134,7 +134,7 @@ public:
         *ppvObject = NULL;
 
         if ((__uuidof(IWSDAsyncCallback) == riid ) ||
-            ( __uuidof(IUnknown) == riid)) 
+                ( __uuidof(IUnknown) == riid))
         {
             *ppvObject = this;
         }
@@ -158,9 +158,9 @@ public:
 
     ULONG STDMETHODCALLTYPE Release()
     {
-        ULONG ulNewRefCount = 
+        ULONG ulNewRefCount =
             (ULONG)InterlockedDecrement((LONG *)&m_cRef);
-        
+
         if (0 == ulNewRefCount)
         {
             delete this;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -84,7 +84,10 @@ public:
     REFCLSID _rclsid;
     HRESULT (*_pfnCreateInstance)(IUnknown *pUnkOuter, REFIID riid, _COM_Outptr_ void **ppvObj);
 private:
-	CClassFactory& operator=(const CClassFactory& rhn) {rhn;};
+    CClassFactory& operator=(const CClassFactory& rhn)
+    {
+        rhn;
+    };
 };
 
 //+---------------------------------------------------------------------------
@@ -199,9 +202,9 @@ void FreeGlobalObjects(void)
 //----------------------------------------------------------------------------
 _Check_return_
 STDAPI  DllGetClassObject(
-	_In_ REFCLSID rclsid, 
-	_In_ REFIID riid, 
-	_Outptr_ void** ppv)
+    _In_ REFCLSID rclsid,
+    _In_ REFIID riid,
+    _Outptr_ void** ppv)
 {
     if (classFactoryObjects[0] == nullptr)
     {
@@ -217,12 +220,12 @@ STDAPI  DllGetClassObject(
     }
 
     if (IsEqualIID(riid, IID_IClassFactory) ||
-        IsEqualIID(riid, IID_IUnknown))
+            IsEqualIID(riid, IID_IUnknown))
     {
         for (int i = 0; i < ARRAYSIZE(classFactoryObjects); i++)
         {
             if (nullptr != classFactoryObjects[i] &&
-                IsEqualGUID(rclsid, classFactoryObjects[i]->_rclsid))
+                    IsEqualGUID(rclsid, classFactoryObjects[i]->_rclsid))
             {
                 *ppv = (void *)classFactoryObjects[i];
                 DllAddRef();    // class factory holds DLL ref count

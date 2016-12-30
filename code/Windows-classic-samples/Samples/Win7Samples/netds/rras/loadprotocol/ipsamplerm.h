@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999 - 2000 Microsoft Corporation
 
@@ -32,8 +32,8 @@ Abstract:
 PROTOCOL_ID(PROTO_TYPE_UCAST, PROTO_VENDOR_MS0, PROTO_IP_SAMPLE)
 
 #define SAMPLE_PROTOCOL_MULTICAST_GROUP ((DWORD)0x640000E0) // 224.0.0.100
-    
-    
+
+
 //----------------------------------------------------------------------------
 // constants identifying IPSAMPLE's MIB tables
 //----------------------------------------------------------------------------
@@ -62,15 +62,15 @@ PROTOCOL_ID(PROTO_TYPE_UCAST, PROTO_VENDOR_MS0, PROTO_IP_SAMPLE)
 
 #define IPSAMPLE_METRIC_INFINITE        16
 
-    
-    
+
+
 //----------------------------------------------------------------------------
 // constants used to construct the field IPSAMPLE_IF_BINDING::dwState
 //----------------------------------------------------------------------------
-    
+
 #define IPSAMPLE_STATE_ACTIVE           0x00000001
 #define IPSAMPLE_STATE_BOUND            0x00000002
-    
+
 
 
 //----------------------------------------------------------------------------
@@ -216,7 +216,7 @@ typedef struct _IPSAMPLE_IP_ADDRESS
 #define IPSAMPLE_IF_ADDRESS_TABLE(bind)                         \
     ((PIPSAMPLE_IP_ADDRESS)((bind) + 1))
 
-        
+
 
 //----------------------------------------------------------------------------
 // The following structures are used to query the MIB and get back a
@@ -226,7 +226,7 @@ typedef struct _IPSAMPLE_IP_ADDRESS
 // In general the index could be a variable size array of DWORDs.
 //----------------------------------------------------------------------------
 
-        
+
 
 //----------------------------------------------------------------------------
 // struct:      IPSAMPLE_MIB_SET_INPUT_DATA

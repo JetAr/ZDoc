@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,7 +26,7 @@
 //********************************************************************************************
 VOID EnumerateVpnConnections(
     _In_opt_ LPWSTR serverName
-    )
+)
 {
     DWORD status = ERROR_SUCCESS;
     MPR_SERVER_HANDLE serverHandleAdmin = NULL;
@@ -35,34 +35,34 @@ VOID EnumerateVpnConnections(
     DWORD entriesRead   = 0;
     DWORD totalEntries  = 0;
     DWORD resumeHandle    = 0;
-    
+
     wprintf(L"---------------------------------------------------------\n\n");
     wprintf(L"Executing EnumerateVpnConnections on '%s'\n", (serverName == NULL) ? L"Current machine" : serverName);
 
     status = RemoteAccessServerConenct(serverName, &serverHandleAdmin, &serverHandleConfig);
-    if ((ERROR_SUCCESS != status) || 
-        (NULL == serverHandleAdmin))
+    if ((ERROR_SUCCESS != status) ||
+            (NULL == serverHandleAdmin))
     {
         wprintf(L"RemoteAccessServerConenct failed. \
             The RemoteAccess service might be stopped - Try after starting the RemoteAccess service.\n");
         DisplayError(status);
         goto Done;
     }
-    
+
     status = g_pMprAdminConnectionEnum(serverHandleAdmin,            // hRasServer
-                                     4,                 // dwLevel
-                                     (LPBYTE *) &vpnConnectionList, // lplpbBuffer
-                                     0xffffffff,        // dwPrefMaxLen
-                                     &entriesRead,    // lpdwEntriesRead
-                                     &totalEntries,   // lpdwTotalEntries
-                                     &resumeHandle);    // lpdwResumeHandle
+                                       4,                 // dwLevel
+                                       (LPBYTE *) &vpnConnectionList, // lplpbBuffer
+                                       0xffffffff,        // dwPrefMaxLen
+                                       &entriesRead,    // lpdwEntriesRead
+                                       &totalEntries,   // lpdwTotalEntries
+                                       &resumeHandle);    // lpdwResumeHandle
     if (ERROR_SUCCESS != status)
     {
         wprintf(L"MprAdminConnectionEnum failed.\n");
         DisplayError(status);
         goto Done;
     }
-    
+
     if (0 == entriesRead)
     {
         wprintf(L"No VPN clients are connected to the server at this moment.\n");
@@ -75,20 +75,20 @@ VOID EnumerateVpnConnections(
     for (DWORD index = 0; index < entriesRead; index++)
     {
         wprintf(L"Connection - %u\n", (index + 1));
-        PrintVPNConnectionDetails(&(vpnConnectionList[index])); 
+        PrintVPNConnectionDetails(&(vpnConnectionList[index]));
     }
-    
+
 Done:
     if (vpnConnectionList)
     {
         g_pMprAdminBufferFree(vpnConnectionList);
     }
     RemoteAccessServerDisconenct(serverHandleAdmin, serverHandleConfig);
-    
+
     if (status != ERROR_SUCCESS)
     {
-         wprintf(L"EnumerateVpnConnections failed\n");
-         DisplayError(status);
+        wprintf(L"EnumerateVpnConnections failed\n");
+        DisplayError(status);
     }
     wprintf(L"---------------------------------------------------------\n\n");
 }
@@ -97,12 +97,12 @@ Done:
 //********************************************************************************************
 // Function: PrintVPNConnectionDetails
 //
-// Description: Prints various fields of the speficied RAS_CONNECTION_4 structure in string format 
+// Description: Prints various fields of the speficied RAS_CONNECTION_4 structure in string format
 //
 //********************************************************************************************
 VOID PrintVPNConnectionDetails(
     _In_ RAS_CONNECTION_4* vpnConnection
-    )
+)
 {
     wprintf(L"\t Connection Start time: ");
     PrintFileTime(&(vpnConnection->connectionStartTime));
@@ -123,32 +123,32 @@ VOID PrintVPNConnectionDetails(
     }
     else
         wprintf(L"UnKnown\n");
-        
 
-    
+
+
     wprintf(L"\t Interface type: ");
     PrintInterfaceType(vpnConnection->dwInterfaceType);
     wprintf(L"\n");
-    
+
     // print tunnel type
     //
     wprintf(L"\t VPN type: ");
     switch (vpnConnection->dwDeviceType)
     {
-        case RDT_Tunnel_Pptp:
-            wprintf(L"PPTP\n");
-            break;
-        case RDT_Tunnel_L2tp:
-            wprintf(L"L2TP\n");
-            break;
-        case RDT_Tunnel_Sstp:
-            wprintf(L"SSTP\n");
-            break;
-        case RDT_Tunnel_Ikev2:
-            wprintf(L"IKEv2\n");
-            break;
-        default:
-            wprintf(L"UnKnown\n");
+    case RDT_Tunnel_Pptp:
+        wprintf(L"PPTP\n");
+        break;
+    case RDT_Tunnel_L2tp:
+        wprintf(L"L2TP\n");
+        break;
+    case RDT_Tunnel_Sstp:
+        wprintf(L"SSTP\n");
+        break;
+    case RDT_Tunnel_Ikev2:
+        wprintf(L"IKEv2\n");
+        break;
+    default:
+        wprintf(L"UnKnown\n");
     }
 
     // Authentication method
@@ -156,22 +156,22 @@ VOID PrintVPNConnectionDetails(
     wprintf(L"\t Authentication method: ");
     PrintAuthMethod(&(vpnConnection->ProjectionInfo));
     wprintf(L"\n");
-    
+
     wprintf(L"\t Total bytes Received: %I64u\n", vpnConnection->ullBytesRcved);
     wprintf(L"\t Total bytes Transmitted: %I64u\n", vpnConnection->ullBytesXmited);
-    
+
 }
 
 //********************************************************************************************
 // Function: PrintAuthMethod
 //
-// Description: Retrieve the authentication method from the speficied PROJECTION_INFO2 structure 
-// and prints it in string format 
+// Description: Retrieve the authentication method from the speficied PROJECTION_INFO2 structure
+// and prints it in string format
 //
 //********************************************************************************************
 VOID PrintAuthMethod(
     _In_ PROJECTION_INFO2* projectionInfo
-    )
+)
 {
     DWORD authProtocol = 0;
     DWORD eapTypeID = 0;
@@ -195,8 +195,8 @@ VOID PrintAuthMethod(
         embeddedEapTypeID = projectionInfo->PppProjectionInfo.dwEmbeddedEAPTypeId;
         authenticationData = projectionInfo->PppProjectionInfo.dwAuthenticationData;
     }
-    if ((authProtocol != PPP_LCP_EAP) && 
-        (authProtocol != MPRAPI_IKEV2_AUTH_USING_EAP))
+    if ((authProtocol != PPP_LCP_EAP) &&
+            (authProtocol != MPRAPI_IKEV2_AUTH_USING_EAP))
     {
         // if auth protocol is not EAP, the auth protocol ID is same as the auth method used
         //

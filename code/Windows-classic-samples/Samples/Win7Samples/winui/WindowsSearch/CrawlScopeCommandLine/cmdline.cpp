@@ -1,4 +1,4 @@
-#include "csmcmd.h"
+﻿#include "csmcmd.h"
 
 int CFlagParam::Init(int argc, wchar_t *argv[], int& rParamsProcessed)
 {
@@ -49,7 +49,7 @@ int CExclFlagParam::Init(int argc, wchar_t *argv[], int& rParamsProcessed)
     if (ERROR_INVALID_PARAMETER == iRes)
     {
         wcout << L"/" << m_szTrueParamName << L" and /" <<
-                         m_szFalseParamName << L" parameters can't be used together!" << endl;
+              m_szFalseParamName << L" parameters can't be used together!" << endl;
     }
 
     return iRes;
@@ -65,8 +65,8 @@ int CSetValueParam::Init(int argc, wchar_t *argv[], int& rParamsProcessed)
         {
             m_fExists = TRUE;
             if (1 < argc &&           // if it's not last word in command line
-                '/' != argv[1][0] &&  // and not followed by other parameter
-                '-' != argv[1][0])    // Parameter values starting with '/' and '-' are not supported
+                    '/' != argv[1][0] &&  // and not followed by other parameter
+                    '-' != argv[1][0])    // Parameter values starting with '/' and '-' are not supported
             {
                 m_szValue = argv[1];
                 rParamsProcessed = 2;

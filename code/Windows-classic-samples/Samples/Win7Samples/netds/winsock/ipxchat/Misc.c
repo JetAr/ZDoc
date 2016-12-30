@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -138,7 +138,7 @@ BOOL ReceiveInBox(HWND hWnd, WPARAM uParam, LPARAM lParam, char * szRBuf, int cR
 
     uParam;
 
-    
+
     if (LOWORD(lParam) == FD_CLOSE)                   // Is this a FD_CLOSE event?
     {
         SendMessage(hWnd, MW_DISCONNECTED, 0, 0);     // Yes, post message
@@ -147,14 +147,14 @@ BOOL ReceiveInBox(HWND hWnd, WPARAM uParam, LPARAM lParam, char * szRBuf, int cR
 
     pRBuf = szRBuf;   // Set temp pointer
     cRBufLen--;       // Save room for null terminator
-          
+
     // read socket
     if((cBytesRead = recv(sock, pRBuf, cRBufLen, 0)) != SOCKET_ERROR)
         pRBuf += cBytesRead;    // Move temp pointer to end of buffer
-              
-    *pRBuf = 0;   // Null terminate - if recv() failed, then prBuf will 
-                  // point to first byte of the buffer
-    
+
+    *pRBuf = 0;   // Null terminate - if recv() failed, then prBuf will
+    // point to first byte of the buffer
+
     return (TRUE);   // We've got a buffer to display
 }
 
@@ -178,7 +178,7 @@ void SendOutBox(char * szSBuf, int cSBufLen)
     int cBytesSent;
 
     pSBuf = szSBuf; // Set temp pointer
-    
+
     while((cBytesSent = send(sock,
                              pSBuf,
                              cSBufLen,
@@ -283,8 +283,8 @@ void CleanUp(void)
 //  COMMENTS:
 //
 //    Address is in network order to use HtoA to convert to ascii.
-//    
-//    Final format is 
+//
+//    Final format is
 //      <8 char network address>.<12 char node address>.<4 char sock address>
 //
 
@@ -301,7 +301,7 @@ void GetAddrString(PSOCKADDR_IPX pSAddr, char * dest)
     currptr += 8;
     hRet = StringCchCat(currptr,18,".");                   // don't forget seperator
     currptr++;
-    
+
     HtoA((char *)&pSAddr->sa_nodenum, abuf, 6);   // convert node number
     hRet = StringCchCat(currptr,18,abuf);
     currptr += 12;
@@ -310,7 +310,7 @@ void GetAddrString(PSOCKADDR_IPX pSAddr, char * dest)
 
     HtoA((char *)&pSAddr->sa_socket, abuf, 2);    // convert socket number
     hRet = StringCchCat(currptr,18,abuf);
-   
+
 }
 
 //
@@ -333,14 +333,14 @@ void HtoA(char * src, char * dest, int srclen)
 {
     char * destptr; // temp pointers
     UCHAR * srcptr;
-        
+
     srcptr = (UCHAR *)src;
     destptr = dest;
 
     while(srclen--)
     {
-    *destptr++ = HtoB((UCHAR)(*srcptr >> 4));      // Convert high order nibble
-    *destptr++ = HtoB((UCHAR)(*srcptr++ & 0x0F));  // Convert low order nibble
+        *destptr++ = HtoB((UCHAR)(*srcptr >> 4));      // Convert high order nibble
+        *destptr++ = HtoB((UCHAR)(*srcptr++ & 0x0F));  // Convert low order nibble
     }
     *destptr = 0;  // Null terminator
 }
@@ -352,7 +352,7 @@ void HtoA(char * src, char * dest, int srclen)
 //
 //  PARAMETERS:
 //    ch - Hex byte
-//                 
+//
 //  RETURNS:
 //    ascii byte
 //
@@ -382,9 +382,9 @@ char HtoB(UCHAR ch)
 
 LPTSTR GetStringRes (int id)
 {
-  static TCHAR buffer[MAX_PATH];
+    static TCHAR buffer[MAX_PATH];
 
-  buffer[0]=0;
-  LoadString (GetModuleHandle (NULL), id, buffer, MAX_PATH);
-  return buffer;
+    buffer[0]=0;
+    LoadString (GetModuleHandle (NULL), id, buffer, MAX_PATH);
+    return buffer;
 }

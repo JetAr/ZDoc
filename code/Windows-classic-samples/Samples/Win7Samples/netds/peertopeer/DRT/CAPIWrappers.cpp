@@ -1,4 +1,4 @@
-// CAPIWrappers.cpp - Functions for dealing with certificates.  
+﻿// CAPIWrappers.cpp - Functions for dealing with certificates.
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -78,11 +78,11 @@ CreateWellKnownSidForAccount(
     // Get the TokenUser, use this TokenUser to generate a well-known sid that requires a domain
     //
     if (!GetTokenInformation(
-        hToken,
-        TokenUser,
-        NULL,
-        dwTokenLen,
-        &dwTokenLen))
+                hToken,
+                TokenUser,
+                NULL,
+                dwTokenLen,
+                &dwTokenLen))
     {
         DWORD   err = GetLastError();
         if (err != ERROR_INSUFFICIENT_BUFFER)
@@ -100,11 +100,11 @@ CreateWellKnownSidForAccount(
     }
 
     if (!GetTokenInformation(
-        hToken,
-        TokenUser,
-        pUserToken,
-        dwTokenLen,
-        &dwTokenLen))
+                hToken,
+                TokenUser,
+                pUserToken,
+                dwTokenLen,
+                &dwTokenLen))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto cleanup;
@@ -114,19 +114,19 @@ CreateWellKnownSidForAccount(
     // Now get the domain sid from the TokenUser
     //
     if (!GetWindowsAccountDomainSid(
-            pUserToken->User.Sid,
-            (PSID) pDomainSid,
-            &dwSidSize))
+                pUserToken->User.Sid,
+                (PSID) pDomainSid,
+                &dwSidSize))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto cleanup;
     }
 
     if(!CreateWellKnownSid(
-        sidType,
-        pDomainSid,
-        pSid,
-        pdwSidSize))
+                sidType,
+                pDomainSid,
+                pSid,
+                pdwSidSize))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto cleanup;
@@ -175,10 +175,10 @@ IsMemberOf(
     // create SID for the authenticated users
     //
     if (!CreateWellKnownSid(
-            sid,
-            NULL,                    // not a domain sid
-            (SID*)pSID,
-            &dwSIDSize))
+                sid,
+                NULL,                    // not a domain sid
+                (SID*)pSID,
+                &dwSIDSize))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         if (FAILED(hr) && (hr != E_INVALIDARG))
@@ -209,8 +209,8 @@ IsMemberOf(
     // check whether token has this sid
     //
     if (!CheckTokenMembership(hToken,
-                                (SID*)pSID,    // sid for the authenticated user
-                                &fMember))
+                              (SID*)pSID,    // sid for the authenticated user
+                              &fMember))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -317,12 +317,12 @@ DeleteKeys(
     // in order to delete the contanier and all the keys in it, i have to call CryptAcquireContext
     //
     if (!CryptAcquireContextW(&hCryptProv,
-                               pwzContainer,
-                               NULL,
-                               DEFAULT_PROV_TYPE,
-                               fServiceAccount ?
-                                   (CRYPT_DELETEKEYSET | CRYPT_MACHINE_KEYSET) :
-                                   (CRYPT_DELETEKEYSET)))
+                              pwzContainer,
+                              NULL,
+                              DEFAULT_PROV_TYPE,
+                              fServiceAccount ?
+                              (CRYPT_DELETEKEYSET | CRYPT_MACHINE_KEYSET) :
+                              (CRYPT_DELETEKEYSET)))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
@@ -462,8 +462,8 @@ CreateCryptProv(
 
     if (NULL == pwzContainerName)
     {
-         UUID    uuid;
-         BOOL   fServiceAccount = FALSE;
+        UUID    uuid;
+        BOOL   fServiceAccount = FALSE;
 
         //
         // generate container name from the UUID
@@ -497,12 +497,12 @@ CreateCryptProv(
         // creates new key container. duh.
         //
         if (!CryptAcquireContextW(phCryptProv,
-                                pwzNewContainerName,
-                                NULL,               // default provider name
-                                DEFAULT_PROV_TYPE,
-                                fServiceAccount ?
-                                    (CRYPT_SILENT | CRYPT_NEWKEYSET | CRYPT_MACHINE_KEYSET) :
-                                    (CRYPT_SILENT | CRYPT_NEWKEYSET)))
+                                  pwzNewContainerName,
+                                  NULL,               // default provider name
+                                  DEFAULT_PROV_TYPE,
+                                  fServiceAccount ?
+                                  (CRYPT_SILENT | CRYPT_NEWKEYSET | CRYPT_MACHINE_KEYSET) :
+                                  (CRYPT_SILENT | CRYPT_NEWKEYSET)))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -535,12 +535,12 @@ CreateCryptProv(
         // open the provider first, create the keys too
         //
         if (!CryptAcquireContextW(phCryptProv,
-                            pwzContainerName,
-                            NULL,               // default provider name
-                            DEFAULT_PROV_TYPE,
-                            fServiceAccount ?
-                                (CRYPT_SILENT | CRYPT_MACHINE_KEYSET) :
-                                (CRYPT_SILENT)))
+                                  pwzContainerName,
+                                  NULL,               // default provider name
+                                  DEFAULT_PROV_TYPE,
+                                  fServiceAccount ?
+                                  (CRYPT_SILENT | CRYPT_MACHINE_KEYSET) :
+                                  (CRYPT_SILENT)))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -563,8 +563,8 @@ CreateCryptProv(
         // make sure keys exist
         //
         if (!CryptGetUserKey(*phCryptProv,
-                            DEFAULT_KEY_SPEC,
-                            &hKey))
+                             DEFAULT_KEY_SPEC,
+                             &hKey))
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -574,9 +574,9 @@ CreateCryptProv(
                 hr = S_OK;
 
                 if (!CryptGenKey(*phCryptProv,
-                                  DEFAULT_KEY_SPEC,
-                                  CRYPT_EXPORTABLE,
-                                  &hKey))
+                                 DEFAULT_KEY_SPEC,
+                                 CRYPT_EXPORTABLE,
+                                 &hKey))
                 {
                     hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -680,10 +680,10 @@ GetContainerName(
     // get the name of the key container
     //
     if (!CryptGetProvParam(hCryptProv,
-                          PP_CONTAINER,
-                          (BYTE*)pszBuf,
-                          &cbBufSize,
-                          0))
+                           PP_CONTAINER,
+                           (BYTE*)pszBuf,
+                           &cbBufSize,
+                           0))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -704,11 +704,11 @@ GetContainerName(
     // convert the string to the wide character, since that's what needed for the key info
     //
     if (0 == MultiByteToWideChar(CP_ACP,
-                               0,                   // dwFlags
-                               pszBuf,
-                               -1,                  // calculate the length
-                               pwzContainerName,
-                               *pcChars))
+                                 0,                   // dwFlags
+                                 pszBuf,
+                                 -1,                  // calculate the length
+                                 pwzContainerName,
+                                 *pcChars))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Cleanup;
@@ -730,7 +730,7 @@ HRESULT ReadCertFromFile(LPCWSTR pwzFileName, CERT_CONTEXT** ppCert, HCRYPTPROV*
     BOOL bRet = FALSE;
     FILE* pFile = NULL;
     errno_t err;
-    
+
     // open cert file for local cert
     err = _wfopen_s(&pFile, pwzFileName, L"rb");
     if (err)
@@ -759,10 +759,10 @@ HRESULT ReadCertFromFile(LPCWSTR pwzFileName, CERT_CONTEXT** ppCert, HCRYPTPROV*
     DWORD dwKeySpec = 0;
     HCRYPTPROV hCryptProv = NULL;
     bRet = CryptAcquireCertificatePrivateKey(pCertContext,
-        CRYPT_ACQUIRE_SILENT_FLAG | CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
-        NULL, &hCryptProv, &dwKeySpec, NULL);
+            CRYPT_ACQUIRE_SILENT_FLAG | CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
+            NULL, &hCryptProv, &dwKeySpec, NULL);
     if (!bRet)
-            return HRESULT_FROM_WIN32(GetLastError());
+        return HRESULT_FROM_WIN32(GetLastError());
 
     // make sure provider stays around for duration of the test run. We need hCryptProv of root cert to sign local certs
     CryptContextAddRef(hCryptProv, NULL, 0);
@@ -771,7 +771,7 @@ HRESULT ReadCertFromFile(LPCWSTR pwzFileName, CERT_CONTEXT** ppCert, HCRYPTPROV*
     *ppCert = pCertContext;
     if (NULL != phCryptProv)
         *phCryptProv = hCryptProv;
-    
+
     return S_OK;
 }
 
@@ -795,7 +795,7 @@ HRESULT WriteStoreToFile(__in HCERTSTORE hCertStore, __in PCWSTR pwzFileName)
     {
         return CRYPT_E_FILE_ERROR;
     }
-    
+
     fwrite(blob.pbData, blob.cbData, 1, pFile);
     fclose(pFile);
 
@@ -829,8 +829,8 @@ HRESULT EncodeName(__in PCWSTR pwzName, DWORD* pcbEncodedName, BYTE* pbEncodedNa
 
 // manufacture a single cert and export it to a file
 HRESULT MakeAndExportACert(PCWSTR pwzSignerName, PCWSTR pwzCertName, PCWSTR pwzFileName, HCERTSTORE hCertStore,
-                                                        HCRYPTPROV hCryptProvSigner, HCRYPTPROV hCryptProvThisCert,
-                                                        CERT_CONTEXT* pIssuerCertContext)
+                           HCRYPTPROV hCryptProvSigner, HCRYPTPROV hCryptProvThisCert,
+                           CERT_CONTEXT* pIssuerCertContext)
 {
     HRESULT hr = S_OK;
     BOOL     bRet = FALSE;
@@ -839,29 +839,29 @@ HRESULT MakeAndExportACert(PCWSTR pwzSignerName, PCWSTR pwzCertName, PCWSTR pwzF
     DWORD cSignerName = sizeof(byteBuf1);
     BYTE* pbSignerName = byteBuf1;
     DWORD cCertName = sizeof(byteBuf2);
-    BYTE* pbCertName = byteBuf2;    
+    BYTE* pbCertName = byteBuf2;
     CERT_INFO certInfo = {0};
     BYTE serialNumberBuf[16];
     ULONGLONG ullTime = 0;
     XCERT_CONTEXT pCertContext;
     ULONG cchContainer = 512;
     WCHAR wzContainer[512];
-    CRYPT_KEY_PROV_INFO keyInfo = {0};    
-    
-   
+    CRYPT_KEY_PROV_INFO keyInfo = {0};
+
+
     // encode the names for use in a cert
     hr = EncodeName(pwzSignerName, &cSignerName, pbSignerName);
     if (FAILED(hr))
         return hr;
-    
+
     hr = EncodeName(pwzCertName, &cCertName, pbCertName);
     if (FAILED(hr))
         return hr;
-    
+
     // first retrieve the public key from the hCryptProv (which abstracts the key pair)
     DWORD dwSize = sizeof(s_keyDataBuf);
     bRet = CryptExportPublicKeyInfo(hCryptProvThisCert, DEFAULT_KEY_SPEC, DEFAULT_ENCODING,
-                                                          reinterpret_cast<CERT_PUBLIC_KEY_INFO*>(s_keyDataBuf), &dwSize);
+                                    reinterpret_cast<CERT_PUBLIC_KEY_INFO*>(s_keyDataBuf), &dwSize);
     if (FALSE == bRet)
         return HRESULT_FROM_WIN32(GetLastError());
 
@@ -884,23 +884,23 @@ HRESULT MakeAndExportACert(PCWSTR pwzSignerName, PCWSTR pwzCertName, PCWSTR pwzF
     // create the cert
     DWORD cCertBuf = sizeof(s_certBuf);
     bRet = CryptSignAndEncodeCertificate(hCryptProvSigner,                         // Crypto provider
-                                                                   DEFAULT_KEY_SPEC,                   // Key spec, we always use the same
-                                                                   DEFAULT_ENCODING,                   // Encoding type, default
-                                                                   X509_CERT_TO_BE_SIGNED,             // Structure type - certificate
-                                                                   &certInfo,                          // Structure information
-                                                                   &certInfo.SignatureAlgorithm,       // Signature algorithm
-                                                                   NULL,                               // reserved, must be NULL
-                                                                   s_certBuf,                     // hopefully it will fit in 1K
-                                                                   &cCertBuf);
+                                         DEFAULT_KEY_SPEC,                   // Key spec, we always use the same
+                                         DEFAULT_ENCODING,                   // Encoding type, default
+                                         X509_CERT_TO_BE_SIGNED,             // Structure type - certificate
+                                         &certInfo,                          // Structure information
+                                         &certInfo.SignatureAlgorithm,       // Signature algorithm
+                                         NULL,                               // reserved, must be NULL
+                                         s_certBuf,                     // hopefully it will fit in 1K
+                                         &cCertBuf);
     if (!bRet)
         return HRESULT_FROM_WIN32(GetLastError());
 
-    // retrieve the cert context.  pCertContext gets a pointer into the crypto api heap, we must treat it as read only. 
+    // retrieve the cert context.  pCertContext gets a pointer into the crypto api heap, we must treat it as read only.
     //  pCertContext must be freed with CertFreeCertificateContext(p); we use a smart pointer to do the free
     pCertContext = (CERT_CONTEXT*)CertCreateCertificateContext(DEFAULT_ENCODING, s_certBuf, cCertBuf);
     if (NULL == pCertContext)
         return HRESULT_FROM_WIN32(GetLastError());
-    
+
 
     // next attach the private key
     // =================
@@ -917,11 +917,11 @@ HRESULT MakeAndExportACert(PCWSTR pwzSignerName, PCWSTR pwzCertName, PCWSTR pwzF
     keyInfo.dwProvType = DEFAULT_PROV_TYPE;
     keyInfo.dwKeySpec = DEFAULT_KEY_SPEC;
 
-     // attach private key
+    // attach private key
     bRet = CertSetCertificateContextProperty(pCertContext, CERT_KEY_PROV_INFO_PROP_ID, 0, &keyInfo);
     if (!bRet)
         return HRESULT_FROM_WIN32(GetLastError());
-            
+
     // put the cert into the store
     bRet = CertAddCertificateContextToStore(hCertStore, pCertContext, CERT_STORE_ADD_NEW, NULL);
     if (!bRet)
@@ -937,7 +937,7 @@ HRESULT MakeAndExportACert(PCWSTR pwzSignerName, PCWSTR pwzCertName, PCWSTR pwzF
 
     // now export the cert to a file
     hr = WriteStoreToFile(hCertStore, pwzFileName);
-    
+
     return hr;
 
 }
@@ -946,8 +946,8 @@ HRESULT MakeAndExportACert(PCWSTR pwzSignerName, PCWSTR pwzCertName, PCWSTR pwzF
 //  use the existing root cert to sign the local cert.
 //  export a local cert to the file <currentdir>\LocalCert.cer
 //  export a root cert to the file <currentDir>\RootCert.cer (if one does not already exist)
-HRESULT MakeCert(LPCWSTR pwzLocalCertFileName, LPCWSTR pwzLocalCertName, 
-                                 LPCWSTR pwzIssuerCertFileName, LPCWSTR pwzIssuerCertName)
+HRESULT MakeCert(LPCWSTR pwzLocalCertFileName, LPCWSTR pwzLocalCertName,
+                 LPCWSTR pwzIssuerCertFileName, LPCWSTR pwzIssuerCertName)
 {
     HRESULT hr = S_OK;
     XHCERTSTORE hSelfCertStore;
@@ -972,16 +972,16 @@ HRESULT MakeCert(LPCWSTR pwzLocalCertFileName, LPCWSTR pwzLocalCertName,
 
     // create cert store
     hSelfCertStore = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, NULL,
-        CERT_STORE_CREATE_NEW_FLAG | CERT_STORE_NO_CRYPT_RELEASE_FLAG, NULL); 
+                                   CERT_STORE_CREATE_NEW_FLAG | CERT_STORE_NO_CRYPT_RELEASE_FLAG, NULL);
     if (NULL == hSelfCertStore)
         return HRESULT_FROM_WIN32(GetLastError());
 
 
     // Make the self signed cert, and save it to a file
     hr = MakeAndExportACert(pwzLocalCertName, pwzLocalCertName, pwzLocalCertFileName, hSelfCertStore, hCryptProvThis, hCryptProvThis, NULL);
-        if (FAILED(hr))
-            return hr;
-        
+    if (FAILED(hr))
+        return hr;
+
     // then, sign it if an issuer name was supplied
     //  (surprisingly, the same function does both, since it adds a signing record to existing cert)
     //  FUTURE: this is a bit inefficient, since we write the file twice, we can add a fWrite paramater, and not write the file when it is false
@@ -989,10 +989,10 @@ HRESULT MakeCert(LPCWSTR pwzLocalCertFileName, LPCWSTR pwzLocalCertName,
     {
         // must create a separate store, or we end up with a single cert and a chain cert in same store, apps can pick wrong cert
         hSignedCertStore = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, NULL,
-            CERT_STORE_CREATE_NEW_FLAG | CERT_STORE_NO_CRYPT_RELEASE_FLAG, NULL); 
+                                         CERT_STORE_CREATE_NEW_FLAG | CERT_STORE_NO_CRYPT_RELEASE_FLAG, NULL);
         if (NULL == hSignedCertStore)
             return HRESULT_FROM_WIN32(GetLastError());
-        
+
         hr = MakeAndExportACert(pwzIssuerCertName, pwzLocalCertName, pwzLocalCertFileName, hSignedCertStore, hCryptProvIssuer, hCryptProvThis, pIssuerCert);
     }
     return hr;

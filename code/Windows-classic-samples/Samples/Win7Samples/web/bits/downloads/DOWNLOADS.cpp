@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,11 +9,11 @@
 #include "stdafx.h"
 
 void _cdecl _tmain(int argc, LPWSTR* argv)
-{	
+{
     GUID guidJob;
     HRESULT hr;
-	IBackgroundCopyManager *pQueueMgr;
-	IBackgroundCopyJob* pJob = NULL;
+    IBackgroundCopyManager *pQueueMgr;
+    IBackgroundCopyJob* pJob = NULL;
     CNotifyInterface *pNotify;
 
     if (argc != 3)
@@ -30,25 +30,25 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
     {
         //The impersonation level must be at least RPC_C_IMP_LEVEL_IMPERSONATE.
         hr = CoInitializeSecurity(NULL, -1, NULL, NULL,
-             RPC_C_AUTHN_LEVEL_CONNECT,
-             RPC_C_IMP_LEVEL_IMPERSONATE,
-             NULL, EOAC_NONE, 0);
+                                  RPC_C_AUTHN_LEVEL_CONNECT,
+                                  RPC_C_IMP_LEVEL_IMPERSONATE,
+                                  NULL, EOAC_NONE, 0);
 
         if (SUCCEEDED(hr))
         {
 
-	        // Connect to BITS
+            // Connect to BITS
             hr = CoCreateInstance(__uuidof(BackgroundCopyManager), NULL,
-                CLSCTX_LOCAL_SERVER,
-                __uuidof(IBackgroundCopyManager),
-                (void **)&pQueueMgr);
+                                  CLSCTX_LOCAL_SERVER,
+                                  __uuidof(IBackgroundCopyManager),
+                                  (void **)&pQueueMgr);
 
-	        if (FAILED(hr))
-	        {
-		        // Failed to connect
+            if (FAILED(hr))
+            {
+                // Failed to connect
                 wprintf(L"Failed to connect to BITS.Error: 0x%x\n",hr);
-		        goto done;
-	        }
+                goto done;
+            }
         }
         else
         {
@@ -63,22 +63,22 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         goto done;
     }
 
-	// Create a Job
+    // Create a Job
     wprintf(L"Creating Job...\n");
     hr = pQueueMgr->CreateJob(L"P2PSample",
-         BG_JOB_TYPE_DOWNLOAD,
-         &guidJob,
-         &pJob);
-	
+                              BG_JOB_TYPE_DOWNLOAD,
+                              &guidJob,
+                              &pJob);
+
     // Free Resources
     pQueueMgr->Release();
 
-	if(FAILED(hr))
-    {   
+    if(FAILED(hr))
+    {
         wprintf(L"Create Job failed with error: %x\n",hr);
-    	goto done;
+        goto done;
     }
-    
+
     // Set the File Completed Call
     pNotify = new CNotifyInterface();
     if (pNotify)
@@ -86,8 +86,8 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         hr = pJob->SetNotifyInterface(pNotify);
         if (SUCCEEDED(hr))
         {
-            hr = pJob->SetNotifyFlags(BG_NOTIFY_JOB_TRANSFERRED | 
-                                BG_NOTIFY_JOB_ERROR);
+            hr = pJob->SetNotifyFlags(BG_NOTIFY_JOB_TRANSFERRED |
+                                      BG_NOTIFY_JOB_ERROR);
         }
 
         // Free resouces
@@ -107,52 +107,52 @@ void _cdecl _tmain(int argc, LPWSTR* argv)
         wprintf(L"Cancelling job\n");
         goto cancel;
     }
-	// Add a File
-	// Replace parameters with variables that contain valid paths.
+    // Add a File
+    // Replace parameters with variables that contain valid paths.
     wprintf(L"Adding File to Job\n");
-	hr = pJob->AddFile(argv[1], argv[2]);
+    hr = pJob->AddFile(argv[1], argv[2]);
 
     if(FAILED(hr))
-    {   
+    {
         wprintf(L"Add File failed with error: %x\n",hr);
-    	goto cancel;
+        goto cancel;
     }
 
-	//Resume the job
+    //Resume the job
     wprintf(L"Resuming Job...\n");
-	hr = pJob->Resume();
-	if (FAILED(hr))
-	{
-		// Resume Failed
+    hr = pJob->Resume();
+    if (FAILED(hr))
+    {
+        // Resume Failed
         wprintf(L"Resume failed with error: %x\n",hr);
         wprintf(L"Cancelling Job\n");
-		goto cancel;
-	}    
+        goto cancel;
+    }
 
     // Wait for QuitMessage from CallBack
     DWORD dwLimit = GetTickCount() + (15 * 60 * 1000);  // set 15 minute limit
     while (dwLimit > GetTickCount())
     {
-         MSG msg;
+        MSG msg;
 
-        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) 
-        { 
+        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
             // If it is a quit message, exit.
-            if (msg.message == WM_QUIT) 
+            if (msg.message == WM_QUIT)
             {
                 pJob->Release();
                 CoUninitialize();
-                return; 
+                return;
             }
             // Otherwise, dispatch the message.
-            DispatchMessage(&msg); 
+            DispatchMessage(&msg);
         } // End of PeekMessage while loop
     }
 
 done:
     CoUninitialize();
 finished:
-	return;
+    return;
 cancel:
     pJob->Cancel();
     pJob->Release();

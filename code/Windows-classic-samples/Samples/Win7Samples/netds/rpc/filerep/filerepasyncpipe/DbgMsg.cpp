@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,12 +7,12 @@
 
 
 /*
-    
+
 
     Server Debugging Routines
 
     FILE: DbgMsg.cpp
-    
+
     PURPOSE: Routines for debugging system services.
 
 */
@@ -30,34 +30,39 @@ UINT nDbgMsgLogSize = 0;
 
 CRITICAL_SECTION DbgMsgCriticalSection;
 
-VOID DbgMsgOpenLog(LPTSTR LogFileName) {
+VOID DbgMsgOpenLog(LPTSTR LogFileName)
+{
 
     // Init the critsec.
-    if (InitializeCriticalSectionAndSpinCount(&DbgMsgCriticalSection, 0) == 0) {
+    if (InitializeCriticalSectionAndSpinCount(&DbgMsgCriticalSection, 0) == 0)
+    {
         AddToMessageLogProcFailure(TEXT("DbgMsgOpenLog: InitializeCriticalSectionAndSpinCount"), GetLastError());
         return;
     }
 
     // Open the profiling log.
     if ((hDbgMsgLog = CreateFile(LogFileName,
-                               GENERIC_WRITE,
-                               0,
-                               NULL,
-                               CREATE_ALWAYS,
-                               FILE_ATTRIBUTE_NORMAL,
-                               NULL)) == INVALID_HANDLE_VALUE) {
+                                 GENERIC_WRITE,
+                                 0,
+                                 NULL,
+                                 CREATE_ALWAYS,
+                                 FILE_ATTRIBUTE_NORMAL,
+                                 NULL)) == INVALID_HANDLE_VALUE)
+    {
         AddToMessageLogProcFailure(TEXT("DbgMsgOpenLog: CreateFile"), GetLastError());
     }
 }
 
-VOID DbgMsgRecord(LPTSTR msg) {
+VOID DbgMsgRecord(LPTSTR msg)
+{
     ULONG cbWritten;
 
     EnterCriticalSection(&DbgMsgCriticalSection);
 
     // Write the entry only if there is enough space left in
     // the log.
-    if (nDbgMsgLogSize < DEBUG_LOG_MAX_SIZE + _tcslen(msg)) {
+    if (nDbgMsgLogSize < DEBUG_LOG_MAX_SIZE + _tcslen(msg))
+    {
 
         // Append the entry to the log.
         nDbgMsgLogSize += _tcslen(msg);
@@ -65,7 +70,8 @@ VOID DbgMsgRecord(LPTSTR msg) {
                       (LPVOID)msg,
                       _tcslen(msg)*sizeof(TCHAR),
                       &cbWritten,
-                      NULL)) {
+                      NULL))
+        {
             AddToMessageLogProcFailure(TEXT("DbgMsgRecord: WriteFile"), GetLastError());
         }
     }
@@ -74,14 +80,16 @@ VOID DbgMsgRecord(LPTSTR msg) {
     return;
 }
 
-VOID DbgMsgCloseLog(VOID) {
+VOID DbgMsgCloseLog(VOID)
+{
     DWORD status;
 
     // Delete and the critsec.
     DeleteCriticalSection(&DbgMsgCriticalSection);
 
     // Close the debug log.
-    if (hDbgMsgLog != NULL && hDbgMsgLog != INVALID_HANDLE_VALUE) {
+    if (hDbgMsgLog != NULL && hDbgMsgLog != INVALID_HANDLE_VALUE)
+    {
         status = CloseHandle(hDbgMsgLog);
         ASSERT(status);
     }

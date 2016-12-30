@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -12,7 +12,7 @@
 Abstract:
 
     Templatized helper routines used to aggregate common methods
-    to createTasks, createRoles, createAppGroups used commonly for 
+    to createTasks, createRoles, createAppGroups used commonly for
     both CAzScopes and CAzApplications
 
  History:
@@ -35,7 +35,7 @@ CAzHelper<NativeInterfaceType>::~CAzHelper(void)
 
 Routine description:
 
-    This method copies tasks from the source native AzMan interface to 
+    This method copies tasks from the source native AzMan interface to
     the destination native AzMan interface
 
 Arguments: pNativeSource - Source native interface
@@ -43,7 +43,7 @@ Arguments: pNativeSource - Source native interface
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 Description:
@@ -53,7 +53,8 @@ Description:
 --*/
 template <class NativeInterfaceType>
 HRESULT CAzHelper<NativeInterfaceType>::CreateTasks(CComPtr<NativeInterfaceType> &pNativeSource,
-                                                    CComPtr<NativeInterfaceType> &pNativeNew) {
+        CComPtr<NativeInterfaceType> &pNativeNew)
+{
 // Copy all tasks objects; donot create any links between then
     HRESULT hr=CreateTasks(pNativeSource,pNativeNew,false);
 
@@ -68,7 +69,7 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateTasks(CComPtr<NativeInterfaceType>
 
 Routine description:
 
-    This method copies appgroups from the source native AzMan interface to 
+    This method copies appgroups from the source native AzMan interface to
     the destination native AzMan interface
 
 Arguments: pNativeSource - Source native interface
@@ -76,7 +77,7 @@ Arguments: pNativeSource - Source native interface
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 Description:
@@ -87,7 +88,8 @@ Description:
 
 template <class NativeInterfaceType>
 HRESULT CAzHelper<NativeInterfaceType>::CreateAppGroups(CComPtr<NativeInterfaceType> &pNativeSource,
-                                                        CComPtr<NativeInterfaceType> &pNativeNew) {
+        CComPtr<NativeInterfaceType> &pNativeNew)
+{
 
     HRESULT hr=CreateAppGroups(pNativeSource,pNativeNew,false);
 
@@ -101,25 +103,26 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateAppGroups(CComPtr<NativeInterfaceT
 
 Routine description:
 
-    This method copies tasks from the source native AzMan interface to 
+    This method copies tasks from the source native AzMan interface to
     the destination native AzMan interface.
     If createlinks == true, then donot create tasks, only create links
     else create the new task objects
 
-Arguments: pNativeSource - Source native interface, 
-           pNativeNew -  destination native interface, 
+Arguments: pNativeSource - Source native interface,
+           pNativeNew -  destination native interface,
            bCreateLinks - createLinks
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 --*/
 
 template <class NativeInterfaceType>
 HRESULT CAzHelper<NativeInterfaceType>::CreateTasks(CComPtr<NativeInterfaceType> &pNativeSource,
-                                                    CComPtr<NativeInterfaceType> &pNativeNew,
-                                                    bool bCreateLinks) {
+        CComPtr<NativeInterfaceType> &pNativeNew,
+        bool bCreateLinks)
+{
 
     CAzLogging::Entering(_TEXT("CreateTasks"));
 
@@ -127,7 +130,7 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateTasks(CComPtr<NativeInterfaceType>
 
     long lCount=0;
 
-    CComVariant cVappl;	
+    CComVariant cVappl;
 
     HRESULT hr=pNativeSource->get_Tasks(&spAzTasks);
 
@@ -146,7 +149,8 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateTasks(CComPtr<NativeInterfaceType>
     if (lCount==0)
         goto lError1;
 
-    for (long i = 1 ; i <= lCount ; i++) {
+    for (long i = 1 ; i <= lCount ; i++)
+    {
 
         CComPtr<IAzTask> spOldTask,spNewTask;
 
@@ -168,23 +172,26 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateTasks(CComPtr<NativeInterfaceType>
 
         CAzTask oldTask=CAzTask(spOldTask,false);
 
-        if (!bCreateLinks) {
+        if (!bCreateLinks)
+        {
 
             hr=pNativeNew->CreateTask(oldTask.getName(),CComVariant(),&spNewTask);
 
-            CAzLogging::Log(hr,_TEXT("Creating New Task Object"));			
+            CAzLogging::Log(hr,_TEXT("Creating New Task Object"));
 
             if (FAILED(hr))
                 goto lError1;
 
-        } else {
+        }
+        else
+        {
 
-                hr=pNativeNew->OpenTask(oldTask.getName(),CComVariant(),&spNewTask);
+            hr=pNativeNew->OpenTask(oldTask.getName(),CComVariant(),&spNewTask);
 
-                CAzLogging::Log(hr,_TEXT("Opening New Task Object to create links"));			
+            CAzLogging::Log(hr,_TEXT("Opening New Task Object to create links"));
 
-                if (FAILED(hr))
-                    goto lError1;        
+            if (FAILED(hr))
+                goto lError1;
 
         }
 
@@ -208,22 +215,23 @@ lError1:
 
 Routine description:
 
-    This method copies roles from the source native AzMan interface to 
+    This method copies roles from the source native AzMan interface to
     the destination native AzMan interface
 
-Arguments: pNativeSource - Source native interface, 
-           pNativeNew -  destination native interface, 
+Arguments: pNativeSource - Source native interface,
+           pNativeNew -  destination native interface,
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
 template <class NativeInterfaceType>
 HRESULT CAzHelper<NativeInterfaceType>::CreateRoles(CComPtr<NativeInterfaceType> &pNativeSource,
-                                                    CComPtr<NativeInterfaceType> &pNativeNew) {
+        CComPtr<NativeInterfaceType> &pNativeNew)
+{
     CAzLogging::Entering(_TEXT("CreateRoles"));
 
     CComPtr<IAzRoles> spAzRoles;
@@ -249,7 +257,8 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateRoles(CComPtr<NativeInterfaceType>
     if (lCount==0)
         goto lError1;
 
-    for (long i = 1;i <= lCount ; i++) {
+    for (long i = 1; i <= lCount ; i++)
+    {
 
         CComPtr<IAzRole> spRole,spNewRole;
 
@@ -288,35 +297,36 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateRoles(CComPtr<NativeInterfaceType>
             goto lError1;
     }
 lError1:
-        CAzLogging::Exiting(_TEXT("CreateRoles"));
+    CAzLogging::Exiting(_TEXT("CreateRoles"));
 
-        return hr;
+    return hr;
 }
 
 /*++
 
 Routine description:
 
-    This method copies appgroups from the source native AzMan interface to 
+    This method copies appgroups from the source native AzMan interface to
     the destination native AzMan interface.
     If createlinks == true, then donot create appgroups, only create links
     else create the new appgroup objects
 
-Arguments: pNativeSource - Source native interface, 
-           pNativeNew -  destination native interface, 
+Arguments: pNativeSource - Source native interface,
+           pNativeNew -  destination native interface,
            bCreateLinks - createLinks
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 --*/
 
 
 template <class NativeInterfaceType>
 HRESULT CAzHelper<NativeInterfaceType>::CreateAppGroups(CComPtr<NativeInterfaceType> &pNativeSource,
-                                                        CComPtr<NativeInterfaceType> &pNativeNew,
-                                                        bool bCreateLinks) {
+        CComPtr<NativeInterfaceType> &pNativeNew,
+        bool bCreateLinks)
+{
 
     CAzLogging::Entering(_TEXT("CreateAppGroups"));
 
@@ -324,7 +334,7 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateAppGroups(CComPtr<NativeInterfaceT
 
     long lCount=0;
 
-    CComVariant cVappl;	
+    CComVariant cVappl;
 
     HRESULT hr=pNativeSource->get_ApplicationGroups(&spAzAppGroups);
 
@@ -343,7 +353,8 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateAppGroups(CComPtr<NativeInterfaceT
     if (lCount==0)
         goto lError1;
 
-    for (long i = 1 ; i <= lCount ; i++) {
+    for (long i = 1 ; i <= lCount ; i++)
+    {
 
         CComPtr<IAzApplicationGroup> spSrcAppGroup,spNewAppGroup;
 
@@ -367,7 +378,8 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateAppGroups(CComPtr<NativeInterfaceT
 
         CAzAppGroup oldAppGroup=CAzAppGroup(spSrcAppGroup,false);
 
-        if (!bCreateLinks) {
+        if (!bCreateLinks)
+        {
 
             hr=pNativeNew->CreateApplicationGroup(oldAppGroup.getName(),CComVariant(),&spNewAppGroup);
 
@@ -376,14 +388,16 @@ HRESULT CAzHelper<NativeInterfaceType>::CreateAppGroups(CComPtr<NativeInterfaceT
             if (FAILED(hr))
                 goto lError1;
 
-        } else {
+        }
+        else
+        {
 
-                hr=pNativeNew->OpenApplicationGroup(oldAppGroup.getName(),CComVariant(),&spNewAppGroup);
+            hr=pNativeNew->OpenApplicationGroup(oldAppGroup.getName(),CComVariant(),&spNewAppGroup);
 
-                CAzLogging::Log(hr,_TEXT("Opening New App Group Object to create links"));
+            CAzLogging::Log(hr,_TEXT("Opening New App Group Object to create links"));
 
-                if (FAILED(hr))
-                    goto lError1;
+            if (FAILED(hr))
+                goto lError1;
 
         }
 

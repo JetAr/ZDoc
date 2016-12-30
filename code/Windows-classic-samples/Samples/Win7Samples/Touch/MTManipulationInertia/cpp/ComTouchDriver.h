@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,11 +16,12 @@
 #define MOUSE_CURSOR_ID 0
 #define DEFAULT_PPI 96.0f
 
-class CComTouchDriver {
+class CComTouchDriver
+{
 public:
     CComTouchDriver(HWND hWnd);
     ~CComTouchDriver();
-    
+
     // Initializes Core Objects, Manipulation Processors and Inertia Processors
     BOOL Initialize();
 
@@ -33,7 +34,7 @@ public:
     // Processes all changes that include active inertia processors
     // Note: ProcessChanges automatically calls RenderObjects()
     VOID ProcessChanges();
-    
+
     // Localizes point for high-DPI
     int GetLocalizedPointX(int ptX);
     int GetLocalizedPointY(int ptY);
@@ -50,7 +51,7 @@ private:
 
     // Map of cursor ids and core obejcts
     std::map<DWORD, CCoreObject*> m_mCursorObject;
-  
+
     // List of core objects to be manipulated
     std::list<CCoreObject*> m_lCoreObjects;
 

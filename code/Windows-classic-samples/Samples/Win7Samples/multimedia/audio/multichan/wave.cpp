@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@
 /*
  *	WaveOpenFile	:	opens a wave file, validates format, extracts parameters
  */
-HANDLE 
+HANDLE
 WaveOpenFile
 (
     IN  LPCSTR          szFileName,
@@ -35,12 +35,12 @@ WaveOpenFile
     LONG            lDataPos = 0;
 
     // open the file
-    if(!(hmmio = mmioOpen((LPSTR)szFileName, NULL, MMIO_READ | MMIO_ALLOCBUF))) 
+    if(!(hmmio = mmioOpen((LPSTR)szFileName, NULL, MMIO_READ | MMIO_ALLOCBUF)))
     {
         return FALSE;
     }
 
-    // verify that the file is of type "WAVE" 
+    // verify that the file is of type "WAVE"
     mmckinfoParent.fccType = MAKEFOURCC('W', 'A', 'V', 'E');
     if(mmioDescend(hmmio, (LPMMCKINFO)&mmckinfoParent, NULL, MMIO_FINDRIFF))
     {
@@ -81,7 +81,7 @@ WaveOpenFile
     // ascend out o' the "fmt " chunk
     mmioAscend(hmmio, &mmckinfoSubchunk, 0);
 
-    // and find the data subchunk.  (current file pos should be at the beginning of the 
+    // and find the data subchunk.  (current file pos should be at the beginning of the
     // data chunk, but when you assume...)
     mmckinfoSubchunk.ckid = MAKEFOURCC('d', 'a', 't', 'a');
     if(mmioDescend(hmmio, &mmckinfoSubchunk, &mmckinfoParent, MMIO_FINDCHUNK))
@@ -100,7 +100,7 @@ WaveOpenFile
         goto _error_;
     }
 
-    // remember the data 
+    // remember the data
     lDataPos = mmioSeek(hmmio, 0, SEEK_CUR);
     mmioClose(hmmio, 0);
 
@@ -111,18 +111,18 @@ WaveOpenFile
 
     __try
     {
-        hFile = 
+        hFile =
             CreateFile
-            ( 
-                szFileName, 
-                GENERIC_READ, 
+            (
+                szFileName,
+                GENERIC_READ,
                 FILE_SHARE_READ,
-                NULL, 
-                OPEN_EXISTING, 
+                NULL,
+                OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL,
-                NULL 
+                NULL
             );
-    }    
+    }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
         MessageBox(hwnd, "WaveOpenFile : Handling exception thrown by CreateFile!", "MultiChan : Error opening wave file!", MB_ICONEXCLAMATION | MB_OK);
@@ -137,13 +137,13 @@ WaveOpenFile
     SetFilePointer
     (
         hFile,
-        lDataPos,  
-        NULL, 
+        lDataPos,
+        NULL,
         FILE_BEGIN
-    ); 
+    );
 
     return hFile;
-    
+
 _error_:
     SafeCloseHandle(hFile);
     if(hmmio)
@@ -169,7 +169,7 @@ WaveSaveFile
 {
     HANDLE          hFile		= INVALID_HANDLE_VALUE;
     ULONG           cbWritten;
-	HRSRC           hrsrc		= (HRSRC)INVALID_HANDLE_VALUE;
+    HRSRC           hrsrc		= (HRSRC)INVALID_HANDLE_VALUE;
     void*           pv			= NULL;
 
     //
@@ -179,18 +179,18 @@ WaveSaveFile
 
     __try
     {
-        hFile = 
+        hFile =
             CreateFile
-            ( 
-                szFileName, 
-                GENERIC_WRITE, 
+            (
+                szFileName,
+                GENERIC_WRITE,
                 0,
-                NULL, 
-                CREATE_ALWAYS, 
+                NULL,
+                CREATE_ALWAYS,
                 FILE_ATTRIBUTE_NORMAL,
-                NULL 
+                NULL
             );
-    }    
+    }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
         MessageBox(AfxGetMainWnd()->m_hWnd, "WaveSaveFile : Handling exception thrown by CreateFile!", "MultiChan : Error creating wave file", MB_ICONEXCLAMATION | MB_OK);
@@ -200,9 +200,9 @@ WaveSaveFile
     if (!IsValidHandle(hFile))
         goto _error_;
 
-	// 
-	// write file header
-	//
+    //
+    // write file header
+    //
 
     // standard wave goo
     struct
@@ -214,7 +214,7 @@ WaveSaveFile
     DataHeader.fourccData         = MAKEFOURCC('d','a','t','a');
     DataHeader.dwDataLength       = cbData;
 
-    struct 
+    struct
     {
         DWORD       dwRiff;
         DWORD       dwFileSize;
@@ -248,7 +248,7 @@ WaveSaveFile
 
     SafeCloseHandle( hFile );
     return TRUE;
-    
+
 _error_:
     MessageBox(NULL, "WaveSaveFile : Error Writing File", "MultiChan : Error!", MB_ICONEXCLAMATION | MB_OK);
     SafeCloseHandle( hFile );
@@ -259,12 +259,12 @@ _error_:
 
 // ===============================================================
 /*
- *   WavePlayFileCB  
+ *   WavePlayFileCB
  *   callback for the waveOut functions
  *   notifies the originating window
  */
-void 
-CALLBACK   
+void
+CALLBACK
 WavePlayFileCB
 (
     HWAVEOUT	hwo,
@@ -280,34 +280,34 @@ WavePlayFileCB
 
     switch( uMsg )
     {
-        case    WOM_OPEN:
-            {
-                //
-                //  notify window
-                //
-                (( CDialog * )dwInstance)->PostMessage( WM_START_PLAYBACK, 0, 0 );
+    case    WOM_OPEN:
+    {
+        //
+        //  notify window
+        //
+        (( CDialog * )dwInstance)->PostMessage( WM_START_PLAYBACK, 0, 0 );
 
-                break;
-            }
-        case    WOM_DONE:
-            {
-                //
-                //  notify window
-                //
-                (( CDialog * )dwInstance)->PostMessage( WM_STOP_PLAYBACK, 0, 0 );
+        break;
+    }
+    case    WOM_DONE:
+    {
+        //
+        //  notify window
+        //
+        (( CDialog * )dwInstance)->PostMessage( WM_STOP_PLAYBACK, 0, 0 );
 
-                break;
-            }
+        break;
+    }
 
-        case    WOM_CLOSE:
-            {
+    case    WOM_CLOSE:
+    {
 
-                break;
-            }
+        break;
+    }
 
 
-        default:
-            ASSERT(0);
+    default:
+        ASSERT(0);
     }
     return;
 }
@@ -319,55 +319,55 @@ WavePlayFileCB
 void
 WaveTogglePlayback
 (
-			CDlgSrc	*	pdlgSelf,
-	const	BOOL		fSwitch
+    CDlgSrc	*	pdlgSelf,
+    const	BOOL		fSwitch
 )
 {
-	CDlgSrc	*	pdlgSrc	= 0;
-	//
-	//	fSwitch toggles between disable (FALSE) and allow (TRUE)
-	//
+    CDlgSrc	*	pdlgSrc	= 0;
+    //
+    //	fSwitch toggles between disable (FALSE) and allow (TRUE)
+    //
 
-	for
-	( 
-		POSITION	position = g_listSources.GetHeadPosition();
-		position;
-	)
-	{
-		pdlgSrc = g_listSources.GetNext( position );
-		//
-		//	disable/enable the play button. the stop button is unaffected
-		//
-		pdlgSrc->m_fPlayable = fSwitch;
-		(pdlgSrc->m_butPlay).EnableWindow( fSwitch );
-	}
+    for
+    (
+        POSITION	position = g_listSources.GetHeadPosition();
+        position;
+    )
+    {
+        pdlgSrc = g_listSources.GetNext( position );
+        //
+        //	disable/enable the play button. the stop button is unaffected
+        //
+        pdlgSrc->m_fPlayable = fSwitch;
+        (pdlgSrc->m_butPlay).EnableWindow( fSwitch );
+    }
 
-	//
-	//	check target
-	//
-	if( pdlgSelf )
-	{
-		//	allow stop
-		(pdlgSelf->m_butStop).EnableWindow( !fSwitch );
+    //
+    //	check target
+    //
+    if( pdlgSelf )
+    {
+        //	allow stop
+        (pdlgSelf->m_butStop).EnableWindow( !fSwitch );
 
-		//	destination may not be mixed already
-		if( g_pdlgDest->m_fPlayable )
-		{
-			g_pdlgDest->m_fPlayable = fSwitch;
-			(g_pdlgDest->m_butPlay).EnableWindow( fSwitch );
-		}
-		else
-		{
-			g_pdlgDest->m_fPlayable = fSwitch & (0 != g_pdlgDest->m_pbData);
-			(g_pdlgDest->m_butPlay).EnableWindow( g_pdlgDest->m_fPlayable );
-		}
-	}
-	else
-	{
-		g_pdlgDest->m_fPlayable = fSwitch;
-		(g_pdlgDest->m_butPlay).EnableWindow( fSwitch );
-		(g_pdlgDest->m_butStop).EnableWindow( !fSwitch );
-	}
+        //	destination may not be mixed already
+        if( g_pdlgDest->m_fPlayable )
+        {
+            g_pdlgDest->m_fPlayable = fSwitch;
+            (g_pdlgDest->m_butPlay).EnableWindow( fSwitch );
+        }
+        else
+        {
+            g_pdlgDest->m_fPlayable = fSwitch & (0 != g_pdlgDest->m_pbData);
+            (g_pdlgDest->m_butPlay).EnableWindow( g_pdlgDest->m_fPlayable );
+        }
+    }
+    else
+    {
+        g_pdlgDest->m_fPlayable = fSwitch;
+        (g_pdlgDest->m_butPlay).EnableWindow( fSwitch );
+        (g_pdlgDest->m_butStop).EnableWindow( !fSwitch );
+    }
 
 
 }	//	WaveTogglePlayback
@@ -377,112 +377,112 @@ WaveTogglePlayback
 // TrapMMError
 // return:          FALSE if it is an error, TRUE otherwise
 // ----------------------------------------------------------------------------------
-BOOL 
+BOOL
 TrapMMError
 (
     MMRESULT mmRes,
     LPCSTR   szAPI
 )
 {
-	//	no error
+    //	no error
     if(MMSYSERR_NOERROR == mmRes)
     {
         return( TRUE );
-    } 
+    }
 
     HWND    hwndMain        = AfxGetMainWnd()->m_hWnd;
 
-	const size_t ERROR_STRING_SIZE_CCH = 128; 
+    const size_t ERROR_STRING_SIZE_CCH = 128;
 
     char    szError[ERROR_STRING_SIZE_CCH]	= "";
     char    szErrMsg[ERROR_STRING_SIZE_CCH]	= "";
 
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	//	basic mmsys error
-	if( MMSYSERR_LASTERROR >= mmRes )
-	{
-		if( MMSYSERR_NOMEM == waveOutGetErrorText( mmRes, szError, 128 ) )
-		{
-			hr = StringCchPrintfA( szErrMsg, ERROR_STRING_SIZE_CCH, "Insufficient memory to complete the task.");
-		}
+    //	basic mmsys error
+    if( MMSYSERR_LASTERROR >= mmRes )
+    {
+        if( MMSYSERR_NOMEM == waveOutGetErrorText( mmRes, szError, 128 ) )
+        {
+            hr = StringCchPrintfA( szErrMsg, ERROR_STRING_SIZE_CCH, "Insufficient memory to complete the task.");
+        }
         else
         {
-    		hr = StringCchPrintfA( szErrMsg, ERROR_STRING_SIZE_CCH, "ERROR : %s returned : %s", szAPI, szError );
+            hr = StringCchPrintfA( szErrMsg, ERROR_STRING_SIZE_CCH, "ERROR : %s returned : %s", szAPI, szError );
         }
-	}
+    }
     else
     {
-	    //	other errors
-	    switch( mmRes )
-	    {
-		    case	WAVERR_BADFORMAT	:
-		    {
-			    hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : Attempt to open an unsupported waveform-audio format." );
-			    break;
-		    }
+        //	other errors
+        switch( mmRes )
+        {
+        case	WAVERR_BADFORMAT	:
+        {
+            hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : Attempt to open an unsupported waveform-audio format." );
+            break;
+        }
 
-		    case	WAVERR_STILLPLAYING	:
-		    {
-			    hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : There is another waveform resource still playing." );
-			    break;
-		    }
+        case	WAVERR_STILLPLAYING	:
+        {
+            hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : There is another waveform resource still playing." );
+            break;
+        }
 
-		    case	WAVERR_UNPREPARED	:
-		    {
-			    hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : Header is not prepared." );
-			    break;
-		    }
+        case	WAVERR_UNPREPARED	:
+        {
+            hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : Header is not prepared." );
+            break;
+        }
 
-		    case	WAVERR_SYNC			:
-		    {
-			    hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : Device is synchronous." );
-			    break;
-		    }
+        case	WAVERR_SYNC			:
+        {
+            hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : Device is synchronous." );
+            break;
+        }
 
-		    case	ACMERR_NOTPOSSIBLE	:
-		    {
-			    hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : The specified action is not possible in the current context." );
-			    break;
-		    }
+        case	ACMERR_NOTPOSSIBLE	:
+        {
+            hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : The specified action is not possible in the current context." );
+            break;
+        }
 
-		    case	ACMERR_BUSY	:
-		    {
-			    hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : The driver is currently in use and cannot be reused." );
-			    break;
-		    }
-		    
-		    case	ACMERR_UNPREPARED	:
-		    {
-			    hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : The stream header is not currently prepared." );
-			    break;
-		    }
+        case	ACMERR_BUSY	:
+        {
+            hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : The driver is currently in use and cannot be reused." );
+            break;
+        }
 
-		    case	ACMERR_CANCELED		:
-		    {
-			    hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : The action has been canceled." );
-			    break;
-		    }
+        case	ACMERR_UNPREPARED	:
+        {
+            hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : The stream header is not currently prepared." );
+            break;
+        }
 
-		    default	:
-		    {
-			    //	default
-			    hr = StringCchPrintfA( szError, ERROR_STRING_SIZE_CCH, "an unrecognized error code (%d).", mmRes );
-			    break;
-		    }
+        case	ACMERR_CANCELED		:
+        {
+            hr = StringCchCopyA( szError, ERROR_STRING_SIZE_CCH, " : The action has been canceled." );
+            break;
+        }
+
+        default	:
+        {
+            //	default
+            hr = StringCchPrintfA( szError, ERROR_STRING_SIZE_CCH, "an unrecognized error code (%d).", mmRes );
+            break;
+        }
         }	//	switch
 
-		if (SUCCEEDED(hr))
-		{
-		    hr = StringCchPrintfA( szErrMsg, ERROR_STRING_SIZE_CCH, "ERROR : %s returned %s.", szAPI, szError );
+        if (SUCCEEDED(hr))
+        {
+            hr = StringCchPrintfA( szErrMsg, ERROR_STRING_SIZE_CCH, "ERROR : %s returned %s.", szAPI, szError );
         }
-	}
+    }
 
     // Display the string.
     if (SUCCEEDED(hr))
     {
-    	MessageBox(hwndMain, szErrMsg, "MultiChan : Error!", MB_ICONEXCLAMATION | MB_OK);
+        MessageBox(hwndMain, szErrMsg, "MultiChan : Error!", MB_ICONEXCLAMATION | MB_OK);
     }
 
-	return( FALSE );
+    return( FALSE );
 }

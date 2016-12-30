@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -12,7 +12,7 @@ Module Name:
 
 Abstract:
 
-    This C file includes sample code for a simple nspv2 naming 
+    This C file includes sample code for a simple nspv2 naming
     provider.
 
 Feedback:
@@ -30,8 +30,8 @@ Feedback:
 // NOTE:  *** Every provider should generate their own unique id ***
 //
 // if you use this sample as the basis for your own provider, you must change the next line.
-GUID g_SampleProviderId = 
-    { 0xe6401bf9, 0x5579, 0x472a, { 0x83, 0x82, 0xca, 0x07, 0x07, 0x66, 0x11, 0xbd }};
+GUID g_SampleProviderId =
+{ 0xe6401bf9, 0x5579, 0x472a, { 0x83, 0x82, 0xca, 0x07, 0x07, 0x66, 0x11, 0xbd }};
 
 
 typedef struct _LookupRequest
@@ -46,16 +46,16 @@ typedef struct _LookupRequest
 // Utility routine that calculates the size of a WSAQUERYSET2 based on a specific
 // email address and array of CSADDR_INFO.
 //
-size_t CalculateSizeHelper(PCWSTR pcwzEmail, 
-                          ULONG cAddresses, 
-                          __in_ecount(cAddresses) CSADDR_INFO *prgAddresses)
+size_t CalculateSizeHelper(PCWSTR pcwzEmail,
+                           ULONG cAddresses,
+                           __in_ecount(cAddresses) CSADDR_INFO *prgAddresses)
 {
     WSAQUERYSET2 qs = {0};
 
     // Fill out our temp queryset w/ the required fields.
     //
     qs.lpszServiceInstanceName = (PWSTR) pcwzEmail;
-    qs.dwNumberOfCsAddrs = cAddresses; 
+    qs.dwNumberOfCsAddrs = cAddresses;
     qs.lpcsaBuffer = prgAddresses;
     qs.lpNSProviderId = &g_SampleProviderId;
 
@@ -68,11 +68,11 @@ size_t CalculateSizeHelper(PCWSTR pcwzEmail,
 // NSP Function Entry Points
 //
 
-// Called each time a new client process begins using the provider  Providers may use the 
-// ppvClientSessionArg field to store information about this session -- the value returned 
+// Called each time a new client process begins using the provider  Providers may use the
+// ppvClientSessionArg field to store information about this session -- the value returned
 // from this function will be passed to subsequent calls in the same session.
 //
-INT WSAAPI NSPv2Startup(__in  LPGUID lpguidProvider, 
+INT WSAAPI NSPv2Startup(__in  LPGUID lpguidProvider,
                         __out LPVOID* ppvClientSessionArg)
 {
     lpguidProvider; //unreferenced param
@@ -82,10 +82,10 @@ INT WSAAPI NSPv2Startup(__in  LPGUID lpguidProvider,
     return NO_ERROR;
 }
 
-// Called when a client is shutting down.  The ppvClientSessionArg is the same one returned 
+// Called when a client is shutting down.  The ppvClientSessionArg is the same one returned
 // from this provider from the call to NSPv2Startup.
 //
-INT WSAAPI NSPv2Cleanup(__in  LPGUID lpguidProvider, 
+INT WSAAPI NSPv2Cleanup(__in  LPGUID lpguidProvider,
                         __in  LPVOID* ppvClientSessionArg)
 {
     lpguidProvider; //unreferenced param
@@ -94,15 +94,15 @@ INT WSAAPI NSPv2Cleanup(__in  LPGUID lpguidProvider,
 }
 
 
-// Called when a new lookup is beginning.  The provider should store any required information 
-// in order to  perform the actual lookup, which will happen in NSPv2LookupServiceNextEx.   
-// The provider returns a "handle" in phLookup, which will be passed back to the provider 
+// Called when a new lookup is beginning.  The provider should store any required information
+// in order to  perform the actual lookup, which will happen in NSPv2LookupServiceNextEx.
+// The provider returns a "handle" in phLookup, which will be passed back to the provider
 // in NSPv2LookupServiceNextEx and NSPv2LookupServiceEnd to keep track of which lookup session
 // is being used.
 //
 INT WSAAPI NSPv2LookupServiceBegin(__in  LPGUID lpguidProvider,
-                                   __in  LPWSAQUERYSET2 pqsRestrictions, 
-                                         DWORD dwControlFlags, 
+                                   __in  LPWSAQUERYSET2 pqsRestrictions,
+                                   DWORD dwControlFlags,
                                    __in  LPVOID pvClientSessionArg,
                                    __out LPHANDLE phLookup)
 {
@@ -114,7 +114,7 @@ INT WSAAPI NSPv2LookupServiceBegin(__in  LPGUID lpguidProvider,
 
     if (pRequest == NULL)
     {
-        err = WSA_NOT_ENOUGH_MEMORY; 
+        err = WSA_NOT_ENOUGH_MEMORY;
         goto cleanup;
     }
 
@@ -149,17 +149,17 @@ cleanup:
     }
     else
     {
-       *phLookup = (HANDLE) pRequest;
+        *phLookup = (HANDLE) pRequest;
         return NO_ERROR;
     }
 }
 
 
 VOID WSAAPI NSPv2LookupServiceNextEx(        HANDLE hAsyncCall,
-                                             HANDLE hLookup,
-                                             DWORD dwControlFlags,
-                                     __inout LPDWORD pdwBufLen, 
-                                     __out   LPWSAQUERYSET2 pqsResults)
+        HANDLE hLookup,
+        DWORD dwControlFlags,
+        __inout LPDWORD pdwBufLen,
+        __out   LPWSAQUERYSET2 pqsResults)
 {
     INT err = NO_ERROR;
     ULONG cAddresses = 0;
@@ -183,7 +183,7 @@ VOID WSAAPI NSPv2LookupServiceNextEx(        HANDLE hAsyncCall,
         // we have already returned a result for this request, and we only support one.
         err = WSA_E_NO_MORE;
     }
-    else 
+    else
     {
         if (pRequest->fPreferredName)
         {
@@ -197,10 +197,10 @@ VOID WSAAPI NSPv2LookupServiceNextEx(        HANDLE hAsyncCall,
         {
             RegInfo *pRegInfo = NULL;
 
-            // The pRegInfo returned from FindRegistration is just a pointer to an item in an internal 
-            // array that could go away, based on another call to SetService.  Thus, we enter a 
+            // The pRegInfo returned from FindRegistration is just a pointer to an item in an internal
+            // array that could go away, based on another call to SetService.  Thus, we enter a
             // critical section to protect that.
-            EnterCriticalSection(&g_cs); 
+            EnterCriticalSection(&g_cs);
 
             // Lookup the email address.  In our implementation this is just a lookup in a local cache.
             //
@@ -217,22 +217,22 @@ VOID WSAAPI NSPv2LookupServiceNextEx(        HANDLE hAsyncCall,
                 err = WSANO_DATA;
             }
 
-            LeaveCriticalSection(&g_cs); 
+            LeaveCriticalSection(&g_cs);
         }
     }
 
     if (err == NO_ERROR)
     {
-        // Found a registration!   Figure out how much space is required to return the data 
+        // Found a registration!   Figure out how much space is required to return the data
         // to the caller.
-        // 
-        size_t cbRequired = CalculateSizeHelper(pwzEmailAddress, 
-                                                cAddresses, 
+        //
+        size_t cbRequired = CalculateSizeHelper(pwzEmailAddress,
+                                                cAddresses,
                                                 pAddresses);
 
         if (*pdwBufLen < cbRequired)
         {
-            // They didn't pass us a large enough buffer.  Tell them how much we need, and 
+            // They didn't pass us a large enough buffer.  Tell them how much we need, and
             // return WSAEFAULT.
             //
             *pdwBufLen = (DWORD) cbRequired;
@@ -250,12 +250,12 @@ VOID WSAAPI NSPv2LookupServiceNextEx(        HANDLE hAsyncCall,
             qs.dwNumberOfCsAddrs  = cAddresses;
             qs.lpcsaBuffer = pAddresses;
             qs.lpNSProviderId = &g_SampleProviderId;
-            
+
             if (pRequest->fPreferredName)
                 qs.dwOutputFlags = LUP_RETURN_PREFERRED_NAMES;
 
-            // We need to hand back our memory in buffer from a single allocation (pointers in 
-            // the WSAQUERYSET2 structure need to simply point to memory later in the same 
+            // We need to hand back our memory in buffer from a single allocation (pointers in
+            // the WSAQUERYSET2 structure need to simply point to memory later in the same
             // allocation).   We call our utility routine to perform this serialization.
             err = BuildSerializedQuerySet2(&qs, *pdwBufLen, (BYTE*) pqsResults);
 
@@ -274,7 +274,7 @@ VOID WSAAPI NSPv2LookupServiceNextEx(        HANDLE hAsyncCall,
     WSAProviderCompleteAsyncCall(hAsyncCall, err);
 }
 
-// Called when a particular lookup is complete.  In our case, we need to free the memory 
+// Called when a particular lookup is complete.  In our case, we need to free the memory
 // associated w/ our "handle".
 //
 INT WSAAPI NSPv2LookupServiceEnd(HANDLE hLookup)
@@ -297,19 +297,19 @@ INT WSAAPI NSPv2LookupServiceEnd(HANDLE hLookup)
 
 // Called when the client wants to add or remove a new registration for the specified email address.
 //
-void WSAAPI NSPv2SetServiceEx(     HANDLE hAsyncCall, 
-                             __in  LPGUID pProviderGuid,
-                             __in  LPWSAQUERYSET2 pQuerySet, 
+void WSAAPI NSPv2SetServiceEx(     HANDLE hAsyncCall,
+                                   __in  LPGUID pProviderGuid,
+                                   __in  LPWSAQUERYSET2 pQuerySet,
                                    WSAESETSERVICEOP eSetServiceOp,
                                    DWORD dwControlFlags,
-                             __in  LPVOID pvClientSessionArg)
+                                   __in  LPVOID pvClientSessionArg)
 {
     INT retval = NO_ERROR;
 
     pProviderGuid; //unreferenced param
     dwControlFlags; //unreferenced param
     pvClientSessionArg; //unreferenced param
-    
+
     if (eSetServiceOp == RNRSERVICE_REGISTER)
     {
         retval = AddRegistration(pQuerySet);
@@ -345,7 +345,7 @@ void __cdecl main(int argc, __in_ecount(argc) char *argv[])
         INT iResult = DoInstall(g_SampleProviderId);
         if (iResult != NO_ERROR)
         {
-            // If the service provider is already installed, this will return 
+            // If the service provider is already installed, this will return
             // an error.  Reinstalling the service provider will insure there
             // are no other installation issues.
             //
@@ -364,7 +364,7 @@ void __cdecl main(int argc, __in_ecount(argc) char *argv[])
     }
     else
     {
-        // We are doing normal startup.  Need to inform winsock about the entry points 
+        // We are doing normal startup.  Need to inform winsock about the entry points
         // to our NSP routines
         //
         NSPV2_ROUTINE NspRoutines = {0};
@@ -374,9 +374,9 @@ void __cdecl main(int argc, __in_ecount(argc) char *argv[])
         NspRoutines.dwMinorVersion = 0;
         NspRoutines.NSPv2Startup = NSPv2Startup;
         NspRoutines.NSPv2Cleanup = NSPv2Cleanup;
-        NspRoutines.NSPv2LookupServiceBegin = NSPv2LookupServiceBegin;  
+        NspRoutines.NSPv2LookupServiceBegin = NSPv2LookupServiceBegin;
         NspRoutines.NSPv2LookupServiceNextEx = NSPv2LookupServiceNextEx;
-        NspRoutines.NSPv2LookupServiceEnd = NSPv2LookupServiceEnd;  
+        NspRoutines.NSPv2LookupServiceEnd = NSPv2LookupServiceEnd;
         NspRoutines.NSPv2SetServiceEx = NSPv2SetServiceEx;
         NspRoutines.NSPv2ClientSessionRundown = NULL;
 
@@ -402,5 +402,5 @@ void __cdecl main(int argc, __in_ecount(argc) char *argv[])
     if (WSACleanup() != NO_ERROR)
     {
         fprintf(stderr, "WSACleanup failed WSAError = 0x%x\n", WSAGetLastError());
-    }    
+    }
 }

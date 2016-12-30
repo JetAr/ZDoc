@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -22,14 +22,14 @@ EXTERN_C GUID CLSID_CSample;
 class CClassFactory : public IClassFactory
 {
 public:
-    CClassFactory() : _cRef(1) 
+    CClassFactory() : _cRef(1)
     {
     }
 
     // IUnknown
     IFACEMETHODIMP QueryInterface(__in REFIID riid, __deref_out void **ppv)
     {
-        static const QITAB qit[] = 
+        static const QITAB qit[] =
         {
             QITABENT(CClassFactory, IClassFactory),
             { 0 },
@@ -144,7 +144,7 @@ STDAPI_(BOOL) DllMain(__in HINSTANCE hinstDll, __in DWORD dwReason, __in void *)
     case DLL_THREAD_DETACH:
         break;
     }
-    
+
     g_hinst = hinstDll;
     return TRUE;
 }

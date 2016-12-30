@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,7 +7,7 @@
 
 
 /**
- * This sample demonstrates how to query Security Center for the product name, 
+ * This sample demonstrates how to query Security Center for the product name,
  * product state, and product signature status for each security product
  * registered.
  */
@@ -19,10 +19,10 @@
 #include <iwscapi.h>
 
 
-HRESULT 
+HRESULT
 GetSecurityProducts(
     _In_ WSC_SECURITY_PROVIDER provider
-    )
+)
 {
     HRESULT                         hr                  = S_OK;
     IWscProduct*                    PtrProduct          = nullptr;
@@ -32,9 +32,9 @@ GetSecurityProducts(
     WSC_SECURITY_PRODUCT_STATE      ProductState;
     WSC_SECURITY_SIGNATURE_STATUS   ProductStatus;
 
-    if (provider != WSC_SECURITY_PROVIDER_FIREWALL && 
-        provider != WSC_SECURITY_PROVIDER_ANTIVIRUS && 
-        provider != WSC_SECURITY_PROVIDER_ANTISPYWARE)
+    if (provider != WSC_SECURITY_PROVIDER_FIREWALL &&
+            provider != WSC_SECURITY_PROVIDER_ANTIVIRUS &&
+            provider != WSC_SECURITY_PROVIDER_ANTISPYWARE)
     {
         hr = E_INVALIDARG;
         goto exit;
@@ -45,11 +45,11 @@ GetSecurityProducts(
     // CoCreateInstance for each security product type you want to query.
     //
     hr = CoCreateInstance(
-            __uuidof(WSCProductList), 
-            NULL, 
-            CLSCTX_INPROC_SERVER, 
-            __uuidof(IWSCProductList), 
-            reinterpret_cast<LPVOID*> (&PtrProductList));
+             __uuidof(WSCProductList),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IWSCProductList),
+             reinterpret_cast<LPVOID*> (&PtrProductList));
     if(FAILED(hr))
     {
         wprintf(L"CoCreateInstance returned error = 0x%d \n", hr);
@@ -57,7 +57,7 @@ GetSecurityProducts(
     }
 
     //
-    // Initialize the product list with the type of security product you're 
+    // Initialize the product list with the type of security product you're
     // interested in.
     //
     hr = PtrProductList->Initialize(provider);
@@ -159,8 +159,8 @@ GetSecurityProducts(
                 wprintf(L"get_SignatureStatus failed with error: 0x%d\n", hr);
                 goto exit;
             }
-            LPWSTR pszStatus = (ProductStatus == WSC_SECURITY_PRODUCT_UP_TO_DATE) ? 
-                                    L"Up-to-date" : L"Out-of-date";
+            LPWSTR pszStatus = (ProductStatus == WSC_SECURITY_PRODUCT_UP_TO_DATE) ?
+                               L"Up-to-date" : L"Out-of-date";
             wprintf(L"Product status: %s\n", pszStatus);
         }
 
@@ -179,7 +179,7 @@ GetSecurityProducts(
         PtrVal = nullptr;
 
         //
-        // Get the product state timestamp (updated when product changes its 
+        // Get the product state timestamp (updated when product changes its
         // state), and only applicable for AV products (NULL is returned for
         // AS and FW products)
         //
@@ -226,12 +226,12 @@ void PrintUsage()
     wprintf(L"   fw: Query Firewall programs\n\n");
 }
 
-int 
-__cdecl 
+int
+__cdecl
 wmain(
-    _In_              int     argc, 
+    _In_              int     argc,
     _In_reads_(argc)  LPCWSTR argv[]
-    )
+)
 {
     int     ret             = 0;
     HRESULT hr              = S_OK;

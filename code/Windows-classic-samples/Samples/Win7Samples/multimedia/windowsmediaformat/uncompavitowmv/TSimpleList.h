@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -19,7 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 //  Element of the list template
-//  Implements operators < , == and != 
+//  Implements operators < , == and !=
 //  required by CTSimpleList template
 //  Template parameter class must implement method Cleanup()
 //
@@ -33,7 +33,7 @@ public :
     {
         m_elem.Cleanup();
     }
-    
+
     explicit El( const e )
     {
         m_elem = e;
@@ -52,17 +52,17 @@ public :
 
     bool operator<( const El< e > &right )
     {
-      return( this->m_elem < right.m_elem );
+        return( this->m_elem < right.m_elem );
     }
 
     bool operator==( const El< e > &right )
     {
-      return( this->m_elem == right.m_elem );
+        return( this->m_elem == right.m_elem );
     }
 
     bool operator!=( const El< e > &right )
     {
-      return( !( this->m_elem == right.m_elem ) );
+        return( !( this->m_elem == right.m_elem ) );
     }
 
     e   m_elem;
@@ -70,7 +70,7 @@ public :
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-typedef enum 
+typedef enum
 {
     ITER_FIRST,
     ITER_NEXT
@@ -79,7 +79,7 @@ typedef enum
 ////////////////////////////////////////////////////////////////////////////////
 // List template declaration
 ////////////////////////////////////////////////////////////////////////////////
-template< class T > class CTSimpleList  
+template< class T > class CTSimpleList
 {
 public:
     CTSimpleList()
@@ -97,10 +97,16 @@ public:
         }
     }
 
-    El<T> *GetStart() { return m_pStart; };
+    El<T> *GetStart()
+    {
+        return m_pStart;
+    };
     bool Append( T * pElem );
     bool Erase( El<T> * pElem );
-    WORD Size() { return m_wSize; };
+    WORD Size()
+    {
+        return m_wSize;
+    };
     T *Iterate( IterationType Iter, El<T> ** ppEl = NULL );
     T *GetMinElement( El<T> ** ppEl = NULL );
 
@@ -127,7 +133,7 @@ bool CTSimpleList< T >::Append( T * pElem )
         return( FALSE );
     }
 
-    m_pEnd->m_elem = *pElem; 
+    m_pEnd->m_elem = *pElem;
     m_pEnd->m_pNext = NULL;
     (m_pCur ? m_pCur->m_pNext : m_pStart ) = m_pEnd;
     m_wSize++;
@@ -160,11 +166,11 @@ bool CTSimpleList< T >::Erase( El<T> * pElem )
         {
             if( NULL != pEl->m_pNext && pEl->m_pNext == pElem )
             {
-               pTemp = pEl->m_pNext;
-               pEl->m_pNext = pEl->m_pNext->m_pNext;
-               delete pTemp;
-               m_wSize--;
-               return TRUE;
+                pTemp = pEl->m_pNext;
+                pEl->m_pNext = pEl->m_pNext->m_pNext;
+                delete pTemp;
+                m_wSize--;
+                return TRUE;
             }
         }
     }
@@ -174,7 +180,7 @@ bool CTSimpleList< T >::Erase( El<T> * pElem )
 
 ////////////////////////////////////////////////////////////////////////////////
 template< class T >
-T * CTSimpleList< T >::Iterate( IterationType Iter, El<T> ** ppEl ) 
+T * CTSimpleList< T >::Iterate( IterationType Iter, El<T> ** ppEl )
 {
     do
     {
@@ -209,7 +215,8 @@ T * CTSimpleList< T >::Iterate( IterationType Iter, El<T> ** ppEl )
             return( &(m_pIter->m_elem) );
         }
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     if( NULL != ppEl )
     {
@@ -261,7 +268,7 @@ T *Find( CTSimpleList< T > * pLst, A * pElem, El<T> ** ppEl )
         for( El< T > * pEl = pStart; NULL != pEl; pEl = pEl->m_pNext )
         {
             if( pEl->m_elem == *pElem )
-            {                
+            {
                 if( NULL != ppEl )
                 {
                     *ppEl = pEl;

@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,7 +14,8 @@
 
 WSD_LOCALIZED_STRING thisDeviceName = {NULL, L"StockQuote Device"};
 WSD_LOCALIZED_STRING_LIST thisDeviceNameList = {NULL, &thisDeviceName};
-const WSD_THIS_DEVICE_METADATA thisDeviceMetadata = {
+const WSD_THIS_DEVICE_METADATA thisDeviceMetadata =
+{
     &thisDeviceNameList,        // FriendlyName;
     L"0.095",                   // FirmwareVersion;
     L"0123456789-9876543210",   // SerialNumber;
@@ -29,7 +30,7 @@ void print_result(HRESULT hr)
     {
         _cwprintf(L"[S_OK]\r\n");
     }
-    else 
+    else
     {
         _cwprintf(L"[ERROR: %x]\r\n", hr);
     }
@@ -51,7 +52,7 @@ float StockLookup(
 // CStockQuoteService constructor
 //////////////////////////////////////////////////////////////////////////////
 CStockQuoteService::CStockQuoteService()
-:   m_cRef(1)
+    :   m_cRef(1)
 {
 }
 
@@ -62,7 +63,7 @@ CStockQuoteService::CStockQuoteService()
 //  a structure with a stock price.
 //////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP CStockQuoteService::GetLastTradePrice(
-    TRADE_PRICE_REQUEST* parameters, 
+    TRADE_PRICE_REQUEST* parameters,
     TRADE_PRICE** ppTradePrice)
 {
     TRADE_PRICE* pTradePrice = NULL;
@@ -92,7 +93,7 @@ STDMETHODIMP CStockQuoteService::GetLastTradePrice(
     // Deallocator for this port type's stub functions is WSDFreeLinkedMemory.
     _cwprintf(L"    Allocating response structure... ");
     pTradePrice = (TRADE_PRICE*)WSDAllocateLinkedMemory( NULL,
-            sizeof(TRADE_PRICE) );
+                  sizeof(TRADE_PRICE) );
 
     if( NULL == pTradePrice )
     {
@@ -145,7 +146,7 @@ void Usage()
 //      argv[1] = device address
 //////////////////////////////////////////////////////////////////////////////
 int _cdecl wmain(
-    int argc, 
+    int argc,
     _In_reads_(argc) LPWSTR* argv)
 {
     HRESULT hr = S_OK;
@@ -170,7 +171,7 @@ int _cdecl wmain(
         {
             // Copy device address, if specified
             hr = ::StringCbCopyW( szDeviceAddress,
-                    sizeof(szDeviceAddress), argv[1] );
+                                  sizeof(szDeviceAddress), argv[1] );
         }
     }
     else
@@ -185,11 +186,11 @@ int _cdecl wmain(
         if( S_OK == hr )
         {
             hr = StringCbPrintfW(
-                szDeviceAddress, sizeof(szDeviceAddress),
-                L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-                uuid.Data1, uuid.Data2, uuid.Data3,
-                uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
-                uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
+                     szDeviceAddress, sizeof(szDeviceAddress),
+                     L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+                     uuid.Data1, uuid.Data2, uuid.Data3,
+                     uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
+                     uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
         }
     }
 
@@ -222,7 +223,7 @@ int _cdecl wmain(
     {
         _cwprintf(L"Creating stock quote host with ID %s... ", szDeviceAddress);
         hr = CreateStockQuoteHost( szDeviceAddress, &thisDeviceMetadata,
-                pIStockQuote, &pHost, NULL );
+                                   pIStockQuote, &pHost, NULL );
         print_result( hr );
     }
 

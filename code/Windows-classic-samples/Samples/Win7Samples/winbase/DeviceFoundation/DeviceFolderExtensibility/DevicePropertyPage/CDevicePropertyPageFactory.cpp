@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -45,7 +45,7 @@ IFACEMETHODIMP CDevicePropertyPageFactory::CreateInstance(
     __in_opt IUnknown* pUnkOuter,
     __in REFIID riid,
     __deref_out void** ppvObject
-    )
+)
 {
     HRESULT hr  = E_FAIL;
     CDevicePropertyPage* pCDevicePropertyPage = NULL;
@@ -65,7 +65,7 @@ IFACEMETHODIMP CDevicePropertyPageFactory::CreateInstance(
     {
         return E_OUTOFMEMORY;
     }
-	
+
     hr = pCDevicePropertyPage->QueryInterface( riid, ppvObject );
     pCDevicePropertyPage->Release();
 
@@ -78,7 +78,7 @@ IFACEMETHODIMP CDevicePropertyPageFactory::CreateInstance(
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDevicePropertyPageFactory::LockServer(
     BOOL bLock
-    )
+)
 {
     if( TRUE == bLock )
     {
@@ -101,9 +101,9 @@ IFACEMETHODIMP CDevicePropertyPageFactory::LockServer(
 // CDevicePropertyPageFactory::QueryInterface
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDevicePropertyPageFactory::QueryInterface(
-    __in REFIID riid, 
+    __in REFIID riid,
     __deref_out void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

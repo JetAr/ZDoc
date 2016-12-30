@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1995 Intel Corp
 
@@ -56,7 +56,7 @@ typedef
 VOID
 (WINAPI * LPFNWSAEXCEPTIONNOTIFY)(
     IN LPEXCEPTION_POINTERS ExceptionPointers
-    );
+);
 
 //
 // Function prototype for exception notify.
@@ -66,7 +66,7 @@ VOID
 WINAPI
 WSAExceptionNotify(
     IN LPEXCEPTION_POINTERS ExceptionPointers
-    );
+);
 
 
 //

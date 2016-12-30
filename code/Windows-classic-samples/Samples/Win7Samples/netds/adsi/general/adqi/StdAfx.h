@@ -1,4 +1,4 @@
-// stdafx.h : include file for standard system include files,
+﻿// stdafx.h : include file for standard system include files,
 //  or project specific include files that are used frequently, but
 //      are changed infrequently
 //
@@ -25,20 +25,20 @@
 
 typedef void (* ADSDLGPROC)(LPUNKNOWN, LPUNKNOWN*);
 
-typedef struct tagADSIIF 
+typedef struct tagADSIIF
 {
-	const GUID    *pIID;
-	LPTSTR		   szIf;
-	ADSDLGPROC     pFn;	
+    const GUID    *pIID;
+    LPTSTR		   szIf;
+    ADSDLGPROC     pFn;
 } ADSIIF;
 
 typedef struct tagADSERRMSG
 {
-	HRESULT    hr;
-	LPCTSTR    pszError;
-}ADSERRMSG;
+    HRESULT    hr;
+    LPCTSTR    pszError;
+} ADSERRMSG;
 
-#define MAKEADSENTRY(x)  &IID_##x, _T(#x) 
+#define MAKEADSENTRY(x)  &IID_##x, _T(#x)
 #define ADDADSERROR(x)   x, _T(#x)
 #define DECLAREADSPROC(x) void DlgProc##x(LPUNKNOWN, LPUNKNOWN *ppNew=NULL); \
 void DlgProc##x(LPUNKNOWN pUnk, LPUNKNOWN *ppNew) { CDlg##x dlg( pUnk); dlg.DoModal(); }

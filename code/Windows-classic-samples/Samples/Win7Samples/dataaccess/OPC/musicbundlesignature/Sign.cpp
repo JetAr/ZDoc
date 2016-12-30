@@ -1,4 +1,4 @@
-//<SnippetMusicBundleSig_cppSignWholePage>
+ï»¿//<SnippetMusicBundleSig_cppSignWholePage>
 /*****************************************************************************
 *
 * File: Sign.cpp
@@ -12,18 +12,18 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 ****************************************************************************/
 
 #include <stdio.h>
@@ -59,25 +59,25 @@ static const WCHAR g_albumArtContentType[] = L"image/jpeg";
 static const WCHAR g_tracklistPartContentType[] = L"application/vnd.ms-wpl";
 
 // Relationship types for relationships in music bundle
-static const WCHAR g_tracklistRelationshipType[] = 
+static const WCHAR g_tracklistRelationshipType[] =
     L"http://schemas.example.com/package/2008/relationships/media-bundle/tracklist";
 
-// We reuse the thumbnail relationship defined in Office Open XML spec for relationship 
+// We reuse the thumbnail relationship defined in Office Open XML spec for relationship
 // to the album art image part.
-static const WCHAR g_albumArtRelationshipType[] = 
+static const WCHAR g_albumArtRelationshipType[] =
     L"http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail";
 
-static const WCHAR g_albumWebsiteRelationshipType[] = 
+static const WCHAR g_albumWebsiteRelationshipType[] =
     L"http://schemas.example.com/package/2008/relationships/media-bundle/album-website";
 
-static LPCWSTR g_trackRelationshipType = 
+static LPCWSTR g_trackRelationshipType =
     L"http://schemas.example.com/package/2008/relationships/media-bundle/playlist-song";
 
-static LPCWSTR g_lyricRelationshipType = 
+static LPCWSTR g_lyricRelationshipType =
     L"http://schemas.example.com/package/2008/relationships/media-bundle/song-lryic";
 
 // Signature relationship type as defined in OPC spec
-static LPCWSTR g_signatureRelationshipType = 
+static LPCWSTR g_signatureRelationshipType =
     L"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature";
 
 
@@ -98,7 +98,7 @@ GetPartsToBeSigned(
     OpcPartArray* lyricParts,
     IOpcPart** tracklistPart,
     IOpcPart** albumArtPart
-    )
+)
 {
     IOpcPartSet * partSet = NULL;
     IOpcRelationshipSet * relsSet = NULL;
@@ -119,24 +119,24 @@ GetPartsToBeSigned(
     if (SUCCEEDED(hr))
     {
         hr = GetPartByRelationshipType(
-                partSet, 
-                relsSet, 
-                g_albumArtRelationshipType, 
-                g_albumArtContentType,
-                albumArtPart
-                );
+                 partSet,
+                 relsSet,
+                 g_albumArtRelationshipType,
+                 g_albumArtContentType,
+                 albumArtPart
+             );
     }
 
     // Get tracklist part. As defined by our sample signing policy, it needs to be signed.
     if (SUCCEEDED(hr))
     {
         hr = GetPartByRelationshipType(
-                partSet, 
-                relsSet, 
-                g_tracklistRelationshipType, 
-                g_tracklistPartContentType, 
-                tracklistPart
-                );
+                 partSet,
+                 relsSet,
+                 g_tracklistRelationshipType,
+                 g_tracklistPartContentType,
+                 tracklistPart
+             );
     }
 
     // Get tracklist part's relationships.
@@ -152,20 +152,20 @@ GetPartsToBeSigned(
         hr = partRelsSet->GetEnumeratorForType(g_trackRelationshipType, &partRelsEnumerator);
     }
 
-    // Get the number of relationships to track parts. Note that we assume the 
+    // Get the number of relationships to track parts. Note that we assume the
     // number of track parts is the same as the number of lyric parts.
-    
-    
+
+
 
     while (
         SUCCEEDED(hr) &&
         SUCCEEDED(hr = partRelsEnumerator->MoveNext(&hasNext)) &&
         hasNext
-        )
+    )
     {
         count++;
     }
-    
+
     // Initialize the OpcPartArrays with desired capacity.
     if (SUCCEEDED(hr))
     {
@@ -176,7 +176,7 @@ GetPartsToBeSigned(
         hr = lyricParts->Init(count);
     }
 
-        
+
     while (
         SUCCEEDED(hr) &&
         // There is no method to rewind the enumerator to go to the beginning.
@@ -186,7 +186,7 @@ GetPartsToBeSigned(
         // will have the position pointing to the beginning so you can iterate forwards.
         SUCCEEDED(hr = partRelsEnumerator->MovePrevious(&hasPrevious)) &&
         hasPrevious
-        )
+    )
     {
         IOpcRelationship * rels = NULL;
         IOpcPart * trackPart = NULL;
@@ -215,14 +215,14 @@ GetPartsToBeSigned(
         if (SUCCEEDED(hr))
         {
             hr = GetPartByRelationshipType(
-                    partSet, 
-                    trackPartRelationshipSet, 
-                    g_lyricRelationshipType, 
-                    g_lyricContentType, 
-                    &lyricPart
-                    );
+                     partSet,
+                     trackPartRelationshipSet,
+                     g_lyricRelationshipType,
+                     g_lyricContentType,
+                     &lyricPart
+                 );
         }
-        
+
         if (SUCCEEDED(hr))
         {
             hr = lyricParts->Append(lyricPart);
@@ -253,7 +253,7 @@ GetPartsToBeSigned(
             lyricPart = NULL;
         }
     }
-    
+
     // Release resources
     if (partSet)
     {
@@ -279,16 +279,16 @@ GetPartsToBeSigned(
         partRelsEnumerator = NULL;
     }
 
-    // Depending on file format specification, we may also want to check whether the parts 
+    // Depending on file format specification, we may also want to check whether the parts
     // we want to sign have valid content formats. For example, if the file format says
-    // a specific part cannot be empty, then we should also check whether the part size 
-    // is zero. Validating the file format before signing makes sure you sign a package 
-    // that is valid according to your file format specification. 
+    // a specific part cannot be empty, then we should also check whether the part size
+    // is zero. Validating the file format before signing makes sure you sign a package
+    // that is valid according to your file format specification.
     return hr;
 }
 
 // Adds relationship reference by relationship type. Multiple relationship types
-// can be added in one call to this method. 
+// can be added in one call to this method.
 //
 // Parameters:
 //  relsReferenceSet - the relationship reference set that the new reference will be added to
@@ -301,7 +301,7 @@ AddReferenceByRelationshipType(
     IOpcUri* sourceUri,
     UINT32 count,
     LPCWSTR relationshipTypes[]
-    )
+)
 {
     // Create the relationship selector set to add relationship types as selection criterion.
     IOpcRelationshipSelectorSet * relsSelectorSet = NULL;
@@ -313,30 +313,30 @@ AddReferenceByRelationshipType(
         for (UINT32 i = 0; i < count && SUCCEEDED(hr); i++)
         {
             // Add relationship type as as selection criterion to the selector set.
-            // Since we sign the relationships by type, it guards against changes to the 
+            // Since we sign the relationships by type, it guards against changes to the
             // relationships we care about. However, relationships with different types
-            // can be changed, added or removed later and not breaking the signature. If 
+            // can be changed, added or removed later and not breaking the signature. If
             // you want to be more strict, you can sign the entire relationships part
             // (see OPC_RELATIONSHIP_SIGN_PART) so that any change to the relationships
             // part will break the signature.
             hr = relsSelectorSet->Create(
-                    OPC_RELATIONSHIP_SELECT_BY_TYPE,
-                    relationshipTypes[i],
-                    NULL
-                    );
+                     OPC_RELATIONSHIP_SELECT_BY_TYPE,
+                     relationshipTypes[i],
+                     NULL
+                 );
         }
 
         // Create and add the relationship reference to the set.
         if (SUCCEEDED(hr))
         {
             relsReferenceSet->Create(
-                sourceUri, 
+                sourceUri,
                 NULL,       // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
-                OPC_RELATIONSHIP_SIGN_USING_SELECTORS, 
-                relsSelectorSet, 
-                OPC_CANONICALIZATION_C14N, 
+                OPC_RELATIONSHIP_SIGN_USING_SELECTORS,
+                relsSelectorSet,
+                OPC_CANONICALIZATION_C14N,
                 NULL        // no need to get the output reference object
-                );
+            );
         }
     }
 
@@ -355,7 +355,7 @@ AddReferenceByRelationshipType(
 HRESULT
 AddCustomObjectsToSign(
     IOpcSigningOptions* signingOptions
-    )
+)
 {
     IOpcSignatureCustomObjectSet * customObjectSet = NULL;
     IOpcSignatureReferenceSet * customReferenceSet = NULL;
@@ -368,9 +368,9 @@ AddCustomObjectsToSign(
     // One possible usage may be adding trustable timestamp to the signature.
     // Note that the signing time provided by OPC digital signature spec is from the
     // clock of local machine where the signature is created. So it is not a trustable
-    // time since the clock may be inaccurate or the user may have changed the time locally.  
+    // time since the clock may be inaccurate or the user may have changed the time locally.
     //
-    // Here we use a fake timestamp as an example to show how you can use custom object. 
+    // Here we use a fake timestamp as an example to show how you can use custom object.
     // In real world you need to get a trustable timestamp from a timestamp server.
     //
     // To better understand this sample, you should open and view the signature XML stored in
@@ -379,55 +379,55 @@ AddCustomObjectsToSign(
 
     // Example of constructing a fully signed custom object. The entire
     // object XML markup will be signed because we will reference the Id of the
-    // object element. 
+    // object element.
     //
-    // Note that it is important to include namespace declaration in the XML markup. 
+    // Note that it is important to include namespace declaration in the XML markup.
     // Otherwise it is not a valid XML snippet that can be interpreted.
-    UINT8 customObject1[] = 
+    UINT8 customObject1[] =
         "<Object Id=\"idMyCustomObject_Timestamp1\" xmlns=\"http://www.w3.org/2000/09/xmldsig#\" xmlns:x=\"http://www.example.com/MusicBundle\">"
-            "<x:Comment>This is a fake timestamp.</x:Comment>"
-            "<x:EncodedTime>ABCDEFGHIJK</x:EncodedTime>"
+        "<x:Comment>This is a fake timestamp.</x:Comment>"
+        "<x:EncodedTime>ABCDEFGHIJK</x:EncodedTime>"
         "</Object>";
 
-    // Example of custructing a partially signed custom object. 
-    UINT8 customObject2[] = 
+    // Example of custructing a partially signed custom object.
+    UINT8 customObject2[] =
         "<Object xmlns=\"http://www.w3.org/2000/09/xmldsig#\">"
-            // The <TimeStamp> element XML markup will be signed, because we will 
-            // reference its Id.
-            "<TimeStamp Id=\"idMyCustomObject_Timestamp2\" xmlns=\"http://www.example.com/MusicBundle\">"
-                "<Comment>This is a fake timestamp.</Comment>"
-                "<EncodedTime>ABCDEFGHIJK</EncodedTime>"
-            "</TimeStamp>"
-            // Outside of the <TimeStamp> element is the unsigned portion of this custom
-            // object. Updates (changes, addition or deletion) can be made in that portion
-            // without breaking the signature.
-            "<Extension xmlns=\"http://www.example.com/MusicBundle\">"
-                "<Comment>Unsigned portion of XML. Can be updated without breaking the signature.</Comment>"
-            "</Extension>"
+        // The <TimeStamp> element XML markup will be signed, because we will
+        // reference its Id.
+        "<TimeStamp Id=\"idMyCustomObject_Timestamp2\" xmlns=\"http://www.example.com/MusicBundle\">"
+        "<Comment>This is a fake timestamp.</Comment>"
+        "<EncodedTime>ABCDEFGHIJK</EncodedTime>"
+        "</TimeStamp>"
+        // Outside of the <TimeStamp> element is the unsigned portion of this custom
+        // object. Updates (changes, addition or deletion) can be made in that portion
+        // without breaking the signature.
+        "<Extension xmlns=\"http://www.example.com/MusicBundle\">"
+        "<Comment>Unsigned portion of XML. Can be updated without breaking the signature.</Comment>"
+        "</Extension>"
         "</Object>";
 
 
     // Get the custom object set from signing options. We will add custom objects to
     // it so those custom objects will be created in the signature XML after Sign() is called.
     HRESULT hr = signingOptions->GetCustomObjectSet(&customObjectSet);
-    
+
     // Create and add the custom object into the custom object set.
     if (SUCCEEDED(hr))
     {
-        // Number of bytes of the custom object. Note that we need to minus 1 because the 
+        // Number of bytes of the custom object. Note that we need to minus 1 because the
         // buffer has the last byte as string terminator ('\0').
         count = sizeof(customObject1)/sizeof(customObject1[0]) - 1;
 
         hr = customObjectSet->Create(customObject1, count, NULL);
     }
-   
+
     // Create and add the custom object into the custom object set.
     if (SUCCEEDED(hr))
     {
-        // Number of bytes of the custom object. Note that we need to minus 1 because the 
+        // Number of bytes of the custom object. Note that we need to minus 1 because the
         // buffer has the last byte as string terminator ('\0').
         count = sizeof(customObject2)/sizeof(customObject2[0]) - 1;
-     
+
         hr = customObjectSet->Create(customObject2, count, NULL);
     }
 
@@ -453,40 +453,40 @@ AddCustomObjectsToSign(
     if (SUCCEEDED(hr))
     {
         hr = customReferenceSet->Create(
-                referenceUri1, 
-                NULL,   // Id. No Id for the reference element
-                L"http://www.w3.org/2000/09/xmldsig#Object", // Type
-                NULL,   // Digest method. Use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
-                OPC_CANONICALIZATION_C14N,   // Use C14N to canonicalize the referenced XML markup before signing
-                NULL    // no need to get the output signature reference object
-                );
+                 referenceUri1,
+                 NULL,   // Id. No Id for the reference element
+                 L"http://www.w3.org/2000/09/xmldsig#Object", // Type
+                 NULL,   // Digest method. Use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
+                 OPC_CANONICALIZATION_C14N,   // Use C14N to canonicalize the referenced XML markup before signing
+                 NULL    // no need to get the output signature reference object
+             );
     }
 
-    // Create reference to the element we want to sign in the second custom object. 
-    // Note that the reference Uri is constructed as "#" + the Id value of the element 
+    // Create reference to the element we want to sign in the second custom object.
+    // Note that the reference Uri is constructed as "#" + the Id value of the element
     // you want to sign. Here "#idMyCustomObject_Timestamp2" refers to the <TimeStamp>
     // element inside of the second custom object. Only the <TimeStamp> XML markup, including
     // its nested elements will be signed.
     if (SUCCEEDED(hr))
     {
         hr = CreateUri(
-                L"#idMyCustomObject_Timestamp2",
-                Uri_CREATE_ALLOW_RELATIVE,
-                0,
-                &referenceUri2
-                );
+                 L"#idMyCustomObject_Timestamp2",
+                 Uri_CREATE_ALLOW_RELATIVE,
+                 0,
+                 &referenceUri2
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         hr = customReferenceSet->Create(
-                referenceUri2, 
-                NULL,   // Id. No Id for the reference element
-                L"http://www.example.com/MusicBundle#TimestampObject", // Type, user defined type
-                NULL,   // Digest method. Use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
-                OPC_CANONICALIZATION_C14N,   // Use C14N to canonicalize the referenced XML markup before signing
-                NULL    // no need to get the output signature reference object
-                );
+                 referenceUri2,
+                 NULL,   // Id. No Id for the reference element
+                 L"http://www.example.com/MusicBundle#TimestampObject", // Type, user defined type
+                 NULL,   // Digest method. Use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
+                 OPC_CANONICALIZATION_C14N,   // Use C14N to canonicalize the referenced XML markup before signing
+                 NULL    // no need to get the output signature reference object
+             );
     }
 
     // Release resources
@@ -521,7 +521,7 @@ AddCustomObjectsToSign(
 HRESULT
 SelectCert(
     PCCERT_CONTEXT* certContext
-    )
+)
 {
     typedef BOOL (WINAPI *fnCertSelectCertificate)(PCERT_SELECT_STRUCT_W);
 
@@ -535,7 +535,7 @@ SelectCert(
 
     HRESULT hr = S_OK;
 
-    fnCertSelectCertificate  pfnCertSelectCertificate = 
+    fnCertSelectCertificate  pfnCertSelectCertificate =
         (fnCertSelectCertificate)GetProcAddress(hCryptDlgInst, "CertSelectCertificateW");
 
     if (pfnCertSelectCertificate)
@@ -556,7 +556,7 @@ SelectCert(
 
             BOOL result = pfnCertSelectCertificate(&certSelect);
 
-            if (!result) 
+            if (!result)
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -574,13 +574,13 @@ SelectCert(
 
             CertCloseStore(hMySysStore, 0);
         }
-        else 
+        else
         {
             fwprintf(stderr, L"CertOpenSystemStore() failed.\n");
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
     }
-    else 
+    else
     {
         fwprintf(stderr, L"Cannot find CertSelectCertificateW function in CryptDlg.dll.\n");
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -603,7 +603,7 @@ PrepareForSigning(
     IOpcPackage* opcPackage,
     IOpcSigningOptions* signingOptions,
     IOpcDigitalSignatureManager* opcDigSigManager
-    )
+)
 {
     IOpcPart * albumArtPart = NULL;
     IOpcPart * tracklistPart = NULL;
@@ -617,23 +617,23 @@ PrepareForSigning(
     OpcPartArray trackParts;
     OpcPartArray lyricParts;
 
-    // As defined by our sample signing policy, any root relationship with tracklist, 
-    // album art or album website relationship type needs to be signed. 
-    LPCWSTR rootRelationshipTypesToSign[] = 
+    // As defined by our sample signing policy, any root relationship with tracklist,
+    // album art or album website relationship type needs to be signed.
+    LPCWSTR rootRelationshipTypesToSign[] =
     {
-        g_tracklistRelationshipType, 
-        g_albumArtRelationshipType, 
+        g_tracklistRelationshipType,
+        g_albumArtRelationshipType,
         g_albumWebsiteRelationshipType
     };
-    
+
     // Get the parts that should be signed according to the custom signing policy.
     HRESULT hr = GetPartsToBeSigned(
-                    opcPackage,
-                    &trackParts,
-                    &lyricParts,
-                    &tracklistPart,
-                    &albumArtPart
-                    );
+                     opcPackage,
+                     &trackParts,
+                     &lyricParts,
+                     &tracklistPart,
+                     &albumArtPart
+                 );
 
     // Get the part reference set so we can add references to parts we want to sign.
     if (SUCCEEDED(hr))
@@ -655,7 +655,7 @@ PrepareForSigning(
         hr = opcFactory->CreatePackageRootUri(&rootUri);
     }
 
-    // Add references to root relationships need-to-sign to the relationship reference set. 
+    // Add references to root relationships need-to-sign to the relationship reference set.
     if (SUCCEEDED(hr))
     {
         hr = AddReferenceByRelationshipType(relsReferenceSet, rootUri, 3, rootRelationshipTypesToSign);
@@ -672,11 +672,11 @@ PrepareForSigning(
     if (SUCCEEDED(hr))
     {
         hr = partReferenceSet->Create(
-                albumArtPartUri, 
-                NULL,   // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
-                OPC_CANONICALIZATION_NONE,
-                NULL    // no need to get the output part reference
-                );
+                 albumArtPartUri,
+                 NULL,   // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
+                 OPC_CANONICALIZATION_NONE,
+                 NULL    // no need to get the output part reference
+             );
     }
 
     //
@@ -690,78 +690,78 @@ PrepareForSigning(
     if (SUCCEEDED(hr))
     {
         hr = partReferenceSet->Create(
-                tracklistPartUri, 
-                NULL,   // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
-                OPC_CANONICALIZATION_NONE,
-                NULL    // no need to get the output part reference
-                );
+                 tracklistPartUri,
+                 NULL,   // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
+                 OPC_CANONICALIZATION_NONE,
+                 NULL    // no need to get the output part reference
+             );
     }
 
     //
-    // As defined by our sample signing policy, any tracklist part relationship with 
-    // track relationship type needs to be signed. 
-    // Add a reference to such a relationship to the relationship reference set. 
+    // As defined by our sample signing policy, any tracklist part relationship with
+    // track relationship type needs to be signed.
+    // Add a reference to such a relationship to the relationship reference set.
     //
     if (SUCCEEDED(hr))
     {
         hr = AddReferenceByRelationshipType(
-                relsReferenceSet,
-                tracklistPartUri,
-                1,
-                &g_trackRelationshipType
-                );
+                 relsReferenceSet,
+                 tracklistPartUri,
+                 1,
+                 &g_trackRelationshipType
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         //
-        // Create part reference to the track parts so they will be signed. 
+        // Create part reference to the track parts so they will be signed.
         //
         UINT32 numberOfTracks = trackParts.GetCount();
-    
+
         for (UINT32 i=0; i<numberOfTracks && SUCCEEDED(hr); i++)
         {
             IOpcPart * trackPart = NULL;
             IOpcPartUri * trackPartUri = NULL;
-    
+
             hr = trackParts.GetAt(i, &trackPart);
-            
+
             if (SUCCEEDED(hr))
             {
                 hr = trackPart->GetName(&trackPartUri);
             }
-    
+
             if (SUCCEEDED(hr))
             {
                 hr = partReferenceSet->Create(
-                        trackPartUri, 
-                        NULL,   // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
-                        OPC_CANONICALIZATION_NONE,
-                        NULL    // no need to get the output part reference
-                        );
+                         trackPartUri,
+                         NULL,   // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
+                         OPC_CANONICALIZATION_NONE,
+                         NULL    // no need to get the output part reference
+                     );
             }
-    
+
             //
-            // As defined by our sample signing policy, any track part relationship with 
-            // lyric relationship type needs to be signed. 
-            // Add a reference to such a relationship to the relationship reference set. 
+            // As defined by our sample signing policy, any track part relationship with
+            // lyric relationship type needs to be signed.
+            // Add a reference to such a relationship to the relationship reference set.
             //
             if (SUCCEEDED(hr))
             {
                 hr = AddReferenceByRelationshipType(
-                        relsReferenceSet,
-                        trackPartUri,
-                        1,
-                        &g_lyricRelationshipType
-                        );
+                         relsReferenceSet,
+                         trackPartUri,
+                         1,
+                         &g_lyricRelationshipType
+                     );
             }
-    
+
             if (trackPart)
             {
                 trackPart->Release();
                 trackPart = NULL;
             }
-    
+
             if (trackPartUri)
             {
                 trackPartUri->Release();
@@ -773,38 +773,38 @@ PrepareForSigning(
     if (SUCCEEDED(hr))
     {
         //
-        // Create part reference to the lyric parts so they will be signed. 
+        // Create part reference to the lyric parts so they will be signed.
         //
         UINT32 numberOfLyrics = lyricParts.GetCount();
-    
+
         for (UINT32 i=0; i<numberOfLyrics && SUCCEEDED(hr); i++)
         {
             IOpcPart * lyricPart = NULL;
             IOpcPartUri * lyricPartUri = NULL;
-    
+
             hr = lyricParts.GetAt(i, &lyricPart);
-    
+
             if (SUCCEEDED(hr))
             {
                 hr = lyricPart->GetName(&lyricPartUri);
             }
-    
+
             if (SUCCEEDED(hr))
             {
                 hr = partReferenceSet->Create(
-                        lyricPartUri, 
-                        NULL,   // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
-                        OPC_CANONICALIZATION_NONE,
-                        NULL    // no need to get the output part reference
-                        );
+                         lyricPartUri,
+                         NULL,   // use default digest method, which will be set by IOpcSigningOptions::SetDefaultDigestMethod()
+                         OPC_CANONICALIZATION_NONE,
+                         NULL    // no need to get the output part reference
+                     );
             }
-    
+
             if (lyricPart)
             {
                 lyricPart->Release();
                 lyricPart = NULL;
             }
-    
+
             if (lyricPartUri)
             {
                 lyricPartUri->Release();
@@ -815,11 +815,11 @@ PrepareForSigning(
 
     //
     // As defined by our sample signing policy, any signature origin part's relationship
-    // with signature relationship type needs to be signed. 
+    // with signature relationship type needs to be signed.
     // In order to do that, we must define the signature origin part's name before calling Sign().
     //
     // Note that signing the signature relationships from the signature origin part is not required
-    // by OPC Digital Signature spec. Doing so will prevent any new signatures from being added to 
+    // by OPC Digital Signature spec. Doing so will prevent any new signatures from being added to
     // the signed package in the future. It may be desirable or not depending on user's scenario
     // and should be called out in the signing policy of the custom file format. In general, if you
     // want to allow somebody else to sign the package after you sign it (countersign scenario),
@@ -829,7 +829,7 @@ PrepareForSigning(
     {
         hr = opcFactory->CreatePartUri(g_signatureOriginPartName, &signatureOriginPartUri);
     }
-    
+
     // We assume the signature origin part uri is unique in the package. If not, Sign() will fail.
     if (SUCCEEDED(hr))
     {
@@ -840,25 +840,25 @@ PrepareForSigning(
     if (SUCCEEDED(hr))
     {
         hr = AddReferenceByRelationshipType(
-                relsReferenceSet,
-                signatureOriginPartUri,
-                1,
-                &g_signatureRelationshipType
-                );
+                 relsReferenceSet,
+                 signatureOriginPartUri,
+                 1,
+                 &g_signatureRelationshipType
+             );
     }
 
     // The default certificate embedding option is OPC_CERTIFICATE_IN_CERTIFICATE_PART,
-    // so if you are fine with the default you don't really need to make this call. 
+    // so if you are fine with the default you don't really need to make this call.
     // Making it explicitly here to let you know you can change the embedding option by calling
     // SetCertificateEmbeddingOption(). Using OPC_CERTIFICATE_IN_CERTIFICATE_PART is recommended
     // because multiple signatures may share the same certificate if the certificate is stored in
-    // a part. 
+    // a part.
     if (SUCCEEDED(hr))
     {
         hr = signingOptions->SetCertificateEmbeddingOption(OPC_CERTIFICATE_IN_CERTIFICATE_PART);
     }
 
-    // Advanced scenario: adding custom objects to the signature. 
+    // Advanced scenario: adding custom objects to the signature.
     // Custom objects can add more information (like XAdES timestamp) to the signature
     // if needed. For basic scenarios, you can skip this step.
     if (SUCCEEDED(hr))
@@ -866,13 +866,13 @@ PrepareForSigning(
         hr = AddCustomObjectsToSign(signingOptions);
     }
 
-    // User must provide default digest method before calling Sign(). 
+    // User must provide default digest method before calling Sign().
     if (SUCCEEDED(hr))
     {
         hr = signingOptions->SetDefaultDigestMethod(g_defaultDigestMethod);
     }
 
-    // User must provide signature method before calling Sign(). 
+    // User must provide signature method before calling Sign().
     // User also needs to make sure the certificate he/she selected for signing supports
     // the signature method. Otherwise Sign() will fail. For more information on how to
     // find the supported signature methods in a certificate, check the
@@ -937,7 +937,7 @@ PrepareForSigning(
 HRESULT
 SignMusicBundle(
     IOpcFactory* opcFactory
-    )
+)
 {
     IOpcPackage * opcPackage = NULL;
     IOpcDigitalSignatureManager * opcDigSigManager = NULL;
@@ -956,13 +956,13 @@ SignMusicBundle(
 
     // First detect whether the package has been signed previously.
     // Our signing policy in this sample disallows countersignature (adding more
-    // signatures to an already signed music bundle) so we signed the signature origin part’s 
+    // signatures to an already signed music bundle) so we signed the signature origin partâ€™s
     // signature relationships by relationship type. Adding new signature will
-    // break the existing signature. 
+    // break the existing signature.
     //
     // Note that it is not required or recommended for a signing policy to disallow
     // countersignature. If your signing policy allows countersignature, you shouldn't
-    // sign the signature origin part’s signature relationships by relationship type. 
+    // sign the signature origin partâ€™s signature relationships by relationship type.
     if (SUCCEEDED(hr))
     {
         hr = opcDigSigManager->GetSignatureEnumerator(&signatureEnumerator);
@@ -976,9 +976,9 @@ SignMusicBundle(
         if (SUCCEEDED(hr) && hasNext)
         {
             fwprintf(
-                stderr, 
+                stderr,
                 L"This music bundle has been signed. To sign a music bundle, it must have not been signed before.\n"
-                );
+            );
 
             hr = E_UNEXPECTED;
         }
@@ -998,18 +998,18 @@ SignMusicBundle(
     // Let user select a certificate from the certificate store on the local machine.
     // We will use the certificate to sign the music bundle and the signer will be identified
     // by the certificate. It is not always necessary to pop up a UI dialog for user to select
-    // a signer certificate. In a sever signing scenario (no human interaction), the sever process 
+    // a signer certificate. In a sever signing scenario (no human interaction), the sever process
     // may have pre-defined certificate to use or pick a certificate from certificate store using
     // CertFindCertificateInStore API.
     //
     // Note that Sign() does not verify the certificate so user should verify the certificate like
-    // making sure it is not expired, not in revocation lists, etc. User should also verify the 
+    // making sure it is not expired, not in revocation lists, etc. User should also verify the
     // certification path of the certificate to see whether it leads to a trusted root certificate.
     // The above can be done programmatically in production code. For more information, check
     // CertGetCertificateChain API.
     //
     // Also note that the certificate selected must support the signature method we use in this sample,
-    // which is RSA-SHA1. RSA is the encryption algorithm. A user can check whether a certificate 
+    // which is RSA-SHA1. RSA is the encryption algorithm. A user can check whether a certificate
     // supports RSA by checking its public key type. SHA1 is the hash algorithm and is not related to
     // a certificate. Because of these, the signature algorithm can be determined based on
     // what certificate is used for signing, instead of using an arbitrary one like in this sample.
@@ -1021,15 +1021,15 @@ SignMusicBundle(
         hr = SelectCert(&cert);
     }
 
-    // Sign() will add signature related parts and relationships to the package object. 
-    // If Sign() fails, it may leave unwanted parts and relationships in the package. 
-    // However, the changes are not persisted until we call IOpcFactory::WritePackageToStream(). 
+    // Sign() will add signature related parts and relationships to the package object.
+    // If Sign() fails, it may leave unwanted parts and relationships in the package.
+    // However, the changes are not persisted until we call IOpcFactory::WritePackageToStream().
     // So you can simply discard the package object if Sign() fails and your original package
-    // file on disk is intact. 
+    // file on disk is intact.
     //
     // However, if you just created the package from scratch or edited an existing package,
     // you should save the package before calling Sign() to prevent loss of data in case Sign()
-    // fails. 
+    // fails.
     //
     // For this sample, since the package has no changes that need to be saved at this point,
     // we will call Sign() immediately.

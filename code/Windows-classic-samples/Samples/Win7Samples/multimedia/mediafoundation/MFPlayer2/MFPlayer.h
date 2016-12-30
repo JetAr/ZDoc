@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // File: MFPlayer.h
 // Main header for the application
@@ -58,7 +58,7 @@ template <class T> void SafeRelease(T **ppT)
 
 inline HINSTANCE GetInstance()
 {
-    return (HINSTANCE)GetModuleHandle(NULL); 
+    return (HINSTANCE)GetModuleHandle(NULL);
 }
 
 // Include the v6 common controls in the manifest

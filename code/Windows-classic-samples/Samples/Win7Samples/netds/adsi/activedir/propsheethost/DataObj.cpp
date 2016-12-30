@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 //    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
 //    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,14 +32,14 @@
 
 **************************************************************************/
 
-STDMETHODIMP CPropSheetHost::QueryInterface(REFIID riid, 
-                                            LPVOID *ppReturn)
+STDMETHODIMP CPropSheetHost::QueryInterface(REFIID riid,
+        LPVOID *ppReturn)
 {
     if(!ppReturn)
     {
         return E_INVALIDARG;
     }
-    
+
     *ppReturn = NULL;
 
     if(IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IDataObject))
@@ -54,7 +54,7 @@ STDMETHODIMP CPropSheetHost::QueryInterface(REFIID riid,
     }
 
     return E_NOINTERFACE;
-}                                             
+}
 
 /**************************************************************************
 
@@ -80,7 +80,7 @@ STDMETHODIMP_(DWORD) CPropSheetHost::Release()
         delete this;
         return 0;
     }
-   
+
     return m_ObjRefCount;
 }
 
@@ -93,19 +93,19 @@ STDMETHODIMP_(DWORD) CPropSheetHost::Release()
 
    CPropSheetHost::GetData()
 
-    Retrieves the data and places it in memory that the implementation 
+    Retrieves the data and places it in memory that the implementation
     allocates.
 
 **************************************************************************/
 
-STDMETHODIMP CPropSheetHost::GetData(FORMATETC *pFormatEtc, 
-                                    STGMEDIUM *pStgMedium)
+STDMETHODIMP CPropSheetHost::GetData(FORMATETC *pFormatEtc,
+                                     STGMEDIUM *pStgMedium)
 {
     if(!pFormatEtc || ! pStgMedium)
     {
         return E_INVALIDARG;
     }
-    
+
     HRESULT hr = DV_E_FORMATETC;
 
     if(m_cfDSDispSpecOptions == pFormatEtc->cfFormat)
@@ -128,13 +128,13 @@ STDMETHODIMP CPropSheetHost::GetData(FORMATETC *pFormatEtc,
 
    CPropSheetHost::GetDataHere()
 
-    Retrieves the data and places it in memory that the caller 
+    Retrieves the data and places it in memory that the caller
     allocates.
 
 **************************************************************************/
 
-STDMETHODIMP CPropSheetHost::GetDataHere(FORMATETC *pFormatEtc, 
-                                        STGMEDIUM *pStgMedium)
+STDMETHODIMP CPropSheetHost::GetDataHere(FORMATETC *pFormatEtc,
+        STGMEDIUM *pStgMedium)
 {
     return E_NOTIMPL;
 }
@@ -143,8 +143,8 @@ STDMETHODIMP CPropSheetHost::GetDataHere(FORMATETC *pFormatEtc,
 
     CPropSheetHost::QueryGetData()
 
-    Determines if the data object can supply the data in the specified 
-    format. Returns S_OK if it can or one of the DV_E_ values if not. It is 
+    Determines if the data object can supply the data in the specified
+    format. Returns S_OK if it can or one of the DV_E_ values if not. It is
     not necessary to call this before GetData() or GetDataHere().
 
 **************************************************************************/
@@ -163,7 +163,7 @@ STDMETHODIMP CPropSheetHost::QueryGetData(FORMATETC *pFormatEtc)
     {
         return S_OK;
     }
-    
+
     return DV_E_FORMATETC;
 }
 
@@ -173,8 +173,8 @@ STDMETHODIMP CPropSheetHost::QueryGetData(FORMATETC *pFormatEtc)
 
 **************************************************************************/
 
-STDMETHODIMP CPropSheetHost::GetCanonicalFormatEtc(LPFORMATETC pFEIn, 
-                                                  LPFORMATETC pFEOut)
+STDMETHODIMP CPropSheetHost::GetCanonicalFormatEtc(LPFORMATETC pFEIn,
+        LPFORMATETC pFEOut)
 {
     return E_NOTIMPL;
 }
@@ -185,8 +185,8 @@ STDMETHODIMP CPropSheetHost::GetCanonicalFormatEtc(LPFORMATETC pFEIn,
 
 **************************************************************************/
 
-STDMETHODIMP CPropSheetHost::EnumFormatEtc(DWORD dwDirection, 
-                                          IEnumFORMATETC** ppEFE)
+STDMETHODIMP CPropSheetHost::EnumFormatEtc(DWORD dwDirection,
+        IEnumFORMATETC** ppEFE)
 {
     return E_NOTIMPL;
 }
@@ -197,9 +197,9 @@ STDMETHODIMP CPropSheetHost::EnumFormatEtc(DWORD dwDirection,
 
 **************************************************************************/
 
-STDMETHODIMP CPropSheetHost::SetData(LPFORMATETC pFormatEtc, 
-                                    LPSTGMEDIUM pStgMedium, 
-                                    BOOL fRelease)
+STDMETHODIMP CPropSheetHost::SetData(LPFORMATETC pFormatEtc,
+                                     LPSTGMEDIUM pStgMedium,
+                                     BOOL fRelease)
 {
     return E_NOTIMPL;
 }
@@ -210,10 +210,10 @@ STDMETHODIMP CPropSheetHost::SetData(LPFORMATETC pFormatEtc,
 
 **************************************************************************/
 
-STDMETHODIMP CPropSheetHost::DAdvise(  LPFORMATETC pFE, 
-                                    DWORD advf, 
-                                    IAdviseSink *ppAdviseSink, 
-                                    LPDWORD pdwConnection)
+STDMETHODIMP CPropSheetHost::DAdvise(  LPFORMATETC pFE,
+                                       DWORD advf,
+                                       IAdviseSink *ppAdviseSink,
+                                       LPDWORD pdwConnection)
 {
     return E_NOTIMPL;
 }
@@ -248,27 +248,27 @@ STDMETHODIMP CPropSheetHost::EnumDAdvise(IEnumSTATDATA** ppEnumAdvise)
 
 ***************************************************************************/
 
-HRESULT CPropSheetHost::_GetDSDispSpecOption(FORMATETC *pFormatEtc, 
-                                             STGMEDIUM *pStgMedium)
+HRESULT CPropSheetHost::_GetDSDispSpecOption(FORMATETC *pFormatEtc,
+        STGMEDIUM *pStgMedium)
 {
     if((m_cfDSDispSpecOptions != pFormatEtc->cfFormat) ||
-        !(pFormatEtc->tymed & TYMED_HGLOBAL))
+            !(pFormatEtc->tymed & TYMED_HGLOBAL))
     {
         return DV_E_FORMATETC;
     }
-    
+
     HRESULT hr = E_OUTOFMEMORY;
     LPWSTR pwszPrefix = m_pwszPrefix;
     DWORD dwPrefixOffset;
 
     // Size of the DSDISPLAYSPECOPTIONS structure.
     DWORD dwBytes = sizeof(DSDISPLAYSPECOPTIONS);
-    
+
     // Store the offset to the prefix.
     dwPrefixOffset = dwBytes;
-    
+
     // Length of the prefix Unicode string, including the null terminator.
-	DWORD strBufferLenInChar = lstrlenW(pwszPrefix) + 1;
+    DWORD strBufferLenInChar = lstrlenW(pwszPrefix) + 1;
     dwBytes += strBufferLenInChar * sizeof(WCHAR);
 
     pStgMedium->pUnkForRelease = NULL;
@@ -288,7 +288,7 @@ HRESULT CPropSheetHost::_GetDSDispSpecOption(FORMATETC *pFormatEtc,
             pDispSpecOptions->offsetPassword = 0;
             pDispSpecOptions->offsetServer = 0;
             pDispSpecOptions->offsetServerConfigPath = 0;
-            
+
             // Copy the prefix string.
             pwszTemp = (LPWSTR)((LPBYTE)pDispSpecOptions + dwPrefixOffset);
             wcscpy_s(pwszTemp, strBufferLenInChar, pwszPrefix);
@@ -310,15 +310,15 @@ HRESULT CPropSheetHost::_GetDSDispSpecOption(FORMATETC *pFormatEtc,
 
 ***************************************************************************/
 
-HRESULT CPropSheetHost::_GetDSObjectNames(FORMATETC *pFormatEtc, 
-                                          STGMEDIUM *pStgMedium)
+HRESULT CPropSheetHost::_GetDSObjectNames(FORMATETC *pFormatEtc,
+        STGMEDIUM *pStgMedium)
 {
     if((m_cfDSObjectNames != pFormatEtc->cfFormat) ||
-        !(pFormatEtc->tymed & TYMED_HGLOBAL))
+            !(pFormatEtc->tymed & TYMED_HGLOBAL))
     {
         return DV_E_FORMATETC;
     }
-    
+
     HRESULT hr;
     CComBSTR sbstrADsPath;
 
@@ -339,21 +339,21 @@ HRESULT CPropSheetHost::_GetDSObjectNames(FORMATETC *pFormatEtc,
 
     // Size of the DSOBJECTNAMES structure.
     size_t dwBytes = sizeof(DSOBJECTNAMES);
-    
+
     // Store the offset to the name.
     size_t dwNameOffset = dwBytes;
-    
+
     // Length of the ADsPath Unicode string, including the null terminator.
-	size_t pathBuffLenInChar = sbstrADsPath.Length() + 1;
+    size_t pathBuffLenInChar = sbstrADsPath.Length() + 1;
     dwBytes += pathBuffLenInChar * sizeof(WCHAR);
-    
+
     // Store the offset to the class.
     size_t dwClassOffset = dwBytes;
 
     // Length of the class Unicode string, including the null terminator.
-	size_t classBuffLenInChar = sbstrClass.Length() + 1;
+    size_t classBuffLenInChar = sbstrClass.Length() + 1;
     dwBytes += classBuffLenInChar * sizeof(WCHAR);
-    
+
     pStgMedium->pUnkForRelease = NULL;
     pStgMedium->tymed = TYMED_HGLOBAL;
     pStgMedium->hGlobal = GlobalAlloc(GPTR, dwBytes);
@@ -396,15 +396,15 @@ HRESULT CPropSheetHost::_GetDSObjectNames(FORMATETC *pFormatEtc,
 
 ***************************************************************************/
 
-HRESULT CPropSheetHost::_GetDSPropSheetConfig(FORMATETC *pFormatEtc, 
-                                              STGMEDIUM *pStgMedium)
+HRESULT CPropSheetHost::_GetDSPropSheetConfig(FORMATETC *pFormatEtc,
+        STGMEDIUM *pStgMedium)
 {
     if((m_cfDSPropSheetConfig != pFormatEtc->cfFormat) ||
-        !(pFormatEtc->tymed & TYMED_HGLOBAL))
+            !(pFormatEtc->tymed & TYMED_HGLOBAL))
     {
         return DV_E_FORMATETC;
     }
-    
+
     HRESULT hr = E_OUTOFMEMORY;
 
     pStgMedium->pUnkForRelease = NULL;
@@ -425,12 +425,12 @@ HRESULT CPropSheetHost::_GetDSPropSheetConfig(FORMATETC *pFormatEtc,
             pPropSheetCfg->lNotifyHandle = 0;
 
             /*
-            wParamSheetClose is an identifier that is passed as the wparam in 
-            the WM_DSA_SHEET_CLOSE_NOTIFY message. If this member is zero, the 
-            WM_DSA_SHEET_CLOSE_NOTIFY is not posted. 
+            wParamSheetClose is an identifier that is passed as the wparam in
+            the WM_DSA_SHEET_CLOSE_NOTIFY message. If this member is zero, the
+            WM_DSA_SHEET_CLOSE_NOTIFY is not posted.
             */
             pPropSheetCfg->wParamSheetClose = PROP_SHEET_HOST_ID;
-            
+
             GlobalUnlock(pStgMedium->hGlobal);
 
             hr = S_OK;

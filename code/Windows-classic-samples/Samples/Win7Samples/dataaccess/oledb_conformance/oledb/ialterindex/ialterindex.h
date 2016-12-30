@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
 // Copyright (C) 1995-2000 Microsoft Corporation
@@ -59,42 +59,42 @@
 
 enum ETESTCASE
 {
-	TC_SingleColNoProps = 1,
-	TC_SingleColProps,
-	TC_MultipleColsNoProps,
-	TC_MultipleColsProps,
-	TC_PropSingCol,
-	TC_PropMultCol
+    TC_SingleColNoProps = 1,
+    TC_SingleColProps,
+    TC_MultipleColsNoProps,
+    TC_MultipleColsProps,
+    TC_PropSingCol,
+    TC_PropMultCol
 };
 
 enum EINDEXSCHEMA	// Index of data in schema rowset
 {
-	IS_TABLE_CATALOG = 0,
-	IS_TABLE_SCHEMA,
-	IS_TABLE_NAME,
-	IS_INDEX_CATALOG,
-	IS_INDEX_SCHEMA,
-	IS_INDEX_NAME,
-	IS_PRIMARY_KEY,
-	IS_UNIQUE,
-	IS_CLUSTERED,
-	IS_TYPE,
-	IS_FILL_FACTOR,
-	IS_INITIAL_SIZE,
-	IS_NULLS,
-	IS_SORT_BOOKMARKS,
-	IS_AUTO_UPDATE,
-	IS_NULL_COLLATION,
-	IS_ORDINAL_POSITION,
-	IS_COLUMN_NAME,
-	IS_COLUMN_GUID,
-	IS_COLUMN_PROPID,
-	IS_COLLATION,
-	IS_CARDINALITY,
-	IS_PAGES,
-	IS_FILTER_CONDITION,
-	IS_INTEGRATED,
-	CINDEXFIELDS		// Must remain the last enumeration
+    IS_TABLE_CATALOG = 0,
+    IS_TABLE_SCHEMA,
+    IS_TABLE_NAME,
+    IS_INDEX_CATALOG,
+    IS_INDEX_SCHEMA,
+    IS_INDEX_NAME,
+    IS_PRIMARY_KEY,
+    IS_UNIQUE,
+    IS_CLUSTERED,
+    IS_TYPE,
+    IS_FILL_FACTOR,
+    IS_INITIAL_SIZE,
+    IS_NULLS,
+    IS_SORT_BOOKMARKS,
+    IS_AUTO_UPDATE,
+    IS_NULL_COLLATION,
+    IS_ORDINAL_POSITION,
+    IS_COLUMN_NAME,
+    IS_COLUMN_GUID,
+    IS_COLUMN_PROPID,
+    IS_COLLATION,
+    IS_CARDINALITY,
+    IS_PAGES,
+    IS_FILTER_CONDITION,
+    IS_INTEGRATED,
+    CINDEXFIELDS		// Must remain the last enumeration
 };
 
 enum ETXN	{ETXN_COMMIT, ETXN_ABORT};
@@ -106,35 +106,35 @@ enum ETXN	{ETXN_COMMIT, ETXN_ABORT};
 
 typedef struct tagPropVal
 {
-	ULONG	ulPropVal;
-	LPWSTR	pwszPropVal;
+    ULONG	ulPropVal;
+    LPWSTR	pwszPropVal;
 } PropVal;
 
 typedef struct tagIndexInfo
 {
-   ULONG					cKeyColumns;
-   DBINDEXCOLUMNDESC *		rgIndexColumnDesc;
-   ULONG 					cIndexPropSets;
-   DBPROPSET *				rgIndexPropSets;
+    ULONG					cKeyColumns;
+    DBINDEXCOLUMNDESC *		rgIndexColumnDesc;
+    ULONG 					cIndexPropSets;
+    DBPROPSET *				rgIndexPropSets;
 } IndexInfo;
 
 typedef struct tagPropMap
 {
-	DBPROPID dwProp;
-	LPWSTR	pwszPropVal;
-	enum EINDEXSCHEMA eSchemaField;
+    DBPROPID dwProp;
+    LPWSTR	pwszPropVal;
+    enum EINDEXSCHEMA eSchemaField;
 } PropMap;
 
 // Thread arg structure for one more argument than Extralib
 struct THREADARG6
 {
-	LPVOID	pFunc;
-	LPVOID	pArg1;
-	LPVOID	pArg2;
-	LPVOID	pArg3;
-	LPVOID	pArg4;
-	LPVOID	pArg5;
-	LPVOID	pArg6;
+    LPVOID	pFunc;
+    LPVOID	pArg1;
+    LPVOID	pArg2;
+    LPVOID	pArg3;
+    LPVOID	pArg4;
+    LPVOID	pArg5;
+    LPVOID	pArg6;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ struct THREADARG6
 ///////////////////////////////////////////////////////////////////////
 const LPWSTR ProviderSupportsDefaultOnly[] =
 {
-	L"MSJETOLEDB40.DLL"
+    L"MSJETOLEDB40.DLL"
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -153,17 +153,17 @@ const LPWSTR ProviderSupportsDefaultOnly[] =
 ///////////////////////////////////////////////////////////////////////
 const PropMap IndexProperties[] =
 {
-	EXPAND(DBPROP_INDEX_AUTOUPDATE),	IS_AUTO_UPDATE,
-	EXPAND(DBPROP_INDEX_CLUSTERED),		IS_CLUSTERED,
-	EXPAND(DBPROP_INDEX_FILLFACTOR),	IS_FILL_FACTOR,
-	EXPAND(DBPROP_INDEX_INITIALSIZE),	IS_INITIAL_SIZE,
-	EXPAND(DBPROP_INDEX_NULLCOLLATION),	IS_NULL_COLLATION,
-	EXPAND(DBPROP_INDEX_NULLS),			IS_NULLS,
-	EXPAND(DBPROP_INDEX_PRIMARYKEY),	IS_PRIMARY_KEY,
-	EXPAND(DBPROP_INDEX_SORTBOOKMARKS),	IS_SORT_BOOKMARKS,
-	EXPAND(DBPROP_INDEX_TEMPINDEX),		CINDEXFIELDS,		// No field entry in indexes rowset
-	EXPAND(DBPROP_INDEX_TYPE),			IS_TYPE,
-	EXPAND(DBPROP_INDEX_UNIQUE),		IS_UNIQUE
+    EXPAND(DBPROP_INDEX_AUTOUPDATE),	IS_AUTO_UPDATE,
+    EXPAND(DBPROP_INDEX_CLUSTERED),		IS_CLUSTERED,
+    EXPAND(DBPROP_INDEX_FILLFACTOR),	IS_FILL_FACTOR,
+    EXPAND(DBPROP_INDEX_INITIALSIZE),	IS_INITIAL_SIZE,
+    EXPAND(DBPROP_INDEX_NULLCOLLATION),	IS_NULL_COLLATION,
+    EXPAND(DBPROP_INDEX_NULLS),			IS_NULLS,
+    EXPAND(DBPROP_INDEX_PRIMARYKEY),	IS_PRIMARY_KEY,
+    EXPAND(DBPROP_INDEX_SORTBOOKMARKS),	IS_SORT_BOOKMARKS,
+    EXPAND(DBPROP_INDEX_TEMPINDEX),		CINDEXFIELDS,		// No field entry in indexes rowset
+    EXPAND(DBPROP_INDEX_TYPE),			IS_TYPE,
+    EXPAND(DBPROP_INDEX_UNIQUE),		IS_UNIQUE
 };
 
 
@@ -173,38 +173,38 @@ const PropMap IndexProperties[] =
 ///////////////////////////////////////////////////////////////////////
 const VARIANT_BOOL VariantBoolVals[] =
 {
-	VARIANT_TRUE,
-	VARIANT_FALSE
+    VARIANT_TRUE,
+    VARIANT_FALSE
 };
 
 const DBINDEX_COL_ORDER IndexOrderVals[] =
 {
-	DBINDEX_COL_ORDER_ASC,
-	DBINDEX_COL_ORDER_DESC
+    DBINDEX_COL_ORDER_ASC,
+    DBINDEX_COL_ORDER_DESC
 };
 
 const PropVal IndexNullVals[] =
 {
-	EXPAND(DBPROPVAL_IN_ALLOWNULL),
-	EXPAND(DBPROPVAL_IN_DISALLOWNULL),
-	EXPAND(DBPROPVAL_IN_IGNORENULL),
-	EXPAND(DBPROPVAL_IN_IGNOREANYNULL)
+    EXPAND(DBPROPVAL_IN_ALLOWNULL),
+    EXPAND(DBPROPVAL_IN_DISALLOWNULL),
+    EXPAND(DBPROPVAL_IN_IGNORENULL),
+    EXPAND(DBPROPVAL_IN_IGNOREANYNULL)
 };
 
 const PropVal IndexTypeVals[] =
 {
-	EXPAND(DBPROPVAL_IT_BTREE),
-	EXPAND(DBPROPVAL_IT_HASH),
-	EXPAND(DBPROPVAL_IT_CONTENT),
-	EXPAND(DBPROPVAL_IT_OTHER)
+    EXPAND(DBPROPVAL_IT_BTREE),
+    EXPAND(DBPROPVAL_IT_HASH),
+    EXPAND(DBPROPVAL_IT_CONTENT),
+    EXPAND(DBPROPVAL_IT_OTHER)
 };
 
 const PropVal NullCollationVals[] =
 {
-	EXPAND(DBPROPVAL_NC_END),
-	EXPAND(DBPROPVAL_NC_START),
-	EXPAND(DBPROPVAL_NC_HIGH),
-	EXPAND(DBPROPVAL_NC_LOW)
+    EXPAND(DBPROPVAL_NC_END),
+    EXPAND(DBPROPVAL_NC_START),
+    EXPAND(DBPROPVAL_NC_HIGH),
+    EXPAND(DBPROPVAL_NC_LOW)
 };
 
 #endif 	//_IALTERINDEX_H_

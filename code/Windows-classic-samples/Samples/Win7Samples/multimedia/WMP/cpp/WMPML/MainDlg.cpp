@@ -1,4 +1,4 @@
-// MainDlg.cpp : Implementation of CMainDlg
+﻿// MainDlg.cpp : Implementation of CMainDlg
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -18,7 +18,8 @@ WCHAR* g_wszAdvQuery = L"Advanced Query";
 WCHAR* g_szUnknown = L"Unknown";
 
 // Media types
-WCHAR* g_pwszMediaTypes[] = {
+WCHAR* g_pwszMediaTypes[] =
+{
     L"audio",
     L"photo",
     L"video",
@@ -28,13 +29,13 @@ WCHAR* g_pwszMediaTypes[] = {
 
 // Note that attribute values retrieved by using the Player object model
 // might be returned in a different form or format than you see in
-// in Windows Media Player. For example, the Rating attribute returns a 
+// in Windows Media Player. For example, the Rating attribute returns a
 // value between 0 and 99 when using the SDK, rather than a "star" rating.
-// (For details about how to convert the 0-99 value to "stars", see 
+// (For details about how to convert the 0-99 value to "stars", see
 // UserRating Attribute in the Attribute Reference section of the documentation.
 
 // Params to build Audio tree
-NODEPARAM g_pAudioNodes[] = 
+NODEPARAM g_pAudioNodes[] =
 {
     { L"Artist", L"Artist" },
     { L"Album", L"WM/AlbumTitle" },
@@ -45,7 +46,7 @@ NODEPARAM g_pAudioNodes[] =
 };
 
 // Params to build Photo tree
-NODEPARAM g_pPhotoNodes[] = 
+NODEPARAM g_pPhotoNodes[] =
 {
     { L"All Pictures", NULL },
     { L"Keywords", L"Comment" },
@@ -55,7 +56,7 @@ NODEPARAM g_pPhotoNodes[] =
 };
 
 // Params to build Video tree
-NODEPARAM g_pVideoNodes[] = 
+NODEPARAM g_pVideoNodes[] =
 {
     { L"All Video", NULL },
     { L"Actors", L"Author" },
@@ -64,13 +65,13 @@ NODEPARAM g_pVideoNodes[] =
 };
 
 // Params to build Playlist tree
-NODEPARAM g_pPlaylistNodes[] = 
+NODEPARAM g_pPlaylistNodes[] =
 {
     { L"My Playlists", NULL },
 };
 
 // Params to build Other tree
-NODEPARAM g_pOtherNodes[] = 
+NODEPARAM g_pOtherNodes[] =
 {
     { L"Other Media", NULL },
     { L"Folder", L"Folder" }
@@ -78,9 +79,9 @@ NODEPARAM g_pOtherNodes[] =
 
 // Launch the dialog when the application launchs
 extern "C" int WINAPI wWinMain(
-    HINSTANCE hInstance, 
+    HINSTANCE hInstance,
     HINSTANCE /*hPrevInstance*/,
-    LPWSTR /*lpCmdLine*/, 
+    LPWSTR /*lpCmdLine*/,
     int /*nShowCmd*/)
 {
     CoInitialize(NULL);
@@ -105,7 +106,7 @@ CMainDlg::CMainDlg()
     m_cSchemaCount = sizeof(g_pAudioNodes) / sizeof(g_pAudioNodes[0]);
     m_pnpNodeParams = g_pAudioNodes;
     m_bstrMediaType = g_pwszMediaTypes[m_mtCurMediaType];
-    
+
     // Use prenode to keep track current clicking on the tree
     m_hPreNode = NULL;
 }
@@ -119,7 +120,7 @@ CMainDlg::~CMainDlg()
 
 /***********************************************************************
 * OnInitDialog
-* 
+*
 * Initialize member variables of handlers
 * Initialize WMP OCX
 ***********************************************************************/
@@ -127,14 +128,14 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 {
     ::InitCommonControls();
     AtlAxWinInit();
-    
+
     // dialog items
     m_hLibTree = GetDlgItem(IDC_TREE);
     m_hDetailList = GetDlgItem(IDC_DETAILLIST);
-    
+
     // Create a WMP OCX
     CreateWmpOcx();
-    
+
     // Fill in combo box for media type
     HWND    hMediaTypeList = GetDlgItem(IDC_MEDIATYPELIST);
     SendMessage(hMediaTypeList, CB_ADDSTRING, 0, (LPARAM)L"Music");
@@ -143,13 +144,13 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
     SendMessage(hMediaTypeList, CB_ADDSTRING, 0, (LPARAM)L"Playlists");
     SendMessage(hMediaTypeList, CB_ADDSTRING, 0, (LPARAM)L"Other Media");
     SendMessage(hMediaTypeList, CB_SETCURSEL, 0, (LPARAM)m_mtCurMediaType);
-    
+
     // Use IWMPLibraryServices to enumerate the libries and fill in combo box
     HRESULT                         hr = E_POINTER;
     LONG                            lLibCount = 0;
     HWND                            hLibList = GetDlgItem(IDC_LIBLIST);
     CComPtr<IWMPLibraryServices>    spLibSvc;
-    
+
     if(m_spPlayer != NULL)
     {
         hr = m_spPlayer->QueryInterface(&spLibSvc);
@@ -164,8 +165,8 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
         {
             CComPtr<IWMPLibrary>    spLib;
             CComBSTR                bstrLibName;
-            
-            hr = spLibSvc->getLibraryByType(wmpltAll, i , &spLib);
+
+            hr = spLibSvc->getLibraryByType(wmpltAll, i, &spLib);
             if(SUCCEEDED(hr) && spLib)
             {
                 hr = spLib->get_name(&bstrLibName);
@@ -177,16 +178,16 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
         }
     }
     SendMessage(hLibList, CB_SETCURSEL, 0, 0);
-    
+
     // Set WordWheel text to Search...
     SetDlgItemText(IDC_WORDWHEEL, L"Search...");
-    
+
     // Set m_spMC to correct mediaCollection of currently selected library
     UpdateCurMC();
 
     // Now we try to build the tree
     BuildLibTree();
-    
+
     return 0;
 }
 
@@ -263,9 +264,9 @@ LRESULT CMainDlg::OnChangeMediaType(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*h
     default:
         break;
     }
-    
+
     m_bstrMediaType = g_pwszMediaTypes[m_mtCurMediaType];
-    
+
     BuildLibTree();
     return 0;
 }
@@ -278,7 +279,7 @@ LRESULT CMainDlg::OnChangeLib(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl
 {
     // Set m_spMC to correct mediaCollection of currently selected library
     UpdateCurMC();
-    
+
     BuildLibTree();
 
     return 0;
@@ -291,20 +292,20 @@ LRESULT CMainDlg::OnChangeLib(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl
 LRESULT CMainDlg::OnClickTree(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& bHandled)
 {
     POINT p;
-    
+
     TVHITTESTINFO   hitInfo;
     HTREEITEM       hNode = NULL;
     TVITEM          tvi;
     WCHAR           szVal[MAX_PATH];
 
     HRESULT hr = S_OK;
-    
+
     // Find out the hit point
     GetCursorPos(&p);
     ::ScreenToClient(m_hLibTree, &p);
     hitInfo.pt = p;
     hNode = TreeView_HitTest(m_hLibTree, &hitInfo);
-    
+
     // Proceed only when user clicks on the node label
     if(hNode && hitInfo.flags == TVHT_ONITEMLABEL && m_spMC)
     {
@@ -317,9 +318,9 @@ LRESULT CMainDlg::OnClickTree(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& bHandled)
         {
             // Reset Detail List
             SendMessage(m_hDetailList, LB_RESETCONTENT, 0, 0);
-            
+
             CComPtr<IWMPQuery>              spQuery;
-            
+
             // If the param is -1, it's a Advanced Query node
             // So we bring out the Query dialog for more conditions
             if(tvi.lParam < 0)
@@ -330,14 +331,14 @@ LRESULT CMainDlg::OnClickTree(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& bHandled)
                 SetDlgItemText(IDC_DETAILTEXT, g_wszAdvQuery);
             }
             else if(m_hPreNode != hNode)
-            // Otherwise the query condition is based on current schema node
+                // Otherwise the query condition is based on current schema node
             {
                 WCHAR*      szAttName = NULL;
                 if(tvi.lParam < m_cSchemaCount)
                 {
                     szAttName = m_pnpNodeParams[tvi.lParam].szAttrName;
                 }
-                
+
                 // If szAttrName is not NULL, build a query for that attribute
                 if(szAttName)
                 {
@@ -348,10 +349,10 @@ LRESULT CMainDlg::OnClickTree(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& bHandled)
                             CComBSTR(szAttName),
                             CComBSTR(L"Equals"),
                             CComBSTR(tvi.pszText)
-                       );
+                        );
                     }
                 }
-                
+
                 // Show current node path
                 if(szAttName && TreeView_GetParent(m_hLibTree, tvi.hItem))
                 {
@@ -366,16 +367,16 @@ LRESULT CMainDlg::OnClickTree(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& bHandled)
             }
 
             if(SUCCEEDED(hr))
-            {            
+            {
                 // Now we use the query to get stringCollection and show it.
                 ShowQueryResult(spQuery);
             }
-            
+
             // Remember current node
             m_hPreNode = hNode;
         }
     }
-    
+
     // Let tree view do its job for UI of the tree
     bHandled = FALSE;
     return SUCCEEDED(hr)?0:1;
@@ -401,7 +402,7 @@ HRESULT CMainDlg::CreateWmpOcx()
 
     m_pView = new CAxWindow();
     hr = m_pView ? S_OK : AtlHresultFromLastError();
-    
+
     if(SUCCEEDED(hr) && m_pView)
     {
         m_pView->Create(m_hWnd, rect, NULL, WS_CHILD | WS_VISIBLE);
@@ -409,7 +410,7 @@ HRESULT CMainDlg::CreateWmpOcx()
         {
             hr = m_pView->QueryHost(IID_IObjectWithSite, (void **)&spHostObject);
         }
-        
+
         if(SUCCEEDED(hr) && spHostObject.p)
         {
             hr = CComObject<CWMPRemoteHost>::CreateInstance(&pRemoteHost);
@@ -418,19 +419,19 @@ HRESULT CMainDlg::CreateWmpOcx()
                 hr = ((IUnknown *)(IWMPRemoteMediaServices *)pRemoteHost)->QueryInterface(IID_IUnknown, (void **)&punkSite);
             }
         }
-        
+
         if(SUCCEEDED(hr) && punkSite)
         {
             hr = spHostObject->SetSite(punkSite);
             punkSite->Release();
             punkSite = NULL;
         }
-        
+
         if(SUCCEEDED(hr))
         {
             hr = m_pView->QueryHost(&spHost);
         }
-        
+
         if(SUCCEEDED(hr) && spHost.p)
         {
             hr = spHost->CreateControl(L"{6BF52A52-394A-11d3-B153-00C04F79FAA6}", m_pView->m_hWnd, 0);
@@ -441,14 +442,14 @@ HRESULT CMainDlg::CreateWmpOcx()
             hr = m_pView->QueryControl(&m_spPlayer);
         }
     }
-    
+
     return hr;
 }
 
 
 /***********************************************************************
 * BuildLibTree
-* Build the tree view for current library. 
+* Build the tree view for current library.
 * Try to simulate the Windows Media Player library
 ***********************************************************************/
 void CMainDlg::BuildLibTree()
@@ -460,13 +461,13 @@ void CMainDlg::BuildLibTree()
     tvins.item.mask = TVIF_TEXT | TVIF_PARAM;
     tvins.hParent = NULL;
     tvins.hInsertAfter = TVI_ROOT;
-    
+
     // Add the first node as Advanced Query so we can click on it
     tvins.item.lParam = (LPARAM)-1;
     tvins.item.pszText = g_wszAdvQuery;
     tvins.item.cchTextMax = lstrlen(tvins.item.pszText) + 1;
     hParentNode = TreeView_InsertItem(m_hLibTree, &tvins);
-    
+
     // Now add nodes for schemas
     for(int iSchemaIndex = 0; iSchemaIndex < m_cSchemaCount; iSchemaIndex++)
     {
@@ -476,23 +477,23 @@ void CMainDlg::BuildLibTree()
         tvins.item.pszText = m_pnpNodeParams[iSchemaIndex].szNodeName;
         tvins.item.cchTextMax = lstrlen(tvins.item.pszText) + 1;
         hParentNode = TreeView_InsertItem(m_hLibTree, &tvins);
-    
+
         // If fEnumValues is true, we enumerate the values related to szNodeName
-        // and add those values as subnodes 
+        // and add those values as subnodes
         if(hParentNode && m_pnpNodeParams[iSchemaIndex].szAttrName)
         {
             HRESULT                         hr = E_FAIL;
             CComBSTR                        bstrAttrName = m_pnpNodeParams[iSchemaIndex].szAttrName;
             CComPtr<IWMPStringCollection>   spSC;
             LONG                            lCount = 0;
-            
+
             hr = m_spMC->getStringCollectionByQuery(
-                bstrAttrName,
-                NULL,
-                m_bstrMediaType,
-                bstrAttrName,
-                VARIANT_TRUE,
-                &spSC);
+                     bstrAttrName,
+                     NULL,
+                     m_bstrMediaType,
+                     bstrAttrName,
+                     VARIANT_TRUE,
+                     &spSC);
             if(SUCCEEDED(hr) && spSC)
             {
                 hr = spSC->get_count(&lCount);
@@ -514,8 +515,8 @@ void CMainDlg::BuildLibTree()
                     }
                 }
             }
-    
-        }        
+
+        }
     }
 }
 
@@ -531,19 +532,19 @@ HRESULT CMainDlg::UpdateCurMC()
     LONG                            lLidID = -1;
     CComPtr<IWMPLibrary>            spLib;
     CComPtr<IWMPLibraryServices>    spLibSvc;
-            
+
     lLidID      = SendDlgItemMessage(IDC_LIBLIST, CB_GETCURSEL, 0, 0);
-    
+
     if(m_spPlayer != NULL)
     {
         hr = m_spPlayer->QueryInterface(&spLibSvc);
     }
-    
+
     if(spLibSvc && lLidID >= 0)
     {
         hr = spLibSvc->getLibraryByType(wmpltAll, lLidID, &spLib);
     }
-    
+
     if(SUCCEEDED(hr) && spLib)
     {
         m_spMC = NULL;
@@ -553,9 +554,9 @@ HRESULT CMainDlg::UpdateCurMC()
         {
             spTmpMC->QueryInterface(&m_spMC);
         }
-        
+
     }
-    
+
     return hr;
 }
 
@@ -576,7 +577,7 @@ void CMainDlg::ShowQueryResult(IWMPQuery* pQuery)
             CComBSTR(L"Title"),
             VARIANT_TRUE,
             &spSC);
-        
+
         if(spSC)
         {
             LONG    lCount = 0;
@@ -587,7 +588,7 @@ void CMainDlg::ShowQueryResult(IWMPQuery* pQuery)
                 spSC->item(i, &bstrVal);
                 if(bstrVal.m_str)
                 {
-					SendMessage(m_hDetailList, LB_ADDSTRING, 0, (LPARAM)bstrVal.m_str);
+                    SendMessage(m_hDetailList, LB_ADDSTRING, 0, (LPARAM)bstrVal.m_str);
                 }
             }
         }

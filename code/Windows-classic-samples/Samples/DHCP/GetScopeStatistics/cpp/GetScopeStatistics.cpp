@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -23,10 +23,10 @@ int __cdecl main(void)
 
     // This API returns the statistics w.r.t a specific scope.
     dwError = DhcpV4FailoverGetScopeStatistics(
-                    pwszServer, // Server IP Address
-                    dwScope,    // Subnet address
-                    &pStats     // Failover statistics for the scope
-                    );
+                  pwszServer, // Server IP Address
+                  dwScope,    // Subnet address
+                  &pStats     // Failover statistics for the scope
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverGetScopeStatistics failed with Error = %d\n", dwError);

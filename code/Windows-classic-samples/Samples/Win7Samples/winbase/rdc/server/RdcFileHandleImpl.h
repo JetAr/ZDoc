@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -33,7 +33,7 @@ class RdcFileHandleImpl
 {
 public:
     RdcFileHandleImpl() :
-            m_SimilarityComputed ( false )
+        m_SimilarityComputed ( false )
     {
         m_SourceFileName[0] = 0;
         m_GeneratorJobInfo = 0;

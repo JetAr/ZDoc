@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Winmain.cpp : Defines the entry point for the application.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,30 +14,30 @@
 //
 //This sample demostrates the use of the following ASF objects provided by
 //Media Foundation, for reading an ASF media file:
-//- ASF Splitter 
+//- ASF Splitter
 //- ASF ContentInfo
 //- ASF Indexer
 //
 //All of these objects are controlled by the ASF Manager, implemented in the
-//CASFManager class. 
+//CASFManager class.
 //
 //The user opens an ASF media file (*.wma or *.wmv) by using a standard Open
 //dialog box. The global file attributes is shown on the Information pane.
-//The ASF Manager enumerates the streams contained in the media file  
-//and displays only the first audio stream and the video stream to the user. 
+//The ASF Manager enumerates the streams contained in the media file
+//and displays only the first audio stream and the video stream to the user.
 //
-//The user can: then 
+//The user can: then
 //- Select a stream for parsing. By default, the first stream is selected by the ASF Manager.
 //- Specify the offset from where to start parsing by seeking to a point in the presentation.
 //- Check the Reverse check box to generate samples in reverse.
 //
-//The ASF Manager generates samples that passed through a decoder for decompression. 
+//The ASF Manager generates samples that passed through a decoder for decompression.
 //As the samples are generated, sample attributes are shown on the Information pane.
 //
 //To test the samples, the user can use to Media Controller, implemented in the
 //CMediaController class. For an audio stream, the Media Controller plays samples for
 //5 seconds. For a video stream, it shows the first key frame as a bitmap.
-// 
+//
 //////////////////////////////////////////////////////////////////////////
 
 //local project files
@@ -93,7 +93,7 @@ void FormatTimeString(MFTIME time, WCHAR *szTimeString, DWORD cbSize, HRESULT hr
         Seconds = TimeInSeconds;
     }
 
-    hr = StringCchPrintf (szTimeString, cbSize, L"%02d:%02d:%02d", (int) Hours, (int) Minutes, (int)Seconds);    
+    hr = StringCchPrintf (szTimeString, cbSize, L"%02d:%02d:%02d", (int) Hours, (int) Minutes, (int)Seconds);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ void DisplaySampleInfo(SAMPLE_INFO *sampleinfo)
 //////////////////////////////////////////////////////////////////////////
 //  Name: DisplayFilePropertiesObject
 //  Description: Displays File Properties Object Header about the currently open ASF file.
-//  
+//
 //  Parameter: Handle to the main Window.
 /////////////////////////////////////////////////////////////////////////
 
@@ -177,7 +177,7 @@ void DisplayFilePropertiesObject(const FILE_PROPERTIES_OBJECT& fileinfo, HWND hW
     SendMessage(GetDlgItem(hWnd, IDC_INFO), LB_RESETCONTENT, 0, 0);
 
     SetDlgItemText(hWnd, IDC_STATIC_INFO, L"Global File Attributes");
-    
+
     //File ID
     StringCchPrintf(szMessage, MAX_STRING_SIZE, L"File ID: %08lX %04X %04X", fileinfo.guidFileID);
     SendMessage(GetDlgItem(hWnd, IDC_INFO), LB_ADDSTRING, 0, (LPARAM)szMessage);
@@ -233,20 +233,20 @@ void DisplayFilePropertiesObject(const FILE_PROPERTIES_OBJECT& fileinfo, HWND hW
 //////////////////////////////////////////////////////////////////////////
 //  Name: ResetUI
 //  Description: Reset controls to original state because there is not ASF file
-//               that is currently open. 
+//               that is currently open.
 //  Parameter: Handle to the main Window.
 /////////////////////////////////////////////////////////////////////////
 
 void ResetUI(HWND hWnd)
 {
     //Hide Show File Properties button
-    ShowWindow(GetDlgItem(hWnd, IDC_FILE_PROP), SW_HIDE); 
-        
+    ShowWindow(GetDlgItem(hWnd, IDC_FILE_PROP), SW_HIDE);
+
     //Hide Information pane
     ShowWindow(GetDlgItem(hWnd, IDC_INFO), SW_HIDE);
-    
+
     //Hide Splitter configuration controls
-    ShowWindow(GetDlgItem(hWnd, IDC_STATIC_PARSER_CONFIG), SW_HIDE); 
+    ShowWindow(GetDlgItem(hWnd, IDC_STATIC_PARSER_CONFIG), SW_HIDE);
     ShowWindow(GetDlgItem(hWnd, IDC_STATIC_STREAM), SW_HIDE);
     ShowWindow(GetDlgItem(hWnd, IDC_STATIC_STREAM2), SW_HIDE);
     ShowWindow(GetDlgItem(hWnd, IDC_STATIC_STREAM1), SW_HIDE);
@@ -256,9 +256,9 @@ void ResetUI(HWND hWnd)
     ShowWindow(GetDlgItem(hWnd, IDC_STATIC_SEEK), SW_HIDE);
     ShowWindow(GetDlgItem(hWnd, IDC_SEEK), SW_HIDE);
     ShowWindow(GetDlgItem(hWnd, IDC_TIME), SW_HIDE);
-    SendMessage(GetDlgItem(hWnd, IDC_STREAM1), BM_SETCHECK , BST_UNCHECKED, 0);
-    SendMessage(GetDlgItem(hWnd, IDC_STREAM2), BM_SETCHECK , BST_UNCHECKED, 0);
-    
+    SendMessage(GetDlgItem(hWnd, IDC_STREAM1), BM_SETCHECK, BST_UNCHECKED, 0);
+    SendMessage(GetDlgItem(hWnd, IDC_STREAM2), BM_SETCHECK, BST_UNCHECKED, 0);
+
     //Hide the Generate Samples button
     ShowWindow(GetDlgItem(hWnd, IDC_PARSE), SW_HIDE);
 
@@ -270,8 +270,8 @@ void ResetUI(HWND hWnd)
 //////////////////////////////////////////////////////////////////////////
 //  Name: StreamSelect
 //  Description: Selects audio or video stream for parsing.
-//  Parameter: 
-//      wStreamNumber: Stream number of the stream to select. 
+//  Parameter:
+//      wStreamNumber: Stream number of the stream to select.
 //      hWnd: Handle to the main Window.
 //
 /////////////////////////////////////////////////////////////////////////
@@ -305,7 +305,7 @@ void StreamSelect(WORD wStreamNumber, HWND hWnd)
     {
         NotifyError(L"Could not select stream", hr, hWnd);
     }
-    
+
     return;
 
 }
@@ -319,7 +319,7 @@ void StreamSelect(WORD wStreamNumber, HWND hWnd)
 
 void GetAvailableStreams(HWND hWnd)
 {
-    HRESULT hr = S_OK;  
+    HRESULT hr = S_OK;
 
     WORD *pwStreamNumbers = NULL;
     GUID *pGUIDs = NULL;
@@ -331,7 +331,7 @@ void GetAvailableStreams(HWND hWnd)
 
     //Get the stream numbers and the major media type GUIDs for the streams
     hr = g_pASFManager->EnumerateStreams(&pwStreamNumbers, &pGUIDs, &cbTotalStreams);
-    
+
     if(SUCCEEDED(hr) && pwStreamNumbers)
     {
 
@@ -340,12 +340,12 @@ void GetAvailableStreams(HWND hWnd)
             if(pGUIDs[index] == MFMediaType_Audio)
             {
                 //For audio stream make UI adjustments:
-                
+
                 //Show the stream number
                 StringCchPrintf(szLabel, MAX_STRING_SIZE, L"%d", pwStreamNumbers[index]);
                 SetDlgItemText(hWnd, IDC_STATIC_STREAM1, szLabel);
                 ShowWindow(GetDlgItem(hWnd, IDC_STATIC_STREAM1), SW_SHOW);
-                
+
                 //Designate the radio button 1 as Audio
                 SetDlgItemText(hWnd, IDC_STREAM1, L"- Audio");
                 ShowWindow(GetDlgItem(hWnd, IDC_STREAM1), SW_SHOW);
@@ -354,30 +354,30 @@ void GetAvailableStreams(HWND hWnd)
             if(pGUIDs[index] == MFMediaType_Video)
             {
                 //For video stream make UI adjustments:
-                
+
                 //Show the stream number
                 StringCchPrintf(szLabel, MAX_STRING_SIZE, L"%d", pwStreamNumbers[index]);
                 SetDlgItemText(hWnd, IDC_STATIC_STREAM2, szLabel);
                 SetDlgItemText(hWnd, IDC_STREAM2, L"- Video");
-                
+
                 //Designate the radio button 1 as Video
                 ShowWindow(GetDlgItem(hWnd, IDC_STATIC_STREAM2), SW_SHOW);
                 ShowWindow(GetDlgItem(hWnd, IDC_STREAM2), SW_SHOW);
             }
-            
+
         }
-        
+
         //By default select the first stream and based on the GUID show the corresponding
         //stream radio button as checked.
         StreamSelect(pwStreamNumbers[0], hWnd);
 
         if(pGUIDs[0] == MFMediaType_Audio)
         {
-            SendMessage(GetDlgItem(hWnd, IDC_STREAM1), BM_SETCHECK , BST_CHECKED, 0);
+            SendMessage(GetDlgItem(hWnd, IDC_STREAM1), BM_SETCHECK, BST_CHECKED, 0);
         }
         if(pGUIDs[0] == MFMediaType_Video)
         {
-            SendMessage(GetDlgItem(hWnd, IDC_STREAM2), BM_SETCHECK , BST_CHECKED, 0);
+            SendMessage(GetDlgItem(hWnd, IDC_STREAM2), BM_SETCHECK, BST_CHECKED, 0);
         }
 
         //Show the related UI controls
@@ -398,7 +398,7 @@ void GetAvailableStreams(HWND hWnd)
 
 //////////////////////////////////////////////////////////////////////////
 //  Name: SetSeekBar
-//  Description: Setup seek bar range. 
+//  Description: Setup seek bar range.
 //
 /////////////////////////////////////////////////////////////////////////
 
@@ -412,7 +412,7 @@ void SetSeekBar(HWND hWnd)
     SendMessage(GetDlgItem(hWnd, IDC_SEEK), TBM_SETRANGEMIN, TRUE, 0);
     SendMessage(GetDlgItem(hWnd, IDC_SEEK), TBM_SETRANGEMAX, TRUE, (LPARAM)g_fileinfo.cbPresentationDuration/10000000);
     ShowWindow(GetDlgItem(hWnd, IDC_SEEK), SW_SHOW);
-    
+
     //Show play duration
     FormatTimeString(g_fileinfo.cbPresentationDuration, szMessage, MAX_STRING_SIZE, hr);
     SetDlgItemText(hWnd, IDC_TIME, szMessage);
@@ -422,7 +422,7 @@ void SetSeekBar(HWND hWnd)
 ////////////////////////////////////////////////////////////////////////////////////////
 //  Name: OnOpen
 //  Description: Opens the standard open file dialog and allows the user to a wma or wmv file.
-//      
+//
 //  Parameter: Handle to the main Window.
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -436,7 +436,7 @@ void OnOpen(HWND hWnd)
 
     //Reset the UI and show the controls later depending on the file opened and stream selection.
     ResetUI(hWnd);
-    
+
     if (g_pASFManager)
     {
         // Show the File Open dialog.
@@ -454,16 +454,16 @@ void OnOpen(HWND hWnd)
 
         if (GetOpenFileName(&ofn))
         {
-            CHECK_HR (hr = g_pASFManager->OpenASFFile(path)); 
+            CHECK_HR (hr = g_pASFManager->OpenASFFile(path));
 
             CHECK_HR (hr = g_pASFManager->SetFilePropertiesObject(&g_fileinfo));
 
             //Get File Properties Header Object that stores the global file attributes
             DisplayFilePropertiesObject(g_fileinfo, hWnd);
-            
+
             //Show the Show File Properties button that will display the global file attributes
             ShowWindow(GetDlgItem(hWnd, IDC_FILE_PROP), SW_SHOW);
-            
+
             //Show the Information pane
             ShowWindow(GetDlgItem(hWnd, IDC_INFO), SW_SHOW);
 
@@ -473,7 +473,7 @@ void OnOpen(HWND hWnd)
             //Setup seek bar that the user can use to set the offset
             SetSeekBar(hWnd);
 
-            //If the file is reversible, show the Reverse check box 
+            //If the file is reversible, show the Reverse check box
             if (g_fileinfo.cbMaxPacketSize == g_fileinfo.cbMinPacketSize)
             {
                 ShowWindow(GetDlgItem(hWnd, IDC_REVERSE), SW_SHOW);
@@ -521,12 +521,12 @@ void OnParse(HWND hWnd)
     SetDlgItemText(hWnd, IDC_STATIC_INFO, L"Sample Attributes");
     SendMessage(GetDlgItem(hWnd, IDC_INFO), LB_RESETCONTENT, 0, 0);
 
-    //Get the Media Controller that will control test data 
+    //Get the Media Controller that will control test data
     if (!g_pMediaController)
     {
         hr = g_pASFManager->GetMediaController(&g_pMediaController);
     }
-    
+
     //Clear exisiting test content from the Media Controller
     if (SUCCEEDED (hr))
     {
@@ -560,7 +560,7 @@ void OnParse(HWND hWnd)
 
             //For the video stream, show the Show Bitmap button
             if (g_guidMediaType == MFMediaType_Video)
-            {           
+            {
                 ShowWindow(GetDlgItem(hWnd, IDC_SHOW_BITMAP), SW_SHOW);
             }
         }
@@ -600,7 +600,7 @@ void OnPlayTestAudio(HWND hWnd)
 
 //////////////////////////////////////////////////////////////////////////
 //  Name: ConvertLabelToStreamNumber
-//  Description: Converts the control caption to a valid stream number and then 
+//  Description: Converts the control caption to a valid stream number and then
 //               selects the stream.
 //
 //  lpControlID: Control ID
@@ -615,7 +615,7 @@ void ConvertLabelToStreamNumber( HWND hWnd, int ControlID)
     WCHAR *szStop = (szLabel+1);
 
     int l = wcstol(szLabel, &szStop, 10);
-    
+
     WORD wStreamNumber = (WORD)l;
 
     StreamSelect(wStreamNumber, hWnd);
@@ -623,31 +623,31 @@ void ConvertLabelToStreamNumber( HWND hWnd, int ControlID)
 
 //////////////////////////////////////////////////////////////////////////
 //  Name: SetReverse
-//  Description: Setup the reverse flag and the seektime when reverse is enabled. 
+//  Description: Setup the reverse flag and the seektime when reverse is enabled.
 //
 /////////////////////////////////////////////////////////////////////////
 
 void SetReverse(HWND hWnd)
 {
     //Check if the Reverse check box is enabled.
-    if (SendMessage(GetDlgItem(hWnd, IDC_REVERSE), BM_GETCHECK , 0, 0)==BST_CHECKED)
+    if (SendMessage(GetDlgItem(hWnd, IDC_REVERSE), BM_GETCHECK, 0, 0)==BST_CHECKED)
     {
-        LRESULT nMax = SendMessage(GetDlgItem(hWnd, IDC_SEEK), TBM_GETRANGEMAX , 0, 0);
+        LRESULT nMax = SendMessage(GetDlgItem(hWnd, IDC_SEEK), TBM_GETRANGEMAX, 0, 0);
         SendMessage(GetDlgItem(hWnd, IDC_SEEK), TBM_SETPOS, TRUE, nMax);
 
         //Setup seek time
         g_seektime = nMax*10000000;
 
-        g_fIsReverse = TRUE; 
+        g_fIsReverse = TRUE;
     }
     else
     {
-        LRESULT nMin = SendMessage(GetDlgItem(hWnd, IDC_SEEK), TBM_GETRANGEMIN , 0, 0);
+        LRESULT nMin = SendMessage(GetDlgItem(hWnd, IDC_SEEK), TBM_GETRANGEMIN, 0, 0);
         SendMessage(GetDlgItem(hWnd, IDC_SEEK), TBM_SETPOS, TRUE, nMin);
 
         g_seektime = nMin*1;
 
-        g_fIsReverse = FALSE; 
+        g_fIsReverse = FALSE;
     }
 }
 
@@ -656,7 +656,7 @@ void SetReverse(HWND hWnd)
 //////////////////////////////////////////////////////////////////////////
 //  Name: UIBitmap
 //  Description: Dialogbox callback for the window that shows the bitmap
-//               for the key frame. 
+//               for the key frame.
 /////////////////////////////////////////////////////////////////////////
 
 INT_PTR CALLBACK UIBitmap(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -666,24 +666,24 @@ INT_PTR CALLBACK UIBitmap(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_INITDIALOG :
-        {
-            RECT rcClient = { 0, 0, 0, 0 };
+    {
+        RECT rcClient = { 0, 0, 0, 0 };
 
-            g_pMediaController->GetBitmapDimensions((UINT32*)&rcClient.right, (UINT32*)&rcClient.bottom);
+        g_pMediaController->GetBitmapDimensions((UINT32*)&rcClient.right, (UINT32*)&rcClient.bottom);
 
-            AdjustWindowRectEx(&rcClient, GetWindowStyle(hDlg), FALSE, GetWindowExStyle(hDlg));
+        AdjustWindowRectEx(&rcClient, GetWindowStyle(hDlg), FALSE, GetWindowExStyle(hDlg));
 
-            SetWindowPos(
-                hDlg, 
-                HWND_TOP, 
-                0, 0, 
-                // New window size:
-                (rcClient.right - rcClient.left), (rcClient.bottom - rcClient.top),
-                SWP_NOMOVE
-                );
+        SetWindowPos(
+            hDlg,
+            HWND_TOP,
+            0, 0,
+            // New window size:
+            (rcClient.right - rcClient.left), (rcClient.bottom - rcClient.top),
+            SWP_NOMOVE
+        );
 
-        }
-        return TRUE;
+    }
+    return TRUE;
 
     case WM_PAINT:
         hr = g_pMediaController->DrawKeyFrame(hDlg);
@@ -715,7 +715,7 @@ INT_PTR CALLBACK UIBitmap(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 void OnShowBitmap(void)
 {
-    DialogBox(g_hInst, MAKEINTRESOURCE(IDD_BITMAP), g_hWnd, UIBitmap); 
+    DialogBox(g_hInst, MAKEINTRESOURCE(IDD_BITMAP), g_hWnd, UIBitmap);
 }
 
 
@@ -765,8 +765,8 @@ INT_PTR CALLBACK UIMain(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
         if (HIWORD(wParam) == BN_CLICKED)
         {
-            switch (LOWORD(wParam)) 
-            { 
+            switch (LOWORD(wParam))
+            {
             case IDC_STREAM1:
                 ConvertLabelToStreamNumber(hDlg, IDC_STATIC_STREAM1);
                 break;
@@ -776,7 +776,7 @@ INT_PTR CALLBACK UIMain(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
 
             case IDC_REVERSE:
-                SetReverse(hDlg);   
+                SetReverse(hDlg);
                 break;
 
             }  // switch (inner)
@@ -789,15 +789,15 @@ INT_PTR CALLBACK UIMain(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case TB_ENDTRACK:
             DWORD dwPos;
-            dwPos = (DWORD)SendMessage(GetDlgItem(hDlg, IDC_SEEK), TBM_GETPOS, 0, 0); 
+            dwPos = (DWORD)SendMessage(GetDlgItem(hDlg, IDC_SEEK), TBM_GETPOS, 0, 0);
             //Get current slider position and convert value into seconds.
             g_seektime = dwPos*10000000;
 
-            
+
 
             break;
-        default: 
-            break; 
+        default:
+            break;
         }
         break;
 
@@ -829,7 +829,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     g_hInst = hInstance;
 
     HRESULT hr = S_OK;
-    
+
     //Initialize CASFManager object as a global instance
     CHECK_HR( hr = CASFManager::CreateInstance(&g_pASFManager));
 
@@ -845,7 +845,7 @@ done:
     }
 
     SAFE_RELEASE (g_pASFManager); //This also releases the Media Controller.
-    
+
     TRACE_CLOSE();
 
     return 0;

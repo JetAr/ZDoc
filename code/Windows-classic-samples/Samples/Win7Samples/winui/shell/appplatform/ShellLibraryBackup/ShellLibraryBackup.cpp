@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -113,12 +113,18 @@ public:
 
 
     IFACEMETHODIMP InitializeProgressDialog(PWSTR *ppszTitle, PWSTR *ppszCancel)
-    { *ppszTitle = NULL; *ppszCancel = NULL; return E_NOTIMPL; }
+    {
+        *ppszTitle = NULL;
+        *ppszCancel = NULL;
+        return E_NOTIMPL;
+    }
 
 
     // INamespaceWalkCB2
     IFACEMETHODIMP WalkComplete(HRESULT /*hr*/)
-    { return S_OK; }
+    {
+        return S_OK;
+    }
 
 private:
     ~CNameSpaceWalkCB()
@@ -322,18 +328,18 @@ INT_PTR CALLBACK MainPageDialogProc(HWND hwndDialog, UINT uMsg, WPARAM wParam, L
     switch (uMsg)
     {
     case WM_NOTIFY:
+    {
+        LPNMHDR pnmh = (LPNMHDR)lParam;
+        switch (pnmh->code)
         {
-            LPNMHDR pnmh = (LPNMHDR)lParam;
-            switch (pnmh->code)
-            {
-            case PSN_SETACTIVE:
-                PropSheet_ShowWizButtons(hwndDialog,
-                    PSWIZB_SHOW,
-                    PSWIZB_BACK | PSWIZB_CANCEL | PSWIZB_FINISH | PSWIZB_NEXT | PSWIZB_RESTORE);
-                break;
-            }
+        case PSN_SETACTIVE:
+            PropSheet_ShowWizButtons(hwndDialog,
+                                     PSWIZB_SHOW,
+                                     PSWIZB_BACK | PSWIZB_CANCEL | PSWIZB_FINISH | PSWIZB_NEXT | PSWIZB_RESTORE);
+            break;
         }
-        break;
+    }
+    break;
 
     case WM_COMMAND:
         switch (LOWORD(wParam))
@@ -353,21 +359,21 @@ INT_PTR CALLBACK BackupDialogProc(HWND hwndDialog, UINT uMsg, WPARAM wParam, LPA
     switch (uMsg)
     {
     case WM_NOTIFY:
+    {
+        LPNMHDR pnmh = (LPNMHDR)lParam;
+        switch (pnmh->code)
         {
-            LPNMHDR pnmh = (LPNMHDR)lParam;
-            switch (pnmh->code)
-            {
-            case PSN_SETACTIVE:
-                PropSheet_ShowWizButtons(hwndDialog,
-                    PSWIZB_BACK | PSWIZB_FINISH,
-                    PSWIZB_BACK | PSWIZB_CANCEL | PSWIZB_FINISH | PSWIZB_NEXT | PSWIZB_RESTORE);
-                break;
-            case PSN_WIZBACK:
-                TreeView_DeleteAllItems(GetDlgItem(hwndDialog, IDC_BACKUPTREE));
-                break;
-            }
+        case PSN_SETACTIVE:
+            PropSheet_ShowWizButtons(hwndDialog,
+                                     PSWIZB_BACK | PSWIZB_FINISH,
+                                     PSWIZB_BACK | PSWIZB_CANCEL | PSWIZB_FINISH | PSWIZB_NEXT | PSWIZB_RESTORE);
+            break;
+        case PSN_WIZBACK:
+            TreeView_DeleteAllItems(GetDlgItem(hwndDialog, IDC_BACKUPTREE));
+            break;
         }
-        break;
+    }
+    break;
 
     case WM_COMMAND:
         switch (LOWORD(wParam))
@@ -377,18 +383,18 @@ INT_PTR CALLBACK BackupDialogProc(HWND hwndDialog, UINT uMsg, WPARAM wParam, LPA
             break;
 
         case IDC_BACKUPREMOVEDIR:
+        {
+            HWND hwndTreeView = GetDlgItem(hwndDialog, IDC_BACKUPTREE);
+            if (hwndTreeView)
             {
-                HWND hwndTreeView = GetDlgItem(hwndDialog, IDC_BACKUPTREE);
-                if (hwndTreeView)
+                HTREEITEM hTreeItem = TreeView_GetSelection(hwndTreeView);
+                if (hTreeItem)
                 {
-                    HTREEITEM hTreeItem = TreeView_GetSelection(hwndTreeView);
-                    if (hTreeItem)
-                    {
-                        TreeView_DeleteItem(hwndTreeView, hTreeItem);
-                    }
+                    TreeView_DeleteItem(hwndTreeView, hTreeItem);
                 }
             }
-            break;
+        }
+        break;
         }
         break;
     }

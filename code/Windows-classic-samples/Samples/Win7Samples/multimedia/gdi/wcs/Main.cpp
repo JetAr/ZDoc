@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -8,7 +8,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  Abstract:
-//      Main entry point for WCS color sample application 
+//      Main entry point for WCS color sample application
 //
 //----------------------------------------------------------------------------
 
@@ -25,11 +25,11 @@
 //
 //----------------------------------------------------------------------------
 int __cdecl wmain(
-    __in int argc, 
+    __in int argc,
     // Argument count
     __in_ecount(argc) WCHAR *argv[]
     // Argugment list
-    )
+)
 {
     HRESULT hr = S_OK;
 

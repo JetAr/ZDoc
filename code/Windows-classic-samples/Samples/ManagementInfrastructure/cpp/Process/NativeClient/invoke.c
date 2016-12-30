@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -16,9 +16,9 @@
 void Do_Method_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const wchar_t *className, const wchar_t *methodName, MI_Instance *keyedInstance, MI_Instance *inboundParameters);
 void Do_Method_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const wchar_t *className, const wchar_t *methodName, MI_Instance *keyedInstance, MI_Instance *inboundParameters);
 
-/* Do_Modify() gets the class declaration for the class and gives the user a list of methods to choose from.  If the method non-static 
- * the user is asked to input the key properties to identify the instance to execute the method against.  The user can then input all 
- * the In parameters for the method. Finally the user selects from synchronous or asynchronous, before calling into the function to 
+/* Do_Modify() gets the class declaration for the class and gives the user a list of methods to choose from.  If the method non-static
+ * the user is asked to input the key properties to identify the instance to execute the method against.  The user can then input all
+ * the In parameters for the method. Finally the user selects from synchronous or asynchronous, before calling into the function to
  * carry out the operation.
  */
 void Do_Method(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const wchar_t *className)
@@ -48,7 +48,7 @@ void Do_Method(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const
 
     /* Retrieves the class declaration synchronously so we can find all the methods on the class, and if the methods are static or not. */
     MI_Session_GetClass(miSession, 0, NULL, namespaceName, className, NULL, &classOperation);
-    
+
     /* Retrieve the single instance result */
     _miResult = MI_Operation_GetClass(&classOperation, &miClass, NULL, &miResult, &errorMessage, &errorDetails);
     if (_miResult != MI_RESULT_OK)
@@ -57,7 +57,7 @@ void Do_Method(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const
          * When an out of memory error happens, the operation will shut down as best it can.
          * Invalid parameter means a programming error happened.
          * Access denied means the security context while calling into the Close() is different from
-         * when the operation was created.  This will be a programming error and could happen if closing 
+         * when the operation was created.  This will be a programming error and could happen if closing
          * from a different thread and forgetting to impersonate.
          */
         wprintf(L"MI_Operation_GetClass failed, error %s", MI_Result_To_String(_miResult));
@@ -81,7 +81,7 @@ void Do_Method(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const
     }
 
     wprintf(L"Select the method you want to execute:\n");
-    
+
     methodSelectionList[0] = L'0';
 
     for (methodIndex = 0; (methodIndex < methodCount) && ((methodIndex+2) < sizeof(methodSelectionList)/sizeof(methodSelectionList[0])); methodIndex++)
@@ -98,8 +98,8 @@ void Do_Method(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const
     wprintf(L"\t[0] back to operation choice\n");
     methodSelectionList[methodIndex+1] = L'\0';
     methodSelector = GetUserSelection(
-                L"",
-                methodSelectionList);
+                         L"",
+                         methodSelectionList);
 
     if (methodSelector == L'0')
     {
@@ -213,7 +213,7 @@ void Do_Method(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const
         {
             /* we need to create one as we have some in parameters */
 
-            /* This is a weakly typed 'dynamic' instance.  There are no typed properties, but we can determine 
+            /* This is a weakly typed 'dynamic' instance.  There are no typed properties, but we can determine
              * this from the method and add them in a typed way as we go.  This instance needs to be deleted
              * with a call to MI_Instance_Delete().
              */
@@ -236,28 +236,28 @@ void Do_Method(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const
 
     /* We have all the information to execute the method so choose from synchronous and asynchronous. */
     {
-		wchar_t synchronous;
+        wchar_t synchronous;
 
-		synchronous = GetUserSelection(
-					L"How do you want the Invoke operation to be carried out?\n"
-					L"\t[1] Synchronous\n"
-					L"\t[2] Asynchronous\n"
-					L"\t[0] back to operation choice\n",
-					L"012");
-		if (synchronous == L'0')
-		{
-			return;
-		}
+        synchronous = GetUserSelection(
+                          L"How do you want the Invoke operation to be carried out?\n"
+                          L"\t[1] Synchronous\n"
+                          L"\t[2] Asynchronous\n"
+                          L"\t[0] back to operation choice\n",
+                          L"012");
+        if (synchronous == L'0')
+        {
+            return;
+        }
 
-		switch(synchronous)
-		{
-		case L'1':
-			Do_Method_Synchronous(miSession, namespaceName, className, methodName, methodInstance, inboundMethodParameters);
-			break;
-		case L'2':
-			Do_Method_Asynchronous(miSession, namespaceName, className, methodName, methodInstance, inboundMethodParameters);
-			break;
-		}
+        switch(synchronous)
+        {
+        case L'1':
+            Do_Method_Synchronous(miSession, namespaceName, className, methodName, methodInstance, inboundMethodParameters);
+            break;
+        case L'2':
+            Do_Method_Asynchronous(miSession, namespaceName, className, methodName, methodInstance, inboundMethodParameters);
+            break;
+        }
     }
 DoCloseClass:
     if (inboundMethodParameters)
@@ -281,8 +281,8 @@ DoCloseClass:
     }
     /* All operations must be closed.  If an operation is not closed the owning session will hang until the operations
      * are closed fully.  MI_Operation_Close will cancel an operation if it is still running, however results must be
-     * consumed before the close can complete fully.  
-     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed 
+     * consumed before the close can complete fully.
+     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed
      * (moreResults == MI_FALSE).
      */
     _miResult = MI_Operation_Close(&classOperation);
@@ -292,7 +292,7 @@ DoCloseClass:
          * When an out of memory error happens, the operation will shut down as best it can.
          * Invalid parameter means a programming error happened.
          * Access denied means the security context while calling into the Close() is different from
-         * when the operation was created.  This will be a programming error and could happen if closing 
+         * when the operation was created.  This will be a programming error and could happen if closing
          * from a different thread and forgetting to impersonate.
          */
         wprintf(L"MI_Operation_Close failed, error %s\n", MI_Result_To_String(_miResult));
@@ -301,17 +301,17 @@ DoCloseClass:
 }
 
 /* Do_Method_Synchronous() carries out an method operation synchronously, retrieving the result
- * on the same thread.  The result can be retrieved on any thread, but that would be unusual for a 
- * synchronous operation. 
+ * on the same thread.  The result can be retrieved on any thread, but that would be unusual for a
+ * synchronous operation.
  */
 void Do_Method_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const wchar_t *className, const wchar_t *methodName, MI_Instance *keyedInstance, MI_Instance *inboundParameters)
 {
     MI_Operation miOperation = MI_OPERATION_NULL;
     MI_Instance *miInstance;
-	MI_Result miResult;
-	MI_Result _miResult;
-	const wchar_t *errorMessage;
-	MI_Instance *completionDetails;
+    MI_Result miResult;
+    MI_Result _miResult;
+    const wchar_t *errorMessage;
+    MI_Instance *completionDetails;
     MI_Boolean moreResults;
 
     /* Note that the identity of the thread needs to be the same as the one the session was created on. */
@@ -323,21 +323,21 @@ void Do_Method_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespac
      *      MI_OperationCallbacks.writeProgress
      */
 
-    /* Note, methods can have outbound parameters that are marked for streaming ([stream] qualifier).  The synchronous sample is retrieving 
-     * all the objects synchronously and not supporting streaming.  This still works, but it means all the streamed parameter parts are 
+    /* Note, methods can have outbound parameters that are marked for streaming ([stream] qualifier).  The synchronous sample is retrieving
+     * all the objects synchronously and not supporting streaming.  This still works, but it means all the streamed parameter parts are
      * cached on the server and one big instance result is sent at the end.  This can cause the memory to spike on the server and client
      * when this is done.  A synchronous client can add a streamed parameter callback in the same way that the asyncronous sample
      * does by setting the MI_OperationCallbacks.streamedParameterResult parameter and passing to the Invoke operation.
      */
 
-    /* Initiate the CreateInstance operation.  Synchronous results are always retrieved through a call MI_Operation_GetInstance(). 
+    /* Initiate the CreateInstance operation.  Synchronous results are always retrieved through a call MI_Operation_GetInstance().
      * All operations must be closed with a call to MI_Operation_Close(), but all results must be processed before that.
      * The operation can be cancelled via MI_Operation_Cancel(), although even then all results must be consumed before the operation
-     * is closed. 
+     * is closed.
      */
     MI_Session_Invoke(miSession, 0, NULL, namespaceName, className, methodName, keyedInstance, inboundParameters, NULL, &miOperation);
-    
-    /* We always need to look through results until moreResults == MI_FALSE.  For synchronous operations without 
+
+    /* We always need to look through results until moreResults == MI_FALSE.  For synchronous operations without
      * PowerShell callbacks it is not very likely to get more than one result from MI_Operation_GetInstance,
      * but it is always best to be sure, especially if you choose to add the PowerShell callbacks at a later data
      * and forget to update the retrieval to a loop.
@@ -372,12 +372,13 @@ void Do_Method_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespac
             }
             wprintf(L"------------------------------------------\n");
         }
-    } while (moreResults == MI_TRUE);
+    }
+    while (moreResults == MI_TRUE);
 
     /* All operations must be closed.  If an operation is not closed the owning session will hang until the operations
      * are closed fully.  MI_Operation_Close will cancel an operation if it is still running, however results must be
-     * consumed before the close can complete fully.  
-     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed 
+     * consumed before the close can complete fully.
+     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed
      * (moreResults == MI_FALSE).
      */
     _miResult = MI_Operation_Close(&miOperation);
@@ -387,7 +388,7 @@ void Do_Method_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespac
          * When an out of memory error happens, the operation will shut down as best it can.
          * Invalid parameter means a programming error happened.
          * Access denied means the security context while calling into the Close() is different from
-         * when the operation was created.  This will be a programming error and could happen if closing 
+         * when the operation was created.  This will be a programming error and could happen if closing
          * from a different thread and forgetting to impersonate.
          */
         wprintf(L"MI_Operation_Close failed, error %s\n", MI_Result_To_String(_miResult));
@@ -395,7 +396,7 @@ void Do_Method_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespac
 }
 
 /* Do_Method_Asynchronous() carries out an instance method invocation operation asynchronously. The asynchronous callback
- * will with the final result. 
+ * will with the final result.
  */
 void Do_Method_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const wchar_t *className, const wchar_t *methodName, MI_Instance *keyedInstance, MI_Instance *inboundParameters)
 {
@@ -412,7 +413,7 @@ void Do_Method_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespa
     if (instanceCallback_Context.asyncNotificationHandle == NULL)
     {
         wprintf(L"Failed to create a Windows Event, windows error %u\n", GetLastError());
-        goto NoHandleError; 
+        goto NoHandleError;
     }
 
     /* Add optional context information to callback structure so we can hold state
@@ -442,7 +443,7 @@ void Do_Method_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespa
     miOperationCallbacks.writeProgress = WriteProgressCallback;
 
     /* Opttional callback (allowed for synchronous operations also), that receive
-     * streamed out parameters.  Streamed out parameters allow larger amounts 
+     * streamed out parameters.  Streamed out parameters allow larger amounts
      * of data to be passed back to the client in small pieces.  Only array parameters
      * are allowed to be streamed.  The streamed data may be a single element of the array
      * and so the type is not an array, OR a part of the array may be returned.
@@ -453,13 +454,13 @@ void Do_Method_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespa
     MI_Session_Invoke(miSession, 0, NULL, namespaceName, className, methodName, keyedInstance, inboundParameters, &miOperationCallbacks, &miOperation);
 
     /* InstanceResultCallback() will always be called back for asyncronous operations, so wait for it to finish */
-    
+
     WaitForSingleObject(instanceCallback_Context.asyncNotificationHandle, INFINITE);
 
     CloseHandle(instanceCallback_Context.asyncNotificationHandle);
 
-    /* Final miResult is here if needed: instanceCallback_Context.finalResult 
-     * Any data from the callback cannot be accessed here because the lifetime of the data is 
+    /* Final miResult is here if needed: instanceCallback_Context.finalResult
+     * Any data from the callback cannot be accessed here because the lifetime of the data is
      * only valid in the callback and until the operation is closed.
      * In this sample the operation handle is closed inside the instance callback.
      */

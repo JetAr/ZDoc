@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 // This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -28,17 +28,17 @@
 #define TM_GUID "58b78708-cd1a-473e-9401-ba399c0e89fc"
 
 // Use this extern C section as is.
-// 
-// XA protocol requires every XA RM to implement an xa_switch_t structure.
-// The xa_switch_t structure contains information such as the RMs name, 
-// end points, and various flags which indicates supported operations 
-// by the RM.
-// 
-// The following C section makes a reference to the xa_switch_t 
-// structure implemented by the MSDTC proxy, which will later be used to 
-// communicate with MSDTC. 
 //
-// Every XA superior application must create this reference to be able to 
+// XA protocol requires every XA RM to implement an xa_switch_t structure.
+// The xa_switch_t structure contains information such as the RMs name,
+// end points, and various flags which indicates supported operations
+// by the RM.
+//
+// The following C section makes a reference to the xa_switch_t
+// structure implemented by the MSDTC proxy, which will later be used to
+// communicate with MSDTC.
+//
+// Every XA superior application must create this reference to be able to
 // communicate with MSDTC using the XA protocol.
 extern "C"
 {
@@ -68,9 +68,9 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     char pszRMInfo[MAXINFOSIZE] = "";
 
     XID xid;
-    
+
     // Calculate the XA open string for this superior RM
-    if (FAILED(FormatOpenString(pszRMInfo, MAXINFOSIZE))) 
+    if (FAILED(FormatOpenString(pszRMInfo, MAXINFOSIZE)))
         goto cleanup;
 
     // Open the subordinate resource manager to start an XA session
@@ -78,13 +78,13 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     if (XAOpenEntry(pszRMInfo, rmID) != XA_OK)
         goto cleanup;
 
-    // Create a new XA Transaction ID (XID)  
+    // Create a new XA Transaction ID (XID)
     wprintf(L"Creating a new XA transaction ID ...\n");
     if (GetNewXID(&xid) != RPC_S_OK)
         goto cleanup;
-    
+
     // Start work on the transaction branch.
-    // This informs the subordinate resource manager that an application 
+    // This informs the subordinate resource manager that an application
     // can do work using the transaction identified by xid.
     wprintf(L"Inform the RM that applications can do work using this transaction...\n");
     if (XAStartEntry(&xid, rmID) != XA_OK)
@@ -92,7 +92,7 @@ int __cdecl wmain(int argc, WCHAR* argv[])
 
     // Do work here.
     wprintf(L"\nDo work...\n\n");
-    
+
     // End work on the transaction branch.
     wprintf(L"Inform the RM that applications cannot do any work using this transaction...\n");
     if (XAEndEntry(&xid, rmID) != XA_OK)
@@ -100,7 +100,7 @@ int __cdecl wmain(int argc, WCHAR* argv[])
 
     // The transaction manager can call more than one start and end pairs.
     // Only the work in between a start and an end calls are included in the transaction.
-    
+
     // Ask the resource manager to prepare the transaction.
     wprintf(L"Prepare the transaction...\n");
     if (XAPrepareEntry(&xid, rmID) != XA_OK)
@@ -117,18 +117,18 @@ int __cdecl wmain(int argc, WCHAR* argv[])
     wprintf(L"Closing the connection with the resource manager for this transaction.\n\n");
     if (XACloseEntry(pszRMInfo, rmID)  != XA_OK)
         goto cleanup;
-    
+
 cleanup:
 
     return 0;
 }
 
 // In the XA protocol, when a TM opens a connection to an RM,
-// it identifies itself with a formatted open string, which 
+// it identifies itself with a formatted open string, which
 // contains the name of the TM and an id which uniquely identifies the TM.
-// The RM can then use this information for recovery purposes if it 
+// The RM can then use this information for recovery purposes if it
 // needs to connect back to the TM.
-// 
+//
 // This sample connects to MSDTC as an XA superior TM. The following method
 // calculates an XA open string to uniquely identify this TM.
 HRESULT FormatOpenString(char* pszRMInfo, size_t sizeInBytesRMInfo)
@@ -141,9 +141,9 @@ HRESULT FormatOpenString(char* pszRMInfo, size_t sizeInBytesRMInfo)
     // Get the current computer name
     if (GetComputerNameA(tmName, &tmNameLen))
     {
-        // Set a GUID as the recovery ID for the Resource Manager 
-        _snprintf_s(pszRMInformation, MAXINFOSIZE, 
-            "TM=%s, RmRecoveryGuid=%s", tmName,TM_GUID);
+        // Set a GUID as the recovery ID for the Resource Manager
+        _snprintf_s(pszRMInformation, MAXINFOSIZE,
+                    "TM=%s, RmRecoveryGuid=%s", tmName,TM_GUID);
         wprintf(L"Configuration:\nRMINFO: %hs\n\n", pszRMInformation);
         strcpy_s(pszRMInfo, sizeInBytesRMInfo, pszRMInformation);
         hr = S_OK;
@@ -156,7 +156,7 @@ HRESULT FormatOpenString(char* pszRMInfo, size_t sizeInBytesRMInfo)
     }
 
     return hr;
-    
+
 }
 
 // XA defines a structure called XID, which is used to uniquely identify
@@ -170,31 +170,31 @@ RPC_STATUS GetNewXID(XID* pXid)
     char* pszTxid = NULL;
 
     if (NULL==pXid)
-    {        
+    {
         wprintf(L"ERROR: Invalid argument to GetNewXID().\n");
         return RPC_S_INVALID_ARG;
     }
-     
+
     ZeroMemory(pXid, sizeof(XID));
-    
+
     // XID structure contains four fields
     //
-    // formatID:     identifies the format used to uniquely identify 
+    // formatID:     identifies the format used to uniquely identify
     //               the transaction.
-    //               Setting formatID to 0 indicates OSI CCR naming is used 
+    //               Setting formatID to 0 indicates OSI CCR naming is used
     //               to uniquely identify the transaction.
-    //               If any other naming scheme is used the field should be 
+    //               If any other naming scheme is used the field should be
     //               greater than 0.
     //               -1 indicates XID is null.
     // data:         data field consists of two fields named gtrid and bqual.
-    //               When gtrid and bqual are together they uniquely identify 
+    //               When gtrid and bqual are together they uniquely identify
     //               the transaction.
     //               Neither gtrid, nor bqual can be null terminated.
     // gtrid_length: specifies the length of the gtrid field in bytes.
     //               can have any value between 1 and 64.
     // bqual_length: specifies the length of the bqual field in bytes.
     //               can have any value between 1 and 64.
-    
+
     // The following code generates a unique id and fills the XID structure.
 
     rpcStatus = UuidCreate(&txid);

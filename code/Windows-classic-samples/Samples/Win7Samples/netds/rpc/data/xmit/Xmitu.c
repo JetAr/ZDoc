@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
                    Microsoft RPC Version 2.0
            Copyright Microsoft Corp. 1992 - 2000
                         xmit Example
@@ -53,7 +53,8 @@ void ArrayWalkProc(DOUBLE_XMIT_TYPE * pArray)
 void ListWalkProc(DOUBLE_LINK_TYPE * pList)
 {
     printf("Display contents of doubly linked list:\n");
-    while (pList != NULL) {
+    while (pList != NULL)
+    {
         printf("pList %p = %d, Next = %p\n",
                pList, pList->sNumber, pList->pNext);
         pList = pList->pNext;
@@ -64,9 +65,11 @@ DOUBLE_LINK_TYPE * InsertNewNode(short sValue, DOUBLE_LINK_TYPE * pPrevious)
 {
     DOUBLE_LINK_TYPE * pNew;
 
-    do {
+    do
+    {
         pNew = (DOUBLE_LINK_TYPE *)midl_user_allocate(sizeof(DOUBLE_LINK_TYPE));
-    } while (pNew == pPrevious);
+    }
+    while (pNew == pPrevious);
 
     pNew->pNext = NULL;      // initialize
     pNew->pPrevious = NULL;  // initialize
@@ -75,7 +78,8 @@ DOUBLE_LINK_TYPE * InsertNewNode(short sValue, DOUBLE_LINK_TYPE * pPrevious)
     pNew->pPrevious = pPrevious;             // prev(b) = a
     if (pPrevious == NULL)
         pNew->pNext = NULL;
-    else {
+    else
+    {
         pNew->pNext = pPrevious->pNext;      // next(b) = c
         pPrevious->pNext = pNew;             // next(a) = b
         if (pNew->pNext != NULL)
@@ -137,14 +141,16 @@ DOUBLE_LINK_TYPE_from_xmit(
     DOUBLE_LINK_TYPE *pCurrent;
     int i;
 
-    if (pArray->sSize <= 0) {  // error checking
+    if (pArray->sSize <= 0)    // error checking
+    {
         pList = NULL;
         return;
     }
 
     if (pList == NULL)
         pList = InsertNewNode(pArray->asNumber[0], NULL);
-    else {
+    else
+    {
         DOUBLE_LINK_TYPE_free_inst(pList);  // free all other nodes
         pList->sNumber = pArray->asNumber[0];
         pList->pNext = NULL;
@@ -166,7 +172,8 @@ DOUBLE_LINK_TYPE_free_inst(
         pList = pList->pNext;
 
     pList = pList->pPrevious;
-    while (pList != NULL) {  // back through list
+    while (pList != NULL)    // back through list
+    {
         midl_user_free(pList->pNext);
         pList = pList->pPrevious;
     }

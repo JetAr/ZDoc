@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -63,7 +63,7 @@ template<class Interface>
 inline void
 SafeRelease(
     Interface **ppInterfaceToRelease
-    )
+)
 {
     if (*ppInterfaceToRelease != NULL)
     {
@@ -107,12 +107,12 @@ private:
 
     void OnChar(
         SHORT aChar
-        );
+    );
 
     void OnVScroll(
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     UINT GetScrollRange();
     UINT GetScrollPos();
@@ -120,11 +120,11 @@ private:
     void OnMouseWheel(
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     void OnLeftButtonDown(
         D2D1_POINT_2F diPosition
-        );
+    );
 
     D2D1_SIZE_U CalculateD2DWindowSize();
 
@@ -133,14 +133,14 @@ private:
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     static LRESULT CALLBACK ParentWndProc(
         HWND hWnd,
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     HRESULT LoadDirectory();
 
@@ -148,7 +148,7 @@ private:
         FLOAT linearFactor,
         FLOAT p1,
         FLOAT p2
-        );
+    );
 
     FLOAT GetAnimatingItemInterpolationFactor();
     FLOAT GetAnimatingScrollInterpolationFactor();
@@ -156,7 +156,7 @@ private:
 
     D2D1_POINT_2F GetScrolledDIPositionFromPixelPosition(
         D2D1_POINT_2U
-        );
+    );
 
 
     /******************************************************************
@@ -168,17 +168,17 @@ private:
     static int __cdecl CompareAToZ(
         const void *a,
         const void *b
-        );
+    );
 
     static int __cdecl CompareZToA(
         const void *a,
         const void *b
-        );
+    );
 
     static int __cdecl CompareDirFirstAToZ(
         const void *a,
         const void *b
-        );
+    );
 
 private:
     HWND m_d2dHwnd;

@@ -1,4 +1,4 @@
-#include <assert.h>
+﻿#include <assert.h>
 #include <windows.h>
 #include <imm.h>
 #include "FullIME.h"
@@ -10,24 +10,24 @@
 // Window procedure of candidate window.
 //
 //********************************************************************
-int WINAPI CandWndProc( 
-    HWND hwnd, 
-    UINT msg, 
-    WPARAM wParam, 
+int WINAPI CandWndProc(
+    HWND hwnd,
+    UINT msg,
+    WPARAM wParam,
     LPARAM lParam )
 {
 
     switch( msg )
     {
 
-        case WM_PAINT:
+    case WM_PAINT:
 
-            CandUIPaint( hwnd );
-            break;
+        CandUIPaint( hwnd );
+        break;
 
-        default:
-            
-            return (int) DefWindowProc( hwnd, msg, wParam, lParam );
+    default:
+
+        return (int) DefWindowProc( hwnd, msg, wParam, lParam );
     }
 
     return 0;
@@ -41,8 +41,8 @@ int WINAPI CandWndProc(
 //
 //********************************************************************
 
-void DisplayCandStrings( 
-    HWND hwnd, 
+void DisplayCandStrings(
+    HWND hwnd,
     LPCANDIDATELIST lpCandList )
 {
 
@@ -52,7 +52,7 @@ void DisplayCandStrings(
     DWORD       dwStartIndex;   // Storage for candidate index
     DWORD       dwEndIndex;     // Storage for candidate index
     RECT        rect;           // Storage for client rect.
-    int         y = 0;          // 
+    int         y = 0;          //
     DWORD       dwBackColor;    // Storage for background color value
     DWORD       dwTextColor;
 
@@ -61,8 +61,8 @@ void DisplayCandStrings(
     //
 
     dwNumPerPage = ( !lpCandList->dwPageSize ) ?
-                     DEFAULT_CAND_NUM_PER_PAGE :
-                     lpCandList->dwPageSize;
+                   DEFAULT_CAND_NUM_PER_PAGE :
+                   lpCandList->dwPageSize;
 
     //
     // Determine the dwStartIndex from which the candidate string will
@@ -80,8 +80,8 @@ void DisplayCandStrings(
 
     dwEndIndex = ( dwEndIndex >= lpCandList->dwCount ) ?
                  lpCandList->dwCount : dwEndIndex;
-                 
-    
+
+
     //
     // Dissplay candidate strings.
     // First paint background color.
@@ -100,7 +100,7 @@ void DisplayCandStrings(
     // Set background color of selected candidate string to be blue.
     //
 
-    rect.top = rect.top + 
+    rect.top = rect.top +
                ( lpCandList->dwSelection - dwStartIndex ) * cyMetrics;
 
     rect.bottom = rect.top + cyMetrics;
@@ -110,7 +110,7 @@ void DisplayCandStrings(
     ExtTextOut( hdc, 0, rect.top, ETO_OPAQUE, &rect, NULL, 0, 0 );
 
     //
-    // Display candidate strings. 
+    // Display candidate strings.
     //
 
     SetBkMode( hdc, TRANSPARENT );
@@ -133,7 +133,7 @@ void DisplayCandStrings(
 
 
     SetTextColor( hdc, dwTextColor );
-    
+
     SetBkColor( hdc, dwBackColor );
 
     ReleaseDC( hwnd, hdc );
@@ -148,7 +148,7 @@ void DisplayCandStrings(
 //
 //**********************************************************************
 
-void CandUIPaint( 
+void CandUIPaint(
     HWND hwnd )
 {
     int             index;
@@ -158,7 +158,7 @@ void CandUIPaint(
 
 
     hdc = BeginPaint( hwnd, &ps );
-    
+
     //
     // Determine which candidate window needs to repaint.
     //
@@ -175,8 +175,8 @@ void CandUIPaint(
         goto exit;
 
     if ( !gImeUIData.hListCandMem[ index ] ||
-         (lpCandList = (LPCANDIDATELIST)
-              GlobalLock( gImeUIData.hListCandMem[ index ] ) ) == NULL )
+            (lpCandList = (LPCANDIDATELIST)
+                          GlobalLock( gImeUIData.hListCandMem[ index ] ) ) == NULL )
     {
         goto exit;
     }

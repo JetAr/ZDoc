@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -19,9 +19,9 @@
 class CLangBarItemButton;
 
 class CTextService : public ITfTextInputProcessor,
-                     public ITfThreadMgrEventSink,
-                     public ITfTextEditSink,
-                     public ITfKeyEventSink
+    public ITfThreadMgrEventSink,
+    public ITfTextEditSink,
+    public ITfKeyEventSink
 {
 public:
     CTextService();
@@ -57,7 +57,10 @@ public:
     // CClassFactory factory callback
     static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 
-    ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
+    ITfThreadMgr *_GetThreadMgr()
+    {
+        return _pThreadMgr;
+    }
 
     // utility function for compartment
     BOOL _IsKeyboardDisabled();

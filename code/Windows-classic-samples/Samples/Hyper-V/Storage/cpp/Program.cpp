@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,49 +44,49 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             LPCWSTR virtualDiskPath = argv[2];
 
             rc = SampleDetachVirtualDisk(
-                    virtualDiskPath);
+                     virtualDiskPath);
         }
         else if (_wcsicmp(argv[1], L"MergeVirtualDisk") == 0)
         {
             LPCWSTR virtualDiskPath = argv[2];
 
             rc = SampleMergeVirtualDisk(
-                    virtualDiskPath);
+                     virtualDiskPath);
         }
         else if (_wcsicmp(argv[1], L"CompactVirtualDisk") == 0)
         {
             LPCWSTR virtualDiskPath = argv[2];
 
             rc = SampleCompactVirtualDisk(
-                    virtualDiskPath);
+                     virtualDiskPath);
         }
         else if (_wcsicmp(argv[1], L"EnumerateUserMetaData") == 0)
         {
             LPCWSTR virtualDiskPath = argv[2];
 
             rc = SampleEnumerateUserMetaData(
-                    virtualDiskPath);
+                     virtualDiskPath);
         }
         else if (_wcsicmp(argv[1], L"GetUserMetaData") == 0)
         {
             LPCWSTR virtualDiskPath = argv[2];
-            
+
             rc = SampleGetUserMetaData(
-                    virtualDiskPath);
+                     virtualDiskPath);
         }
         else if (_wcsicmp(argv[1], L"DeleteUserMetaData") == 0)
         {
             LPCWSTR virtualDiskPath = argv[2];
-            
+
             rc = SampleDeleteUserMetaData(
-                    virtualDiskPath);
+                     virtualDiskPath);
         }
         else if (_wcsicmp(argv[1], L"GetStorageDependencyInformation") == 0)
         {
             LPCWSTR Disk = argv[2];
-            
+
             rc = SampleGetStorageDependencyInformation(
-                    Disk);
+                     Disk);
         }
         else
         {
@@ -101,8 +101,8 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             LPCWSTR readOnly = argv[3];
 
             rc = SampleAttachVirtualDisk(
-                    virtualDiskPath,
-                    (readOnly[0] == 't' || readOnly[0] == 'T'));
+                     virtualDiskPath,
+                     (readOnly[0] == 't' || readOnly[0] == 'T'));
         }
         else if (_wcsicmp(argv[1], L"MirrorVirtualDisk") == 0)
         {
@@ -110,8 +110,8 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             LPCWSTR destinationPath = argv[3];
 
             rc = SampleMirrorVirtualDisk(
-                    sourcePath,
-                    destinationPath);
+                     sourcePath,
+                     destinationPath);
         }
         else if (_wcsicmp(argv[1], L"CreateDifferencingVirtualDisk") == 0)
         {
@@ -119,13 +119,13 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             LPCWSTR parentPath = argv[3];
 
             rc = SampleCreateVirtualDisk(
-                    virtualDiskPath,
-                    parentPath,
-                    CREATE_VIRTUAL_DISK_FLAG_NONE,
-                    0,
-                    0,
-                    0,
-                    0);
+                     virtualDiskPath,
+                     parentPath,
+                     CREATE_VIRTUAL_DISK_FLAG_NONE,
+                     0,
+                     0,
+                     0,
+                     0);
         }
         else if (_wcsicmp(argv[1], L"RawIO") == 0)
         {
@@ -133,8 +133,8 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             LPCWSTR destinationPath = argv[3];
 
             rc = SampleRawIO(
-                    sourcePath,
-                    destinationPath);
+                     sourcePath,
+                     destinationPath);
         }
         else if (_wcsicmp(argv[1], L"ResizeVirtualDisk") == 0)
         {
@@ -143,8 +143,8 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
 
 
             rc = SampleResizeVirtualDisk(
-                    virtualDiskPath,
-                    fileSize);
+                     virtualDiskPath,
+                     fileSize);
         }
         else if (_wcsicmp(argv[1], L"SetUserMetaData") == 0)
         {
@@ -152,8 +152,8 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             DWORD ID = _wtoi(argv[3]);
 
             rc = SampleSetUserMetaData(
-                    virtualDiskPath, 
-                    ID);
+                     virtualDiskPath,
+                     ID);
         }
         else if (_wcsicmp(argv[1], L"AddVirtualDiskParent") == 0)
         {
@@ -161,8 +161,8 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             LPCWSTR parentPath = argv[3];
 
             rc = SampleAddVirtualDiskParent(
-                    virtualDiskPath,
-                    parentPath);
+                     virtualDiskPath,
+                     parentPath);
         }
         else
         {
@@ -178,9 +178,9 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             DWORD physicalSectorSize = _wtoi(argv[4]);
 
             rc = SampleSetVirtualDiskInformation(
-                    virtualDiskPath,
-                    parentPath,
-                    physicalSectorSize);
+                     virtualDiskPath,
+                     parentPath,
+                     physicalSectorSize);
         }
         else
         {
@@ -200,32 +200,32 @@ int __cdecl wmain(_In_ int argc, _In_reads_(argc) WCHAR *argv[])
             DWORD physicalSectorSize = _wtoi(argv[6]);
 
             rc = SampleCreateVirtualDisk(
-                    virtualDiskPath,
-                    parentPath,
-                    CREATE_VIRTUAL_DISK_FLAG_FULL_PHYSICAL_ALLOCATION,
-                    fileSize,
-                    blockSize,
-                    logicalSectorSize,
-                    physicalSectorSize);
+                     virtualDiskPath,
+                     parentPath,
+                     CREATE_VIRTUAL_DISK_FLAG_FULL_PHYSICAL_ALLOCATION,
+                     fileSize,
+                     blockSize,
+                     logicalSectorSize,
+                     physicalSectorSize);
         }
         else if (_wcsicmp(argv[1], L"CreateDynamicVirtualDisk") == 0)
         {
             LPCWSTR virtualDiskPath = argv[2];
             LPCWSTR parentPath = NULL;
-             
+
             ULONGLONG fileSize = _wtoi64(argv[3]);
             DWORD blockSize = _wtoi(argv[4]);
             DWORD logicalSectorSize = _wtoi(argv[5]);
             DWORD physicalSectorSize = _wtoi(argv[6]);
 
             rc = SampleCreateVirtualDisk(
-                    virtualDiskPath,
-                    parentPath,
-                    CREATE_VIRTUAL_DISK_FLAG_NONE,
-                    fileSize,
-                    blockSize,
-                    logicalSectorSize,
-                    physicalSectorSize);
+                     virtualDiskPath,
+                     parentPath,
+                     CREATE_VIRTUAL_DISK_FLAG_NONE,
+                     fileSize,
+                     blockSize,
+                     logicalSectorSize,
+                     physicalSectorSize);
         }
         else
         {
@@ -266,7 +266,7 @@ ShowUsage(
     wprintf(L"   AddVirtualDiskParent <path> <parent path>\n");
     wprintf(L"   GetStorageDependencyInformation [<volume> | <disk>]\n");
     wprintf(L"   GetAllAttachedVirtualDiskPhysicalPaths\n");
-    
+
 
     wprintf(L"\nExamples:\n");
     wprintf(L"   %s GetVirtualDiskInformation c:\\fixed.vhd\n", ModuleName);
@@ -285,10 +285,10 @@ ShowUsage(
     wprintf(L"   %s SetUserMetaData c:\\fixed.vhdx 1234\n", ModuleName);
     wprintf(L"   %s GetUserMetaData c:\\fixed.vhdx\n", ModuleName);
     wprintf(L"   %s DeleteUserMetaData c:\\fixed.vhdx\n", ModuleName);
-    wprintf(L"   %s AddVirtualDiskParent c:\\diff.vhdx c:\\dynamic.vhdx\n", ModuleName); 
-    wprintf(L"   %s GetStorageDependencyInformation C:\n", ModuleName); 
+    wprintf(L"   %s AddVirtualDiskParent c:\\diff.vhdx c:\\dynamic.vhdx\n", ModuleName);
+    wprintf(L"   %s GetStorageDependencyInformation C:\n", ModuleName);
     wprintf(L"   %s GetAllAttachedVirtualDiskPhysicalPaths\n", ModuleName);
-        
+
     wprintf(L"\n\n");
 }
 

@@ -1,10 +1,10 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+﻿/*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 Copyright 1995 - 2000 Microsoft Corporation
 
 Module Name:
 
-    perfutil.h  
+    perfutil.h
 
 Abstract:
 
@@ -40,7 +40,7 @@ Revision History:
 
 extern WCHAR  GLOBAL_STRING[];      // Global command (get all local ctrs)
 extern WCHAR  FOREIGN_STRING[];           // get data from foreign computers
-extern WCHAR  COSTLY_STRING[];      
+extern WCHAR  COSTLY_STRING[];
 extern WCHAR  NULL_STRING[];
 
 #define QUERY_GLOBAL    1
@@ -49,8 +49,8 @@ extern WCHAR  NULL_STRING[];
 #define QUERY_COSTLY    4
 
 //
-// The definition of the only routine of perfutil.c, It builds part of a 
-// performance data instance (PERF_INSTANCE_DEFINITION) as described in 
+// The definition of the only routine of perfutil.c, It builds part of a
+// performance data instance (PERF_INSTANCE_DEFINITION) as described in
 // winperf.h
 //
 
@@ -67,9 +67,10 @@ MonBuildInstanceDefinition(
     DWORD ParentObjectInstance,
     DWORD UniqueID,
     LPWSTR Name
-    );
+);
 
-typedef struct _LOCAL_HEAP_INFO_BLOCK {
+typedef struct _LOCAL_HEAP_INFO_BLOCK
+{
     DWORD   AllocatedEntries;
     DWORD   AllocatedBytes;
     DWORD   FreeEntries;

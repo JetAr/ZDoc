@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -13,10 +13,10 @@
 #include "LayeredListener.h"
 
 HRESULT CALLBACK CustomCreateListener(
-    __in WS_CHANNEL_TYPE channelType, 
-    __in_bcount(listenerParametersSize) const void* listenerParameters, 
-    __in ULONG listenerParametersSize, 
-    __deref_out void** listenerInstance, 
+    __in WS_CHANNEL_TYPE channelType,
+    __in_bcount(listenerParametersSize) const void* listenerParameters,
+    __in ULONG listenerParametersSize,
+    __deref_out void** listenerInstance,
     __in_opt WS_ERROR* error)
 {
     HRESULT hr;
@@ -39,13 +39,13 @@ HRESULT CALLBACK CustomCreateListener(
 
     // Create the underlying listener using the passed in parameters
     hr = WsCreateListener(
-        channelType,
-        layeredListenerParameters->channelBinding,
-        layeredListenerParameters->listenerProperties,
-        layeredListenerParameters->listenerPropertyCount,
-        layeredListenerParameters->securityDescription,
-        &customListener->listener,
-        error);
+             channelType,
+             layeredListenerParameters->channelBinding,
+             layeredListenerParameters->listenerProperties,
+             layeredListenerParameters->listenerPropertyCount,
+             layeredListenerParameters->securityDescription,
+             &customListener->listener,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -63,7 +63,7 @@ Exit:
         HeapFree(GetProcessHeap(), 0, customListener);
     }
 
-    return hr;  
+    return hr;
 }
 
 void CALLBACK CustomFreeListener(
@@ -79,7 +79,7 @@ void CALLBACK CustomFreeListener(
 }
 
 HRESULT CALLBACK CustomResetListener(
-    __in void* listenerInstance, 
+    __in void* listenerInstance,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying listener
@@ -88,9 +88,9 @@ HRESULT CALLBACK CustomResetListener(
 }
 
 HRESULT CALLBACK CustomOpenListener(
-    __in void* listenerInstance, 
-    __in const WS_STRING* url, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* listenerInstance,
+    __in const WS_STRING* url,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying listener
@@ -99,8 +99,8 @@ HRESULT CALLBACK CustomOpenListener(
 }
 
 HRESULT CALLBACK CustomCloseListener(
-    __in void* listenerInstance, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* listenerInstance,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying listener
@@ -109,7 +109,7 @@ HRESULT CALLBACK CustomCloseListener(
 }
 
 HRESULT CALLBACK CustomAbortListener(
-    __in void* listenerInstance, 
+    __in void* listenerInstance,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying listener
@@ -118,10 +118,10 @@ HRESULT CALLBACK CustomAbortListener(
 }
 
 HRESULT CALLBACK CustomGetListenerProperty(
-    __in void* listenerInstance, 
-    __in WS_LISTENER_PROPERTY_ID id, 
-    __out_bcount(valueSize) void* value, 
-    __in ULONG valueSize, 
+    __in void* listenerInstance,
+    __in WS_LISTENER_PROPERTY_ID id,
+    __out_bcount(valueSize) void* value,
+    __in ULONG valueSize,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying listener
@@ -130,10 +130,10 @@ HRESULT CALLBACK CustomGetListenerProperty(
 }
 
 HRESULT CALLBACK CustomSetListenerProperty(
-    __in void* listenerInstance, 
-    __in WS_LISTENER_PROPERTY_ID id, 
-    __in_bcount(valueSize) const void* value, 
-    __in ULONG valueSize, 
+    __in void* listenerInstance,
+    __in WS_LISTENER_PROPERTY_ID id,
+    __in_bcount(valueSize) const void* value,
+    __in ULONG valueSize,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying listener
@@ -142,9 +142,9 @@ HRESULT CALLBACK CustomSetListenerProperty(
 }
 
 HRESULT CALLBACK CustomAcceptChannel(
-    __in void* listenerInstance, 
-    __in void* channelInstance, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in void* listenerInstance,
+    __in void* channelInstance,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     // Delegate to the underlying listener
@@ -154,10 +154,10 @@ HRESULT CALLBACK CustomAcceptChannel(
 }
 
 HRESULT CALLBACK CustomCreateChannelForListener(
-    __in void* listenerInstance, 
-    __in_bcount(channelParametersSize) const void* channelParameters, 
-    __in ULONG channelParametersSize, 
-    __deref_out void** channelInstance, 
+    __in void* listenerInstance,
+    __in_bcount(channelParametersSize) const void* channelParameters,
+    __in ULONG channelParametersSize,
+    __deref_out void** channelInstance,
     __in_opt WS_ERROR* error)
 {
     HRESULT hr;
@@ -181,11 +181,11 @@ HRESULT CALLBACK CustomCreateChannelForListener(
 
     // Create the underlying channel using the passed in parameters
     hr = WsCreateChannelForListener(
-        customListener->listener,
-        layeredChannelParameters->channelProperties,
-        layeredChannelParameters->channelPropertyCount,
-        &customChannel->channel,
-        error);
+             customListener->listener,
+             layeredChannelParameters->channelProperties,
+             layeredChannelParameters->channelPropertyCount,
+             &customChannel->channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -214,20 +214,20 @@ Exit:
         HeapFree(GetProcessHeap(), 0, customChannel);
     }
 
-    return hr;  
+    return hr;
 }
 
 // Initialize the callbacks that will implement the custom listener
 WS_CUSTOM_LISTENER_CALLBACKS layeredListenerCallbacks =
 {
-    &CustomCreateListener, 
-    &CustomFreeListener, 
-    &CustomResetListener, 
-    &CustomOpenListener, 
-    &CustomCloseListener, 
-    &CustomAbortListener, 
-    &CustomGetListenerProperty, 
-    &CustomSetListenerProperty, 
-    &CustomCreateChannelForListener, 
-    &CustomAcceptChannel, 
+    &CustomCreateListener,
+    &CustomFreeListener,
+    &CustomResetListener,
+    &CustomOpenListener,
+    &CustomCloseListener,
+    &CustomAbortListener,
+    &CustomGetListenerProperty,
+    &CustomSetListenerProperty,
+    &CustomCreateChannelForListener,
+    &CustomAcceptChannel,
 };

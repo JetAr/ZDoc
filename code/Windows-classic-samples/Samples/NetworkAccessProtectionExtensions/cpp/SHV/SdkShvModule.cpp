@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -39,14 +39,14 @@ HRESULT CSdkShvModule::RegisterSdkShv()
     if(FAILED(hr))
     {
         DebugPrintfW(L"RegisterSdkShv:: FillShvComponentRegistrationInfo Failed with %#x",hr);
-		ZeroMemory(&shvInfo, sizeof(shvInfo));
-		goto Cleanup;
-	}
+        ZeroMemory(&shvInfo, sizeof(shvInfo));
+        goto Cleanup;
+    }
 
     hr = pSHVMgmt->RegisterSystemHealthValidator(&shvInfo, &CLSID_SampleShv);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"RegisterSdkShv:: RegisterSystemHealthValidator failed %#x", hr); 
+        DebugPrintfW(L"RegisterSdkShv:: RegisterSystemHealthValidator failed %#x", hr);
         goto Cleanup;
     }
 
@@ -81,8 +81,8 @@ HRESULT CSdkShvModule::UnregisterSdkShv()
         DebugPrintfW(L"UnregisterSdkShv: UnregisterSystemHealthValidator Failed with %#x",hr);
         goto Cleanup;
     }
-    
-Cleanup:    
+
+Cleanup:
     ReleaseObject(pSHVMgmt);
     return hr;
 }
@@ -95,7 +95,7 @@ HRESULT CSdkShvModule::FillShvComponentRegistrationInfo(
 
     shvInfo->id = QuarSampleSystemHealthId;
     shvInfo->infoClsid = SHV_CLSID_INFO;
-	shvInfo->configClsid = CLSID_SDK_SHV_UI;
+    shvInfo->configClsid = CLSID_SDK_SHV_UI;
 
     hr = FillCountedString(SDK_SHV_friendlyName, &(shvInfo->friendlyName));
     if (FAILED(hr))
@@ -125,10 +125,10 @@ HRESULT CSdkShvModule::FillShvComponentRegistrationInfo(
         goto Cleanup;
     }
 
-	return hr;
+    return hr;
 
 Cleanup:
-	FreeComponentRegistration(shvInfo);
+    FreeComponentRegistration(shvInfo);
     return hr;
 }
 
@@ -144,7 +144,8 @@ void CSdkShvModule::FreeComponentRegistration(
 
 
 // A binary data representing ACL of network service used for COM object launch permissions
-const unsigned char LaunchPermission[] = {
+const unsigned char LaunchPermission[] =
+{
     0x01, 0x00, 0x04, 0x80, 0x70, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x14, 0x00, 0x00, 0x00, 0x02, 0x00, 0x5c, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00,
     0x1f, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x12, 0x00, 0x00, 0x00,
@@ -157,9 +158,10 @@ const unsigned char LaunchPermission[] = {
 };
 
 // A binary data representing ACL of network service used for COM object access permissions
-const unsigned char AccessPermission[] = {
+const unsigned char AccessPermission[] =
+{
     0x01, 0x00, 0x04, 0x80, 0x58, 0x00, 0x00, 0x00, 0x68, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x14, 0x00, 0x00, 0x00, 0x02, 0x00, 0x44, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00, 
+    0x14, 0x00, 0x00, 0x00, 0x02, 0x00, 0x44, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00,
     0x03, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x14, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x14, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05,
     0x0a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00,
@@ -175,12 +177,12 @@ HRESULT CSdkShvModule::RegisterServer()
     // Write CLSID to a buffer
     wchar_t *lpClsid = NULL;
     hr = StringFromCLSID(
-            CLSID_SampleShv,
-            &lpClsid);
+             CLSID_SampleShv,
+             &lpClsid);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer StringFromCLSID failed %#x", hr); 
-		lpClsid = NULL;
+        DebugPrintfW(L"CSdkShvModule::RegisterServer StringFromCLSID failed %#x", hr);
+        lpClsid = NULL;
         goto Cleanup;
     }
 
@@ -190,13 +192,13 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_keyRoot, SDK_SHV_progId, NULL);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_keyRoot, SDK_SHV_progId, NULL) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_keyRoot, SDK_SHV_progId, NULL) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, NULL, SDK_SHV_friendlyName);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -204,13 +206,13 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_keyRoot, SDK_SHV_progId, L"\\CLSID");
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_keyRoot, SDK_SHV_progId, \\CLSID) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_keyRoot, SDK_SHV_progId, \\CLSID) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, NULL, lpClsid);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -218,31 +220,31 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_clsidKeyRoot, lpClsid, NULL);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_clsidKeyRoot, lpClsid, NULL) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_clsidKeyRoot, lpClsid, NULL) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, NULL, SDK_SHV_friendlyName);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
     hr = SdkSetRegistryStringValue(keyPath, L"AppID", SDK_SHV_appID);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
     wchar_t buff[MAX_PATH] = {0};
     if (!GetModuleFileName(
-        g_hModule,
-        buff,
-        MAX_PATH))
+                g_hModule,
+                buff,
+                MAX_PATH))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
-        DebugPrintfW(L"CSdkShvModule::RegisterServer GetModuleFileName failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer GetModuleFileName failed %#x", hr);
         goto Cleanup;
     }
 
@@ -250,13 +252,13 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_clsidKeyRoot, lpClsid, L"\\ProgId");
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_clsidKeyRoot, lpClsid, \\ProgId) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_clsidKeyRoot, lpClsid, \\ProgId) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, NULL, SDK_SHV_progId);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -264,21 +266,21 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_clsidKeyRoot, lpClsid, L"\\InprocServer32");
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_clsidKeyRoot, lpClsid, \\InprocServer32) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_clsidKeyRoot, lpClsid, \\InprocServer32) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, NULL, buff);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
-   // SOFTWARE\CLASSES\CLSID\<clsid>\InprocServer32\ThreadingModel
+    // SOFTWARE\CLASSES\CLSID\<clsid>\InprocServer32\ThreadingModel
     hr = SdkSetRegistryStringValue(keyPath, L"ThreadingModel", L"Both");
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -286,19 +288,19 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_appidKeyRoot, SDK_SHV_appID, NULL);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_appidKeyRoot, SDK_SHV_appID, NULL) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_appidKeyRoot, SDK_SHV_appID, NULL) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, NULL, SDK_SHV_friendlyName);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryValue(keyPath, L"DllSurrogate", REG_SZ, NULL, 0);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -306,14 +308,14 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = SdkSetRegistryValue(keyPath, L"AuthenticationLevel", REG_DWORD, &authLevel, sizeof(DWORD));
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryValue failed %#x", hr);
         goto Cleanup;
     }
 
     hr = SdkSetRegistryStringValue(keyPath, L"RunAs", L"NT AUTHORITY\\networkservice");
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -321,13 +323,13 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_appidKeyRoot, SDK_SHV_dllName, NULL);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_appidKeyRoot, SDK_SHV_dllName, NULL) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_appidKeyRoot, SDK_SHV_dllName, NULL) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, L"AppID", SDK_SHV_appID);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -335,26 +337,26 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_appidKeyRoot, SDK_SHV_sampleUIAppID, NULL);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_appidKeyRoot, SDK_SHV_sampleUIAppID, NULL) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_appidKeyRoot, SDK_SHV_sampleUIAppID, NULL) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, NULL, SDK_SHV_configFriendlyName);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryValue(keyPath, L"AccessPermission", REG_BINARY, static_cast<const void*>(AccessPermission), static_cast<DWORD>(sizeof(AccessPermission)));
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
     hr = SdkSetRegistryValue(keyPath, L"LaunchPermission", REG_BINARY, static_cast<const void*>(LaunchPermission), static_cast<DWORD>(sizeof(LaunchPermission)));
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -362,13 +364,13 @@ HRESULT CSdkShvModule::RegisterServer()
     hr = CreateKeyPath(keyPath, MAX_KEY_LENGTH, SDK_appidKeyRoot, SDK_SHV_exeName, NULL);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_appidKeyRoot, SDK_SHV_exeName, NULL) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer CreateKeyPath (SDK_appidKeyRoot, SDK_SHV_exeName, NULL) failed %#x", hr);
         goto Cleanup;
     }
     hr = SdkSetRegistryStringValue(keyPath, L"AppID", SDK_SHV_sampleUIAppID);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer SdkSetRegistryStringValue failed %#x", hr);
         goto Cleanup;
     }
 
@@ -395,12 +397,12 @@ HRESULT CSdkShvModule::UnregisterServer()
     // Write CLSID to a buffer
     wchar_t *lpClsid = NULL;
     hr = StringFromCLSID(
-            CLSID_SampleShv,
-            &lpClsid);
+             CLSID_SampleShv,
+             &lpClsid);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer StringFromCLSID failed %#x", hr); 
-		lpClsid = NULL;
+        DebugPrintfW(L"CSdkShvModule::RegisterServer StringFromCLSID failed %#x", hr);
+        lpClsid = NULL;
         goto Cleanup;
     }
 
@@ -409,7 +411,7 @@ HRESULT CSdkShvModule::UnregisterServer()
     if (FAILED(hr))
     {
         res = hr;
-        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_keyRoot, SDK_SHV_progId) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_keyRoot, SDK_SHV_progId) failed %#x", hr);
     }
 
     // SOFTWARE\CLASSES\CLSID\<clsid>
@@ -417,7 +419,7 @@ HRESULT CSdkShvModule::UnregisterServer()
     if (FAILED(hr))
     {
         res = hr;
-        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_clsidKeyRoot, lpClsid) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_clsidKeyRoot, lpClsid) failed %#x", hr);
     }
 
     // SOFTWARE\CLASSES\AppID\<clsid>
@@ -425,7 +427,7 @@ HRESULT CSdkShvModule::UnregisterServer()
     if (FAILED(hr))
     {
         res = hr;
-        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_appidKeyRoot, SDK_SHV_appID) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_appidKeyRoot, SDK_SHV_appID) failed %#x", hr);
     }
 
     // SOFTWARE\CLASSES\AppID\SdkShv.DLL
@@ -433,14 +435,14 @@ HRESULT CSdkShvModule::UnregisterServer()
     if (FAILED(hr))
     {
         res = hr;
-        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_appidKeyRoot, SDK_SHV_dllName) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_appidKeyRoot, SDK_SHV_dllName) failed %#x", hr);
     }
 
     // SOFTWARE\CLASSES\AppID\<UI clsid>
     hr = DeleteRegistryTree(SDK_appidKeyRoot, SDK_SHV_sampleUIAppID);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_appidKeyRoot, SDK_SHV_sampleUIAppID) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_appidKeyRoot, SDK_SHV_sampleUIAppID) failed %#x", hr);
         res = hr;
     }
 
@@ -448,7 +450,7 @@ HRESULT CSdkShvModule::UnregisterServer()
     hr = DeleteRegistryTree(SDK_appidKeyRoot, SDK_SHV_exeName);
     if (FAILED(hr))
     {
-        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_appidKeyRoot, SDK_SHV_exeName) failed %#x", hr); 
+        DebugPrintfW(L"CSdkShvModule::RegisterServer DeleteRegistryTree (SDK_appidKeyRoot, SDK_SHV_exeName) failed %#x", hr);
         res = hr;
     }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,11 +24,11 @@ int __cdecl main(void)
     // DhcpV4QueryPolicyEnforcement sets bPolicyActivated to TRUE if policies are enabled for the scope "dwSubnet" on the server, otherwise
     // bPolicyActivated is set to FALSE.
     dwError = DhcpV4QueryPolicyEnforcement(
-                     pwszServer,      // Server IP Address, a value of NULL means the current server (where the program is executed)
-                    (dwSubnet == 0),  // fGlobalPolicy, signifies whether the policy enforcement is queried for server or a specific scope
-                    dwSubnet,         // Subnet Address
-                    &bPolicyActivated //PBOOL to hold the results of whether the policies are enabled or not
-                    );
+                  pwszServer,      // Server IP Address, a value of NULL means the current server (where the program is executed)
+                  (dwSubnet == 0),  // fGlobalPolicy, signifies whether the policy enforcement is queried for server or a specific scope
+                  dwSubnet,         // Subnet Address
+                  &bPolicyActivated //PBOOL to hold the results of whether the policies are enabled or not
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4QueryPolicyEnforcement failed with Error = %d\n", dwError);
@@ -36,11 +36,11 @@ int __cdecl main(void)
     }
     //DhcpV4SetPolicyEnforcement sets the policy enforcement for the scope "dwSubnet" on the server.
     dwError = DhcpV4SetPolicyEnforcement(
-                     pwszServer,                         // Server IP Address, a value of NULL means the current server (where the program is executed)
-                    (dwSubnet == 0),                     // fGlobalPolicy, signifies whether the policy enforcement is getting set for server or a specific scope
-                    dwSubnet,                            // Subnet Address
-                    ((bPolicyActivated==TRUE)?FALSE:TRUE)// Policy is to be enabled or disabled.
-                    );
+                  pwszServer,                         // Server IP Address, a value of NULL means the current server (where the program is executed)
+                  (dwSubnet == 0),                     // fGlobalPolicy, signifies whether the policy enforcement is getting set for server or a specific scope
+                  dwSubnet,                            // Subnet Address
+                  ((bPolicyActivated==TRUE)?FALSE:TRUE)// Policy is to be enabled or disabled.
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4SetPolicyEnforcement failed with Error = %d\n", dwError);

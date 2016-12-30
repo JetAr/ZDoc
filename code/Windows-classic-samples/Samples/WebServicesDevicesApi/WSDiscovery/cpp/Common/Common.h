@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -26,7 +26,7 @@
 // The caller should delete[] the destination string.
 HRESULT DeepCopyString
 (   _In_ LPCWSTR source
-,   _Outptr_ LPWSTR *dest
+    ,   _Outptr_ LPWSTR *dest
 );
 
 // Deep copies the string from source to dest.
@@ -41,8 +41,8 @@ HRESULT DeepCopyString
 // deallocate memory allocated through this method.
 HRESULT DeepCopyStringLinked
 (   _In_ LPCWSTR source
-,   _In_opt_ void *parent
-,   _Outptr_ LPWSTR *dest
+    ,   _In_opt_ void *parent
+    ,   _Outptr_ LPWSTR *dest
 );
 
 // Gets the host name of the machine
@@ -59,7 +59,7 @@ HRESULT GetWideStringHostName
 _Success_( return == S_OK )
 HRESULT DeepCopyWsdUriList
 (   _In_ const WSD_URI_LIST *srcList
-,   _Outptr_ WSD_URI_LIST **destList
+    ,   _Outptr_ WSD_URI_LIST **destList
 );
 
 // Parses the scopes from the command line.
@@ -73,9 +73,9 @@ HRESULT DeepCopyWsdUriList
 _Success_( return == S_OK )
 HRESULT ParseScopes
 (   _In_ int argc
-,   _In_reads_( argc ) LPWSTR *argv
-,   _In_ int startIndex
-,   _Outptr_result_maybenull_ WSD_URI_LIST **scopesList
+    ,   _In_reads_( argc ) LPWSTR *argv
+    ,   _In_ int startIndex
+    ,   _Outptr_result_maybenull_ WSD_URI_LIST **scopesList
 );
 
 // Converts the GUID into a string of the following format:
@@ -85,7 +85,7 @@ HRESULT ParseScopes
 _Success_( return == S_OK )
 HRESULT GetGuidString
 (   _In_ GUID guidToConvert
-,   _Outptr_ LPWSTR *guidString
+    ,   _Outptr_ LPWSTR *guidString
 );
 
 // Prints the given GUID in the format of
@@ -106,7 +106,7 @@ void PrintGuid
 //
 void PrintErrorMessage
 (   _In_opt_ LPCWSTR message
-,   _In_ HRESULT hr
+    ,   _In_ HRESULT hr
 );
 
 // Prints out the contents in the discovered service.
@@ -115,7 +115,7 @@ void PrintErrorMessage
 // will not be available.
 HRESULT PrintDiscoveredService
 (   _In_ IWSDiscoveredService *service
-,   _In_ BOOL isByeMessage
+    ,   _In_ BOOL isByeMessage
 );
 
 // Prints out the types list.
@@ -131,13 +131,13 @@ void PrintUriList
 // Prints out the XML element.
 void PrintXmlElement
 (   _In_opt_ WSDXML_ELEMENT *element
-,   UINT indentLevel
+    ,   UINT indentLevel
 );
 
 // Prints out the entire tree of an XML Node.
 void PrintXmlNode
 (   _In_opt_ WSDXML_NODE *pNode
-,   UINT indentLevel
+    ,   UINT indentLevel
 );
 
 // Prints out tabs for a given indentation level.

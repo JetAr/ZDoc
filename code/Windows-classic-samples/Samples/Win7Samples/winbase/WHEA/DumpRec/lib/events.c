@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -32,7 +32,7 @@ CperOpenWheaLogQuery (
     __in_opt PWSTR Password,
     __in_opt PWSTR FileName,
     __out EVT_HANDLE *Session
-    )
+)
 
 /*++
 
@@ -87,8 +87,10 @@ Return Value:
     // well as a filename.
     //
 
-    if (ComputerName != NULL) {
-        if (FileName != NULL) {
+    if (ComputerName != NULL)
+    {
+        if (FileName != NULL)
+        {
             Error = ERROR_INVALID_PARAMETER;
             goto OpenWheaLogQueryEnd;
         }
@@ -100,17 +102,21 @@ Return Value:
         Login.Password = Password;
         Login.Flags = EvtRpcLoginAuthDefault;
         SessionHandle = EvtOpenSession(EvtRpcLogin, &Login, 0, 0);
-        if (SessionHandle == NULL) {
+        if (SessionHandle == NULL)
+        {
             Error = GetLastError();
             goto OpenWheaLogQueryEnd;
         }
     }
 
-    if (FileName == NULL) {
+    if (FileName == NULL)
+    {
         Path = WHEA_CHANNEL;
         Flags = EvtQueryChannelPath | EvtQueryForwardDirection;
 
-    } else {
+    }
+    else
+    {
         Path = (PCWSTR)FileName;
         Flags = EvtQueryFilePath | EvtQueryForwardDirection;
     }
@@ -121,12 +127,15 @@ Return Value:
     //
 
     QueryHandle = EvtQuery(SessionHandle, Path, WHEA_LOG_QUERY, Flags);
-    if (QueryHandle == NULL) {
+    if (QueryHandle == NULL)
+    {
         Error = GetLastError();
-        if (FileName == NULL) {
+        if (FileName == NULL)
+        {
             Path = WHEA_CHANNEL_LEGACY;
             QueryHandle = EvtQuery(SessionHandle, Path, WHEA_LOG_QUERY, Flags);
-            if (QueryHandle == NULL) {
+            if (QueryHandle == NULL)
+            {
                 Error = GetLastError();
                 goto OpenWheaLogQueryEnd;
             }
@@ -136,8 +145,10 @@ Return Value:
     *Session = SessionHandle;
 
 OpenWheaLogQueryEnd:
-    if (QueryHandle == NULL) {
-        if (SessionHandle != NULL) {
+    if (QueryHandle == NULL)
+    {
+        if (SessionHandle != NULL)
+        {
             EvtClose(SessionHandle);
         }
 
@@ -154,7 +165,7 @@ CperGetNextWheaLogEntry (
     __out_bcount_part_opt(BufferSize, *ReturnedSize) PWHEA_ERROR_RECORD Record,
     __in DWORD BufferSize,
     __out DWORD *ReturnedSize
-    )
+)
 
 /*++
 
@@ -206,13 +217,15 @@ Return Value:
     LastError = NO_ERROR;
 
     Result = EvtNext(QueryHandle, 1, &EventHandle, (DWORD)-1, 0, &Returned);
-    if (Result == FALSE) {
+    if (Result == FALSE)
+    {
         EventHandle = NULL;
         goto GetNextWheaLogEntryEnd;
     }
 
     RenderContext = EvtCreateRenderContext(0, NULL, EvtRenderContextUser);
-    if (RenderContext == NULL) {
+    if (RenderContext == NULL)
+    {
         Result = FALSE;
         goto GetNextWheaLogEntryEnd;
     }
@@ -232,13 +245,15 @@ Return Value:
                        &Returned,
                        &PropertyCount);
 
-    if (Result != FALSE) {
+    if (Result != FALSE)
+    {
         SetLastError(ERROR_GEN_FAILURE);
         Result = FALSE;
         goto GetNextWheaLogEntryEnd;
     }
 
-    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+    if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
         goto GetNextWheaLogEntryEnd;
     }
 
@@ -248,7 +263,8 @@ Return Value:
     //
 
     Buffer = HeapAlloc(GetProcessHeap(), 0, Returned);
-    if (Buffer == NULL) {
+    if (Buffer == NULL)
+    {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         Result = FALSE;
         goto GetNextWheaLogEntryEnd;
@@ -262,7 +278,8 @@ Return Value:
                        &Returned,
                        &PropertyCount);
 
-    if (Result == FALSE) {
+    if (Result == FALSE)
+    {
         goto GetNextWheaLogEntryEnd;
     }
 
@@ -271,7 +288,8 @@ Return Value:
     // return failure.
     //
 
-    if (PropertyCount < 2) {
+    if (PropertyCount < 2)
+    {
         Result = FALSE;
         SetLastError(ERROR_GEN_FAILURE);
         goto GetNextWheaLogEntryEnd;
@@ -282,7 +300,8 @@ Return Value:
     //
 
     Variant = (PEVT_VARIANT)Buffer;
-    if (Variant->Type != EvtVarTypeUInt32) {
+    if (Variant->Type != EvtVarTypeUInt32)
+    {
         Result = FALSE;
         SetLastError(ERROR_GEN_FAILURE);
         goto GetNextWheaLogEntryEnd;
@@ -295,7 +314,8 @@ Return Value:
     //
 
     Variant += 1;
-    if (Variant->Type != EvtVarTypeBinary) {
+    if (Variant->Type != EvtVarTypeBinary)
+    {
         Result = FALSE;
         SetLastError(ERROR_GEN_FAILURE);
         goto GetNextWheaLogEntryEnd;
@@ -308,7 +328,8 @@ Return Value:
     // record header are the same.
     //
 
-    if (ErrorRecord->Header.Length != RecordSize) {
+    if (ErrorRecord->Header.Length != RecordSize)
+    {
         Result = FALSE;
         SetLastError(ERROR_GEN_FAILURE);
         goto GetNextWheaLogEntryEnd;
@@ -323,34 +344,42 @@ Return Value:
     //
 
     *ReturnedSize = RecordSize;
-    if (BufferSize >= RecordSize) {
+    if (BufferSize >= RecordSize)
+    {
         RtlCopyMemory(Record, ErrorRecord, RecordSize);
         Result = TRUE;
 
-    } else {
+    }
+    else
+    {
         EvtSeek(QueryHandle, -1, NULL, 0, EvtSeekRelativeToCurrent);
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         Result = FALSE;
     }
 
 GetNextWheaLogEntryEnd:
-    if (Result == FALSE) {
+    if (Result == FALSE)
+    {
         LastError = GetLastError();
     }
 
-    if (EventHandle != NULL) {
+    if (EventHandle != NULL)
+    {
         EvtClose(EventHandle);
     }
 
-    if (RenderContext != NULL) {
+    if (RenderContext != NULL)
+    {
         EvtClose(RenderContext);
     }
 
-    if (Buffer != NULL) {
+    if (Buffer != NULL)
+    {
         HeapFree(GetProcessHeap(), 0, Buffer);
     }
 
-    if (Result == FALSE) {
+    if (Result == FALSE)
+    {
         SetLastError(LastError);
     }
 

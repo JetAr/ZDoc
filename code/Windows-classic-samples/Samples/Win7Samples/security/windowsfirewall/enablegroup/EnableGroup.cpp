@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -9,8 +9,8 @@ Copyright (c) 1985-2005 Microsoft Corporation. All Rights Reserved.
 Abstract:
     This C++ file includes sample code for enabling Windows Firewall
     exception groups using the Microsoft Windows Firewall APIs. The
-    sample will first add a disabled Firewall rule to the private 
-    profile using a string resource from within this binary 
+    sample will first add a disabled Firewall rule to the private
+    profile using a string resource from within this binary
     ("MyRuleGroup") for the rule group. Then it will enable the
     "MyRuleGroup" group of rules for the Private profile.
 
@@ -36,7 +36,7 @@ int __cdecl main()
 
     VARIANT_BOOL bIsEnabled = FALSE;
 
-    // The rule name, description, and group are provided as indirect strings for 
+    // The rule name, description, and group are provided as indirect strings for
     // localization purposes. These resource strings can be found in the rc file
 
     BSTR bstrRuleName = SysAllocString(L"@EnableGroup.exe,-128");
@@ -46,17 +46,37 @@ int __cdecl main()
     BSTR bstrRuleLPorts = SysAllocString(L"4000");
 
     // Error checking for BSTR allocations
-    if (NULL == bstrRuleName) { printf("Failed to allocate bstrRuleName\n"); goto Cleanup; }
-    if (NULL == bstrRuleDescription) { printf("Failed to allocate bstrRuleDescription\n"); goto Cleanup; }
-    if (NULL == bstrRuleGroup) { printf("Failed to allocate bstrRuleGroup\n"); goto Cleanup; }
-    if (NULL == bstrRuleApplication) { printf("Failed to allocate bstrRuleApplication\n"); goto Cleanup; }
-    if (NULL == bstrRuleLPorts) { printf("Failed to allocate bstrRuleLPorts\n"); goto Cleanup; }
+    if (NULL == bstrRuleName)
+    {
+        printf("Failed to allocate bstrRuleName\n");
+        goto Cleanup;
+    }
+    if (NULL == bstrRuleDescription)
+    {
+        printf("Failed to allocate bstrRuleDescription\n");
+        goto Cleanup;
+    }
+    if (NULL == bstrRuleGroup)
+    {
+        printf("Failed to allocate bstrRuleGroup\n");
+        goto Cleanup;
+    }
+    if (NULL == bstrRuleApplication)
+    {
+        printf("Failed to allocate bstrRuleApplication\n");
+        goto Cleanup;
+    }
+    if (NULL == bstrRuleLPorts)
+    {
+        printf("Failed to allocate bstrRuleLPorts\n");
+        goto Cleanup;
+    }
 
     // Initialize COM.
     hrComInit = CoInitializeEx(
                     0,
                     COINIT_APARTMENTTHREADED
-                    );
+                );
 
     // Ignore RPC_E_CHANGED_MODE; this just means that COM has already been
     // initialized with a different mode. Since we don't care what the mode is,
@@ -87,11 +107,11 @@ int __cdecl main()
 
     // Create a new Firewall Rule object.
     hr = CoCreateInstance(
-                __uuidof(NetFwRule),
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                __uuidof(INetFwRule),
-                (void**)&pFwRule);
+             __uuidof(NetFwRule),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwRule),
+             (void**)&pFwRule);
     if (FAILED(hr))
     {
         printf("CoCreateInstance for Firewall Rule failed: 0x%08lx\n", hr);
@@ -113,7 +133,7 @@ int __cdecl main()
         printf("put_Description failed: 0x%08lx\n", hr);
         goto Cleanup;
     }
-	
+
     // Populate the Firewall Rule Application Name
     hr = pFwRule->put_ApplicationName(bstrRuleApplication);
     if (FAILED(hr))
@@ -243,7 +263,7 @@ Cleanup:
     {
         CoUninitialize();
     }
-   
+
     return 0;
 }
 
@@ -254,16 +274,16 @@ HRESULT WFCOMInitialize(INetFwPolicy2** ppNetFwPolicy2)
     HRESULT hr = S_OK;
 
     hr = CoCreateInstance(
-        __uuidof(NetFwPolicy2), 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        __uuidof(INetFwPolicy2), 
-        (void**)ppNetFwPolicy2);
+             __uuidof(NetFwPolicy2),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwPolicy2),
+             (void**)ppNetFwPolicy2);
 
     if (FAILED(hr))
     {
         printf("CoCreateInstance for INetFwPolicy2 failed: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
 
 Cleanup:

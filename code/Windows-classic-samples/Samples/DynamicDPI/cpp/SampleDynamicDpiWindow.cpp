@@ -15,17 +15,17 @@ using namespace Microsoft::WRL;
 
 namespace UILayout
 {
-    static const float TitlePositionX = 20.0F;
-    static const float TitlePositionY = 10.0F;
-    static const float SubTitlePositionY = 60.0F;
+static const float TitlePositionX = 20.0F;
+static const float TitlePositionY = 10.0F;
+static const float SubTitlePositionY = 60.0F;
 
-    static const float SmallXOffset = 42.0f;
-    static const float ButtonPositionX = 20.0F;
-    static const float ButtonPositionY = 130.0F;
-    static const float ButtonPpemSize = 24.0F;
+static const float SmallXOffset = 42.0f;
+static const float ButtonPositionX = 20.0F;
+static const float ButtonPositionY = 130.0F;
+static const float ButtonPpemSize = 24.0F;
 };
 
-// <summary> 
+// <summary>
 // Initializes the elements that will be used to draw the application UI.
 // Unless otherwise specified, each of these elements is intended to
 // resize, relayout or show different UI in response to DPI changes.
@@ -105,7 +105,7 @@ CSampleDynamicDpiWindow::CSampleDynamicDpiWindow()
         m_RichEditWindow.SetFormatItalic();
     });
     m_engine.AddElement(button);
-    
+
     button = make_shared<CSampleCustomColorFontButton>(UILayout::ButtonPositionX + 7 * UILayout::SmallXOffset, UILayout::ButtonPositionY, UILayout::ButtonPpemSize, CustomGlyphId::Highlight);
     button->SetClickHandler([&]()
     {
@@ -137,10 +137,10 @@ CSampleDynamicDpiWindow::CSampleDynamicDpiWindow()
     button = make_shared<CSampleCustomColorFontButton>(UILayout::ButtonPositionX + 11 * UILayout::SmallXOffset, UILayout::ButtonPositionY, UILayout::ButtonPpemSize, CustomGlyphId::RightJustify);
     button->SetClickHandler([&]()
     {
-       m_RichEditWindow.SetAlignment(PFA_RIGHT);
+        m_RichEditWindow.SetAlignment(PFA_RIGHT);
     });
     m_engine.AddElement(button);
-    
+
     button = make_shared<CSampleCustomColorFontButton>(UILayout::ButtonPositionX + 12 * UILayout::SmallXOffset, UILayout::ButtonPositionY, UILayout::ButtonPpemSize, CustomGlyphId::Outdent);
     button->SetClickHandler([&]()
     {
@@ -165,11 +165,11 @@ CSampleDynamicDpiWindow::~CSampleDynamicDpiWindow()
 // This method initializes member variables and objects required by this class.
 // This method will be called once base class initialize functionality completes.
 // </summary>
-HRESULT 
+HRESULT
 CSampleDynamicDpiWindow::Initialize(
     _In_    RECT bounds,
     _In_    std::wstring title
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -219,7 +219,7 @@ CSampleDynamicDpiWindow::CreateDeviceIndependentResources()
     m_engine.CreateDeviceIndependentResources(m_deviceResources);
 }
 
-void 
+void
 CSampleDynamicDpiWindow::ReleaseDeviceIndependentResources()
 {
     m_engine.ReleaseDeviceIndependentResources();
@@ -286,7 +286,7 @@ void
 CSampleDynamicDpiWindow::OnPointerUp(
     _In_    float x,
     _In_    float y
-    )
+)
 {
     m_engine.PointerUp(x, y);
 }
@@ -295,7 +295,7 @@ void
 CSampleDynamicDpiWindow::OnPointerDown(
     _In_    float x,
     _In_    float y
-    )
+)
 {
     m_engine.PointerDown(x, y);
 }
@@ -304,7 +304,7 @@ void
 CSampleDynamicDpiWindow::OnPointerUpdate(
     _In_    float x,
     _In_    float y
-    )
+)
 {
     m_engine.PointerUpdate(x, y);
 }
@@ -334,7 +334,7 @@ void
 CSampleDynamicDpiWindow::OnDpiChange(
     _In_ int dpi,
     _In_ LPRECT newRect
-    )
+)
 {
     float changedDpi = static_cast<float>(dpi);
     SetNewDpi(changedDpi);
@@ -348,7 +348,7 @@ CSampleDynamicDpiWindow::CalcWindowRectNewDpi(
     _In_    RECT oldRect,
     _In_    float oldDpi,
     _In_    float newDpi
-    )
+)
 {
     float oldWidth = static_cast<float>(oldRect.right - oldRect.left);
     float oldHeight = static_cast<float>(oldRect.bottom - oldRect.top);
@@ -372,7 +372,7 @@ CSampleDynamicDpiWindow::RebuildCurrentDpiString()
     UINT dpix(0), dpiy(0);
 
     auto monitor = MonitorFromWindow(m_hWnd,MONITOR_DEFAULTTONEAREST);
-    
+
     DX::ThrowIfFailed(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &dpix, &dpiy));
     auto windowDpi = static_cast<float>(dpix);
 
@@ -401,12 +401,12 @@ CSampleDynamicDpiWindow::GetDpiForWindow()
 {
     auto monitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
 
-	UINT newDpiX;
-	UINT newDpiY;
-	if (FAILED(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &newDpiX, &newDpiY)))
-	{
-		newDpiX = 96;
-		newDpiX = 96;
-	}
+    UINT newDpiX;
+    UINT newDpiY;
+    if (FAILED(GetDpiForMonitor(monitor, MONITOR_DPI_TYPE::MDT_EFFECTIVE_DPI, &newDpiX, &newDpiY)))
+    {
+        newDpiX = 96;
+        newDpiX = 96;
+    }
     return static_cast<float>(newDpiX);
 }

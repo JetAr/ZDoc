@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -57,8 +57,8 @@ BOOL EnablePrivilege()
 
     bRes = LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &PrivilegeRequired);
     if( !bRes) return FALSE;
-    
-    bRes = OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, TRUE, &hToken); 
+
+    bRes = OpenThreadToken(GetCurrentThread(), TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, TRUE, &hToken);
     if(!bRes) return FALSE;
 
     bRes = GetTokenInformation(hToken, TokenPrivileges, NULL, 0, &dwLen);
@@ -69,8 +69,8 @@ BOOL EnablePrivilege()
     }
     pBuffer = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwLen);
     if(NULL == pBuffer) return FALSE;
-    
-    if (!GetTokenInformation(hToken, TokenPrivileges, pBuffer, dwLen, &dwLen)) 
+
+    if (!GetTokenInformation(hToken, TokenPrivileges, pBuffer, dwLen, &dwLen))
     {
         CloseHandle(hToken);
         HeapFree(GetProcessHeap(), 0, pBuffer);
@@ -83,7 +83,7 @@ BOOL EnablePrivilege()
     for(iCount = 0; iCount < pPrivs->PrivilegeCount; iCount++)
     {
         if (pPrivs->Privileges[iCount].Luid.LowPart == PrivilegeRequired.LowPart &&
-          pPrivs->Privileges[iCount].Luid.HighPart == PrivilegeRequired.HighPart )
+                pPrivs->Privileges[iCount].Luid.HighPart == PrivilegeRequired.HighPart )
         {
             pPrivs->Privileges[iCount].Attributes |= SE_PRIVILEGE_ENABLED;
             // here it's found
@@ -93,12 +93,12 @@ BOOL EnablePrivilege()
     }
 
     CloseHandle(hToken);
-    HeapFree(GetProcessHeap(), 0, pBuffer);    
+    HeapFree(GetProcessHeap(), 0, pBuffer);
     return bRes;
 }
 
 MI_Result ConvertFileTimeToDateTime(
-    _In_ LPFILETIME pfTime, 
+    _In_ LPFILETIME pfTime,
     _Out_ MI_Datetime *pdTime)
 {
     SYSTEMTIME sTime;
@@ -134,7 +134,7 @@ MI_Result SetInstance(
     _Out_ MSFT_WindowsProcess* self,
     DWORD processId,
     _In_ MI_Context* context
-    )
+)
 {
     HANDLE hProcess = NULL;
     MI_Result result = MSFT_WindowsProcess_Construct(self, context);
@@ -145,8 +145,8 @@ MI_Result SetInstance(
 
     // Get a handle to the process.
     hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-        FALSE,
-        processId);
+                           FALSE,
+                           processId);
     if(NULL != hProcess)
     {
         // Set process handle in the instance - putting the PID of the process in string format
@@ -174,13 +174,13 @@ MI_Result SetInstance(
             DWORD cbNeeded;
             MI_Char szProcessName[MAX_PATH] = L"";
 
-            if ( EnumProcessModules( hProcess, &hMod, sizeof(hMod), 
-                    &cbNeeded) )
+            if ( EnumProcessModules( hProcess, &hMod, sizeof(hMod),
+                                     &cbNeeded) )
             {
-                GetModuleBaseName( hProcess, hMod, szProcessName, 
-                                    sizeof(szProcessName)/sizeof(TCHAR) );
+                GetModuleBaseName( hProcess, hMod, szProcessName,
+                                   sizeof(szProcessName)/sizeof(TCHAR) );
             }
-            
+
             result = MSFT_WindowsProcess_Set_Name(self, szProcessName);
             if( result != MI_RESULT_OK )
             {
@@ -257,7 +257,7 @@ MI_Result SetInstance(
                         return result;
                     }
                 }
-                
+
                 {
                     // Setting KernelModeTime in milliseconds
                     // FILETIME contains two 32-bit values that combine to form a 64 bit count of 100-nanosecond time units.
@@ -266,7 +266,7 @@ MI_Result SetInstance(
                     temp = fKernelTime.dwHighDateTime;
                     temp = temp << 32;
                     temp += fKernelTime.dwLowDateTime;
-                    //temp = (UINT64) (((UINT32)fKernelTime.dwHighDateTime << 32) | (UINT32)fKernelTime.dwLowDateTime); 
+                    //temp = (UINT64) (((UINT32)fKernelTime.dwHighDateTime << 32) | (UINT32)fKernelTime.dwLowDateTime);
                     timeInMilliseconds = temp / 10000; // Converting 100-nanosecond time units to milliseconds.
 
                     result = MSFT_WindowsProcess_Set_KernelModeTime (self, timeInMilliseconds);
@@ -291,7 +291,7 @@ MI_Result SetInstance(
                         return result;
                     }
                 }
-                
+
                 result = ConvertFileTimeToDateTime(&fCreationTime, &dTime);
                 if(result == MI_RESULT_OK)
                 {
@@ -316,7 +316,7 @@ MI_Result SetInstance(
             MSFT_WindowsProcess_Destruct(self);
             return result;
         }
-          
+
         result = MSFT_WindowsProcess_Set_OSCreationClassName(self, OS_CREATION_CLASS_NAME);
         if(result != MI_RESULT_OK)
         {
@@ -331,8 +331,8 @@ MI_Result SetInstance(
             MSFT_WindowsProcess_Destruct(self);
             return result;
         }
-                        
-        //OSName 
+
+        //OSName
         {
             MI_Char buf[INFO_BUFFER_SIZE];
 
@@ -383,18 +383,18 @@ MI_Result IsValidInstance(_In_ const MSFT_WindowsProcess* instanceName)
 {
     MI_Result result = MI_RESULT_OK;
     // Check to make sure that instance is not null and instance has all the key properties.
-    if(instanceName && 
-        instanceName->CSCreationClassName.exists == MI_TRUE &&
-        instanceName->CSName.exists == MI_TRUE &&
-        instanceName->OSCreationClassName.exists == MI_TRUE &&
-        instanceName->OSName.exists == MI_TRUE &&
-        instanceName->CreationClassName.exists == MI_TRUE &&
-        instanceName->Handle.exists == MI_TRUE)
+    if(instanceName &&
+            instanceName->CSCreationClassName.exists == MI_TRUE &&
+            instanceName->CSName.exists == MI_TRUE &&
+            instanceName->OSCreationClassName.exists == MI_TRUE &&
+            instanceName->OSName.exists == MI_TRUE &&
+            instanceName->CreationClassName.exists == MI_TRUE &&
+            instanceName->Handle.exists == MI_TRUE)
     {
         // Making sure that key properties are same as the one set by the provider
         if( (_wcsicmp(instanceName->CSCreationClassName.value, CS_CREATION_CLASS_NAME) != 0) ||
-            (_wcsicmp(instanceName->OSCreationClassName.value, OS_CREATION_CLASS_NAME) != 0) ||
-            (_wcsicmp(instanceName->CreationClassName.value, CLASS_CREATION_NAME) != 0) )
+                (_wcsicmp(instanceName->OSCreationClassName.value, OS_CREATION_CLASS_NAME) != 0) ||
+                (_wcsicmp(instanceName->CreationClassName.value, CLASS_CREATION_NAME) != 0) )
         {
             // The instance with the user passed in key is not found.
             return MI_RESULT_NOT_FOUND;
@@ -445,8 +445,8 @@ MI_Result EnumerateProcesses(
     _In_ MI_Context* context,
     _In_ MI_Boolean keysOnly)
 {
-    DWORD aProcesses[1024]; 
-    DWORD cbNeeded; 
+    DWORD aProcesses[1024];
+    DWORD cbNeeded;
     DWORD cProcesses;
     unsigned int i;
     MI_Result result = MI_RESULT_OK;
@@ -481,7 +481,7 @@ MI_Result EnumerateProcesses(
 
         // Post instance to wmi server
         result = MSFT_WindowsProcess_Post(&instance, context);
-            
+
         // Now we can free the instance which will free the resources allocated as part of setting the properties.
         MSFT_WindowsProcess_Destruct(&instance);
         if(result != MI_RESULT_OK)
@@ -500,21 +500,21 @@ MI_Result GetProcessInstance(
     MSFT_WindowsProcess instance;
 
     EnablePrivilege();
-    
+
     result = IsValidInstance(instanceName);
-  
+
     if(result == MI_RESULT_OK)
     {
         DWORD processId;
         // Retrieving the process id from handle parameter
         processId = (DWORD)_wtoi64(instanceName->Handle.value);
-        
+
         result = SetInstance(&instance, processId, context);
         if(result == MI_RESULT_OK)
         {
             // Post instance to wmi server
             result = MSFT_WindowsProcess_Post(&instance, context);
-            
+
             // Now we can free the instance which will free the resources allocated as part of setting the properties.
             MSFT_WindowsProcess_Destruct(&instance);
         }
@@ -530,18 +530,18 @@ MI_Result DeleteProcessInstance(
     MI_UNREFERENCED_PARAMETER(context);
 
     EnablePrivilege();
-   
+
     result = IsValidInstance(instanceName);
-   
+
     if(result == MI_RESULT_OK)
     {
         DWORD processId;
         HANDLE hProcess;
         // Retrieving the process id from handle parameter
         processId = (DWORD)_wtoi64(instanceName->Handle.value);
-        
+
         hProcess = OpenProcess( PROCESS_TERMINATE,
-                        FALSE, processId );
+                                FALSE, processId );
         if(NULL != hProcess)
         {
             if(! TerminateProcess(hProcess, 0) )
@@ -569,18 +569,18 @@ MI_Result ModifyProcessInstance(
     MI_UNREFERENCED_PARAMETER(context);
 
     EnablePrivilege();
-    
+
     // Modify has to find the instance with the key properties passed in and modify non-key properties passed by client.
     // And then post the modified instance.
     result = IsValidInstance(modifiedInstance);
-   
+
     if(result == MI_RESULT_OK)
     {
         DWORD processId;
         HANDLE hProcess;
         // Retrieving the process id from handle parameter
         processId = (DWORD)_wtoi64(modifiedInstance->Handle.value);
-        
+
         hProcess = OpenProcess(PROCESS_SET_INFORMATION, FALSE, processId );
         if(NULL != hProcess)
         {
@@ -590,14 +590,14 @@ MI_Result ModifyProcessInstance(
                 if(SetPriorityClass(hProcess, modifiedInstance->Priority.value))
                 {
                     MSFT_WindowsProcess instance;
-                    
-                    // Retrieving the modified process instance       
+
+                    // Retrieving the modified process instance
                     result = SetInstance(&instance, processId, context);
                     if(result == MI_RESULT_OK)
                     {
                         // Post modified instance to wmi server
                         result = MSFT_WindowsProcess_Post(&instance, context);
-            
+
                         // Now we can free the instance which will free the resources allocated as part of setting the properties.
                         MSFT_WindowsProcess_Destruct(&instance);
                     }
@@ -617,7 +617,7 @@ MI_Result ModifyProcessInstance(
         }
 
     }
-    
+
     return result;
 }
 
@@ -636,20 +636,20 @@ MI_Result Invoke_SetPriority(
     }
 
     EnablePrivilege();
-    
+
     // Instance method has to find the instance with the key properties passed in and modify non-key properties passed by client.
     // And then post the output instance.
     result = IsValidInstance(instanceName);
-   
+
     if(result == MI_RESULT_OK)
     {
         DWORD processId;
         HANDLE hProcess;
         // Retrieving the process id from handle parameter
         processId = (DWORD)_wtoi64(instanceName->Handle.value);
-        
+
         hProcess = OpenProcess( PROCESS_SET_INFORMATION,
-                        FALSE, processId );
+                                FALSE, processId );
         if(NULL != hProcess)
         {
             // Setting the new priority
@@ -683,17 +683,17 @@ MI_Result Invoke_SetPriority(
         }
 
     }
-    
+
     return result;
 }
 
 
 //
 // Helper function of allocating memory from process heap
-// 
+//
 // Argument:
 //      dwBytes     number of bytes to allocate.
-//  
+//
 // Return value:
 //      allocated memory address
 //
@@ -704,7 +704,7 @@ LPVOID AllocateMemory(SIZE_T dwBytes)
 
 //
 // Helper function of freeing memory
-// 
+//
 // Argument:
 //      lpMem       memory address to free.
 //
@@ -762,16 +762,16 @@ MI_Result CreateProcessHelper(
     // in session 0 and UI is invisible to the logged on user,
     // but the process can be found through task manager.
     creationResult = CreateProcess(
-        NULL,                   // No module name (use command line)
-        cmdLine,                // Command line
-        NULL,                   // Process handle not inheritable
-        NULL,                   // Thread handle not inheritable
-        FALSE,                  // Set handle inheritance to FALSE
-        NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE | CREATE_NEW_PROCESS_GROUP, // creation flags
-        NULL,                   // Use parent's environment block
-        NULL,                   // Use parent's starting directory 
-        &startupInfo,           // Pointer to STARTUPINFO structure
-        &processInformation);   // Pointer to PROCESS_INFORMATION structure
+                         NULL,                   // No module name (use command line)
+                         cmdLine,                // Command line
+                         NULL,                   // Process handle not inheritable
+                         NULL,                   // Thread handle not inheritable
+                         FALSE,                  // Set handle inheritance to FALSE
+                         NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE | CREATE_NEW_PROCESS_GROUP, // creation flags
+                         NULL,                   // Use parent's environment block
+                         NULL,                   // Use parent's starting directory
+                         &startupInfo,           // Pointer to STARTUPINFO structure
+                         &processInformation);   // Pointer to PROCESS_INFORMATION structure
     FreeMemory(cmdLine);
     if (!creationResult)
     {

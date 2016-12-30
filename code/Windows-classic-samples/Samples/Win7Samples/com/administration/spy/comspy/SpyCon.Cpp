@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -67,42 +67,42 @@ STDMETHODIMP CSpyCon::Run()
         DWORD dwValue;
         DWORD dwSize = sizeof(dwValue);
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, REG_VALUE_LEFT, NULL, &dwType, (LPBYTE)&dwValue, &dwSize)) &&
-            (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
+                (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
         {
             m_wp.rcNormalPosition.left = (LONG)dwValue;
         }
 
         dwSize = sizeof(dwValue);
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, REG_VALUE_TOP, NULL, &dwType, (LPBYTE)&dwValue, &dwSize)) &&
-            (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
+                (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
         {
             m_wp.rcNormalPosition.top = (LONG)dwValue;
         }
 
         dwSize = sizeof(dwValue);
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, REG_VALUE_RIGHT, NULL, &dwType, (LPBYTE)&dwValue, &dwSize)) &&
-            (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
+                (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
         {
             m_wp.rcNormalPosition.right = (LONG)dwValue;
         }
 
         dwSize = sizeof(dwValue);
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, REG_VALUE_BOTTOM, NULL, &dwType, (LPBYTE)&dwValue, &dwSize)) &&
-            (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
+                (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
         {
             m_wp.rcNormalPosition.bottom = (LONG)dwValue;
         }
 
         dwSize = sizeof(dwValue);
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, REG_VALUE_SHOW_WINDOW, NULL, &dwType, (LPBYTE)&dwValue, &dwSize)) &&
-            (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
+                (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
         {
             m_wp.showCmd = (UINT)dwValue;
         }
 
         dwSize = sizeof(dwValue);
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, REG_VALUE_ALWAYS_ON_TOP, NULL, &dwType, (LPBYTE)&dwValue, &dwSize)) &&
-            (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
+                (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
         {
             m_bAlwaysOnTop = (dwValue != 0);
         }
@@ -114,7 +114,7 @@ STDMETHODIMP CSpyCon::Run()
 
         dwSize = sizeof(dwValue);
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, REG_VALUE_SAVE_ON_EXIT, NULL, &dwType, (LPBYTE)&dwValue, &dwSize)) &&
-            (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
+                (dwType == REG_DWORD) && (dwSize == sizeof(dwValue)))
         {
             m_bSaveOnExit = (dwValue != 0);
         }
@@ -122,7 +122,7 @@ STDMETHODIMP CSpyCon::Run()
         // Get the control properties persisted in a stream
         dwSize = 0;
         if ((ERROR_SUCCESS == RegQueryValueEx(hKey, REG_VALUE_CONTROL_PROPERTIES, NULL, &dwType, NULL, &dwSize)) &&
-            (dwType == REG_BINARY))
+                (dwType == REG_BINARY))
         {
             HGLOBAL hGlobal = GlobalAlloc(GPTR, dwSize);
             if (hGlobal)
@@ -134,7 +134,7 @@ STDMETHODIMP CSpyCon::Run()
 
                 CComPtr<IStream> spStream;
                 if ((ERROR_SUCCESS == lResult) &&
-                    SUCCEEDED(CreateStreamOnHGlobal(hGlobal, TRUE, &spStream)))
+                        SUCCEEDED(CreateStreamOnHGlobal(hGlobal, TRUE, &spStream)))
                 {
                     CComPtr<IPersistStreamInit> spPersist;
                     hr = m_spSpy->QueryInterface(IID_PPV_ARGS(&spPersist));
@@ -148,7 +148,7 @@ STDMETHODIMP CSpyCon::Run()
                     GlobalFree(hGlobal);
                 }
             }
-        }        
+        }
     }
 
     if (!(( m_wp.rcNormalPosition.right - m_wp.rcNormalPosition.left < 10) || (m_wp.rcNormalPosition.bottom - m_wp.rcNormalPosition.top < 10)))
@@ -158,7 +158,7 @@ STDMETHODIMP CSpyCon::Run()
 
     GetClientRect(&rcPos);
     MSG msg;
-    return m_spOleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, &msg, this, 0, m_hWnd, &rcPos);    
+    return m_spOleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, &msg, this, 0, m_hWnd, &rcPos);
 }
 
 //
@@ -197,7 +197,7 @@ LRESULT CSpyCon::OnLogToFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     m_spSpy->get_LogToFile(&bVal);
     bVal = !bVal;
     m_spSpy->put_LogToFile(bVal);
-    return 0;    
+    return 0;
 }
 
 //
@@ -211,7 +211,7 @@ LRESULT CSpyCon::OnChooseLogFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     BOOL bCanceled;
     m_spSpy->ChooseLogFile(&bstrFileName, &bCanceled);
     return 0;
-    
+
 }
 
 //
@@ -237,7 +237,7 @@ LRESULT CSpyCon::OnToggleSaveOnExit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
         }
     }
 
-    return 0;    
+    return 0;
 }
 
 //
@@ -251,7 +251,7 @@ LRESULT CSpyCon::OnToggleShowOnScreen(WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     m_spSpy->get_ShowOnScreen(&bVal);
     bVal = !bVal;
     m_spSpy->put_ShowOnScreen(bVal);
-    return 0;    
+    return 0;
 
 }
 //
@@ -273,13 +273,13 @@ LRESULT CSpyCon::OnInitMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     ModifyMenu(hMenu, ID_LOG, MF_BYCOMMAND|MF_STRING, ID_LOG, temp);
     BOOL bVal;
     m_spSpy->get_LogToFile(&bVal);
-    CheckMenuItem(hMenu, ID_LOG,   bVal ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED); 
-    m_spSpy->get_ShowGridLines(&bVal);    
-    CheckMenuItem(hMenu, ID_OPTIONS_GRID_LINES,  bVal ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED); 
+    CheckMenuItem(hMenu, ID_LOG,   bVal ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
+    m_spSpy->get_ShowGridLines(&bVal);
+    CheckMenuItem(hMenu, ID_OPTIONS_GRID_LINES,  bVal ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
     m_spSpy->get_ShowOnScreen(&bVal);
-    CheckMenuItem(hMenu, ID_SHOW_ON_SCREEN,  bVal ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED); 
-    CheckMenuItem(hMenu, IDM_ON_TOP,  m_bAlwaysOnTop ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED); 
-    CheckMenuItem(hMenu, ID_SAVE_ON_EXIT,  m_bSaveOnExit ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED); 
+    CheckMenuItem(hMenu, ID_SHOW_ON_SCREEN,  bVal ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
+    CheckMenuItem(hMenu, IDM_ON_TOP,  m_bAlwaysOnTop ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
+    CheckMenuItem(hMenu, ID_SAVE_ON_EXIT,  m_bSaveOnExit ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
 
     return 0;
 }
@@ -296,7 +296,7 @@ LRESULT CSpyCon::OnToggleGridLines(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     BOOL bVal;
     m_spSpy->get_ShowGridLines(&bVal);
     bVal = !bVal;
-    m_spSpy->put_ShowGridLines(bVal);    
+    m_spSpy->put_ShowGridLines(bVal);
     return 0;
 }
 //
@@ -441,7 +441,7 @@ HRESULT CSpyCon::SaveSettings()
 }
 
 LRESULT CSpyCon::OnNCDestroy(UINT /* uMsg */, WPARAM /* wParam */, LPARAM /* lParam */, BOOL& /* bHandled */)
-{            
+{
     PostQuitMessage(0);
     return 0;
 }

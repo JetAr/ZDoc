@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
 // Description:
 //
 //    This file contains the routines used to create a map of the LSPs installed.
-//    This map is used to order the relationship between LSPs. It is used by the 
+//    This map is used to order the relationship between LSPs. It is used by the
 //    LSP uninstaller code to determine which LSPs are dependent on each other.
 //    Winsock catalog. See instlsp.cpp for more information on running this code.
 //
@@ -26,31 +26,31 @@
 //
 // Function: PrintProviders
 //
-// Description: 
+// Description:
 //    This function prints out each entry in the Winsock catalog and its
 //    catalog ID if the parameter, bLayeredOnly, is FALSE. If TRUE then
 //    print only those layered catalog entries.
 //
-void 
+void
 PrintProviders(
-    WINSOCK_CATALOG Catalog, 
-    BOOL            bLayeredOnly, 
+    WINSOCK_CATALOG Catalog,
+    BOOL            bLayeredOnly,
     BOOL            bVerbose
-    )
+)
 {
     WSAPROTOCOL_INFOW  *pProtocolInfo = NULL;
     INT                 iProtocolCount = 0,
                         i;
 
     // Enumerate catalog and print it
-	pProtocolInfo = EnumerateProviders( Catalog, &iProtocolCount );
+    pProtocolInfo = EnumerateProviders( Catalog, &iProtocolCount );
     if ( NULL == pProtocolInfo )
     {
         fprintf( stderr, "PrintProviders: Unable to enumerate catalog!\n" );
         goto cleanup;
     }
 
-    for(i=0; i < iProtocolCount ;i++)
+    for(i=0; i < iProtocolCount ; i++)
     {
         if ( FALSE == bLayeredOnly )
         {
@@ -58,10 +58,10 @@ PrintProviders(
             if ( TRUE == bVerbose )
                 PrintProtocolInfo( &pProtocolInfo[ i ] );
             else
-                printf("%04d - %S\n", 
-                        pProtocolInfo[ i ].dwCatalogEntryId,
-                        pProtocolInfo[ i ].szProtocol
-                        );
+                printf("%04d - %S\n",
+                       pProtocolInfo[ i ].dwCatalogEntryId,
+                       pProtocolInfo[ i ].szProtocol
+                      );
         }
         else if ( LAYERED_PROTOCOL == pProtocolInfo[ i ].ProtocolChain.ChainLen )
         {
@@ -69,13 +69,13 @@ PrintProviders(
             if ( TRUE == bVerbose )
                 PrintProtocolInfo( &pProtocolInfo[ i ] );
             else
-                printf("%04d - %S\n", 
-                        pProtocolInfo[ i ].dwCatalogEntryId,
-                        pProtocolInfo[ i ].szProtocol
-                        );
+                printf("%04d - %S\n",
+                       pProtocolInfo[ i ].dwCatalogEntryId,
+                       pProtocolInfo[ i ].szProtocol
+                      );
         }
     }
-    
+
 cleanup:
 
     if ( NULL != pProtocolInfo )
@@ -91,7 +91,7 @@ cleanup:
 //    This routine builds a map of all LSPs installed according to what order
 //    they are in the catalog. That is, the information returned will be ordered
 //    in the way the LSPs need to be installed. For example if LSP1 is installed
-//    over the base TCP and UDP providers and LSP2 is installed over LSP1, then 
+//    over the base TCP and UDP providers and LSP2 is installed over LSP1, then
 //    this routine will return two LSP_ENTRY structures with LSP1 first followed
 //    by LSP2. The algorithm for determining the order is to first sort by where
 //    a base provider ID occurs in an LSP chain with lower numbered ones first.
@@ -111,7 +111,7 @@ BuildLspMap(
     WSAPROTOCOL_INFOW *pProviders,
     int                iProviderCount,
     int               *pLspCount
-    )
+)
 {
     LSP_ENTRY *pLsps = NULL,
                lsptmp;
@@ -148,8 +148,8 @@ BuildLspMap(
 
     // Allocate space for our structure which represents the LSPs installed
     pLsps = (LSP_ENTRY *) LspAlloc(
-            sizeof( LSP_ENTRY ) * iLspCount,
-           &ErrorCode
+                sizeof( LSP_ENTRY ) * iLspCount,
+                &ErrorCode
             );
     if ( NULL == pLsps )
     {
@@ -175,20 +175,20 @@ BuildLspMap(
         // Find the orphaned entries and save them off
         //
         idx = 0;
-        for(i=0; i < iProviderCount ;i++)
+        for(i=0; i < iProviderCount ; i++)
         {
             // Only investigate protocol chain entries (i.e. chainlen > 1)
             if ( pProviders[ i ].ProtocolChain.ChainLen > 1 )
             {
-                // Walk the catalog and look for the dummy entry (i.e. the ID in 
+                // Walk the catalog and look for the dummy entry (i.e. the ID in
                 //    chain entry 0)
-                for(j=0; j < iProviderCount ;j++) 
+                for(j=0; j < iProviderCount ; j++)
                 {
                     if ( i == j )
                         continue;
 
                     if ( pProviders[ i ].ProtocolChain.ChainEntries[ 0 ] ==
-                         pProviders[ j ].dwCatalogEntryId )
+                            pProviders[ j ].dwCatalogEntryId )
                     {
                         break;
                     }
@@ -199,16 +199,16 @@ BuildLspMap(
                     //    an orphaned entry...save it off
                     memcpy( &pLsps[ iLspCount-1 ].LayeredEntries[ idx ],
                             &pProviders[ i ],
-                             sizeof( WSAPROTOCOL_INFOW )
+                            sizeof( WSAPROTOCOL_INFOW )
                           );
                     rc = AddGuidToLspEntry( &pLsps[ iLspCount-1 ], &pProviders[ i ].ProviderId,
-                            &ErrorCode );
+                                            &ErrorCode );
                     if ( SOCKET_ERROR == rc )
                     {
                         fprintf( stderr, "BuildLspMap: AddGuidToLspEntry failed: %d\n", ErrorCode );
                         goto cleanup;
                     }
-                        
+
                     idx++;
                 }
             }
@@ -219,7 +219,7 @@ BuildLspMap(
     // Build a list of the valid LSPs installed on the system
     //
     idx = 0;
-    for(i=0; i < iProviderCount ;i++)
+    for(i=0; i < iProviderCount ; i++)
     {
         if ( LAYERED_PROTOCOL == pProviders[ i ].ProtocolChain.ChainLen )
         {
@@ -229,11 +229,11 @@ BuildLspMap(
             // Get the DLL path
             iProviderPathLen = MAX_PATH-1;
             rc = WSCGetProviderPath(
-                    &pLsps[ idx ].DummyEntry.ProviderId,
+                     &pLsps[ idx ].DummyEntry.ProviderId,
                      pLsps[ idx ].wszLspDll,
-                    &iProviderPathLen,
-                    &ErrorCode
-                     );
+                     &iProviderPathLen,
+                     &ErrorCode
+                 );
             if ( SOCKET_ERROR == rc )
             {
                 fprintf( stderr, "BuildLspMap: WSCGetProviderPath failed: %d\n", ErrorCode );
@@ -245,18 +245,18 @@ BuildLspMap(
             //
 
             // First get the count
-            for(j=0; j < iProviderCount ;j++)
+            for(j=0; j < iProviderCount ; j++)
             {
                 //
-                // Compare only the first entry against the dummy ID. Otherwise, 
-                //    we may pick up more than the provider's owned by this LSP 
+                // Compare only the first entry against the dummy ID. Otherwise,
+                //    we may pick up more than the provider's owned by this LSP
                 //    (it may pick up other providers layered over this LSP.
                 //
                 if ( ( pProviders[ j ].ProtocolChain.ChainLen > 1 ) &&
-                     ( pProviders[ j ].ProtocolChain.ChainEntries[ 0 ] ==
-                       pLsps[ idx ].DummyEntry.dwCatalogEntryId ) 
+                        ( pProviders[ j ].ProtocolChain.ChainEntries[ 0 ] ==
+                          pLsps[ idx ].DummyEntry.dwCatalogEntryId )
                    )
-                // if ( IsIdInChain( &pProviders[ j ], pLsps[ idx ].DummyEntry.dwCatalogEntryId ) )
+                    // if ( IsIdInChain( &pProviders[ j ], pLsps[ idx ].DummyEntry.dwCatalogEntryId ) )
                 {
                     pLsps[idx].Count++;
                 }
@@ -264,9 +264,9 @@ BuildLspMap(
 
             // Allocate space
             pLsps[ idx ].LayeredEntries = (WSAPROTOCOL_INFOW *) LspAlloc(
-                    sizeof( WSAPROTOCOL_INFOW ) * pLsps[ idx ].Count,
-                   &ErrorCode
-                    );
+                                              sizeof( WSAPROTOCOL_INFOW ) * pLsps[ idx ].Count,
+                                              &ErrorCode
+                                          );
             if ( NULL == pLsps[ idx ].LayeredEntries )
             {
                 fprintf( stderr, "BuildLspMap: LspAlloc failed: %d\n", ErrorCode );
@@ -274,9 +274,9 @@ BuildLspMap(
             }
 
             pLsps[ idx ].LayerChanged = (int *) LspAlloc(
-                    sizeof( int ) * pLsps[ idx ].Count,
-                   &ErrorCode
-                    );
+                                            sizeof( int ) * pLsps[ idx ].Count,
+                                            &ErrorCode
+                                        );
             if ( NULL == pLsps[ idx ].LayerChanged )
             {
                 fprintf( stderr, "BuildLspMap: LspAlloc failed: %d\n", ErrorCode );
@@ -285,23 +285,23 @@ BuildLspMap(
 
             // Now go find the entries
             pLsps[idx].Count = 0;
-            for(j=0; j < iProviderCount ;j++)
+            for(j=0; j < iProviderCount ; j++)
             {
                 if ( ( pProviders[ j ].ProtocolChain.ChainLen > 1 ) &&
-                     ( pProviders[ j ].ProtocolChain.ChainEntries[ 0 ] ==
-                       pLsps[ idx ].DummyEntry.dwCatalogEntryId ) 
+                        ( pProviders[ j ].ProtocolChain.ChainEntries[ 0 ] ==
+                          pLsps[ idx ].DummyEntry.dwCatalogEntryId )
                    )
                 {
-                    memcpy( 
-                           &pLsps[ idx ].LayeredEntries[pLsps[ idx ].Count],
-                           &pProviders[ j ],
-                            sizeof( WSAPROTOCOL_INFOW )
-                            );
+                    memcpy(
+                        &pLsps[ idx ].LayeredEntries[pLsps[ idx ].Count],
+                        &pProviders[ j ],
+                        sizeof( WSAPROTOCOL_INFOW )
+                    );
 
-                    pLsps[idx].MaxChainLength = MAX( 
-                            pLsps[ idx ].MaxChainLength,
-                            pLsps[ idx ].LayeredEntries[ pLsps[idx].Count ].ProtocolChain.ChainLen 
-                            );
+                    pLsps[idx].MaxChainLength = MAX(
+                                                    pLsps[ idx ].MaxChainLength,
+                                                    pLsps[ idx ].LayeredEntries[ pLsps[idx].Count ].ProtocolChain.ChainLen
+                                                );
 
                     // Mark this entry as visited
                     pProviders[ j ].dwProviderReserved = 1;
@@ -338,9 +338,9 @@ BuildLspMap(
 
     // Allocate space for the array of base provider ID's
     pBaseList = (DWORD *) LspAlloc(
-            sizeof( DWORD ) * iBaseCount,
-           &ErrorCode
-            );
+                    sizeof( DWORD ) * iBaseCount,
+                    &ErrorCode
+                );
     if ( NULL == pBaseList )
     {
         fprintf( stderr, "BuildLspMap: HeapAlloc failed: %d\n", ErrorCode );
@@ -353,7 +353,7 @@ BuildLspMap(
     // in which LSPs were installed.
     //
     idx = 0;
-    for(i=0; i < iProviderCount ;i++)
+    for(i=0; i < iProviderCount ; i++)
     {
         if ( BASE_PROTOCOL == pProviders[ i ].ProtocolChain.ChainLen )
         {
@@ -366,16 +366,16 @@ BuildLspMap(
     // chain where a base provider resides. A protocol chain should always terminate
     // in a base provider.
     //
-    for(LspOrder = 1; LspOrder < MAX_PROTOCOL_CHAIN ;LspOrder++)
+    for(LspOrder = 1; LspOrder < MAX_PROTOCOL_CHAIN ; LspOrder++)
     {
-        for(i=0; i < iSortLspCount ;i++)
+        for(i=0; i < iSortLspCount ; i++)
         {
-            for(j=0; j < pLsps[ i ].Count ;j++)
+            for(j=0; j < pLsps[ i ].Count ; j++)
             {
-                for(k=0; k < iBaseCount ;k++)
+                for(k=0; k < iBaseCount ; k++)
                 {
                     if ( pLsps[ i ].LayeredEntries[ j ].ProtocolChain.ChainEntries[ LspOrder ] ==
-                         pBaseList[ k ] )
+                            pBaseList[ k ] )
                     {
                         pLsps[ i ].LspOrder = MIN( pLsps[ i ].LspOrder, LspOrder );
                         break;
@@ -388,9 +388,9 @@ BuildLspMap(
     //
     // Sort the entries according to the LspOrder field
     //
-    for(i=0; i < iSortLspCount ;i++)
+    for(i=0; i < iSortLspCount ; i++)
     {
-        for(j=i; j < iSortLspCount ;j++)
+        for(j=i; j < iSortLspCount ; j++)
         {
             if ( pLsps[ i ].LspOrder > pLsps[ j ].LspOrder )
             {
@@ -405,14 +405,14 @@ BuildLspMap(
     //
     // Now need to sort by MaxChainLength withing the LspOrder groupings
     //
-    for(LspOrder=1; LspOrder < MAX_PROTOCOL_CHAIN ;LspOrder++)
+    for(LspOrder=1; LspOrder < MAX_PROTOCOL_CHAIN ; LspOrder++)
     {
         // Find the start and end positions within the array for the given
         // LspOrder value
         start = -1;
         end   = -1;
 
-        for(i=0; i < iSortLspCount ;i++)
+        for(i=0; i < iSortLspCount ; i++)
         {
             if ( pLsps[ i ].LspOrder == LspOrder )
             {
@@ -429,7 +429,7 @@ BuildLspMap(
         //
         if ( -1 != start )
         {
-            for(j=start; j < iSortLspCount ;j++)
+            for(j=start; j < iSortLspCount ; j++)
             {
                 if ( pLsps[ j ].LspOrder != LspOrder )
                 {
@@ -438,11 +438,11 @@ BuildLspMap(
                 }
             }
         }
-        
+
         //
         // If the following is true then all entries have the same order
         // value. We still need to sort by MaxChainLength so set the end
-        // to the last LSP 
+        // to the last LSP
         //
         if ( ( -1 != start ) && ( -1 == end ) )
         {
@@ -451,9 +451,9 @@ BuildLspMap(
 
         if ( ( -1 != start ) && ( -1 != end ) )
         {
-            for(i=start; i < end ;i++)
+            for(i=start; i < end ; i++)
             {
-                for(j=i; j < end ;j++)
+                for(j=i; j < end ; j++)
                 {
                     if ( pLsps[ i ].MaxChainLength > pLsps[ j ].MaxChainLength )
                     {
@@ -477,7 +477,7 @@ BuildLspMap(
     }
 
 cleanup:
-    
+
     if ( NULL != pLspCount )
         *pLspCount = iLspCount;
 
@@ -498,7 +498,7 @@ void
 PrintLspMap(
     LSP_ENTRY *pLspMap,
     int        iLspCount
-    )
+)
 {
     WCHAR   szGuidString[ MAX_PATH ];
     int     i, j, k;
@@ -508,22 +508,22 @@ PrintLspMap(
         printf( "\tNo LSPs currently installed\n\n" );
         goto cleanup;
     }
-  
-    for(i=0; i < iLspCount ;i++)
+
+    for(i=0; i < iLspCount ; i++)
     {
         if ( pLspMap[ i ].OrphanedEntries != TRUE )
         {
             // Display the LSP name and its DLL (and path)
-            printf( "%3d LSP: %ws   DLL '%ws' ID: %d\n", 
-                    i, 
+            printf( "%3d LSP: %ws   DLL '%ws' ID: %d\n",
+                    i,
                     pLspMap[ i ].DummyEntry.szProtocol,
                     pLspMap[ i ].wszLspDll,
                     pLspMap[ i ].DummyEntry.dwCatalogEntryId
-                    );
+                  );
 
             // Display the GUIDs under which the layered entries of this LSP are installed
             printf( "\t LSP Installed under %d GUIDs\n", pLspMap[ i ].LayeredGuidCount );
-            for(k=0; k < pLspMap[ i ].LayeredGuidCount ;k++)
+            for(k=0; k < pLspMap[ i ].LayeredGuidCount ; k++)
             {
                 StringFromGUID2( pLspMap[ i ].LayeredGuids[ k ], szGuidString, MAX_PATH-1 );
                 printf( "\t\t%ws\n", szGuidString );
@@ -535,15 +535,15 @@ PrintLspMap(
         }
 
         // Display the layered entries and the protocol chains
-        for(j=0; j < pLspMap[ i ].Count ;j++)
+        for(j=0; j < pLspMap[ i ].Count ; j++)
         {
-            printf( "\t Layer %-5d \"%ws\" \n\t       Chain %d [ ", 
+            printf( "\t Layer %-5d \"%ws\" \n\t       Chain %d [ ",
                     pLspMap[ i ].LayeredEntries[ j ].dwCatalogEntryId,
                     pLspMap[ i ].LayeredEntries[ j ].szProtocol,
                     pLspMap[ i ].LayeredEntries[ j ].ProtocolChain.ChainLen
-                    );
+                  );
 
-            for(k=0; k < pLspMap[ i ].LayeredEntries[ j ].ProtocolChain.ChainLen ;k++)
+            for(k=0; k < pLspMap[ i ].LayeredEntries[ j ].ProtocolChain.ChainLen ; k++)
             {
                 printf( "%d ", pLspMap[ i ].LayeredEntries[ j ].ProtocolChain.ChainEntries[ k ] );
             }
@@ -556,12 +556,12 @@ PrintLspMap(
             printf( "\t\tNone\n");
         else
         {
-            for(j=0; j < pLspMap[ i ].DependentCount ;j++)
+            for(j=0; j < pLspMap[ i ].DependentCount ; j++)
             {
                 printf("\t\t%d %ws\n",
-                        pLspMap[ pLspMap[ i ].DependentLspIndexArray[ j ] ].DummyEntry.dwCatalogEntryId,
-                        pLspMap[ pLspMap[ i ].DependentLspIndexArray[ j ] ].DummyEntry.szProtocol
-                        );
+                       pLspMap[ pLspMap[ i ].DependentLspIndexArray[ j ] ].DummyEntry.dwCatalogEntryId,
+                       pLspMap[ pLspMap[ i ].DependentLspIndexArray[ j ] ].DummyEntry.szProtocol
+                      );
             }
         }
 
@@ -583,11 +583,11 @@ void
 FreeLspMap(
     LSP_ENTRY *pLspMap,
     int        iLspCount
-    )
+)
 {
     int     i;
 
-    for(i=0; i < iLspCount ;i++)
+    for(i=0; i < iLspCount ; i++)
     {
         // Free the layered providers first
         if ( NULL != pLspMap[ i ].LayeredEntries )
@@ -621,22 +621,22 @@ int
 LspDependencyCheck(
     LSP_ENTRY  *pLspMap,
     int         iLspCount
-    )
+)
 {
     BOOL        bDependent;
     int         iCheckLspIndex = 0,
                 ret = SOCKET_ERROR,
-               *tmpArray = NULL,
-                ErrorCode,
-                i, j, k, l;
+                *tmpArray = NULL,
+                 ErrorCode,
+                 i, j, k, l;
 
     // For each LSP entry, find its dependencies
-    for(i=0; i < iLspCount ;i++)
+    for(i=0; i < iLspCount ; i++)
     {
         iCheckLspIndex = i;
 
         // Search all other LSPs for dependencies on this entry
-        for(j=0; j < iLspCount ;j++)
+        for(j=0; j < iLspCount ; j++)
         {
             // Skip checking against the same one were currently looking at
             if ( j == iCheckLspIndex )
@@ -646,18 +646,18 @@ LspDependencyCheck(
 
             // Check the dummy catalog entry against all the chains for the LSP we're
             // currently looking at
-            for(k=0; k < pLspMap[ j ].Count ;k++)
+            for(k=0; k < pLspMap[ j ].Count ; k++)
             {
                 if ( IsIdInChain(
-                           &pLspMap[ j ].LayeredEntries[ k ],
+                            &pLspMap[ j ].LayeredEntries[ k ],
                             pLspMap[ iCheckLspIndex ].DummyEntry.dwCatalogEntryId )
                    )
                 {
                     // Allocate an array for the dependent LSP indices
                     tmpArray = (int *) LspAlloc(
-                            sizeof( int ) * ( pLspMap[ iCheckLspIndex ].DependentCount + 1),
-                           &ErrorCode
-                            );
+                                   sizeof( int ) * ( pLspMap[ iCheckLspIndex ].DependentCount + 1),
+                                   &ErrorCode
+                               );
                     if ( NULL == tmpArray )
                     {
                         fprintf( stderr, "CheckLspDependency: LspAlloc failed: %d\n", ErrorCode );
@@ -667,16 +667,16 @@ LspDependencyCheck(
                     // If one already exists, copy the existing array into the new one
                     if ( NULL != pLspMap[ iCheckLspIndex ].DependentLspIndexArray )
                     {
-                        memcpy( 
-                                tmpArray + 1,
-                                pLspMap[ iCheckLspIndex ].DependentLspIndexArray,
-                                sizeof( int ) * pLspMap[ iCheckLspIndex ].DependentCount
-                                );
+                        memcpy(
+                            tmpArray + 1,
+                            pLspMap[ iCheckLspIndex ].DependentLspIndexArray,
+                            sizeof( int ) * pLspMap[ iCheckLspIndex ].DependentCount
+                        );
 
                         // Free the existing array
                         LspFree( pLspMap[ iCheckLspIndex ].DependentLspIndexArray );
                     }
-                    
+
                     // Assign the new array and increment the count
                     pLspMap[ iCheckLspIndex ].DependentLspIndexArray = tmpArray;
                     pLspMap[ iCheckLspIndex ].DependentLspIndexArray[ 0 ] = j;
@@ -698,23 +698,23 @@ LspDependencyCheck(
             // of the layered protocol entry chains of the LSP we're currently
             // looking at.
             //
-            for(l=0; l < pLspMap[ iCheckLspIndex ].Count ;l++)
+            for(l=0; l < pLspMap[ iCheckLspIndex ].Count ; l++)
             {
                 bDependent = FALSE;
 
                 // Check against each layered entry
-                for(k=0; k < pLspMap[ j ].Count ;k++ )
+                for(k=0; k < pLspMap[ j ].Count ; k++ )
                 {
                     if ( IsIdInChain(
-                           &pLspMap[ j ].LayeredEntries[ k ],
-                            pLspMap[ iCheckLspIndex ].LayeredEntries[ l ].dwCatalogEntryId )
+                                &pLspMap[ j ].LayeredEntries[ k ],
+                                pLspMap[ iCheckLspIndex ].LayeredEntries[ l ].dwCatalogEntryId )
                        )
                     {
                         {
                             tmpArray = (int *) LspAlloc(
-                                    sizeof( int ) * ( pLspMap[ iCheckLspIndex ].DependentCount + 1),
-                                    &ErrorCode
-                                    );
+                                           sizeof( int ) * ( pLspMap[ iCheckLspIndex ].DependentCount + 1),
+                                           &ErrorCode
+                                       );
                             if ( NULL == tmpArray )
                             {
                                 fprintf( stderr, "CheckLspDependency: LspAlloc failed: %d\n", ErrorCode );
@@ -723,11 +723,11 @@ LspDependencyCheck(
 
                             if ( NULL != pLspMap[ iCheckLspIndex ].DependentLspIndexArray )
                             {
-                                memcpy( 
-                                        tmpArray + 1,
-                                        pLspMap[ iCheckLspIndex ].DependentLspIndexArray,
-                                        sizeof( int ) * pLspMap[ iCheckLspIndex ].DependentCount
-                                      );
+                                memcpy(
+                                    tmpArray + 1,
+                                    pLspMap[ iCheckLspIndex ].DependentLspIndexArray,
+                                    sizeof( int ) * pLspMap[ iCheckLspIndex ].DependentCount
+                                );
 
                                 LspFree( pLspMap[ iCheckLspIndex ].DependentLspIndexArray );
                             }
@@ -742,12 +742,12 @@ LspDependencyCheck(
                     }
                 }
 
-                if ( TRUE == bDependent )  
+                if ( TRUE == bDependent )
                     break;
             }
         }
     }
-    
+
     ret = NO_ERROR;
 
 cleanup:
@@ -774,22 +774,22 @@ UpdateLspMap(
     LSP_ENTRY *pLspMap,
     DWORD      dwOldValue,
     DWORD      dwNewValue
-    )
+)
 {
     int i, j;
 
     // Go through all providers beloging to this LSP
-    for(i=0; i < pLspMap->Count ;i++)
+    for(i=0; i < pLspMap->Count ; i++)
     {
         // Go through the protocol chain and update references if they match
-        for(j=0; j < pLspMap->LayeredEntries[ i ].ProtocolChain.ChainLen ;j++)
+        for(j=0; j < pLspMap->LayeredEntries[ i ].ProtocolChain.ChainLen ; j++)
         {
-            if ( pLspMap->LayeredEntries[ i ].ProtocolChain.ChainEntries[ j ] == 
-                    dwOldValue 
+            if ( pLspMap->LayeredEntries[ i ].ProtocolChain.ChainEntries[ j ] ==
+                    dwOldValue
                )
             {
-                pLspMap->LayeredEntries[ i ].ProtocolChain.ChainEntries[ j ] = 
-                        dwNewValue;
+                pLspMap->LayeredEntries[ i ].ProtocolChain.ChainEntries[ j ] =
+                    dwNewValue;
             }
         }
     }
@@ -815,25 +815,25 @@ UpdateLspMap(
 //
 void
 MapNewEntriesToOld(
-    LSP_ENTRY         *pEntry, 
-    WSAPROTOCOL_INFOW *pProvider, 
+    LSP_ENTRY         *pEntry,
+    WSAPROTOCOL_INFOW *pProvider,
     int                iProviderCount
-    )
+)
 {
     int     i, j;
 
-    for(i=0; i < pEntry->Count ;i++)
+    for(i=0; i < pEntry->Count ; i++)
     {
-        for(j=0; j < iProviderCount ;j++)
+        for(j=0; j < iProviderCount ; j++)
         {
             if ( IsEqualProtocolEntries( &pEntry->LayeredEntries[ i ], &pProvider[ j ] ) )
             {
-                pEntry->LayeredEntries[ i ].dwProviderReserved = 
-                        pProvider[ j ].dwCatalogEntryId;
+                pEntry->LayeredEntries[ i ].dwProviderReserved =
+                    pProvider[ j ].dwCatalogEntryId;
 
                 dbgprint( "Mapped old %d to new %d\n",
-                        pEntry->LayeredEntries[ i ].dwCatalogEntryId,
-                        pProvider[ j ].dwCatalogEntryId
+                          pEntry->LayeredEntries[ i ].dwCatalogEntryId,
+                          pProvider[ j ].dwCatalogEntryId
                         );
 
                 break;
@@ -854,7 +854,7 @@ AddGuidToLspEntry(
     LSP_ENTRY  *entry,
     GUID       *guid,
     int        *lpErrno
-    )
+)
 {
     BOOL    bFound;
     int     rc,
@@ -863,9 +863,9 @@ AddGuidToLspEntry(
     if ( 0 == entry->Count )
     {
         entry->LayeredGuids = (GUID *) LspAlloc(
-                sizeof( GUID ),
-                lpErrno 
-                );
+                                  sizeof( GUID ),
+                                  lpErrno
+                              );
         if ( NULL == entry->LayeredGuids )
         {
             fprintf( stderr, "AddGuidToLspEntry: LspAlloc failed: %d\n", *lpErrno );
@@ -880,7 +880,7 @@ AddGuidToLspEntry(
     {
         // See if we've already seen this guid
         bFound = FALSE;
-        for(i=0; i < entry->LayeredGuidCount ;i++)
+        for(i=0; i < entry->LayeredGuidCount ; i++)
         {
             rc = memcmp( &entry->LayeredGuids[ i ], guid, sizeof( GUID ) );
             if ( 0 == rc )
@@ -895,9 +895,9 @@ AddGuidToLspEntry(
 
             // New GUID -- we need to add it to the array
             tmpguid = (GUID *) LspAlloc(
-                    sizeof( GUID ) * ( entry->LayeredGuidCount + 1 ),
-                    lpErrno
-                    );
+                          sizeof( GUID ) * ( entry->LayeredGuidCount + 1 ),
+                          lpErrno
+                      );
             if ( NULL == tmpguid )
             {
                 fprintf( stderr, "AddGuidToLspEntry: LspAlloc failed: %d\n", *lpErrno );
@@ -927,7 +927,7 @@ cleanup:
 //
 // Desciption:
 //    This routine is called after removing and reinstalling an existing LSP (which
-//    is done when removing an LSP that other LSPs are layered over and the 
+//    is done when removing an LSP that other LSPs are layered over and the
 //    WSCUpdateProvider function is not available). After the LSP is re-installed
 //    the dwProviderReserved field of each of it's layered protocol entries contains
 //    its new catalog ID. This routine walks the original array describing the order
@@ -940,14 +940,14 @@ UpdateProviderOrder(
     LSP_ENTRY  *UpdatedEntry,
     DWORD      *OrderArray,
     int         ArrayCount
-    )
+)
 {
     int     i, j;
 
 
-    for(i=0; i < UpdatedEntry->Count ;i++)
+    for(i=0; i < UpdatedEntry->Count ; i++)
     {
-        for(j=0; j < ArrayCount ;j++)
+        for(j=0; j < ArrayCount ; j++)
         {
             // Replace an occurence of the old value with the new value
             if ( OrderArray[ j ] == UpdatedEntry->LayeredEntries[ i ].dwCatalogEntryId )
@@ -971,12 +971,12 @@ int
 MaxLayeredChainCount(
     LSP_ENTRY  *pLspMap,
     int         LspCount
-    )
+)
 {
     int MaxSize = 0,
         i;
 
-    for(i=0; i < LspCount ;i++)
+    for(i=0; i < LspCount ; i++)
     {
         MaxSize = MAX( MaxSize, pLspMap[ i ].Count );
     }

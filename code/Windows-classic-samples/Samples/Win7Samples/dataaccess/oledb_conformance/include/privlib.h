@@ -1,11 +1,11 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
-// @doc 
+// @doc
 //
-// @module Privlib.h | 	This module contains header information for 
+// @module Privlib.h | 	This module contains header information for
 //						private library
 //
 // @comm
@@ -13,7 +13,7 @@
 //
 // <nl><nl>
 // Revision History:<nl>
-//	
+//
 //	[00] MM-DD-YY	EMAIL_NAME	ACTION PERFORMED... <nl>
 //	[01] 06-30-95	Microsoft	Created <nl>
 //	[02] 10-16-95	Microsoft	Changed to single header for all private library users <nl>
@@ -41,7 +41,7 @@
 #endif	//_CRT_NON_CONFORMING_SWPRINTFS
 
 ///////////////////////////////////////////////////////////////////
-// Includes 
+// Includes
 //
 ///////////////////////////////////////////////////////////////////
 #include "transact.h"

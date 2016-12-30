@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -89,9 +89,9 @@ const wchar_t eapMethodId[] = L"40";
 /**
   * Allocate space for the EAPAttributes structure that will contain specified number of EAP attribute.
   *
-  * @param  attribCount       The # of Eap attributes to create. 
-  *                           
-  * @param  ppEapAttributes  (input/output) A pointer to the real data buffer pointer.  
+  * @param  attribCount       The # of Eap attributes to create.
+  *
+  * @param  ppEapAttributes  (input/output) A pointer to the real data buffer pointer.
   *                                        The real pointer will be set to point to the allocated memory.
   *
   * @return A Win32 error code, indicating success or failure.
@@ -126,7 +126,7 @@ DWORD FreeAttributes(
   * finds the first unset attribute, and sets it to contain the specified data.
   * It allocates memory for the attribute's value member.
   *
-  * @param  pEapAttributes  (input/output) A pointer to the real data buffer pointer.  
+  * @param  pEapAttributes  (input/output) A pointer to the real data buffer pointer.
   * @param  eaType            New attribute's type (from EapTypes.h).
   * @param  dwLength         New attribute's length.
   * @param  pValue             New attribute's value.
@@ -138,7 +138,7 @@ DWORD AddAttribute(
     IN     EapAttributeType eaType,
     IN     DWORD dwLength,
     IN     PVOID pValue
-    );
+);
 
 
 /**
@@ -185,10 +185,10 @@ DWORD AppendAttributeToList(
   *                          parameter.
   */
 
-VOID   
+VOID
 EapTrace(
-    IN  __in CHAR*   Format, 
-    ... 
+    IN  __in CHAR*   Format,
+    ...
 );
 
 //
@@ -201,32 +201,32 @@ EapTrace(
   * The memory will be freed by EapPeerFreeErrorMemory() or EapMethodAuthenticatorFreeErrorMemory()
   * depending on who the caller of this API is.
   *
-  * @param  pEapError                         EAP_ERROR will be allocated at this pointer and 
+  * @param  pEapError                         EAP_ERROR will be allocated at this pointer and
   *                                                      populated with above input parameters.
   * @param  errCode                           Win32 error code
-  * @param  dwReasonCode                 Reason Code 
+  * @param  dwReasonCode                 Reason Code
   * @param  pRootCauseGuid        	  Root Cause GUID
   * @param  pRepairGuid                      Repair GUID
   * @param  pHelpLinkGuid                   Help Link GUID
   * @param  pRootCauseString              String describing the root cause
-  * @param  pRepairString                    String describing the repair mechanism  
+  * @param  pRepairString                    String describing the repair mechanism
   *
   * @return A Win32 error code, indicating success or failure.
   */
 DWORD AllocateandFillEapError(
-   	IN OUT EAP_ERROR** pEapError,
-	IN DWORD errCode,  
-	IN DWORD dwReasonCode,
-	IN LPCGUID pRootCauseGuid,
-	IN LPCGUID pRepairGuid,
-	IN LPCGUID pHelpLinkGuid,
-	IN __in LPWSTR pRootCauseString,
-	IN __in LPWSTR pRepairString
-	);
+    IN OUT EAP_ERROR** pEapError,
+    IN DWORD errCode,
+    IN DWORD dwReasonCode,
+    IN LPCGUID pRootCauseGuid,
+    IN LPCGUID pRepairGuid,
+    IN LPCGUID pHelpLinkGuid,
+    IN __in LPWSTR pRootCauseString,
+    IN __in LPWSTR pRepairString
+);
 
 DWORD CopyWideString(
-	IN __in LPWSTR pSrcWString,
-	OUT __out LPWSTR *pDestWString);
+    IN __in LPWSTR pSrcWString,
+    OUT __out LPWSTR *pDestWString);
 
 //
 // Functions related to host-network and network-host.
@@ -234,28 +234,28 @@ DWORD CopyWideString(
 
 /// Convert a 32-bit integer from host format to wire format.
 VOID HostToWireFormat32(
-	IN     DWORD dwHostFormat,
-	IN OUT PBYTE pWireFormat
-	);
+    IN     DWORD dwHostFormat,
+    IN OUT PBYTE pWireFormat
+);
 
 /// Convert a 16-bit integer from host format to wire format.
 VOID HostToWireFormat16(
-	IN     WORD  wHostFormat,
-	IN OUT PBYTE pWireFormat
-	);
+    IN     WORD  wHostFormat,
+    IN OUT PBYTE pWireFormat
+);
 
 /// Convert a 16-bit integer from wire format to host format.
 VOID WireToHostFormat16(
-	IN     WORD  wWireFormat,
-	IN OUT PBYTE pHostFormat
-	);
+    IN     WORD  wWireFormat,
+    IN OUT PBYTE pHostFormat
+);
 
 /// Get the current working directory and appends dllName (input param) to it.
 DWORD GetFullPath(
-		OUT __out LPWSTR &pathName, 
-		IN OUT DWORD &pathNameLength, 
-		IN __in LPWSTR dllName, 
-		IN DWORD sizeofDllNameInBytes);
+    OUT __out LPWSTR &pathName,
+    IN OUT DWORD &pathNameLength,
+    IN __in LPWSTR dllName,
+    IN DWORD sizeofDllNameInBytes);
 
 }  // End "namespace SDK_METHOD_SAMPLE_COMMON
 #endif  // __SDKMETHODCOMMON_H__

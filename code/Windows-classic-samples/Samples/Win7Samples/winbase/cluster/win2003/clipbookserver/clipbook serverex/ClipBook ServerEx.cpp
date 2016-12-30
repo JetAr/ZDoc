@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -39,7 +39,7 @@ static char THIS_FILE[] = __FILE__;
 CComModule _Module;
 
 BEGIN_OBJECT_MAP( ObjectMap )
-    OBJECT_ENTRY( CLSID_CoClipBookServerEx, CExtObject )
+OBJECT_ENTRY( CLSID_CoClipBookServerEx, CExtObject )
 END_OBJECT_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -51,10 +51,10 @@ DllCanUnloadNow( void );
 
 STDAPI
 DllGetClassObject(
-      REFCLSID  rclsidIn
+    REFCLSID  rclsidIn
     , REFIID    riidIn
     , LPVOID *  ppvOut
-    );
+);
 
 STDAPI
 DllRegisterServer( void );
@@ -65,12 +65,12 @@ DllUnregisterServer( void );
 STDAPI
 DllRegisterCluAdminExtension(
     HCLUSTER hClusterIn
-    );
+);
 
 STDAPI
 DllUnregisterCluAdminExtension(
     HCLUSTER hClusterIn
-    );
+);
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -159,9 +159,9 @@ CClipBookServerApp::ExitInstance( void )
 /////////////////////////////////////////////////////////////////////////////
 void
 FormatError(
-      CString & rstrErrorInout
+    CString & rstrErrorInout
     , DWORD     dwErrorIn
-    )
+)
 {
     DWORD   cch;
     TCHAR   szError[ 512 ];
@@ -173,25 +173,25 @@ FormatError(
     //
 
     cch = FormatMessage(
-                      FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS
-                    , ::GetModuleHandle( _T( "CLUSAPI.DLL" ) )
-                    , dwErrorIn
-                    , MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL )
-                    , szError
-                    , RTL_NUMBER_OF( szError )
-                    , 0
-                    );
+              FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS
+              , ::GetModuleHandle( _T( "CLUSAPI.DLL" ) )
+              , dwErrorIn
+              , MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL )
+              , szError
+              , RTL_NUMBER_OF( szError )
+              , 0
+          );
     if ( cch == 0 )
     {
         cch = FormatMessage(
-                          FORMAT_MESSAGE_FROM_SYSTEM
-                        , NULL
-                        , dwErrorIn
-                        , MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL )
-                        , szError
-                        , RTL_NUMBER_OF( szError )
-                        , 0
-                        );
+                  FORMAT_MESSAGE_FROM_SYSTEM
+                  , NULL
+                  , dwErrorIn
+                  , MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL )
+                  , szError
+                  , RTL_NUMBER_OF( szError )
+                  , 0
+              );
         if ( cch == 0 )
         {
             //
@@ -200,14 +200,14 @@ FormatError(
             //
 
             cch = FormatMessage(
-                              FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS
-                            , ::GetModuleHandle( _T( "NTDLL.DLL" ) )
-                            , dwErrorIn
-                            , MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL)
-                            , szError
-                            , RTL_NUMBER_OF( szError )
-                            , 0
-                            );
+                      FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS
+                      , ::GetModuleHandle( _T( "NTDLL.DLL" ) )
+                      , dwErrorIn
+                      , MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL)
+                      , szError
+                      , RTL_NUMBER_OF( szError )
+                      , 0
+                  );
         }  // if:  error formatting status code from system
     }  // if:  error formatting status code from ClusApi
 
@@ -275,10 +275,10 @@ DllCanUnloadNow( void )
 /////////////////////////////////////////////////////////////////////////////
 STDAPI
 DllGetClassObject(
-      REFCLSID  rclsidIn
+    REFCLSID  rclsidIn
     , REFIID    riidIn
     , LPVOID *  ppvOut
-    )
+)
 {
     return _Module.GetClassObject( rclsidIn, riidIn, ppvOut );
 
@@ -368,7 +368,7 @@ DllUnregisterServer( void )
 STDAPI
 DllRegisterCluAdminExtension(
     HCLUSTER hClusterIn
-    )
+)
 {
     DWORD       sc = ERROR_SUCCESS;
     DWORD       scTemp = ERROR_SUCCESS;
@@ -384,10 +384,10 @@ DllRegisterCluAdminExtension(
     {
         wprintf( L"  %s\n", pwszResTypes );
         scTemp = RegisterCluAdminResourceTypeExtension(
-                      hClusterIn
-                    , pwszResTypes
-                    , &CLSID_CoClipBookServerEx
-                    );
+                     hClusterIn
+                     , pwszResTypes
+                     , &CLSID_CoClipBookServerEx
+                 );
         if ( scTemp != ERROR_SUCCESS )
         {
             sc = scTemp;
@@ -427,7 +427,7 @@ Cleanup:
 STDAPI
 DllUnregisterCluAdminExtension(
     HCLUSTER hClusterIn
-    )
+)
 {
     DWORD       sc = ERROR_SUCCESS;
     DWORD       scTemp = ERROR_SUCCESS;
@@ -444,10 +444,10 @@ DllUnregisterCluAdminExtension(
     {
         wprintf( L"  %s\n", pwszResTypes );
         scTemp = UnregisterCluAdminResourceTypeExtension(
-                      hClusterIn
-                    , pwszResTypes
-                    , &CLSID_CoClipBookServerEx
-                    );
+                     hClusterIn
+                     , pwszResTypes
+                     , &CLSID_CoClipBookServerEx
+                 );
         if ( scTemp != ERROR_SUCCESS )
         {
             sc = scTemp;

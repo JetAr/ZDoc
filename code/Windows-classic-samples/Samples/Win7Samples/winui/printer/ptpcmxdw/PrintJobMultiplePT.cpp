@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@ XPathQueryOnPrintCaps(
     __in BSTR               bstrXPathQuery,
     __out IXMLDOMNodeList **ppIXMLDOMNodeList
 
-    )
+)
 {
     HRESULT           hr                       = S_OK;
     BSTR              bstrSelectionLanguage    = SysAllocString(L"SelectionLanguage");
@@ -29,8 +29,8 @@ XPathQueryOnPrintCaps(
                         ");
 
     if ( NULL == pPrintCapsDOM  ||
-         NULL == bstrXPathQuery ||
-         NULL == ppIXMLDOMNodeList)
+            NULL == bstrXPathQuery ||
+            NULL == ppIXMLDOMNodeList)
     {
         hr = E_INVALIDARG;
     }
@@ -38,22 +38,22 @@ XPathQueryOnPrintCaps(
     *ppIXMLDOMNodeList = NULL;
 
     if ( NULL == bstrSelectionLanguage  ||
-         NULL == bstrXPath              ||
-         NULL == bstrSelectionNamespaces||
-         NULL == bstrNS
-        )
+            NULL == bstrXPath              ||
+            NULL == bstrSelectionNamespaces||
+            NULL == bstrNS
+       )
     {
         hr = E_OUTOFMEMORY;
     }
 
     if ( SUCCEEDED(hr) )
     {
-       VARIANT var;
-       VariantInit (&var);
-       var.vt      = VT_BSTR;
-       var.bstrVal = bstrXPath;
+        VARIANT var;
+        VariantInit (&var);
+        var.vt      = VT_BSTR;
+        var.bstrVal = bstrXPath;
 
-       hr = pPrintCapsDOM->setProperty(bstrSelectionLanguage, var);
+        hr = pPrintCapsDOM->setProperty(bstrSelectionLanguage, var);
     }
 
     if ( SUCCEEDED(hr) )
@@ -63,7 +63,7 @@ XPathQueryOnPrintCaps(
         var.vt      = VT_BSTR;
         var.bstrVal = bstrNS;
 
-       hr = pPrintCapsDOM->setProperty(bstrSelectionNamespaces, var);
+        hr = pPrintCapsDOM->setProperty(bstrSelectionNamespaces, var);
     }
 
     //
@@ -108,7 +108,7 @@ GetNodeWithA4PaperSize(
     __in PPTPC_STATE_INFO   psi,
     __in IXMLDOMDocument2  *pPrintCapsDOM,
     __out IXMLDOMNode     **ppPaperSizeNode
-    )
+)
 {
     HRESULT             hr                  = S_OK;
     IXMLDOMNodeList     *pPaperSizeNodeList = NULL;
@@ -119,8 +119,8 @@ GetNodeWithA4PaperSize(
     {
         *ppPaperSizeNode = NULL;
     }
-    
-    if ( NULL == bstrXPathQuery 
+
+    if ( NULL == bstrXPathQuery
        )
     {
         hr = E_OUTOFMEMORY;
@@ -129,7 +129,7 @@ GetNodeWithA4PaperSize(
     if ( SUCCEEDED(hr) )
     {
         hr = XPathQueryOnPrintCaps(psi, pPrintCapsDOM, bstrXPathQuery, &pPaperSizeNodeList);
-    } 
+    }
 
     if ( SUCCEEDED(hr) )
     {
@@ -139,7 +139,7 @@ GetNodeWithA4PaperSize(
     if ( NULL != bstrXPathQuery)
     {
         SysFreeString(bstrXPathQuery);
-    } 
+    }
 
     if ( NULL != pPaperSizeNodeList )
     {
@@ -154,8 +154,8 @@ HRESULT
 CreateNewPrintTicketWithA4PaperSize(
     __in PPTPC_STATE_INFO     psi,
     __in IXMLDOMDocument2    *pPrintCapsDOM,
-    __in IStream             *pBasePrintTicketStream, 
-    __in IXMLDOMDocument2    *pBasePrintTicketDOM, 
+    __in IStream             *pBasePrintTicketStream,
+    __in IXMLDOMDocument2    *pBasePrintTicketDOM,
     __out IStream           **ppPrintTicketA4Stream)
 {
     IStream          *pDeltaPrintTicketStream   = NULL;
@@ -182,7 +182,7 @@ CreateNewPrintTicketWithA4PaperSize(
     if ( SUCCEEDED(hr) )
     {
         hr = CreatePTFeatureOptionNodeFromPrintCapOptionNode(psi, pPrintCapsA4Node, &pPrintTicketA4Node);
-             
+
     }
 
     // Create a duplicate print ticket from the same print ticket stream as the base print ticket.
@@ -204,7 +204,7 @@ CreateNewPrintTicketWithA4PaperSize(
     }
 
     // The API PTMergeAndValidatePrintTicket() takes in a base PrintTicket, a Delta or a New PrintTicket
-    // and returns the merged print ticket. We already have a stream for Base PT. We create a 
+    // and returns the merged print ticket. We already have a stream for Base PT. We create a
     // stream for Delta PT and also prepare an empty stream where the merged PT can be written.
     if ( SUCCEEDED(hr) )
     {
@@ -239,11 +239,11 @@ CreateNewPrintTicketWithA4PaperSize(
         hr = PTMergeAndValidatePrintTicket(psi->hProvider, pBasePrintTicketStream, pDeltaPrintTicketStream, kPTPageScope, *ppPrintTicketA4Stream, NULL);
     }
 
-    // If operation succeeded, the returned hr can be either 
+    // If operation succeeded, the returned hr can be either
     //      S_PT_NO_CONFLICT                 (0x00040001) OR
     //      S_PT_CONFLICT_RESOLVED           (0x00040002)
     // as defined in prntvpt.h.
-    // These codes are ALSO defined as "Success but static" or "Macintosh clipboard format" in winerror.h where 
+    // These codes are ALSO defined as "Success but static" or "Macintosh clipboard format" in winerror.h where
     // they have a different meaning. So do not get confused.
 
     if ( pPrintCapsA4Node )
@@ -279,7 +279,7 @@ CreateJobWith2PrintTickets(
     __in                    DWORD               cbPTBuf1,
     __in_bcount(cbPTBuf2)   PBYTE               pbPTBuf2,
     __in                    DWORD               cbPTBuf2
-    )
+)
 {
     HRESULT          hr         = S_OK;
     HDC              hdcMXDW    = NULL;
@@ -309,7 +309,7 @@ CreateJobWith2PrintTickets(
     if (SUCCEEDED (hr) )
     {
         hr = IsXPSCapableDriver(hdcMXDW);
-     
+
         // Only a return value of S_OK from IsXPSCapableDriver() means driver is  XPS capable
         // while we were querying the driver.
         // A return value of S_FALSE means driver is not XPS capable
@@ -322,18 +322,19 @@ CreateJobWith2PrintTickets(
 
     if ( SUCCEEDED(hr) )
     {
-        DOCINFO	DocInfo = { 
-                            sizeof(DOCINFO), 
-                            L"Multiple PrintTickets Sample",  // Title of the print job
-                            NULL,                             // Not specifying output file. Determined by Printer
-                            NULL,                             // Not specifying data type. 
-                            0
-                          };
+        DOCINFO	DocInfo =
+        {
+            sizeof(DOCINFO),
+            L"Multiple PrintTickets Sample",  // Title of the print job
+            NULL,                             // Not specifying output file. Determined by Printer
+            NULL,                             // Not specifying data type.
+            0
+        };
 
 
         //Send the Escape
         if( StartDoc(hdcMXDW, &DocInfo) > 0)
-        { 
+        {
             bStartDocSent = TRUE;
         }
         else
@@ -348,7 +349,7 @@ CreateJobWith2PrintTickets(
     if ( SUCCEEDED (hr) )
     {
         if( StartPage(hdcMXDW) > 0)
-        { 
+        {
             bStartPageSent = TRUE;
         }
         else
@@ -361,25 +362,25 @@ CreateJobWith2PrintTickets(
     if ( SUCCEEDED(hr) )
     {
         hr = PutTogetherEscapeStructureForPrintTicket(
-                                        MXDCOP_PRINTTICKET_FIXED_DOC,
-                                        pbPTBuf1,
-                                        cbPTBuf1,
-                                        &pEscData,
-                                        &cbEscData);
+                 MXDCOP_PRINTTICKET_FIXED_DOC,
+                 pbPTBuf1,
+                 cbPTBuf1,
+                 &pEscData,
+                 &cbEscData);
     }
 
     // Send Print Ticket for the first page
     if ( SUCCEEDED (hr) )
     {
         if( ExtEscape(hdcMXDW, MXDC_ESCAPE, cbEscData, (LPCSTR) pEscData, 0, NULL) <= 0 )
-        { 
+        {
             vFormatAndPrint(IDS_APP_EXTESCAPE_FAILED);
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
     }
 
     if ( SUCCEEDED (hr) )
-    {   
+    {
         WCHAR szText[] = L"First Page with User Default PrintTicket";
         if ( FALSE == TextOut(hdcMXDW, 200, 200, szText, (int) wcslen(szText) ) )
         {
@@ -388,9 +389,9 @@ CreateJobWith2PrintTickets(
     }
 
     if ( bStartPageSent )
-    {   
+    {
         if( EndPage(hdcMXDW) > 0)
-        { 
+        {
             bStartPageSent = FALSE;
         }
         else
@@ -399,10 +400,10 @@ CreateJobWith2PrintTickets(
         }
     }
 
-    // Free the pEscData allocated in PutTogetherEscapeStructureForPrintTicket 
+    // Free the pEscData allocated in PutTogetherEscapeStructureForPrintTicket
     if(pEscData != NULL)
-    { 
-        MemFree (pEscData); 
+    {
+        MemFree (pEscData);
         pEscData = NULL;
     }
 
@@ -410,7 +411,7 @@ CreateJobWith2PrintTickets(
     if ( SUCCEEDED(hr) )
     {
         if( StartPage(hdcMXDW) > 0)
-        { 
+        {
             bStartPageSent = TRUE;
         }
         else
@@ -424,25 +425,25 @@ CreateJobWith2PrintTickets(
     if ( SUCCEEDED(hr) )
     {
         hr = PutTogetherEscapeStructureForPrintTicket(
-                                        MXDCOP_PRINTTICKET_FIXED_PAGE,
-                                        pbPTBuf2,
-                                        cbPTBuf2, 
-                                        &pEscData,
-                                        &cbEscData);
+                 MXDCOP_PRINTTICKET_FIXED_PAGE,
+                 pbPTBuf2,
+                 cbPTBuf2,
+                 &pEscData,
+                 &cbEscData);
     }
 
     // Send Print Ticket for the above page
     if ( SUCCEEDED (hr) )
     {
         if( ExtEscape(hdcMXDW, MXDC_ESCAPE, cbEscData, (LPCSTR) pEscData, 0, NULL) <= 0 )
-        { 
+        {
             vFormatAndPrint(IDS_APP_EXTESCAPE_FAILED);
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
     }
 
     if ( SUCCEEDED (hr) )
-    {   
+    {
         WCHAR szText[] = L"Second Page with Modified Print Ticket";
         if ( FALSE == TextOut(hdcMXDW, 200, 200, szText, (int)wcslen(szText)) )
         {
@@ -450,7 +451,7 @@ CreateJobWith2PrintTickets(
         }
     }
 
-    
+
     if( bStartPageSent )
     {
         EndPage(hdcMXDW);
@@ -460,16 +461,16 @@ CreateJobWith2PrintTickets(
     {
         EndDoc(hdcMXDW);
     }
-     
+
     if(hdcMXDW != NULL)
     {
         DeleteDC(hdcMXDW);
         hdcMXDW = NULL;
     }
-    
+
     if(pEscData != NULL)
-    { 
-        MemFree (pEscData); 
+    {
+        MemFree (pEscData);
         pEscData = NULL;
     }
     return hr;
@@ -495,7 +496,7 @@ CreateJobWith2PrintTickets(
 
     PBYTE       pbPTBuf2       = NULL;
     DWORD       cbPTBuf2      = 0;
-    
+
     if ( SUCCEEDED(hr) )
     {
         hr = ConvertPTStreamToBuffer(pPTStream1,
@@ -534,26 +535,26 @@ Routine Description:
 
     This routine creates a print job for the "Microsoft XPS Document Writer" printer.
     The job has multiple print tickets. A different print ticket for each page.
-    One print ticket is the full user default print ticket. Second print ticket is 
-    a full print ticket with a media size A4. 
+    One print ticket is the full user default print ticket. Second print ticket is
+    a full print ticket with a media size A4.
     First page has a simple line of text and an embedded image.
     Second page has a simple line of text.
-    
+
 Arguments:
 
     <None>
 
 Return Value:
 
-    S_OK if successful, 
-    E_* if there is an error 
+    S_OK if successful,
+    E_* if there is an error
 
 --*/
 
 HRESULT
 CreatePrintJobMultiplePrintTicket(
     VOID
-    )
+)
 {
     HRESULT          hr                       = S_OK;
     PTPC_STATE_INFO  si                       = {0};
@@ -575,14 +576,14 @@ CreatePrintJobMultiplePrintTicket(
 
     if ( SUCCEEDED(hr) )
     {
-         hr = ConvertPTPCStreamToDOM(pBasePrintTicketStream, &pBasePrintTicketDOM);
+        hr = ConvertPTPCStreamToDOM(pBasePrintTicketStream, &pBasePrintTicketDOM);
     }
 
     // Use the PrintTicket to get the print capabilities. If you want to get
     // the print ticket based on the default print ticket, you don't need to
     // pass the default print ticket stream to the API. But we are doing it
     // here just to show how it can be done.
-    // ConvertPTPCStreamToDOM may have moved the stream pointer. 
+    // ConvertPTPCStreamToDOM may have moved the stream pointer.
     // So make sure printticket stream points to the begining
     if ( SUCCEEDED(hr) )
     {
@@ -613,7 +614,7 @@ CreatePrintJobMultiplePrintTicket(
 
 
     // Cleanup
-    
+
     if ( NULL != pPrintCapsDOM )
     {
         pPrintCapsDOM->Release();

@@ -1,12 +1,12 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
-// ReadOnlyPlugin.cpp : 
+// ReadOnlyPlugin.cpp :
 //
-//  This file contains the implementation of a sample plugin for the 
+//  This file contains the implementation of a sample plugin for the
 //  photo acquisition process.  The sample plugin sets the read-only
-//	attribute on acquired files.  
+//	attribute on acquired files.
 //
-//  To enable the plugin, run regsvr32.exe with the built DLL as the 
+//  To enable the plugin, run regsvr32.exe with the built DLL as the
 //	argument.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -27,21 +27,21 @@
 #include "resource.h"
 //////////////////////////////////////////////////////////////////////////
 // Forward declarations for helper functions
-HRESULT SetRegistryString(HKEY hKeyRoot, 
-                          PCWSTR pszValueName, 
-                          PCWSTR pszString, 
-                          PCWSTR pszSubKeyFormat, 
+HRESULT SetRegistryString(HKEY hKeyRoot,
+                          PCWSTR pszValueName,
+                          PCWSTR pszString,
+                          PCWSTR pszSubKeyFormat,
                           ...);
-HRESULT SetRegistryValueFormatV(HKEY hKeyRoot, 
-                                PCWSTR pszValueName, 
-                                DWORD dwType, 
-                                const void* pValue, 
-                                DWORD dwSize, 
-                                PCWSTR pszSubKeyFormat, 
+HRESULT SetRegistryValueFormatV(HKEY hKeyRoot,
+                                PCWSTR pszValueName,
+                                DWORD dwType,
+                                const void* pValue,
+                                DWORD dwSize,
+                                PCWSTR pszSubKeyFormat,
                                 va_list pArgs);
-HRESULT SetRegistryDWord(HKEY hKeyRoot, 
-                         PCWSTR pszValueName, 
-                         DWORD dwValue, 
+HRESULT SetRegistryDWord(HKEY hKeyRoot,
+                         PCWSTR pszValueName,
+                         DWORD dwValue,
                          PCWSTR pszSubKeyFormat,
                          ...);
 
@@ -50,10 +50,10 @@ HRESULT SetRegistryDWord(HKEY hKeyRoot,
 //////////////////////////////////////////////////////////////////////////
 // TODO: Change this CLSID for each new plugin you create.
 // {08e2efd9-51ba-4d93-8d2f-2f0911d7ab9c}
-static const CLSID CLSID_ThisPlugin = 
-    {0x08e2efd9, 0x51ba, 0x4d93, {0x8d, 0x2f, 0x2f, 0x09, 0x11, 0xd7, 0xab, 0x9c}};
+static const CLSID CLSID_ThisPlugin =
+{0x08e2efd9, 0x51ba, 0x4d93, {0x8d, 0x2f, 0x2f, 0x09, 0x11, 0xd7, 0xab, 0x9c}};
 
-// TODO: Change this name for your own plugin. 
+// TODO: Change this name for your own plugin.
 // It appears only in the registry, but serves to help identify the plugin.
 static PCWSTR g_pszPluginRegistryName = L"Read-Only Photo Acquire Plugin";
 static LONG g_nComponents = 0;
@@ -73,7 +73,7 @@ void DllRelease()
 //////////////////////////////////////////////////////////////////////////
 //  ThisPhotoAcquirePluginClassFactory
 //  Description: A class that provides an implementation of IUnknown and
-//  IClassFactory methods.  
+//  IClassFactory methods.
 //////////////////////////////////////////////////////////////////////////
 class ThisPhotoAcquirePluginClassFactory : public IClassFactory
 {
@@ -96,7 +96,7 @@ private:
 };
 //////////////////////////////////////////////////////////////////////////
 //  ThisPhotoAcquirePlugin
-//  Description: A class that provides an implementation of 
+//  Description: A class that provides an implementation of
 //		IPhotoAcquirePlugin.
 //////////////////////////////////////////////////////////////////////////
 class ThisPhotoAcquirePlugin : public IPhotoAcquirePlugin
@@ -126,8 +126,8 @@ private:
 ///////////////////////////////////////////////////////////////////////
 //
 //  Description:  Entry point for the DLL.
-//  Arguments:  hinst - Handle to the DLL module. 
-//              dwReason - Indicates why the DLL entry-point function 
+//  Arguments:  hinst - Handle to the DLL module.
+//              dwReason - Indicates why the DLL entry-point function
 //					is being called.
 //				lpReserved - Not used in this implementation.
 //
@@ -147,7 +147,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserve
 //
 //  Description:  Enters required information into the registry and
 //	registers the plugin.
-//	The module description is entered at 
+//	The module description is entered at
 //	[HKEY_CLASSES_ROOT\CLSID\{CLSID}]
 //	(where {CLSID} is the GUID for the plugin).
 //	""="Module description"
@@ -235,9 +235,9 @@ extern "C" STDMETHODIMP DllRegisterServer()
 }
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  Default implementation simply returns, since in this 
+//  Description:  Default implementation simply returns, since in this
 //  sample we don't need to remove information from the registry or
-//  unregister the plugin.  
+//  unregister the plugin.
 ///////////////////////////////////////////////////////////////////////
 extern "C" STDMETHODIMP DllUnregisterServer()
 {
@@ -262,8 +262,8 @@ extern "C" STDMETHODIMP DllCanUnloadNow()
 //
 //  Description:  Retrieves the class object.
 ///////////////////////////////////////////////////////////////////////
-extern "C" STDAPI DllGetClassObject(const CLSID &clsid, 
-                                    const IID &iid, 
+extern "C" STDAPI DllGetClassObject(const CLSID &clsid,
+                                    const IID &iid,
                                     void **ppvObject)
 {
     // Make sure we've got a valid ppvObject
@@ -281,7 +281,7 @@ extern "C" STDAPI DllGetClassObject(const CLSID &clsid,
     if (CLSID_ThisPlugin == clsid)
     {
         // Create class factory
-        ThisPhotoAcquirePluginClassFactory* pThisPhotoAcquirePluginClassFactory = 
+        ThisPhotoAcquirePluginClassFactory* pThisPhotoAcquirePluginClassFactory =
             new ThisPhotoAcquirePluginClassFactory;
         if (pThisPhotoAcquirePluginClassFactory != NULL)
         {
@@ -369,8 +369,8 @@ ULONG ThisPhotoAcquirePluginClassFactory::Release()
 //  Description:  Implementation of IClassFactory::CreateInstance.
 ///////////////////////////////////////////////////////////////////////
 HRESULT ThisPhotoAcquirePluginClassFactory::CreateInstance(
-    IUnknown *pUnknownOuter, 
-    REFIID iid, 
+    IUnknown *pUnknownOuter,
+    REFIID iid,
     void **ppvObject)
 {
     HRESULT hr;
@@ -439,7 +439,7 @@ ThisPhotoAcquirePlugin::~ThisPhotoAcquirePlugin()
 HRESULT ThisPhotoAcquirePlugin::CreateInstance(REFIID riid, void** ppv)
 {
     HRESULT hr;
-    ThisPhotoAcquirePlugin* pThisPhotoAcquirePlugin = 
+    ThisPhotoAcquirePlugin* pThisPhotoAcquirePlugin =
         new ThisPhotoAcquirePlugin();
     if (pThisPhotoAcquirePlugin != NULL)
     {
@@ -456,8 +456,8 @@ HRESULT ThisPhotoAcquirePlugin::CreateInstance(REFIID riid, void** ppv)
 //
 //  Description:  Implementation of IUnknown::QueryInterface.
 ///////////////////////////////////////////////////////////////////////
-HRESULT ThisPhotoAcquirePlugin::QueryInterface(const IID &iid, 
-                                               void **ppvObject)
+HRESULT ThisPhotoAcquirePlugin::QueryInterface(const IID &iid,
+        void **ppvObject)
 {
     if ((iid == IID_IUnknown) || (iid == IID_IPhotoAcquirePlugin))
     {
@@ -498,13 +498,13 @@ ULONG ThisPhotoAcquirePlugin::Release()
 //
 //  Description:  Implementation of IPhotoAcquirePlugin::Initialize.
 //		This callback is invoked when the acquisition session begins.
-//  Arguments:  pPhotoAcquireSource - Specifies the source from 
+//  Arguments:  pPhotoAcquireSource - Specifies the source from
 //					which photos are being acquired.
-//				pPhotoAcquireProgressCB - Specifies the callback used 
+//				pPhotoAcquireProgressCB - Specifies the callback used
 //					to provide additional processing during acquisition.
 ///////////////////////////////////////////////////////////////////////
-HRESULT ThisPhotoAcquirePlugin::Initialize(IPhotoAcquireSource*, 
-                                           IPhotoAcquireProgressCB*)
+HRESULT ThisPhotoAcquirePlugin::Initialize(IPhotoAcquireSource*,
+        IPhotoAcquireProgressCB*)
 {
     return S_OK;
 }
@@ -515,24 +515,24 @@ HRESULT ThisPhotoAcquirePlugin::Initialize(IPhotoAcquireSource*,
 //		This callback is invoked each time an item is acquired,
 //		both before and after the item is saved.
 //  Arguments:  dwAcquireStage - PAPS_PRESAVE or PAPS_POSTSAVE.
-//					Specifies whether the item has been saved already. 
-//				pPhotoAcquireItem - The item being acquired. 
+//					Specifies whether the item has been saved already.
+//				pPhotoAcquireItem - The item being acquired.
 //					Not used in this sample
-//				pOriginalItemStream - Pointer to an IStream object 
-//					for the original item.  NULL if dwAcquireStage is 
+//				pOriginalItemStream - Pointer to an IStream object
+//					for the original item.  NULL if dwAcquireStage is
 //					PAPS_POSTSAVE.  Not used in this sample.
-//				pszFinalFilename - The file name of the destination of 
+//				pszFinalFilename - The file name of the destination of
 //					the item.  NULL if dwAcquireStage is PAPS_PRESAVE.
-//				pPropertyStore - The item's property store.  NULL if 
-//					dwAcquireStage is PAPS_POSTSAVE. 
+//				pPropertyStore - The item's property store.  NULL if
+//					dwAcquireStage is PAPS_POSTSAVE.
 //					Not used in this sample.
-//				
+//
 ///////////////////////////////////////////////////////////////////////
-HRESULT ThisPhotoAcquirePlugin::ProcessItem(DWORD dwAcquireStage, 
-                                            IPhotoAcquireItem*, 
-                                            IStream*, 
-                                            LPCWSTR pszFinalFilename, 
-                                            IPropertyStore*)
+HRESULT ThisPhotoAcquirePlugin::ProcessItem(DWORD dwAcquireStage,
+        IPhotoAcquireItem*,
+        IStream*,
+        LPCWSTR pszFinalFilename,
+        IPropertyStore*)
 {
     if (dwAcquireStage == PAPS_POSTSAVE)
     {
@@ -543,7 +543,7 @@ HRESULT ThisPhotoAcquirePlugin::ProcessItem(DWORD dwAcquireStage,
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IPhotoAcquirePlugin::TransferComplete.
 //		This callback is invoked when the acquisition session ends.
 //		This implementation simply returns since it is not providing
@@ -558,16 +558,16 @@ HRESULT ThisPhotoAcquirePlugin::TransferComplete(HRESULT hrTransfer)
 
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  
+//  Description:
 //		Implementation of IPhotoAcquirePlugin::DisplayConfigureDialog.
-//		This callback is invoked when the acquisition configuration 
+//		This callback is invoked when the acquisition configuration
 //		dialog is displayed.
 // 		This implementation simply returns since it is not providing
 //		any additional logic when the dialog displays.
 //
 //	Arguments: hWndParent - Handle to the configuration dialog window.
 //					Not used in this example.
-//		
+//
 ///////////////////////////////////////////////////////////////////////
 HRESULT ThisPhotoAcquirePlugin::DisplayConfigureDialog(HWND hWndParent)
 {
@@ -580,11 +580,11 @@ HRESULT ThisPhotoAcquirePlugin::DisplayConfigureDialog(HWND hWndParent)
 //
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  Helper function that creates a registry key and writes 
+//  Description:  Helper function that creates a registry key and writes
 //					a formatted value to the key.
-//					Called by the functions SetRegistryDWORD and 
+//					Called by the functions SetRegistryDWORD and
 //					SetRegistryString, below.
-//  Arguments:  hKeyRoot - Root of the registry key. 
+//  Arguments:  hKeyRoot - Root of the registry key.
 //					Typically one of the following predefined values:
 //					HKEY_CLASSES_ROOT
 //					HKEY_CURRENT_CONFIG
@@ -592,26 +592,26 @@ HRESULT ThisPhotoAcquirePlugin::DisplayConfigureDialog(HWND hWndParent)
 //					HKEY_LOCAL_MACHINE
 //					HKEY_PERFORMANCE_DATA
 //					HKEY_USERS
-//              pszValueName - Pointer to a string containing the 
-//					name of the value to set. 
+//              pszValueName - Pointer to a string containing the
+//					name of the value to set.
 //				dwType - Type of registry key value.
-//				pValue - Pointer to a buffer containing the data 
-//					to be stored with the specified value name. 
+//				pValue - Pointer to a buffer containing the data
+//					to be stored with the specified value name.
 //				dwSize - Size of value.
-//				pszSubKeyFormat - Pointer to a buffer containing a 
-//					printf-style format string that indicates the 
-//					format for the registry subkey to create. 
+//				pszSubKeyFormat - Pointer to a buffer containing a
+//					printf-style format string that indicates the
+//					format for the registry subkey to create.
 //					This string must be null-terminated.
-//				pArgs - A va_list containing the arguments to be 
+//				pArgs - A va_list containing the arguments to be
 //					inserted into pszSubKeyFormat.
 //
 /////////////////////////////////////////////////////////////////////////
-HRESULT SetRegistryValueFormatV(HKEY hKeyRoot, 
-                                PCWSTR pszValueName, 
-                                DWORD dwType, 
-                                const void* pValue, 
-                                DWORD dwSize, 
-                                PCWSTR pszSubKeyFormat, 
+HRESULT SetRegistryValueFormatV(HKEY hKeyRoot,
+                                PCWSTR pszValueName,
+                                DWORD dwType,
+                                const void* pValue,
+                                DWORD dwSize,
+                                PCWSTR pszSubKeyFormat,
                                 va_list pArgs)
 {
     WCHAR szSubKey[MAX_PATH];
@@ -634,9 +634,9 @@ HRESULT SetRegistryValueFormatV(HKEY hKeyRoot,
 }
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  Helper function that creates a string type registry 
+//  Description:  Helper function that creates a string type registry
 //					key and writes a formatted string value to the key.
-//  Arguments:  hKeyRoot - Root of the registry key. 
+//  Arguments:  hKeyRoot - Root of the registry key.
 //					Typically one of the following predefined values:
 //					HKEY_CLASSES_ROOT
 //					HKEY_CURRENT_CONFIG
@@ -644,15 +644,15 @@ HRESULT SetRegistryValueFormatV(HKEY hKeyRoot,
 //					HKEY_LOCAL_MACHINE
 //					HKEY_PERFORMANCE_DATA
 //					HKEY_USERS
-//              pszValueName - Pointer to a string containing the 
-//					name of the value to set. 
-//				pszString - Pointer to a string containing the 
+//              pszValueName - Pointer to a string containing the
+//					name of the value to set.
+//				pszString - Pointer to a string containing the
 //					string value.
-//				pszSubKeyFormat - Pointer to a buffer containing a 
-//					printf-style format string that indicates the 
-//					format for the registry subkey to create. 
+//				pszSubKeyFormat - Pointer to a buffer containing a
+//					printf-style format string that indicates the
+//					format for the registry subkey to create.
 //					This string must be null-terminated.
-//				... - A va_list containing the arguments to be 
+//				... - A va_list containing the arguments to be
 //					inserted into pszSubKeyFormat.
 //
 /////////////////////////////////////////////////////////////////////////
@@ -660,19 +660,19 @@ HRESULT SetRegistryString(HKEY hKeyRoot, PCWSTR pszValueName, PCWSTR pszString, 
 {
     va_list pArgs;
     va_start(pArgs, pszSubKeyFormat);
-    HRESULT hr = SetRegistryValueFormatV(hKeyRoot, 
-                                            pszValueName, 
-                                            REG_SZ, 
-                                            pszString, 
-                                            (lstrlenW(pszString) + 1) * sizeof(WCHAR), 
-                                            pszSubKeyFormat, 
-                                            pArgs);
+    HRESULT hr = SetRegistryValueFormatV(hKeyRoot,
+                                         pszValueName,
+                                         REG_SZ,
+                                         pszString,
+                                         (lstrlenW(pszString) + 1) * sizeof(WCHAR),
+                                         pszSubKeyFormat,
+                                         pArgs);
     va_end(pArgs);
     return hr;
 }
 ///////////////////////////////////////////////////////////////////////
 //
-//  Description:  Helper function that creates a DWORD type registry 
+//  Description:  Helper function that creates a DWORD type registry
 //					key and writes a formatted DWORD value to the key.
 //  Arguments:  hKeyRoot - Root of the registry key to create.
 //					Typically one of the following predefined values:
@@ -682,15 +682,15 @@ HRESULT SetRegistryString(HKEY hKeyRoot, PCWSTR pszValueName, PCWSTR pszString, 
 //					HKEY_LOCAL_MACHINE
 //					HKEY_PERFORMANCE_DATA
 //					HKEY_USERS
-//              pszValueName - Pointer to a string containing the 
-//					name of the value to set. 
-//				pszString - Pointer to a string containing the 
+//              pszValueName - Pointer to a string containing the
+//					name of the value to set.
+//				pszString - Pointer to a string containing the
 //					string value.
-//				pszSubKeyFormat - Pointer to a buffer containing a 
-//					printf-style format string that indicates the 
-//					format for the registry subkey to create. 
+//				pszSubKeyFormat - Pointer to a buffer containing a
+//					printf-style format string that indicates the
+//					format for the registry subkey to create.
 //					This string must be null-terminated.
-//				... - A va_list containing the arguments to be 
+//				... - A va_list containing the arguments to be
 //					inserted into pszSubKeyFormat.
 //
 /////////////////////////////////////////////////////////////////////////
@@ -698,13 +698,13 @@ HRESULT SetRegistryDWord(HKEY hKeyRoot, PCWSTR pszValueName, DWORD dwValue, PCWS
 {
     va_list pArgs;
     va_start(pArgs, pszSubKeyFormat);
-    HRESULT hr = SetRegistryValueFormatV(hKeyRoot, 
-                                            pszValueName, 
-                                            REG_DWORD, 
-                                            &dwValue, 
-                                            sizeof(DWORD), 
-                                            pszSubKeyFormat, 
-                                            pArgs);
+    HRESULT hr = SetRegistryValueFormatV(hKeyRoot,
+                                         pszValueName,
+                                         REG_DWORD,
+                                         &dwValue,
+                                         sizeof(DWORD),
+                                         pszSubKeyFormat,
+                                         pArgs);
     va_end(pArgs);
     return hr;
 }

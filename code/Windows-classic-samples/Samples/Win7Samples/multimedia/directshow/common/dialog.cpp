@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: Dialog.cpp
 // Desc: Dialog class
 //
@@ -22,16 +22,16 @@
 void ShowLastError(HWND hwnd)
 {
     LPVOID lpMsgBuf;
-    if (FormatMessage( 
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-        FORMAT_MESSAGE_FROM_SYSTEM | 
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        GetLastError(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        (LPTSTR) &lpMsgBuf,
-        0,
-        NULL ))
+    if (FormatMessage(
+                FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                FORMAT_MESSAGE_FROM_SYSTEM |
+                FORMAT_MESSAGE_IGNORE_INSERTS,
+                NULL,
+                GetLastError(),
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                (LPTSTR) &lpMsgBuf,
+                0,
+                NULL ))
     {
         MessageBox( hwnd, (LPCWSTR)lpMsgBuf, L"Error", MB_OK | MB_ICONINFORMATION );
         LocalFree( lpMsgBuf );
@@ -43,13 +43,13 @@ void ShowLastError(HWND hwnd)
 //-----------------------------------------------------------------------------
 // Name: CBaseDialog()
 // Desc: Constructor
-// 
+//
 // nID: Resource ID of the dialog
 //-----------------------------------------------------------------------------
 
 CBaseDialog::CBaseDialog(int nID)
-: m_nID(nID), m_hDlg(0), m_hinst(0), m_hwnd(0),
-  m_NcTop(0), m_NcBottom(0), m_NcWidth(0)
+    : m_nID(nID), m_hDlg(0), m_hinst(0), m_hwnd(0),
+      m_NcTop(0), m_NcBottom(0), m_NcWidth(0)
 {
 }
 
@@ -75,8 +75,8 @@ BOOL CBaseDialog::ShowDialog(HINSTANCE hinst, HWND hwnd)
     m_hwnd = hwnd;
 
     // Show the dialog. Pass a pointer to ourselves as the LPARAM
-    INT_PTR ret = DialogBoxParam(hinst, MAKEINTRESOURCE(m_nID), 
-        hwnd, DialogProc, (LPARAM)this);
+    INT_PTR ret = DialogBoxParam(hinst, MAKEINTRESOURCE(m_nID),
+                                 hwnd, DialogProc, (LPARAM)this);
 
     if (ret == 0 || ret == -1)
     {
@@ -92,20 +92,20 @@ BOOL CBaseDialog::ShowDialog(HINSTANCE hinst, HWND hwnd)
 // Name: DialogProc()
 // Desc: DialogProc for the dialog. This is a static class method.
 //
-// lParam: Pointer to the CBaseDialog object. 
+// lParam: Pointer to the CBaseDialog object.
 //
-// The CBaseDialog class specifies lParam when it calls DialogBoxParam. We store the 
-// pointer as user data in the window. 
+// The CBaseDialog class specifies lParam when it calls DialogBoxParam. We store the
+// pointer as user data in the window.
 //
 // (Note: The DirectShow CBasePropertyPage class uses the same technique.)
 //-----------------------------------------------------------------------------
 INT_PTR CALLBACK CBaseDialog::DialogProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    CBaseDialog *pDlg = 0;  // Pointer to the dialog class that manages the dialog 
+    CBaseDialog *pDlg = 0;  // Pointer to the dialog class that manages the dialog
 
     if (msg == WM_INITDIALOG)
     {
-        // Get the pointer to the dialog object and store it in 
+        // Get the pointer to the dialog object and store it in
         // the window's user data
 
         _SetWindowLongPtr(hDlg, DWLP_USER, lParam);
@@ -231,7 +231,7 @@ void CBaseDialog::RedrawControl(int nID)
     GetWindowRect(m_hDlg, &rcDlg);
     GetWindowRect(GetDlgItem(nID), &rcControl);
 
-    // Adjust the dialog rect by the size of the border and caption 
+    // Adjust the dialog rect by the size of the border and caption
     rcDlg.top += NonClientTop();
     rcDlg.left += NonClientWidth();
 

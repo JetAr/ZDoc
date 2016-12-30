@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -41,7 +41,7 @@ int __cdecl main()
     HRESULT hrComInit = S_OK;
     HRESULT hr = S_OK;
 
-    ULONG cFetched = 0; 
+    ULONG cFetched = 0;
     CComVariant var;
 
     IUnknown *pEnumerator;
@@ -57,7 +57,7 @@ int __cdecl main()
     hrComInit = CoInitializeEx(
                     0,
                     COINIT_APARTMENTTHREADED
-                    );
+                );
 
     // Ignore RPC_E_CHANGED_MODE; this just means that COM has already been
     // initialized with a different mode. Since we don't care what the mode is,
@@ -93,7 +93,7 @@ int __cdecl main()
         wprintf(L"get_Count failed: 0x%08lx\n", hr);
         goto Cleanup;
     }
-    
+
     wprintf(L"The number of rules in the Windows Firewall are %d\n", fwRuleCount);
 
     // Iterate through all of the rules in pFwRules
@@ -127,7 +127,7 @@ int __cdecl main()
             }
         }
     }
- 
+
 Cleanup:
 
     // Release pFwRule
@@ -147,16 +147,16 @@ Cleanup:
     {
         CoUninitialize();
     }
-   
+
     return 0;
 }
 
 
-// Output properties of a Firewall rule 
+// Output properties of a Firewall rule
 void DumpFWRulesInCollection(INetFwRule* FwRule)
 {
     variant_t InterfaceArray;
-    variant_t InterfaceString;  
+    variant_t InterfaceString;
 
     VARIANT_BOOL bEnabled;
     BSTR bstrVal;
@@ -167,7 +167,7 @@ void DumpFWRulesInCollection(INetFwRule* FwRule)
     NET_FW_RULE_DIRECTION fwDirection;
     NET_FW_ACTION fwAction;
 
-    struct ProfileMapElement 
+    struct ProfileMapElement
     {
         NET_FW_PROFILE_TYPE2 Id;
         LPCWSTR Name;
@@ -207,19 +207,19 @@ void DumpFWRulesInCollection(INetFwRule* FwRule)
     {
         switch(lVal)
         {
-            case NET_FW_IP_PROTOCOL_TCP: 
+        case NET_FW_IP_PROTOCOL_TCP:
 
-                wprintf(L"IP Protocol:      %s\n", NET_FW_IP_PROTOCOL_TCP_NAME);
-                break;
+            wprintf(L"IP Protocol:      %s\n", NET_FW_IP_PROTOCOL_TCP_NAME);
+            break;
 
-            case NET_FW_IP_PROTOCOL_UDP: 
+        case NET_FW_IP_PROTOCOL_UDP:
 
-                wprintf(L"IP Protocol:      %s\n", NET_FW_IP_PROTOCOL_UDP_NAME);
-                break;
+            wprintf(L"IP Protocol:      %s\n", NET_FW_IP_PROTOCOL_UDP_NAME);
+            break;
 
-            default:
+        default:
 
-                break;
+            break;
         }
 
         if(lVal != NET_FW_IP_VERSION_V4 && lVal != NET_FW_IP_VERSION_V6)
@@ -255,7 +255,7 @@ void DumpFWRulesInCollection(INetFwRule* FwRule)
 
     if (SUCCEEDED(FwRule->get_Profiles(&lProfileBitmask)))
     {
-        // The returned bitmask can have more than 1 bit set if multiple profiles 
+        // The returned bitmask can have more than 1 bit set if multiple profiles
         //   are active or current at the same time
 
         for (int i=0; i<3; i++)
@@ -271,19 +271,19 @@ void DumpFWRulesInCollection(INetFwRule* FwRule)
     {
         switch(fwDirection)
         {
-            case NET_FW_RULE_DIR_IN:
+        case NET_FW_RULE_DIR_IN:
 
-                wprintf(L"Direction:        %s\n", NET_FW_RULE_DIR_IN_NAME);
-                break;
+            wprintf(L"Direction:        %s\n", NET_FW_RULE_DIR_IN_NAME);
+            break;
 
-            case NET_FW_RULE_DIR_OUT:
+        case NET_FW_RULE_DIR_OUT:
 
-                wprintf(L"Direction:        %s\n", NET_FW_RULE_DIR_OUT_NAME);
-                break;
+            wprintf(L"Direction:        %s\n", NET_FW_RULE_DIR_OUT_NAME);
+            break;
 
-            default:
+        default:
 
-                break;
+            break;
         }
     }
 
@@ -291,19 +291,19 @@ void DumpFWRulesInCollection(INetFwRule* FwRule)
     {
         switch(fwAction)
         {
-            case NET_FW_ACTION_BLOCK:
+        case NET_FW_ACTION_BLOCK:
 
-                wprintf(L"Action:           %s\n", NET_FW_RULE_ACTION_BLOCK_NAME);
-                break;
+            wprintf(L"Action:           %s\n", NET_FW_RULE_ACTION_BLOCK_NAME);
+            break;
 
-            case NET_FW_ACTION_ALLOW:
+        case NET_FW_ACTION_ALLOW:
 
-                wprintf(L"Action:           %s\n", NET_FW_RULE_ACTION_ALLOW_NAME);
-                break;
+            wprintf(L"Action:           %s\n", NET_FW_RULE_ACTION_ALLOW_NAME);
+            break;
 
-            default:
+        default:
 
-                break;
+            break;
         }
     }
 
@@ -365,16 +365,16 @@ HRESULT WFCOMInitialize(INetFwPolicy2** ppNetFwPolicy2)
     HRESULT hr = S_OK;
 
     hr = CoCreateInstance(
-        __uuidof(NetFwPolicy2), 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        __uuidof(INetFwPolicy2), 
-        (void**)ppNetFwPolicy2);
+             __uuidof(NetFwPolicy2),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwPolicy2),
+             (void**)ppNetFwPolicy2);
 
     if (FAILED(hr))
     {
         wprintf(L"CoCreateInstance for INetFwPolicy2 failed: 0x%08lx\n", hr);
-        goto Cleanup;        
+        goto Cleanup;
     }
 
 Cleanup:

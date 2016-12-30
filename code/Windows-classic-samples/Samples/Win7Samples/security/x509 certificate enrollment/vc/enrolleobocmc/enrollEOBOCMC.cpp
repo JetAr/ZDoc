@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,9 +14,9 @@
 //---------------------------------------------------------------------
 
 
-// Create a CMC EOBO request, sign it with a Enrollment Agent 
-// certificate (containing EKU of Certificate Request Agent), 
-// enroll to an enterprise CA, export the enrolled cert into 
+// Create a CMC EOBO request, sign it with a Enrollment Agent
+// certificate (containing EKU of Certificate Request Agent),
+// enroll to an enterprise CA, export the enrolled cert into
 // a PFX file, delete the enrolled cert and its private key
 
 #include <stdio.h>
@@ -33,14 +33,14 @@ void Usage()
     wprintf(L"<Password> [<EATemplate>]\n");
     wprintf(L"Example: enrollEOBOCMC User Domain\\User pfx.out ");
     wprintf(L"1111 EnrollmentAgent\n");
-    }
+}
 
 HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 {
 
     HRESULT hr = S_OK;
     bool fCoInit = false;
-    IX509Enrollment* pEnroll = NULL; 
+    IX509Enrollment* pEnroll = NULL;
     IX509CertificateRequest* pRequest = NULL;
     IX509CertificateRequest* pInnerRequest = NULL;
     IX509CertificateRequestPkcs10* pPkcs10 = NULL;
@@ -62,9 +62,10 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     BSTR strCert = NULL;
     BSTR strPFX = NULL;
     BSTR strPassword = NULL;
-    
+
     // Process command line arguments
-    if (argc !=  6 && argc != 5 ) {
+    if (argc !=  6 && argc != 5 )
+    {
         Usage();
         hr = E_INVALIDARG;
         _JumpError(hr, error, "invalid arg");
@@ -110,23 +111,23 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509CertificateRequestCmc
     hr = CoCreateInstance(
-            __uuidof(CX509CertificateRequestCmc),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509CertificateRequestCmc),
-            (void **) &pCmc);
+             __uuidof(CX509CertificateRequestCmc),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509CertificateRequestCmc),
+             (void **) &pCmc);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509CertificateRequestCmc
     hr = pCmc->InitializeFromTemplateName(
-            ContextUser,      
-            strTemplateName); 
+             ContextUser,
+             strTemplateName);
     _JumpIfError(hr, error, "InitializeFromTemplateName");
 
     // Add requester name since it is an EOBO request
     hr = pCmc->put_RequesterName(strRequester);
-    _JumpIfError(hr, error, "put_RequesterName");    
- 
+    _JumpIfError(hr, error, "put_RequesterName");
+
 
     /* Find a EA certificate first */
 
@@ -136,11 +137,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     {
         // Enroll an EA cert first
         hr = enrollCertByTemplate(pwszEATemplateName);
-        _JumpIfError(hr, error, "enrollCertByTemplate");    
- 
+        _JumpIfError(hr, error, "enrollCertByTemplate");
+
         // Search again
         hr = findCertByEKU(szOID_ENROLLMENT_AGENT, &pCert);
-        _JumpIfError(hr, error, "findCertByEKU");  
+        _JumpIfError(hr, error, "findCertByEKU");
     }
 
     // Verify the certificate chain and its EKU
@@ -149,8 +150,8 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Convert PCCERT_CONTEXT to BSTR
     strEACert = SysAllocStringByteLen(
-            (CHAR const *) pCert->pbCertEncoded, 
-            pCert->cbCertEncoded);
+                    (CHAR const *) pCert->pbCertEncoded,
+                    pCert->cbCertEncoded);
 
     if (NULL == strEACert)
     {
@@ -159,23 +160,23 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     }
 
     /* Sign the EOBO request with EA certificate */
-    
-     // Create ISignerCertificate
+
+    // Create ISignerCertificate
     hr = CoCreateInstance(
-            __uuidof(CSignerCertificate),
-            NULL,   // pUnkOuter
-            CLSCTX_INPROC_SERVER, 
-            __uuidof(ISignerCertificate), 
-            (void **)&pSignerCertificate); 
-   _JumpIfError(hr, error, "CoCreateInstance");
+             __uuidof(CSignerCertificate),
+             NULL,   // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(ISignerCertificate),
+             (void **)&pSignerCertificate);
+    _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize ISignerCertificate from EA certificate
     hr = pSignerCertificate->Initialize(
-            VARIANT_FALSE,
-            VerifyNone,
-            XCN_CRYPT_STRING_BINARY,
-            strEACert);
-   _JumpIfError(hr, error, "Initialize");
+             VARIANT_FALSE,
+             VerifyNone,
+             XCN_CRYPT_STRING_BINARY,
+             strEACert);
+    _JumpIfError(hr, error, "Initialize");
 
     // Retrieve ISignerCertificates collection from CMC request
     hr = pCmc->get_SignerCertificates(&pSignerCertificates);
@@ -187,14 +188,14 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
 
     /* Enroll for EOBO request */
-    
+
     // Create IX509Enrollment
     hr = CoCreateInstance(
-            __uuidof(CX509Enrollment),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509Enrollment),
-            (void **) &pEnroll);
+             __uuidof(CX509Enrollment),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509Enrollment),
+             (void **) &pEnroll);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509Enrollment
@@ -207,25 +208,25 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Check enrollment status
     hr = checkEnrollStatus(pEnroll);
-    _JumpIfError(hr, error, "checkEnrollStatus"); 
+    _JumpIfError(hr, error, "checkEnrollStatus");
 
 
     /* Export the enrolled cert to a PFX file */
 
     // Create PFX output in binary format
     hr = pEnroll->CreatePFX(
-            strPassword, 
-            PFXExportEEOnly,
-            XCN_CRYPT_STRING_BINARY, 
-            &strPFX);
-    _JumpIfError(hr, error, "checkEnrollStatus"); 
+             strPassword,
+             PFXExportEEOnly,
+             XCN_CRYPT_STRING_BINARY,
+             &strPFX);
+    _JumpIfError(hr, error, "checkEnrollStatus");
 
     // Save the PFX output to file in binary format
     hr = EncodeToFileW(
-            pwszFileOut, 
-            (BYTE const *) strPFX, 
-            SysStringByteLen(strPFX), 
-            CR_OUT_BINARY | DECF_FORCEOVERWRITE);
+             pwszFileOut,
+             (BYTE const *) strPFX,
+             SysStringByteLen(strPFX),
+             CR_OUT_BINARY | DECF_FORCEOVERWRITE);
     _JumpIfError(hr, error, "EncodeToFileW");
 
 
@@ -233,29 +234,29 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Get the cert just enrolled in binary format
     hr = pEnroll->get_Certificate(XCN_CRYPT_STRING_BINARY, &strCert);
-    _JumpIfError(hr, error, "get_Certificate"); 
-    
+    _JumpIfError(hr, error, "get_Certificate");
+
 
     // Get the PCCERT_CONTEXT handle out of the certificate
     pCert = CertCreateCertificateContext(
-            X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-            (BYTE const *)strCert,
-            SysStringByteLen(strCert));
+                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+                (BYTE const *)strCert,
+                SysStringByteLen(strCert));
 
     if (NULL == pCert)
     {
         hr = GetLastError();
         _JumpError(hr, error, "CertCreateCertificateContext");
     }
-    
+
     // Open user MY store
     hStore = CertOpenStore(
-            CERT_STORE_PROV_SYSTEM_W,
-            X509_ASN_ENCODING,
-            NULL,
-            CERT_SYSTEM_STORE_CURRENT_USER,
-            L"MY"  );
-    
+                 CERT_STORE_PROV_SYSTEM_W,
+                 X509_ASN_ENCODING,
+                 NULL,
+                 CERT_SYSTEM_STORE_CURRENT_USER,
+                 L"MY"  );
+
     if (NULL == hStore)
     {
         hr = GetLastError();
@@ -264,12 +265,12 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Search for the cert based on CERT_CONTEXT
     pCertContext = CertFindCertificateInStore(
-            hStore,
-            X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-            0,
-            CERT_FIND_EXISTING,
-            pCert,
-            NULL);
+                       hStore,
+                       X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+                       0,
+                       CERT_FIND_EXISTING,
+                       pCert,
+                       NULL);
 
     if (NULL == pCertContext)
     {
@@ -277,28 +278,28 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
         _JumpError(hr, error, "CertFindCertificateInStore");
     }
 
-    // Delete the cert from store 
+    // Delete the cert from store
     if (!CertDeleteCertificateFromStore(pCertContext))
     {
         hr = GetLastError();
         _JumpError(hr, error, "CertDeleteCertificateFromStore");
     }
-    
+
 
     /* Delete the private key as well */
 
     // Retrieve the request
     hr = pEnroll->get_Request(&pRequest);
-    _JumpIfError(hr, error, "get_Request"); 
+    _JumpIfError(hr, error, "get_Request");
 
     // Get the innermost request
     hr = pRequest->GetInnerRequest(LevelInnermost, &pInnerRequest);
-    _JumpIfError(hr, error, "GetInnerRequest"); 
+    _JumpIfError(hr, error, "GetInnerRequest");
 
     // QueryInterface for the pkcs10 request
     hr = pInnerRequest->QueryInterface(
-            __uuidof(IX509CertificateRequestPkcs10),
-            (VOID **)&pPkcs10);
+             __uuidof(IX509CertificateRequestPkcs10),
+             (VOID **)&pPkcs10);
     _JumpIfError(hr, error, "QueryInterface");
 
     // Get the private key

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-	OBJECT_ENTRY(CLSID_ComSpyAudit, CComSpySqlAudit)
+OBJECT_ENTRY(CLSID_ComSpyAudit, CComSpySqlAudit)
 END_OBJECT_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -28,14 +28,14 @@ END_OBJECT_MAP()
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 {
-	if (dwReason == DLL_PROCESS_ATTACH)
-	{
-		_Module.Init(ObjectMap, hInstance);
-		DisableThreadLibraryCalls(hInstance);
-	}
-	else if (dwReason == DLL_PROCESS_DETACH)
-		_Module.Term();
-	return TRUE;    // ok
+    if (dwReason == DLL_PROCESS_ATTACH)
+    {
+        _Module.Init(ObjectMap, hInstance);
+        DisableThreadLibraryCalls(hInstance);
+    }
+    else if (dwReason == DLL_PROCESS_DETACH)
+        _Module.Term();
+    return TRUE;    // ok
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 
 STDAPI DllCanUnloadNow(void)
 {
-	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
+    return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ STDAPI DllCanUnloadNow(void)
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
-	return _Module.GetClassObject(rclsid, riid, ppv);
+    return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -59,8 +59,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
 STDAPI DllRegisterServer(void)
 {
-	// registers object, typelib and all interfaces in typelib
-	return _Module.RegisterServer(TRUE);
+    // registers object, typelib and all interfaces in typelib
+    return _Module.RegisterServer(TRUE);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -68,8 +68,8 @@ STDAPI DllRegisterServer(void)
 
 STDAPI DllUnregisterServer(void)
 {
-	_Module.UnregisterServer();
-	return S_OK;
+    _Module.UnregisterServer();
+    return S_OK;
 }
 
 

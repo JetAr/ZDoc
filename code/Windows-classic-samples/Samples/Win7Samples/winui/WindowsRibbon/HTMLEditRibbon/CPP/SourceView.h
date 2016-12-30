@@ -1,4 +1,4 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+﻿// This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -22,42 +22,42 @@
 class CSourceView : public CEditView
 {
 protected:
-	CSourceView();           // protected constructor used by dynamic creation
-	DECLARE_DYNCREATE(CSourceView)
-	CFont m_font;
+    CSourceView();           // protected constructor used by dynamic creation
+    DECLARE_DYNCREATE(CSourceView)
+    CFont m_font;
 // Attributes
 public:
 
-	void NewDocument()
-	{
-		this->DeleteContents();
-	}
-	void UpdateView();
+    void NewDocument()
+    {
+        this->DeleteContents();
+    }
+    void UpdateView();
 // Operations
 public:
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSourceView)
-	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CSourceView)
+protected:
+    virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+    virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	virtual ~CSourceView();
+    virtual ~CSourceView();
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+    virtual void AssertValid() const;
+    virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+    // Generated message map functions
 protected:
-	//{{AFX_MSG(CSourceView)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CSourceView)
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 private:
 
 };

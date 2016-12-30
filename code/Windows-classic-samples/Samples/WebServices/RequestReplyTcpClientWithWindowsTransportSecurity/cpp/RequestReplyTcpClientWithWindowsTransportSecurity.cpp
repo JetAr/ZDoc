@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -58,21 +58,21 @@ Exit:
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_CHANNEL* channel = NULL;
     WS_MESSAGE* requestMessage = NULL;
     WS_MESSAGE* replyMessage = NULL;
     WS_HEAP* heap = NULL;
-    
+
     // declare and initialize a windows credential
     WS_DEFAULT_WINDOWS_INTEGRATED_AUTH_CREDENTIAL windowsCredential = {}; // zero out the struct
     windowsCredential.credential.credentialType = WS_DEFAULT_WINDOWS_INTEGRATED_AUTH_CREDENTIAL_TYPE; // set the credential type
-    
+
     ULONG impersonation = SecurityImpersonation;
     BOOL requireServerAuth = FALSE;
-    
+
     // declare and initialize properties to change the impersonation level from the default.
     // to run client and service on single machine you have to specify either:
     //  - WS_WINDOWS_INTEGRATED_AUTH_PACKAGE set to WS_WINDOWS_INTEGRATED_AUTH_PACKAGE_KERBEROS
@@ -81,63 +81,63 @@ int __cdecl wmain()
     WS_SECURITY_BINDING_PROPERTY sspiBindingProperties[2] =
     {
         { WS_SECURITY_BINDING_PROPERTY_ALLOWED_IMPERSONATION_LEVEL, &impersonation, sizeof(impersonation) },
-        { WS_SECURITY_BINDING_PROPERTY_REQUIRE_SERVER_AUTH, &requireServerAuth, sizeof(requireServerAuth) } 
+        { WS_SECURITY_BINDING_PROPERTY_REQUIRE_SERVER_AUTH, &requireServerAuth, sizeof(requireServerAuth) }
     };
-    
+
     // declare and initialize an Windows SSPI transport security binding
     WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING sspiBinding = {}; // zero out the struct
     sspiBinding.binding.bindingType = WS_TCP_SSPI_TRANSPORT_SECURITY_BINDING_TYPE; // set the binding type
     sspiBinding.binding.properties = sspiBindingProperties;
     sspiBinding.binding.propertyCount = WsCountOf(sspiBindingProperties);
     sspiBinding.clientCredential = &windowsCredential.credential;
-    
+
     // declare and initialize the array of all security bindings
     WS_SECURITY_BINDING* securityBindings[1] = { &sspiBinding.binding };
-    
+
     // declare and initialize the security description
     WS_SECURITY_DESCRIPTION securityDescription = {}; // zero out the struct
     securityDescription.securityBindings = securityBindings;
     securityDescription.securityBindingCount = WsCountOf(securityBindings);
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
-    
-    
+
+
+
     // Create a TCP duplex session channel
     hr = WsCreateChannel(
-        WS_CHANNEL_TYPE_DUPLEX_SESSION, 
-        WS_TCP_CHANNEL_BINDING, 
-        NULL, 
-        0, 
-        &securityDescription, 
-        &channel, 
-        error);
+             WS_CHANNEL_TYPE_DUPLEX_SESSION,
+             WS_TCP_CHANNEL_BINDING,
+             NULL,
+             0,
+             &securityDescription,
+             &channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Initialize address of service
     WS_ENDPOINT_ADDRESS address;
     address.url.chars = L"net.tcp://localhost/example";
@@ -145,40 +145,40 @@ int __cdecl wmain()
     address.headers = NULL;
     address.extensions = NULL;
     address.identity = NULL;
-    
+
     // Open channel to address
     hr = WsOpenChannel(
-        channel, 
-        &address, 
-        NULL, 
-        error);
+             channel,
+             &address,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateMessageForChannel(
-        channel,
-        NULL, 
-        0, 
-        &requestMessage, 
-        error);
+             channel,
+             NULL,
+             0,
+             &requestMessage,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateMessageForChannel(
-        channel,
-        NULL, 
-        0, 
-        &replyMessage, 
-        error);
+             channel,
+             NULL,
+             0,
+             &replyMessage,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Send some request-replies
     for (int i = 0; i < 100; i++)
     {
@@ -186,158 +186,158 @@ int __cdecl wmain()
         _PurchaseOrderType purchaseOrder;
         purchaseOrder.quantity = 100;
         purchaseOrder.productName = L"Pencil";
-        
+
         _OrderConfirmationType orderConfirmation;
-        
+
         // Send purchase order, get order confirmation
         hr = WsRequestReply(
-            channel,
-            requestMessage, 
-            &PurchaseOrder_wsdl.messages.PurchaseOrder, 
-            WS_WRITE_REQUIRED_VALUE,
-            &purchaseOrder,
-            sizeof(purchaseOrder),
-            replyMessage, 
-            &PurchaseOrder_wsdl.messages.OrderConfirmation, 
-            WS_READ_REQUIRED_VALUE, 
-            heap, 
-            &orderConfirmation, 
-            sizeof(orderConfirmation), 
-            NULL, 
-            error);
-        
+                 channel,
+                 requestMessage,
+                 &PurchaseOrder_wsdl.messages.PurchaseOrder,
+                 WS_WRITE_REQUIRED_VALUE,
+                 &purchaseOrder,
+                 sizeof(purchaseOrder),
+                 replyMessage,
+                 &PurchaseOrder_wsdl.messages.OrderConfirmation,
+                 WS_READ_REQUIRED_VALUE,
+                 heap,
+                 &orderConfirmation,
+                 sizeof(orderConfirmation),
+                 NULL,
+                 error);
+
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Print out confirmation contents
         wprintf(L"Expected ship date for order %lu is %s\n",
-            orderConfirmation.orderID,
-            orderConfirmation.expectedShipDate);
-        
+                orderConfirmation.orderID,
+                orderConfirmation.expectedShipDate);
+
         // Reset the message so it can be used again
         hr = WsResetMessage(requestMessage, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Reset the message so it can be used again
         hr = WsResetMessage(replyMessage, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Initialize request for order status
         _GetOrderStatusType getOrderStatus;
         getOrderStatus.orderID = orderConfirmation.orderID;
-        
+
         _GetOrderStatusResponseType getOrderStatusResponse;
-        
+
         // Send order status request, get order status reply
         hr = WsRequestReply(
-            channel,
-            requestMessage, 
-            &PurchaseOrder_wsdl.messages.GetOrderStatus, 
-            WS_WRITE_REQUIRED_VALUE,
-            &getOrderStatus,
-            sizeof(getOrderStatus),
-            replyMessage, 
-            &PurchaseOrder_wsdl.messages.GetOrderStatusResponse, 
-            WS_READ_REQUIRED_VALUE, 
-            heap, 
-            &getOrderStatusResponse, 
-            sizeof(getOrderStatusResponse), 
-            NULL, 
-            error);
-        
+                 channel,
+                 requestMessage,
+                 &PurchaseOrder_wsdl.messages.GetOrderStatus,
+                 WS_WRITE_REQUIRED_VALUE,
+                 &getOrderStatus,
+                 sizeof(getOrderStatus),
+                 replyMessage,
+                 &PurchaseOrder_wsdl.messages.GetOrderStatusResponse,
+                 WS_READ_REQUIRED_VALUE,
+                 heap,
+                 &getOrderStatusResponse,
+                 sizeof(getOrderStatusResponse),
+                 NULL,
+                 error);
+
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Print out order status
         wprintf(L"Order status for order %lu is: %s\n",
-            getOrderStatusResponse.orderID,
-            getOrderStatusResponse.status);
-        
+                getOrderStatusResponse.orderID,
+                getOrderStatusResponse.status);
+
         // Reset the message so it can be used again
         hr = WsResetMessage(requestMessage, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Reset the message so it can be used again
         hr = WsResetMessage(replyMessage, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Make same request, but this time with an invalid order ID
         getOrderStatus.orderID = 321;
         hr = WsRequestReply(
-            channel,
-            requestMessage, 
-            &PurchaseOrder_wsdl.messages.GetOrderStatus, 
-            WS_WRITE_REQUIRED_VALUE,
-            &getOrderStatus,
-            sizeof(getOrderStatus),
-            replyMessage, 
-            &PurchaseOrder_wsdl.messages.GetOrderStatusResponse, 
-            WS_READ_REQUIRED_VALUE, 
-            heap, 
-            &getOrderStatusResponse, 
-            sizeof(getOrderStatusResponse), 
-            NULL, 
-            error);
-        
+                 channel,
+                 requestMessage,
+                 &PurchaseOrder_wsdl.messages.GetOrderStatus,
+                 WS_WRITE_REQUIRED_VALUE,
+                 &getOrderStatus,
+                 sizeof(getOrderStatus),
+                 replyMessage,
+                 &PurchaseOrder_wsdl.messages.GetOrderStatusResponse,
+                 WS_READ_REQUIRED_VALUE,
+                 heap,
+                 &getOrderStatusResponse,
+                 sizeof(getOrderStatusResponse),
+                 NULL,
+                 error);
+
         // Check to see if we got a fault
         if (hr == WS_E_ENDPOINT_FAULT_RECEIVED)
         {
             // Print the strings in the error object
             PrintError(hr, error);
-        
+
             static const WS_XML_STRING _faultDetailName = WS_XML_STRING_VALUE("OrderNotFound");
             static const WS_XML_STRING _faultDetailNs = WS_XML_STRING_VALUE("http://example.com");
             static const WS_XML_STRING _faultAction = WS_XML_STRING_VALUE("http://example.com/fault");
-            static const WS_ELEMENT_DESCRIPTION _faultElementDescription = 
-            { 
-                (WS_XML_STRING*)&_faultDetailName, 
-                (WS_XML_STRING*)&_faultDetailNs, 
-                WS_UINT32_TYPE, 
-                NULL 
+            static const WS_ELEMENT_DESCRIPTION _faultElementDescription =
+            {
+                (WS_XML_STRING*)&_faultDetailName,
+                (WS_XML_STRING*)&_faultDetailNs,
+                WS_UINT32_TYPE,
+                NULL
             };
-            static const WS_FAULT_DETAIL_DESCRIPTION orderNotFoundFaultTypeDescription = 
-            { 
-                (WS_XML_STRING*)&_faultAction, 
-                (WS_ELEMENT_DESCRIPTION*)&_faultElementDescription 
+            static const WS_FAULT_DETAIL_DESCRIPTION orderNotFoundFaultTypeDescription =
+            {
+                (WS_XML_STRING*)&_faultAction,
+                (WS_ELEMENT_DESCRIPTION*)&_faultElementDescription
             };
-        
+
             // Try to get the fault detail from the error object
             _OrderNotFoundFaultType* orderNotFound;
             hr = WsGetFaultErrorDetail(
-                error,
-                &orderNotFoundFaultTypeDescription,
-                WS_READ_OPTIONAL_POINTER,
-                heap,
-                &orderNotFound,
-                sizeof(orderNotFound));
-                
+                     error,
+                     &orderNotFoundFaultTypeDescription,
+                     WS_READ_OPTIONAL_POINTER,
+                     heap,
+                     &orderNotFound,
+                     sizeof(orderNotFound));
+
             if (FAILED(hr))
             {
                 goto Exit;
             }
-        
+
             if (orderNotFound != NULL)
             {
                 // Print out the fault detail
                 wprintf(L"Order %lu was not found\n", orderNotFound->orderID);
             }
-        
+
             // Reset error so it can be used again
             hr = WsResetError(error);
             if (FAILED(hr))
@@ -345,28 +345,28 @@ int __cdecl wmain()
                 goto Exit;
             }
         }
-        
+
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Reset the message so it can be used again
         hr = WsResetMessage(requestMessage, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Reset the message so it can be used again
         hr = WsResetMessage(replyMessage, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         wprintf(L"\n");
-        
+
         // Reset the heap
         hr = WsResetHeap(heap, error);
         if (FAILED(hr))
@@ -374,14 +374,14 @@ int __cdecl wmain()
             goto Exit;
         }
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (channel != NULL)
     {
         // Close the channel
@@ -399,8 +399,8 @@ Exit:
     {
         WsFreeChannel(channel);
     }
-    
-    
+
+
     if (error != NULL)
     {
         WsFreeError(error);

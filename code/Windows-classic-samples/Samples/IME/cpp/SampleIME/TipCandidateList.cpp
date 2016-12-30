@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,7 +11,7 @@
 #include "TipCandidateString.h"
 
 HRESULT CTipCandidateList::CreateInstance(_Outptr_ ITfCandidateList **ppobj, size_t candStrReserveSize)
-{  
+{
     if (ppobj == nullptr)
     {
         return E_INVALIDARG;
@@ -19,7 +19,7 @@ HRESULT CTipCandidateList::CreateInstance(_Outptr_ ITfCandidateList **ppobj, siz
     *ppobj = nullptr;
 
     *ppobj = new (std::nothrow) CTipCandidateList(candStrReserveSize);
-    if (*ppobj == nullptr) 
+    if (*ppobj == nullptr)
     {
         return E_OUTOFMEMORY;
     }
@@ -28,7 +28,7 @@ HRESULT CTipCandidateList::CreateInstance(_Outptr_ ITfCandidateList **ppobj, siz
 }
 
 HRESULT CTipCandidateList::CreateInstance(REFIID riid, _Outptr_ void **ppvObj, size_t candStrReserveSize)
-{  
+{
     if (ppvObj == nullptr)
     {
         return E_INVALIDARG;
@@ -36,7 +36,7 @@ HRESULT CTipCandidateList::CreateInstance(REFIID riid, _Outptr_ void **ppvObj, s
     *ppvObj = nullptr;
 
     *ppvObj = new (std::nothrow) CTipCandidateList(candStrReserveSize);
-    if (*ppvObj == nullptr) 
+    if (*ppvObj == nullptr)
     {
         return E_OUTOFMEMORY;
     }
@@ -163,7 +163,8 @@ STDMETHODIMP CTipCandidateList::GetCandidateNum(_Out_ ULONG *pnCnt)
 
 STDMETHODIMP CTipCandidateList::SetResult(ULONG nIndex, TfCandidateResult imcr)
 {
-    nIndex;imcr;
+    nIndex;
+    imcr;
 
     return E_NOTIMPL;
 }

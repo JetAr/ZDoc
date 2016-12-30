@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -144,7 +144,7 @@ void ColorPick_OnPaint(PCOLORPICKSTATE pcps, HWND hwnd)
             // Now shrink the rectangle by an edge and fill the rest with the
             // color of the item itself.
             InflateRect(&rc, -GetSystemMetrics(SM_CXEDGE),
-                             -GetSystemMetrics(SM_CYEDGE));
+                        -GetSystemMetrics(SM_CYEDGE));
 
             HBRUSH hbr = CreateSolidBrush(c_rgclrPredef[iColor]);
             FillRect(hdc, &rc, hbr);
@@ -192,7 +192,7 @@ void ColorPick_OnMouseMove(PCOLORPICKSTATE pcps, HWND hwnd, int x, int y)
     int iSel;
 
     if (x >= 0 && x < CXFAKEMENU &&
-        y >= 0 && y < ARRAYSIZE(c_rgclrPredef) * CYCOLOR)
+            y >= 0 && y < ARRAYSIZE(c_rgclrPredef) * CYCOLOR)
     {
         iSel = y / CYCOLOR;
     }
@@ -233,36 +233,36 @@ void ColorPick_OnKeyDown(PCOLORPICKSTATE pcps, HWND hwnd, WPARAM vk)
 {
     switch (vk)
     {
-        case VK_ESCAPE:
-            pcps->fDone = TRUE;         // Abandoned
-            break;
+    case VK_ESCAPE:
+        pcps->fDone = TRUE;         // Abandoned
+        break;
 
-        case VK_RETURN:
-            pcps->iResult = pcps->iSel; // Accept current selection
-            pcps->fDone = TRUE;
-            break;
+    case VK_RETURN:
+        pcps->iResult = pcps->iSel; // Accept current selection
+        pcps->fDone = TRUE;
+        break;
 
-        case VK_UP:
-            if (pcps->iSel > 0)         // Decrement selection
-            {
-                ColorPick_ChangeSel(pcps, hwnd, pcps->iSel - 1);
-            }
-            else
-            {
-                ColorPick_ChangeSel(pcps, hwnd, ARRAYSIZE(c_rgclrPredef) - 1);
-            }
-            break;
+    case VK_UP:
+        if (pcps->iSel > 0)         // Decrement selection
+        {
+            ColorPick_ChangeSel(pcps, hwnd, pcps->iSel - 1);
+        }
+        else
+        {
+            ColorPick_ChangeSel(pcps, hwnd, ARRAYSIZE(c_rgclrPredef) - 1);
+        }
+        break;
 
-        case VK_DOWN:                   // Increment selection
-            if (pcps->iSel + 1 < ARRAYSIZE(c_rgclrPredef))
-            {
-                ColorPick_ChangeSel(pcps, hwnd, pcps->iSel + 1);
-            }
-            else
-            {
-                ColorPick_ChangeSel(pcps, hwnd, 0);
-            }
-            break;
+    case VK_DOWN:                   // Increment selection
+        if (pcps->iSel + 1 < ARRAYSIZE(c_rgclrPredef))
+        {
+            ColorPick_ChangeSel(pcps, hwnd, pcps->iSel + 1);
+        }
+        else
+        {
+            ColorPick_ChangeSel(pcps, hwnd, 0);
+        }
+        break;
     }
 }
 
@@ -277,31 +277,31 @@ LRESULT CALLBACK ColorPick_WndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM 
 
     switch (uiMsg)
     {
-        case WM_CREATE:
-            return ColorPick_OnCreate(hwnd, (LPCREATESTRUCT)lParam);
+    case WM_CREATE:
+        return ColorPick_OnCreate(hwnd, (LPCREATESTRUCT)lParam);
 
-        case WM_MOUSEMOVE:
-            ColorPick_OnMouseMove(pcps, hwnd, (short)LOWORD(lParam),
-                                              (short)HIWORD(lParam));
-            break;
+    case WM_MOUSEMOVE:
+        ColorPick_OnMouseMove(pcps, hwnd, (short)LOWORD(lParam),
+                              (short)HIWORD(lParam));
+        break;
 
-        case WM_LBUTTONUP:
-            ColorPick_OnLButtonUp(pcps, hwnd, (short)LOWORD(lParam),
-                                              (short)HIWORD(lParam));
-            break;
+    case WM_LBUTTONUP:
+        ColorPick_OnLButtonUp(pcps, hwnd, (short)LOWORD(lParam),
+                              (short)HIWORD(lParam));
+        break;
 
-        case WM_SYSKEYDOWN:
-        case WM_KEYDOWN:
-            ColorPick_OnKeyDown(pcps, hwnd, wParam);
-            break;
+    case WM_SYSKEYDOWN:
+    case WM_KEYDOWN:
+        ColorPick_OnKeyDown(pcps, hwnd, wParam);
+        break;
 
-        // Do not activate when somebody clicks the window.
-        case WM_MOUSEACTIVATE:
-            return MA_NOACTIVATE;
+    // Do not activate when somebody clicks the window.
+    case WM_MOUSEACTIVATE:
+        return MA_NOACTIVATE;
 
-        case WM_PAINT:
-            ColorPick_OnPaint(pcps, hwnd);
-            return 0;
+    case WM_PAINT:
+        ColorPick_OnPaint(pcps, hwnd);
+        return 0;
     }
 
     return DefWindowProc(hwnd, uiMsg, wParam, lParam);
@@ -417,16 +417,16 @@ int ColorPick_Popup(HWND hwndOwner, int x, int y)
     ColorPick_ChooseLocation(hwndOwner, x, y, cx, cy, &pt);
 
     HWND hwndPopup = CreateWindowEx(
-        dwExStyle,
-        L"ColorPick",
-        L"",
-        dwStyle,
-        pt.x, pt.y,
-        cx, cy,
-        hwndOwner,
-        NULL,
-        g_hInstance,
-        &cps);
+                         dwExStyle,
+                         L"ColorPick",
+                         L"",
+                         dwStyle,
+                         pt.x, pt.y,
+                         cx, cy,
+                         hwndOwner,
+                         NULL,
+                         g_hInstance,
+                         &cps);
 
     // Show the window but don't activate it!
     ShowWindow(hwndPopup, SW_SHOWNOACTIVATE);
@@ -451,7 +451,7 @@ int ColorPick_Popup(HWND hwndOwner, int x, int y)
         // Alt+Tab'd to another window in the meantime), then stop.
         HWND hwndActive = GetActiveWindow();
         if (hwndActive != hwndOwner && !IsChild(hwndActive, hwndOwner) ||
-            GetCapture() != hwndOwner)
+                GetCapture() != hwndOwner)
         {
             break;
         }
@@ -466,52 +466,52 @@ int ColorPick_Popup(HWND hwndOwner, int x, int y)
         // target to the client coordinates of the new target.
         switch (msg.message)
         {
-            // These mouse messages arrive in client coordinates, so in
-            // addition to stealing the message, we also need to convert the
-            // coordinates.
-            case WM_MOUSEMOVE:
-            case WM_LBUTTONDOWN:
-            case WM_LBUTTONUP:
-            case WM_LBUTTONDBLCLK:
-            case WM_RBUTTONDOWN:
-            case WM_RBUTTONUP:
-            case WM_RBUTTONDBLCLK:
-            case WM_MBUTTONDOWN:
-            case WM_MBUTTONUP:
-            case WM_MBUTTONDBLCLK:
-                pt.x = (short)LOWORD(msg.lParam);
-                pt.y = (short)HIWORD(msg.lParam);
-                MapWindowPoints(msg.hwnd, hwndPopup, &pt, 1);
-                msg.lParam = MAKELPARAM(pt.x, pt.y);
-                msg.hwnd = hwndPopup;
-                break;
+        // These mouse messages arrive in client coordinates, so in
+        // addition to stealing the message, we also need to convert the
+        // coordinates.
+        case WM_MOUSEMOVE:
+        case WM_LBUTTONDOWN:
+        case WM_LBUTTONUP:
+        case WM_LBUTTONDBLCLK:
+        case WM_RBUTTONDOWN:
+        case WM_RBUTTONUP:
+        case WM_RBUTTONDBLCLK:
+        case WM_MBUTTONDOWN:
+        case WM_MBUTTONUP:
+        case WM_MBUTTONDBLCLK:
+            pt.x = (short)LOWORD(msg.lParam);
+            pt.y = (short)HIWORD(msg.lParam);
+            MapWindowPoints(msg.hwnd, hwndPopup, &pt, 1);
+            msg.lParam = MAKELPARAM(pt.x, pt.y);
+            msg.hwnd = hwndPopup;
+            break;
 
-            // These mouse messages arrive in screen coordinates, so we just
-            // need to steal the message.
-            case WM_NCMOUSEMOVE:
-            case WM_NCLBUTTONDOWN:
-            case WM_NCLBUTTONUP:
-            case WM_NCLBUTTONDBLCLK:
-            case WM_NCRBUTTONDOWN:
-            case WM_NCRBUTTONUP:
-            case WM_NCRBUTTONDBLCLK:
-            case WM_NCMBUTTONDOWN:
-            case WM_NCMBUTTONUP:
-            case WM_NCMBUTTONDBLCLK:
-                msg.hwnd = hwndPopup;
-                break;
+        // These mouse messages arrive in screen coordinates, so we just
+        // need to steal the message.
+        case WM_NCMOUSEMOVE:
+        case WM_NCLBUTTONDOWN:
+        case WM_NCLBUTTONUP:
+        case WM_NCLBUTTONDBLCLK:
+        case WM_NCRBUTTONDOWN:
+        case WM_NCRBUTTONUP:
+        case WM_NCRBUTTONDBLCLK:
+        case WM_NCMBUTTONDOWN:
+        case WM_NCMBUTTONUP:
+        case WM_NCMBUTTONDBLCLK:
+            msg.hwnd = hwndPopup;
+            break;
 
-            // We need to steal all keyboard messages, too.
-            case WM_KEYDOWN:
-            case WM_KEYUP:
-            case WM_CHAR:
-            case WM_DEADCHAR:
-            case WM_SYSKEYDOWN:
-            case WM_SYSKEYUP:
-            case WM_SYSCHAR:
-            case WM_SYSDEADCHAR:
-                msg.hwnd = hwndPopup;
-                break;
+        // We need to steal all keyboard messages, too.
+        case WM_KEYDOWN:
+        case WM_KEYUP:
+        case WM_CHAR:
+        case WM_DEADCHAR:
+        case WM_SYSKEYDOWN:
+        case WM_SYSKEYUP:
+        case WM_SYSCHAR:
+        case WM_SYSDEADCHAR:
+            msg.hwnd = hwndPopup;
+            break;
         }
 
         TranslateMessage(&msg);
@@ -527,7 +527,7 @@ int ColorPick_Popup(HWND hwndOwner, int x, int y)
         // Alt+Tab'd to another window in the meantime), then stop.
         hwndActive = GetActiveWindow();
         if (hwndActive != hwndOwner && !IsChild(hwndActive, hwndOwner) ||
-            GetCapture() != hwndOwner)
+                GetCapture() != hwndOwner)
         {
             break;
         }
@@ -600,18 +600,18 @@ LRESULT CALLBACK FakeMenuDemo_WndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPAR
 {
     switch (uiMsg)
     {
-        case WM_ERASEBKGND:
-            FakeMenuDemo_OnEraseBkgnd(hwnd, (HDC)wParam);
-            return TRUE;
+    case WM_ERASEBKGND:
+        FakeMenuDemo_OnEraseBkgnd(hwnd, (HDC)wParam);
+        return TRUE;
 
-        case WM_CONTEXTMENU:
-            FakeMenuDemo_OnContextMenu(hwnd, (short)LOWORD(lParam),
-                                             (short)HIWORD(lParam));
-            return 0;
+    case WM_CONTEXTMENU:
+        FakeMenuDemo_OnContextMenu(hwnd, (short)LOWORD(lParam),
+                                   (short)HIWORD(lParam));
+        return 0;
 
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
     }
 
     return DefWindowProc(hwnd, uiMsg, wParam, lParam);
@@ -642,15 +642,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE /* hInstPrev */, LPWSTR /* ps
     g_hbrColor = CreateSolidBrush(RGB(0xFF, 0xFF, 0xFF));
 
     HWND hwnd = CreateWindow(
-        L"FakeMenuDemo",
-        L"Fake Menu Demo - Right-click in window to change color",
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT,
-        CW_USEDEFAULT, CW_USEDEFAULT,
-        NULL,
-        NULL,
-        g_hInstance,
-        0);
+                    L"FakeMenuDemo",
+                    L"Fake Menu Demo - Right-click in window to change color",
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT, CW_USEDEFAULT,
+                    CW_USEDEFAULT, CW_USEDEFAULT,
+                    NULL,
+                    NULL,
+                    g_hInstance,
+                    0);
 
     ShowWindow(hwnd, nCmdShow);
 

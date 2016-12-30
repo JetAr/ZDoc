@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,9 +14,9 @@
 // Helper source/sink class for text analysis.
 class TextAnalysis
     :   public ComBase<
-            QiList<IDWriteTextAnalysisSource,
-            QiList<IDWriteTextAnalysisSink,
-            QiList<IUnknown
+        QiList<IDWriteTextAnalysisSource,
+        QiList<IDWriteTextAnalysisSink,
+        QiList<IUnknown
         > > > >
 {
 public:
@@ -24,14 +24,14 @@ public:
     struct Run
     {
         Run() throw()
-        :   textStart(),
-            textLength(),
-            glyphStart(),
-            glyphCount(),
-            bidiLevel(),
-            script(),
-            isNumberSubstituted(),
-            isSideways()
+            :   textStart(),
+                textLength(),
+                glyphStart(),
+                glyphCount(),
+                bidiLevel(),
+                script(),
+                isNumberSubstituted(),
+                isSideways()
         { }
 
         UINT32 textStart;   // starting text position of this run
@@ -46,7 +46,7 @@ public:
         inline bool ContainsTextPosition(UINT32 desiredTextPosition) const throw()
         {
             return desiredTextPosition >= textStart
-                && desiredTextPosition <  textStart + textLength;
+                   && desiredTextPosition <  textStart + textLength;
         }
 
         inline bool operator==(UINT32 desiredTextPosition) const throw()
@@ -60,7 +60,7 @@ public:
     struct LinkedRun : Run
     {
         LinkedRun() throw()
-        :   nextRunIndex(0)
+            :   nextRunIndex(0)
         { }
 
         UINT32 nextRunIndex;  // index of next run
@@ -73,13 +73,13 @@ public:
         const wchar_t* localeName,
         IDWriteNumberSubstitution* numberSubstitution,
         DWRITE_READING_DIRECTION readingDirection
-        );
+    );
 
     STDMETHODIMP GenerateResults(
         IDWriteTextAnalyzer* textAnalyzer,
         OUT std::vector<Run>& runs,
         OUT std::vector<DWRITE_LINE_BREAKPOINT>& breakpoints_
-        ) throw();
+    ) throw();
 
     // IDWriteTextAnalysisSource implementation
 
@@ -87,13 +87,13 @@ public:
         UINT32 textPosition,
         OUT WCHAR const** textString,
         OUT UINT32* textLength
-        ) throw();
+    ) throw();
 
     IFACEMETHODIMP GetTextBeforePosition(
         UINT32 textPosition,
         OUT WCHAR const** textString,
         OUT UINT32* textLength
-        ) throw();
+    ) throw();
 
     IFACEMETHODIMP_(DWRITE_READING_DIRECTION) GetParagraphReadingDirection() throw();
 
@@ -101,13 +101,13 @@ public:
         UINT32 textPosition,
         OUT UINT32* textLength,
         OUT WCHAR const** localeName
-        ) throw();
+    ) throw();
 
     IFACEMETHODIMP GetNumberSubstitution(
         UINT32 textPosition,
         OUT UINT32* textLength,
         OUT IDWriteNumberSubstitution** numberSubstitution
-        ) throw();
+    ) throw();
 
     // IDWriteTextAnalysisSink implementation
 
@@ -115,26 +115,26 @@ public:
         UINT32 textPosition,
         UINT32 textLength,
         DWRITE_SCRIPT_ANALYSIS const* scriptAnalysis
-        ) throw();
+    ) throw();
 
     IFACEMETHODIMP SetLineBreakpoints(
         UINT32 textPosition,
         UINT32 textLength,
         const DWRITE_LINE_BREAKPOINT* lineBreakpoints // [textLength]
-        ) throw();
+    ) throw();
 
     IFACEMETHODIMP SetBidiLevel(
         UINT32 textPosition,
         UINT32 textLength,
         UINT8 explicitLevel,
         UINT8 resolvedLevel
-        ) throw();
+    ) throw();
 
     IFACEMETHODIMP SetNumberSubstitution(
         UINT32 textPosition,
         UINT32 textLength,
         IDWriteNumberSubstitution* numberSubstitution
-        ) throw();
+    ) throw();
 
 protected:
     LinkedRun& FetchNextRun(IN OUT UINT32* textLength);

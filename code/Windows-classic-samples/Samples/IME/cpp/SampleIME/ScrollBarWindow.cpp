@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -153,22 +153,22 @@ LRESULT CALLBACK CScrollBarWindow::_WindowProcCallback(_In_ HWND wndHandle, _In_
     switch (uMsg)
     {
     case WM_PAINT:
-        {
-            HDC dcHandle = nullptr;
-            PAINTSTRUCT ps;
+    {
+        HDC dcHandle = nullptr;
+        PAINTSTRUCT ps;
 
-            dcHandle = BeginPaint(wndHandle, &ps);
+        dcHandle = BeginPaint(wndHandle, &ps);
 
-            // paint itself at first
-            _OnPaint(dcHandle, &ps);
+        // paint itself at first
+        _OnPaint(dcHandle, &ps);
 
-            // paint all children
-            _pBtnUp->_OnPaint(dcHandle, &ps);
-            _pBtnDn->_OnPaint(dcHandle, &ps);
+        // paint all children
+        _pBtnUp->_OnPaint(dcHandle, &ps);
+        _pBtnDn->_OnPaint(dcHandle, &ps);
 
-            EndPaint(wndHandle, &ps);
-        }
-        return 0;
+        EndPaint(wndHandle, &ps);
+    }
+    return 0;
     }
 
     return DefWindowProc(wndHandle, uMsg, wParam, lParam);
@@ -393,11 +393,11 @@ void CScrollBarWindow::_AdjustWindowPos()
 
     GetWindowRect(pParent->_GetWnd(), &rc);
     SetWindowPos(_GetWnd(), pParent->_GetWnd(),
-        rc.left,
-        rc.top,
-        rc.right - rc.left,
-        rc.bottom - rc.top,
-        SWP_NOOWNERZORDER | SWP_NOACTIVATE);
+                 rc.left,
+                 rc.top,
+                 rc.right - rc.left,
+                 rc.bottom - rc.top,
+                 SWP_NOOWNERZORDER | SWP_NOACTIVATE);
 }
 
 //+---------------------------------------------------------------------------
@@ -526,7 +526,8 @@ void CScrollBarWindow::_SetCurPos(int nPos, int dwSB)
 
     _scrollInfo.nPos = nPos;
 
-    if (_IsWindowVisible()) {
+    if (_IsWindowVisible())
+    {
         _InvalidateRect();
     }
 

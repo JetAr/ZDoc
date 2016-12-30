@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,10 +24,10 @@ CAlarmContent::~CAlarmContent()
 HRESULT CAlarmContent::QueryInterface(
     REFIID riid,
     LPVOID* ppvObject
-    )
+)
 {
-    if (IID_IUnknown == riid || 
-        IID_ISideShowContent == riid)
+    if (IID_IUnknown == riid ||
+            IID_ISideShowContent == riid)
     {
         *ppvObject = this;
         AddRef();
@@ -36,12 +36,12 @@ HRESULT CAlarmContent::QueryInterface(
 
     return E_NOINTERFACE;
 }
-            
+
 ULONG CAlarmContent::AddRef()
 {
     return ::InterlockedIncrement(&m_nRef);
 }
-            
+
 ULONG CAlarmContent::Release()
 {
     LONG nRef = ::InterlockedDecrement(&m_nRef);
@@ -57,13 +57,13 @@ ULONG CAlarmContent::Release()
 //
 // ISideShowContent methods
 //
-HRESULT CAlarmContent::GetContent( 
+HRESULT CAlarmContent::GetContent(
     ISideShowCapabilities* /*pICapabilities*/,
     DWORD* pdwSize,
     BYTE** ppbData)
 {
     HRESULT hr = S_OK;
-    
+
     if (NULL == pdwSize || NULL == ppbData)
     {
         return E_INVALIDARG;
@@ -98,8 +98,8 @@ HRESULT CAlarmContent::GetContent(
     return hr;
 }
 
-        
-HRESULT CAlarmContent::get_ContentId( 
+
+HRESULT CAlarmContent::get_ContentId(
     PCONTENT_ID pcontentId)
 {
     if (NULL != pcontentId)
@@ -114,8 +114,8 @@ HRESULT CAlarmContent::get_ContentId(
     return S_OK;
 }
 
-        
-HRESULT CAlarmContent::get_DifferentiateContent( 
+
+HRESULT CAlarmContent::get_DifferentiateContent(
     BOOL* pfDifferentiateContent)
 {
     if (NULL != pfDifferentiateContent)

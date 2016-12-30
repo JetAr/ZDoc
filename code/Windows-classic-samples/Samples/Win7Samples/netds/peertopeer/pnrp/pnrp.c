@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -143,7 +143,7 @@ MENU_COMMAND g_MenuRegistered[] =
 void PrintError(HRESULT hrError)
 {
     DWORD dwCch=0;
-    WCHAR wszBuffer[ERRBUFSIZE] = {0};  
+    WCHAR wszBuffer[ERRBUFSIZE] = {0};
 
     if (HRESULT_FACILITY(hrError) == FACILITY_P2P)
     {
@@ -158,7 +158,7 @@ void PrintError(HRESULT hrError)
                                   ERRBUFSIZE,
                                   NULL);
             FreeLibrary(hResDll);
-           
+
             if (dwCch > 0)
             {
                 wprintf(L"Error Description: %s\n", wszBuffer);
@@ -180,7 +180,7 @@ void PrintError(HRESULT hrError)
             wprintf(L"Error Description: %s\n", wszBuffer);
         }
     }
-}  
+}
 
 
 //-----------------------------------------------------------------------------
@@ -264,7 +264,8 @@ HRESULT RegisterPeerNameCommand()
             {
                 wprintf(L"Classifier must be non-empty.\n");
             }
-        } while (SUCCEEDED(hr) && wzClassifier[0] == L'\0');
+        }
+        while (SUCCEEDED(hr) && wzClassifier[0] == L'\0');
     }
 
     // Create peer name
@@ -381,7 +382,8 @@ HRESULT ResolvePeerNameCommand()
             {
                 wprintf(L"Peer Name must be non-empty.\n");
             }
-        } while (SUCCEEDED(hr) && wzInputBuffer[0] == L'\0');
+        }
+        while (SUCCEEDED(hr) && wzInputBuffer[0] == L'\0');
 
     }
 
@@ -403,7 +405,7 @@ HRESULT ResolvePeerNameCommand()
 // Function:    ShowDNSEncodedNameCommand
 // Purpose:     Given a PNRP encoded name show the equivalant DNS encoded name to
 //              pass to GetAddrInfo to resolve this name.  The DNS encoded name
-//              can be used to lookup a PNRP name from ANY application that 
+//              can be used to lookup a PNRP name from ANY application that
 //              calls GetAddrInfo (which means almost every application that
 //              converts a DNS name to an IP address).  Try it from ping.exe or
 //              Internet Explorer.
@@ -426,7 +428,8 @@ HRESULT ShowDNSEncodedNameCommand()
         {
             wprintf(L"Peer Name must be non-empty.\n");
         }
-    } while (SUCCEEDED(hr) && wzInputBuffer[0] == L'\0');
+    }
+    while (SUCCEEDED(hr) && wzInputBuffer[0] == L'\0');
 
     hr = PeerNameToPeerHostName(wzInputBuffer, &pwzHostName);
 
@@ -587,7 +590,7 @@ HRESULT SyncPeerNameResolve(PCWSTR pwzPeerName, PCWSTR pwzCloudName)
     {
         // Perform a synchronous resolve
         hr = PeerPnrpResolve(pwzPeerName, pwzCloudName, &cEndpoints,
-                              &pEndpointInfo);
+                             &pEndpointInfo);
     }
     else
     {
@@ -647,13 +650,13 @@ HRESULT AsyncPeerNameResolve(PCWSTR pwzPeerName, PCWSTR pwzCloudName)
     {
         // Start an asynchronous resolve
         hr = PeerPnrpStartResolve(pwzPeerName, pwzCloudName, cEndpoints,
-                                            hEvent, &hResolve);
+                                  hEvent, &hResolve);
     }
     else
     {
         // If no cloud name is given, search in all clouds (NULL argument)
         hr = PeerPnrpStartResolve(pwzPeerName, NULL, cEndpoints,
-                                            hEvent, &hResolve);
+                                  hEvent, &hResolve);
     }
 
     cEndpoints = 0;
@@ -682,7 +685,7 @@ HRESULT AsyncPeerNameResolve(PCWSTR pwzPeerName, PCWSTR pwzCloudName)
                 {
                     PeerFreeData(pEndpointInfo);
                 }
-            }    
+            }
             else
             {
                 break;
@@ -757,7 +760,7 @@ HRESULT GetAddress(BOOL fAllowDefault, __out ULONG* pcAddresses, __out_ecount(pc
             {
                 goto exit;
             }
-            
+
             cNumAddresses = _wtoi(wzInputBuffer);
 
             if (cNumAddresses<0)
@@ -768,7 +771,8 @@ HRESULT GetAddress(BOOL fAllowDefault, __out ULONG* pcAddresses, __out_ecount(pc
             {
                 wprintf(L"Registering 0 addresses.  Payload is mandatory.\n");
             }
-        } while (cNumAddresses < 0);
+        }
+        while (cNumAddresses < 0);
 
         if (cNumAddresses == 0)
         {
@@ -804,16 +808,16 @@ HRESULT GetAddress(BOOL fAllowDefault, __out ULONG* pcAddresses, __out_ecount(pc
 
                 // Try parsing string as V6 address first
                 hr = WSAStringToAddressW(wzInputBuffer, AF_INET6,
-                       NULL, (LPSOCKADDR) ppRegAddrs[nCurrentAddress],
-                       (LPINT) &iAddrSizeV6);
+                                         NULL, (LPSOCKADDR) ppRegAddrs[nCurrentAddress],
+                                         (LPINT) &iAddrSizeV6);
 
                 if (FAILED(hr))
                 {
                     // Now try parsing as V4 address
                     hr = WSAStringToAddressW(wzInputBuffer, AF_INET,
-                           NULL, (LPSOCKADDR) ppRegAddrs[nCurrentAddress],
-                           (LPINT) &iAddrSizeV4);
-                    
+                                             NULL, (LPSOCKADDR) ppRegAddrs[nCurrentAddress],
+                                             (LPINT) &iAddrSizeV4);
+
                     if (SUCCEEDED(hr))
                     {
                         g_fUseV6 = FALSE;
@@ -882,7 +886,7 @@ HRESULT GetPayload(ULONG cbPayloadDataSize,
     if (FAILED(hr))
     {
         ZeroMemory(pbPayloadData, cbPayloadDataSize);
-    } 
+    }
 
     return hr;
 }
@@ -1061,12 +1065,12 @@ HRESULT GetCloudName(BOOL fAllowAll, __in ULONG cchCloudName, __out_ecount(cchCl
         else if (ulCloud == 1)     // All Link Local clouds
         {
             hr = StringCchCopy(pwzCloudName, cchCloudName,
-                     PEER_PNRP_ALL_LINK_CLOUDS);
+                               PEER_PNRP_ALL_LINK_CLOUDS);
         }
         else
         {
             hr = StringCchCopy(pwzCloudName, cchCloudName,
-                     pCloudInfo[ulCloud-2].pwzCloudName);
+                               pCloudInfo[ulCloud-2].pwzCloudName);
         }
         PeerFreeData(pCloudInfo);
     }
@@ -1157,8 +1161,8 @@ HRESULT DisplayPNRPEndpoint(__in PPEER_PNRP_ENDPOINT_INFO pEndpoint)
         DWORD dwLen = (sizeof(wzAddr) / sizeof(wzAddr[0]));
 
         hr = WSAAddressToString(
-                (LPSOCKADDR) pEndpoint->ppAddresses[i],
-                sizeof(SOCKADDR_IN6), NULL, wzAddr, &dwLen);
+                 (LPSOCKADDR) pEndpoint->ppAddresses[i],
+                 sizeof(SOCKADDR_IN6), NULL, wzAddr, &dwLen);
 
         if (SUCCEEDED(hr))
         {
@@ -1189,7 +1193,7 @@ HRESULT DisplayPNRPEndpoint(__in PPEER_PNRP_ENDPOINT_INFO pEndpoint)
         if (VerifyPayloadData(&pEndpoint->payload))
         {
             wprintf(L"Payload:\tYes (Data: %s)\n",
-                (PWSTR) pEndpoint->payload.pbData);
+                    (PWSTR) pEndpoint->payload.pbData);
         }
         else
         {
@@ -1249,7 +1253,7 @@ void PrintMenu()
 
     for(i = 0; pMenuOptions[i].pfnCommand != NULL; i++)
     {
-            wprintf(L"\n%d. %s", i+1, pMenuOptions[i].pwzTitle);
+        wprintf(L"\n%d. %s", i+1, pMenuOptions[i].pwzTitle);
     }
     wprintf(L"\n%d. %s\n> ", i+1, pMenuOptions[i].pwzTitle);
 }

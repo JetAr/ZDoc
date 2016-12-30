@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -361,8 +361,8 @@ STDMETHODIMP CMyDeviceSyncHandler::GetObject(
 STDMETHODIMP CMyDeviceSyncHandler::GetCapabilities(__out SYNCMGR_HANDLER_CAPABILITIES *pmCapabilities)
 {
     *pmCapabilities = (SYNCMGR_HANDLER_CAPABILITIES) (SYNCMGR_HCM_QUERY_BEFORE_ACTIVATE
-                                                    | SYNCMGR_HCM_CAN_SHOW_SCHEDULE
-                                                    | SYNCMGR_HCM_CAN_BROWSE_CONTENT);
+                      | SYNCMGR_HCM_CAN_SHOW_SCHEDULE
+                      | SYNCMGR_HCM_CAN_BROWSE_CONTENT);
     return S_OK;
 
 } //*** CMyDeviceSyncHandler::GetCapabilities
@@ -638,16 +638,16 @@ HRESULT CMyDeviceSyncHandler::Synchronize(
                     {
                         GUID guidEventID;
                         _ReportEvent(
-                                pCallback,
-                                pszItemID,
-                                IDS_SYNC_WARNING_1,
-                                IDS_SYNC_WARNING_DESC_1,
-                                SYNCMGR_EL_WARNING,
-                                SYNCMGR_EF_NONE,
-                                NULL,
-                                NULL,
-                                NULL,
-                                &guidEventID);
+                            pCallback,
+                            pszItemID,
+                            IDS_SYNC_WARNING_1,
+                            IDS_SYNC_WARNING_DESC_1,
+                            SYNCMGR_EL_WARNING,
+                            SYNCMGR_EF_NONE,
+                            NULL,
+                            NULL,
+                            NULL,
+                            &guidEventID);
                     }
 
                     // Simulate errors for example purposes only.
@@ -658,30 +658,30 @@ HRESULT CMyDeviceSyncHandler::Synchronize(
                     {
                         GUID guidEventID;
                         _ReportEvent(
-                                pCallback,
-                                pszItemID,
-                                IDS_SYNC_ERROR_1,
-                                IDS_SYNC_ERROR_DESC_1,
-                                SYNCMGR_EL_ERROR,
-                                SYNCMGR_EF_NONE,
-                                NULL /*pszLinkText*/,
-                                NULL /*pszLinkReference*/,
-                                NULL /*pszContext*/,
-                                &guidEventID);
+                            pCallback,
+                            pszItemID,
+                            IDS_SYNC_ERROR_1,
+                            IDS_SYNC_ERROR_DESC_1,
+                            SYNCMGR_EL_ERROR,
+                            SYNCMGR_EF_NONE,
+                            NULL /*pszLinkText*/,
+                            NULL /*pszLinkReference*/,
+                            NULL /*pszContext*/,
+                            &guidEventID);
                         hrSync = E_FAIL;
                     }
 
                     // Report progress.
                     _ReportItemProgress(
-                            pCallback,
-                            pszItemID,
-                            pItem->GetSyncTextID(),
-                            SYNCMGR_PS_UPDATING,
-                            uCurrentStep,
-                            cMaxSteps,
-                            &nCancelRequest,
-                            uCurrentStep,
-                            cMaxSteps);
+                        pCallback,
+                        pszItemID,
+                        pItem->GetSyncTextID(),
+                        SYNCMGR_PS_UPDATING,
+                        uCurrentStep,
+                        cMaxSteps,
+                        &nCancelRequest,
+                        uCurrentStep,
+                        cMaxSteps);
                     if (nCancelRequest != SYNCMGR_CR_NONE)
                     {
                         // The handler or item has been canceled.
@@ -690,11 +690,11 @@ HRESULT CMyDeviceSyncHandler::Synchronize(
 
                     // Update the info text shown for the handler.
                     _SetHandlerProgressText(
-                            pCallback,
-                            IDS_FILE_SYNC_STEP,
-                            &nCancelRequest,
-                            uCurrentHandlerStep,
-                            cMaxHandlerSteps);
+                        pCallback,
+                        IDS_FILE_SYNC_STEP,
+                        &nCancelRequest,
+                        uCurrentHandlerStep,
+                        cMaxHandlerSteps);
                     if (nCancelRequest != SYNCMGR_CR_NONE)
                     {
                         // The handler has been canceled.
@@ -1117,13 +1117,13 @@ HRESULT CMyDeviceSyncHandler::_LoadItems()
                     {
                         // Create our item with our ID, name, known folder, and label details.
                         hr = CMyDeviceSyncItem_CreateInstance(
-                            s_rgItemInfo[iItemInfo].pszItemID,
-                            pszItemName,
-                            pszItemLabel,
-                            _szHandlerID,
-                            s_rgItemInfo[iItemInfo].folderID,
-                            s_rgItemInfo[iItemInfo].uSyncTextID,
-                            &_ppItems[_cItems]);
+                                 s_rgItemInfo[iItemInfo].pszItemID,
+                                 pszItemName,
+                                 pszItemLabel,
+                                 _szHandlerID,
+                                 s_rgItemInfo[iItemInfo].folderID,
+                                 s_rgItemInfo[iItemInfo].uSyncTextID,
+                                 &_ppItems[_cItems]);
                         if (SUCCEEDED(hr))
                         {
                             // Increment our total item count.

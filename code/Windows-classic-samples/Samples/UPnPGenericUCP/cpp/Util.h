@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@ void PrintErrorText(_In_ HRESULT hr);
 
 void SafeStrCopy(_Out_writes_(srcBufLen) LPWSTR src, _In_ LPCWSTR dst, _In_ size_t srcBufLen);
 
-// For Invoke Action 
+// For Invoke Action
 HRESULT HrCreateSafeArray(_In_ VARTYPE vt, _In_ int nArgs, _Outptr_ SAFEARRAY **ppsa);
 _When_(dwArgs == 0, _At_(*pppVars, _Post_null_))
 _When_(dwArgs > 0, _At_(*pppVars, _Post_notnull_))

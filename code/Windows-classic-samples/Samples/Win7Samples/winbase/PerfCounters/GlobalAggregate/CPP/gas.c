@@ -1,14 +1,14 @@
-/*++
+﻿/*++
 
-THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
+THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 PARTICULAR PURPOSE.
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
-    
+
     gas.c
 
 Abstract:
@@ -32,19 +32,19 @@ Environment:
 #include <math.h>
 #include "gasCounters.h"
 
-#define M_PI 3.14159265358979323846 
+#define M_PI 3.14159265358979323846
 #define TIME_INTERVAL 1000
 #define AMPLITUDE 30.0
 
 ULONG
 CreateInstance(
     PPERF_COUNTERSET_INSTANCE *ObjectInstance
-    )
+)
 /*++
 
 Routine Description:
 
-    Create instance for the provider. 
+    Create instance for the provider.
 
 Arguments:
 
@@ -62,16 +62,17 @@ Return Value:
     //
 
     *ObjectInstance = PerfCreateInstance(GlobalAggregateSample, & TrignometricWaveGuid, L"GlobalAggregate", 0);
-    if (*ObjectInstance == NULL) {
+    if (*ObjectInstance == NULL)
+    {
         return GetLastError();
     }
     return ERROR_SUCCESS;
 }
-    
+
 ULONG
 RunSample(
     VOID
-    )
+)
 /*++
 
 Routine Description:
@@ -105,39 +106,46 @@ Return Value:
     //
 
     Status = CounterInitialize(NULL,NULL,NULL,NULL);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         return Status;
     }
 
     Status = CreateInstance(&ObjectInstance);
-    if (Status != ERROR_SUCCESS){
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     Status = PerfSetCounterRefValue(GlobalAggregateSample, ObjectInstance, 1, & Sine);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     Status = PerfSetCounterRefValue(GlobalAggregateSample, ObjectInstance, 2, & Cosine);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     Base = 50;
     Status = PerfSetCounterRefValue(GlobalAggregateSample, ObjectInstance, 3, & Base);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
     Status = PerfSetULongCounterValue(GlobalAggregateSample, ObjectInstance, 4, Base);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
-    
+
     NaturalNumbers = 1;
     Status = PerfSetCounterRefValue(GlobalAggregateSample, ObjectInstance, 5, &NaturalNumbers);
-    if (Status != ERROR_SUCCESS) {
+    if (Status != ERROR_SUCCESS)
+    {
         goto Cleanup;
     }
 
@@ -145,24 +153,25 @@ Return Value:
 
     printf("\tPress any key to quit\n");
 
-    while (!_kbhit()) {
+    while (!_kbhit())
+    {
 
         //
         // Increment the Degree value to between 0 - 360
         //
-        
+
         Degree = (Degree + 10) % 360;
-        
+
         //
         // Increment the Natural Number counter. Set it to 1 if we reach 100
         //
-        
+
         NaturalNumbers = ++NaturalNumbers % 100;
 
         //
         // Set raw counter data for SingleInstanceCounterSet
         //
-        
+
         Angle   = (((double) Degree) * M_PI) / (180.00);
         Sine   = Base + (ULONG) (AMPLITUDE * sin(Angle));
         Cosine = Base + (ULONG) (AMPLITUDE * cos(Angle));
@@ -178,19 +187,19 @@ Cleanup:
     return Status;
 }
 
-int 
+int
 __cdecl wmain(
     VOID
-    )
+)
 /*++
 
 Routine Description:
 
     Starting point of the V2 provider executable.
-    1. Initializes the provider 
+    1. Initializes the provider
     2. Creates instacnes for the counter sets
-    3. Sets the counter values for the object's counters in counter 
-        set iteratively sleeps for 1 second between iterations. 
+    3. Sets the counter values for the object's counters in counter
+        set iteratively sleeps for 1 second between iterations.
 
 Arguments:
 

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -66,7 +66,7 @@ private:
     //
 
     STDMETHODIMP
-    DuplicateIssuerList( 
+    DuplicateIssuerList(
         _In_ DWORD cIssuerList,
         _In_reads_(cIssuerList) const WCHAR **rgpwszIssuerList,
         _Out_ const WCHAR ***prgpwszDuplicateIssuerList
@@ -120,7 +120,7 @@ public:
     );
 
     STDMETHODIMP
-    OnServerCertificateReceived( 
+    OnServerCertificateReceived(
         __RPC__in_opt IXMLHTTPRequest3 *pXHR,
         DWORD dwCertErrors,
         DWORD cServerCertChain,
@@ -128,7 +128,7 @@ public:
     );
 
     STDMETHODIMP
-    OnClientCertificateRequested( 
+    OnClientCertificateRequested(
         __RPC__in_opt IXMLHTTPRequest3 *pXHR,
         DWORD cIssuerList,
         __RPC__in_ecount_full_opt(cIssuerList) const WCHAR **rgpwszIssuerList

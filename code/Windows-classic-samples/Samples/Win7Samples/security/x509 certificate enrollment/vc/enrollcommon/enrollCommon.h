@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -21,7 +21,7 @@
 #define wcBOMBIGENDIAN      (WCHAR) 0xfffe
 
 #define DECF_FORCEOVERWRITE             0x00000100
-#define DECF_WRITEUNICODE               0x00000200  
+#define DECF_WRITEUNICODE               0x00000200
 
 #define _JumpIfError(hr, label, pszMessage) \
     { \
@@ -103,7 +103,7 @@ HRESULT
 verifyCertContext(
     __in CERT_CONTEXT const *pCert,
     __in_opt PSTR pszEKU);
-   
+
 HRESULT
 decConvertFromUnicode(
     __deref_inout_ecount(*pcb) BYTE **ppb,

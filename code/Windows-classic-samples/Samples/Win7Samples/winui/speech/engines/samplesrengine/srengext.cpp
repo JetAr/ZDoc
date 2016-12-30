@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   srengext.cpp 
+*   srengext.cpp
 *       This file contains the implementation of the CSampleSRExtension class.
 *       This implements the custom interface ISampleSRExtension.
 *       When an app QI's for this from the reco context, SAPI will
@@ -24,10 +24,10 @@
 *       This method shows an example of calling back to the main engine object.
 *       When CallEngine is called, the data supplied will get passed by SAPI
 *       to the ISpSREngine::PrivateCall method in CSrEngine.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSampleSRExtension::ExamplePrivateEngineCall(void)
 {
     // We can use this method to pass data to and from the actual engine class, via the context
@@ -75,13 +75,13 @@ STDMETHODIMP CSampleSRExtension::ExamplePrivateEngineCall(void)
 *
 *       This method should return at least one valid alternate in order to
 *       enable Windows Vista to dictate using this engine.
-*   Return: 
+*   Return:
 *       S_OK
 *       FAILED(hr)
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSampleSRExtension::GetDisplayAlternates(
-    const SPDISPLAYPHRASE *pPhrase, 
-    ULONG cRequestCount, 
+    const SPDISPLAYPHRASE *pPhrase,
+    ULONG cRequestCount,
     SPDISPLAYPHRASE **ppCoMemPhrases,
     ULONG *pcPhrasesReturned)
 {
@@ -229,9 +229,9 @@ CleanUp:
 *   Description:
 *       This is used by the application to specify the number of spaces after
 *       full stop puctuations.
-*   Return: 
+*   Return:
 *       S_OK
-*****************************************************************************/   
+*****************************************************************************/
 STDMETHODIMP CSampleSRExtension::SetFullStopTrailSpace(ULONG ulTrailSpace)
 {
     // Do nothing.
@@ -244,10 +244,10 @@ STDMETHODIMP CSampleSRExtension::SetFullStopTrailSpace(ULONG ulTrailSpace)
 *   Description:
 *       This method is supposed to return the list of normalized forms for a
 *       given word, but it's not supported by this sample engine.
-*   Return: 
+*   Return:
 *       S_NOTSUPPORTED
-*****************************************************************************/   
-STDMETHODIMP CSampleSRExtension::Normalize( 
+*****************************************************************************/
+STDMETHODIMP CSampleSRExtension::Normalize(
     LPCWSTR pszWord,
     LPCWSTR pszLeftContext,
     LPCWSTR pszRightContext,
@@ -259,7 +259,7 @@ STDMETHODIMP CSampleSRExtension::Normalize(
 
     return S_NOTSUPPORTED;
 }
-    
+
 /****************************************************************************
 * CSampleSRExtension::GetPronunciations *
 *----------------------------------------------*
@@ -267,10 +267,10 @@ STDMETHODIMP CSampleSRExtension::Normalize(
 *       This method is supposed to return all the pronunciations the engine
 *       knows about for a given word, but it's not supported by this sample
 *       engine.
-*   Return: 
+*   Return:
 *       S_NOTSUPPORTED
-*****************************************************************************/   
-STDMETHODIMP CSampleSRExtension::GetPronunciations( 
+*****************************************************************************/
+STDMETHODIMP CSampleSRExtension::GetPronunciations(
     LPCWSTR pszWord,
     LPCWSTR pszLeftContext,
     LPCWSTR pszRightContext,

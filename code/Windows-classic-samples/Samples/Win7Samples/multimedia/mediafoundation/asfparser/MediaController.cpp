@@ -1,8 +1,8 @@
-
+﻿
 //////////////////////////////////////////////////////////////////////////
 //
 // MediaController.cpp : CMediaController class implementation.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -18,8 +18,8 @@
 ///////////////////////////////////////////////////////////////////////
 //  Name: CreateInstance
 //  Description:  Static class method to create the CMediaController object.
-//  
-//  ppDecoder: Receives an AddRef's pointer to the CMediaController object. 
+//
+//  ppDecoder: Receives an AddRef's pointer to the CMediaController object.
 //            The caller must release the pointer.
 /////////////////////////////////////////////////////////////////////////
 
@@ -33,8 +33,8 @@ HRESULT CMediaController::CreateInstance(CMediaController **ppMediaController)
     if (!pMediaController)
     {
         LOG_MSG_IF_FAILED(L"CMediaController creation failed.\n", E_OUTOFMEMORY);
-        
-        return E_OUTOFMEMORY;       
+
+        return E_OUTOFMEMORY;
     }
 
     //Return the pointer to the caller
@@ -42,10 +42,10 @@ HRESULT CMediaController::CreateInstance(CMediaController **ppMediaController)
     {
         *ppMediaController = pMediaController;
         (*ppMediaController)->AddRef();
-                
+
         TRACE((L"CMediaController created.\n"));
     }
-                
+
     LOG_MSG_IF_FAILED(L"CMediaController creation failed.\n", E_FAIL);
 
     SAFE_RELEASE (pMediaController);
@@ -61,19 +61,19 @@ HRESULT CMediaController::CreateInstance(CMediaController **ppMediaController)
 /////////////////////////////////////////////////////////////////////////
 
 CMediaController::CMediaController(HRESULT* hr)
-: 
-m_nRefCount (1),
-m_gdiplusToken (0),
-m_pAudioTestSample (NULL),
-m_pBitmap (NULL),
-m_hWaveOut (NULL),
-m_fHasTestMedia (FALSE),
-m_fAudioDeviceBusy (FALSE)
+    :
+    m_nRefCount (1),
+    m_gdiplusToken (0),
+    m_pAudioTestSample (NULL),
+    m_pBitmap (NULL),
+    m_hWaveOut (NULL),
+    m_fHasTestMedia (FALSE),
+    m_fAudioDeviceBusy (FALSE)
 {
     //Load the GDI+ platform, this will be used for displaying the bitmap
     Gdiplus::Status status;
     GdiplusStartupInput gdiplusStartupInput;
-    
+
     status = GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
     if (status == Ok)
@@ -129,7 +129,7 @@ HRESULT CMediaController::CreateBitmapForKeyFrame(BYTE* pPixelData, IMFMediaType
 
     CHECK_HR (hr = MFGetAttributeSize(pMediaType, MF_MT_FRAME_SIZE, &m_Width, &m_Height));
 
-    CHECK_HR (pMediaType->GetUINT32(MF_MT_DEFAULT_STRIDE, (UINT32*)&stride)); 
+    CHECK_HR (pMediaType->GetUINT32(MF_MT_DEFAULT_STRIDE, (UINT32*)&stride));
 
     SAFE_DELETE(m_pBitmap);
 
@@ -175,7 +175,7 @@ HRESULT CMediaController::GetBitmapDimensions(UINT32 *pWidth, UINT32 *pHeight)
 
     *pWidth = m_Width;
     *pHeight = m_Height;
-    
+
     return S_OK;
 }
 
@@ -232,8 +232,8 @@ HRESULT CMediaController::AddToAudioTestSample (IMFSample *pSample)
     {
         CHECK_HR ( hr = MFCreateSample(&m_pAudioTestSample));
     }
-    
-    CHECK_HR (hr = pSample->ConvertToContiguousBuffer(&pBuffer)); 
+
+    CHECK_HR (hr = pSample->ConvertToContiguousBuffer(&pBuffer));
 
     CHECK_HR (hr =  m_pAudioTestSample->AddBuffer(pBuffer));
 
@@ -315,16 +315,16 @@ HRESULT CMediaController::OpenAudioDevice(IMFMediaType* pMediaType)
     {
         return E_UNEXPECTED;
     }
-     
+
     //Query if the format is supported
     MMRESULT mmr = waveOutOpen(
-        NULL,            
-        WAVE_MAPPER,        // select the device for me
-        pWavOutputFormat,   // format
-        0,      
-        0,      
-        WAVE_FORMAT_QUERY   // Query if the format is OK.
-        );
+                       NULL,
+                       WAVE_MAPPER,        // select the device for me
+                       pWavOutputFormat,   // format
+                       0,
+                       0,
+                       WAVE_FORMAT_QUERY   // Query if the format is OK.
+                   );
 
     if (mmr == MMSYSERR_NOERROR)
     {
@@ -355,20 +355,20 @@ HRESULT CMediaController::OpenAudioDevice(IMFMediaType* pMediaType)
 
         // Open the device.
         MMRESULT mmr = waveOutOpen(
-            &m_hWaveOut,            // receives the handle to the device
-            WAVE_MAPPER,            // select the device for me
-            pWavOutputFormat,                 // format
-            (DWORD)dwThreadId,      // thread ID to get waveOut messages
-            (DWORD_PTR)this,        // instance data
-            CALLBACK_THREAD 
-            );
+                           &m_hWaveOut,            // receives the handle to the device
+                           WAVE_MAPPER,            // select the device for me
+                           pWavOutputFormat,                 // format
+                           (DWORD)dwThreadId,      // thread ID to get waveOut messages
+                           (DWORD_PTR)this,        // instance data
+                           CALLBACK_THREAD
+                       );
 
-            if (mmr != MMSYSERR_NOERROR)
-            {
-                hr = E_FAIL;
-            }
+        if (mmr != MMSYSERR_NOERROR)
+        {
+            hr = E_FAIL;
         }
-    
+    }
+
     TRACE((L"Audio device opened.\n"));
 
 done:
@@ -416,12 +416,12 @@ HRESULT CMediaController::PlayAudio()
 
     // Prepare the header for playing.
     m_WaveHeader.lpData = (LPSTR)pData;
-    m_WaveHeader.dwBufferLength = cbData; 
+    m_WaveHeader.dwBufferLength = cbData;
     m_WaveHeader.dwBytesRecorded = cbData;
     m_WaveHeader.dwUser = (DWORD_PTR)pAudioBuffer; // Store the sample pointer as user data. This will be released in the MM_WOM_DONE handler
     m_WaveHeader.dwLoops = 0;
     m_WaveHeader.dwFlags = 0;
-    
+
     mmt = waveOutPrepareHeader( m_hWaveOut, &m_WaveHeader, sizeof( WAVEHDR ) );
 
     if (mmt == MMSYSERR_NOERROR)
@@ -440,7 +440,7 @@ HRESULT CMediaController::PlayAudio()
     else
     {
         hr = S_OK;
-        
+
         //Set the device to busy
         m_fAudioDeviceBusy = TRUE;
     }
@@ -453,7 +453,7 @@ done:
         pAudioBuffer->Unlock();
         SAFE_RELEASE (pAudioBuffer);
     }
-    
+
     return hr;
 }
 
@@ -489,24 +489,24 @@ void CMediaController::DoWaveOutThread()
         switch( uMsg.message )
         {
         case MM_WOM_DONE:  // waveOut has finished using an audio buffer.
-            {
-                WAVEHDR *pwh = (WAVEHDR*)uMsg.lParam;
+        {
+            WAVEHDR *pwh = (WAVEHDR*)uMsg.lParam;
 
-                // (1) Unprepare the wave header.
-                MMRESULT mmr = waveOutUnprepareHeader(m_hWaveOut, pwh, sizeof(WAVEHDR));
+            // (1) Unprepare the wave header.
+            MMRESULT mmr = waveOutUnprepareHeader(m_hWaveOut, pwh, sizeof(WAVEHDR));
 
-                // (2) Release the buffer pointer.
-                IMFMediaBuffer *pBuffer= (IMFMediaBuffer*)pwh->dwUser;
-                pBuffer->Unlock();
-                pBuffer->Release();
+            // (2) Release the buffer pointer.
+            IMFMediaBuffer *pBuffer= (IMFMediaBuffer*)pwh->dwUser;
+            pBuffer->Unlock();
+            pBuffer->Release();
 
-                // (3) Reset the WAVEHDR structure
-                ZeroMemory(pwh, sizeof(WAVEHDR));
+            // (3) Reset the WAVEHDR structure
+            ZeroMemory(pwh, sizeof(WAVEHDR));
 
-                // (4) Set the busy flag
-                m_fAudioDeviceBusy = FALSE;
-            }
-            break;
+            // (4) Set the busy flag
+            m_fAudioDeviceBusy = FALSE;
+        }
+        break;
 
         case MM_WOM_CLOSE:  // the waveOut device has closed.
             // Tell the thread to quit:

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1997-1999  Microsoft Corporation
 
@@ -44,7 +44,7 @@ CMSPStream::CMSPStream()
 CMSPStream::~CMSPStream()
 {
     LOG((MSP_TRACE, "CMSPStream::~CMSPStream - enter"));
-    
+
     ReleaseSink();
 
     LOG((MSP_TRACE, "CMSPStream::~CMSPStream - exit"));
@@ -52,7 +52,7 @@ CMSPStream::~CMSPStream()
 
 STDMETHODIMP CMSPStream::get_MediaType(
     OUT     long *                  plTapiMediaType
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::get_MediaType - enter"));
 
@@ -63,7 +63,7 @@ STDMETHODIMP CMSPStream::get_MediaType(
         return E_POINTER;
     }
 
-    
+
     CLock lock(m_lock);
 
     *plTapiMediaType = m_dwMediaType;
@@ -75,7 +75,7 @@ STDMETHODIMP CMSPStream::get_MediaType(
 
 STDMETHODIMP CMSPStream::get_Direction(
     OUT     TERMINAL_DIRECTION *    pTerminalDirection
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::get_Direction - enter"));
 
@@ -91,21 +91,21 @@ STDMETHODIMP CMSPStream::get_Direction(
 
 
     *pTerminalDirection = m_Direction;
-    
+
     LOG((MSP_TRACE, "CMSPStream::get_Direction - exit S_OK"));
-    
+
     return S_OK;
 }
 
 STDMETHODIMP CMSPStream::SelectTerminal(
     IN      ITTerminal *            pTerminal
-    )
+)
 /*++
 
 Routine Description:
 
 Arguments:
-    
+
 
 Return Value:
 
@@ -138,13 +138,13 @@ TAPI_E_INVALIDTERMINAL
     // Get the private interface from this terminal.
     //
 
-    hr = pTerminal->QueryInterface(IID_ITTerminalControl, 
+    hr = pTerminal->QueryInterface(IID_ITTerminalControl,
                                    (void **) &pTerminalControl);
 
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPStream::SelectTerminal - "
-            "can't get ITTerminalControl - exit TAPI_E_INVALIDTERMINAL"));
+             "can't get ITTerminalControl - exit TAPI_E_INVALIDTERMINAL"));
 
         return TAPI_E_INVALIDTERMINAL;
     }
@@ -161,7 +161,7 @@ TAPI_E_INVALIDTERMINAL
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPStream::SelectTerminal - "
-            "can't get address handle - exit TAPI_E_INVALIDTERMINAL"));
+             "can't get address handle - exit TAPI_E_INVALIDTERMINAL"));
 
         return TAPI_E_INVALIDTERMINAL;
     }
@@ -175,7 +175,7 @@ TAPI_E_INVALIDTERMINAL
     if ( ( hAddress != NULL ) && ( hAddress != (MSP_HANDLE) m_hAddress ) )
     {
         LOG((MSP_ERROR, "CMSPStream::SelectTerminal - "
-            "terminal from another address - exit TAPI_E_INVALIDTERMINAL"));
+             "terminal from another address - exit TAPI_E_INVALIDTERMINAL"));
 
         return TAPI_E_INVALIDTERMINAL;
     }
@@ -185,15 +185,15 @@ TAPI_E_INVALIDTERMINAL
     //
 
     CLock lock(m_lock);
-    
+
     if (m_Terminals.Find(pTerminal) >= 0)
     {
         LOG((MSP_ERROR, "CMSPStream::SelectTerminal - "
-            "terminal already selected - exit TAPI_E_INVALIDTERMINAL"));
+             "terminal already selected - exit TAPI_E_INVALIDTERMINAL"));
 
         return TAPI_E_INVALIDTERMINAL;
     }
-    
+
     //
     // Add the new terminal into our list and addref it.
     //
@@ -201,7 +201,7 @@ TAPI_E_INVALIDTERMINAL
     if (!m_Terminals.Add(pTerminal))
     {
         LOG((MSP_ERROR, "CMSPStream::SelectTerminal - "
-            "exit E_OUTOFMEMORY"));
+             "exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -212,17 +212,17 @@ TAPI_E_INVALIDTERMINAL
     if( FAILED(hr) )
     {
         LOG((MSP_TRACE, "CMSPStream::SelectTerminal - "
-            "something wrong in RegisterPluggableTerminalEventSink"));
+             "something wrong in RegisterPluggableTerminalEventSink"));
     }
 
     LOG((MSP_TRACE, "CMSPStream::SelectTerminal - exit S_OK"));
-    
+
     return S_OK;
 }
 
 STDMETHODIMP CMSPStream::UnselectTerminal(
     IN     ITTerminal *             pTerminal
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::UnselectTerminal - enter"));
 
@@ -232,12 +232,12 @@ STDMETHODIMP CMSPStream::UnselectTerminal(
 
     CLock lock(m_lock);
     int index;
-    
+
     if ((index = m_Terminals.Find(pTerminal)) < 0)
     {
         LOG((MSP_ERROR, "CMSPStream::UnselectTerminal - "
-            "exit TAPI_E_INVALIDTERMINAL"));
-    
+             "exit TAPI_E_INVALIDTERMINAL"));
+
         return TAPI_E_INVALIDTERMINAL;
     }
 
@@ -245,15 +245,15 @@ STDMETHODIMP CMSPStream::UnselectTerminal(
     // Unregister the PTEventSink object
     //
 
-    HRESULT hr = E_FAIL; 
+    HRESULT hr = E_FAIL;
     hr = UnregisterPluggableTerminalEventSink( pTerminal );
 
     if( FAILED(hr) )
     {
         LOG((MSP_TRACE, "CMSPStream::UnselectTerminal - "
-            "something wrong in UnregisterPluggableTerminalEventSink"));
+             "something wrong in UnregisterPluggableTerminalEventSink"));
     }
-    
+
     //
     // remove the terminal from our list and release it.
     //
@@ -261,8 +261,8 @@ STDMETHODIMP CMSPStream::UnselectTerminal(
     if (!m_Terminals.RemoveAt(index))
     {
         LOG((MSP_ERROR, "CMSPStream::UnselectTerminal - "
-            "exit E_UNEXPECTED"));
-    
+             "exit E_UNEXPECTED"));
+
         return E_UNEXPECTED;
     }
 
@@ -275,10 +275,10 @@ STDMETHODIMP CMSPStream::UnselectTerminal(
 
 STDMETHODIMP CMSPStream::EnumerateTerminals(
     OUT     IEnumTerminal **        ppEnumTerminal
-    )
+)
 {
-    LOG((MSP_TRACE, 
-        "EnumerateTerminals entered. ppEnumTerminal:%x", ppEnumTerminal));
+    LOG((MSP_TRACE,
+         "EnumerateTerminals entered. ppEnumTerminal:%x", ppEnumTerminal));
 
     if (!ppEnumTerminal)
     {
@@ -292,14 +292,14 @@ STDMETHODIMP CMSPStream::EnumerateTerminals(
     if (m_Terminals.GetData() == NULL)
     {
         LOG((MSP_ERROR, "CMSPStream::EnumerateTerminals - "
-            "stream appears to have been shut down - exit E_UNEXPECTED"));
+             "stream appears to have been shut down - exit E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
 
     typedef _CopyInterface<ITTerminal> CCopy;
-    typedef CSafeComEnum<IEnumTerminal, &IID_IEnumTerminal, 
-                ITTerminal *, CCopy> CEnumerator;
+    typedef CSafeComEnum<IEnumTerminal, &IID_IEnumTerminal,
+            ITTerminal *, CCopy> CEnumerator;
 
     HRESULT hr;
 
@@ -323,11 +323,11 @@ STDMETHODIMP CMSPStream::EnumerateTerminals(
 
     // The CSafeComEnum can handle zero-sized array.
     hr = pEnum->Init(
-        m_Terminals.GetData(),                        // the begin itor
-        m_Terminals.GetData() + m_Terminals.GetSize(),  // the end itor, 
-        NULL,                                       // IUnknown
-        AtlFlagCopy                                 // copy the data.
-        );
+             m_Terminals.GetData(),                        // the begin itor
+             m_Terminals.GetData() + m_Terminals.GetSize(),  // the end itor,
+             NULL,                                       // IUnknown
+             AtlFlagCopy                                 // copy the data.
+         );
 
     if (FAILED(hr))
     {
@@ -343,7 +343,7 @@ STDMETHODIMP CMSPStream::EnumerateTerminals(
 
 STDMETHODIMP CMSPStream::get_Terminals(
     OUT     VARIANT *               pVariant
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::get_Terminals - enter"));
 
@@ -354,7 +354,7 @@ STDMETHODIMP CMSPStream::get_Terminals(
     if ( !pVariant)
     {
         LOG((MSP_ERROR, "CMSPStream::get_Terminals - "
-            "bad pointer argument - exit E_POINTER"));
+             "bad pointer argument - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -369,7 +369,7 @@ STDMETHODIMP CMSPStream::get_Terminals(
     if (m_Terminals.GetData() == NULL)
     {
         LOG((MSP_ERROR, "CMSPStream::get_Terminals - "
-            "stream appears to have been shut down - exit E_UNEXPECTED"));
+             "stream appears to have been shut down - exit E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -387,7 +387,7 @@ STDMETHODIMP CMSPStream::get_Terminals(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPStream::get_Terminals - "
-            "can't create collection - exit 0x%08x", hr));
+             "can't create collection - exit 0x%08x", hr));
 
         return hr;
     }
@@ -399,12 +399,12 @@ STDMETHODIMP CMSPStream::get_Terminals(
     IDispatch * pDispatch;
 
     hr = pCollection->_InternalQueryInterface(IID_IDispatch,
-                                              (void **) &pDispatch );
+            (void **) &pDispatch );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPStream::get_Terminals - "
-            "QI for IDispatch on collection failed - exit 0x%08x", hr));
+             "QI for IDispatch on collection failed - exit 0x%08x", hr));
 
         delete pCollection;
 
@@ -423,8 +423,8 @@ STDMETHODIMP CMSPStream::get_Terminals(
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CMSPStream::get_Terminals - "
-            "Initialize on collection failed - exit 0x%08x", hr));
-        
+             "Initialize on collection failed - exit 0x%08x", hr));
+
         pDispatch->Release();
         return hr;
     }
@@ -434,14 +434,14 @@ STDMETHODIMP CMSPStream::get_Terminals(
     //
 
     LOG((MSP_TRACE, "CMSPStream::get_Terminals - "
-        "placing IDispatch value %08x in variant", pDispatch));
+         "placing IDispatch value %08x in variant", pDispatch));
 
     VariantInit(pVariant);
     pVariant->vt = VT_DISPATCH;
     pVariant->pdispVal = pDispatch;
 
     LOG((MSP_TRACE, "CMSPStream::get_Terminals - exit S_OK"));
- 
+
     return S_OK;
 }
 
@@ -450,7 +450,7 @@ STDMETHODIMP CMSPStream::StartStream()
     LOG((MSP_TRACE, "CMSPStream - RUNNING GRAPH"));
 
     HRESULT hr = m_pIMediaControl->Run();
-    
+
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "graph doesn't run, %x", hr));
@@ -463,7 +463,7 @@ STDMETHODIMP CMSPStream::PauseStream()
     LOG((MSP_TRACE, "CMSPStream - PAUSING GRAPH"));
 
     HRESULT hr = m_pIMediaControl->Pause();
-    
+
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "graph doesn't pause, %x", hr));
@@ -476,7 +476,7 @@ STDMETHODIMP CMSPStream::StopStream()
     LOG((MSP_TRACE, "CMSPStream - STOPPING GRAPH"));
 
     HRESULT hr = m_pIMediaControl->Stop();
-    
+
     if(FAILED(hr))
     {
         LOG((MSP_ERROR, "graph doesn't stop, %x", hr));
@@ -491,11 +491,11 @@ HRESULT CMSPStream::Init(
     IN     IMediaEvent *            pGraph,
     IN     DWORD                    dwMediaType,
     IN     TERMINAL_DIRECTION       Direction
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::Init - enter"));
 
-    
+
     CLock lock(m_lock);
 
 
@@ -511,7 +511,7 @@ HRESULT CMSPStream::Init(
 
         return E_OUTOFMEMORY;
     }
-    
+
     HRESULT hr;
     hr = CoCreateFreeThreadedMarshaler(GetControllingUnknown(), &m_pFTM);
     if (FAILED(hr))
@@ -546,7 +546,7 @@ HRESULT CMSPStream::Init(
 
     m_pIMediaControl    = pMC;
     // no addref because QI addrefs for us above
-    
+
     m_pIGraphBuilder    = pGB;
     // no addref because QI addrefs for us above
 
@@ -585,7 +585,7 @@ HRESULT CMSPStream::ShutDown()
     {
         UnselectTerminal(m_Terminals[i]);
     }
- 
+
     //
     // At this point the derive class should have removed and released
     // all of the terminals from the list. If that's not the case, the
@@ -632,7 +632,7 @@ void CMSPStream::FinalRelease()
 HRESULT CMSPStream::HandleTSPData(
     IN     BYTE *                   pData,
     IN     DWORD                    dwSize
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::HandleTSPData - enter"));
     LOG((MSP_TRACE, "CMSPStream::HandleTSPData - exit S_OK"));
@@ -644,7 +644,7 @@ HRESULT CMSPStream::ProcessGraphEvent(
     IN  long lEventCode,
     IN  LONG_PTR lParam1,
     IN  LONG_PTR lParam2
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::ProcessGraphEvent - enter"));
     LOG((MSP_TRACE, "CMSPStream::ProcessGraphEvent - exit S_OK"));
@@ -663,7 +663,7 @@ Description;
 --*/
 HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
     IN  ITTerminal* pTerminal
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::RegisterPluggableTerminalEventSink - enter"));
 
@@ -674,7 +674,7 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
     if( ! pTerminal)
     {
         LOG((MSP_ERROR, "CMSPStream::RegisterPluggableTerminalEventSink "
-            "pTerminal invalid, returns E_POINTER"));
+             "pTerminal invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -690,7 +690,7 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPStream::RegisterPluggableTerminalEventSink "
-            "get_TerminalType failed, exit E_UNEXPECTED"));
+             "get_TerminalType failed, exit E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -702,11 +702,11 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
     if( TT_DYNAMIC != nTerminalType)
     {
         LOG((MSP_ERROR, "CMSPStream::RegisterPluggableTerminalEventSink "
-            "terminal is not dynamic, exit E_INVALIDARG"));
+             "terminal is not dynamic, exit E_INVALIDARG"));
         return E_INVALIDARG;
     }
 
-    
+
     CLock lock(m_lock);
 
 
@@ -724,11 +724,11 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
         {
 
             LOG((MSP_ERROR, "CMSPStream::RegisterPluggableTerminalEventSink "
-                "CreateInstance failed, returns E_OUTOFMEMORY"));
+                 "CreateInstance failed, returns E_OUTOFMEMORY"));
             return E_OUTOFMEMORY;
         }
 
-        
+
         // tell sink that we are ready to be processing its events
 
         hr = pPTEventSink->SetSinkStream(this);
@@ -736,8 +736,8 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
         if (FAILED(hr))
         {
             LOG((MSP_ERROR, "CMSPStream::RegisterPluggableTerminalEventSink "
-                "event sink refused to accept sink stream. hr = %lx", hr));
-            
+                 "event sink refused to accept sink stream. hr = %lx", hr));
+
             delete pPTEventSink;
 
             return hr;
@@ -751,7 +751,7 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
         if( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CMSPStream::RegisterPluggableTerminalEventSink "
-                "QI for ITPluggableTerminalEventSink failed, returns E_UNEXPECTED"));
+                 "QI for ITPluggableTerminalEventSink failed, returns E_UNEXPECTED"));
 
 
             //
@@ -764,7 +764,7 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
 
 
             //
-            // sink does not expose IID_ITPluggableTerminalEventSink interface? 
+            // sink does not expose IID_ITPluggableTerminalEventSink interface?
             // something is seriously wrong
             //
 
@@ -774,20 +774,20 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
 
     }
 
-    
+
     // Get the ITDTEventHandler interface
     ITPluggableTerminalEventSinkRegistration*   pEventRegistration = NULL;
 
-    hr = pTerminal->QueryInterface( IID_ITPluggableTerminalEventSinkRegistration, 
-        (void**)&pEventRegistration
-        );
+    hr = pTerminal->QueryInterface( IID_ITPluggableTerminalEventSinkRegistration,
+                                    (void**)&pEventRegistration
+                                  );
 
     if( FAILED(hr) )
     {
         // The dynamic terminal doesn't implement ITPluggableTerminalEventSinkRegistration
         // This is bad! We cannot use the new event stuff
         LOG((MSP_ERROR, "CMSPStream::RegisterPluggableTerminalEventSink "
-           "QI for ITPluggableTerminalEventSinkregistration failed, returns S_FALSE"));
+             "QI for ITPluggableTerminalEventSinkregistration failed, returns S_FALSE"));
 
         //
         // no need to keep the sink
@@ -800,8 +800,8 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
 
     // pass the sink to the terminal
     hr = pEventRegistration->RegisterSink(
-        m_pPTEventSink
-        );
+             m_pPTEventSink
+         );
 
 
     // Clean up, anyway
@@ -811,7 +811,7 @@ HRESULT CMSPStream::RegisterPluggableTerminalEventSink(
     {
 
         LOG((MSP_ERROR, "CMSPStream::RegisterPluggableTerminalEventSink "
-           "RegisterSink failed, returns E_FAIL"));
+             "RegisterSink failed, returns E_FAIL"));
 
 
         //
@@ -838,18 +838,18 @@ Description;
 --*/
 HRESULT CMSPStream::UnregisterPluggableTerminalEventSink(
     IN  ITTerminal* pTerminal
-    )
+)
 {
     LOG((MSP_TRACE, "CMSPStream::UnregisterPluggableTerminalEventSink - enter"));
 
-        //
+    //
     // Validates arguments
     //
 
     if( ! pTerminal)
     {
         LOG((MSP_ERROR, "CMSPStream::UnregisterPluggableTerminalEventSink "
-            "pTerminal invalid, returns E_POINTER"));
+             "pTerminal invalid, returns E_POINTER"));
         return E_POINTER;
     }
 
@@ -865,7 +865,7 @@ HRESULT CMSPStream::UnregisterPluggableTerminalEventSink(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPStream::UnregisterPluggableTerminalEventSink "
-            "get_TerminalType failed, exit E_UNEXPECTED"));
+             "get_TerminalType failed, exit E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -877,7 +877,7 @@ HRESULT CMSPStream::UnregisterPluggableTerminalEventSink(
     if( TT_DYNAMIC != nTerminalType)
     {
         LOG((MSP_ERROR, "CMSPStream::UnregisterPluggableTerminalEventSink "
-            "terminal is not dynamic, exit E_INVALIDARG"));
+             "terminal is not dynamic, exit E_INVALIDARG"));
         return E_INVALIDARG;
     }
 
@@ -892,7 +892,7 @@ HRESULT CMSPStream::UnregisterPluggableTerminalEventSink(
     if(NULL == m_pPTEventSink)
     {
         LOG((MSP_TRACE, "CMSPStream::UnregisterPluggableTerminalEventSink - "
-            "No EventSink - exit S_OK"));
+             "No EventSink - exit S_OK"));
         return S_OK;
     }
 
@@ -901,9 +901,9 @@ HRESULT CMSPStream::UnregisterPluggableTerminalEventSink(
     //
     ITPluggableTerminalEventSinkRegistration*   pEventRegistration = NULL;
 
-    hr = pTerminal->QueryInterface( IID_ITPluggableTerminalEventSinkRegistration, 
-        (void**)&pEventRegistration
-        );
+    hr = pTerminal->QueryInterface( IID_ITPluggableTerminalEventSinkRegistration,
+                                    (void**)&pEventRegistration
+                                  );
 
     if( FAILED(hr) )
     {
@@ -912,7 +912,7 @@ HRESULT CMSPStream::UnregisterPluggableTerminalEventSink(
         // This is bad!
 
         LOG((MSP_ERROR, "CMSPStream::UnregisterPluggableTerminalEventSink "
-           "QI for ITPluggableTerminalEventSinkRegistration failed, returns E_NOTIMPL"));
+             "QI for ITPluggableTerminalEventSinkRegistration failed, returns E_NOTIMPL"));
         return E_NOTIMPL;
     }
 
@@ -928,11 +928,11 @@ HRESULT CMSPStream::UnregisterPluggableTerminalEventSink(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CMSPStream::UnregisterPluggableTerminalEventSink "
-           "UnregisterSink failed, returns E_FAIL"));
+             "UnregisterSink failed, returns E_FAIL"));
         return E_FAIL;
     }
 
-    
+
     //
     // no longer need this sink
     //
@@ -978,12 +978,12 @@ HRESULT CMSPStream::HandleSinkEvent(MSPEVENTITEM *pEventItem)
     {
 
         LOG((MSP_WARN,
-            "CMSPStream::HandleSinkEvent - there is no call to pass event to"));
+             "CMSPStream::HandleSinkEvent - there is no call to pass event to"));
     }
 
 
     LOG((MSP_(hr), "CMSPStream::HandleSinkEvent - exit hr = %lx", hr));
-    
+
     return hr;
 }
 
@@ -1002,7 +1002,7 @@ HRESULT CMSPStream::ReleaseSink()
 {
     LOG((MSP_TRACE, "CMSPStream::ReleaseSink - enter"));
 
-    
+
     HRESULT hr = S_OK;
 
 
@@ -1010,7 +1010,7 @@ HRESULT CMSPStream::ReleaseSink()
 
 
     //
-    // if sink is present, let it know that we will no longer be available to 
+    // if sink is present, let it know that we will no longer be available to
     // process its events and release it
     //
 
@@ -1024,10 +1024,10 @@ HRESULT CMSPStream::ReleaseSink()
 
         if (FAILED(hr))
         {
-            
-            LOG((MSP_ERROR, 
-                "CMSPStream::ReleaseSink - pSinkObject->SetSinkStream failed. hr - %lx", 
-                hr));
+
+            LOG((MSP_ERROR,
+                 "CMSPStream::ReleaseSink - pSinkObject->SetSinkStream failed. hr - %lx",
+                 hr));
         }
 
 
@@ -1059,14 +1059,14 @@ ULONG CMSPStream::InternalAddRef()
 
 
     //
-    // if the refcount is zero, return 1. this is the indication that the 
+    // if the refcount is zero, return 1. this is the indication that the
     // addref was called while the object is in its finalrelease or entering
     // destructor. Note that the only time this could happen is when event sink
     // attempts to send an event and addrefs the stream object after the stream
-    // objects received its last Release() but before the stream object told 
+    // objects received its last Release() but before the stream object told
     // the sink to stop using it (which takes place in stream's destructor).
     //
-    // we also need to be able to tell if refcount was 0 because it's a new 
+    // we also need to be able to tell if refcount was 0 because it's a new
     // object or if the addref was called on an object whose refcount became
     // zero because of a release.
     //
@@ -1075,8 +1075,8 @@ ULONG CMSPStream::InternalAddRef()
     {
 
         //
-        // the caller (event sink logic) should detect this condition (by the 
-        // return value of 1) and not expect that the stream is going to 
+        // the caller (event sink logic) should detect this condition (by the
+        // return value of 1) and not expect that the stream is going to
         // continue to be valid.
         //
 
@@ -1089,8 +1089,8 @@ ULONG CMSPStream::InternalAddRef()
 
 
     //
-    // we have made a transition from non-zero refcount to zero. set the 
-    // flag, so that future addrefs know to return 1 in ths case when refcount 
+    // we have made a transition from non-zero refcount to zero. set the
+    // flag, so that future addrefs know to return 1 in ths case when refcount
     // is 0
     //
 
@@ -1122,7 +1122,7 @@ ULONG CMSPStream::InternalRelease()
     _ASSERTE(m_lMyPersonalRefcount > 0);
 
 
-    // we are inside a lock, no need to use interlocked api 
+    // we are inside a lock, no need to use interlocked api
     long lNewRefcount = (--m_lMyPersonalRefcount);
 
 

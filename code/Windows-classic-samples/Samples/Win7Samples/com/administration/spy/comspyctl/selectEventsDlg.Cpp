@@ -1,27 +1,27 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
-#include "stdafx.h"            
-#include <comsvcs.h>        
-#include <comadmin.h>        
+#include "stdafx.h"
+#include <comsvcs.h>
+#include <comadmin.h>
 
 #include "ComSpyCtl.h"
 #include "ComSpyAudit.h"
 
-#include "CComSpy.h"                
-#include "AppInfo.h"                
-#include "SelectEventsDlg.h"    
+#include "CComSpy.h"
+#include "AppInfo.h"
+#include "SelectEventsDlg.h"
 #include <algorithm>
 #include <strsafe.h>
 
 
 // A simple macro used to set the checked state of a ListView item.
 #ifndef ListView_SetCheckState
-   #define ListView_SetCheckState(hwndLV, i, fCheck) \
+#define ListView_SetCheckState(hwndLV, i, fCheck) \
       ListView_SetItemState(hwndLV, i, INDEXTOSTATEIMAGEMASK((fCheck)+1),\
                                     LVIS_STATEIMAGEMASK)
 #endif
@@ -47,7 +47,7 @@ typedef struct _EVENT_SINK_INFO
 } EVENT_SINK_INFO;
 
 
-// Module level EventInfo array containing all possible Publishing 
+// Module level EventInfo array containing all possible Publishing
 // interfaces from COM+.
 EVENT_SINK_INFO EventInfo[] =
 {
@@ -55,7 +55,7 @@ EVENT_SINK_INFO EventInfo[] =
     L"Object Pool",    ObjectPool,
     L"Pool Mgmt",    ObjectPool2,
     L"Application",    Application,
-    L"Construction",    ObjectConstruction,    
+    L"Construction",    ObjectConstruction,
     L"Thread",        Thread,
     L"Instance",        Instance,
     L"Transaction",    Transaction,
@@ -66,11 +66,11 @@ EVENT_SINK_INFO EventInfo[] =
     L"Security",        Security,
     L"Identity",        Identity,
     L"Queued",        QC,
-    L"Exception",    Exception,    
+    L"Exception",    Exception,
     L"CRM",            CRM,
 };
 
-//System events 
+//System events
 EVENT_SINK_INFO SystemEventInfo[] =
 {
     L"Event Store",    EventStore,
@@ -83,8 +83,8 @@ EVENT_SINK_INFO SystemEventInfo[] =
 // Params:  spMap:            Pointer to a MapStringToAppInfo that contains a STL
 //                            map of all CAppInfo structures and their names.
 //                            Each CAppInfo manages the events it subscribes to.
-//            pSysAppInfo:    Pointer to AppInfo that manages the system events it 
-//                            subscribe to. Should have only one instance per COM+ system. 
+//            pSysAppInfo:    Pointer to AppInfo that manages the system events it
+//                            subscribe to. Should have only one instance per COM+ system.
 //            pSpyObj:        Polymorphic pointer to the CComSpy-derived subscription
 //                            object for various COM+ Events.
 // Returns: (None)
@@ -93,7 +93,7 @@ EVENT_SINK_INFO SystemEventInfo[] =
 CSelectEventsDlg::CSelectEventsDlg(MapStringToAppInfo* spMap, CAppInfo * pSysAppInfo, CComSpy* pSpyObj)
 {
     m_map = spMap;
-    m_pSysAppInfo = pSysAppInfo;  
+    m_pSysAppInfo = pSysAppInfo;
     m_pSpyObj = pSpyObj;
 }
 
@@ -102,7 +102,7 @@ CSelectEventsDlg::CSelectEventsDlg(MapStringToAppInfo* spMap, CAppInfo * pSysApp
 // -----------------------------------------------------------------------------
 // Method:    CSelectEventsDlg::OnInitDialog(...)
 // Params:  All params are standard for ATL's MESSAGE_HANDLER mapping.
-// Returns: Always 1 to ensure that the system sets focus 
+// Returns: Always 1 to ensure that the system sets focus
 // Purpose:    Called when Dialog sends WM_INITDIALOG message.  Does following:
 //                1. Modifies the ListView to add CheckBox support.
 //                2. Sets the Delete flag on all current Applications.
@@ -114,11 +114,11 @@ CSelectEventsDlg::CSelectEventsDlg(MapStringToAppInfo* spMap, CAppInfo * pSysApp
 //                8. Select the first row in the Apps List Box.
 //                9. Update the Event checkboxes for the current App or AllApps
 // -----------------------------------------------------------------------------
-LRESULT CSelectEventsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, 
-                                                    BOOL& bHandled)
+LRESULT CSelectEventsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
+                                       BOOL& bHandled)
 {
     // Set the window to have Check Box support.
-    ListView_SetExtendedListViewStyle(GetDlgItem(IDC_LISTVIEWEVENTS), LVS_EX_CHECKBOXES);    
+    ListView_SetExtendedListViewStyle(GetDlgItem(IDC_LISTVIEWEVENTS), LVS_EX_CHECKBOXES);
 
 
     ListView_SetExtendedListViewStyle(GetDlgItem(IDC_LISTVIEWSYSEVENTS), LVS_EX_CHECKBOXES);
@@ -130,12 +130,12 @@ LRESULT CSelectEventsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
     GetCatalogApps();
 
     // Now populate the current Running applications.
-    GetRunningApps();    
+    GetRunningApps();
 
-    // Populate the list of possible App events.    
+    // Populate the list of possible App events.
     PopulateEventList();
 
-    //Populate the list of possible system events.  
+    //Populate the list of possible system events.
     PopulateSysEventList();
 
     // Now create the AllApps CAppInfo.
@@ -154,7 +154,7 @@ LRESULT CSelectEventsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
     // Select the first Application in the listbox.
     SendDlgItemMessage(IDC_LIST_APPS, LB_SETCURSEL, 0);
 
-    // If they are using any event in the special AllApps object, then display 
+    // If they are using any event in the special AllApps object, then display
     // the check box and disable the ListBox.
     if (pInfo->IsSubscribedToAny())
     {
@@ -164,7 +164,7 @@ LRESULT CSelectEventsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
     else
         SelectApplication(0);
 
-    ShowSelectedSystemEvents(); 
+    ShowSelectedSystemEvents();
 
     return 1;
 }
@@ -177,7 +177,7 @@ LRESULT CSelectEventsDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,
 // Returns: Returns 0 always.
 // Purpose:    Handler for the OK button.  Simply ends the Dialog.
 // -----------------------------------------------------------------------------
-LRESULT CSelectEventsDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, 
+LRESULT CSelectEventsDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                BOOL& bHandled)
 {
     EndDialog(wID);
@@ -192,8 +192,8 @@ LRESULT CSelectEventsDlg::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 // Returns: Returns 0 always.
 // Purpose:    Handler for the Destory Window message.  Ends the Dialog.
 // -----------------------------------------------------------------------------
-LRESULT CSelectEventsDlg::OnDestroyDlg(UINT uMsg, WPARAM wParam, 
-                                                    LPARAM lParam, BOOL& bHandled)
+LRESULT CSelectEventsDlg::OnDestroyDlg(UINT uMsg, WPARAM wParam,
+                                       LPARAM lParam, BOOL& bHandled)
 {
     bHandled = FALSE;
     return 0;
@@ -206,8 +206,8 @@ LRESULT CSelectEventsDlg::OnDestroyDlg(UINT uMsg, WPARAM wParam,
 // Params:  bDeleteUnused: If true, this will actually delete the CAppInfo
 //                                    instances with the delete flag set.
 // Returns: (None)
-// Purpose: To iterate through the STL map of applications and to set the delete 
-//                flag for each one. Every app that is later found again will be 
+// Purpose: To iterate through the STL map of applications and to set the delete
+//                flag for each one. Every app that is later found again will be
 //                cleared. Finally, the ones remaining will be garbaged.
 // -----------------------------------------------------------------------------
 void CSelectEventsDlg::MarkAllAppsForDelete(bool bDeleteUnused)
@@ -224,7 +224,7 @@ void CSelectEventsDlg::MarkAllAppsForDelete(bool bDeleteUnused)
         // If Delete Unsued flag is set, we purge.
         if (bDeleteUnused)
         {
-            if (pInfo->IsReadyForDelete()) 
+            if (pInfo->IsReadyForDelete())
             {
                 delete pInfo;
                 item = m_map->erase(item);
@@ -272,8 +272,8 @@ bool CSelectEventsDlg::GetCatalogApps()
     CComPtr<ICatalogObject> spCatalogObject;
     CComBSTR bstrApplications("Applications");
 
-    hr = CoCreateInstance(CLSID_COMAdminCatalog, NULL, CLSCTX_ALL, 
-                         IID_PPV_ARGS(&spCOMAdminCatalog));
+    hr = CoCreateInstance(CLSID_COMAdminCatalog, NULL, CLSCTX_ALL,
+                          IID_PPV_ARGS(&spCOMAdminCatalog));
     if (FAILED(hr) || (!spCOMAdminCatalog))
     {
         _ASSERTE(0);
@@ -296,7 +296,7 @@ bool CSelectEventsDlg::GetCatalogApps()
     }
     spDispatch.Release();
 
-    // Populate the Catalog collection.  The collection is empty 
+    // Populate the Catalog collection.  The collection is empty
     //    until this is called.
     hr = spCatalogCollection->Populate();
     if (FAILED(hr))
@@ -304,7 +304,7 @@ bool CSelectEventsDlg::GetCatalogApps()
         _ASSERTE(0);
         return false;
     }
-    
+
     // Now we can iterate through the Catalog apps.
     long lApplications;
     spCatalogCollection->get_Count(&lApplications);
@@ -314,7 +314,7 @@ bool CSelectEventsDlg::GetCatalogApps()
         spCatalogCollection->get_Item(i, &spDispatch);
         if (spDispatch) spDispatch->QueryInterface(IID_PPV_ARGS(&spCatalogObject));
 
-        // Get the Application name into a CComBSTR from the Catalog 
+        // Get the Application name into a CComBSTR from the Catalog
         // object for easier conversion.
         CComVariant varName;
         CComBSTR bstrName;
@@ -329,21 +329,21 @@ bool CSelectEventsDlg::GetCatalogApps()
         _ASSERTE(SUCCEEDED(hr));
 
         // Now get the pointer to the CAppInfo for this one.
-        CAppInfo * pInfo = NULL;            
+        CAppInfo * pInfo = NULL;
         pInfo = (*m_map)[(wstring)bstrName];
         if (!pInfo)
         {
-            pInfo = new CAppInfo((LPCWSTR)bstrName, m_pSpyObj, (LPCWSTR)bstrKey); 
+            pInfo = new CAppInfo((LPCWSTR)bstrName, m_pSpyObj, (LPCWSTR)bstrKey);
             _ASSERTE(pInfo);
             (*m_map)[(wstring)bstrName] = pInfo;
         };
 
         // Ensure we don't delete this app during Garbage Collection.
-        pInfo->SetDeleteFlag(false);    
+        pInfo->SetDeleteFlag(false);
 
         // Add the item to the List Box.
-        SendDlgItemMessage(IDC_LIST_APPS, LB_ADDSTRING, 
-                                    0, (LPARAM)(LPCWSTR)bstrName);
+        SendDlgItemMessage(IDC_LIST_APPS, LB_ADDSTRING,
+                           0, (LPARAM)(LPCWSTR)bstrName);
         spDispatch.Release();
         spCatalogObject.Release();
     }
@@ -357,7 +357,7 @@ bool CSelectEventsDlg::GetCatalogApps()
 // Method:    CSelectEventsDlg::GetRunningApps()
 // Params:  (None)
 // Returns: True if successfully added the apps, False otherwise.
-// Purpose:    To iterate through the currently running COM+ processes.  This can 
+// Purpose:    To iterate through the currently running COM+ processes.  This can
 //                be either standard Applications or other processes via Libraries.
 //                For each new Process, create a CAppInfo object for it and add it
 //                to the Application MAP.  Also, add the name to App ListBox.
@@ -394,13 +394,13 @@ bool CSelectEventsDlg::GetRunningApps()
         spEvents = NULL;
 
         if (spUnk) spUnk->QueryInterface(IID_PPV_ARGS(&spEvents));
-        _ASSERTE(spEvents);        
+        _ASSERTE(spEvents);
 
         // Get the Application name into a CComBSTR for easier conversion.
         CComBSTR bstrName;
-        CAppInfo * pInfo = NULL;            
+        CAppInfo * pInfo = NULL;
         long lPID = 0;
-        if (spEvents) spEvents->get_PackageName(&bstrName);                    
+        if (spEvents) spEvents->get_PackageName(&bstrName);
         if (spEvents) spEvents->GetProcessID(&lPID);
         CComBSTR bstrApplicationName((BSTR)bstrName);
 
@@ -411,17 +411,17 @@ bool CSelectEventsDlg::GetRunningApps()
         pInfo = (*m_map)[(wstring)bstrApplicationName];
         if (!pInfo)
         {
-            pInfo = new CAppInfo((LPCWSTR)bstrApplicationName, m_pSpyObj, lPID); 
+            pInfo = new CAppInfo((LPCWSTR)bstrApplicationName, m_pSpyObj, lPID);
             _ASSERTE(pInfo);
             (*m_map)[(wstring)bstrApplicationName] = pInfo;
         };
 
         // Ensure we don't delete this app during Garbage Collection.
-        pInfo->SetDeleteFlag(false);    
+        pInfo->SetDeleteFlag(false);
 
         // Add the AppName (with PID info) to the Apps ListBox.
-        SendDlgItemMessage(IDC_LIST_APPS, LB_ADDSTRING, 0, 
-                                             (LPARAM)((LPCWSTR)bstrApplicationName));
+        SendDlgItemMessage(IDC_LIST_APPS, LB_ADDSTRING, 0,
+                           (LPARAM)((LPCWSTR)bstrApplicationName));
 
         spEvents.Release();
         spUnk.Release();
@@ -479,7 +479,7 @@ void CSelectEventsDlg::PopulateSysEventList()
     LVITEM lvItem;
     int nIndex;
     int i;
-    
+
     HWND    hSysEvents = GetDlgItem(IDC_LISTVIEWSYSEVENTS);
 
     lvItem.state = 0;
@@ -508,8 +508,8 @@ void CSelectEventsDlg::PopulateSysEventList()
 //                for the new Application.  Also, this may take some time so we need
 //                to throw up the HourGlass.
 // -----------------------------------------------------------------------------
-LRESULT CSelectEventsDlg::AppsListHandler(WORD wNotifyCode, WORD wID, 
-                                                        HWND hWndCtl, BOOL& bHandled)
+LRESULT CSelectEventsDlg::AppsListHandler(WORD wNotifyCode, WORD wID,
+        HWND hWndCtl, BOOL& bHandled)
 {
     bool bResult;
     int nIndex;
@@ -537,8 +537,8 @@ LRESULT CSelectEventsDlg::AppsListHandler(WORD wNotifyCode, WORD wID,
 // Returns: 0 always.
 // Purpose:    Handle the toggling of the checkbox for Selecting All Apps.
 // -----------------------------------------------------------------------------
-LRESULT CSelectEventsDlg::OnSelectAllApps(WORD wNotifyCode, WORD wID, 
-                                                        HWND hWndCtl, BOOL& bHandled)
+LRESULT CSelectEventsDlg::OnSelectAllApps(WORD wNotifyCode, WORD wID,
+        HWND hWndCtl, BOOL& bHandled)
 {
     UINT nChecked = IsDlgButtonChecked(IDC_CHECK_ALLAPPS);
     bool bResult = SelectAllApps(nChecked ? true : false);
@@ -556,7 +556,7 @@ LRESULT CSelectEventsDlg::OnSelectAllApps(WORD wNotifyCode, WORD wID,
 //                1. Remove all Subscriptions for every App (expect AllApps object).
 //                2. Disable Apps ListBox and update the static text caption.
 //                3. Show current event mapping for the AllApps object.
-//                In the Un-Select case, we simply reverse this. We also use 
+//                In the Un-Select case, we simply reverse this. We also use
 //                Hourglass because this can take some time.
 // -----------------------------------------------------------------------------
 bool CSelectEventsDlg::SelectAllApps(bool bSelectAll)
@@ -576,15 +576,15 @@ bool CSelectEventsDlg::SelectAllApps(bool bSelectAll)
             pAppInfo->RemoveAllSubscriptions();
     };
 
-    if (!bSelectAll)    
+    if (!bSelectAll)
     {
         ::EnableWindow(GetDlgItem(IDC_LIST_APPS), TRUE);
         int nItem = (int)SendDlgItemMessage(IDC_LIST_APPS, LB_GETCURSEL, 0, 0);
-        // Since we are unselecting AllApps, we need to remove its subscriptions 
+        // Since we are unselecting AllApps, we need to remove its subscriptions
         pAllAppsInfo->RemoveAllSubscriptions();
         bool bResult = SelectApplication(nItem);
     }
-    else                    
+    else
     {
         ::EnableWindow(GetDlgItem(IDC_LIST_APPS), FALSE);
         SetDlgItemText(IDC_STATIC_CURRENTAPP, (LPWSTR)g_bstrAllApps);
@@ -606,15 +606,15 @@ bool CSelectEventsDlg::SelectAllApps(bool bSelectAll)
 // Method:    CSelectEventsDlg::LVEventItemChanged(...)
 // Params:  All params for the standard ATL COMMAND_ID_HANDLER map.
 // Returns: Always returns 0
-// Purpose:    
+// Purpose:
 // -----------------------------------------------------------------------------
 LRESULT CSelectEventsDlg::LVEventItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     NM_LISTVIEW* pnmList = (NM_LISTVIEW*)pnmh;
     LVITEM lvItem;
     BOOL bResult;
-    WCHAR wszBuffer[MAX_APPNAME_SIZE];        
-    
+    WCHAR wszBuffer[MAX_APPNAME_SIZE];
+
     UINT nItemNumber = pnmList->iItem;
     UINT nCurrentState = pnmList->uNewState;
     UINT nOldState = pnmList->uOldState;
@@ -625,8 +625,8 @@ LRESULT CSelectEventsDlg::LVEventItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHa
     ZeroMemory(wszBuffer, sizeof(wszBuffer));
 
     // If we toggled check box state, do this.
-    if (((nCurrentState & 8192) && (nOldState & 4096)) || 
-         ((nOldState & 8192) && (nCurrentState & 4096)))
+    if (((nCurrentState & 8192) && (nOldState & 4096)) ||
+            ((nOldState & 8192) && (nCurrentState & 4096)))
     {
         EventEnum nEvent;
         bResult = ListView_GetItem(GetDlgItem(IDC_LISTVIEWEVENTS), &lvItem);
@@ -642,19 +642,19 @@ LRESULT CSelectEventsDlg::LVEventItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHa
         else
             StringCchCopy(wszBuffer, ARRAYSIZE(wszBuffer), (LPCWSTR)g_bstrAllApps);
 
-        CAppInfo * pInfo = NULL;            
+        CAppInfo * pInfo = NULL;
         CComBSTR bstrApplicationName(wszBuffer);
         pInfo = (*m_map)[(wstring)bstrApplicationName];
         _ASSERTE(pInfo);
 
         // If we have checked a previously unchecked box, do this:
         if ((nCurrentState & 8192) && (nOldState & 4096))
-        {    
+        {
             // Install this event handler.
             if (!pInfo->IsSubscribed(nEvent))
             {
                 HCURSOR hOldCursor = ::SetCursor(LoadCursor(NULL, IDC_WAIT));
-                bResult = pInfo->AddSubscription(nEvent);                
+                bResult = pInfo->AddSubscription(nEvent);
                 ::SetCursor(hOldCursor);
             };
         }
@@ -678,15 +678,15 @@ LRESULT CSelectEventsDlg::LVEventItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHa
 // Method:    CSelectEventsDlg::LVSystemEventItemChanged(...)
 // Params:  All params for the standard ATL COMMAND_ID_HANDLER map.
 // Returns: Always returns 0
-// Purpose:    
+// Purpose:
 // -----------------------------------------------------------------------------
 LRESULT CSelectEventsDlg::LVSystemEventItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     NM_LISTVIEW* pnmList = (NM_LISTVIEW*)pnmh;
     LVITEM lvItem;
     BOOL bResult;
-    WCHAR wszBuffer[MAX_APPNAME_SIZE];        
-    
+    WCHAR wszBuffer[MAX_APPNAME_SIZE];
+
     UINT nItemNumber = pnmList->iItem;
     UINT nCurrentState = pnmList->uNewState;
     UINT nOldState = pnmList->uOldState;
@@ -697,8 +697,8 @@ LRESULT CSelectEventsDlg::LVSystemEventItemChanged(int idCtrl, LPNMHDR pnmh, BOO
     ZeroMemory(wszBuffer, sizeof(wszBuffer));
 
     // If we toggled check box state, do this.
-    if (((nCurrentState & 8192) && (nOldState & 4096)) || 
-         ((nOldState & 8192) && (nCurrentState & 4096)))
+    if (((nCurrentState & 8192) && (nOldState & 4096)) ||
+            ((nOldState & 8192) && (nCurrentState & 4096)))
     {
         EventEnum nEvent;
         bResult = ListView_GetItem(GetDlgItem(IDC_LISTVIEWSYSEVENTS), &lvItem);
@@ -707,12 +707,12 @@ LRESULT CSelectEventsDlg::LVSystemEventItemChanged(int idCtrl, LPNMHDR pnmh, BOO
 
         // If we have checked a previously unchecked box, do this:
         if ((nCurrentState & 8192) && (nOldState & 4096))
-        {    
+        {
             // Install this event handler.
             if (!m_pSysAppInfo->IsSubscribed(nEvent))
             {
                 HCURSOR hOldCursor = ::SetCursor(LoadCursor(NULL, IDC_WAIT));
-                bResult = m_pSysAppInfo->AddSubscription(nEvent);                
+                bResult = m_pSysAppInfo->AddSubscription(nEvent);
                 ::SetCursor(hOldCursor);
             };
         }
@@ -746,7 +746,7 @@ void CSelectEventsDlg::ShowSelectedEvents(CAppInfo* pInfo)
     BOOL bResult;
     bool bIsChecked;
     EventEnum nEvent;
-    
+
     lvItem.iSubItem = 0;
     lvItem.mask = LVIF_PARAM;    // Get the the EventEnum value from lParam.
 
@@ -770,7 +770,7 @@ void CSelectEventsDlg::ShowSelectedEvents(CAppInfo* pInfo)
 // -----------------------------------------------------------------------------
 // Method:    CSelectEventsDlg::ShowSelectedSystemEvents(...)
 // Returns: (None)
-// Purpose:    This will update the System Event ListView based on the 
+// Purpose:    This will update the System Event ListView based on the
 //            subscriptions of the object that m_pSysAppInfo points to contains.
 // -----------------------------------------------------------------------------
 void CSelectEventsDlg::ShowSelectedSystemEvents()
@@ -780,7 +780,7 @@ void CSelectEventsDlg::ShowSelectedSystemEvents()
     BOOL bResult;
     bool bIsChecked;
     EventEnum nEvent;
-    
+
     lvItem.iSubItem = 0;
     lvItem.mask = LVIF_PARAM;    // Get the the EventEnum value from lParam.
 
@@ -806,7 +806,7 @@ void CSelectEventsDlg::ShowSelectedSystemEvents()
 // Params:  nItem: Application index in listbox.
 // Returns: Always returns true
 // Purpose:    Select the Application with index nItem. This will update the
-//                ListBox control with the proper highlight. It also gets the 
+//                ListBox control with the proper highlight. It also gets the
 //                CAppInfo pointer for the given item. It updates some label text
 //                on the Dialog to respect Process or Application.  Finally, this
 //                method will update the list of events registered for this CAppInfo.

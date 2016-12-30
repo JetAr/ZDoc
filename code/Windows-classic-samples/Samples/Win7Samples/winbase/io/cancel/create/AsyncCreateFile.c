@@ -1,6 +1,6 @@
-//======================================================================
+﻿//======================================================================
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
 // PURPOSE.
 //
@@ -14,12 +14,12 @@
     This file contains an application for the IO cancellation object.
     The application is an asynchronous create file that supports cancellation.
 
-    This file also demonstrate the usage for this function in a console 
+    This file also demonstrate the usage for this function in a console
     application that can check the existence of a file with a timeout.
-    
-    This sample code is written in a platform independent way and it should 
+
+    This sample code is written in a platform independent way and it should
 	also work on versions of Windows without full cancellation support.
-                
+
 --*/
 
 #include <windows.h>
@@ -38,22 +38,22 @@ typedef struct _ASYNC_CREATE_FILE_CONTEXT
     // Handle to thread create to call CreateFile
     //
     HANDLE                      hThread;
-    
+
     //
     // CreateFile status
     //
     DWORD                       dwStatus;
-    
+
     //
     // Handle returned by CreateFile
     //
     HANDLE                      hFile;
-    
+
     //
     // Cancellation Object
     //
     PIO_CANCELLATION_OBJECT     pCancellationObject;
-    
+
     //
     // Arguments to CreateFile call
     //
@@ -100,9 +100,10 @@ wmain(int argc, wchar_t* argv[])
     DWORD                      dwWaitStatus = 0;
     DWORD                      dwTimeout    = 0;
     DWORD                      err          = 0;
-	BOOL                       bReturnOnTimeout = FALSE;
+    BOOL                       bReturnOnTimeout = FALSE;
 
-    if (argc < 4) {
+    if (argc < 4)
+    {
         printf("Usage %ls [file name] [timeout in milliseconds] [return on timeout - 0/1]\n", argv[0]);
         goto cleanup;
     }
@@ -112,114 +113,132 @@ wmain(int argc, wchar_t* argv[])
     //
     wszFileName = argv[1];
     dwTimeout   = (DWORD)_wtoi(argv[2]);
-	bReturnOnTimeout = (DWORD)_wtoi(argv[3]);
+    bReturnOnTimeout = (DWORD)_wtoi(argv[3]);
 
     //
     // Call CreateFile to check the existence of a file
-    // 
+    //
     err = AsyncCreateFile( &pContext,
-		                   wszFileName,
-						   GENERIC_READ,
-						   FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-						   NULL,
-						   OPEN_EXISTING,
-						   FILE_ATTRIBUTE_NORMAL,
-						   NULL );
+                           wszFileName,
+                           GENERIC_READ,
+                           FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                           NULL,
+                           OPEN_EXISTING,
+                           FILE_ATTRIBUTE_NORMAL,
+                           NULL );
 
-    if (!err) {
+    if (!err)
+    {
 
         printf("File found: %ls\n", wszFileName);
         goto cleanup;
 
-	} else if (err != ERROR_IO_PENDING) {
+    }
+    else if (err != ERROR_IO_PENDING)
+    {
 
-       goto cleanup;
+        goto cleanup;
     }
 
-	err = 0;
+    err = 0;
 
     //
     // Wait with timeout on the worker thread
     //
     dwWaitStatus = WaitForSingleObject(pContext->hThread, dwTimeout);
 
-    switch (dwWaitStatus) {
+    switch (dwWaitStatus)
+    {
 
-    case WAIT_OBJECT_0: 
+    case WAIT_OBJECT_0:
 
-		//
+        //
         // Check the status after CreateFile completed
         //
-        if (pContext->dwStatus != ERROR_SUCCESS) {
+        if (pContext->dwStatus != ERROR_SUCCESS)
+        {
 
             err = pContext->dwStatus;
 
-		} else {
+        }
+        else
+        {
 
-			printf("File found: %ls\n", wszFileName);
-		}
+            printf("File found: %ls\n", wszFileName);
+        }
 
         break;
-    
-    case WAIT_TIMEOUT: 
 
-		//
-		// If we timeout, attempt to cancel the create.  Note that
-		// this may not do anything depending on the current status of
-		// the operation
-		//
-		
+    case WAIT_TIMEOUT:
+
+        //
+        // If we timeout, attempt to cancel the create.  Note that
+        // this may not do anything depending on the current status of
+        // the operation
+        //
+
         CancelAsyncCreateFile(pContext);
 
-		//
-		// If the caller specified we should wait after the cancel call for
-		// the create to complete, we do that here; otherwise we return
-		// an error.
-		//
-		
-		if (bReturnOnTimeout == TRUE) {
+        //
+        // If the caller specified we should wait after the cancel call for
+        // the create to complete, we do that here; otherwise we return
+        // an error.
+        //
 
-			err = ERROR_OPERATION_ABORTED;
+        if (bReturnOnTimeout == TRUE)
+        {
 
-		} else {
+            err = ERROR_OPERATION_ABORTED;
 
-			dwWaitStatus = WaitForSingleObject(pContext->hThread, INFINITE);
-			err = pContext->dwStatus;
-		}
+        }
+        else
+        {
+
+            dwWaitStatus = WaitForSingleObject(pContext->hThread, INFINITE);
+            err = pContext->dwStatus;
+        }
 
         break;
 
     default:
-        
+
         err = GetLastError();
         break;
     }
 
 cleanup:
-    if (err) {
+    if (err)
+    {
 
-        if (err == ERROR_OPERATION_ABORTED) {
+        if (err == ERROR_OPERATION_ABORTED)
+        {
 
-			if (bReturnOnTimeout == TRUE) {
+            if (bReturnOnTimeout == TRUE)
+            {
 
-				printf("Operation timed out while trying to open %ls\n", wszFileName);
+                printf("Operation timed out while trying to open %ls\n", wszFileName);
 
-			} else {
+            }
+            else
+            {
 
-				//
-				// If we waited for the create to complete and we still got 
-				// this error code, we know that it was successfully cancelled.
-				//
-				printf("Operation timed out and was cancelled while trying to open %ls\n", wszFileName);
-			}
+                //
+                // If we waited for the create to complete and we still got
+                // this error code, we know that it was successfully cancelled.
+                //
+                printf("Operation timed out and was cancelled while trying to open %ls\n", wszFileName);
+            }
 
-        } else {
+        }
+        else
+        {
 
             printf("Error %u while trying to open %ls\n", err, wszFileName);
         }
     }
 
-    if (pContext) {
+    if (pContext)
+    {
         CleanupAsyncCreateFile(pContext);
     }
 
@@ -229,7 +248,7 @@ cleanup:
 DWORD WINAPI
 AsyncCreateFileCallback (
     LPVOID pParameter
-	)
+)
 /*++
 
 Routine Description:
@@ -252,19 +271,20 @@ Return Value:
     pContext = (PASYNC_CREATE_FILE_CONTEXT)pParameter;
 
     err = CancelableCreateFileW( &pContext->hFile,
-		                         pContext->pCancellationObject,
-								 pContext->wszFileName,
-								 pContext->dwDesiredAccess,
-								 pContext->dwShareMode,
-								 pContext->lpSecurityAttributes,
-								 pContext->dwCreationDisposition,
-								 pContext->dwFlagsAndAttributes,
-								 pContext->hTemplateFile );
+                                 pContext->pCancellationObject,
+                                 pContext->wszFileName,
+                                 pContext->dwDesiredAccess,
+                                 pContext->dwShareMode,
+                                 pContext->lpSecurityAttributes,
+                                 pContext->dwCreationDisposition,
+                                 pContext->dwFlagsAndAttributes,
+                                 pContext->hTemplateFile );
 
-    if (err) {
+    if (err)
+    {
         //
         // Ensure we propagate the status back
-		//
+        //
         pContext->dwStatus = err;
         goto cleanup;
     }
@@ -324,7 +344,7 @@ Return Value:
 	    The caller should wait for the thread to exit at which point
 		they can retrieve the status of the create from ppObject.
 
-	Other failures may happen with an appropriate error code (such as 
+	Other failures may happen with an appropriate error code (such as
 	ERROR_OUTOFMEMORY).
 
 --*/
@@ -335,15 +355,16 @@ Return Value:
     *ppObject = NULL;
 
     pObject = (PASYNC_CREATE_FILE_CONTEXT)
-        HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*pObject));
+              HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(*pObject));
 
-    if (pObject == NULL) {
+    if (pObject == NULL)
+    {
         err = ERROR_OUTOFMEMORY;
         goto cleanup;
     }
 
     pObject->hFile                  = INVALID_HANDLE_VALUE;
-	pObject->hThread                = INVALID_HANDLE_VALUE;
+    pObject->hThread                = INVALID_HANDLE_VALUE;
     pObject->wszFileName            = wszFileName;
     pObject->dwDesiredAccess        = dwDesiredAccess;
     pObject->dwShareMode            = dwShareMode;
@@ -354,29 +375,33 @@ Return Value:
 
     err = IoCancellationCreate(&pObject->pCancellationObject);
 
-    if (err == ERROR_NOT_SUPPORTED) {
+    if (err == ERROR_NOT_SUPPORTED)
+    {
 
         pObject->pCancellationObject = NULL;
         err = 0;
     }
 
-    if (err) {
+    if (err)
+    {
         goto cleanup;
     }
 
-	//
+    //
     // Call CreateFile asynchronously if cancellation is applicable
-	//
-    if (pObject->pCancellationObject) {
+    //
+    if (pObject->pCancellationObject)
+    {
 
         pObject->hThread = CreateThread( NULL,   // default security
                                          0,      // default stack size
-										 AsyncCreateFileCallback,
-										 pObject,
-										 0,      // default creation
-										 NULL ); // no need for thread id
+                                         AsyncCreateFileCallback,
+                                         pObject,
+                                         0,      // default creation
+                                         NULL ); // no need for thread id
 
-        if (pObject->hThread == INVALID_HANDLE_VALUE) {
+        if (pObject->hThread == INVALID_HANDLE_VALUE)
+        {
 
             err = GetLastError();
             goto cleanup;
@@ -385,24 +410,28 @@ Return Value:
         // not a failure
         err = ERROR_IO_PENDING;
 
-    } else {
+    }
+    else
+    {
 
-		//
+        //
         // Call CreateFile synchronously if cancellation is not applicable
-		//
+        //
         pObject->hFile = CreateFileW( pObject->wszFileName,
-			                          pObject->dwDesiredAccess,
-									  pObject->dwShareMode,
-									  pObject->lpSecurityAttributes,
-									  pObject->dwCreationDisposition,
-									  pObject->dwFlagsAndAttributes,
-									  pObject->hTemplateFile );
+                                      pObject->dwDesiredAccess,
+                                      pObject->dwShareMode,
+                                      pObject->lpSecurityAttributes,
+                                      pObject->dwCreationDisposition,
+                                      pObject->dwFlagsAndAttributes,
+                                      pObject->hTemplateFile );
 
-		if (pObject->hFile == INVALID_HANDLE_VALUE) {
+        if (pObject->hFile == INVALID_HANDLE_VALUE)
+        {
             err = GetLastError();
         }
 
-        if (err) {
+        if (err)
+        {
             goto cleanup;
         }
     }
@@ -412,8 +441,9 @@ Return Value:
     pObject   = NULL;
 
 cleanup:
-    
-    if (pObject) {
+
+    if (pObject)
+    {
         CleanupAsyncCreateFile(pObject);
     }
 
@@ -423,7 +453,7 @@ cleanup:
 VOID
 CancelAsyncCreateFile(
     PASYNC_CREATE_FILE_CONTEXT  pObject
-	)
+)
 /*++
 
 Routine Description:
@@ -443,13 +473,13 @@ Arguments:
 
 --*/
 {
-	IoCancellationSignal(pObject->pCancellationObject);	
+    IoCancellationSignal(pObject->pCancellationObject);
 }
 
 VOID
 CleanupAsyncCreateFile(
     PASYNC_CREATE_FILE_CONTEXT  pObject
-	)
+)
 /*++
 
 Routine Description:
@@ -460,27 +490,30 @@ Routine Description:
 	has returned ERROR_SUCCESS or ERROR_IO_PENDING and they are
 	finished with the result of the create (for instance on a successful
 	create they no longer need the file handle).
-	
+
 Arguments:
 
 	pObject - Pointer to a context object returned by AsyncCreateFile.
 
 --*/
 {
-    if (pObject->hThread != INVALID_HANDLE_VALUE) {
+    if (pObject->hThread != INVALID_HANDLE_VALUE)
+    {
         WaitForSingleObject(pObject->hThread, INFINITE);
         CloseHandle(pObject->hThread);
     }
 
-	//
-	// Once the thread has exited we can safely assume that we
-	// have full control of the object.
-	//
-    if (pObject->pCancellationObject != NULL) {
+    //
+    // Once the thread has exited we can safely assume that we
+    // have full control of the object.
+    //
+    if (pObject->pCancellationObject != NULL)
+    {
         IoCancellationClose(pObject->pCancellationObject);
     }
-  
-    if (pObject->hFile != INVALID_HANDLE_VALUE) {
+
+    if (pObject->hFile != INVALID_HANDLE_VALUE)
+    {
         CloseHandle(pObject->hFile);
     }
 

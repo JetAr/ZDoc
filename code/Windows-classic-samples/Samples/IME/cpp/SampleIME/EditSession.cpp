@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -53,7 +53,7 @@ STDAPI CEditSessionBase::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
     *ppvObj = nullptr;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfEditSession))
+            IsEqualIID(riid, IID_ITfEditSession))
     {
         *ppvObj = (ITfLangBarItemButton *)this;
     }

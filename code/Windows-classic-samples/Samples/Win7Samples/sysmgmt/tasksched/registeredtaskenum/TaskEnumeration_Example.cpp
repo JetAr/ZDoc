@@ -1,11 +1,11 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved
 //
-// This sample enumerates all the tasks registered in the root task 
+// This sample enumerates all the tasks registered in the root task
 // folder on the local computer and displays their name and status.
 //
 
@@ -36,15 +36,15 @@ void main(void)
 
     //  Set general COM security levels.
     hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+             NULL,
+             -1,
+             NULL,
+             NULL,
+             RPC_C_AUTHN_LEVEL_PKT,
+             RPC_C_IMP_LEVEL_IMPERSONATE,
+             NULL,
+             0,
+             NULL);
     if( FAILED(hr) )
     {
         printf("\nCoInitializeSecurity failed: %x", hr );
@@ -52,23 +52,23 @@ void main(void)
     }
 
     //  ------------------------------------------------------
-    //  Create an instance of the Task Service. 
+    //  Create an instance of the Task Service.
     ITaskService *pService = NULL;
     hr = CoCreateInstance( CLSID_TaskScheduler,
                            NULL,
                            CLSCTX_INPROC_SERVER,
                            IID_ITaskService,
-                           (void**)&pService );  
+                           (void**)&pService );
     if( FAILED(hr) )
     {
-          printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
-          CoUninitialize();
-          return;
+        printf("Failed to CoCreate an instance of the TaskService class: %x", hr);
+        CoUninitialize();
+        return;
     }
-        
+
     //  Connect to the local task service.
     hr = pService->Connect(_variant_t(), _variant_t(),
-        _variant_t(), _variant_t());
+                           _variant_t(), _variant_t());
     if( FAILED(hr) )
     {
         printf("ITaskService::Connect failed: %x", hr );
@@ -80,7 +80,7 @@ void main(void)
     //  ------------------------------------------------------
     //  Get the pointer to the root task folder.
     ITaskFolder *pRootFolder = NULL;
-    hr = pService->GetFolder( _bstr_t( L"\\") , &pRootFolder );
+    hr = pService->GetFolder( _bstr_t( L"\\"), &pRootFolder );
 
     pService->Release();
     if( FAILED(hr) )
@@ -89,7 +89,7 @@ void main(void)
         CoUninitialize();
         return;
     }
-    
+
     //  -------------------------------------------------------
     //  Get the registered tasks in the folder.
     IRegisteredTaskCollection* pTaskCollection = NULL;
@@ -137,7 +137,7 @@ void main(void)
             printf("Cannot get the registered task: %x", hr);
             continue;
         }
-        
+
         hr = pRegisteredTask->get_Name(taskName.GetAddress());
         if( FAILED(hr) )
         {

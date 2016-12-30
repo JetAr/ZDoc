@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexDDS.cpp
-//  
+//
 // DirectX Texture Library - Microsoft DirectDraw Surface (DDS) file format reader/writer
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -40,9 +40,9 @@ enum CONVERSION_FLAGS
     CONV_FLAGS_A8P8     = 0x800,    // Has an 8-bit palette with an alpha channel
     CONV_FLAGS_DX10     = 0x10000,  // Has the 'DX10' extension header
     CONV_FLAGS_PMALPHA  = 0x20000,  // Contains premultiplied alpha data
-    CONV_FLAGS_L8       = 0x40000,  // Source is a 8 luminance format 
-    CONV_FLAGS_L16      = 0x80000,  // Source is a 16 luminance format 
-    CONV_FLAGS_A8L8     = 0x100000, // Source is a 8:8 luminance format 
+    CONV_FLAGS_L8       = 0x40000,  // Source is a 8 luminance format
+    CONV_FLAGS_L16      = 0x80000,  // Source is a 16 luminance format
+    CONV_FLAGS_A8L8     = 0x100000, // Source is a 8:8 luminance format
 };
 
 struct LegacyDDS
@@ -52,7 +52,7 @@ struct LegacyDDS
     DDS_PIXELFORMAT ddpf;
 };
 
-const LegacyDDS g_LegacyDDSMap[] = 
+const LegacyDDS g_LegacyDDSMap[] =
 {
     { DXGI_FORMAT_BC1_UNORM,          CONV_FLAGS_NONE,        DDSPF_DXT1 }, // D3DFMT_DXT1
     { DXGI_FORMAT_BC2_UNORM,          CONV_FLAGS_NONE,        DDSPF_DXT3 }, // D3DFMT_DXT3
@@ -81,20 +81,28 @@ const LegacyDDS g_LegacyDDSMap[] =
     { DXGI_FORMAT_R10G10B10A2_UNORM,  CONV_FLAGS_SWIZZLE,     { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 32, 0x000003ff, 0x000ffc00, 0x3ff00000, 0xc0000000 } }, // D3DFMT_A2R10G10B10 (D3DX reversal issue workaround)
     { DXGI_FORMAT_R10G10B10A2_UNORM,  CONV_FLAGS_NONE,        { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 32, 0x3ff00000, 0x000ffc00, 0x000003ff, 0xc0000000 } }, // D3DFMT_A2B10G10R10 (D3DX reversal issue workaround)
 
-    { DXGI_FORMAT_R8G8B8A8_UNORM,     CONV_FLAGS_EXPAND
-                                      | CONV_FLAGS_NOALPHA
-                                      | CONV_FLAGS_888,       DDSPF_R8G8B8 }, // D3DFMT_R8G8B8
+    {
+        DXGI_FORMAT_R8G8B8A8_UNORM,     CONV_FLAGS_EXPAND
+        | CONV_FLAGS_NOALPHA
+        | CONV_FLAGS_888,       DDSPF_R8G8B8
+    }, // D3DFMT_R8G8B8
 
     { DXGI_FORMAT_B5G6R5_UNORM,       CONV_FLAGS_565,         DDSPF_R5G6B5 }, // D3DFMT_R5G6B5
     { DXGI_FORMAT_B5G5R5A1_UNORM,     CONV_FLAGS_5551,        DDSPF_A1R5G5B5 }, // D3DFMT_A1R5G5B5
-    { DXGI_FORMAT_B5G5R5A1_UNORM,     CONV_FLAGS_5551
-                                      | CONV_FLAGS_NOALPHA,   { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 16, 0x7c00,     0x03e0,     0x001f,     0x0000     } }, // D3DFMT_X1R5G5B5
-     
-    { DXGI_FORMAT_R8G8B8A8_UNORM,     CONV_FLAGS_EXPAND
-                                      | CONV_FLAGS_8332,      { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 16, 0x00e0,     0x001c,     0x0003,     0xff00     } }, // D3DFMT_A8R3G3B2
-    { DXGI_FORMAT_B5G6R5_UNORM,       CONV_FLAGS_EXPAND
-                                      | CONV_FLAGS_332,       { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0,  8, 0xe0,       0x1c,       0x03,       0x00       } }, // D3DFMT_R3G3B2
-  
+    {
+        DXGI_FORMAT_B5G5R5A1_UNORM,     CONV_FLAGS_5551
+        | CONV_FLAGS_NOALPHA,   { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 16, 0x7c00,     0x03e0,     0x001f,     0x0000     }
+    }, // D3DFMT_X1R5G5B5
+
+    {
+        DXGI_FORMAT_R8G8B8A8_UNORM,     CONV_FLAGS_EXPAND
+        | CONV_FLAGS_8332,      { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 16, 0x00e0,     0x001c,     0x0003,     0xff00     }
+    }, // D3DFMT_A8R3G3B2
+    {
+        DXGI_FORMAT_B5G6R5_UNORM,       CONV_FLAGS_EXPAND
+        | CONV_FLAGS_332,       { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0,  8, 0xe0,       0x1c,       0x03,       0x00       }
+    }, // D3DFMT_R3G3B2
+
     { DXGI_FORMAT_R8_UNORM,           CONV_FLAGS_NONE,        DDSPF_L8   }, // D3DFMT_L8
     { DXGI_FORMAT_R16_UNORM,          CONV_FLAGS_NONE,        DDSPF_L16  }, // D3DFMT_L16
     { DXGI_FORMAT_R8G8_UNORM,         CONV_FLAGS_NONE,        DDSPF_A8L8 }, // D3DFMT_A8L8
@@ -112,17 +120,25 @@ const LegacyDDS g_LegacyDDSMap[] =
 
     { DXGI_FORMAT_R32_FLOAT,          CONV_FLAGS_NONE,        { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 32, 0xffffffff, 0x00000000, 0x00000000, 0x00000000 } }, // D3DFMT_R32F (D3DX uses FourCC 114 instead)
 
-    { DXGI_FORMAT_R8G8B8A8_UNORM,     CONV_FLAGS_EXPAND
-                                      | CONV_FLAGS_PAL8
-                                      | CONV_FLAGS_A8P8,      { sizeof(DDS_PIXELFORMAT), DDS_PAL8,      0, 16, 0,          0,          0,          0         } }, // D3DFMT_A8P8
-    { DXGI_FORMAT_R8G8B8A8_UNORM,     CONV_FLAGS_EXPAND
-                                      | CONV_FLAGS_PAL8,      { sizeof(DDS_PIXELFORMAT), DDS_PAL8,      0,  8, 0,          0,          0,          0         } }, // D3DFMT_P8
+    {
+        DXGI_FORMAT_R8G8B8A8_UNORM,     CONV_FLAGS_EXPAND
+        | CONV_FLAGS_PAL8
+        | CONV_FLAGS_A8P8,      { sizeof(DDS_PIXELFORMAT), DDS_PAL8,      0, 16, 0,          0,          0,          0         }
+    }, // D3DFMT_A8P8
+    {
+        DXGI_FORMAT_R8G8B8A8_UNORM,     CONV_FLAGS_EXPAND
+        | CONV_FLAGS_PAL8,      { sizeof(DDS_PIXELFORMAT), DDS_PAL8,      0,  8, 0,          0,          0,          0         }
+    }, // D3DFMT_P8
 
     { DXGI_FORMAT_B4G4R4A4_UNORM,     CONV_FLAGS_4444,        DDSPF_A4R4G4B4 }, // D3DFMT_A4R4G4B4 (uses DXGI 1.2 format)
-    { DXGI_FORMAT_B4G4R4A4_UNORM,     CONV_FLAGS_NOALPHA
-                                      | CONV_FLAGS_4444,      { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 16, 0x0f00,     0x00f0,     0x000f,     0x0000     } }, // D3DFMT_X4R4G4B4 (uses DXGI 1.2 format)
-    { DXGI_FORMAT_B4G4R4A4_UNORM,     CONV_FLAGS_EXPAND
-                                      | CONV_FLAGS_44,        { sizeof(DDS_PIXELFORMAT), DDS_LUMINANCE, 0,  8, 0x0f,       0x00,       0x00,       0xf0       } }, // D3DFMT_A4L4 (uses DXGI 1.2 format)
+    {
+        DXGI_FORMAT_B4G4R4A4_UNORM,     CONV_FLAGS_NOALPHA
+        | CONV_FLAGS_4444,      { sizeof(DDS_PIXELFORMAT), DDS_RGB,       0, 16, 0x0f00,     0x00f0,     0x000f,     0x0000     }
+    }, // D3DFMT_X4R4G4B4 (uses DXGI 1.2 format)
+    {
+        DXGI_FORMAT_B4G4R4A4_UNORM,     CONV_FLAGS_EXPAND
+        | CONV_FLAGS_44,        { sizeof(DDS_PIXELFORMAT), DDS_LUMINANCE, 0,  8, 0x0f,       0x00,       0x00,       0xf0       }
+    }, // D3DFMT_A4L4 (uses DXGI 1.2 format)
 };
 
 // Note that many common DDS reader/writers (including D3DX) swap the
@@ -164,9 +180,9 @@ static DXGI_FORMAT _GetDXGIFormat( const DDS_PIXELFORMAT& ddpf, DWORD flags, _In
             {
                 // RGB, RGBA, ALPHA, LUMINANCE
                 if ( ddpf.dwRBitMask == entry->ddpf.dwRBitMask
-                     && ddpf.dwGBitMask == entry->ddpf.dwGBitMask
-                     && ddpf.dwBBitMask == entry->ddpf.dwBBitMask
-                     && ddpf.dwABitMask == entry->ddpf.dwABitMask )
+                        && ddpf.dwGBitMask == entry->ddpf.dwGBitMask
+                        && ddpf.dwBBitMask == entry->ddpf.dwBBitMask
+                        && ddpf.dwABitMask == entry->ddpf.dwABitMask )
                     break;
             }
         }
@@ -219,7 +235,7 @@ static HRESULT _DecodeDDSHeader( _In_reads_bytes_(size) LPCVOID pSource, size_t 
 
     // Verify header to validate DDS file
     if ( pHeader->dwSize != sizeof(DDS_HEADER)
-         || pHeader->ddspf.dwSize != sizeof(DDS_PIXELFORMAT) )
+            || pHeader->ddspf.dwSize != sizeof(DDS_PIXELFORMAT) )
     {
         return E_FAIL;
     }
@@ -230,7 +246,7 @@ static HRESULT _DecodeDDSHeader( _In_reads_bytes_(size) LPCVOID pSource, size_t 
 
     // Check for DX10 extension
     if ( (pHeader->ddspf.dwFlags & DDS_FOURCC)
-         && (MAKEFOURCC( 'D', 'X', '1', '0' ) == pHeader->ddspf.dwFourCC) )
+            && (MAKEFOURCC( 'D', 'X', '1', '0' ) == pHeader->ddspf.dwFourCC) )
     {
         // Buffer must be big enough for both headers and magic value
         if ( size < ( sizeof(DDS_HEADER) + sizeof(uint32_t) + sizeof(DDS_HEADER_DXT10) ) )
@@ -326,13 +342,13 @@ static HRESULT _DecodeDDSHeader( _In_reads_bytes_(size) LPCVOID pSource, size_t 
             metadata.depth = pHeader->dwDepth;
             metadata.dimension = TEX_DIMENSION_TEXTURE3D;
         }
-        else 
+        else
         {
             if ( pHeader->dwCaps2 & DDS_CUBEMAP )
             {
-               // We require all six faces to be defined
-               if ( (pHeader->dwCaps2 & DDS_CUBEMAP_ALLFACES ) != DDS_CUBEMAP_ALLFACES )
-                   return HRESULT_FROM_WIN32( ERROR_NOT_SUPPORTED );
+                // We require all six faces to be defined
+                if ( (pHeader->dwCaps2 & DDS_CUBEMAP_ALLFACES ) != DDS_CUBEMAP_ALLFACES )
+                    return HRESULT_FROM_WIN32( ERROR_NOT_SUPPORTED );
 
                 metadata.arraySize = 6;
                 metadata.miscFlags |= TEX_MISC_TEXTURECUBE;
@@ -437,7 +453,7 @@ static HRESULT _DecodeDDSHeader( _In_reads_bytes_(size) LPCVOID pSource, size_t 
 // Encodes DDS file header (magic value, header, optional DX10 extended header)
 //-------------------------------------------------------------------------------------
 _Use_decl_annotations_
-HRESULT _EncodeDDSHeader( const TexMetadata& metadata, DWORD flags, 
+HRESULT _EncodeDDSHeader( const TexMetadata& metadata, DWORD flags,
                           LPVOID pDestination, size_t maxsize, size_t& required )
 {
     assert( IsValid( metadata.format ) && !IsVideo( metadata.format ) );
@@ -461,51 +477,107 @@ HRESULT _EncodeDDSHeader( const TexMetadata& metadata, DWORD flags,
     {
         switch( metadata.format )
         {
-        case DXGI_FORMAT_R8G8B8A8_UNORM:        memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A8B8G8R8, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_R16G16_UNORM:          memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_G16R16, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_R8G8_UNORM:            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A8L8, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_R16_UNORM:             memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_L16, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_R8_UNORM:              memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_L8, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_A8_UNORM:              memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A8, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_R8G8_B8G8_UNORM:       memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_R8G8_B8G8, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_G8R8_G8B8_UNORM:       memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_G8R8_G8B8, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_BC1_UNORM:             memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_DXT1, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_BC2_UNORM:             memcpy_s( &ddpf, sizeof(ddpf), metadata.IsPMAlpha() ? (&DDSPF_DXT2) : (&DDSPF_DXT3), sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_BC3_UNORM:             memcpy_s( &ddpf, sizeof(ddpf), metadata.IsPMAlpha() ? (&DDSPF_DXT4) : (&DDSPF_DXT5), sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_BC4_UNORM:             memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_BC4_UNORM, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_BC4_SNORM:             memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_BC4_SNORM, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_BC5_UNORM:             memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_BC5_UNORM, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_BC5_SNORM:             memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_BC5_SNORM, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_B5G6R5_UNORM:          memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_R5G6B5, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_B5G5R5A1_UNORM:        memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A1R5G5B5, sizeof(DDS_PIXELFORMAT) ); break;
-        case DXGI_FORMAT_B8G8R8A8_UNORM:        memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A8R8G8B8, sizeof(DDS_PIXELFORMAT) ); break; // DXGI 1.1
-        case DXGI_FORMAT_B8G8R8X8_UNORM:        memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_X8R8G8B8, sizeof(DDS_PIXELFORMAT) ); break; // DXGI 1.1
-        case DXGI_FORMAT_B4G4R4A4_UNORM:        memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A4R4G4B4, sizeof(DDS_PIXELFORMAT) ); break;
+        case DXGI_FORMAT_R8G8B8A8_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A8B8G8R8, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_R16G16_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_G16R16, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_R8G8_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A8L8, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_R16_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_L16, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_R8_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_L8, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_A8_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A8, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_R8G8_B8G8_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_R8G8_B8G8, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_G8R8_G8B8_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_G8R8_G8B8, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_BC1_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_DXT1, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_BC2_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), metadata.IsPMAlpha() ? (&DDSPF_DXT2) : (&DDSPF_DXT3), sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_BC3_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), metadata.IsPMAlpha() ? (&DDSPF_DXT4) : (&DDSPF_DXT5), sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_BC4_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_BC4_UNORM, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_BC4_SNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_BC4_SNORM, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_BC5_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_BC5_UNORM, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_BC5_SNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_BC5_SNORM, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_B5G6R5_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_R5G6B5, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_B5G5R5A1_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A1R5G5B5, sizeof(DDS_PIXELFORMAT) );
+            break;
+        case DXGI_FORMAT_B8G8R8A8_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A8R8G8B8, sizeof(DDS_PIXELFORMAT) );
+            break; // DXGI 1.1
+        case DXGI_FORMAT_B8G8R8X8_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_X8R8G8B8, sizeof(DDS_PIXELFORMAT) );
+            break; // DXGI 1.1
+        case DXGI_FORMAT_B4G4R4A4_UNORM:
+            memcpy_s( &ddpf, sizeof(ddpf), &DDSPF_A4R4G4B4, sizeof(DDS_PIXELFORMAT) );
+            break;
 
         // Legacy D3DX formats using D3DFMT enum value as FourCC
         case DXGI_FORMAT_R32G32B32A32_FLOAT:
-            ddpf.dwSize = sizeof(DDS_PIXELFORMAT); ddpf.dwFlags = DDS_FOURCC; ddpf.dwFourCC = 116;  // D3DFMT_A32B32G32R32F
+            ddpf.dwSize = sizeof(DDS_PIXELFORMAT);
+            ddpf.dwFlags = DDS_FOURCC;
+            ddpf.dwFourCC = 116;  // D3DFMT_A32B32G32R32F
             break;
         case DXGI_FORMAT_R16G16B16A16_FLOAT:
-            ddpf.dwSize = sizeof(DDS_PIXELFORMAT); ddpf.dwFlags = DDS_FOURCC; ddpf.dwFourCC = 113;  // D3DFMT_A16B16G16R16F
+            ddpf.dwSize = sizeof(DDS_PIXELFORMAT);
+            ddpf.dwFlags = DDS_FOURCC;
+            ddpf.dwFourCC = 113;  // D3DFMT_A16B16G16R16F
             break;
         case DXGI_FORMAT_R16G16B16A16_UNORM:
-            ddpf.dwSize = sizeof(DDS_PIXELFORMAT); ddpf.dwFlags = DDS_FOURCC; ddpf.dwFourCC = 36;  // D3DFMT_A16B16G16R16
+            ddpf.dwSize = sizeof(DDS_PIXELFORMAT);
+            ddpf.dwFlags = DDS_FOURCC;
+            ddpf.dwFourCC = 36;  // D3DFMT_A16B16G16R16
             break;
         case DXGI_FORMAT_R16G16B16A16_SNORM:
-            ddpf.dwSize = sizeof(DDS_PIXELFORMAT); ddpf.dwFlags = DDS_FOURCC; ddpf.dwFourCC = 110;  // D3DFMT_Q16W16V16U16
+            ddpf.dwSize = sizeof(DDS_PIXELFORMAT);
+            ddpf.dwFlags = DDS_FOURCC;
+            ddpf.dwFourCC = 110;  // D3DFMT_Q16W16V16U16
             break;
         case DXGI_FORMAT_R32G32_FLOAT:
-            ddpf.dwSize = sizeof(DDS_PIXELFORMAT); ddpf.dwFlags = DDS_FOURCC; ddpf.dwFourCC = 115;  // D3DFMT_G32R32F
+            ddpf.dwSize = sizeof(DDS_PIXELFORMAT);
+            ddpf.dwFlags = DDS_FOURCC;
+            ddpf.dwFourCC = 115;  // D3DFMT_G32R32F
             break;
-       case DXGI_FORMAT_R16G16_FLOAT:
-            ddpf.dwSize = sizeof(DDS_PIXELFORMAT); ddpf.dwFlags = DDS_FOURCC; ddpf.dwFourCC = 112;  // D3DFMT_G16R16F
+        case DXGI_FORMAT_R16G16_FLOAT:
+            ddpf.dwSize = sizeof(DDS_PIXELFORMAT);
+            ddpf.dwFlags = DDS_FOURCC;
+            ddpf.dwFourCC = 112;  // D3DFMT_G16R16F
             break;
         case DXGI_FORMAT_R32_FLOAT:
-            ddpf.dwSize = sizeof(DDS_PIXELFORMAT); ddpf.dwFlags = DDS_FOURCC; ddpf.dwFourCC = 114;  // D3DFMT_R32F
+            ddpf.dwSize = sizeof(DDS_PIXELFORMAT);
+            ddpf.dwFlags = DDS_FOURCC;
+            ddpf.dwFourCC = 114;  // D3DFMT_R32F
             break;
         case DXGI_FORMAT_R16_FLOAT:
-            ddpf.dwSize = sizeof(DDS_PIXELFORMAT); ddpf.dwFlags = DDS_FOURCC; ddpf.dwFourCC = 111;  // D3DFMT_R16F
+            ddpf.dwSize = sizeof(DDS_PIXELFORMAT);
+            ddpf.dwFlags = DDS_FOURCC;
+            ddpf.dwFourCC = 111;  // D3DFMT_R16F
             break;
         }
     }
@@ -554,18 +626,18 @@ HRESULT _EncodeDDSHeader( const TexMetadata& metadata, DWORD flags,
             return E_INVALIDARG;
 #endif
 
-        header->dwWidth = static_cast<uint32_t>( metadata.width ); 
+        header->dwWidth = static_cast<uint32_t>( metadata.width );
         header->dwHeight = header->dwDepth = 1;
         break;
 
     case TEX_DIMENSION_TEXTURE2D:
 #ifdef _M_X64
         if ( metadata.height > 0xFFFFFFFF
-             || metadata.width > 0xFFFFFFFF)
+                || metadata.width > 0xFFFFFFFF)
             return E_INVALIDARG;
 #endif
 
-        header->dwHeight = static_cast<uint32_t>( metadata.height ); 
+        header->dwHeight = static_cast<uint32_t>( metadata.height );
         header->dwWidth = static_cast<uint32_t>( metadata.width );
         header->dwDepth = 1;
 
@@ -579,14 +651,14 @@ HRESULT _EncodeDDSHeader( const TexMetadata& metadata, DWORD flags,
     case TEX_DIMENSION_TEXTURE3D:
 #ifdef _M_X64
         if ( metadata.height > 0xFFFFFFFF
-             || metadata.width > 0xFFFFFFFF
-             || metadata.depth > 0xFFFFFFFF )
+                || metadata.width > 0xFFFFFFFF
+                || metadata.depth > 0xFFFFFFFF )
             return E_INVALIDARG;
 #endif
 
         header->dwFlags |= DDS_HEADER_FLAGS_VOLUME;
         header->dwCaps2 |= DDS_FLAGS_VOLUME;
-        header->dwHeight = static_cast<uint32_t>( metadata.height ); 
+        header->dwHeight = static_cast<uint32_t>( metadata.height );
         header->dwWidth = static_cast<uint32_t>( metadata.width );
         header->dwDepth = static_cast<uint32_t>( metadata.depth );
         break;
@@ -600,7 +672,7 @@ HRESULT _EncodeDDSHeader( const TexMetadata& metadata, DWORD flags,
 
 #ifdef _M_X64
     if ( slicePitch > 0xFFFFFFFF
-         || rowPitch > 0xFFFFFFFF )
+            || rowPitch > 0xFFFFFFFF )
         return E_FAIL;
 #endif
 
@@ -632,7 +704,7 @@ HRESULT _EncodeDDSHeader( const TexMetadata& metadata, DWORD flags,
 #endif
 
         static_assert( TEX_MISC_TEXTURECUBE == DDS_RESOURCE_MISC_TEXTURECUBE, "DDS header mismatch");
-        
+
         ext->miscFlag = metadata.miscFlags & ~TEX_MISC_TEXTURECUBE;
 
         if ( metadata.miscFlags & TEX_MISC_TEXTURECUBE )
@@ -717,7 +789,7 @@ inline static TEXP_LEGACY_FORMAT _FindLegacyFormat( DWORD flags )
 }
 
 _Success_(return != false)
-static bool _LegacyExpandScanline( _Out_writes_bytes_(outSize) LPVOID pDestination, size_t outSize, _In_ DXGI_FORMAT outFormat, 
+static bool _LegacyExpandScanline( _Out_writes_bytes_(outSize) LPVOID pDestination, size_t outSize, _In_ DXGI_FORMAT outFormat,
                                    _In_reads_bytes_(inSize) LPCVOID pSource, size_t inSize, _In_ TEXP_LEGACY_FORMAT inFormat,
                                    _In_reads_opt_(256) const uint32_t* pal8, _In_ DWORD flags )
 {
@@ -741,7 +813,7 @@ static bool _LegacyExpandScanline( _Out_writes_bytes_(outSize) LPVOID pDestinati
             {
                 // 24bpp Direct3D 9 files are actually BGR, so need to swizzle as well
                 uint32_t t1 = ( *(sPtr) << 16 );
-                uint32_t t2 = ( *(sPtr+1) << 8 ); 
+                uint32_t t2 = ( *(sPtr+1) << 8 );
                 uint32_t t3 = *(sPtr+2);
 
                 *(dPtr++) = t1 | t2 | t3 | 0xff000000;
@@ -870,7 +942,7 @@ static bool _LegacyExpandScanline( _Out_writes_bytes_(outSize) LPVOID pDestinati
         switch( outFormat )
         {
         case DXGI_FORMAT_B4G4R4A4_UNORM :
-            // D3DFMT_A4L4 -> DXGI_FORMAT_B4G4R4A4_UNORM 
+            // D3DFMT_A4L4 -> DXGI_FORMAT_B4G4R4A4_UNORM
             if ( inSize >= 1 && outSize >= 2 )
             {
                 const uint8_t * __restrict sPtr = reinterpret_cast<const uint8_t*>(pSource);
@@ -1015,7 +1087,7 @@ static bool _LegacyExpandScanline( _Out_writes_bytes_(outSize) LPVOID pDestinati
 //-------------------------------------------------------------------------------------
 // Converts or copies image data from pPixels into scratch image data
 //-------------------------------------------------------------------------------------
-static HRESULT _CopyImage( _In_reads_bytes_(size) const void* pPixels, _In_ size_t size, 
+static HRESULT _CopyImage( _In_reads_bytes_(size) const void* pPixels, _In_ size_t size,
                            _In_ const TexMetadata& metadata, _In_ DWORD cpFlags, _In_ DWORD convFlags, _In_reads_opt_(256) const uint32_t *pal8, _In_ const ScratchImage& image )
 {
     assert( pPixels );
@@ -1023,7 +1095,7 @@ static HRESULT _CopyImage( _In_reads_bytes_(size) const void* pPixels, _In_ size
 
     if ( !size )
         return E_FAIL;
-     
+
     if ( convFlags & CONV_FLAGS_EXPAND )
     {
         if ( convFlags & CONV_FLAGS_888 )
@@ -1073,151 +1145,151 @@ static HRESULT _CopyImage( _In_reads_bytes_(size) const void* pPixels, _In_ size
     {
     case TEX_DIMENSION_TEXTURE1D:
     case TEX_DIMENSION_TEXTURE2D:
+    {
+        size_t index = 0;
+        for( size_t item = 0; item < metadata.arraySize; ++item )
         {
-            size_t index = 0;
-            for( size_t item = 0; item < metadata.arraySize; ++item )
+            for( size_t level = 0; level < metadata.mipLevels; ++level, ++index )
             {
-                for( size_t level = 0; level < metadata.mipLevels; ++level, ++index )
+                if ( index >= nimages )
+                    return E_FAIL;
+
+                if ( images[ index ].height != timages[ index ].height )
+                    return E_FAIL;
+
+                size_t dpitch = images[ index ].rowPitch;
+                size_t spitch = timages[ index ].rowPitch;
+
+                const uint8_t *pSrc = const_cast<const uint8_t*>( timages[ index ].pixels );
+                if ( !pSrc )
+                    return E_POINTER;
+
+                uint8_t *pDest = images[ index ].pixels;
+                if ( !pDest )
+                    return E_POINTER;
+
+                if ( IsCompressed( metadata.format ) )
                 {
-                    if ( index >= nimages )
-                        return E_FAIL;
-
-                    if ( images[ index ].height != timages[ index ].height )
-                        return E_FAIL;
-
-                    size_t dpitch = images[ index ].rowPitch;
-                    size_t spitch = timages[ index ].rowPitch;
-
-                    const uint8_t *pSrc = const_cast<const uint8_t*>( timages[ index ].pixels );
-                    if ( !pSrc )
-                        return E_POINTER;
-
-                    uint8_t *pDest = images[ index ].pixels;
-                    if ( !pDest )
-                        return E_POINTER;
-
-                    if ( IsCompressed( metadata.format ) )
+                    size_t csize = std::min<size_t>( images[ index ].slicePitch, timages[ index ].slicePitch );
+                    memcpy_s( pDest, images[ index ].slicePitch, pSrc, csize );
+                }
+                else
+                {
+                    for( size_t h = 0; h < images[ index ].height; ++h )
                     {
-                        size_t csize = std::min<size_t>( images[ index ].slicePitch, timages[ index ].slicePitch );
-                        memcpy_s( pDest, images[ index ].slicePitch, pSrc, csize );
-                    }
-                    else
-                    {
-                        for( size_t h = 0; h < images[ index ].height; ++h )
+                        if ( convFlags & CONV_FLAGS_EXPAND )
                         {
-                            if ( convFlags & CONV_FLAGS_EXPAND )
+                            if ( convFlags & (CONV_FLAGS_565|CONV_FLAGS_5551|CONV_FLAGS_4444) )
                             {
-                                if ( convFlags & (CONV_FLAGS_565|CONV_FLAGS_5551|CONV_FLAGS_4444) )
-                                {
-                                    if ( !_ExpandScanline( pDest, dpitch, DXGI_FORMAT_R8G8B8A8_UNORM,
-                                                           pSrc, spitch,
-                                                           (convFlags & CONV_FLAGS_565) ? DXGI_FORMAT_B5G6R5_UNORM : DXGI_FORMAT_B5G5R5A1_UNORM,
-                                                           tflags ) )
-                                        return E_FAIL;
-                                }
-                                else
-                                {
-                                    TEXP_LEGACY_FORMAT lformat = _FindLegacyFormat( convFlags );
-                                    if ( !_LegacyExpandScanline( pDest, dpitch, metadata.format,
-                                                                 pSrc, spitch, lformat, pal8,
-                                                                 tflags ) )
-                                        return E_FAIL;
-                                }
-                            }
-                            else if ( convFlags & CONV_FLAGS_SWIZZLE )
-                            {
-                                _SwizzleScanline( pDest, dpitch, pSrc, spitch,
-                                                  metadata.format, tflags );
+                                if ( !_ExpandScanline( pDest, dpitch, DXGI_FORMAT_R8G8B8A8_UNORM,
+                                                       pSrc, spitch,
+                                                       (convFlags & CONV_FLAGS_565) ? DXGI_FORMAT_B5G6R5_UNORM : DXGI_FORMAT_B5G5R5A1_UNORM,
+                                                       tflags ) )
+                                    return E_FAIL;
                             }
                             else
                             {
-                                _CopyScanline( pDest, dpitch, pSrc, spitch,
-                                               metadata.format, tflags );
+                                TEXP_LEGACY_FORMAT lformat = _FindLegacyFormat( convFlags );
+                                if ( !_LegacyExpandScanline( pDest, dpitch, metadata.format,
+                                                             pSrc, spitch, lformat, pal8,
+                                                             tflags ) )
+                                    return E_FAIL;
                             }
-
-                            pSrc += spitch;
-                            pDest += dpitch;
                         }
+                        else if ( convFlags & CONV_FLAGS_SWIZZLE )
+                        {
+                            _SwizzleScanline( pDest, dpitch, pSrc, spitch,
+                                              metadata.format, tflags );
+                        }
+                        else
+                        {
+                            _CopyScanline( pDest, dpitch, pSrc, spitch,
+                                           metadata.format, tflags );
+                        }
+
+                        pSrc += spitch;
+                        pDest += dpitch;
                     }
                 }
             }
         }
-        break;
+    }
+    break;
 
     case TEX_DIMENSION_TEXTURE3D:
+    {
+        size_t index = 0;
+        size_t d = metadata.depth;
+
+        for( size_t level = 0; level < metadata.mipLevels; ++level )
         {
-            size_t index = 0;
-            size_t d = metadata.depth;
-
-            for( size_t level = 0; level < metadata.mipLevels; ++level )
+            for( size_t slice = 0; slice < d; ++slice, ++index )
             {
-                for( size_t slice = 0; slice < d; ++slice, ++index )
+                if ( index >= nimages )
+                    return E_FAIL;
+
+                if ( images[ index ].height != timages[ index ].height )
+                    return E_FAIL;
+
+                size_t dpitch = images[ index ].rowPitch;
+                size_t spitch = timages[ index ].rowPitch;
+
+                const uint8_t *pSrc = const_cast<const uint8_t*>( timages[ index ].pixels );
+                if ( !pSrc )
+                    return E_POINTER;
+
+                uint8_t *pDest = images[ index ].pixels;
+                if ( !pDest )
+                    return E_POINTER;
+
+                if ( IsCompressed( metadata.format ) )
                 {
-                    if ( index >= nimages )
-                        return E_FAIL;
-
-                    if ( images[ index ].height != timages[ index ].height )
-                        return E_FAIL;
-
-                    size_t dpitch = images[ index ].rowPitch;
-                    size_t spitch = timages[ index ].rowPitch;
-
-                    const uint8_t *pSrc = const_cast<const uint8_t*>( timages[ index ].pixels );
-                    if ( !pSrc )
-                        return E_POINTER;
-
-                    uint8_t *pDest = images[ index ].pixels;
-                    if ( !pDest )
-                        return E_POINTER;
-
-                    if ( IsCompressed( metadata.format ) )
+                    size_t csize = std::min<size_t>( images[ index ].slicePitch, timages[ index ].slicePitch );
+                    memcpy_s( pDest, images[ index ].slicePitch, pSrc, csize );
+                }
+                else
+                {
+                    for( size_t h = 0; h < images[ index ].height; ++h )
                     {
-                        size_t csize = std::min<size_t>( images[ index ].slicePitch, timages[ index ].slicePitch );
-                        memcpy_s( pDest, images[ index ].slicePitch, pSrc, csize );
-                    }
-                    else
-                    {
-                        for( size_t h = 0; h < images[ index ].height; ++h )
+                        if ( convFlags & CONV_FLAGS_EXPAND )
                         {
-                            if ( convFlags & CONV_FLAGS_EXPAND )
+                            if ( convFlags & (CONV_FLAGS_565|CONV_FLAGS_5551|CONV_FLAGS_4444) )
                             {
-                                if ( convFlags & (CONV_FLAGS_565|CONV_FLAGS_5551|CONV_FLAGS_4444) )
-                                {
-                                    if ( !_ExpandScanline( pDest, dpitch, DXGI_FORMAT_R8G8B8A8_UNORM,
-                                                           pSrc, spitch,
-                                                           (convFlags & CONV_FLAGS_565) ? DXGI_FORMAT_B5G6R5_UNORM : DXGI_FORMAT_B5G5R5A1_UNORM,
-                                                           tflags ) )
-                                        return E_FAIL;
-                                }
-                                else
-                                {
-                                    TEXP_LEGACY_FORMAT lformat = _FindLegacyFormat( convFlags );
-                                    if ( !_LegacyExpandScanline( pDest, dpitch, metadata.format,
-                                                                 pSrc, spitch, lformat, pal8,
-                                                                 tflags ) )
-                                        return E_FAIL;
-                                }
-                            }
-                            else if ( convFlags & CONV_FLAGS_SWIZZLE )
-                            {
-                                _SwizzleScanline( pDest, dpitch, pSrc, spitch, metadata.format, tflags );
+                                if ( !_ExpandScanline( pDest, dpitch, DXGI_FORMAT_R8G8B8A8_UNORM,
+                                                       pSrc, spitch,
+                                                       (convFlags & CONV_FLAGS_565) ? DXGI_FORMAT_B5G6R5_UNORM : DXGI_FORMAT_B5G5R5A1_UNORM,
+                                                       tflags ) )
+                                    return E_FAIL;
                             }
                             else
                             {
-                                _CopyScanline( pDest, dpitch, pSrc, spitch, metadata.format, tflags );
+                                TEXP_LEGACY_FORMAT lformat = _FindLegacyFormat( convFlags );
+                                if ( !_LegacyExpandScanline( pDest, dpitch, metadata.format,
+                                                             pSrc, spitch, lformat, pal8,
+                                                             tflags ) )
+                                    return E_FAIL;
                             }
-
-                            pSrc += spitch;
-                            pDest += dpitch;
                         }
+                        else if ( convFlags & CONV_FLAGS_SWIZZLE )
+                        {
+                            _SwizzleScanline( pDest, dpitch, pSrc, spitch, metadata.format, tflags );
+                        }
+                        else
+                        {
+                            _CopyScanline( pDest, dpitch, pSrc, spitch, metadata.format, tflags );
+                        }
+
+                        pSrc += spitch;
+                        pDest += dpitch;
                     }
                 }
-
-                if ( d > 1 )
-                    d >>= 1;
             }
+
+            if ( d > 1 )
+                d >>= 1;
         }
-        break;
+    }
+    break;
 
     default:
         return E_FAIL;
@@ -1297,7 +1369,7 @@ HRESULT GetMetadataFromDDSFile( LPCWSTR szFile, DWORD flags, TexMetadata& metada
     ScopedHandle hFile( safe_handle( CreateFile2( szFile, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0 ) ) );
 #else
     ScopedHandle hFile( safe_handle( CreateFileW( szFile, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING,
-                                                  FILE_FLAG_SEQUENTIAL_SCAN, 0 ) ) );
+                                     FILE_FLAG_SEQUENTIAL_SCAN, 0 ) ) );
 #endif
     if ( !hFile )
     {
@@ -1361,7 +1433,7 @@ HRESULT LoadFromDDSMemory( LPCVOID pSource, size_t size, DWORD flags, TexMetadat
 
     DWORD convFlags = 0;
     TexMetadata mdata;
-    HRESULT hr = _DecodeDDSHeader( pSource, size, flags, mdata, convFlags );  
+    HRESULT hr = _DecodeDDSHeader( pSource, size, flags, mdata, convFlags );
     if ( FAILED(hr) )
         return hr;
 
@@ -1416,7 +1488,7 @@ HRESULT LoadFromDDSFile( LPCWSTR szFile, DWORD flags, TexMetadata* metadata, Scr
     ScopedHandle hFile( safe_handle ( CreateFile2( szFile, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0 ) ) );
 #else
     ScopedHandle hFile( safe_handle ( CreateFileW( szFile, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING,
-                                                   FILE_FLAG_SEQUENTIAL_SCAN, 0 ) ) );
+                                      FILE_FLAG_SEQUENTIAL_SCAN, 0 ) ) );
 #endif
 
     if ( !hFile )
@@ -1629,71 +1701,71 @@ HRESULT SaveToDDSMemory( const Image* images, size_t nimages, const TexMetadata&
     {
     case DDS_DIMENSION_TEXTURE1D:
     case DDS_DIMENSION_TEXTURE2D:
+    {
+        size_t index = 0;
+        for( size_t item = 0; item < metadata.arraySize; ++item )
         {
-            size_t index = 0;
-            for( size_t item = 0; item < metadata.arraySize; ++item )
-            {
-                for( size_t level = 0; level < metadata.mipLevels; ++level )
-                {
-                    if ( index >= nimages )
-                    {
-                        blob.Release();
-                        return E_FAIL;
-                    }
-
-                    size_t pixsize = images[ index ].slicePitch;
-                    if ( memcpy_s( pDestination, remaining, images[ index ].pixels, pixsize ) )
-                    {
-                        blob.Release();
-                        return E_FAIL;
-                    }
-                    pDestination += pixsize;
-                    remaining -= pixsize;
-
-                    ++index;
-                }
-            }
-        }
-        break;
-
-    case DDS_DIMENSION_TEXTURE3D:
-        {
-            if ( metadata.arraySize != 1 )
-            {
-                blob.Release();
-                return E_FAIL;
-            }
-
-            size_t d = metadata.depth;
-
-            size_t index = 0;
             for( size_t level = 0; level < metadata.mipLevels; ++level )
             {
-                for( size_t slice = 0; slice < d; ++slice )
+                if ( index >= nimages )
                 {
-                    if ( index >= nimages )
-                    {
-                        blob.Release();
-                        return E_FAIL;
-                    }
-
-                    size_t pixsize = images[ index ].slicePitch;
-                    if ( memcpy_s( pDestination, remaining, images[ index ].pixels, pixsize ) )
-                    {
-                        blob.Release();
-                        return E_FAIL;
-                    }
-                    pDestination += pixsize;
-                    remaining -= pixsize;
-
-                    ++index;
+                    blob.Release();
+                    return E_FAIL;
                 }
 
-                if ( d > 1 )
-                    d >>= 1;
+                size_t pixsize = images[ index ].slicePitch;
+                if ( memcpy_s( pDestination, remaining, images[ index ].pixels, pixsize ) )
+                {
+                    blob.Release();
+                    return E_FAIL;
+                }
+                pDestination += pixsize;
+                remaining -= pixsize;
+
+                ++index;
             }
         }
-        break;
+    }
+    break;
+
+    case DDS_DIMENSION_TEXTURE3D:
+    {
+        if ( metadata.arraySize != 1 )
+        {
+            blob.Release();
+            return E_FAIL;
+        }
+
+        size_t d = metadata.depth;
+
+        size_t index = 0;
+        for( size_t level = 0; level < metadata.mipLevels; ++level )
+        {
+            for( size_t slice = 0; slice < d; ++slice )
+            {
+                if ( index >= nimages )
+                {
+                    blob.Release();
+                    return E_FAIL;
+                }
+
+                size_t pixsize = images[ index ].slicePitch;
+                if ( memcpy_s( pDestination, remaining, images[ index ].pixels, pixsize ) )
+                {
+                    blob.Release();
+                    return E_FAIL;
+                }
+                pDestination += pixsize;
+                remaining -= pixsize;
+
+                ++index;
+            }
+
+            if ( d > 1 )
+                d >>= 1;
+        }
+    }
+    break;
 
     default:
         blob.Release();
@@ -1748,70 +1820,70 @@ HRESULT SaveToDDSFile( const Image* images, size_t nimages, const TexMetadata& m
     {
     case DDS_DIMENSION_TEXTURE1D:
     case DDS_DIMENSION_TEXTURE2D:
+    {
+        size_t index = 0;
+        for( size_t item = 0; item < metadata.arraySize; ++item )
         {
-            size_t index = 0;
-            for( size_t item = 0; item < metadata.arraySize; ++item )
+            for( size_t level = 0; level < metadata.mipLevels; ++level, ++index )
             {
-                for( size_t level = 0; level < metadata.mipLevels; ++level, ++index )
+                if ( index >= nimages )
+                    return E_FAIL;
+
+                if ( !images[ index ].pixels )
+                    return E_POINTER;
+
+                size_t pixsize = images[ index ].slicePitch;
+
+                if ( !WriteFile( hFile.get(), images[ index ].pixels, static_cast<DWORD>( pixsize ), &bytesWritten, 0 ) )
                 {
-                    if ( index >= nimages )
-                        return E_FAIL;
+                    return HRESULT_FROM_WIN32( GetLastError() );
+                }
 
-                    if ( !images[ index ].pixels )
-                        return E_POINTER;
-
-                    size_t pixsize = images[ index ].slicePitch;
-
-                    if ( !WriteFile( hFile.get(), images[ index ].pixels, static_cast<DWORD>( pixsize ), &bytesWritten, 0 ) )
-                    {
-                        return HRESULT_FROM_WIN32( GetLastError() );
-                    }
-
-                    if ( bytesWritten != pixsize )
-                    {
-                        return E_FAIL;
-                    }
+                if ( bytesWritten != pixsize )
+                {
+                    return E_FAIL;
                 }
             }
         }
-        break;
+    }
+    break;
 
     case DDS_DIMENSION_TEXTURE3D:
+    {
+        if ( metadata.arraySize != 1 )
+            return E_FAIL;
+
+        size_t d = metadata.depth;
+
+        size_t index = 0;
+        for( size_t level = 0; level < metadata.mipLevels; ++level )
         {
-            if ( metadata.arraySize != 1 )
-                return E_FAIL;
-
-            size_t d = metadata.depth;
-
-            size_t index = 0;
-            for( size_t level = 0; level < metadata.mipLevels; ++level )
+            for( size_t slice = 0; slice < d; ++slice, ++index )
             {
-                for( size_t slice = 0; slice < d; ++slice, ++index )
+                if ( index >= nimages )
+                    return E_FAIL;
+
+                if ( !images[ index ].pixels )
+                    return E_POINTER;
+
+                size_t pixsize = images[ index ].slicePitch;
+
+                if ( !WriteFile( hFile.get(), images[ index ].pixels, static_cast<DWORD>( pixsize ), &bytesWritten, 0 ) )
                 {
-                    if ( index >= nimages )
-                        return E_FAIL;
-
-                    if ( !images[ index ].pixels )
-                        return E_POINTER;
-
-                    size_t pixsize = images[ index ].slicePitch;
-
-                    if ( !WriteFile( hFile.get(), images[ index ].pixels, static_cast<DWORD>( pixsize ), &bytesWritten, 0 ) )
-                    {
-                        return HRESULT_FROM_WIN32( GetLastError() );
-                    }
-
-                    if ( bytesWritten != pixsize )
-                    {
-                        return E_FAIL;
-                    }
+                    return HRESULT_FROM_WIN32( GetLastError() );
                 }
 
-                if ( d > 1 )
-                    d >>= 1;
+                if ( bytesWritten != pixsize )
+                {
+                    return E_FAIL;
+                }
             }
+
+            if ( d > 1 )
+                d >>= 1;
         }
-        break;
+    }
+    break;
 
     default:
         return E_FAIL;

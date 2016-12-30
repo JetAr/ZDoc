@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexUtil.cpp
-//  
+//
 // DirectX Texture Library - Utilities
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -25,7 +25,7 @@ struct WICTranslate
     bool        srgb;
 };
 
-static WICTranslate g_WICFormats[] = 
+static WICTranslate g_WICFormats[] =
 {
     { GUID_WICPixelFormat128bppRGBAFloat,       DXGI_FORMAT_R32G32B32A32_FLOAT,         false },
 
@@ -96,7 +96,7 @@ bool _DXGIToWIC( DXGI_FORMAT format, GUID& guid, bool ignoreRGBvsBGR )
         }
         else
         {
-            memcpy( &guid, &GUID_WICPixelFormat32bppRGBA, sizeof(GUID) );      
+            memcpy( &guid, &GUID_WICPixelFormat32bppRGBA, sizeof(GUID) );
         }
         return true;
 
@@ -106,7 +106,7 @@ bool _DXGIToWIC( DXGI_FORMAT format, GUID& guid, bool ignoreRGBvsBGR )
 
     case DXGI_FORMAT_D16_UNORM:
         memcpy( &guid, &GUID_WICPixelFormat16bppGray, sizeof(GUID) );
-        return true;    
+        return true;
 
     case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
         memcpy( &guid, &GUID_WICPixelFormat32bppBGRA, sizeof(GUID) );
@@ -183,12 +183,12 @@ IWICImagingFactory* _GetWIC()
 
 #if(_WIN32_WINNT >= _WIN32_WINNT_WIN8) || defined(_WIN7_PLATFORM_UPDATE)
     HRESULT hr = CoCreateInstance(
-        CLSID_WICImagingFactory2,
-        nullptr,
-        CLSCTX_INPROC_SERVER,
-        __uuidof(IWICImagingFactory2),
-        (LPVOID*)&s_Factory
-        );
+                     CLSID_WICImagingFactory2,
+                     nullptr,
+                     CLSCTX_INPROC_SERVER,
+                     __uuidof(IWICImagingFactory2),
+                     (LPVOID*)&s_Factory
+                 );
 
     if ( SUCCEEDED(hr) )
     {
@@ -198,12 +198,12 @@ IWICImagingFactory* _GetWIC()
     else
     {
         hr = CoCreateInstance(
-            CLSID_WICImagingFactory1,
-            nullptr,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IWICImagingFactory),
-            (LPVOID*)&s_Factory
-            );
+                 CLSID_WICImagingFactory1,
+                 nullptr,
+                 CLSCTX_INPROC_SERVER,
+                 __uuidof(IWICImagingFactory),
+                 (LPVOID*)&s_Factory
+             );
 
         if ( FAILED(hr) )
         {
@@ -213,12 +213,12 @@ IWICImagingFactory* _GetWIC()
     }
 #else
     HRESULT hr = CoCreateInstance(
-        CLSID_WICImagingFactory,
-        nullptr,
-        CLSCTX_INPROC_SERVER,
-        __uuidof(IWICImagingFactory),
-        (LPVOID*)&s_Factory
-        );
+                     CLSID_WICImagingFactory,
+                     nullptr,
+                     CLSCTX_INPROC_SERVER,
+                     __uuidof(IWICImagingFactory),
+                     (LPVOID*)&s_Factory
+                 );
 
     if ( FAILED(hr) )
     {
@@ -560,11 +560,11 @@ void ComputePitch( DXGI_FORMAT fmt, size_t width, size_t height,
     if ( IsCompressed(fmt) )
     {
         size_t bpb = ( fmt == DXGI_FORMAT_BC1_TYPELESS
-                     || fmt == DXGI_FORMAT_BC1_UNORM
-                     || fmt == DXGI_FORMAT_BC1_UNORM_SRGB
-                     || fmt == DXGI_FORMAT_BC4_TYPELESS
-                     || fmt == DXGI_FORMAT_BC4_UNORM
-                     || fmt == DXGI_FORMAT_BC4_SNORM) ? 8 : 16;
+                       || fmt == DXGI_FORMAT_BC1_UNORM
+                       || fmt == DXGI_FORMAT_BC1_UNORM_SRGB
+                       || fmt == DXGI_FORMAT_BC4_TYPELESS
+                       || fmt == DXGI_FORMAT_BC4_UNORM
+                       || fmt == DXGI_FORMAT_BC4_SNORM) ? 8 : 16;
         size_t nbw = std::max<size_t>( 1, (width + 3) / 4 );
         size_t nbh = std::max<size_t>( 1, (height + 3) / 4 );
         rowPitch = nbw * bpb;

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Main.cpp
 //
 // Desc: DirectShow sample code - simple movie player console application.
@@ -8,8 +8,8 @@
 
 
 //
-//   This program uses the PlayCutscene() function provided in cutscene.cpp.  
-//   It is only necessary to provide the name of a file and the application's 
+//   This program uses the PlayCutscene() function provided in cutscene.cpp.
+//   It is only necessary to provide the name of a file and the application's
 //   instance handle.
 //
 //   If the file was played to the end, PlayCutscene returns S_OK.
@@ -37,11 +37,11 @@
 // Main program code
 //
 int APIENTRY wWinMain (
-         HINSTANCE hInstance,
-         HINSTANCE hPrevInstance,
-         LPWSTR lpszMovie,
-         int nCmdShow
-         )
+    HINSTANCE hInstance,
+    HINSTANCE hPrevInstance,
+    LPWSTR lpszMovie,
+    int nCmdShow
+)
 {
     HRESULT hr;
 

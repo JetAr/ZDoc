@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,9 +36,9 @@ inline int RECTHEIGHT(const RECT &rc )
 }
 
 class CRecipePreviewHandler : public IObjectWithSite,
-                              public IPreviewHandler,
-                              public IOleWindow,
-                              public IInitializeWithStream
+    public IPreviewHandler,
+    public IOleWindow,
+    public IInitializeWithStream
 {
 public:
     CRecipePreviewHandler() : _cRef(1), _hwndParent(NULL), _hwndPreview(NULL),  _hinstEditLibrary(NULL),
@@ -139,7 +139,7 @@ HRESULT CRecipePreviewHandler::SetWindow(HWND hwnd, const RECT *prc)
             // Update preview window parent and rect information
             SetParent(_hwndPreview, _hwndParent);
             SetWindowPos(_hwndPreview, NULL, _rcParent.left, _rcParent.top,
-                RECTWIDTH(_rcParent), RECTHEIGHT(_rcParent), SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+                         RECTWIDTH(_rcParent), RECTHEIGHT(_rcParent), SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
     }
     return S_OK;
@@ -199,7 +199,7 @@ HRESULT CRecipePreviewHandler::SetRect(const RECT *prc)
         {
             // Preview window is already created, so set its size and position
             SetWindowPos(_hwndPreview, NULL, _rcParent.left, _rcParent.top,
-                RECTWIDTH(_rcParent), RECTHEIGHT(_rcParent), SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+                         RECTWIDTH(_rcParent), RECTHEIGHT(_rcParent), SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
         }
         hr = S_OK;
     }

@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -42,7 +42,7 @@
 HRESULT CMyDeviceHandlerCollection_CreateInstance(
     __in_opt        IUnknown     *punkOuter,
     __deref_out     IUnknown    **ppunk
-    )
+)
 {
     *ppunk = NULL;
 
@@ -244,7 +244,7 @@ HRESULT CMyDeviceHandlerCollection::_LoadHandlerIDs()
     if (SUCCEEDED(hr))
     {
         nStatus = RegQueryInfoKey(hkeyPartners, NULL, NULL, NULL, &cPartners,
-            NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL);
         if (nStatus == ERROR_SUCCESS)
         {
             delete [] _pDevices;
@@ -314,12 +314,12 @@ HRESULT CMyDeviceHandlerCollection::_LoadHandlerIDs()
                         {
                             StringFromGUID2(guidHandlerID, _pDevices[iPartner].szHandlerID, ARRAYSIZE(_pDevices[iPartner].szHandlerID));
                             nStatus = RegSetValueExW(
-                                hkeyPartnership,
-                                L"SyncCenterGUID",
-                                0,
-                                REG_SZ,
-                                (const BYTE *) _pDevices[iPartner].szHandlerID,
-                                (lstrlenW(_pDevices[iPartner].szHandlerID) + 1) * sizeof(_pDevices[iPartner].szHandlerID[0]));
+                                          hkeyPartnership,
+                                          L"SyncCenterGUID",
+                                          0,
+                                          REG_SZ,
+                                          (const BYTE *) _pDevices[iPartner].szHandlerID,
+                                          (lstrlenW(_pDevices[iPartner].szHandlerID) + 1) * sizeof(_pDevices[iPartner].szHandlerID[0]));
                             if (nStatus != ERROR_SUCCESS)
                             {
                                 hrLocal = HRESULT_FROM_WIN32(nStatus);

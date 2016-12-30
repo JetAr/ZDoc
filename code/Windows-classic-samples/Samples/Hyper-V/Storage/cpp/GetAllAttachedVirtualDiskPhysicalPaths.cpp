@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@
 
 DWORD
 SampleGetAllAttachedVirtualDiskPhysicalPaths(
-    )
+)
 {
     LPWSTR  pathList;
     LPWSTR  pathListBuffer;
@@ -39,22 +39,22 @@ SampleGetAllAttachedVirtualDiskPhysicalPaths(
         //
 
         opStatus = GetAllAttachedVirtualDiskPhysicalPaths(&pathListSizeInBytes,
-                                                          pathListBuffer);
+                   pathListBuffer);
         if (opStatus == ERROR_SUCCESS)
         {
             break;
         }
-           
+
         if (opStatus != ERROR_INSUFFICIENT_BUFFER)
         {
             goto Cleanup;
         }
-           
+
         if (pathListBuffer != NULL)
         {
             free(pathListBuffer);
         }
-        
+
         //
         // Allocate a large enough buffer.
         //
@@ -64,42 +64,43 @@ SampleGetAllAttachedVirtualDiskPhysicalPaths(
         {
             opStatus = ERROR_OUTOFMEMORY;
             goto Cleanup;
-        } 
-        
-    } while (opStatus == ERROR_INSUFFICIENT_BUFFER);
-    
-    if (pathListBuffer == NULL || pathListBuffer[0] == NULL) 
+        }
+
+    }
+    while (opStatus == ERROR_INSUFFICIENT_BUFFER);
+
+    if (pathListBuffer == NULL || pathListBuffer[0] == NULL)
     {
         // There are no loopback mounted virtual disks.
         wprintf(L"There are no loopback mounted virtual disks.\n");
         goto Cleanup;
     }
-       
+
     //
     // The pathList is a MULTI_SZ.
     //
-        
+
     pathList = pathListBuffer;
     pathListSizeRemaining = (size_t) pathListSizeInBytes;
-    
+
     while ((pathListSizeRemaining >= sizeof(pathList[0])) && (*pathList != 0))
-    {        
-        stringLengthResult = StringCbLengthW(pathList, 
+    {
+        stringLengthResult = StringCbLengthW(pathList,
                                              pathListSizeRemaining,
                                              &nextPathListSize);
-        
+
         if (FAILED(stringLengthResult))
         {
             goto Cleanup;
         }
-        
+
         wprintf(L"Path = '%s'\n", pathList);
-        
+
         nextPathListSize += sizeof(pathList[0]);
         pathList = pathList + (nextPathListSize / sizeof(pathList[0]));
         pathListSizeRemaining -= nextPathListSize;
     }
-    
+
 Cleanup:
     if (opStatus == ERROR_SUCCESS)
     {

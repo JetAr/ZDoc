@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -34,28 +34,28 @@ LPCWSTR pszPolicyContainer =
     L"LDAP://CN=Central Access Policies,CN=Claims Configuration,CN=Services,CN=Configuration,%1";
 LPCWSTR pszLdap = L"LDAP://%1";
 
-_Success_(return == TRUE) 
-BOOL 
+_Success_(return == TRUE)
+BOOL
 GetCentralAccessPolicyIDs(
     _Outptr_result_buffer_(*Count) PSID*  CapIDs[],
     _Out_                          ULONG* Count
-    );
-BOOL 
+);
+BOOL
 GetNameForPolicyDirectory(
     _Out_ CAtlString* PolicyDir
-    );
-BOOL 
+);
+BOOL
 DisplayCentralAccessPolicyInformation(
     _In_reads_(Count) PSID* CapIDs,
     _In_                ULONG Count
-    );
-BOOL 
+);
+BOOL
 DisplayCentralAccessRuleInformation(
     _In_ LPWSTR Path
-    );
+);
 
-int 
-__cdecl 
+int
+__cdecl
 wmain()
 {
     HRESULT hr                  = S_OK;
@@ -107,7 +107,7 @@ Cleanup:
     return Succeeded ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
-_Success_(return == TRUE) 
+_Success_(return == TRUE)
 BOOL
 GetCentralAccessPolicyIDs(
     _Outptr_result_buffer_(*Count) PSID*  CapIDs[], // valid on success
@@ -128,9 +128,9 @@ GetCentralAccessPolicyIDs(
 
     // Get the applied CAP IDs on the machine
     Status = LsaGetAppliedCAPIDs(
-                NULL, 
-                &AppliedCapIds, 
-                &CapIdCount);
+                 NULL,
+                 &AppliedCapIds,
+                 &CapIdCount);
     if (Status != 0)
     {
         printf("LsaGetAppliedCAPIDs Error 0x%08X\n", Status);
@@ -210,7 +210,7 @@ GetNameForPolicyDirectory(
     {
         // Construct the distinguished name for the CAP container
         DistinguishedName.FormatMessage(
-            pszPolicyContainer, 
+            pszPolicyContainer,
             NamingContext.bstrVal);
     }
     catch (const CAtlException &e)
@@ -492,7 +492,7 @@ Cleanup:
     return Succeeded;
 }
 
-BOOL 
+BOOL
 DisplayCentralAccessRuleInformation(
     _In_ LPWSTR Path)
 {

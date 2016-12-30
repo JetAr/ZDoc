@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -57,12 +57,12 @@ public:
 
 protected:
 
-    HRESULT CreateAppGroups(CAzMStore& ,bool);
+    HRESULT CreateAppGroups(CAzMStore&,bool);
 
     HRESULT CopyStoreProperties(CAzMStore&);
 
-    HRESULT InitializeUsingSafeArray(VARIANT &var, 
-                                    HRESULT (__stdcall IAzAuthorizationStore:: *targetMethod)(BSTR, VARIANT));
+    HRESULT InitializeUsingSafeArray(VARIANT &var,
+                                     HRESULT (__stdcall IAzAuthorizationStore:: *targetMethod)(BSTR, VARIANT));
 
     static const unsigned int m_props[];
 

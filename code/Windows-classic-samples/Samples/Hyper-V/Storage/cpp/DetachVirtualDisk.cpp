@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -35,20 +35,20 @@ SampleDetachVirtualDisk(
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
     memset(&openParameters, 0, sizeof(openParameters));
-    
+
     extension = ::PathFindExtension(VirtualDiskPath);
-    
+
     if (extension != NULL && _wcsicmp(extension, L".iso") == 0)
     {
         //
         // ISO files can only be opened using the V1 API.
         //
-        
+
         openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_1;
         accessMask = VIRTUAL_DISK_ACCESS_READ;
     }
@@ -58,24 +58,24 @@ SampleDetachVirtualDisk(
         // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
         // OPEN_VIRTUAL_DISK_FLAG_NONE bypasses any special handling of the open.
         //
-        
+
         openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
         openParameters.Version2.GetInfoOnly = FALSE;
         accessMask = VIRTUAL_DISK_ACCESS_NONE;
     }
-    
+
     //
     // Open the VHD/VHDX or ISO.
     //
     //
 
     opStatus = OpenVirtualDisk(
-        &storageType,
-        VirtualDiskPath,
-        accessMask,
-        OPEN_VIRTUAL_DISK_FLAG_NONE,
-        &openParameters,
-        &vhdHandle);
+                   &storageType,
+                   VirtualDiskPath,
+                   accessMask,
+                   OPEN_VIRTUAL_DISK_FLAG_NONE,
+                   &openParameters,
+                   &vhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -89,9 +89,9 @@ SampleDetachVirtualDisk(
     //
 
     opStatus = DetachVirtualDisk(
-        vhdHandle,
-        DETACH_VIRTUAL_DISK_FLAG_NONE,
-        0);
+                   vhdHandle,
+                   DETACH_VIRTUAL_DISK_FLAG_NONE,
+                   0);
 
     if (opStatus != ERROR_SUCCESS)
     {

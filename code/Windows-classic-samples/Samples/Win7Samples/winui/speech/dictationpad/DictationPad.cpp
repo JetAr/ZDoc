@@ -1,16 +1,16 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   DictationPad.cpp 
+*   DictationPad.cpp
 *       This file contains the entry point for the DictationPad application
 *       and some of the definitions for methods of CDictationPad, the
-*       main object.  
-*       dictpad_sapi.cpp contains the methods of CDictationPad that 
+*       main object.
+*       dictpad_sapi.cpp contains the methods of CDictationPad that
 *       pertain to the SAPI interfaces used in this app.
 ******************************************************************************/
 
@@ -34,7 +34,7 @@
                 = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
 
 DEFINE_GUID(IID_ITextDocument,0x8CC497C0,0xA1DF,0x11CE,0x80,0x98,
-                0x00,0xAA,0x00,0x47,0xBE,0x5D);
+            0x00,0xAA,0x00,0x47,0xBE,0x5D);
 
 /************************************************************************
 * WinMain() *
@@ -43,7 +43,7 @@ DEFINE_GUID(IID_ITextDocument,0x8CC497C0,0xA1DF,0x11CE,0x80,0x98,
 *       Main entry point for the application
 **************************************************************************/
 int APIENTRY WinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance,
-    __in_opt LPSTR lpCmdLine, __in int nCmdShow )
+                      __in_opt LPSTR lpCmdLine, __in int nCmdShow )
 {
     int iRet = 0;
     HRESULT hr = CoInitialize( NULL );
@@ -70,7 +70,7 @@ int APIENTRY WinMain( __in HINSTANCE hInstance, __in_opt HINSTANCE hPrevInstance
 *--------------------------------*
 *   Description:
 *       Constructor
-*****************************************************************************/   
+*****************************************************************************/
 CDictationPad::CDictationPad( HINSTANCE hInst ) :
     m_hAccelTable( NULL ),
     m_hInst( hInst ),
@@ -81,19 +81,19 @@ CDictationPad::CDictationPad( HINSTANCE hInst ) :
     m_hFont( NULL ),
     m_hAltsButton( NULL ),
     m_dwFlags( DP_SHARED_RECOGNIZER ),
-    m_ullDictInterest( 
+    m_ullDictInterest(
 #ifdef _DEBUG
-                                      // DictationPad doesn't actually need SOUND_START
-                                      // or SOUND_END
-                                      SPFEI(SPEI_SOUND_START) | SPFEI(SPEI_SOUND_END) |
+        // DictationPad doesn't actually need SOUND_START
+        // or SOUND_END
+        SPFEI(SPEI_SOUND_START) | SPFEI(SPEI_SOUND_END) |
 #endif
-                                      SPFEI(SPEI_PHRASE_START) | SPFEI(SPEI_RECOGNITION) |
-                                      SPFEI(SPEI_RECO_OTHER_CONTEXT) |
-                                      SPFEI(SPEI_FALSE_RECOGNITION) | SPFEI(SPEI_HYPOTHESIS) | 
-                                      SPFEI(SPEI_INTERFERENCE) | SPFEI(SPEI_RECO_STATE_CHANGE) ),
+        SPFEI(SPEI_PHRASE_START) | SPFEI(SPEI_RECOGNITION) |
+        SPFEI(SPEI_RECO_OTHER_CONTEXT) |
+        SPFEI(SPEI_FALSE_RECOGNITION) | SPFEI(SPEI_HYPOTHESIS) |
+        SPFEI(SPEI_INTERFERENCE) | SPFEI(SPEI_RECO_STATE_CHANGE) ),
     m_ullCCInterest( SPFEI(SPEI_SOUND_START) | SPFEI(SPEI_SOUND_END) |
-                                      SPFEI(SPEI_PHRASE_START) | SPFEI(SPEI_RECOGNITION) | 
-                                      SPFEI(SPEI_INTERFERENCE) | SPFEI(SPEI_RECO_STATE_CHANGE) ),
+                     SPFEI(SPEI_PHRASE_START) | SPFEI(SPEI_RECOGNITION) |
+                     SPFEI(SPEI_INTERFERENCE) | SPFEI(SPEI_RECO_STATE_CHANGE) ),
     m_pCandidateList( NULL ),
     m_pszFile( NULL )
 {
@@ -108,7 +108,7 @@ CDictationPad::CDictationPad( HINSTANCE hInst ) :
 *---------------------------------*
 *   Description:
 *       Destructor
-*****************************************************************************/   
+*****************************************************************************/
 CDictationPad::~CDictationPad()
 {
     // Release the richedit/TOM objects.  These need to be released before
@@ -148,7 +148,7 @@ CDictationPad::~CDictationPad()
 *       Set up the windows, as well as the RichEdit objects.
 *       Calls InitializeSAPIObjs, which in initializes the SAPI objects
 *       and sets up notification for SAPI events.
-*****************************************************************************/   
+*****************************************************************************/
 BOOL CDictationPad::Initialize( int nCmdShow, __in_opt LPSTR lpCmdLine )
 {
     TCHAR szTitle[MAX_LOADSTRING];          // The title bar text
@@ -161,7 +161,7 @@ BOOL CDictationPad::Initialize( int nCmdShow, __in_opt LPSTR lpCmdLine )
 
     // register our window class
     WNDCLASSEX wcex;
-    wcex.cbSize = sizeof(WNDCLASSEX); 
+    wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style = CS_HREDRAW | CS_VREDRAW;
     wcex.lpfnWndProc = (WNDPROC)WndProc;
     wcex.cbClsExtra = 0;
@@ -191,20 +191,20 @@ BOOL CDictationPad::Initialize( int nCmdShow, __in_opt LPSTR lpCmdLine )
 
         // Create the main application window
         m_hClient = ::CreateWindow( szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, m_hInst, this );
+                                    CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, m_hInst, this );
 
         // The richedit window (m_hEdit) will have been created by the WM_CREATE
         // message-handling in the WNDPROC for the main window
         if( m_hClient && m_hEdit )
         {
             // Set interest in various events from the richedit control
-            ::SendMessage( m_hEdit, EM_SETEVENTMASK, 0, 
-                ENM_KEYEVENTS | ENM_MOUSEEVENTS | ENM_CHANGE | ENM_UPDATE | ENM_SELCHANGE | ENM_SCROLL );
+            ::SendMessage( m_hEdit, EM_SETEVENTMASK, 0,
+                           ENM_KEYEVENTS | ENM_MOUSEEVENTS | ENM_CHANGE | ENM_UPDATE | ENM_SELCHANGE | ENM_SCROLL );
 
             // Show the window if it is supposed to be shown upon startup
             ::ShowWindow( m_hClient, nCmdShow );
-            
-            // Update the window so that the window is drawn without having to 
+
+            // Update the window so that the window is drawn without having to
             // wait for all of the SAPI initialization
             ::UpdateWindow( m_hClient );
 
@@ -225,8 +225,8 @@ BOOL CDictationPad::Initialize( int nCmdShow, __in_opt LPSTR lpCmdLine )
                 // Hand the pointer to the ITextDocument for this document to the
                 // data members that need that pointer.
                 m_pTextRunList->SetTextDoc( m_cpTextDoc );
-                
-                hr = m_cpTextDoc->GetSelection( &m_cpTextSel );  
+
+                hr = m_cpTextDoc->GetSelection( &m_cpTextSel );
             }
             else
             {
@@ -305,9 +305,9 @@ int CDictationPad::Run()
 {
     // Main message loop:
     MSG msg;
-    while( ::GetMessage( &msg, NULL, 0, 0 ) ) 
+    while( ::GetMessage( &msg, NULL, 0, 0 ) )
     {
-        if( !::TranslateAccelerator( m_hClient, m_hAccelTable, &msg ) ) 
+        if( !::TranslateAccelerator( m_hClient, m_hAccelTable, &msg ) )
         {
             ::TranslateMessage( &msg );
             ::DispatchMessage( &msg );
@@ -333,472 +333,472 @@ LRESULT CALLBACK CDictationPad::WndProc( HWND hWnd, UINT message, WPARAM wParam,
     // The CDictationPad object was set to be the USERDATA in the window long
     // associated with this window when WM_CREATE was called
     CDictationPad * pThis = (CDictationPad *)(LONG_PTR)::GetWindowLongPtr( hWnd, GWLP_USERDATA );
-        
-    switch( message ) 
+
+    switch( message )
     {
-        case WM_CREATE :
+    case WM_CREATE :
+    {
+        // store pointer to the object that created this window
+        pThis = (CDictationPad *)(((LPCREATESTRUCT)lParam)->lpCreateParams);
+        _ASSERTE(pThis);
+        if ( pThis == NULL )
         {
-            // store pointer to the object that created this window
-            pThis = (CDictationPad *)(((LPCREATESTRUCT)lParam)->lpCreateParams);
-            _ASSERTE(pThis);
-            if ( pThis == NULL )
+            break;
+        }
+        ::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) pThis );
+
+        // This call draws the toolbar buttons, gets the richedit control, etc.
+        if ( !( pThis->InitializeWindow( hWnd ) ) )
+        {
+            ::DestroyWindow( hWnd );
+            break;
+        }
+
+        ::SetFocus( pThis->m_hEdit );
+
+        // Indicate whether whole words are being selected
+        hMenu = ::GetMenu( hWnd );
+        ::CheckMenuItem( hMenu, IDM_WHOLE_WORDS,
+                         (pThis->m_dwFlags & DP_WHOLE_WORD_SEL) ? MF_CHECKED : MF_UNCHECKED );
+
+        // Set the appropriate menu info for the type of engine
+        ::CheckMenuItem( hMenu, IDM_SHAREDENGINE,
+                         (pThis->m_dwFlags & DP_SHARED_RECOGNIZER) ? MF_CHECKED : MF_UNCHECKED );
+
+        //--- get us into dictation mode
+        ::SendMessage( hWnd, WM_COMMAND, IDM_DICTATION_MODE, 0 );
+
+        break;
+    }
+
+    case WM_SIZE:
+    {
+        // If the frame changes size, change the size of the edit control,
+        // taking the toolbar & status bar into consideration
+        RECT r;
+        ::GetWindowRect( pThis->m_hToolBar, &r );
+        LONG lToolBarHeight = r.bottom - r.top;
+
+        ::GetWindowRect( pThis->m_hStatusBar, &r );
+        LONG lStatusBarHeight = r.bottom - r.top;
+
+        ::SetWindowPos( pThis->m_hToolBar, hWnd, 0, 0, LOWORD(lParam),
+                        lToolBarHeight, SWP_NOMOVE | SWP_NOZORDER );
+        ::SetWindowPos( pThis->m_hEdit, hWnd, 0, 0, LOWORD(lParam),
+                        HIWORD(lParam) - lToolBarHeight - lStatusBarHeight,
+                        SWP_NOMOVE | SWP_NOZORDER );
+        ::SetWindowPos( pThis->m_hStatusBar, hWnd, 0,
+                        HIWORD(lParam) - lStatusBarHeight, LOWORD(lParam), lStatusBarHeight,
+                        SWP_NOZORDER );
+        break;
+    }
+
+    case WM_COMMAND:
+        // If the SR engine is currently cranking, then save this message for later
+        if ( pThis->m_pRecoEventMgr->IsProcessingPhrase() )
+        {
+            // The message will get handled later, when the result comes back
+            pThis->m_pRecoEventMgr->QueueCommand( hWnd, message, wParam, lParam );
+            break;
+        }
+
+        wmId    = LOWORD(wParam);
+        wmEvent = HIWORD(wParam);
+
+        // Look for notifications from the edit control about gaining and losing
+        // input focus
+        if ( ((HWND) lParam) == pThis->m_hEdit )
+        {
+            switch ( wmEvent )
             {
+            case EN_KILLFOCUS:
+                if ( pThis->m_dwFlags & DP_DICTATION_MODE )
+                {
+                    // Turn off the "mic"
+                    pThis->SetGrammarState( false );
+                }
+                break;
+
+            case EN_SETFOCUS:
+                if ( pThis->m_dwFlags & DP_DICTATION_MODE )
+                {
+                    // Restore the "mic" to its state when we last lost focus
+                    pThis->SetGrammarState( pThis->m_dwFlags & DP_MICROPHONE_ON );
+                }
+
+                // Trigger an update so that the alternates button appears
+                // if appropriate
+                pThis->m_hAltsButton = pThis->m_pCandidateList->Update(
+                                           pThis->m_pTextRunList );
                 break;
             }
-            ::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) pThis );
+            break;
+        }
 
-            // This call draws the toolbar buttons, gets the richedit control, etc.
-            if ( !( pThis->InitializeWindow( hWnd ) ) )
+
+        // Handle menu item selections
+        switch (wmId)
+        {
+        //----------------------
+        // FILE
+        //----------------------
+        case ID_FILE_NEW:
+        {
+            hr = pThis->DoFileNew();
+            if ( FAILED( hr ) )
             {
+                MessageBoxFromResource( hWnd, IDS_CANNOTFILENEW, NULL, MB_ICONEXCLAMATION );
                 ::DestroyWindow( hWnd );
-                break;
             }
 
-            ::SetFocus( pThis->m_hEdit );
+            break;
+        }
+        case ID_FILE_OPEN:
+        {
+            hr = pThis->DoFileOpen( NULL );
 
-            // Indicate whether whole words are being selected
+            if ( FAILED( hr ) )
+            {
+                MessageBoxFromResource( hWnd, IDS_CANNOTOPEN, NULL, MB_ICONEXCLAMATION );
+
+                // Open a new file instead
+                ::SendMessage( pThis->m_hClient, WM_COMMAND, ID_FILE_NEW, 0 );
+            }
+
+            break;
+        }
+
+        case ID_FILE_SAVE:
+        case ID_FILE_SAVEAS:
+        {
+            if ( (ID_FILE_SAVE == wmId) && pThis->m_pszFile )
+            {
+                // The file already has a name.
+                // Just save under the existing name
+                hr = pThis->DoFileSave();
+            }
+            else
+            {
+                // Need to get a name
+                hr = pThis->DoFileSaveAs();
+            }
+
+            if (FAILED(hr))
+            {
+                TCHAR pszCaptionText[ MAX_LOADSTRING ];
+                ::LoadString( pThis->m_hInst, IDS_CANNOTSAVE,
+                              pszCaptionText, MAX_LOADSTRING );
+
+                if (STG_E_ACCESSDENIED == hr)
+                {
+                    // The user has a readonly file open
+                    MessageBoxFromResource( hWnd, IDS_ACCESSDENIED, pszCaptionText,
+                                            MB_ICONEXCLAMATION );
+
+                    // Ask user to save under a different name
+                    ::SendMessage( pThis->m_hClient, WM_COMMAND, ID_FILE_SAVEAS, 0 );
+                }
+                else
+                {
+                    MessageBoxFromResource( hWnd, IDS_ERRORSAVING, pszCaptionText,
+                                            MB_ICONEXCLAMATION );
+                }
+            }
+
+            // Return 1 only if we saved the file
+            return (S_OK == hr);
+
+            break;
+        }
+
+        case IDM_EXIT:
+            ::SendMessage( hWnd, WM_CLOSE, 0, 0 );
+            break;
+
+        case ID_EDIT_CUT:
+            // Cut the selected text to the clipboard
+            pThis->m_cpTextSel->Cut( NULL );
+            break;
+
+        case ID_EDIT_COPY:
+            // Copy the selected text to the clipboard
+            pThis->m_cpTextSel->Copy( NULL );
+            break;
+
+        case ID_EDIT_PASTE:
+            // Paste the text from the clipboard into the document
+
+            // This flag will be used when the selection changed is processed.
+            // It will indicate that there is new text present, even if the
+            // length of the text in the document has not changed.
+            pThis->m_dwFlags |= DP_JUST_PASTED_TEXT;
+            pThis->m_cpTextSel->Paste( NULL, 0 );
+            pThis->m_dwFlags &= ~DP_JUST_PASTED_TEXT;
+            break;
+
+        case IDM_FONT:
+        {
+            LOGFONT lf;
+            CHOOSEFONT cf;
+            ZeroMemory( &cf, sizeof(cf) );
+            cf.lStructSize = sizeof(cf);
+            cf.lpLogFont = &lf;
+            cf.Flags = CF_SCREENFONTS;
+            if( ::ChooseFont( &cf ) )     // Display the choose font dialog
+            {
+                ::DeleteObject( (HGDIOBJ)pThis->m_hFont );
+                pThis->m_hFont = ::CreateFontIndirect( &lf );
+                ::SendMessage( pThis->m_hEdit, WM_SETFONT, (WPARAM)pThis->m_hFont, MAKELPARAM(true, 0) );
+                ::SetFocus( pThis->m_hEdit );
+            }
+        }
+        break;
+
+        case IDM_DICTATION_MODE:
+        case IDM_COMMAND_MODE:
+            // Choose between dictation mode and command mode
+            hr = pThis->SetMode( IDM_DICTATION_MODE == wmId );
+            if (FAILED(hr))
+            {
+                MessageBoxFromResource( hWnd, IDS_CANNOTSWITCHMODES, NULL,
+                                        MB_ICONEXCLAMATION );
+            }
+            break;
+
+        case IDM_VOICE_TRAINING:
+        {
+            // Brings up the SR-engine-specific user training UI
+            pThis->m_cpRecoEngine->DisplayUI(hWnd, NULL, SPDUI_UserTraining, NULL, 0);
+        }
+        break;
+
+        case IDM_MICROPHONE_SETUP:
+        {
+            // Brings up the SR-engine-specific mic training UI
+            pThis->m_cpRecoEngine->DisplayUI(hWnd, NULL, SPDUI_MicTraining, NULL, 0);
+        }
+        break;
+
+        case IDM_ADDREMOVEWORDS:
+            // Brings up the SR-engine-specific Add/Remove Words UI
+            pThis->RunAddDeleteUI();
+            break;
+
+        case IDM_MODE_TOGGLE:
+            // Toggles between dictation mode and command mode
+            if( pThis->m_dwFlags & DP_DICTATION_MODE )
+            {
+                ::SendMessage( hWnd, WM_COMMAND, IDM_COMMAND_MODE, 0 );
+            }
+            else
+            {
+                ::SendMessage( hWnd, WM_COMMAND, IDM_DICTATION_MODE, 0 );
+            }
+            break;
+
+        case IDM_WHOLE_WORDS:
+            // Toggles between selecting whole words and normal selection
             hMenu = ::GetMenu( hWnd );
-            ::CheckMenuItem( hMenu, IDM_WHOLE_WORDS, 
-                (pThis->m_dwFlags & DP_WHOLE_WORD_SEL) ? MF_CHECKED : MF_UNCHECKED );
-
-            // Set the appropriate menu info for the type of engine
-            ::CheckMenuItem( hMenu, IDM_SHAREDENGINE, 
-                (pThis->m_dwFlags & DP_SHARED_RECOGNIZER) ? MF_CHECKED : MF_UNCHECKED );
-            
-            //--- get us into dictation mode
-            ::SendMessage( hWnd, WM_COMMAND, IDM_DICTATION_MODE, 0 );
-
-            break;
-        }
-        
-        case WM_SIZE:
-        {
-            // If the frame changes size, change the size of the edit control,
-            // taking the toolbar & status bar into consideration
-            RECT r;
-            ::GetWindowRect( pThis->m_hToolBar, &r );
-            LONG lToolBarHeight = r.bottom - r.top;
-
-            ::GetWindowRect( pThis->m_hStatusBar, &r );
-            LONG lStatusBarHeight = r.bottom - r.top;
-
-            ::SetWindowPos( pThis->m_hToolBar, hWnd, 0, 0, LOWORD(lParam), 
-                lToolBarHeight, SWP_NOMOVE | SWP_NOZORDER );
-            ::SetWindowPos( pThis->m_hEdit, hWnd, 0, 0, LOWORD(lParam), 
-                HIWORD(lParam) - lToolBarHeight - lStatusBarHeight, 
-                SWP_NOMOVE | SWP_NOZORDER );
-            ::SetWindowPos( pThis->m_hStatusBar, hWnd, 0, 
-                HIWORD(lParam) - lStatusBarHeight, LOWORD(lParam), lStatusBarHeight, 
-                SWP_NOZORDER );
-            break;
-        }
-
-        case WM_COMMAND:
-            // If the SR engine is currently cranking, then save this message for later
-            if ( pThis->m_pRecoEventMgr->IsProcessingPhrase() )
+            if( pThis->m_dwFlags & DP_WHOLE_WORD_SEL )
             {
-                // The message will get handled later, when the result comes back
-                pThis->m_pRecoEventMgr->QueueCommand( hWnd, message, wParam, lParam );
-                break;
+                pThis->m_dwFlags &= ~DP_WHOLE_WORD_SEL;
+                ::CheckMenuItem( hMenu, IDM_WHOLE_WORDS, MF_UNCHECKED );
             }
-
-            wmId    = LOWORD(wParam); 
-            wmEvent = HIWORD(wParam); 
- 
-            // Look for notifications from the edit control about gaining and losing
-            // input focus
-            if ( ((HWND) lParam) == pThis->m_hEdit )
+            else
             {
-                switch ( wmEvent )
-                {
-                   case EN_KILLFOCUS:
-                        if ( pThis->m_dwFlags & DP_DICTATION_MODE )
-                        {
-                            // Turn off the "mic"
-                            pThis->SetGrammarState( false );
-                        }
-                        break;
-
-                    case EN_SETFOCUS:
-                        if ( pThis->m_dwFlags & DP_DICTATION_MODE )
-                        {
-                            // Restore the "mic" to its state when we last lost focus
-                            pThis->SetGrammarState( pThis->m_dwFlags & DP_MICROPHONE_ON );
-                        }
-
-                        // Trigger an update so that the alternates button appears
-                        // if appropriate
-                        pThis->m_hAltsButton = pThis->m_pCandidateList->Update( 
-                            pThis->m_pTextRunList );
-                        break;
-                }
-                break;
-            }
-                    
-
-            // Handle menu item selections
-            switch (wmId)
-            {
-                //----------------------
-                // FILE
-                //----------------------
-                case ID_FILE_NEW:
-                {
-                    hr = pThis->DoFileNew();
-                    if ( FAILED( hr ) )
-                    {
-                        MessageBoxFromResource( hWnd, IDS_CANNOTFILENEW, NULL, MB_ICONEXCLAMATION );
-                        ::DestroyWindow( hWnd );
-                    }
-
-                    break;
-                }
-                case ID_FILE_OPEN:
-                {
-                    hr = pThis->DoFileOpen( NULL );
-
-                    if ( FAILED( hr ) )
-                    {
-                        MessageBoxFromResource( hWnd, IDS_CANNOTOPEN, NULL, MB_ICONEXCLAMATION );
-
-                        // Open a new file instead
-                        ::SendMessage( pThis->m_hClient, WM_COMMAND, ID_FILE_NEW, 0 );
-                    }
-
-                    break;
-                }
-
-                case ID_FILE_SAVE:
-                case ID_FILE_SAVEAS:
-                {
-                    if ( (ID_FILE_SAVE == wmId) && pThis->m_pszFile )
-                    {
-                        // The file already has a name.
-                        // Just save under the existing name
-                        hr = pThis->DoFileSave();
-                    }
-                    else
-                    {
-                        // Need to get a name
-                        hr = pThis->DoFileSaveAs();
-                    }
-
-                    if (FAILED(hr))
-                    {
-                        TCHAR pszCaptionText[ MAX_LOADSTRING ];
-                        ::LoadString( pThis->m_hInst, IDS_CANNOTSAVE, 
-                            pszCaptionText, MAX_LOADSTRING );
-                        
-                        if (STG_E_ACCESSDENIED == hr)
-                        {
-                            // The user has a readonly file open
-                            MessageBoxFromResource( hWnd, IDS_ACCESSDENIED, pszCaptionText, 
-                                MB_ICONEXCLAMATION );
-
-                            // Ask user to save under a different name
-                            ::SendMessage( pThis->m_hClient, WM_COMMAND, ID_FILE_SAVEAS, 0 );
-                        }
-                        else
-                        {
-                            MessageBoxFromResource( hWnd, IDS_ERRORSAVING, pszCaptionText, 
-                                MB_ICONEXCLAMATION );
-                        }
-                    }
-
-                    // Return 1 only if we saved the file
-                    return (S_OK == hr);
-                    
-                    break;
-                }              
-
-                case IDM_EXIT:
-                    ::SendMessage( hWnd, WM_CLOSE, 0, 0 );
-                    break;
-
-                case ID_EDIT_CUT:
-                    // Cut the selected text to the clipboard
-                    pThis->m_cpTextSel->Cut( NULL );
-                    break;
-
-                case ID_EDIT_COPY:
-                    // Copy the selected text to the clipboard
-                    pThis->m_cpTextSel->Copy( NULL );
-                    break;
-
-                case ID_EDIT_PASTE:
-                    // Paste the text from the clipboard into the document
-                    
-                    // This flag will be used when the selection changed is processed.
-                    // It will indicate that there is new text present, even if the 
-                    // length of the text in the document has not changed.
-                    pThis->m_dwFlags |= DP_JUST_PASTED_TEXT;
-                    pThis->m_cpTextSel->Paste( NULL, 0 );
-                    pThis->m_dwFlags &= ~DP_JUST_PASTED_TEXT;
-                    break;
-
-                case IDM_FONT:
-                    {
-                        LOGFONT lf;
-                        CHOOSEFONT cf;
-                        ZeroMemory( &cf, sizeof(cf) );
-                        cf.lStructSize = sizeof(cf);
-                        cf.lpLogFont = &lf;
-                        cf.Flags = CF_SCREENFONTS;
-                        if( ::ChooseFont( &cf ) )     // Display the choose font dialog
-                        {
-                            ::DeleteObject( (HGDIOBJ)pThis->m_hFont );
-                            pThis->m_hFont = ::CreateFontIndirect( &lf );
-                            ::SendMessage( pThis->m_hEdit, WM_SETFONT, (WPARAM)pThis->m_hFont, MAKELPARAM(true, 0) );
-                            ::SetFocus( pThis->m_hEdit );
-                        }
-                    }
-                    break;
-
-                case IDM_DICTATION_MODE:
-                case IDM_COMMAND_MODE:
-                    // Choose between dictation mode and command mode
-                    hr = pThis->SetMode( IDM_DICTATION_MODE == wmId );
-                    if (FAILED(hr))
-                    {
-                        MessageBoxFromResource( hWnd, IDS_CANNOTSWITCHMODES, NULL, 
-                            MB_ICONEXCLAMATION );
-                    }
-                    break;
-
-                case IDM_VOICE_TRAINING:
-                    {
-                        // Brings up the SR-engine-specific user training UI
-                        pThis->m_cpRecoEngine->DisplayUI(hWnd, NULL, SPDUI_UserTraining, NULL, 0);
-                    }
-                    break;
-
-                case IDM_MICROPHONE_SETUP:
-                    {
-                        // Brings up the SR-engine-specific mic training UI
-                        pThis->m_cpRecoEngine->DisplayUI(hWnd, NULL, SPDUI_MicTraining, NULL, 0);
-                    }
-                    break;
-
-                case IDM_ADDREMOVEWORDS:
-                    // Brings up the SR-engine-specific Add/Remove Words UI
-                    pThis->RunAddDeleteUI();
-                    break;
-                
-                case IDM_MODE_TOGGLE:
-                    // Toggles between dictation mode and command mode
-                    if( pThis->m_dwFlags & DP_DICTATION_MODE )
-                    {
-                        ::SendMessage( hWnd, WM_COMMAND, IDM_COMMAND_MODE, 0 );
-                    }
-                    else
-                    {
-                        ::SendMessage( hWnd, WM_COMMAND, IDM_DICTATION_MODE, 0 );
-                    }
-                    break;
-
-                case IDM_WHOLE_WORDS:
-                    // Toggles between selecting whole words and normal selection
-                    hMenu = ::GetMenu( hWnd );
-                    if( pThis->m_dwFlags & DP_WHOLE_WORD_SEL )
-                    {
-                        pThis->m_dwFlags &= ~DP_WHOLE_WORD_SEL;
-                        ::CheckMenuItem( hMenu, IDM_WHOLE_WORDS, MF_UNCHECKED );
-                    }
-                    else
-                    {
-                        pThis->m_dwFlags |= DP_WHOLE_WORD_SEL;
-                        ::CheckMenuItem( hMenu, IDM_WHOLE_WORDS, MF_CHECKED );
-                    }
-                    break;
-
-               case IDM_SHAREDENGINE:
-                   // Toggles between inproc reco engine and shared reco engine
-                    hMenu = ::GetMenu( hWnd );
-                    if ( pThis->m_dwFlags & DP_SHARED_RECOGNIZER )
-                    {
-                        pThis->m_dwFlags &= ~DP_SHARED_RECOGNIZER;
-                        ::CheckMenuItem( hMenu, IDM_SHAREDENGINE, MF_UNCHECKED );
-                    }
-                    else
-                    {
-                        pThis->m_dwFlags |= DP_SHARED_RECOGNIZER;
-                        ::CheckMenuItem( hMenu, IDM_SHAREDENGINE, MF_CHECKED );
-                    }
-
-                    // When the reco engine changes, all of the SAPI objects need
-                    // to be unplugged and reinitialized.
-                    if ( FAILED(pThis->InitializeSAPIObjs()) )
-                    {
-                        // New SAPI objects couldn't get set up: need to bail
-                        ::DestroyWindow( hWnd );
-                    }
-                    break;
-                
-               case IDM_PLAY:
-                    // if we're already speaking then stop
-                    if( pThis->m_dwFlags & DP_IS_SPEAKING )
-                    {
-                        pThis->EndSpeaking();
-                    }
-                    else
-                    {
-                        pThis->DoPlay();
-                    }
-                    break;
-                
-                case IDM_MIC_TOGGLE:
-                {
-                    DWORD dwOldFlags = pThis->m_dwFlags;
-                    if ( !(pThis->m_dwFlags & DP_GRAMMARS_ACTIVE) )
-                    {
-                        // If the user sees the microphone button not pressed and tries
-                        // to press it, the grammars should be activated regardless
-                        // of what the state is
-                        pThis->m_dwFlags |= DP_MICROPHONE_ON;
-                    }
-                    else
-                    {
-                        // Flip the microphone flag
-                        pThis->m_dwFlags ^= DP_MICROPHONE_ON;
-                    }
-
-                    if ( pThis->m_dwFlags & DP_MICROPHONE_ON )
-                    {
-                        // Since the grammars are active, we want the dictation
-                        // window to have the input focus
-                        ::SetFocus( pThis->m_hEdit );
-                    }
-
-                    // Set the microphone accordingly
-                    hr = pThis->SetGrammarState( pThis->m_dwFlags & DP_MICROPHONE_ON );
-
-                    if ( FAILED( hr ) )
-                    {
-                        // Couldn't do this: switch the microphone flag back
-                        pThis->m_dwFlags = dwOldFlags;
-                    }
-
-                    break;
-                }
-
-                case IDM_ABOUT:
-                    ::DialogBox( pThis->m_hInst, (LPCTSTR)IDD_ABOUTBOX, hWnd, (DLGPROC)About );
-                    break;
-
-                default:
-                    return ::DefWindowProc( hWnd, message, wParam, lParam );
-            }
-
-            break;
-
-        case WM_KILLFOCUS:
-            OutputDebugString( _T("Kill focus\r\n") );
-
-            if ( pThis->m_dwFlags & DP_DICTATION_MODE )
-            {
-                // No focus, no microphone
-                pThis->SetGrammarState( false );
+                pThis->m_dwFlags |= DP_WHOLE_WORD_SEL;
+                ::CheckMenuItem( hMenu, IDM_WHOLE_WORDS, MF_CHECKED );
             }
             break;
 
-        case WM_CLOSE:
-            if ( S_OK == pThis->DoFileClose() )
+        case IDM_SHAREDENGINE:
+            // Toggles between inproc reco engine and shared reco engine
+            hMenu = ::GetMenu( hWnd );
+            if ( pThis->m_dwFlags & DP_SHARED_RECOGNIZER )
             {
+                pThis->m_dwFlags &= ~DP_SHARED_RECOGNIZER;
+                ::CheckMenuItem( hMenu, IDM_SHAREDENGINE, MF_UNCHECKED );
+            }
+            else
+            {
+                pThis->m_dwFlags |= DP_SHARED_RECOGNIZER;
+                ::CheckMenuItem( hMenu, IDM_SHAREDENGINE, MF_CHECKED );
+            }
+
+            // When the reco engine changes, all of the SAPI objects need
+            // to be unplugged and reinitialized.
+            if ( FAILED(pThis->InitializeSAPIObjs()) )
+            {
+                // New SAPI objects couldn't get set up: need to bail
                 ::DestroyWindow( hWnd );
             }
             break;
 
-        case WM_DESTROY:
-            ::PostQuitMessage( 0 );
+        case IDM_PLAY:
+            // if we're already speaking then stop
+            if( pThis->m_dwFlags & DP_IS_SPEAKING )
+            {
+                pThis->EndSpeaking();
+            }
+            else
+            {
+                pThis->DoPlay();
+            }
             break;
 
-        // The following three window messages were defined by the call to 
-        // ISpNotifyTranslator::InitWindowMessage() in 
-        // CDictationPad::InitSAPICallback (see dictpad_sapi.cpp) to be
-        // the messages this window receives whenever SAPI wants to 
-        // notify us of one of the events in which we said we were interested
-        
-        case WM_DICTRECOEVENT:
+        case IDM_MIC_TOGGLE:
         {
-            // Something happened with the dictation recognition context
-            bool fSuccess = pThis->SRDictEventHandler();
-            
+            DWORD dwOldFlags = pThis->m_dwFlags;
+            if ( !(pThis->m_dwFlags & DP_GRAMMARS_ACTIVE) )
+            {
+                // If the user sees the microphone button not pressed and tries
+                // to press it, the grammars should be activated regardless
+                // of what the state is
+                pThis->m_dwFlags |= DP_MICROPHONE_ON;
+            }
+            else
+            {
+                // Flip the microphone flag
+                pThis->m_dwFlags ^= DP_MICROPHONE_ON;
+            }
+
+            if ( pThis->m_dwFlags & DP_MICROPHONE_ON )
+            {
+                // Since the grammars are active, we want the dictation
+                // window to have the input focus
+                ::SetFocus( pThis->m_hEdit );
+            }
+
+            // Set the microphone accordingly
+            hr = pThis->SetGrammarState( pThis->m_dwFlags & DP_MICROPHONE_ON );
+
+            if ( FAILED( hr ) )
+            {
+                // Couldn't do this: switch the microphone flag back
+                pThis->m_dwFlags = dwOldFlags;
+            }
+
+            break;
+        }
+
+        case IDM_ABOUT:
+            ::DialogBox( pThis->m_hInst, (LPCTSTR)IDD_ABOUTBOX, hWnd, (DLGPROC)About );
+            break;
+
+        default:
+            return ::DefWindowProc( hWnd, message, wParam, lParam );
+        }
+
+        break;
+
+    case WM_KILLFOCUS:
+        OutputDebugString( _T("Kill focus\r\n") );
+
+        if ( pThis->m_dwFlags & DP_DICTATION_MODE )
+        {
+            // No focus, no microphone
+            pThis->SetGrammarState( false );
+        }
+        break;
+
+    case WM_CLOSE:
+        if ( S_OK == pThis->DoFileClose() )
+        {
+            ::DestroyWindow( hWnd );
+        }
+        break;
+
+    case WM_DESTROY:
+        ::PostQuitMessage( 0 );
+        break;
+
+    // The following three window messages were defined by the call to
+    // ISpNotifyTranslator::InitWindowMessage() in
+    // CDictationPad::InitSAPICallback (see dictpad_sapi.cpp) to be
+    // the messages this window receives whenever SAPI wants to
+    // notify us of one of the events in which we said we were interested
+
+    case WM_DICTRECOEVENT:
+    {
+        // Something happened with the dictation recognition context
+        bool fSuccess = pThis->SRDictEventHandler();
+
+        // We expect this to succeed; otherwise exit
+        _ASSERTE( fSuccess );
+        if ( !fSuccess )
+        {
+            MessageBoxFromResource( hWnd, IDS_UPDATEERROR,
+                                    NULL, MB_ICONEXCLAMATION );
+            ::SendMessage( hWnd, WM_CLOSE, 0, 0 );
+        }
+        break;
+    }
+
+    case WM_CCRECOEVENT:
+        // Something happened with the command-and-control reco context
+        pThis->SRCCEventHandler();
+        break;
+
+    case WM_TTSEVENT:
+        // Some TTS event happened
+        pThis->TTSEventHandler();
+        break;
+
+    // The following two messages have to do with "updating", which is
+    // DictationPad's way of dealing with selection changes in the richedit
+    // control (which is how DictationPad knows that the text in the document
+    // has changed
+
+    case WM_STOPUPDATE:
+        pThis->m_dwFlags |= DP_SKIP_UPDATE;
+        break;
+
+    case WM_STARTUPDATE:
+        pThis->m_dwFlags &= ~DP_SKIP_UPDATE;
+        break;
+
+    case WM_UPDATEALTSBUTTON:
+        pThis->m_hAltsButton = pThis->m_pCandidateList->Update( pThis->m_pTextRunList );
+        break;
+
+    // Notifications from the richedit control
+    case WM_NOTIFY:
+
+        // Set the tooltips if that is what this notification is about
+        pThis->SetTooltipText( lParam );
+
+        switch ( ((LPNMHDR)lParam)->code)
+        {
+        case EN_MSGFILTER:
+        {
+            MSGFILTER *pMsgFilter = (MSGFILTER*)lParam;
+            pThis->ProcessMsgFilter( pMsgFilter );
+            break;
+        }
+
+        case EN_SELCHANGE:
+            // Selection has changed; DictationPad needs to update
+            // its state
+            hr = pThis->ProcessSelChange( (SELCHANGE *) lParam );
+
             // We expect this to succeed; otherwise exit
-            _ASSERTE( fSuccess );
-            if ( !fSuccess )
+            _ASSERTE( SUCCEEDED(hr) );
+            if ( FAILED( hr ) )
             {
                 MessageBoxFromResource( hWnd, IDS_UPDATEERROR,
-                    NULL, MB_ICONEXCLAMATION );
+                                        NULL, MB_ICONEXCLAMATION );
                 ::SendMessage( hWnd, WM_CLOSE, 0, 0 );
             }
             break;
         }
+        break;
 
-        case WM_CCRECOEVENT:
-            // Something happened with the command-and-control reco context
-            pThis->SRCCEventHandler();
-            break;
 
-        case WM_TTSEVENT:
-            // Some TTS event happened
-            pThis->TTSEventHandler();
-            break;
-
-        // The following two messages have to do with "updating", which is
-        // DictationPad's way of dealing with selection changes in the richedit 
-        // control (which is how DictationPad knows that the text in the document
-        // has changed
-
-        case WM_STOPUPDATE:
-            pThis->m_dwFlags |= DP_SKIP_UPDATE;
-            break;
-
-        case WM_STARTUPDATE:
-            pThis->m_dwFlags &= ~DP_SKIP_UPDATE;
-            break;
-
-        case WM_UPDATEALTSBUTTON:
-            pThis->m_hAltsButton = pThis->m_pCandidateList->Update( pThis->m_pTextRunList );
-            break;
-
-        // Notifications from the richedit control
-        case WM_NOTIFY:
-
-            // Set the tooltips if that is what this notification is about
-            pThis->SetTooltipText( lParam );
-            
-            switch ( ((LPNMHDR)lParam)->code)
-            {
-                case EN_MSGFILTER:
-                {
-                    MSGFILTER *pMsgFilter = (MSGFILTER*)lParam;
-                    pThis->ProcessMsgFilter( pMsgFilter );
-                    break;
-                }
-
-                case EN_SELCHANGE:
-                    // Selection has changed; DictationPad needs to update 
-                    // its state
-                    hr = pThis->ProcessSelChange( (SELCHANGE *) lParam );
-
-                    // We expect this to succeed; otherwise exit
-                    _ASSERTE( SUCCEEDED(hr) );
-                    if ( FAILED( hr ) )
-                    {
-                        MessageBoxFromResource( hWnd, IDS_UPDATEERROR,
-                            NULL, MB_ICONEXCLAMATION );
-                        ::SendMessage( hWnd, WM_CLOSE, 0, 0 );
-                    }
-                    break;
-            }
-            break;
-
-        
-        default:
-            return ::DefWindowProc( hWnd, message, wParam, lParam );
-            break;
-   }
-   return 0;
+    default:
+        return ::DefWindowProc( hWnd, message, wParam, lParam );
+        break;
+    }
+    return 0;
 } /* CDictationPad::WndProc */
 
 
@@ -817,8 +817,8 @@ LRESULT CALLBACK CDictationPad::WndProc( HWND hWnd, UINT message, WPARAM wParam,
 BOOL CDictationPad::InitializeWindow( HWND hWnd )
 {
     // Create a toolbar
-    m_hToolBar = ::CreateToolbarEx( hWnd, WS_CHILD | WS_BORDER | WS_VISIBLE | TBSTYLE_TOOLTIPS, 
-        IDR_TOOLBAR, 5, m_hInst, IDR_TOOLBAR, NULL, 0, 0, 0, 0, 0, sizeof(TBBUTTON) );
+    m_hToolBar = ::CreateToolbarEx( hWnd, WS_CHILD | WS_BORDER | WS_VISIBLE | TBSTYLE_TOOLTIPS,
+                                    IDR_TOOLBAR, 5, m_hInst, IDR_TOOLBAR, NULL, 0, 0, 0, 0, 0, sizeof(TBBUTTON) );
     if ( !m_hToolBar )
     {
         return FALSE;
@@ -847,7 +847,7 @@ BOOL CDictationPad::InitializeWindow( HWND hWnd )
     tbButtons[2].fsStyle = TBSTYLE_SEP;
     tbButtons[2].dwData = 0;
     tbButtons[2].iString = 0;
-    
+
     tbButtons[3].iBitmap = 2;
     tbButtons[3].idCommand = IDM_PLAY;
     tbButtons[3].fsState = TBSTATE_ENABLED;
@@ -882,8 +882,8 @@ BOOL CDictationPad::InitializeWindow( HWND hWnd )
     }
 
     // Create a rich edit control from the candidate UI object's registered parent class
-    
-    // The richedit control should fill the client area, taking the toolbar & status bar 
+
+    // The richedit control should fill the client area, taking the toolbar & status bar
     // into consideration
     POINT ptToolBar;
     RECT r;
@@ -897,7 +897,7 @@ BOOL CDictationPad::InitializeWindow( HWND hWnd )
 
     ::GetWindowRect( m_hStatusBar, &r );
     lStatusBarHeight = r.bottom - r.top;
-    
+
     ::GetClientRect (hWnd, &r);
 
     // Get the modified richedit window class registered by m_pCandidateList
@@ -906,19 +906,19 @@ BOOL CDictationPad::InitializeWindow( HWND hWnd )
     {
         // Create the modified richedit control.
         // We pass the candidate UI manager in as lParam
-        m_hEdit = ::CreateWindowEx( WS_EX_CLIENTEDGE, 
-            pwcEditWindowClass->lpszClassName,
-            _T(""), 
-            WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE |
-                WS_VSCROLL | ES_AUTOVSCROLL | ES_NOHIDESEL,
-            0, 
-            ptToolBar.y, r.right, 
-            ( r.bottom - ( lToolBarHeight + lStatusBarHeight ) ), 
-                                   
-            hWnd, 
-            (HMENU)1, 
-            m_hInst,  
-            (LPVOID) m_pCandidateList );
+        m_hEdit = ::CreateWindowEx( WS_EX_CLIENTEDGE,
+                                    pwcEditWindowClass->lpszClassName,
+                                    _T(""),
+                                    WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE |
+                                    WS_VSCROLL | ES_AUTOVSCROLL | ES_NOHIDESEL,
+                                    0,
+                                    ptToolBar.y, r.right,
+                                    ( r.bottom - ( lToolBarHeight + lStatusBarHeight ) ),
+
+                                    hWnd,
+                                    (HMENU)1,
+                                    m_hInst,
+                                    (LPVOID) m_pCandidateList );
     }
 
     if ( !m_hEdit )
@@ -936,27 +936,27 @@ BOOL CDictationPad::InitializeWindow( HWND hWnd )
 *       Puts the appropriate tooltip text into the LTOOLTIPTEXT struct pointed to
 *       by lParam.
 ******************************************************************************************/
-void CDictationPad::SetTooltipText( LPARAM lParam ) 
-{ 
-    LPTOOLTIPTEXT pToolTipText; 
-    static TCHAR szBuffer[64]; 
- 
-    pToolTipText = (LPTOOLTIPTEXT)lParam; 
+void CDictationPad::SetTooltipText( LPARAM lParam )
+{
+    LPTOOLTIPTEXT pToolTipText;
+    static TCHAR szBuffer[64];
+
+    pToolTipText = (LPTOOLTIPTEXT)lParam;
     if( pToolTipText->hdr.code == TTN_NEEDTEXT )
-    { 
-        ::LoadString( m_hInst, (UINT) pToolTipText->hdr.idFrom, szBuffer, _countof(szBuffer) ); 
-        pToolTipText->lpszText = szBuffer; 
-    } 
+    {
+        ::LoadString( m_hInst, (UINT) pToolTipText->hdr.idFrom, szBuffer, _countof(szBuffer) );
+        pToolTipText->lpszText = szBuffer;
+    }
 } /* CDictationPad::SetTooltipText */
- 
+
 /***************************************************************************************
 * CDictationPad::UpdateList *
 *---------------------------*
 *   Description:
 *       Updates the TextRunList by inserting a TextRun that has the given range.
-*       This is called when the RichEdit control notifies us of some change to the 
-*       text.  The node added to the TextRunList is to be a TextRun -- not a 
-*       DictationRun -- since the case of dictated text is handled separately in 
+*       This is called when the RichEdit control notifies us of some change to the
+*       text.  The node added to the TextRunList is to be a TextRun -- not a
+*       DictationRun -- since the case of dictated text is handled separately in
 *       ProcessDictation()
 *   Return:
 *       Return value of CTextRunList::Insert()
@@ -968,7 +968,7 @@ HRESULT CDictationPad::UpdateList( long lStart, long lEnd )
     {
         return E_UNEXPECTED;
     }
-   
+
     // Create a new CTextRun for the text in the range lStart->lEnd
     CTextRun *pTextRun = new CTextRun();
     if ( !pTextRun )
@@ -1022,70 +1022,70 @@ void CDictationPad::ProcessMsgFilter( MSGFILTER *pMsgFilter )
     switch( pMsgFilter->msg )
     {
     case WM_CHAR:
+    {
+        switch( pMsgFilter->wParam )
         {
-            switch( pMsgFilter->wParam )
-            {
-                case VK_BACK:
-                    if( m_dwFlags & DP_WHOLE_WORD_SEL )
-                    {
-                        // Delete whole words at a time
-
-                        // Use the information on the last selection
-                        // to see whether a selected range was being deleted 
-                        // or whether the selection was an IP
-                        long lStart = m_LastSelInfo.selchange.chrg.cpMin;
-                        long lEnd = m_LastSelInfo.selchange.chrg.cpMax;
-                        if ( lStart == lEnd )
-                        {
-                            // Select and then delete the current word
-                            m_cpTextSel->MoveStart( tomWord, -1, NULL );
-                            m_cpTextSel->MoveEnd( tomWord, 1, NULL );
-                            m_cpTextSel->Delete(tomWord, 0, NULL);
-                        }
-                    }
-                    break;
-
-                case VK_ESCAPE:
-                    if ( m_dwFlags & DP_IS_SPEAKING )
-                    {
-                        // Esc stops a playback
-                        EndSpeaking();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-            break;
-        }
-    case WM_LBUTTONDOWN:
-        {
+        case VK_BACK:
             if( m_dwFlags & DP_WHOLE_WORD_SEL )
             {
-                // Mouse capture will expand the text selection to 
-                // include whole words when the left button is back up
-                ::SetCapture( m_hClient );
-            }
+                // Delete whole words at a time
 
-            else if ( m_dwFlags & DP_IS_SPEAKING )
+                // Use the information on the last selection
+                // to see whether a selected range was being deleted
+                // or whether the selection was an IP
+                long lStart = m_LastSelInfo.selchange.chrg.cpMin;
+                long lEnd = m_LastSelInfo.selchange.chrg.cpMax;
+                if ( lStart == lEnd )
+                {
+                    // Select and then delete the current word
+                    m_cpTextSel->MoveStart( tomWord, -1, NULL );
+                    m_cpTextSel->MoveEnd( tomWord, 1, NULL );
+                    m_cpTextSel->Delete(tomWord, 0, NULL);
+                }
+            }
+            break;
+
+        case VK_ESCAPE:
+            if ( m_dwFlags & DP_IS_SPEAKING )
             {
-                // Clicking anywhere in the document should kill the speak
+                // Esc stops a playback
                 EndSpeaking();
             }
+            break;
 
+        default:
             break;
         }
-    case WM_LBUTTONUP:
+        break;
+    }
+    case WM_LBUTTONDOWN:
+    {
+        if( m_dwFlags & DP_WHOLE_WORD_SEL )
         {
-            if( m_dwFlags & DP_WHOLE_WORD_SEL )
-            {
-                // Get the selection, expanded to whole words
-                ::ReleaseCapture();
-                m_cpTextSel->Expand( tomWord, NULL );
-            }
-
-            break;
+            // Mouse capture will expand the text selection to
+            // include whole words when the left button is back up
+            ::SetCapture( m_hClient );
         }
+
+        else if ( m_dwFlags & DP_IS_SPEAKING )
+        {
+            // Clicking anywhere in the document should kill the speak
+            EndSpeaking();
+        }
+
+        break;
+    }
+    case WM_LBUTTONUP:
+    {
+        if( m_dwFlags & DP_WHOLE_WORD_SEL )
+        {
+            // Get the selection, expanded to whole words
+            ::ReleaseCapture();
+            m_cpTextSel->Expand( tomWord, NULL );
+        }
+
+        break;
+    }
     default:
         break;
     }
@@ -1096,7 +1096,7 @@ void CDictationPad::ProcessMsgFilter( MSGFILTER *pMsgFilter )
 *-----------------------------------*
 *   Description:
 *       Called whenever there is an EN_SELCHANGE notification.  Updates the state
-*       info and processes new non-dictated text.  
+*       info and processes new non-dictated text.
 *       New text is detected by comparing the current state of the document
 *       against the state when this function was last called.
 *   Return:
@@ -1118,26 +1118,26 @@ HRESULT CDictationPad::ProcessSelChange( SELCHANGE *pSelChange )
     const long lLastTextLen = m_LastSelInfo.lTextLen;
 
     // Get the current selection info and document length
-    
+
     m_CurSelInfo.selchange = *pSelChange;
-    
+
     long lCurrentTextLen;
     GETTEXTLENGTHEX gtl;
     gtl.flags = GTL_PRECISE | GTL_NUMCHARS;
     gtl.codepage = CP_ACP;
-    lCurrentTextLen = (long) ::SendMessage( m_hEdit, 
-        EM_GETTEXTLENGTHEX, (WPARAM) &gtl, 0 );
+    lCurrentTextLen = (long) ::SendMessage( m_hEdit,
+                                            EM_GETTEXTLENGTHEX, (WPARAM) &gtl, 0 );
     m_CurSelInfo.lTextLen = lCurrentTextLen;
-    
+
     // These variables are here for the purpose of clarity
     const SELCHANGE lastSelChange = m_LastSelInfo.selchange;
     const SELCHANGE curSelChange = m_CurSelInfo.selchange;
-    
+
     // Move the alternates button to the new location
     if ( !( m_dwFlags & DP_SKIP_UPDATE ) )
     {
         m_hAltsButton = m_pCandidateList->Update( m_pTextRunList );
-    }                            
+    }
 
     // The DP_SKIP_UPDATE flag is set when DictationPad is elsewhere making
     // changes to the document (or moving around the selection)
@@ -1147,10 +1147,10 @@ HRESULT CDictationPad::ProcessSelChange( SELCHANGE *pSelChange )
         // Nothing needs to be done
         return S_OK;
     }
-    
+
     // Tell the recoevent manager if the selection is being
     // moved around, because it is possible that if an utterance
-    // is currently being processed that we may want it to appear 
+    // is currently being processed that we may want it to appear
     // here.
     if ( lCurrentTextLen == lLastTextLen )
     {
@@ -1193,7 +1193,7 @@ HRESULT CDictationPad::ProcessSelChange( SELCHANGE *pSelChange )
     // the last time this function was called and whether there is new text
     // to deal with (or text that has been deleted).
 
-    // Consider all combinations of {nondegenerate, degenerate} among the current 
+    // Consider all combinations of {nondegenerate, degenerate} among the current
     // selection and the last selection
     HRESULT hr = E_FAIL;
     if ( lastSelChange.chrg.cpMin == lastSelChange.chrg.cpMax )
@@ -1201,7 +1201,7 @@ HRESULT CDictationPad::ProcessSelChange( SELCHANGE *pSelChange )
         // Last selection was degenerate (an IP).
         if ( lCurrentTextLen < lLastTextLen )
         {
-             // Something was deleted; insert the current (degenerate) range
+            // Something was deleted; insert the current (degenerate) range
             long lStart;
             long lEnd;
             lStart = lEnd = curSelChange.chrg.cpMax;
@@ -1210,8 +1210,8 @@ HRESULT CDictationPad::ProcessSelChange( SELCHANGE *pSelChange )
         else if ( lCurrentTextLen > m_LastSelInfo.lTextLen )
         {
             // Something has been inserted.  The start of the new text
-            // is the start of the old text selection, 
-            // and the end of the new text is the end of the current 
+            // is the start of the old text selection,
+            // and the end of the new text is the end of the current
             // text selection
             long lStart = lastSelChange.chrg.cpMin;;
             long lEnd = curSelChange.chrg.cpMax;
@@ -1227,13 +1227,13 @@ HRESULT CDictationPad::ProcessSelChange( SELCHANGE *pSelChange )
     {
         // Last selection was not degenerate.
 
-        // The new text starts at the start of the last selection and ends at the 
+        // The new text starts at the start of the last selection and ends at the
         // end of the current selection (think about what happens when you
         // highlight some text and type over it)
         long lStart = lastSelChange.chrg.cpMin;
         long lEnd = curSelChange.chrg.cpMax;
 
-        // If the text length has stayed the same, unless we just did a paste, 
+        // If the text length has stayed the same, unless we just did a paste,
         // there is no new text to deal with
         if (( lLastTextLen == lCurrentTextLen ) && !(m_dwFlags & DP_JUST_PASTED_TEXT) )
         {
@@ -1276,7 +1276,7 @@ HRESULT CDictationPad::DoPlay()
         return S_FALSE;
     }
 
-    // Save the info on the selection so that we can restore it after 
+    // Save the info on the selection so that we can restore it after
     // tracking the spoken text.
     // This will occur in CDictationPad::EndSpeaking()
     long lSpeakStart = 0;
@@ -1291,7 +1291,7 @@ HRESULT CDictationPad::DoPlay()
         if ( lSpeakStart >= m_pTextRunList->GetTailEnd() )
         {
             // IP is at the end of the document:
-            // Speak from beginning to end 
+            // Speak from beginning to end
             lSpeakStart = 0;
         }
         // Else lSpeakStart is already correct
@@ -1300,7 +1300,7 @@ HRESULT CDictationPad::DoPlay()
         lSpeakEnd = m_pTextRunList->GetTailEnd();
     }
 
-    // This will deactivate the grammars and set things up for 
+    // This will deactivate the grammars and set things up for
     // a playback
     HRESULT hr = StartSpeaking( lSpeakStart, lSpeakEnd );
     if ( S_OK != hr )
@@ -1364,8 +1364,8 @@ HRESULT CDictationPad::StartSpeaking( long lStartSpeakRange, long lEndSpeakRange
 
     // Set the range for the playback state info
     _ASSERTE( !m_SpeakInfo.pSpeakRange );
-    HRESULT hr = m_cpTextDoc->Range( lStartSpeakRange, lEndSpeakRange, 
-        &(m_SpeakInfo.pSpeakRange) );
+    HRESULT hr = m_cpTextDoc->Range( lStartSpeakRange, lEndSpeakRange,
+                                     &(m_SpeakInfo.pSpeakRange) );
     if ( FAILED( hr ) )
     {
         return hr;
@@ -1373,10 +1373,10 @@ HRESULT CDictationPad::StartSpeaking( long lStartSpeakRange, long lEndSpeakRange
 
     // Set the flag and the toolbar buttons
     m_dwFlags |= DP_IS_SPEAKING;
-    ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY, 
-        MAKELONG( TBSTATE_ENABLED | TBSTATE_PRESSED, 0 ) );
+    ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY,
+                   MAKELONG( TBSTATE_ENABLED | TBSTATE_PRESSED, 0 ) );
     ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_MIC_TOGGLE,
-        MAKELONG( 0, 0 ) );
+                   MAKELONG( 0, 0 ) );
 
     // Disable all the menu items
     HMENU hMenu = ::GetMenu( m_hClient );
@@ -1400,16 +1400,16 @@ HRESULT CDictationPad::StartSpeaking( long lStartSpeakRange, long lEndSpeakRange
 
     // Set the speak info
     m_SpeakInfo.ulCurrentStream = 1;
-    m_SpeakInfo.pCurrentNode = 
+    m_SpeakInfo.pCurrentNode =
         m_pTextRunList->Find( lStartSpeakRange );
-    
+
     _ASSERTE( !(lStartSpeakRange) || m_SpeakInfo.pCurrentNode );
     if ( lStartSpeakRange && !m_SpeakInfo.pCurrentNode )
     {
         return E_UNEXPECTED;
     }
-    
-    // Move the selection to an IP at the beginning of the selection for the 
+
+    // Move the selection to an IP at the beginning of the selection for the
     // time being (so that the highlighting can still be seen if the selection is
     // nondegenerate.
     m_cpTextSel->Collapse( tomStart );
@@ -1421,9 +1421,9 @@ HRESULT CDictationPad::StartSpeaking( long lStartSpeakRange, long lEndSpeakRange
 * CDictationPad::EndSpeaking *
 *----------------------------*
 *   Description:
-*       Called when a playback has ended (whether it has 
+*       Called when a playback has ended (whether it has
 *       ended on its own or by the user interrupting it.
-*       Restores the selection to what it was before 
+*       Restores the selection to what it was before
 *       the playback started
 ****************************************************************************************/
 void CDictationPad::EndSpeaking()
@@ -1437,9 +1437,9 @@ void CDictationPad::EndSpeaking()
     // Set the flag and the toolbar buttons
     m_dwFlags &= ~DP_IS_SPEAKING;
     ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_PLAY,
-        MAKELONG( TBSTATE_ENABLED, 0 ) );
+                   MAKELONG( TBSTATE_ENABLED, 0 ) );
     ::SendMessage( m_hToolBar, TB_SETSTATE, IDM_MIC_TOGGLE,
-        MAKELONG( TBSTATE_ENABLED, 0 ) );
+                   MAKELONG( TBSTATE_ENABLED, 0 ) );
 
     // Re-enable all the menu items
     HMENU hMenu = ::GetMenu( m_hClient );
@@ -1460,13 +1460,13 @@ void CDictationPad::EndSpeaking()
     }
 
     // Restore the selection to what it was before the playback started
-    m_cpTextSel->SetRange( m_SpeakInfo.lSelStart, 
-        m_SpeakInfo.lSelEnd );
-    
+    m_cpTextSel->SetRange( m_SpeakInfo.lSelStart,
+                           m_SpeakInfo.lSelEnd );
+
     // If the selection is no longer visible, then scroll it into view
     POINT pt;
-    hr = m_cpTextSel->GetPoint( tomEnd | TA_BOTTOM | TA_RIGHT, 
-        &(pt.x), &(pt.y) );
+    hr = m_cpTextSel->GetPoint( tomEnd | TA_BOTTOM | TA_RIGHT,
+                                &(pt.x), &(pt.y) );
     if ( hr == S_FALSE )
     {
         // Out of view
@@ -1480,7 +1480,7 @@ void CDictationPad::EndSpeaking()
     m_SpeakInfo.pSpeakRange->Release();
     m_SpeakInfo.pSpeakRange = NULL;
 
-    // Restore the input focus and place the candidate button in the 
+    // Restore the input focus and place the candidate button in the
     // appropriate place
     ::SetFocus( m_hEdit );
     m_hAltsButton = m_pCandidateList->Update( m_pTextRunList );
@@ -1530,7 +1530,7 @@ HRESULT CDictationPad::DoFileNew()
         hr = m_cpTextDoc->New();
         m_pTextRunList = new CTextRunList();
         m_dwFlags &= ~DP_SKIP_UPDATE;
-        
+
         if ( !m_pTextRunList )
         {
             return E_OUTOFMEMORY;
@@ -1542,7 +1542,7 @@ HRESULT CDictationPad::DoFileNew()
     {
         m_pTextRunList->SetTextDoc( m_cpTextDoc );
     }
-    
+
     return hr;
 
 }   /* CDictationPad::DoFileNew */
@@ -1554,7 +1554,7 @@ HRESULT CDictationPad::DoFileNew()
 *   Description:
 *       Opens the file whose full path is lpFileName, or if lpFileName is NULL
 *       gets the name by using the GetOpenFileName common control.
-*       Attempts to open the file in the DictationPad format 
+*       Attempts to open the file in the DictationPad format
 *       (an IStorage with two IStreams, one for text, and one with the
 *       serialized TextRunList).
 *       Failing that, opens the file as text.
@@ -1572,7 +1572,7 @@ HRESULT CDictationPad::DoFileOpen( __in_opt LPTSTR lpFileName )
         return E_FAIL;
     }
 
-    // Stop listening for dictation, and do not start listening 
+    // Stop listening for dictation, and do not start listening
     // again unless the user explicitly asks to do so
     if ( m_dwFlags & DP_MICROPHONE_ON )
     {
@@ -1586,18 +1586,18 @@ HRESULT CDictationPad::DoFileOpen( __in_opt LPTSTR lpFileName )
         // User cancelled
         return hr;
     }
-    
+
     if ( lpFileName )
     {
         m_pszFile = _tcsdup( lpFileName );
     }
     else
     {
-		// Start an "Open" dialog box
+        // Start an "Open" dialog box
         TCHAR pszFileName[ MAX_PATH ];
         *pszFileName = 0;
         OPENFILENAME ofn;
-		size_t ofnsize = (BYTE*)&ofn.lpTemplateName + sizeof(ofn.lpTemplateName) - (BYTE*)&ofn;
+        size_t ofnsize = (BYTE*)&ofn.lpTemplateName + sizeof(ofn.lpTemplateName) - (BYTE*)&ofn;
         ZeroMemory( &ofn, ofnsize);
         ofn.lStructSize = (DWORD)ofnsize;
         ofn.hwndOwner = m_hClient;
@@ -1615,12 +1615,12 @@ HRESULT CDictationPad::DoFileOpen( __in_opt LPTSTR lpFileName )
         ofn.Flags = OFN_CREATEPROMPT;
         ofn.lpstrDefExt = _T("dpd");
         BOOL fSuccess = ::GetOpenFileName( &ofn );
-    
+
         if ( !fSuccess )
         {
             // Check what caused fSuccess to be false
             DWORD dwErr = ::CommDlgExtendedError();
-        
+
             if ( 0 == dwErr )
             {
                 // User cancelled the open
@@ -1651,7 +1651,7 @@ HRESULT CDictationPad::DoFileOpen( __in_opt LPTSTR lpFileName )
         _ASSERTE( !m_pszFile );
         m_pszFile = _tcsdup( ofn.lpstrFile );
     }
-    
+
     if ( !m_pszFile )
     {
         return E_OUTOFMEMORY;
@@ -1667,15 +1667,15 @@ HRESULT CDictationPad::DoFileOpen( __in_opt LPTSTR lpFileName )
     // Attempt to open an IStorage from that file
     IStorage *pStorage = NULL;
     hr = ::StgOpenStorage( CT2W(m_pszFile), NULL, STGM_READ | STGM_TRANSACTED,
-        NULL, 0, &pStorage );
+                           NULL, 0, &pStorage );
 
     // Attempt to open an IStream from the IStorage
     IStream *pStream = NULL;
     if ( SUCCEEDED( hr ) && pStorage )
     {
         // Open an IStream off that storage
-        hr = pStorage->OpenStream( DICTPAD_TEXT, 0, STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 
-            0, &pStream );
+        hr = pStorage->OpenStream( DICTPAD_TEXT, 0, STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
+                                   0, &pStream );
     }
 
     // Read in from that IStream
@@ -1709,13 +1709,13 @@ HRESULT CDictationPad::DoFileOpen( __in_opt LPTSTR lpFileName )
 
     if ( SUCCEEDED( hr ) && pStorage )
     {
-        // We will be here if we could open the DICTPAD_TEXT stream 
+        // We will be here if we could open the DICTPAD_TEXT stream
         // from pStorage
 
         // Open the IStream with the serialized result objects
-        hr = pStorage->OpenStream( DICTPAD_RECORESULTS, 0, 
-            STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 
-            0, &pStream );
+        hr = pStorage->OpenStream( DICTPAD_RECORESULTS, 0,
+                                   STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
+                                   0, &pStream );
     }
     if ( SUCCEEDED( hr ) && pStream )
     {
@@ -1732,7 +1732,7 @@ HRESULT CDictationPad::DoFileOpen( __in_opt LPTSTR lpFileName )
 
     // We need to know how long the text run list is starting out
     m_CurSelInfo.lTextLen = m_pTextRunList->GetTailEnd();
-    
+
     if ( pStream )
     {
         pStream->Release();
@@ -1776,7 +1776,7 @@ HRESULT CDictationPad::DoFileSave( bool fTextOnly )
         return E_FAIL;
     }
 
-    // Stop listening for dictation, and do not start listening 
+    // Stop listening for dictation, and do not start listening
     // again unless the user explicitly asks to do so
     if ( m_dwFlags & DP_MICROPHONE_ON )
     {
@@ -1796,9 +1796,9 @@ HRESULT CDictationPad::DoFileSave( bool fTextOnly )
         CComVariant var = bstrFile;
 
         HRESULT hr = m_cpTextDoc->Save( &var, tomCreateAlways | tomText, 0 );
-        
+
         ::SysFreeString( bstrFile );
-        
+
         if ( SUCCEEDED( hr ) )
         {
             m_cpTextDoc->SetSaved( tomTrue );
@@ -1809,16 +1809,16 @@ HRESULT CDictationPad::DoFileSave( bool fTextOnly )
 
     // Associate an IStorage with this file
     IStorage *pStorage = NULL;
-    HRESULT hr = ::StgCreateDocfile( CT2W(m_pszFile), 
-        STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED,
-        0, &pStorage );
-    
+    HRESULT hr = ::StgCreateDocfile( CT2W(m_pszFile),
+                                     STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED,
+                                     0, &pStorage );
+
     // Create a stream for the text of the document in the storage object
     IStream *pStream = NULL;
     if ( SUCCEEDED( hr ) )
     {
-        hr = pStorage->CreateStream( DICTPAD_TEXT, 
-            STGM_CREATE | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, 0, &pStream );
+        hr = pStorage->CreateStream( DICTPAD_TEXT,
+                                     STGM_CREATE | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, 0, &pStream );
     }
 
     if ( SUCCEEDED( hr ) )
@@ -1830,11 +1830,11 @@ HRESULT CDictationPad::DoFileSave( bool fTextOnly )
         es.dwCookie = (DWORD_PTR) pStream;
         es.pfnCallback = (EDITSTREAMCALLBACK) EditStreamCallbackWriteOut;
         ::SendMessage( m_hEdit, EM_STREAMOUT, SF_RTF, (LPARAM) &es );
-    
+
         // Commit the changes to the IStream
         hr = pStream->Commit( STGC_DEFAULT );
     }
-    
+
     if ( pStream )
     {
         pStream->Release();
@@ -1844,7 +1844,7 @@ HRESULT CDictationPad::DoFileSave( bool fTextOnly )
     if ( SUCCEEDED( hr ) )
     {
         // The text document has been saved (if this doesn't succeed then
-        // we will just be prompted to save next time, even if we didn't make 
+        // we will just be prompted to save next time, even if we didn't make
         // any changes; this is not serious.
         m_cpTextDoc->SetSaved( tomTrue );
     }
@@ -1858,7 +1858,7 @@ HRESULT CDictationPad::DoFileSave( bool fTextOnly )
     if ( SUCCEEDED(hr) )
     {
         hr = pStorage->CreateStream( DICTPAD_RECORESULTS,
-            STGM_CREATE | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, 0, &pStream );
+                                     STGM_CREATE | STGM_READWRITE | STGM_SHARE_EXCLUSIVE, 0, 0, &pStream );
     }
     if ( SUCCEEDED( hr ) )
     {
@@ -1892,10 +1892,10 @@ HRESULT CDictationPad::DoFileSave( bool fTextOnly )
 * CDictationPad::DoFileSaveAs *
 *-----------------------------*
 *   Description:
-*       Saves the file, using the GetSaveFileName common control. 
+*       Saves the file, using the GetSaveFileName common control.
 *   Return:
 *       S_OK
-*       S_FALSE if user cancelled save 
+*       S_FALSE if user cancelled save
 *       E_FAIL if no client window or if unsuccessful at obtaining the file name
 *       Return value of CDictationPad::DoFileSave()
 ****************************************************************************************/
@@ -1906,7 +1906,7 @@ HRESULT CDictationPad::DoFileSaveAs()
         return E_FAIL;
     }
 
-    // Stop listening for dictation, and do not start listening 
+    // Stop listening for dictation, and do not start listening
     // again unless the user explicitly asks to do so
     if ( m_dwFlags & DP_MICROPHONE_ON )
     {
@@ -1917,12 +1917,12 @@ HRESULT CDictationPad::DoFileSaveAs()
     TCHAR pszFileName[ MAX_PATH ];
     *pszFileName = 0;
     OPENFILENAME ofn;
-	size_t ofnsize = (BYTE*)&ofn.lpTemplateName + sizeof(ofn.lpTemplateName) - (BYTE*)&ofn;
+    size_t ofnsize = (BYTE*)&ofn.lpTemplateName + sizeof(ofn.lpTemplateName) - (BYTE*)&ofn;
     ZeroMemory( &ofn, ofnsize);
     ofn.lStructSize = (DWORD)ofnsize;
     ofn.hwndOwner = m_hClient;
     ofn.hInstance = m_hInst;
-    ofn.lpstrFilter = 
+    ofn.lpstrFilter =
         _T("DictationPad Files (*.dpd)\0*.dpd\0Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0\0");
     ofn.lpstrCustomFilter = NULL;
     ofn.nMaxCustFilter = 0;
@@ -1954,7 +1954,7 @@ HRESULT CDictationPad::DoFileSaveAs()
     {
         // Check what caused fSuccess to be false
         DWORD dwErr = ::CommDlgExtendedError();
-        
+
         if ( 0 == dwErr )
         {
             // User cancelled the save
@@ -1973,11 +1973,11 @@ HRESULT CDictationPad::DoFileSaveAs()
 * CDictationPad::DoFileClose *
 *----------------------------*
 *   Description:
-*       If there is currently an open file, closes the file (checking to see if 
+*       If there is currently an open file, closes the file (checking to see if
 *       it needs saving).
 *       Always frees the file name string if successful
 *   Return:
-*       S_OK 
+*       S_OK
 *       S_FALSE if the user cancelled the close
 *       E_FAIL if there is no associated window
 ****************************************************************************************/
@@ -2003,8 +2003,8 @@ HRESULT CDictationPad::DoFileClose()
         // Find out whether the user wants to save the current file
         TCHAR pszCaption[ MAX_LOADSTRING ];
         ::LoadString( m_hInst, IDS_APP_TITLE, pszCaption, MAX_LOADSTRING );
-        int iResult = MessageBoxFromResource( m_hClient, IDS_CONFIRMCLOSE, pszCaption, 
-            MB_YESNOCANCEL | MB_ICONEXCLAMATION );
+        int iResult = MessageBoxFromResource( m_hClient, IDS_CONFIRMCLOSE, pszCaption,
+                                              MB_YESNOCANCEL | MB_ICONEXCLAMATION );
 
         if ( IDCANCEL == iResult )
         {
@@ -2023,12 +2023,12 @@ HRESULT CDictationPad::DoFileClose()
         else
         {
             // The user said don't save.
-            // If we opened the file via ITextDocument::Open(), TOM will save 
+            // If we opened the file via ITextDocument::Open(), TOM will save
             // the file anyways, unless we set the saved flag, which we do here
             m_cpTextDoc->SetSaved( tomTrue );
         }
     }
-    
+
     // Free the memory associated with this file
     if ( m_pszFile )
     {
@@ -2051,7 +2051,7 @@ HRESULT CDictationPad::DoFileClose()
 *       Repeatedly called by RichEdit when an EM_STREAMIN message is sent.
 *       dwCookie is the IStream from which we will be reading
 *       pbBuff is the buffer into which we will put the bytes from the IStream
-*       cb is the number of bytes we are requested to read, and *pcb is the 
+*       cb is the number of bytes we are requested to read, and *pcb is the
 *           number of bytes actually read.
 *       This function ceases to be called when it returns a nonzero value or sets
 *           *pcb to 0.
@@ -2086,7 +2086,7 @@ DWORD CALLBACK EditStreamCallbackReadIn( DWORD_PTR dwCookie, LPBYTE pbBuff, ULON
 *       Repeatedly called by RichEdit when an EM_STREAMOUT message is sent.
 *       dwCookie is the IStream to which we will be writing
 *       pbBuff is the buffer from which we will get the bytes to write to the IStream
-*       cb is the number of bytes we are requested to write, and *pcb is the 
+*       cb is the number of bytes we are requested to write, and *pcb is the
 *           number of bytes actually written.
 *       This function ceases to be called when it returns a nonzero value or sets
 *           *pcb to 0.
@@ -2126,7 +2126,7 @@ int MessageBoxFromResource( HWND hWnd, UINT uID, LPCTSTR lpCaption, UINT uType )
 {
     TCHAR pszMessageBoxText[ MAX_LOADSTRING ];
     int iRet = ::LoadString( (HINSTANCE)(LONG_PTR) ::GetWindowLongPtr( hWnd, GWLP_HINSTANCE ),
-        uID, pszMessageBoxText, MAX_LOADSTRING );
+                             uID, pszMessageBoxText, MAX_LOADSTRING );
     if ( iRet )
     {
         iRet = ::MessageBox( hWnd, pszMessageBoxText, lpCaption, uType );
@@ -2145,20 +2145,20 @@ LRESULT CALLBACK About( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
 {
     switch( message )
     {
-        case WM_COMMAND:
-        {
-            WORD wId    = LOWORD(wParam); 
-            
-            switch( wId )
-            {
-                case IDOK:
-                case IDCANCEL:
-                    EndDialog( hDlg, LOWORD(wParam) );
-                    return TRUE;
-            }
+    case WM_COMMAND:
+    {
+        WORD wId    = LOWORD(wParam);
 
-            break;
+        switch( wId )
+        {
+        case IDOK:
+        case IDCANCEL:
+            EndDialog( hDlg, LOWORD(wParam) );
+            return TRUE;
         }
+
+        break;
+    }
     }
     return FALSE;
 }   /* About */

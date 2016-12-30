@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // dllmain.cpp : Implements DLL exports and COM class factory
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -38,12 +38,12 @@ ClassFactoryData g_ClassFactories[] =
 {
     {   &CLSID_GrayscaleMFT, CGrayscale::CreateInstance }
 };
-      
+
 DWORD g_numClassFactories = ARRAY_SIZE(g_ClassFactories);
 
 
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  ul_reason_for_call, 
+BOOL APIENTRY DllMain( HANDLE hModule,
+                       DWORD  ul_reason_for_call,
                        LPVOID lpReserved
                      )
 {
@@ -80,7 +80,7 @@ STDAPI DllCanUnloadNow()
 
 STDAPI DllRegisterServer()
 {
-    assert(g_hModule != NULL); 
+    assert(g_hModule != NULL);
 
     HRESULT hr = S_OK;
 
@@ -91,16 +91,16 @@ STDAPI DllRegisterServer()
     if (SUCCEEDED(hr))
     {
         hr = MFTRegister(
-            CLSID_GrayscaleMFT,         // CLSID
-            MFT_CATEGORY_VIDEO_EFFECT,  // Category
-            L"Grayscale Video Effect",  // Friendly name
-            0,                          // Reserved, must be zero.
-            0,
-            NULL,
-            0,
-            NULL,
-            NULL
-            );
+                 CLSID_GrayscaleMFT,         // CLSID
+                 MFT_CATEGORY_VIDEO_EFFECT,  // Category
+                 L"Grayscale Video Effect",  // Friendly name
+                 0,                          // Reserved, must be zero.
+                 0,
+                 NULL,
+                 0,
+                 NULL,
+                 NULL
+             );
     }
     return hr;
 }

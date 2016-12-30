@@ -1,4 +1,4 @@
-#ifndef __COM_ROUTINGEXTENSION_SAMPLE
+﻿#ifndef __COM_ROUTINGEXTENSION_SAMPLE
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -44,7 +44,7 @@
 #define ROUTEDEBUG( parm ) DebugPrint parm
 #else
 #define ROUTEDEBUG( parm )
-#endif 
+#endif
 
 //Constants
 #define ROUTEITGUID           L"{5797dee0-e738-11d0-83c0-00c04fb6e984}"
@@ -71,17 +71,17 @@
 #define DEFAULT_FLAGS               0       // Routing method not enabled
 
 // forward declarations
-BOOL WriteRoutingInfoIntoIniFile( LPWSTR TiffFileName, PFAX_ROUTE FaxRoute ); 
+BOOL WriteRoutingInfoIntoIniFile( LPWSTR TiffFileName, PFAX_ROUTE FaxRoute );
 void DebugPrint( LPWSTR, ... );
 BOOL WINAPI ExtensionCallback( IN HANDLE FaxHandle, IN LPVOID Context, IN OUT LPWSTR MethodName, IN OUT LPWSTR FriendlyName, IN OUT LPWSTR FunctionName, IN OUT LPWSTR Guid );
 HRESULT FaxExtInitializeConfig ( PFAX_EXT_GET_DATA pFaxExtGetData, PFAX_EXT_SET_DATA pFaxExtSetData, PFAX_EXT_REGISTER_FOR_EVENTS pFaxExtRegisterForEvents, PFAX_EXT_UNREGISTER_FOR_EVENTS  pFaxExtUnregisterForEvents, PFAX_EXT_FREE_BUFFER pFaxExtFreeBuffer);
 DWORD ReadConfiguration (DWORD dwDevId);
 BOOL IsServiceAuthSystem();
-        
+
 // globals
 PFAXROUTEADDFILE    FaxRouteAddFile = NULL;
 PFAXROUTEDELETEFILE FaxRouteDeleteFile =NULL;
-PFAXROUTEGETFILE    FaxRouteGetFile= NULL;  
+PFAXROUTEGETFILE    FaxRouteGetFile= NULL;
 PFAXROUTEENUMFILES  FaxRouteEnumFiles =NULL;
 PFAXROUTEMODIFYROUTINGDATA  FaxRouteModifyRoutingData;
 

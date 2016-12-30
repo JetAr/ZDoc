@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -33,40 +33,40 @@
 
 // This is a pseudo-COM object, i.e. not co-create-able and not in registry.
 class __declspec(novtable) ShaCallback
-   : public CComObjectRootEx<CComMultiThreadModelNoCS>,
-     public INapSystemHealthAgentCallback
+    : public CComObjectRootEx<CComMultiThreadModelNoCS>,
+      public INapSystemHealthAgentCallback
 
 {
 public:
 
     // Create instance
-	static SDK_SAMPLE_SHA::IShaCallbackPtr CreateInstance(
-                            INapSystemHealthAgentBinding* binding
-                            ) throw ();
+    static SDK_SAMPLE_SHA::IShaCallbackPtr CreateInstance(
+        INapSystemHealthAgentBinding* binding
+    ) throw ();
 
     STDMETHOD(GetSoHRequest)(
-       IN INapSystemHealthAgentRequest* pRequest) throw ();
+        IN INapSystemHealthAgentRequest* pRequest) throw ();
 
 
     STDMETHOD(ProcessSoHResponse)(
-       IN INapSystemHealthAgentRequest* pIRequest) throw ();
+        IN INapSystemHealthAgentRequest* pIRequest) throw ();
 
 
     STDMETHOD(NotifySystemIsolationStateChange)(void) throw ();
 
 
     STDMETHOD(GetFixupInfo)(
-       OUT FixupInfo** ppstatus) throw ();
+        OUT FixupInfo** ppstatus) throw ();
 
     STDMETHOD(CompareSoHRequests)(
-       /* in */ const SoHRequest* lhs,
-       /* in */ const SoHRequest* rhs,
-       /* out */ BOOL* isEqual
-       ) throw ();
+        /* in */ const SoHRequest* lhs,
+        /* in */ const SoHRequest* rhs,
+        /* out */ BOOL* isEqual
+    ) throw ();
 
     STDMETHOD(NotifyOrphanedSoHRequest)(
-       /* in */ const CorrelationId* correlationId
-       ) throw ();
+        /* in */ const CorrelationId* correlationId
+    ) throw ();
 
 protected:
 
@@ -89,8 +89,8 @@ private:
 
 
     HRESULT HandleSoHResponse(INapSoHProcessor * pSohProcessor,
-                                    SystemHealthEntityId  systemHealthId,
-                                    BOOL doFixup) throw();
+                              SystemHealthEntityId  systemHealthId,
+                              BOOL doFixup) throw();
 
 
 
@@ -100,7 +100,7 @@ private:
     // variables correctly.
 
     ShaCallback& operator=
-        (const ShaCallback&rhs) throw();
+    (const ShaCallback&rhs) throw();
 
 
     // Copy constructor not implemented. This explicitly prevents the
@@ -118,8 +118,8 @@ private:
     DECLARE_NOT_AGGREGATABLE(ShaCallback)
 
     BEGIN_COM_MAP(ShaCallback)
-      COM_INTERFACE_ENTRY(INapSystemHealthAgentCallback)
-   END_COM_MAP()
+    COM_INTERFACE_ENTRY(INapSystemHealthAgentCallback)
+    END_COM_MAP()
 };
 
 #endif

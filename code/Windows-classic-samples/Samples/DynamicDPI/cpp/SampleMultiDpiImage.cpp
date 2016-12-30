@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -64,10 +64,10 @@ void CSampleMultiDPIImage::DoDraw()
                 m_top,
                 static_cast<float>(toDraw->ImageWidth) + m_left,
                 static_cast<float>(toDraw->ImageHeight) + m_top
-                ),
+            ),
             1.0f,
             D2D1_BITMAP_INTERPOLATION_MODE::D2D1_BITMAP_INTERPOLATION_MODE_LINEAR
-            );
+        );
 
         d2dContext->SetUnitMode(D2D1_UNIT_MODE::D2D1_UNIT_MODE_DIPS);    // Reenable D2D scaling
     }
@@ -92,8 +92,8 @@ shared_ptr<CSceneGraphicsBitmap> CSampleMultiDPIImage::LoadImage(std::wstring na
                 GENERIC_READ,
                 WICDecodeMetadataCacheOnDemand,
                 decoder.GetAddressOf()
-                )
-            );
+            )
+        );
 
         ComPtr<IWICBitmapFrameDecode> source;
         DX::ThrowIfFailed(decoder->GetFrame(0, source.GetAddressOf()));
@@ -110,8 +110,8 @@ shared_ptr<CSceneGraphicsBitmap> CSampleMultiDPIImage::LoadImage(std::wstring na
                 nullptr,
                 0.0,
                 WICBitmapPaletteTypeMedianCut
-                )
-            );
+            )
+        );
     }
     return bitmap;
 }
@@ -155,18 +155,18 @@ void CSampleMultiDPIImage::CreateDeviceResources()
             d2dContext->CreateBitmapFromWicBitmap(
                 m_bitmap100->Image.Get(),
                 m_bitmap100->Bitmap.GetAddressOf()
-                )
-            );
+            )
+        );
     }
 
-    if (m_bitmap125->Image) 
+    if (m_bitmap125->Image)
     {
         DX::ThrowIfFailed(
             d2dContext->CreateBitmapFromWicBitmap(
                 m_bitmap125->Image.Get(),
                 m_bitmap125->Bitmap.GetAddressOf()
-                )
-            );
+            )
+        );
     }
 
     if (m_bitmap150->Image)
@@ -175,8 +175,8 @@ void CSampleMultiDPIImage::CreateDeviceResources()
             d2dContext->CreateBitmapFromWicBitmap(
                 m_bitmap150->Image.Get(),
                 m_bitmap150->Bitmap.GetAddressOf()
-                )
-            );
+            )
+        );
     }
 
     if (m_bitmap200->Image)
@@ -185,8 +185,8 @@ void CSampleMultiDPIImage::CreateDeviceResources()
             d2dContext->CreateBitmapFromWicBitmap(
                 m_bitmap200->Image.Get(),
                 m_bitmap200->Bitmap.GetAddressOf()
-                )
-            );
+            )
+        );
     }
 }
 

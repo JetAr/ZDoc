@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: WebHelper.h
 // Desc: Class for opening a browser window and sending data via HTTP PUSH.
 //
@@ -28,7 +28,7 @@ HRESULT WebHelper::Init(DispatchCallback *pCallback)
 
     // Create the InternetExplorer object.
     HRESULT hr = CoCreateInstance(CLSID_InternetExplorer, NULL,
-        CLSCTX_ALL, IID_IWebBrowser2, (void**)&m_pBrowser);
+                                  CLSCTX_ALL, IID_IWebBrowser2, (void**)&m_pBrowser);
     LOG_MSG_IF_FAILED(L"CoCreateInstance(CLSID_InternetExplorer)", hr);
 
     // Set up the connection point so that we receive events.
@@ -73,7 +73,7 @@ HRESULT WebHelper::Init(DispatchCallback *pCallback)
 
 void WebHelper::Exit()
 {
-    // Release the connection point. 
+    // Release the connection point.
     if (m_pCP)
     {
         m_pCP->Unadvise(m_dwCookie);
@@ -111,7 +111,7 @@ HRESULT WebHelper::OpenURLWithData(const WCHAR *wszURL, const BYTE *pbPostData, 
     {
         return E_UNEXPECTED;
     }
-    
+
     HRESULT hr = S_OK;
     BSTR    bstrURL = NULL;
     VARIANT vtEmpty;

@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,7 +32,7 @@ size_t GetWSAQuerySet2Size(__in  WSAQUERYSET2  *pQuerySet);
 
 INT BuildSerializedQuerySet2(
     __in                               PWSAQUERYSET2  pQuerySet,
-                                       size_t         cbSerializedQuerySet,
+    size_t         cbSerializedQuerySet,
     __out_bcount(cbSerializedQuerySet) PBYTE          pbSerializedQuerySet);
 
 

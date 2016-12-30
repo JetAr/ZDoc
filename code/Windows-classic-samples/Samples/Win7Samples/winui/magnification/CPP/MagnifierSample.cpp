@@ -1,44 +1,44 @@
-/*************************************************************************************************
+﻿/*************************************************************************************************
 *
 * File: MagnifierSample.cpp
 *
-* Description: Implements a simple control that magnifies the screen, using the 
+* Description: Implements a simple control that magnifies the screen, using the
 * Magnification API.
 *
 * The magnification window is quarter-screen by default but can be resized.
 * To make it full-screen, use the Maximize button or double-click the caption
-* bar. To return to partial-screen mode, click on the application icon in the 
-* taskbar and press ESC. 
+* bar. To return to partial-screen mode, click on the application icon in the
+* taskbar and press ESC.
 *
 * In full-screen mode, all keystrokes and mouse clicks are passed through to the
-* underlying focused application. In partial-screen mode, the window can receive the 
-* focus. 
+* underlying focused application. In partial-screen mode, the window can receive the
+* focus.
 *
 * Multiple monitors are not supported.
 *
-* 
-* Requirements: To compile, link to Magnification.lib. The sample must be run with 
+*
+* Requirements: To compile, link to Magnification.lib. The sample must be run with
 * elevated privileges.
 *
 * The sample is not designed for multimonitor setups.
-* 
+*
 *  This file is part of the Microsoft WinfFX SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 *************************************************************************************************/
 
 // Ensure that the following definition is in effect before winuser.h is included.
-#define _WIN32_WINNT 0x0501    
+#define _WIN32_WINNT 0x0501
 
 #include <windows.h>
 #include <wincodec.h>
@@ -113,12 +113,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 //
 LRESULT CALLBACK HostWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    switch (message) 
+    switch (message)
     {
     case WM_KEYDOWN:
         if (wParam == VK_ESCAPE)
         {
-            if (isFullScreen) 
+            if (isFullScreen)
             {
                 GoPartialScreen();
             }
@@ -145,15 +145,15 @@ LRESULT CALLBACK HostWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         {
             GetClientRect(hWnd, &magWindowRect);
             // Resize the control to fill the window.
-            SetWindowPos(hwndMag, NULL, 
-                magWindowRect.left, magWindowRect.top, magWindowRect.right, magWindowRect.bottom, 0);
+            SetWindowPos(hwndMag, NULL,
+                         magWindowRect.left, magWindowRect.top, magWindowRect.right, magWindowRect.bottom, 0);
         }
         break;
 
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
-    return 0;  
+    return 0;
 }
 
 //
@@ -165,7 +165,7 @@ ATOM RegisterHostWindowClass(HINSTANCE hInstance)
 {
     WNDCLASSEX wcex = {};
 
-    wcex.cbSize = sizeof(WNDCLASSEX); 
+    wcex.cbSize = sizeof(WNDCLASSEX);
     wcex.style          = CS_HREDRAW | CS_VREDRAW;
     wcex.lpfnWndProc    = HostWndProc;
     wcex.hInstance      = hInstance;
@@ -191,10 +191,10 @@ BOOL SetupMagnifier(HINSTANCE hinst)
 
     // Create the host window.
     RegisterHostWindowClass(hinst);
-    hwndHost = CreateWindowEx(WS_EX_TOPMOST | WS_EX_LAYERED, 
-        WindowClassName, WindowTitle, 
-        RESTOREDWINDOWSTYLES,
-        0, 0, hostWindowRect.right, hostWindowRect.bottom, NULL, NULL, hInst, NULL);
+    hwndHost = CreateWindowEx(WS_EX_TOPMOST | WS_EX_LAYERED,
+                              WindowClassName, WindowTitle,
+                              RESTOREDWINDOWSTYLES,
+                              0, 0, hostWindowRect.right, hostWindowRect.bottom, NULL, NULL, hInst, NULL);
     if (!hwndHost)
     {
         return FALSE;
@@ -205,9 +205,9 @@ BOOL SetupMagnifier(HINSTANCE hinst)
 
     // Create a magnifier control that fills the client area.
     GetClientRect(hwndHost, &magWindowRect);
-    hwndMag = CreateWindow(WC_MAGNIFIER, TEXT("MagnifierWindow"), 
-        WS_CHILD | MS_SHOWMAGNIFIEDCURSOR | WS_VISIBLE,
-        magWindowRect.left, magWindowRect.top, magWindowRect.right, magWindowRect.bottom, hwndHost, NULL, hInst, NULL );
+    hwndMag = CreateWindow(WC_MAGNIFIER, TEXT("MagnifierWindow"),
+                           WS_CHILD | MS_SHOWMAGNIFIEDCURSOR | WS_VISIBLE,
+                           magWindowRect.left, magWindowRect.top, magWindowRect.right, magWindowRect.bottom, hwndHost, NULL, hInst, NULL );
     if (!hwndMag)
     {
         return FALSE;
@@ -224,19 +224,22 @@ BOOL SetupMagnifier(HINSTANCE hinst)
 
     if (ret)
     {
-        MAGCOLOREFFECT magEffectInvert = 
-        {{ // MagEffectInvert
-            { -1.0f,  0.0f,  0.0f,  0.0f,  0.0f },
-            {  0.0f, -1.0f,  0.0f,  0.0f,  0.0f },
-            {  0.0f,  0.0f, -1.0f,  0.0f,  0.0f },
-            {  0.0f,  0.0f,  0.0f,  1.0f,  0.0f },
-            {  1.0f,  1.0f,  1.0f,  0.0f,  1.0f } 
-        }};
+        MAGCOLOREFFECT magEffectInvert =
+        {
+            {
+                // MagEffectInvert
+                { -1.0f,  0.0f,  0.0f,  0.0f,  0.0f },
+                {  0.0f, -1.0f,  0.0f,  0.0f,  0.0f },
+                {  0.0f,  0.0f, -1.0f,  0.0f,  0.0f },
+                {  0.0f,  0.0f,  0.0f,  1.0f,  0.0f },
+                {  1.0f,  1.0f,  1.0f,  0.0f,  1.0f }
+            }
+        };
 
         ret = MagSetColorEffect(hwndMag,&magEffectInvert);
     }
 
-    return ret;  
+    return ret;
 }
 
 
@@ -280,9 +283,9 @@ void CALLBACK UpdateMagWindow(HWND /*hwnd*/, UINT /*uMsg*/, UINT_PTR /*idEvent*/
     // Set the source rectangle for the magnifier control.
     MagSetWindowSource(hwndMag, sourceRect);
 
-    // Reclaim topmost status, to prevent unmagnified menus from remaining in view. 
-    SetWindowPos(hwndHost, HWND_TOPMOST, 0, 0, 0, 0, 
-        SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
+    // Reclaim topmost status, to prevent unmagnified menus from remaining in view.
+    SetWindowPos(hwndHost, HWND_TOPMOST, 0, 0, 0, 0,
+                 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE );
 
     // Force redraw.
     InvalidateRect(hwndMag, NULL, TRUE);
@@ -297,7 +300,7 @@ void CALLBACK UpdateMagWindow(HWND /*hwnd*/, UINT /*uMsg*/, UINT_PTR /*idEvent*/
 void GoFullScreen()
 {
     isFullScreen = TRUE;
-    // The window must be styled as layered for proper rendering. 
+    // The window must be styled as layered for proper rendering.
     // It is styled as transparent so that it does not capture mouse clicks.
     SetWindowLong(hwndHost, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TRANSPARENT);
     // Give the window a system menu so it can be closed on the taskbar.
@@ -320,8 +323,8 @@ void GoFullScreen()
     xSpan += 2 * xBorder;
     ySpan += 2 * yBorder + yCaption;
 
-    SetWindowPos(hwndHost, HWND_TOPMOST, xOrigin, yOrigin, xSpan, ySpan, 
-        SWP_SHOWWINDOW | SWP_NOZORDER | SWP_NOACTIVATE);
+    SetWindowPos(hwndHost, HWND_TOPMOST, xOrigin, yOrigin, xSpan, ySpan,
+                 SWP_SHOWWINDOW | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 //
@@ -335,7 +338,7 @@ void GoPartialScreen()
 
     SetWindowLong(hwndHost, GWL_EXSTYLE, WS_EX_TOPMOST | WS_EX_LAYERED);
     SetWindowLong(hwndHost, GWL_STYLE, RESTOREDWINDOWSTYLES);
-    SetWindowPos(hwndHost, HWND_TOPMOST, 
-        hostWindowRect.left, hostWindowRect.top, hostWindowRect.right, hostWindowRect.bottom, 
-        SWP_SHOWWINDOW | SWP_NOZORDER | SWP_NOACTIVATE);
+    SetWindowPos(hwndHost, HWND_TOPMOST,
+                 hostWindowRect.left, hostWindowRect.top, hostWindowRect.right, hostWindowRect.bottom,
+                 SWP_SHOWWINDOW | SWP_NOZORDER | SWP_NOACTIVATE);
 }

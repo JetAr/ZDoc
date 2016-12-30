@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ public:
 
     HRESULT Initialize(
         HINSTANCE hInstance
-        );
+    );
 
     HRESULT Invalidate();
 
@@ -36,41 +36,41 @@ protected:
         UINT uMsg,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
     HRESULT OnPaint(
         HDC hdc,
         const RECT &rcPaint
-        );
-    
+    );
+
     HRESULT OnLButtonDown();
-    
+
     void OnDestroy();
 
     HRESULT DrawClientArea(
         HDC hdc,
         const RECT &rcPaint
-        );
+    );
 
     HRESULT DrawBackground(
         Gdiplus::Graphics &graphics,
         const Gdiplus::RectF &rectPaint
-        );
+    );
 
     HRESULT ChangeColor(
         DOUBLE red,
         DOUBLE green,
         DOUBLE blue
-        );
+    );
 
     DOUBLE RandomFromRange(
         DOUBLE minimum,
         DOUBLE maximum
-        );
-        
+    );
+
     HRESULT HrFromStatus(
         Gdiplus::Status status
-        );
+    );
 
 private:
 

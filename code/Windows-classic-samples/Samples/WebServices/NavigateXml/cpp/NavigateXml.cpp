@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -59,78 +59,79 @@ static const WS_XML_STRING purchaseOrderNamespace = WS_XML_STRING_VALUE("http://
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_HEAP* heap = NULL;
     WS_XML_WRITER* xmlWriter = NULL;
     WS_XML_BUFFER* xmlBuffer = NULL;
     WS_XML_READER* xmlReader = NULL;
-    static const WS_STRING productNames[4] = {
+    static const WS_STRING productNames[4] =
+    {
         WS_STRING_VALUE(L"Pencil"),
         WS_STRING_VALUE(L"Ruler"),
         WS_STRING_VALUE(L"Eraser"),
         WS_STRING_VALUE(L"Pen")
     };
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     hr = WsCreateHeap(/* maxSize */ 65536, /* trimSize */ 4096, NULL, 0, &heap, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML writer
     hr = WsCreateWriter(
-        NULL, 
-        0, 
-        &xmlWriter, 
-        error);
+             NULL,
+             0,
+             &xmlWriter,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML buffer on the specified heap
     hr = WsCreateXmlBuffer(
-        heap, 
-        NULL, 
-        0, 
-        &xmlBuffer, 
-        error);
+             heap,
+             NULL,
+             0,
+             &xmlBuffer,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Set the writer to output to the XML buffer
     hr = WsSetOutputToBuffer(
-        xmlWriter, 
-        xmlBuffer, 
-        NULL, 
-        0, 
-        error);
+             xmlWriter,
+             xmlBuffer,
+             NULL,
+             0,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Write purchase order start element
     hr = WsWriteStartElement(xmlWriter, NULL, &purchaseOrderLocalName, &purchaseOrderNamespace, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     for (ULONG i = 0; i < 4; i++)
     {
         // Write product name start element
@@ -139,14 +140,14 @@ int __cdecl wmain()
         {
             goto Exit;
         }
-    
+
         // Write product name
         hr = WsWriteChars(xmlWriter, productNames[i].chars, productNames[i].length, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         // Write product name end element
         hr = WsWriteEndElement(xmlWriter, error);
         if (FAILED(hr))
@@ -154,78 +155,78 @@ int __cdecl wmain()
             goto Exit;
         }
     }
-    
+
     // Write purchase order end element
     hr = WsWriteEndElement(xmlWriter, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Flush writer so all XML content is put in the buffer
     hr = WsFlushWriter(xmlWriter, 0, NULL, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML reader
     hr = WsCreateReader(
-        NULL,
-        0, 
-        &xmlReader, 
-        error);
+             NULL,
+             0,
+             &xmlReader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Set the reader input to current position of XML buffer
     hr = WsSetInputToBuffer(xmlReader, xmlBuffer, NULL, 0, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Navigate to the purchase order
     hr = WsMoveReader(xmlReader, WS_MOVE_TO_ROOT_ELEMENT, NULL, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Navigate to the first child element
     hr = WsMoveReader(xmlReader, WS_MOVE_TO_CHILD_ELEMENT, NULL, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Record the position of each product
     WS_XML_NODE_POSITION productPositions[16];
     ULONG productCount = 0;
     for (;;)
     {
         BOOL found;
-    
+
         // Read to product name element
         hr = WsReadToStartElement(xmlReader, &productNameLocalName, &purchaseOrderNamespace, &found, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
+
         if (!found)
         {
             break;
         }
-    
+
         if (productCount >= WsCountOf(productPositions))
         {
             hr = E_FAIL;
             goto Exit;
         }
-    
+
         // Record product position
         hr = WsGetReaderPosition(xmlReader, &productPositions[productCount], error);
         if (FAILED(hr))
@@ -233,7 +234,7 @@ int __cdecl wmain()
             goto Exit;
         }
         productCount++;
-    
+
         // Skip element
         hr = WsSkipNode(xmlReader, error);
         if (FAILED(hr))
@@ -241,7 +242,7 @@ int __cdecl wmain()
             goto Exit;
         }
     }
-    
+
     // Move to each product in reverse and print out the contents
     for (ULONG i = productCount; i > 0; i--)
     {
@@ -250,14 +251,14 @@ int __cdecl wmain()
         {
             goto Exit;
         }
-    
+
         hr = WsReadStartElement(xmlReader, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
-    
-    #pragma warning(disable:26015)
+
+#pragma warning(disable:26015)
         // Read product name into buffer
         WCHAR productName[100];
         ULONG length = 0;
@@ -271,44 +272,44 @@ int __cdecl wmain()
             {
                 goto Exit;
             }
-    
+
             if (charsRead == 0)
             {
                 // No more chars
                 break;
             }
-    
+
             length += charsRead;
             available -= charsRead;
-    
+
             if (available == 0)
             {
                 hr = E_FAIL;
                 goto Exit;
             }
         }
-    
+
         // Zero terminate product name string
         productName[length] = L'\0';
-    
+
         // Print out purchase order contents
         wprintf(L"%s\n",
-            productName);
-    
+                productName);
+
         hr = WsReadEndElement(xmlReader, error);
         if (FAILED(hr))
         {
             goto Exit;
         }
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (heap != NULL)
     {
         WsFreeHeap(heap);

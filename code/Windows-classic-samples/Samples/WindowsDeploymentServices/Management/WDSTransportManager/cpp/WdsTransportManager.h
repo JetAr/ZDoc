@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -28,7 +28,7 @@ Abstract:
 // Types
 //
 
-enum WdsTptAction 
+enum WdsTptAction
 {
     WdsTptEnableServer      = 0,
     WdsTptDisableServer     = 1,
@@ -36,7 +36,7 @@ enum WdsTptAction
     WdsTptRemoveNamespace   = 3
 };
 
-typedef struct 
+typedef struct
 {
     BSTR bszServer;
     PWSTR pwszAction;
@@ -120,34 +120,34 @@ HRESULT
 AllocBstr(
     _In_opt_ PWSTR pwszString,
     _COM_Outptr_ BSTR* pbszString
-    );
+);
 
 _At_(pArguments->bszServer, _Post_notnull_)
 HRESULT
-ParseArguments( 
+ParseArguments(
     _In_ int argc,
     _In_reads_(argc) wchar_t* argv[ ],
     _Out_ PWDSTPT_ARGS pArguments
-    );
+);
 
 HRESULT
-EnableServer( 
+EnableServer(
     _In_ IWdsTransportServer* pWdsTransportServer
-    );
+);
 
 HRESULT
-DisableServer( 
+DisableServer(
     _In_ IWdsTransportServer* pWdsTransportServer
-    );
+);
 
 HRESULT
-AddNamespace( 
+AddNamespace(
     _In_ IWdsTransportServer* pWdsTransportServer,
     _In_ PWDSTPT_ARGS pArguments
-    );
+);
 
 HRESULT
-RemoveNamespace( 
+RemoveNamespace(
     _In_ IWdsTransportServer* pWdsTransportServer,
     _In_ PWDSTPT_ARGS pArguments
-    );
+);

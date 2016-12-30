@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -20,9 +20,9 @@ class CLangBarItemButton;
 class CPropertyPopupWindow;
 
 class CPropertyMonitorTextService : public ITfTextInputProcessor,
-                     public ITfThreadMgrEventSink,
-                     public ITfTextEditSink,
-                     public ITfThreadFocusSink
+    public ITfThreadMgrEventSink,
+    public ITfTextEditSink,
+    public ITfThreadFocusSink
 {
 public:
     CPropertyMonitorTextService();
@@ -54,13 +54,19 @@ public:
     // CClassFactory factory callback
     static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 
-    ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
+    ITfThreadMgr *_GetThreadMgr()
+    {
+        return _pThreadMgr;
+    }
 
     // dump all properties
     void DumpProperties(ITfContext *pContext);
     void _DumpProperties(TfEditCookie ec, ITfContext *pContext);
 
-    CPropertyPopupWindow *_GetPopupWindow() {return _pPopupWindow;}
+    CPropertyPopupWindow *_GetPopupWindow()
+    {
+        return _pPopupWindow;
+    }
 
 private:
     // initialize and uninitialize ThreadMgrEventSink.

@@ -1,10 +1,10 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "resource.h"
 #include <privlib.h>
 #include "Utils.h"
 
 #ifdef __USEPRIVLIB
-	fCreateModInfo*	pf;
+fCreateModInfo*	pf;
 #else
 /////////////////////////////////////////////////////////////////////////////
 // HRESULT ConvertToMBCS
@@ -14,9 +14,9 @@ HRESULT ConvertToMBCS(WCHAR* pwsz, CHAR* psz, ULONG cStrLen)
 {
 //	ASSERT(pwsz && psz);
 
-	//Convert the string to MBCS
-	INT iResult = WideCharToMultiByte(CP_ACP, 0, pwsz, -1, psz, cStrLen, NULL, NULL);
-	return iResult ? S_OK : E_FAIL;
+    //Convert the string to MBCS
+    INT iResult = WideCharToMultiByte(CP_ACP, 0, pwsz, -1, psz, cStrLen, NULL, NULL);
+    return iResult ? S_OK : E_FAIL;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -25,22 +25,22 @@ HRESULT ConvertToMBCS(WCHAR* pwsz, CHAR* psz, ULONG cStrLen)
 /////////////////////////////////////////////////////////////////////////////
 CHAR* ConvertToMBCS(WCHAR* pwsz)
 {
-	//no-op case
-	if(!pwsz)
-		return NULL;
-	
-	ULONG cLen	= wcslen(pwsz);
+    //no-op case
+    if(!pwsz)
+        return NULL;
 
-	//Allocate space for the string
-	CHAR* pszBuffer = new CHAR[((cLen+1)*sizeof(CHAR))];
-	if(pszBuffer==NULL)
-		goto CLEANUP;
+    ULONG cLen	= wcslen(pwsz);
 
-	//Now convert the string
-	WideCharToMultiByte(CP_ACP, 0, pwsz, -1, pszBuffer, cLen+1, NULL, NULL);
+    //Allocate space for the string
+    CHAR* pszBuffer = new CHAR[((cLen+1)*sizeof(CHAR))];
+    if(pszBuffer==NULL)
+        goto CLEANUP;
+
+    //Now convert the string
+    WideCharToMultiByte(CP_ACP, 0, pwsz, -1, pszBuffer, cLen+1, NULL, NULL);
 
 CLEANUP:
-	return pszBuffer;
+    return pszBuffer;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -49,11 +49,11 @@ CLEANUP:
 /////////////////////////////////////////////////////////////////////////////
 HRESULT ConvertToWCHAR(CHAR* psz, WCHAR* pwsz, ULONG cStrLen)
 {
-	//ASSERT(psz && pwsz);
+    //ASSERT(psz && pwsz);
 
-	//Convert the string to MBCS
-	INT iResult = MultiByteToWideChar(CP_ACP, 0, psz, -1, pwsz, cStrLen);
-	return iResult ? S_OK : E_FAIL;
+    //Convert the string to MBCS
+    INT iResult = MultiByteToWideChar(CP_ACP, 0, psz, -1, pwsz, cStrLen);
+    return iResult ? S_OK : E_FAIL;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -62,48 +62,48 @@ HRESULT ConvertToWCHAR(CHAR* psz, WCHAR* pwsz, ULONG cStrLen)
 /////////////////////////////////////////////////////////////////////////////
 WCHAR* ConvertToWCHAR(CHAR* psz)
 {
-	//no-op case
-	if(!psz)
-		return NULL;
-	
-	ULONG cLen	= strlen(psz);
+    //no-op case
+    if(!psz)
+        return NULL;
 
-	//Allocate space for the string
-	WCHAR* pwszBuffer = new WCHAR[((cLen+1)*sizeof(WCHAR))];
-	if(pwszBuffer==NULL)
-		goto CLEANUP;
+    ULONG cLen	= strlen(psz);
 
-	//Now convert the string
-	MultiByteToWideChar(CP_ACP, 0, psz, -1, pwszBuffer, cLen+1);
+    //Allocate space for the string
+    WCHAR* pwszBuffer = new WCHAR[((cLen+1)*sizeof(WCHAR))];
+    if(pwszBuffer==NULL)
+        goto CLEANUP;
+
+    //Now convert the string
+    MultiByteToWideChar(CP_ACP, 0, psz, -1, pwszBuffer, cLen+1);
 
 CLEANUP:
-	return pwszBuffer;
+    return pwszBuffer;
 }
 
 
 //--------------------------------------------------------------------
 // @func BOOL | IsFixedLength
 //
-// Returns TRUE is type is fixed length 
+// Returns TRUE is type is fixed length
 //
 //--------------------------------------------------------------------
 BOOL IsFixedLength(DBTYPE dbtype)
 {
-	if ((DBTYPE_STR == (~(DBTYPE_BYREF) & dbtype))    ||
-		(DBTYPE_STR == (~(DBTYPE_VECTOR) & dbtype))   ||
-		(DBTYPE_STR == (~(DBTYPE_ARRAY) & dbtype))    ||
-		(DBTYPE_WSTR == (~(DBTYPE_BYREF) & dbtype))   ||
-		(DBTYPE_WSTR == (~(DBTYPE_VECTOR) & dbtype))  ||
-		(DBTYPE_WSTR == (~(DBTYPE_ARRAY) & dbtype))   ||
-		(DBTYPE_BSTR == (~(DBTYPE_BYREF) & dbtype))   ||
-		(DBTYPE_BSTR == (~(DBTYPE_VECTOR) & dbtype))  ||
-		(DBTYPE_BSTR == (~(DBTYPE_ARRAY) & dbtype))   ||
-		(DBTYPE_BYTES == (~(DBTYPE_BYREF) & dbtype))  ||
-		(DBTYPE_BYTES == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_BYTES == (~(DBTYPE_ARRAY) & dbtype)))
-		return FALSE;
-	else
-		return TRUE;
+    if ((DBTYPE_STR == (~(DBTYPE_BYREF) & dbtype))    ||
+            (DBTYPE_STR == (~(DBTYPE_VECTOR) & dbtype))   ||
+            (DBTYPE_STR == (~(DBTYPE_ARRAY) & dbtype))    ||
+            (DBTYPE_WSTR == (~(DBTYPE_BYREF) & dbtype))   ||
+            (DBTYPE_WSTR == (~(DBTYPE_VECTOR) & dbtype))  ||
+            (DBTYPE_WSTR == (~(DBTYPE_ARRAY) & dbtype))   ||
+            (DBTYPE_BSTR == (~(DBTYPE_BYREF) & dbtype))   ||
+            (DBTYPE_BSTR == (~(DBTYPE_VECTOR) & dbtype))  ||
+            (DBTYPE_BSTR == (~(DBTYPE_ARRAY) & dbtype))   ||
+            (DBTYPE_BYTES == (~(DBTYPE_BYREF) & dbtype))  ||
+            (DBTYPE_BYTES == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_BYTES == (~(DBTYPE_ARRAY) & dbtype)))
+        return FALSE;
+    else
+        return TRUE;
 }
 
 //--------------------------------------------------------------------
@@ -114,48 +114,48 @@ BOOL IsFixedLength(DBTYPE dbtype)
 //--------------------------------------------------------------------
 BOOL  IsNumericType(DBTYPE dbtype)
 {
-	if ((DBTYPE_I1 == (~(DBTYPE_BYREF) & dbtype))  ||
-		(DBTYPE_I1 == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_I1 == (~(DBTYPE_ARRAY) & dbtype))  ||
-		(DBTYPE_I2 == (~(DBTYPE_BYREF) & dbtype))  ||
-		(DBTYPE_I2 == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_I2 == (~(DBTYPE_ARRAY) & dbtype))  ||
-		(DBTYPE_I4 == (~(DBTYPE_BYREF) & dbtype))  ||
-		(DBTYPE_I4 == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_I4 == (~(DBTYPE_ARRAY) & dbtype))  ||
-		(DBTYPE_I8 == (~(DBTYPE_BYREF) & dbtype))  ||
-		(DBTYPE_I8 == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_I8 == (~(DBTYPE_ARRAY) & dbtype))  ||
-		(DBTYPE_UI1 == (~(DBTYPE_BYREF) & dbtype)) ||
-		(DBTYPE_UI1 == (~(DBTYPE_VECTOR) & dbtype))||
-		(DBTYPE_UI1 == (~(DBTYPE_ARRAY) & dbtype)) ||
-		(DBTYPE_UI2 == (~(DBTYPE_BYREF) & dbtype)) ||
-		(DBTYPE_UI2 == (~(DBTYPE_VECTOR) & dbtype))||
-		(DBTYPE_UI2 == (~(DBTYPE_ARRAY) & dbtype)) ||
-		(DBTYPE_UI4 == (~(DBTYPE_BYREF) & dbtype)) ||
-		(DBTYPE_UI4 == (~(DBTYPE_VECTOR) & dbtype))||
-		(DBTYPE_UI4 == (~(DBTYPE_ARRAY) & dbtype)) ||
-		(DBTYPE_UI8 == (~(DBTYPE_BYREF) & dbtype)) ||
-		(DBTYPE_UI8 == (~(DBTYPE_VECTOR) & dbtype))||
-		(DBTYPE_UI8 == (~(DBTYPE_ARRAY) & dbtype)) ||
-		(DBTYPE_R4 == (~(DBTYPE_BYREF) & dbtype))  ||
-		(DBTYPE_R4 == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_R4 == (~(DBTYPE_ARRAY) & dbtype))  ||
-		(DBTYPE_R8 == (~(DBTYPE_BYREF) & dbtype))  ||
-		(DBTYPE_R8 == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_R8 == (~(DBTYPE_ARRAY) & dbtype))  ||
-		(DBTYPE_CY == (~(DBTYPE_BYREF) & dbtype))  ||
-		(DBTYPE_CY == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_CY == (~(DBTYPE_ARRAY) & dbtype))  ||
-		(DBTYPE_DECIMAL == (~(DBTYPE_BYREF) & dbtype))	||
-		(DBTYPE_DECIMAL == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_DECIMAL == (~(DBTYPE_ARRAY) & dbtype))	||
-		(DBTYPE_NUMERIC == (~(DBTYPE_BYREF) & dbtype))	||
-		(DBTYPE_NUMERIC == (~(DBTYPE_VECTOR) & dbtype)) ||
-		(DBTYPE_NUMERIC == (~(DBTYPE_ARRAY) & dbtype)))
-		return TRUE;
-	else 
-		return FALSE;
+    if ((DBTYPE_I1 == (~(DBTYPE_BYREF) & dbtype))  ||
+            (DBTYPE_I1 == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_I1 == (~(DBTYPE_ARRAY) & dbtype))  ||
+            (DBTYPE_I2 == (~(DBTYPE_BYREF) & dbtype))  ||
+            (DBTYPE_I2 == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_I2 == (~(DBTYPE_ARRAY) & dbtype))  ||
+            (DBTYPE_I4 == (~(DBTYPE_BYREF) & dbtype))  ||
+            (DBTYPE_I4 == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_I4 == (~(DBTYPE_ARRAY) & dbtype))  ||
+            (DBTYPE_I8 == (~(DBTYPE_BYREF) & dbtype))  ||
+            (DBTYPE_I8 == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_I8 == (~(DBTYPE_ARRAY) & dbtype))  ||
+            (DBTYPE_UI1 == (~(DBTYPE_BYREF) & dbtype)) ||
+            (DBTYPE_UI1 == (~(DBTYPE_VECTOR) & dbtype))||
+            (DBTYPE_UI1 == (~(DBTYPE_ARRAY) & dbtype)) ||
+            (DBTYPE_UI2 == (~(DBTYPE_BYREF) & dbtype)) ||
+            (DBTYPE_UI2 == (~(DBTYPE_VECTOR) & dbtype))||
+            (DBTYPE_UI2 == (~(DBTYPE_ARRAY) & dbtype)) ||
+            (DBTYPE_UI4 == (~(DBTYPE_BYREF) & dbtype)) ||
+            (DBTYPE_UI4 == (~(DBTYPE_VECTOR) & dbtype))||
+            (DBTYPE_UI4 == (~(DBTYPE_ARRAY) & dbtype)) ||
+            (DBTYPE_UI8 == (~(DBTYPE_BYREF) & dbtype)) ||
+            (DBTYPE_UI8 == (~(DBTYPE_VECTOR) & dbtype))||
+            (DBTYPE_UI8 == (~(DBTYPE_ARRAY) & dbtype)) ||
+            (DBTYPE_R4 == (~(DBTYPE_BYREF) & dbtype))  ||
+            (DBTYPE_R4 == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_R4 == (~(DBTYPE_ARRAY) & dbtype))  ||
+            (DBTYPE_R8 == (~(DBTYPE_BYREF) & dbtype))  ||
+            (DBTYPE_R8 == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_R8 == (~(DBTYPE_ARRAY) & dbtype))  ||
+            (DBTYPE_CY == (~(DBTYPE_BYREF) & dbtype))  ||
+            (DBTYPE_CY == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_CY == (~(DBTYPE_ARRAY) & dbtype))  ||
+            (DBTYPE_DECIMAL == (~(DBTYPE_BYREF) & dbtype))	||
+            (DBTYPE_DECIMAL == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_DECIMAL == (~(DBTYPE_ARRAY) & dbtype))	||
+            (DBTYPE_NUMERIC == (~(DBTYPE_BYREF) & dbtype))	||
+            (DBTYPE_NUMERIC == (~(DBTYPE_VECTOR) & dbtype)) ||
+            (DBTYPE_NUMERIC == (~(DBTYPE_ARRAY) & dbtype)))
+        return TRUE;
+    else
+        return FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -166,45 +166,45 @@ BOOL  IsNumericType(DBTYPE dbtype)
 //
 //--------------------------------------------------------------------
 BOOL AddCharToNumericVal(
-	WCHAR wLetter,
-	DB_NUMERIC * pNumeric
+    WCHAR wLetter,
+    DB_NUMERIC * pNumeric
 )
 {
-	//ASSERT(iswdigit(wLetter) && pNumeric);
-	
-	// Check parameters
-	if (!pNumeric)
-		return FALSE;
+    //ASSERT(iswdigit(wLetter) && pNumeric);
 
-	// Convert WCHAR to ULONG
-	WCHAR pwszBuf[2];
-	pwszBuf[0]  = wLetter;
-	pwszBuf[1]  = L'\0';;
-	LONG lDigit = _wtol(pwszBuf);
+    // Check parameters
+    if (!pNumeric)
+        return FALSE;
 
-	// If operation won't overflow
-	if (pNumeric->precision <= sizeof(DWORDLONG) - 1)
-	{
-		*(UNALIGNED DWORDLONG *)pNumeric->val *= 10;
-		*(UNALIGNED DWORDLONG *)pNumeric->val += lDigit;
-	}
-	else
-	{
-		DWORDLONG dwlAccum = lDigit;
+    // Convert WCHAR to ULONG
+    WCHAR pwszBuf[2];
+    pwszBuf[0]  = wLetter;
+    pwszBuf[1]  = L'\0';;
+    LONG lDigit = _wtol(pwszBuf);
 
-		for(ULONG ul = 0; ul < sizeof(pNumeric->val) / sizeof(ULONG); ul++ )
-		{
-			dwlAccum +=(DWORDLONG)(*(((UNALIGNED ULONG *)pNumeric->val) + ul)) * 10;
-			*(((UNALIGNED ULONG *)pNumeric->val) + ul) = (ULONG)dwlAccum;
-			dwlAccum >>= sizeof(ULONG) * 8;
-		}
-	}
+    // If operation won't overflow
+    if (pNumeric->precision <= sizeof(DWORDLONG) - 1)
+    {
+        *(UNALIGNED DWORDLONG *)pNumeric->val *= 10;
+        *(UNALIGNED DWORDLONG *)pNumeric->val += lDigit;
+    }
+    else
+    {
+        DWORDLONG dwlAccum = lDigit;
 
-	//	Adjust length if overflow into next byte
-	if (pNumeric->precision < sizeof(pNumeric->val) && *(pNumeric->val + pNumeric->precision) != 0)
-		pNumeric->precision++;
+        for(ULONG ul = 0; ul < sizeof(pNumeric->val) / sizeof(ULONG); ul++ )
+        {
+            dwlAccum +=(DWORDLONG)(*(((UNALIGNED ULONG *)pNumeric->val) + ul)) * 10;
+            *(((UNALIGNED ULONG *)pNumeric->val) + ul) = (ULONG)dwlAccum;
+            dwlAccum >>= sizeof(ULONG) * 8;
+        }
+    }
 
-	return TRUE;
+    //	Adjust length if overflow into next byte
+    if (pNumeric->precision < sizeof(pNumeric->val) && *(pNumeric->val + pNumeric->precision) != 0)
+        pNumeric->precision++;
+
+    return TRUE;
 }
 
 #endif //__USEPRIVLIB

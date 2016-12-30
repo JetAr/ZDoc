@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -29,7 +29,7 @@ ShvUIClassFactory::~ShvUIClassFactory()
 {
     InterlockedDecrement(&g_cObjRefCount);
 }
-    
+
 STDMETHODIMP_(ULONG) ShvUIClassFactory::AddRef(void)
 {
     return InterlockedIncrement((PLONG)&m_cRef);
@@ -40,35 +40,35 @@ STDMETHODIMP_(ULONG) ShvUIClassFactory::Release(void)
     ULONG res = InterlockedDecrement((PLONG)&m_cRef);
     if (res == 0)
     {
-       delete this;
+        delete this;
     }
     return res;
 }
 
 STDMETHODIMP ShvUIClassFactory::QueryInterface(
-    _In_ const IID& riid, 
+    _In_ const IID& riid,
     _Out_ void** ppvObject)
 {
     if (IID_IUnknown == riid || IID_IClassFactory == riid)
     {
         *ppvObject = static_cast<IClassFactory*>(this);
     }
-    else 
+    else
     {
-       *ppvObject = NULL;
+        *ppvObject = NULL;
         return E_NOINTERFACE;
     }
-    
+
     reinterpret_cast<IUnknown *>(*ppvObject)->AddRef();
-    
+
     return S_OK;
 }
 
 
-STDMETHODIMP 
+STDMETHODIMP
 ShvUIClassFactory::CreateInstance(
-    _In_opt_ IUnknown *pUnkOuter, 
-    _In_ REFIID riid, 
+    _In_opt_ IUnknown *pUnkOuter,
+    _In_ REFIID riid,
     _Outptr_ void **ppvObject)
 {
     HRESULT hr =S_OK;
@@ -95,10 +95,10 @@ ShvUIClassFactory::CreateInstance(
     }
 
     return hr;
-    
+
 }
 
-STDMETHODIMP 
+STDMETHODIMP
 ShvUIClassFactory::LockServer(
     __RPC__in BOOL fLock)
 {
@@ -111,7 +111,7 @@ ShvUIClassFactory::LockServer(
         InterlockedDecrement(&g_serverLock);
     }
 
-    return S_OK;    
+    return S_OK;
 }
 
 
@@ -135,11 +135,11 @@ BOOL ShvUIClassFactory::StartFactory()
     // Register the class factory.
     DWORD doRegister;
     HRESULT hr = ::CoRegisterClassObject(
-                      pFactoryData->m_pCLSID,
-                      static_cast<IUnknown*>(pIFactory),
-                      CLSCTX_LOCAL_SERVER,
-                      REGCLS_MULTIPLEUSE,
-                      &doRegister) ;
+                     pFactoryData->m_pCLSID,
+                     static_cast<IUnknown*>(pIFactory),
+                     CLSCTX_LOCAL_SERVER,
+                     REGCLS_MULTIPLEUSE,
+                     &doRegister) ;
     if (FAILED(hr))
     {
         pIFactory->Release() ;

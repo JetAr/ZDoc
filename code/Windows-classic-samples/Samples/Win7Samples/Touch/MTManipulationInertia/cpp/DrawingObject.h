@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,17 +11,18 @@
 #include "D2DDriver.h"
 #include <windows.h>
 
-class CDrawingObject {
+class CDrawingObject
+{
 public:
     enum DrawingColor {Blue, Orange, Green, Red};
 
     CDrawingObject(HWND hwnd, CD2DDriver* d2dDriver);
     ~CDrawingObject();
 
-    VOID ResetState(const FLOAT startX, const FLOAT startY, 
-        const int ixClient, const int iyClient, 
-        const int iScaledWidth, const int iScaledHeight,
-        const DrawingColor colorChoice);
+    VOID ResetState(const FLOAT startX, const FLOAT startY,
+                    const int ixClient, const int iyClient,
+                    const int iScaledWidth, const int iScaledHeight,
+                    const DrawingColor colorChoice);
     VOID Paint();
     VOID Translate(FLOAT fdx, FLOAT fdy, BOOL bInertia);
     VOID Scale(const FLOAT fFactor);
@@ -43,7 +44,7 @@ public:
 private:
     VOID RotateVector(FLOAT* vector, FLOAT* tVector, FLOAT fAngle);
     VOID ComputeElasticPoint(FLOAT fIPt, FLOAT* fRPt, int iDimension);
-    VOID UpdateBorders(); 
+    VOID UpdateBorders();
     VOID EnsureVisible();
 
     HWND m_hWnd;
@@ -54,9 +55,9 @@ private:
     ID2D1HwndRenderTargetPtr	m_spRT;
     ID2D1LinearGradientBrushPtr m_pGlBrush;
     ID2D1LinearGradientBrushPtr m_currBrush;
-    
+
     ID2D1RoundedRectangleGeometryPtr m_spRoundedRectGeometry;
-    
+
     // Keeps the last matrix used to perform the rotate transform
     D2D_MATRIX_3X2_F m_lastMatrix;
 
@@ -67,11 +68,11 @@ private:
     // Internal top, left coordinates of object (Real inertia values)
     FLOAT m_fXI;
     FLOAT m_fYI;
-    
+
     // Rendered top, left coordinates of object
     FLOAT m_fXR;
     FLOAT m_fYR;
-    
+
     // Width and height of the object
     FLOAT m_fWidth;
     FLOAT m_fHeight;

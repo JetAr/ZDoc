@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 
 #ifdef USEWAPI
 int WINAPI MylstrcmpW(LPWSTR lp0, LPWSTR lp1)
@@ -14,7 +14,7 @@ int WINAPI MylstrcmpW(LPWSTR lp0, LPWSTR lp1)
         lp1++;
 
     }
-    
+
     if (!*lp1)
     {
         return 0;

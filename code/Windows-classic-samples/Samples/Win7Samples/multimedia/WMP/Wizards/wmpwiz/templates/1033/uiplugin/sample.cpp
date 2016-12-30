@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].cpp : Implementation of C[!output Safe_root]
 // Copyright (c) Microsoft Corporation. All rights reserved.
@@ -20,15 +20,15 @@
 
 C[!output Safe_root]::C[!output Safe_root]()
 {
-[!if HASWINDOW]
+    [!if HASWINDOW]
     m_pPluginWindow = NULL;
-[!endif]
-[!if HASPROPERTYPAGE]
+    [!endif]
+    [!if HASPROPERTYPAGE]
     wcsncpy_s(m_wszPluginText, sizeof(m_wszPluginText) / sizeof(m_wszPluginText[0]), L"[!output root] Plugin", sizeof(m_wszPluginText) / sizeof(m_wszPluginText[0]));
-[!endif]
-[!if LISTENTOEVENTS]
+    [!endif]
+    [!if LISTENTOEVENTS]
     m_dwAdviseCookie = 0;
-[!endif]
+    [!endif]
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ HRESULT C[!output Safe_root]::SetCore(IWMPCore *pCore)
 
     m_spCore = pCore;
 
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     // connect up the event interface
     CComPtr<IConnectionPointContainer>  spConnectionContainer;
 
@@ -102,7 +102,7 @@ HRESULT C[!output Safe_root]::SetCore(IWMPCore *pCore)
         }
     }
 
-[!endif]
+    [!endif]
     return hr;
 }
 
@@ -112,7 +112,7 @@ HRESULT C[!output Safe_root]::SetCore(IWMPCore *pCore)
 
 void C[!output Safe_root]::ReleaseCore()
 {
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     if (m_spConnectionPoint)
     {
         if (0 != m_dwAdviseCookie)
@@ -123,7 +123,7 @@ void C[!output Safe_root]::ReleaseCore()
         m_spConnectionPoint = NULL;
     }
 
-[!endif]
+    [!endif]
     if (m_spCore)
     {
         m_spCore = NULL;
@@ -231,7 +231,7 @@ HRESULT C[!output Safe_root]::GetProperty(const WCHAR *pwszName, VARIANT *pvarPr
         return E_POINTER;
     }
 
-[!if HASWINDOW]
+    [!if HASWINDOW]
     HRESULT hr = S_OK;
 
     if (0 == lstrcmpiW(pwszName, PLUGIN_SEPARATEWINDOW_DEFAULTWIDTH ))
@@ -250,9 +250,9 @@ HRESULT C[!output Safe_root]::GetProperty(const WCHAR *pwszName, VARIANT *pvarPr
     }
 
     return hr;
-[!else]
+    [!else]
     return E_NOTIMPL;
-[!endif]
+    [!endif]
 }
 
 /////////////////////////////////////////////////////////////////////////////

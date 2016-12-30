@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 						Microsoft RPC
-          
+
                         hello Example
 
     FILE:       hellos.c
@@ -51,16 +51,16 @@ void Usage(char * pszProgramName)
     fprintf_s(stderr, "Usage:  %s\n", pszProgramName);
     fprintf_s(stderr, " -p protocol_sequence\n");
     fprintf_s(stderr, " -e endpoint\n");
-    fprintf_s(stderr, " -a server principal name\n");	
+    fprintf_s(stderr, " -a server principal name\n");
     fprintf_s(stderr, " -m maxcalls\n");
     fprintf_s(stderr, " -n mincalls\n");
     fprintf_s(stderr, " -f flag_wait_op\n");
-   
+
 
     exit(1);
 }
 
-// main:  register the interface, start listening for clients 
+// main:  register the interface, start listening for clients
 void __cdecl main(int argc, char * argv[])
 {
     RPC_STATUS status;
@@ -73,10 +73,13 @@ void __cdecl main(int argc, char * argv[])
     unsigned int    fDontWait           = FALSE;
     int i;
 
-    // allow the user to override settings with command line switches 
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    // allow the user to override settings with command line switches
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
@@ -94,7 +97,7 @@ void __cdecl main(int argc, char * argv[])
                 break;
             case 'f':
                 fDontWait = (unsigned int) atoi(argv[++i]);
-                break;	   
+                break;
 
             case 'h':
             case '?':
@@ -111,12 +114,14 @@ void __cdecl main(int argc, char * argv[])
                                    pszEndpoint,
                                    pszSecurity);  // Security descriptor
     printf_s("RpcServerUseProtseqEp returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
-	
+
     // User did not specify spn, construct one.
-    if (pszSpn == NULL) {
+    if (pszSpn == NULL)
+    {
         MakeSpn(&pszSpn);
     }
 
@@ -125,17 +130,19 @@ void __cdecl main(int argc, char * argv[])
                                        RPC_C_AUTHN_GSS_NEGOTIATE,
                                        NULL,
                                        NULL);
-	
+
     printf_s("RpcServerRegisterAuthInfo returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
-    }	
+    }
 
     status = RpcServerRegisterIfEx(hello_ServerIfHandle, NULL, NULL, 0, RPC_C_LISTEN_MAX_CALLS_DEFAULT, NULL );
 
-    printf_s("RpcServerRegisterIfEx returned 0x%x\n", status);   
+    printf_s("RpcServerRegisterIfEx returned 0x%x\n", status);
 
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -144,15 +151,18 @@ void __cdecl main(int argc, char * argv[])
                              cMaxCalls,
                              fDontWait);
     printf_s("RpcServerListen returned: 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
-    if (fDontWait) {
+    if (fDontWait)
+    {
         printf_s("Calling RpcMgmtWaitServerListen\n");
         status = RpcMgmtWaitServerListen();  // wait operation
         printf_s("RpcMgmtWaitServerListen returned: 0x%x\n", status);
-        if (status) {
+        if (status)
+        {
             exit(status);
         }
     }
@@ -174,4 +184,4 @@ void __RPC_USER midl_user_free(void __RPC_FAR * ptr)
     free(ptr);
 }
 
-// end file hellos.c 
+// end file hellos.c

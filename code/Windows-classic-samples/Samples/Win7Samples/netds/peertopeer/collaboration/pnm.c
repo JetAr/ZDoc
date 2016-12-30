@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -79,7 +79,7 @@ void EnumeratePeopleNearMe()
     if (SUCCEEDED(hr))
     {
         PrintPeopleNearMeInfo(ppPeopleNearMe, count);
-    } 
+    }
     else
     {
         wprintf(L"Error retrieving endpoints, HRESULT=0x%x", hr);
@@ -98,7 +98,7 @@ exit:
 //-----------------------------------------------------------------------------
 // Function:    AddEndpointAsContact
 // Purpose:     Add an endpoints data to the contact store
-// Parameters:  
+// Parameters:
 //   None
 //
 void AddEndpointAsContact()
@@ -133,7 +133,7 @@ void AddEndpointAsContact()
         wprintf(L"PeerCollabAddContact failed.\nHRESULT=0x%x\n", hr);
         PrintError(hr);
     }
-    
+
 
 exit:
     SAFE_PEER_FREE_DATA(pwzContactData);

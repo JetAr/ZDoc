@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // File: ThemedButton.cpp
 // Description: Implements a theme-aware button control.
@@ -17,9 +17,9 @@
 BOOL AlphaDrawBitmap(HDC hdc, const RECT& rcDest, BitmapStrip& bitmap, UINT index);
 
 //------------------------------------------------------------------------------
-// Load 
+// Load
 // Loads the bitmap that contains the image strip.
-// 
+//
 // nID: Resource ID of the bitmap
 // cImages: Count of images in the bitmap.
 //------------------------------------------------------------------------------
@@ -132,8 +132,8 @@ void ThemedButton::CloseTheme()
 
 //------------------------------------------------------------------------------
 // ResetTheme
-// Resets the theme. 
-// 
+// Resets the theme.
+//
 // Call this method in response to WM_THEMECHANGED messages.
 //------------------------------------------------------------------------------
 
@@ -209,8 +209,8 @@ BOOL ThemedButton::SetButtonImage(UINT iState, UINT iImageIndex)
 
 //------------------------------------------------------------------------------
 // Draw
-// Draws the themed button. 
-// 
+// Draws the themed button.
+//
 // Call this method in response to NM_CUSTOMDRAW messages.
 //------------------------------------------------------------------------------
 
@@ -219,7 +219,7 @@ LRESULT ThemedButton::Draw(const NMCUSTOMDRAW *pDraw)
     OpenTheme();
 
     int iPartId = BP_PUSHBUTTON;
-    int iStateId = PBS_NORMAL; 
+    int iStateId = PBS_NORMAL;
 
     // Translate the button state into the theme state.
     if (HasStyle(WS_DISABLED))
@@ -324,19 +324,19 @@ BOOL AlphaDrawBitmap(HDC hdc, const RECT& rcDest, BitmapStrip& bitmap, UINT inde
     LONG height = min(dest_h, src_h);
 
     bResult = AlphaBlend(
-      hdc,                  // handle to destination DC
-      rcDest.left + padX,   // x-coord of upper-left corner
-      rcDest.top + padY,    // y-coord of upper-left corner
-      width,                // destination width
-      height,               // destination height
-      hdcMem,               // handle to source DC
-      info.rc.left,         // x-coord of upper-left corner
-      info.rc.top,          // y-coord of upper-left corner
-      src_w,                // source width
-      src_h,                // source height
-      BlendFn               // alpha-blending function
-    );
-    
+                  hdc,                  // handle to destination DC
+                  rcDest.left + padX,   // x-coord of upper-left corner
+                  rcDest.top + padY,    // y-coord of upper-left corner
+                  width,                // destination width
+                  height,               // destination height
+                  hdcMem,               // handle to source DC
+                  info.rc.left,         // x-coord of upper-left corner
+                  info.rc.top,          // y-coord of upper-left corner
+                  src_w,                // source width
+                  src_h,                // source height
+                  BlendFn               // alpha-blending function
+              );
+
     DeleteDC(hdcMem);
 
     return TRUE;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,7 +44,8 @@ extern BOOL bTrace;  /* in sdkdiff.cpp'.  Read only here */
 /*
  * a section handle (SECTION) is a pointer to one of these structures
  */
-struct section {
+struct section
+{
     LINE first;             /* first line in section */
     LINE last;              /* last line in section */
 
@@ -87,14 +88,14 @@ section_new(LINE first, LINE last, LIST list)
     SECTION sec;
 
     /* alloc the sec and remember where we alloc-ed it */
-    if (list) 
+    if (list)
     {
         sec = (SECTION) List_NewLast(list, sizeof(struct section));
         if (!sec)
             return NULL;
         sec->bDiscard = TRUE;
-    } 
-    else 
+    }
+    else
     {
         sec = (SECTION) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct section));
         if (!sec)
@@ -120,7 +121,8 @@ section_new(LINE first, LINE last, LIST list)
 void
 section_delete(SECTION section)
 {
-    if (section->bDiscard) {
+    if (section->bDiscard)
+    {
         HeapFree(GetProcessHeap(), NULL, section);
     }
 }
@@ -166,11 +168,13 @@ section_match(SECTION sec1, SECTION sec2, BOOL ReSynch)
     BOOL bLinked = FALSE;
 
 
-    if ((sec1 == NULL) || (sec2 == NULL)) {
+    if ((sec1 == NULL) || (sec2 == NULL))
+    {
         return(FALSE);
     }
 
-    if ((sec1->first == NULL) || (sec2->first == NULL)) {
+    if ((sec1->first == NULL) || (sec2->first == NULL))
+    {
         return(FALSE);
     }
     /* ASSERT if first is non-null, so is last */
@@ -201,19 +205,21 @@ section_match(SECTION sec1, SECTION sec2, BOOL ReSynch)
      * (8 chars or fewer) then don't accept them.  It can waste a lot
      * of time matching spurious {, } or blank lines.
      */
-    for (line = sec1->first; line != NULL; line = (LINE)List_Next(line)) {
+    for (line = sec1->first; line != NULL; line = (LINE)List_Next(line))
+    {
 
         if (  (line_getlink(line) == NULL)
-              && (  ReSynch
-                    ?  (  (ctree_getcount(ctleft, line_gethashcode(line)) >= 1)
-                          && (ctree_getcount(ctright, line_gethashcode(line)) >= 1)
-                          && (line_gettextlen(line) > 8)
-                       )
-                    :  (  (ctree_getcount(ctleft, line_gethashcode(line)) == 1)
-                          && (ctree_getcount(ctright, line_gethashcode(line)) == 1)
-                       )
-                 )
-           ) {
+                && (  ReSynch
+                      ?  (  (ctree_getcount(ctleft, line_gethashcode(line)) >= 1)
+                            && (ctree_getcount(ctright, line_gethashcode(line)) >= 1)
+                            && (line_gettextlen(line) > 8)
+                         )
+                      :  (  (ctree_getcount(ctleft, line_gethashcode(line)) == 1)
+                            && (ctree_getcount(ctright, line_gethashcode(line)) == 1)
+                         )
+                   )
+           )
+        {
 
             /* lines match */
             line2 = * ((LINE FAR *)ctree_find(ctright,
@@ -221,7 +227,8 @@ section_match(SECTION sec1, SECTION sec2, BOOL ReSynch)
             bLinked |= section_expandanchor(sec1, line, sec2, line2);
         }
 
-        if (line == sec1->last) {
+        if (line == sec1->last)
+        {
             break;
         }
     }
@@ -247,7 +254,8 @@ section_match(SECTION sec1, SECTION sec2, BOOL ReSynch)
 LINE
 section_getfirstline(SECTION section)
 {
-    if (section == NULL) {
+    if (section == NULL)
+    {
         return(NULL);
     }
     return(section->first);
@@ -259,7 +267,8 @@ section_getfirstline(SECTION section)
 LINE
 section_getlastline(SECTION section)
 {
-    if (section == NULL) {
+    if (section == NULL)
+    {
         return(NULL);
     }
     return(section->last);
@@ -272,7 +281,8 @@ section_getlastline(SECTION section)
 SECTION
 section_getlink(SECTION section)
 {
-    if (section == NULL) {
+    if (section == NULL)
+    {
         return NULL;
     }
     return(section->link);
@@ -285,7 +295,8 @@ section_getlink(SECTION section)
 SECTION
 section_getcorrespond(SECTION section)
 {
-    if (section == NULL) {
+    if (section == NULL)
+    {
         return(NULL);
     }
     return(section->correspond);
@@ -295,7 +306,8 @@ section_getcorrespond(SECTION section)
 int
 section_getstate(SECTION section)
 {
-    if (section == NULL) {
+    if (section == NULL)
+    {
         TRACE_ERROR("SECTION: null section in getstate call", FALSE);
         return(0);
     }
@@ -363,7 +375,7 @@ section_setrightbasenr(SECTION section, int base)
 /* --- section list functions -------------------------------------*/
 
 /* Theory of handling blank lines:
-|                                      
+|
 |  If ignore_blanks is FALSE then a blank is just another character.
 |  If it is TRUE then we will normally include unmatched blanks in whatever
 |  section is surrounding them.  It would be nice if we could arrange to
@@ -396,8 +408,9 @@ LINE FindEndOfUnmatched(LINE line)
 {
     LINE next;
 
-    for (; ; ) 
-    {   next = (LINE)List_Next(line);
+    for (; ; )
+    {
+        next = (LINE)List_Next(line);
         if (next==NULL) return line;
         if (line_getlink(next)!=NULL) return line;
         line = next;
@@ -417,15 +430,17 @@ LINE FindEndOfUnmatched(LINE line)
    sometimes returning NULL).
 */
 LINE NextNonIgnorable(LINE line)
-{       LINE next;
+{
+    LINE next;
     if (  line_getlink(line)==NULL
-          && ! (ignore_blanks && line_isblank(line))
+            && ! (ignore_blanks && line_isblank(line))
        )
         TRACE_ERROR("!!Bad call to NextNonIgnorable!!", FALSE);
 
     next = (LINE)List_Next(line);
     if (next==NULL) return NULL;
-    for (; ; ) {
+    for (; ; )
+    {
         line = next;
         if (  line_getlink(line)!=NULL) return line;
         if (! ignore_blanks)            return line;
@@ -466,7 +481,8 @@ LINE FindEndOfMatched(LINE line)
     /* As a section (at least at the start of the file) might start
        with an ignored non-linked blank line, first step over any such
     */
-    if ( line_getlink(line)==NULL && line_isblank(line) ) {
+    if ( line_getlink(line)==NULL && line_isblank(line) )
+    {
         next = NextNonIgnorable(line);
 
         /* There are unfortunately 6 cases to deal with
@@ -485,8 +501,10 @@ LINE FindEndOfMatched(LINE line)
               linked - cases C,D continue from that linked line
         */
         if (next==NULL) return line;
-        if (line_getlink(next)==NULL) {
-            if (ignore_blanks && line_isblank(next)) {
+        if (line_getlink(next)==NULL)
+        {
+            if (ignore_blanks && line_isblank(next))
+            {
                 return next;
             }
             return(LINE)List_Prev(next);
@@ -499,13 +517,16 @@ LINE FindEndOfMatched(LINE line)
     if (line_getlink(line)==NULL)
         TRACE_ERROR("!!FindEndOfMatched -- no link!!", FALSE);
 
-    for ( ; ; ) {
+    for ( ; ; )
+    {
 
         next = NextNonIgnorable(line);
         /* Same 6 cases - basically same again */
         if (next==NULL) return line;
-        if (line_getlink(next)==NULL) {
-            if (ignore_blanks && line_isblank(next)) {
+        if (line_getlink(next)==NULL)
+        {
+            if (ignore_blanks && line_isblank(next))
+            {
                 return next;
             }
             return(LINE)List_Prev(next);
@@ -550,16 +571,20 @@ section_makelist(LIST linelist, BOOL left)
     sections = List_Create();
 
     /* for each line in the list */
-    for ( line1=(LINE)List_First(linelist);  line1!=NULL;  line1 = (LINE)List_Next((LPVOID)line1)) {
+    for ( line1=(LINE)List_First(linelist);  line1!=NULL;  line1 = (LINE)List_Next((LPVOID)line1))
+    {
 
         /* is it linked ? */
 
         if ( line_getlink(line1) != NULL
-             || ( ignore_blanks && line_isblank(line1))
-           ) {
+                || ( ignore_blanks && line_isblank(line1))
+           )
+        {
             line2 = FindEndOfMatched(line1);
             matched = TRUE;
-        } else {
+        }
+        else
+        {
             line2 = FindEndOfUnmatched(line1);
             matched = FALSE;
         }
@@ -572,7 +597,8 @@ section_makelist(LIST linelist, BOOL left)
                       );
 
 #ifdef trace
-        {       char msg[80];
+        {
+            char msg[80];
             StringCchPrintf( msg, 80
                              , "Created section: lines %d..%d of %s %s\r\n"
                              , line_getlinenr(line1)
@@ -622,7 +648,8 @@ LINE FindFirstWithLink(LINE first, LINE last)
     while (line_getlink(first)==NULL && first!=last)
         first = (LINE)List_Next(first);
 
-    if (line_getlink(first)==NULL) {
+    if (line_getlink(first)==NULL)
+    {
 #ifdef trace
         char msg[80];
         StringCchPrintf( msg, 80
@@ -663,11 +690,14 @@ section_matchlists(LIST secsleft, LIST secsright, BOOL bDups)
     */
 
     /*  for each linked section try to find the section  linked to it. */
-    for ( sec1=(SECTION)List_First(secsleft);  sec1!=NULL;  sec1 = (SECTION)List_Next((LPVOID)sec1)) {
-        if (sec1->state==STATE_SAME) {
+    for ( sec1=(SECTION)List_First(secsleft);  sec1!=NULL;  sec1 = (SECTION)List_Next((LPVOID)sec1))
+    {
+        if (sec1->state==STATE_SAME)
+        {
             LINE FirstWithLink = FindFirstWithLink(sec1->first, sec1->last);
 #ifdef trace
-            {       char msg[80];
+            {
+                char msg[80];
                 StringCchPrintf( msg, 80
                                  , "matchlists left matching section %d..%d \r\n"
                                  , line_getlinenr(sec1->first)
@@ -676,19 +706,23 @@ section_matchlists(LIST secsleft, LIST secsright, BOOL bDups)
                 if (bTrace) Trace_File(msg);
             }
 #endif
-            for ( sec2=(SECTION)List_First(secsright);  sec2!=NULL;  sec2 = (SECTION)List_Next((LPVOID)sec2)) {
+            for ( sec2=(SECTION)List_First(secsright);  sec2!=NULL;  sec2 = (SECTION)List_Next((LPVOID)sec2))
+            {
                 if ( sec2->state==STATE_SAME
-                     && line_getlink(FirstWithLink)
-                     == FindFirstWithLink(sec2->first, sec2->last)) {
+                        && line_getlink(FirstWithLink)
+                        == FindFirstWithLink(sec2->first, sec2->last))
+                {
                     break;
                 }
             }
             /* sec2 could be NULL if sec1 is all allowable blanks */
-            if (sec2!=NULL) {
+            if (sec2!=NULL)
+            {
                 sec1->link = sec2;
                 sec2->link = sec1;
 #ifdef trace
-                {       char msg[80];
+                {
+                    char msg[80];
                     StringCchPrintf( msg, 80
                                      , "matchlists right matching section is %d..%d \r\n"
                                      , line_getlinenr(sec2->first)
@@ -706,10 +740,12 @@ section_matchlists(LIST secsleft, LIST secsright, BOOL bDups)
      * all the links in place for this to work.
      */
 
-    for ( sec1=(SECTION)List_First(secsleft);  sec1!=NULL;  sec1 = (SECTION)List_Next((LPVOID)sec1)) {
+    for ( sec1=(SECTION)List_First(secsleft);  sec1!=NULL;  sec1 = (SECTION)List_Next((LPVOID)sec1))
+    {
         SECTION secTemp;
 
-        if (sec1->state == STATE_SAME) {
+        if (sec1->state == STATE_SAME)
+        {
             /* skip the linked sections */
             continue;
         }
@@ -720,12 +756,14 @@ section_matchlists(LIST secsleft, LIST secsright, BOOL bDups)
          * one section
          */
         secTemp = (SECTION)List_Prev(sec1);
-        if (secTemp && secTemp->state!= STATE_SAME) {
+        if (secTemp && secTemp->state!= STATE_SAME)
+        {
             TRACE_ERROR("consecutive unlinked sections", FALSE);
             continue;
         }
         secTemp = (SECTION)List_Next(sec1);
-        if (secTemp && secTemp->state!= STATE_SAME) {
+        if (secTemp && secTemp->state!= STATE_SAME)
+        {
             TRACE_ERROR("consecutive unlinked sections.", FALSE);
             continue;
         }
@@ -734,7 +772,8 @@ section_matchlists(LIST secsleft, LIST secsright, BOOL bDups)
          * section following the section linked to our previous section.
          * we could be at beginning or end of list.
          */
-        if (List_Prev(sec1) != NULL) {
+        if (List_Prev(sec1) != NULL)
+        {
             SECTION secOther;
             secOther = section_getlink((SECTION)List_Prev(sec1));
             if (secOther==NULL)
@@ -743,26 +782,34 @@ section_matchlists(LIST secsleft, LIST secsright, BOOL bDups)
             sec2 = (SECTION)List_Next(secOther);
 
             /* check this section is not linked */
-            if ((sec2 == NULL) || (section_getlink(sec2) != NULL)) {
+            if ((sec2 == NULL) || (section_getlink(sec2) != NULL))
+            {
                 continue;
             }
 
             /* check that the section after these are linked
              * to each other (or both are at end of list).
              */
-            if (List_Next(sec1) != NULL) {
+            if (List_Next(sec1) != NULL)
+            {
 
                 if (section_getlink((SECTION)List_Next(sec1)) !=
-                    List_Next(sec2)) {
+                        List_Next(sec2))
+                {
                     continue;
                 }
-            } else {
-                if (List_Next(sec2) != NULL) {
+            }
+            else
+            {
+                if (List_Next(sec2) != NULL)
+                {
                     continue;
                 }
             }
 
-        } else if (List_Next(sec1) != NULL) {
+        }
+        else if (List_Next(sec1) != NULL)
+        {
             SECTION secOther;
             secOther = section_getlink((SECTION)List_Next(sec1));
             if (secOther==NULL)
@@ -771,30 +818,38 @@ section_matchlists(LIST secsleft, LIST secsright, BOOL bDups)
             sec2 = (SECTION)List_Prev(secOther);
 
             /* check this section is not linked */
-            if ((sec2 == NULL) || (section_getlink(sec2) != NULL)) {
+            if ((sec2 == NULL) || (section_getlink(sec2) != NULL))
+            {
                 continue;
             }
 
             /* check that the section before these are linked
              * to each other (or both are at start of list).
              */
-            if (List_Prev(sec1) != NULL) {
+            if (List_Prev(sec1) != NULL)
+            {
 
                 if (section_getlink((SECTION)List_Prev(sec1)) !=
-                    List_Prev(sec2)) {
-                    continue;
-                }
-            } else {
-                if (List_Prev(sec2) != NULL) {
+                        List_Prev(sec2))
+                {
                     continue;
                 }
             }
-        } else {
+            else
+            {
+                if (List_Prev(sec2) != NULL)
+                {
+                    continue;
+                }
+            }
+        }
+        else
+        {
             /* there must be at most one section in each
              * file, and they are unmatched. make these correspond.
              * (Though I don't think this would ever do anything except
              * waste time by trying to link that which has already failed)
-             * 
+             *
              */
             sec2 = (SECTION)List_First(secsright);
         }
@@ -803,13 +858,15 @@ section_matchlists(LIST secsleft, LIST secsright, BOOL bDups)
         /* make the correspondence links
          * we will want these for  zebra striping
          */
-        if ((sec1 != NULL) && (sec2 != NULL)) {
+        if ((sec1 != NULL) && (sec2 != NULL))
+        {
             sec1->correspond = sec2;
             sec2->correspond = sec1;
         }
 
         /* attempt to link up lines */
-        if (section_match(sec1, sec2, bDups)) {
+        if (section_match(sec1, sec2, bDups))
+        {
             bLinked = TRUE;
         }
     }
@@ -834,7 +891,8 @@ section_takesection(LIST compo, SECTION left, SECTION right, int state)
     /* select which section is being output, and change the state
      * to indicate it has been output
      */
-    switch (state) {
+    switch (state)
+    {
     case STATE_SAME:
         /* both the same. we mark both as output, and
          * take the right one.  It is possible that the
@@ -866,15 +924,21 @@ section_takesection(LIST compo, SECTION left, SECTION right, int state)
     newsec->state = state;
 
 
-    if (left != NULL) {
+    if (left != NULL)
+    {
         newsec->leftbase = line_getlinenr(left->first);
-    } else {
+    }
+    else
+    {
         newsec->leftbase = 0;
     }
 
-    if (right != NULL) {
+    if (right != NULL)
+    {
         newsec->rightbase = line_getlinenr(right->first);
-    } else {
+    }
+    else
+    {
         newsec->rightbase = 0;
     }
 
@@ -895,10 +959,12 @@ typedef BYTE bitmap[32];   /* 256 bits.  address the ith bit as m[i/8] & (1<<i%8
    at least once anywhere in the string.
 */
 void MakeMap(bitmap bm, LPSTR str)
-{   int i;
+{
+    int i;
     for (i=0; i<32; ++i)  bm[i] = 0;   /* clear it (yeah, could use memset) */
     for (i=0; str[i]!='\0'; ++i)    /* for each char */
-    {   UINT v = ((UINT)str[i]) & 0x000000ff;   /* 0..256, No negatives! */
+    {
+        UINT v = ((UINT)str[i]) & 0x000000ff;   /* 0..256, No negatives! */
         bm[v/8] = BYTE(bm[v/8] | (1<<v%8));
     }
 } /* MakeMap */
@@ -908,7 +974,8 @@ void MakeMap(bitmap bm, LPSTR str)
    in both a and b
 */
 void AndMaps(bitmap res, bitmap a, bitmap b)
-{   int i;
+{
+    int i;
     for (i=0; i<32; ++i)
         res[i] = (char)(a[i] & b[i]);
 }
@@ -918,7 +985,8 @@ void AndMaps(bitmap res, bitmap a, bitmap b)
    in either a or b
 */
 void OrMaps(bitmap res, bitmap a, bitmap b)
-{   int i;
+{
+    int i;
     for (i=0; i<32; ++i)
         res[i] = (char)(a[i] | b[i]);
 }
@@ -927,13 +995,16 @@ void OrMaps(bitmap res, bitmap a, bitmap b)
    return the number of bits set on in bm
 */
 int BitsInMap(bitmap bm)
-{   int i;
+{
+    int i;
     int j;
     int cb = 0;                  /* bit count */
 
     for (i=0; i<32; ++i)         /* for each byte in bm */
-    {   for ( j=0; j<8; ++j)     /*    for each bit in byte */
-        {   if (bm[i] & (1<<j))    /*    if the bit is set  */
+    {
+        for ( j=0; j<8; ++j)     /*    for each bit in byte */
+        {
+            if (bm[i] & (1<<j))    /*    if the bit is set  */
                 ++cb;
         }
     }
@@ -957,7 +1028,8 @@ int BitsInMap(bitmap bm)
 |           COUNTING THE BITS IN A BYTE!
  -------------------------------------------------------------------------------*/
 BOOL LinesMatch(LINE Left, LINE Right)
-{   LPSTR LText = line_gettext(Left);
+{
+    LPSTR LText = line_gettext(Left);
     LPSTR RText = line_gettext(Right);
     bitmap bmLeft;
     bitmap bmRight;
@@ -1017,9 +1089,11 @@ void TakeTwoSections(LIST compo, SECTION left, SECTION right)
     left->state = STATE_MARKED;
     right->state = STATE_MARKED;
 
-    while (left!=NULL && right !=NULL) {
+    while (left!=NULL && right !=NULL)
+    {
 
-        if (LinesMatch(LLine, RLine)) {
+        if (LinesMatch(LLine, RLine))
+        {
             NewL = section_new(LLine, LLine, compo);
             NewL->state = STATE_SIMILARLEFT;
             NewL->leftbase = line_getlinenr(LLine);
@@ -1034,7 +1108,9 @@ void TakeTwoSections(LIST compo, SECTION left, SECTION right)
             else LLine = (LINE)List_Next(LLine);
             if (RLine == right->last) right = (SECTION)NULL;  /* done */
             else RLine = (LINE)List_Next(RLine);
-        } else {
+        }
+        else
+        {
             /* lost synch - take all the rest with no more zebra stuff */
             NewL = section_new(LLine, left->last, compo);
             NewL->state = STATE_LEFTONLY;
@@ -1050,13 +1126,15 @@ void TakeTwoSections(LIST compo, SECTION left, SECTION right)
         }
     }
 
-    if (left!=NULL) {
+    if (left!=NULL)
+    {
         NewL = section_new(LLine, left->last, compo);
         NewL->state = STATE_LEFTONLY;
         NewL->leftbase = line_getlinenr(LLine);
         NewL->rightbase = 0;
     }
-    if (right!=NULL) {
+    if (right!=NULL)
+    {
         NewR = section_new(RLine, right->last, compo);
         NewR->state = STATE_RIGHTONLY;
         NewR->rightbase = line_getlinenr(RLine);
@@ -1066,7 +1144,8 @@ void TakeTwoSections(LIST compo, SECTION left, SECTION right)
 #ifdef trace
     Ticks = GetTickCount()-Ticks;
     ZebraTicks += Ticks;
-    {   char Msg[80];
+    {
+        char Msg[80];
         StringCchPrintf(Msg, 80, "Zebra time %d, total zebra time %d\n", Ticks, ZebraTicks);
         Trace_File(Msg);
     }
@@ -1122,71 +1201,98 @@ section_makecomposite(LIST secsleft, LIST secsright)
     left = (SECTION)List_First(secsleft);
     right = (SECTION)List_First(secsright);
 
-    while ( (left != NULL) || (right != NULL)) {
+    while ( (left != NULL) || (right != NULL))
+    {
 
-        if (left == NULL) {
+        if (left == NULL)
+        {
             /* no more in left list - take right section */
             /* is it moved or just unmatched ? */
-            if (right->link == NULL) {
+            if (right->link == NULL)
+            {
                 section_takesection(compo, NULL, right, STATE_RIGHTONLY);
                 right = (SECTION)List_Next(right);
-            } else {
+            }
+            else
+            {
                 section_takesection(compo, right->link, right, STATE_MOVEDRIGHT);
                 right = (SECTION)List_Next(right);
             }
-        } else if (right == NULL) {
+        }
+        else if (right == NULL)
+        {
             /* right list empty - must be left next */
 
             /* is it moved or just unmatched ? */
-            if (left->link == NULL) {
+            if (left->link == NULL)
+            {
                 section_takesection(compo, left, NULL, STATE_LEFTONLY);
                 left = (SECTION)List_Next(left);
-            } else {
+            }
+            else
+            {
                 section_takesection(compo, left, left->link, STATE_MOVEDLEFT);
                 left = (SECTION)List_Next(left);
             }
 
-        } else if (left->state == STATE_LEFTONLY) {
+        }
+        else if (left->state == STATE_LEFTONLY)
+        {
             /* unlinked section on left */
-            if (left->correspond==right) {
+            if (left->correspond==right)
+            {
                 TakeTwoSections( compo, left, left->correspond );
                 left = (SECTION)List_Next(left);
                 right = (SECTION)List_Next(right);
-            } else {
+            }
+            else
+            {
                 /* see picture below for when this might occur */
                 section_takesection(compo, left, NULL, STATE_LEFTONLY);
                 left = (SECTION)List_Next(left);
             }
 
-        } else if (left->link==NULL) {
+        }
+        else if (left->link==NULL)
+        {
             /* This is an ignorable blank section on the left.
              * We ignore it. (We will take any such from the right)
              */
             left = (SECTION)List_Next(left);
 
-        } else if (left->link->state==STATE_MARKED) {
+        }
+        else if (left->link->state==STATE_MARKED)
+        {
             /* left is linked to section that is already taken*/
             section_takesection(compo, left, left->link, STATE_MOVEDLEFT);
             left = (SECTION)List_Next(left);
 
-        } else if (right->link == NULL) {
+        }
+        else if (right->link == NULL)
+        {
             /* take unlinked section on right
              * Either unmatched or ignorable blanks
              */
             section_takesection(compo, NULL, right, right->state);
             right = (SECTION)List_Next(right);
 
-        } else if (right->link->state==STATE_MARKED) {
+        }
+        else if (right->link->state==STATE_MARKED)
+        {
             /* right is linked to section that's already taken */
             section_takesection(compo, right->link, right, STATE_MOVEDRIGHT);
             right = (SECTION)List_Next(right);
 
-        } else if (left->link == right) {
+        }
+        else if (left->link == right)
+        {
             /* sections match */
             section_takesection(compo, left, right, STATE_SAME);
             right = (SECTION)List_Next(right);
             left = (SECTION)List_Next(left);
-        } else {
+        }
+        else
+        {
             /* both sections linked to forward sections
              * Original idea was to go by section size and
              * take smallest first as a move so that larger one is
@@ -1219,12 +1325,14 @@ section_makecomposite(LIST secsleft, LIST secsright)
              * and take it first.
              */
             if ( line_getlinenr(right->link->first) - line_getlinenr(left->first)
-                 > line_getlinenr(left->link->first)  - line_getlinenr(right->first)
-               ) 
-               {
+                    > line_getlinenr(left->link->first)  - line_getlinenr(right->first)
+               )
+            {
                 section_takesection(compo, right->link, right, STATE_MOVEDRIGHT);
                 right = (SECTION)List_Next(right);
-            } else {
+            }
+            else
+            {
                 section_takesection(compo, left, left->link, STATE_MOVEDLEFT);
                 left = (SECTION)List_Next(left);
             }
@@ -1245,12 +1353,14 @@ typedef LINE (APIENTRY * MOVEPROC)(LINE);
    It is legit for limit to be NULL (meaning end of file).
 */
 BOOL AbsorbAnyBlanks(LINE * from, LINE limit, MOVEPROC Move)
-{       BOOL progress = FALSE;
+{
+    BOOL progress = FALSE;
 
     while ( (from!=NULL)
             && (line_isblank(*from))
             && (*from!=limit)
-          ) {
+          )
+    {
         *from = Move(*from);
         progress = TRUE;
     }
@@ -1290,7 +1400,8 @@ section_expandanchor(SECTION sec1, LINE line1, SECTION sec2, LINE line2)
     rightend = (LINE)List_Next(sec2->last);
 
 #ifdef trace
-    {  char msg[120];
+    {
+        char msg[120];
 
         StringCchPrintf( msg, 120, "expanding anchor at %d<->%d in sections %d..%d <-> %d..%d\r\n"
                          , line_getlinenr(line1)
@@ -1305,7 +1416,8 @@ section_expandanchor(SECTION sec1, LINE line1, SECTION sec2, LINE line2)
 #endif
 
     /* null lines shall not match */
-    if ((line1 == NULL) || (line2 == NULL)) {
+    if ((line1 == NULL) || (line2 == NULL))
+    {
         return(FALSE);
     }
 
@@ -1318,15 +1430,18 @@ section_expandanchor(SECTION sec1, LINE line1, SECTION sec2, LINE line2)
      */
     left = line1;
     right = line2;
-    for (; ; ) {
-        if (line_link(left, right) ) {
+    for (; ; )
+    {
+        if (line_link(left, right) )
+        {
 
             bChanges = TRUE;
             left = (LINE)List_Next(left);
             right = (LINE)List_Next(right);
             if (left==leftend || right==rightend) break;
         }
-        else if (ignore_blanks) {
+        else if (ignore_blanks)
+        {
             /* even though no match, maybe an ignorable blank? */
 
             BOOL moved = FALSE;
@@ -1339,7 +1454,8 @@ section_expandanchor(SECTION sec1, LINE line1, SECTION sec2, LINE line2)
     }
 
 #ifdef trace
-    {   char msg[120];
+    {
+        char msg[120];
         StringCchPrintf( msg, 120, "marched forwards to (the line before) %d<->%d\r\n"
                          , (left==NULL ? 9999 : line_getlinenr(left))
                          , (right==NULL ? 9999 : line_getlinenr(right))
@@ -1361,8 +1477,10 @@ section_expandanchor(SECTION sec1, LINE line1, SECTION sec2, LINE line2)
     leftend = (LINE)List_Prev(sec1->first);
     rightend = (LINE)List_Prev(sec2->first);
 
-    for (; ; ) {
-        if (line_link(left, right)) {
+    for (; ; )
+    {
+        if (line_link(left, right))
+        {
 
             bChanges = TRUE;
             left = (LINE)List_Prev(left);
@@ -1370,7 +1488,8 @@ section_expandanchor(SECTION sec1, LINE line1, SECTION sec2, LINE line2)
             if (left == leftend || right == rightend) break;
 
         }
-        else if (ignore_blanks) {
+        else if (ignore_blanks)
+        {
             /* even though no match, maybe an ignorable blank? */
 
             BOOL moved = FALSE;
@@ -1384,7 +1503,8 @@ section_expandanchor(SECTION sec1, LINE line1, SECTION sec2, LINE line2)
     }
 
 #ifdef trace
-    {   char msg[120];
+    {
+        char msg[120];
 
         StringCchPrintf( msg, 120, "marched backwards to (the line after) %d<->%d\r\n"
                          , (left==NULL ? 0 : line_getlinenr(left))
@@ -1416,12 +1536,15 @@ section_makectree(SECTION sec)
     /* make an empty tree */
     tree = ctree_create();
 
-    for (line = sec->first; line != NULL; line = (LINE)List_Next(line)) {
-        if (line_getlink(line) == NULL) {
+    for (line = sec->first; line != NULL; line = (LINE)List_Next(line))
+    {
+        if (line_getlink(line) == NULL)
+        {
             ctree_update(tree, line_gethashcode(line),
                          &line, sizeof(LINE));
         }
-        if (line == sec->last) {
+        if (line == sec->last)
+        {
             break;
         }
     }

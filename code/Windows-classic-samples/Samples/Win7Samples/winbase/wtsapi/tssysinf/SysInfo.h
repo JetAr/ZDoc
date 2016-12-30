@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright 1998 - 2000 Microsoft Corporation
 
@@ -53,7 +53,8 @@ Author:
 //
 // definitions
 //
-typedef struct{
+typedef struct
+{
     char          szClientName[MAX_COMPUTERNAME_LENGTH+1];
     TCHAR         szComputerName[MAX_COMPUTERNAME_LENGTH+1];
     TCHAR         szUserName[UNLEN+1];

@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -41,7 +41,7 @@ const LPWSTR CONTEXT_SAMPLE_NEW_EVENT_HEADER = L"*******************************
 WCHAR * CContextPlugin::s_wstrNamedValueOutputPath = L"OutputPath";
 WCHAR * CContextPlugin::s_wstrNamedValueContextTypes = L"ContextTypes";
 
-const ContextNameHint CContextPlugin::s_UserContextHintValues[] = 
+const ContextNameHint CContextPlugin::s_UserContextHintValues[] =
 {
     WMS_USER_AGENT, WMS_USER_AGENT_ID,
     WMS_USER_GUID, WMS_USER_GUID_ID,
@@ -63,7 +63,7 @@ const ContextNameHint CContextPlugin::s_UserContextHintValues[] =
     NULL, -1          // signals end of array
 };
 
-const ContextNameHint CContextPlugin::s_PresentationContextHintValues[] = 
+const ContextNameHint CContextPlugin::s_PresentationContextHintValues[] =
 {
     WMS_PRESENT_STREAM_HEADERS, WMS_PRESENT_STREAM_HEADERS_ID,
     WMS_PRESENT_CONTENT_DESCRIPTION, WMS_PRESENT_CONTENT_DESCRIPTION_ID,
@@ -90,7 +90,7 @@ const ContextNameHint CContextPlugin::s_PresentationContextHintValues[] =
     NULL, -1          // signals end of array
 };
 
-const ContextNameHint CContextPlugin::s_CommandContextHintValues[] = 
+const ContextNameHint CContextPlugin::s_CommandContextHintValues[] =
 {
     WMS_COMMAND_CONTEXT_URL, WMS_COMMAND_CONTEXT_URL_ID,
     WMS_COMMAND_CONTEXT_URL_SCHEME, WMS_COMMAND_CONTEXT_URL_SCHEME_ID,
@@ -156,7 +156,7 @@ CContextPlugin::~CContextPlugin()
 /////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP CContextPlugin::InitializePlugin
 (
-    IWMSContext *pServerContext, 
+    IWMSContext *pServerContext,
     IWMSNamedValues *pNamedValues,
     IWMSClassObject *pClassFactory
 )
@@ -164,14 +164,14 @@ STDMETHODIMP CContextPlugin::InitializePlugin
     HRESULT hr = S_OK;
 
     if ( ( NULL == pServerContext )
-        || ( NULL == pNamedValues )
-        || ( NULL == pClassFactory ) )
+            || ( NULL == pNamedValues )
+            || ( NULL == pClassFactory ) )
     {
         return( E_INVALIDARG );
     }
 
     hr = pServerContext->GetAndQueryIUnknownValue( const_cast<LPWSTR>( WMS_SERVER ), WMS_SERVER_ID,
-                                                   IID_IWMSServer, (IUnknown**) &m_pServer, 0 );
+            IID_IWMSServer, (IUnknown**) &m_pServer, 0 );
 
     if( SUCCEEDED( hr ) )
     {
@@ -254,7 +254,7 @@ STDMETHODIMP CContextPlugin::GetCustomAdminInterface( IDispatch **ppValue )
     {
         return( E_POINTER );
     }
-    
+
     *ppValue = NULL;
 
     CComObject< CContextAdmin > *spContextAdmin;
@@ -322,10 +322,10 @@ STDMETHODIMP CContextPlugin::GetHandledEvents( VARIANT *pvarHandledEvents )
 /////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP CContextPlugin::OnEvent
 (
-    WMS_EVENT *pEvent, 
-    IWMSContext *pUserCtx, 
-    IWMSContext *pPresentationCtx, 
-    IWMSCommandContext *pCommandCtx 
+    WMS_EVENT *pEvent,
+    IWMSContext *pUserCtx,
+    IWMSContext *pPresentationCtx,
+    IWMSCommandContext *pCommandCtx
 )
 {
     HRESULT hr = S_OK;
@@ -401,7 +401,7 @@ STDMETHODIMP CContextPlugin::OnEvent
     case WMS_EVENT_SERVER:
         hr = OnNotifyServer( pUserCtx, pPresentationCtx, pCommandCtx );
         break;
-    case WMS_EVENT_PUBLISHING_POINT:		
+    case WMS_EVENT_PUBLISHING_POINT:
         hr = OnNotifyPublishingPoint( pUserCtx, pPresentationCtx, pCommandCtx );
         break;
     case WMS_EVENT_LIMIT_CHANGE:
@@ -429,7 +429,7 @@ STDMETHODIMP CContextPlugin::OnEvent
         hr = OnNotifyRemoteCacheLog( pUserCtx, pPresentationCtx, pCommandCtx );
         break;
     }
-    
+
     return( hr );
 }
 
@@ -455,7 +455,7 @@ HRESULT CContextPlugin::LoadConfigValues()
     //
     // Get the Output Path Name
     //
-    
+
     if ( SUCCEEDED(hr) )
     {
         hr = pValue->get_Value(&var);
@@ -544,7 +544,7 @@ HRESULT CContextPlugin::SaveConfigValues()
     }
 
 
-    
+
     VariantInit( &var );
 
     //
@@ -629,7 +629,7 @@ HRESULT CContextPlugin::CreateArrayOfEvents( VARIANT *pvarEvents, WMS_EVENT_TYPE
     long iEvents = 0;
     SAFEARRAY *psa = NULL;
     SAFEARRAYBOUND rgsabound[1];
-    
+
     if( NULL == pvarEvents )
     {
         return( E_POINTER );
@@ -637,9 +637,9 @@ HRESULT CContextPlugin::CreateArrayOfEvents( VARIANT *pvarEvents, WMS_EVENT_TYPE
 
     if( NULL == pWMSEvents || 0 >= nNumEvents )
     {
-        return( E_INVALIDARG );   
+        return( E_INVALIDARG );
     }
-        
+
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = nNumEvents;
 
@@ -706,26 +706,26 @@ HRESULT CContextPlugin::WriteContextInformation( HANDLE hFile, IWMSContext *pCon
 
     switch( wmsContextType )
     {
-        case WMS_USER_CONTEXT_TYPE:
-            // Create a header for this context type
-            wcsncpy_s( wstrBuffer,MAX_PATH, CONTEXT_SAMPLE_USER_CONTEXT_HEADER, MAX_PATH );
-            pContextHintValues = const_cast<ContextNameHint *>(CContextPlugin::s_UserContextHintValues);
-            break;
-        case WMS_PRESENTATION_CONTEXT_TYPE:
-            // Create a header for this context type
-            wcsncpy_s( wstrBuffer, MAX_PATH,CONTEXT_SAMPLE_PRESENTATION_CONTEXT_HEADER, MAX_PATH );
-            pContextHintValues = const_cast<ContextNameHint *>(CContextPlugin::s_PresentationContextHintValues);
-            break;
-        case WMS_COMMAND_REQUEST_CONTEXT_TYPE:
-            // Create a header for this context type
-            wcsncpy_s( wstrBuffer,MAX_PATH, CONTEXT_SAMPLE_COMMAND_REQUEST_CONTEXT_HEADER, MAX_PATH );
-            pContextHintValues = const_cast<ContextNameHint *>(CContextPlugin::s_CommandContextHintValues);
-            break;
-        case WMS_COMMAND_RESPONSE_CONTEXT_TYPE:
-            // Create a header for this context type
-            wcsncpy_s( wstrBuffer,MAX_PATH, CONTEXT_SAMPLE_COMMAND_RESPONSE_CONTEXT_HEADER, MAX_PATH );
-            pContextHintValues = const_cast<ContextNameHint *>(CContextPlugin::s_CommandContextHintValues);
-            break;
+    case WMS_USER_CONTEXT_TYPE:
+        // Create a header for this context type
+        wcsncpy_s( wstrBuffer,MAX_PATH, CONTEXT_SAMPLE_USER_CONTEXT_HEADER, MAX_PATH );
+        pContextHintValues = const_cast<ContextNameHint *>(CContextPlugin::s_UserContextHintValues);
+        break;
+    case WMS_PRESENTATION_CONTEXT_TYPE:
+        // Create a header for this context type
+        wcsncpy_s( wstrBuffer, MAX_PATH,CONTEXT_SAMPLE_PRESENTATION_CONTEXT_HEADER, MAX_PATH );
+        pContextHintValues = const_cast<ContextNameHint *>(CContextPlugin::s_PresentationContextHintValues);
+        break;
+    case WMS_COMMAND_REQUEST_CONTEXT_TYPE:
+        // Create a header for this context type
+        wcsncpy_s( wstrBuffer,MAX_PATH, CONTEXT_SAMPLE_COMMAND_REQUEST_CONTEXT_HEADER, MAX_PATH );
+        pContextHintValues = const_cast<ContextNameHint *>(CContextPlugin::s_CommandContextHintValues);
+        break;
+    case WMS_COMMAND_RESPONSE_CONTEXT_TYPE:
+        // Create a header for this context type
+        wcsncpy_s( wstrBuffer,MAX_PATH, CONTEXT_SAMPLE_COMMAND_RESPONSE_CONTEXT_HEADER, MAX_PATH );
+        pContextHintValues = const_cast<ContextNameHint *>(CContextPlugin::s_CommandContextHintValues);
+        break;
     }
 
     if( !::WriteFile( hFile, (LPVOID) wstrBuffer, DWORD(wcslen( wstrBuffer ) * sizeof( WCHAR )), &cbWritten, NULL ) )
@@ -756,33 +756,33 @@ HRESULT CContextPlugin::WriteContextInformation( HANDLE hFile, IWMSContext *pCon
             // Write string with data information
             switch( V_VT( &varValue ) )
             {
-                case VT_BSTR:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_BSTR_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_BSTR( &varValue ) );
-                    break;
-                case VT_I4:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_I4_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_I4( &varValue ), V_I4( &varValue ) );
-                    break;
-                case VT_UI8:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_UI8_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_UI8( &varValue ) );
-                    break;
-                case VT_CY:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_CY_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_CY( &varValue ) );
-                    break;
-                case VT_DATE:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_DATE_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_DATE( &varValue ) );
-                    break;
-                case VT_DECIMAL:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_DECIMAL_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_DECIMAL( &varValue ) );
-                    break;
-                case VT_UNKNOWN:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_UNKNOWN_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_UNKNOWN( &varValue ) );
-                    break;
-                case VT_DISPATCH:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_DISPATCH_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_DISPATCH( &varValue ) );
-                    break;
-                default:
-                    _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_ARRAY_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_ARRAY( &varValue ) );
-                    break;
+            case VT_BSTR:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_BSTR_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_BSTR( &varValue ) );
+                break;
+            case VT_I4:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_I4_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_I4( &varValue ), V_I4( &varValue ) );
+                break;
+            case VT_UI8:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_UI8_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_UI8( &varValue ) );
+                break;
+            case VT_CY:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_CY_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_CY( &varValue ) );
+                break;
+            case VT_DATE:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_DATE_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_DATE( &varValue ) );
+                break;
+            case VT_DECIMAL:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_DECIMAL_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_DECIMAL( &varValue ) );
+                break;
+            case VT_UNKNOWN:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_UNKNOWN_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_UNKNOWN( &varValue ) );
+                break;
+            case VT_DISPATCH:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_DISPATCH_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_DISPATCH( &varValue ) );
+                break;
+            default:
+                _snwprintf_s( wstrBuffer,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_ARRAY_TYPE_STRING, pContextHintValues[nValue].wstrContextName, pContextHintValues[nValue].lContextHint, V_ARRAY( &varValue ) );
+                break;
             }
 
             if( !::WriteFile( hFile, (LPVOID) wstrBuffer, DWORD(wcslen( wstrBuffer ) * sizeof( WCHAR )), &cbWritten, NULL ) )
@@ -820,8 +820,8 @@ HRESULT CContextPlugin::DumpContextInformation( LPCWSTR wstrEventType, IWMSConte
     ZeroMemory( wstrHeader, MAX_PATH * sizeof( WCHAR ) );
 
     if( ( WMS_CONTEXT_PLUGIN_NO_CONTEXT == m_wmsContexts )
-        || ( NULL == m_bstrOutputPath )
-        || ( '\0' == m_bstrOutputPath[0] ) )
+            || ( NULL == m_bstrOutputPath )
+            || ( '\0' == m_bstrOutputPath[0] ) )
     {
         // We aren't interested in dumping any context information, so just exit with Success
         return( hr );
@@ -852,7 +852,7 @@ HRESULT CContextPlugin::DumpContextInformation( LPCWSTR wstrEventType, IWMSConte
             // we should only open disk files.
             hr = HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
             goto abort;
-            
+
         }
 
         if( ERROR_ALREADY_EXISTS != dwRet )
@@ -887,7 +887,7 @@ HRESULT CContextPlugin::DumpContextInformation( LPCWSTR wstrEventType, IWMSConte
                 if( ( 1 == cbRead ) || ( 0xFF != pReadBuffer[0] ) || ( 0xFE != pReadBuffer[1] ) )
                 {
                     // This file is not unicode, so error out.
-                    hr = HRESULT_FROM_WIN32( ERROR_INVALID_DATA );                    
+                    hr = HRESULT_FROM_WIN32( ERROR_INVALID_DATA );
                     goto abort;
                 }
             }
@@ -920,7 +920,7 @@ HRESULT CContextPlugin::DumpContextInformation( LPCWSTR wstrEventType, IWMSConte
             // Create a buffer of text to pass to WriteFile
             GetLocalTime( &sTime);
             _snwprintf_s( wstrHeader,MAX_PATH, MAX_PATH, CONTEXT_SAMPLE_NEW_EVENT_HEADER,
-                            wstrEventType, sTime.wYear, sTime.wMonth, sTime.wDay, sTime.wHour, sTime.wMinute, sTime.wSecond );
+                          wstrEventType, sTime.wYear, sTime.wMonth, sTime.wDay, sTime.wHour, sTime.wMinute, sTime.wSecond );
 
             if( !::WriteFile( hFile, (LPVOID) wstrHeader,DWORD( wcslen( wstrHeader ) * sizeof( WCHAR )), &cbWritten, NULL ) )
             {

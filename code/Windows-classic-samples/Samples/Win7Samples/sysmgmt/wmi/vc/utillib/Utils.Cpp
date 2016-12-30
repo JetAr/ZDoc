@@ -1,4 +1,4 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
@@ -37,7 +37,7 @@ BSTR WbemErrorString(SCODE sc)
     BSTR bstr = NULL;
 
     SCODE mysc = CoCreateInstance(CLSID_WbemStatusCodeText, 0, CLSCTX_INPROC_SERVER,
-        IID_IWbemStatusCodeText, (LPVOID *) &pStatus);
+                                  IID_IWbemStatusCodeText, (LPVOID *) &pStatus);
 
     if (mysc == S_OK)
     {
@@ -51,8 +51,8 @@ BSTR WbemErrorString(SCODE sc)
             WCHAR szBuffer[sizeof(szBuffer2) + 4];
 
             _ltow_s(sc, szBuffer2, 16);
-			StringCbCopyW(szBuffer, sizeof(szBuffer), L"0x");      
-			StringCbCatW(szBuffer, sizeof(szBuffer), szBuffer2);
+            StringCbCopyW(szBuffer, sizeof(szBuffer), L"0x");
+            StringCbCatW(szBuffer, sizeof(szBuffer), szBuffer2);
             bstr = SysAllocString(szBuffer);
         }
     }
@@ -239,39 +239,98 @@ const WCHAR *TypeToString(VARTYPE v)
 
     switch (v)
     {
-    case VT_NULL: pRetVal = pVT_NULL; break;
+    case VT_NULL:
+        pRetVal = pVT_NULL;
+        break;
 
-    case VT_I1: pRetVal = pVT_I1; break;
-    case VT_UI1: pRetVal = pVT_UI1; break;
-    case VT_I2: pRetVal = pVT_I2; break;
-    case VT_UI2: pRetVal = pVT_UI2; break;
-    case VT_I4: pRetVal = pVT_I4; break;
-    case VT_UI4: pRetVal = pVT_UI4; break;
-    case VT_I8: pRetVal = pVT_I8; break;
-    case VT_UI8: pRetVal = pVT_UI8; break;
-    case VT_R4: pRetVal = pVT_R4; break;
-    case VT_R8: pRetVal = pVT_R8; break;
-    case VT_BOOL: pRetVal = pVT_BOOL; break;
-    case VT_BSTR: pRetVal = pVT_BSTR; break;
-    case VT_DISPATCH: pRetVal = pVT_DISPATCH; break;
-    case VT_UNKNOWN: pRetVal = pVT_UNKNOWN; break;
+    case VT_I1:
+        pRetVal = pVT_I1;
+        break;
+    case VT_UI1:
+        pRetVal = pVT_UI1;
+        break;
+    case VT_I2:
+        pRetVal = pVT_I2;
+        break;
+    case VT_UI2:
+        pRetVal = pVT_UI2;
+        break;
+    case VT_I4:
+        pRetVal = pVT_I4;
+        break;
+    case VT_UI4:
+        pRetVal = pVT_UI4;
+        break;
+    case VT_I8:
+        pRetVal = pVT_I8;
+        break;
+    case VT_UI8:
+        pRetVal = pVT_UI8;
+        break;
+    case VT_R4:
+        pRetVal = pVT_R4;
+        break;
+    case VT_R8:
+        pRetVal = pVT_R8;
+        break;
+    case VT_BOOL:
+        pRetVal = pVT_BOOL;
+        break;
+    case VT_BSTR:
+        pRetVal = pVT_BSTR;
+        break;
+    case VT_DISPATCH:
+        pRetVal = pVT_DISPATCH;
+        break;
+    case VT_UNKNOWN:
+        pRetVal = pVT_UNKNOWN;
+        break;
 
-    case VT_I1|VT_ARRAY: pRetVal = pVT_I1_ARRAY; break;
-    case VT_UI1|VT_ARRAY: pRetVal = pVT_UI1_ARRAY; break;
-    case VT_I2|VT_ARRAY: pRetVal = pVT_I2_ARRAY; break;
-    case VT_UI2|VT_ARRAY: pRetVal = pVT_UI2_ARRAY; break;
-    case VT_I4|VT_ARRAY: pRetVal = pVT_I4_ARRAY; break;
-    case VT_UI4|VT_ARRAY: pRetVal = pVT_UI4_ARRAY; break;
-    case VT_I8|VT_ARRAY: pRetVal = pVT_I8_ARRAY; break;
-    case VT_UI8|VT_ARRAY: pRetVal = pVT_UI8_ARRAY; break;
-    case VT_R4|VT_ARRAY: pRetVal = pVT_R4_ARRAY; break;
-    case VT_R8|VT_ARRAY: pRetVal = pVT_R8_ARRAY; break;
-    case VT_BOOL|VT_ARRAY: pRetVal = pVT_BOOL_ARRAY; break;
-    case VT_BSTR|VT_ARRAY: pRetVal = pVT_BSTR_ARRAY; break;
-    case VT_DISPATCH|VT_ARRAY: pRetVal = pVT_DISPATCH_ARRAY; break;
-    case VT_UNKNOWN|VT_ARRAY: pRetVal = pVT_UNKNOWN_ARRAY; break;
+    case VT_I1|VT_ARRAY:
+        pRetVal = pVT_I1_ARRAY;
+        break;
+    case VT_UI1|VT_ARRAY:
+        pRetVal = pVT_UI1_ARRAY;
+        break;
+    case VT_I2|VT_ARRAY:
+        pRetVal = pVT_I2_ARRAY;
+        break;
+    case VT_UI2|VT_ARRAY:
+        pRetVal = pVT_UI2_ARRAY;
+        break;
+    case VT_I4|VT_ARRAY:
+        pRetVal = pVT_I4_ARRAY;
+        break;
+    case VT_UI4|VT_ARRAY:
+        pRetVal = pVT_UI4_ARRAY;
+        break;
+    case VT_I8|VT_ARRAY:
+        pRetVal = pVT_I8_ARRAY;
+        break;
+    case VT_UI8|VT_ARRAY:
+        pRetVal = pVT_UI8_ARRAY;
+        break;
+    case VT_R4|VT_ARRAY:
+        pRetVal = pVT_R4_ARRAY;
+        break;
+    case VT_R8|VT_ARRAY:
+        pRetVal = pVT_R8_ARRAY;
+        break;
+    case VT_BOOL|VT_ARRAY:
+        pRetVal = pVT_BOOL_ARRAY;
+        break;
+    case VT_BSTR|VT_ARRAY:
+        pRetVal = pVT_BSTR_ARRAY;
+        break;
+    case VT_DISPATCH|VT_ARRAY:
+        pRetVal = pVT_DISPATCH_ARRAY;
+        break;
+    case VT_UNKNOWN|VT_ARRAY:
+        pRetVal = pVT_UNKNOWN_ARRAY;
+        break;
 
-    default: pRetVal = L"<unknown>";
+    default:
+        pRetVal = L"<unknown>";
     }
 
     return pRetVal;
@@ -325,41 +384,107 @@ const WCHAR *TypeToString(CIMTYPE v)
 
     switch (v)
     {
-        case CIM_ILLEGAL: pRetVal = pCIM_ILLEGAL; break;
-        case CIM_EMPTY: pRetVal = pCIM_EMPTY; break;
-        case CIM_SINT8: pRetVal = pCIM_SINT8; break;
-        case CIM_UINT8: pRetVal = pCIM_UINT8; break;
-        case CIM_SINT16: pRetVal = pCIM_SINT16; break;
-        case CIM_UINT16: pRetVal = pCIM_UINT16; break;
-        case CIM_SINT32: pRetVal = pCIM_SINT32; break;
-        case CIM_UINT32: pRetVal = pCIM_UINT32; break;
-        case CIM_SINT64: pRetVal = pCIM_SINT64; break;
-        case CIM_UINT64: pRetVal = pCIM_UINT64; break;
-        case CIM_REAL32: pRetVal = pCIM_REAL32; break;
-        case CIM_REAL64: pRetVal = pCIM_REAL64; break;
-        case CIM_BOOLEAN: pRetVal = pCIM_BOOLEAN; break;
-        case CIM_STRING: pRetVal = pCIM_STRING; break;
-        case CIM_DATETIME: pRetVal = pCIM_DATETIME; break;
-        case CIM_REFERENCE: pRetVal = pCIM_REFERENCE; break;
-        case CIM_OBJECT: pRetVal = pCIM_OBJECT; break;
+    case CIM_ILLEGAL:
+        pRetVal = pCIM_ILLEGAL;
+        break;
+    case CIM_EMPTY:
+        pRetVal = pCIM_EMPTY;
+        break;
+    case CIM_SINT8:
+        pRetVal = pCIM_SINT8;
+        break;
+    case CIM_UINT8:
+        pRetVal = pCIM_UINT8;
+        break;
+    case CIM_SINT16:
+        pRetVal = pCIM_SINT16;
+        break;
+    case CIM_UINT16:
+        pRetVal = pCIM_UINT16;
+        break;
+    case CIM_SINT32:
+        pRetVal = pCIM_SINT32;
+        break;
+    case CIM_UINT32:
+        pRetVal = pCIM_UINT32;
+        break;
+    case CIM_SINT64:
+        pRetVal = pCIM_SINT64;
+        break;
+    case CIM_UINT64:
+        pRetVal = pCIM_UINT64;
+        break;
+    case CIM_REAL32:
+        pRetVal = pCIM_REAL32;
+        break;
+    case CIM_REAL64:
+        pRetVal = pCIM_REAL64;
+        break;
+    case CIM_BOOLEAN:
+        pRetVal = pCIM_BOOLEAN;
+        break;
+    case CIM_STRING:
+        pRetVal = pCIM_STRING;
+        break;
+    case CIM_DATETIME:
+        pRetVal = pCIM_DATETIME;
+        break;
+    case CIM_REFERENCE:
+        pRetVal = pCIM_REFERENCE;
+        break;
+    case CIM_OBJECT:
+        pRetVal = pCIM_OBJECT;
+        break;
 
-        case CIM_SINT8 | CIM_FLAG_ARRAY: pRetVal = pCIM_SINT8_ARRAY; break;
-        case CIM_UINT8 | CIM_FLAG_ARRAY: pRetVal = pCIM_UINT8_ARRAY; break;
-        case CIM_SINT16 | CIM_FLAG_ARRAY: pRetVal = pCIM_SINT16_ARRAY; break;
-        case CIM_UINT16 | CIM_FLAG_ARRAY: pRetVal = pCIM_UINT16_ARRAY; break;
-        case CIM_SINT32 | CIM_FLAG_ARRAY: pRetVal = pCIM_SINT32_ARRAY; break;
-        case CIM_UINT32 | CIM_FLAG_ARRAY: pRetVal = pCIM_UINT32_ARRAY; break;
-        case CIM_SINT64 | CIM_FLAG_ARRAY: pRetVal = pCIM_SINT64_ARRAY; break;
-        case CIM_UINT64 | CIM_FLAG_ARRAY: pRetVal = pCIM_UINT64_ARRAY; break;
-        case CIM_REAL32 | CIM_FLAG_ARRAY: pRetVal = pCIM_REAL32_ARRAY; break;
-        case CIM_REAL64 | CIM_FLAG_ARRAY: pRetVal = pCIM_REAL64_ARRAY; break;
-        case CIM_BOOLEAN | CIM_FLAG_ARRAY: pRetVal = pCIM_BOOLEAN_ARRAY; break;
-        case CIM_STRING | CIM_FLAG_ARRAY: pRetVal = pCIM_STRING_ARRAY; break;
-        case CIM_DATETIME | CIM_FLAG_ARRAY: pRetVal = pCIM_DATETIME_ARRAY; break;
-        case CIM_REFERENCE | CIM_FLAG_ARRAY: pRetVal = pCIM_REFERENCE_ARRAY; break;
-        case CIM_OBJECT | CIM_FLAG_ARRAY: pRetVal = pCIM_OBJECT_ARRAY; break;
+    case CIM_SINT8 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_SINT8_ARRAY;
+        break;
+    case CIM_UINT8 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_UINT8_ARRAY;
+        break;
+    case CIM_SINT16 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_SINT16_ARRAY;
+        break;
+    case CIM_UINT16 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_UINT16_ARRAY;
+        break;
+    case CIM_SINT32 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_SINT32_ARRAY;
+        break;
+    case CIM_UINT32 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_UINT32_ARRAY;
+        break;
+    case CIM_SINT64 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_SINT64_ARRAY;
+        break;
+    case CIM_UINT64 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_UINT64_ARRAY;
+        break;
+    case CIM_REAL32 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_REAL32_ARRAY;
+        break;
+    case CIM_REAL64 | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_REAL64_ARRAY;
+        break;
+    case CIM_BOOLEAN | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_BOOLEAN_ARRAY;
+        break;
+    case CIM_STRING | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_STRING_ARRAY;
+        break;
+    case CIM_DATETIME | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_DATETIME_ARRAY;
+        break;
+    case CIM_REFERENCE | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_REFERENCE_ARRAY;
+        break;
+    case CIM_OBJECT | CIM_FLAG_ARRAY:
+        pRetVal = pCIM_OBJECT_ARRAY;
+        break;
 
-        default: pRetVal = pCIM_UNKNOWN; break;
+    default:
+        pRetVal = pCIM_UNKNOWN;
+        break;
     }
 
     return pRetVal;
@@ -380,831 +505,831 @@ WCHAR *ValueToString(CIMTYPE dwType, VARIANT *pValue, WCHAR **pbuf, WCHAR *fnHan
 
     switch (pValue->vt)
     {
-        case VT_EMPTY:
+    case VT_EMPTY:
+    {
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
         {
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
-            {
-                StringCbCopyW(buf, BLOCKSIZE, L"<empty>");
-            }
-            break;
+            StringCbCopyW(buf, BLOCKSIZE, L"<empty>");
         }
+        break;
+    }
 
-        case VT_NULL:
+    case VT_NULL:
+    {
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
         {
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
-            {
-                StringCbCopyW(buf, BLOCKSIZE, L"<null>");
-            }
-            break;
+            StringCbCopyW(buf, BLOCKSIZE, L"<null>");
         }
+        break;
+    }
 
-        case VT_BOOL:
+    case VT_BOOL:
+    {
+        VARIANT_BOOL b = pValue->boolVal;
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
         {
-            VARIANT_BOOL b = pValue->boolVal;
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
+            if (!b)
             {
-                if (!b)
-                {
-                    StringCbCopyW(buf, BLOCKSIZE, L"FALSE");
-                }
-                else
-                {
-                    StringCbCopyW(buf, BLOCKSIZE, L"TRUE");
-                }
-            }
-            break;
-        }
-
-        case VT_I1:
-        {
-            char b = pValue->bVal;
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
-            {
-                if (b >= 32)
-                {
-                    StringCbPrintfW(buf, BLOCKSIZE, L"'%c' (%hd, 0x%hX)", b, (signed char)b, b);
-                }
-                else
-                {
-                    StringCbPrintfW(buf, BLOCKSIZE, L"%hd (0x%hX)", (signed char)b, b);
-                }
-            }
-            break;
-        }
-
-        case VT_UI1:
-        {
-            unsigned char b = pValue->bVal;
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
-            {
-                if (b >= 32)
-                {
-                    StringCbPrintfW(buf, BLOCKSIZE, L"'%c' (%hu, 0x%hX)", b, (unsigned char)b, b);
-                }
-                else
-                {
-                    StringCbPrintfW(buf, BLOCKSIZE, L"%hu (0x%hX)", (unsigned char)b, b);
-                }
-            }
-            break;
-        }
-
-        case VT_I2:
-        {
-            SHORT i = pValue->iVal;
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
-            {
-                StringCbPrintfW(buf, BLOCKSIZE, L"%hd (0x%hX)", i, i);
-            }
-            break;
-        }
-
-        case VT_UI2:
-        {
-            USHORT i = pValue->uiVal;
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
-            {
-                StringCbPrintfW(buf, BLOCKSIZE, L"%hu (0x%hX)", i, i);
-            }
-            break;
-        }
-
-        case VT_I4:
-        {
-            LONG l = pValue->lVal;
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
-            {
-                StringCbPrintfW(buf, BLOCKSIZE, L"%d (0x%X)", l, l);
-            }
-            break;
-        }
-
-        case VT_UI4:
-        {
-            ULONG l = pValue->ulVal;
-            buf = (WCHAR *)malloc(BLOCKSIZE);
-            if (buf)
-            {
-                StringCbPrintfW(buf, BLOCKSIZE, L"%u (0x%X)", l, l);
-            }
-            break;
-        }
-
-        case VT_R4:
-        {
-            float f = pValue->fltVal;
-            buf = (WCHAR *)malloc(CVTBUFSIZE * sizeof(WCHAR));
-            if (buf)
-            {
-                StringCbPrintfW(buf, BLOCKSIZE,  L"%10.4f", f);
-            }
-            break;
-        }
-
-        case VT_R8:
-        {
-            double d = pValue->dblVal;
-            buf = (WCHAR *)malloc(CVTBUFSIZE * sizeof(WCHAR));
-            if (buf)
-            {
-                StringCbPrintfW(buf, BLOCKSIZE, L"%10.4f", d);
-            }
-            break;
-        }
-
-        case VT_BSTR:
-        {
-            if (dwType == CIM_SINT64)
-            {
-                // a little redundant, but it makes me feel better
-                LPWSTR pWStr = pValue->bstrVal;
-                __int64 l = _wtoi64(pWStr);
-
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-                if (buf)
-                {
-                    StringCbPrintfW(buf, BLOCKSIZE, L"%I64d", l);
-                }
-            }
-            else if (dwType == CIM_UINT64)
-            {
-                // a little redundant, but it makes me feel better
-                LPWSTR pWStr = pValue->bstrVal;
-                __int64 l = _wtoi64(pWStr);
-
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-                if (buf)
-                {
-                    StringCbPrintfW(buf, BLOCKSIZE,  L"%I64u", l);
-                }
-            }
-            else // string, datetime, reference
-            {
-                LPWSTR pWStr = pValue->bstrVal;
-                buf = (WCHAR *)malloc((wcslen(pWStr) * sizeof(WCHAR)) + sizeof(WCHAR) + (2 * sizeof(WCHAR)));
-                if (buf)
-                {
-                    StringCbPrintfW(buf, BLOCKSIZE,  L"\"%wS\"", pWStr);
-                }
-            }
-            break;
-        }
-
-        case VT_BOOL|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-					StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-            buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
-            if (buf)
-            {
-                StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCatW(buf, (iUBound - iLBound + 1) * BLOCKSIZE, L",");
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    VARIANT_BOOL v;
-                    SafeArrayGetElement(pVec, &i, &v);
-                    if (v)
-                    {
-                        StringCbCatW(buf, (iUBound - iLBound + 1) * BLOCKSIZE, L"TRUE");
-                    }
-                    else
-                    {
-                        StringCbCatW(buf, (iUBound - iLBound + 1) * BLOCKSIZE, L"FALSE");
-                    }
-                }
-            }
-
-            break;
-        }
-
-        case VT_I1|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-					StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-            int bufSize = (iUBound - iLBound + 1) * BLOCKSIZE;
-            buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
-            if (buf)
-            {
-
-                StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
-                WCHAR *pos = buf;
-                DWORD len;
-
-                BYTE *pbstr;
-                SafeArrayAccessData(pVec, (void HUGEP* FAR*)&pbstr);
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCopyW(pos, bufSize - (pos - buf) * sizeof(WCHAR), L",");
-                        pos += 1;
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    char v;
-                    //            SafeArrayGetElement(pVec, &i, &v);
-                    v = pbstr[i];
-
-                    if (v < 32)
-                    {
-                        len = StringCbPrintfW(lbuf, sizeof(lbuf), L"%hd (0x%X)", v, v);	
-                    }
-                    else
-                    {
-                        len = StringCbPrintfW(lbuf, sizeof(lbuf), L"'%c' %hd (0x%X)", v, v, v);
-                    }
-                    StringCbCopyW(pos, bufSize - (pos - buf)*sizeof(WCHAR), lbuf);
-                    pos += len;
-                }
-            }
-
-            SafeArrayUnaccessData(pVec);
-
-            break;
-        }
-
-        case VT_UI1|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-					StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-			int bufsize = (iUBound - iLBound + 1) * BLOCKSIZE;
-            buf = (WCHAR *)malloc(bufsize);
-            if (buf)
-            {
-                StringCbCopyW(buf, bufsize, L"");
-                WCHAR *pos = buf;
-                DWORD len;
-
-                BYTE *pbstr;
-                SafeArrayAccessData(pVec, (void HUGEP* FAR*)&pbstr);
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCopyW(pos, bufsize - ((pos - buf)*sizeof(WCHAR)), L",");
-                        pos += 1;
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    unsigned char v;
-                    //            SafeArrayGetElement(pVec, &i, &v);
-                    v = pbstr[i];
-
-                    if (v < 32)
-                    {
-                        len = StringCbPrintfW(lbuf, sizeof(lbuf), L"%hu (0x%X)", v, v);
-                    }
-                    else
-                    {
-                        len = StringCbPrintfW(lbuf, sizeof(lbuf), L"'%c' %hu (0x%X)", v, v, v);
-                    }
-
-                    StringCbCopyW(pos, bufsize - ((pos - buf)*sizeof(WCHAR)), lbuf);
-                    pos += len;
-                }
-            }
-
-            SafeArrayUnaccessData(pVec);
-
-            break;
-        }
-
-        case VT_I2|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-					StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-            buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
-            if (buf)
-            {
-                StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    SHORT v;
-                    SafeArrayGetElement(pVec, &i, &v);
-                    StringCbPrintfW(lbuf, sizeof(lbuf), L"%hd", v);
-                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
-                }
-            }
-
-            break;
-        }
-
-        case VT_UI2|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-	                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-            buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
-            if (buf)
-            {
-                StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    USHORT v;
-                    SafeArrayGetElement(pVec, &i, &v);
-                    StringCbPrintfW(lbuf, sizeof(lbuf), L"%hu", v);
-                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
-                }
-            }
-
-            break;
-        }
-
-        case VT_I4|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-	                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-            buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
-            if (buf)
-            {
-                StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCatW(buf,((iUBound - iLBound + 1) * BLOCKSIZE), L",");
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    LONG v;
-                    SafeArrayGetElement(pVec, &i, &v);
-                    _ltow_s(v, lbuf, 10);
-                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
-                }
-            }
-
-            break;
-        }
-
-        case VT_UI4|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-	                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-            buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
-            if (buf)
-            {
-                StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    ULONG v;
-                    SafeArrayGetElement(pVec, &i, &v);
-                    _ultow_s(v, lbuf, 10);
-                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
-                }
-            }
-
-            break;
-        }
-
-        case CIM_REAL32|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-	                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-            int bufSize = (iUBound - iLBound + 1) * (CVTBUFSIZE * sizeof(WCHAR));
-            buf = (WCHAR *)malloc(bufSize);
-            if (buf)
-            {
-                StringCbCopyW(buf,  bufSize, L"");
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCatW(buf, bufSize, L",");
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    FLOAT v;
-                    SafeArrayGetElement(pVec, &i, &v);
-                    StringCbPrintfW(lbuf, sizeof(lbuf), L"%10.4f", v);
-                    StringCbCatW(buf, bufSize, lbuf);
-                }
-            }
-
-            break;
-        }
-
-        case CIM_REAL64|VT_ARRAY:
-        {
-            SAFEARRAY *pVec = pValue->parray;
-            long iLBound, iUBound;
-            BOOL bFirst = TRUE;
-
-            SafeArrayGetLBound(pVec, 1, &iLBound);
-            SafeArrayGetUBound(pVec, 1, &iUBound);
-            if ((iUBound - iLBound + 1) == 0)
-            {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-				if (buf)
-				{
-	                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-				}
-                break;
-            }
-
-            int bufSize = (iUBound - iLBound + 1) * (CVTBUFSIZE * sizeof(WCHAR));
-            buf = (WCHAR *)malloc(bufSize);
-            if (buf)
-            {
-                StringCbCopyW(buf, bufSize, L"");
-
-                for (long i = iLBound; i <= iUBound; i++)
-                {
-                    if (!bFirst)
-                    {
-                        StringCbCatW(buf, bufSize, L",");
-                    }
-                    else
-                    {
-                        bFirst = FALSE;
-                    }
-
-                    double v;
-                    SafeArrayGetElement(pVec, &i, &v);
-                    StringCbPrintfW(lbuf, sizeof(lbuf), L"%10.4f", v);
-                    StringCbCatW(buf, bufSize, lbuf);
-                }
-            }
-
-            break;
-        }
-
-        case VT_BSTR|VT_ARRAY:
-        {
-            if (dwType == (CIM_UINT64|VT_ARRAY))
-            {
-                SAFEARRAY *pVec = pValue->parray;
-                long iLBound, iUBound;
-                BOOL bFirst = TRUE;
-
-                SafeArrayGetLBound(pVec, 1, &iLBound);
-                SafeArrayGetUBound(pVec, 1, &iUBound);
-                if ((iUBound - iLBound + 1) == 0)
-                {
-                    buf = (WCHAR *)malloc(BLOCKSIZE);
-					if (buf)
-					{
-	                    StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-					}
-                    break;
-                }
-
-                buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
-                if (buf)
-                {
-                    StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
-
-                    for (long i = iLBound; i <= iUBound; i++)
-                    {
-                        if (!bFirst)
-                        {
-                            StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
-                        }
-                        else
-                        {
-                            bFirst = FALSE;
-                        }
-
-                        BSTR v = NULL;
-
-                        SafeArrayGetElement(pVec, &i, &v);
-
-                        StringCbPrintfW(lbuf, sizeof(lbuf), L"%I64u", _wtoi64(v));
-                        StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
-                    }
-                }
-            }
-            else if (dwType == (CIM_SINT64|VT_ARRAY))
-            {
-                SAFEARRAY *pVec = pValue->parray;
-                long iLBound, iUBound;
-                BOOL bFirst = TRUE;
-
-                SafeArrayGetLBound(pVec, 1, &iLBound);
-                SafeArrayGetUBound(pVec, 1, &iUBound);
-                if ((iUBound - iLBound + 1) == 0)
-                {
-                    buf = (WCHAR *)malloc(BLOCKSIZE);
-					if (buf)
-					{
-	                    StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-					}
-                    break;
-                }
-
-                buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
-                if (buf)
-                {
-                    StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
-
-                    for (long i = iLBound; i <= iUBound; i++)
-                    {
-                        if (!bFirst)
-                        {
-                            StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
-                        }
-                        else
-                        {
-                            bFirst = FALSE;
-                        }
-
-                        BSTR v = NULL;
-
-                        SafeArrayGetElement(pVec, &i, &v);
-
-                        StringCbPrintfW(lbuf, sizeof(lbuf), L"%I64d", _wtoi64(v));
-                        StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
-                    }
-                }
-            }
-            else // string, datetime, reference
-            {
-                SAFEARRAY *pVec = pValue->parray;
-                long iLBound, iUBound;
-                DWORD iNeed;
-                size_t iVSize;
-                DWORD iCurBufSize;
-
-                SafeArrayGetLBound(pVec, 1, &iLBound);
-                SafeArrayGetUBound(pVec, 1, &iUBound);
-                if ((iUBound - iLBound + 1) == 0)
-                {
-                    buf = (WCHAR *)malloc(BLOCKSIZE);
-					if (buf)
-					{
-	                    StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
-					}
-                    break;
-                }
-
-                iTotBufSize = (iUBound - iLBound + 1) * BLOCKSIZE;
-                buf = (WCHAR *)malloc(iTotBufSize);
-                if (buf)
-                {
-                   
-					buf[0] = L'\0';
-                    iCurBufSize = 0;
-                    iVSize = BLOCKSIZE;
-                    vbuf = (WCHAR *)malloc(BLOCKSIZE);
-
-                    if (vbuf)
-                    {
-                        size_t iLen;
-						WCHAR *Buffer;
-						WCHAR *Buff;
-                        for (long i = iLBound; i <= iUBound; i++)
-                        {
-                           	BSTR v = NULL;
-                            SafeArrayGetElement(pVec, &i, &v);
-                            iLen = (SysStringLen(v) + 1) * sizeof(WCHAR);
-                            if (iLen > iVSize)
-                            {
-                                Buffer = vbuf;
-								vbuf = (WCHAR *)realloc(vbuf, iLen + sizeof(WCHAR));								
-                                iVSize = iLen;
-                            }
-
-                            // String size + (quotes + comma + null)
-							if (vbuf)
-							{
-								iNeed = (StringCbPrintfW(vbuf, iVSize, L"%wS", v) + 4) * sizeof(WCHAR);
-								if (iNeed + iCurBufSize > iTotBufSize)
-								{
-									iTotBufSize += (iNeed * 2);  // Room enough for 2 more entries
-									Buff = buf;
-									buf = (WCHAR *)realloc(buf, iTotBufSize);									
-								}
-								if (buf)
-								{
-									StringCbCatW(buf, iTotBufSize, L"\"");
-									StringCbCatW(buf, iTotBufSize, vbuf);
-									if (i + 1 <= iUBound)
-									{
-										StringCbCatW(buf, iTotBufSize, L"\",");
-									}
-									else
-									{
-										StringCbCatW(buf, iTotBufSize, L"\"");
-									}
-									iCurBufSize += iNeed;
-								}
-								else
-								{
-									buf = Buff;
-								}
-							}
-							else
-							{
-								vbuf = Buffer;
-							}    
-                            SysFreeString(v);
-                        }
-                        free(vbuf);
-                    }
-                }
-            }
-
-            break;
-        }
-
-        default:
-        {
-            if (fnHandler != NULL)
-            {
-                buf = fnHandler(pValue);
+                StringCbCopyW(buf, BLOCKSIZE, L"FALSE");
             }
             else
             {
-                buf = (WCHAR *)malloc(BLOCKSIZE);
-                if (buf)
-                {
-                    StringCbCopyW(buf, BLOCKSIZE, L"<conversion error>");
-                }
+                StringCbCopyW(buf, BLOCKSIZE, L"TRUE");
+            }
+        }
+        break;
+    }
+
+    case VT_I1:
+    {
+        char b = pValue->bVal;
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
+        {
+            if (b >= 32)
+            {
+                StringCbPrintfW(buf, BLOCKSIZE, L"'%c' (%hd, 0x%hX)", b, (signed char)b, b);
+            }
+            else
+            {
+                StringCbPrintfW(buf, BLOCKSIZE, L"%hd (0x%hX)", (signed char)b, b);
+            }
+        }
+        break;
+    }
+
+    case VT_UI1:
+    {
+        unsigned char b = pValue->bVal;
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
+        {
+            if (b >= 32)
+            {
+                StringCbPrintfW(buf, BLOCKSIZE, L"'%c' (%hu, 0x%hX)", b, (unsigned char)b, b);
+            }
+            else
+            {
+                StringCbPrintfW(buf, BLOCKSIZE, L"%hu (0x%hX)", (unsigned char)b, b);
+            }
+        }
+        break;
+    }
+
+    case VT_I2:
+    {
+        SHORT i = pValue->iVal;
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
+        {
+            StringCbPrintfW(buf, BLOCKSIZE, L"%hd (0x%hX)", i, i);
+        }
+        break;
+    }
+
+    case VT_UI2:
+    {
+        USHORT i = pValue->uiVal;
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
+        {
+            StringCbPrintfW(buf, BLOCKSIZE, L"%hu (0x%hX)", i, i);
+        }
+        break;
+    }
+
+    case VT_I4:
+    {
+        LONG l = pValue->lVal;
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
+        {
+            StringCbPrintfW(buf, BLOCKSIZE, L"%d (0x%X)", l, l);
+        }
+        break;
+    }
+
+    case VT_UI4:
+    {
+        ULONG l = pValue->ulVal;
+        buf = (WCHAR *)malloc(BLOCKSIZE);
+        if (buf)
+        {
+            StringCbPrintfW(buf, BLOCKSIZE, L"%u (0x%X)", l, l);
+        }
+        break;
+    }
+
+    case VT_R4:
+    {
+        float f = pValue->fltVal;
+        buf = (WCHAR *)malloc(CVTBUFSIZE * sizeof(WCHAR));
+        if (buf)
+        {
+            StringCbPrintfW(buf, BLOCKSIZE,  L"%10.4f", f);
+        }
+        break;
+    }
+
+    case VT_R8:
+    {
+        double d = pValue->dblVal;
+        buf = (WCHAR *)malloc(CVTBUFSIZE * sizeof(WCHAR));
+        if (buf)
+        {
+            StringCbPrintfW(buf, BLOCKSIZE, L"%10.4f", d);
+        }
+        break;
+    }
+
+    case VT_BSTR:
+    {
+        if (dwType == CIM_SINT64)
+        {
+            // a little redundant, but it makes me feel better
+            LPWSTR pWStr = pValue->bstrVal;
+            __int64 l = _wtoi64(pWStr);
+
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbPrintfW(buf, BLOCKSIZE, L"%I64d", l);
+            }
+        }
+        else if (dwType == CIM_UINT64)
+        {
+            // a little redundant, but it makes me feel better
+            LPWSTR pWStr = pValue->bstrVal;
+            __int64 l = _wtoi64(pWStr);
+
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbPrintfW(buf, BLOCKSIZE,  L"%I64u", l);
+            }
+        }
+        else // string, datetime, reference
+        {
+            LPWSTR pWStr = pValue->bstrVal;
+            buf = (WCHAR *)malloc((wcslen(pWStr) * sizeof(WCHAR)) + sizeof(WCHAR) + (2 * sizeof(WCHAR)));
+            if (buf)
+            {
+                StringCbPrintfW(buf, BLOCKSIZE,  L"\"%wS\"", pWStr);
+            }
+        }
+        break;
+    }
+
+    case VT_BOOL|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
             }
             break;
         }
-   }
 
-   if (!buf)
-   {
-       PrintErrorAndExit("ValueToString() out of memory", S_OK, 0);
-   }
+        buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
+        if (buf)
+        {
+            StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
 
-   *pbuf = buf;
-   return buf;
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCatW(buf, (iUBound - iLBound + 1) * BLOCKSIZE, L",");
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                VARIANT_BOOL v;
+                SafeArrayGetElement(pVec, &i, &v);
+                if (v)
+                {
+                    StringCbCatW(buf, (iUBound - iLBound + 1) * BLOCKSIZE, L"TRUE");
+                }
+                else
+                {
+                    StringCbCatW(buf, (iUBound - iLBound + 1) * BLOCKSIZE, L"FALSE");
+                }
+            }
+        }
+
+        break;
+    }
+
+    case VT_I1|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+            }
+            break;
+        }
+
+        int bufSize = (iUBound - iLBound + 1) * BLOCKSIZE;
+        buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
+        if (buf)
+        {
+
+            StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
+            WCHAR *pos = buf;
+            DWORD len;
+
+            BYTE *pbstr;
+            SafeArrayAccessData(pVec, (void HUGEP* FAR*)&pbstr);
+
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCopyW(pos, bufSize - (pos - buf) * sizeof(WCHAR), L",");
+                    pos += 1;
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                char v;
+                //            SafeArrayGetElement(pVec, &i, &v);
+                v = pbstr[i];
+
+                if (v < 32)
+                {
+                    len = StringCbPrintfW(lbuf, sizeof(lbuf), L"%hd (0x%X)", v, v);
+                }
+                else
+                {
+                    len = StringCbPrintfW(lbuf, sizeof(lbuf), L"'%c' %hd (0x%X)", v, v, v);
+                }
+                StringCbCopyW(pos, bufSize - (pos - buf)*sizeof(WCHAR), lbuf);
+                pos += len;
+            }
+        }
+
+        SafeArrayUnaccessData(pVec);
+
+        break;
+    }
+
+    case VT_UI1|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+            }
+            break;
+        }
+
+        int bufsize = (iUBound - iLBound + 1) * BLOCKSIZE;
+        buf = (WCHAR *)malloc(bufsize);
+        if (buf)
+        {
+            StringCbCopyW(buf, bufsize, L"");
+            WCHAR *pos = buf;
+            DWORD len;
+
+            BYTE *pbstr;
+            SafeArrayAccessData(pVec, (void HUGEP* FAR*)&pbstr);
+
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCopyW(pos, bufsize - ((pos - buf)*sizeof(WCHAR)), L",");
+                    pos += 1;
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                unsigned char v;
+                //            SafeArrayGetElement(pVec, &i, &v);
+                v = pbstr[i];
+
+                if (v < 32)
+                {
+                    len = StringCbPrintfW(lbuf, sizeof(lbuf), L"%hu (0x%X)", v, v);
+                }
+                else
+                {
+                    len = StringCbPrintfW(lbuf, sizeof(lbuf), L"'%c' %hu (0x%X)", v, v, v);
+                }
+
+                StringCbCopyW(pos, bufsize - ((pos - buf)*sizeof(WCHAR)), lbuf);
+                pos += len;
+            }
+        }
+
+        SafeArrayUnaccessData(pVec);
+
+        break;
+    }
+
+    case VT_I2|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+            }
+            break;
+        }
+
+        buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
+        if (buf)
+        {
+            StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
+
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                SHORT v;
+                SafeArrayGetElement(pVec, &i, &v);
+                StringCbPrintfW(lbuf, sizeof(lbuf), L"%hd", v);
+                StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
+            }
+        }
+
+        break;
+    }
+
+    case VT_UI2|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+            }
+            break;
+        }
+
+        buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
+        if (buf)
+        {
+            StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
+
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                USHORT v;
+                SafeArrayGetElement(pVec, &i, &v);
+                StringCbPrintfW(lbuf, sizeof(lbuf), L"%hu", v);
+                StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
+            }
+        }
+
+        break;
+    }
+
+    case VT_I4|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+            }
+            break;
+        }
+
+        buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
+        if (buf)
+        {
+            StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
+
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCatW(buf,((iUBound - iLBound + 1) * BLOCKSIZE), L",");
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                LONG v;
+                SafeArrayGetElement(pVec, &i, &v);
+                _ltow_s(v, lbuf, 10);
+                StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
+            }
+        }
+
+        break;
+    }
+
+    case VT_UI4|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+            }
+            break;
+        }
+
+        buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
+        if (buf)
+        {
+            StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
+
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                ULONG v;
+                SafeArrayGetElement(pVec, &i, &v);
+                _ultow_s(v, lbuf, 10);
+                StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
+            }
+        }
+
+        break;
+    }
+
+    case CIM_REAL32|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+            }
+            break;
+        }
+
+        int bufSize = (iUBound - iLBound + 1) * (CVTBUFSIZE * sizeof(WCHAR));
+        buf = (WCHAR *)malloc(bufSize);
+        if (buf)
+        {
+            StringCbCopyW(buf,  bufSize, L"");
+
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCatW(buf, bufSize, L",");
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                FLOAT v;
+                SafeArrayGetElement(pVec, &i, &v);
+                StringCbPrintfW(lbuf, sizeof(lbuf), L"%10.4f", v);
+                StringCbCatW(buf, bufSize, lbuf);
+            }
+        }
+
+        break;
+    }
+
+    case CIM_REAL64|VT_ARRAY:
+    {
+        SAFEARRAY *pVec = pValue->parray;
+        long iLBound, iUBound;
+        BOOL bFirst = TRUE;
+
+        SafeArrayGetLBound(pVec, 1, &iLBound);
+        SafeArrayGetUBound(pVec, 1, &iUBound);
+        if ((iUBound - iLBound + 1) == 0)
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+            }
+            break;
+        }
+
+        int bufSize = (iUBound - iLBound + 1) * (CVTBUFSIZE * sizeof(WCHAR));
+        buf = (WCHAR *)malloc(bufSize);
+        if (buf)
+        {
+            StringCbCopyW(buf, bufSize, L"");
+
+            for (long i = iLBound; i <= iUBound; i++)
+            {
+                if (!bFirst)
+                {
+                    StringCbCatW(buf, bufSize, L",");
+                }
+                else
+                {
+                    bFirst = FALSE;
+                }
+
+                double v;
+                SafeArrayGetElement(pVec, &i, &v);
+                StringCbPrintfW(lbuf, sizeof(lbuf), L"%10.4f", v);
+                StringCbCatW(buf, bufSize, lbuf);
+            }
+        }
+
+        break;
+    }
+
+    case VT_BSTR|VT_ARRAY:
+    {
+        if (dwType == (CIM_UINT64|VT_ARRAY))
+        {
+            SAFEARRAY *pVec = pValue->parray;
+            long iLBound, iUBound;
+            BOOL bFirst = TRUE;
+
+            SafeArrayGetLBound(pVec, 1, &iLBound);
+            SafeArrayGetUBound(pVec, 1, &iUBound);
+            if ((iUBound - iLBound + 1) == 0)
+            {
+                buf = (WCHAR *)malloc(BLOCKSIZE);
+                if (buf)
+                {
+                    StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+                }
+                break;
+            }
+
+            buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
+
+                for (long i = iLBound; i <= iUBound; i++)
+                {
+                    if (!bFirst)
+                    {
+                        StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
+                    }
+                    else
+                    {
+                        bFirst = FALSE;
+                    }
+
+                    BSTR v = NULL;
+
+                    SafeArrayGetElement(pVec, &i, &v);
+
+                    StringCbPrintfW(lbuf, sizeof(lbuf), L"%I64u", _wtoi64(v));
+                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
+                }
+            }
+        }
+        else if (dwType == (CIM_SINT64|VT_ARRAY))
+        {
+            SAFEARRAY *pVec = pValue->parray;
+            long iLBound, iUBound;
+            BOOL bFirst = TRUE;
+
+            SafeArrayGetLBound(pVec, 1, &iLBound);
+            SafeArrayGetUBound(pVec, 1, &iUBound);
+            if ((iUBound - iLBound + 1) == 0)
+            {
+                buf = (WCHAR *)malloc(BLOCKSIZE);
+                if (buf)
+                {
+                    StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+                }
+                break;
+            }
+
+            buf = (WCHAR *)malloc((iUBound - iLBound + 1) * BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L"");
+
+                for (long i = iLBound; i <= iUBound; i++)
+                {
+                    if (!bFirst)
+                    {
+                        StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), L",");
+                    }
+                    else
+                    {
+                        bFirst = FALSE;
+                    }
+
+                    BSTR v = NULL;
+
+                    SafeArrayGetElement(pVec, &i, &v);
+
+                    StringCbPrintfW(lbuf, sizeof(lbuf), L"%I64d", _wtoi64(v));
+                    StringCbCatW(buf, ((iUBound - iLBound + 1) * BLOCKSIZE), lbuf);
+                }
+            }
+        }
+        else // string, datetime, reference
+        {
+            SAFEARRAY *pVec = pValue->parray;
+            long iLBound, iUBound;
+            DWORD iNeed;
+            size_t iVSize;
+            DWORD iCurBufSize;
+
+            SafeArrayGetLBound(pVec, 1, &iLBound);
+            SafeArrayGetUBound(pVec, 1, &iUBound);
+            if ((iUBound - iLBound + 1) == 0)
+            {
+                buf = (WCHAR *)malloc(BLOCKSIZE);
+                if (buf)
+                {
+                    StringCbCopyW(buf, BLOCKSIZE, L"<empty array>");
+                }
+                break;
+            }
+
+            iTotBufSize = (iUBound - iLBound + 1) * BLOCKSIZE;
+            buf = (WCHAR *)malloc(iTotBufSize);
+            if (buf)
+            {
+
+                buf[0] = L'\0';
+                iCurBufSize = 0;
+                iVSize = BLOCKSIZE;
+                vbuf = (WCHAR *)malloc(BLOCKSIZE);
+
+                if (vbuf)
+                {
+                    size_t iLen;
+                    WCHAR *Buffer;
+                    WCHAR *Buff;
+                    for (long i = iLBound; i <= iUBound; i++)
+                    {
+                        BSTR v = NULL;
+                        SafeArrayGetElement(pVec, &i, &v);
+                        iLen = (SysStringLen(v) + 1) * sizeof(WCHAR);
+                        if (iLen > iVSize)
+                        {
+                            Buffer = vbuf;
+                            vbuf = (WCHAR *)realloc(vbuf, iLen + sizeof(WCHAR));
+                            iVSize = iLen;
+                        }
+
+                        // String size + (quotes + comma + null)
+                        if (vbuf)
+                        {
+                            iNeed = (StringCbPrintfW(vbuf, iVSize, L"%wS", v) + 4) * sizeof(WCHAR);
+                            if (iNeed + iCurBufSize > iTotBufSize)
+                            {
+                                iTotBufSize += (iNeed * 2);  // Room enough for 2 more entries
+                                Buff = buf;
+                                buf = (WCHAR *)realloc(buf, iTotBufSize);
+                            }
+                            if (buf)
+                            {
+                                StringCbCatW(buf, iTotBufSize, L"\"");
+                                StringCbCatW(buf, iTotBufSize, vbuf);
+                                if (i + 1 <= iUBound)
+                                {
+                                    StringCbCatW(buf, iTotBufSize, L"\",");
+                                }
+                                else
+                                {
+                                    StringCbCatW(buf, iTotBufSize, L"\"");
+                                }
+                                iCurBufSize += iNeed;
+                            }
+                            else
+                            {
+                                buf = Buff;
+                            }
+                        }
+                        else
+                        {
+                            vbuf = Buffer;
+                        }
+                        SysFreeString(v);
+                    }
+                    free(vbuf);
+                }
+            }
+        }
+
+        break;
+    }
+
+    default:
+    {
+        if (fnHandler != NULL)
+        {
+            buf = fnHandler(pValue);
+        }
+        else
+        {
+            buf = (WCHAR *)malloc(BLOCKSIZE);
+            if (buf)
+            {
+                StringCbCopyW(buf, BLOCKSIZE, L"<conversion error>");
+            }
+        }
+        break;
+    }
+    }
+
+    if (!buf)
+    {
+        PrintErrorAndExit("ValueToString() out of memory", S_OK, 0);
+    }
+
+    *pbuf = buf;
+    return buf;
 }
 
 //*****************************************************************************
@@ -1216,16 +1341,16 @@ char *cvt(WCHAR *x, char **y)
 {
     int dwRet, i;
     i = WideCharToMultiByte( CP_OEMCP,
-        0,
-        x,
-        -1,
-        NULL,
-        0,
-        NULL,
-        NULL);
+                             0,
+                             x,
+                             -1,
+                             NULL,
+                             0,
+                             NULL,
+                             NULL);
 
-	if (i == 0)
-	{
+    if (i == 0)
+    {
         PrintErrorAndExit("cvt() failed", S_OK, 0);
     }
 
@@ -1234,13 +1359,13 @@ char *cvt(WCHAR *x, char **y)
     if (*y)
     {
         dwRet = WideCharToMultiByte( CP_OEMCP,
-            0,
-            x,
-            -1,
-            *y,
-            i,
-            NULL,
-            NULL);
+                                     0,
+                                     x,
+                                     -1,
+                                     *y,
+                                     i,
+                                     NULL,
+                                     NULL);
 
         if (dwRet == 0)
         {
@@ -1250,10 +1375,10 @@ char *cvt(WCHAR *x, char **y)
             {
                 memcpy(*y, CVTFAILED, sizeof(CVTFAILED));
             }
-			else
-			{
-				PrintErrorAndExit("cvt() out of memory", S_OK, 0);
-			}
+            else
+            {
+                PrintErrorAndExit("cvt() out of memory", S_OK, 0);
+            }
         }
     }
     else

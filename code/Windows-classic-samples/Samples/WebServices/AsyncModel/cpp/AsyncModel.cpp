@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -106,10 +106,10 @@ DWORD WINAPI AdderThread(
 
     // Do the addition
     HRESULT hr = DoAdd(
-        addParameters->a,
-        addParameters->b,
-        addParameters->sumPointer,
-        addParameters->error);
+                     addParameters->a,
+                     addParameters->b,
+                     addParameters->sumPointer,
+                     addParameters->error);
 
     // Make a copy of the async context
     WS_ASYNC_CONTEXT asyncContext = addParameters->asyncContext;
@@ -195,33 +195,33 @@ void CallAddSync(
 {
     HRESULT hr;
     WS_ERROR* error = NULL;
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     int sum;
     hr = Add(a, b, &sum, NULL, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     wprintf(L"%d\n", sum);
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (error != NULL)
     {
         WsFreeError(error);
@@ -267,17 +267,17 @@ void CallAddAsync(
     WS_ERROR* error = NULL;
     HANDLE eventHandle = NULL;
     int* sumPointer = NULL;
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an event handle that will be signaled in callback
     eventHandle = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (eventHandle == NULL)
@@ -285,11 +285,11 @@ void CallAddAsync(
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
     }
-    
+
     // Store information used by the callback when add completes
     AddCompletion addCompletion;
     addCompletion.eventHandle = eventHandle;
-    
+
     // Allocate space to store return value
     sumPointer = (int*)HeapAlloc(GetProcessHeap(), 0, sizeof(int));
     if (sumPointer == NULL)
@@ -297,54 +297,54 @@ void CallAddAsync(
         hr = E_OUTOFMEMORY;
         goto Exit;
     }
-    
+
     // Specify the callback to call if function completes synchronously
     // along with the state to pass to the callback (AddCompletion structure)
     WS_ASYNC_CONTEXT asyncContext;
     asyncContext.callback = OnAddComplete;
     asyncContext.callbackState = &addCompletion;
-    
+
     // Call the function asynchronously
     hr = Add(a, b, sumPointer, &asyncContext, error);
-    
+
     // Zero out asyncContext to illustrate that async function should have copied it
     ZeroMemory(&asyncContext, sizeof(asyncContext));
-    
+
     if (hr == WS_S_ASYNC)
     {
         // Function completed asynchronously
-    
+
         // Wait for callback to signal completion
         if (WaitForSingleObject(eventHandle, INFINITE) != WAIT_OBJECT_0)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
             goto Exit;
         }
-    
+
         // Get error code that was stored by callback
         hr = addCompletion.errorCode;
     }
-    
+
     wprintf(L"%d\n", *sumPointer);
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (eventHandle != NULL)
     {
         CloseHandle(eventHandle);
     }
-    
+
     if (sumPointer != NULL)
     {
         // Free value
         HeapFree(GetProcessHeap(), 0, sumPointer);
     }
-    
+
     if (error != NULL)
     {
         WsFreeError(error);

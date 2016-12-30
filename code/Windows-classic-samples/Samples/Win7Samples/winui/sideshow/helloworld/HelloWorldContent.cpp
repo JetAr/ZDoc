@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,10 +24,10 @@ CHelloWorldContent::~CHelloWorldContent()
 HRESULT CHelloWorldContent::QueryInterface(
     REFIID riid,
     LPVOID* ppvObject
-    )
+)
 {
-    if (IID_IUnknown == riid || 
-        IID_ISideShowContent == riid)
+    if (IID_IUnknown == riid ||
+            IID_ISideShowContent == riid)
     {
         *ppvObject = this;
         AddRef();
@@ -36,12 +36,12 @@ HRESULT CHelloWorldContent::QueryInterface(
 
     return E_NOINTERFACE;
 }
-            
+
 ULONG CHelloWorldContent::AddRef()
 {
     return ::InterlockedIncrement(&m_nRef);
 }
-            
+
 ULONG CHelloWorldContent::Release()
 {
     LONG nRef = ::InterlockedDecrement(&m_nRef);
@@ -57,11 +57,11 @@ ULONG CHelloWorldContent::Release()
 //
 // ISideShowContent methods
 //
-STDMETHODIMP CHelloWorldContent::GetContent( 
+STDMETHODIMP CHelloWorldContent::GetContent(
     ISideShowCapabilities* /*pICapabilities*/,
     DWORD *pdwSize,
     BYTE **ppbData
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -94,10 +94,10 @@ STDMETHODIMP CHelloWorldContent::GetContent(
     return hr;
 }
 
-        
-STDMETHODIMP CHelloWorldContent::get_ContentId( 
+
+STDMETHODIMP CHelloWorldContent::get_ContentId(
     PCONTENT_ID pcontentId
-    )
+)
 {
     if (NULL != pcontentId)
     {
@@ -112,10 +112,10 @@ STDMETHODIMP CHelloWorldContent::get_ContentId(
     return S_OK;
 }
 
-        
+
 STDMETHODIMP CHelloWorldContent::get_DifferentiateContent(
     BOOL *pfDifferentiateContent
-    )
+)
 {
     if (NULL != pfDifferentiateContent)
     {

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,8 +32,8 @@ const ICIVERBTOIDMAP c_FolderViewImplContextMenuIDMap[] =
 
 
 class CFolderViewImplContextMenu   : public IContextMenu
-                                   , public IShellExtInit
-                                   , public IObjectWithSite
+    , public IShellExtInit
+    , public IObjectWithSite
 {
 public:
     CFolderViewImplContextMenu() : _cRef(1), _punkSite(NULL), _pdtobj(NULL)
@@ -44,7 +44,8 @@ public:
     // IUnknown
     IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv)
     {
-        static const QITAB qit[] = {
+        static const QITAB qit[] =
+        {
             QITABENT(CFolderViewImplContextMenu, IContextMenu),
             QITABENT(CFolderViewImplContextMenu, IShellExtInit),
             QITABENT(CFolderViewImplContextMenu, IObjectWithSite),

@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -36,11 +36,11 @@ Feedback:
 // Other global constants
 // ----------------------
 #define MAX_ADDR_LENGTH          256 // Max length of a string representation
-                                     // of an address
+// of an address
 #define MAX_ENDPOINTS_TO_RESOLVE 5   // Default number of endpoints to return
-                                     // with each peer name resolve
+// with each peer name resolve
 #define NUM_USER_DEFINED_ADDRESSES  1  // Number of user defined addresses
-                                        // allowed per registration
+// allowed per registration
 
 //Function Prototypes
 //-------------------

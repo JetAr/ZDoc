@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // preview.cpp : Preview helper class.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -24,9 +24,9 @@ void ShowErrorMessage(HWND hwnd, PCWSTR format, HRESULT hr);
 //-------------------------------------------------------------------
 //  CreateInstance
 //  Static class method to create the CPreview object.
-//  
+//
 //  hVideo:   Handle to the video window.
-//  ppPlayer: Receives an AddRef's pointer to the CPreview object. 
+//  ppPlayer: Receives an AddRef's pointer to the CPreview object.
 //            The caller must release the pointer.
 //-------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ HRESULT CPreview::CreateInstance(HWND hVideo, CPreview **ppPlayer)
 //  CPreview constructor
 //-------------------------------------------------------------------
 
-CPreview::CPreview(HWND hVideo) : 
+CPreview::CPreview(HWND hVideo) :
     m_pPlayer(NULL),
     m_pSource(NULL),
     m_nRefCount(1),
@@ -113,7 +113,7 @@ ULONG CPreview::Release()
 
 HRESULT CPreview::QueryInterface(REFIID riid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(CPreview, IMFPMediaPlayerCallback),
         { 0 },
@@ -141,7 +141,7 @@ void STDMETHODCALLTYPE CPreview::OnMediaPlayerEvent(MFP_EVENT_HEADER * pEventHea
         ShowErrorMessage(NULL, L"Preview error.", pEventHeader->hrEvent);
         return;
     }
-    
+
     switch (pEventHeader->eEventType)
     {
     case MFP_EVENT_TYPE_MEDIAITEM_CREATED:
@@ -160,10 +160,10 @@ void STDMETHODCALLTYPE CPreview::OnMediaPlayerEvent(MFP_EVENT_HEADER * pEventHea
 
 //-------------------------------------------------------------------
 //  SetDevice
-// 
+//
 //  Sets the capture device source on the player.
 //
-//  pActivate: Pointer to the activation object for the device 
+//  pActivate: Pointer to the activation object for the device
 //             source.
 //-------------------------------------------------------------------
 
@@ -178,21 +178,21 @@ HRESULT CPreview::SetDevice(IMFActivate *pActivate)
 
     // Create a new instance of the player.
     hr = MFPCreateMediaPlayer(
-        NULL,   // URL
-        FALSE,
-        0,      // Options
-        this,   // Callback
-        m_hwnd,
-        &m_pPlayer
-        );
+             NULL,   // URL
+             FALSE,
+             0,      // Options
+             this,   // Callback
+             m_hwnd,
+             &m_pPlayer
+         );
 
     // Create the media source for the device.
     if (SUCCEEDED(hr))
     {
         hr = pActivate->ActivateObject(
-            __uuidof(IMFMediaSource), 
-            (void**)&pSource
-            );
+                 __uuidof(IMFMediaSource),
+                 (void**)&pSource
+             );
     }
 
     // Get the symbolic link. This is needed to handle device-
@@ -201,10 +201,10 @@ HRESULT CPreview::SetDevice(IMFActivate *pActivate)
     if (SUCCEEDED(hr))
     {
         hr = pActivate->GetAllocatedString(
-            MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_SYMBOLIC_LINK,
-            &m_pwszSymbolicLink,
-            &m_cchSymbolicLink
-            );
+                 MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_SYMBOLIC_LINK,
+                 &m_pwszSymbolicLink,
+                 &m_cchSymbolicLink
+             );
 
     }
 
@@ -212,11 +212,11 @@ HRESULT CPreview::SetDevice(IMFActivate *pActivate)
     if (SUCCEEDED(hr))
     {
         hr = m_pPlayer->CreateMediaItemFromObject(
-            pSource,
-            FALSE,  // FALSE = asynchronous call
-            0,
-            NULL
-            );
+                 pSource,
+                 FALSE,  // FALSE = asynchronous call
+                 0,
+                 NULL
+             );
     }
 
     // When the method completes, MFPlay will call OnMediaPlayerEvent
@@ -244,7 +244,7 @@ HRESULT CPreview::SetDevice(IMFActivate *pActivate)
 //-------------------------------------------------------------------
 //  OnMediaItemCreated
 //
-//  Called when the IMFPMediaPlayer::CreateMediaItemFromObject method 
+//  Called when the IMFPMediaPlayer::CreateMediaItemFromObject method
 //  completes.
 //-------------------------------------------------------------------
 
@@ -298,13 +298,13 @@ void CPreview::OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT * /*pEvent*/)
         SetRect(&rc, 0, 0, szVideo.cx, szVideo.cy);
 
         AdjustWindowRect(
-            &rc, 
+            &rc,
             GetWindowLong(m_hwnd, GWL_STYLE),
             TRUE
-            );
+        );
 
-        SetWindowPos(m_hwnd, 0, 0, 0, rc.right - rc.left, rc.bottom - rc.top, 
-            SWP_NOZORDER | SWP_NOMOVE | SWP_NOOWNERZORDER);
+        SetWindowPos(m_hwnd, 0, 0, 0, rc.right - rc.left, rc.bottom - rc.top,
+                     SWP_NOZORDER | SWP_NOMOVE | SWP_NOOWNERZORDER);
 
         hr = m_pPlayer->Play();
     }
@@ -320,7 +320,7 @@ void CPreview::OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT * /*pEvent*/)
 //-------------------------------------------------------------------
 //  UpdateVideo
 //
-//  Repaints and resizes the video image. The application calls this 
+//  Repaints and resizes the video image. The application calls this
 //  method when it receives a WM_PAINT or WM_SIZE message.
 //-------------------------------------------------------------------
 
@@ -374,7 +374,7 @@ HRESULT CPreview::CloseDevice()
 //  CheckDeviceLost
 //  Checks whether the video capture device was removed.
 //
-//  The application calls this method when is receives a 
+//  The application calls this method when is receives a
 //  WM_DEVICECHANGE message.
 //-------------------------------------------------------------------
 
@@ -388,7 +388,7 @@ HRESULT CPreview::CheckDeviceLost(DEV_BROADCAST_HDR *pHdr, BOOL *pbDeviceLost)
     }
 
     *pbDeviceLost = FALSE;
-    
+
     if (m_pSource == NULL)
     {
         return S_OK;

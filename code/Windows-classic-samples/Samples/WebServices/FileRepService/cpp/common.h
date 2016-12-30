@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,10 +43,10 @@ static WS_XML_STRING fileRequestDictionaryStrings[] =
 static WS_XML_DICTIONARY fileRequestDictionary =
 {
     { /* 615a0125-2a70-4159-bd28-080480339f04 */
-    0x615a0125,
-    0x2a70,
-    0x4159,
-    {0xbd, 0x28, 0x08, 0x04, 0x80, 0x33, 0x9f, 0x04}
+        0x615a0125,
+        0x2a70,
+        0x4159,
+        {0xbd, 0x28, 0x08, 0x04, 0x80, 0x33, 0x9f, 0x04}
     },
     fileRequestDictionaryStrings,
     WsCountOf(fileRequestDictionaryStrings),
@@ -59,7 +59,7 @@ static WS_XML_DICTIONARY fileRequestDictionary =
 #define fileRequestNamespace fileRequestDictionaryStrings[3]
 #define fileRequestTypeName fileRequestDictionaryStrings[4]
 
-static WS_FIELD_DESCRIPTION filePositionField = 
+static WS_FIELD_DESCRIPTION filePositionField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &filePositionLocalName,
@@ -69,8 +69,8 @@ static WS_FIELD_DESCRIPTION filePositionField =
     WsOffsetOf(FileRequest, filePosition),
 };
 
-static WS_FIELD_DESCRIPTION fileNameField = 
-{ 
+static WS_FIELD_DESCRIPTION fileNameField =
+{
     WS_ELEMENT_FIELD_MAPPING,
     &fileNameLocalName,
     &fileRequestNamespace,
@@ -79,8 +79,8 @@ static WS_FIELD_DESCRIPTION fileNameField =
     WsOffsetOf(FileRequest, fileName),
 };
 
-static WS_FIELD_DESCRIPTION* fileRequestFields[] = 
-{ 
+static WS_FIELD_DESCRIPTION* fileRequestFields[] =
+{
     &filePositionField,
     &fileNameField,
 };
@@ -95,7 +95,7 @@ static WS_STRUCT_DESCRIPTION fileRequestType =
     &fileRequestNamespace,
 };
 
-static WS_ELEMENT_DESCRIPTION fileRequestElement = 
+static WS_ELEMENT_DESCRIPTION fileRequestElement =
 {
     &fileRequestLocalName,
     &fileRequestNamespace,
@@ -111,7 +111,7 @@ struct FileInfo
 {
     LPWSTR fileName;
     LONGLONG fileLength;
-    DWORD chunkSize;    
+    DWORD chunkSize;
 };
 
 extern WS_XML_DICTIONARY fileInfoDictionary;
@@ -129,10 +129,10 @@ static WS_XML_STRING fileInfoDictionaryStrings[] =
 static WS_XML_DICTIONARY fileInfoDictionary =
 {
     { /* 22b4b751-eede-4d35-9307-50a2fcba3d4e */
-    0x22b4b751,
-    0xeede,
-    0x4d35,
-    {0x93, 0x07, 0x50, 0xa2, 0xfc, 0xba, 0x3d, 0x4e}
+        0x22b4b751,
+        0xeede,
+        0x4d35,
+        {0x93, 0x07, 0x50, 0xa2, 0xfc, 0xba, 0x3d, 0x4e}
     },
     fileInfoDictionaryStrings,
     WsCountOf(fileInfoDictionaryStrings),
@@ -146,7 +146,7 @@ static WS_XML_DICTIONARY fileInfoDictionary =
 #define fileInfoNamespace fileInfoDictionaryStrings[4]
 #define fileInfoElementName fileInfoDictionaryStrings[5]
 
-static WS_FIELD_DESCRIPTION fileNameInfoField = 
+static WS_FIELD_DESCRIPTION fileNameInfoField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &fileNameInfoLocalName,
@@ -156,7 +156,7 @@ static WS_FIELD_DESCRIPTION fileNameInfoField =
     WsOffsetOf(FileInfo, fileName),
 };
 
-static WS_FIELD_DESCRIPTION fileLengthField = 
+static WS_FIELD_DESCRIPTION fileLengthField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &fileLengthLocalName,
@@ -166,7 +166,7 @@ static WS_FIELD_DESCRIPTION fileLengthField =
     WsOffsetOf(FileInfo, fileLength),
 };
 
-static WS_FIELD_DESCRIPTION chunkSizeField = 
+static WS_FIELD_DESCRIPTION chunkSizeField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &chunkSizeLocalName,
@@ -176,8 +176,8 @@ static WS_FIELD_DESCRIPTION chunkSizeField =
     WsOffsetOf(FileInfo, chunkSize),
 };
 
-static WS_FIELD_DESCRIPTION* fileInfoFields[] = 
-{ 
+static WS_FIELD_DESCRIPTION* fileInfoFields[] =
+{
     &fileNameInfoField,
     &fileLengthField,
     &chunkSizeField,
@@ -193,7 +193,7 @@ static WS_STRUCT_DESCRIPTION fileInfoType =
     &fileInfoNamespace,
 };
 
-static WS_ELEMENT_DESCRIPTION fileInfoElement = 
+static WS_ELEMENT_DESCRIPTION fileInfoElement =
 {
     &fileInfoLocalName,
     &fileInfoNamespace,
@@ -207,11 +207,11 @@ static WS_ELEMENT_DESCRIPTION fileInfoElement =
 //
 struct FileChunk
 {
-    LONGLONG chunkPosition; // Starting position of the transmitted chunk. Must match request. Undefined in error case. 
-    
-    // Size of the content must match the defined chunk length or be last chunk, 
+    LONGLONG chunkPosition; // Starting position of the transmitted chunk. Must match request. Undefined in error case.
+
+    // Size of the content must match the defined chunk length or be last chunk,
     // in which case size+chunkPosition must match the length of the file.
-    WS_BYTES fileContent;  
+    WS_BYTES fileContent;
     LPWSTR error;  // Contains "http://tempuri.org/FileRep/NoError" in the success case.
 };
 
@@ -230,10 +230,10 @@ static WS_XML_STRING fileChunkDictionaryStrings[] =
 static WS_XML_DICTIONARY fileChunkDictionary =
 {
     { /* e99f3780-7a2a-449a-a40f-bf9f4a5db648 */
-    0xe99f3780,
-    0x7a2a,
-    0x449a,
-    {0xa4, 0x0f, 0xbf, 0x9f, 0x4a, 0x5d, 0xb6, 0x48}
+        0xe99f3780,
+        0x7a2a,
+        0x449a,
+        {0xa4, 0x0f, 0xbf, 0x9f, 0x4a, 0x5d, 0xb6, 0x48}
     },
     fileChunkDictionaryStrings,
     WsCountOf(fileChunkDictionaryStrings),
@@ -247,7 +247,7 @@ static WS_XML_DICTIONARY fileChunkDictionary =
 #define fileChunkNamespace fileChunkDictionaryStrings[4]
 #define fileChunkElementName fileChunkDictionaryStrings[5]
 
-static WS_FIELD_DESCRIPTION chunkPositionField = 
+static WS_FIELD_DESCRIPTION chunkPositionField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &chunkPositionLocalName,
@@ -258,7 +258,7 @@ static WS_FIELD_DESCRIPTION chunkPositionField =
 };
 
 
-static WS_FIELD_DESCRIPTION fileContentField = 
+static WS_FIELD_DESCRIPTION fileContentField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &fileContentLocalName,
@@ -268,7 +268,7 @@ static WS_FIELD_DESCRIPTION fileContentField =
     WsOffsetOf(FileChunk, fileContent),
 };
 
-static WS_FIELD_DESCRIPTION errorField = 
+static WS_FIELD_DESCRIPTION errorField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &errorLocalName,
@@ -278,11 +278,11 @@ static WS_FIELD_DESCRIPTION errorField =
     WsOffsetOf(FileChunk, error),
 };
 
-static WS_FIELD_DESCRIPTION* fileChunkFields[] = 
-{ 
+static WS_FIELD_DESCRIPTION* fileChunkFields[] =
+{
     &chunkPositionField,
     &fileContentField,
-    &errorField,    
+    &errorField,
 };
 
 static WS_STRUCT_DESCRIPTION fileChunkType =
@@ -295,7 +295,7 @@ static WS_STRUCT_DESCRIPTION fileChunkType =
     &fileChunkNamespace,
 };
 
-static WS_ELEMENT_DESCRIPTION fileChunkElement = 
+static WS_ELEMENT_DESCRIPTION fileChunkElement =
 {
     &fileChunkLocalName,
     &fileChunkNamespace,
@@ -312,7 +312,7 @@ typedef enum
 typedef enum
 {
     NO_SECURITY = 1,
-    SSL_SECURITY = 2,   
+    SSL_SECURITY = 2,
 } SECURITY_MODE;
 
 typedef enum
@@ -326,7 +326,7 @@ typedef enum
 typedef enum
 {
     ASYNC_REQUEST = 1,
-    SYNC_REQUEST = 2,   
+    SYNC_REQUEST = 2,
 } REQUEST_TYPE;
 
 //
@@ -338,7 +338,7 @@ struct UserRequest
     LPWSTR serverUri; // Uri of the server service
     TRANSPORT_MODE serverProtocol;
     SECURITY_MODE securityMode;
-    MESSAGE_ENCODING messageEncoding; 
+    MESSAGE_ENCODING messageEncoding;
     LPWSTR sourcePath; // Fully qualified local file name of the source file
     LPWSTR destinationPath;// Fully qualified local file name of the destination file
 };
@@ -362,10 +362,10 @@ static WS_XML_STRING userRequestDictionaryStrings[] =
 static WS_XML_DICTIONARY userRequestDictionary =
 {
     { /* 98e77255-271b-4434-abb6-3ab6d3b5a6a4 */
-    0x98e77255,
-    0x271b,
-    0x4434,
-    {0xab, 0xb6, 0x3a, 0xb6, 0xd3, 0xb5, 0xa6, 0xa4}
+        0x98e77255,
+        0x271b,
+        0x4434,
+        {0xab, 0xb6, 0x3a, 0xb6, 0xd3, 0xb5, 0xa6, 0xa4}
     },
     userRequestDictionaryStrings,
     WsCountOf(userRequestDictionaryStrings),
@@ -384,7 +384,7 @@ static WS_XML_DICTIONARY userRequestDictionary =
 #define userRequestNamespace userRequestDictionaryStrings[8]
 #define userRequestTypeName userRequestDictionaryStrings[9]
 
-static WS_FIELD_DESCRIPTION requestTypeField = 
+static WS_FIELD_DESCRIPTION requestTypeField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &requestTypeLocalName,
@@ -394,8 +394,8 @@ static WS_FIELD_DESCRIPTION requestTypeField =
     WsOffsetOf(UserRequest, requestType),
 };
 
-static WS_FIELD_DESCRIPTION serverUriField = 
-{ 
+static WS_FIELD_DESCRIPTION serverUriField =
+{
     WS_ELEMENT_FIELD_MAPPING,
     &serverUriLocalName,
     &userRequestNamespace,
@@ -404,8 +404,8 @@ static WS_FIELD_DESCRIPTION serverUriField =
     WsOffsetOf(UserRequest, serverUri),
 };
 
-static WS_FIELD_DESCRIPTION serverProtocolField = 
-{ 
+static WS_FIELD_DESCRIPTION serverProtocolField =
+{
     WS_ELEMENT_FIELD_MAPPING,
     &serverProtocolLocalName,
     &userRequestNamespace,
@@ -414,8 +414,8 @@ static WS_FIELD_DESCRIPTION serverProtocolField =
     WsOffsetOf(UserRequest, serverProtocol),
 };
 
-static WS_FIELD_DESCRIPTION securityModeField = 
-{ 
+static WS_FIELD_DESCRIPTION securityModeField =
+{
     WS_ELEMENT_FIELD_MAPPING,
     &securityModeLocalName,
     &userRequestNamespace,
@@ -424,8 +424,8 @@ static WS_FIELD_DESCRIPTION securityModeField =
     WsOffsetOf(UserRequest, securityMode),
 };
 
-static WS_FIELD_DESCRIPTION messageEncodingField = 
-{ 
+static WS_FIELD_DESCRIPTION messageEncodingField =
+{
     WS_ELEMENT_FIELD_MAPPING,
     &messageEncodingLocalName,
     &userRequestNamespace,
@@ -434,8 +434,8 @@ static WS_FIELD_DESCRIPTION messageEncodingField =
     WsOffsetOf(UserRequest, messageEncoding),
 };
 
-static WS_FIELD_DESCRIPTION sourcePathField = 
-{ 
+static WS_FIELD_DESCRIPTION sourcePathField =
+{
     WS_ELEMENT_FIELD_MAPPING,
     &sourcePathLocalName,
     &userRequestNamespace,
@@ -444,8 +444,8 @@ static WS_FIELD_DESCRIPTION sourcePathField =
     WsOffsetOf(UserRequest, sourcePath),
 };
 
-static WS_FIELD_DESCRIPTION destinationPathField = 
-{ 
+static WS_FIELD_DESCRIPTION destinationPathField =
+{
     WS_ELEMENT_FIELD_MAPPING,
     &destinationPathLocalName,
     &userRequestNamespace,
@@ -454,8 +454,8 @@ static WS_FIELD_DESCRIPTION destinationPathField =
     WsOffsetOf(UserRequest, destinationPath),
 };
 
-static WS_FIELD_DESCRIPTION* userRequestFields[] = 
-{ 
+static WS_FIELD_DESCRIPTION* userRequestFields[] =
+{
     &requestTypeField,
     &serverUriField,
     &serverProtocolField,
@@ -475,7 +475,7 @@ static WS_STRUCT_DESCRIPTION userRequestType =
     &userRequestNamespace,
 };
 
-static WS_ELEMENT_DESCRIPTION userRequestElement = 
+static WS_ELEMENT_DESCRIPTION userRequestElement =
 {
     &userRequestLocalName,
     &userRequestNamespace,
@@ -496,7 +496,7 @@ typedef enum
 
 struct UserResponse
 {
-    TRANSFER_RESULTS returnValue; 
+    TRANSFER_RESULTS returnValue;
 };
 
 extern WS_XML_DICTIONARY userResponseDictionary;
@@ -512,10 +512,10 @@ static WS_XML_STRING userResponseDictionaryStrings[] =
 static WS_XML_DICTIONARY userResponseDictionary =
 {
     { /* 3c13293c-665f-4586-85eb-954a3279a500 */
-    0x3c13293c,
-    0x665f,
-    0x4586,
-    {0x85, 0xeb, 0x95, 0x4a, 0x32, 0x79, 0xa5, 0x00}
+        0x3c13293c,
+        0x665f,
+        0x4586,
+        {0x85, 0xeb, 0x95, 0x4a, 0x32, 0x79, 0xa5, 0x00}
     },
     userResponseDictionaryStrings,
     WsCountOf(userResponseDictionaryStrings),
@@ -528,7 +528,7 @@ static WS_XML_DICTIONARY userResponseDictionary =
 #define userResponseNamespace userResponseDictionaryStrings[2]
 #define userResponseTypeName userResponseDictionaryStrings[3]
 
-static WS_FIELD_DESCRIPTION returnValueField = 
+static WS_FIELD_DESCRIPTION returnValueField =
 {
     WS_ELEMENT_FIELD_MAPPING,
     &returnValueLocalName,
@@ -539,8 +539,8 @@ static WS_FIELD_DESCRIPTION returnValueField =
 };
 
 
-static WS_FIELD_DESCRIPTION* userResponseFields[] = 
-{ 
+static WS_FIELD_DESCRIPTION* userResponseFields[] =
+{
     &returnValueField,
 };
 
@@ -554,7 +554,7 @@ static WS_STRUCT_DESCRIPTION userResponseType =
     &userResponseNamespace,
 };
 
-static WS_ELEMENT_DESCRIPTION userResponseElement = 
+static WS_ELEMENT_DESCRIPTION userResponseElement =
 {
     &userResponseLocalName,
     &userResponseNamespace,

@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -10,37 +10,36 @@
 // --------------------------------------------------------------------
 //
 // MQEventHandler.h : header file
-// 
+//
 
 
 class CMSMQEventHandler : public CCmdTarget
 {
 public:
 
-	CMSMQEventHandler();
-	~CMSMQEventHandler();
+    CMSMQEventHandler();
+    ~CMSMQEventHandler();
 
 
-	virtual void Arrived(	/*[in]*/ IDispatch* pdispQueue, 
-							/*[in]*/ long lCursor);
-	virtual void ArrivedError(	/*[in]*/ IDispatch* pdispQueue, 
-								/*[in]*/ long lErrorCode, 
-								/*[in]*/ long lCursor);
+    virtual void Arrived(	/*[in]*/ IDispatch* pdispQueue,
+                                     /*[in]*/ long lCursor);
+    virtual void ArrivedError(	/*[in]*/ IDispatch* pdispQueue,
+                                         /*[in]*/ long lErrorCode,
+                                         /*[in]*/ long lCursor);
 
-	HRESULT AdviseSource(IDispatch* pDispatch);
+    HRESULT AdviseSource(IDispatch* pDispatch);
 
-	LPUNKNOWN GetInterfaceHook(const void* piid);
+    LPUNKNOWN GetInterfaceHook(const void* piid);
 
-	DECLARE_DISPATCH_MAP()
+    DECLARE_DISPATCH_MAP()
 
 private:
-	DWORD				m_dwMyCookie;
-	LPCONNECTIONPOINT	m_pMyCP;
+    DWORD				m_dwMyCookie;
+    LPCONNECTIONPOINT	m_pMyCP;
 
 };
 
 
-						
-					
 
-	
+
+

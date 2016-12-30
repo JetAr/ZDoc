@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -80,14 +80,14 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         HANDLE_MSG(hwnd, WM_MOUSEMOVE,        Main_OnMouseMove);
         HANDLE_MSG(hwnd, WM_LBUTTONUP,        Main_OnLButtonUp);
 
-        case APPBAR_CALLBACK:
-            AppBar_Callback(hwnd, uMsg, wParam, lParam);
-            lResult = 0;
-            break;
+    case APPBAR_CALLBACK:
+        AppBar_Callback(hwnd, uMsg, wParam, lParam);
+        lResult = 0;
+        break;
 
-        default:                // Pass message on for default proccessing
-            lResult = DefWindowProc( hwnd, uMsg, wParam, lParam );
-            break;
+    default:                // Pass message on for default proccessing
+        lResult = DefWindowProc( hwnd, uMsg, wParam, lParam );
+        break;
     }
 
     // If we performed non-default processing on the message, return FALSE
@@ -178,17 +178,17 @@ void Main_OnActivate(HWND hwnd, UINT state, HWND /* hwndActDeact */, BOOL /* fMi
     // Now determine if we're getting or losing activation
     switch (state)
     {
-        case WA_ACTIVE:
-        case WA_CLICKACTIVE:
-            // If we're gaining activation, make sure we're visible
-            AppBar_UnHide(hwnd);
-            KillTimer(hwnd, IDT_AUTOHIDE);
-            break;
+    case WA_ACTIVE:
+    case WA_CLICKACTIVE:
+        // If we're gaining activation, make sure we're visible
+        AppBar_UnHide(hwnd);
+        KillTimer(hwnd, IDT_AUTOHIDE);
+        break;
 
-        case WA_INACTIVE:
-            // If we're losing activation, check to see if we need to autohide.
-            AppBar_Hide(hwnd);
-            break;
+    case WA_INACTIVE:
+        // If we're losing activation, check to see if we need to autohide.
+        AppBar_Hide(hwnd);
+        break;
     }
 }
 
@@ -244,51 +244,51 @@ void Main_OnCommand(HWND hwnd, int id, HWND /* hwndCtl */, UINT /* codeNotify */
 {
     switch (id)
     {
-        case ID_FILE_EXIT:
-            // The user wants to exit, so send our window a close message
-            SendMessage(hwnd, WM_CLOSE, 0, 0L);
-            break;
+    case ID_FILE_EXIT:
+        // The user wants to exit, so send our window a close message
+        SendMessage(hwnd, WM_CLOSE, 0, 0L);
+        break;
 
-        case ID_HELP_ABOUT:
-            // Display the "About" dialog
-            DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_ABOUT), hwnd, AboutDlgProc);
-            break;
+    case ID_HELP_ABOUT:
+        // Display the "About" dialog
+        DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_ABOUT), hwnd, AboutDlgProc);
+        break;
 
-        case ID_PROPERTIES:
-            ShowOptions(hwnd);
-            break;
+    case ID_PROPERTIES:
+        ShowOptions(hwnd);
+        break;
 
-        case ID_APPBAR_REGISTER:
-            AppBar_Register(hwnd);
-            break;
+    case ID_APPBAR_REGISTER:
+        AppBar_Register(hwnd);
+        break;
 
-        case ID_APPBAR_UNREGISTER:
-            AppBar_UnRegister(hwnd);
-            break;
+    case ID_APPBAR_UNREGISTER:
+        AppBar_UnRegister(hwnd);
+        break;
 
-        case ID_APPBAR_AUTOHIDE:
-            AppBar_SetAutoHide(hwnd, TRUE);
-            break;
+    case ID_APPBAR_AUTOHIDE:
+        AppBar_SetAutoHide(hwnd, TRUE);
+        break;
 
-        case ID_APPBAR_NOAUTOHIDE:
-            AppBar_SetAutoHide(hwnd, FALSE);
-            break;
+    case ID_APPBAR_NOAUTOHIDE:
+        AppBar_SetAutoHide(hwnd, FALSE);
+        break;
 
-        case ID_APPBAR_TOP:
-            AppBar_SetSide(hwnd, ABE_TOP);
-            break;
+    case ID_APPBAR_TOP:
+        AppBar_SetSide(hwnd, ABE_TOP);
+        break;
 
-        case ID_APPBAR_BOTTOM:
-            AppBar_SetSide(hwnd, ABE_BOTTOM);
-            break;
+    case ID_APPBAR_BOTTOM:
+        AppBar_SetSide(hwnd, ABE_BOTTOM);
+        break;
 
-        case ID_APPBAR_LEFT:
-            AppBar_SetSide(hwnd, ABE_LEFT);
-            break;
+    case ID_APPBAR_LEFT:
+        AppBar_SetSide(hwnd, ABE_LEFT);
+        break;
 
-        case ID_APPBAR_RIGHT:
-            AppBar_SetSide(hwnd, ABE_RIGHT);
-            break;
+    case ID_APPBAR_RIGHT:
+        AppBar_SetSide(hwnd, ABE_RIGHT);
+        break;
     }
 }
 
@@ -480,52 +480,52 @@ void Main_OnTimer(HWND hwnd, UINT id)
     POPTIONS pOpt = GetAppbarData(hwnd);
     switch (id)
     {
-        // The AUTOHIDE timer has fired.  Check to see if the mouse is over our
-        // window and if not hide the appbar.
-        case IDT_AUTOHIDE:
-            if ((pOpt->fAutoHide) && (!pOpt->fHiding))
-            {
-                // Get the mouse position, the window position, and active window
-                POINT pt;
-                GetCursorPos(&pt);
-                RECT rc;
-                GetWindowRect(hwnd, &rc);
-                HWND hwndActive = GetForegroundWindow();
-
-                // If the mouse is outside of our window, or we are not active,
-                // or at least one window is active, or we are not the parent
-                // of an active window, the hide the appbar window.
-                if ((!PtInRect(&rc, pt)) && (hwndActive != hwnd) &&
-                    (hwndActive != NULL) && (GetWindowOwner(hwndActive) != hwnd))
-                {
-                    KillTimer(hwnd, id);
-                    AppBar_Hide(hwnd);
-                }
-            }
-            break;
-
-        // The period between the time the user has entered our window and the
-        // time we should show the window has expired.
-        case IDT_AUTOUNHIDE:
+    // The AUTOHIDE timer has fired.  Check to see if the mouse is over our
+    // window and if not hide the appbar.
+    case IDT_AUTOHIDE:
+        if ((pOpt->fAutoHide) && (!pOpt->fHiding))
         {
-            // Kill the timer, we only need it to fire once.
-            KillTimer(hwnd, id);
+            // Get the mouse position, the window position, and active window
+            POINT pt;
+            GetCursorPos(&pt);
+            RECT rc;
+            GetWindowRect(hwnd, &rc);
+            HWND hwndActive = GetForegroundWindow();
 
-            if ((pOpt->fAutoHide) && (pOpt->fHiding))
+            // If the mouse is outside of our window, or we are not active,
+            // or at least one window is active, or we are not the parent
+            // of an active window, the hide the appbar window.
+            if ((!PtInRect(&rc, pt)) && (hwndActive != hwnd) &&
+                    (hwndActive != NULL) && (GetWindowOwner(hwndActive) != hwnd))
             {
-                // Check to see if the cursor is still in the appbar.  If so,
-                // the unhide the window.
-                POINT pt;
-                GetCursorPos(&pt);
-                RECT rc;
-                GetWindowRect(hwnd, &rc);
-                if (PtInRect(&rc, pt))
-                {
-                    AppBar_UnHide(hwnd);
-                }
+                KillTimer(hwnd, id);
+                AppBar_Hide(hwnd);
             }
-            break;
         }
+        break;
+
+    // The period between the time the user has entered our window and the
+    // time we should show the window has expired.
+    case IDT_AUTOUNHIDE:
+    {
+        // Kill the timer, we only need it to fire once.
+        KillTimer(hwnd, id);
+
+        if ((pOpt->fAutoHide) && (pOpt->fHiding))
+        {
+            // Check to see if the cursor is still in the appbar.  If so,
+            // the unhide the window.
+            POINT pt;
+            GetCursorPos(&pt);
+            RECT rc;
+            GetWindowRect(hwnd, &rc);
+            if (PtInRect(&rc, pt))
+            {
+                AppBar_UnHide(hwnd);
+            }
+        }
+        break;
+    }
     }
 }
 
@@ -609,19 +609,19 @@ void Main_OnPaint(HWND hwnd)
     // Figure out which side we're on so we can adjust the text accordingly
     switch (pOpt->uSide)
     {
-        case ABE_TOP:
-        case ABE_BOTTOM:
-            hfont = (HFONT)SelectObject(hdc, s_hFontTop);
-            x = 2;
-            y = 2;
-            break;
+    case ABE_TOP:
+    case ABE_BOTTOM:
+        hfont = (HFONT)SelectObject(hdc, s_hFontTop);
+        x = 2;
+        y = 2;
+        break;
 
-        case ABE_LEFT:
-        case ABE_RIGHT:
-            hfont = (HFONT)SelectObject(hdc, s_hFontLeft);
-            x = rc.right - 2;
-            y = 2;
-            break;
+    case ABE_LEFT:
+    case ABE_RIGHT:
+        hfont = (HFONT)SelectObject(hdc, s_hFontLeft);
+        x = rc.right - 2;
+        y = 2;
+        break;
     }
 
     // Draw the text and clean up
@@ -798,18 +798,18 @@ void Main_OnLButtonUp(HWND hwnd, int /* x */, int /* y */, UINT /* keyFlags */)
     {
         switch (pOpt->uSide)
         {
-            case ABE_TOP:
-                s_rcDrag.bottom = s_rcDrag.top + 2;
-                break;
-            case ABE_BOTTOM:
-                s_rcDrag.top = s_rcDrag.bottom - 2;
-                break;
-            case ABE_LEFT:
-                s_rcDrag.right = s_rcDrag.left + 2;
-                break;
-            case ABE_RIGHT:
-                s_rcDrag.left = s_rcDrag.right - 2;
-                break;
+        case ABE_TOP:
+            s_rcDrag.bottom = s_rcDrag.top + 2;
+            break;
+        case ABE_BOTTOM:
+            s_rcDrag.top = s_rcDrag.bottom - 2;
+            break;
+        case ABE_LEFT:
+            s_rcDrag.right = s_rcDrag.left + 2;
+            break;
+        case ABE_RIGHT:
+            s_rcDrag.left = s_rcDrag.right - 2;
+            break;
         }
     }
 
@@ -840,19 +840,19 @@ INT_PTR CALLBACK AboutDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM /* lPa
 {
     switch(uMsg)
     {
-        case WM_INITDIALOG:
-            // Should return nonzero to set focus to the first control in the
-            // dialog, or zero if this routine sets the focus manually.
-            return TRUE;
+    case WM_INITDIALOG:
+        // Should return nonzero to set focus to the first control in the
+        // dialog, or zero if this routine sets the focus manually.
+        return TRUE;
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDOK:
-                    EndDialog(hwnd, 0);
-                    break;
-            }
-            return TRUE;
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+            EndDialog(hwnd, 0);
+            break;
+        }
+        return TRUE;
     }
 
     return FALSE;

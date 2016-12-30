@@ -1,4 +1,4 @@
-#define IDS_APP_TITLE                   101
+﻿#define IDS_APP_TITLE                   101
 
 #define IDB_BUTTONIMAGES_96             101
 #define IDB_BUTTONIMAGES_120            102

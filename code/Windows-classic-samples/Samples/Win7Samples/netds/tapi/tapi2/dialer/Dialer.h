@@ -1,4 +1,4 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+﻿/*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 Copyright 1995 - 2000 Microsoft Corporation
 
@@ -32,7 +32,7 @@ Revision History:
 
 #define MENU_CHOICE         1 // for Connect Using dialog...
 #define INVALID_LINE        2 // if INVALID_LINE, turn off CANCEL
-                              // button and add extra text...
+// button and add extra text...
 
 #define MAXNUMLENGTH    64
 #define MAXBUFSIZE      256

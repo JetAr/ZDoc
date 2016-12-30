@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -42,21 +42,21 @@ polGetServerCallbackInterface(
     if (NULL == ppServer)
     {
         hr = E_POINTER;
-	_JumpError(hr, error, "Policy:polGetServerCallbackInterface");
+        _JumpError(hr, error, "Policy:polGetServerCallbackInterface");
     }
 
     hr = CoCreateInstance(
-                    CLSID_CCertServerPolicy,
-                    NULL,               // pUnkOuter
-                    CLSCTX_INPROC_SERVER,
-                    IID_ICertServerPolicy,
-                    (VOID **) ppServer);
+             CLSID_CCertServerPolicy,
+             NULL,               // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             IID_ICertServerPolicy,
+             (VOID **) ppServer);
     _JumpIfError(hr, error, "Policy:CoCreateInstance");
 
     if (NULL == *ppServer)
     {
         hr = E_UNEXPECTED;
-	_JumpError(hr, error, "Policy:CoCreateInstance");
+        _JumpError(hr, error, "Policy:CoCreateInstance");
     }
 
     // only set context if nonzero
@@ -86,28 +86,28 @@ polGetProperty(
     strName = SysAllocString(pwszPropertyName);
     if (IsNullBStr(strName))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:SysAllocString");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:SysAllocString");
     }
     if (fRequest)
     {
-	hr = pServer->GetRequestProperty(strName, PropType, pvarOut);
-	_JumpIfErrorStr2(
-		    hr,
-		    error,
-		    "Policy:GetRequestProperty",
-		    pwszPropertyName,
-		    CERTSRV_E_PROPERTY_EMPTY);
+        hr = pServer->GetRequestProperty(strName, PropType, pvarOut);
+        _JumpIfErrorStr2(
+            hr,
+            error,
+            "Policy:GetRequestProperty",
+            pwszPropertyName,
+            CERTSRV_E_PROPERTY_EMPTY);
     }
     else
     {
-	hr = pServer->GetCertificateProperty(strName, PropType, pvarOut);
-	_JumpIfErrorStr2(
-		    hr,
-		    error,
-		    "Policy:GetCertificateProperty",
-		    pwszPropertyName,
-		    CERTSRV_E_PROPERTY_EMPTY);
+        hr = pServer->GetCertificateProperty(strName, PropType, pvarOut);
+        _JumpIfErrorStr2(
+            hr,
+            error,
+            "Policy:GetCertificateProperty",
+            pwszPropertyName,
+            CERTSRV_E_PROPERTY_EMPTY);
     }
 
 error:
@@ -131,21 +131,21 @@ polGetStringProperty(
     *pstrOut = NULL;
 
     hr = polGetProperty(
-		    pServer,
-		    fRequest,
-		    pwszPropertyName,
-		    PROPTYPE_STRING,
-		    &var);
+             pServer,
+             fRequest,
+             pwszPropertyName,
+             PROPTYPE_STRING,
+             &var);
     _JumpIfError2(
-	    hr,
-	    error,
-	    "Policy:polGetProperty",
-	    CERTSRV_E_PROPERTY_EMPTY);
+        hr,
+        error,
+        "Policy:polGetProperty",
+        CERTSRV_E_PROPERTY_EMPTY);
 
     if (VT_BSTR != var.vt || IsNullOrEmptyBStr(var.bstrVal))
     {
-	hr = CERTSRV_E_PROPERTY_EMPTY;
-	_JumpError(hr, error, "Policy:polGetProperty");
+        hr = CERTSRV_E_PROPERTY_EMPTY;
+        _JumpError(hr, error, "Policy:polGetProperty");
     }
     *pstrOut = var.bstrVal;
     var.vt = VT_EMPTY;
@@ -169,17 +169,17 @@ polGetLongProperty(
 
     VariantInit(&var);
     hr = polGetProperty(
-		    pServer,
-		    fRequest,
-		    pwszPropertyName,
-		    PROPTYPE_LONG,
-		    &var);
+             pServer,
+             fRequest,
+             pwszPropertyName,
+             PROPTYPE_LONG,
+             &var);
     _JumpIfError2(hr, error, "Policy:polGetProperty", CERTSRV_E_PROPERTY_EMPTY);
 
     if (VT_I4 != var.vt)
     {
-	hr = CERTSRV_E_PROPERTY_EMPTY;
-	_JumpError(hr, error, "Policy:polGetProperty");
+        hr = CERTSRV_E_PROPERTY_EMPTY;
+        _JumpError(hr, error, "Policy:polGetProperty");
     }
     *plOut = var.lVal;
     hr = S_OK;
@@ -266,16 +266,16 @@ polGetRequestAttribute(
     strName = SysAllocString(pwszAttributeName);
     if (IsNullBStr(strName))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:SysAllocString");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:SysAllocString");
     }
     hr = pServer->GetRequestAttribute(strName, pstrOut);
     _JumpIfErrorStr2(
-		hr,
-		error,
-		"Policy:GetRequestAttribute",
-		pwszAttributeName,
-		CERTSRV_E_PROPERTY_EMPTY);
+        hr,
+        error,
+        "Policy:GetRequestAttribute",
+        pwszAttributeName,
+        CERTSRV_E_PROPERTY_EMPTY);
 
 error:
     SysFreeString(strName);
@@ -296,16 +296,16 @@ polGetCertificateExtension(
     strName = SysAllocString(pwszExtensionName);
     if (IsNullBStr(strName))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:SysAllocString");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:SysAllocString");
     }
     hr = pServer->GetCertificateExtension(strName, dwPropType, pvarOut);
     _JumpIfErrorStr2(
-		hr,
-		error,
-		"Policy:GetCertificateExtension",
-		pwszExtensionName,
-		CERTSRV_E_PROPERTY_EMPTY);
+        hr,
+        error,
+        "Policy:GetCertificateExtension",
+        pwszExtensionName,
+        CERTSRV_E_PROPERTY_EMPTY);
 
 error:
     SysFreeString(strName);
@@ -327,19 +327,19 @@ polSetCertificateExtension(
     strName = SysAllocString(pwszExtensionName);
     if (IsNullBStr(strName))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:SysAllocString");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:SysAllocString");
     }
     hr = pServer->SetCertificateExtension(
-				    strName,
-				    dwPropType,
-				    dwExtFlags,
-				    pvarIn);
+             strName,
+             dwPropType,
+             dwExtFlags,
+             pvarIn);
     _JumpIfErrorStr(
-		hr,
-		error,
-		"Policy:SetCertificateExtension",
-		pwszExtensionName);
+        hr,
+        error,
+        "Policy:SetCertificateExtension",
+        pwszExtensionName);
 
 error:
     SysFreeString(strName);
@@ -361,21 +361,21 @@ polSetCertificateStringProperty(
     strName = SysAllocString(pwszPropName);
     if (IsNullBStr(strName))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:SysAllocString");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:SysAllocString");
     }
     V_VT(&varValue) = VT_BSTR;
     V_BSTR(&varValue) = strPropertyValue;
     hr = pServer->SetCertificateProperty(
-				    strName,
-				    PROPTYPE_STRING,
-                                    &varValue);
+             strName,
+             PROPTYPE_STRING,
+             &varValue);
 
     _JumpIfErrorStr(
-		hr,
-		error,
-		"Policy:SetCertificateProperty",
-		strName);
+        hr,
+        error,
+        "Policy:SetCertificateProperty",
+        strName);
 
 error:
     SysFreeString(strName);
@@ -397,21 +397,21 @@ polSetCertificateLongProperty(
     strName = SysAllocString(pwszPropName);
     if (IsNullBStr(strName))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:SysAllocString");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:SysAllocString");
     }
     V_VT(&varValue) = VT_I4;
     V_I4(&varValue) = lVal;
     hr = pServer->SetCertificateProperty(
-				    strName,
-				    PROPTYPE_LONG,
-                                    &varValue);
+             strName,
+             PROPTYPE_LONG,
+             &varValue);
 
     _JumpIfErrorStr(
-		hr,
-		error,
-		"Policy:SetCertificateProperty",
-		strName);
+        hr,
+        error,
+        "Policy:SetCertificateProperty",
+        strName);
 
 error:
     SysFreeString(strName);
@@ -501,7 +501,7 @@ CCertPolicySample::_Cleanup()
     if (NULL != m_wszASPRevocationURL)
     {
         LocalFree(m_wszASPRevocationURL);
-    	m_wszASPRevocationURL = NULL;
+        m_wszASPRevocationURL = NULL;
     }
 
 
@@ -549,18 +549,18 @@ CCertPolicySample::_ReadRegistryString(
 
     *ppwszOut = NULL;
     hr = RegQueryValueEx(
-		    hkey,
-		    pwszRegName,
-		    NULL,           // lpdwReserved
-		    &dwType,
-		    NULL,
-		    &cbValue);
+             hkey,
+             pwszRegName,
+             NULL,           // lpdwReserved
+             &dwType,
+             NULL,
+             &cbValue);
     _JumpIfErrorStr2(
-		hr,
-		error,
-		"Policy:RegQueryValueEx",
-		pwszRegName,
-		ERROR_FILE_NOT_FOUND);
+        hr,
+        error,
+        "Policy:RegQueryValueEx",
+        pwszRegName,
+        ERROR_FILE_NOT_FOUND);
 
     if (REG_SZ != dwType && REG_MULTI_SZ != dwType)
     {
@@ -569,13 +569,13 @@ CCertPolicySample::_ReadRegistryString(
     }
     if (NULL != pwszSuffix)
     {
-	size_t cbValueT = wcslen(pwszSuffix) * sizeof(WCHAR);
-	if (CENCODEMAX < cbValueT)
-	{
-	    hr = HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW);
-	    _JumpIfError(hr, error, "pwszSuffix");
-	}
-	cbValue += (DWORD) cbValueT;
+        size_t cbValueT = wcslen(pwszSuffix) * sizeof(WCHAR);
+        if (CENCODEMAX < cbValueT)
+        {
+            hr = HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW);
+            _JumpIfError(hr, error, "pwszSuffix");
+        }
+        cbValue += (DWORD) cbValueT;
     }
     pwszRegValue = (WCHAR *) LocalAlloc(LMEM_FIXED, cbValue + sizeof(WCHAR));
     if (NULL == pwszRegValue)
@@ -586,12 +586,12 @@ CCertPolicySample::_ReadRegistryString(
     cblen = cbValue + sizeof(WCHAR);
 
     hr = RegQueryValueEx(
-		    hkey,
-		    pwszRegName,
-		    NULL,           // lpdwReserved
-		    &dwType,
-		    (BYTE *) pwszRegValue,
-		    &cbValue);
+             hkey,
+             pwszRegName,
+             NULL,           // lpdwReserved
+             &dwType,
+             (BYTE *) pwszRegValue,
+             &cbValue);
     _JumpIfErrorStr(hr, error, "Policy:RegQueryValueEx", pwszRegName);
 
     // Handle malformed registry values cleanly:
@@ -599,23 +599,23 @@ CCertPolicySample::_ReadRegistryString(
     pwszRegValue[cbValue / sizeof(WCHAR)] = L'\0';
     if (NULL != pwszSuffix)
     {
-	StringCbCat(pwszRegValue, cblen, pwszSuffix);
+        StringCbCat(pwszRegValue, cblen, pwszSuffix);
     }
 
     hr = ceFormatCertsrvStringArray(
-			fURL,			// fURL
-			m_strMachineDNSName, 	// pwszServerName_p1_2
-			m_strCASanitizedName,	// pwszSanitizedName_p3_7
-			m_iCert,		// iCert_p4
-			MAXDWORD,		// iCertTarget_p4
-			L"",		// pwszDomainDN_p5
-			L"",		// pwszConfigDN_p6
-			m_iCRL,			// iCRL_p8
-			FALSE,			// fDeltaCRL_p9
-			TRUE,			// fDSAttrib_p10_11
-			1,			// cStrings
-			(LPCWSTR *) &pwszRegValue, // apwszStringsIn
-			ppwszOut);		// apwszStringsOut
+             fURL,			// fURL
+             m_strMachineDNSName, 	// pwszServerName_p1_2
+             m_strCASanitizedName,	// pwszSanitizedName_p3_7
+             m_iCert,		// iCert_p4
+             MAXDWORD,		// iCertTarget_p4
+             L"",		// pwszDomainDN_p5
+             L"",		// pwszConfigDN_p6
+             m_iCRL,			// iCRL_p8
+             FALSE,			// fDeltaCRL_p9
+             TRUE,			// fDSAttrib_p10_11
+             1,			// cStrings
+             (LPCWSTR *) &pwszRegValue, // apwszStringsIn
+             ppwszOut);		// apwszStringsOut
     _JumpIfError(hr, error, "Policy:ceFormatCertsrvStringArray");
 
 error:
@@ -640,20 +640,20 @@ CCertPolicySample::_DumpStringArray(
 
     for (i = 0; i < count; i++)
     {
-	pwszName = L"";
-	if (iswdigit(apwsz[i][0]))
-	{
-	    pwszName = ceGetOIDName(
-                                     apwsz[i]); // Static: do not free!
-	}
-	DBGPRINT((
-		fDebug,
-		"%hs[%u]: %ws%hs%ws\n",
-		pszType,
-		i,
-		apwsz[i],
-		L'\0' != *pwszName? " -- " : "",
-		pwszName));
+        pwszName = L"";
+        if (iswdigit(apwsz[i][0]))
+        {
+            pwszName = ceGetOIDName(
+                           apwsz[i]); // Static: do not free!
+        }
+        DBGPRINT((
+                     fDebug,
+                     "%hs[%u]: %ws%hs%ws\n",
+                     pszType,
+                     i,
+                     apwsz[i],
+                     L'\0' != *pwszName? " -- " : "",
+                     pwszName));
     }
 }
 #endif // DBG_CERTSRV
@@ -674,18 +674,18 @@ CCertPolicySample::_SetSystemStringProp(
 
     if (!ceConvertWszToBstr(&strName, pwszName, -1))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:ceConvertWszToBstr");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:ceConvertWszToBstr");
     }
 
     if (NULL != pwszValue)
     {
         if (!ceConvertWszToBstr(&varValue.bstrVal, pwszValue, -1))
-	{
-	    hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "Policy:ceConvertWszToBstr");
-	}
-	varValue.vt = VT_BSTR;
+        {
+            hr = E_OUTOFMEMORY;
+            _JumpError(hr, error, "Policy:ceConvertWszToBstr");
+        }
+        varValue.vt = VT_BSTR;
     }
 
     hr = pServer->SetCertificateProperty(strName, PROPTYPE_STRING, &varValue);
@@ -718,12 +718,12 @@ CCertPolicySample::_AddStringArray(
     }
     if (0 == cString)		// no strings
     {
-	hr = S_OK;
+        hr = S_OK;
         goto error;
     }
     awszFormatStrings = (LPCWSTR *) LocalAlloc(
-			    LMEM_FIXED | LMEM_ZEROINIT,
-			    cString * sizeof(LPWSTR));
+                            LMEM_FIXED | LMEM_ZEROINIT,
+                            cString * sizeof(LPWSTR));
     if (NULL == awszFormatStrings)
     {
         hr = E_OUTOFMEMORY;
@@ -738,11 +738,11 @@ CCertPolicySample::_AddStringArray(
 
         if (L'-' == *pwsz)
         {
-	    pwsz++;
-	    if (L'-' != *pwsz)
-	    {
+            pwsz++;
+            if (L'-' != *pwsz)
+            {
                 continue;
-	    }
+            }
         }
         awszFormatStrings[cString++] = pwsz;
     }
@@ -751,8 +751,8 @@ CCertPolicySample::_AddStringArray(
     if (cString > 0)
     {
         awszOutputStrings = (LPWSTR *) LocalAlloc(
-			        LMEM_FIXED | LMEM_ZEROINIT,
-			        (cString + *pcStrings) * sizeof(LPWSTR));
+                                LMEM_FIXED | LMEM_ZEROINIT,
+                                (cString + *pcStrings) * sizeof(LPWSTR));
         if (NULL == awszOutputStrings)
         {
             hr = E_OUTOFMEMORY;
@@ -763,26 +763,26 @@ CCertPolicySample::_AddStringArray(
         {
             assert(NULL != *papwszRegValues);
             CopyMemory(
-		awszOutputStrings,
-		*papwszRegValues,
-		*pcStrings * sizeof(LPWSTR));
+                awszOutputStrings,
+                *papwszRegValues,
+                *pcStrings * sizeof(LPWSTR));
         }
 
         hr = ceFormatCertsrvStringArray(
-		fURL,				// fURL
-		m_strMachineDNSName,		// pwszServerName_p1_2
-		m_strCASanitizedName,		// pwszSanitizedName_p3_7
-		m_iCert,			// iCert_p4
-		MAXDWORD,			// iCertTarget_p4
-		L"",			// pwszDomainDN_p5
-		L"",			// pwszConfigDN_p6
-		m_iCRL,				// iCRL_p8
-		FALSE,				// fDeltaCRL_p9
-		TRUE,				// fDSAttrib_p10_11
-		cString,			// cStrings
-		awszFormatStrings,		// apwszStringsIn
-		awszOutputStrings + (*pcStrings)); // apwszStringsOut
-	_JumpIfError(hr, error, "Policy:ceFormatCertsrvStringArray");
+                 fURL,				// fURL
+                 m_strMachineDNSName,		// pwszServerName_p1_2
+                 m_strCASanitizedName,		// pwszSanitizedName_p3_7
+                 m_iCert,			// iCert_p4
+                 MAXDWORD,			// iCertTarget_p4
+                 L"",			// pwszDomainDN_p5
+                 L"",			// pwszConfigDN_p6
+                 m_iCRL,				// iCRL_p8
+                 FALSE,				// fDeltaCRL_p9
+                 TRUE,				// fDSAttrib_p10_11
+                 cString,			// cStrings
+                 awszFormatStrings,		// apwszStringsIn
+                 awszOutputStrings + (*pcStrings)); // apwszStringsOut
+        _JumpIfError(hr, error, "Policy:ceFormatCertsrvStringArray");
 
         *pcStrings = (*pcStrings) + cString;
         if (*papwszRegValues)
@@ -819,12 +819,12 @@ CCertPolicySample::_ReadRegistryMultiString(
 
 
     hr = RegQueryValueEx(
-	        hkey,
-	        pwszRegName,
-	        NULL,           // lpdwReserved
-	        &dwType,
-	        NULL,
-	        &cbValue);
+             hkey,
+             pwszRegName,
+             NULL,           // lpdwReserved
+             &dwType,
+             NULL,
+             &cbValue);
     hr = HRESULT_FROM_WIN32(hr);
     _JumpIfError(hr, error, "Policy:RegQueryValueEx");
 
@@ -834,24 +834,24 @@ CCertPolicySample::_ReadRegistryMultiString(
         _JumpError(hr, error, "Policy:RegQueryValueEx TYPE");
     }
 
-     // Handle malformed registry values cleanly by adding two WCHAR L'\0's
-     // allocate space for 3 WCHARs to allow for unaligned (odd) cbValue;
+    // Handle malformed registry values cleanly by adding two WCHAR L'\0's
+    // allocate space for 3 WCHARs to allow for unaligned (odd) cbValue;
 
     pwszzValue = (WCHAR *) LocalAlloc(
-			        LMEM_FIXED,
-			        cbValue + 3 * sizeof(WCHAR));
+                     LMEM_FIXED,
+                     cbValue + 3 * sizeof(WCHAR));
     if (NULL == pwszzValue)
     {
         hr = E_OUTOFMEMORY;
         _JumpError(hr, error, "Policy:LocalAlloc");
     }
     hr = RegQueryValueEx(
-	        hkey,
-	        pwszRegName,
-	        NULL,           // lpdwReserved
-	        &dwType,
-	        (BYTE *) pwszzValue,
-	        &cbValue);
+             hkey,
+             pwszRegName,
+             NULL,           // lpdwReserved
+             &dwType,
+             (BYTE *) pwszzValue,
+             &cbValue);
     hr = HRESULT_FROM_WIN32(hr);
     _JumpIfError(hr, error, "Policy:RegQueryValueEx");
 
@@ -893,34 +893,34 @@ CCertPolicySample::_ReadRegistryStringArray(
     {
         if (0 == (dwFlags & aFlags[i]))
         {
-	    continue;
+            continue;
         }
         if (NULL != pwszzValue)
         {
-	    LocalFree(pwszzValue);
-	    pwszzValue = NULL;
+            LocalFree(pwszzValue);
+            pwszzValue = NULL;
         }
- 
+
         hr = _ReadRegistryMultiString(
-                                                       hkey,
-                                                       apwszRegNames[i],
-                                                       &pwszzValue);
+                 hkey,
+                 apwszRegNames[i],
+                 &pwszzValue);
         if (S_OK != hr)
         {
 
             _PrintErrorStr2(
-                                       hr,
-                                       "_ReadRegistryMultiStringValue",
-                                       apwszRegNames[i],
-                                       HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
+                hr,
+                "_ReadRegistryMultiStringValue",
+                apwszRegNames[i],
+                HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
             continue;
         }
 
         hr = _AddStringArray(
-			pwszzValue,
-			fURL,
-			pcStrings,
-			papwszRegValues);
+                 pwszzValue,
+                 fURL,
+                 pcStrings,
+                 papwszRegValues);
         _JumpIfErrorStr(hr, error, "_AddStringArray", apwszRegNames[i]);
     }
     hr = S_OK;
@@ -951,17 +951,17 @@ CCertPolicySample::_InitRevocationExtension(
 
     cb = sizeof(m_dwRevocationFlags);
     hr = RegQueryValueEx(
-                hkey,
-                wszREGREVOCATIONTYPE,
-                NULL,           // lpdwReserved
-                &dwType,
-                (BYTE *) &m_dwRevocationFlags,
-                &cb);
+             hkey,
+             wszREGREVOCATIONTYPE,
+             NULL,           // lpdwReserved
+             &dwType,
+             (BYTE *) &m_dwRevocationFlags,
+             &cb);
     if (S_OK != hr ||
-	REG_DWORD != dwType ||
-	sizeof(m_dwRevocationFlags) != cb)
+            REG_DWORD != dwType ||
+            sizeof(m_dwRevocationFlags) != cb)
     {
-	m_dwRevocationFlags = 0;
+        m_dwRevocationFlags = 0;
         goto error;
     }
     DBGPRINT((fDebug, "Revocation Flags = %x\n", m_dwRevocationFlags));
@@ -970,18 +970,18 @@ CCertPolicySample::_InitRevocationExtension(
 
     if (NULL != m_wszASPRevocationURL)
     {
-	LocalFree(m_wszASPRevocationURL);
-	m_wszASPRevocationURL = NULL;
+        LocalFree(m_wszASPRevocationURL);
+        m_wszASPRevocationURL = NULL;
     }
 
     if (REVEXT_ASPENABLE & m_dwRevocationFlags)
     {
         hr = _ReadRegistryString(
-			    hkey,
-			    TRUE,			// fURL
-			    wszREGREVOCATIONURL,	// pwszRegName
-			    L"?",			// pwszSuffix
-			    &m_wszASPRevocationURL);	// pstrRegValue
+                 hkey,
+                 TRUE,			// fURL
+                 wszREGREVOCATIONURL,	// pwszRegName
+                 L"?",			// pwszSuffix
+                 &m_wszASPRevocationURL);	// pstrRegValue
         _JumpIfErrorStr(hr, error, "_ReadRegistryString", wszREGREVOCATIONURL);
         _DumpStringArray("ASP", 1, &m_wszASPRevocationURL);
     }
@@ -1001,14 +1001,17 @@ CCertPolicySample::_InitRequestExtensionList(
     IN HKEY hkey)
 {
     HRESULT hr;
-    DWORD adwFlags[] = {
-	EDITF_REQUESTEXTENSIONLIST,
+    DWORD adwFlags[] =
+    {
+        EDITF_REQUESTEXTENSIONLIST,
     };
-    WCHAR *apwszRegNames[] = {
-	wszREGENABLEREQUESTEXTENSIONLIST,
+    WCHAR *apwszRegNames[] =
+    {
+        wszREGENABLEREQUESTEXTENSIONLIST,
     };
-    WCHAR *apwszRegNamesEnrollee[] = {
-	wszREGENABLEENROLLEEREQUESTEXTENSIONLIST,
+    WCHAR *apwszRegNamesEnrollee[] =
+    {
+        wszREGENABLEENROLLEEREQUESTEXTENSIONLIST,
     };
 
     assert(ARRAYSIZE(adwFlags) == ARRAYSIZE(apwszRegNames));
@@ -1019,47 +1022,47 @@ CCertPolicySample::_InitRequestExtensionList(
     if (NULL != m_apwszEnableRequestExtensions)
     {
         _FreeStringArray(
-		    &m_cEnableRequestExtensions,
-		    &m_apwszEnableRequestExtensions);
+            &m_cEnableRequestExtensions,
+            &m_apwszEnableRequestExtensions);
     }
     if (NULL != m_apwszEnableEnrolleeRequestExtensions)
     {
         _FreeStringArray(
-		    &m_cEnableEnrolleeRequestExtensions,
-		    &m_apwszEnableEnrolleeRequestExtensions);
+            &m_cEnableEnrolleeRequestExtensions,
+            &m_apwszEnableEnrolleeRequestExtensions);
     }
 
     hr = _ReadRegistryStringArray(
-			hkey,
-			FALSE,			// fURL
-			m_dwEditFlags,
-			ARRAYSIZE(adwFlags),
-			adwFlags,
-			apwszRegNames,
-			&m_cEnableRequestExtensions,
-			&m_apwszEnableRequestExtensions);
+             hkey,
+             FALSE,			// fURL
+             m_dwEditFlags,
+             ARRAYSIZE(adwFlags),
+             adwFlags,
+             apwszRegNames,
+             &m_cEnableRequestExtensions,
+             &m_apwszEnableRequestExtensions);
     _JumpIfError(hr, error, "_ReadRegistryStringArray");
 
     _DumpStringArray(
-		"Request",
-		m_cEnableRequestExtensions,
-		m_apwszEnableRequestExtensions);
+        "Request",
+        m_cEnableRequestExtensions,
+        m_apwszEnableRequestExtensions);
 
     hr = _ReadRegistryStringArray(
-			hkey,
-			FALSE,			// fURL
-			m_dwEditFlags,
-			ARRAYSIZE(adwFlags),
-			adwFlags,
-			apwszRegNamesEnrollee,
-			&m_cEnableEnrolleeRequestExtensions,
-			&m_apwszEnableEnrolleeRequestExtensions);
+             hkey,
+             FALSE,			// fURL
+             m_dwEditFlags,
+             ARRAYSIZE(adwFlags),
+             adwFlags,
+             apwszRegNamesEnrollee,
+             &m_cEnableEnrolleeRequestExtensions,
+             &m_apwszEnableEnrolleeRequestExtensions);
     _JumpIfError(hr, error, "_ReadRegistryStringArray");
 
     _DumpStringArray(
-		"EnrolleeRequest",
-		m_cEnableEnrolleeRequestExtensions,
-		m_apwszEnableEnrolleeRequestExtensions);
+        "EnrolleeRequest",
+        m_cEnableEnrolleeRequestExtensions,
+        m_apwszEnableEnrolleeRequestExtensions);
 
 error:
     ;
@@ -1084,14 +1087,14 @@ CCertPolicySample::_InitEKUExtensionListForVolatileMode(
     if (NULL != m_apszEKUOIDsForVolatileRequests)
     {
         _FreeStringArray(
-		    &m_cEKUOIDsForVolatileRequests,
-		    &m_apszEKUOIDsForVolatileRequests);
+            &m_cEKUOIDsForVolatileRequests,
+            &m_apszEKUOIDsForVolatileRequests);
     }
 
     hr = _ReadRegistryMultiString(
-			hkey,
-			wszREGEKUOIDSFORVOLATILEREQUESTS,
-			&pwszzEKUList);
+             hkey,
+             wszREGEKUOIDSFORVOLATILEREQUESTS,
+             &pwszzEKUList);
     if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
         hr = S_OK;
@@ -1101,32 +1104,32 @@ CCertPolicySample::_InitEKUExtensionListForVolatileMode(
 
     // Verify each value is an OID and convert them to ansi
     hr = ceVerifyAndConvertWszToSzObjIds(
-            pwszzEKUList,
-            &m_cEKUOIDsForVolatileRequests,
-            &m_apszEKUOIDsForVolatileRequests);
+             pwszzEKUList,
+             &m_cEKUOIDsForVolatileRequests,
+             &m_apszEKUOIDsForVolatileRequests);
     if (S_OK != hr)
     {
-            _PrintError(hr, "ceVerifyObjId");	   
-            goto error;
+        _PrintError(hr, "ceVerifyObjId");
+        goto error;
     }
 
     m_fMatchAnyEKU = FALSE;
     for (i = 0; i < m_cEKUOIDsForVolatileRequests; ++i)
     {
         if (0 == _strcmpi(
-                                   m_apszEKUOIDsForVolatileRequests[i],
-                                   szOID_ANY_ENHANCED_KEY_USAGE))
+                    m_apszEKUOIDsForVolatileRequests[i],
+                    szOID_ANY_ENHANCED_KEY_USAGE))
         {
-             m_fMatchAnyEKU = TRUE;
+            m_fMatchAnyEKU = TRUE;
         }
     }
 
     hr = S_OK;
 error:
     if (NULL != pwszzEKUList)
-   {
-       LocalFree(pwszzEKUList);
-   }
+    {
+        LocalFree(pwszzEKUList);
+    }
     return hr;
 }
 
@@ -1142,11 +1145,13 @@ CCertPolicySample::_InitDisableExtensionList(
     IN HKEY hkey)
 {
     HRESULT hr;
-    DWORD adwFlags[] = {
-	EDITF_DISABLEEXTENSIONLIST,
+    DWORD adwFlags[] =
+    {
+        EDITF_DISABLEEXTENSIONLIST,
     };
-    WCHAR *apwszRegNames[] = {
-	wszREGDISABLEEXTENSIONLIST,
+    WCHAR *apwszRegNames[] =
+    {
+        wszREGDISABLEEXTENSIONLIST,
     };
 
     assert(ARRAYSIZE(adwFlags) == ARRAYSIZE(apwszRegNames));
@@ -1159,20 +1164,20 @@ CCertPolicySample::_InitDisableExtensionList(
     }
 
     hr = _ReadRegistryStringArray(
-			hkey,
-			FALSE,			// fURL
-			m_dwEditFlags,
-			ARRAYSIZE(adwFlags),
-			adwFlags,
-			apwszRegNames,
-			&m_cDisableExtensions,
-			&m_apwszDisableExtensions);
+             hkey,
+             FALSE,			// fURL
+             m_dwEditFlags,
+             ARRAYSIZE(adwFlags),
+             adwFlags,
+             apwszRegNames,
+             &m_cDisableExtensions,
+             &m_apwszDisableExtensions);
     _JumpIfError(hr, error, "_ReadRegistryStringArray");
 
     _DumpStringArray(
-		"Disable",
-		m_cDisableExtensions,
-		m_apwszDisableExtensions);
+        "Disable",
+        m_cDisableExtensions,
+        m_apwszDisableExtensions);
 
 error:
     ;
@@ -1207,254 +1212,254 @@ CCertPolicySample::Initialize(
 
     hr = S_OK;
 
-	_Cleanup();
+    _Cleanup();
 
-	m_strCAName = SysAllocString(strConfig);
-	if (IsNullBStr(m_strCAName))
-	{
-	    hr = E_OUTOFMEMORY;
-	    _LeaveError(hr, leave_block, "CCertPolicySample::SysAllocString");
-	}
+    m_strCAName = SysAllocString(strConfig);
+    if (IsNullBStr(m_strCAName))
+    {
+        hr = E_OUTOFMEMORY;
+        _LeaveError(hr, leave_block, "CCertPolicySample::SysAllocString");
+    }
 
-	// force loading the description from resources
+    // force loading the description from resources
 
-	hr = GetDescription(&bstrDescription);
-	_LeaveIfError(hr, leave_block, "CCertPolicySample::GetDescription");
+    hr = GetDescription(&bstrDescription);
+    _LeaveIfError(hr, leave_block, "CCertPolicySample::GetDescription");
 
-	// get server callbacks
+    // get server callbacks
 
-	hr = polGetServerCallbackInterface(&pServer, 0);
-	_LeaveIfError(hr, leave_block, "Policy:polGetServerCallbackInterface");
+    hr = polGetServerCallbackInterface(&pServer, 0);
+    _LeaveIfError(hr, leave_block, "Policy:polGetServerCallbackInterface");
 
-	hr = ReqInitialize(pServer);
-	_JumpIfError(hr, error, "ReqInitialize");
+    hr = ReqInitialize(pServer);
+    _JumpIfError(hr, error, "ReqInitialize");
 
 
-	// get storage location
-	hr = polGetCertificateStringProperty(
-				    pServer,
-				    wszPROPMODULEREGLOC,
-				    &m_strRegStorageLoc);
-	_LeaveIfErrorStr(
-		    hr,
+    // get storage location
+    hr = polGetCertificateStringProperty(
+             pServer,
+             wszPROPMODULEREGLOC,
+             &m_strRegStorageLoc);
+    _LeaveIfErrorStr(
+        hr,
+        leave_block,
+        "Policy:polGetCertificateStringProperty",
+        wszPROPMODULEREGLOC);
+
+    // get CA type
+
+    hr = polGetCertificateLongProperty(
+             pServer,
+             wszPROPCATYPE,
+             (LONG *) &m_CAType);
+    _LeaveIfErrorStr(
+        hr,
+        leave_block,
+        "Policy:polGetCertificateLongProperty",
+        wszPROPCATYPE);
+
+    // get the Volatile Mode Database property
+
+    hr = polGetCertificateLongProperty(
+             pServer,
+             wszPROPVOLATILEMODE,
+             (LONG *) &m_fVolatileMode);
+    if (S_OK != hr)
+    {
+        m_fVolatileMode= FALSE;
+        _PrintErrorStr(
+            hr,
+            "Policy:polGetCertificateLongProperty",
+            wszPROPVOLATILEMODE);
+    }
+
+
+    // get sanitized name
+
+    hr = polGetCertificateStringProperty(
+             pServer,
+             wszPROPSANITIZEDCANAME,
+             &m_strCASanitizedName);
+    _LeaveIfErrorStr(
+        hr,
+        leave_block,
+        "Policy:polGetCertificateStringProperty",
+        wszPROPSANITIZEDCANAME);
+
+    // get sanitized name
+
+    hr = polGetCertificateStringProperty(
+             pServer,
+             wszPROPSANITIZEDSHORTNAME,
+             &m_strCASanitizedDSName);
+    _LeaveIfErrorStr(
+        hr,
+        leave_block,
+        "Policy:polGetCertificateStringProperty",
+        wszPROPSANITIZEDSHORTNAME);
+
+    hr = polGetCertificateLongProperty(
+             pServer,
+             wszPROPSERVERUPGRADED,
+             (LONG *) &fUpgraded);
+    if (S_OK != hr)
+    {
+        fUpgraded = FALSE;
+        _PrintErrorStr(
+            hr,
+            "Policy:polGetCertificateLongProperty",
+            wszPROPSERVERUPGRADED);
+    }
+
+    hr = RegOpenKeyEx(
+             HKEY_LOCAL_MACHINE,
+             m_strRegStorageLoc,
+             0,              // dwReserved
+             fUpgraded?
+             KEY_ALL_ACCESS :
+             (KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE),
+             &hkey);
+    _LeaveIfErrorStr(
+        hr,
+        leave_block,
+        "Policy:Initialize:RegOpenKeyEx",
+        m_strRegStorageLoc);
+
+    // Ignore error codes.
+
+    dwSize = sizeof(m_dwDispositionFlags);
+    hr = RegQueryValueEx(
+             hkey,
+             wszREGREQUESTDISPOSITION,
+             0,
+             &dwType,
+             (BYTE *) &m_dwDispositionFlags,
+             &dwSize);
+    if (S_OK != hr || REG_DWORD != dwType)
+    {
+        m_dwDispositionFlags = REQDISP_PENDINGFIRST | REQDISP_ISSUE;
+    }
+    DBGPRINT((
+                 fDebug,
+                 "Disposition Flags = %x\n",
+                 m_dwDispositionFlags));
+
+    dwSize = sizeof(m_dwEditFlags);
+    hr = RegQueryValueEx(
+             hkey,
+             wszREGEDITFLAGS,
+             0,
+             &dwType,
+             (BYTE *) &m_dwEditFlags,
+             &dwSize);
+    if (S_OK != hr || REG_DWORD != dwType)
+    {
+        m_dwEditFlags =
+            EDITF_DEFAULT_STANDALONE;
+    }
+    if (fUpgraded)
+    {
+        DBGPRINT((
+                     fDebug,
+                     "Initialize: setting EDITF_SERVERUPGRADED\n"));
+
+        m_dwEditFlags |= EDITF_SERVERUPGRADED;
+        dwSize = sizeof(m_dwEditFlags);
+        hr = RegSetValueEx(
+                 hkey,
+                 wszREGEDITFLAGS,
+                 0,
+                 REG_DWORD,
+                 (BYTE *) &m_dwEditFlags,
+                 dwSize);
+        _PrintIfError(hr, "Policy:RegSetValueEx");
+    }
+    DBGPRINT((fDebug, "Edit Flags = %x\n", m_dwEditFlags));
+
+    dwSize = sizeof(m_CAPathLength);
+    hr = RegQueryValueEx(
+             hkey,
+             wszREGCAPATHLENGTH,
+             0,
+             &dwType,
+             (BYTE *) &m_CAPathLength,
+             &dwSize);
+    if (S_OK != hr || REG_DWORD != dwType)
+    {
+        m_CAPathLength = CAPATHLENGTH_INFINITE;
+    }
+    DBGPRINT((fDebug, "CAPathLength = %x\n", m_CAPathLength));
+
+
+    // Initialize the insertion string array.
+    // Machine DNS name (%1)
+
+    hr = polGetCertificateStringProperty(
+             pServer,
+             wszPROPMACHINEDNSNAME,
+             &m_strMachineDNSName);
+    _LeaveIfErrorStr(
+        hr,
+        leave_block,
+        "Policy:polGetCertificateStringProperty",
+        wszPROPMACHINEDNSNAME);
+
+    hr = polGetCertificateLongProperty(
+             pServer,
+             wszPROPCERTCOUNT,
+             (LONG *) &m_iCert);
+    _LeaveIfErrorStr(
+        hr,
+        leave_block,
+        "Policy:polGetCertificateLongProperty",
+        wszPROPCERTCOUNT);
+
+    if (0 == m_iCert)	// no CA certs?
+    {
+        hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
+        _LeaveIfErrorStr(
+            hr,
             leave_block,
-		    "Policy:polGetCertificateStringProperty",
-		    wszPROPMODULEREGLOC);
+            "Policy:polGetCertificateLongProperty",
+            wszPROPCERTCOUNT);
+    }
+    m_iCert--;
 
-	// get CA type
+    hr = polGetCertificateLongProperty(
+             pServer,
+             wszPROPCRLINDEX,
+             (LONG *) &m_iCRL);
+    _LeaveIfErrorStr(
+        hr,
+        leave_block,
+        "Policy:polGetCertificateLongProperty",
+        wszPROPCRLINDEX);
 
-	hr = polGetCertificateLongProperty(
-				    pServer,
-				    wszPROPCATYPE,
-				    (LONG *) &m_CAType);
-	_LeaveIfErrorStr(
-		    hr,
-                leave_block,
-		    "Policy:polGetCertificateLongProperty",
-		    wszPROPCATYPE);
+    _InitRevocationExtension(hkey);
+    _InitRequestExtensionList(hkey);
+    _InitDisableExtensionList(hkey);
+    {
+        if (m_fVolatileMode)
+        {
+            hr = _InitEKUExtensionListForVolatileMode(
+                     hkey
+                 );
+            _LeaveIfError(hr, error, "_InitEKUExtensionListForVolatileMode");
+        }
+    }
 
-       // get the Volatile Mode Database property
-
-	hr = polGetCertificateLongProperty(
-				    pServer,
-				    wszPROPVOLATILEMODE,
-				    (LONG *) &m_fVolatileMode);
-	if (S_OK != hr)
-	{
-	    m_fVolatileMode= FALSE;
-	    _PrintErrorStr(
-		    hr,
-		    "Policy:polGetCertificateLongProperty",
-		    wszPROPVOLATILEMODE);
-	}
-
-
-	// get sanitized name
-
-	hr = polGetCertificateStringProperty(
-				    pServer,
-				    wszPROPSANITIZEDCANAME,
-				    &m_strCASanitizedName);
-	_LeaveIfErrorStr(
-		    hr,
-            leave_block,
-		    "Policy:polGetCertificateStringProperty",
-		    wszPROPSANITIZEDCANAME);
-
-	// get sanitized name
-
-	hr = polGetCertificateStringProperty(
-				    pServer,
-				    wszPROPSANITIZEDSHORTNAME,
-				    &m_strCASanitizedDSName);
-	_LeaveIfErrorStr(
-		    hr,
-            leave_block,
-		    "Policy:polGetCertificateStringProperty",
-		    wszPROPSANITIZEDSHORTNAME);
-
-	hr = polGetCertificateLongProperty(
-				    pServer,
-				    wszPROPSERVERUPGRADED,
-				    (LONG *) &fUpgraded);
-	if (S_OK != hr)
-	{
-	    fUpgraded = FALSE;
-	    _PrintErrorStr(
-		    hr,
-		    "Policy:polGetCertificateLongProperty",
-		    wszPROPSERVERUPGRADED);
-	}
-
-	hr = RegOpenKeyEx(
-		HKEY_LOCAL_MACHINE,
-		m_strRegStorageLoc,
-		0,              // dwReserved
-		fUpgraded?
-		    KEY_ALL_ACCESS :
-		    (KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE),
-		&hkey);
-	_LeaveIfErrorStr(
-		    hr,
-            leave_block,
-		    "Policy:Initialize:RegOpenKeyEx",
-		    m_strRegStorageLoc);
-
-	// Ignore error codes.
-
-	dwSize = sizeof(m_dwDispositionFlags);
-	hr = RegQueryValueEx(
-			hkey,
-			wszREGREQUESTDISPOSITION,
-			0,
-			&dwType,
-			(BYTE *) &m_dwDispositionFlags,
-			&dwSize);
-	if (S_OK != hr || REG_DWORD != dwType)
-	{
-	    m_dwDispositionFlags = REQDISP_PENDINGFIRST | REQDISP_ISSUE;
-	}
-	DBGPRINT((
-	    fDebug,
-	    "Disposition Flags = %x\n",
-	    m_dwDispositionFlags));
-
-	dwSize = sizeof(m_dwEditFlags);
-	hr = RegQueryValueEx(
-			hkey,
-			wszREGEDITFLAGS,
-			0,
-			&dwType,
-			(BYTE *) &m_dwEditFlags,
-			&dwSize);
-	if (S_OK != hr || REG_DWORD != dwType)
-	{
-	    m_dwEditFlags =
-		    EDITF_DEFAULT_STANDALONE;
-	}
-	if (fUpgraded)
-	{
-	    DBGPRINT((
-		fDebug,
-		"Initialize: setting EDITF_SERVERUPGRADED\n"));
-
-	    m_dwEditFlags |= EDITF_SERVERUPGRADED;
-	    dwSize = sizeof(m_dwEditFlags);
-	    hr = RegSetValueEx(
-			    hkey,
-			    wszREGEDITFLAGS,
-			    0,
-			    REG_DWORD,
-			    (BYTE *) &m_dwEditFlags,
-			    dwSize);
-	    _PrintIfError(hr, "Policy:RegSetValueEx");
-	}
-	DBGPRINT((fDebug, "Edit Flags = %x\n", m_dwEditFlags));
-
-	dwSize = sizeof(m_CAPathLength);
-	hr = RegQueryValueEx(
-			hkey,
-			wszREGCAPATHLENGTH,
-			0,
-			&dwType,
-			(BYTE *) &m_CAPathLength,
-			&dwSize);
-	if (S_OK != hr || REG_DWORD != dwType)
-	{
-	    m_CAPathLength = CAPATHLENGTH_INFINITE;
-	}
-	DBGPRINT((fDebug, "CAPathLength = %x\n", m_CAPathLength));
-
-
-	// Initialize the insertion string array.
-	// Machine DNS name (%1)
-
-	hr = polGetCertificateStringProperty(
-			    pServer,
-			    wszPROPMACHINEDNSNAME,
-			    &m_strMachineDNSName);
-	_LeaveIfErrorStr(
-		    hr,
-            leave_block,
-		    "Policy:polGetCertificateStringProperty",
-		    wszPROPMACHINEDNSNAME);
-
-	hr = polGetCertificateLongProperty(
-				    pServer,
-				    wszPROPCERTCOUNT,
-				    (LONG *) &m_iCert);
-	_LeaveIfErrorStr(
-		    hr,
-            leave_block,
-		    "Policy:polGetCertificateLongProperty",
-		    wszPROPCERTCOUNT);
-
-	if (0 == m_iCert)	// no CA certs?
-	{
-	    hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
-	    _LeaveIfErrorStr(
-			hr,
-            leave_block,
-			"Policy:polGetCertificateLongProperty",
-			wszPROPCERTCOUNT);
-	}
-	m_iCert--;
-
-	hr = polGetCertificateLongProperty(
-				    pServer,
-				    wszPROPCRLINDEX,
-				    (LONG *) &m_iCRL);
-	_LeaveIfErrorStr(
-		    hr,
-            leave_block,
-		    "Policy:polGetCertificateLongProperty",
-		    wszPROPCRLINDEX);
-
-	_InitRevocationExtension(hkey);
-	_InitRequestExtensionList(hkey);
-	_InitDisableExtensionList(hkey);
-       {
-           if (m_fVolatileMode)
-           {
-               hr = _InitEKUExtensionListForVolatileMode(
-                                                                                 hkey
-                                                                                );
-               _LeaveIfError(hr, error, "_InitEKUExtensionListForVolatileMode");
-           }
-       }
-
-	hr = S_OK;
+    hr = S_OK;
 leave_block:
 
 error:
     SysFreeString(bstrDescription);
     if (NULL != hkey)
     {
-	RegCloseKey(hkey);
+        RegCloseKey(hkey);
     }
     if (NULL != pServer)
     {
-	pServer->Release();
+        pServer->Release();
     }
     return(ceHError(hr));	// Reg routines return Win32 error codes
 }
@@ -1471,15 +1476,15 @@ polFindObjIdInList(
 
     for (i = 0; i < count; i++)
     {
-	if (NULL == pwsz || NULL == ppwsz[i])
-	{
-	    i = count;
-	    break;
-	}
-	if (0 == wcscmp(pwsz, ppwsz[i]))
-	{
-	    break;
-	}
+        if (NULL == pwsz || NULL == ppwsz[i])
+        {
+            i = count;
+            break;
+        }
+        if (0 == wcscmp(pwsz, ppwsz[i]))
+        {
+            break;
+        }
     }
     return(i < count? i : MAXDWORD);
 }
@@ -1521,17 +1526,17 @@ CCertPolicySample::_EnumerateExtensions(
         _JumpIfError(hr, error, "Policy:EnumerateExtensions");
 
         hr = pServer->GetCertificateExtension(
-                                        strName,
-                                        PROPTYPE_BINARY,
-                                        &varValue);
+                 strName,
+                 PROPTYPE_BINARY,
+                 &varValue);
         _JumpIfError(hr, error, "Policy:GetCertificateExtension");
 
         hr = pServer->GetCertificateExtensionFlags(&ExtFlags);
-	_JumpIfError(hr, error, "Policy:GetCertificateExtensionFlags");
+        _JumpIfError(hr, error, "Policy:GetCertificateExtensionFlags");
 
-	fEnable = FALSE;
-	fDisable = FALSE;
-	fCritical = FALSE;
+        fEnable = FALSE;
+        fDisable = FALSE;
+        fCritical = FALSE;
 
         if (fFirstPass)
         {
@@ -1539,23 +1544,23 @@ CCertPolicySample::_EnumerateExtensions(
             {
                 switch (EXTENSION_ORIGIN_MASK & ExtFlags)
                 {
-                    case EXTENSION_ORIGIN_REQUEST:
-                    case EXTENSION_ORIGIN_RENEWALCERT:
-                    case EXTENSION_ORIGIN_PKCS7:
-                    case EXTENSION_ORIGIN_CMC:
+                case EXTENSION_ORIGIN_REQUEST:
+                case EXTENSION_ORIGIN_RENEWALCERT:
+                case EXTENSION_ORIGIN_PKCS7:
+                case EXTENSION_ORIGIN_CMC:
                     if ((EDITF_ENABLEREQUESTEXTENSIONS & m_dwEditFlags) ||
-			MAXDWORD != polFindObjIdInList(
-				    strName,
-				    m_cEnableRequestExtensions,
-				    m_apwszEnableRequestExtensions) ||
-			(fEnableEnrolleeExtensions &&
-			 MAXDWORD != polFindObjIdInList(
-				    strName,
-				    m_cEnableEnrolleeRequestExtensions,
-				    m_apwszEnableEnrolleeRequestExtensions)))
+                            MAXDWORD != polFindObjIdInList(
+                                strName,
+                                m_cEnableRequestExtensions,
+                                m_apwszEnableRequestExtensions) ||
+                            (fEnableEnrolleeExtensions &&
+                             MAXDWORD != polFindObjIdInList(
+                                 strName,
+                                 m_cEnableEnrolleeRequestExtensions,
+                                 m_apwszEnableEnrolleeRequestExtensions)))
                     {
-			ExtFlags &= ~EXTENSION_DISABLE_FLAG;
-			fEnable = TRUE;
+                        ExtFlags &= ~EXTENSION_DISABLE_FLAG;
+                        fEnable = TRUE;
                     }
                     break;
                 }
@@ -1564,19 +1569,19 @@ CCertPolicySample::_EnumerateExtensions(
         else
         {
             if (0 == (EXTENSION_DISABLE_FLAG & ExtFlags) &&
-		MAXDWORD != polFindObjIdInList(
-				    strName,
-				    m_cDisableExtensions,
-				    m_apwszDisableExtensions))
+                    MAXDWORD != polFindObjIdInList(
+                        strName,
+                        m_cDisableExtensions,
+                        m_apwszDisableExtensions))
             {
                 ExtFlags |= EXTENSION_DISABLE_FLAG;
                 fDisable = TRUE;
             }
             if (0 == (EXTENSION_CRITICAL_FLAG & ExtFlags) &&
-		MAXDWORD != polFindObjIdInList(
-				    strName,
-				    cCriticalExtensions,
-				    apwszCriticalExtensions))
+                    MAXDWORD != polFindObjIdInList(
+                        strName,
+                        cCriticalExtensions,
+                        apwszCriticalExtensions))
             {
                 ExtFlags |= EXTENSION_CRITICAL_FLAG;
                 fCritical = TRUE;
@@ -1586,26 +1591,26 @@ CCertPolicySample::_EnumerateExtensions(
         if (fDisable || fEnable)
         {
             hr = pServer->SetCertificateExtension(
-			            strName,
-			            PROPTYPE_BINARY,
-			            ExtFlags,
-			            &varValue);
+                     strName,
+                     PROPTYPE_BINARY,
+                     ExtFlags,
+                     &varValue);
             _JumpIfError(hr, error, "Policy:SetCertificateExtension");
         }
 
         if (fFirstPass || fDisable || fEnable)
         {
-	    DBGPRINT((
-		fDebug,
-                "Policy:EnumerateExtensions(%ws, Flags=%x, %x bytes)%hs%hs\n",
-                strName,
-                ExtFlags,
-                SysStringByteLen(varValue.bstrVal),
-		fDisable? " DISABLING" : (fEnable? " ENABLING" : ""),
-		fCritical? " +CRITICAL" : ""));
+            DBGPRINT((
+                         fDebug,
+                         "Policy:EnumerateExtensions(%ws, Flags=%x, %x bytes)%hs%hs\n",
+                         strName,
+                         ExtFlags,
+                         SysStringByteLen(varValue.bstrVal),
+                         fDisable? " DISABLING" : (fEnable? " ENABLING" : ""),
+                         fCritical? " +CRITICAL" : ""));
         }
-	SysFreeString(strName);
-	strName = NULL;
+        SysFreeString(strName);
+        strName = NULL;
 
         VariantClear(&varValue);
     }
@@ -1620,7 +1625,7 @@ error:
             {
                 hr = hr2;
             }
-	    _PrintError(hr2, "Policy:EnumerateExtensionsClose");
+            _PrintError(hr2, "Policy:EnumerateExtensionsClose");
         }
     }
     SysFreeString(strName);
@@ -1646,26 +1651,26 @@ EnumerateAttributes(
     while (TRUE)
     {
         hr = pServer->EnumerateAttributes(&strName);
-	if (S_FALSE == hr)
-	{
-	    hr = S_OK;
-	    break;
-	}
-	_JumpIfError(hr, error, "Policy:EnumerateAttributes");
+        if (S_FALSE == hr)
+        {
+            hr = S_OK;
+            break;
+        }
+        _JumpIfError(hr, error, "Policy:EnumerateAttributes");
 
         hr = pServer->GetRequestAttribute(strName, &strValue);
-	_JumpIfError(hr, error, "Policy:GetRequestAttribute");
+        _JumpIfError(hr, error, "Policy:GetRequestAttribute");
 
-	DBGPRINT((
-		fDebug,
-                "Policy:EnumerateAttributes(%ws = %ws)\n",
-                strName,
-                strValue));
-	SysFreeString(strName);
-	strName = NULL;
+        DBGPRINT((
+                     fDebug,
+                     "Policy:EnumerateAttributes(%ws = %ws)\n",
+                     strName,
+                     strValue));
+        SysFreeString(strName);
+        strName = NULL;
 
-	SysFreeString(strValue);
-	strValue = NULL;
+        SysFreeString(strValue);
+        strValue = NULL;
     }
 
 error:
@@ -1674,7 +1679,7 @@ error:
         hr2 = pServer->EnumerateAttributesClose();
         if (S_OK != hr2)
         {
-	    _PrintError(hr2, "Policy:EnumerateAttributesClose");
+            _PrintError(hr2, "Policy:EnumerateAttributesClose");
             if (S_OK == hr)
             {
                 hr = hr2;
@@ -1698,10 +1703,10 @@ GetRequestId(
     _JumpIfError(hr, error, "Policy:polGetRequestLongProperty");
 
     DBGPRINT((
-	fDebug,
-	"Policy:GetRequestId(%ws = %u)\n",
-	wszPROPREQUESTREQUESTID,
-	*plRequestId));
+                 fDebug,
+                 "Policy:GetRequestId(%ws = %u)\n",
+                 wszPROPREQUESTREQUESTID,
+                 *plRequestId));
 
 error:
     return(hr);
@@ -1724,22 +1729,22 @@ CCertPolicySample::_AddRevocationExtension(
 
     if (NULL != m_wszASPRevocationURL)
     {
-	strASPExtension = SysAllocString(m_wszASPRevocationURL);
-	if (IsNullBStr(strASPExtension))
-	{
-	    hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "Policy:SysAllocString");
-	}
+        strASPExtension = SysAllocString(m_wszASPRevocationURL);
+        if (IsNullBStr(strASPExtension))
+        {
+            hr = E_OUTOFMEMORY;
+            _JumpError(hr, error, "Policy:SysAllocString");
+        }
 
-	varExtension.vt = VT_BSTR;
-	varExtension.bstrVal = strASPExtension;
-	hr = polSetCertificateExtension(
-				pServer,
-				TEXT(szOID_NETSCAPE_REVOCATION_URL),
-				PROPTYPE_STRING,
-				0,
-				&varExtension);
-	_JumpIfErrorStr(hr, error, "Policy:polSetCertificateExtension", L"ASP");
+        varExtension.vt = VT_BSTR;
+        varExtension.bstrVal = strASPExtension;
+        hr = polSetCertificateExtension(
+                 pServer,
+                 TEXT(szOID_NETSCAPE_REVOCATION_URL),
+                 PROPTYPE_STRING,
+                 0,
+                 &varExtension);
+        _JumpIfErrorStr(hr, error, "Policy:polSetCertificateExtension", L"ASP");
     }
 
 error:
@@ -1791,83 +1796,83 @@ CCertPolicySample::_AddOldCertTypeExtension(
 
     if (EDITF_ADDOLDCERTTYPE & m_dwEditFlags)
     {
-	BYTE CertType;
+        BYTE CertType;
 
-	if (!fCA)
-	{
-	    hr = polGetCertificateExtension(
-				    pServer,
-				    TEXT(szOID_BASIC_CONSTRAINTS2),
-				    PROPTYPE_BINARY,
-				    &varConstraints);
-	    if (S_OK == hr)
-	    {
-		cb = sizeof(Constraints);
-		if (!CryptDecodeObject(
-				    X509_ASN_ENCODING,
-				    X509_BASIC_CONSTRAINTS2,
-				    (BYTE const *) varConstraints.bstrVal,
-				    SysStringByteLen(varConstraints.bstrVal),
-				    0,
-				    &Constraints,
-				    &cb))
-		{
-		    hr = ceHLastError();
-		    _JumpError(hr, error, "Policy:CryptDecodeObject");
-		}
-		fCA = Constraints.fCA;
-	    }
-	}
+        if (!fCA)
+        {
+            hr = polGetCertificateExtension(
+                     pServer,
+                     TEXT(szOID_BASIC_CONSTRAINTS2),
+                     PROPTYPE_BINARY,
+                     &varConstraints);
+            if (S_OK == hr)
+            {
+                cb = sizeof(Constraints);
+                if (!CryptDecodeObject(
+                            X509_ASN_ENCODING,
+                            X509_BASIC_CONSTRAINTS2,
+                            (BYTE const *) varConstraints.bstrVal,
+                            SysStringByteLen(varConstraints.bstrVal),
+                            0,
+                            &Constraints,
+                            &cb))
+                {
+                    hr = ceHLastError();
+                    _JumpError(hr, error, "Policy:CryptDecodeObject");
+                }
+                fCA = Constraints.fCA;
+            }
+        }
 
-	hr = CoCreateInstance(
-			CLSID_CCertEncodeBitString,
-			NULL,               // pUnkOuter
-			CLSCTX_INPROC_SERVER,
-			IID_ICertEncodeBitString,
-			(VOID **) &pBitString);
-	_JumpIfError(hr, error, "Policy:CoCreateInstance");
+        hr = CoCreateInstance(
+                 CLSID_CCertEncodeBitString,
+                 NULL,               // pUnkOuter
+                 CLSCTX_INPROC_SERVER,
+                 IID_ICertEncodeBitString,
+                 (VOID **) &pBitString);
+        _JumpIfError(hr, error, "Policy:CoCreateInstance");
 
-	CertType = NSCERTTYPE_CLIENT;	// Default to client auth. cert
-	if (fCA)
-	{
-	    CertType = NSCERTTYPE_CA;
-	}
-	else
-	{
-	    hr = polGetRequestAttribute(pServer, wszPROPCERTTYPE, &strCertType);
-	    if (S_OK == hr)
-	    {
-		if (0 == celstrcmpiL(strCertType, L"server"))
-		{
-		    CertType = NSCERTTYPE_SERVER;
-		}
-	    }
-	}
+        CertType = NSCERTTYPE_CLIENT;	// Default to client auth. cert
+        if (fCA)
+        {
+            CertType = NSCERTTYPE_CA;
+        }
+        else
+        {
+            hr = polGetRequestAttribute(pServer, wszPROPCERTTYPE, &strCertType);
+            if (S_OK == hr)
+            {
+                if (0 == celstrcmpiL(strCertType, L"server"))
+                {
+                    CertType = NSCERTTYPE_SERVER;
+                }
+            }
+        }
 
         if (!ceConvertWszToBstr(
-		    &strBitString,
-		    (WCHAR const *) &CertType,
-		    sizeof(CertType)))
-	{
-	    hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "Policy:ceConvertWszToBstr");
-	}
+                    &strBitString,
+                    (WCHAR const *) &CertType,
+                    sizeof(CertType)))
+        {
+            hr = E_OUTOFMEMORY;
+            _JumpError(hr, error, "Policy:ceConvertWszToBstr");
+        }
 
-	hr = pBitString->Encode(
-			    sizeof(CertType) * 8,
-			    strBitString,
-			    &strExtension);
-	_JumpIfError(hr, error, "Policy:BitString:Encode");
+        hr = pBitString->Encode(
+                 sizeof(CertType) * 8,
+                 strBitString,
+                 &strExtension);
+        _JumpIfError(hr, error, "Policy:BitString:Encode");
 
         varExtension.vt = VT_BSTR;
-	varExtension.bstrVal = strExtension;
-	hr = polSetCertificateExtension(
-				pServer,
-				TEXT(szOID_NETSCAPE_CERT_TYPE),
-				PROPTYPE_BINARY,
-				0,
-				&varExtension);
-	_JumpIfError(hr, error, "Policy:polSetCertificateExtension");
+        varExtension.bstrVal = strExtension;
+        hr = polSetCertificateExtension(
+                 pServer,
+                 TEXT(szOID_NETSCAPE_CERT_TYPE),
+                 PROPTYPE_BINARY,
+                 0,
+                 &varExtension);
+        _JumpIfError(hr, error, "Policy:polSetCertificateExtension");
     }
 
 error:
@@ -1908,21 +1913,21 @@ CCertPolicySample::_AddAuthorityKeyId(
     // Optimization
 
     if ((EDITF_ENABLEAKIKEYID |
-	 EDITF_ENABLEAKIISSUERNAME |
-	 EDITF_ENABLEAKIISSUERSERIAL) ==
-	((EDITF_ENABLEAKIKEYID |
-	  EDITF_ENABLEAKIISSUERNAME |
-	  EDITF_ENABLEAKIISSUERSERIAL |
-	  EDITF_ENABLEAKICRITICAL) & m_dwEditFlags))
+            EDITF_ENABLEAKIISSUERNAME |
+            EDITF_ENABLEAKIISSUERSERIAL) ==
+            ((EDITF_ENABLEAKIKEYID |
+              EDITF_ENABLEAKIISSUERNAME |
+              EDITF_ENABLEAKIISSUERSERIAL |
+              EDITF_ENABLEAKICRITICAL) & m_dwEditFlags))
     {
         goto error;
     }
 
     hr = polGetCertificateExtension(
-			    pServer,
-			    TEXT(szOID_AUTHORITY_KEY_IDENTIFIER2),
-			    PROPTYPE_BINARY,
-			    &varExtension);
+             pServer,
+             TEXT(szOID_AUTHORITY_KEY_IDENTIFIER2),
+             PROPTYPE_BINARY,
+             &varExtension);
     _JumpIfError(hr, error, "Policy:polGetCertificateExtension");
 
     hr = pServer->GetCertificateExtensionFlags(&ExtFlags);
@@ -1930,22 +1935,22 @@ CCertPolicySample::_AddAuthorityKeyId(
 
     if (VT_BSTR != varExtension.vt)
     {
-	hr = E_INVALIDARG;
-	_JumpError(hr, error, "Policy:GetCertificateExtension");
+        hr = E_INVALIDARG;
+        _JumpError(hr, error, "Policy:GetCertificateExtension");
     }
 
     cbInfo = 0;
     if (!ceDecodeObject(
-		    X509_ASN_ENCODING,
-                    X509_AUTHORITY_KEY_ID2,
-                    (BYTE *) varExtension.bstrVal,
-                    SysStringByteLen(varExtension.bstrVal),
-		    FALSE,
-                    (VOID **) &pInfo,
-                    &cbInfo))
+                X509_ASN_ENCODING,
+                X509_AUTHORITY_KEY_ID2,
+                (BYTE *) varExtension.bstrVal,
+                SysStringByteLen(varExtension.bstrVal),
+                FALSE,
+                (VOID **) &pInfo,
+                &cbInfo))
     {
-	hr = ceHLastError();
-	_JumpIfError(hr, error, "Policy:ceDecodeObject");
+        hr = ceHLastError();
+        _JumpIfError(hr, error, "Policy:ceDecodeObject");
     }
 
     // Make Any Modifications Here
@@ -1967,56 +1972,56 @@ CCertPolicySample::_AddAuthorityKeyId(
     }
     if (EDITF_ENABLEAKICRITICAL & m_dwEditFlags)
     {
-	ExtFlags |= EXTENSION_CRITICAL_FLAG;
+        ExtFlags |= EXTENSION_CRITICAL_FLAG;
     }
     if (0 ==
-	((EDITF_ENABLEAKIKEYID |
-	  EDITF_ENABLEAKIISSUERNAME |
-	  EDITF_ENABLEAKIISSUERSERIAL) & m_dwEditFlags))
+            ((EDITF_ENABLEAKIKEYID |
+              EDITF_ENABLEAKIISSUERNAME |
+              EDITF_ENABLEAKIISSUERSERIAL) & m_dwEditFlags))
     {
-	ExtFlags |= EXTENSION_DISABLE_FLAG;
+        ExtFlags |= EXTENSION_DISABLE_FLAG;
     }
 
     if (!ceEncodeObject(
-		    X509_ASN_ENCODING,
-		    X509_AUTHORITY_KEY_ID2,
-		    pInfo,
-		    0,
-		    FALSE,
-		    &pbEncoded,
-		    &cbEncoded))
+                X509_ASN_ENCODING,
+                X509_AUTHORITY_KEY_ID2,
+                pInfo,
+                0,
+                FALSE,
+                &pbEncoded,
+                &cbEncoded))
     {
-	hr = ceHLastError();
-	_JumpError(hr, error, "Policy:ceEncodeObject");
+        hr = ceHLastError();
+        _JumpError(hr, error, "Policy:ceEncodeObject");
     }
     if (!ceConvertWszToBstr(
-			&strExtension,
-			(WCHAR const *) pbEncoded,
-			cbEncoded))
+                &strExtension,
+                (WCHAR const *) pbEncoded,
+                cbEncoded))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:ceConvertWszToBstr");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:ceConvertWszToBstr");
     }
 
     varExtensionT.vt = VT_BSTR;
     varExtensionT.bstrVal = strExtension;
     hr = polSetCertificateExtension(
-			    pServer,
-			    TEXT(szOID_AUTHORITY_KEY_IDENTIFIER2),
-			    PROPTYPE_BINARY,
-			    ExtFlags,
-			    &varExtensionT);
+             pServer,
+             TEXT(szOID_AUTHORITY_KEY_IDENTIFIER2),
+             PROPTYPE_BINARY,
+             ExtFlags,
+             &varExtensionT);
     _JumpIfError(hr, error, "Policy:polSetCertificateExtension(AuthorityKeyId2)");
 
 error:
     VariantClear(&varExtension);
     if (NULL != pInfo)
     {
-	LocalFree(pInfo);
+        LocalFree(pInfo);
     }
     if (NULL != pbEncoded)
     {
-	LocalFree(pbEncoded);
+        LocalFree(pbEncoded);
     }
     SysFreeString(strExtension);
     return(hr);
@@ -2054,112 +2059,112 @@ CCertPolicySample::_AddDefaultKeyUsageExtension(
 
     if (EDITF_ADDOLDKEYUSAGE & m_dwEditFlags)
     {
-	BOOL fModified = FALSE;
+        BOOL fModified = FALSE;
 
-	if (!fCA)
-	{
-	    hr = polGetCertificateExtension(
-				    pServer,
-				    TEXT(szOID_BASIC_CONSTRAINTS2),
-				    PROPTYPE_BINARY,
-				    &varConstraints);
-	    if (S_OK == hr)
-	    {
-		cb = sizeof(Constraints);
-		if (!CryptDecodeObject(
-				    X509_ASN_ENCODING,
-				    X509_BASIC_CONSTRAINTS2,
-				    (BYTE const *) varConstraints.bstrVal,
-				    SysStringByteLen(varConstraints.bstrVal),
-				    0,
-				    &Constraints,
-				    &cb))
-		{
-		    hr = ceHLastError();
-		    _JumpError(hr, error, "Policy:CryptDecodeObject");
-		}
-		fCA = Constraints.fCA;
-	    }
-	}
+        if (!fCA)
+        {
+            hr = polGetCertificateExtension(
+                     pServer,
+                     TEXT(szOID_BASIC_CONSTRAINTS2),
+                     PROPTYPE_BINARY,
+                     &varConstraints);
+            if (S_OK == hr)
+            {
+                cb = sizeof(Constraints);
+                if (!CryptDecodeObject(
+                            X509_ASN_ENCODING,
+                            X509_BASIC_CONSTRAINTS2,
+                            (BYTE const *) varConstraints.bstrVal,
+                            SysStringByteLen(varConstraints.bstrVal),
+                            0,
+                            &Constraints,
+                            &cb))
+                {
+                    hr = ceHLastError();
+                    _JumpError(hr, error, "Policy:CryptDecodeObject");
+                }
+                fCA = Constraints.fCA;
+            }
+        }
 
-	ZeroMemory(abKeyUsage, sizeof(abKeyUsage));
-	pbKeyUsage = abKeyUsage;
-	cbKeyUsage = sizeof(abKeyUsage);
+        ZeroMemory(abKeyUsage, sizeof(abKeyUsage));
+        pbKeyUsage = abKeyUsage;
+        cbKeyUsage = sizeof(abKeyUsage);
 
-	hr = polGetCertificateExtension(
-				pServer,
-				TEXT(szOID_KEY_USAGE),
-				PROPTYPE_BINARY,
-				&varKeyUsage);
-	if (S_OK == hr)
-	{
-	    if (!ceDecodeObject(
-			    X509_ASN_ENCODING,
-			    X509_KEY_USAGE,
-			    (BYTE const *) varKeyUsage.bstrVal,
-			    SysStringByteLen(varKeyUsage.bstrVal),
-			    FALSE,
-			    (VOID **) &pKeyUsage,
-			    &cb))
-	    {
-		hr = GetLastError();
-		_PrintError(hr, "Policy:ceDecodeObject");
-	    }
-	    else if (0 != cb && NULL != pKeyUsage && 0 != pKeyUsage->cbData)
-	    {
-		pbKeyUsage = pKeyUsage->pbData;
-		cbKeyUsage = pKeyUsage->cbData;
-	    }
-	}
+        hr = polGetCertificateExtension(
+                 pServer,
+                 TEXT(szOID_KEY_USAGE),
+                 PROPTYPE_BINARY,
+                 &varKeyUsage);
+        if (S_OK == hr)
+        {
+            if (!ceDecodeObject(
+                        X509_ASN_ENCODING,
+                        X509_KEY_USAGE,
+                        (BYTE const *) varKeyUsage.bstrVal,
+                        SysStringByteLen(varKeyUsage.bstrVal),
+                        FALSE,
+                        (VOID **) &pKeyUsage,
+                        &cb))
+            {
+                hr = GetLastError();
+                _PrintError(hr, "Policy:ceDecodeObject");
+            }
+            else if (0 != cb && NULL != pKeyUsage && 0 != pKeyUsage->cbData)
+            {
+                pbKeyUsage = pKeyUsage->pbData;
+                cbKeyUsage = pKeyUsage->cbData;
+            }
+        }
 
-	if ((CERT_KEY_ENCIPHERMENT_KEY_USAGE & pbKeyUsage[0]) &&
-	    (CERT_KEY_AGREEMENT_KEY_USAGE & pbKeyUsage[0]))
-	{
-	    pbKeyUsage[0] &= ~CERT_KEY_AGREEMENT_KEY_USAGE;
-	    pbKeyUsage[0] |= CERT_DIGITAL_SIGNATURE_KEY_USAGE;
-	    fModified = TRUE;
-	}
-	if (fCA)
-	{
-	    pbKeyUsage[0] |= ceCASIGN_KEY_USAGE;
-	    fModified = TRUE;
-	}
-	if (fModified)
-	{
-	    hr = CoCreateInstance(
-			    CLSID_CCertEncodeBitString,
-			    NULL,               // pUnkOuter
-			    CLSCTX_INPROC_SERVER,
-			    IID_ICertEncodeBitString,
-			    (VOID **) &pBitString);
-	    _JumpIfError(hr, error, "Policy:CoCreateInstance");
+        if ((CERT_KEY_ENCIPHERMENT_KEY_USAGE & pbKeyUsage[0]) &&
+                (CERT_KEY_AGREEMENT_KEY_USAGE & pbKeyUsage[0]))
+        {
+            pbKeyUsage[0] &= ~CERT_KEY_AGREEMENT_KEY_USAGE;
+            pbKeyUsage[0] |= CERT_DIGITAL_SIGNATURE_KEY_USAGE;
+            fModified = TRUE;
+        }
+        if (fCA)
+        {
+            pbKeyUsage[0] |= ceCASIGN_KEY_USAGE;
+            fModified = TRUE;
+        }
+        if (fModified)
+        {
+            hr = CoCreateInstance(
+                     CLSID_CCertEncodeBitString,
+                     NULL,               // pUnkOuter
+                     CLSCTX_INPROC_SERVER,
+                     IID_ICertEncodeBitString,
+                     (VOID **) &pBitString);
+            _JumpIfError(hr, error, "Policy:CoCreateInstance");
 
-	    if (!ceConvertWszToBstr(
-			&strBitString,
-			(WCHAR const *) pbKeyUsage,
-			cbKeyUsage))
-	    {
-		hr = E_OUTOFMEMORY;
-		_JumpError(hr, error, "Policy:ceConvertWszToBstr");
-	    }
+            if (!ceConvertWszToBstr(
+                        &strBitString,
+                        (WCHAR const *) pbKeyUsage,
+                        cbKeyUsage))
+            {
+                hr = E_OUTOFMEMORY;
+                _JumpError(hr, error, "Policy:ceConvertWszToBstr");
+            }
 
-	    hr = pBitString->Encode(cbKeyUsage * 8, strBitString, &strExtension);
-	    _JumpIfError(hr, error, "Policy:Encode");
+            hr = pBitString->Encode(cbKeyUsage * 8, strBitString, &strExtension);
+            _JumpIfError(hr, error, "Policy:Encode");
 
-	    if (!ceConvertWszToBstr(&strName, TEXT(szOID_KEY_USAGE), -1))
-	    {
-		hr = E_OUTOFMEMORY;
-		_JumpError(hr, error, "Policy:ceConvertWszToBstr");
-	    }
-	    varExtension.vt = VT_BSTR;
-	    varExtension.bstrVal = strExtension;
-	    hr = pServer->SetCertificateExtension(
-				    strName,
-				    PROPTYPE_BINARY,
-				    0,
-				    &varExtension);
-	    _JumpIfError(hr, error, "Policy:SetCertificateExtension");
-	}
+            if (!ceConvertWszToBstr(&strName, TEXT(szOID_KEY_USAGE), -1))
+            {
+                hr = E_OUTOFMEMORY;
+                _JumpError(hr, error, "Policy:ceConvertWszToBstr");
+            }
+            varExtension.vt = VT_BSTR;
+            varExtension.bstrVal = strExtension;
+            hr = pServer->SetCertificateExtension(
+                     strName,
+                     PROPTYPE_BINARY,
+                     0,
+                     &varExtension);
+            _JumpIfError(hr, error, "Policy:SetCertificateExtension");
+        }
     }
     hr = S_OK;
 
@@ -2206,42 +2211,42 @@ CCertPolicySample::_AddEnhancedKeyUsageExtension(
 
     if (0 == (EDITF_ATTRIBUTEEKU & m_dwEditFlags))
     {
-	hr = S_OK;
-	goto error;
+        hr = S_OK;
+        goto error;
     }
     hr = polGetRequestAttribute(pServer, wszPROPCERTUSAGE, &strUsage);
     if (S_OK != hr)
     {
-	hr = S_OK;
-	goto error;
+        hr = S_OK;
+        goto error;
     }
     if (!ceConvertWszToSz(&pszUsage, strUsage, -1))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:ceConvertWszToSz");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:ceConvertWszToSz");
     }
     for (psz = pszUsage; '\0' != *psz; psz = pszNext)
     {
-	pszNext = &psz[strcspn(psz, ",")];
-	if ('\0' != *pszNext)
-	{
-	    pszNext++;
-	}
-	ceu.cUsageIdentifier++;
+        pszNext = &psz[strcspn(psz, ",")];
+        if ('\0' != *pszNext)
+        {
+            pszNext++;
+        }
+        ceu.cUsageIdentifier++;
     }
     if (0 == ceu.cUsageIdentifier)
     {
-	hr = S_OK;
-	goto error;
+        hr = S_OK;
+        goto error;
     }
 
     ceu.rgpszUsageIdentifier = (char **) LocalAlloc(
-		LMEM_FIXED,
-		ceu.cUsageIdentifier * sizeof(ceu.rgpszUsageIdentifier[0]));
+                                   LMEM_FIXED,
+                                   ceu.cUsageIdentifier * sizeof(ceu.rgpszUsageIdentifier[0]));
     if (NULL == ceu.rgpszUsageIdentifier)
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:myLocalAlloc");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:myLocalAlloc");
     }
 
     // Destructively parse comma separated ObjIds into individual strings
@@ -2249,73 +2254,73 @@ CCertPolicySample::_AddEnhancedKeyUsageExtension(
     i = 0;
     for (psz = pszUsage; '\0' != *psz; psz = pszNext)
     {
-	char *pszEnd;
+        char *pszEnd;
 
-	assert(i < ceu.cUsageIdentifier);
-	pszNext = &psz[strcspn(psz, ",")];
-	pszEnd = pszNext;
-	if ('\0' != *pszNext)
-	{
-	    *pszNext++ = '\0';
-	}
-	while (' ' == *psz)
-	{
-	    psz++;
-	}
-	while (pszEnd > psz && ' ' == *--pszEnd)
-	{
-	    *pszEnd = '\0';
-	}
-	if ('\0' != *psz)
-	{
-	    hr = ceVerifyObjIdA(psz);
-	    _JumpIfError(hr, error, "Policy:ceVerifyObjIdA");
+        assert(i < ceu.cUsageIdentifier);
+        pszNext = &psz[strcspn(psz, ",")];
+        pszEnd = pszNext;
+        if ('\0' != *pszNext)
+        {
+            *pszNext++ = '\0';
+        }
+        while (' ' == *psz)
+        {
+            psz++;
+        }
+        while (pszEnd > psz && ' ' == *--pszEnd)
+        {
+            *pszEnd = '\0';
+        }
+        if ('\0' != *psz)
+        {
+            hr = ceVerifyObjIdA(psz);
+            _JumpIfError(hr, error, "Policy:ceVerifyObjIdA");
 
-	    ceu.rgpszUsageIdentifier[i++] = psz;
-	}
+            ceu.rgpszUsageIdentifier[i++] = psz;
+        }
     }
     ceu.cUsageIdentifier = i;
     if (0 == ceu.cUsageIdentifier)
     {
-	hr = S_OK;
-	goto error;
+        hr = S_OK;
+        goto error;
     }
 
     if (!ceEncodeObject(
-		    X509_ASN_ENCODING,
-		    X509_ENHANCED_KEY_USAGE,
-		    &ceu,
-		    0,
-		    FALSE,
-		    &pbKeyUsage,
-		    &cbKeyUsage))
+                X509_ASN_ENCODING,
+                X509_ENHANCED_KEY_USAGE,
+                &ceu,
+                0,
+                FALSE,
+                &pbKeyUsage,
+                &cbKeyUsage))
     {
-	hr = ceHLastError();
-	_JumpError(hr, error, "Policy:ceEncodeObject");
+        hr = ceHLastError();
+        _JumpError(hr, error, "Policy:ceEncodeObject");
     }
 
     varExtension.bstrVal = NULL;
     if (!ceConvertWszToBstr(
-			&varExtension.bstrVal,
-			(WCHAR const *) pbKeyUsage,
-			cbKeyUsage))
+                &varExtension.bstrVal,
+                (WCHAR const *) pbKeyUsage,
+                cbKeyUsage))
     {
         hr = E_OUTOFMEMORY;
         _JumpError(hr, error, "Policy:ceConvertWszToBstr");
     }
     varExtension.vt = VT_BSTR;
     hr = polSetCertificateExtension(
-			    pServer,
-			    TEXT(szOID_ENHANCED_KEY_USAGE),
-			    PROPTYPE_BINARY,
-			    0,
-			    &varExtension);
+             pServer,
+             TEXT(szOID_ENHANCED_KEY_USAGE),
+             PROPTYPE_BINARY,
+             0,
+             &varExtension);
     _JumpIfError(hr, error, "Policy:polSetCertificateExtension");
 
     cpi.cPolicyInfo = ceu.cUsageIdentifier;
     cpi.rgPolicyInfo = (CERT_POLICY_INFO *) LocalAlloc(
-			    LMEM_FIXED | LMEM_ZEROINIT,
-			    cpi.cPolicyInfo * sizeof(cpi.rgPolicyInfo[0]));
+                           LMEM_FIXED | LMEM_ZEROINIT,
+                           cpi.cPolicyInfo * sizeof(cpi.rgPolicyInfo[0]));
     if (NULL == cpi.rgPolicyInfo)
     {
         hr = E_OUTOFMEMORY;
@@ -2323,58 +2328,58 @@ CCertPolicySample::_AddEnhancedKeyUsageExtension(
     }
     for (i = 0; i < cpi.cPolicyInfo; i++)
     {
-	cpi.rgPolicyInfo[i].pszPolicyIdentifier = ceu.rgpszUsageIdentifier[i];
+        cpi.rgPolicyInfo[i].pszPolicyIdentifier = ceu.rgpszUsageIdentifier[i];
     }
     if (!ceEncodeObject(
-		    X509_ASN_ENCODING,
-		    X509_CERT_POLICIES,
-		    &cpi,
-		    0,
-		    FALSE,
-		    &pbPolicies,
-		    &cbPolicies))
+                X509_ASN_ENCODING,
+                X509_CERT_POLICIES,
+                &cpi,
+                0,
+                FALSE,
+                &pbPolicies,
+                &cbPolicies))
     {
-	hr = ceHLastError();
-	_JumpError(hr, error, "Policy:ceEncodeObject");
+        hr = ceHLastError();
+        _JumpError(hr, error, "Policy:ceEncodeObject");
     }
 
     if (!ceConvertWszToBstr(
-			&varExtension.bstrVal,
-			(WCHAR const *) pbPolicies,
-			cbPolicies))
+                &varExtension.bstrVal,
+                (WCHAR const *) pbPolicies,
+                cbPolicies))
     {
         hr = E_OUTOFMEMORY;
         _JumpError(hr, error, "Policy:ceConvertWszToBstr");
     }
     hr = polSetCertificateExtension(
-			    pServer,
-			    TEXT(szOID_APPLICATION_CERT_POLICIES),
-			    PROPTYPE_BINARY,
-			    0,
-			    &varExtension);
+             pServer,
+             TEXT(szOID_APPLICATION_CERT_POLICIES),
+             PROPTYPE_BINARY,
+             0,
+             &varExtension);
     _JumpIfError(hr, error, "Policy:polSetCertificateExtension");
 
 error:
     if (NULL != pcpi)
     {
-	LocalFree(pcpi);
+        LocalFree(pcpi);
     }
     VariantClear(&varExtension);
     if (NULL != ceu.rgpszUsageIdentifier)
     {
-	LocalFree(ceu.rgpszUsageIdentifier);
+        LocalFree(ceu.rgpszUsageIdentifier);
     }
     if (NULL != pbPolicies)
     {
-	LocalFree(pbPolicies);
+        LocalFree(pbPolicies);
     }
     if (NULL != pbKeyUsage)
     {
-	LocalFree(pbKeyUsage);
+        LocalFree(pbKeyUsage);
     }
     if (NULL != pszUsage)
     {
-	LocalFree(pszUsage);
+        LocalFree(pszUsage);
     }
     SysFreeString(strUsage);
     return(hr);
@@ -2404,18 +2409,18 @@ CCertPolicySample::_AddDefaultBasicConstraintsExtension(
     if (EDITF_BASICCONSTRAINTSCA & m_dwEditFlags)
     {
         hr = polGetCertificateExtension(
-				pServer,
-				TEXT(szOID_BASIC_CONSTRAINTS2),
-				PROPTYPE_BINARY,
-				&varExtension);
+                 pServer,
+                 TEXT(szOID_BASIC_CONSTRAINTS2),
+                 PROPTYPE_BINARY,
+                 &varExtension);
         if (S_OK == hr)
         {
-	    CERT_BASIC_CONSTRAINTS2_INFO Constraints;
-	    DWORD cb;
+            CERT_BASIC_CONSTRAINTS2_INFO Constraints;
+            DWORD cb;
 
-	    hr = pServer->GetCertificateExtensionFlags(&ExtFlags);
-	    if (S_OK == hr)
-	    {
+            hr = pServer->GetCertificateExtensionFlags(&ExtFlags);
+            if (S_OK == hr)
+            {
                 Ext.pszObjId = szOID_BASIC_CONSTRAINTS2;
                 Ext.fCritical = FALSE;
                 if (EXTENSION_CRITICAL_FLAG & ExtFlags)
@@ -2424,51 +2429,51 @@ CCertPolicySample::_AddDefaultBasicConstraintsExtension(
                 }
                 Ext.Value.pbData = (BYTE *) varExtension.bstrVal;
                 Ext.Value.cbData = SysStringByteLen(varExtension.bstrVal);
-		pExtension = &Ext;
+                pExtension = &Ext;
 
-		cb = sizeof(Constraints);
-		if (!fCA && CryptDecodeObject(
-			        X509_ASN_ENCODING,
-			        X509_BASIC_CONSTRAINTS2,
-			        Ext.Value.pbData,
-			        Ext.Value.cbData,
-			        0,
-			        &Constraints,
-			        &cb))
-		{
-		    fCA = Constraints.fCA;
-		}
-	    }
-	}
+                cb = sizeof(Constraints);
+                if (!fCA && CryptDecodeObject(
+                            X509_ASN_ENCODING,
+                            X509_BASIC_CONSTRAINTS2,
+                            Ext.Value.pbData,
+                            Ext.Value.cbData,
+                            0,
+                            &Constraints,
+                            &cb))
+                {
+                    fCA = Constraints.fCA;
+                }
+            }
+        }
     }
 
     if (EDITF_ATTRIBUTECA & m_dwEditFlags)
     {
         if (!fCA)
         {
-	    hr = polGetRequestAttribute(pServer, wszPROPCERTTYPE, &strCertType);
+            hr = polGetRequestAttribute(pServer, wszPROPCERTTYPE, &strCertType);
             if (S_OK == hr)
             {
                 if (0 == celstrcmpiL(strCertType, L"ca"))
                 {
                     fCA = TRUE;
                 }
-		SysFreeString(strCertType);
-		strCertType = NULL;
+                SysFreeString(strCertType);
+                strCertType = NULL;
             }
         }
         if (!fCA)
         {
-	    hr = polGetRequestAttribute(pServer, wszPROPCERTTEMPLATE, &strCertType);
+            hr = polGetRequestAttribute(pServer, wszPROPCERTTEMPLATE, &strCertType);
             if (S_OK == hr)
             {
                 if (0 == celstrcmpiL(strCertType, wszCERTTYPE_SUBORDINATE_CA) ||
-		    0 == celstrcmpiL(strCertType, wszCERTTYPE_CROSS_CA))
+                        0 == celstrcmpiL(strCertType, wszCERTTYPE_CROSS_CA))
                 {
                     fCA = TRUE;
                 }
             }
-	}
+        }
     }
 
     // For standalone, the extension is only enabled if it's a CA
@@ -2514,16 +2519,16 @@ CCertPolicySample::AddBasicConstraintsCommon(
     {
         cb = sizeof(Constraints);
         if (!CryptDecodeObject(
-			X509_ASN_ENCODING,
-			X509_BASIC_CONSTRAINTS2,
-			pExtension->Value.pbData,
-			pExtension->Value.cbData,
-			0,
-			&Constraints,
-			&cb))
+                    X509_ASN_ENCODING,
+                    X509_BASIC_CONSTRAINTS2,
+                    pExtension->Value.pbData,
+                    pExtension->Value.cbData,
+                    0,
+                    &Constraints,
+                    &cb))
         {
-	    hr = ceHLastError();
-	    _JumpError(hr, error, "Policy:CryptDecodeObject");
+            hr = ceHLastError();
+            _JumpError(hr, error, "Policy:CryptDecodeObject");
         }
 
         // Cert templates use CAPATHLENGTH_INFINITE to indicate
@@ -2534,22 +2539,22 @@ CCertPolicySample::AddBasicConstraintsCommon(
 
             // NOTE: This is ok as certcli already sets fPathLenConstraint to FALSE
             // for templates in this case.
-	    Constraints.fPathLenConstraint = FALSE;
+            Constraints.fPathLenConstraint = FALSE;
 
             // NOTE: This is ok as autoenrollment ignores dwPathLenConstraint
             // if fPathLenConstraint is FALSE;
-	    Constraints.dwPathLenConstraint = 0;
+            Constraints.dwPathLenConstraint = 0;
         }
         if (pExtension->fCritical)
         {
-	    ExtFlags = EXTENSION_CRITICAL_FLAG;
+            ExtFlags = EXTENSION_CRITICAL_FLAG;
         }
     }
     else
     {
-	Constraints.fCA = fCA;
-	Constraints.fPathLenConstraint = FALSE;
-	Constraints.dwPathLenConstraint = 0;
+        Constraints.fCA = fCA;
+        Constraints.fPathLenConstraint = FALSE;
+        Constraints.dwPathLenConstraint = 0;
     }
     if (EDITF_BASICCONSTRAINTSCRITICAL & m_dwEditFlags)
     {
@@ -2559,20 +2564,20 @@ CCertPolicySample::AddBasicConstraintsCommon(
     // Check basic constraints against the issuer's cert.
 
     pIssuerExtension = CertFindExtension(
-				szOID_BASIC_CONSTRAINTS2,
-				pIssuerCert->pCertInfo->cExtension,
-				pIssuerCert->pCertInfo->rgExtension);
+                           szOID_BASIC_CONSTRAINTS2,
+                           pIssuerCert->pCertInfo->cExtension,
+                           pIssuerCert->pCertInfo->rgExtension);
     if (NULL != pIssuerExtension)
     {
         cb = sizeof(IssuerConstraints);
         if (!CryptDecodeObject(
-			        X509_ASN_ENCODING,
-			        X509_BASIC_CONSTRAINTS2,
-			        pIssuerExtension->Value.pbData,
-			        pIssuerExtension->Value.cbData,
-			        0,
-			        &IssuerConstraints,
-			        &cb))
+                    X509_ASN_ENCODING,
+                    X509_BASIC_CONSTRAINTS2,
+                    pIssuerExtension->Value.pbData,
+                    pIssuerExtension->Value.cbData,
+                    0,
+                    &IssuerConstraints,
+                    &cb))
         {
             hr = ceHLastError();
             _JumpError(hr, error, "Policy:CryptDecodeObject");
@@ -2594,12 +2599,12 @@ CCertPolicySample::AddBasicConstraintsCommon(
                 _JumpError(hr, error, "Policy:CA cert is a leaf CA cert");
             }
             if (!Constraints.fPathLenConstraint ||
-                Constraints.dwPathLenConstraint >
-	            IssuerConstraints.dwPathLenConstraint - 1)
+                    Constraints.dwPathLenConstraint >
+                    IssuerConstraints.dwPathLenConstraint - 1)
             {
                 Constraints.fPathLenConstraint = TRUE;
                 Constraints.dwPathLenConstraint =
-                IssuerConstraints.dwPathLenConstraint - 1;
+                    IssuerConstraints.dwPathLenConstraint - 1;
             }
         }
         if (CAPATHLENGTH_INFINITE != m_CAPathLength)
@@ -2610,7 +2615,7 @@ CCertPolicySample::AddBasicConstraintsCommon(
                 _JumpError(hr, error, "Policy:Registry says not to issue CA certs");
             }
             if (!Constraints.fPathLenConstraint ||
-                Constraints.dwPathLenConstraint > m_CAPathLength - 1)
+                    Constraints.dwPathLenConstraint > m_CAPathLength - 1)
             {
                 Constraints.fPathLenConstraint = TRUE;
                 Constraints.dwPathLenConstraint = m_CAPathLength - 1;
@@ -2624,22 +2629,22 @@ CCertPolicySample::AddBasicConstraintsCommon(
     }
 
     if (!ceEncodeObject(
-		    X509_ASN_ENCODING,
-                    X509_BASIC_CONSTRAINTS2,
-                    &Constraints,
-		    0,
-		    FALSE,
-                    &pbConstraints,
-                    &cb))
+                X509_ASN_ENCODING,
+                X509_BASIC_CONSTRAINTS2,
+                &Constraints,
+                0,
+                FALSE,
+                &pbConstraints,
+                &cb))
     {
         hr = ceHLastError();
         _JumpError(hr, error, "Policy:ceEncodeObject");
     }
 
     if (!ceConvertWszToBstr(
-			&strExtension,
-			(WCHAR const *) pbConstraints,
-			cb))
+                &strExtension,
+                (WCHAR const *) pbConstraints,
+                cb))
     {
         hr = E_OUTOFMEMORY;
         _JumpError(hr, error, "Policy:ceConvertWszToBstr");
@@ -2648,11 +2653,11 @@ CCertPolicySample::AddBasicConstraintsCommon(
     varExtension.vt = VT_BSTR;
     varExtension.bstrVal = strExtension;
     hr = polSetCertificateExtension(
-			    pServer,
-			    TEXT(szOID_BASIC_CONSTRAINTS2),
-			    PROPTYPE_BINARY,
-			    ExtFlags,
-			    &varExtension);
+             pServer,
+             TEXT(szOID_BASIC_CONSTRAINTS2),
+             PROPTYPE_BINARY,
+             ExtFlags,
+             &varExtension);
     _JumpIfError(hr, error, "Policy:polSetCertificateExtension");
 
 error:
@@ -2691,19 +2696,19 @@ CCertPolicySample::_SetValidityPeriod(
 
     if (!(EDITF_ATTRIBUTEENDDATE & m_dwEditFlags))
     {
-	hr = S_OK;
-	goto error;
+        hr = S_OK;
+        goto error;
     }
 
     hr = polGetRequestAttribute(
-                        pServer,
-                        wszPROPEXPIRATIONDATE,
-                        &strExpirationDate);
+             pServer,
+             wszPROPEXPIRATIONDATE,
+             &strExpirationDate);
     if (SUCCEEDED(hr))
     {
         if (!WinHttpTimeToSystemTime(
-                strExpirationDate,
-                &SysExpirationDate))
+                    strExpirationDate,
+                    &SysExpirationDate))
         {
             hr = ceHLastError();
             _JumpError(hr, error, "WinHttpTimeToSystemTime");
@@ -2719,39 +2724,39 @@ CCertPolicySample::_SetValidityPeriod(
     else
     {
         hr = polGetRequestAttribute(
-			    pServer,
-			    wszPROPVALIDITYPERIODSTRING,
-			    &strPeriodString);
+                 pServer,
+                 wszPROPVALIDITYPERIODSTRING,
+                 &strPeriodString);
         if (S_OK != hr)
         {
-	    _PrintErrorStr2(
-		    hr,
-		    "Policy:polGetRequestAttribute",
-		    wszPROPVALIDITYPERIODSTRING,
-		    CERTSRV_E_PROPERTY_EMPTY);
-	    if (CERTSRV_E_PROPERTY_EMPTY == hr)
-	    {
-	        hr = S_OK;
-	    }
-	    goto error;
+            _PrintErrorStr2(
+                hr,
+                "Policy:polGetRequestAttribute",
+                wszPROPVALIDITYPERIODSTRING,
+                CERTSRV_E_PROPERTY_EMPTY);
+            if (CERTSRV_E_PROPERTY_EMPTY == hr)
+            {
+                hr = S_OK;
+            }
+            goto error;
         }
 
         hr = polGetRequestAttribute(
-			    pServer,
-			    wszPROPVALIDITYPERIODCOUNT,
-			    &strPeriodCount);
+                 pServer,
+                 wszPROPVALIDITYPERIODCOUNT,
+                 &strPeriodCount);
         if (S_OK != hr)
         {
-	    _PrintErrorStr2(
-		    hr,
-		    "Policy:polGetRequestAttribute",
-		    wszPROPVALIDITYPERIODCOUNT,
-		    CERTSRV_E_PROPERTY_EMPTY);
-	    if (CERTSRV_E_PROPERTY_EMPTY == hr)
-	    {
-	        hr = S_OK;
-	    }
-	    goto error;
+            _PrintErrorStr2(
+                hr,
+                "Policy:polGetRequestAttribute",
+                wszPROPVALIDITYPERIODCOUNT,
+                CERTSRV_E_PROPERTY_EMPTY);
+            if (CERTSRV_E_PROPERTY_EMPTY == hr)
+            {
+                hr = S_OK;
+            }
+            goto error;
         }
 
         // Swap Count and String BSTRs if backwards -- Windows 2000 had it wrong.
@@ -2759,17 +2764,17 @@ CCertPolicySample::_SetValidityPeriod(
         lDelta = ceWtoI(strPeriodCount, &fValidDigitString);
         if (!fValidDigitString)
         {
-	    BSTR str = strPeriodCount;
+            BSTR str = strPeriodCount;
 
-	    strPeriodCount = strPeriodString;
-	    strPeriodString = str;
+            strPeriodCount = strPeriodString;
+            strPeriodString = str;
 
-	    lDelta = ceWtoI(strPeriodCount, &fValidDigitString);
-	    if (!fValidDigitString)
-	    {
-	        hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
-	        _JumpError(hr, error, "Policy:ceWtoI");
-	    }
+            lDelta = ceWtoI(strPeriodCount, &fValidDigitString);
+            if (!fValidDigitString)
+            {
+                hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
+                _JumpError(hr, error, "Policy:ceWtoI");
+            }
         }
 
         hr = ceTranslatePeriodUnits(strPeriodString, lDelta, &enumValidityPeriod, &lDelta);
@@ -2782,9 +2787,9 @@ CCertPolicySample::_SetValidityPeriod(
             _JumpError(hr, error, "Policy:SysAllocString");
         }
         hr = pServer->GetCertificateProperty(
-				    strNameNotBefore,
-				    PROPTYPE_DATE,
-				    &varValue);
+                 strNameNotBefore,
+                 PROPTYPE_DATE,
+                 &varValue);
         _JumpIfError(hr, error, "Policy:GetCertificateProperty");
 
         hr = ceMakeExprDate(&varValue.date, lDelta, enumValidityPeriod);
@@ -2798,9 +2803,9 @@ CCertPolicySample::_SetValidityPeriod(
         _JumpError(hr, error, "Policy:SysAllocString");
     }
     hr = pServer->SetCertificateProperty(
-				strNameNotAfter,
-				PROPTYPE_DATE,
-				&varValue);
+             strNameNotAfter,
+             PROPTYPE_DATE,
+             &varValue);
     if (S_OK != hr)
     {
         _PrintError(hr, "_SetValidityPeriod");
@@ -2837,7 +2842,7 @@ CCertPolicySample::_PersistRequest(
     VARIANT var;
     CERT_ENHKEY_USAGE* pEKU = NULL;
     BSTR strPropName = NULL;
-    VariantInit(&var); 
+    VariantInit(&var);
 
     strPropName = SysAllocString(wszPROPCERTIFICATEGENERALFLAGS);
     if (IsNullBStr(strPropName))
@@ -2849,38 +2854,38 @@ CCertPolicySample::_PersistRequest(
 
     {
         hr = polGetCertificateExtension(
-                     pServer,
-                     TEXT(szOID_ENHANCED_KEY_USAGE), 
-                     PROPTYPE_BINARY,
-                     &var);
+                 pServer,
+                 TEXT(szOID_ENHANCED_KEY_USAGE),
+                 PROPTYPE_BINARY,
+                 &var);
         if (CERTSRV_E_PROPERTY_EMPTY == hr)
         {
             hr = S_OK;
             goto error;
         }
-    
+
         hr = pServer->GetCertificateExtensionFlags(&ExtFlags);
         _JumpIfError(hr, error, "Policy:GetCertificateExtensionFlags");
-    
+
         if (EXTENSION_DISABLE_FLAG & ExtFlags)
         {
             hr = S_OK;
             goto error;
         }
-    
+
         if (!ceDecodeObject(
-                     X509_ASN_ENCODING,
-                     X509_ENHANCED_KEY_USAGE,
-                     (BYTE const *)(V_BSTR(&var)),
-                     SysStringByteLen(V_BSTR(&var)), 
-                     FALSE,
-                     (VOID * *)&pEKU, 
-                     &cbEKU))
+                    X509_ASN_ENCODING,
+                    X509_ENHANCED_KEY_USAGE,
+                    (BYTE const *)(V_BSTR(&var)),
+                    SysStringByteLen(V_BSTR(&var)),
+                    FALSE,
+                    (VOID * *)&pEKU,
+                    &cbEKU))
         {
             hr = ceHLastError();
             _JumpError(hr, error, "ceDecodeObject");
         }
-    
+
         if (0 == pEKU->cUsageIdentifier)
         {
             hr = S_OK;
@@ -2898,11 +2903,11 @@ CCertPolicySample::_PersistRequest(
                 for (j = 0; j < m_cEKUOIDsForVolatileRequests; j++)
                 {
                     if (0 == _strcmpi(
-                                                pEKU->rgpszUsageIdentifier[i],
-                                                m_apszEKUOIDsForVolatileRequests[j]) ||
-                        0 == _strcmpi(
-                                                pEKU->rgpszUsageIdentifier[i],
-                                                szOID_ANY_ENHANCED_KEY_USAGE))
+                                pEKU->rgpszUsageIdentifier[i],
+                                m_apszEKUOIDsForVolatileRequests[j]) ||
+                            0 == _strcmpi(
+                                pEKU->rgpszUsageIdentifier[i],
+                                szOID_ANY_ENHANCED_KEY_USAGE))
                     {
                         fMatch = TRUE;	// found matching EKU OID
                         break;
@@ -2913,16 +2918,16 @@ CCertPolicySample::_PersistRequest(
 
         if (fMatch)
         {
-            // set a GeneralFlag value to indicate to the CA that this request must not be persisted 
-            VariantClear(&var);  
- 
+            // set a GeneralFlag value to indicate to the CA that this request must not be persisted
+            VariantClear(&var);
+
             hr = pServer->GetCertificateProperty(strPropName, PROPTYPE_LONG, &var);
             if (CERTSRV_E_PROPERTY_EMPTY == hr)
             {
                 hr  = S_OK;
             }
             _JumpIfError(hr, error, "Policy:SetCertificateProperty");
-            
+
             var.vt = VT_I4;
             var.lVal |= CT_FLAG_DONOTPERSISTINDB;
 
@@ -2932,22 +2937,22 @@ CCertPolicySample::_PersistRequest(
         }
 
     }
-    
+
 
     if (fMatch)
     {
         // Fail Key archival requests
         hr = polGetCertificateLongProperty(pServer, wszPROPKEYARCHIVED, &fArchivedKey);
         _JumpIfErrorStr(hr, error, "polGetCertificateLongProperty", wszPROPKEYARCHIVED);
-    
+
         // fail the request as there is an archived key
 
         if (fArchivedKey)
         {
             hr = CERTSRV_E_BAD_REQUESTSTATUS;
-    
+
             _JumpError(hr, error, "Key Archival request");
-        }        
+        }
     }
 
     hr = S_OK;
@@ -2990,101 +2995,101 @@ CCertPolicySample::AddV1TemplateNameExtension(
     strName = SysAllocString(TEXT(szOID_ENROLL_CERTTYPE_EXTENSION));
     if (IsNullBStr(strName))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:SysAllocString");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:SysAllocString");
     }
 
     hr = pServer->GetCertificateExtension(
-				    strName,
-				    PROPTYPE_BINARY,
-				    &varExtension);
+             strName,
+             PROPTYPE_BINARY,
+             &varExtension);
     _PrintIfError2(hr, "Policy:GetCertificateExtension", hr);
     if (CERTSRV_E_PROPERTY_EMPTY == hr)
     {
-	if (NULL == pwszTemplateName)
-	{
-	    hr = S_OK;
-	    goto error;
-	}
+        if (NULL == pwszTemplateName)
+        {
+            hr = S_OK;
+            goto error;
+        }
     }
     else
     {
-	_JumpIfError(hr, error, "Policy:GetCertificateExtension");
+        _JumpIfError(hr, error, "Policy:GetCertificateExtension");
 
-	hr = pServer->GetCertificateExtensionFlags(&ExtFlags);
-	_JumpIfError(hr, error, "Policy:GetCertificateExtensionFlags");
+        hr = pServer->GetCertificateExtensionFlags(&ExtFlags);
+        _JumpIfError(hr, error, "Policy:GetCertificateExtensionFlags");
 
-	if (VT_BSTR == varExtension.vt &&
-	    0 == (EXTENSION_DISABLE_FLAG & ExtFlags) &&
-	    NULL != pwszTemplateName)
-	{
-	    if (!ceDecodeObject(
-			X509_ASN_ENCODING,
-			X509_UNICODE_ANY_STRING,
-			(BYTE *) varExtension.bstrVal,
-			SysStringByteLen(varExtension.bstrVal),
-			FALSE,
-			(VOID **) &pName,
-			&cbEncoded))
-	    {
-		hr = ceHLastError();
-		_JumpError(hr, error, "Policy:ceDecodeObject");
-	    }
+        if (VT_BSTR == varExtension.vt &&
+                0 == (EXTENSION_DISABLE_FLAG & ExtFlags) &&
+                NULL != pwszTemplateName)
+        {
+            if (!ceDecodeObject(
+                        X509_ASN_ENCODING,
+                        X509_UNICODE_ANY_STRING,
+                        (BYTE *) varExtension.bstrVal,
+                        SysStringByteLen(varExtension.bstrVal),
+                        FALSE,
+                        (VOID **) &pName,
+                        &cbEncoded))
+            {
+                hr = ceHLastError();
+                _JumpError(hr, error, "Policy:ceDecodeObject");
+            }
 
-	    // case sensitive compare -- be sure to match case of template
+            // case sensitive compare -- be sure to match case of template
 
-	    if (0 == lstrcmp(
-			(WCHAR const *) pName->Value.pbData,
-			pwszTemplateName))
-	    {
-		fUpdate = FALSE;
-	    }
-	}
+            if (0 == lstrcmp(
+                        (WCHAR const *) pName->Value.pbData,
+                        pwszTemplateName))
+            {
+                fUpdate = FALSE;
+            }
+        }
     }
     if (fUpdate)
     {
-	if (NULL == pwszTemplateName)
-	{
-	    ExtFlags |= EXTENSION_DISABLE_FLAG;
-	}
-	else
-	{
-	    VariantClear(&varExtension);
-	    varExtension.bstrVal = NULL;
+        if (NULL == pwszTemplateName)
+        {
+            ExtFlags |= EXTENSION_DISABLE_FLAG;
+        }
+        else
+        {
+            VariantClear(&varExtension);
+            varExtension.bstrVal = NULL;
 
-	    NameValue.dwValueType = CERT_RDN_UNICODE_STRING;
-	    NameValue.Value.pbData = (BYTE *) pwszTemplateName;
-	    NameValue.Value.cbData = 0;
+            NameValue.dwValueType = CERT_RDN_UNICODE_STRING;
+            NameValue.Value.pbData = (BYTE *) pwszTemplateName;
+            NameValue.Value.cbData = 0;
 
-	    if (!ceEncodeObject(
-			    X509_ASN_ENCODING,
-			    X509_UNICODE_ANY_STRING,
-			    &NameValue,
-			    0,
-			    FALSE,
-			    &pbEncoded,
-			    &cbEncoded))
-	    {
-		hr = ceHLastError();
-		_JumpError(hr, error, "Policy:ceEncodeObject");
-	    }
-	    if (!ceConvertWszToBstr(
-				&varExtension.bstrVal,
-				(WCHAR const *) pbEncoded,
-				cbEncoded))
-	    {
-		hr = E_OUTOFMEMORY;
-		_JumpError(hr, error, "Policy:ceConvertWszToBstr");
-	    }
-	    varExtension.vt = VT_BSTR;
-	    ExtFlags &= ~EXTENSION_DISABLE_FLAG;
-	}
-	hr = pServer->SetCertificateExtension(
-				strName,
-				PROPTYPE_BINARY,
-				ExtFlags,
-				&varExtension);
-	_JumpIfError(hr, error, "Policy:SetCertificateExtension");
+            if (!ceEncodeObject(
+                        X509_ASN_ENCODING,
+                        X509_UNICODE_ANY_STRING,
+                        &NameValue,
+                        0,
+                        FALSE,
+                        &pbEncoded,
+                        &cbEncoded))
+            {
+                hr = ceHLastError();
+                _JumpError(hr, error, "Policy:ceEncodeObject");
+            }
+            if (!ceConvertWszToBstr(
+                        &varExtension.bstrVal,
+                        (WCHAR const *) pbEncoded,
+                        cbEncoded))
+            {
+                hr = E_OUTOFMEMORY;
+                _JumpError(hr, error, "Policy:ceConvertWszToBstr");
+            }
+            varExtension.vt = VT_BSTR;
+            ExtFlags &= ~EXTENSION_DISABLE_FLAG;
+        }
+        hr = pServer->SetCertificateExtension(
+                 strName,
+                 PROPTYPE_BINARY,
+                 ExtFlags,
+                 &varExtension);
+        _JumpIfError(hr, error, "Policy:SetCertificateExtension");
     }
     hr = S_OK;
 
@@ -3093,11 +3098,11 @@ error:
     SysFreeString(strName);
     if (NULL != pName)
     {
-	LocalFree(pName);
+        LocalFree(pName);
     }
     if (NULL != pbEncoded)
     {
-	LocalFree(pbEncoded);
+        LocalFree(pbEncoded);
     }
     return(hr);
 }
@@ -3126,178 +3131,178 @@ CCertPolicySample::VerifyRequest(
     lRequestId = 0;
 
 
-	if (NULL == pDisposition)
-	{
-	    hr = E_POINTER;
-	    _LeaveError(hr, leave_block, "Policy:pDisposition");
-	}
-	*pDisposition = VR_INSTANT_BAD;
+    if (NULL == pDisposition)
+    {
+        hr = E_POINTER;
+        _LeaveError(hr, leave_block, "Policy:pDisposition");
+    }
+    *pDisposition = VR_INSTANT_BAD;
 
-	hr = polGetServerCallbackInterface(&pServer, Context);
-	_LeaveIfError(hr, leave_block, "Policy:polGetServerCallbackInterface");
+    hr = polGetServerCallbackInterface(&pServer, Context);
+    _LeaveIfError(hr, leave_block, "Policy:polGetServerCallbackInterface");
 
-	hr = GetRequestId(pServer, &lRequestId);
-	_JumpIfError(hr, deny, "Policy:GetRequestId");
+    hr = GetRequestId(pServer, &lRequestId);
+    _JumpIfError(hr, deny, "Policy:GetRequestId");
 
-	// only need to check user access for original submitter:
-	// resubmit can only be called by admins
+    // only need to check user access for original submitter:
+    // resubmit can only be called by admins
 
-	if (bNewRequest && (0 == (m_dwEditFlags & EDITF_IGNOREREQUESTERGROUP)))
-	{
-	    BOOL fRequesterAccess = FALSE;
+    if (bNewRequest && (0 == (m_dwEditFlags & EDITF_IGNOREREQUESTERGROUP)))
+    {
+        BOOL fRequesterAccess = FALSE;
 
-	    // Is this user allowed to request certs?
-	    hr = polGetCertificateLongProperty(
-				    pServer,
-				    wszPROPREQUESTERCAACCESS,
-				    (LONG *) &fRequesterAccess);
-	    _PrintIfErrorStr(
-			hr,
-			"Policy:polGetCertificateLongProperty",
-			wszPROPREQUESTERCAACCESS);
-	    if (hr != S_OK || !fRequesterAccess)
-	    {
-		hr = CERTSRV_E_ENROLL_DENIED;
-		_JumpError(hr, deny, "Policy:fRequesterAccess");
-	    }
-	}
-
-
-	hr = Request.Initialize(
-			    this,
-  		           pServer,
-			    &fEnableEnrolleeExtensions);
-	_LeaveIfError(hr, leave_block, "Policy:VerifyRequest:Request.Initialize");
+        // Is this user allowed to request certs?
+        hr = polGetCertificateLongProperty(
+                 pServer,
+                 wszPROPREQUESTERCAACCESS,
+                 (LONG *) &fRequesterAccess);
+        _PrintIfErrorStr(
+            hr,
+            "Policy:polGetCertificateLongProperty",
+            wszPROPREQUESTERCAACCESS);
+        if (hr != S_OK || !fRequesterAccess)
+        {
+            hr = CERTSRV_E_ENROLL_DENIED;
+            _JumpError(hr, deny, "Policy:fRequesterAccess");
+        }
+    }
 
 
-	hr = _EnumerateExtensions(
-			    pServer,
-			    bNewRequest,
-			    TRUE,
-			    fEnableEnrolleeExtensions,
-			    0,
-			    NULL);
-	_LeaveIfError(hr, leave_block, "_EnumerateExtensions");
-
-	{
-	    hr = _AddDefaultBasicConstraintsExtension(
-						pServer,
-						Request.IsCARequest());
-	    _LeaveIfError(hr, leave_block, "_AddDefaultBasicConstraintsExtension");
-
-	    hr = _AddDefaultKeyUsageExtension(pServer, Request.IsCARequest());
-	    _LeaveIfError(hr, leave_block, "_AddDefaultKeyUsageExtension");
-
-	    hr = _AddEnhancedKeyUsageExtension(pServer);
-	    _LeaveIfError(hr, leave_block, "_AddEnhancedKeyUsageExtension");
-	}
-
-	hr = _SetValidityPeriod(pServer);
-	_LeaveIfError(hr, leave_block, "_SetValidityPeriod");
-
-	hr = EnumerateAttributes(pServer);
-	_LeaveIfError(hr, leave_block, "Policy:EnumerateAttributes");
-
-	hr = _AddRevocationExtension(pServer);
-	_LeaveIfError(hr, leave_block, "_AddRevocationExtension");
-
-	hr = _AddOldCertTypeExtension(pServer, Request.IsCARequest());
-	_LeaveIfError(hr, leave_block, "_AddOldCertTypeExtension");
-
-	hr = _AddAuthorityKeyId(pServer);
-	_LeaveIfError(hr, leave_block, "_AddAuthorityKeyId");
+    hr = Request.Initialize(
+             this,
+             pServer,
+             &fEnableEnrolleeExtensions);
+    _LeaveIfError(hr, leave_block, "Policy:VerifyRequest:Request.Initialize");
 
 
-	// pass hr as Disposition
+    hr = _EnumerateExtensions(
+             pServer,
+             bNewRequest,
+             TRUE,
+             fEnableEnrolleeExtensions,
+             0,
+             NULL);
+    _LeaveIfError(hr, leave_block, "_EnumerateExtensions");
 
-	if ((EDITF_DISABLEEXTENSIONLIST & m_dwEditFlags) ||
-	    NULL != apwszCriticalExtensions)
-	{
-	    hr = _EnumerateExtensions(
-				pServer,
-				bNewRequest,
-				FALSE,
-				FALSE,
-				cCriticalExtensions,
-				apwszCriticalExtensions);
-	    _LeaveIfError(hr, leave_block, "_EnumerateExtensions");
-	}
+    {
+        hr = _AddDefaultBasicConstraintsExtension(
+                 pServer,
+                 Request.IsCARequest());
+        _LeaveIfError(hr, leave_block, "_AddDefaultBasicConstraintsExtension");
+
+        hr = _AddDefaultKeyUsageExtension(pServer, Request.IsCARequest());
+        _LeaveIfError(hr, leave_block, "_AddDefaultKeyUsageExtension");
+
+        hr = _AddEnhancedKeyUsageExtension(pServer);
+        _LeaveIfError(hr, leave_block, "_AddEnhancedKeyUsageExtension");
+    }
+
+    hr = _SetValidityPeriod(pServer);
+    _LeaveIfError(hr, leave_block, "_SetValidityPeriod");
+
+    hr = EnumerateAttributes(pServer);
+    _LeaveIfError(hr, leave_block, "Policy:EnumerateAttributes");
+
+    hr = _AddRevocationExtension(pServer);
+    _LeaveIfError(hr, leave_block, "_AddRevocationExtension");
+
+    hr = _AddOldCertTypeExtension(pServer, Request.IsCARequest());
+    _LeaveIfError(hr, leave_block, "_AddOldCertTypeExtension");
+
+    hr = _AddAuthorityKeyId(pServer);
+    _LeaveIfError(hr, leave_block, "_AddAuthorityKeyId");
 
 
-       if (m_fVolatileMode)
-       {
-           hr = _PersistRequest(pServer);
-           _LeaveIfError(hr, leave_block, "_PersistRequest");
-       }
-       
+    // pass hr as Disposition
 
-	if (bNewRequest &&
-	    (
-	     (REQDISP_PENDINGFIRST & m_dwDispositionFlags)))
-	{
-	    *pDisposition = VR_PENDING;
-	}
-	else switch (REQDISP_MASK & m_dwDispositionFlags)
-	{
-	    default:
-	    case REQDISP_PENDING:
-		*pDisposition = VR_PENDING;
-		break;
+    if ((EDITF_DISABLEEXTENSIONLIST & m_dwEditFlags) ||
+            NULL != apwszCriticalExtensions)
+    {
+        hr = _EnumerateExtensions(
+                 pServer,
+                 bNewRequest,
+                 FALSE,
+                 FALSE,
+                 cCriticalExtensions,
+                 apwszCriticalExtensions);
+        _LeaveIfError(hr, leave_block, "_EnumerateExtensions");
+    }
 
-	    case REQDISP_ISSUE:
-		*pDisposition = VR_INSTANT_OK;
-		break;
 
-	    case REQDISP_DENY:
-		*pDisposition = VR_INSTANT_BAD;
-		break;
+    if (m_fVolatileMode)
+    {
+        hr = _PersistRequest(pServer);
+        _LeaveIfError(hr, leave_block, "_PersistRequest");
+    }
 
-	    case REQDISP_USEREQUESTATTRIBUTE:
-		*pDisposition = VR_INSTANT_OK;
-		hr = polGetRequestAttribute(
-				    pServer,
-				    wszPROPDISPOSITION,
-				    &strDisposition);
-		if (S_OK == hr)
-		{
-		    if (0 == celstrcmpiL(strDisposition, wszPROPDISPOSITIONDENY))
-		    {
-			*pDisposition = VR_INSTANT_BAD;
-		    }
-		    if (0 == celstrcmpiL(strDisposition, wszPROPDISPOSITIONPENDING))
-		    {
-			*pDisposition = VR_PENDING;
-		    }
-		}
-		hr = S_OK;
-		break;
-	}
+
+    if (bNewRequest &&
+            (
+                (REQDISP_PENDINGFIRST & m_dwDispositionFlags)))
+    {
+        *pDisposition = VR_PENDING;
+    }
+    else switch (REQDISP_MASK & m_dwDispositionFlags)
+        {
+        default:
+        case REQDISP_PENDING:
+            *pDisposition = VR_PENDING;
+            break;
+
+        case REQDISP_ISSUE:
+            *pDisposition = VR_INSTANT_OK;
+            break;
+
+        case REQDISP_DENY:
+            *pDisposition = VR_INSTANT_BAD;
+            break;
+
+        case REQDISP_USEREQUESTATTRIBUTE:
+            *pDisposition = VR_INSTANT_OK;
+            hr = polGetRequestAttribute(
+                     pServer,
+                     wszPROPDISPOSITION,
+                     &strDisposition);
+            if (S_OK == hr)
+            {
+                if (0 == celstrcmpiL(strDisposition, wszPROPDISPOSITIONDENY))
+                {
+                    *pDisposition = VR_INSTANT_BAD;
+                }
+                if (0 == celstrcmpiL(strDisposition, wszPROPDISPOSITIONPENDING))
+                {
+                    *pDisposition = VR_PENDING;
+                }
+            }
+            hr = S_OK;
+            break;
+        }
 deny:
-	if (FAILED(hr))
-	{
-	    *pDisposition = hr;	// pass failed HRESULT back as Disposition
-	}
-	else if (hr != S_OK)
-	{
-	    *pDisposition = VR_INSTANT_BAD;
-	}
-	hr = S_OK;
+    if (FAILED(hr))
+    {
+        *pDisposition = hr;	// pass failed HRESULT back as Disposition
+    }
+    else if (hr != S_OK)
+    {
+        *pDisposition = VR_INSTANT_BAD;
+    }
+    hr = S_OK;
 leave_block:
 
     {
-	hr2 = hr;
+        hr2 = hr;
 #define wszFORMATREQUESTID	L"RequestId=%u"
-	WCHAR wszRequestId[ARRAYSIZE(wszFORMATREQUESTID) + cwcDWORDSPRINTF];
+        WCHAR wszRequestId[ARRAYSIZE(wszFORMATREQUESTID) + cwcDWORDSPRINTF];
 
-	if (S_OK == hr2 && NULL != pDisposition && FAILED(*pDisposition))
-	{
-	    hr2 = *pDisposition;
-	}
-	if (S_OK != hr2)
-	{
-	    StringCbPrintf(wszRequestId, sizeof(wszRequestId), wszFORMATREQUESTID, lRequestId);
-	    _PrintErrorStr(hr2, "VerifyRequest", wszRequestId);
-	}
+        if (S_OK == hr2 && NULL != pDisposition && FAILED(*pDisposition))
+        {
+            hr2 = *pDisposition;
+        }
+        if (S_OK != hr2)
+        {
+            StringCbPrintf(wszRequestId, sizeof(wszRequestId), wszFORMATREQUESTID, lRequestId);
+            _PrintErrorStr(hr2, "VerifyRequest", wszRequestId);
+        }
     }
     SysFreeString(strDisposition);
     if (NULL != pServer)
@@ -3326,16 +3331,16 @@ CCertPolicySample::GetDescription(
 
     if(!m_strDescription)
     {
-	assert(wcslen(wsz_SAMPLE_DESCRIPTION) < ARRAYSIZE(sz));
-	StringCbCopy(sz, sizeof(sz), wsz_SAMPLE_DESCRIPTION);
-	sz[ARRAYSIZE(sz) - 1] = L'\0';
+        assert(wcslen(wsz_SAMPLE_DESCRIPTION) < ARRAYSIZE(sz));
+        StringCbCopy(sz, sizeof(sz), wsz_SAMPLE_DESCRIPTION);
+        sz[ARRAYSIZE(sz) - 1] = L'\0';
 
-	m_strDescription = SysAllocString(sz);
-	if (IsNullBStr(m_strDescription))
-	{
-	    hr = E_OUTOFMEMORY;
-	    return hr;
-	}
+        m_strDescription = SysAllocString(sz);
+        if (IsNullBStr(m_strDescription))
+        {
+            hr = E_OUTOFMEMORY;
+            return hr;
+        }
     }
     SysFreeString(*pstrDescription);
     *pstrDescription = SysAllocString(m_strDescription);
@@ -3376,11 +3381,11 @@ CCertPolicySample::GetManageModule(
 
     *ppManageModule = NULL;
     hr = CoCreateInstance(
-		    CLSID_CCertManagePolicyModuleSample,
-                    NULL,               // pUnkOuter
-                    CLSCTX_INPROC_SERVER,
-		    IID_ICertManageModule,
-                    (VOID **) ppManageModule);
+             CLSID_CCertManagePolicyModuleSample,
+             NULL,               // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             IID_ICertManageModule,
+             (VOID **) ppManageModule);
     _JumpIfError(hr, error, "CoCreateInstance");
 
 error:
@@ -3406,25 +3411,25 @@ CCertPolicySample::_GetIssuer(
     if (NULL != m_pCert)
     {
         hr = S_OK;
-	goto error;
+        goto error;
     }
     strName = SysAllocString(wszPROPRAWCACERTIFICATE);
     if (IsNullBStr(strName))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "Policy:SysAllocString");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "Policy:SysAllocString");
     }
     hr = pServer->GetCertificateProperty(strName, PROPTYPE_BINARY, &varValue);
     _JumpIfError(hr, error, "Policy:GetCertificateProperty");
 
     m_pCert = CertCreateCertificateContext(
-				    X509_ASN_ENCODING,
-				    (BYTE *) varValue.bstrVal,
-				    SysStringByteLen(varValue.bstrVal));
+                  X509_ASN_ENCODING,
+                  (BYTE *) varValue.bstrVal,
+                  SysStringByteLen(varValue.bstrVal));
     if (NULL == m_pCert)
     {
-	hr = ceHLastError();
-	_JumpError(hr, error, "Policy:CertCreateCertificateContext");
+        hr = ceHLastError();
+        _JumpError(hr, error, "Policy:CertCreateCertificateContext");
     }
 
 error:

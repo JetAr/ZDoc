@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -61,7 +61,8 @@ WINAPI WinMain(
     //
     // if touch down was succesfull, send a touch up
     //
-    if (bRet) {
+    if (bRet)
+    {
         contact.pointerInfo.pointerFlags = POINTER_FLAG_UP;
 
         //

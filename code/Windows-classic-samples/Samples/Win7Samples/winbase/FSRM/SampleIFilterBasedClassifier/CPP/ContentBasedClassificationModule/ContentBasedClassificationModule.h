@@ -1,16 +1,16 @@
-
+﻿
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0553 */
+/* File created by MIDL compiler version 7.00.0553 */
 /* at Mon Feb 16 16:40:08 2009
  */
 /* Compiler settings for .\ContentBasedClassificationModule.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0553 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 7.00.0553
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -43,7 +43,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IContentBasedClassifier_FWD_DEFINED__
 #define __IContentBasedClassifier_FWD_DEFINED__
@@ -68,108 +68,109 @@ typedef struct ContentBasedClassifier ContentBasedClassifier;
 #include "ocidl.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 
 #ifndef __IContentBasedClassifier_INTERFACE_DEFINED__
 #define __IContentBasedClassifier_INTERFACE_DEFINED__
 
 /* interface IContentBasedClassifier */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+/* [unique][helpstring][nonextensible][dual][uuid][object] */
 
 
 EXTERN_C const IID IID_IContentBasedClassifier;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("74614539-C851-4E87-BCAA-01C30246DC6E")
-    IContentBasedClassifier : public IDispatch
-    {
-    public:
-    };
-    
+
+MIDL_INTERFACE("74614539-C851-4E87-BCAA-01C30246DC6E")
+IContentBasedClassifier :
+public IDispatch
+{
+public:
+};
+
 #else 	/* C style interface */
 
-    typedef struct IContentBasedClassifierVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IContentBasedClassifier * This,
-            /* [in] */ REFIID riid,
-            /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IContentBasedClassifier * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IContentBasedClassifier * This);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
-            IContentBasedClassifier * This,
-            /* [out] */ UINT *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
-            IContentBasedClassifier * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
-            IContentBasedClassifier * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [range][in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
-            IContentBasedClassifier * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
-        
-        END_INTERFACE
-    } IContentBasedClassifierVtbl;
+typedef struct IContentBasedClassifierVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IContentBasedClassifier
-    {
-        CONST_VTBL struct IContentBasedClassifierVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IContentBasedClassifier * This,
+        /* [in] */ REFIID riid,
+        /* [annotation][iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IContentBasedClassifier * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IContentBasedClassifier * This);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )(
+        IContentBasedClassifier * This,
+        /* [out] */ UINT *pctinfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )(
+        IContentBasedClassifier * This,
+        /* [in] */ UINT iTInfo,
+        /* [in] */ LCID lcid,
+        /* [out] */ ITypeInfo **ppTInfo);
+
+    HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )(
+        IContentBasedClassifier * This,
+        /* [in] */ REFIID riid,
+        /* [size_is][in] */ LPOLESTR *rgszNames,
+        /* [range][in] */ UINT cNames,
+        /* [in] */ LCID lcid,
+        /* [size_is][out] */ DISPID *rgDispId);
+
+    /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )(
+        IContentBasedClassifier * This,
+        /* [in] */ DISPID dispIdMember,
+        /* [in] */ REFIID riid,
+        /* [in] */ LCID lcid,
+        /* [in] */ WORD wFlags,
+        /* [out][in] */ DISPPARAMS *pDispParams,
+        /* [out] */ VARIANT *pVarResult,
+        /* [out] */ EXCEPINFO *pExcepInfo,
+        /* [out] */ UINT *puArgErr);
+
+    END_INTERFACE
+} IContentBasedClassifierVtbl;
+
+interface IContentBasedClassifier
+{
+    CONST_VTBL struct IContentBasedClassifierVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
 
 #define IContentBasedClassifier_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) )
 
 #define IContentBasedClassifier_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
+    ( (This)->lpVtbl -> AddRef(This) )
 
 #define IContentBasedClassifier_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
+    ( (This)->lpVtbl -> Release(This) )
 
 
 #define IContentBasedClassifier_GetTypeInfoCount(This,pctinfo)	\
-    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) ) 
+    ( (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo) )
 
 #define IContentBasedClassifier_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
-    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) ) 
+    ( (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo) )
 
 #define IContentBasedClassifier_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
-    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) ) 
+    ( (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId) )
 
 #define IContentBasedClassifier_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
-    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
+    ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) )
 
 
 #endif /* COBJMACROS */
@@ -188,7 +189,7 @@ EXTERN_C const IID IID_IContentBasedClassifier;
 #define __ContentBasedClassificationModuleLib_LIBRARY_DEFINED__
 
 /* library ContentBasedClassificationModuleLib */
-/* [helpstring][version][uuid] */ 
+/* [helpstring][version][uuid] */
 
 
 EXTERN_C const IID LIBID_ContentBasedClassificationModuleLib;
@@ -198,7 +199,7 @@ EXTERN_C const CLSID CLSID_ContentBasedClassifier;
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("7853D011-8F9D-4831-BA8A-E5EE99B7CC65")
-ContentBasedClassifier;
+    ContentBasedClassifier;
 #endif
 #endif /* __ContentBasedClassificationModuleLib_LIBRARY_DEFINED__ */
 

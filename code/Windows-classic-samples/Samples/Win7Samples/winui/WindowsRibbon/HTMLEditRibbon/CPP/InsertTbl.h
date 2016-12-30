@@ -1,4 +1,4 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+﻿// This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,33 +23,33 @@ class CInsertTableDlg : public CDialog
 {
 // Construction
 public:
-	CInsertTableDlg(CWnd* pParent = NULL);   // standard constructor
+    CInsertTableDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(CInsertTableDlg)
-	enum { IDD = IDD_INSERT_TABLE };
-	CString	m_Caption;
-	CString	m_CellAttribs;
-	UINT	m_NumCols;
-	UINT	m_NumRows;
-	CString	m_TableAttribs;
-	//}}AFX_DATA
+    //{{AFX_DATA(CInsertTableDlg)
+    enum { IDD = IDD_INSERT_TABLE };
+    CString	m_Caption;
+    CString	m_CellAttribs;
+    UINT	m_NumCols;
+    UINT	m_NumRows;
+    CString	m_TableAttribs;
+    //}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CInsertTableDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CInsertTableDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CInsertTableDlg)
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CInsertTableDlg)
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,7 +24,7 @@
 //
 
 #ifdef _IA64_
-	#pragma warning(disable:4127 4706 4267)
+#pragma warning(disable:4127 4706 4267)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -65,20 +65,20 @@ void Usage(char *szProgramName)
 */
 void PrintAddressString(LPSOCKADDR pSockAddr, DWORD dwSockAddrLen)
 {
-    // INET6_ADDRSTRLEN is the maximum size of a valid IPv6 address 
+    // INET6_ADDRSTRLEN is the maximum size of a valid IPv6 address
     // including port,colons,NULL,etc.
     char buf[INET6_ADDRSTRLEN];
-    DWORD dwBufSize = 0;    
+    DWORD dwBufSize = 0;
 
     memset(buf,0,sizeof(buf));
     dwBufSize = sizeof(buf);
 
-    // This function converts the pSockAddr to a printable format into buf.   
-    if (WSAAddressToString(pSockAddr, 
-                dwSockAddrLen, 
-                NULL, 
-                buf, 
-                &dwBufSize) == SOCKET_ERROR)
+    // This function converts the pSockAddr to a printable format into buf.
+    if (WSAAddressToString(pSockAddr,
+                           dwSockAddrLen,
+                           NULL,
+                           buf,
+                           &dwBufSize) == SOCKET_ERROR)
     {
         printf("ERROR: WSAAddressToString failed %d \n", WSAGetLastError());
         goto CLEANUP;
@@ -101,7 +101,7 @@ BOOL DoGracefulShutdown(SOCKET sock);
 int __cdecl main(int argc, char **argv)
 {
     char *pszIPAdress = NULL;
-    char *pszPort = DEFAULT_PORT;   
+    char *pszPort = DEFAULT_PORT;
     char *pszChildFileMappingObj = NULL;
     WSADATA wsaData;
     BOOL bParent = TRUE;
@@ -117,22 +117,22 @@ int __cdecl main(int argc, char **argv)
             {
                 switch(tolower(argv[i][1]))
                 {
-                    case 'c':
-                        bParent = FALSE;
-                        if (i + 1 < argc)
-                            pszChildFileMappingObj = argv[++i];
-                        break;
-                    case 'i':
-                        if (i + 1 < argc)
-                            pszIPAdress = argv[++i];
-                        break;
-                    case 'e':
-                        if (i + 1 < argc)               
-                            pszPort = argv[++i];
-                        break;
-                    default:
-                        Usage(argv[0]);
-                        exit(1);
+                case 'c':
+                    bParent = FALSE;
+                    if (i + 1 < argc)
+                        pszChildFileMappingObj = argv[++i];
+                    break;
+                case 'i':
+                    if (i + 1 < argc)
+                        pszIPAdress = argv[++i];
+                    break;
+                case 'e':
+                    if (i + 1 < argc)
+                        pszPort = argv[++i];
+                    break;
+                default:
+                    Usage(argv[0]);
+                    exit(1);
                 }
             }
             else
@@ -176,8 +176,8 @@ void DoParent(char *pszIPAddress, char *pszPort, char *pszChildProcName)
 
     // Install the CTRL+BREAK and CTRL+C Handler
     if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleCtrlHandler,
-                TRUE)
-            == FALSE) 
+                              TRUE)
+            == FALSE)
         fprintf(stderr,"SetConsoleCtrlHandler failed: %d", GetLastError());
 
     dwProcID = GetCurrentProcessId();
@@ -193,10 +193,10 @@ void DoParent(char *pszIPAddress, char *pszPort, char *pszChildProcName)
 
     // getaddrinfo is the protocol independent version of GetHostByName.
     // the res contains the result.
-    if (getaddrinfo(pszIPAddress, 
-                pszPort,
-                &hints, 
-                &res) != NO_ERROR)
+    if (getaddrinfo(pszIPAddress,
+                    pszPort,
+                    &hints,
+                    &res) != NO_ERROR)
     {
         fprintf(stderr,"getaddrinfo failed. Error = %d\n", WSAGetLastError());
         goto CLEANUP;
@@ -211,12 +211,12 @@ void DoParent(char *pszIPAddress, char *pszPort, char *pszChildProcName)
         printf("Trying Address : %d from getaddrinfo\n", i);
         PrintAddressString(pAddr->ai_addr, (DWORD) pAddr->ai_addrlen);
         // create a suitable socket for this interface.
-        gsListen = WSASocket(pAddr->ai_family, 
-                pAddr->ai_socktype,
-                pAddr->ai_protocol,
-                NULL,
-                0,
-                0);
+        gsListen = WSASocket(pAddr->ai_family,
+                             pAddr->ai_socktype,
+                             pAddr->ai_protocol,
+                             NULL,
+                             0,
+                             0);
         if (gsListen != INVALID_SOCKET)
             break;
 
@@ -231,11 +231,11 @@ void DoParent(char *pszIPAddress, char *pszPort, char *pszChildProcName)
     }
 
     gsListen = WSASocket(pAddr->ai_family,
-            pAddr->ai_socktype,
-            pAddr->ai_protocol,
-            (LPWSAPROTOCOL_INFO) NULL,
-            0,
-            WSA_FLAG_OVERLAPPED);
+                         pAddr->ai_socktype,
+                         pAddr->ai_protocol,
+                         (LPWSAPROTOCOL_INFO) NULL,
+                         0,
+                         WSA_FLAG_OVERLAPPED);
 
     if (gsListen == INVALID_SOCKET)
     {
@@ -245,7 +245,7 @@ void DoParent(char *pszIPAddress, char *pszPort, char *pszChildProcName)
     }
 
     // bind() associates a local address and port
-    // combination with the socket just created. 
+    // combination with the socket just created.
     if (bind(gsListen, (struct sockaddr*)pAddr->ai_addr, (int) pAddr->ai_addrlen)
             == SOCKET_ERROR)
     {
@@ -262,7 +262,7 @@ void DoParent(char *pszIPAddress, char *pszPort, char *pszChildProcName)
         fprintf(stderr, "\nlisten() failed: %d\n",
                 WSAGetLastError());
         closesocket(gsListen);
-        gsListen = INVALID_SOCKET;      
+        gsListen = INVALID_SOCKET;
         goto CLEANUP;
     }
 
@@ -275,10 +275,10 @@ void DoParent(char *pszIPAddress, char *pszPort, char *pszChildProcName)
         printf("Waiting for new connection (Type CTRL+C to exit) ...\n\n");
 
         gsAccept = WSAAccept(gsListen,
-                (struct sockaddr*)&saFrom,
-                &nFromLen,
-                (LPCONDITIONPROC)NULL,
-                0);
+                             (struct sockaddr*)&saFrom,
+                             &nFromLen,
+                             (LPCONDITIONPROC)NULL,
+                             0);
 
         if(gsAccept == INVALID_SOCKET)
         {
@@ -302,7 +302,7 @@ void DoParent(char *pszIPAddress, char *pszPort, char *pszChildProcName)
          */
 
         closesocket(gsAccept);
-        gsAccept = INVALID_SOCKET;      
+        gsAccept = INVALID_SOCKET;
     }
 
 CLEANUP:
@@ -310,7 +310,7 @@ CLEANUP:
     if (gsListen != INVALID_SOCKET)
     {
         closesocket(gsListen);
-        gsListen = INVALID_SOCKET;   
+        gsListen = INVALID_SOCKET;
     }
 
     if (res != NULL)
@@ -346,12 +346,12 @@ void DoChild(char *pszChildFileMappingObj)
 
             // Receive the data sent by the other side.
             nStatus = WSARecv(sockDuplicated,
-                    &wsaBuf,
-                    1,
-                    &dwReceived,
-                    &dwFlags,
-                    (LPWSAOVERLAPPED) NULL,
-                    0);
+                              &wsaBuf,
+                              1,
+                              &dwReceived,
+                              &dwFlags,
+                              (LPWSAOVERLAPPED) NULL,
+                              0);
 
             if (nStatus == 0) // success
             {
@@ -449,15 +449,15 @@ BOOL DispatchChild(SOCKET ClientSock, char *pszChildProcName)
               szFileMappingObj);
 
     if (CreateProcess(NULL,
-                szChildComandLineBuf,
-                NULL,
-                NULL,
-                FALSE,
-                CREATE_NEW_CONSOLE,
-                NULL,
-                NULL,
-                &siParent,
-                &piChild)) 
+                      szChildComandLineBuf,
+                      NULL,
+                      NULL,
+                      FALSE,
+                      CREATE_NEW_CONSOLE,
+                      NULL,
+                      NULL,
+                      &siParent,
+                      &piChild))
     {
         WSAPROTOCOL_INFO ProtocolInfo;
         int nError;
@@ -467,10 +467,10 @@ BOOL DispatchChild(SOCKET ClientSock, char *pszChildProcName)
         // Get the protocol information
         // to be used to duplicate the socket
         if (WSADuplicateSocket(ClientSock,
-                    piChild.dwProcessId,
-                    &ProtocolInfo) == SOCKET_ERROR)
+                               piChild.dwProcessId,
+                               &ProtocolInfo) == SOCKET_ERROR)
         {
-            fprintf(stderr, "WSADuplicateSocket(): failed. Error = %d\n", WSAGetLastError());	
+            fprintf(stderr, "WSADuplicateSocket(): failed. Error = %d\n", WSAGetLastError());
             DoCleanup();
             exit(1);
         }
@@ -478,11 +478,11 @@ BOOL DispatchChild(SOCKET ClientSock, char *pszChildProcName)
         // Set the protocol information in a
         // memory mapped file for the child to use
         ghMMFileMap = CreateFileMapping(INVALID_HANDLE_VALUE,
-                NULL,
-                PAGE_READWRITE,
-                0,
-                nStructLen,
-                szFileMappingObj);
+                                        NULL,
+                                        PAGE_READWRITE,
+                                        0,
+                                        nStructLen,
+                                        szFileMappingObj);
 
         if (ghMMFileMap != NULL)
         {
@@ -491,8 +491,8 @@ BOOL DispatchChild(SOCKET ClientSock, char *pszChildProcName)
             else
             {
                 lpView = MapViewOfFile(ghMMFileMap,
-                        FILE_MAP_READ | FILE_MAP_WRITE,
-                        0, 0, 0);
+                                       FILE_MAP_READ | FILE_MAP_WRITE,
+                                       0, 0, 0);
 
                 if (lpView != NULL)
                 {
@@ -535,13 +535,13 @@ BOOL DispatchChild(SOCKET ClientSock, char *pszChildProcName)
         bResult = FALSE;
     }
 
-    if (ghParentFileMappingEvent != NULL) 
+    if (ghParentFileMappingEvent != NULL)
     {
         CloseHandle(ghParentFileMappingEvent);
         ghParentFileMappingEvent = NULL;
     }
 
-    if (ghChildFileMappingEvent != NULL) 
+    if (ghChildFileMappingEvent != NULL)
     {
         CloseHandle(ghChildFileMappingEvent);
         ghChildFileMappingEvent = NULL;
@@ -589,14 +589,14 @@ SOCKET GetSocket(char *szFileMappingObj)
     }
 
     ghMMFileMap = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE,
-            FALSE,
-            szFileMappingObj);
+                                  FALSE,
+                                  szFileMappingObj);
 
     if (ghMMFileMap != NULL)
     {
         LPVOID lpView = MapViewOfFile(ghMMFileMap,
-                FILE_MAP_READ | FILE_MAP_WRITE,
-                0, 0, 0);
+                                      FILE_MAP_READ | FILE_MAP_WRITE,
+                                      0, 0, 0);
 
         if ((BYTE*) lpView != NULL)
         {
@@ -608,11 +608,11 @@ SOCKET GetSocket(char *szFileMappingObj)
             // Duplicate the socket based on the protocol
             // information stored in the memory mapped file.
             sockDuplicated = WSASocket(FROM_PROTOCOL_INFO,
-                    FROM_PROTOCOL_INFO,
-                    FROM_PROTOCOL_INFO,
-                    &ProtocolInfo,
-                    0,
-                    0);
+                                       FROM_PROTOCOL_INFO,
+                                       FROM_PROTOCOL_INFO,
+                                       &ProtocolInfo,
+                                       0,
+                                       0);
 
             // Signal the parent the we are done
             // with the mapped file
@@ -624,19 +624,19 @@ SOCKET GetSocket(char *szFileMappingObj)
     else
         fprintf(stderr, "CreateFileMapping() failed: %d\n", GetLastError());
 
-    if (ghParentFileMappingEvent != NULL) 
+    if (ghParentFileMappingEvent != NULL)
     {
         CloseHandle(ghParentFileMappingEvent);
         ghParentFileMappingEvent = NULL;
     }
 
-    if (ghChildFileMappingEvent != NULL) 
+    if (ghChildFileMappingEvent != NULL)
     {
         CloseHandle(ghChildFileMappingEvent);
         ghChildFileMappingEvent = NULL;
     }
 
-    if (ghMMFileMap != NULL) 
+    if (ghMMFileMap != NULL)
     {
         CloseHandle(ghMMFileMap);
         ghMMFileMap = NULL;
@@ -701,7 +701,7 @@ BOOL DoGracefulShutdown(SOCKET sock)
     hEvent = WSACreateEvent();
     if (hEvent == WSA_INVALID_EVENT)
     {
-        fprintf(stderr, "DoGracefulShutdown: WSACreateEvent failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: WSACreateEvent failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }
@@ -709,35 +709,36 @@ BOOL DoGracefulShutdown(SOCKET sock)
     lNetworkEvents = FD_CLOSE;
     if (WSAEventSelect(sock, hEvent, lNetworkEvents) != 0)
     {
-        fprintf(stderr, "DoGracefulShutdown: WSAEventSelect failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: WSAEventSelect failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }
 
     if (shutdown(sock, SD_SEND) != 0)
     {
-        fprintf(stderr, "DoGracefulShutdown: shutdown failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: shutdown failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }
 
     if (WaitForSingleObject(hEvent, INFINITE) != WAIT_OBJECT_0)
     {
-        fprintf(stderr, "DoGracefulShutdown: WaitForSingleObject failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: WaitForSingleObject failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }
 
-    do 
+    do
     {
         char buf[128];
 
         status = recv(sock, buf, sizeof(buf), 0);
-    } while (!(status == 0 || status == SOCKET_ERROR));
+    }
+    while (!(status == 0 || status == SOCKET_ERROR));
 
     if (closesocket(sock) != 0)
     {
-        fprintf(stderr, "DoGracefulShutdown: closesocket failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: closesocket failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }

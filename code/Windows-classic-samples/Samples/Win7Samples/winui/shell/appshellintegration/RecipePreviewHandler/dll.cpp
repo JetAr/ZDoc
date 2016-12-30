@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -168,12 +168,12 @@ HRESULT CreateRegKeyAndSetValue(const REGISTRY_ENTRY *pRegistryEntry)
 {
     HKEY hKey;
     HRESULT hr = HRESULT_FROM_WIN32(RegCreateKeyExW(pRegistryEntry->hkeyRoot, pRegistryEntry->pszKeyName,
-                                0, NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &hKey, NULL));
+                                    0, NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &hKey, NULL));
     if (SUCCEEDED(hr))
     {
         hr = HRESULT_FROM_WIN32(RegSetValueExW(hKey, pRegistryEntry->pszValueName, 0, REG_SZ,
-                            (LPBYTE) pRegistryEntry->pszData,
-                            ((DWORD) wcslen(pRegistryEntry->pszData) + 1) * sizeof(WCHAR)));
+                                               (LPBYTE) pRegistryEntry->pszData,
+                                               ((DWORD) wcslen(pRegistryEntry->pszData) + 1) * sizeof(WCHAR)));
         RegCloseKey(hKey);
     }
     return hr;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -41,10 +41,10 @@ SampleAttachVirtualDisk(
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
-    
+
     memset(&openParameters, 0, sizeof(openParameters));
 
     extension = ::PathFindExtension(VirtualDiskPath);
@@ -54,13 +54,13 @@ SampleAttachVirtualDisk(
         //
         // ISO files can only be mounted read-only and using the V1 API.
         //
-        
+
         if (ReadOnly != TRUE)
         {
             opStatus = ERROR_NOT_SUPPORTED;
             goto Cleanup;
         }
-        
+
         openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_1;
         accessMask = VIRTUAL_DISK_ACCESS_READ;
     }
@@ -69,25 +69,25 @@ SampleAttachVirtualDisk(
         //
         // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
         //
-        
+
         openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
         openParameters.Version2.GetInfoOnly = FALSE;
         accessMask = VIRTUAL_DISK_ACCESS_NONE;
     }
-    
+
     //
     // Open the VHD or ISO.
     //
     // OPEN_VIRTUAL_DISK_FLAG_NONE bypasses any special handling of the open.
     //
-    
+
     opStatus = OpenVirtualDisk(
-        &storageType,
-        VirtualDiskPath,
-        accessMask,
-        OPEN_VIRTUAL_DISK_FLAG_NONE,
-        &openParameters,
-        &vhdHandle);
+                   &storageType,
+                   VirtualDiskPath,
+                   accessMask,
+                   OPEN_VIRTUAL_DISK_FLAG_NONE,
+                   &openParameters,
+                   &vhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -99,10 +99,10 @@ SampleAttachVirtualDisk(
     //
 
     if (!::ConvertStringSecurityDescriptorToSecurityDescriptor(
-            L"O:BAG:BAD:(A;;GA;;;WD)",
-            SDDL_REVISION_1,
-            &sd,
-            NULL))
+                L"O:BAG:BAD:(A;;GA;;;WD)",
+                SDDL_REVISION_1,
+                &sd,
+                NULL))
     {
         opStatus = ::GetLastError();
         goto Cleanup;
@@ -118,9 +118,9 @@ SampleAttachVirtualDisk(
     //
     // A "Permanent" surface persists even when the handle is closed.
     //
-    
+
     attachFlags = ATTACH_VIRTUAL_DISK_FLAG_PERMANENT_LIFETIME;
-    
+
     if (ReadOnly)
     {
         // ATTACH_VIRTUAL_DISK_FLAG_READ_ONLY specifies a read-only mount.
@@ -128,12 +128,12 @@ SampleAttachVirtualDisk(
     }
 
     opStatus = AttachVirtualDisk(
-        vhdHandle,
-        sd,
-        attachFlags,
-        0,
-        &attachParameters,
-        NULL);
+                   vhdHandle,
+                   sd,
+                   attachFlags,
+                   0,
+                   &attachParameters,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {

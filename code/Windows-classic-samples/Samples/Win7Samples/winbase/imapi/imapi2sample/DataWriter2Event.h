@@ -1,4 +1,4 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+﻿/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
 #pragma once
 #ifndef _IMAPI2TEST_DATAWRITER2_EVENTS_
@@ -21,11 +21,11 @@ class  CTestDataWriter2Event :
 
     // This is the list of all interfaces supported by the object
     BEGIN_COM_MAP(CTestDataWriter2Event)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
     BEGIN_SINK_MAP(CTestDataWriter2Event)
-        SINK_ENTRY_EX(1, IID_DDiscFormat2DataEvents, DISPID_DDISCFORMAT2DATAEVENTS_UPDATE, &Update)
+    SINK_ENTRY_EX(1, IID_DDiscFormat2DataEvents, DISPID_DDISCFORMAT2DATAEVENTS_UPDATE, &Update)
     END_SINK_MAP()
 
 public: // DDiscFormat2DataEvents

@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1997, Microsoft Corporation, all rights reserved
 
@@ -16,7 +16,7 @@ History:
 
 // Defines states within the this EAP protocol.
 
-typedef enum _MYSTATE 
+typedef enum _MYSTATE
 {
     MYSTATE_Initial,
     MYSTATE_WaitForUserOK,
@@ -27,7 +27,7 @@ typedef enum _MYSTATE
 
 } MYSTATE;
 
-typedef struct _EAPCB 
+typedef struct _EAPCB
 {
     MYSTATE             EapState;
     DWORD               fFlags;
@@ -39,8 +39,8 @@ typedef struct _EAPCB
     DWORD               dwResult;
     DWORD               dwInitialPacketId;
     BYTE*               pDataFromInteractiveUI;
-    BYTE                bRecvPacketId;          //Special Id for Wireless case 
-                                                //because it does not retransmit packets
+    BYTE                bRecvPacketId;          //Special Id for Wireless case
+    //because it does not retransmit packets
     DWORD               dwSizeOfDataFromInteractiveUI;
     PBYTE               pUIContext;
     RAS_AUTH_ATTRIBUTE* pUserAttributes;
@@ -71,21 +71,21 @@ extern HINSTANCE    g_hInstance;
 
 // Function Prototypes
 
-VOID   
+VOID
 EapTrace(
-    IN  CHAR*   Format, 
-    ... 
+    IN  CHAR*   Format,
+    ...
 );
 
 DWORD APIENTRY
 EapBegin(
     OUT VOID** ppWorkBuf,
-    IN  VOID*  pInfo 
+    IN  VOID*  pInfo
 );
 
 DWORD APIENTRY
 EapEnd(
-    IN VOID* pWorkBuf 
+    IN VOID* pWorkBuf
 );
 
 DWORD APIENTRY
@@ -95,7 +95,7 @@ EapMakeMessage(
     OUT PPP_EAP_PACKET*     pSendBuf,
     IN  DWORD               cbSendBuf,
     OUT PPP_EAP_OUTPUT*     pResult,
-    IN  PPP_EAP_INPUT*      pInput 
+    IN  PPP_EAP_INPUT*      pInput
 );
 
 DWORD

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -18,9 +18,9 @@ namespace WiaWrap
 /*++
 
     CProgressDlg implements a simple progress dialog with a status message,
-    progress bar and a cancel button. The dialog is created in a separate 
-    thread so that it remains responsive to the user while the main thread 
-    is busy with a long operation. It is descended from IUnknown for 
+    progress bar and a cancel button. The dialog is created in a separate
+    thread so that it remains responsive to the user while the main thread
+    is busy with a long operation. It is descended from IUnknown for
     reference counting.
 
 Methods
@@ -41,7 +41,7 @@ Methods
         Sets the status message.
 
     SetPercent
-        Sets the progress bar position. 
+        Sets the progress bar position.
 
     ThreadProc
         Creates the dialog box
@@ -77,8 +77,8 @@ private:
 
 private:
     LONG    m_cRef;
-	HWND    m_hDlg;
-	HWND    m_hWndParent;
+    HWND    m_hDlg;
+    HWND    m_hWndParent;
     LONG    m_bCancelled;
     HANDLE  m_hInitDlg;
 };

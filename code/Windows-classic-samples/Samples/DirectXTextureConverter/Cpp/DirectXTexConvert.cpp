@@ -1,7 +1,7 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexConvert.cpp
-//  
-// DirectX Texture Library - Image conversion 
+//
+// DirectX Texture Library - Image conversion
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -20,25 +20,25 @@ using namespace DirectX::PackedVector;
 #if DIRECTX_MATH_VERSION < 306
 namespace
 {
-    inline float round_to_nearest( float x )
-    {
-        // Round to nearest (even)
-        float i = floorf(x);
-        x -= i;
-        if(x < 0.5f)
-            return i;
-        if(x > 0.5f)
-            return i + 1.f;
-
-        float int_part;
-        modff( i / 2.f, &int_part );
-        if ( (2.f*int_part) == i )
-        {
-            return i;
-        }
-
+inline float round_to_nearest( float x )
+{
+    // Round to nearest (even)
+    float i = floorf(x);
+    x -= i;
+    if(x < 0.5f)
+        return i;
+    if(x > 0.5f)
         return i + 1.f;
+
+    float int_part;
+    modff( i / 2.f, &int_part );
+    if ( (2.f*int_part) == i )
+    {
+        return i;
     }
+
+    return i + 1.f;
+}
 };
 #endif
 
@@ -404,7 +404,7 @@ void _SwizzleScanline( LPVOID pDestination, size_t outSize, LPCVOID pSource, siz
 // Returns true if supported, false if expansion case not supported
 //-------------------------------------------------------------------------------------
 _Use_decl_annotations_
-bool _ExpandScanline( LPVOID pDestination, size_t outSize, DXGI_FORMAT outFormat,  
+bool _ExpandScanline( LPVOID pDestination, size_t outSize, DXGI_FORMAT outFormat,
                       LPCVOID pSource, size_t inSize, DXGI_FORMAT inFormat, DWORD flags )
 {
     assert( pDestination && outSize > 0 );
@@ -437,7 +437,7 @@ bool _ExpandScanline( LPVOID pDestination, size_t outSize, DXGI_FORMAT outFormat
             return true;
         }
         return false;
-        
+
     case DXGI_FORMAT_B5G5R5A1_UNORM:
         if ( outFormat != DXGI_FORMAT_R8G8B8A8_UNORM )
             return false;
@@ -554,11 +554,11 @@ bool _LoadScanline( XMVECTOR* pDestination, size_t count,
     switch( format )
     {
     case DXGI_FORMAT_R32G32B32A32_FLOAT:
-        {
-            size_t msize = (size > (sizeof(XMVECTOR)*count)) ? (sizeof(XMVECTOR)*count) : size;
-            memcpy_s( dPtr, sizeof(XMVECTOR)*count, pSource, msize );
-        }
-        return true;
+    {
+        size_t msize = (size > (sizeof(XMVECTOR)*count)) ? (sizeof(XMVECTOR)*count) : size;
+        memcpy_s( dPtr, sizeof(XMVECTOR)*count, pSource, msize );
+    }
+    return true;
 
     case DXGI_FORMAT_R32G32B32A32_UINT:
         LOAD_SCANLINE( XMUINT4, XMLoadUInt4 )
@@ -579,7 +579,7 @@ bool _LoadScanline( XMVECTOR* pDestination, size_t count,
         LOAD_SCANLINE( XMHALF4, XMLoadHalf4 )
 
     case DXGI_FORMAT_R16G16B16A16_UNORM:
-        LOAD_SCANLINE( XMUSHORTN4, XMLoadUShortN4 ) 
+        LOAD_SCANLINE( XMUSHORTN4, XMLoadUShortN4 )
 
     case DXGI_FORMAT_R16G16B16A16_UINT:
         LOAD_SCANLINE( XMUSHORT4, XMLoadUShort4 )
@@ -600,57 +600,57 @@ bool _LoadScanline( XMVECTOR* pDestination, size_t count,
         LOAD_SCANLINE2( XMINT2, XMLoadSInt2, g_XMIdentityR3 )
 
     case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
+    {
+        const size_t psize = sizeof(float)+sizeof(uint32_t);
+        if ( size >= psize )
         {
-            const size_t psize = sizeof(float)+sizeof(uint32_t);
-            if ( size >= psize )
+            const float * sPtr = reinterpret_cast<const float*>(pSource);
+            for( size_t icount = 0; icount < ( size - psize + 1 ); icount += psize )
             {
-                const float * sPtr = reinterpret_cast<const float*>(pSource);
-                for( size_t icount = 0; icount < ( size - psize + 1 ); icount += psize )
-                {
-                    const uint8_t* ps8 = reinterpret_cast<const uint8_t*>( &sPtr[1] );
-                    if ( dPtr >= ePtr ) break;
-                    *(dPtr++) = XMVectorSet( sPtr[0], static_cast<float>( *ps8 ), 0.f, 1.f );
-                    sPtr += 2;
-                }
-                return true;
+                const uint8_t* ps8 = reinterpret_cast<const uint8_t*>( &sPtr[1] );
+                if ( dPtr >= ePtr ) break;
+                *(dPtr++) = XMVectorSet( sPtr[0], static_cast<float>( *ps8 ), 0.f, 1.f );
+                sPtr += 2;
             }
+            return true;
         }
-        return false;
+    }
+    return false;
 
     case DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS:
+    {
+        const size_t psize = sizeof(float)+sizeof(uint32_t);
+        if ( size >= psize )
         {
-            const size_t psize = sizeof(float)+sizeof(uint32_t);
-            if ( size >= psize )
+            const float * sPtr = reinterpret_cast<const float*>(pSource);
+            for( size_t icount = 0; icount < ( size - psize + 1 ); icount += psize )
             {
-                const float * sPtr = reinterpret_cast<const float*>(pSource);
-                for( size_t icount = 0; icount < ( size - psize + 1 ); icount += psize )
-                {
-                    if ( dPtr >= ePtr ) break;
-                    *(dPtr++) = XMVectorSet( sPtr[0], 0.f /* typeless component assumed zero */, 0.f, 1.f );
-                    sPtr += 2;
-                }
-                return true;
+                if ( dPtr >= ePtr ) break;
+                *(dPtr++) = XMVectorSet( sPtr[0], 0.f /* typeless component assumed zero */, 0.f, 1.f );
+                sPtr += 2;
             }
+            return true;
         }
-        return false;
+    }
+    return false;
 
     case DXGI_FORMAT_X32_TYPELESS_G8X24_UINT:
+    {
+        const size_t psize = sizeof(float)+sizeof(uint32_t);
+        if ( size >= psize )
         {
-            const size_t psize = sizeof(float)+sizeof(uint32_t);
-            if ( size >= psize )
+            const float * sPtr = reinterpret_cast<const float*>(pSource);
+            for( size_t icount = 0; icount < ( size - psize + 1 ); icount += psize )
             {
-                const float * sPtr = reinterpret_cast<const float*>(pSource);
-                for( size_t icount = 0; icount < ( size - psize + 1 ); icount += psize )
-                {
-                    const uint8_t* pg8 = reinterpret_cast<const uint8_t*>( &sPtr[1] );
-                    if ( dPtr >= ePtr ) break;
-                    *(dPtr++) = XMVectorSet( 0.f /* typeless component assumed zero */, static_cast<float>( *pg8 ), 0.f, 1.f );
-                    sPtr += 2;
-                }
-                return true;
+                const uint8_t* pg8 = reinterpret_cast<const uint8_t*>( &sPtr[1] );
+                if ( dPtr >= ePtr ) break;
+                *(dPtr++) = XMVectorSet( 0.f /* typeless component assumed zero */, static_cast<float>( *pg8 ), 0.f, 1.f );
+                sPtr += 2;
             }
+            return true;
         }
-        return false;
+    }
+    return false;
 
     case DXGI_FORMAT_R10G10B10A2_UNORM:
         LOAD_SCANLINE( XMUDECN4, XMLoadUDecN4 );
@@ -670,7 +670,8 @@ bool _LoadScanline( XMVECTOR* pDestination, size_t count,
                 int32_t ElementY = (sPtr->v >> 10) & 0x3FF;
                 int32_t ElementZ = (sPtr->v >> 20) & 0x3FF;
 
-                XMVECTORF32 vResult = {
+                XMVECTORF32 vResult =
+                {
                     (float)(ElementX - 0x180) / 510.0f,
                     (float)(ElementY - 0x180) / 510.0f,
                     (float)(ElementZ - 0x180) / 510.0f,
@@ -965,7 +966,7 @@ bool _LoadScanline( XMVECTOR* pDestination, size_t count,
                     if ( dPtr >= ePtr ) break;
                     *(dPtr++) = XMVectorSet( (((*sPtr >> (bcount-1)) & 0x1) ? 1.f : 0.f), 0.f, 0.f, 1.f );
                 }
-                
+
                 ++sPtr;
             }
             return true;
@@ -981,15 +982,21 @@ bool _LoadScanline( XMVECTOR* pDestination, size_t count,
             const XMFLOAT3SE * __restrict sPtr = reinterpret_cast<const XMFLOAT3SE*>(pSource);
             for( size_t icount = 0; icount < ( size - sizeof(XMFLOAT3SE) + 1 ); icount += sizeof(XMFLOAT3SE) )
             {
-                union { float f; int32_t i; } fi;
+                union
+                {
+                    float f;
+                    int32_t i;
+                } fi;
                 fi.i = 0x33800000 + (sPtr->e << 23);
                 float Scale = fi.f;
 
-                XMVECTORF32 v = {
+                XMVECTORF32 v =
+                {
                     Scale * float( sPtr->xm ),
                     Scale * float( sPtr->ym ),
                     Scale * float( sPtr->zm ),
-                    1.0f };
+                    1.0f
+                };
 
                 if ( dPtr >= ePtr ) break;
                 *(dPtr++) = v;
@@ -1180,7 +1187,7 @@ bool _StoreScanline( LPVOID pDestination, size_t size, DXGI_FORMAT format,
         STORE_SCANLINE( XMHALF4, XMStoreHalf4 )
 
     case DXGI_FORMAT_R16G16B16A16_UNORM:
-        STORE_SCANLINE( XMUSHORTN4, XMStoreUShortN4 ) 
+        STORE_SCANLINE( XMUSHORTN4, XMStoreUShortN4 )
 
     case DXGI_FORMAT_R16G16B16A16_UINT:
         STORE_SCANLINE( XMUSHORT4, XMStoreUShort4 )
@@ -1201,26 +1208,26 @@ bool _StoreScanline( LPVOID pDestination, size_t size, DXGI_FORMAT format,
         STORE_SCANLINE( XMINT2, XMStoreSInt2 )
 
     case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:
+    {
+        const size_t psize = sizeof(float)+sizeof(uint32_t);
+        if ( size >= psize )
         {
-            const size_t psize = sizeof(float)+sizeof(uint32_t);
-            if ( size >= psize )
+            float *dPtr = reinterpret_cast<float*>(pDestination);
+            for( size_t icount = 0; icount < ( size - psize + 1 ); icount += psize )
             {
-                float *dPtr = reinterpret_cast<float*>(pDestination);
-                for( size_t icount = 0; icount < ( size - psize + 1 ); icount += psize )
-                {
-                    if ( sPtr >= ePtr ) break;
-                    XMFLOAT4 f;
-                    XMStoreFloat4( &f, *sPtr++ );
-                    dPtr[0] = f.x;
-                    uint8_t* ps8 = reinterpret_cast<uint8_t*>( &dPtr[1] );
-                    ps8[0] = static_cast<uint8_t>( std::min<float>( 255.f, std::max<float>( 0.f, f.y ) ) );
-                    ps8[1] = ps8[2] = ps8[3] = 0;
-                    dPtr += 2;
-                }
-                return true;
+                if ( sPtr >= ePtr ) break;
+                XMFLOAT4 f;
+                XMStoreFloat4( &f, *sPtr++ );
+                dPtr[0] = f.x;
+                uint8_t* ps8 = reinterpret_cast<uint8_t*>( &dPtr[1] );
+                ps8[0] = static_cast<uint8_t>( std::min<float>( 255.f, std::max<float>( 0.f, f.y ) ) );
+                ps8[1] = ps8[2] = ps8[3] = 0;
+                dPtr += 2;
             }
+            return true;
         }
-        return false;
+    }
+    return false;
 
     case DXGI_FORMAT_R10G10B10A2_UNORM:
         STORE_SCANLINE( XMUDECN4, XMStoreUDecN4 );
@@ -1247,9 +1254,9 @@ bool _StoreScanline( LPVOID pDestination, size_t size, DXGI_FORMAT format,
                 XMStoreFloat4A(&tmp, N );
 
                 dPtr->v = ((uint32_t)tmp.w << 30)
-                           | (((uint32_t)tmp.z & 0x3FF) << 20)
-                           | (((uint32_t)tmp.y & 0x3FF) << 10)
-                           | (((uint32_t)tmp.x & 0x3FF));
+                          | (((uint32_t)tmp.z & 0x3FF) << 20)
+                          | (((uint32_t)tmp.y & 0x3FF) << 10)
+                          | (((uint32_t)tmp.x & 0x3FF));
                 ++dPtr;
             }
             return true;
@@ -1563,7 +1570,11 @@ bool _StoreScanline( LPVOID pDestination, size_t size, DXGI_FORMAT format,
 
                 const float maxColor = (max_rgb > minf9) ? max_rgb : minf9;
 
-                union { float f; INT32 i; } fi;
+                union
+                {
+                    float f;
+                    INT32 i;
+                } fi;
                 fi.f = maxColor;
                 fi.i &= 0xFF800000; // cut off fraction
 
@@ -2059,7 +2070,8 @@ struct ConvertData
     DWORD flags;
 };
 
-static const ConvertData g_ConvertTable[] = {
+static const ConvertData g_ConvertTable[] =
+{
     { DXGI_FORMAT_R32G32B32A32_FLOAT,           32, CONVF_FLOAT | CONVF_R | CONVF_G | CONVF_B | CONVF_A },
     { DXGI_FORMAT_R32G32B32A32_UINT,            32, CONVF_UINT | CONVF_R | CONVF_G | CONVF_B | CONVF_A },
     { DXGI_FORMAT_R32G32B32A32_SINT,            32, CONVF_SINT | CONVF_R | CONVF_G | CONVF_B | CONVF_A },
@@ -2067,10 +2079,10 @@ static const ConvertData g_ConvertTable[] = {
     { DXGI_FORMAT_R32G32B32_UINT,               32, CONVF_UINT | CONVF_R | CONVF_G | CONVF_B },
     { DXGI_FORMAT_R32G32B32_SINT,               32, CONVF_SINT | CONVF_R | CONVF_G | CONVF_B },
     { DXGI_FORMAT_R16G16B16A16_FLOAT,           16, CONVF_FLOAT | CONVF_R | CONVF_G | CONVF_B | CONVF_A },
-    { DXGI_FORMAT_R16G16B16A16_UNORM,           16, CONVF_UNORM | CONVF_R | CONVF_G | CONVF_B | CONVF_A }, 
-    { DXGI_FORMAT_R16G16B16A16_UINT,            16, CONVF_UINT | CONVF_R | CONVF_G | CONVF_B | CONVF_A }, 
-    { DXGI_FORMAT_R16G16B16A16_SNORM,           16, CONVF_SNORM | CONVF_R | CONVF_G | CONVF_B | CONVF_A }, 
-    { DXGI_FORMAT_R16G16B16A16_SINT,            16, CONVF_SINT | CONVF_R | CONVF_G | CONVF_B | CONVF_A }, 
+    { DXGI_FORMAT_R16G16B16A16_UNORM,           16, CONVF_UNORM | CONVF_R | CONVF_G | CONVF_B | CONVF_A },
+    { DXGI_FORMAT_R16G16B16A16_UINT,            16, CONVF_UINT | CONVF_R | CONVF_G | CONVF_B | CONVF_A },
+    { DXGI_FORMAT_R16G16B16A16_SNORM,           16, CONVF_SNORM | CONVF_R | CONVF_G | CONVF_B | CONVF_A },
+    { DXGI_FORMAT_R16G16B16A16_SINT,            16, CONVF_SINT | CONVF_R | CONVF_G | CONVF_B | CONVF_A },
     { DXGI_FORMAT_R32G32_FLOAT,                 32, CONVF_FLOAT | CONVF_R | CONVF_G },
     { DXGI_FORMAT_R32G32_UINT,                  32, CONVF_UINT | CONVF_R | CONVF_G  },
     { DXGI_FORMAT_R32G32_SINT,                  32, CONVF_SINT | CONVF_R | CONVF_G  },
@@ -2162,7 +2174,7 @@ DWORD _GetConvertFlags( DXGI_FORMAT format )
 
     ConvertData key = { format, 0 };
     const ConvertData* in = (const ConvertData*) bsearch_s( &key, g_ConvertTable, _countof(g_ConvertTable), sizeof(ConvertData),
-                                                            _ConvertCompare, 0 );
+                            _ConvertCompare, 0 );
     return (in) ? in->flags : 0;
 }
 
@@ -2190,10 +2202,10 @@ void _ConvertScanline( XMVECTOR* pBuffer, size_t count, DXGI_FORMAT outFormat, D
     // Determine conversion details about source and dest formats
     ConvertData key = { inFormat, 0 };
     const ConvertData* in = (const ConvertData*) bsearch_s( &key, g_ConvertTable, _countof(g_ConvertTable), sizeof(ConvertData),
-                                                            _ConvertCompare, 0 );
+                            _ConvertCompare, 0 );
     key.format = outFormat;
     const ConvertData* out = (const ConvertData*) bsearch_s( &key, g_ConvertTable, _countof(g_ConvertTable), sizeof(ConvertData),
-                                                            _ConvertCompare, 0 );
+                             _ConvertCompare, 0 );
     if ( !in || !out )
     {
         assert(false);
@@ -2371,40 +2383,40 @@ void _ConvertScanline( XMVECTOR* pBuffer, size_t count, DXGI_FORMAT outFormat, D
                     break;
 
                 case TEX_FILTER_RGB_COPY_GREEN:
+                {
+                    XMVECTOR* ptr = pBuffer;
+                    for( size_t i=0; i < count; ++i )
                     {
-                        XMVECTOR* ptr = pBuffer;
-                        for( size_t i=0; i < count; ++i )
-                        {
-                            XMVECTOR v = *ptr;
-                            XMVECTOR v1 = XMVectorSplatY( v );
-                            *ptr++ = XMVectorSelect( v, v1, g_XMSelect1110 );
-                        }
+                        XMVECTOR v = *ptr;
+                        XMVECTOR v1 = XMVectorSplatY( v );
+                        *ptr++ = XMVectorSelect( v, v1, g_XMSelect1110 );
                     }
-                    break;
+                }
+                break;
 
                 case TEX_FILTER_RGB_COPY_BLUE:
+                {
+                    XMVECTOR* ptr = pBuffer;
+                    for( size_t i=0; i < count; ++i )
                     {
-                        XMVECTOR* ptr = pBuffer;
-                        for( size_t i=0; i < count; ++i )
-                        {
-                            XMVECTOR v = *ptr;
-                            XMVECTOR v1 = XMVectorSplatZ( v );
-                            *ptr++ = XMVectorSelect( v, v1, g_XMSelect1110 );
-                        }
+                        XMVECTOR v = *ptr;
+                        XMVECTOR v1 = XMVectorSplatZ( v );
+                        *ptr++ = XMVectorSelect( v, v1, g_XMSelect1110 );
                     }
-                    break;
+                }
+                break;
 
                 default:
+                {
+                    XMVECTOR* ptr = pBuffer;
+                    for( size_t i=0; i < count; ++i )
                     {
-                        XMVECTOR* ptr = pBuffer;
-                        for( size_t i=0; i < count; ++i )
-                        {
-                            XMVECTOR v = *ptr;
-                            XMVECTOR v1 = XMVector3Dot( v, g_Grayscale );
-                            *ptr++ = XMVectorSelect( v, v1, g_XMSelect1110 );
-                        }
+                        XMVECTOR v = *ptr;
+                        XMVECTOR v1 = XMVector3Dot( v, g_Grayscale );
+                        *ptr++ = XMVectorSelect( v, v1, g_XMSelect1110 );
                     }
-                    break;
+                }
+                break;
                 }
             }
             else if ( (out->flags & CONVF_RGB_MASK) == (CONVF_R|CONVF_G) )
@@ -2413,28 +2425,28 @@ void _ConvertScanline( XMVECTOR* pBuffer, size_t count, DXGI_FORMAT outFormat, D
                 switch( flags & ( TEX_FILTER_RGB_COPY_RED | TEX_FILTER_RGB_COPY_GREEN | TEX_FILTER_RGB_COPY_BLUE ) )
                 {
                 case TEX_FILTER_RGB_COPY_RED | TEX_FILTER_RGB_COPY_BLUE:
+                {
+                    XMVECTOR* ptr = pBuffer;
+                    for( size_t i=0; i < count; ++i )
                     {
-                        XMVECTOR* ptr = pBuffer;
-                        for( size_t i=0; i < count; ++i )
-                        {
-                            XMVECTOR v = *ptr;
-                            XMVECTOR v1 = XMVectorSwizzle<0,2,0,2>( v );
-                            *ptr++ = XMVectorSelect( v, v1, g_XMSelect1100 );
-                        }
+                        XMVECTOR v = *ptr;
+                        XMVECTOR v1 = XMVectorSwizzle<0,2,0,2>( v );
+                        *ptr++ = XMVectorSelect( v, v1, g_XMSelect1100 );
                     }
-                    break;
+                }
+                break;
 
                 case TEX_FILTER_RGB_COPY_GREEN | TEX_FILTER_RGB_COPY_BLUE:
+                {
+                    XMVECTOR* ptr = pBuffer;
+                    for( size_t i=0; i < count; ++i )
                     {
-                        XMVECTOR* ptr = pBuffer;
-                        for( size_t i=0; i < count; ++i )
-                        {
-                            XMVECTOR v = *ptr;
-                            XMVECTOR v1 = XMVectorSwizzle<1,2,3,0>( v );
-                            *ptr++ = XMVectorSelect( v, v1, g_XMSelect1100 );
-                        }
+                        XMVECTOR v = *ptr;
+                        XMVECTOR v1 = XMVectorSwizzle<1,2,3,0>( v );
+                        *ptr++ = XMVectorSelect( v, v1, g_XMSelect1100 );
                     }
-                    break;
+                }
+                break;
 
                 case TEX_FILTER_RGB_COPY_RED | TEX_FILTER_RGB_COPY_GREEN:
                 default:
@@ -3088,19 +3100,19 @@ static inline bool _UseWICConversion( _In_ DWORD filter, _In_ DXGI_FORMAT sforma
         case DXGI_FORMAT_R16_FLOAT:
         case DXGI_FORMAT_R32_FLOAT:
         case DXGI_FORMAT_D32_FLOAT:
-            // WIC converts via UNORM formats and ends up converting colorspaces for these cases
+        // WIC converts via UNORM formats and ends up converting colorspaces for these cases
         case DXGI_FORMAT_A8_UNORM:
             // Conversion logic for these kinds of textures is unintuitive for WIC code paths
             return false;
         }
         break;
-    
+
     case DXGI_FORMAT_R16_FLOAT:
         switch( tformat )
         {
         case DXGI_FORMAT_R32_FLOAT:
         case DXGI_FORMAT_D32_FLOAT:
-            // WIC converts via UNORM formats and ends up converting colorspaces for these cases
+        // WIC converts via UNORM formats and ends up converting colorspaces for these cases
         case DXGI_FORMAT_A8_UNORM:
             // Conversion logic for these kinds of textures is unintuitive for WIC code paths
             return false;
@@ -3119,7 +3131,7 @@ static inline bool _UseWICConversion( _In_ DWORD filter, _In_ DXGI_FORMAT sforma
             return false;
         }
     }
-    
+
     // Check for implicit color space changes
     if ( IsSRGB( sformat ) )
         filter |= TEX_FILTER_SRGB_IN;
@@ -3185,7 +3197,7 @@ static HRESULT _ConvertUsingWIC( _In_ const Image& srcImage, _In_ const WICPixel
     if ( FAILED(hr) )
         return hr;
 
-    hr = FC->CopyPixels( 0, static_cast<UINT>( destImage.rowPitch ), static_cast<UINT>( destImage.slicePitch ), destImage.pixels );  
+    hr = FC->CopyPixels( 0, static_cast<UINT>( destImage.rowPitch ), static_cast<UINT>( destImage.slicePitch ), destImage.pixels );
     if ( FAILED(hr) )
         return hr;
 
@@ -3295,8 +3307,8 @@ HRESULT Convert( const Image& srcImage, DXGI_FORMAT format, DWORD filter, float 
         return E_POINTER;
 
     if ( IsCompressed(srcImage.format) || IsCompressed(format)
-         || IsVideo(srcImage.format) || IsVideo(format) 
-         || IsTypeless(srcImage.format) || IsTypeless(format) )
+            || IsVideo(srcImage.format) || IsVideo(format)
+            || IsTypeless(srcImage.format) || IsTypeless(format) )
         return HRESULT_FROM_WIN32( ERROR_NOT_SUPPORTED );
 
 #ifdef _M_X64
@@ -3307,7 +3319,7 @@ HRESULT Convert( const Image& srcImage, DXGI_FORMAT format, DWORD filter, float 
     HRESULT hr = image.Initialize2D( format, srcImage.width, srcImage.height, 1, 1 );
     if ( FAILED(hr) )
         return hr;
-   
+
     const Image *rimage = image.GetImage( 0, 0, 0 );
     if ( !rimage )
     {
@@ -3346,8 +3358,8 @@ HRESULT Convert( const Image* srcImages, size_t nimages, const TexMetadata& meta
         return E_INVALIDARG;
 
     if ( IsCompressed(metadata.format) || IsCompressed(format)
-         || IsVideo(metadata.format) || IsVideo(format) 
-         || IsTypeless(metadata.format) || IsTypeless(format) )
+            || IsVideo(metadata.format) || IsVideo(format)
+            || IsTypeless(metadata.format) || IsTypeless(format) )
         return HRESULT_FROM_WIN32( ERROR_NOT_SUPPORTED );
 
 #ifdef _M_X64
@@ -3422,58 +3434,58 @@ HRESULT Convert( const Image* srcImages, size_t nimages, const TexMetadata& meta
         break;
 
     case TEX_DIMENSION_TEXTURE3D:
+    {
+        size_t index = 0;
+        size_t d = metadata.depth;
+        for( size_t level = 0; level < metadata.mipLevels; ++level )
         {
-            size_t index = 0;
-            size_t d = metadata.depth;
-            for( size_t level = 0; level < metadata.mipLevels; ++level )
+            for( size_t slice = 0; slice < d; ++slice, ++index )
             {
-                for( size_t slice = 0; slice < d; ++slice, ++index )
+                if ( index >= nimages )
+                    return E_FAIL;
+
+                const Image& src = srcImages[ index ];
+                if ( src.format != metadata.format )
                 {
-                    if ( index >= nimages )
-                        return E_FAIL;
-
-                    const Image& src = srcImages[ index ];
-                    if ( src.format != metadata.format )
-                    {
-                        result.Release();
-                        return E_FAIL;
-                    }
-
-#ifdef _M_X64
-                    if ( (src.width > 0xFFFFFFFF) || (src.height > 0xFFFFFFFF) )
-                        return E_FAIL;
-#endif
-
-                    const Image& dst = dest[ index ];
-                    assert( dst.format == format );
-
-                    if ( src.width != dst.width || src.height != dst.height )
-                    {
-                        result.Release();
-                        return E_FAIL;
-                    }
-
-                    if ( usewic )
-                    {
-                        hr = _ConvertUsingWIC( src, pfGUID, targetGUID, filter, threshold, dst );
-                    }
-                    else
-                    {
-                        hr = _Convert( src, filter, dst, threshold, slice );
-                    }
-
-                    if ( FAILED(hr) )
-                    {
-                        result.Release();
-                        return hr;
-                    }
+                    result.Release();
+                    return E_FAIL;
                 }
 
-                if ( d > 1 )
-                    d >>= 1;
+#ifdef _M_X64
+                if ( (src.width > 0xFFFFFFFF) || (src.height > 0xFFFFFFFF) )
+                    return E_FAIL;
+#endif
+
+                const Image& dst = dest[ index ];
+                assert( dst.format == format );
+
+                if ( src.width != dst.width || src.height != dst.height )
+                {
+                    result.Release();
+                    return E_FAIL;
+                }
+
+                if ( usewic )
+                {
+                    hr = _ConvertUsingWIC( src, pfGUID, targetGUID, filter, threshold, dst );
+                }
+                else
+                {
+                    hr = _Convert( src, filter, dst, threshold, slice );
+                }
+
+                if ( FAILED(hr) )
+                {
+                    result.Release();
+                    return hr;
+                }
             }
+
+            if ( d > 1 )
+                d >>= 1;
         }
-        break;
+    }
+    break;
 
     default:
         return E_FAIL;

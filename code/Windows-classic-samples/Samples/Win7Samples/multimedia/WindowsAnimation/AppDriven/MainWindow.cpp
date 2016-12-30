@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -48,16 +48,16 @@ CMainWindow::~CMainWindow()
     SafeRelease(&m_pBackgroundBrush);
 }
 
-// Creates the CMainWindow window and initializes 
+// Creates the CMainWindow window and initializes
 // device-independent resources
 
 HRESULT CMainWindow::Initialize(
     HINSTANCE hInstance
-    )
+)
 {
     // Client area dimensions, in inches
     const FLOAT CLIENT_WIDTH = 7.0f;
-    const FLOAT CLIENT_HEIGHT = 5.0f; 
+    const FLOAT CLIENT_HEIGHT = 5.0f;
 
     HRESULT hr = CreateDeviceIndependentResources();
     if (SUCCEEDED(hr))
@@ -75,7 +75,7 @@ HRESULT CMainWindow::Initialize(
 
         RegisterClassEx(&wcex);
 
-        // Because CreateWindow function takes its size in pixels, 
+        // Because CreateWindow function takes its size in pixels,
         // obtain the DPI and use it to calculate the window size.
 
         // The D2D factory returns the current system DPI. This is
@@ -85,23 +85,23 @@ HRESULT CMainWindow::Initialize(
         m_pD2DFactory->GetDesktopDpi(
             &dpiX,
             &dpiY
-            );
+        );
 
         // Create the CMainWindow window
 
         m_hwnd = CreateWindow(
-            wcex.lpszClassName,
-            L"Windows Animation - App-Driven Animation Demo",
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(dpiX * CLIENT_WIDTH),
-            static_cast<UINT>(dpiY * CLIENT_HEIGHT),
-            NULL,
-            NULL,
-            hInstance,
-            this
-            );
+                     wcex.lpszClassName,
+                     L"Windows Animation - App-Driven Animation Demo",
+                     WS_OVERLAPPEDWINDOW,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     static_cast<UINT>(dpiX * CLIENT_WIDTH),
+                     static_cast<UINT>(dpiY * CLIENT_HEIGHT),
+                     NULL,
+                     NULL,
+                     hInstance,
+                     this
+                 );
 
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
@@ -133,11 +133,11 @@ HRESULT CMainWindow::Initialize(
 HRESULT CMainWindow::Invalidate()
 {
     BOOL bResult = InvalidateRect(
-        m_hwnd,
-        NULL,
-        FALSE
-        );
-    
+                       m_hwnd,
+                       NULL,
+                       FALSE
+                   );
+
     HRESULT hr = bResult ? S_OK : E_FAIL;
 
     return hr;
@@ -150,51 +150,51 @@ HRESULT CMainWindow::InitializeAnimation()
     // Create Animation Manager
 
     HRESULT hr = CoCreateInstance(
-        CLSID_UIAnimationManager,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_PPV_ARGS(&m_pAnimationManager)
-        );
+                     CLSID_UIAnimationManager,
+                     NULL,
+                     CLSCTX_INPROC_SERVER,
+                     IID_PPV_ARGS(&m_pAnimationManager)
+                 );
     if (SUCCEEDED(hr))
     {
         // Create Animation Timer
 
         hr = CoCreateInstance(
-            CLSID_UIAnimationTimer,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_PPV_ARGS(&m_pAnimationTimer)
-            );
+                 CLSID_UIAnimationTimer,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_PPV_ARGS(&m_pAnimationTimer)
+             );
         if (SUCCEEDED(hr))
         {
             // Create Animation Transition Library
 
             hr = CoCreateInstance(
-                CLSID_UIAnimationTransitionLibrary,
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                IID_PPV_ARGS(&m_pTransitionLibrary)
-                );
+                     CLSID_UIAnimationTransitionLibrary,
+                     NULL,
+                     CLSCTX_INPROC_SERVER,
+                     IID_PPV_ARGS(&m_pTransitionLibrary)
+                 );
             if (SUCCEEDED(hr))
             {
                 // Create and set the ManagerEventHandler to start updating when animations are scheduled
 
                 IUIAnimationManagerEventHandler *pManagerEventHandler;
                 hr = CManagerEventHandler::CreateInstance(
-                    this,
-                    &pManagerEventHandler
-                    );
+                         this,
+                         &pManagerEventHandler
+                     );
                 if (SUCCEEDED(hr))
                 {
                     hr = m_pAnimationManager->SetManagerEventHandler(
-                        pManagerEventHandler
-                        );
+                             pManagerEventHandler
+                         );
                     pManagerEventHandler->Release();
                 }
             }
         }
     }
-    
+
     return hr;
 }
 
@@ -207,9 +207,9 @@ HRESULT CMainWindow::CreateAnimationVariables()
     const DOUBLE INITIAL_BLUE = COLOR_MAX;
 
     HRESULT hr = m_pAnimationManager->CreateAnimationVariable(
-        INITIAL_RED,
-        &m_pAnimationVariableRed
-        );
+                     INITIAL_RED,
+                     &m_pAnimationVariableRed
+                 );
     if (SUCCEEDED(hr))
     {
         hr = m_pAnimationVariableRed->SetLowerBound(COLOR_MIN);
@@ -219,9 +219,9 @@ HRESULT CMainWindow::CreateAnimationVariables()
             if (SUCCEEDED(hr))
             {
                 hr = m_pAnimationManager->CreateAnimationVariable(
-                    INITIAL_GREEN,
-                    &m_pAnimationVariableGreen
-                    );
+                         INITIAL_GREEN,
+                         &m_pAnimationVariableGreen
+                     );
                 if (SUCCEEDED(hr))
                 {
                     hr = m_pAnimationVariableGreen->SetLowerBound(COLOR_MIN);
@@ -231,9 +231,9 @@ HRESULT CMainWindow::CreateAnimationVariables()
                         if (SUCCEEDED(hr))
                         {
                             hr = m_pAnimationManager->CreateAnimationVariable(
-                                INITIAL_BLUE,
-                                &m_pAnimationVariableBlue
-                                );
+                                     INITIAL_BLUE,
+                                     &m_pAnimationVariableBlue
+                                 );
                             if (SUCCEEDED(hr))
                             {
                                 hr = m_pAnimationVariableBlue->SetLowerBound(COLOR_MIN);
@@ -248,7 +248,7 @@ HRESULT CMainWindow::CreateAnimationVariables()
             }
         }
     }
-    
+
     return hr;
 }
 
@@ -259,11 +259,11 @@ HRESULT CMainWindow::CreateAnimationVariables()
 HRESULT CMainWindow::CreateDeviceIndependentResources()
 {
     // Create a Direct2D factory
-    
+
     HRESULT hr = D2D1CreateFactory(
-        D2D1_FACTORY_TYPE_SINGLE_THREADED,
-        &m_pD2DFactory
-        );
+                     D2D1_FACTORY_TYPE_SINGLE_THREADED,
+                     &m_pD2DFactory
+                 );
 
     return hr;
 }
@@ -273,53 +273,53 @@ HRESULT CMainWindow::CreateDeviceIndependentResources()
 // in the event of Direct3D device loss (e.g. display change, remoting,
 // removal of video card, etc). The resources will only be created
 // if necessary.
-             
+
 HRESULT CMainWindow::CreateDeviceResources()
 {
     HRESULT hr = S_OK;
-    
+
     if (m_pRenderTarget == NULL)
     {
         RECT rc;
         GetClientRect(
             m_hwnd,
             &rc
-            );
+        );
 
         D2D1_SIZE_U size = D2D1::SizeU(
-            rc.right - rc.left,
-            rc.bottom - rc.top
-            );
- 
+                               rc.right - rc.left,
+                               rc.bottom - rc.top
+                           );
+
         // Create a Direct2D render target
 
         hr = m_pD2DFactory->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(
-                m_hwnd,
-                size
-                ),
-            &m_pRenderTarget
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(
+                     m_hwnd,
+                     size
+                 ),
+                 &m_pRenderTarget
+             );
         if (SUCCEEDED(hr))
         {
             // Create a background brush
 
             hr = m_pRenderTarget->CreateSolidColorBrush(
-                D2D1::ColorF(
-                    D2D1::ColorF::Blue
-                    ),
-                &m_pBackgroundBrush
-                );
+                     D2D1::ColorF(
+                         D2D1::ColorF::Blue
+                     ),
+                     &m_pBackgroundBrush
+                 );
         }
     }
 
     return hr;
 }
-                                                                                             
-//  Discards device-specific resources that need to be recreated   
-//  when a Direct3D device is lost                                      
-                                                              
+
+//  Discards device-specific resources that need to be recreated
+//  when a Direct3D device is lost
+
 void CMainWindow::DiscardDeviceResources()
 {
     SafeRelease(&m_pRenderTarget);
@@ -333,7 +333,7 @@ LRESULT CALLBACK CMainWindow::WndProc(
     UINT uMsg,
     WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     const int MESSAGE_PROCESSED = 0;
 
@@ -346,110 +346,110 @@ LRESULT CALLBACK CMainWindow::WndProc(
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pMainWindow)
-            );
+        );
 
         return MESSAGE_PROCESSED;
     }
 
     CMainWindow *pMainWindow = reinterpret_cast<CMainWindow *>(static_cast<LONG_PTR>(
-        GetWindowLongPtrW(
-            hwnd,
-            GWLP_USERDATA
-            )));
+                                   GetWindowLongPtrW(
+                                       hwnd,
+                                       GWLP_USERDATA
+                                   )));
 
     if (pMainWindow != NULL)
     {
         switch (uMsg)
         {
         case WM_SIZE:
-            {
-                UINT width = LOWORD(lParam);
-                UINT height = HIWORD(lParam);
-                pMainWindow->OnResize(
-                    width,
-                    height
-                    );
-            }
-            return MESSAGE_PROCESSED;
-        
+        {
+            UINT width = LOWORD(lParam);
+            UINT height = HIWORD(lParam);
+            pMainWindow->OnResize(
+                width,
+                height
+            );
+        }
+        return MESSAGE_PROCESSED;
+
         case WM_LBUTTONDOWN:
-            {
-                pMainWindow->OnLButtonDown();
-            }
-            return MESSAGE_PROCESSED;
+        {
+            pMainWindow->OnLButtonDown();
+        }
+        return MESSAGE_PROCESSED;
 
         case WM_PAINT:
         case WM_DISPLAYCHANGE:
-            {
-                PAINTSTRUCT ps;
-                BeginPaint(
-                    hwnd,
-                    &ps
-                    );
+        {
+            PAINTSTRUCT ps;
+            BeginPaint(
+                hwnd,
+                &ps
+            );
 
-                pMainWindow->OnPaint(
-                    ps.hdc,
-                    ps.rcPaint
-                    );
+            pMainWindow->OnPaint(
+                ps.hdc,
+                ps.rcPaint
+            );
 
-                EndPaint(
-                    hwnd,
-                    &ps
-                    );
-            }
-            return MESSAGE_PROCESSED;
+            EndPaint(
+                hwnd,
+                &ps
+            );
+        }
+        return MESSAGE_PROCESSED;
 
         case WM_DESTROY:
-            {
-                pMainWindow->OnDestroy();
-            
-                PostQuitMessage(
-                    0
-                    );
-            }
-            return MESSAGE_PROCESSED;
+        {
+            pMainWindow->OnDestroy();
+
+            PostQuitMessage(
+                0
+            );
+        }
+        return MESSAGE_PROCESSED;
         }
     }
-    
+
     return DefWindowProc(
-        hwnd,
-        uMsg,
-        wParam,
-        lParam
-        );
+               hwnd,
+               uMsg,
+               wParam,
+               lParam
+           );
 }
-                                                        
+
 //  Called whenever the client area needs to be drawn
 
 HRESULT CMainWindow::OnPaint(
     HDC hdc,
     const RECT &rcPaint
-    )
+)
 {
     // Update the animation manager with the current time
 
     UI_ANIMATION_SECONDS secondsNow;
     HRESULT hr = m_pAnimationTimer->GetTime(
-        &secondsNow
-        );
+                     &secondsNow
+                 );
     if (SUCCEEDED(hr))
     {
         hr = m_pAnimationManager->Update(
-            secondsNow
-            );
+                 secondsNow
+             );
         if (SUCCEEDED(hr))
         {
             // Read the values of the animation variables and draw the client area
-        
+
             hr = DrawClientArea();
             if (SUCCEEDED(hr))
             {
                 // Continue redrawing the client area as long as there are animations scheduled
-                
+
                 UI_ANIMATION_MANAGER_STATUS status;
                 hr = m_pAnimationManager->GetStatus(
-                    &status
-                    );
+                         &status
+                     );
                 if (SUCCEEDED(hr))
                 {
                     if (status == UI_ANIMATION_MANAGER_BUSY)
@@ -458,7 +458,7 @@ HRESULT CMainWindow::OnPaint(
                             m_hwnd,
                             NULL,
                             FALSE
-                            );
+                        );
                     }
                 }
             }
@@ -474,20 +474,20 @@ HRESULT CMainWindow::OnPaint(
 HRESULT CMainWindow::OnLButtonDown()
 {
     HRESULT hr = ChangeColor(
-        RandomFromRange(COLOR_MIN, COLOR_MAX),
-        RandomFromRange(COLOR_MIN, COLOR_MAX),
-        RandomFromRange(COLOR_MIN, COLOR_MAX)
-        );
+                     RandomFromRange(COLOR_MIN, COLOR_MAX),
+                     RandomFromRange(COLOR_MIN, COLOR_MAX),
+                     RandomFromRange(COLOR_MIN, COLOR_MAX)
+                 );
 
-    return hr; 
+    return hr;
 }
-                                        
-// Resizes the render target in response to a change in client area size                        
+
+// Resizes the render target in response to a change in client area size
 
 HRESULT CMainWindow::OnResize(
     UINT width,
     UINT height
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -497,8 +497,8 @@ HRESULT CMainWindow::OnResize(
         size.width = width;
         size.height = height;
         hr = m_pRenderTarget->Resize(
-            size
-            );
+                 size
+             );
     }
 
     return hr;
@@ -511,7 +511,7 @@ void CMainWindow::OnDestroy()
     if (m_pAnimationManager != NULL)
     {
         // Clear the manager event handler, to ensure that the one that points to this object is released
-    
+
         (void)m_pAnimationManager->SetManagerEventHandler(NULL);
     }
 }
@@ -537,14 +537,14 @@ HRESULT CMainWindow::DrawClientArea()
         D2D1_SIZE_F sizeRenderTarget = m_pRenderTarget->GetSize();
 
         hr = DrawBackground(
-            D2D1::RectF(
-                0.0f,
-                0.0f,
-                sizeRenderTarget.width,
-                sizeRenderTarget.height
-                )
-            );
-                       
+                 D2D1::RectF(
+                     0.0f,
+                     0.0f,
+                     sizeRenderTarget.width,
+                     sizeRenderTarget.height
+                 )
+             );
+
         // Can only return one failure HRESULT
         HRESULT hrEndDraw = m_pRenderTarget->EndDraw();
         if (SUCCEEDED(hr))
@@ -557,7 +557,7 @@ HRESULT CMainWindow::DrawClientArea()
             DiscardDeviceResources();
         }
     }
-    
+
     return hr;
 }
 
@@ -565,26 +565,26 @@ HRESULT CMainWindow::DrawClientArea()
 
 HRESULT CMainWindow::DrawBackground(
     const D2D1_RECT_F &rectPaint
-    )
+)
 {
     // Get the RGB animation variable values
 
     DOUBLE red;
     HRESULT hr = m_pAnimationVariableRed->GetValue(
-        &red
-        );
+                     &red
+                 );
     if (SUCCEEDED(hr))
     {
         DOUBLE green;
         hr = m_pAnimationVariableGreen->GetValue(
-            &green
-            );
+                 &green
+             );
         if (SUCCEEDED(hr))
         {
             DOUBLE blue;
             hr = m_pAnimationVariableBlue->GetValue(
-                &blue
-                );
+                     &blue
+                 );
             if (SUCCEEDED(hr))
             {
                 // Set the RGB of the background brush to the new animated value
@@ -595,15 +595,15 @@ HRESULT CMainWindow::DrawBackground(
                         static_cast<FLOAT>(green),
                         static_cast<FLOAT>(blue),
                         1.0
-                        )
-                    );
+                    )
+                );
 
                 // Paint the background
 
                 m_pRenderTarget->FillRectangle(
                     rectPaint,
                     m_pBackgroundBrush
-                    );
+                );
             }
         }
     }
@@ -617,7 +617,7 @@ HRESULT CMainWindow::ChangeColor(
     DOUBLE red,
     DOUBLE green,
     DOUBLE blue
-    )
+)
 {
     const UI_ANIMATION_SECONDS DURATION = 0.5;
     const DOUBLE ACCELERATION_RATIO = 0.5;
@@ -627,73 +627,73 @@ HRESULT CMainWindow::ChangeColor(
 
     IUIAnimationStoryboard *pStoryboard = NULL;
     HRESULT hr = m_pAnimationManager->CreateStoryboard(
-        &pStoryboard
-        );
+                     &pStoryboard
+                 );
     if (SUCCEEDED(hr))
     {
         // Create transitions for the RGB animation variables
 
         IUIAnimationTransition *pTransitionRed;
         hr = m_pTransitionLibrary->CreateAccelerateDecelerateTransition(
-            DURATION,
-            red,
-            ACCELERATION_RATIO,
-            DECELERATION_RATIO,
-            &pTransitionRed
-            );
+                 DURATION,
+                 red,
+                 ACCELERATION_RATIO,
+                 DECELERATION_RATIO,
+                 &pTransitionRed
+             );
         if (SUCCEEDED(hr))
         {
             IUIAnimationTransition *pTransitionGreen;
             hr = m_pTransitionLibrary->CreateAccelerateDecelerateTransition(
-                DURATION,
-                green,
-                ACCELERATION_RATIO,
-                DECELERATION_RATIO,
-                &pTransitionGreen
-                );
+                     DURATION,
+                     green,
+                     ACCELERATION_RATIO,
+                     DECELERATION_RATIO,
+                     &pTransitionGreen
+                 );
             if (SUCCEEDED(hr))
             {
                 IUIAnimationTransition *pTransitionBlue;
                 hr = m_pTransitionLibrary->CreateAccelerateDecelerateTransition(
-                    DURATION,
-                    blue,
-                    ACCELERATION_RATIO,
-                    DECELERATION_RATIO,
-                    &pTransitionBlue
-                    );
+                         DURATION,
+                         blue,
+                         ACCELERATION_RATIO,
+                         DECELERATION_RATIO,
+                         &pTransitionBlue
+                     );
                 if (SUCCEEDED(hr))
                 {
                     // Add transitions to the storyboard
 
                     hr = pStoryboard->AddTransition(
-                        m_pAnimationVariableRed,
-                        pTransitionRed
-                        );
+                             m_pAnimationVariableRed,
+                             pTransitionRed
+                         );
                     if (SUCCEEDED(hr))
                     {
                         hr = pStoryboard->AddTransition(
-                            m_pAnimationVariableGreen,
-                            pTransitionGreen
-                            );
+                                 m_pAnimationVariableGreen,
+                                 pTransitionGreen
+                             );
                         if (SUCCEEDED(hr))
                         {
                             hr = pStoryboard->AddTransition(
-                                m_pAnimationVariableBlue,
-                                pTransitionBlue
-                                );
+                                     m_pAnimationVariableBlue,
+                                     pTransitionBlue
+                                 );
                             if (SUCCEEDED(hr))
                             {
                                 // Get the current time and schedule the storyboard for play
 
                                 UI_ANIMATION_SECONDS secondsNow;
                                 hr = m_pAnimationTimer->GetTime(
-                                    &secondsNow
-                                    );
+                                         &secondsNow
+                                     );
                                 if (SUCCEEDED(hr))
                                 {
                                     hr = pStoryboard->Schedule(
-                                        secondsNow
-                                        );
+                                             secondsNow
+                                         );
                                 }
                             }
                         }
@@ -719,7 +719,7 @@ HRESULT CMainWindow::ChangeColor(
 DOUBLE CMainWindow::RandomFromRange(
     DOUBLE minimum,
     DOUBLE maximum
-    )
+)
 {
-     return minimum + (maximum - minimum) * rand() / RAND_MAX;
+    return minimum + (maximum - minimum) * rand() / RAND_MAX;
 }

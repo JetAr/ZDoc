@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,7 +25,7 @@ CDrawingObject::~CDrawingObject()
 }
 
 // Sets the default position, dimensions and color for the drawing object
-VOID CDrawingObject::ResetState(const FLOAT startX, const FLOAT startY, 
+VOID CDrawingObject::ResetState(const FLOAT startX, const FLOAT startY,
                                 const int ixClient, const int iyClient,
                                 const int iScaledWidth, const int iScaledHeight,
                                 const DrawingColor colorChoice)
@@ -77,24 +77,25 @@ VOID CDrawingObject::ResetState(const FLOAT startX, const FLOAT startY,
         }
     }
 
-    // Determines what brush to use for drawing this object and 
+    // Determines what brush to use for drawing this object and
     // gets the brush from the D2DDriver class
 
-    switch (colorChoice){
-        case Blue:
-            m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Blue);
-            break;
-        case Orange:
-            m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Orange);
-            break;
-        case Green:
-            m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Green);
-            break;
-        case Red:
-            m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Red);
-            break;
-        default:
-            m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Blue);
+    switch (colorChoice)
+    {
+    case Blue:
+        m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Blue);
+        break;
+    case Orange:
+        m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Orange);
+        break;
+    case Green:
+        m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Green);
+        break;
+    case Red:
+        m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Red);
+        break;
+    default:
+        m_currBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Blue);
     }
 }
 
@@ -103,23 +104,23 @@ VOID CDrawingObject::Paint()
     if(!(m_spRT->CheckWindowState() & D2D1_WINDOW_STATE_OCCLUDED))
     {
         FLOAT fGlOffset = 2.5f;
-    
+
         // Setup our matrices for performing transforms
 
         D2D_MATRIX_3X2_F rotateMatrix;
         D2D_MATRIX_3X2_F identityMatrix;
         identityMatrix = D2D1::Matrix3x2F::Identity();
-        
+
         // Apply rotate transform
-        
+
         rotateMatrix = D2D1::Matrix3x2F::Rotation(
-            m_fAngleCumulative, 
-            D2D1::Point2F(
-                m_fXR + m_fWidth/2.0f, 
-                m_fYR + m_fHeight/2.0f 
-            )
-        );
-        
+                           m_fAngleCumulative,
+                           D2D1::Point2F(
+                               m_fXR + m_fWidth/2.0f,
+                               m_fYR + m_fHeight/2.0f
+                           )
+                       );
+
         m_spRT->SetTransform(&rotateMatrix);
 
         // Store the rotate matrix to be used in hit testing
@@ -127,33 +128,33 @@ VOID CDrawingObject::Paint()
 
         // Get glossy brush
         m_pGlBrush = m_d2dDriver->get_GradBrush(CD2DDriver::GRB_Glossy);
-        
+
         // Set positions of gradients based on the new coordinates of the objecs
-        
+
         m_currBrush->SetStartPoint(
             D2D1::Point2F(
-                m_fXR, 
+                m_fXR,
                 m_fYR
             )
         );
-        
+
         m_currBrush->SetEndPoint(
             D2D1::Point2F(
-                m_fXR, 
+                m_fXR,
                 m_fYR + m_fHeight
             )
         );
-        
+
         m_pGlBrush->SetStartPoint(
             D2D1::Point2F(
-                m_fXR, 
+                m_fXR,
                 m_fYR
             )
         );
-        
+
         m_pGlBrush->SetEndPoint(
             D2D1::Point2F(
-                m_fXR + m_fWidth/15.0f, 
+                m_fXR + m_fWidth/15.0f,
                 m_fYR + m_fHeight/2.0f
             )
         );
@@ -161,41 +162,41 @@ VOID CDrawingObject::Paint()
         // Create rectangle to draw
 
         D2D1_RECT_F rectangle = D2D1::RectF(
-            m_fXR,
-            m_fYR,
-            m_fXR+m_fWidth,
-            m_fYR+m_fHeight
-        );
-    
+                                    m_fXR,
+                                    m_fYR,
+                                    m_fXR+m_fWidth,
+                                    m_fYR+m_fHeight
+                                );
+
         D2D1_ROUNDED_RECT roundedRect = D2D1::RoundedRect(
-            rectangle,
-            10.0f, 10.0f
-        );
+                                            rectangle,
+                                            10.0f, 10.0f
+                                        );
 
         // Create glossy effect
 
         D2D1_RECT_F glossyRect = D2D1::RectF(
-            m_fXR+fGlOffset,
-            m_fYR+fGlOffset,
-            m_fXR+m_fWidth-fGlOffset,
-            m_fYR+m_fHeight/2.0f
-        );
-        
+                                     m_fXR+fGlOffset,
+                                     m_fYR+fGlOffset,
+                                     m_fXR+m_fWidth-fGlOffset,
+                                     m_fYR+m_fHeight/2.0f
+                                 );
+
         D2D1_ROUNDED_RECT glossyRoundedRect = D2D1::RoundedRect(
-            glossyRect, 
-            10.0f, 
-            10.0f
-        );
+                glossyRect,
+                10.0f,
+                10.0f
+                                              );
 
         // D2D requires that a geometry is created for the rectangle
         m_d2dDriver->CreateGeometryRoundedRect(
-            roundedRect, 
+            roundedRect,
             &m_spRoundedRectGeometry
         );
 
         // Fill the geometry that was created
         m_spRT->FillGeometry(
-            m_spRoundedRectGeometry, 
+            m_spRoundedRectGeometry,
             m_currBrush
         );
 
@@ -219,10 +220,10 @@ VOID CDrawingObject::Translate(FLOAT fdx, FLOAT fdy, BOOL bInertia)
     fOffset[0] = m_fOX - m_fdX;
     fOffset[1] = m_fOY - m_fdY;
 
-    // Translate based on the offset caused by rotating 
-    // and scaling in order to vary rotational behavior depending 
+    // Translate based on the offset caused by rotating
+    // and scaling in order to vary rotational behavior depending
     // on where the manipulation started
-    
+
     if(m_fAngleApplied != 0.0f)
     {
         FLOAT v1[2];
@@ -245,7 +246,7 @@ VOID CDrawingObject::Translate(FLOAT fdx, FLOAT fdy, BOOL bInertia)
         FLOAT v2[2];
         v2[0] = v1[0] * m_fFactor;
         v2[1] = v1[1] * m_fFactor;
-        
+
         m_fdX += v2[0] - v1[0];
         m_fdY += v2[1] - v1[1];
     }
@@ -253,7 +254,7 @@ VOID CDrawingObject::Translate(FLOAT fdx, FLOAT fdy, BOOL bInertia)
     m_fXI += m_fdX;
     m_fYI += m_fdY;
 
-    // The following code handles the effect for 
+    // The following code handles the effect for
     // bouncing off the edge of the screen.  It takes
     // the x,y coordinates computed by the inertia processor
     // and calculates the appropriate render coordinates
@@ -289,13 +290,13 @@ VOID CDrawingObject::Scale(const FLOAT dFactor)
     FLOAT scaledH = (dFactor-1) * m_fHeight;
     FLOAT scaledX = scaledW/2.0f;
     FLOAT scaledY = scaledH/2.0f;
-    
+
     m_fXI -= scaledX;
     m_fYI -= scaledY;
 
     m_fWidth  += scaledW;
     m_fHeight += scaledH;
-    
+
     // Only limit scaling in the case that the factor is not 1.0
 
     if(dFactor != 1.0f)
@@ -371,10 +372,10 @@ FLOAT CDrawingObject::GetCenterY()
 BOOL CDrawingObject::InRegion(LONG x, LONG y)
 {
     BOOL b = FALSE;
-    
+
     m_spRoundedRectGeometry->FillContainsPoint(
         D2D1::Point2F((FLOAT)x, (FLOAT)y),
-        &m_lastMatrix, 
+        &m_lastMatrix,
         &b
     );
     return b;
@@ -406,10 +407,10 @@ VOID CDrawingObject::ComputeElasticPoint(FLOAT fIPt, FLOAT *fRPt, int iBSize)
     // Divide the cumulative translation vector by the max border size
     int q = (int)abs(fIPt) / iBSize;
     int direction = q % 2;
-    
+
     // Calculate the remainder this is the new render coordinate
     FLOAT newPt = abs(fIPt) - (FLOAT)(iBSize*q);
-    
+
     if (direction == DEFAULT_DIRECTION)
     {
         *fRPt = newPt;

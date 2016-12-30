@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -48,20 +48,20 @@
  *      phmmioIn    - Pointer to handle which will be used
  *          for further mmio routines.
  *      ppwfxInfo   - Ptr to ptr to WaveFormatEx structure
- *          with all info about the file.                        
- *      
+ *          with all info about the file.
+ *
 */
 int WaveOpenFile(
     TCHAR*pszFileName,                              // (IN)
     HMMIO *phmmioIn,                                // (OUT)
     WAVEFORMATEX **ppwfxInfo,                       // (OUT)
     MMCKINFO *pckInRIFF                             // (OUT)
-            )
+)
 {
     HMMIO           hmmioIn;
     MMCKINFO        ckIn;           // chunk info. for general use.
-    PCMWAVEFORMAT   pcmWaveFormat;  // Temp PCM structure to load in.       
-    WORD            cbExtraAlloc;   // Extra bytes for waveformatex 
+    PCMWAVEFORMAT   pcmWaveFormat;  // Temp PCM structure to load in.
+    WORD            cbExtraAlloc;   // Extra bytes for waveformatex
     int             nError;         // Return value.
 
     // Initialization
@@ -90,7 +90,7 @@ int WaveOpenFile(
     ckIn.ckid = mmioFOURCC('f', 'm', 't', ' ');
     if ((nError = (int)mmioDescend(hmmioIn, &ckIn, pckInRIFF, MMIO_FINDCHUNK)) != 0)
     {
-        goto ERROR_READING_WAVE;                
+        goto ERROR_READING_WAVE;
     }
 
     /* Expect the 'fmt' chunk to be at least as large as <PCMWAVEFORMAT>;
@@ -112,12 +112,12 @@ int WaveOpenFile(
     // format, read the next word, and thats how many extra
     // bytes to allocate.
     if (pcmWaveFormat.wf.wFormatTag == WAVE_FORMAT_PCM)
-        cbExtraAlloc = 0;                               
+        cbExtraAlloc = 0;
     else
     {
         // Read in length of extra bytes.
         if (mmioRead(hmmioIn, (HPSTR) &cbExtraAlloc,
-            (long) sizeof(cbExtraAlloc)) != (long) sizeof(cbExtraAlloc))
+                     (long) sizeof(cbExtraAlloc)) != (long) sizeof(cbExtraAlloc))
         {
             nError = ER_CANNOTREAD;
             goto ERROR_READING_WAVE;
@@ -139,7 +139,7 @@ int WaveOpenFile(
     if (cbExtraAlloc != 0)
     {
         if (mmioRead(hmmioIn, (HPSTR) (((BYTE*)&((*ppwfxInfo)->cbSize))+sizeof(cbExtraAlloc)),
-            (long) (cbExtraAlloc)) != (long) (cbExtraAlloc))
+                     (long) (cbExtraAlloc)) != (long) (cbExtraAlloc))
         {
             nError = ER_NOTWAVEFILE;
             goto ERROR_READING_WAVE;
@@ -152,14 +152,14 @@ int WaveOpenFile(
         goto ERROR_READING_WAVE;
     }
 
-    goto TEMPCLEANUP;               
+    goto TEMPCLEANUP;
 
 ERROR_READING_WAVE:
     if (*ppwfxInfo != NULL)
     {
         GlobalFree(*ppwfxInfo);
         *ppwfxInfo = NULL;
-    }               
+    }
 
     if (hmmioIn != NULL)
     {
@@ -174,22 +174,22 @@ TEMPCLEANUP:
 
 }
 
-/*  This routine has to be called before WaveReadFile as it searchs for the 
-    chunk to descend into for reading, that is, the 'data' chunk.  For 
-    simplicity, this used to be in the open routine, but was taken out and 
-    moved to a separate routine so there was more control on the chunks that 
+/*  This routine has to be called before WaveReadFile as it searchs for the
+    chunk to descend into for reading, that is, the 'data' chunk.  For
+    simplicity, this used to be in the open routine, but was taken out and
+    moved to a separate routine so there was more control on the chunks that
     are before the data chunk, such as 'fact', etc... */
 
 int WaveStartDataRead(
-                    HMMIO *phmmioIn,
-                    MMCKINFO *pckIn,
-                    MMCKINFO *pckInRIFF
-                    )
+    HMMIO *phmmioIn,
+    MMCKINFO *pckIn,
+    MMCKINFO *pckInRIFF
+)
 {
     int nError=0;
 
     // Perform a seek...
-    if ((nError = mmioSeek(*phmmioIn, 
+    if ((nError = mmioSeek(*phmmioIn,
                            pckInRIFF->dwDataOffset + sizeof(FOURCC), SEEK_SET)) == -1)
     {
         // ASSERT(FALSE);
@@ -208,18 +208,18 @@ int WaveStartDataRead(
 /*  This will read wave data from the wave file.  Makre sure we're descended into
     the data chunk, else this will fail bigtime!
     hmmioIn         - Handle to mmio.
-    cbRead          - # of bytes to read.   
+    cbRead          - # of bytes to read.
     pbDest          - Destination buffer to put bytes.
-    cbActualRead- # of bytes actually read.     
+    cbActualRead- # of bytes actually read.
 */
 
 int WaveReadFile(
-        HMMIO hmmioIn,                          // IN
-        UINT cbRead,                            // IN           
-        BYTE *pbDest,                           // IN
-        MMCKINFO *pckIn,                        // IN.
-        UINT *cbActualRead                      // OUT.        
-        )
+    HMMIO hmmioIn,                          // IN
+    UINT cbRead,                            // IN
+    BYTE *pbDest,                           // IN
+    MMCKINFO *pckIn,                        // IN.
+    UINT *cbActualRead                      // OUT.
+)
 {
     MMIOINFO    mmioinfoIn;         // current status of <hmmioIn>
     int         nError=0;
@@ -231,8 +231,8 @@ int WaveReadFile(
     }
 
     cbDataIn = cbRead;
-    if (cbDataIn > pckIn->cksize) 
-        cbDataIn = pckIn->cksize;       
+    if (cbDataIn > pckIn->cksize)
+        cbDataIn = pckIn->cksize;
 
     pckIn->cksize -= cbDataIn;
 
@@ -244,7 +244,7 @@ int WaveReadFile(
             if ((nError = mmioAdvance(hmmioIn, &mmioinfoIn, MMIO_READ)) != 0)
             {
                 goto ERROR_CANNOT_READ;
-            } 
+            }
             if (mmioinfoIn.pchNext == mmioinfoIn.pchEndRead)
             {
                 nError = ER_CORRUPTWAVEFILE;
@@ -253,7 +253,7 @@ int WaveReadFile(
         }
 
         // Actual copy.
-        *((BYTE*)pbDest+cT) = *((BYTE*)mmioinfoIn.pchNext)++;                                                                                                   
+        *((BYTE*)pbDest+cT) = *((BYTE*)mmioinfoIn.pchNext)++;
     }
 
     if ((nError = mmioSetInfo(hmmioIn, &mmioinfoIn, 0)) != 0)
@@ -272,7 +272,7 @@ FINISHED_READING:
 
 }
 
-/*  This will close the wave file openned with WaveOpenFile.  
+/*  This will close the wave file openned with WaveOpenFile.
     phmmioIn - Pointer to the handle to input MMIO.
     ppwfxSrc - Pointer to pointer to WaveFormatEx structure.
 
@@ -281,9 +281,9 @@ FINISHED_READING:
 */
 
 int WaveCloseReadFile(
-            HMMIO *phmmio,                          // IN
-            WAVEFORMATEX **ppwfxSrc                 // IN
-            )
+    HMMIO *phmmio,                          // IN
+    WAVEFORMATEX **ppwfxSrc                 // IN
+)
 {
     if (*ppwfxSrc != NULL)
     {
@@ -312,12 +312,12 @@ int WaveCloseReadFile(
 */
 
 int WaveCreateFile(
-            TCHAR*pszFileName,                      // (IN)
-            HMMIO *phmmioOut,                       // (OUT)
-            WAVEFORMATEX *pwfxDest,                 // (IN)
-            MMCKINFO *pckOut,                       // (OUT)
-            MMCKINFO *pckOutRIFF                    // (OUT)
-            )
+    TCHAR*pszFileName,                      // (IN)
+    HMMIO *phmmioOut,                       // (OUT)
+    WAVEFORMATEX *pwfxDest,                 // (IN)
+    MMCKINFO *pckOut,                       // (OUT)
+    MMCKINFO *pckOutRIFF                    // (OUT)
+)
 {
     int       nError;        // Return value
     DWORD     dwFactChunk;   // Contains the actual fact chunk. Garbage until WaveCloseWriteFile.
@@ -327,7 +327,7 @@ int WaveCreateFile(
     nError = 0;
 
     *phmmioOut = mmioOpen(pszFileName, NULL,
-        MMIO_ALLOCBUF | MMIO_READWRITE|MMIO_CREATE);
+                          MMIO_ALLOCBUF | MMIO_READWRITE|MMIO_CREATE);
 
     if (*phmmioOut == NULL)
     {
@@ -336,8 +336,8 @@ int WaveCreateFile(
     }
 
     /* Create the output file RIFF chunk of form type 'WAVE'. */
-    pckOutRIFF->fccType = mmioFOURCC('W', 'A', 'V', 'E');       
-    pckOutRIFF->cksize = 0; 
+    pckOutRIFF->fccType = mmioFOURCC('W', 'A', 'V', 'E');
+    pckOutRIFF->cksize = 0;
     if ((nError = mmioCreateChunk(*phmmioOut, pckOutRIFF, MMIO_CREATERIFF)) != 0)
     {
         goto ERROR_CANNOT_WRITE;    // cannot write file, probably
@@ -359,7 +359,7 @@ int WaveCreateFile(
     if (pwfxDest->wFormatTag == WAVE_FORMAT_PCM)
     {
         if (mmioWrite(*phmmioOut, (HPSTR) pwfxDest, sizeof(PCMWAVEFORMAT))
-            != sizeof(PCMWAVEFORMAT))
+                != sizeof(PCMWAVEFORMAT))
         {
             nError = ER_CANNOTWRITE;
             goto ERROR_CANNOT_WRITE;    // cannot write file, probably
@@ -369,12 +369,12 @@ int WaveCreateFile(
     {
         // Write the variable length size.
         if ((UINT)mmioWrite(*phmmioOut, (HPSTR) pwfxDest, sizeof(*pwfxDest)+pwfxDest->cbSize)
-            != (sizeof(*pwfxDest)+pwfxDest->cbSize))
+                != (sizeof(*pwfxDest)+pwfxDest->cbSize))
         {
             nError = ER_CANNOTWRITE;
             goto ERROR_CANNOT_WRITE;    // cannot write file, probably
-        } 
-    }  
+        }
+    }
 
     /* Ascend out of the 'fmt ' chunk, back into the 'RIFF' chunk. */
     if ((nError = mmioAscend(*phmmioOut, pckOut, 0)) != 0)
@@ -420,10 +420,10 @@ DONE_CREATE:
 */
 
 int WaveStartDataWrite(
-                HMMIO *phmmioOut,                       // (IN)
-                MMCKINFO *pckOut,                       // (IN)
-                MMIOINFO *pmmioinfoOut                  // (OUT)
-                )
+    HMMIO *phmmioOut,                       // (IN)
+    MMCKINFO *pckOut,                       // (IN)
+    MMIOINFO *pmmioinfoOut                  // (OUT)
+)
 {
     int nError=0;
 
@@ -441,7 +441,7 @@ int WaveStartDataWrite(
 }
 
 
-/* This routine will write out data to a wave file. 
+/* This routine will write out data to a wave file.
     hmmioOut                - Handle to hmmioOut filled by WaveCreateFile
     cbWrite                 - # of bytes to write out.
     pbSrc                   - Pointer to source.
@@ -454,13 +454,13 @@ int WaveStartDataWrite(
  */
 
 int WaveWriteFile(
-        HMMIO hmmioOut,                         // (IN)
-        UINT cbWrite,                           // (IN)
-        BYTE *pbSrc,                            // (IN)
-        MMCKINFO *pckOut,                       // (IN)
-        UINT *cbActualWrite,                    // (OUT)
-        MMIOINFO *pmmioinfoOut                  // (IN)
-        )
+    HMMIO hmmioOut,                         // (IN)
+    UINT cbWrite,                           // (IN)
+    BYTE *pbSrc,                            // (IN)
+    MMCKINFO *pckOut,                       // (IN)
+    UINT *cbActualWrite,                    // (OUT)
+    MMIOINFO *pmmioinfoOut                  // (IN)
+)
 {
     int  nError=0;
     UINT cT;
@@ -468,7 +468,7 @@ int WaveWriteFile(
     *cbActualWrite = 0;
 
     for (cT=0; cT < cbWrite; cT++)
-    {       
+    {
         if (pmmioinfoOut->pchNext == pmmioinfoOut->pchEndWrite)
         {
             pmmioinfoOut->dwFlags |= MMIO_DIRTY;
@@ -502,12 +502,12 @@ ERROR_CANNOT_WRITE:
 */
 
 int WaveCloseWriteFile(
-            HMMIO *phmmioOut,               // (IN)
-            MMCKINFO *pckOut,               // (IN)
-            MMCKINFO *pckOutRIFF,           // (IN)
-            MMIOINFO *pmmioinfoOut,         // (IN)
-            DWORD cSamples                  // (IN)
-            )
+    HMMIO *phmmioOut,               // (IN)
+    MMCKINFO *pckOut,               // (IN)
+    MMCKINFO *pckOutRIFF,           // (IN)
+    MMIOINFO *pmmioinfoOut,         // (IN)
+    DWORD cSamples                  // (IN)
+)
 {
     int nError=0;
 
@@ -518,7 +518,7 @@ int WaveCloseWriteFile(
     if ((nError = mmioSetInfo(*phmmioOut, pmmioinfoOut, 0)) != 0)
     {
         // cannot flush, probably...
-        goto ERROR_CANNOT_WRITE;                                
+        goto ERROR_CANNOT_WRITE;
     }
 
     /* Ascend the output file out of the 'data' chunk -- this will cause
@@ -546,7 +546,7 @@ int WaveCloseWriteFile(
         // If it didn't fail, write the fact chunk out, if it failed, not critical, just
         // assert (below).
         nError = mmioWrite(*phmmioOut, (HPSTR)&cSamples, sizeof(DWORD));
-        nError = mmioAscend(*phmmioOut, pckOut, 0); 
+        nError = mmioAscend(*phmmioOut, pckOut, 0);
         nError = 0;
     }
     else
@@ -591,12 +591,12 @@ ERROR_CANNOT_WRITE:
 */
 
 int WaveCopyUselessChunks(
-                    HMMIO *phmmioIn, 
-                    MMCKINFO *pckIn, 
-                    MMCKINFO *pckInRiff, 
-                    HMMIO *phmmioOut, 
-                    MMCKINFO *pckOut, 
-                    MMCKINFO *pckOutRiff)
+    HMMIO *phmmioIn,
+    MMCKINFO *pckIn,
+    MMCKINFO *pckInRiff,
+    HMMIO *phmmioOut,
+    MMCKINFO *pckOut,
+    MMCKINFO *pckOutRiff)
 {
     int  nError=0;
 
@@ -607,60 +607,60 @@ int WaveCopyUselessChunks(
         goto ERROR_IN_PROC;
     }
 
-    nError = 0;                     
+    nError = 0;
 
     while (mmioDescend(*phmmioIn, pckIn, pckInRiff, 0) == 0)
     {
-        //  quickly check for corrupt RIFF file--don't ascend past end!        
-        if ((pckIn->dwDataOffset + pckIn->cksize) > 
-            (pckInRiff->dwDataOffset + pckInRiff->cksize))
+        //  quickly check for corrupt RIFF file--don't ascend past end!
+        if ((pckIn->dwDataOffset + pckIn->cksize) >
+                (pckInRiff->dwDataOffset + pckInRiff->cksize))
             goto ERROR_IN_PROC;
 
         switch (pckIn->ckid)
-        {                   
-            //  explicitly skip these...            
-            case mmioFOURCC('f', 'm', 't', ' '):
-                break;
+        {
+        //  explicitly skip these...
+        case mmioFOURCC('f', 'm', 't', ' '):
+            break;
 
-            case mmioFOURCC('d', 'a', 't', 'a'):
-                break;
+        case mmioFOURCC('d', 'a', 't', 'a'):
+            break;
 
-            case mmioFOURCC('f', 'a', 'c', 't'):
-                break;
+        case mmioFOURCC('f', 'a', 'c', 't'):
+            break;
 
-            case mmioFOURCC('J', 'U', 'N', 'K'):
-                break;
+        case mmioFOURCC('J', 'U', 'N', 'K'):
+            break;
 
-            case mmioFOURCC('P', 'A', 'D', ' '):
-                break;
+        case mmioFOURCC('P', 'A', 'D', ' '):
+            break;
 
-            case mmioFOURCC('c', 'u', 'e', ' '):
-                break;                                                  
+        case mmioFOURCC('c', 'u', 'e', ' '):
+            break;
 
-            //  copy chunks that are OK to copy            
-            case mmioFOURCC('p', 'l', 's', 't'):
-                // although without the 'cue' chunk, it doesn't make much sense
-                riffCopyChunk(*phmmioIn, *phmmioOut, pckIn);
-                break;
+        //  copy chunks that are OK to copy
+        case mmioFOURCC('p', 'l', 's', 't'):
+            // although without the 'cue' chunk, it doesn't make much sense
+            riffCopyChunk(*phmmioIn, *phmmioOut, pckIn);
+            break;
 
-            case mmioFOURCC('D', 'I', 'S', 'P'):
-                riffCopyChunk(*phmmioIn, *phmmioOut, pckIn);
-                break;
+        case mmioFOURCC('D', 'I', 'S', 'P'):
+            riffCopyChunk(*phmmioIn, *phmmioOut, pckIn);
+            break;
 
-            //  don't copy unknown chunks
-            default:
-                break;
+        //  don't copy unknown chunks
+        default:
+            break;
         }
 
 
-        //  step up to prepare for next chunk..        
+        //  step up to prepare for next chunk..
         mmioAscend(*phmmioIn, pckIn, 0);
     }
 
-    ERROR_IN_PROC:
+ERROR_IN_PROC:
     {
         int nErrorT;
-        // Seek back to riff header     
+        // Seek back to riff header
         nErrorT = mmioSeek(*phmmioIn, pckInRiff->dwDataOffset + sizeof(FOURCC), SEEK_SET);
     }
 
@@ -671,7 +671,7 @@ int WaveCopyUselessChunks(
 /** BOOL RIFFAPI riffCopyChunk(HMMIO hmmioSrc, HMMIO hmmioDst, const LPMMCKINFO lpck)
  *
  *  DESCRIPTION:
- *      
+ *
  *
  *  ARGUMENTS:
  *      (LPWAVECONVCB lpwc, LPMMCKINFO lpck)
@@ -727,20 +727,20 @@ rscc_Error:
     cSamples        -       # of samples loaded.
     ppwfxInfo       -       Pointer to pointer to waveformatex structure.  The wfx structure
                             IS ALLOCATED by this routine!  Make sure to free it!
-    ppbData         -       Pointer to a byte pointer (globalalloc) which is allocated by this 
+    ppbData         -       Pointer to a byte pointer (globalalloc) which is allocated by this
                             routine.  Make sure to free it!
 
     Returns 0 if successful, else the error code.
 */
 
 int WaveLoadFile(
-            TCHAR*pszFileName,                      // (IN)
-            UINT *cbSize,                           // (OUT)
-            WAVEFORMATEX **ppwfxInfo,               // (OUT)
-            BYTE **ppbData                          // (OUT)
-            )
+    TCHAR*pszFileName,                      // (IN)
+    UINT *cbSize,                           // (OUT)
+    WAVEFORMATEX **ppwfxInfo,               // (OUT)
+    BYTE **ppbData                          // (OUT)
+)
 {
-    HMMIO     hmmioIn;        
+    HMMIO     hmmioIn;
     MMCKINFO  ckInRiff;
     MMCKINFO  ckIn;
     int       nError;
@@ -770,7 +770,7 @@ int WaveLoadFile(
     if ((nError = WaveReadFile(hmmioIn, ckIn.cksize, *ppbData, &ckIn, &cbActualRead)) != 0)
     {
         goto ERROR_LOADING;
-    }        
+    }
 
     *cbSize = cbActualRead;
     goto DONE_LOADING;
@@ -788,7 +788,7 @@ ERROR_LOADING:
     }
 
 DONE_LOADING:
-    // Close the wave file. 
+    // Close the wave file.
     if (hmmioIn != NULL)
     {
         mmioClose(hmmioIn, 0);
@@ -804,15 +804,15 @@ DONE_LOADING:
     cSamples        -       # of samples to write, used to make the fact chunk. (if !PCM)
     pwfxDest        -       Pointer to waveformatex structure.
     pbData          -       Pointer to the data.
-*/      
+*/
 
 int WaveSaveFile(
-                TCHAR*pszFileName,                      // (IN)
-                UINT cbSize,                            // (IN)
-                DWORD cSamples,                         // (IN) 
-                WAVEFORMATEX *pwfxDest,                 // (IN)
-                BYTE *pbData                            // (IN)
-                )
+    TCHAR*pszFileName,                      // (IN)
+    UINT cbSize,                            // (IN)
+    DWORD cSamples,                         // (IN)
+    WAVEFORMATEX *pwfxDest,                 // (IN)
+    BYTE *pbData                            // (IN)
+)
 {
 
     HMMIO     hmmioOut;
@@ -840,11 +840,11 @@ int WaveSaveFile(
     if ((nError = WaveCloseWriteFile(&hmmioOut, &ckOut, &ckOutRIFF, &mmioinfoOut, cSamples)) != 0)
     {
         goto ERROR_SAVING;
-    }       
+    }
 
 ERROR_SAVING:
 
-    return(nError);         
+    return(nError);
 }
 
 

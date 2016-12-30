@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -83,7 +83,7 @@ static UINT olds = 0;
 static char szOldTicks[MAX_CBFMT];
 
 PRIVATE VOID NEAR PASCAL PaintTime(
-    HDC                     hDC)           
+    HDC                     hDC)
 {
     TICKS                   tkTime;
     DWORD                   msTime;
@@ -102,7 +102,7 @@ PRIVATE VOID NEAR PASCAL PaintTime(
 
     SetBkColor(hDC, RGB(0xFF, 0xFF, 0xFF));
     hFont = SelectObject(hDC, ghFont);
-    
+
     if (gnTimeFormat == IDS_TICKS)
     {
         StringCchPrintf(szWork, MAX_CBFMT, "%9lu", (DWORD)tkTime);
@@ -111,15 +111,15 @@ PRIVATE VOID NEAR PASCAL PaintTime(
         {
             if (gbRepaint || szOldTicks[ii] != szWork[ii])
                 EmbossedTextOut(
-                                hDC,
-                                ganPosX[ii],
-                                gnPosY,
-                                szWork+ii,
-                                1,
-                                (COLORREF)-1,
-                                (COLORREF)-1,
-                                3,
-                                3);
+                    hDC,
+                    ganPosX[ii],
+                    gnPosY,
+                    szWork+ii,
+                    1,
+                    (COLORREF)-1,
+                    (COLORREF)-1,
+                    3,
+                    3);
             szOldTicks[ii] = szWork[ii];
         }
     }
@@ -127,8 +127,10 @@ PRIVATE VOID NEAR PASCAL PaintTime(
     {
         msTime = seqTicksToMillisecs(gpSeq, tkTime) / 1000L;
 
-        h = (UINT)(msTime / 3600L);    msTime %= 3600L;
-        m = (UINT)(msTime / 60L);      msTime %= 60L;
+        h = (UINT)(msTime / 3600L);
+        msTime %= 3600L;
+        m = (UINT)(msTime / 60L);
+        msTime %= 60L;
         s = (UINT)msTime;
 
         cb = lstrlen(gszFormatHMS);
@@ -138,15 +140,15 @@ PRIVATE VOID NEAR PASCAL PaintTime(
             szWork[0] = '0' + (char)(h / 10);
             szWork[1] = '0' + (char)(h % 10);
             EmbossedTextOut(
-                            hDC,
-                            ganPosX[HOUR_INDEX],
-                            gnPosY,
-                            szWork,
-                            2,
-                            (COLORREF)-1,
-                            (COLORREF)-1,
-                            3,
-                            3);
+                hDC,
+                ganPosX[HOUR_INDEX],
+                gnPosY,
+                szWork,
+                2,
+                (COLORREF)-1,
+                (COLORREF)-1,
+                3,
+                3);
             oldh = h;
         }
 
@@ -157,15 +159,15 @@ PRIVATE VOID NEAR PASCAL PaintTime(
             szWork[1] = '0' + (char)(m / 10);
             szWork[2] = '0' + (char)(m % 10);
             EmbossedTextOut(
-                            hDC,
-                            ganPosX[MIN_SEP_INDEX],
-                            gnPosY,
-                            szWork,
-                            3,
-                            (COLORREF)-1,
-                            (COLORREF)-1,
-                            3,
-                            3);
+                hDC,
+                ganPosX[MIN_SEP_INDEX],
+                gnPosY,
+                szWork,
+                3,
+                (COLORREF)-1,
+                (COLORREF)-1,
+                3,
+                3);
             oldm = m;
             fRepaintedMin = TRUE;
         }
@@ -177,15 +179,15 @@ PRIVATE VOID NEAR PASCAL PaintTime(
             szWork[1] = '0' + (char)(s / 10);
             szWork[2] = '0' + (char)(s % 10);
             EmbossedTextOut(
-                            hDC,
-                            ganPosX[SEC_SEP_INDEX],
-                            gnPosY,
-                            szWork,
-                            3,
-                            (COLORREF)-1,
-                            (COLORREF)-1,
-                            3,
-                            3);
+                hDC,
+                ganPosX[SEC_SEP_INDEX],
+                gnPosY,
+                szWork,
+                3,
+                (COLORREF)-1,
+                (COLORREF)-1,
+                3,
+                3);
             olds = s;
             fRepaintedSec = TRUE;
         }
@@ -203,18 +205,18 @@ PRIVATE VOID NEAR PASCAL PaintTime(
                         continue;
 
                     EmbossedTextOut(
-                                    hDC,
-                                    ganPosX[ii],
-                                    gnPosY,
-                                    gszFormatHMS+ii,
-                                    1,
-                                    (COLORREF)-1,
-                                    (COLORREF)-1,
-                                    3,
-                                    3);
+                        hDC,
+                        ganPosX[ii],
+                        gnPosY,
+                        gszFormatHMS+ii,
+                        1,
+                        (COLORREF)-1,
+                        (COLORREF)-1,
+                        3,
+                        3);
                 }
     }
-    
+
     gbRepaint = FALSE;
     SelectObject(hDC, hFont);
 }
@@ -265,7 +267,7 @@ VOID NEAR PASCAL TWnd_OnSize(
     int                     cy)
 {
     HDC                     hDC;
-    
+
     GetClientRect(hWnd, &grcTWnd);
 
     if (ghFont != (HFONT)NULL)
@@ -296,15 +298,20 @@ VOID NEAR PASCAL TWnd_OnSize(
 * Repaint the time.
 *
 *****************************************************************************/
-VOID NEAR PASCAL TWnd_OnPaint( HWND hWnd) { PAINTSTRUCT ps; HDC hDC;
-HBRUSH hBrOld; int nWidth; int nHeight;
+VOID NEAR PASCAL TWnd_OnPaint( HWND hWnd)
+{
+    PAINTSTRUCT ps;
+    HDC hDC;
+    HBRUSH hBrOld;
+    int nWidth;
+    int nHeight;
 
     RECT                    rc;
 
     GetClientRect(hWnd, &rc);
     nWidth  = rc.right;
     nHeight = rc.bottom;
-    
+
     hDC = BeginPaint(hWnd, &ps);
 
     hBrOld = (HBRUSH)SelectObject(hDC, GetStockObject(GRAY_BRUSH));
@@ -322,7 +329,7 @@ HBRUSH hBrOld; int nWidth; int nHeight;
     SelectObject(hDC, GetStockObject(LTGRAY_BRUSH));
     PatBlt(hDC, rc.right-2, 1, 1, nHeight-2, PATCOPY);
     PatBlt(hDC, 1, rc.bottom-2, nWidth-2, 1, PATCOPY);
-    
+
     SelectObject(hDC, hBrOld);
 
     gbRepaint = TRUE;
@@ -346,7 +353,7 @@ HBRUSH hBrOld; int nWidth; int nHeight;
 * We will receive IDM_PLAY and IDM_STOP messages forwarded from the main
 * application window whenver playback starts or stops. Use these messages
 * to create or kill a timer which will be used to update the time.
-* 
+*
 *****************************************************************************/
 VOID NEAR PASCAL TWnd_OnCommand(
     HWND                    hWnd,
@@ -356,25 +363,25 @@ VOID NEAR PASCAL TWnd_OnCommand(
 {
     switch(id)
     {
-        case IDM_PLAY:
-            if (0 == gnTimerOn)
-            {
-                gnTimerOn++;
-                SetTimer(hWnd, TIMER_ID, TIMER_INTERVAL, 0);
-            }
+    case IDM_PLAY:
+        if (0 == gnTimerOn)
+        {
+            gnTimerOn++;
+            SetTimer(hWnd, TIMER_ID, TIMER_INTERVAL, 0);
+        }
 
-            UpdateWindow(hWnd);
-            break;
+        UpdateWindow(hWnd);
+        break;
 
-        case IDM_STOP:
-            if (0 == gnTimerOn)
-            {
-                gnTimerOn--;
-                KillTimer(hWnd, TIMER_ID);
-            }
-            
-            UpdateWindow(hWnd);
-            break;
+    case IDM_STOP:
+        if (0 == gnTimerOn)
+        {
+            gnTimerOn--;
+            KillTimer(hWnd, TIMER_ID);
+        }
+
+        UpdateWindow(hWnd);
+        break;
     }
 }
 
@@ -387,7 +394,7 @@ VOID NEAR PASCAL TWnd_OnCommand(
 * HWND hWnd                 - Window handle
 *
 * If we're being destroyed and the timer is still running, stop it.
-* 
+*
 *****************************************************************************/
 VOID NEAR PASCAL TWnd_OnDestroy(
     HWND                    hWnd)
@@ -408,7 +415,7 @@ VOID NEAR PASCAL TWnd_OnDestroy(
 * UINT id                   - Timer ID
 *
 * Update the time.
-* 
+*
 *****************************************************************************/
 PRIVATE VOID NEAR PASCAL TWnd_OnTimer(
     HWND                    hWnd,
@@ -456,8 +463,8 @@ LRESULT CALLBACK TWnd_WndProc(
         HANDLE_MSG(hWnd, WM_DESTROY,        TWnd_OnDestroy);
         HANDLE_MSG(hWnd, WM_TIMER,          TWnd_OnTimer);
 
-        default:
-            return DefWindowProc(hWnd, msg, wParam, lParam);
+    default:
+        return DefWindowProc(hWnd, msg, wParam, lParam);
     }
 
     return 0;

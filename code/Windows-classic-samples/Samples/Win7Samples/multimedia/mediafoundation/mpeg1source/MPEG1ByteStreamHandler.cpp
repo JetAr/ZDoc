@@ -1,8 +1,8 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // MPEG1ByteStreamHandler.cpp
 // Implements the byte-stream handler for the MPEG1 source.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -29,7 +29,7 @@
 // This method is used by the class factory.
 //
 // pUnkOuter: Aggregating IUnknown.
-// 
+//
 //-------------------------------------------------------------------
 
 HRESULT MPEG1ByteStreamHandler::CreateInstance(IUnknown *pUnkOuter, REFIID iid, void **ppv)
@@ -67,7 +67,7 @@ HRESULT MPEG1ByteStreamHandler::CreateInstance(IUnknown *pUnkOuter, REFIID iid, 
 // Constructor
 //-------------------------------------------------------------------
 
-MPEG1ByteStreamHandler::MPEG1ByteStreamHandler(HRESULT& hr) 
+MPEG1ByteStreamHandler::MPEG1ByteStreamHandler(HRESULT& hr)
     : m_pSource(NULL), m_pResult(NULL)
 {
 
@@ -100,7 +100,7 @@ ULONG MPEG1ByteStreamHandler::Release()
 
 HRESULT MPEG1ByteStreamHandler::QueryInterface(REFIID riid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(MPEG1ByteStreamHandler, IMFByteStreamHandler),
         QITABENT(MPEG1ByteStreamHandler, IMFAsyncCallback),
@@ -119,15 +119,15 @@ HRESULT MPEG1ByteStreamHandler::QueryInterface(REFIID riid, void** ppv)
 // Starts creating the media source.
 //-------------------------------------------------------------------
 
-HRESULT MPEG1ByteStreamHandler::BeginCreateObject( 
-        /* [in] */ IMFByteStream *pByteStream,
-        /* [in] */ LPCWSTR pwszURL,
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ IPropertyStore *pProps,
-        /* [out] */ IUnknown **ppIUnknownCancelCookie,  // Can be NULL
-        /* [in] */ IMFAsyncCallback *pCallback,
-        /* [in] */ IUnknown *punkState                  // Can be NULL
-        )
+HRESULT MPEG1ByteStreamHandler::BeginCreateObject(
+    /* [in] */ IMFByteStream *pByteStream,
+    /* [in] */ LPCWSTR pwszURL,
+    /* [in] */ DWORD dwFlags,
+    /* [in] */ IPropertyStore *pProps,
+    /* [out] */ IUnknown **ppIUnknownCancelCookie,  // Can be NULL
+    /* [in] */ IMFAsyncCallback *pCallback,
+    /* [in] */ IUnknown *punkState                  // Can be NULL
+)
 {
     if (pByteStream == NULL)
     {
@@ -155,7 +155,7 @@ HRESULT MPEG1ByteStreamHandler::BeginCreateObject(
     // Create a result object for the caller's async callback.
     CHECK_HR(hr = MFCreateAsyncResult(NULL, pCallback, punkState, &pResult));
 
-    // Start opening the source. This is an async operation. 
+    // Start opening the source. This is an async operation.
     // When it completes, the source will invoke our callback
     // and then we will invoke the caller's callback.
     CHECK_HR(hr = pSource->BeginOpen(pByteStream, this, NULL));
@@ -177,16 +177,16 @@ done:
     SAFE_RELEASE(pResult);
     return hr;
 }
-    
+
 //-------------------------------------------------------------------
 // EndCreateObject
 // Completes the BeginCreateObject operation.
 //-------------------------------------------------------------------
 
-HRESULT MPEG1ByteStreamHandler::EndCreateObject( 
-        /* [in] */ IMFAsyncResult *pResult,
-        /* [out] */ MF_OBJECT_TYPE *pObjectType,
-        /* [out] */ IUnknown **ppObject)
+HRESULT MPEG1ByteStreamHandler::EndCreateObject(
+    /* [in] */ IMFAsyncResult *pResult,
+    /* [out] */ MF_OBJECT_TYPE *pObjectType,
+    /* [out] */ IUnknown **ppObject)
 {
     if (pResult == NULL || pObjectType == NULL || ppObject == NULL)
     {
@@ -213,7 +213,7 @@ done:
     return hr;
 }
 
-    
+
 HRESULT MPEG1ByteStreamHandler::CancelObjectCreation(IUnknown *pIUnknownCancelCookie)
 {
     return E_NOTIMPL;

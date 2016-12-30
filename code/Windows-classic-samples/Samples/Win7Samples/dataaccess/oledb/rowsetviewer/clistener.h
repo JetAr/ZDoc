@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -16,102 +16,102 @@
 // Includes
 //
 //////////////////////////////////////////////////////////////////////////////
-						
+
 
 /////////////////////////////////////////////////////////////////
-// CListener 
+// CListener
 //
 /////////////////////////////////////////////////////////////////
 class CListener :	public IRowsetNotify,		//Rowset Notifications
-					public IDBAsynchNotify,		//Asynch Notifications
-					public IRowPositionChange	//RowPosition Notifications
+    public IDBAsynchNotify,		//Asynch Notifications
+    public IRowPositionChange	//RowPosition Notifications
 {
 public:
-	CListener();
-	virtual ~CListener();
-	
-	virtual HRESULT			Advise(CContainerBase* pCCPointBase, REFIID riid, DWORD* pdwCookie);
-	virtual HRESULT			Advise(IConnectionPoint* pIConnectionPoint, DWORD* pdwCookie);
+    CListener();
+    virtual ~CListener();
 
-	virtual HRESULT			Unadvise(CContainerBase* pCCPointBase, REFIID riid, DWORD* pdwCookie);
-	virtual HRESULT			Unadvise(IConnectionPoint* pIConnectionPoint, DWORD* pdwCookie);
+    virtual HRESULT			Advise(CContainerBase* pCCPointBase, REFIID riid, DWORD* pdwCookie);
+    virtual HRESULT			Advise(IConnectionPoint* pIConnectionPoint, DWORD* pdwCookie);
 
-	virtual HRESULT			SetReturnValue(HRESULT hrReturn);
-	virtual HRESULT			GetReturnValue();
+    virtual HRESULT			Unadvise(CContainerBase* pCCPointBase, REFIID riid, DWORD* pdwCookie);
+    virtual HRESULT			Unadvise(IConnectionPoint* pIConnectionPoint, DWORD* pdwCookie);
 
-	STDMETHODIMP_(ULONG)	AddRef(void);
-	STDMETHODIMP_(ULONG)	Release(void);
-	STDMETHODIMP			QueryInterface(REFIID riid, LPVOID *ppv);
+    virtual HRESULT			SetReturnValue(HRESULT hrReturn);
+    virtual HRESULT			GetReturnValue();
 
-	//IRowsetNotify
+    STDMETHODIMP_(ULONG)	AddRef(void);
+    STDMETHODIMP_(ULONG)	Release(void);
+    STDMETHODIMP			QueryInterface(REFIID riid, LPVOID *ppv);
+
+    //IRowsetNotify
     STDMETHODIMP OnFieldChange
-		( 
-            IRowset* pIRowset,
-            HROW hRow,
-            DBORDINAL cColumns,
-            DBORDINAL rgColumns[  ],
-            DBREASON eReason,
-            DBEVENTPHASE ePhase,
-            BOOL fCantDeny
-		);
-        
+    (
+        IRowset* pIRowset,
+        HROW hRow,
+        DBORDINAL cColumns,
+        DBORDINAL rgColumns[  ],
+        DBREASON eReason,
+        DBEVENTPHASE ePhase,
+        BOOL fCantDeny
+    );
+
     STDMETHODIMP OnRowChange
-		( 
-            IRowset* pIRowset,
-            DBCOUNTITEM cRows,
-            const HROW rghRows[  ],
-            DBREASON eReason,
-            DBEVENTPHASE ePhase,
-            BOOL fCantDeny
-		);
-        
-	STDMETHODIMP OnRowsetChange
-		( 
-			IRowset* pIRowset,
-            DBREASON eReason,
-            DBEVENTPHASE ePhase,
-            BOOL fCantDeny
-		);
+    (
+        IRowset* pIRowset,
+        DBCOUNTITEM cRows,
+        const HROW rghRows[  ],
+        DBREASON eReason,
+        DBEVENTPHASE ePhase,
+        BOOL fCantDeny
+    );
+
+    STDMETHODIMP OnRowsetChange
+    (
+        IRowset* pIRowset,
+        DBREASON eReason,
+        DBEVENTPHASE ePhase,
+        BOOL fCantDeny
+    );
 
 
-	//IDBAsynchNotify
+    //IDBAsynchNotify
     STDMETHODIMP OnLowResource
-		( 
-            DB_DWRESERVE dwReserved
-		);
-        
-    STDMETHODIMP OnProgress
-		( 
-            HCHAPTER		hChapter,
-            DBASYNCHOP		eOperation,
-            DBCOUNTITEM		ulProgress,
-            DBCOUNTITEM		ulProgressMax,
-            DBASYNCHPHASE	eAsynchPhase,
-            LPOLESTR pwszStatusText
-		);
-        
-	STDMETHODIMP OnStop
-	   ( 
-            HCHAPTER		hChapter,
-            DBASYNCHOP		eOperation,
-            HRESULT			hrStatus,
-            LPOLESTR		pwszStatusText
-		);
+    (
+        DB_DWRESERVE dwReserved
+    );
 
-	//IRowPositionChange
-	STDMETHODIMP OnRowPositionChange
-		(
-			DBREASON			eReason,
-			DBEVENTPHASE		ePhase,
-			BOOL				fCantDeny
-		);
+    STDMETHODIMP OnProgress
+    (
+        HCHAPTER		hChapter,
+        DBASYNCHOP		eOperation,
+        DBCOUNTITEM		ulProgress,
+        DBCOUNTITEM		ulProgressMax,
+        DBASYNCHPHASE	eAsynchPhase,
+        LPOLESTR pwszStatusText
+    );
+
+    STDMETHODIMP OnStop
+    (
+        HCHAPTER		hChapter,
+        DBASYNCHOP		eOperation,
+        HRESULT			hrStatus,
+        LPOLESTR		pwszStatusText
+    );
+
+    //IRowPositionChange
+    STDMETHODIMP OnRowPositionChange
+    (
+        DBREASON			eReason,
+        DBEVENTPHASE		ePhase,
+        BOOL				fCantDeny
+    );
 
 
 
 protected:
-	//Data
-	ULONG			m_cRef;			// reference count
-	HRESULT			m_hrReturn;
+    //Data
+    ULONG			m_cRef;			// reference count
+    HRESULT			m_hrReturn;
 };
 
 

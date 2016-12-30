@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,7 +13,7 @@
 // This routine frees  LPDHCPV4_FAILOVER_CLIENT_INFO and its internal elements.
 VOID FreeClientInfoMemory(LPDHCPV4_FAILOVER_CLIENT_INFO pClientInfo)
 {
-    if (NULL != pClientInfo) 
+    if (NULL != pClientInfo)
     {
         // Frees client name
         if( NULL != pClientInfo->ClientName)
@@ -38,7 +38,7 @@ VOID FreeClientInfoMemory(LPDHCPV4_FAILOVER_CLIENT_INFO pClientInfo)
         //Frees the NetBiosName
         if(NULL != pClientInfo->OwnerHost.NetBiosName)
             DhcpRpcFreeMemory(pClientInfo->OwnerHost.NetBiosName);
-        
+
         // Frees the clientInfo
         DhcpRpcFreeMemory(pClientInfo);
         pClientInfo=NULL;
@@ -61,10 +61,10 @@ int __cdecl main(void)
     pSearchInfo->SearchType = DhcpClientIpAddress;
     pSearchInfo->SearchInfo.ClientIpAddress=0xa000033; // Client with IP Address 10.0.0.51
     dwError = DhcpV4FailoverGetClientInfo(
-                    pwszServer,  // Server IP Address
-                    pSearchInfo, // Search Info on the basis of which clients will be fetched
-                    &pClientInfo // ClientInfo obtained from the server
-                    );
+                  pwszServer,  // Server IP Address
+                  pSearchInfo, // Search Info on the basis of which clients will be fetched
+                  &pClientInfo // ClientInfo obtained from the server
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverGetClientInfo failed with Error = %d\n", dwError);

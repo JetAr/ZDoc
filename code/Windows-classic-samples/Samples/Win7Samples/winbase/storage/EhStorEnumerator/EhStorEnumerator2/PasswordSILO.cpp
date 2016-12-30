@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -41,7 +41,8 @@ void OnQueryPwdDialogInit(HWND hwndDlg)
     HRESULT hr = S_OK;
 
     nSelectedDeviceIDX = GetSelectedDevice(GetParent(hwndDlg), szDevicePNPID, _countof(szDevicePNPID));
-    if (nSelectedDeviceIDX < 0) {
+    if (nSelectedDeviceIDX < 0)
+    {
         return;
     }
 
@@ -93,10 +94,10 @@ INT_PTR CALLBACK PwdDefDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
     case WM_COMMAND:
         switch(LOWORD(wParam))
         {
-            case IDCANCEL:
-            case IDOK:
-                EndDialog(hwndDlg, LOWORD(wParam));
-                return TRUE;
+        case IDCANCEL:
+        case IDOK:
+            EndDialog(hwndDlg, LOWORD(wParam));
+            return TRUE;
         }
         break;
     }
@@ -138,7 +139,7 @@ INT_PTR CALLBACK PwdITMSDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
 void OnPasswordQueryInformation(HWND hwndDlg)
 {
     DialogBox(GetModuleHandle(NULL),
-        MAKEINTRESOURCE(IDD_PWDSILO_INFO), hwndDlg, PwdQueryDialogProc);
+              MAKEINTRESOURCE(IDD_PWDSILO_INFO), hwndDlg, PwdQueryDialogProc);
 }
 
 void OnPasswordInittomanufacturerstate(HWND hwndDlg)
@@ -165,7 +166,7 @@ void OnPasswordInittomanufacturerstate(HWND hwndDlg)
         memset(g_szData, 0, sizeof(g_szData));
 
         if (DialogBox(GetModuleHandle(NULL),
-            MAKEINTRESOURCE(IDD_PWD_ITMS), hwndDlg, PwdITMSDialogProc) == IDOK)
+                      MAKEINTRESOURCE(IDD_PWD_ITMS), hwndDlg, PwdITMSDialogProc) == IDOK)
         {
             // Send command
             EXEC_CHECKHR(device.PasswordInitializeToManufacturerState(g_szData));
@@ -194,21 +195,22 @@ INT_PTR CALLBACK PwdPasswordSetDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam
         GetDlgItemText(hwndDlg, IDC_NEW_PASSWORD, g_ChangePwdData.szNewPassword, _countof(g_ChangePwdData.szNewPassword));
         GetDlgItemText(hwndDlg, IDC_DEVICE_SID, g_ChangePwdData.szSID, _countof(g_ChangePwdData.szSID));
         GetDlgItemText(hwndDlg, IDC_PASSWORD_HINT, g_ChangePwdData.szPasswordHint, _countof(g_ChangePwdData.szPasswordHint));
-        if (IsDlgButtonChecked(hwndDlg, IDC_INDICATOR_USER) == BST_CHECKED) {
+        if (IsDlgButtonChecked(hwndDlg, IDC_INDICATOR_USER) == BST_CHECKED)
+        {
             g_ChangePwdData.nPasswordIndicator = PASSWD_INDICATOR_USER;
         }
         break;
     case WM_COMMAND:
         switch(LOWORD(wParam))
         {
-            case IDC_INDICATOR_ADMIN:
-                SetDlgItemText(hwndDlg, IDC_PASSWORD_HINT, g_siloInformation.get_AdminHint());
-                break;
-            case IDC_INDICATOR_USER:
-                SetDlgItemText(hwndDlg, IDC_PASSWORD_HINT, g_siloInformation.get_UserHint());
-                break;
-            default:
-                return PwdDefDialogProc(hwndDlg, uMsg, wParam, lParam);
+        case IDC_INDICATOR_ADMIN:
+            SetDlgItemText(hwndDlg, IDC_PASSWORD_HINT, g_siloInformation.get_AdminHint());
+            break;
+        case IDC_INDICATOR_USER:
+            SetDlgItemText(hwndDlg, IDC_PASSWORD_HINT, g_siloInformation.get_UserHint());
+            break;
+        default:
+            return PwdDefDialogProc(hwndDlg, uMsg, wParam, lParam);
         }
         break;
     default:
@@ -241,15 +243,15 @@ void OnPasswordSet(HWND hwndDlg)
     {
         g_ChangePwdData = CChangePasswordData();
         if (DialogBox(GetModuleHandle(NULL),
-            MAKEINTRESOURCE(IDD_SET_PASSWORD), hwndDlg, PwdPasswordSetDialogProc) == IDOK)
+                      MAKEINTRESOURCE(IDD_SET_PASSWORD), hwndDlg, PwdPasswordSetDialogProc) == IDOK)
         {
             // transmit command to the silo
             EXEC_CHECKHR(device.PasswordChangePassword(
-                    g_ChangePwdData.nPasswordIndicator, 
-                    g_ChangePwdData.szOldPassword,
-                    g_ChangePwdData.szNewPassword,
-                    g_ChangePwdData.szPasswordHint,
-                    g_ChangePwdData.szSID));
+                             g_ChangePwdData.nPasswordIndicator,
+                             g_ChangePwdData.szOldPassword,
+                             g_ChangePwdData.szNewPassword,
+                             g_ChangePwdData.szPasswordHint,
+                             g_ChangePwdData.szSID));
         }
     }
 

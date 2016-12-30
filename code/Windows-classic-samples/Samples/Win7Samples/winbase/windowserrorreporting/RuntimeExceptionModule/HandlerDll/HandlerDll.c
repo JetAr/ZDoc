@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -29,12 +29,12 @@ Abstract:
 
 HRESULT WINAPI
 OutOfProcessExceptionEventCallback (
-  /* __in    */ PVOID pContext,
-  /* __in    */ const PWER_RUNTIME_EXCEPTION_INFORMATION pExceptionInformation,
-  /* __out   */ BOOL *pbOwnershipClaimed,
-  /* __out   */ PWSTR pwszEventName,
-  /* __inout */ PDWORD pchSize,
-  /* __out   */ PDWORD pdwSignatureCount
+    /* __in    */ PVOID pContext,
+    /* __in    */ const PWER_RUNTIME_EXCEPTION_INFORMATION pExceptionInformation,
+    /* __out   */ BOOL *pbOwnershipClaimed,
+    /* __out   */ PWSTR pwszEventName,
+    /* __inout */ PDWORD pchSize,
+    /* __out   */ PDWORD pdwSignatureCount
 )
 
 /*++
@@ -89,7 +89,8 @@ Return Value:
     //
     // Bail out if it is not an exception we want to handle.
     //
-    if (0xABCD1234 != pExceptionInformation->exceptionRecord.ExceptionCode) {
+    if (0xABCD1234 != pExceptionInformation->exceptionRecord.ExceptionCode)
+    {
         *pbOwnershipClaimed = FALSE;
         return S_OK;
     }
@@ -105,7 +106,8 @@ Return Value:
     //
     EventNameLength = (DWORD) (1 + wcslen (EventName));
 
-    if (*pchSize < EventNameLength) {
+    if (*pchSize < EventNameLength)
+    {
         *pchSize = EventNameLength;
         return HRESULT_FROM_WIN32 (ERROR_INSUFFICIENT_BUFFER);
     }
@@ -120,13 +122,13 @@ Return Value:
 
 HRESULT WINAPI
 OutOfProcessExceptionEventSignatureCallback (
-  /* __in    */ PVOID pContext,
-  /* __in    */ const PWER_RUNTIME_EXCEPTION_INFORMATION pExceptionInformation,
-  /* __in    */ DWORD dwIndex,
-  /* __out   */ PWSTR pwszName,
-  /* __inout */ PDWORD pchName,
-  /* __out   */ PWSTR pwszValue,
-  /* __inout */ PDWORD pchValue
+    /* __in    */ PVOID pContext,
+    /* __in    */ const PWER_RUNTIME_EXCEPTION_INFORMATION pExceptionInformation,
+    /* __in    */ DWORD dwIndex,
+    /* __out   */ PWSTR pwszName,
+    /* __inout */ PDWORD pchName,
+    /* __out   */ PWSTR pwszValue,
+    /* __inout */ PDWORD pchValue
 )
 
 /*++
@@ -173,7 +175,8 @@ Return Value:
     // Some sanity checks. Our handler only specifies 2 signature pairs.
     //
     if (dwIndex >= 2
-        || (0xABCD1234 != pExceptionInformation->exceptionRecord.ExceptionCode)) {
+            || (0xABCD1234 != pExceptionInformation->exceptionRecord.ExceptionCode))
+    {
 
         return E_UNEXPECTED;
     }
@@ -182,12 +185,14 @@ Return Value:
     // Make sure the given buffers are large enough to hold our signature name/value pairs.
     // We will need 4 characters (3 characters + 1 null-terminator) for our fixed strings.
     //
-    if (*pchName < 4) {
+    if (*pchName < 4)
+    {
         *pchName = 4;
         return HRESULT_FROM_WIN32 (ERROR_INSUFFICIENT_BUFFER);
     }
 
-    if (*pchValue < 4) {
+    if (*pchValue < 4)
+    {
         *pchValue = 4;
         return HRESULT_FROM_WIN32 (ERROR_INSUFFICIENT_BUFFER);
     }
@@ -202,18 +207,19 @@ Return Value:
     //
     // In here, we will simply set the signature to some fixed strings.
     //
-    switch (dwIndex) {
-      case 0:
+    switch (dwIndex)
+    {
+    case 0:
         wcscpy_s (pwszName, *pchName, L"one");
         wcscpy_s (pwszValue, *pchValue, L"111");
         break;
 
-      case 1:
+    case 1:
         wcscpy_s (pwszName, *pchName, L"two");
         wcscpy_s (pwszValue, *pchValue, L"222");
         break;
 
-      default:
+    default:
         UNREACHABLE_CODE ();
     }
 
@@ -222,12 +228,12 @@ Return Value:
 
 HRESULT WINAPI
 OutOfProcessExceptionEventDebuggerLaunchCallback (
-  /* __in    */ PVOID pContext,
-  /* __in    */ const PWER_RUNTIME_EXCEPTION_INFORMATION pExceptionInformation,
-  /* __out   */ PBOOL pbIsCustomDebugger,
-  /* __out   */ PWSTR pwszDebuggerLaunch,
-  /* __inout */ PDWORD pchDebuggerLaunch,
-  /* __out   */ PBOOL pbIsDebuggerAutolaunch
+    /* __in    */ PVOID pContext,
+    /* __in    */ const PWER_RUNTIME_EXCEPTION_INFORMATION pExceptionInformation,
+    /* __out   */ PBOOL pbIsCustomDebugger,
+    /* __out   */ PWSTR pwszDebuggerLaunch,
+    /* __inout */ PDWORD pchDebuggerLaunch,
+    /* __out   */ PBOOL pbIsDebuggerAutolaunch
 )
 
 /*++
@@ -276,7 +282,8 @@ Return Value:
     //
     // Some sanity checks.
     //
-    if ((0xABCD1234 != pExceptionInformation->exceptionRecord.ExceptionCode)) {
+    if ((0xABCD1234 != pExceptionInformation->exceptionRecord.ExceptionCode))
+    {
         return E_UNEXPECTED;
     }
 

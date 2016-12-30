@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,22 +16,22 @@ Routine Description:
 
     This routine creates a print job for the "Microsoft XPS Document Writer" printer.
     A .jpg image is sent using an image escape. A fixed page XAML is sent that references the image.
-    
+
 Arguments:
 
     <None>
 
 Return Value:
 
-    S_OK if successful, 
-    E_* if there is an error 
+    S_OK if successful,
+    E_* if there is an error
 
 --*/
 
 HRESULT
 CreatePrintJobWithImagePassThrough(
     VOID
-    )
+)
 {
     HDC               hdcMXDW        = NULL;
     HRESULT           hr             = S_OK;
@@ -53,7 +53,7 @@ CreatePrintJobWithImagePassThrough(
                                         "Viewbox=\"0,0,256,384\" TileMode=\"None\" ViewboxUnits=\"Absolute\" ViewportUnits=\"Absolute\" "
                                         "Viewport=\"100.00,100.00,340.48,513.44\" /></Path.Fill></Path></FixedPage>";
 
-    
+
     hr = StringCchCopy(si.szPrinterName, CCHOF(si.szPrinterName), gszPrinterName);
 
     if ( SUCCEEDED(hr) )
@@ -74,11 +74,11 @@ CreatePrintJobWithImagePassThrough(
     if ( SUCCEEDED(hr) )
     {
         hr = PutTogetherEscapeStructureForPrintTicket(
-                                        MXDCOP_PRINTTICKET_FIXED_DOC,
-                                        pbPTBuf,
-                                        cbPTBuf, 
-                                        &pEscData,
-                                        &cbEscData);
+                 MXDCOP_PRINTTICKET_FIXED_DOC,
+                 pbPTBuf,
+                 cbPTBuf,
+                 &pEscData,
+                 &cbEscData);
     }
 
     //
@@ -102,13 +102,13 @@ CreatePrintJobWithImagePassThrough(
     //
     // Make sure driver is a XPSDrv driver. i.e. it can accept XPS content.
 
-    // 
+    //
     if (SUCCEEDED (hr) )
     {
         hr = IsXPSCapableDriver(hdcMXDW);
     }
 
-       
+
     //
     // Send the Print Ticket
     // If return value is S_OK, it means driver is  XPS capable
@@ -123,19 +123,20 @@ CreatePrintJobWithImagePassThrough(
     }
     else
     {
-    
-        DOCINFO	DocInfo = { 
-                            sizeof(DOCINFO), 
-                            L"Fixed Page PrintTicket Sample", // Title of the print job
-                            NULL,                             // Not specifying output file. Determined by Printer
-                            NULL,                             // Not specifying data type. 
-                            0
-                          };
+
+        DOCINFO	DocInfo =
+        {
+            sizeof(DOCINFO),
+            L"Fixed Page PrintTicket Sample", // Title of the print job
+            NULL,                             // Not specifying output file. Determined by Printer
+            NULL,                             // Not specifying data type.
+            0
+        };
 
 
 
         if( StartDoc(hdcMXDW, &DocInfo) > 0)
-        { 
+        {
             bStartDocSent = TRUE;
         }
         else
@@ -148,13 +149,13 @@ CreatePrintJobWithImagePassThrough(
     }
 
     if ( SUCCEEDED (hr) )
-    {	
+    {
         if( StartPage(hdcMXDW) > 0)
         {
             bStartPageSent = TRUE;
         }
         else
-        { 
+        {
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
     }
@@ -163,12 +164,12 @@ CreatePrintJobWithImagePassThrough(
     if ( SUCCEEDED (hr) )
     {
         if( ExtEscape(hdcMXDW, MXDC_ESCAPE, cbEscData, (LPCSTR) pEscData, 0, NULL) <= 0 )
-        { 
+        {
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
     }
 
-    // Send Image as an escape 
+    // Send Image as an escape
     // Note: Here the image has been including within the .exe as a resource. This makes it
     // easier to distribute the .exe as a single package without the need to bundle an extra .jpg file.
     // But in real world, you'll likely need to load the .jpg file separately.
@@ -190,18 +191,18 @@ CreatePrintJobWithImagePassThrough(
         }
         else
         {
-            hr = HRESULT_FROM_WIN32(GetLastError() );   
+            hr = HRESULT_FROM_WIN32(GetLastError() );
         }
 
         if ( SUCCEEDED(hr) )
         {
             hr = PutTogetherEscapeStructureForImage(
-                                            MXDCOP_SET_S0PAGE_RESOURCE,
-                                            (PBYTE)pImage,
-                                            cbImage,
-                                            szURI,
-                                            &pImgEscData,
-                                            &cbImgEscData);
+                     MXDCOP_SET_S0PAGE_RESOURCE,
+                     (PBYTE)pImage,
+                     cbImage,
+                     szURI,
+                     &pImgEscData,
+                     &cbImgEscData);
         }
     }
 
@@ -211,7 +212,7 @@ CreatePrintJobWithImagePassThrough(
     if ( SUCCEEDED (hr) )
     {
         if( ExtEscape(hdcMXDW, MXDC_ESCAPE, cbImgEscData, (LPCSTR) pImgEscData, 0, NULL) <= 0 )
-        { 
+        {
             vFormatAndPrint(IDS_APP_EXTESCAPE_FAILED);
             hr = HRESULT_FROM_WIN32(GetLastError());
         }
@@ -226,23 +227,23 @@ CreatePrintJobWithImagePassThrough(
         size_t cbFixedPage       = 0;
         PBYTE pFixedPageEscData  = NULL;
         DWORD cbFixedPageEscData = 0;
-        
+
         cbFixedPage = strlen(pFixedPage);
 
         if ( SUCCEEDED(hr) )
         {
             hr = PutTogetherEscapeStructureForFixedPage(
-                                            MXDCOP_SET_S0PAGE,
-                                            (PBYTE)pFixedPage,
-                                            (DWORD)cbFixedPage,
-                                            &pFixedPageEscData,
-                                            &cbFixedPageEscData);  
+                     MXDCOP_SET_S0PAGE,
+                     (PBYTE)pFixedPage,
+                     (DWORD)cbFixedPage,
+                     &pFixedPageEscData,
+                     &cbFixedPageEscData);
         }
 
         if ( SUCCEEDED (hr) )
         {
             if( ExtEscape(hdcMXDW, MXDC_ESCAPE, cbFixedPageEscData, (LPCSTR) pFixedPageEscData, 0, NULL) <= 0 )
-            { 
+            {
                 vFormatAndPrint(IDS_APP_EXTESCAPE_FAILED);
                 hr = HRESULT_FROM_WIN32(GetLastError());
             }
@@ -258,11 +259,11 @@ CreatePrintJobWithImagePassThrough(
     {
         EndDoc(hdcMXDW);
     }
-	
+
     // Clean up
     if(pEscData != NULL)
-    { 
-        MemFree (pEscData); 
+    {
+        MemFree (pEscData);
         pEscData = NULL;
     }
 
@@ -277,9 +278,9 @@ CreatePrintJobWithImagePassThrough(
         pPTStream->Release();
         pPTStream = NULL;
     }
-		
+
     if(hdcMXDW != NULL)
-    { 
+    {
         DeleteDC(hdcMXDW);
         hdcMXDW = NULL;
     }

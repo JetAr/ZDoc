@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -140,26 +140,26 @@ VOID FNLOCAL MessagePump(
     VOID);
 
 VOID FNLOCAL Error(
-     HWND                   hWnd,
-     int                    nErrDesc,
-     MMRESULT               mmrc);
+    HWND                   hWnd,
+    int                    nErrDesc,
+    MMRESULT               mmrc);
 
 VOID FNLOCAL EmbossedTextOut(
-     HDC                    hDC,
-     int                    x,
-     int                    y,
-     LPSTR                  lpsz,
-     UINT                   cb,
-     COLORREF               crText,
-     COLORREF               crShadow,
-     int                    cx,
-     int                    cy);   
+    HDC                    hDC,
+    int                    x,
+    int                    y,
+    LPSTR                  lpsz,
+    UINT                   cb,
+    COLORREF               crText,
+    COLORREF               crShadow,
+    int                    cx,
+    int                    cy);
 
 HFONT FNLOCAL CreateScaledFont(
-     HDC                    hDC,
-     LPRECT                 lpRect,
-     LPSTR                  lpszFormat,
-     int                    anPosX[],
-     int* nPosY);
+    HDC                    hDC,
+    LPRECT                 lpRect,
+    LPSTR                  lpszFormat,
+    int                    anPosX[],
+    int* nPosY);
 
 #endif

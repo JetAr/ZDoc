@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #pragma comment(lib, "SearchSDK.lib")
 
@@ -14,9 +14,12 @@ using namespace std;
 class CParamBase
 {
 public:
-    CParamBase():m_fExists(FALSE){}
+    CParamBase():m_fExists(FALSE) {}
     virtual int Init(int argc, wchar_t *argv[], int& rParamsProcessed) = 0;
-    BOOL Exists() { return m_fExists;   }
+    BOOL Exists()
+    {
+        return m_fExists;
+    }
 protected:
     BOOL m_fExists;
 };
@@ -45,7 +48,10 @@ public:
         m_szFalseParamName(szFalseParamName)
     {}
     virtual int Init(int argc, wchar_t *argv[], int& rParamsProcessed);
-    BOOL Get() {    return m_fFlag; }
+    BOOL Get()
+    {
+        return m_fFlag;
+    }
 protected:
     BOOL m_fFlag;
     PCWSTR m_szTrueParamName;
@@ -61,7 +67,10 @@ public:
         m_szValue(NULL)
     {}
     virtual int Init(int argc, wchar_t *argv[], int& rParamsProcessed);
-    PCWSTR Get() {    return m_szValue; }
+    PCWSTR Get()
+    {
+        return m_szValue;
+    }
 
 protected:
     PCWSTR m_szParamName;

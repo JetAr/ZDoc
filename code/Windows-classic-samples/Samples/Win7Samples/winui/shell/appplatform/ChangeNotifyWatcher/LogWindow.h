@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,7 +40,7 @@ template <class TGroupIDMap, class TGroupID> class CLogWindow
 {
 public:
     CLogWindow(const TGroupIDMap *pGroupInfo, UINT cGroupInfo) :
-      _pGroupInfo(pGroupInfo), _cGroupInfo(cGroupInfo), _fDebugOutput(false)
+        _pGroupInfo(pGroupInfo), _cGroupInfo(cGroupInfo), _fDebugOutput(false)
     {
     }
 
@@ -55,7 +55,7 @@ public:
         _hwndList = hwndList;
         // Enable ListView for Grouping mode.
         SetWindowLongPtr(_hwndList, GWL_STYLE, GetWindowLongPtr(_hwndList, GWL_STYLE) |
-                        LVS_REPORT | LVS_NOSORTHEADER | LVS_SHOWSELALWAYS);
+                         LVS_REPORT | LVS_NOSORTHEADER | LVS_SHOWSELALWAYS);
         ListView_SetExtendedListViewStyle(_hwndList, LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER);
         ListView_EnableGroupView(_hwndList, TRUE);
 

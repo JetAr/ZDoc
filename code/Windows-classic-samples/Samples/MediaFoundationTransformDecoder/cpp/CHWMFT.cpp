@@ -1,4 +1,4 @@
-#include "CHWMFT.h"
+﻿#include "CHWMFT.h"
 #include "CHWMFT_DecodeTask.h"
 #include "CAutoLock.h"
 #include <mfapi.h>
@@ -7,8 +7,8 @@
 #include <initguid.h>
 
 // {1F620607-A7FF-4B94-82F4-993F2E17B497}
-DEFINE_GUID(MYMFT_MFSampleExtension_Marker, 
-0x1f620607, 0xa7ff, 0x4b94, 0x82, 0xf4, 0x99, 0x3f, 0x2e, 0x17, 0xb4, 0x97);
+DEFINE_GUID(MYMFT_MFSampleExtension_Marker,
+            0x1f620607, 0xa7ff, 0x4b94, 0x82, 0xf4, 0x99, 0x3f, 0x2e, 0x17, 0xb4, 0x97);
 
 // Helper Macros
 #define SAFERELEASE(x) \
@@ -22,20 +22,20 @@ DEFINE_GUID(MYMFT_MFSampleExtension_Marker,
 #define MFT_HW_URL                  L"MSFT Win8 SDK HW MFT Sample"
 
 // Global Variables
-const GUID*     g_ppguidInputTypes[] = 
-    {
-        &MFVideoFormat_H264,
-        &MFVideoFormat_MPEG2,
-        &MFVideoFormat_WVC1,
-        &MFVideoFormat_MP4V,
-    };
+const GUID*     g_ppguidInputTypes[] =
+{
+    &MFVideoFormat_H264,
+    &MFVideoFormat_MPEG2,
+    &MFVideoFormat_WVC1,
+    &MFVideoFormat_MP4V,
+};
 const DWORD     g_dwNumInputTypes   = sizeof(g_ppguidInputTypes) / sizeof(g_ppguidInputTypes[0]);
 
 const GUID*     g_ppguidOutputTypes[] =
-    {
-        &MFVideoFormat_RGB32,
-        &MFVideoFormat_NV12,
-    };
+{
+    &MFVideoFormat_RGB32,
+    &MFVideoFormat_NV12,
+};
 const DWORD     g_dwNumOutputTypes   = sizeof(g_ppguidOutputTypes) / sizeof(g_ppguidOutputTypes[0]);
 
 // Initializer
@@ -69,7 +69,8 @@ HRESULT CHWMFT::CreateInstance(IMFTransform** ppHWMFT)
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pMyHWMFT);
 
@@ -97,7 +98,7 @@ CHWMFT::CHWMFT(void)
     }
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Enter", __FUNCTION__);
-    
+
     m_ulRef                 = 1;
     m_ulSampleCounter       = 0;
     m_pInputMT              = NULL;
@@ -241,7 +242,8 @@ HRESULT CHWMFT::InitializeTransform(void)
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit (hr=0x%x)", __FUNCTION__, hr);
 
@@ -304,7 +306,8 @@ HRESULT CHWMFT::CheckInputType(
         }
 
         // The Mediatype is acceptable
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -393,7 +396,8 @@ HRESULT CHWMFT::CheckOutputType(
         }
 
         // The Mediatype is acceptable
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -419,7 +423,8 @@ HRESULT CHWMFT::ShutdownEventQueue(void)
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -436,7 +441,7 @@ HRESULT CHWMFT::OnStartOfStream(void)
     {
         {
             CAutoLock lock(&m_csLock);
-                
+
             m_dwStatus |= MYMFT_STATUS_STREAM_STARTED;
         }
 
@@ -448,12 +453,13 @@ HRESULT CHWMFT::OnStartOfStream(void)
         ** input stream, you will
         ** have to change this logic
         *******************************/
-        hr = RequestSample(0);  
+        hr = RequestSample(0);
         if(FAILED(hr))
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -469,7 +475,7 @@ HRESULT CHWMFT::OnEndOfStream(void)
     do
     {
         CAutoLock lock(&m_csLock);
-                
+
         m_dwStatus &= (~MYMFT_STATUS_STREAM_STARTED);
 
         /*****************************************
@@ -478,7 +484,8 @@ HRESULT CHWMFT::OnEndOfStream(void)
         ** input request should be reset to 0
         *****************************************/
         m_dwNeedInputCount = 0;
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -495,18 +502,19 @@ HRESULT CHWMFT::OnDrain(
     do
     {
         CAutoLock lock(&m_csLock);
-                
+
         m_dwStatus |= (MYMFT_STATUS_DRAINING);
 
         /*******************************
         ** Todo: This MFT only has one
         ** input stream, so it does not
-        ** track the stream being drained. 
+        ** track the stream being drained.
         ** If your MFT has more than one
         ** input stream, you will
         ** have to change this logic
         *******************************/
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -518,11 +526,11 @@ HRESULT CHWMFT::OnFlush(void)
     HRESULT hr = S_OK;
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Enter", __FUNCTION__);
-    
+
     do
     {
         CAutoLock lock(&m_csLock);
-                
+
         m_dwStatus &= (~MYMFT_STATUS_STREAM_STARTED);
 
         hr = FlushSamples();
@@ -532,7 +540,8 @@ HRESULT CHWMFT::OnFlush(void)
         }
 
         m_llCurrentSampleTime   = 0;    // Reset our sample time to 0 on a flush
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -561,7 +570,8 @@ HRESULT CHWMFT::OnMarker(
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -621,7 +631,8 @@ HRESULT CHWMFT::RequestSample(
 
             TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): NeedInputCount: %u",  __FUNCTION__, m_dwNeedInputCount);
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pEvent);
 
@@ -645,7 +656,7 @@ HRESULT CHWMFT::FlushSamples(void)
         if(FAILED(hr))              // a new stream is started
         {
             break;
-        }        
+        }
 
         m_dwHaveOutputCount = 0;    // Don't Output samples until new input samples are given
 
@@ -662,7 +673,8 @@ HRESULT CHWMFT::FlushSamples(void)
         }
 
         m_bFirstSample = TRUE; // Be sure to reset our first sample so we know to set discontinuity
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(hr=0x%x)", __FUNCTION__, hr);
 
@@ -693,9 +705,9 @@ HRESULT CHWMFT::ScheduleFrameDecode(void)
         }
 
         hr = CDecodeTask::Create(
-            m_dwDecodeWorkQueueID,
-            pInputSample,
-            (IMFAsyncCallback**)&pDecodeTask);
+                 m_dwDecodeWorkQueueID,
+                 pInputSample,
+                 (IMFAsyncCallback**)&pDecodeTask);
         if(FAILED(hr))
         {
             break;
@@ -706,7 +718,8 @@ HRESULT CHWMFT::ScheduleFrameDecode(void)
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pInputSample);
     SAFERELEASE(pDecodeTask);
@@ -736,7 +749,7 @@ HRESULT CHWMFT::DecodeInputFrame(
         /****************************************
         ** Todo, here's where the MFT transforms
         ** the input to output samples. In the
-        ** SDK sample, the output is simply a 
+        ** SDK sample, the output is simply a
         ** numbered frame, so no complicated
         ** processing is done here. Your MFT
         ** should reference it's input and output
@@ -768,9 +781,9 @@ HRESULT CHWMFT::DecodeInputFrame(
         else
         {
             dwDataLen = (MFT_OUTPUT_WIDTH * MFT_OUTPUT_HEIGHT) * 4; // This is the max needed for the
-                                                                    // biggest supported output type
-            hr = MFCreateMemoryBuffer(dwDataLen, &pMediaBuffer); 
-            if(FAILED(hr))                                                                        
+            // biggest supported output type
+            hr = MFCreateMemoryBuffer(dwDataLen, &pMediaBuffer);
+            if(FAILED(hr))
             {
                 break;
             }
@@ -794,7 +807,8 @@ HRESULT CHWMFT::DecodeInputFrame(
             }
         }
 
-        unsigned char pucColors[10] = {
+        unsigned char pucColors[10] =
+        {
             0,
             25,
             50,
@@ -808,7 +822,7 @@ HRESULT CHWMFT::DecodeInputFrame(
         };
 
         memset(pbData, pucColors[dwCurrentSample % 10], dwDataLen);     // Fill our buffer with a color correlated to the frame number
-                                                                        // This will show our frames changing
+        // This will show our frames changing
 
         // Now setup the sample
         hr = DuplicateAttributes(pOutputSample, pInputSample);
@@ -852,8 +866,8 @@ HRESULT CHWMFT::DecodeInputFrame(
                 m_bFirstSample = FALSE;
             }
 
-            TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Output Sample @%p Created: Duration %I64u, Sample Time %I64d", 
-                __FUNCTION__, pOutputSample, llSampleDuration, m_llCurrentSampleTime);
+            TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Output Sample @%p Created: Duration %I64u, Sample Time %I64d",
+                        __FUNCTION__, pOutputSample, llSampleDuration, m_llCurrentSampleTime);
         }
 
         /***************************************
@@ -931,7 +945,8 @@ HRESULT CHWMFT::DecodeInputFrame(
                 {
                     break;
                 }
-            }while(false);
+            }
+            while(false);
 
             SAFERELEASE(pMarkerEvent);
 
@@ -951,12 +966,13 @@ HRESULT CHWMFT::DecodeInputFrame(
         ** input stream, you will
         ** have to change this logic
         *******************************/
-        hr = RequestSample(0); 
+        hr = RequestSample(0);
         if(FAILED(hr))
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     if(pMediaBuffer != NULL)
     {
@@ -985,9 +1001,9 @@ BOOL CHWMFT::IsLocked(void)
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Enter",  __FUNCTION__);
 
     BOOL bUnlocked  = MFGetAttributeUINT32(m_pAttributes,
-        MF_TRANSFORM_ASYNC_UNLOCK,
-        FALSE
-        );
+                                           MF_TRANSFORM_ASYNC_UNLOCK,
+                                           FALSE
+                                          );
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(%s)", __FUNCTION__, (bUnlocked != FALSE) ? L"False" : L"True");
 
@@ -1027,7 +1043,8 @@ BOOL CHWMFT::IsMFTReady(void)
         m_dwStatus |= MYMFT_STATUS_INPUT_ACCEPT_DATA; // The MFT is ready for data
 
         bReady = TRUE;
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit(%s)", __FUNCTION__, bReady ? L"True" : L"False");
 
@@ -1077,7 +1094,8 @@ HRESULT DuplicateAttributes(
                 break;
             }
         }
-    }while(false);
+    }
+    while(false);
 
     PropVariantClear(&pv);
 

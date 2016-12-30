@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -29,15 +29,15 @@ public:
         IUIAnimationTransitionFactory *pTransitionFactory,
         UINT uThumbCount,
         CThumbnail *thumbs
-        );
+    );
 
     HRESULT Arrange(
         D2D1_SIZE_F sizeClient
-        );
+    );
 
     HRESULT Attract(
         DOUBLE finalYValue
-        );
+    );
 
 protected:
 
@@ -47,16 +47,16 @@ protected:
         DOUBLE valuePrimary,
         IUIAnimationVariable *pVariableSecondary,
         DOUBLE valueSecondary
-        );
+    );
 
     HRESULT ScheduleStoryboard(
         IUIAnimationStoryboard *pStoryboard
-        );
+    );
 
     DOUBLE RandomFromRange(
         DOUBLE minimum,
         DOUBLE maximum
-        );
+    );
 
     // Animation objects
 

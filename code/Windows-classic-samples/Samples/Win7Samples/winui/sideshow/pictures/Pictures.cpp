@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,7 +25,7 @@ void InitClient(CPictureClient& client)
     //
     GdiplusStartupInput gdiplusStartupInput;
     GdiplusStartup(&g_gdiToken, &gdiplusStartupInput, NULL);
-    
+
     //
     // Register this client application with the Windows SideShow
     // platform
@@ -46,12 +46,12 @@ void UnInitClient(CPictureClient& client)
     // closes
     //
     client.RemoveAllContent();
-    
+
     //
     // Unregister this client application from the platform
     //
     client.Unregister();
-    
+
     //
     // Take-down GDI+
     //
@@ -72,7 +72,7 @@ int __stdcall WinMain(HINSTANCE /*hInst*/,
                         NULL,
                         TRUE,
                         L"{00BA1AD8-5381-449b-9A13-551FA4ADE0F2}"
-                        );
+                    );
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
         if (0 != hMutex)
@@ -81,12 +81,12 @@ int __stdcall WinMain(HINSTANCE /*hInst*/,
         }
         return 0;
     }
-    
+
     //
     // Initialize COM
     //
     ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
-    
+
     g_threadID = GetCurrentThreadId();
 
     //
@@ -94,14 +94,14 @@ int __stdcall WinMain(HINSTANCE /*hInst*/,
     //
     CPictureClient client;
     InitClient(client);
-    
+
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0) > 0)
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
-    
+
     UnInitClient(client);
 
     //

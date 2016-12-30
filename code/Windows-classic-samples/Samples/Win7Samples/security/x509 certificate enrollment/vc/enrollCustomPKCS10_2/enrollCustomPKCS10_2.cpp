@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -37,7 +37,7 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     HRESULT hr = S_OK;
     bool fCoInit = false;
-    IX509Enrollment* pEnroll = NULL; 
+    IX509Enrollment* pEnroll = NULL;
     IX509CertificateRequest* pRequest = NULL;
     IX509CertificateRequest* pInnerRequest = NULL;
     IX509CertificateRequestPkcs10* pPkcs10 = NULL;
@@ -48,9 +48,10 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     PCWSTR pwszProvName;
     BSTR strTemplateName = NULL;
     BSTR strProvName = NULL;
-    
+
     // Process command line arguments
-    if (argc !=  3) {
+    if (argc !=  3)
+    {
         Usage();
         hr = E_INVALIDARG;
         _JumpError(hr, error, "invalid arg");
@@ -84,45 +85,45 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509Enrollment
     hr = CoCreateInstance(
-            __uuidof(CX509Enrollment),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509Enrollment),
-            (void **) &pEnroll);
+             __uuidof(CX509Enrollment),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509Enrollment),
+             (void **) &pEnroll);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initiate IX509Enrollment
     hr = pEnroll->InitializeFromTemplateName(
-            ContextUser,     
-            strTemplateName);
+             ContextUser,
+             strTemplateName);
     _JumpIfError(hr, error, "InitializeFromTemplateName");
 
     // Retrieve the request
     hr = pEnroll->get_Request(&pRequest);
     _JumpIfError(hr, error, "get_Request");
-  
+
     // Get the innermost request
     hr = pRequest->GetInnerRequest(LevelInnermost, &pInnerRequest);
-     _JumpIfError(hr, error, "GetInnerRequest");
+    _JumpIfError(hr, error, "GetInnerRequest");
 
-    // QueryInterface for the pkcs10 request 
+    // QueryInterface for the pkcs10 request
     hr = pInnerRequest->QueryInterface(
-            __uuidof(IX509CertificateRequestPkcs10),
-            (VOID **)&pPkcs10);
+             __uuidof(IX509CertificateRequestPkcs10),
+             (VOID **)&pPkcs10);
     _JumpIfError(hr, error, "QueryInterface");
-    
+
     // Retrieve the private key
     hr = pPkcs10->get_PrivateKey(&pPrivateKey);
     _JumpIfError(hr, error, "get_PrivateKey");
 
     // Create ICspInformations
     hr = CoCreateInstance(
-            __uuidof(CCspInformations), 
-            NULL,   // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(ICspInformations),
-            (void **)&pCspInfos);  
-     _JumpIfError(hr, error, "CoCreateInstance");
+             __uuidof(CCspInformations),
+             NULL,   // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(ICspInformations),
+             (void **)&pCspInfos);
+    _JumpIfError(hr, error, "CoCreateInstance");
 
     // Add available csps
     hr = pCspInfos->AddAvailableCsps();
@@ -130,22 +131,22 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Get the ICspStatus
     hr = pCspInfos->GetCspStatusFromProviderName(
-            strProvName,
-            XCN_AT_KEYEXCHANGE,
-            &pCspStatus);
+             strProvName,
+             XCN_AT_KEYEXCHANGE,
+             &pCspStatus);
     _JumpIfError(hr, error, "GetCspStatusFromProviderName");
 
     // Set CspStatus to the private key
     hr = pPrivateKey->put_CspStatus(pCspStatus);
-     _JumpIfError(hr, error, "put_CspStatus");
+    _JumpIfError(hr, error, "put_CspStatus");
 
     // Enroll
     hr = pEnroll->Enroll();
-    _JumpIfError(hr, error, "Enroll"); 
+    _JumpIfError(hr, error, "Enroll");
 
     // Check enrollment status
     hr = checkEnrollStatus(pEnroll);
-    _JumpIfError(hr, error, "checkEnrollStatus"); 
+    _JumpIfError(hr, error, "checkEnrollStatus");
 
 error:
     SysFreeString(strTemplateName);

@@ -1,6 +1,6 @@
-// Copyright (C) Microsoft Corporation.  All rights reserved. 
+﻿// Copyright (C) Microsoft Corporation.  All rights reserved.
 //
-// sample code demonstrates how to retrieve "cmd.exe dir" results 
+// sample code demonstrates how to retrieve "cmd.exe dir" results
 // by calliing shell client API
 
 #include <windows.h>

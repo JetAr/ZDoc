@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -55,7 +55,7 @@ CWlanDevice::GetDeviceImageList()
 // CWlanDevice
 CWlanDevice::CWlanDevice(
     DOT11_MAC_ADDRESS& MacAddress
-    )
+)
 {
     // copy MAC address
     memcpy(m_MacAddress, MacAddress, sizeof(DOT11_MAC_ADDRESS));
@@ -70,30 +70,30 @@ CWlanDevice::~CWlanDevice()
 {
 }
 
-BOOL 
+BOOL
 CWlanDevice::operator==(
     const CWlanDevice& Other
-    )
+)
 {
     // only match the MAC address
     return *this == Other.m_MacAddress;
 }
 
-BOOL 
+BOOL
 CWlanDevice::operator==(
     const DOT11_MAC_ADDRESS MacAddress
-    )
+)
 {
     // only match MAC address
     return memcmp(m_MacAddress, MacAddress, sizeof(DOT11_MAC_ADDRESS)) == 0;
 }
 
-VOID 
+VOID
 CWlanDevice::GetDisplayMacAddress(
     CAtlString& strMacAddress
-    )
+)
 {
-    WCHAR strDisplayName[WLAN_MAX_NAME_LENGTH] = {0}; 
+    WCHAR strDisplayName[WLAN_MAX_NAME_LENGTH] = {0};
     DWORD szDisplayName = WLAN_MAX_NAME_LENGTH;
 
     StringCchPrintf(
@@ -106,7 +106,7 @@ CWlanDevice::GetDisplayMacAddress(
         m_MacAddress[3],
         m_MacAddress[4],
         m_MacAddress[5]
-        );
+    );
 
     strMacAddress = strDisplayName;
 }

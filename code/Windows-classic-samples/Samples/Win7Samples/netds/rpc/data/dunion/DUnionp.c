@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 						Microsoft RPC
-           
+
                    Discriminated Union Example
 
     FILE:       unionp.c
@@ -30,11 +30,12 @@
 
 
 void UnionParamProc(IN RPC_BINDING_HANDLE hBinding,
-					DISCRIM_UNION_PARAM_TYPE *up,
+                    DISCRIM_UNION_PARAM_TYPE *up,
                     short                    sDiscrim)
 {
     printf_s("sDiscrim = %d, data = ", sDiscrim);
-    switch(sDiscrim) {
+    switch(sDiscrim)
+    {
     case 0:
         printf_s("short %d\n", up->sVal);
         break;
@@ -51,10 +52,11 @@ void UnionParamProc(IN RPC_BINDING_HANDLE hBinding,
 }
 
 void UnionStructProc(IN RPC_BINDING_HANDLE hBinding,
-					 DISCRIM_UNION_STRUCT_TYPE *u)
+                     DISCRIM_UNION_STRUCT_TYPE *u)
 {
     printf_s("sDiscrim = %d, data = ", u->sDiscrim);
-    switch(u->sDiscrim) {
+    switch(u->sDiscrim)
+    {
     case 0:
         printf_s("short %d\n", u->u.sVal);
         break;
@@ -77,14 +79,16 @@ void Shutdown(IN RPC_BINDING_HANDLE hBinding)
     printf_s("Calling RpcMgmtStopServerListening\n");
     status = RpcMgmtStopServerListening(NULL);
     printf_s("RpcMgmtStopServerListening returned: 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     printf_s("Calling RpcServerUnregisterIf\n");
     status = RpcServerUnregisterIf(NULL, NULL, FALSE);
     printf_s("RpcServerUnregisterIf returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 }

@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
         REFIID uuid,
         _Outptr_ void** object
-        ) override;
+    ) override;
 
     virtual ULONG STDMETHODCALLTYPE AddRef() override;
 
@@ -27,19 +27,19 @@ public:
         UINT64 fileOffset,
         UINT64 fragmentSize,
         _Out_ void** fragmentContext
-        ) override;
+    ) override;
 
     virtual void STDMETHODCALLTYPE ReleaseFileFragment(
         _In_ void* fragmentContext
-        ) override;
+    ) override;
 
     virtual HRESULT STDMETHODCALLTYPE GetFileSize(
         _Out_ UINT64* fileSize
-        ) override;
+    ) override;
 
     virtual HRESULT STDMETHODCALLTYPE GetLastWriteTime(
         _Out_ UINT64* lastWriteTime
-        ) override;
+    ) override;
 
 private:
     // Reference counter

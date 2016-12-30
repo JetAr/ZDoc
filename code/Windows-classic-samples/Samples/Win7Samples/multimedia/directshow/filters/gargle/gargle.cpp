@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Gargle.cpp
 //
 // Desc: DirectShow sample code - "gargle" filter, a transform filter
@@ -141,21 +141,21 @@
 //------------------------------------------------------------------------
 
 class CGargle
-    // Inherited classes
+// Inherited classes
     : public CTransInPlaceFilter       // Main DirectShow interfaces
 
     , public ISpecifyPropertyPages     // Needed for properties only
 
     , public IGargle                   // Needed for properties only.
-                                       // Without this the PURE virtual
-                                       // functions in IGargle will not
-                                       // be implemented.  (If they ever
-                                       // got called the entire app would
-                                       // silently ExitProcess!!).
+// Without this the PURE virtual
+// functions in IGargle will not
+// be implemented.  (If they ever
+// got called the entire app would
+// silently ExitProcess!!).
 
     , public CPersistStream            // Implements IPersistStream
-                                       // to alow saving of properties
-                                       // in a saved graph.
+// to alow saving of properties
+// in a saved graph.
 {
 
 public:
@@ -243,51 +243,56 @@ private:
 
 const AMOVIESETUP_MEDIATYPE
 sudPinTypes =   { &MEDIATYPE_Audio        // clsMajorType
-                , &MEDIASUBTYPE_NULL };   // clsMinorType
+                  , &MEDIASUBTYPE_NULL
+                };   // clsMinorType
 
 const AMOVIESETUP_PIN
-psudPins[] = { { L"Input"            // strName
-               , FALSE               // bRendered
-               , FALSE               // bOutput
-               , FALSE               // bZero
-               , FALSE               // bMany
-               , &CLSID_NULL         // clsConnectsToFilter
-               , L"Output"           // strConnectsToPin
-               , 1                   // nTypes
-               , &sudPinTypes        // lpTypes
-               }
-             , { L"Output"           // strName
-               , FALSE               // bRendered
-               , TRUE                // bOutput
-               , FALSE               // bZero
-               , FALSE               // bMany
-               , &CLSID_NULL         // clsConnectsToFilter
-               , L"Input"            // strConnectsToPin
-               , 1                   // nTypes
-               , &sudPinTypes        // lpTypes
-               }
-             };
+psudPins[] = { {
+        L"Input"            // strName
+        , FALSE               // bRendered
+        , FALSE               // bOutput
+        , FALSE               // bZero
+        , FALSE               // bMany
+        , &CLSID_NULL         // clsConnectsToFilter
+        , L"Output"           // strConnectsToPin
+        , 1                   // nTypes
+        , &sudPinTypes        // lpTypes
+    }
+    , {
+        L"Output"           // strName
+        , FALSE               // bRendered
+        , TRUE                // bOutput
+        , FALSE               // bZero
+        , FALSE               // bMany
+        , &CLSID_NULL         // clsConnectsToFilter
+        , L"Input"            // strConnectsToPin
+        , 1                   // nTypes
+        , &sudPinTypes        // lpTypes
+    }
+};
 
 const AMOVIESETUP_FILTER
 sudGargle = { &CLSID_Gargle                   // class id
-            , L"Gargle"                       // strName
-            , MERIT_DO_NOT_USE                // dwMerit
-            , 2                               // nPins
-            , psudPins                        // lpPin
+              , L"Gargle"                       // strName
+              , MERIT_DO_NOT_USE                // dwMerit
+              , 2                               // nPins
+              , psudPins                        // lpPin
             };
 
 // Needed for the CreateInstance mechanism
-CFactoryTemplate g_Templates[2]= { { L"Gargle"
-                                   , &CLSID_Gargle
-                                   , CGargle::CreateInstance
-                                   , NULL
-                                   , &sudGargle
-                                   }
-                                 , { L"Gargle Property Page"
-                                   , &CLSID_GargProp
-                                   , CGargleProperties::CreateInstance
-                                   }
-                                 };
+CFactoryTemplate g_Templates[2]= { {
+        L"Gargle"
+        , &CLSID_Gargle
+        , CGargle::CreateInstance
+        , NULL
+        , &sudGargle
+    }
+    , {
+        L"Gargle Property Page"
+        , &CLSID_GargProp
+        , CGargleProperties::CreateInstance
+    }
+};
 
 int g_cTemplates = sizeof(g_Templates)/sizeof(g_Templates[0]);
 
@@ -328,9 +333,10 @@ CGargle::CGargle(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
 CUnknown * WINAPI CGargle::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
     ASSERT(phr);
-    
+
     CGargle *pNewObject = new CGargle(NAME("Gargle Filter"), punk, phr);
-    if (pNewObject == NULL) {
+    if (pNewObject == NULL)
+    {
         if (phr)
             *phr = E_OUTOFMEMORY;
     }
@@ -352,16 +358,23 @@ STDMETHODIMP CGargle::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
 
-    if (riid == IID_IGargle) {
+    if (riid == IID_IGargle)
+    {
         return GetInterface((IGargle *) this, ppv);
 
-    } else if (riid == IID_ISpecifyPropertyPages) {
+    }
+    else if (riid == IID_ISpecifyPropertyPages)
+    {
         return GetInterface((ISpecifyPropertyPages *) this, ppv);
 
-    } else if (riid == IID_IPersistStream) {
+    }
+    else if (riid == IID_IPersistStream)
+    {
         return GetInterface((IPersistStream *) this, ppv);
 
-    } else {
+    }
+    else
+    {
         // Pass the buck
         return CTransInPlaceFilter::NonDelegatingQueryInterface(riid, ppv);
     }
@@ -379,7 +392,7 @@ STDMETHODIMP CGargle::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 STDMETHODIMP CGargle::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid,E_POINTER);
-    
+
     *pClsid = CLSID_Gargle;
     return NOERROR;
 
@@ -415,11 +428,11 @@ HRESULT CGargle::WriteToStream(IStream *pStream)
     HRESULT hr;
 
     hr = WriteInt(pStream, m_GargleRate);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         return hr;
 
     hr = WriteInt(pStream, m_Shape);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         return hr;
 
     return NOERROR;
@@ -438,11 +451,11 @@ HRESULT CGargle::ReadFromStream(IStream *pStream)
     HRESULT hr;
 
     m_GargleRate = ReadInt(pStream, hr);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         return hr;
 
     m_Shape = ReadInt(pStream, hr);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
         return hr;
 
     return NOERROR;
@@ -471,75 +484,81 @@ void CGargle::MessItAbout(PBYTE pb, int cb)
     //
     int Period = (m_SamplesPerSec * m_Channels) / m_GargleRate;
 
-    while (cb > 0) 
+    while (cb > 0)
     {
-       --cb;
+        --cb;
 
-       // If m_Shape is 0 (triangle) then we multiply by a triangular waveform
-       // that runs 0..Period/2..0..Period/2..0... else by a square one that
-       // is either 0 or Period/2 (same maximum as the triangle) or zero.
-       //
-       {
-           // m_Phase is the number of samples from the start of the period.
-           // We keep this running from one call to the next,
-           // but if the period changes so as to make this more
-           // than Period then we reset to 0 with a bang.  This may cause
-           // an audible click or pop (but, hey! it's only a sample!)
-           //
-           ++m_Phase;
+        // If m_Shape is 0 (triangle) then we multiply by a triangular waveform
+        // that runs 0..Period/2..0..Period/2..0... else by a square one that
+        // is either 0 or Period/2 (same maximum as the triangle) or zero.
+        //
+        {
+            // m_Phase is the number of samples from the start of the period.
+            // We keep this running from one call to the next,
+            // but if the period changes so as to make this more
+            // than Period then we reset to 0 with a bang.  This may cause
+            // an audible click or pop (but, hey! it's only a sample!)
+            //
+            ++m_Phase;
 
-           if (m_Phase>Period) 
-               m_Phase = 0;
+            if (m_Phase>Period)
+                m_Phase = 0;
 
-           int M = m_Phase;      // m is what we modulate with
+            int M = m_Phase;      // m is what we modulate with
 
-           if (m_Shape ==0 ) {   // Triangle
-               if (M>Period/2) M = Period-M;  // handle downslope
-           } else {             // Square wave
-               if (M<=Period/2) M = Period/2; else M = 0;
-           }
+            if (m_Shape ==0 )     // Triangle
+            {
+                if (M>Period/2) M = Period-M;  // handle downslope
+            }
+            else                 // Square wave
+            {
+                if (M<=Period/2) M = Period/2;
+                else M = 0;
+            }
 
-           if (m_BytesPerSample==1) 
-           {
-               // 8 bit sound uses 0..255 representing -128..127
-               // Any overflow, even by 1, would sound very bad.
-               // so we clip paranoically after modulating.
-               // I think it should never clip by more than 1
-               //
-               int i = *pb-128;               // sound sample, zero based
+            if (m_BytesPerSample==1)
+            {
+                // 8 bit sound uses 0..255 representing -128..127
+                // Any overflow, even by 1, would sound very bad.
+                // so we clip paranoically after modulating.
+                // I think it should never clip by more than 1
+                //
+                int i = *pb-128;               // sound sample, zero based
 
-               i = (i*M*2)/Period;            // modulate
-               if (i>127)  i = 127;           // clip
-               if (i<-128) i = -128;
+                i = (i*M*2)/Period;            // modulate
+                if (i>127)  i = 127;           // clip
+                if (i<-128) i = -128;
 
-               *pb = (unsigned char)(i+128);  // reset zero offset to 128
+                *pb = (unsigned char)(i+128);  // reset zero offset to 128
 
-           } 
-           else if (m_BytesPerSample==2) 
-           {
-               // 16 bit sound uses 16 bits properly (0 means 0)
-               // We still clip paranoically
-               //
-               short int *psi = (short int *)pb;
-               int i = *psi;                  // in a register, we might hope
+            }
+            else if (m_BytesPerSample==2)
+            {
+                // 16 bit sound uses 16 bits properly (0 means 0)
+                // We still clip paranoically
+                //
+                short int *psi = (short int *)pb;
+                int i = *psi;                  // in a register, we might hope
 
-               i = (i*M*2)/Period;            // modulate
-               if (i>32767)  i = 32767;        // clip
-               if (i<-32768) i = -32768;
+                i = (i*M*2)/Period;            // modulate
+                if (i>32767)  i = 32767;        // clip
+                if (i<-32768) i = -32768;
 
-               *psi = (short)i;
-               ++pb;  // nudge it on another 8 bits here to get a 16 bit step
-               --cb;  // and nudge the count too.
+                *psi = (short)i;
+                ++pb;  // nudge it on another 8 bits here to get a 16 bit step
+                --cb;  // and nudge the count too.
 
-           } else {
+            }
+            else
+            {
 
-               DbgBreak("Too many bytes per sample");
-               // just leave it alone!
+                DbgBreak("Too many bytes per sample");
+                // just leave it alone!
 
-           }
+            }
 
-       }
-       ++pb;   // move on 8 bits to next sound sample
+        }
+        ++pb;   // move on 8 bits to next sound sample
     }
 
 } // MessItAbout
@@ -553,7 +572,7 @@ void CGargle::MessItAbout(PBYTE pb, int cb)
 //
 HRESULT CGargle::Transform(IMediaSample *pSample)
 {
-    CheckPointer(pSample,E_POINTER);   
+    CheckPointer(pSample,E_POINTER);
     DbgFunc("Transform");
 
     // Get the details of the data (address, length)
@@ -589,7 +608,8 @@ HRESULT CGargle::CheckInputType(const CMediaType *pmt)
 
     // Reject non-Audio types.
     //
-    if (pmt->majortype != MEDIATYPE_Audio) {
+    if (pmt->majortype != MEDIATYPE_Audio)
+    {
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
@@ -600,13 +620,15 @@ HRESULT CGargle::CheckInputType(const CMediaType *pmt)
 
     // Reject compressed audio
     //
-    if (pwfx->wFormatTag != WAVE_FORMAT_PCM) {
+    if (pwfx->wFormatTag != WAVE_FORMAT_PCM)
+    {
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
     // Accept only 8 or 16 bit
     //
-    if (pwfx->wBitsPerSample!=8 && pwfx->wBitsPerSample!=16) {
+    if (pwfx->wBitsPerSample!=8 && pwfx->wBitsPerSample!=16)
+    {
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
@@ -767,7 +789,8 @@ STDMETHODIMP CGargle::GetPages(CAUUID * pPages)
 
     pPages->cElems = 1;
     pPages->pElems = (GUID *) CoTaskMemAlloc(sizeof(GUID));
-    if (pPages->pElems == NULL) {
+    if (pPages->pElems == NULL)
+    {
         return E_OUTOFMEMORY;
     }
 
@@ -780,20 +803,20 @@ STDMETHODIMP CGargle::GetPages(CAUUID * pPages)
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
 
 STDAPI DllRegisterServer()
 {
-  return AMovieDllRegisterServer2( TRUE );
+    return AMovieDllRegisterServer2( TRUE );
 }
 
 
 STDAPI DllUnregisterServer()
 {
-  return AMovieDllRegisterServer2( FALSE );
+    return AMovieDllRegisterServer2( FALSE );
 }
 
 //
@@ -801,11 +824,11 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 
 #pragma warning(disable: 4514) // "unreferenced inline function has been removed"

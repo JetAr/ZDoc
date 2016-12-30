@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "CDialogLite.h"	//CAppLite
 #include "Spy.h"			//CMallocSpy
-						
+
 
 //////////////////////////////////////////////////////////////////////////
 // CWinApp
@@ -27,18 +27,18 @@
 class CWinApp : public CAppLite
 {
 public:
-	CWinApp();
-	virtual ~CWinApp();
+    CWinApp();
+    virtual ~CWinApp();
 
-	//Overrides
-	virtual BOOL	InitInstance();
-	virtual int		ExitInstance();
+    //Overrides
+    virtual BOOL	InitInstance();
+    virtual int		ExitInstance();
 
-	//Helpers
+    //Helpers
 
 //protected:
-	//Data
-	CMallocSpy*		m_pCMallocSpy;
+    //Data
+    CMallocSpy*		m_pCMallocSpy;
 };
 
 

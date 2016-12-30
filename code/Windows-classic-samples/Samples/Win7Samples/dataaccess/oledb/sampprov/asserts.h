@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -42,7 +42,10 @@ HRESULT FreeProperties(ULONG* pcProperties, DBPROP** prgProperties);
 # define DEBUGCODE(p)	p
 #else	//_DEBUG
 # define TRACE			OLEDB_Trace
-  inline void			OLEDB_Trace( const char *format, ... ) { /* do nothing */ }
+inline void			OLEDB_Trace( const char *format, ... )
+{
+    /* do nothing */
+}
 # define DEBUGCODE(p)
 #endif	//_DEBUG
 

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -22,50 +22,50 @@ Author:
 BOOL
 InitializeIsapiTime(
     VOID
-    );
+);
 
 DWORD
 GetCurrentTimeInSeconds(
     VOID
-    );
+);
 
 DWORD64
 GetCurrentTimeInMilliseconds(
     VOID
-    );
+);
 
 BOOL
 GetCurrentTimeAsFileTime(
     FILETIME *  pft
-    );
+);
 
 BOOL
 GetFileTimeFromString(
     FILETIME *  pft,
     CHAR *      szTimeString
-    );
+);
 
 BOOL
 GetFileTimeAsString(
     FILETIME *      pft,
     ISAPI_STRING *  pString
-    );
+);
 
 BOOL
 GetCurrentTimeAsString(
     ISAPI_STRING *  pString
-    );
+);
 
 DWORD
 DiffFileTimeInSeconds(
     FILETIME *  pft1,
     FILETIME *  pft2
-    );
+);
 
 DWORD64
 DiffFileTimeInMilliseconds(
     FILETIME *  pft1,
     FILETIME *  pft2
-    );
+);
 
 #endif  // _isapi_time_h

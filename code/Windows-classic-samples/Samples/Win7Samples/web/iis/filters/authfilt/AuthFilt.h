@@ -1,4 +1,4 @@
-/* Copyright (c) 1996-2002 Microsoft Corporation
+﻿/* Copyright (c) 1996-2002 Microsoft Corporation
 
 Module Name:
 
@@ -18,14 +18,14 @@ Abstract:
 #define ISWHITE(ch) ((ch) && ((ch) == ' ' || (ch) == '\t' || (ch) == '\n' || (ch) == '\r'))
 
 #if DBG
-	#define DEST							buff
-	#define DbgWrite(x)				{                                 \
+#define DEST							buff
+#define DbgWrite(x)				{                                 \
                               char buff[256];                 \
                               swprintf_s x;                     \
                               OutputDebugString( buff );      \
 														}
 #else
-	#define DbgWrite(x)      /* nothing */
+#define DbgWrite(x)      /* nothing */
 #endif
 
 // Database routines
@@ -40,7 +40,7 @@ BOOL LookupUserInDb(
     OUT CHAR *pszPassword,
     OUT CHAR *pszNTUser,
     OUT CHAR *pszNTUserPassword
-    );
+);
 
 VOID TerminateUserDatabase(VOID);
 
@@ -54,14 +54,14 @@ BOOL LookupUserInCache(
     CHAR *pszPassword,
     CHAR *pszNTUser,
     CHAR *pszNTUserPassword
-    );
+);
 
 BOOL AddUserToCache(
     CHAR *pszUserName,
     CHAR *pszPassword,
     CHAR *pszNTUser,
     CHAR *pszNTUserPassword
-    );
+);
 
 VOID TerminateCache(VOID);
 

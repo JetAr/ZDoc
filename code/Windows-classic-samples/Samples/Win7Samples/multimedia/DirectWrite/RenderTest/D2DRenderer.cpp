@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,19 +14,19 @@
 
 namespace
 {
-    DWRITE_MATRIX const g_identityTransform =
-    {
-        1, 0,
-        0, 1,
-        0, 0
-    };
+DWRITE_MATRIX const g_identityTransform =
+{
+    1, 0,
+    0, 1,
+    0, 0
+};
 
-    D2D1_MATRIX_3X2_F const g_identityMatrix =
-    {
-        1, 0,
-        0, 1,
-        0, 0
-    };
+D2D1_MATRIX_3X2_F const g_identityMatrix =
+{
+    1, 0,
+    0, 1,
+    0, 0
+};
 }
 
 IRenderer* CreateD2DRenderer(
@@ -35,15 +35,15 @@ IRenderer* CreateD2DRenderer(
     UINT height,
     IDWriteTextFormat* textFormat,
     wchar_t const* text
-    )
+)
 {
     return new(std::nothrow) D2DRenderer(
-        hwnd,
-        width,
-        height,
-        textFormat,
-        text
-        );
+               hwnd,
+               width,
+               height,
+               textFormat,
+               text
+           );
 }
 
 D2DRenderer::D2DRenderer(
@@ -52,9 +52,9 @@ D2DRenderer::D2DRenderer(
     UINT height,
     IDWriteTextFormat* textFormat,
     wchar_t const* text
-    ) : 
+) :
     hwnd_(hwnd),
-    width_(width), 
+    width_(width),
     height_(height),
     measuringMode_(DWRITE_MEASURING_MODE_NATURAL),
     transform_(g_identityTransform),
@@ -182,7 +182,7 @@ HRESULT D2DRenderer::DrawInternal()
         textOrigin_,
         textLayout_,
         textBrush_
-        );
+    );
 
     // Restore the original identity transform.
     renderTarget_->SetTransform(g_identityMatrix);
@@ -224,21 +224,21 @@ HRESULT D2DRenderer::DrawMagnifier()
 
     // Get the bounding rectangles, in DIPs, of the magnifier and the focus area.
     D2D1_RECT_F magnifierRect = MakeRectF(
-        magnifier_.magnifierPos.x,
-        magnifier_.magnifierPos.y,
-        magnifier_.magnifierPos.x + magnifier_.magnifierSize.cx,
-        magnifier_.magnifierPos.y + magnifier_.magnifierSize.cy
-        );
+                                    magnifier_.magnifierPos.x,
+                                    magnifier_.magnifierPos.y,
+                                    magnifier_.magnifierPos.x + magnifier_.magnifierSize.cx,
+                                    magnifier_.magnifierPos.y + magnifier_.magnifierSize.cy
+                                );
 
     int const focusWidth  = magnifier_.magnifierSize.cx / magnifier_.scale;
     int const focusHeight = magnifier_.magnifierSize.cy / magnifier_.scale;
 
     D2D1_RECT_F focusRect = MakeRectF(
-        magnifier_.focusPos.x,
-        magnifier_.focusPos.y,
-        magnifier_.focusPos.x + focusWidth,
-        magnifier_.focusPos.y + focusHeight
-        );
+                                magnifier_.focusPos.x,
+                                magnifier_.focusPos.y,
+                                magnifier_.focusPos.x + focusWidth,
+                                magnifier_.focusPos.y + focusHeight
+                            );
 
     // Branch depending on the magnifier type:
     //
@@ -277,12 +277,12 @@ HRESULT D2DRenderer::DrawMagnifier()
         if (bitmapRenderTarget_ == NULL)
         {
             hr = renderTarget_->CreateCompatibleRenderTarget(
-                    D2D1::SizeF(PixelsToDipsX(focusWidth), PixelsToDipsY(focusHeight)),
-                    D2D1::SizeU(focusWidth, focusHeight),
-                    D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_IGNORE),
-                    D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE,
-                    &bitmapRenderTarget_
-                    );
+                     D2D1::SizeF(PixelsToDipsX(focusWidth), PixelsToDipsY(focusHeight)),
+                     D2D1::SizeU(focusWidth, focusHeight),
+                     D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_IGNORE),
+                     D2D1_COMPATIBLE_RENDER_TARGET_OPTIONS_NONE,
+                     &bitmapRenderTarget_
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -315,11 +315,11 @@ HRESULT D2DRenderer::DrawMagnifier()
         if (SUCCEEDED(hr))
         {
             renderTarget_->DrawBitmap(
-                bitmap, 
-                magnifierRect, 
-                1.0f, 
+                bitmap,
+                magnifierRect,
+                1.0f,
                 D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR
-                );
+            );
         }
 
         SafeRelease(&bitmap);
@@ -344,19 +344,19 @@ HRESULT D2DRenderer::InitializeDeviceDependentResources()
     ID2D1SolidColorBrush*  borderBrush  = NULL;
 
     D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties = D2D1::RenderTargetProperties(
-        D2D1_RENDER_TARGET_TYPE_DEFAULT,
-        D2D1::PixelFormat(),
-        static_cast<float>(g_dpiX),
-        static_cast<float>(g_dpiY)
-        );
+                D2D1_RENDER_TARGET_TYPE_DEFAULT,
+                D2D1::PixelFormat(),
+                static_cast<float>(g_dpiX),
+                static_cast<float>(g_dpiY)
+            );
 
     if (SUCCEEDED(hr))
     {
         hr = g_d2dFactory->CreateHwndRenderTarget(
-                renderTargetProperties,
-                D2D1::HwndRenderTargetProperties(hwnd_, D2D1::SizeU(width_, height_)),
-                &renderTarget
-                );
+                 renderTargetProperties,
+                 D2D1::HwndRenderTargetProperties(hwnd_, D2D1::SizeU(width_, height_)),
+                 &renderTarget
+             );
     }
 
     if (renderingParams_ != NULL)
@@ -369,25 +369,25 @@ HRESULT D2DRenderer::InitializeDeviceDependentResources()
     if (SUCCEEDED(hr))
     {
         hr = renderTarget->CreateSolidColorBrush(
-                backColor_,
-                &backBrush
-                );
+                 backColor_,
+                 &backBrush
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         hr = renderTarget->CreateSolidColorBrush(
-                D2D1::ColorF(GetSysColor(COLOR_WINDOWTEXT)),
-                &textBrush
-                );
+                 D2D1::ColorF(GetSysColor(COLOR_WINDOWTEXT)),
+                 &textBrush
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         hr = renderTarget->CreateSolidColorBrush(
-                D2D1::ColorF(1.0f, 0, 0, 0.5f),
-                &borderBrush
-                );
+                 D2D1::ColorF(1.0f, 0, 0, 0.5f),
+                 &borderBrush
+             );
     }
 
     // Commit changes.
@@ -418,29 +418,29 @@ HRESULT D2DRenderer::InitializeTextLayout()
     if (measuringMode_ == DWRITE_MEASURING_MODE_NATURAL)
     {
         hr = g_dwriteFactory->CreateTextLayout(
-                text_,
-                lstrlenW(text_),
-                textFormat_,
-                g_formatWidth,
-                0, // max height
-                &textLayout_
-                );
+                 text_,
+                 lstrlenW(text_),
+                 textFormat_,
+                 g_formatWidth,
+                 0, // max height
+                 &textLayout_
+             );
     }
     else
     {
         BOOL useGdiNatural = (measuringMode_ == DWRITE_MEASURING_MODE_GDI_NATURAL);
 
         hr = g_dwriteFactory->CreateGdiCompatibleTextLayout(
-                text_,
-                lstrlenW(text_),
-                textFormat_,
-                g_formatWidth,
-                0, // max height
-                g_dpiY / 96.0f, // pixels per DIP
-                &transform_,
-                useGdiNatural,
-                &textLayout_
-                );
+                 text_,
+                 lstrlenW(text_),
+                 textFormat_,
+                 g_formatWidth,
+                 0, // max height
+                 g_dpiY / 96.0f, // pixels per DIP
+                 &transform_,
+                 useGdiNatural,
+                 &textLayout_
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -464,9 +464,9 @@ HRESULT D2DRenderer::UpdateTextOrigin()
 
     // Center the text.
     textOrigin_ = D2D1::Point2F(
-        (PixelsToDipsX(width_) - metrics.width) * 0.5f,
-        (PixelsToDipsY(height_) - metrics.height) * 0.5f
-        );
+                      (PixelsToDipsX(width_) - metrics.width) * 0.5f,
+                      (PixelsToDipsY(height_) - metrics.height) * 0.5f
+                  );
 
     return hr;
 }

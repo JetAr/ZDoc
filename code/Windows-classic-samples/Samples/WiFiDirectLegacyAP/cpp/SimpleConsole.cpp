@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // This code is licensed under the MIT License (MIT).
@@ -72,8 +72,8 @@ void SimpleConsole::OnDeviceDisconnected(std::wstring deviceId)
 void SimpleConsole::OnAdvertisementStarted()
 {
     std::wcout << "Soft AP started!" << std::endl
-        << "Peers can connect to: " << _hostedNetwork.GetSSID() << std::endl
-        << "Passphrase: " << _hostedNetwork.GetPassphrase() << std::endl;
+               << "Peers can connect to: " << _hostedNetwork.GetSSID() << std::endl
+               << "Passphrase: " << _hostedNetwork.GetPassphrase() << std::endl;
     SetEvent(_apEvent.Get());
 }
 
@@ -107,7 +107,7 @@ bool SimpleConsole::AcceptIncommingConnection()
     getline(std::wcin, response);
 
     if (response.length() > 0 &&
-        (response[0] == 'y' || response[0] == 'Y'))
+            (response[0] == 'y' || response[0] == 'Y'))
     {
         return true;
     }
@@ -123,15 +123,15 @@ void SimpleConsole::ShowPrompt()
 void SimpleConsole::ShowHelp()
 {
     std::wcout << std::endl
-        << "Wi-Fi Direct Legacy AP Demo Usage:" << std::endl
-        << "----------------------------------" << std::endl
-        << "start             : Start the legacy AP to accept connections" << std::endl
-        << "stop              : Stop the legacy AP" << std::endl
-        << "ssid <ssid>       : Configure the SSID before starting the legacy AP" << std::endl
-        << "pass <passphrase> : Configure the passphrase before starting the legacy AP" << std::endl
-        << "autoaccept <0|1>  : Configure the legacy AP to accept connections (default) or prompt the user" << std::endl
-        << "quit|exit         : Exit" << std::endl
-        << std::endl;
+               << "Wi-Fi Direct Legacy AP Demo Usage:" << std::endl
+               << "----------------------------------" << std::endl
+               << "start             : Start the legacy AP to accept connections" << std::endl
+               << "stop              : Stop the legacy AP" << std::endl
+               << "ssid <ssid>       : Configure the SSID before starting the legacy AP" << std::endl
+               << "pass <passphrase> : Configure the passphrase before starting the legacy AP" << std::endl
+               << "autoaccept <0|1>  : Configure the legacy AP to accept connections (default) or prompt the user" << std::endl
+               << "quit|exit         : Exit" << std::endl
+               << std::endl;
 }
 
 bool SimpleConsole::ExecuteCommand(std::wstring command)
@@ -139,7 +139,7 @@ bool SimpleConsole::ExecuteCommand(std::wstring command)
     // Simple command parsing logic
 
     if (command == L"quit" ||
-        command == L"exit")
+            command == L"exit")
     {
         std::wcout << std::endl << "Exiting" << std::endl;
         return false;

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: WinCtrl.cpp
 //
 // Desc: DirectShow base classes - implements video control interface class.
@@ -34,42 +34,42 @@ BOOL WINAPI PossiblyEatMessage(HWND hwndDrain, UINT uMsg, WPARAM wParam, LPARAM 
     {
         switch (uMsg)
         {
-            case WM_CHAR:
-            case WM_DEADCHAR:
-            case WM_KEYDOWN:
-            case WM_KEYUP:
-            case WM_LBUTTONDBLCLK:
-            case WM_LBUTTONDOWN:
-            case WM_LBUTTONUP:
-            case WM_MBUTTONDBLCLK:
-            case WM_MBUTTONDOWN:
-            case WM_MBUTTONUP:
-            case WM_MOUSEACTIVATE:
-            case WM_MOUSEMOVE:
-            // If we pass this on we don't get any mouse clicks
-            //case WM_NCHITTEST:
-            case WM_NCLBUTTONDBLCLK:
-            case WM_NCLBUTTONDOWN:
-            case WM_NCLBUTTONUP:
-            case WM_NCMBUTTONDBLCLK:
-            case WM_NCMBUTTONDOWN:
-            case WM_NCMBUTTONUP:
-            case WM_NCMOUSEMOVE:
-            case WM_NCRBUTTONDBLCLK:
-            case WM_NCRBUTTONDOWN:
-            case WM_NCRBUTTONUP:
-            case WM_RBUTTONDBLCLK:
-            case WM_RBUTTONDOWN:
-            case WM_RBUTTONUP:
-            case WM_SYSCHAR:
-            case WM_SYSDEADCHAR:
-            case WM_SYSKEYDOWN:
-            case WM_SYSKEYUP:
+        case WM_CHAR:
+        case WM_DEADCHAR:
+        case WM_KEYDOWN:
+        case WM_KEYUP:
+        case WM_LBUTTONDBLCLK:
+        case WM_LBUTTONDOWN:
+        case WM_LBUTTONUP:
+        case WM_MBUTTONDBLCLK:
+        case WM_MBUTTONDOWN:
+        case WM_MBUTTONUP:
+        case WM_MOUSEACTIVATE:
+        case WM_MOUSEMOVE:
+        // If we pass this on we don't get any mouse clicks
+        //case WM_NCHITTEST:
+        case WM_NCLBUTTONDBLCLK:
+        case WM_NCLBUTTONDOWN:
+        case WM_NCLBUTTONUP:
+        case WM_NCMBUTTONDBLCLK:
+        case WM_NCMBUTTONDOWN:
+        case WM_NCMBUTTONUP:
+        case WM_NCMOUSEMOVE:
+        case WM_NCRBUTTONDBLCLK:
+        case WM_NCRBUTTONDOWN:
+        case WM_NCRBUTTONUP:
+        case WM_RBUTTONDBLCLK:
+        case WM_RBUTTONDOWN:
+        case WM_RBUTTONUP:
+        case WM_SYSCHAR:
+        case WM_SYSDEADCHAR:
+        case WM_SYSKEYDOWN:
+        case WM_SYSKEYUP:
 
-                DbgLog((LOG_TRACE, 2, TEXT("Forwarding %x to drain")));
-                PostMessage(hwndDrain, uMsg, wParam, lParam);
+            DbgLog((LOG_TRACE, 2, TEXT("Forwarding %x to drain")));
+            PostMessage(hwndDrain, uMsg, wParam, lParam);
 
-                return TRUE;
+            return TRUE;
         }
     }
     return FALSE;
@@ -84,11 +84,11 @@ BOOL WINAPI PossiblyEatMessage(HWND hwndDrain, UINT uMsg, WPARAM wParam, LPARAM 
 // more direct and efficient mechanism as many values may be changed in one
 
 CBaseControlWindow::CBaseControlWindow(
-                        __inout CBaseFilter *pFilter,     // Owning filter
-                        __in CCritSec *pInterfaceLock,    // Locking object
-                        __in_opt LPCTSTR pName,           // Object description
-                        __inout_opt LPUNKNOWN pUnk,       // Normal COM ownership
-                        __inout HRESULT *phr) :           // OLE return code
+    __inout CBaseFilter *pFilter,     // Owning filter
+    __in CCritSec *pInterfaceLock,    // Locking object
+    __in_opt LPCTSTR pName,           // Object description
+    __inout_opt LPUNKNOWN pUnk,       // Normal COM ownership
+    __inout HRESULT *phr) :           // OLE return code
 
     CBaseVideoWindow(pName,pUnk),
     m_pInterfaceLock(pInterfaceLock),
@@ -160,15 +160,18 @@ STDMETHODIMP CBaseControlWindow::put_WindowStyleEx(long WindowStyleEx)
 
     // Should we be taking off WS_EX_TOPMOST
 
-    if (GetWindowLong(m_hwnd,GWL_EXSTYLE) & WS_EX_TOPMOST) {
-        if ((WindowStyleEx & WS_EX_TOPMOST) == 0) {
+    if (GetWindowLong(m_hwnd,GWL_EXSTYLE) & WS_EX_TOPMOST)
+    {
+        if ((WindowStyleEx & WS_EX_TOPMOST) == 0)
+        {
             SendMessage(m_hwnd,m_ShowStageTop,(WPARAM) FALSE,(LPARAM) 0);
         }
     }
 
     // Likewise should we be adding WS_EX_TOPMOST
 
-    if (WindowStyleEx & WS_EX_TOPMOST) {
+    if (WindowStyleEx & WS_EX_TOPMOST)
+    {
         SendMessage(m_hwnd,m_ShowStageTop,(WPARAM) TRUE,(LPARAM) 0);
         WindowStyleEx &= (~WS_EX_TOPMOST);
         if (WindowStyleEx == 0) return NOERROR;
@@ -194,13 +197,14 @@ STDMETHODIMP CBaseControlWindow::put_WindowStyle(long WindowStyle)
     // These styles cannot be changed dynamically
 
     if ((WindowStyle & WS_DISABLED) ||
-        (WindowStyle & WS_ICONIC) ||
-        (WindowStyle & WS_MAXIMIZE) ||
-        (WindowStyle & WS_MINIMIZE) ||
-        (WindowStyle & WS_HSCROLL) ||
-        (WindowStyle & WS_VSCROLL)) {
+            (WindowStyle & WS_ICONIC) ||
+            (WindowStyle & WS_MAXIMIZE) ||
+            (WindowStyle & WS_MINIMIZE) ||
+            (WindowStyle & WS_HSCROLL) ||
+            (WindowStyle & WS_VSCROLL))
+    {
 
-            return E_INVALIDARG;
+        return E_INVALIDARG;
     }
 
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
@@ -240,7 +244,8 @@ HRESULT CBaseControlWindow::DoSetWindowStyle(long Style,long WindowLong)
 
     // Show the window again in the current position
 
-    if (bVisible == TRUE) {
+    if (bVisible == TRUE)
+    {
 
         SetWindowPos(m_hwnd,            // Base window handle
                      HWND_TOP,          // Just a place holder
@@ -268,7 +273,8 @@ HRESULT CBaseControlWindow::DoSetWindowStyle(long Style,long WindowLong)
 
     ShowWindow(m_hwnd,SW_HIDE);
 
-    if (GetParent(m_hwnd)) {
+    if (GetParent(m_hwnd))
+    {
 
         MapWindowPoints(HWND_DESKTOP, GetParent(m_hwnd), (LPPOINT)&WindowRect, 2);
     }
@@ -323,24 +329,30 @@ STDMETHODIMP CBaseControlWindow::get_WindowState(__out long *pWindowState)
     // the current desktop even if it is completely obscured by other windows
     // so the flag is a style for each window set with the WS_VISIBLE bit
 
-    if (IsWindowVisible(m_hwnd) == TRUE) {
+    if (IsWindowVisible(m_hwnd) == TRUE)
+    {
 
         // Is the base window iconic
-        if (IsIconic(m_hwnd) == TRUE) {
+        if (IsIconic(m_hwnd) == TRUE)
+        {
             *pWindowState |= SW_MINIMIZE;
         }
 
         // Has the window been maximised
-        else if (IsZoomed(m_hwnd) == TRUE) {
+        else if (IsZoomed(m_hwnd) == TRUE)
+        {
             *pWindowState |= SW_MAXIMIZE;
         }
 
         // Window is normal
-        else {
+        else
+        {
             *pWindowState |= SW_SHOW;
         }
 
-    } else {
+    }
+    else
+    {
         *pWindowState |= SW_HIDE;
     }
     return NOERROR;
@@ -360,8 +372,10 @@ STDMETHODIMP CBaseControlWindow::put_BackgroundPalette(long BackgroundPalette)
 
     // Check this is a valid automation boolean type
 
-    if (BackgroundPalette != OATRUE) {
-        if (BackgroundPalette != OAFALSE) {
+    if (BackgroundPalette != OATRUE)
+    {
+        if (BackgroundPalette != OAFALSE)
+        {
             return E_INVALIDARG;
         }
     }
@@ -400,8 +414,10 @@ STDMETHODIMP CBaseControlWindow::put_Visible(long Visible)
 
     // Check this is a valid automation boolean type
 
-    if (Visible != OATRUE) {
-        if (Visible != OAFALSE) {
+    if (Visible != OATRUE)
+    {
+        if (Visible != OAFALSE)
+        {
             return E_INVALIDARG;
         }
     }
@@ -444,7 +460,8 @@ STDMETHODIMP CBaseControlWindow::put_Left(long Left)
     // Get the current window position in a RECT
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
-    if (GetParent(m_hwnd)) {
+    if (GetParent(m_hwnd))
+    {
 
         MapWindowPoints(HWND_DESKTOP, GetParent(m_hwnd), (LPPOINT)&WindowRect, 2);
     }
@@ -465,7 +482,8 @@ STDMETHODIMP CBaseControlWindow::put_Left(long Left)
                             WindowRect.bottom,     // The HEIGHT (not bottom)
                             WindowFlags);          // Show window options
 
-    if (bSuccess == FALSE) {
+    if (bSuccess == FALSE)
+    {
         return E_INVALIDARG;
     }
     return NOERROR;
@@ -503,7 +521,8 @@ STDMETHODIMP CBaseControlWindow::put_Width(long Width)
 
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
-    if (GetParent(m_hwnd)) {
+    if (GetParent(m_hwnd))
+    {
 
         MapWindowPoints(HWND_DESKTOP, GetParent(m_hwnd), (LPPOINT)&WindowRect, 2);
     }
@@ -523,7 +542,8 @@ STDMETHODIMP CBaseControlWindow::put_Width(long Width)
                             WindowRect.bottom,     // The HEIGHT (not bottom)
                             WindowFlags);          // Show window options
 
-    if (bSuccess == FALSE) {
+    if (bSuccess == FALSE)
+    {
         return E_INVALIDARG;
     }
     return NOERROR;
@@ -557,7 +577,8 @@ STDMETHODIMP CBaseControlWindow::put_Top(long Top)
     // Get the current window position in a RECT
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
-    if (GetParent(m_hwnd)) {
+    if (GetParent(m_hwnd))
+    {
 
         MapWindowPoints(HWND_DESKTOP, GetParent(m_hwnd), (LPPOINT)&WindowRect, 2);
     }
@@ -578,7 +599,8 @@ STDMETHODIMP CBaseControlWindow::put_Top(long Top)
                             WindowRect.bottom,     // The HEIGHT (not bottom)
                             WindowFlags);          // Show window flags
 
-    if (bSuccess == FALSE) {
+    if (bSuccess == FALSE)
+    {
         return E_INVALIDARG;
     }
     return NOERROR;
@@ -616,7 +638,8 @@ STDMETHODIMP CBaseControlWindow::put_Height(long Height)
 
     EXECUTE_ASSERT(GetWindowRect(m_hwnd,&WindowRect));
 
-    if (GetParent(m_hwnd)) {
+    if (GetParent(m_hwnd))
+    {
 
         MapWindowPoints(HWND_DESKTOP, GetParent(m_hwnd), (LPPOINT)&WindowRect, 2);
     }
@@ -632,7 +655,8 @@ STDMETHODIMP CBaseControlWindow::put_Height(long Height)
                             Height,                // New height dimension
                             WindowFlags);          // Show window flags
 
-    if (bSuccess == FALSE) {
+    if (bSuccess == FALSE)
+    {
         return E_INVALIDARG;
     }
     return NOERROR;
@@ -675,9 +699,12 @@ STDMETHODIMP CBaseControlWindow::put_Owner(OAHWND Owner)
     // Add or remove WS_CHILD as appropriate
 
     LONG Style = GetWindowLong(m_hwnd,GWL_STYLE);
-    if (Owner == NULL) {
+    if (Owner == NULL)
+    {
         Style &= (~WS_CHILD);
-    } else {
+    }
+    else
+    {
         Style |= (WS_CHILD);
     }
     SetWindowLong(m_hwnd,GWL_STYLE,Style);
@@ -751,31 +778,33 @@ CBaseControlWindow::NotifyOwnerMessage(OAHWND hwnd,    // Window handle
 
     // Only interested in these Windows messages
 
-    switch (uMsg) {
+    switch (uMsg)
+    {
 
-        case WM_SYSCOLORCHANGE:
-        case WM_PALETTECHANGED:
-        case WM_PALETTEISCHANGING:
-        case WM_QUERYNEWPALETTE:
-        case WM_DEVMODECHANGE:
-        case WM_DISPLAYCHANGE:
-        case WM_ACTIVATEAPP:
+    case WM_SYSCOLORCHANGE:
+    case WM_PALETTECHANGED:
+    case WM_PALETTEISCHANGING:
+    case WM_QUERYNEWPALETTE:
+    case WM_DEVMODECHANGE:
+    case WM_DISPLAYCHANGE:
+    case WM_ACTIVATEAPP:
 
-            // If we do not have an owner then ignore
+        // If we do not have an owner then ignore
 
-            if (m_hwndOwner == NULL) {
-                return NOERROR;
-            }
-            SendMessage(m_hwnd,uMsg,(WPARAM)wParam,(LPARAM)lParam);
-	    break;
+        if (m_hwndOwner == NULL)
+        {
+            return NOERROR;
+        }
+        SendMessage(m_hwnd,uMsg,(WPARAM)wParam,(LPARAM)lParam);
+        break;
 
-	// do NOT fwd WM_MOVE. the parameters are the location of the parent
-	// window, NOT what the renderer should be looking at.  But we need
-	// to make sure the overlay is moved with the parent window, so we
-	// do this.
-	case WM_MOVE:
-	    PostMessage(m_hwnd,WM_PAINT,0,0);
-	    break;
+    // do NOT fwd WM_MOVE. the parameters are the location of the parent
+    // window, NOT what the renderer should be looking at.  But we need
+    // to make sure the overlay is moved with the parent window, so we
+    // do this.
+    case WM_MOVE:
+        PostMessage(m_hwnd,WM_PAINT,0,0);
+        break;
     }
     return NOERROR;
 }
@@ -789,8 +818,10 @@ STDMETHODIMP CBaseControlWindow::SetWindowForeground(long Focus)
 {
     // Check this is a valid automation boolean type
 
-    if (Focus != OATRUE) {
-        if (Focus != OAFALSE) {
+    if (Focus != OATRUE)
+    {
+        if (Focus != OAFALSE)
+        {
             return E_INVALIDARG;
         }
     }
@@ -831,7 +862,8 @@ CBaseControlWindow::SetWindowPosition(long Left,long Top,long Width,long Height)
 #ifdef DEBUG
     DbgLog((LOG_TRACE, 1, TEXT("SWP failed error %d"), GetLastError()));
 #endif
-    if (bSuccess == FALSE) {
+    if (bSuccess == FALSE)
+    {
         return E_INVALIDARG;
     }
     return NOERROR;
@@ -897,8 +929,10 @@ CBaseControlWindow::GetRestorePosition(__out long *pLeft,__out long *pTop,__out 
 
     // We must take into account any task bar present
 
-    if (SystemParametersInfo(SPI_GETWORKAREA,0,&WorkArea,FALSE) == TRUE) {
-        if (GetParent(m_hwnd) == NULL) {
+    if (SystemParametersInfo(SPI_GETWORKAREA,0,&WorkArea,FALSE) == TRUE)
+    {
+        if (GetParent(m_hwnd) == NULL)
+        {
             Place.rcNormalPosition.top += WorkArea.top;
             Place.rcNormalPosition.bottom += WorkArea.top;
             Place.rcNormalPosition.left += WorkArea.left;
@@ -974,8 +1008,10 @@ STDMETHODIMP CBaseControlWindow::put_AutoShow(long AutoShow)
 
     // Check this is a valid automation boolean type
 
-    if (AutoShow != OATRUE) {
-        if (AutoShow != OAFALSE) {
+    if (AutoShow != OATRUE)
+    {
+        if (AutoShow != OAFALSE)
+        {
             return E_INVALIDARG;
         }
     }
@@ -1014,7 +1050,8 @@ CBaseControlWindow::GetMinIdealImageSize(__out long *pWidth,__out long *pHeight)
     // Must not be stopped for this to work correctly
 
     m_pFilter->GetState(0,&State);
-    if (State == State_Stopped) {
+    if (State == State_Stopped)
+    {
         return VFW_E_WRONG_STATE;
     }
 
@@ -1041,7 +1078,8 @@ CBaseControlWindow::GetMaxIdealImageSize(__out long *pWidth,__out long *pHeight)
     // Must not be stopped for this to work correctly
 
     m_pFilter->GetState(0,&State);
-    if (State == State_Stopped) {
+    if (State == State_Stopped)
+    {
         return VFW_E_WRONG_STATE;
     }
 
@@ -1061,8 +1099,10 @@ CBaseControlWindow::HideCursor(long HideCursor)
 
     // Check this is a valid automation boolean type
 
-    if (HideCursor != OATRUE) {
-        if (HideCursor != OAFALSE) {
+    if (HideCursor != OATRUE)
+    {
+        if (HideCursor != OAFALSE)
+        {
             return E_INVALIDARG;
         }
     }
@@ -1091,11 +1131,11 @@ STDMETHODIMP CBaseControlWindow::IsCursorHidden(__out long *CursorHidden)
 // more direct and efficient mechanism as many values may be changed in one
 
 CBaseControlVideo::CBaseControlVideo(
-                        __inout CBaseFilter *pFilter,     // Owning filter
-                        __in CCritSec *pInterfaceLock,    // Locking object
-                        __in_opt LPCTSTR pName,           // Object description
-                        __inout_opt LPUNKNOWN pUnk,       // Normal COM ownership
-                        __inout HRESULT *phr) :           // OLE return code
+    __inout CBaseFilter *pFilter,     // Owning filter
+    __in CCritSec *pInterfaceLock,    // Locking object
+    __in_opt LPCTSTR pName,           // Object description
+    __inout_opt LPUNKNOWN pUnk,       // Normal COM ownership
+    __inout HRESULT *phr) :           // OLE return code
 
     CBaseBasicVideo(pName,pUnk),
     m_pFilter(pFilter),
@@ -1117,7 +1157,7 @@ STDMETHODIMP CBaseControlVideo::get_AvgTimePerFrame(__out REFTIME *pAvgTimePerFr
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     COARefTime AvgTime(pVideoInfo->AvgTimePerFrame);
     *pAvgTimePerFrame = (REFTIME) AvgTime;
 
@@ -1135,7 +1175,7 @@ STDMETHODIMP CBaseControlVideo::get_BitRate(__out long *pBitRate)
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     *pBitRate = pVideoInfo->dwBitRate;
     return NOERROR;
 }
@@ -1151,7 +1191,7 @@ STDMETHODIMP CBaseControlVideo::get_BitErrorRate(__out long *pBitErrorRate)
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     *pBitErrorRate = pVideoInfo->dwBitErrorRate;
     return NOERROR;
 }
@@ -1167,7 +1207,7 @@ STDMETHODIMP CBaseControlVideo::get_VideoWidth(__out long *pVideoWidth)
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     *pVideoWidth = pVideoInfo->bmiHeader.biWidth;
     return NOERROR;
 }
@@ -1183,7 +1223,7 @@ STDMETHODIMP CBaseControlVideo::get_VideoHeight(__out long *pVideoHeight)
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     *pVideoHeight = pVideoInfo->bmiHeader.biHeight;
     return NOERROR;
 }
@@ -1197,9 +1237,9 @@ STDMETHODIMP CBaseControlVideo::get_VideoHeight(__out long *pVideoHeight)
 // If the number of entries evaluates to zero then we return an S_FALSE code
 
 STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
-                                                       long Entries,
-                                                       __out long *pRetrieved,
-                                                       __out_ecount_part(Entries, *pRetrieved) long *pPalette)
+        long Entries,
+        __out long *pRetrieved,
+        __out_ecount_part(Entries, *pRetrieved) long *pPalette)
 {
     CheckPointer(pRetrieved,E_POINTER);
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
@@ -1210,26 +1250,29 @@ STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
 
     // Is the current format palettised
 
-    if (PALETTISED(pVideoInfo) == FALSE) {
+    if (PALETTISED(pVideoInfo) == FALSE)
+    {
         *pRetrieved = 0;
         return VFW_E_NO_PALETTE_AVAILABLE;
     }
 
     // Do they just want to know how many are available
 
-    if (pPalette == NULL) {
+    if (pPalette == NULL)
+    {
         *pRetrieved = pHeader->biClrUsed;
         return NOERROR;
     }
 
     // Make sure the start position is a valid offset
 
-    if (StartIndex >= (LONG) pHeader->biClrUsed || StartIndex < 0) {
+    if (StartIndex >= (LONG) pHeader->biClrUsed || StartIndex < 0)
+    {
         *pRetrieved = 0;
         return E_INVALIDARG;
     }
@@ -1238,7 +1281,8 @@ STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
 
     LONG Available = (LONG) pHeader->biClrUsed - StartIndex;
     *pRetrieved = max(0,min(Available,Entries));
-    if (*pRetrieved == 0) {
+    if (*pRetrieved == 0)
+    {
         return S_FALSE;
     }
 
@@ -1247,7 +1291,8 @@ STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
     PALETTEENTRY *pEntries = (PALETTEENTRY *) pPalette;
     RGBQUAD *pColours = COLORS(pVideoInfo) + StartIndex;
 
-    for (LONG Count = 0;Count < *pRetrieved;Count++) {
+    for (LONG Count = 0; Count < *pRetrieved; Count++)
+    {
         pEntries[Count].peRed = pColours[Count].rgbRed;
         pEntries[Count].peGreen = pColours[Count].rgbGreen;
         pEntries[Count].peBlue = pColours[Count].rgbBlue;
@@ -1272,7 +1317,7 @@ STDMETHODIMP CBaseControlVideo::GetVideoSize(__out long *pWidth,__out long *pHei
     // Get the video format from the derived class
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     *pWidth = pVideoInfo->bmiHeader.biWidth;
     *pHeight = pVideoInfo->bmiHeader.biHeight;
     return NOERROR;
@@ -1297,14 +1342,16 @@ CBaseControlVideo::SetSourcePosition(long Left,long Top,long Width,long Height)
     // Check the source rectangle is valid
 
     HRESULT hr = CheckSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the source rectangle
 
     hr = SetSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1358,14 +1405,16 @@ CBaseControlVideo::SetDestinationPosition(long Left,long Top,long Width,long Hei
     // Check the target rectangle is valid
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the new target rectangle
 
     hr = SetTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1417,14 +1466,16 @@ STDMETHODIMP CBaseControlVideo::put_SourceLeft(long SourceLeft)
     // Check the source rectangle is valid
 
     HRESULT hr = CheckSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the source rectangle
 
     hr = SetSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1461,14 +1512,16 @@ STDMETHODIMP CBaseControlVideo::put_SourceWidth(long SourceWidth)
     // Check the source rectangle is valid
 
     HRESULT hr = CheckSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the source rectangle
 
     hr = SetSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1507,14 +1560,16 @@ STDMETHODIMP CBaseControlVideo::put_SourceTop(long SourceTop)
     // Check the source rectangle is valid
 
     HRESULT hr = CheckSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the source rectangle
 
     hr = SetSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1549,14 +1604,16 @@ STDMETHODIMP CBaseControlVideo::put_SourceHeight(long SourceHeight)
     // Check the source rectangle is valid
 
     HRESULT hr = CheckSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the source rectangle
 
     hr = SetSourceRect(&SourceRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1595,14 +1652,16 @@ STDMETHODIMP CBaseControlVideo::put_DestinationLeft(long DestinationLeft)
     // Check the target rectangle is valid
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the new target rectangle
 
     hr = SetTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1637,14 +1696,16 @@ STDMETHODIMP CBaseControlVideo::put_DestinationWidth(long DestinationWidth)
     // Check the target rectangle is valid
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the new target rectangle
 
     hr = SetTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1683,14 +1744,16 @@ STDMETHODIMP CBaseControlVideo::put_DestinationTop(long DestinationTop)
     // Check the target rectangle is valid
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the new target rectangle
 
     hr = SetTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1725,14 +1788,16 @@ STDMETHODIMP CBaseControlVideo::put_DestinationHeight(long DestinationHeight)
     // Check the target rectangle is valid
 
     HRESULT hr = CheckTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
     // Now set the new target rectangle
 
     hr = SetTargetRect(&DestinationRect);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1761,7 +1826,8 @@ STDMETHODIMP CBaseControlVideo::SetDefaultSourcePosition()
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     HRESULT hr = SetDefaultSourceRect();
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1785,7 +1851,8 @@ STDMETHODIMP CBaseControlVideo::SetDefaultDestinationPosition()
     CheckConnected(m_pPin,VFW_E_NOT_CONNECTED);
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     HRESULT hr = SetDefaultTargetRect();
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
     return OnUpdateRectangles();
@@ -1814,9 +1881,11 @@ CBaseControlVideo::GetCurrentImage(__inout long *pBufferSize,__out_bcount_part(*
 
     // Make sure we are in a paused state
 
-    if (pVideoImage != NULL) {
+    if (pVideoImage != NULL)
+    {
         m_pFilter->GetState(0,&State);
-        if (State != State_Paused) {
+        if (State != State_Paused)
+        {
             return VFW_E_NOT_PAUSED;
         }
         return GetStaticImage(pBufferSize,pVideoImage);
@@ -1826,7 +1895,7 @@ CBaseControlVideo::GetCurrentImage(__inout long *pBufferSize,__out_bcount_part(*
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     RECT SourceRect;
     GetSourceRect(&SourceRect);
     return GetImageSize(pVideoInfo,pBufferSize,&SourceRect);
@@ -1851,15 +1920,18 @@ HRESULT CBaseControlVideo::GetImageSize(__in VIDEOINFOHEADER *pVideoInfo,
 
     if (pSourceRect == NULL ||
             pVideoInfo == NULL ||
-            pBufferSize == NULL) {
+            pBufferSize == NULL)
+    {
 
         return E_UNEXPECTED;
     }
 
     // Is the data format compatible
 
-    if (pVideoInfo->bmiHeader.biCompression != BI_RGB) {
-        if (pVideoInfo->bmiHeader.biCompression != BI_BITFIELDS) {
+    if (pVideoInfo->bmiHeader.biCompression != BI_RGB)
+    {
+        if (pVideoInfo->bmiHeader.biCompression != BI_BITFIELDS)
+        {
             return E_INVALIDARG;
         }
     }
@@ -1899,20 +1971,24 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
 
     if (pMediaSample == NULL || pSourceRect == NULL ||
             pVideoInfo == NULL || pVideoImage == NULL ||
-            pBufferSize == NULL) {
+            pBufferSize == NULL)
+    {
 
         return E_UNEXPECTED;
     }
 
     // Is the data format compatible
 
-    if (pVideoInfo->bmiHeader.biCompression != BI_RGB) {
-        if (pVideoInfo->bmiHeader.biCompression != BI_BITFIELDS) {
+    if (pVideoInfo->bmiHeader.biCompression != BI_RGB)
+    {
+        if (pVideoInfo->bmiHeader.biCompression != BI_BITFIELDS)
+        {
             return E_INVALIDARG;
         }
     }
 
-    if (*pBufferSize < 0) {
+    if (*pBufferSize < 0)
+    {
         return E_INVALIDARG;
     }
 
@@ -1932,7 +2008,8 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
     DWORD Total;
     DWORD dwDibSize;
 
-    if( !ValidateBitmapInfoHeader( HEADER(pVideoInfo), Size)) {
+    if( !ValidateBitmapInfoHeader( HEADER(pVideoInfo), Size))
+    {
         return E_INVALIDARG;
     }
 
@@ -1940,17 +2017,20 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
     //  tools aren't picking up the annotation
     __analysis_assume(Size >= sizeof(BITMAPINFOHEADER));
 
-    if (FAILED(SAFE_DIBSIZE(&bih, &dwDibSize))) {
+    if (FAILED(SAFE_DIBSIZE(&bih, &dwDibSize)))
+    {
         return E_INVALIDARG;
     }
 
-    if (FAILED(DWordAdd(Size, dwDibSize, &Total))) {
+    if (FAILED(DWordAdd(Size, dwDibSize, &Total)))
+    {
         return E_INVALIDARG;
     }
 
     // Make sure we have a large enough buffer
 
-    if ((DWORD)*pBufferSize < Total) {
+    if ((DWORD)*pBufferSize < Total)
+    {
         return E_OUTOFMEMORY;
     }
 
@@ -1965,7 +2045,8 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
     // Get the pointer to it's image data
 
     HRESULT hr = pMediaSample->GetPointer(&pCurrentImage);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -1979,7 +2060,8 @@ HRESULT CBaseControlVideo::CopyImage(IMediaSample *pMediaSample,
 
     // Even money on this GP faulting sometime...
 
-    for (LONG Line = 0;Line < HEIGHT(pSourceRect);Line++) {
+    for (LONG Line = 0; Line < HEIGHT(pSourceRect); Line++)
+    {
         CopyMemory((PVOID)pImageData, (PVOID)pCurrentImage, ScanLine);
         pImageData += DIBWIDTHBYTES(*(BITMAPINFOHEADER *)pVideoImage);
         pCurrentImage += DIBWIDTHBYTES(pVideoInfo->bmiHeader);
@@ -1999,7 +2081,7 @@ HRESULT CBaseControlVideo::OnVideoSizeChange()
 
     VIDEOINFOHEADER *pVideoInfo = GetVideoFormat();
     if (pVideoInfo == NULL)
-    return E_OUTOFMEMORY;
+        return E_OUTOFMEMORY;
     WORD Width = (WORD) pVideoInfo->bmiHeader.biWidth;
     WORD Height = (WORD) pVideoInfo->bmiHeader.biHeight;
 
@@ -2027,9 +2109,10 @@ HRESULT CBaseControlVideo::CheckSourceRect(__in RECT *pSourceRect)
     // and that the rectangle is valid (left<right, top<bottom)
 
     if ((pSourceRect->left >= pSourceRect->right) ||
-       (pSourceRect->left < 0) ||
-       (pSourceRect->top >= pSourceRect->bottom) ||
-       (pSourceRect->top < 0)) {
+            (pSourceRect->left < 0) ||
+            (pSourceRect->top >= pSourceRect->bottom) ||
+            (pSourceRect->top < 0))
+    {
 
         return E_INVALIDARG;
     }
@@ -2037,7 +2120,8 @@ HRESULT CBaseControlVideo::CheckSourceRect(__in RECT *pSourceRect)
     // Check the coordinates are less than the extents
 
     if ((pSourceRect->right > Width) ||
-        (pSourceRect->bottom > Height)) {
+            (pSourceRect->bottom > Height))
+    {
 
         return E_INVALIDARG;
     }
@@ -2058,20 +2142,23 @@ HRESULT CBaseControlVideo::CheckTargetRect(__in RECT *pTargetRect)
 {
     // Check the pointer is valid
 
-    if (pTargetRect == NULL) {
+    if (pTargetRect == NULL)
+    {
         return E_POINTER;
     }
 
     // These overflow the WIDTH and HEIGHT checks
 
     if (pTargetRect->left > pTargetRect->right ||
-            pTargetRect->top > pTargetRect->bottom) {
-                return E_INVALIDARG;
+            pTargetRect->top > pTargetRect->bottom)
+    {
+        return E_INVALIDARG;
     }
 
     // Check the rectangle has valid coordinates
 
-    if (WIDTH(pTargetRect) <= 0 || HEIGHT(pTargetRect) <= 0) {
+    if (WIDTH(pTargetRect) <= 0 || HEIGHT(pTargetRect) <= 0)
+    {
         return E_INVALIDARG;
     }
 

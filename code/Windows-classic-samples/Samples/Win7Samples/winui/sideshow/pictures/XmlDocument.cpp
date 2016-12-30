@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -121,7 +121,7 @@ CXmlElement* CXmlDocument::AddElement(LPWSTR pwszName)
     BSTR            bstrName = ::SysAllocString(pwszName);
 
     if (NULL != m_pXMLDoc)
-    {      
+    {
         hr = m_pXMLDoc->createElement(bstrName, &pIElement);
         if (SUCCEEDED(hr))
         {

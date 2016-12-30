@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -16,7 +16,7 @@ VOID DeleteCurrentLine2()
     printf("\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
            "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
            "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b"
-           );
+          );
     return;
 }
 
@@ -24,7 +24,7 @@ VOID OverwriteCurrentLine2()
 {
     printf("                                        "
            "                                        "
-           );
+          );
     return;
 }
 
@@ -33,7 +33,7 @@ VOID UpdatePercentageDisplay2(IN ULONG Numerator, IN ULONG Denominator)
     ULONG percent = 0;
     ULONG i = 0;
 
-    if (Numerator > Denominator) 
+    if (Numerator > Denominator)
     {
         return;
     }
@@ -44,19 +44,19 @@ VOID UpdatePercentageDisplay2(IN ULONG Numerator, IN ULONG Denominator)
 
     // each block is 2%
     // ----=----1----=----2----=----3----=----4----=----5----=----6----=----7----=----8
-    // �.....................
+    // ±.....................
 
-    for (i=1; i<100; i+=2) 
+    for (i=1; i<100; i+=2)
     {
-        if (i < percent) 
+        if (i < percent)
         {
             putchar(178);
-        } 
-        else if (i == percent) 
+        }
+        else if (i == percent)
         {
             putchar(177);
-        } 
-        else 
+        }
+        else
         {
             putchar(176);
         }

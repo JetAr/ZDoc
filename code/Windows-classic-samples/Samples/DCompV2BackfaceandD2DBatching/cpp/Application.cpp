@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,28 +18,28 @@ LRESULT CALLBACK Application::WindowProc(HWND hWnd, UINT msg, WPARAM wparam, LPA
     switch (msg)
     {
     case WM_POINTERUP:
-        {
-            result = _application->OnPointerUp(lparam);
-            break;
-        }
+    {
+        result = _application->OnPointerUp(lparam);
+        break;
+    }
 
     case WM_CLOSE:
-        {
-            result = _application->OnClose();
-            break;
-        }
+    {
+        result = _application->OnClose();
+        break;
+    }
 
     case WM_DESTROY:
-        {
-            result = _application->OnDestroy();
-            break;
-        }
+    {
+        result = _application->OnDestroy();
+        break;
+    }
 
     default:
-        {
-            result = DefWindowProc(hWnd, msg, wparam, lparam);
-            break;
-        }
+    {
+        result = DefWindowProc(hWnd, msg, wparam, lparam);
+        break;
+    }
     }
 
     return result;
@@ -192,18 +192,18 @@ HRESULT Application::CreateMainWindow()
         if (SUCCEEDED(hr))
         {
             _hWnd = CreateWindowExW(
-                0,
-                L"MainWindowClass",
-                L"DirectComposition",
-                WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-                0,
-                0,
-                windowRect.right - windowRect.left,
-                windowRect.bottom - windowRect.top,
-                NULL,
-                NULL,
-                _hInstance,
-                nullptr);
+                        0,
+                        L"MainWindowClass",
+                        L"DirectComposition",
+                        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+                        0,
+                        0,
+                        windowRect.right - windowRect.left,
+                        windowRect.bottom - windowRect.top,
+                        NULL,
+                        NULL,
+                        _hInstance,
+                        nullptr);
 
             hr = (_hWnd == NULL) ? E_FAIL : S_OK;
 
@@ -214,7 +214,7 @@ HRESULT Application::CreateMainWindow()
     return hr;
 }
 
-// Shows the application window 
+// Shows the application window
 HRESULT Application::ShowMainWindow()
 {
     HRESULT hr = (_hWnd == NULL) ? E_UNEXPECTED : S_OK;
@@ -228,7 +228,7 @@ HRESULT Application::ShowMainWindow()
     return hr;
 }
 
-// Destroys the application window 
+// Destroys the application window
 void Application::DestroyMainWindow()
 {
     if (_hWnd != NULL)
@@ -283,16 +283,16 @@ HRESULT Application::CreateD3DDevice()
             Microsoft::WRL::ComPtr<ID3D11Device> d3dDevice;
 
             hr = ::D3D11CreateDevice(
-                nullptr,
-                driverTypes[i],
-                NULL,
-                D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-                featureLevels,
-                sizeof(featureLevels) / sizeof(featureLevels[0]),
-                D3D11_SDK_VERSION,
-                &d3dDevice,
-                &featureLevelSupported,
-                nullptr);
+                     nullptr,
+                     driverTypes[i],
+                     NULL,
+                     D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+                     featureLevels,
+                     sizeof(featureLevels) / sizeof(featureLevels[0]),
+                     D3D11_SDK_VERSION,
+                     &d3dDevice,
+                     &featureLevelSupported,
+                     nullptr);
 
             ShowMessageBoxIfFailed(hr, L"::D3D11CreateDevice");
 
@@ -352,7 +352,7 @@ HRESULT Application::CreateDWriteFactory()
 
     if (SUCCEEDED(hr))
     {
-        hr = ::DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory) , reinterpret_cast<IUnknown **>(_dwriteFactory.GetAddressOf()));
+        hr = ::DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown **>(_dwriteFactory.GetAddressOf()));
 
         ShowMessageBoxIfFailed(hr, L"::DWriteCreateFactory");
     }
@@ -375,7 +375,7 @@ HRESULT Application::CreateDCompDevice()
 
     if (SUCCEEDED(hr))
     {
-        hr = ::DCompositionCreateDevice2(_d2dDevice.Get(), __uuidof(IDCompositionDesktopDevice) , reinterpret_cast<void **>(_dcompDevice.GetAddressOf()));
+        hr = ::DCompositionCreateDevice2(_d2dDevice.Get(), __uuidof(IDCompositionDesktopDevice), reinterpret_cast<void **>(_dcompDevice.GetAddressOf()));
 
         ShowMessageBoxIfFailed(hr, L"::DCompositionCreateDevice2");
     }
@@ -388,7 +388,7 @@ void Application::DestroyDCompDevice()
     _dcompDevice = nullptr;
 }
 
-// Calling functions to build DirectComposition visual tree, creating surfaces and setting visual properties 
+// Calling functions to build DirectComposition visual tree, creating surfaces and setting visual properties
 HRESULT Application::CreateDCompVisualTree()
 {
     HRESULT hr = ((_hWnd == NULL) || (_dcompDevice == nullptr)) ? E_UNEXPECTED : S_OK;
@@ -643,7 +643,7 @@ HRESULT Application::DrawDCompTextSurface()
         Microsoft::WRL::ComPtr<ID2D1DeviceContext> d2dDeviceContext;
         POINT updateOffset = { 0 };
 
-        hr = _dcompTextSurface->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext) , reinterpret_cast<void **>(d2dDeviceContext.GetAddressOf()), &updateOffset);
+        hr = _dcompTextSurface->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext), reinterpret_cast<void **>(d2dDeviceContext.GetAddressOf()), &updateOffset);
 
         ShowMessageBoxIfFailed(hr, L"_dcompTextSurface->BeginDraw");
 
@@ -672,7 +672,7 @@ HRESULT Application::DrawDCompTextSurface()
             if (SUCCEEDED(hr))
             {
                 hr = _dwriteFactory->CreateTextFormat(L"Verdana", nullptr, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-                    DWRITE_FONT_STRETCH_NORMAL, 12.0f, L"en-us", &dwriteTextFormat);
+                                                      DWRITE_FONT_STRETCH_NORMAL, 12.0f, L"en-us", &dwriteTextFormat);
 
                 ShowMessageBoxIfFailed(hr, L"dwriteFactory->CreateTextFormat");
             }
@@ -694,15 +694,15 @@ HRESULT Application::DrawDCompTextSurface()
             if (SUCCEEDED(hr))
             {
                 const wchar_t dcompTileSurfaceText [] = L"This sample demonstrates how to use DirectComposition to apply backface visibility and utilize performance optmization feature known as D2D Batching. Tiles 2 & 3 show backface visible while 1 & 4 show the backface hidden. \n\n"
-                    L"Step 1. Tap or click any tile below \n"
-                    L"Step 2. Reset by selecting background \n";
+                                                        L"Step 1. Tap or click any tile below \n"
+                                                        L"Step 2. Reset by selecting background \n";
 
                 D2D1_RECT_F dcompTextSurfaceRect = D2D1::RectF(
-                    updateOffset.x + 0.0f * dcompTextSurfaceWidth,
-                    updateOffset.y + 0.0f * dcompTextSurfaceHeight,
-                    updateOffset.x + 1.0f * dcompTextSurfaceWidth,
-                    updateOffset.y + 1.0f * dcompTextSurfaceHeight
-                    );
+                                                       updateOffset.x + 0.0f * dcompTextSurfaceWidth,
+                                                       updateOffset.y + 0.0f * dcompTextSurfaceHeight,
+                                                       updateOffset.x + 1.0f * dcompTextSurfaceWidth,
+                                                       updateOffset.y + 1.0f * dcompTextSurfaceHeight
+                                                   );
 
                 d2dDeviceContext->FillRectangle(
                     dcompTextSurfaceRect,
@@ -771,7 +771,7 @@ HRESULT Application::DrawDCompTileSurfaces()
         POINT updateOffset = { 0 };
 
         // Begin draw is using a D2D device context for D2D batching
-        hr = _dcompTileSurfaces[i]->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext) , reinterpret_cast<void **>(d2dDeviceContext.GetAddressOf()), &updateOffset);
+        hr = _dcompTileSurfaces[i]->BeginDraw(nullptr, __uuidof(ID2D1DeviceContext), reinterpret_cast<void **>(d2dDeviceContext.GetAddressOf()), &updateOffset);
 
         ShowMessageBoxIfFailed(hr, L"pDCompSurface->BeginDraw");
 
@@ -800,7 +800,7 @@ HRESULT Application::DrawDCompTileSurfaces()
             if (SUCCEEDED(hr))
             {
                 hr = _dwriteFactory->CreateTextFormat(L"Verdana", nullptr, DWRITE_FONT_WEIGHT_NORMAL, DWRITE_FONT_STYLE_NORMAL,
-                    DWRITE_FONT_STRETCH_NORMAL, 72.0f, L"en-us", &dwriteTextFormat);
+                                                      DWRITE_FONT_STRETCH_NORMAL, 72.0f, L"en-us", &dwriteTextFormat);
 
                 ShowMessageBoxIfFailed(hr, L"dwriteFactory->CreateTextFormat");
             }
@@ -822,11 +822,11 @@ HRESULT Application::DrawDCompTileSurfaces()
             if (SUCCEEDED(hr))
             {
                 D2D1_RECT_F dcompTileSurfaceRect = D2D1::RectF(
-                    updateOffset.x + 0.0f * dcompTileSurfaceWidth,
-                    updateOffset.y + 0.0f * dcompTileSurfaceHeight,
-                    updateOffset.x + 1.0f * dcompTileSurfaceWidth,
-                    updateOffset.y + 1.0f * dcompTileSurfaceHeight
-                    );
+                                                       updateOffset.x + 0.0f * dcompTileSurfaceWidth,
+                                                       updateOffset.y + 0.0f * dcompTileSurfaceHeight,
+                                                       updateOffset.x + 1.0f * dcompTileSurfaceWidth,
+                                                       updateOffset.y + 1.0f * dcompTileSurfaceHeight
+                                                   );
 
                 d2dDeviceContext->FillRectangle(
                     dcompTileSurfaceRect,
@@ -1097,7 +1097,7 @@ bool Application::HasAnyVisualBeenHit(int x, int y, int *pVisualIndex)
         }
 
         br = (visualIndex != -1);
-		*pVisualIndex = visualIndex;
+        *pVisualIndex = visualIndex;
     }
 
 

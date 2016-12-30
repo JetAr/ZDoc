@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -26,8 +26,8 @@ const GUID IID_IUnknown = {0x00000000L,0x9716,0x4F35,{0x8E,0xD5,0x9E,0xCB,0x0E,0
 //
 
 CDownloadUI::CDownloadUI() : m_hwndProgress(0), m_hwndParent(0), m_hInst(0),
-                            m_fInitialized(false), m_fUserCancel(false),
-                            m_ulProgressMax(0), m_ulProgressSoFar(0)
+    m_fInitialized(false), m_fUserCancel(false),
+    m_ulProgressMax(0), m_ulProgressSoFar(0)
 {
     StringCchCopy(m_szCaption, ARRAYSIZE(this->m_szCaption), "");
 }
@@ -368,50 +368,50 @@ HRESULT CDownloadBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgre
     switch (ulStatusCode)
     {
     case BINDSTATUS_BEGINDOWNLOADDATA:
-        {
-            // initialize progress bar with max # of ticks
-            m_pDownloadUI->InitProgressBar(ulProgressMax);
+    {
+        // initialize progress bar with max # of ticks
+        m_pDownloadUI->InitProgressBar(ulProgressMax);
 
-            // init progress so far
-            m_ulProgressSoFar = 0;
+        // init progress so far
+        m_ulProgressSoFar = 0;
 
-            // check for cancel
-            if (m_pDownloadUI->HasUserCanceled())
-                return E_ABORT;
+        // check for cancel
+        if (m_pDownloadUI->HasUserCanceled())
+            return E_ABORT;
 
-            // fall through
-        }
+        // fall through
+    }
     case BINDSTATUS_DOWNLOADINGDATA:
-        {
-            // calculate how far we have moved since the last time
-            ULONG ulProgIncrement = ulProgress - m_ulProgressSoFar;
+    {
+        // calculate how far we have moved since the last time
+        ULONG ulProgIncrement = ulProgress - m_ulProgressSoFar;
 
-            // set progress so far to current value
-            m_ulProgressSoFar = ulProgress;
+        // set progress so far to current value
+        m_ulProgressSoFar = ulProgress;
 
-            // send progress message (if we have progressed)
-            if (ulProgIncrement > 0)
-                m_pDownloadUI->IncrementProgressBar(ulProgIncrement);
+        // send progress message (if we have progressed)
+        if (ulProgIncrement > 0)
+            m_pDownloadUI->IncrementProgressBar(ulProgIncrement);
 
-            // check for cancel
-            if(m_pDownloadUI->HasUserCanceled())
-                return E_ABORT;
+        // check for cancel
+        if(m_pDownloadUI->HasUserCanceled())
+            return E_ABORT;
 
-            break;
-        }
+        break;
+    }
     case BINDSTATUS_ENDDOWNLOADDATA:
-        {
-            // send any remaining progress to complete download portion of progress bar
-            ULONG ulProgIncrement = ulProgressMax - m_ulProgressSoFar;
-            if (ulProgIncrement > 0)
-                m_pDownloadUI->IncrementProgressBar(ulProgIncrement);
-            
-            // check for cancel
-            if(m_pDownloadUI->HasUserCanceled())
-                return E_ABORT;
+    {
+        // send any remaining progress to complete download portion of progress bar
+        ULONG ulProgIncrement = ulProgressMax - m_ulProgressSoFar;
+        if (ulProgIncrement > 0)
+            m_pDownloadUI->IncrementProgressBar(ulProgIncrement);
 
-            break;
-        }
+        // check for cancel
+        if(m_pDownloadUI->HasUserCanceled())
+            return E_ABORT;
+
+        break;
+    }
     }
 
     return S_OK;

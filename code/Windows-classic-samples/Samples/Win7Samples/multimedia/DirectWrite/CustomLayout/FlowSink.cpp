@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -52,7 +52,7 @@ STDMETHODIMP FlowLayoutSink::SetGlyphRun(
     float fontEmSize,
     UINT8 bidiLevel,
     bool isSideways
-    )
+)
 {
     // Append this glyph run to the list.
 
@@ -88,7 +88,7 @@ STDMETHODIMP FlowLayoutSink::DrawGlyphRuns(
     IDWriteBitmapRenderTarget* renderTarget,
     IDWriteRenderingParams* renderingParams,
     COLORREF textColor
-    ) const
+) const
 {
     // Just iterate through all the saved glyph runs
     // and have DWrite to draw each one.
@@ -110,17 +110,17 @@ STDMETHODIMP FlowLayoutSink::DrawGlyphRuns(
             &glyphAdvances_[0],
             &glyphOffsets_ [0],
             &glyphRun
-            );
+        );
 
         hr = renderTarget->DrawGlyphRun(
-                customGlyphRun.x,
-                customGlyphRun.y,
-                DWRITE_MEASURING_MODE_NATURAL,
-                &glyphRun,
-                renderingParams,
-                textColor,
-                NULL // don't need blackBoxRect
-                );
+                 customGlyphRun.x,
+                 customGlyphRun.y,
+                 DWRITE_MEASURING_MODE_NATURAL,
+                 &glyphRun,
+                 renderingParams,
+                 textColor,
+                 NULL // don't need blackBoxRect
+             );
         if (FAILED(hr))
             break;
     }
@@ -134,7 +134,7 @@ void FlowLayoutSink::CustomGlyphRun::Convert(
     const float* glyphAdvances,                 // [this->glyphCount]
     const DWRITE_GLYPH_OFFSET* glyphOffsets,    // [this->glyphCount]
     OUT DWRITE_GLYPH_RUN* glyphRun
-    ) const throw()
+) const throw()
 {
     // Populate the DWrite glyph run.
 

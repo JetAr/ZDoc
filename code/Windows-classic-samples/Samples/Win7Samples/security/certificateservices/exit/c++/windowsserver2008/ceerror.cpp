@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -169,7 +169,7 @@ ceHExceptionCode(
 #if (0 == i386)
     if ((HRESULT) STATUS_DATATYPE_MISALIGNMENT == hr)
     {
-	hr = CERTSRV_E_ALIGNMENT_FAULT;
+        hr = CERTSRV_E_ALIGNMENT_FAULT;
     }
 #endif
     return(ceHError(hr));
@@ -292,28 +292,28 @@ errFormatMessage(
     dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER;
     if (NULL == hMod)
     {
-	dwFlags |= FORMAT_MESSAGE_FROM_SYSTEM;
+        dwFlags |= FORMAT_MESSAGE_FROM_SYSTEM;
     }
     else
     {
-	dwFlags |= FORMAT_MESSAGE_FROM_HMODULE;
+        dwFlags |= FORMAT_MESSAGE_FROM_HMODULE;
     }
     if (NULL == ppwszArgs || NULL == ppwszArgs[0])
     {
-	dwFlags |= FORMAT_MESSAGE_IGNORE_INSERTS;
+        dwFlags |= FORMAT_MESSAGE_IGNORE_INSERTS;
     }
     else
     {
-	dwFlags |= FORMAT_MESSAGE_ARGUMENT_ARRAY;
+        dwFlags |= FORMAT_MESSAGE_ARGUMENT_ARRAY;
     }
     return(FormatMessage(
-		dwFlags,
-                hMod,
-                hr,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                (WCHAR *) ppwszOut,
-                1,
-		(va_list *) ppwszArgs));
+               dwFlags,
+               hMod,
+               hr,
+               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+               (WCHAR *) ppwszOut,
+               1,
+               (va_list *) ppwszArgs));
 }
 
 
@@ -339,9 +339,9 @@ ceGetErrorMessageText1(
 
     if (NULL != pwszInsertionText)
     {
-	apwszInsertionText[0] = pwszInsertionText;
-	apwszInsertionText[1] = NULL;
-	papwsz = apwszInsertionText;
+        apwszInsertionText[0] = pwszInsertionText;
+        apwszInsertionText[1] = NULL;
+        papwsz = apwszInsertionText;
     }
     return(ceGetErrorMessageTextEx(hr, fHResultString, papwsz));
 }
@@ -367,28 +367,28 @@ ceGetErrorMessageTextEx(
 
     if (E_UNEXPECTED == hr)
     {
-	pwszUnexpected = L"Unexpected method call sequence.";
+        pwszUnexpected = L"Unexpected method call sequence.";
     }
 #if (0 == i386)
     else if (STATUS_DATATYPE_MISALIGNMENT == hr)
     {
-	pwszUnexpected = L"Possible data alignment fault.";
+        pwszUnexpected = L"Possible data alignment fault.";
     }
 #endif
     if (NULL == pwszUnexpected)
     {
-	pwszUnexpected = wszEmpty;
+        pwszUnexpected = wszEmpty;
     }
     cwcUnexpected = wcslen(pwszUnexpected);
 
     cwc = errFormatMessage(NULL, hr, &pwszRet, papwszInsertionText);
     if (0 == cwc && ISDELAYLOADHRESULTFACILITY(hr))
     {
-	cwc = errFormatMessage(
-			NULL,
-			WIN32ERROR_FROM_DELAYLOAD(hr),
-			&pwszRet,
-			papwszInsertionText);
+        cwc = errFormatMessage(
+                  NULL,
+                  WIN32ERROR_FROM_DELAYLOAD(hr),
+                  &pwszRet,
+                  papwszInsertionText);
     }
     if (0 == cwc)
     {
@@ -421,7 +421,7 @@ ceGetErrorMessageTextEx(
     }
     if (0 == cwc)
     {
-	HMODULE hModT = GetModuleHandle(L"wininet.dll");
+        HMODULE hModT = GetModuleHandle(L"wininet.dll");
         if (NULL != hModT)
         {
             HRESULT hrHttp = hr;
@@ -430,13 +430,13 @@ ceGetErrorMessageTextEx(
 
             while (TRUE)
             {
-		cwc = errFormatMessage(hModT, hrHttp, &pwszRet, papwszInsertionText);
+                cwc = errFormatMessage(hModT, hrHttp, &pwszRet, papwszInsertionText);
                 if (0 == cwc && ISWIN32HRESULT(hrHttp) && fFirst)
                 {
                     hrFormat = ceHLastError();
                     if (HRESULT_FROM_WIN32(ERROR_MR_MID_NOT_FOUND) == hrFormat)
                     {
-			hrHttp = WIN32ERROR_FROM_HRESULT(hrHttp);
+                        hrHttp = WIN32ERROR_FROM_HRESULT(hrHttp);
                         if (hrHttp != hr)
                         {
                             fFirst = FALSE;
@@ -453,58 +453,58 @@ ceGetErrorMessageTextEx(
         hMod2 = ceLoadSystem32Library(L"cdosys.dll");
         if (NULL != hMod2)
         {
-	    cwc = errFormatMessage(hMod2, hr, &pwszRet, papwszInsertionText);
+            cwc = errFormatMessage(hMod2, hr, &pwszRet, papwszInsertionText);
         }
     }
 
     if (0 == cwc)	// couldn't find error, use default & error code
     {
-	fHResultString = TRUE;
+        fHResultString = TRUE;
     }
     awchr[0] = L'\0';
     if (fHResultString)
     {
-	ceHResultToString(awchr, hr);
+        ceHResultToString(awchr, hr);
     }
 
     if (0 == cwc)
     {
-	pwszRetStatic = L"Error";
-	pwszRet = pwszRetStatic;
+        pwszRetStatic = L"Error";
+        pwszRet = pwszRetStatic;
     }
 
     // strip trailing \r\n
 
     cwcCopy = wcslen(pwszRet);
     if (2 <= cwcCopy &&
-	L'\r' == pwszRet[cwcCopy - 2] &&
-	L'\n' == pwszRet[cwcCopy - 1])
+            L'\r' == pwszRet[cwcCopy - 2] &&
+            L'\n' == pwszRet[cwcCopy - 1])
     {
-	cwcCopy -= 2;
+        cwcCopy -= 2;
     }
     cwc = cwcCopy + 1 + cwcUnexpected + 1 + wcslen(awchr) + 1;
     pwszMsgT = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
     if (NULL == pwszMsgT)
     {
-	_JumpError(E_OUTOFMEMORY, error, "LocalAlloc");
+        _JumpError(E_OUTOFMEMORY, error, "LocalAlloc");
     }
     CopyMemory(pwszMsgT, pwszRet, cwcCopy * sizeof(WCHAR));
     pwszMsgT[cwcCopy] = L'\0';
 
     if (0 != cwcUnexpected)
     {
-	StringCchCat(pwszMsgT, cwc, L" ");
-	StringCchCat(pwszMsgT, cwc, pwszUnexpected);
+        StringCchCat(pwszMsgT, cwc, L" ");
+        StringCchCat(pwszMsgT, cwc, pwszUnexpected);
     }
     if (fHResultString)
     {
-	StringCchCat(pwszMsgT, cwc, L" ");
-	StringCchCat(pwszMsgT, cwc, awchr);
+        StringCchCat(pwszMsgT, cwc, L" ");
+        StringCchCat(pwszMsgT, cwc, awchr);
     }
     assert(wcslen(pwszMsgT) < cwc);
     if (NULL != pwszRet && pwszRetStatic != pwszRet)
     {
-	LocalFree(const_cast<WCHAR *>(pwszRet));
+        LocalFree(const_cast<WCHAR *>(pwszRet));
     }
     pwszRet = pwszMsgT;
 

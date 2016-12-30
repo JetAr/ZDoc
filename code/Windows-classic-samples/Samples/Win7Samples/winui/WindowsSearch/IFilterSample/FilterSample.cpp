@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -210,17 +210,17 @@ HRESULT CFilterSample::GetNextChunkValue(CChunkValue &chunkValue)
     // For this we use the m_iEmitState to iterate through them, each call will go to the next one
     switch (m_iEmitState)
     {
-        case EMITSTATE_FLAGSTATUS:
-            // we are using this just to illustrate a numeric property
-            chunkValue.SetIntValue(PKEY_FlagStatus, 1);
-            m_iEmitState++;
-            return S_OK;
+    case EMITSTATE_FLAGSTATUS:
+        // we are using this just to illustrate a numeric property
+        chunkValue.SetIntValue(PKEY_FlagStatus, 1);
+        m_iEmitState++;
+        return S_OK;
 
-        case EMITSTATE_ISREAD:
-            // we are using this just to illustrate a bool property
-            chunkValue.SetIntValue(PKEY_IsRead, true);
-            m_iEmitState++;
-            return S_OK;
+    case EMITSTATE_ISREAD:
+        // we are using this just to illustrate a bool property
+        chunkValue.SetIntValue(PKEY_IsRead, true);
+        m_iEmitState++;
+        return S_OK;
     }
 
     // if we get to here we are done with this document

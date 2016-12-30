@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -35,7 +35,7 @@ ShvUIClassFactory::~ShvUIClassFactory()
 {
     InterlockedDecrement(&g_cObjRefCount);
 }
-    
+
 STDMETHODIMP_(ULONG) ShvUIClassFactory::AddRef(void)
 {
     return InterlockedIncrement((PLONG)&m_cRef);
@@ -46,7 +46,7 @@ STDMETHODIMP_(ULONG) ShvUIClassFactory::Release(void)
     ULONG res = InterlockedDecrement((PLONG)&m_cRef);
     if (res == 0)
     {
-       delete this;
+        delete this;
     }
     return res;
 }
@@ -57,22 +57,22 @@ STDMETHODIMP ShvUIClassFactory::QueryInterface(REFIID riid, void** ppvObject)
     {
         *ppvObject = static_cast<IClassFactory*>(this);
     }
-    else 
+    else
     {
-       *ppvObject = NULL;
+        *ppvObject = NULL;
         return E_NOINTERFACE;
     }
-    
+
     reinterpret_cast<IUnknown *>(*ppvObject)->AddRef();
-    
+
     return S_OK;
 }
 
 
-STDMETHODIMP 
+STDMETHODIMP
 ShvUIClassFactory::CreateInstance(
-    IUnknown *pUnkOuter, 
-    REFIID riid, 
+    IUnknown *pUnkOuter,
+    REFIID riid,
     void **ppvObject)
 {
     HRESULT hr =S_OK;
@@ -99,10 +99,10 @@ ShvUIClassFactory::CreateInstance(
     pShvUI->Release();
 
     return hr;
-    
+
 }
 
-STDMETHODIMP 
+STDMETHODIMP
 ShvUIClassFactory::LockServer(
     BOOL fLock)
 {
@@ -115,7 +115,7 @@ ShvUIClassFactory::LockServer(
         InterlockedDecrement(&g_serverLock);
     }
 
-    return S_OK;    
+    return S_OK;
 }
 
 
@@ -134,15 +134,15 @@ BOOL ShvUIClassFactory::StartFactory()
     IClassFactory* pIFactory = new ShvUIClassFactory() ;
 
 
-	// Register the class factory.
+    // Register the class factory.
     DWORD dwRegister ;
 
     HRESULT hr = ::CoRegisterClassObject(
-	                  pFactoryData->m_pCLSID,
-	                  static_cast<IUnknown*>(pIFactory),
-	                  CLSCTX_LOCAL_SERVER,
-	                  REGCLS_MULTIPLEUSE,
-	                  &dwRegister) ;
+                     pFactoryData->m_pCLSID,
+                     static_cast<IUnknown*>(pIFactory),
+                     CLSCTX_LOCAL_SERVER,
+                     REGCLS_MULTIPLEUSE,
+                     &dwRegister) ;
     if (FAILED(hr))
     {
         pIFactory->Release() ;
@@ -176,12 +176,12 @@ void ShvUIClassFactory::StopFactory()
 
 HRESULT ShvUIClassFactory::Register()
 {
-	ShvUIRegisterServer() ;
-	return S_OK ;
-}   
-	
+    ShvUIRegisterServer() ;
+    return S_OK ;
+}
+
 HRESULT ShvUIClassFactory::Unregister()
 {
-	ShvUIUnRegisterServer() ;
-	return S_OK ;
+    ShvUIUnRegisterServer() ;
+    return S_OK ;
 }

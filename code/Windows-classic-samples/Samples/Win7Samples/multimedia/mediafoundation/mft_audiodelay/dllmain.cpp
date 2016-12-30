@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // dllmain.cpp : Implements DLL exports and COM class factory
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -40,11 +40,11 @@ ClassFactoryData g_ClassFactories[] =
 {
     {   &CLSID_DelayMFT, CDelayMFT::CreateInstance }
 };
-      
+
 const DWORD g_numClassFactories = ARRAY_SIZE(g_ClassFactories);
 
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  ul_reason_for_call, 
+BOOL APIENTRY DllMain( HANDLE hModule,
+                       DWORD  ul_reason_for_call,
                        LPVOID lpReserved
                      )
 {
@@ -78,7 +78,7 @@ STDAPI DllCanUnloadNow()
 STDAPI DllRegisterServer()
 {
     HRESULT hr;
-    
+
     // Register the MFT's CLSID as a COM object.
     hr = RegisterObject(g_hModule, CLSID_DelayMFT, g_sFriendlyName, TEXT("Both"));
 
@@ -91,16 +91,16 @@ STDAPI DllRegisterServer()
         };
 
         hr = MFTRegister(
-            CLSID_DelayMFT,             // CLSID
-            MFT_CATEGORY_AUDIO_EFFECT,  // Category
-            g_sFriendlyName, 
-            0, // Reserved
-            ARRAY_SIZE(tinfo),
-            tinfo,
-            ARRAY_SIZE(tinfo),
-            tinfo,
-            NULL
-            );
+                 CLSID_DelayMFT,             // CLSID
+                 MFT_CATEGORY_AUDIO_EFFECT,  // Category
+                 g_sFriendlyName,
+                 0, // Reserved
+                 ARRAY_SIZE(tinfo),
+                 tinfo,
+                 ARRAY_SIZE(tinfo),
+                 tinfo,
+                 NULL
+             );
 
     }
     return hr;

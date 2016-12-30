@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2006
 
@@ -45,7 +45,7 @@ __inline void SysFreeStringAndNull(__in_opt BSTR &t) throw()
     }                           \
 }
 
-typedef enum _START_STOP_OPTION 
+typedef enum _START_STOP_OPTION
 {
     StopSpinning,
     StartSpinning,
@@ -53,7 +53,7 @@ typedef enum _START_STOP_OPTION
     LoadMedia
 } START_STOP_OPTION, *PSTART_STOP_OPTION;
 
-typedef struct _SENSE_INFOMATION 
+typedef struct _SENSE_INFOMATION
 {
     UCHAR Sense;
     UCHAR Asc;
@@ -72,7 +72,8 @@ typedef VOID (*READ_DISC_INFO_CALLBACK)(__in PVOID object, __in SENSE_DATA* sens
 // NOTE: This class is only valid for tasks less than about
 //       49 days in length due to tick count overflow.
 //
-class CTaskTimeEstimator {
+class CTaskTimeEstimator
+{
 private:
     // BIG 3 -- Compiler auto-generates three functions if not provided,
     //          and marks them as public.  Avoid this, since this class
@@ -109,24 +110,24 @@ private:
     VOID  TestInvariants() const throw();
     VOID  UpdateTime() throw();
 
-    const ULONG   m_OriginalTotalMilliseconds; 
-          ULONG   m_ExpectedTotalMilliseconds; // auto-updates
-          ULONG   m_ElapsedMilliseconds;       // auto-updates
-          ULONG   m_StartTimeTickCount;
-          BOOLEAN m_TimerStarted;
-          BOOLEAN m_TimerEnded;
+    const ULONG   m_OriginalTotalMilliseconds;
+    ULONG   m_ExpectedTotalMilliseconds; // auto-updates
+    ULONG   m_ElapsedMilliseconds;       // auto-updates
+    ULONG   m_StartTimeTickCount;
+    BOOLEAN m_TimerStarted;
+    BOOLEAN m_TimerEnded;
 
     const ULONG   m_TotalSteps;
-          ULONG   m_PreviousCompletedSteps; // to find drives reporting in large "steps"
-          ULONG   m_CompletedSteps;
+    ULONG   m_PreviousCompletedSteps; // to find drives reporting in large "steps"
+    ULONG   m_CompletedSteps;
 
-          ULONG   m_NonZeroCompletedStepsCount;
-          ULONG   m_FirstNonZeroElapsedMilliseconds;
-          ULONG   m_FirstNonZeroCompletedSteps;
+    ULONG   m_NonZeroCompletedStepsCount;
+    ULONG   m_FirstNonZeroElapsedMilliseconds;
+    ULONG   m_FirstNonZeroCompletedSteps;
 
 
 #define TimeKeeperHistoryDepth 4
-          ULONG   m_NewEstimatesHistory[TimeKeeperHistoryDepth];
+    ULONG   m_NewEstimatesHistory[TimeKeeperHistoryDepth];
 
 };
 
@@ -137,7 +138,7 @@ public:
     CDiscInformation() throw();
     ~CDiscInformation() throw();
 
-private: 
+private:
     CDiscInformation(const CDiscInformation& x) throw(); // prevent copy constructor
     CDiscInformation& operator=(const CDiscInformation& x) throw(); // prevent assignment operator
 
@@ -164,16 +165,16 @@ HRESULT SendSetCDSpeed(__in IDiscRecorder2* discRecorder,
                        const IMAPI_MEDIA_PHYSICAL_TYPE mediaType,
                        const ULONG KBps,
                        const ULONG rotationType
-                       );
+                      );
 
 BOOLEAN BstrIsValidClientName(__in_xcount(SysStringLen(value)) BSTR value);
 
 HRESULT UpdateCurrentDriveProperties(__in IDiscRecorder2* discRecorder,
-                                     const IMAPI_MEDIA_PHYSICAL_TYPE mediaType, 
+                                     const IMAPI_MEDIA_PHYSICAL_TYPE mediaType,
                                      __out ULONG *currentSpeedSectorsPerSecond,
-                                     __out ULONG *currentSpeedKBps, 
+                                     __out ULONG *currentSpeedKBps,
                                      __out VARIANT_BOOL *currentRotationTypeIsPureCAV
-                                     );
+                                    );
 
 HRESULT WaitForReadDiscInfo(__in IDiscRecorder2Ex* recorder, const ULONG secondsToTry, __in_opt PVOID object = NULL, __in_opt __callback READ_DISC_INFO_CALLBACK callback = NULL);
 HRESULT ReadMediaCapacity(__in IDiscRecorder2Ex* recorder, __out ULONG* bytesPerBlock, __out ULONG* useSectors);
@@ -189,20 +190,20 @@ HRESULT GetMediaHeuristicallyBlank(__in IDiscRecorder2Ex* discRecorder,
                                    __out VARIANT_BOOL* pHeuristicallyBlank);
 BOOLEAN IsSenseDataInTable(__in_ecount(entries) PSENSE_INFOMATION table, const LONG entries, __in PSENSE_DATA senseData);
 const BOOLEAN TranslateSenseInfoToHResult(
-                                        __in_bcount(1)                  const CDB * Cdb,
-                                        __in_bcount(sizeof(SENSE_DATA)) const SENSE_DATA * Sense,
-                                        __out                           HRESULT * HResult
-                                        );
+    __in_bcount(1)                  const CDB * Cdb,
+    __in_bcount(sizeof(SENSE_DATA)) const SENSE_DATA * Sense,
+    __out                           HRESULT * HResult
+);
 HRESULT FuzzyConvert_KBps2SectorsPerSecond(const IMAPI_MEDIA_PHYSICAL_TYPE mediaType,
-                                           const ULONG writeSpeedKBps,
-                                           __out ULONG *writeSpeedSectorsPerSecond
-                                           );
+        const ULONG writeSpeedKBps,
+        __out ULONG *writeSpeedSectorsPerSecond
+                                          );
 
 const HRESULT CreateVariantSafeArrayFromEnums(
     __in_ecount(valueCount)   const LONG * values,
     __in                      const ULONG valueCount,
     __deref_out                     SAFEARRAY** result
-    );
+);
 
 __inline DWORD CountOfSetBits(__in ULONGLONG value) throw()
 {
@@ -225,13 +226,15 @@ __inline void SafeArrayDestroyAndNull(__in_opt LPSAFEARRAY &t ) throw()
 }
 
 // Inline helper functions
-__inline bool IS_CD_MEDIA(IMAPI_MEDIA_PHYSICAL_TYPE mediaType) {
+__inline bool IS_CD_MEDIA(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
+{
     return (((mediaType == IMAPI_MEDIA_TYPE_CDROM) ||
              (mediaType == IMAPI_MEDIA_TYPE_CDR) ||
              (mediaType == IMAPI_MEDIA_TYPE_CDRW)) ? true : false);
 }
 
-__inline bool IS_DVD_MEDIA(IMAPI_MEDIA_PHYSICAL_TYPE mediaType) {
+__inline bool IS_DVD_MEDIA(IMAPI_MEDIA_PHYSICAL_TYPE mediaType)
+{
     return (((mediaType == IMAPI_MEDIA_TYPE_DVDROM) ||
              (mediaType == IMAPI_MEDIA_TYPE_DVDDASHR) ||
              (mediaType == IMAPI_MEDIA_TYPE_DVDDASHRW) ||

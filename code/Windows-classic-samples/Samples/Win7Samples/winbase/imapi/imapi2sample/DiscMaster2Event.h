@@ -1,4 +1,4 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+﻿/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
 #pragma once
 #ifndef _IMAPI2TEST_DM2_EVENTS_
@@ -24,12 +24,12 @@ public:
 
     // This is the list of all interfaces supported by the object
     BEGIN_COM_MAP(CTestDiscMaster2Event)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
     BEGIN_SINK_MAP(CTestDiscMaster2Event)
-        SINK_ENTRY_EX(1, IID_DDiscMaster2Events, DISPID_DDISCMASTER2EVENTS_DEVICEADDED,   &NotifyDeviceAdded  )
-        SINK_ENTRY_EX(1, IID_DDiscMaster2Events, DISPID_DDISCMASTER2EVENTS_DEVICEREMOVED, &NotifyDeviceRemoved)
+    SINK_ENTRY_EX(1, IID_DDiscMaster2Events, DISPID_DDISCMASTER2EVENTS_DEVICEADDED,   &NotifyDeviceAdded  )
+    SINK_ENTRY_EX(1, IID_DDiscMaster2Events, DISPID_DDISCMASTER2EVENTS_DEVICEREMOVED, &NotifyDeviceRemoved)
     END_SINK_MAP()
 
 public: // DDiscMaster2Events

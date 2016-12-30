@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,13 +44,34 @@ public:
     void Shutdown();
     bool Start(RenderBuffer *RenderBufferQueue);
     void Stop();
-    WORD ChannelCount() { return _MixFormat->nChannels; }
-    UINT32 SamplesPerSecond() { return _MixFormat->nSamplesPerSec; }
-    UINT32 BytesPerSample() { return _MixFormat->wBitsPerSample / 8; }
-    RenderSampleType SampleType() { return _RenderSampleType; }
-    UINT32 FrameSize() { return _FrameSize; }
-    UINT32 BufferSize() { return _BufferSize; }
-    UINT32 BufferSizePerPeriod() { return _BufferSizePerPeriod; }
+    WORD ChannelCount()
+    {
+        return _MixFormat->nChannels;
+    }
+    UINT32 SamplesPerSecond()
+    {
+        return _MixFormat->nSamplesPerSec;
+    }
+    UINT32 BytesPerSample()
+    {
+        return _MixFormat->wBitsPerSample / 8;
+    }
+    RenderSampleType SampleType()
+    {
+        return _RenderSampleType;
+    }
+    UINT32 FrameSize()
+    {
+        return _FrameSize;
+    }
+    UINT32 BufferSize()
+    {
+        return _BufferSize;
+    }
+    UINT32 BufferSizePerPeriod()
+    {
+        return _BufferSizePerPeriod;
+    }
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 

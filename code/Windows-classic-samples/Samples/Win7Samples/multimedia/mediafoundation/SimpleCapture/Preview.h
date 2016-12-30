@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // preview.h : Preview helper class.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -17,7 +17,7 @@ class CPreview : public IMFPMediaPlayerCallback
 {
 public:
     static HRESULT CreateInstance(
-        HWND hVideo, 
+        HWND hVideo,
         CPreview **ppPlayer
     );
 
@@ -32,10 +32,13 @@ public:
     HRESULT       CloseDevice();
     HRESULT       UpdateVideo();
     HRESULT       CheckDeviceLost(DEV_BROADCAST_HDR *pHdr, BOOL *pbDeviceLost);
-    BOOL          HasVideo() const { return m_bHasVideo; }
+    BOOL          HasVideo() const
+    {
+        return m_bHasVideo;
+    }
 
 protected:
-    
+
     // Constructor is private. Use static CreateInstance method to instantiate.
     CPreview(HWND hVideo);
 
@@ -44,7 +47,7 @@ protected:
 
     // Event handlers
     void OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT *pEvent);
-    void OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT *pEvent); 
+    void OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT *pEvent);
 
 protected:
 
@@ -52,7 +55,7 @@ protected:
     IMFPMediaPlayer         *m_pPlayer;
     IMFMediaSource          *m_pSource;
     HWND                    m_hwnd;
-    BOOL                    m_bHasVideo;         
+    BOOL                    m_bHasVideo;
 
     WCHAR                   *m_pwszSymbolicLink;
     UINT32                  m_cchSymbolicLink;

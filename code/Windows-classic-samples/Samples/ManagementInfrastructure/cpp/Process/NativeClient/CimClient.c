@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -44,11 +44,11 @@ int __cdecl wmain(int argc, __in_ecount(argc) wchar_t* argv[])
     {
         /* Helper API to retrieve the user selection */
         selection = GetUserSelection(
-                    L"Do you want local operation, or remote machine?\n"
-                    L"\t[1] Local machine\n"
-                    L"\t[2] Remote machine\n"
-                    L"\t[0] Quit sample application\n",
-                    L"012");
+                        L"Do you want local operation, or remote machine?\n"
+                        L"\t[1] Local machine\n"
+                        L"\t[2] Remote machine\n"
+                        L"\t[0] Quit sample application\n",
+                        L"012");
         if (selection != L'0')
         {
             if (selection == L'2')
@@ -65,11 +65,11 @@ int __cdecl wmain(int argc, __in_ecount(argc) wchar_t* argv[])
 
             /* Override default protocol, where local is WMI DCOM and remote is WS-Man */
             protocolSelection = GetUserSelection(
-                        L"Do you want to override the default protocol?\n"
-                        L"\t[1] Override with WMI DCOM\n"
-                        L"\t[2] Override with WS-Management\n"
-                        L"\t[0] Use default\n",
-                        L"012");
+                                    L"Do you want to override the default protocol?\n"
+                                    L"\t[1] Override with WMI DCOM\n"
+                                    L"\t[2] Override with WS-Management\n"
+                                    L"\t[0] Use default\n",
+                                    L"012");
             if (protocolSelection == L'1')
             {
                 protocol = L"WMIDCOM";
@@ -88,7 +88,7 @@ int __cdecl wmain(int argc, __in_ecount(argc) wchar_t* argv[])
             /* Retrieve the namespace that all operations will be run against.  */
             GetUserInputString(L"Enter CIM namespace", namespaceName, sizeof(namespaceName)/sizeof(namespaceName[0]), L"root/standardcimv2/samples");
 
-            /* Retrieve the class name that all operations will be run on.  Note that a couple 
+            /* Retrieve the class name that all operations will be run on.  Note that a couple
              * of operations will not actually use this, namely enumerations and subscriptions.
              */
             GetUserInputString(L"Enter CIM class name", className, sizeof(className)/sizeof(className[0]), L"MSFT_WindowsProcess");
@@ -97,14 +97,15 @@ int __cdecl wmain(int argc, __in_ecount(argc) wchar_t* argv[])
             Do_Operation(&miApplication, machineName, protocol, namespaceName, className);
         }
 
-    } while (selection != L'0');
+    }
+    while (selection != L'0');
 
     /* MI_Application_Close() will block until all operations and sessions are fully closed.
      */
     miResult = MI_Application_Close(&miApplication);
     if (miResult != MI_RESULT_OK)
     {
-        /* Most common failures are invalid parameter or out of memory.  
+        /* Most common failures are invalid parameter or out of memory.
          * Invalid parameter is likely to be a programming error.
          * Out of memory (unlikely, but possible) will cause things to be shut down as best
          * it can be.  The API should not be called again in this case though.

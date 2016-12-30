@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -14,7 +14,7 @@ Copyright (c) Microsoft Corporation. All rights reserved.
 
 /*++
 
-    CBitmapWnd is an MDI child window that displays a bitmap using GDI+. 
+    CBitmapWnd is an MDI child window that displays a bitmap using GDI+.
     It is descended from IUnknown for reference counting.
 
 Methods
@@ -64,8 +64,8 @@ private:
 
 /*++
 
-    CGdiplusInit is a wrapper class that automatically initializes and 
-    shuts down the GDI+ library. GDI+ initialization is necessary for 
+    CGdiplusInit is a wrapper class that automatically initializes and
+    shuts down the GDI+ library. GDI+ initialization is necessary for
     any program that uses GDI+ functions.
 
 Methods
@@ -94,10 +94,10 @@ public:
         );
 
         StartupStatus = Gdiplus::GdiplusStartup(
-            &Token, 
-            &StartupInput, 
-            this
-        );
+                            &Token,
+                            &StartupInput,
+                            this
+                        );
     }
 
     ~CGdiplusInit()

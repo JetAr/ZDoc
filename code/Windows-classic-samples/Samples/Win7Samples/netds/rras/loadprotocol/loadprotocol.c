@@ -1,10 +1,10 @@
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
+﻿/******************************************************************************\
+*       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1993 - 2000 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
+*       All rights reserved.
+*       This source code is only intended as a supplement to
 *       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
+*       See these sources for detailed information regarding the
 *       Microsoft samples programs.
 \******************************************************************************/
 
@@ -37,7 +37,7 @@ HRESULT AddProtocolToServer(LPCWSTR pswzServerName)
     LPVOID        pNewHeader = NULL;
     DWORD       dwSize = 0;
     HANDLE      hTransport = NULL;
-    
+
 
     // Connect to the server
     // ----------------------------------------------------------------
@@ -84,7 +84,7 @@ HRESULT AddProtocolToServer(LPCWSTR pswzServerName)
                                   NULL,
                                   NULL,
                                   NULL);
-        
+
         // Call MprInfoDuplicate to create a duplicate of
         // the infoblock
         // ------------------------------------------------------------
@@ -106,7 +106,7 @@ HRESULT AddProtocolToServer(LPCWSTR pswzServerName)
         pNewHeader = NULL;
     }
 
-    // Add protocol to the infoblock here!    
+    // Add protocol to the infoblock here!
     MprInfoBlockAdd(pHeader,
                     YOUR_PROTOCOL_ID,
                     YOUR_PROTOCOL_BLOCK_SIZE,
@@ -115,22 +115,22 @@ HRESULT AddProtocolToServer(LPCWSTR pswzServerName)
                     &pNewHeader);
     MprInfoDelete(pHeader);
     pHeader = NULL;
-        
-    
+
+
     if (hMprServer)
     {
-        
-        MprAdminTransportSetInfo(hMprServer, 
-                                 PID_IP, 
-                                 (BYTE*)pNewHeader, 
+
+        MprAdminTransportSetInfo(hMprServer,
+                                 PID_IP,
+                                 (BYTE*)pNewHeader,
                                  MprInfoBlockQuerySize(pNewHeader),
                                  NULL,
                                  0);
     }
-    
+
     if (hMprConfig && hTransport)
     {
-        
+
         MprConfigTransportSetInfo(hMprConfig,
                                   hTransport,
                                   (BYTE*)pNewHeader,
@@ -143,13 +143,13 @@ HRESULT AddProtocolToServer(LPCWSTR pswzServerName)
 
     if (pHeader)
         MprInfoDelete(pHeader);
-    
+
     if (pNewHeader)
         MprInfoDelete(pNewHeader);
-    
+
     if (hMprConfig)
         MprConfigServerDisconnect(hMprConfig);
-        
+
     if (hMprServer)
         MprAdminServerDisconnect(hMprServer);
 

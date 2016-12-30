@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -128,8 +128,8 @@ HRESULT DataObj_CopyHIDA(IDataObject *pdtobj, CIDA **ppida)
 
 class __declspec(uuid("4f0ecd66-5b4d-4821-a73b-aaa64023e19c"))
     CDropTargetVerb : public IDropTarget,
-                      public IObjectWithSite,
-                      CAppMessageLoop
+    public IObjectWithSite,
+    CAppMessageLoop
 {
 public:
     CDropTargetVerb() : _cRef(1), _pdtobj(NULL), _punkSite(NULL)
@@ -369,9 +369,9 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, PWSTR pszCmdLine, int)
                     if (SUCCEEDED(hr))
                     {
                         MessageBox(NULL,
-                            L"Installed DropTarget Verb Sample for .txt files\n\n"
-                            L"right click on a .txt file and choose 'DropTarget Verb Sample' to see this in action",
-                            c_szVerbDisplayName, MB_OK);
+                                   L"Installed DropTarget Verb Sample for .txt files\n\n"
+                                   L"right click on a .txt file and choose 'DropTarget Verb Sample' to see this in action",
+                                   c_szVerbDisplayName, MB_OK);
                     }
                 }
             }

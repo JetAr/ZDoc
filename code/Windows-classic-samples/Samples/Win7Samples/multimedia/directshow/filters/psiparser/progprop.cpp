@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: ProgProp.cpp
 //
 // Desc: DirectShow sample code - implementation of property page class
@@ -47,20 +47,20 @@ CUnknown * WINAPI CProgramProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *p
 // Constructor
 //
 CProgramProperties::CProgramProperties(LPUNKNOWN pUnk, HRESULT *phr)
-: CBasePropertyPage(NAME("Program Property Page"), pUnk,IDD_PROGDIALOG, IDS_TITLE)
-, m_pProgram(NULL)
-, m_stream_id(0)
-, m_pat_version(0)
-, m_mappedAudPid(0)
-, m_mappedVidPid(0)
-, m_bAvStreaming(FALSE)
-, m_pDemux(NULL)
-, m_pGraphBuilder(NULL)
-, m_pMediaControl(NULL)
-, m_pVideoOutPin(NULL)
-, m_pAudioOutPin(NULL)
-, m_pIVideoPIDMap(NULL)
-, m_pIAudioPIDMap(NULL)
+    : CBasePropertyPage(NAME("Program Property Page"), pUnk,IDD_PROGDIALOG, IDS_TITLE)
+    , m_pProgram(NULL)
+    , m_stream_id(0)
+    , m_pat_version(0)
+    , m_mappedAudPid(0)
+    , m_mappedVidPid(0)
+    , m_bAvStreaming(FALSE)
+    , m_pDemux(NULL)
+    , m_pGraphBuilder(NULL)
+    , m_pMediaControl(NULL)
+    , m_pVideoOutPin(NULL)
+    , m_pAudioOutPin(NULL)
+    , m_pIVideoPIDMap(NULL)
+    , m_pIAudioPIDMap(NULL)
 {
 
 } // (Constructor)
@@ -150,7 +150,7 @@ BOOL CProgramProperties::AddListViewItems()
     INT dIndex;
     TCHAR sz[MAX_LEN];
 
-    for(int i = m_number_of_programs-1; i>=0;i--)
+    for(int i = m_number_of_programs-1; i>=0; i--)
     {
 
         WORD wProgramNumber;
@@ -188,7 +188,7 @@ BOOL CProgramProperties::SetEsListColumns()
     LV_COLUMN   lvColumn;
     int         i;
     TCHAR       szString[NUM_OF_ES_SUBITEM_COLUMN+1][MAX_LEN] =
-                    {TEXT("PID"), TEXT("Stream Type"),TEXT("Contents") };
+    {TEXT("PID"), TEXT("Stream Type"),TEXT("Contents") };
 
     //empty the list
     ListView_DeleteAllItems(m_hwndEsList);
@@ -229,7 +229,7 @@ BOOL CProgramProperties::AddEsListViewItems( WORD program_number)
 
     m_pProgram->GetCountOfElementaryStreams(program_number, &wCountOfESs);
 
-    for(int i = wCountOfESs-1; i>=0;i--)
+    for(int i = wCountOfESs-1; i>=0; i--)
     {
         WORD wPid;
         BYTE bType;
@@ -280,9 +280,11 @@ BOOL CProgramProperties::OnRefreshProgram()
         return FALSE;
 
 
-    if(m_pDemux != NULL && m_pGraphBuilder != NULL){
+    if(m_pDemux != NULL && m_pGraphBuilder != NULL)
+    {
 
-            if(m_number_of_programs != 0){
+        if(m_number_of_programs != 0)
+        {
             PopulateTransportStreamInfo();
             SetListColumns();
             AddListViewItems();
@@ -299,7 +301,8 @@ BOOL CProgramProperties::OnUpdate()
 {
 
     // if there is no streaming, the following variables will not be initialized.
-    if(m_pDemux != NULL && m_pGraphBuilder != NULL){
+    if(m_pDemux != NULL && m_pGraphBuilder != NULL)
+    {
         // Get the initial Program value
         m_pProgram->GetTransportStreamId( &m_stream_id);
         m_pProgram->GetPatVersionNumber( &m_pat_version);
@@ -314,115 +317,117 @@ BOOL CProgramProperties::OnUpdate()
 // Virtual method called by base class with Window messages
 //
 INT_PTR CProgramProperties::OnReceiveMessage(HWND hwnd,
-                                           UINT uMsg,
-                                           WPARAM wParam,
-                                           LPARAM lParam)
+        UINT uMsg,
+        WPARAM wParam,
+        LPARAM lParam)
 {
     switch(uMsg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
+    {
+        m_hwndDialog = hwnd;
+        PopulateTransportStreamInfo( );
+
+        m_hwndProgList = GetDlgItem (hwnd, IDC_PROGLIST) ;
+        ASSERT(m_hwndProgList);
+
+        m_hwndEsList = GetDlgItem (hwnd, IDC_ES_LIST) ;
+        ASSERT(m_hwndEsList);
+
+        // populate program list
+        SetListColumns();
+        AddListViewItems();
+
+        // set elementary stream list
+        SetEsListColumns();
+
+        return TRUE;
+    }
+
+    case WM_DESTROY:
+    {
+        DestroyWindow(m_hwndDialog);
+        return TRUE;
+    }
+
+    case WM_COMMAND:
+    {
+
+        switch (LOWORD (wParam))
         {
-            m_hwndDialog = hwnd;
-            PopulateTransportStreamInfo( );
 
-            m_hwndProgList = GetDlgItem (hwnd, IDC_PROGLIST) ;
-            ASSERT(m_hwndProgList);
+        case IDC_VIEWBUTTON :
+            OnViewProgram () ;
+            m_bAvStreaming = TRUE;
+            break ;
 
-            m_hwndEsList = GetDlgItem (hwnd, IDC_ES_LIST) ;
-            ASSERT(m_hwndEsList);
+        case IDC_REFRESHBUTTON :
+            OnRefreshProgram () ;
+            break ;
 
-            // populate program list
-            SetListColumns();
-            AddListViewItems();
-
-            // set elementary stream list
-            SetEsListColumns();
-
-            return TRUE;
-        }
-
-        case WM_DESTROY:
-        {
-            DestroyWindow(m_hwndDialog);
-            return TRUE;
-        }
-
-        case WM_COMMAND:
-        {
-
-            switch (LOWORD (wParam)) {
-
-                case IDC_VIEWBUTTON :
-                    OnViewProgram () ;
-                    m_bAvStreaming = TRUE;
-                    break ;
-
-                case IDC_REFRESHBUTTON :
-                    OnRefreshProgram () ;
-                    break ;
-
-                case IDC_STOPBUTTON :
-                    if(m_bAvStreaming == TRUE){
-                        UnmapAvPIDs();
-                        m_bAvStreaming = FALSE;
-                    }
-                    break ;
-            };
-            return TRUE;
-        }
-
-        case WM_NOTIFY:
-        {
-            switch (wParam)
+        case IDC_STOPBUTTON :
+            if(m_bAvStreaming == TRUE)
             {
-                 case IDC_PROGLIST:
+                UnmapAvPIDs();
+                m_bAvStreaming = FALSE;
+            }
+            break ;
+        };
+        return TRUE;
+    }
 
-                    LPNM_LISTVIEW   pnlv = (LPNM_LISTVIEW)lParam;
-                    BOOL itemSelected = FALSE;
-                    WORD program_number;
-                    UINT ii;
+    case WM_NOTIFY:
+    {
+        switch (wParam)
+        {
+        case IDC_PROGLIST:
 
-                    switch (pnlv->hdr.code)
-                    {
-                        case NM_CLICK:
+            LPNM_LISTVIEW   pnlv = (LPNM_LISTVIEW)lParam;
+            BOOL itemSelected = FALSE;
+            WORD program_number;
+            UINT ii;
 
-                            ii = ListView_GetItemCount(m_hwndProgList);
-                            for(; ii; ii--)
-                            {
-                                if(0!= ListView_GetItemState(
-                                        m_hwndProgList,
-                                        ii-1,
-                                        LVIS_SELECTED))
-                                break;
-                            }
+            switch (pnlv->hdr.code)
+            {
+            case NM_CLICK:
+
+                ii = ListView_GetItemCount(m_hwndProgList);
+                for(; ii; ii--)
+                {
+                    if(0!= ListView_GetItemState(
+                                m_hwndProgList,
+                                ii-1,
+                                LVIS_SELECTED))
+                        break;
+                }
 
 
-                            TCHAR szTmp[MAX_LEN];
-                            ListView_GetItemText( m_hwndProgList,
-                                                  ii-1,
-                                                  0, // first column
-                                                  szTmp,
-                                                  MAX_LEN);
-                            program_number = (WORD) _wtoi(szTmp);
-                            Dump1(TEXT("selected program number = %s\n"), szTmp);
-                            Dump1(TEXT("selected program number = %#x\n"), program_number);
+                TCHAR szTmp[MAX_LEN];
+                ListView_GetItemText( m_hwndProgList,
+                                      ii-1,
+                                      0, // first column
+                                      szTmp,
+                                      MAX_LEN);
+                program_number = (WORD) _wtoi(szTmp);
+                Dump1(TEXT("selected program number = %s\n"), szTmp);
+                Dump1(TEXT("selected program number = %#x\n"), program_number);
 
-                            SetEsListColumns();
-                            AddEsListViewItems( program_number);
+                SetEsListColumns();
+                AddEsListViewItems( program_number);
 
-                            break;
+                break;
 
-                        default:
-                            break;
-                    }
+            default:
+                break;
+            }
 
-                    return TRUE;
+            return TRUE;
 
-            } // end switch (wParam)
-        }
+        } // end switch (wParam)
+    }
 
-        default:
-            return FALSE;
+    default:
+        return FALSE;
     }
 
     return TRUE;
@@ -436,11 +441,13 @@ BOOL CProgramProperties::OnViewProgram ()
 {
     WORD audPid;
     WORD vidPid;
-    if(!GetSelectedPids(&audPid, &vidPid)){
+    if(!GetSelectedPids(&audPid, &vidPid))
+    {
         return FALSE;
     }
 
-    if(audPid == 0 || vidPid == 0){
+    if(audPid == 0 || vidPid == 0)
+    {
         MBOX(TEXT("PIDs of the selected program are not valid!"));
         return FALSE;
     }
@@ -448,24 +455,30 @@ BOOL CProgramProperties::OnViewProgram ()
     // if no aud or vid output pins of demux exist, create, map and render them
     if(!AvPinsExisted())
     {
-        if(!CreateAndRenderAvOutPins()){
+        if(!CreateAndRenderAvOutPins())
+        {
             return FALSE;
         }
 
         m_mappedAudPid = audPid;
         m_mappedVidPid = vidPid;
 
-        if(MapAvPIDs()){
+        if(MapAvPIDs())
+        {
             m_pMediaControl->Run();
         }
-        else{
+        else
+        {
             return FALSE;
         }
     }
-    else{
-        if(PidsChanged(audPid, vidPid)){
+    else
+    {
+        if(PidsChanged(audPid, vidPid))
+        {
             // AV pins have been unmapped if "stop view" button was clicked
-            if(m_bAvStreaming == TRUE){
+            if(m_bAvStreaming == TRUE)
+            {
                 if(!UnmapAvPIDs())
                     return FALSE;
             }
@@ -473,7 +486,8 @@ BOOL CProgramProperties::OnViewProgram ()
             m_mappedAudPid = audPid;
             m_mappedVidPid = vidPid;
 
-            if(MapAvPIDs()){
+            if(MapAvPIDs())
+            {
                 m_pMediaControl->Run();
             }
             else
@@ -713,7 +727,8 @@ HRESULT CProgramProperties::OnConnect(IUnknown *pUnknown)
     pGraph->Release();
 
     // if there is no streaming, the following variables will not be initialized.
-    if(m_pDemux != NULL && m_pGraphBuilder != NULL){
+    if(m_pDemux != NULL && m_pGraphBuilder != NULL)
+    {
         hr = m_pGraphBuilder->QueryInterface(IID_IMediaControl, (void **) & m_pMediaControl);
         RETURN_FALSE_IF_FAILED( TEXT(" CProgramProperties::OnUpdate():Failed to QI IMediaControl. %X"), hr);
 
@@ -791,72 +806,72 @@ void CProgramProperties::GetStreamTypeDescription(BYTE stream_type, TCHAR* sz, s
     HRESULT hr;
     switch(stream_type)
     {
-        case 0x00:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T|ISO/IEC reserved"));
-            break;
+    case 0x00:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T|ISO/IEC reserved"));
+        break;
 
-        case 0x01:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 11172-2 Video"));
-            break;
+    case 0x01:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 11172-2 Video"));
+        break;
 
-        case 0x02:
-            hr = StringCchPrintf(sz, len, TEXT("ISO/IEC 13818-2 Video or ISO/IEC 11172-2 constrained parameter video stream"));
-            break;
+    case 0x02:
+        hr = StringCchPrintf(sz, len, TEXT("ISO/IEC 13818-2 Video or ISO/IEC 11172-2 constrained parameter video stream"));
+        break;
 
-        case 0x03:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 11172-3 Audio"));
-            break;
+    case 0x03:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 11172-3 Audio"));
+        break;
 
-        case 0x04:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-3 Audio"));
-            break;
+    case 0x04:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-3 Audio"));
+        break;
 
-        case 0x05:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T Rec. H.222.0|ISO/IEC 13818-1 private_sections"));
-            break;
+    case 0x05:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T Rec. H.222.0|ISO/IEC 13818-1 private_sections"));
+        break;
 
-        case 0x06:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T Rec. H.222.0|ISO/IEC 13818-1 PES packets containing private data"));
-            break;
+    case 0x06:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T Rec. H.222.0|ISO/IEC 13818-1 PES packets containing private data"));
+        break;
 
-        case 0x07:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13522 MHEG"));
-            break;
+    case 0x07:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13522 MHEG"));
+        break;
 
-        case 0x08:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("Annex A-DSM CC"));
-            break;
+    case 0x08:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("Annex A-DSM CC"));
+        break;
 
-        case 0x09:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T Rec. H.222.1"));
-            break;
+    case 0x09:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T Rec. H.222.1"));
+        break;
 
-        case 0x0A:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-6 type A"));
-            break;
+    case 0x0A:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-6 type A"));
+        break;
 
-        case 0x0B:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-6 type B"));
-            break;
+    case 0x0B:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-6 type B"));
+        break;
 
-        case 0x0C:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-6 type C"));
-            break;
+    case 0x0C:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-6 type C"));
+        break;
 
-        case 0x0D:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-6 type D"));
-            break;
+    case 0x0D:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-6 type D"));
+        break;
 
-        case 0x0E:
-            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-1 auxiliary"));
-            break;
+    case 0x0E:
+        hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ISO/IEC 13818-1 auxiliary"));
+        break;
 
-        default:
+    default:
 
-            if((stream_type >= 0x0F && stream_type <= 0x7F) )
-                hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T Rec. H.222.0|ISO/IEC 13818-1 reserved"));
-            else if(stream_type >= 0x80 && stream_type <= 0xFF)
-                hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("User private"));
+        if((stream_type >= 0x0F && stream_type <= 0x7F) )
+            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("ITU-T Rec. H.222.0|ISO/IEC 13818-1 reserved"));
+        else if(stream_type >= 0x80 && stream_type <= 0xFF)
+            hr = StringCchPrintf(sz, len, TEXT("%s"), TEXT("User private"));
     }
 
     return;

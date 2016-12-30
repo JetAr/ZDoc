@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+﻿/*----------------------------------------------------------------------------
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -184,11 +184,11 @@ WCHAR GetUserInput()
     INPUT_RECORD sInputRecord;
     DWORD        dwInputEvents;
 
-    ReadConsoleInput(hStdIn,&sInputRecord,1 ,&dwInputEvents);
+    ReadConsoleInput(hStdIn,&sInputRecord,1,&dwInputEvents);
     while (!((sInputRecord.EventType == KEY_EVENT) && (sInputRecord.Event.KeyEvent.bKeyDown)))
     {
         FlushConsoleInputBuffer(hStdIn);
-        ReadConsoleInput(hStdIn,&sInputRecord,1 ,&dwInputEvents);
+        ReadConsoleInput(hStdIn,&sInputRecord,1,&dwInputEvents);
     }
 
     return sInputRecord.Event.KeyEvent.uChar.UnicodeChar;

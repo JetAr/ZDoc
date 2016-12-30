@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -213,9 +213,9 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 //      lpCmdLine       command line for the application, null-terminated string
 //      nCmdShow        how to show the window
 int APIENTRY wWinMain(HINSTANCE hInstance,
-                     HINSTANCE /* hPrevInstance */,
-                     LPWSTR    /* lpCmdLine */,
-                     int       nCmdShow)
+                      HINSTANCE /* hPrevInstance */,
+                      LPWSTR    /* lpCmdLine */,
+                      int       nCmdShow)
 {
     MSG msg;
 
@@ -294,7 +294,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     // Create the application window
     hWnd = CreateWindow(g_wszWindowClass, g_wszTitle, WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
     if (!hWnd)
     {
         return FALSE;
@@ -336,91 +336,91 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
-        case WM_COMMAND:
-            wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-                case IDM_EXIT:
-                    DestroyWindow(hWnd);
-                    break;
-                default:
-                    return DefWindowProc(hWnd, message, wParam, lParam);
-            }
+    case WM_COMMAND:
+        wmId = LOWORD(wParam);
+        // Parse the menu selections:
+        switch (wmId)
+        {
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
             break;
-
-        case WM_PAINT:
-            hdc = BeginPaint(hWnd, &ps);
-            // Full redraw: draw complete collection of finished strokes and
-            // also all the strokes that are currently in drawing.
-            g_StrkColFinished.Draw(hdc);
-            g_StrkColDrawing.Draw(hdc);
-            EndPaint(hWnd, &ps);
-            break;
-
-        // WM_TOUCH message handlers
-        case WM_TOUCH:
-            {
-                // WM_TOUCH message can contain several messages from different contacts
-                // packed together.
-                // Message parameters need to be decoded:
-                unsigned int numInputs = (unsigned int) wParam; // Number of actual per-contact messages
-                TOUCHINPUT* ti = new TOUCHINPUT[numInputs]; // Allocate the storage for the parameters of the per-contact messages
-                if (ti == NULL)
-                {
-                    break;
-                }
-                // Unpack message parameters into the array of TOUCHINPUT structures, each
-                // representing a message for one single contact.
-                if (GetTouchInputInfo((HTOUCHINPUT)lParam, numInputs, ti, sizeof(TOUCHINPUT)))
-                {
-                    // For each contact, dispatch the message to the appropriate message
-                    // handler.
-                    for (unsigned int i = 0; i < numInputs; ++i)
-                    {
-                        if (ti[i].dwFlags & TOUCHEVENTF_DOWN)
-                        {
-                            OnTouchDownHandler(hWnd, ti[i]);
-                        }
-                        else if (ti[i].dwFlags & TOUCHEVENTF_MOVE)
-                        {
-                            OnTouchMoveHandler(hWnd, ti[i]);
-                        }
-                        else if (ti[i].dwFlags & TOUCHEVENTF_UP)
-                        {
-                            OnTouchUpHandler(hWnd, ti[i]);
-                        }
-                    }
-                }
-                CloseTouchInputHandle((HTOUCHINPUT)lParam);
-                delete [] ti;
-            }
-            break;
-
-        case WM_DESTROY:
-            // Clean up of application data: unregister window for multi-touch.
-            if (!UnregisterTouchWindow(hWnd))
-            {
-                MessageBox(NULL, L"Cannot unregister application window for touch input", L"Error", MB_OK);
-            }
-            ASSERT(!IsTouchWindow(hWnd, NULL));
-            // Destroy all the strokes
-            {
-                int i;
-                for (i = 0; i < g_StrkColDrawing.Count(); ++i)
-                {
-                    delete g_StrkColDrawing[i];
-                }
-                for (i = 0; i < g_StrkColFinished.Count(); ++i)
-                {
-                    delete g_StrkColFinished[i];
-                }
-            }
-            PostQuitMessage(0);
-            break;
-
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
+        }
+        break;
+
+    case WM_PAINT:
+        hdc = BeginPaint(hWnd, &ps);
+        // Full redraw: draw complete collection of finished strokes and
+        // also all the strokes that are currently in drawing.
+        g_StrkColFinished.Draw(hdc);
+        g_StrkColDrawing.Draw(hdc);
+        EndPaint(hWnd, &ps);
+        break;
+
+    // WM_TOUCH message handlers
+    case WM_TOUCH:
+    {
+        // WM_TOUCH message can contain several messages from different contacts
+        // packed together.
+        // Message parameters need to be decoded:
+        unsigned int numInputs = (unsigned int) wParam; // Number of actual per-contact messages
+        TOUCHINPUT* ti = new TOUCHINPUT[numInputs]; // Allocate the storage for the parameters of the per-contact messages
+        if (ti == NULL)
+        {
+            break;
+        }
+        // Unpack message parameters into the array of TOUCHINPUT structures, each
+        // representing a message for one single contact.
+        if (GetTouchInputInfo((HTOUCHINPUT)lParam, numInputs, ti, sizeof(TOUCHINPUT)))
+        {
+            // For each contact, dispatch the message to the appropriate message
+            // handler.
+            for (unsigned int i = 0; i < numInputs; ++i)
+            {
+                if (ti[i].dwFlags & TOUCHEVENTF_DOWN)
+                {
+                    OnTouchDownHandler(hWnd, ti[i]);
+                }
+                else if (ti[i].dwFlags & TOUCHEVENTF_MOVE)
+                {
+                    OnTouchMoveHandler(hWnd, ti[i]);
+                }
+                else if (ti[i].dwFlags & TOUCHEVENTF_UP)
+                {
+                    OnTouchUpHandler(hWnd, ti[i]);
+                }
+            }
+        }
+        CloseTouchInputHandle((HTOUCHINPUT)lParam);
+        delete [] ti;
+    }
+    break;
+
+    case WM_DESTROY:
+        // Clean up of application data: unregister window for multi-touch.
+        if (!UnregisterTouchWindow(hWnd))
+        {
+            MessageBox(NULL, L"Cannot unregister application window for touch input", L"Error", MB_OK);
+        }
+        ASSERT(!IsTouchWindow(hWnd, NULL));
+        // Destroy all the strokes
+        {
+            int i;
+            for (i = 0; i < g_StrkColDrawing.Count(); ++i)
+            {
+                delete g_StrkColDrawing[i];
+            }
+            for (i = 0; i < g_StrkColFinished.Count(); ++i)
+            {
+                delete g_StrkColFinished[i];
+            }
+        }
+        PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
 }

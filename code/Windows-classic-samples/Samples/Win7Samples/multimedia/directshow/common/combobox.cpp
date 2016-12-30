@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: ComboBox.cpp
 // Desc: ComboBox control class
 //
@@ -58,7 +58,7 @@ BOOL ComboBox::AddString(LPCTSTR sItem, DWORD_PTR pData)
         return SetItemData((int)result, pData);
     }
 }
-    
+
 
 //-----------------------------------------------------------------------------
 // Name: InsertString
@@ -202,7 +202,7 @@ UINT ComboBox::Count()
 // Description: Clears the combo box list.
 //
 // Note: If the combo box items have user data associated with them, the
-//       application must release the free the memory for the user data before 
+//       application must release the free the memory for the user data before
 //       calling this method.
 //-----------------------------------------------------------------------------
 
@@ -223,21 +223,21 @@ void ComboBox::ClearItems()
 BOOL ComboBox::SetItemData(int nIndex, DWORD_PTR pData)
 {
     LRESULT result = SendMessage(CB_SETITEMDATA, nIndex, (LPARAM) pData);
-	if (result == CB_ERR)
-	{
-		return FALSE;
-	}
-	else
-	{
-		return TRUE;
-	}
+    if (result == CB_ERR)
+    {
+        return FALSE;
+    }
+    else
+    {
+        return TRUE;
+    }
 }
 
 
 //-----------------------------------------------------------------------------
 // Name: GetItemData
 // Description: Gets the user data for an item in the combo box.
-// 
+//
 // nIndex: Index of the combo box item.
 // pData: Receives a pointer to the data.
 //-----------------------------------------------------------------------------
@@ -245,16 +245,16 @@ BOOL ComboBox::SetItemData(int nIndex, DWORD_PTR pData)
 BOOL ComboBox::GetItemData(int nIndex, DWORD_PTR *ppData)
 {
 
-	LRESULT result = SendMessage(CB_GETITEMDATA, nIndex, 0);
-	if (result == CB_ERR)
-	{
-		return FALSE;
-	}
-	else
-	{
-		*ppData = (DWORD_PTR)result;
-		return TRUE;
-	}
+    LRESULT result = SendMessage(CB_GETITEMDATA, nIndex, 0);
+    if (result == CB_ERR)
+    {
+        return FALSE;
+    }
+    else
+    {
+        *ppData = (DWORD_PTR)result;
+        return TRUE;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -264,11 +264,11 @@ BOOL ComboBox::GetItemData(int nIndex, DWORD_PTR *ppData)
 
 BOOL ComboBox::GetCurrentSelectionItemData(DWORD_PTR *pData)
 {
-	int selection;
-	BOOL bResult = GetCurrentSelection(&selection);
-	if (bResult)
-	{
-		bResult = GetItemData(selection, pData);
-	}
-	return bResult;
+    int selection;
+    BOOL bResult = GetCurrentSelection(&selection);
+    if (bResult)
+    {
+        bResult = GetItemData(selection, pData);
+    }
+    return bResult;
 }

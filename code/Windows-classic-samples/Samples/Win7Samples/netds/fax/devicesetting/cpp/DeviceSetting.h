@@ -1,4 +1,4 @@
-#ifndef __COM_DEVICESETTING_SAMPLE
+﻿#ifndef __COM_DEVICESETTING_SAMPLE
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,40 +25,40 @@ class CAppUtilDlg : public CDialog
 {
 // Construction
 public:
-	void set_UtilityType(int UtilityType);
-	void set_Catalog(ICOMAdminCatalog* pCatalog);
-	CAppUtilDlg(CWnd* pParent = NULL);   // standard constructor
+    void set_UtilityType(int UtilityType);
+    void set_Catalog(ICOMAdminCatalog* pCatalog);
+    CAppUtilDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(CAppUtilDlg)
-	enum { IDD = IDD_APP_UTILITY };
-	CEdit	m_edtApp;
-	//}}AFX_DATA
+    //{{AFX_DATA(CAppUtilDlg)
+    enum { IDD = IDD_APP_UTILITY };
+    CEdit	m_edtApp;
+    //}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAppUtilDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CAppUtilDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
-	HICON m_hIcon;
+    HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CAppUtilDlg)
-	afx_msg void OnClose();
-	virtual BOOL OnInitDialog();
-	virtual void OnOK();
-	afx_msg void OnAppSearch();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(CAppUtilDlg)
+    afx_msg void OnClose();
+    virtual BOOL OnInitDialog();
+    virtual void OnOK();
+    afx_msg void OnAppSearch();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 private:
-	void ReleaseCatalog();
-	int			m_nUtilityType;
-	ICOMAdminCatalog*	m_pCatalog;
+    void ReleaseCatalog();
+    int			m_nUtilityType;
+    ICOMAdminCatalog*	m_pCatalog;
 };
 
 //{{AFX_INSERT_LOCATION}}

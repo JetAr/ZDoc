@@ -1,9 +1,9 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
 // Copyright (C) 1995-2000 Microsoft Corporation
 //
-// @doc 
+// @doc
 //
 // @module TEMPLATE_MTS.CPP | Template source file for all test modules running under MTS.
 //
@@ -34,9 +34,9 @@ DECLARE_MODULE_VERSION(795921705);
 //
 BOOL ModuleInit(CThisTestModule * pThisTestModule)
 {
-	return TRUE;
-}	
-  
+    return TRUE;
+}
+
 //--------------------------------------------------------------------
 // @func Module level termination routine
 //
@@ -46,8 +46,8 @@ BOOL ModuleInit(CThisTestModule * pThisTestModule)
 //
 BOOL ModuleTerminate(CThisTestModule * pThisTestModule)
 {
-	return TRUE;
-}	
+    return TRUE;
+}
 
 
 

@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -25,13 +25,13 @@ class CReader : public IWMReaderCallback
 {
 public:
 
-	CReader();
+    CReader();
 
     //
     //Methods of IUnknown
     //
     HRESULT STDMETHODCALLTYPE QueryInterface( /* [in] */ REFIID riid,
-                                              /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject ); 
+            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject );
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
@@ -39,17 +39,17 @@ public:
     //Methods of IWMReaderCallback
     //
     HRESULT STDMETHODCALLTYPE OnSample( /* [in] */ DWORD dwOutputNum,
-                                        /* [in] */ QWORD cnsSampleTime,
-                                        /* [in] */ QWORD cnsSampleDuration,
-                                        /* [in] */ DWORD dwFlags,
-                                        /* [in] */ INSSBuffer __RPC_FAR *pSample,
-                                        /* [in] */ void __RPC_FAR *pvContext );
+            /* [in] */ QWORD cnsSampleTime,
+            /* [in] */ QWORD cnsSampleDuration,
+            /* [in] */ DWORD dwFlags,
+            /* [in] */ INSSBuffer __RPC_FAR *pSample,
+            /* [in] */ void __RPC_FAR *pvContext );
 
     HRESULT STDMETHODCALLTYPE OnStatus( /* [in] */ WMT_STATUS Status,
-                                        /* [in] */ HRESULT hr,
-                                        /* [in] */ WMT_ATTR_DATATYPE dwType,
-                                        /* [in] */ BYTE __RPC_FAR *pValue,
-                                        /* [in] */ void __RPC_FAR *pvContext );
+            /* [in] */ HRESULT hr,
+            /* [in] */ WMT_ATTR_DATATYPE dwType,
+            /* [in] */ BYTE __RPC_FAR *pValue,
+            /* [in] */ void __RPC_FAR *pvContext );
     //
     // CReader methods
     //
@@ -74,7 +74,7 @@ public:
 
 protected:
 
-	virtual ~CReader();
+    virtual ~CReader();
 
     CROStream*          m_pStream;
     HANDLE              m_hEvent;

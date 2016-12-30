@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: SynthPrp.h
 //
 // Desc: DirectShow sample code - definition of CSynthProperties class.
@@ -7,7 +7,8 @@
 //------------------------------------------------------------------------------
 
 
-class CSynthProperties : public CBasePropertyPage {
+class CSynthProperties : public CBasePropertyPage
+{
 
 public:
 

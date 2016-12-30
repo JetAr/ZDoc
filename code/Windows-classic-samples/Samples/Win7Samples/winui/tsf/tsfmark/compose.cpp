@@ -1,4 +1,4 @@
-//
+﻿//
 // compose.cpp
 //
 // Composition code.
@@ -111,7 +111,7 @@ void CMarkTextService::_Menu_OnComposition(CMarkTextService *_this)
 
 Exit:
     SafeRelease(pContext);
-    pFocusDoc->Release();    
+    pFocusDoc->Release();
 }
 
 //+---------------------------------------------------------------------------
@@ -142,7 +142,7 @@ STDAPI CCompositionEditSession::DoEditSession(TfEditCookie ec)
     if (_pMark->_IsComposing())
     {
         // we have a composition, let's terminate it
-        
+
         // it's possible our current composition is in another context...let's find out
         fEqualContexts = TRUE;
         if (_pMark->_GetComposition()->GetRange(&pRangeComposition) == S_OK)
@@ -328,9 +328,9 @@ BOOL CMarkTextService::_InitDisplayAttributeGuidAtom()
     HRESULT hr;
 
     if (CoCreateInstance(CLSID_TF_CategoryMgr,
-                         NULL, 
-                         CLSCTX_INPROC_SERVER, 
-                         IID_ITfCategoryMgr, 
+                         NULL,
+                         CLSCTX_INPROC_SERVER,
+                         IID_ITfCategoryMgr,
                          (void**)&pCategoryMgr) != S_OK)
     {
         return FALSE;
@@ -339,6 +339,6 @@ BOOL CMarkTextService::_InitDisplayAttributeGuidAtom()
     hr = pCategoryMgr->RegisterGUID(c_guidMarkDisplayAttribute, &_gaDisplayAttribute);
 
     pCategoryMgr->Release();
-        
+
     return (hr == S_OK);
 }

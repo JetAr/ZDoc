@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -33,7 +33,7 @@ void CSampleElementTextBlock::DoDraw()
         m_textLayout.Get(),
         m_defaultbrush.Get(),
         D2D1_DRAW_TEXT_OPTIONS::D2D1_DRAW_TEXT_OPTIONS_CLIP
-        );
+    );
 }
 
 void CSampleElementTextBlock::CreateDeviceResources()
@@ -68,8 +68,8 @@ void CSampleElementTextBlock::PrepareLayout()
                 m_fontSize,
                 L"en-us",
                 m_textFormat.GetAddressOf()
-                )
-            );
+            )
+        );
 
         m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
     }
@@ -84,7 +84,7 @@ void CSampleElementTextBlock::PrepareLayout()
                 m_width,
                 m_height,
                 &m_textLayout
-                )
-            );
+            )
+        );
     }
 }

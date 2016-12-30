@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------
+﻿/*---------------------------------------------------------------------------
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -85,8 +85,8 @@ extern "C" {
 ////       ServiceControlManager will believe that the service has
 ////       stopped responding
 ////
-   VOID ServiceStart(DWORD dwArgc, LPTSTR *lpszArgv);
-   VOID ServiceStop();
+VOID ServiceStart(DWORD dwArgc, LPTSTR *lpszArgv);
+VOID ServiceStop();
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -112,7 +112,7 @@ extern "C" {
 //    TRUE  - success
 //    FALSE - failure
 //
-   BOOL ReportStatusToSCMgr(DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWaitHint);
+BOOL ReportStatusToSCMgr(DWORD dwCurrentState, DWORD dwWin32ExitCode, DWORD dwWaitHint);
 
 
 //
@@ -126,7 +126,7 @@ extern "C" {
 //  RETURN VALUE:
 //    none
 //
-   void AddToMessageLog(LPTSTR lpszMsg);
+void AddToMessageLog(LPTSTR lpszMsg);
 //////////////////////////////////////////////////////////////////////////////
 
 

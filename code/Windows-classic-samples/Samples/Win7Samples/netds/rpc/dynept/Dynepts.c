@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 						Microsoft RPC
-          
+
                        dynept Example
 
     FILE:       dynepts.c
@@ -48,11 +48,11 @@ void Usage(char * pszProgramName)
     fprintf_s(stderr, "%s", PURPOSE);
     fprintf_s(stderr, "Usage:  %s\n", pszProgramName);
     fprintf_s(stderr, " -p protocol_sequence\n");
-    fprintf_s(stderr, " -a server principal name\n");	
+    fprintf_s(stderr, " -a server principal name\n");
     fprintf_s(stderr, " -m maxcalls\n");
     fprintf_s(stderr, " -n mincalls\n");
     fprintf_s(stderr, " -f flag_wait_op\n");
- 
+
     exit(1);
 }
 
@@ -63,7 +63,7 @@ void __cdecl main(int argc, char * argv[])
     RPC_BINDING_VECTOR * pBindingVector = NULL;
     unsigned char * pszProtocolSequence = "ncacn_ip_tcp";
     unsigned char * pszSecurity         = NULL;
-    unsigned char * pszSpn              = NULL;	
+    unsigned char * pszSpn              = NULL;
     unsigned int    cMinCalls           = 1;
     unsigned int    cMaxCalls           = 20;
     unsigned int    fDontWait           = FALSE;
@@ -72,9 +72,12 @@ void __cdecl main(int argc, char * argv[])
     int i;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
@@ -90,7 +93,7 @@ void __cdecl main(int argc, char * argv[])
             case 'f':
                 fDontWait = (unsigned int) atoi(argv[++i]);
                 break;
-        
+
 
             case 'h':
             case '?':
@@ -106,12 +109,14 @@ void __cdecl main(int argc, char * argv[])
                                  cMaxCalls,
                                  pszSecurity);  // Security descriptor
     printf_s("RpcServerUseProtseq returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         goto cleanup;
     }
-	
+
     /* User did not specify spn, construct one. */
-    if (pszSpn == NULL) {
+    if (pszSpn == NULL)
+    {
         MakeSpn(&pszSpn);
     }
 
@@ -120,21 +125,23 @@ void __cdecl main(int argc, char * argv[])
                                        RPC_C_AUTHN_GSS_NEGOTIATE,
                                        NULL,
                                        NULL);
-	
+
     printf_s("RpcServerRegisterAuthInfo returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
-    }	
+    }
 
     status = RpcServerRegisterIfEx(dynept_ServerIfHandle,
-		                           NULL,
-		                           NULL,
-		                           0,
-		                           RPC_C_LISTEN_MAX_CALLS_DEFAULT,
-		                           NULL );
+                                   NULL,
+                                   NULL,
+                                   0,
+                                   RPC_C_LISTEN_MAX_CALLS_DEFAULT,
+                                   NULL );
 
     printf_s("RpcServerRegisterIfEx returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         goto cleanup;
     }
     else
@@ -142,7 +149,8 @@ void __cdecl main(int argc, char * argv[])
 
     status = RpcServerInqBindings(&pBindingVector);
     printf_s("RpcServerInqBindings returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         goto cleanup;
     }
 
@@ -151,7 +159,8 @@ void __cdecl main(int argc, char * argv[])
                             NULL,
                             "" );
     printf_s("RpcEpRegister returned: 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         goto cleanup;
     }
     else
@@ -162,17 +171,19 @@ void __cdecl main(int argc, char * argv[])
                              cMaxCalls,
                              fDontWait);
     printf_s("RpcServerListen returned: 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         goto cleanup;
     }
 
-    if (fDontWait) {
+    if (fDontWait)
+    {
         printf_s("Calling RpcMgmtWaitServerListen\n");
         status = RpcMgmtWaitServerListen();  // wait operation
         printf_s("RpcMgmtWaitServerListen returned: 0x%x\n", status);
     }
 
-  cleanup:
+cleanup:
 
     if ( fEndpoint )
     {

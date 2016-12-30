@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -16,12 +16,12 @@ Abstract:
     with the Peer-to-Peer Graphing API.
 
 Feedback:
-    If you have any questions or feedback, please contact us using 
+    If you have any questions or feedback, please contact us using
     any of the mechanisms below:
 
-    Email: peerfb@microsoft.com 
-    Newsgroup: Microsoft.public.win32.programmer.networks 
-    Website: http://www.microsoft.com/p2p 
+    Email: peerfb@microsoft.com
+    Newsgroup: Microsoft.public.win32.programmer.networks
+    Website: http://www.microsoft.com/p2p
 
 --********************************************************************/
 
@@ -74,11 +74,11 @@ SOCKET              g_hIoctlSocket = INVALID_SOCKET;
 
 // The unique identifier for chat messages
 GUID CHAT_MESSAGE_RECORD_TYPE =
-    {0x4d5b2f11, 0x6522, 0x433b, {0x84, 0xef, 0xa2, 0x98, 0xe6, 0x7, 0x57, 0xb0}};
+{0x4d5b2f11, 0x6522, 0x433b, {0x84, 0xef, 0xa2, 0x98, 0xe6, 0x7, 0x57, 0xb0}};
 
 // The unique identifier for Whisper (Private chat) messages
 GUID WHISPER_MESSAGE_TYPE =
-    {0x4d5b2f11, 0x6522, 0x433b, {0x84, 0xef, 0xa2, 0x98, 0xe6, 0x7, 0xbb, 0xbb}};
+{0x4d5b2f11, 0x6522, 0x433b, {0x84, 0xef, 0xa2, 0x98, 0xe6, 0x7, 0xbb, 0xbb}};
 
 // The unique identifier for Graph Chat
 GUID GRAPH_CHAT_APP_ID = { 0x88f712fd, 0x17eb, 0x4668, { 0x92, 0xf6, 0xd7, 0x8f, 0x32, 0x19, 0x1b, 0x9f } };
@@ -98,7 +98,8 @@ const int c_dxWindow  = 800;
 const int c_dyWindow  = 600;
 
 const LPCWSTR PEER_GRAPH_EVENT_TYPE_STRINGS[] =
-    {L"PEER_GRAPH_EVENT_STATUS_CHANGED",
+{
+    L"PEER_GRAPH_EVENT_STATUS_CHANGED",
     L"PEER_GRAPH_EVENT_PROPERTY_CHANGED",
     L"PEER_GRAPH_EVENT_RECORD_CHANGED",
     L"PEER_GRAPH_EVENT_DIRECT_CONNECTION",
@@ -106,22 +107,29 @@ const LPCWSTR PEER_GRAPH_EVENT_TYPE_STRINGS[] =
     L"PEER_GRAPH_EVENT_INCOMING_DATA",
     L"PEER_GRAPH_EVENT_CONNECTION_REQUIRED",
     L"PEER_GRAPH_EVENT_NODE_CHANGED",
-    L"PEER_GRAPH_EVENT_SYNCHRONIZED"};
+    L"PEER_GRAPH_EVENT_SYNCHRONIZED"
+};
 
 const LPCWSTR PEER_NODE_CHANGE_TYPE_STRINGS[] =
-    {L"Connected",
+{
+    L"Connected",
     L"Disconnected",
-    L"Updated"};
+    L"Updated"
+};
 
 const LPCWSTR PEER_GRAPH_STATUS_FLAGS_STRINGS[] =
-    {L"Listening",
-     L"Has Connections",
-     L"Synchronized"};
+{
+    L"Listening",
+    L"Has Connections",
+    L"Synchronized"
+};
 
 const LPCWSTR PEER_CONNECTION_STATUS_STRINGS[] =
-    {L"Connected",
+{
+    L"Connected",
     L"Disconnected",
-    L"Connection Failed"};
+    L"Connection Failed"
+};
 
 // Local functions
 HRESULT InitSystem(int nCmdShow, LPSTR lpCmdLine);
@@ -150,7 +158,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, __in LPSTR lp
         HACCEL hAccel = LoadAccelerators(g_hInst, (LPCTSTR)IDC_ACCEL);
 
         // Main message loop:
-        while (GetMessage(&msg, NULL, 0, 0)) 
+        while (GetMessage(&msg, NULL, 0, 0))
         {
             HWND hwndTranslate;
             if ((msg.hwnd == g_hwndMain) || IsChild (g_hwndMain, msg.hwnd))
@@ -237,13 +245,13 @@ HRESULT InitUI(void)
 
     // Create the main window
     CreateWindowEx(0,szWindowClass, szTitle,
-        WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, c_dxWindow, c_dyWindow,
-        NULL, NULL, g_hInst, NULL);
-    
+                   WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, c_dxWindow, c_dyWindow,
+                   NULL, NULL, g_hInst, NULL);
+
     // g_hwndMain is set by WM_CREATE
     if (g_hwndMain == NULL)
         hr = E_FAIL;
-    
+
     return hr;
 }
 
@@ -377,51 +385,51 @@ BOOL ProcessSpecialKeys(__in MSG * pMsg)
 {
     switch (pMsg->message)
     {
-        case WM_CHAR:
-            switch (pMsg->wParam)
+    case WM_CHAR:
+        switch (pMsg->wParam)
+        {
+        case VK_TAB:
+        {
+            BOOL fShift = 0 > GetKeyState(VK_SHIFT);
+            HWND hwnd = GetFocus();
+            if (hwnd == g_hwndText)
             {
-                case VK_TAB:
-                {
-                    BOOL fShift = 0 > GetKeyState(VK_SHIFT);
-                    HWND hwnd = GetFocus();
-                    if (hwnd == g_hwndText)
-                    {
-                        hwnd = fShift ? g_hwndMsg : g_hwndSend;
-                    }
-                    else if (hwnd == g_hwndSend)
-                    {
-                        hwnd = fShift ? g_hwndText : g_hwndMembers;
-                    }
-                    else if (hwnd == g_hwndMembers)
-                    {
-                        hwnd = fShift ?  g_hwndSend : g_hwndMsg;
-                    }
-                    else // if (hwnd == g_hwndMsg)
-                    {
-                        hwnd = fShift ? g_hwndMembers : g_hwndText;
-                    }
-                    SetFocus(hwnd);
-                    return TRUE;
-                }
-                case VK_RETURN:
-                    ProcessSendButton();
-                    return TRUE;
-                
-                default:
-                    // Any typing (except ctrl+C) moves the focus to the text window
-                    if (((pMsg->hwnd == g_hwndMsg) && (pMsg->wParam != 0x03))
-                        || (pMsg->hwnd == g_hwndMain))
-                    {
-                        SetFocus(g_hwndText);
-                        SendMessage(g_hwndText, pMsg->message, pMsg->wParam, pMsg->lParam);
-                        return TRUE;
-                    }
-                    break;
+                hwnd = fShift ? g_hwndMsg : g_hwndSend;
+            }
+            else if (hwnd == g_hwndSend)
+            {
+                hwnd = fShift ? g_hwndText : g_hwndMembers;
+            }
+            else if (hwnd == g_hwndMembers)
+            {
+                hwnd = fShift ?  g_hwndSend : g_hwndMsg;
+            }
+            else // if (hwnd == g_hwndMsg)
+            {
+                hwnd = fShift ? g_hwndMembers : g_hwndText;
+            }
+            SetFocus(hwnd);
+            return TRUE;
+        }
+        case VK_RETURN:
+            ProcessSendButton();
+            return TRUE;
+
+        default:
+            // Any typing (except ctrl+C) moves the focus to the text window
+            if (((pMsg->hwnd == g_hwndMsg) && (pMsg->wParam != 0x03))
+                    || (pMsg->hwnd == g_hwndMain))
+            {
+                SetFocus(g_hwndText);
+                SendMessage(g_hwndText, pMsg->message, pMsg->wParam, pMsg->lParam);
+                return TRUE;
             }
             break;
-        
-        default:
-            break;
+        }
+        break;
+
+    default:
+        break;
     }
 
     return FALSE;
@@ -466,62 +474,62 @@ void ResizeMainWindow(int dxMain, int dyMain)
 
     GetWindowRect(g_hwndStatus, &rect);
     dyStatus = rect.bottom - rect.top;
-    
+
     hDWP = DeferWindowPos(hDWP, g_hwndStatus, NULL,
-            0, dyMain - dyStatus, dxMain, dyStatus,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
-    
+                          0, dyMain - dyStatus, dxMain, dyStatus,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
+
     dyMain -= (dyStatus + c_dyBorder);
 
     hDWP = DeferWindowPos(hDWP, g_hwndChatLabel, NULL,
-            c_dxBorder, c_dyBorder,
-            dxMain - (c_dxMembers + 3*c_dxBorder), c_dyStatic,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          c_dxBorder, c_dyBorder,
+                          dxMain - (c_dxMembers + 3*c_dxBorder), c_dyStatic,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndMsg, NULL,
-            c_dxBorder, c_dyBorder + c_dyStatic,
-            dxMain - (c_dxMembers + 3*c_dxBorder), dyMain - (c_dyBorder + c_dyText + c_dyBorder + c_dyEvent + c_dyStatic + c_dyStatic + c_dyBorder),
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          c_dxBorder, c_dyBorder + c_dyStatic,
+                          dxMain - (c_dxMembers + 3*c_dxBorder), dyMain - (c_dyBorder + c_dyText + c_dyBorder + c_dyEvent + c_dyStatic + c_dyStatic + c_dyBorder),
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndEventLabel, NULL,
-            c_dxBorder, dyMain - (c_dyBorder + c_dyText + c_dyBorder + c_dyEvent + c_dyStatic),
-            dxMain - (c_dxMembers + 3*c_dxBorder), c_dyStatic,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          c_dxBorder, dyMain - (c_dyBorder + c_dyText + c_dyBorder + c_dyEvent + c_dyStatic),
+                          dxMain - (c_dxMembers + 3*c_dxBorder), c_dyStatic,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndEvent, NULL,
-            c_dxBorder, dyMain - (c_dyBorder + c_dyText + c_dyBorder + c_dyEvent),
-            dxMain - (c_dxMembers + 3*c_dxBorder), c_dyEvent,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          c_dxBorder, dyMain - (c_dyBorder + c_dyText + c_dyBorder + c_dyEvent),
+                          dxMain - (c_dxMembers + 3*c_dxBorder), c_dyEvent,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndText, NULL,
-            c_dxBorder, dyMain - (c_dyBorder +c_dyText),
-            dxMain - (c_dxMembers + 3*c_dxBorder), c_dyText,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          c_dxBorder, dyMain - (c_dyBorder +c_dyText),
+                          dxMain - (c_dxMembers + 3*c_dxBorder), c_dyText,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndMemberLabel, NULL,
-            (dxMain - (c_dxMembers + 2*c_dxBorder)) + c_dxBorder, c_dyBorder,
-            c_dxMembers, c_dyStatic,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          (dxMain - (c_dxMembers + 2*c_dxBorder)) + c_dxBorder, c_dyBorder,
+                          c_dxMembers, c_dyStatic,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndMembers, NULL,
-            (dxMain - (c_dxMembers + 2*c_dxBorder)) + c_dxBorder, c_dyBorder + c_dyStatic,
-            c_dxMembers, (dyMain - (c_dyText + 3*c_dyBorder + c_dyStatic))/2,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          (dxMain - (c_dxMembers + 2*c_dxBorder)) + c_dxBorder, c_dyBorder + c_dyStatic,
+                          c_dxMembers, (dyMain - (c_dyText + 3*c_dyBorder + c_dyStatic))/2,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndNeighborLabel, NULL,
-            (dxMain - (c_dxMembers + 2*c_dxBorder)) + c_dxBorder, c_dyBorder + c_dyStatic + (dyMain - (c_dyText + 3*c_dyBorder + c_dyStatic))/2 + c_dyBorder,
-            c_dxMembers, c_dyStatic,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          (dxMain - (c_dxMembers + 2*c_dxBorder)) + c_dxBorder, c_dyBorder + c_dyStatic + (dyMain - (c_dyText + 3*c_dyBorder + c_dyStatic))/2 + c_dyBorder,
+                          c_dxMembers, c_dyStatic,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndNeighbors, NULL,
-            (dxMain - (c_dxMembers + 2*c_dxBorder)) + c_dxBorder, c_dyBorder + 2*c_dyStatic + (dyMain - (c_dyText + 3*c_dyBorder + c_dyStatic))/2 + c_dyBorder,
-            c_dxMembers, (dyMain - (c_dyText + 3*c_dyBorder + c_dyStatic))/2,
-            SWP_NOZORDER | SWP_NOOWNERZORDER);
+                          (dxMain - (c_dxMembers + 2*c_dxBorder)) + c_dxBorder, c_dyBorder + 2*c_dyStatic + (dyMain - (c_dyText + 3*c_dyBorder + c_dyStatic))/2 + c_dyBorder,
+                          c_dxMembers, (dyMain - (c_dyText + 3*c_dyBorder + c_dyStatic))/2,
+                          SWP_NOZORDER | SWP_NOOWNERZORDER);
 
     hDWP = DeferWindowPos(hDWP, g_hwndSend, NULL,
-            (dxMain - (c_dxMembers + c_dxBorder)) + (c_dxMembers - c_dxButton)/2,
-            (dyMain - c_dyText) + (c_dyText + c_dyStatic - c_dyButton)/2,
-            0, 0, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOSIZE);
+                          (dxMain - (c_dxMembers + c_dxBorder)) + (c_dxMembers - c_dxButton)/2,
+                          (dyMain - c_dyText) + (c_dyText + c_dyStatic - c_dyButton)/2,
+                          0, 0, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOSIZE);
 
     EndDeferWindowPos(hDWP);
 }
@@ -539,123 +547,125 @@ void AddControls(void)
     HFONT   hFont = NULL;
     LOGFONT lf = {0};
 
-    int  rgStatusBarWidths[1+SB_PART_MESSAGE] = {
+    int  rgStatusBarWidths[1+SB_PART_MESSAGE] =
+    {
         80,   // SB_PART_LISTENING
         180,  // SB_PART_SYNCHRONIZED
         260,  // SB_PART_CONNECTED
         520,  // SB_PART_ADDRESS
         720,  // SB_PART_NODE_ID
-        -1};  // SB_PART_MESSAGE
+        -1
+    };  // SB_PART_MESSAGE
 
 
     // Create a font for the "Send" button
     ZeroMemory(&lf, sizeof(lf));
-    hFont = CreateFontIndirect(&lf); 
+    hFont = CreateFontIndirect(&lf);
 
     // Create the "Send" push button
     g_hwndSend = CreateWindowEx(
-        0, WC_BUTTON, L"Send",
-        WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP |
-        BS_PUSHBUTTON,
-        0, 0, c_dxButton, c_dyButton,
-        g_hwndMain, (HMENU) IDC_SEND, NULL, NULL);
+                     0, WC_BUTTON, L"Send",
+                     WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP |
+                     BS_PUSHBUTTON,
+                     0, 0, c_dxButton, c_dyButton,
+                     g_hwndMain, (HMENU) IDC_SEND, NULL, NULL);
     SetWindowFont(g_hwndSend, hFont, FALSE);
 
     // Create the edit control for the user to enter text
     g_hwndText = CreateWindowEx(
-        0, WC_EDIT, L"",
-        WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
-        ES_MULTILINE | ES_AUTOVSCROLL,
-        c_dxBorder, 0, 0, c_dyText,
-        g_hwndMain, (HMENU) IDC_TEXTBOX, NULL, NULL);
+                     0, WC_EDIT, L"",
+                     WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
+                     ES_MULTILINE | ES_AUTOVSCROLL,
+                     c_dxBorder, 0, 0, c_dyText,
+                     g_hwndMain, (HMENU) IDC_TEXTBOX, NULL, NULL);
     SendMessage(g_hwndText, EM_SETLIMITTEXT, (MAX_CHAT_MESSAGE - 1), 0);
     SetWindowFont(g_hwndText, hFont, FALSE);
 
     // Create the event area
     g_hwndEvent = CreateWindowEx(
-        0, WC_EDIT, L"",
-        WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
-        ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY,
-        c_dxBorder, 0, 0, c_dyText,
-        g_hwndMain, (HMENU) IDC_EVENTS, NULL, NULL);
+                      0, WC_EDIT, L"",
+                      WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
+                      ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY,
+                      c_dxBorder, 0, 0, c_dyText,
+                      g_hwndMain, (HMENU) IDC_EVENTS, NULL, NULL);
 
     SetWindowFont(g_hwndEvent, hFont, FALSE);
     SendMessage(g_hwndEvent,  EM_SETLIMITTEXT, 0, 0);
 
     // Create the static text "Chat Members"
     g_hwndMemberLabel = CreateWindowEx(
-        0, WC_STATIC, L"Chat Members",
-        WS_CHILD | WS_VISIBLE | ES_READONLY | SS_CENTER,
-        0, c_dyBorder, c_dxMembers, c_dyStatic,
-        g_hwndMain, (HMENU) IDC_STATIC_MEMBERS, NULL, NULL);
+                            0, WC_STATIC, L"Chat Members",
+                            WS_CHILD | WS_VISIBLE | ES_READONLY | SS_CENTER,
+                            0, c_dyBorder, c_dxMembers, c_dyStatic,
+                            g_hwndMain, (HMENU) IDC_STATIC_MEMBERS, NULL, NULL);
     SetWindowFont(g_hwndMemberLabel, hFont, FALSE);
 
     // Create the static text "Graph Neighbors"
     g_hwndNeighborLabel = CreateWindowEx(
-        0, WC_STATIC, L"Graph Neighbors",
-        WS_CHILD | WS_VISIBLE | ES_READONLY | SS_CENTER,
-        0, c_dyBorder, c_dxMembers, c_dyStatic,
-        g_hwndMain, (HMENU) IDC_STATIC_NEIGHBOR, NULL, NULL);
+                              0, WC_STATIC, L"Graph Neighbors",
+                              WS_CHILD | WS_VISIBLE | ES_READONLY | SS_CENTER,
+                              0, c_dyBorder, c_dxMembers, c_dyStatic,
+                              g_hwndMain, (HMENU) IDC_STATIC_NEIGHBOR, NULL, NULL);
     SetWindowFont(g_hwndNeighborLabel, hFont, FALSE);
 
 
     // Create the static text "Graph Events"
     g_hwndEventLabel = CreateWindowEx(
-        0, WC_STATIC, L"Graph Events",
-        WS_CHILD | WS_VISIBLE | ES_READONLY | SS_CENTER,
-        0, c_dyBorder, c_dxMembers, c_dyStatic,
-        g_hwndMain, (HMENU) IDC_STATIC_EVENT, NULL, NULL);
+                           0, WC_STATIC, L"Graph Events",
+                           WS_CHILD | WS_VISIBLE | ES_READONLY | SS_CENTER,
+                           0, c_dyBorder, c_dxMembers, c_dyStatic,
+                           g_hwndMain, (HMENU) IDC_STATIC_EVENT, NULL, NULL);
     SetWindowFont(g_hwndEventLabel, hFont, FALSE);
 
 
     // Create the listbox of active members
     g_hwndMembers = CreateWindowEx(
-        0, WC_LISTBOX, L"",
-        WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
-        LBS_SORT | LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
-        0, c_dyBorder, c_dxMembers, 0,
-        g_hwndMain, (HMENU) IDC_MEMBERS, NULL, NULL);
+                        0, WC_LISTBOX, L"",
+                        WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
+                        LBS_SORT | LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
+                        0, c_dyBorder, c_dxMembers, 0,
+                        g_hwndMain, (HMENU) IDC_MEMBERS, NULL, NULL);
     SetWindowFont(g_hwndMembers, (HFONT) GetStockObject(DEFAULT_GUI_FONT), FALSE);
 
     // Create the listbox of neighbor connections
     g_hwndNeighbors = CreateWindowEx(
-        0, WC_LISTBOX, L"",
-        WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
-        LBS_SORT | LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
-        0, c_dyBorder, c_dxMembers, 0,
-        g_hwndMain, (HMENU) IDC_NEIGHBORS, NULL, NULL);
+                          0, WC_LISTBOX, L"",
+                          WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
+                          LBS_SORT | LBS_NOTIFY | LBS_NOINTEGRALHEIGHT,
+                          0, c_dyBorder, c_dxMembers, 0,
+                          g_hwndMain, (HMENU) IDC_NEIGHBORS, NULL, NULL);
     SetWindowFont(g_hwndNeighbors, (HFONT) GetStockObject(DEFAULT_GUI_FONT), FALSE);
 
 
     // Create the static text for current Chat Status
     g_hwndChatLabel = CreateWindowEx(
-        0, WC_STATIC, L"Offline",
-        WS_CHILD | WS_VISIBLE | ES_READONLY | SS_CENTER,
-        c_dxBorder, c_dyBorder, 0, c_dyStatic,
-        g_hwndMain, (HMENU) IDC_STATIC_MEMBERS, NULL, NULL);
+                          0, WC_STATIC, L"Offline",
+                          WS_CHILD | WS_VISIBLE | ES_READONLY | SS_CENTER,
+                          c_dxBorder, c_dyBorder, 0, c_dyStatic,
+                          g_hwndMain, (HMENU) IDC_STATIC_MEMBERS, NULL, NULL);
     SetWindowFont(g_hwndChatLabel, hFont, FALSE);
 
     // Create the message area
     g_hwndMsg = CreateWindowEx(
-        0, WC_EDIT, L"",
-        WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
-        ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY,
-        c_dxBorder, c_dyBorder, 0, 0,
-        g_hwndMain, (HMENU) IDC_MESSAGES, NULL, NULL);
+                    0, WC_EDIT, L"",
+                    WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | WS_VSCROLL |
+                    ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY,
+                    c_dxBorder, c_dyBorder, 0, 0,
+                    g_hwndMain, (HMENU) IDC_MESSAGES, NULL, NULL);
     SetWindowFont(g_hwndMsg, hFont, FALSE);
     SendMessage(g_hwndMsg,  EM_SETLIMITTEXT, 0, 0);
 
     // Create the status bar
     g_hwndStatus = CreateWindowEx(0,STATUSCLASSNAME, NULL,
-        WS_CHILD | WS_VISIBLE,
-        0, 0, 0, 0,
-        g_hwndMain, (HMENU) IDC_STATUS, NULL, NULL);
+                                  WS_CHILD | WS_VISIBLE,
+                                  0, 0, 0, 0,
+                                  g_hwndMain, (HMENU) IDC_STATUS, NULL, NULL);
     SendMessage(
-        g_hwndStatus, 
-        (UINT)SB_SETPARTS, 
-        celems(rgStatusBarWidths), 
+        g_hwndStatus,
+        (UINT)SB_SETPARTS,
+        celems(rgStatusBarWidths),
         (LPARAM) &rgStatusBarWidths[0]
-        );
+    );
 }
 
 //-----------------------------------------------------------------------------
@@ -666,96 +676,96 @@ void AddControls(void)
 // Returns:  LRESULT (depends on message)
 //
 INT_PTR CALLBACK MainProc(
-                    HWND hWnd, 
-                    UINT message, 
-                    WPARAM wParam, 
-                    LPARAM lParam
-                    )
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
-    switch (message) 
+    switch (message)
     {
-        case WM_CREATE:
-            g_hwndMain = hWnd;
-            AddControls();
-            SignIntoPNM();
-            HandleAppInvite();
-            SetFocus(g_hwndText);
+    case WM_CREATE:
+        g_hwndMain = hWnd;
+        AddControls();
+        SignIntoPNM();
+        HandleAppInvite();
+        SetFocus(g_hwndText);
+        break;
+
+    case WM_SIZING:
+        ProcessResizing((LPRECT) lParam);
+        return TRUE; // the size may have been changed
+
+    case WM_SIZE:
+        ResizeMainWindow(LOWORD(lParam), HIWORD(lParam));
+        break;
+
+    case WM_CTLCOLORSTATIC:
+        // draw the read-only control with a normal window background
+        if (lParam == (LPARAM) g_hwndMsg)
+        {
+            return (LRESULT) GetSysColorBrush(COLOR_WINDOW);
+        }
+
+        // draw the read-only control with a normal window background
+        if (lParam == (LPARAM) g_hwndEvent)
+        {
+            return (LRESULT) GetSysColorBrush(COLOR_WINDOW);
+        }
+        break;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDM_CLEARTEXT:
+            SetWindowText(g_hwndMsg, L"");
             break;
 
-        case WM_SIZING:
-            ProcessResizing((LPRECT) lParam);
-            return TRUE; // the size may have been changed
-        
-        case WM_SIZE:
-            ResizeMainWindow(LOWORD(lParam), HIWORD(lParam));
+        case IDM_EXIT:
+            PostMessage(g_hwndMain, WM_CLOSE, 0, 0);
             break;
-        
-        case WM_CTLCOLORSTATIC:
-            // draw the read-only control with a normal window background
-            if (lParam == (LPARAM) g_hwndMsg)
-            {
-                return (LRESULT) GetSysColorBrush(COLOR_WINDOW);
-            }
 
-            // draw the read-only control with a normal window background
-            if (lParam == (LPARAM) g_hwndEvent)
-            {
-                return (LRESULT) GetSysColorBrush(COLOR_WINDOW);
-            }
+        case IDM_ABOUT:
+            DialogBox(g_hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), g_hwndMain, AboutProc);
             break;
-        
-        case WM_DESTROY:
-            PostQuitMessage(0);
+
+        case IDM_GRAPH_INVITESOMEONENEARBY:
+            InviteSomeoneNearby();
             break;
-        
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
-            {
-                case IDM_CLEARTEXT:
-                    SetWindowText(g_hwndMsg, L"");
-                    break;
 
-                case IDM_EXIT:
-                    PostMessage(g_hwndMain, WM_CLOSE, 0, 0);
-                    break;
-
-                case IDM_ABOUT:
-                    DialogBox(g_hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), g_hwndMain, AboutProc);
-                    break;
-
-                case IDM_GRAPH_INVITESOMEONENEARBY:
-                    InviteSomeoneNearby();
-                    break;
-                
-                case IDM_NEWGRAPH:
-                    DialogBox(g_hInst, MAKEINTRESOURCE(IDD_NEWGRAPH), g_hwndMain, NewGraphProc);
-                    break;
-
-                case IDM_OPENGRAPH:
-                    DialogBox(g_hInst, MAKEINTRESOURCE(IDD_OPENGRAPH), g_hwndMain, OpenGraphProc);
-                    break;
-
-                case IDC_MEMBERS:
-                    if(HIWORD(wParam) == LBN_DBLCLK) //double click
-                    DialogBox(g_hInst, MAKEINTRESOURCE(IDD_WHISPER), g_hwndMain, WhisperProc);
-                    break;
-
-                case IDM_DISCONNECT:
-                    CmdDisconnect();
-                    break;
-
-                case IDC_SEND:
-                    ProcessSendButton();
-                    break;
-
-                default:
-                    break;
-            }
-
+        case IDM_NEWGRAPH:
+            DialogBox(g_hInst, MAKEINTRESOURCE(IDD_NEWGRAPH), g_hwndMain, NewGraphProc);
             break;
-        
+
+        case IDM_OPENGRAPH:
+            DialogBox(g_hInst, MAKEINTRESOURCE(IDD_OPENGRAPH), g_hwndMain, OpenGraphProc);
+            break;
+
+        case IDC_MEMBERS:
+            if(HIWORD(wParam) == LBN_DBLCLK) //double click
+                DialogBox(g_hInst, MAKEINTRESOURCE(IDD_WHISPER), g_hwndMain, WhisperProc);
+            break;
+
+        case IDM_DISCONNECT:
+            CmdDisconnect();
+            break;
+
+        case IDC_SEND:
+            ProcessSendButton();
+            break;
+
         default:
             break;
+        }
+
+        break;
+
+    default:
+        break;
     }
 
     return DefWindowProc(hWnd, message, wParam, lParam);
@@ -774,7 +784,7 @@ void EnableDisconnectMenu()
 {
     BOOL fEnable = (g_hGraph != NULL);
     EnableMenuItem(GetMenu(g_hwndMain), IDM_DISCONNECT,
-        fEnable ? MF_ENABLED : (MF_DISABLED | MF_GRAYED));
+                   fEnable ? MF_ENABLED : (MF_DISABLED | MF_GRAYED));
 }
 
 //-----------------------------------------------------------------------------
@@ -810,17 +820,17 @@ INT_PTR CALLBACK AboutProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            return TRUE;
+    case WM_INITDIALOG:
+        return TRUE;
 
-        case WM_COMMAND:
-            if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-            {
-                EndDialog(hDlg, 0);
-            }
-            break;
-        default:
-            break;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, 0);
+        }
+        break;
+    default:
+        break;
     }
     return FALSE;
 }
@@ -843,52 +853,52 @@ INT_PTR CALLBACK NewGraphProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            
-            // Use global cloud by default (check global scope radio button)
-            SendDlgItemMessage(hDlg, IDC_RADIO_GLOBAL_SCOPE, BM_SETCHECK, BST_CHECKED, 0);
-            EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
+    case WM_INITDIALOG:
 
-            // Make the chat ID our People Near Me nickname
-            //
-            if (SUCCEEDED(PeerCollabGetContact(NULL, &pMeContact)))
+        // Use global cloud by default (check global scope radio button)
+        SendDlgItemMessage(hDlg, IDC_RADIO_GLOBAL_SCOPE, BM_SETCHECK, BST_CHECKED, 0);
+        EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
+
+        // Make the chat ID our People Near Me nickname
+        //
+        if (SUCCEEDED(PeerCollabGetContact(NULL, &pMeContact)))
+        {
+            SetWindowText(GetDlgItem(hDlg, IDC_EDT_CREATORID), pMeContact->pwzNickName);
+            PeerFreeData(pMeContact);
+        }
+
+        return TRUE;
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+            if (SUCCEEDED(HandleNewGraph(hDlg)))
             {
-                SetWindowText(GetDlgItem(hDlg, IDC_EDT_CREATORID), pMeContact->pwzNickName);
-                PeerFreeData(pMeContact);
+                SetStatus(L"graph created");
             }
-
-            return TRUE;
-
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
+            EndDialog(hDlg, IDOK);
+            break;
+        case IDCANCEL:
+            EndDialog(hDlg, IDCANCEL);
+            break;
+        case IDC_EDT_GRAPHNAME:
+        case IDC_EDT_CREATORID:
+            if (HIWORD(wParam) == EN_CHANGE)
             {
-                case IDOK:
-                    if (SUCCEEDED(HandleNewGraph(hDlg)))
-                    {
-                        SetStatus(L"graph created");
-                    }
-                    EndDialog(hDlg, IDOK);
-                    break;
-                case IDCANCEL:
-                    EndDialog(hDlg, IDCANCEL);
-                    break;
-                case IDC_EDT_GRAPHNAME:
-                case IDC_EDT_CREATORID:
-                    if (HIWORD(wParam) == EN_CHANGE)
-                    {
-                        GraphNameLen = SendDlgItemMessage(hDlg, IDC_EDT_GRAPHNAME, WM_GETTEXTLENGTH, 0, 0);
-                        CreatorIdLen = SendDlgItemMessage(hDlg, IDC_EDT_CREATORID, WM_GETTEXTLENGTH, 0, 0);
-                        EnableWindow(GetDlgItem(hDlg, IDOK), GraphNameLen > 0 && CreatorIdLen > 0);
-                    }
-                    break;
-
-                default:
-                    break;
+                GraphNameLen = SendDlgItemMessage(hDlg, IDC_EDT_GRAPHNAME, WM_GETTEXTLENGTH, 0, 0);
+                CreatorIdLen = SendDlgItemMessage(hDlg, IDC_EDT_CREATORID, WM_GETTEXTLENGTH, 0, 0);
+                EnableWindow(GetDlgItem(hDlg, IDOK), GraphNameLen > 0 && CreatorIdLen > 0);
             }
-            break; /* WM_COMMAND */
+            break;
 
         default:
             break;
+        }
+        break; /* WM_COMMAND */
+
+    default:
+        break;
     }
 
     return FALSE;
@@ -912,51 +922,51 @@ INT_PTR CALLBACK OpenGraphProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
     switch (message)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
 
-            // Use global scope by default
-            SendDlgItemMessage(hDlg, IDC_RADIO_GLOBAL_SCOPE, BM_SETCHECK, BST_CHECKED, 0);
-            EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
+        // Use global scope by default
+        SendDlgItemMessage(hDlg, IDC_RADIO_GLOBAL_SCOPE, BM_SETCHECK, BST_CHECKED, 0);
+        EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
 
-            // Make the chat ID our People Near Me nickname
-            //
-            if (SUCCEEDED(PeerCollabGetContact(NULL, &pMeContact)))
+        // Make the chat ID our People Near Me nickname
+        //
+        if (SUCCEEDED(PeerCollabGetContact(NULL, &pMeContact)))
+        {
+            SetWindowText(GetDlgItem(hDlg, IDC_EDT_PEERID), pMeContact->pwzNickName);
+            PeerFreeData(pMeContact);
+        }
+
+        return TRUE;
+
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+            if (SUCCEEDED(HandleOpenGraph(hDlg)))
             {
-                SetWindowText(GetDlgItem(hDlg, IDC_EDT_PEERID), pMeContact->pwzNickName);
-                PeerFreeData(pMeContact);
+                SetStatus(L"graph opened");
             }
-            
-            return TRUE;
-
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
+            EndDialog(hDlg, IDOK);
+            break;
+        case IDCANCEL:
+            EndDialog(hDlg, IDCANCEL);
+            break;
+        case IDC_EDT_GRAPHID:
+        case IDC_EDT_PEERID:
+            if (HIWORD(wParam) == EN_CHANGE)
             {
-                case IDOK:
-                    if (SUCCEEDED(HandleOpenGraph(hDlg)))
-                    {
-                        SetStatus(L"graph opened");
-                    }
-                    EndDialog(hDlg, IDOK);
-                    break;
-                case IDCANCEL:
-                    EndDialog(hDlg, IDCANCEL);
-                    break;
-                case IDC_EDT_GRAPHID:
-                case IDC_EDT_PEERID:
-                    if (HIWORD(wParam) == EN_CHANGE)
-                    {
-                        GraphIdLen = SendDlgItemMessage(hDlg, IDC_EDT_GRAPHID, WM_GETTEXTLENGTH, 0, 0);
-                        PeerIdLen = SendDlgItemMessage(hDlg, IDC_EDT_PEERID, WM_GETTEXTLENGTH, 0, 0);
-                        EnableWindow(GetDlgItem(hDlg, IDOK), GraphIdLen > 0 && PeerIdLen > 0);
-                    }
-                    break;
-                default:
-                    break;
+                GraphIdLen = SendDlgItemMessage(hDlg, IDC_EDT_GRAPHID, WM_GETTEXTLENGTH, 0, 0);
+                PeerIdLen = SendDlgItemMessage(hDlg, IDC_EDT_PEERID, WM_GETTEXTLENGTH, 0, 0);
+                EnableWindow(GetDlgItem(hDlg, IDOK), GraphIdLen > 0 && PeerIdLen > 0);
             }
-            break; /* WM_COMMAND */
-
+            break;
         default:
             break;
+        }
+        break; /* WM_COMMAND */
+
+    default:
+        break;
     }
 
     return FALSE;
@@ -979,50 +989,50 @@ INT_PTR CALLBACK WhisperProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
     switch (message)
     {
-        case WM_INITDIALOG:
-            EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
-            SetFocus(GetDlgItem(hDlg, IDC_EDT_WHISPER));
-            SendMessage(GetDlgItem(hDlg, IDC_EDT_WHISPER), EM_SETLIMITTEXT, MAX_CHAT_MESSAGE, 0);
-            return TRUE;
+    case WM_INITDIALOG:
+        EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
+        SetFocus(GetDlgItem(hDlg, IDC_EDT_WHISPER));
+        SendMessage(GetDlgItem(hDlg, IDC_EDT_WHISPER), EM_SETLIMITTEXT, MAX_CHAT_MESSAGE, 0);
+        return TRUE;
 
-        case WM_COMMAND:
-            switch (LOWORD(wParam))
+    case WM_COMMAND:
+        switch (LOWORD(wParam))
+        {
+        case IDOK:
+            hr = HandleDirectConnection(hDlg);
+            if (SUCCEEDED(hr))
             {
-                case IDOK:
-                    hr = HandleDirectConnection(hDlg);
-                    if (SUCCEEDED(hr))
-                    {
-                        SetStatus(L"Direct msg sent");
-                    }
-                    else if (PEER_E_CONNECT_SELF == hr)
-                    {
-                        DisplayHrError(L"Cannot Whisper to Self", hr);
-                    }
-                    else
-                    {
-                        DisplayHrError(L"Direct Communication Failed", hr);
-                    }
-                    EndDialog(hDlg, IDOK);
-                    break;
-
-                case IDCANCEL:
-                    EndDialog(hDlg, IDCANCEL);
-                    break;
-
-                case IDC_EDT_WHISPER:
-                    if (HIWORD(wParam) == EN_CHANGE)
-                    {
-                        WhisperLen = SendDlgItemMessage(hDlg, IDC_EDT_WHISPER, WM_GETTEXTLENGTH, 0, 0);
-                        EnableWindow(GetDlgItem(hDlg, IDOK), WhisperLen > 0);
-                    }
-                    break;
-                default:
-                    break;
+                SetStatus(L"Direct msg sent");
             }
-            break; /* WM_COMMAND */
+            else if (PEER_E_CONNECT_SELF == hr)
+            {
+                DisplayHrError(L"Cannot Whisper to Self", hr);
+            }
+            else
+            {
+                DisplayHrError(L"Direct Communication Failed", hr);
+            }
+            EndDialog(hDlg, IDOK);
+            break;
 
+        case IDCANCEL:
+            EndDialog(hDlg, IDCANCEL);
+            break;
+
+        case IDC_EDT_WHISPER:
+            if (HIWORD(wParam) == EN_CHANGE)
+            {
+                WhisperLen = SendDlgItemMessage(hDlg, IDC_EDT_WHISPER, WM_GETTEXTLENGTH, 0, 0);
+                EnableWindow(GetDlgItem(hDlg, IDOK), WhisperLen > 0);
+            }
+            break;
         default:
             break;
+        }
+        break; /* WM_COMMAND */
+
+    default:
+        break;
     }
 
     return FALSE;
@@ -1043,13 +1053,13 @@ HRESULT HandleNewGraph(__in HWND hDlg)
     PPEER_PNRP_ENDPOINT_INFO pEndpoints = NULL;
     WCHAR wzCreatorId[MAX_PEERNAME];
     WCHAR wzGraphName[MAX_PEERNAME];
-    
+
     g_fGlobalScope = (SendDlgItemMessage(hDlg, IDC_RADIO_GLOBAL_SCOPE, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    SendDlgItemMessage(hDlg, IDC_EDT_GRAPHNAME, WM_GETTEXT, celems(wzGraphName), (LPARAM) wzGraphName);    
-    
+    SendDlgItemMessage(hDlg, IDC_EDT_GRAPHNAME, WM_GETTEXT, celems(wzGraphName), (LPARAM) wzGraphName);
+
     // Check for preexisting graph with this name
-    hr = DiscoverAddress(wzGraphName, &cEndpoints, &pEndpoints); 
-    if (SUCCEEDED(hr) && cEndpoints == 0) 
+    hr = DiscoverAddress(wzGraphName, &cEndpoints, &pEndpoints);
+    if (SUCCEEDED(hr) && cEndpoints == 0)
     {
         // means no other graph with this name was found.
         // Hence we can go ahead and register one.
@@ -1092,7 +1102,7 @@ HRESULT HandleOpenGraph(__in HWND hDlg)
     SendDlgItemMessage(hDlg, IDC_EDT_GRAPHID, WM_GETTEXT, celems(wzGraphId), (LPARAM) wzGraphId);
     SendDlgItemMessage(hDlg, IDC_EDT_PEERID, WM_GETTEXT, celems(wzPeerId), (LPARAM) wzPeerId);
     g_fGlobalScope = (SendDlgItemMessage(hDlg, IDC_RADIO_GLOBAL_SCOPE, BM_GETCHECK, 0, 0) == BST_CHECKED);
-    
+
     hr = OpenGraph(wzPeerId, wzGraphId);
     if(FAILED(hr))
     {
@@ -1112,11 +1122,11 @@ HRESULT HandleOpenGraph(__in HWND hDlg)
 HRESULT HandleDirectConnection(__in HWND hDlg)
 {
     LRESULT WhisperLen = 0;
-    
+
     int iItem = ListBox_GetCurSel(g_hwndMembers);
     if (iItem < 0)
         return E_FAIL;
- 
+
     ListBox_GetText(g_hwndMembers, iItem, g_wzWsprId);
     WhisperLen = SendDlgItemMessage(hDlg, IDC_EDT_WHISPER, WM_GETTEXTLENGTH, 0, 0);
     g_pwzWsprMsg = (WCHAR*)malloc( sizeof(WCHAR) * (WhisperLen+1) );
@@ -1127,7 +1137,7 @@ HRESULT HandleDirectConnection(__in HWND hDlg)
     SendDlgItemMessage(hDlg, IDC_EDT_WHISPER, WM_GETTEXT, WhisperLen+1, (LPARAM) g_pwzWsprMsg);
     return OpenDirectConnection();
 }
-    
+
 //------------------------------------------------------------------
 // Function: OpenDirectConnection
 //
@@ -1142,15 +1152,15 @@ HRESULT OpenDirectConnection()
     PEER_NODE_INFO ** ppNodeInfo = NULL;
     ULONG cItem = 0;
     WCHAR wzMsg[MAX_PATH];
-    
+
     // Get a handle to an enumeration of peers corresponding to g_wzWsprID
     hr = PeerGraphEnumNodes(g_hGraph, g_wzWsprId, &hPeerEnum);
     if (SUCCEEDED(hr))
     {
         // Search for only one match
-        cItem = 1; 
+        cItem = 1;
 
-        // Extract the first data item from the enumeration 
+        // Extract the first data item from the enumeration
         hr = PeerGraphGetNextItem(hPeerEnum, &cItem, (PVOID **)&ppNodeInfo);
         PeerGraphEndEnumeration(hPeerEnum);
     }
@@ -1172,8 +1182,8 @@ HRESULT OpenDirectConnection()
         // The direct connection uses the first address from the destination
         // node's PEER_NODE_INFO struct (pAddresses[0])
         hr = PeerGraphOpenDirectConnection(g_hGraph, g_wzWsprId,
-            &(*ppNodeInfo)->pAddresses[0], &g_ullConnection);
-        
+                                           &(*ppNodeInfo)->pAddresses[0], &g_ullConnection);
+
         if (SUCCEEDED(hr))
         {
             StringCbPrintf(wzMsg, sizeof(wzMsg), L"ID: %08X", g_ullConnection);
@@ -1188,7 +1198,7 @@ HRESULT OpenDirectConnection()
     }
 
     return hr;
-}    
+}
 
 //-----------------------------------------------------------------------------
 // Function: CreateIdentity
@@ -1201,10 +1211,10 @@ HRESULT OpenDirectConnection()
 HRESULT CreateIdentity()
 {
     return PeerIdentityCreate(
-        L"GraphChat",
-        L"GraphChatMember",
-        (HCRYPTPROV)NULL,
-        &g_pwzIdentity);
+               L"GraphChat",
+               L"GraphChatMember",
+               (HCRYPTPROV)NULL,
+               &g_pwzIdentity);
 }
 
 //-----------------------------------------------------------------------------
@@ -1256,7 +1266,7 @@ HRESULT CreateGraph(PCWSTR wzCreatorId, PCWSTR wzGraphId)
     props.pwzGraphId = (PWSTR) wzGraphId;
     props.pwzCreatorId = (PWSTR) wzCreatorId;
     props.cPresenceMax = (ULONG) -1;    // publish presence for everyone.
-    
+
     // Set scope to match user input - global or local
     if (g_fGlobalScope)
     {
@@ -1285,7 +1295,7 @@ HRESULT CreateGraph(PCWSTR wzCreatorId, PCWSTR wzGraphId)
     {
         DisplayHrError(L"Failed to create a new Graph", hr);
     }
-    
+
     // A brand new graph is always in sync, and ready to listen
     if (SUCCEEDED(hr))
     {
@@ -1299,7 +1309,7 @@ HRESULT CreateGraph(PCWSTR wzCreatorId, PCWSTR wzGraphId)
         {
             // Just Retrieve the Scope ID, don't need the cloud name for now.
             hr = GetLocalCloudInfo(0, NULL, &dwLocalScopeID);
-           
+
             if (SUCCEEDED(hr))
             {
                 hr = PeerGraphListen(g_hGraph, PEER_GRAPH_SCOPE_LINKLOCAL, dwLocalScopeID, GRAPHING_PORT);
@@ -1355,7 +1365,7 @@ HRESULT OpenGraph(PCWSTR wzPeerId, PCWSTR wzGraphId)
         UpdateParticipant(wzPeerId, TRUE);
 
         hr = PrepareToChat(wzGraphId, TRUE);
-        
+
         if (hrOpen == PEER_S_GRAPH_DATA_CREATED)
         {
             if (hr == HRESULT_FROM_WIN32(WSA_E_NO_MORE))
@@ -1394,8 +1404,8 @@ HRESULT PrepareToChat(PCWSTR wzGraphId, __in BOOL fConnect)
 
     if (SUCCEEDED(hr) && fConnect)
     {
-       hr = DiscoverAddress(wzGraphId, &cEndpoints, &pEndpoints);
-       
+        hr = DiscoverAddress(wzGraphId, &cEndpoints, &pEndpoints);
+
         if (SUCCEEDED(hr) && cEndpoints > 0)
         {
             for (i=0; i< cEndpoints; i++)
@@ -1417,7 +1427,7 @@ HRESULT PrepareToChat(PCWSTR wzGraphId, __in BOOL fConnect)
         if (FAILED(hr))
         {
             DisplayHrError(L"Couldn't find/connect to Graph", hr);
-        }           
+        }
     }
 
     if (pEndpoints != NULL)
@@ -1440,7 +1450,8 @@ HRESULT PrepareToChat(PCWSTR wzGraphId, __in BOOL fConnect)
 HRESULT RegisterForEvents()
 {
     HRESULT hr = S_OK;
-    PEER_GRAPH_EVENT_REGISTRATION regs[] = {
+    PEER_GRAPH_EVENT_REGISTRATION regs[] =
+    {
         {PEER_GRAPH_EVENT_STATUS_CHANGED, 0},
         {PEER_GRAPH_EVENT_PROPERTY_CHANGED, 0},
         {PEER_GRAPH_EVENT_RECORD_CHANGED, 0},
@@ -1462,12 +1473,12 @@ HRESULT RegisterForEvents()
     else
     {
         hr = PeerGraphRegisterEvent(
-                 g_hGraph, 
-                 g_hEvent, 
-                 celems(regs), 
-                 regs,  
+                 g_hGraph,
+                 g_hEvent,
+                 celems(regs),
+                 regs,
                  &g_hPeerEvent
-                 );
+             );
         if (FAILED(hr))
         {
             DisplayHrError(L"PeerGraphRegisterEvents failed", hr);
@@ -1525,36 +1536,36 @@ VOID CALLBACK EventCallback(PVOID lpParam, BOOLEAN reason)
 
         switch (pEventData->eventType)
         {
-            case PEER_GRAPH_EVENT_RECORD_CHANGED:
-                ProcessRecordChangeEvent(pEventData);
-                break;
+        case PEER_GRAPH_EVENT_RECORD_CHANGED:
+            ProcessRecordChangeEvent(pEventData);
+            break;
 
-            case PEER_GRAPH_EVENT_STATUS_CHANGED:
-                ProcessStatusChangeEvent(pEventData->dwStatus);
-                break;
+        case PEER_GRAPH_EVENT_STATUS_CHANGED:
+            ProcessStatusChangeEvent(pEventData->dwStatus);
+            break;
 
-            case PEER_GRAPH_EVENT_NODE_CHANGED:
-                ProcessNodeChangeEvent(pEventData);
-                break;
+        case PEER_GRAPH_EVENT_NODE_CHANGED:
+            ProcessNodeChangeEvent(pEventData);
+            break;
 
-            case PEER_GRAPH_EVENT_DIRECT_CONNECTION:
-                ProcessDirectConnectionEvent(pEventData);
-                break;
+        case PEER_GRAPH_EVENT_DIRECT_CONNECTION:
+            ProcessDirectConnectionEvent(pEventData);
+            break;
 
-            case PEER_GRAPH_EVENT_NEIGHBOR_CONNECTION:
-                ProcessNeighborConnectionEvent(pEventData);
-                break;
-        
-            case PEER_GRAPH_EVENT_INCOMING_DATA:
-                ProcessIncomingDataEvent(pEventData);
-                break;
+        case PEER_GRAPH_EVENT_NEIGHBOR_CONNECTION:
+            ProcessNeighborConnectionEvent(pEventData);
+            break;
 
-            case PEER_GRAPH_EVENT_CONNECTION_REQUIRED:
-                ProcessConnectionRequiredEvent(pEventData);
-                break;
-            
-            default:
-                break;
+        case PEER_GRAPH_EVENT_INCOMING_DATA:
+            ProcessIncomingDataEvent(pEventData);
+            break;
+
+        case PEER_GRAPH_EVENT_CONNECTION_REQUIRED:
+            ProcessConnectionRequiredEvent(pEventData);
+            break;
+
+        default:
+            break;
         }
 
         PeerGraphFreeData(pEventData);
@@ -1572,35 +1583,35 @@ void ProcessNodeChangeEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 {
     HRESULT hr = S_OK;
 
-    if (pEventData->nodeChangeData.changeType == PEER_NODE_CHANGE_CONNECTED) 
+    if (pEventData->nodeChangeData.changeType == PEER_NODE_CHANGE_CONNECTED)
     {
-         UpdateParticipant(pEventData->nodeChangeData.pwzPeerId, TRUE);
+        UpdateParticipant(pEventData->nodeChangeData.pwzPeerId, TRUE);
     }
-    else if (pEventData->nodeChangeData.changeType == 
-                PEER_NODE_CHANGE_DISCONNECTED
-                )
+    else if (pEventData->nodeChangeData.changeType ==
+             PEER_NODE_CHANGE_DISCONNECTED
+            )
     {
         UpdateParticipant(pEventData->nodeChangeData.pwzPeerId, FALSE);
     }
     else if (
-       (pEventData->nodeChangeData.changeType == PEER_NODE_CHANGE_UPDATED) &&
-       (pEventData->nodeChangeData.ullNodeId == 0)
-       )
+        (pEventData->nodeChangeData.changeType == PEER_NODE_CHANGE_UPDATED) &&
+        (pEventData->nodeChangeData.ullNodeId == 0)
+    )
     {
-       // PEER_GRAPH_EVENT_NODE_CHANGED event is generated when a
-       // node's attribute changes or when its IPv6 address changes.
-       // If we have received this event in the local node, we
-       // assume in this sample that it is because of an address
-       // change as we don't do anything to change the node attributes.
-       // When we get an address change re-register with PNRP.
+        // PEER_GRAPH_EVENT_NODE_CHANGED event is generated when a
+        // node's attribute changes or when its IPv6 address changes.
+        // If we have received this event in the local node, we
+        // assume in this sample that it is because of an address
+        // change as we don't do anything to change the node attributes.
+        // When we get an address change re-register with PNRP.
 
-       SetStatus(L"Address Change Occured.");
+        SetStatus(L"Address Change Occured.");
 
-       hr = RegisterAddress(g_wzGraphId);
-       if (FAILED(hr))
-       {
-          DisplayHrError(L"Error attempting to Register Graph ID.",hr);
-       }
+        hr = RegisterAddress(g_wzGraphId);
+        if (FAILED(hr))
+        {
+            DisplayHrError(L"Error attempting to Register Graph ID.",hr);
+        }
     }
 }
 
@@ -1613,7 +1624,7 @@ void ProcessNodeChangeEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 //
 void ProcessNeighborConnectionEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 {
-    if (pEventData->connectionChangeData.status == PEER_CONNECTED) 
+    if (pEventData->connectionChangeData.status == PEER_CONNECTED)
     {
         UpdateNeighbor(pEventData->connectionChangeData.ullNodeId, TRUE);
     }
@@ -1648,7 +1659,7 @@ void ProcessStatusChangeEvent(__in DWORD dwStatus)
             if (dwStatus & PEER_GRAPH_STATUS_LISTENING)
             {
                 pwzMsg = L"Listening";
-                StringCbPrintf(wzChatTitle, sizeof(wzChatTitle), L"Waiting to chat in %s", 
+                StringCbPrintf(wzChatTitle, sizeof(wzChatTitle), L"Waiting to chat in %s",
                                pGraphProperties->pwzGraphId);
             }
         }
@@ -1664,14 +1675,14 @@ void ProcessStatusChangeEvent(__in DWORD dwStatus)
             if (dwStatus & PEER_GRAPH_STATUS_HAS_CONNECTIONS)
             {
                 pwzMsg = L"Connected";
-                StringCbPrintf(wzChatTitle, sizeof(wzChatTitle), L"Chatting in %s", 
+                StringCbPrintf(wzChatTitle, sizeof(wzChatTitle), L"Chatting in %s",
                                pGraphProperties->pwzGraphId);
             }
         }
     }
-    
+
     PeerGraphFreeData(pGraphProperties);
-    
+
     SetStatusPart(SB_PART_CONNECTED, pwzMsg);
 
     // Check if database is synchronized
@@ -1716,8 +1727,8 @@ void ProcessStatusChangeEvent(__in DWORD dwStatus)
         pwzMsg = L"Synchronized";
     }
     SetStatusPart(SB_PART_SYNCHRONIZED, pwzMsg);
-    
-    SetWindowText(g_hwndChatLabel, wzChatTitle);    
+
+    SetWindowText(g_hwndChatLabel, wzChatTitle);
 
     EnableDisconnectMenu();
     EnableInviteMenu();
@@ -1762,13 +1773,13 @@ void ProcessDirectConnectionEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 {
     switch (pEventData->connectionChangeData.status)
     {
-        case PEER_CONNECTED:
-            if (g_ullConnection == pEventData->connectionChangeData.ullConnectionId)
-                SendDirectData();
-            break;
-    
-        default:
-            break;
+    case PEER_CONNECTED:
+        if (g_ullConnection == pEventData->connectionChangeData.ullConnectionId)
+            SendDirectData();
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -1785,7 +1796,7 @@ void ProcessIncomingDataEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
     HPEERENUM hPeerEnum = NULL;
     HRESULT hr = S_OK;
     ULONG cItem = 0;
-    
+
     g_ullConnection = (ULONGLONG)pEventData->incomingData.ullConnectionId;
     hr = PeerGraphEnumConnections(g_hGraph, PEER_CONNECTION_DIRECT, &hPeerEnum);
     if (SUCCEEDED(hr))
@@ -1806,7 +1817,7 @@ void ProcessIncomingDataEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
                 PEER_CONNECTION_INFO * pConnectionInfo = ppConnections[i];
                 if (g_ullConnection == pConnectionInfo->ullConnectionId)
                 {
-                    StringCbPrintf(wzSentFrom, sizeof(wzSentFrom), L"Whisper from %s", 
+                    StringCbPrintf(wzSentFrom, sizeof(wzSentFrom), L"Whisper from %s",
                                    pConnectionInfo->pwzPeerId);
                     DisplayMessage(wzSentFrom, (PCWSTR) pEventData->incomingData.data.pbData);
                     break;
@@ -1817,7 +1828,7 @@ void ProcessIncomingDataEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 
         PeerGraphEndEnumeration(hPeerEnum);
     }
-    
+
     PeerGraphCloseDirectConnection(g_hGraph, g_ullConnection);
     g_ullConnection = 0;
 }
@@ -1832,7 +1843,7 @@ void ProcessIncomingDataEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 // Arguments:
 //   [out] pcEndpoints       : Number of connection info objects returned
 //   [out] pppConnectionInfo : Address of a pointer to an array of PEER_CONNECTION_INFO pointers.
-//                             The array is of length pcEndpoints.  The caller is 
+//                             The array is of length pcEndpoints.  The caller is
 //                             responsible for calling PeerGraphFreeData on this pointer.
 //
 // Returns:  HRESULT
@@ -1846,7 +1857,7 @@ HRESULT GetCurrentNeighborConnections(__out ULONG *pcEndpoints, __out PEER_CONNE
     //Failsafe values to return
     *pcEndpoints = 0;
     *pppConnectionInfo = NULL;
-    
+
     hr = PeerGraphEnumConnections(g_hGraph, PEER_CONNECTION_NEIGHBOR, &hPeerEnum);
     if (SUCCEEDED(hr))
     {
@@ -1867,7 +1878,7 @@ HRESULT GetCurrentNeighborConnections(__out ULONG *pcEndpoints, __out PEER_CONNE
 
         PeerGraphEndEnumeration(hPeerEnum);
     }
-    
+
     return hr;
 }
 
@@ -1897,7 +1908,7 @@ BOOL IsEndpointConnected( __in PPEER_PNRP_ENDPOINT_INFO pEndpoint, __in ULONG cC
 
     if (pEndpoint->payload.cbData != sizeof(ULONGLONG)) return FALSE;
     ullNodeId = *(ULONGLONG *)pEndpoint->payload.pbData;
-    
+
     for (ulCurrentConnection=0; ulCurrentConnection<cConnections; ulCurrentConnection++)
     {
         if (ppConnectionInfo[ulCurrentConnection] == NULL)
@@ -1917,9 +1928,9 @@ BOOL IsEndpointConnected( __in PPEER_PNRP_ENDPOINT_INFO pEndpoint, __in ULONG cC
 //----------------------------------------------------------------------------
 // Function: ProcessConnectionRequiredEvent
 //
-// Purpose : Process the PEER_GRAPH_EVENT_CONNECTION_REQUIRED event. 
+// Purpose : Process the PEER_GRAPH_EVENT_CONNECTION_REQUIRED event.
 //
-// Returns: void 
+// Returns: void
 //
 void ProcessConnectionRequiredEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 {
@@ -1938,7 +1949,7 @@ void ProcessConnectionRequiredEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 
     hr = GetCurrentNeighborConnections(&cNeighbors, &ppConnectionInfo);
 
-    // We could find an address then connect to it. 
+    // We could find an address then connect to it.
     if (SUCCEEDED(hr) && cEndpoints > 0)
     {
         ULONG randOffset = rand();
@@ -1951,7 +1962,7 @@ void ProcessConnectionRequiredEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
             //function is called.
             //
             //The randOffset is so that we pick different endpoints to try to connect to
-            //each time we come into this loop.  
+            //each time we come into this loop.
             //
             if (IsEndpointConnected(pEndpoints+((randOffset+i)%cEndpoints), cNeighbors, ppConnectionInfo) == FALSE)
             {
@@ -1987,7 +1998,7 @@ void ProcessConnectionRequiredEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
 //------------------------------------------------------------------
 // Function: SendDirectData
 //
-// Purpose:  Called by ProcessDirectConnectionEvent 
+// Purpose:  Called by ProcessDirectConnectionEvent
 //           to send message to peer.
 //
 // Returns:  nothing
@@ -2014,7 +2025,7 @@ void SendDirectData()
     {
         free(g_pwzWsprMsg);
         g_pwzWsprMsg = NULL;
-    }    
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -2047,54 +2058,55 @@ void DisplayEvent(__in PEER_GRAPH_EVENT_DATA *pEventData)
     WCHAR wzMessage[MAX_EVENT_MESSAGE] = {0};
     WCHAR wzMsg[512] = {0};
     HRESULT hr = S_OK;
-   
+
     switch (pEventData->eventType)
     {
-        case PEER_GRAPH_EVENT_NODE_CHANGED:
-            StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]: %s %s(Node ID:0x%I64X)\r\n", 
-                PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1], 
-                PEER_NODE_CHANGE_TYPE_STRINGS[pEventData->nodeChangeData.changeType-1],
-                pEventData->nodeChangeData.pwzPeerId,
-                pEventData->nodeChangeData.ullNodeId);
-            break;
+    case PEER_GRAPH_EVENT_NODE_CHANGED:
+        StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]: %s %s(Node ID:0x%I64X)\r\n",
+                        PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1],
+                        PEER_NODE_CHANGE_TYPE_STRINGS[pEventData->nodeChangeData.changeType-1],
+                        pEventData->nodeChangeData.pwzPeerId,
+                        pEventData->nodeChangeData.ullNodeId);
+        break;
 
-        case PEER_GRAPH_EVENT_STATUS_CHANGED :
-            StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]: Listening=%s, Has Connections=%s, Synchronized=%s\r\n", 
-                PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1], 
-                pEventData->dwStatus&PEER_GRAPH_STATUS_LISTENING?L"TRUE":L"FALSE",
-                pEventData->dwStatus&PEER_GRAPH_STATUS_HAS_CONNECTIONS?L"TRUE":L"FALSE",
-                pEventData->dwStatus&PEER_GRAPH_STATUS_SYNCHRONIZED?L"TRUE":L"FALSE");
-            break;
+    case PEER_GRAPH_EVENT_STATUS_CHANGED :
+        StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]: Listening=%s, Has Connections=%s, Synchronized=%s\r\n",
+                        PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1],
+                        pEventData->dwStatus&PEER_GRAPH_STATUS_LISTENING?L"TRUE":L"FALSE",
+                        pEventData->dwStatus&PEER_GRAPH_STATUS_HAS_CONNECTIONS?L"TRUE":L"FALSE",
+                        pEventData->dwStatus&PEER_GRAPH_STATUS_SYNCHRONIZED?L"TRUE":L"FALSE");
+        break;
 
-        case PEER_GRAPH_EVENT_DIRECT_CONNECTION: __fallthrough;
-        case PEER_GRAPH_EVENT_NEIGHBOR_CONNECTION:
-            hr = GetErrorMsg(pEventData->connectionChangeData.hrConnectionFailedReason, celems(wzMsg), wzMsg);
-            if (pEventData->connectionChangeData.hrConnectionFailedReason != 0 && SUCCEEDED(hr))
-            {
-                StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]: %s Connection ID:0x%I64X, Node ID:0x%I64X, Next Connection ID:0x%I64X, HRESULT=%s\r\n", 
-                PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1],
-                PEER_CONNECTION_STATUS_STRINGS[pEventData->connectionChangeData.status-1],
-                pEventData->connectionChangeData.ullConnectionId,
-                pEventData->connectionChangeData.ullNodeId,
-                pEventData->connectionChangeData.ullNextConnectionId,
-                wzMsg);
-            }
-            else
-            {
-                StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]: %s Connection ID:0x%I64X, Node ID:0x%I64X, Next Connection ID:0x%I64X, HRESULT=%d\r\n", 
-                PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1],
-                PEER_CONNECTION_STATUS_STRINGS[pEventData->connectionChangeData.status-1],
-                pEventData->connectionChangeData.ullConnectionId,
-                pEventData->connectionChangeData.ullNodeId,
-                pEventData->connectionChangeData.ullNextConnectionId,
-                pEventData->connectionChangeData.hrConnectionFailedReason);
-            }
-            break;
-        
-        default:
-            StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]\r\n", 
-                PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1]);
-            break;
+    case PEER_GRAPH_EVENT_DIRECT_CONNECTION:
+        __fallthrough;
+    case PEER_GRAPH_EVENT_NEIGHBOR_CONNECTION:
+        hr = GetErrorMsg(pEventData->connectionChangeData.hrConnectionFailedReason, celems(wzMsg), wzMsg);
+        if (pEventData->connectionChangeData.hrConnectionFailedReason != 0 && SUCCEEDED(hr))
+        {
+            StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]: %s Connection ID:0x%I64X, Node ID:0x%I64X, Next Connection ID:0x%I64X, HRESULT=%s\r\n",
+                            PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1],
+                            PEER_CONNECTION_STATUS_STRINGS[pEventData->connectionChangeData.status-1],
+                            pEventData->connectionChangeData.ullConnectionId,
+                            pEventData->connectionChangeData.ullNodeId,
+                            pEventData->connectionChangeData.ullNextConnectionId,
+                            wzMsg);
+        }
+        else
+        {
+            StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]: %s Connection ID:0x%I64X, Node ID:0x%I64X, Next Connection ID:0x%I64X, HRESULT=%d\r\n",
+                            PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1],
+                            PEER_CONNECTION_STATUS_STRINGS[pEventData->connectionChangeData.status-1],
+                            pEventData->connectionChangeData.ullConnectionId,
+                            pEventData->connectionChangeData.ullNodeId,
+                            pEventData->connectionChangeData.ullNextConnectionId,
+                            pEventData->connectionChangeData.hrConnectionFailedReason);
+        }
+        break;
+
+    default:
+        StringCchPrintf(wzMessage, celems(wzMessage), L"[%s]\r\n",
+                        PEER_GRAPH_EVENT_TYPE_STRINGS[pEventData->eventType-1]);
+        break;
     }
 
     SendDlgItemMessage(g_hwndMain, IDC_EVENTS, EM_SETSEL, 0x7fffffff, (LPARAM) -1);
@@ -2172,7 +2184,7 @@ void UpdateNeighbor(ULONGLONG ullNodeID, __in BOOL fAdd)
     if (fAdd)
     {
         StringCbPrintf(wzMsg, sizeof(wzMsg), L"0x%I64X", ullNodeID);
-        SendDlgItemMessage(g_hwndMain, IDC_NEIGHBORS, LB_ADDSTRING, 0, (LPARAM)wzMsg);        
+        SendDlgItemMessage(g_hwndMain, IDC_NEIGHBORS, LB_ADDSTRING, 0, (LPARAM)wzMsg);
     }
     else
     {
@@ -2274,7 +2286,7 @@ void CleanupGraph()
     {
         free(g_pwzWsprMsg);
         g_pwzWsprMsg = NULL;
-    }    
+    }
 
     ClearParticipantList();
 
@@ -2285,7 +2297,7 @@ void CleanupGraph()
 // Function: FormatAddress
 //
 // Purpose: Simple wrapper function converting an IP address into a string
-// 
+//
 // Returns:  nothing
 //
 void FormatAddress(__in SOCKADDR_IN6 * pSockAddr, __out PWSTR pwzBuff, DWORD cchMax)
@@ -2305,7 +2317,7 @@ void FormatAddress(__in SOCKADDR_IN6 * pSockAddr, __out PWSTR pwzBuff, DWORD cch
 // Function: DiscoverAddress
 //
 // Purpose:  Given a graphID, uses PnrpResolve to find address(es)
-// 
+//
 // Returns:  HRESULT
 //
 HRESULT DiscoverAddress(PCWSTR wzGraphId, __out ULONG *pcEndpoints, __out PPEER_PNRP_ENDPOINT_INFO *pEndpoints)
@@ -2321,7 +2333,7 @@ HRESULT DiscoverAddress(PCWSTR wzGraphId, __out ULONG *pcEndpoints, __out PPEER_
         hr = E_INVALIDARG;
         return hr;
     }
-    
+
     // generate the unsecured PeerName [0.id]
     hr = PeerCreatePeerName(NULL,wzGraphId,&pwzUnsecuredName);
     if(FAILED(hr))
@@ -2329,19 +2341,19 @@ HRESULT DiscoverAddress(PCWSTR wzGraphId, __out ULONG *pcEndpoints, __out PPEER_
         DisplayHrError(L"PeerName could not be created", hr);
         return hr;
     }
-    
+
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     if (g_fGlobalScope)
     {
         hr = PnrpResolve(pwzUnsecuredName, L"Global_", pcEndpoints, pEndpoints);
-    } 
+    }
     else
     {
         hr = GetLocalCloudInfo(celems(wzCloudName), wzCloudName, &dwLocalScopeID);
         if (SUCCEEDED(hr))
         {
-            hr = PnrpResolve(pwzUnsecuredName, wzCloudName, pcEndpoints, pEndpoints);  
+            hr = PnrpResolve(pwzUnsecuredName, wzCloudName, pcEndpoints, pEndpoints);
         }
         else
         {
@@ -2358,7 +2370,7 @@ HRESULT DiscoverAddress(PCWSTR wzGraphId, __out ULONG *pcEndpoints, __out PPEER_
 // Function: RegisterAddress
 //
 // Purpose:  Registers the current node's address with PNRP
-// 
+//
 // Returns:  HRESULT
 //
 HRESULT RegisterAddress(PCWSTR wzGraphId)
@@ -2369,7 +2381,7 @@ HRESULT RegisterAddress(PCWSTR wzGraphId)
     WCHAR wzCloudName[MAX_CLOUD_NAME];
     DWORD dwLocalScopeID = 0;
     WCHAR wzTemp[512];
-    SOCKADDR_IN6 * pAddress = NULL; 
+    SOCKADDR_IN6 * pAddress = NULL;
 
     // generate the unsecured PeerName [0.id]
     if(wzGraphId != NULL)
@@ -2392,7 +2404,7 @@ HRESULT RegisterAddress(PCWSTR wzGraphId)
         }
         else
         {
-            hr = GetLocalCloudInfo(celems(wzCloudName), wzCloudName, &dwLocalScopeID);            
+            hr = GetLocalCloudInfo(celems(wzCloudName), wzCloudName, &dwLocalScopeID);
             if (SUCCEEDED(hr))
             {
                 hr = PnrpRegister(g_pwzIdentity, pwzUnsecuredName, wzCloudName, pNodeInfo);
@@ -2434,7 +2446,7 @@ HRESULT RegisterAddress(PCWSTR wzGraphId)
 // Function: UnregisterAddress
 //
 // Purpose:  Unregisters the current node's address with PNRP
-// 
+//
 // Returns:  HRESULT
 //
 HRESULT UnregisterAddress(PCWSTR wzGraphId)
@@ -2457,7 +2469,7 @@ HRESULT UnregisterAddress(PCWSTR wzGraphId)
         hr = GetLocalCloudInfo(celems(wzCloudName), wzCloudName, &dwLocalScopeID);
         if (SUCCEEDED(hr))
         {
-             hr = PnrpUnregister();
+            hr = PnrpUnregister();
         }
     }
     if (FAILED(hr))
@@ -2466,7 +2478,7 @@ HRESULT UnregisterAddress(PCWSTR wzGraphId)
     }
     else
         g_fPnrpRegistered = FALSE;
-    
+
     PeerFreeData(pwzUnsecuredName);
     return hr;
 }
@@ -2511,7 +2523,7 @@ HRESULT GetErrorMsg(HRESULT hrError, ULONG cchMsg, __out_ecount(cchMsg) PWSTR pw
         return E_FAIL;
     else
         return S_OK;
-}  
+}
 
 //-----------------------------------------------------------------------------
 // Function: MsgErrHr
@@ -2533,7 +2545,7 @@ void MsgErrHr(PCWSTR pwzText, HRESULT hrErr, PCSTR pszFunction)
     else
         pwzMsg = wzMsg;
 
-    StringCchPrintf(wzError, celems(wzError), L"%s\r\n\r\nFunction: %S\r\nHRESULT=0x%08X (%s)", 
+    StringCchPrintf(wzError, celems(wzError), L"%s\r\n\r\nFunction: %S\r\nHRESULT=0x%08X (%s)",
                     pwzText, pszFunction, hrErr, pwzMsg);
 
     MessageBox(GetWindow(g_hwndMain, GW_ENABLEDPOPUP), wzError, L"Graph Chat Error", MB_OK | MB_ICONWARNING);
@@ -2563,7 +2575,7 @@ void EnableInviteMenu()
     BOOL fEnable = (g_hGraph != NULL);
 
     EnableMenuItem(GetMenu(g_hwndMain), IDM_GRAPH_INVITESOMEONENEARBY,
-        fEnable ? MF_ENABLED : (MF_DISABLED | MF_GRAYED));
+                   fEnable ? MF_ENABLED : (MF_DISABLED | MF_GRAYED));
 }
 
 //-----------------------------------------------------------------------------
@@ -2586,7 +2598,7 @@ HRESULT RegisterApplication(PEER_APPLICATION_REGISTRATION_TYPE registrationType)
     BOOL fNeedsUpdate = FALSE;
 
     GetModuleFileName(NULL, wzPath, MAX_PATH);
-    
+
     // Setup the application registration
     // Remember to use your own GUID for your application id
     //
@@ -2597,7 +2609,7 @@ HRESULT RegisterApplication(PEER_APPLICATION_REGISTRATION_TYPE registrationType)
 
     // Remember to set arguments in this field - if you include it in the pwzApplicationToLaunch field they
     // will not be passed to your instance on the remote side
-    // 
+    //
     appRegInfo.pwzApplicationArguments = L"/invite";
 
 
@@ -2615,9 +2627,9 @@ HRESULT RegisterApplication(PEER_APPLICATION_REGISTRATION_TYPE registrationType)
         {
             hr = PeerGetNextItem(hEnum, &cApplications, (PVOID **) &ppRegisteredApplications);
         }
-    
+
         if (SUCCEEDED(hr))
-        {    
+        {
             // Enumerate through the registered applications looking for Graph Chat by GUID
             //
             while (cIndex < cApplications)
@@ -2631,7 +2643,7 @@ HRESULT RegisterApplication(PEER_APPLICATION_REGISTRATION_TYPE registrationType)
                     //See if the registration needs to be updated (e.g. user is running the sample
                     //from a different location)
                     if (wcscmp(appRegInfo.pwzApplicationToLaunch, ppRegisteredApplications[cIndex]->pwzApplicationToLaunch) != 0 ||
-                        appRegInfo.dwPublicationScope != ppRegisteredApplications[cIndex]->dwPublicationScope)
+                            appRegInfo.dwPublicationScope != ppRegisteredApplications[cIndex]->dwPublicationScope)
                     {
                         fNeedsUpdate = TRUE;
                     }
@@ -2647,7 +2659,7 @@ HRESULT RegisterApplication(PEER_APPLICATION_REGISTRATION_TYPE registrationType)
 
             // Free up the Peer items we needed
             //
-            PeerFreeData(ppRegisteredApplications);   
+            PeerFreeData(ppRegisteredApplications);
         }
 
         PeerEndEnumeration(hEnum);
@@ -2683,17 +2695,17 @@ HRESULT RegisterApplication(PEER_APPLICATION_REGISTRATION_TYPE registrationType)
 HRESULT SignIntoPNM()
 {
     HRESULT hr = S_OK;
-    
+
     // Sign in to people near me service
     //
     hr = PeerCollabSignin(NULL, PEER_SIGNIN_NEAR_ME);
-        
+
     if (FAILED(hr))
     {
         MessageBox(NULL, L"People near me sign-in failed.", L"People Near Me Error", MB_OK);
         return hr;
     }
-    
+
     return hr;
 }
 
@@ -2758,7 +2770,7 @@ HRESULT InviteSomeoneNearby()
     {
         DisplayHrError(L"The Graph Chat invitation could not be created.", hr);
     }
-    
+
     PeoplePickerFreePerson(pPerson);
 
     return hr;
@@ -2778,7 +2790,7 @@ HRESULT HandleAppInvite()
     HRESULT hr = S_OK;
     GRAPHCHAT_INVITATION * pgcInvitation = NULL;
     size_t cbGraphId = 0;
-    
+
     // Get the information sent to us by the remote instance
     //
     hr = PeerCollabGetAppLaunchInfo(&pAppLaunchInfo);
@@ -2786,21 +2798,21 @@ HRESULT HandleAppInvite()
     if (SUCCEEDED(hr))
     {
         pgcInvitation = (GRAPHCHAT_INVITATION *) pAppLaunchInfo->pInvitation->applicationData.pbData;
-        
+
         // Check to make sure the structure we are receiving is the right size
-        // 
+        //
         if (pAppLaunchInfo->pInvitation->applicationData.cbData != sizeof(GRAPHCHAT_INVITATION))
         {
             return E_INVALIDARG;
         }
-        
+
         // Check to make sure our string is null terminated
         //
         if (FAILED(StringCbLength(pgcInvitation->wzGraphId,sizeof(pgcInvitation->wzGraphId),&cbGraphId)))
         {
             return E_INVALIDARG;
         }
-       
+
         // Get the me contact to get my nickname for display
         //
         hr = PeerCollabGetContact(NULL, &pMeContact);
@@ -2809,7 +2821,7 @@ HRESULT HandleAppInvite()
         {
             // Connect to the graph
             //
-           
+
             g_fGlobalScope = pgcInvitation->fGlobalScope;
 
             hr = OpenGraph(pMeContact->pwzNickName, pgcInvitation->wzGraphId);
@@ -2838,7 +2850,7 @@ HRESULT HandleAppInvite()
         {
             DisplayHrError(L"Unable to accept invitation", hr);
         }
-    }    
+    }
     return hr;
 
 }
@@ -2851,8 +2863,8 @@ HRESULT HandleAppInvite()
 //           to select the best destination address to use.
 //
 // Arguments:
-//   pEndpoint          : Pointer to a PPEER_PNRP_ENDPOINT_INFO structure containing 
-//                        the addresses of interest  
+//   pEndpoint          : Pointer to a PPEER_PNRP_ENDPOINT_INFO structure containing
+//                        the addresses of interest
 //   psaBestAddress     : The "best" destination address to use for connecting
 //                        to this host.
 //
@@ -2914,16 +2926,16 @@ HRESULT WINAPI GetBestDestinationAddress(
         //  Sort with SIO_ADDRESS_LIST_SORT IOCTL
         //
         iErr = WSAIoctl(
-            g_hIoctlSocket,
-            SIO_ADDRESS_LIST_SORT,
-            (LPVOID)pAddrList,
-            dwSize,
-            (LPVOID)pAddrList,
-            dwSize,
-            &dwBytes,
-            NULL,
-            NULL
-            );
+                   g_hIoctlSocket,
+                   SIO_ADDRESS_LIST_SORT,
+                   (LPVOID)pAddrList,
+                   dwSize,
+                   (LPVOID)pAddrList,
+                   dwSize,
+                   &dwBytes,
+                   NULL,
+                   NULL
+               );
 
         if(iErr == SOCKET_ERROR)
         {

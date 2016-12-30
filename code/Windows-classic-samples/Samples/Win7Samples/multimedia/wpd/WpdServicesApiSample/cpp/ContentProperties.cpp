@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -276,7 +276,7 @@ void WriteContentProperties(
         {
             printf("! Failed to retrieve property attributes for object '%ws', hr = 0x%lx\n", szSelection, hr);
         }
-        
+
     }
 
     // 4) Prompt the user for the new value of the NAME_GenericObj_Name property only if the property attributes report

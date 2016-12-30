@@ -1,4 +1,4 @@
-//
+﻿//
 // snoop.h
 //
 // CSnoopWnd declaration.
@@ -38,8 +38,8 @@ private:
 
     static void _SetThis(HWND hWnd, LPARAM lParam)
     {
-        SetWindowLongPtr(hWnd, GWLP_USERDATA, 
-                      (LONG_PTR)((CREATESTRUCT *)lParam)->lpCreateParams);
+        SetWindowLongPtr(hWnd, GWLP_USERDATA,
+                         (LONG_PTR)((CREATESTRUCT *)lParam)->lpCreateParams);
     }
 
     static CSnoopWnd *_GetThis(HWND hWnd)

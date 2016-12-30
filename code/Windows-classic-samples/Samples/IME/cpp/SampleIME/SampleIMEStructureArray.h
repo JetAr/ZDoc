@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
 //
@@ -62,7 +62,10 @@ public:
         _imeVector.erase(beginIter, lastIter);
     }
 
-    size_t Count() const { return _imeVector.size(); }
+    size_t Count() const
+    {
+        return _imeVector.size();
+    }
 
     void Append(const T& tVal)
     {

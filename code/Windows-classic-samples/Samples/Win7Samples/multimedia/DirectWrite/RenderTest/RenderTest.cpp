@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,62 +28,62 @@ ID2D1Factory*   g_d2dFactory    = NULL;
 
 namespace
 {
-    // Global variables used only in this module.
-    DWRITE_MEASURING_MODE g_measuringMode = DWRITE_MEASURING_MODE_NATURAL;
-    IDWriteTextFormat* g_textFormat = NULL;
+// Global variables used only in this module.
+DWRITE_MEASURING_MODE g_measuringMode = DWRITE_MEASURING_MODE_NATURAL;
+IDWriteTextFormat* g_textFormat = NULL;
 
-    std::wstring g_text;
-    const static wchar_t g_defaultText[] =
-        L"ClearType is a software technology developed by Microsoft that improves the "
-        L"readability of text on existing LCDs (Liquid Crystal Displays), such as laptop "
-        L"screens, Pocket PC screens and flat panel monitors. With ClearType font technology, "
-        L"the words on your computer screen look almost as sharp and clear as those printed "
-        L"on a piece of paper.";
+std::wstring g_text;
+const static wchar_t g_defaultText[] =
+    L"ClearType is a software technology developed by Microsoft that improves the "
+    L"readability of text on existing LCDs (Liquid Crystal Displays), such as laptop "
+    L"screens, Pocket PC screens and flat panel monitors. With ClearType font technology, "
+    L"the words on your computer screen look almost as sharp and clear as those printed "
+    L"on a piece of paper.";
 
-    // Current monitor.
-    HMONITOR g_monitor;
+// Current monitor.
+HMONITOR g_monitor;
 
-    // Current font.
-    inline float PointsToDips(float points)
-    {
-        return points * (96.0f / 72);
-    }
-    wchar_t const g_defaultFamilyName[] = L"Times New Roman";
-    float const g_minFontSize = PointsToDips(4);
-    float g_fontSize = PointsToDips(12);
-    LOGFONT g_logFont;
+// Current font.
+inline float PointsToDips(float points)
+{
+    return points * (96.0f / 72);
+}
+wchar_t const g_defaultFamilyName[] = L"Times New Roman";
+float const g_minFontSize = PointsToDips(4);
+float g_fontSize = PointsToDips(12);
+LOGFONT g_logFont;
 
-    // Current angle of rotation.
-    int g_degrees = 0;
+// Current angle of rotation.
+int g_degrees = 0;
 
-    // Current renderer.
-    enum RendererID
-    {
-        RendererDWrite,
-        RendererD2D
-    };
-    RendererID g_rendererID = RendererDWrite;
-    IRenderer* g_renderer = NULL;
+// Current renderer.
+enum RendererID
+{
+    RendererDWrite,
+    RendererD2D
+};
+RendererID g_rendererID = RendererDWrite;
+IRenderer* g_renderer = NULL;
 
-    // Current magnifier state.
-    MagnifierInfo g_magnifier =
-    {
-        true,                   // visible
-        MagnifierInfo::Pixel,   // type
-        3,                      // scale
-        0
-    };
+// Current magnifier state.
+MagnifierInfo g_magnifier =
+{
+    true,                   // visible
+    MagnifierInfo::Pixel,   // type
+    3,                      // scale
+    0
+};
 
-    bool g_dragging;
-    POINT g_dragPos;
+bool g_dragging;
+POINT g_dragPos;
 
-    // The following variables are used for the translate animation that occurs
-    // on the Nudge Text Left and Nudge Text Right commands.
-    DWORD g_animationStartCount;
-    float g_animationDuration;
-    float g_animationStartX;
-    float g_animationEndX;
-    float g_animationCurrentX;
+// The following variables are used for the translate animation that occurs
+// on the Nudge Text Left and Nudge Text Right commands.
+DWORD g_animationStartCount;
+float g_animationDuration;
+float g_animationStartX;
+float g_animationEndX;
+float g_animationCurrentX;
 }
 
 // Forward declarations of functions included in this code module:
@@ -112,11 +112,11 @@ HRESULT OnPaste(HWND hwnd);
 void SetCaption(HWND hwnd);
 
 int APIENTRY wWinMain(
-    HINSTANCE   hInstance, 
+    HINSTANCE   hInstance,
     HINSTANCE   hPrevInstance,
     LPWSTR      commandLine,
     int         nCmdShow
-    )
+)
 {
     // The Microsoft Security Development Lifecycle recommends that all
     // applications include the following call to ensure that heap corruptions
@@ -162,26 +162,26 @@ int APIENTRY wWinMain(
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-                DWRITE_FACTORY_TYPE_SHARED, 
-                __uuidof(IDWriteFactory), 
-                reinterpret_cast<IUnknown**>(&g_dwriteFactory)
-                );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&g_dwriteFactory)
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         hr = D2D1CreateFactory(
-                D2D1_FACTORY_TYPE_SINGLE_THREADED, 
-                __uuidof(ID2D1Factory), 
-                NULL,
-                (IID_PPV_ARGS(&g_d2dFactory))
-                );
+                 D2D1_FACTORY_TYPE_SINGLE_THREADED,
+                 __uuidof(ID2D1Factory),
+                 NULL,
+                 (IID_PPV_ARGS(&g_d2dFactory))
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         // Initialize the LOGFONT and use it to construct the text format object.
-        // We use LOGFONT in this application only because we rely on the Win32 
+        // We use LOGFONT in this application only because we rely on the Win32
         // common font dialog.
         memset(&g_logFont, 0, sizeof(g_logFont));
         g_logFont.lfWeight = FW_NORMAL;
@@ -228,17 +228,17 @@ int APIENTRY wWinMain(
 
         // Create the window.
         hwnd = CreateWindow(
-            MAKEINTATOM(classAtom), 
-            L"", // caption (we'll set it later)
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, 
-            windowRect.right - windowRect.left, 
-            windowRect.bottom - windowRect.top, 
-            NULL, 
-            NULL, 
-            hInstance, 
-            NULL
-            );
+                   MAKEINTATOM(classAtom),
+                   L"", // caption (we'll set it later)
+                   WS_OVERLAPPEDWINDOW,
+                   CW_USEDEFAULT, CW_USEDEFAULT,
+                   windowRect.right - windowRect.left,
+                   windowRect.bottom - windowRect.top,
+                   NULL,
+                   NULL,
+                   hInstance,
+                   NULL
+               );
 
         if (hwnd == NULL)
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -262,7 +262,8 @@ int APIENTRY wWinMain(
         }
     }
 
-    delete g_renderer; g_renderer = NULL;
+    delete g_renderer;
+    g_renderer = NULL;
     SafeRelease(&g_textFormat);
     SafeRelease(&g_d2dFactory);
     SafeRelease(&g_dwriteFactory);
@@ -296,18 +297,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
         break;
 
     case WM_WINDOWPOSCHANGED:
+    {
+        HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONULL);
+        if (monitor != g_monitor)
         {
-            HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONULL);
-            if (monitor != g_monitor)
-            {
-                g_monitor = monitor;
-                if (g_renderer != NULL)
-                    g_renderer->SetMonitor(g_monitor);
+            g_monitor = monitor;
+            if (g_renderer != NULL)
+                g_renderer->SetMonitor(g_monitor);
 
-                InvalidateRect(hwnd, NULL, TRUE);
-            }
+            InvalidateRect(hwnd, NULL, TRUE);
         }
-        return DefWindowProc(hwnd, message, wParam, lParam);
+    }
+    return DefWindowProc(hwnd, message, wParam, lParam);
 
     case WM_LBUTTONDOWN:
         OnMouseDown(hwnd);
@@ -408,8 +409,8 @@ void InitializeMenuItems(HMENU popupMenu)
             break;
         }
 
-        UINT newState = 
-            (check ? MFS_CHECKED : 0) | 
+        UINT newState =
+            (check ? MFS_CHECKED : 0) |
             (disable ? MFS_DISABLED : 0);
 
         if (newState != info.fState)
@@ -543,8 +544,8 @@ bool OnCommand(HWND hwnd, WORD commandID)
 HRESULT IncreaseFontSize(HWND hwnd)
 {
     float newFontSize = (g_fontSize < PointsToDips(24)) ?
-        g_fontSize + PointsToDips(0.5f) :
-        g_fontSize * 1.25f;
+                        g_fontSize + PointsToDips(0.5f) :
+                        g_fontSize * 1.25f;
 
     return SetFontSize(hwnd, newFontSize);
 }
@@ -552,8 +553,8 @@ HRESULT IncreaseFontSize(HWND hwnd)
 HRESULT DecreaseFontSize(HWND hwnd)
 {
     float newFontSize = (g_fontSize <= PointsToDips(24)) ?
-        g_fontSize - PointsToDips(0.5f) :
-        g_fontSize * (1/1.25f);
+                        g_fontSize - PointsToDips(0.5f) :
+                        g_fontSize * (1/1.25f);
 
     return SetFontSize(hwnd, std::max(newFontSize, g_minFontSize));
 }
@@ -693,7 +694,8 @@ void SetRenderer(HWND hwnd, RendererID id)
 {
     if (id != g_rendererID)
     {
-        delete g_renderer; g_renderer = NULL;
+        delete g_renderer;
+        g_renderer = NULL;
 
         g_rendererID = id;
 
@@ -821,7 +823,7 @@ void UpdateAnimation(HWND hwnd)
 
     if (elapsed < g_animationDuration)
     {
-        // We're still animating. Compuate the current x by interpolating between 
+        // We're still animating. Compuate the current x by interpolating between
         // the start x and end x.
         float r = elapsed / g_animationDuration;
         g_animationCurrentX = (g_animationStartX * (1 - r)) + (g_animationEndX * r);
@@ -847,27 +849,28 @@ HRESULT CreateRenderer(HWND hwnd)
     RECT clientRect;
     GetClientRect(hwnd, &clientRect);
 
-    delete g_renderer; g_renderer = NULL;
+    delete g_renderer;
+    g_renderer = NULL;
 
     if (g_rendererID == RendererD2D)
     {
         g_renderer = CreateD2DRenderer(
-            hwnd,
-            clientRect.right,
-            clientRect.bottom,
-            g_textFormat,
-            g_text.c_str()
-            );
+                         hwnd,
+                         clientRect.right,
+                         clientRect.bottom,
+                         g_textFormat,
+                         g_text.c_str()
+                     );
     }
     else
     {
         g_renderer = CreateDWriteRenderer(
-            hwnd,
-            clientRect.right,
-            clientRect.bottom,
-            g_textFormat,
-            g_text.c_str()
-            );
+                         hwnd,
+                         clientRect.right,
+                         clientRect.bottom,
+                         g_textFormat,
+                         g_text.c_str()
+                     );
     }
     if (g_renderer == NULL)
         return E_FAIL;
@@ -933,7 +936,7 @@ void OnSize(HWND hwnd)
         g_renderer->SetWindowSize(
             clientRect.right,
             clientRect.bottom
-            );
+        );
 
         g_renderer->SetMagnifier(g_magnifier);
 
@@ -979,7 +982,7 @@ void OnMouseMove(HWND hwnd)
 
         if (g_renderer != NULL)
             g_renderer->SetMagnifier(g_magnifier);
-        
+
         InvalidateRect(hwnd, NULL, TRUE);
     }
 }
@@ -1009,11 +1012,11 @@ void SafeAppend(wchar_t* buffer, size_t bufferSize, size_t* length, wchar_t* tex
 void SafeAppend(wchar_t* buffer, size_t bufferSize, size_t* length, UINT stringID)
 {
     *length += LoadString(
-                    g_instance,
-                    stringID,
-                    buffer + *length,
-                    static_cast<int>(bufferSize - *length)
-                    );
+                   g_instance,
+                   stringID,
+                   buffer + *length,
+                   static_cast<int>(bufferSize - *length)
+               );
 }
 
 void SetCaption(HWND hwnd)

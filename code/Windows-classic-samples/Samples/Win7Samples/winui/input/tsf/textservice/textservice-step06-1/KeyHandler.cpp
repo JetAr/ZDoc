@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -48,17 +48,17 @@ STDAPI CKeyHandlerEditSession::DoEditSession(TfEditCookie ec)
 {
     switch (_wParam)
     {
-        case VK_LEFT:
-        case VK_RIGHT:
-            return _pTextService->_HandleArrowKey(ec, _pContext, _wParam);
+    case VK_LEFT:
+    case VK_RIGHT:
+        return _pTextService->_HandleArrowKey(ec, _pContext, _wParam);
 
-        case VK_RETURN:
-            return _pTextService->_HandleReturnKey(ec, _pContext);
+    case VK_RETURN:
+        return _pTextService->_HandleReturnKey(ec, _pContext);
 
-        default:
-            if (_wParam >= 'A' && _wParam <= 'Z')
-                return _pTextService->_HandleCharacterKey(ec, _pContext, _wParam);
-            break;
+    default:
+        if (_wParam >= 'A' && _wParam <= 'Z')
+            return _pTextService->_HandleCharacterKey(ec, _pContext, _wParam);
+        break;
     }
 
     return S_OK;
@@ -78,13 +78,13 @@ BOOL IsRangeCovered(TfEditCookie ec, ITfRange *pRangeTest, ITfRange *pRangeCover
     LONG lResult;
 
     if (pRangeCover->CompareStart(ec, pRangeTest, TF_ANCHOR_START, &lResult) != S_OK ||
-        lResult > 0)
+            lResult > 0)
     {
         return FALSE;
     }
 
     if (pRangeCover->CompareEnd(ec, pRangeTest, TF_ANCHOR_END, &lResult) != S_OK ||
-        lResult < 0)
+            lResult < 0)
     {
         return FALSE;
     }
@@ -182,7 +182,7 @@ HRESULT CTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext, WPA
 
     // get the selection
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
-        cFetched != 1)
+            cFetched != 1)
     {
         // no selection?
         return S_OK; // eat the keystroke
@@ -196,7 +196,7 @@ HRESULT CTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext, WPA
     if (wParam == VK_LEFT)
     {
         if (tfSelection.range->IsEqualStart(ec, pRangeComposition, TF_ANCHOR_START, &fEqual) == S_OK &&
-            !fEqual)
+                !fEqual)
         {
             tfSelection.range->ShiftStart(ec, -1, &cch, NULL);
         }
@@ -206,7 +206,7 @@ HRESULT CTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext, WPA
     {
         // VK_RIGHT
         if (tfSelection.range->IsEqualEnd(ec, pRangeComposition, TF_ANCHOR_END, &fEqual) == S_OK &&
-            !fEqual)
+                !fEqual)
         {
             tfSelection.range->ShiftEnd(ec, +1, &cch, NULL);
         }

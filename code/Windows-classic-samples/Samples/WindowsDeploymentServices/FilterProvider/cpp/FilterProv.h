@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     Copyright (c) Microsoft Corporation
 
@@ -39,7 +39,7 @@ Environment:
 #define VAL_DEVICE_POLICY_DENY              0
 
 //
-// This string is appended to DLL name to get the file name of configuration 
+// This string is appended to DLL name to get the file name of configuration
 // file.
 //
 #define FILTER_CONFIG_FILE_SUFFIX           L".filter.ini"

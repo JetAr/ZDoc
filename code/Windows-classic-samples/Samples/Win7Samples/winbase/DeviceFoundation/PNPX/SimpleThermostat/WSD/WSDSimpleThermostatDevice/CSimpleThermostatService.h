@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -35,23 +35,23 @@ public:
     //
     STDMETHODIMP GetCurrentTemp(
         __deref_out LONG* plTempOut
-        );
+    );
 
     STDMETHODIMP GetDesiredTemp(
         __deref_out LONG* plTempOut
-        );
+    );
 
     STDMETHODIMP SetDesiredTemp(
         LONG lTemp
-        );
+    );
 
     //
     // IUnknown Implementation
     //
     STDMETHODIMP QueryInterface(
-        __in REFIID riid, 
+        __in REFIID riid,
         __deref_out_opt void** ppvObject
-        );
+    );
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 

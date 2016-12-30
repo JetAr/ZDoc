@@ -1,4 +1,4 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 *
 *  MODULE:      SPINCUBE.C
 *
@@ -71,7 +71,7 @@ int giNumSpincubesThisProcess = 0;
 
 #pragma data_seg(".MYSEG")
 
-  int giNumSpincubesAllProcesses = 0;
+int giNumSpincubesAllProcesses = 0;
 
 #pragma data_seg()
 
@@ -84,7 +84,8 @@ HANDLE    ghMod;   // DLL's module handle
 LPCCSTYLE gpccs;   // global pointer to a CCSTYLE structure
 
 CCSTYLEFLAG aSpincubeStyleFlags[] = { { SS_ERASE,    0, TEXT("SS_ERASE")    },
-                                      { SS_INMOTION, 0, TEXT("SS_INMOTION") } };
+    { SS_INMOTION, 0, TEXT("SS_INMOTION") }
+};
 
 
 
@@ -125,61 +126,61 @@ CCSTYLEFLAG aSpincubeStyleFlags[] = { { SS_ERASE,    0, TEXT("SS_ERASE")    },
 
 BOOL WINAPI DllMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
 {
-  ghMod = hDLL;
-  switch (dwReason)
-  {
+    ghMod = hDLL;
+    switch (dwReason)
+    {
     case DLL_PROCESS_ATTACH:
     {
-      WNDCLASS wc;
+        WNDCLASS wc;
 
-      wc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_OWNDC |
-                         CS_GLOBALCLASS ;
-      wc.lpfnWndProc   = (WNDPROC) SpincubeWndProc;
-      wc.cbClsExtra    = 0;
-      wc.cbWndExtra    = SPINCUBE_EXTRA;
-      wc.hInstance     = hDLL;
-      wc.hIcon         = NULL;
-      wc.hCursor       = LoadCursor (NULL, IDC_ARROW);
-      wc.hbrBackground = NULL;
-      wc.lpszMenuName  = (LPTSTR) NULL;
-      wc.lpszClassName = (LPTSTR) SPINCUBECLASS;
+        wc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_OWNDC |
+                           CS_GLOBALCLASS ;
+        wc.lpfnWndProc   = (WNDPROC) SpincubeWndProc;
+        wc.cbClsExtra    = 0;
+        wc.cbWndExtra    = SPINCUBE_EXTRA;
+        wc.hInstance     = hDLL;
+        wc.hIcon         = NULL;
+        wc.hCursor       = LoadCursor (NULL, IDC_ARROW);
+        wc.hbrBackground = NULL;
+        wc.lpszMenuName  = (LPTSTR) NULL;
+        wc.lpszClassName = (LPTSTR) SPINCUBECLASS;
 
-      if (!RegisterClass (&wc))
-      {
-        MessageBox (NULL,
-                    GetStringRes (IDS_REGCLASSFAIL),
-                    (LPCTSTR) TEXT("SPINCUBE.DLL"),
-                    MB_OK | MB_ICONEXCLAMATION);
+        if (!RegisterClass (&wc))
+        {
+            MessageBox (NULL,
+                        GetStringRes (IDS_REGCLASSFAIL),
+                        (LPCTSTR) TEXT("SPINCUBE.DLL"),
+                        MB_OK | MB_ICONEXCLAMATION);
 
-        return FALSE;
-      }
+            return FALSE;
+        }
 
-      break;
+        break;
     }
 
 
     case DLL_PROCESS_DETACH:
     {
 
-      if (!UnregisterClass ((LPTSTR) SPINCUBECLASS, hDLL ))
-      {
-        MessageBox (NULL,
-                    GetStringRes (IDS_UNREGFAIL),
-                    (LPCTSTR) TEXT("SPINCUBE.DLL"),
-                    MB_OK | MB_ICONEXCLAMATION);
+        if (!UnregisterClass ((LPTSTR) SPINCUBECLASS, hDLL ))
+        {
+            MessageBox (NULL,
+                        GetStringRes (IDS_UNREGFAIL),
+                        (LPCTSTR) TEXT("SPINCUBE.DLL"),
+                        MB_OK | MB_ICONEXCLAMATION);
 
-        return FALSE;
-      }
+            return FALSE;
+        }
 
-      break;
+        break;
     }
 
 
     default:
 
-      break;
-  }
-  return TRUE;
+        break;
+    }
+    return TRUE;
 }
 
 
@@ -198,53 +199,53 @@ BOOL WINAPI DllMain (HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
 
 UINT CALLBACK CustomControlInfo (LPCCINFO acci)
 {
-  //
-  // Dlgedit is querying the number of controls this DLL supports, so return 1.
-  //   Then we'll get called again with a valid "acci"
-  //
+    //
+    // Dlgedit is querying the number of controls this DLL supports, so return 1.
+    //   Then we'll get called again with a valid "acci"
+    //
 
-  if (!acci)
+    if (!acci)
+
+        return 1;
+
+
+    //
+    // Fill in the constant calues.
+    //
+
+    acci[0].flOptions         = 0;
+    acci[0].cxDefault         = 40;      // default width  (dialog units)
+    acci[0].cyDefault         = 40;      // default height (dialog units)
+    acci[0].flStyleDefault    = WS_CHILD |
+                                WS_VISIBLE |
+                                SS_INMOTION;
+    acci[0].flExtStyleDefault = 0;
+    acci[0].flCtrlTypeMask    = 0;
+    acci[0].cStyleFlags       = NUM_SPINCUBE_STYLES;
+    acci[0].aStyleFlags       = aSpincubeStyleFlags;
+    acci[0].lpfnStyle         = SpincubeStyle;
+    acci[0].lpfnSizeToText    = SpincubeSizeToText;
+    acci[0].dwReserved1       = 0;
+    acci[0].dwReserved2       = 0;
+
+
+    //
+    // Copy the strings
+    //
+    // NOTE: MAKE SURE THE STRINGS COPIED DO NOT EXCEED THE LENGTH OF
+    //       THE BUFFERS IN THE CCINFO STRUCTURE!
+    //
+
+    _tcsncpy_s (acci[0].szClass, _countof(acci[0].szClass), SPINCUBECLASS, _TRUNCATE);
+    _tcsncpy_s (acci[0].szDesc, _countof(acci[0].szDesc),  SPINCUBEDESCRIPTION, _TRUNCATE);
+    _tcsncpy_s (acci[0].szTextDefault, _countof(acci[0].szTextDefault), SPINCUBEDEFAULTTEXT, _TRUNCATE);
+
+
+    //
+    // Return the number of controls that the DLL supports
+    //
 
     return 1;
-
-
-  //
-  // Fill in the constant calues.
-  //
-
-  acci[0].flOptions         = 0;
-  acci[0].cxDefault         = 40;      // default width  (dialog units)
-  acci[0].cyDefault         = 40;      // default height (dialog units)
-  acci[0].flStyleDefault    = WS_CHILD |
-                              WS_VISIBLE |
-                              SS_INMOTION;
-  acci[0].flExtStyleDefault = 0;
-  acci[0].flCtrlTypeMask    = 0;
-  acci[0].cStyleFlags       = NUM_SPINCUBE_STYLES;
-  acci[0].aStyleFlags       = aSpincubeStyleFlags;
-  acci[0].lpfnStyle         = SpincubeStyle;
-  acci[0].lpfnSizeToText    = SpincubeSizeToText;
-  acci[0].dwReserved1       = 0;
-  acci[0].dwReserved2       = 0;
-
-
-  //
-  // Copy the strings
-  //
-  // NOTE: MAKE SURE THE STRINGS COPIED DO NOT EXCEED THE LENGTH OF
-  //       THE BUFFERS IN THE CCINFO STRUCTURE!
-  //
-
-  _tcsncpy_s (acci[0].szClass, _countof(acci[0].szClass), SPINCUBECLASS, _TRUNCATE);
-  _tcsncpy_s (acci[0].szDesc, _countof(acci[0].szDesc),  SPINCUBEDESCRIPTION, _TRUNCATE);
-  _tcsncpy_s (acci[0].szTextDefault, _countof(acci[0].szTextDefault), SPINCUBEDEFAULTTEXT, _TRUNCATE);
-
-
-  //
-  // Return the number of controls that the DLL supports
-  //
-
-  return 1;
 }
 
 
@@ -263,20 +264,20 @@ UINT CALLBACK CustomControlInfo (LPCCINFO acci)
 
 BOOL CALLBACK SpincubeStyle (HWND hWndParent, LPCCSTYLE pccs)
 {
-  gpccs = pccs;
+    gpccs = pccs;
 
-  if (DialogBox (ghMod, TEXT("SpincubeStyle"), hWndParent,
-                       (DLGPROC)SpincubeDlgProc) == -1)
-  {
-    MessageBox (hWndParent,
-                GetStringRes (IDS_DLGBOXFAIL),
-                (LPCTSTR) TEXT("Spincube.dll"),
-                MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
+    if (DialogBox (ghMod, TEXT("SpincubeStyle"), hWndParent,
+                   (DLGPROC)SpincubeDlgProc) == -1)
+    {
+        MessageBox (hWndParent,
+                    GetStringRes (IDS_DLGBOXFAIL),
+                    (LPCTSTR) TEXT("Spincube.dll"),
+                    MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
 
-    return FALSE;
-  }
+        return FALSE;
+    }
 
-  return TRUE;
+    return TRUE;
 }
 
 
@@ -301,7 +302,7 @@ BOOL CALLBACK SpincubeStyle (HWND hWndParent, LPCCSTYLE pccs)
 INT CALLBACK SpincubeSizeToText (DWORD flStyle, DWORD flExtStyle,
                                  HFONT hFont,   LPTSTR pszText)
 {
-  return -1;
+    return -1;
 }
 
 
@@ -325,280 +326,280 @@ INT CALLBACK SpincubeSizeToText (DWORD flStyle, DWORD flExtStyle,
 LRESULT CALLBACK SpincubeWndProc (HWND hwnd, UINT msg, WPARAM wParam,
                                   LPARAM lParam)
 {
-  switch (msg)
-  {
+    switch (msg)
+    {
     case WM_CREATE:
     {
-      //
-      // Alloc & init a SPINCUBEINFO struct for this particular control
-      //
+        //
+        // Alloc & init a SPINCUBEINFO struct for this particular control
+        //
 
-      HDC            hdc;
-      LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
-      PSPINCUBEINFO  pSCI = (PSPINCUBEINFO) LocalAlloc (LPTR,
-                                                        sizeof(SPINCUBEINFO));
-      if (!pSCI)
-      {
-        MessageBox (NULL,
-                    GetStringRes (IDS_ALLOCFAIL),
-                    (LPCTSTR) TEXT("SPINCUBE.DLL"),
-                    MB_OK | MB_ICONEXCLAMATION);
-        return -1;
-      }
-
-
-      //
-      // Alloc the compatible DC for this control.
-      //
-
-      hdc = GetDC (hwnd);
-
-      if ((pSCI->hdcCompat = CreateCompatibleDC (hdc)) == NULL)
-      {
-        MessageBox (NULL,
-                    GetStringRes (IDS_CREATEDCFAIL),
-                    (LPCTSTR) TEXT("SPINCUBE.DLL"),
-                    MB_OK | MB_ICONEXCLAMATION);
-        return -1;
-      }
-
-      ReleaseDC (hwnd, hdc);
-
-
-      //
-      // Initialize this instance structure
-      //
-
-      pSCI->fCurrentXRotation =
-      pSCI->fCurrentYRotation =
-      pSCI->fCurrentZRotation = (float) 0.0;
-
-      pSCI->fCurrentXRotationInc =
-      pSCI->fCurrentYRotationInc =
-      pSCI->fCurrentZRotationInc = (float) 0.2617; // a random # (15 degrees)
-
-      pSCI->iCurrentXTranslation =
-      pSCI->iCurrentYTranslation =
-      pSCI->iCurrentZTranslation = 0;
-
-      //
-      // All these calculations so the cubes start out with random movements.
-      //
-
-      if ((pSCI->iCurrentXTranslationInc = (rand() % 10) + 2) > 7)
-
-        pSCI->iCurrentXTranslationInc = -pSCI->iCurrentXTranslationInc;
-
-      if ((pSCI->iCurrentYTranslationInc = (rand() % 10) + 2) <= 7)
-
-        pSCI->iCurrentYTranslationInc = -pSCI->iCurrentYTranslationInc;
-
-      if ((pSCI->iCurrentZTranslationInc = (rand() % 10) + 2) > 7)
-
-        pSCI->iCurrentZTranslationInc = -pSCI->iCurrentZTranslationInc;
-
-      pSCI->rcCubeBoundary.left   =
-      pSCI->rcCubeBoundary.top    = 0;
-      pSCI->rcCubeBoundary.right  = lpcs->cx;
-      pSCI->rcCubeBoundary.bottom = lpcs->cy;
-
-      pSCI->iOptions  = SPINCUBE_REPAINT_BKGND;
-      pSCI->hbmCompat = NULL;
-
-      SetWindowLongPtr (hwnd, GWL_SPINCUBEDATA, (LONG_PTR) pSCI);
-
-      SetTimer (hwnd, SPIN_EVENT, SPIN_INTERVAL, NULL);
-
-      //
-      // Increment the count vars
-      //
-
-      giNumSpincubesThisProcess++;
-      giNumSpincubesAllProcesses++;
-
-      break;
-    }
-
-    case WM_PAINT:
-
-      Paint (hwnd);
-      break;
-
-    case WM_TIMER:
-
-      switch (wParam)
-      {
-        case SPIN_EVENT:
+        HDC            hdc;
+        LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
+        PSPINCUBEINFO  pSCI = (PSPINCUBEINFO) LocalAlloc (LPTR,
+                              sizeof(SPINCUBEINFO));
+        if (!pSCI)
         {
-          PSPINCUBEINFO pSCI = (PSPINCUBEINFO) GetWindowLongPtr (hwnd,
-                                                              GWL_SPINCUBEDATA);
-
-          InvalidateRect (hwnd, &pSCI->rcCubeBoundary, FALSE);
-
-          break;
-        }
-      }
-
-      break;
-
-    case WM_LBUTTONDBLCLK:
-    {
-      //
-      // Toggle the erase state of the control
-      //
-
-      if (DO_ERASE(hwnd))
-
-        SetWindowLongPtr (hwnd, GWL_STYLE,
-                       GetWindowLongPtr (hwnd, GWL_STYLE) & ~SS_ERASE);
-
-
-      else
-      {
-        //
-        // Repaint the entire control to get rid of the (cube trails) mess
-        //
-
-        PSPINCUBEINFO pSCI = (PSPINCUBEINFO) GetWindowLongPtr (hwnd,
-                                                            GWL_SPINCUBEDATA);
-
-        SetWindowLongPtr (hwnd, GWL_STYLE,
-                       GetWindowLongPtr (hwnd, GWL_STYLE) | SS_ERASE);
-        pSCI->iOptions |= SPINCUBE_REPAINT_BKGND;
-        InvalidateRect (hwnd, NULL, FALSE);
-        SendMessage (hwnd, WM_PAINT, 0, 0);
-      }
-      break;
-    }
-
-    case WM_RBUTTONDBLCLK:
-    {
-      //
-      // Toggle the motion state of the control
-      //
-
-      if (IN_MOTION(hwnd))
-      {
-        KillTimer (hwnd, SPIN_EVENT);
-        SetWindowLongPtr (hwnd, GWL_STYLE,
-                       GetWindowLongPtr (hwnd, GWL_STYLE) & ~SS_INMOTION);
-      }
-      else
-      {
-        SetTimer (hwnd, SPIN_EVENT, SPIN_INTERVAL, NULL);
-        SetWindowLongPtr (hwnd, GWL_STYLE,
-                       GetWindowLongPtr (hwnd, GWL_STYLE) | SS_INMOTION);
-      }
-
-      break;
-    }
-
-    case WM_SIZE:
-
-      if (wParam == SIZE_MAXIMIZED || wParam == SIZE_RESTORED)
-      {
-        PSPINCUBEINFO pSCI = (PSPINCUBEINFO) GetWindowLongPtr (hwnd,
-                                                            GWL_SPINCUBEDATA);
-        //
-        // Get a new bitmap which is the new size of our window
-        //
-
-        HDC hdc = GetDC (hwnd);
-        HBITMAP hbmTemp = CreateCompatibleBitmap (hdc,
-                                                  (int) LOWORD (lParam),
-                                                  (int) HIWORD (lParam));
-        if (!hbmTemp)
-        {
-          //
-          // Scream, yell, & committ an untimely demise...
-          //
-
-          MessageBox (NULL,
-                      GetStringRes (IDS_CREATEBITMAPFAIL),
-                      (LPCTSTR) TEXT("SPINCUBE.DLL"),
-                      MB_OK | MB_ICONEXCLAMATION);
-          DestroyWindow (hwnd);
+            MessageBox (NULL,
+                        GetStringRes (IDS_ALLOCFAIL),
+                        (LPCTSTR) TEXT("SPINCUBE.DLL"),
+                        MB_OK | MB_ICONEXCLAMATION);
+            return -1;
         }
 
-        pSCI->hbmSave = SelectObject (pSCI->hdcCompat, hbmTemp);
-        if (pSCI->hbmCompat)
-        	DeleteObject (pSCI->hbmCompat);
-        ReleaseDC    (hwnd, hdc);
-        pSCI->hbmCompat = hbmTemp;
+
+        //
+        // Alloc the compatible DC for this control.
+        //
+
+        hdc = GetDC (hwnd);
+
+        if ((pSCI->hdcCompat = CreateCompatibleDC (hdc)) == NULL)
+        {
+            MessageBox (NULL,
+                        GetStringRes (IDS_CREATEDCFAIL),
+                        (LPCTSTR) TEXT("SPINCUBE.DLL"),
+                        MB_OK | MB_ICONEXCLAMATION);
+            return -1;
+        }
+
+        ReleaseDC (hwnd, hdc);
 
 
         //
-        // Reset the translation so the cube doesn't go spinning off into
-        //   space somewhere- we'd never see it again!
+        // Initialize this instance structure
         //
+
+        pSCI->fCurrentXRotation =
+            pSCI->fCurrentYRotation =
+                pSCI->fCurrentZRotation = (float) 0.0;
+
+        pSCI->fCurrentXRotationInc =
+            pSCI->fCurrentYRotationInc =
+                pSCI->fCurrentZRotationInc = (float) 0.2617; // a random # (15 degrees)
 
         pSCI->iCurrentXTranslation =
-        pSCI->iCurrentYTranslation =
-        pSCI->iCurrentZTranslation = 0;
+            pSCI->iCurrentYTranslation =
+                pSCI->iCurrentZTranslation = 0;
 
         //
-        // All these calculations so the cube starts out with random movements,
+        // All these calculations so the cubes start out with random movements.
         //
 
         if ((pSCI->iCurrentXTranslationInc = (rand() % 10) + 2) > 7)
 
-          pSCI->iCurrentXTranslationInc = -pSCI->iCurrentXTranslationInc;
+            pSCI->iCurrentXTranslationInc = -pSCI->iCurrentXTranslationInc;
 
         if ((pSCI->iCurrentYTranslationInc = (rand() % 10) + 2) <= 7)
 
-          pSCI->iCurrentYTranslationInc = -pSCI->iCurrentYTranslationInc;
+            pSCI->iCurrentYTranslationInc = -pSCI->iCurrentYTranslationInc;
 
         if ((pSCI->iCurrentZTranslationInc = (rand() % 10) + 2) > 7)
 
-          pSCI->iCurrentZTranslationInc = -pSCI->iCurrentZTranslationInc;
+            pSCI->iCurrentZTranslationInc = -pSCI->iCurrentZTranslationInc;
 
         pSCI->rcCubeBoundary.left   =
-        pSCI->rcCubeBoundary.top    = 0;
-        pSCI->rcCubeBoundary.right  = (int) LOWORD (lParam);
-        pSCI->rcCubeBoundary.bottom = (int) HIWORD (lParam);
+            pSCI->rcCubeBoundary.top    = 0;
+        pSCI->rcCubeBoundary.right  = lpcs->cx;
+        pSCI->rcCubeBoundary.bottom = lpcs->cy;
 
-        pSCI->iOptions |= SPINCUBE_REPAINT_BKGND;
+        pSCI->iOptions  = SPINCUBE_REPAINT_BKGND;
+        pSCI->hbmCompat = NULL;
 
-        InvalidateRect (hwnd, NULL, FALSE);
-      }
+        SetWindowLongPtr (hwnd, GWL_SPINCUBEDATA, (LONG_PTR) pSCI);
 
-      break;
+        SetTimer (hwnd, SPIN_EVENT, SPIN_INTERVAL, NULL);
+
+        //
+        // Increment the count vars
+        //
+
+        giNumSpincubesThisProcess++;
+        giNumSpincubesAllProcesses++;
+
+        break;
+    }
+
+    case WM_PAINT:
+
+        Paint (hwnd);
+        break;
+
+    case WM_TIMER:
+
+        switch (wParam)
+        {
+        case SPIN_EVENT:
+        {
+            PSPINCUBEINFO pSCI = (PSPINCUBEINFO) GetWindowLongPtr (hwnd,
+                                 GWL_SPINCUBEDATA);
+
+            InvalidateRect (hwnd, &pSCI->rcCubeBoundary, FALSE);
+
+            break;
+        }
+        }
+
+        break;
+
+    case WM_LBUTTONDBLCLK:
+    {
+        //
+        // Toggle the erase state of the control
+        //
+
+        if (DO_ERASE(hwnd))
+
+            SetWindowLongPtr (hwnd, GWL_STYLE,
+                              GetWindowLongPtr (hwnd, GWL_STYLE) & ~SS_ERASE);
+
+
+        else
+        {
+            //
+            // Repaint the entire control to get rid of the (cube trails) mess
+            //
+
+            PSPINCUBEINFO pSCI = (PSPINCUBEINFO) GetWindowLongPtr (hwnd,
+                                 GWL_SPINCUBEDATA);
+
+            SetWindowLongPtr (hwnd, GWL_STYLE,
+                              GetWindowLongPtr (hwnd, GWL_STYLE) | SS_ERASE);
+            pSCI->iOptions |= SPINCUBE_REPAINT_BKGND;
+            InvalidateRect (hwnd, NULL, FALSE);
+            SendMessage (hwnd, WM_PAINT, 0, 0);
+        }
+        break;
+    }
+
+    case WM_RBUTTONDBLCLK:
+    {
+        //
+        // Toggle the motion state of the control
+        //
+
+        if (IN_MOTION(hwnd))
+        {
+            KillTimer (hwnd, SPIN_EVENT);
+            SetWindowLongPtr (hwnd, GWL_STYLE,
+                              GetWindowLongPtr (hwnd, GWL_STYLE) & ~SS_INMOTION);
+        }
+        else
+        {
+            SetTimer (hwnd, SPIN_EVENT, SPIN_INTERVAL, NULL);
+            SetWindowLongPtr (hwnd, GWL_STYLE,
+                              GetWindowLongPtr (hwnd, GWL_STYLE) | SS_INMOTION);
+        }
+
+        break;
+    }
+
+    case WM_SIZE:
+
+        if (wParam == SIZE_MAXIMIZED || wParam == SIZE_RESTORED)
+        {
+            PSPINCUBEINFO pSCI = (PSPINCUBEINFO) GetWindowLongPtr (hwnd,
+                                 GWL_SPINCUBEDATA);
+            //
+            // Get a new bitmap which is the new size of our window
+            //
+
+            HDC hdc = GetDC (hwnd);
+            HBITMAP hbmTemp = CreateCompatibleBitmap (hdc,
+                              (int) LOWORD (lParam),
+                              (int) HIWORD (lParam));
+            if (!hbmTemp)
+            {
+                //
+                // Scream, yell, & committ an untimely demise...
+                //
+
+                MessageBox (NULL,
+                            GetStringRes (IDS_CREATEBITMAPFAIL),
+                            (LPCTSTR) TEXT("SPINCUBE.DLL"),
+                            MB_OK | MB_ICONEXCLAMATION);
+                DestroyWindow (hwnd);
+            }
+
+            pSCI->hbmSave = SelectObject (pSCI->hdcCompat, hbmTemp);
+            if (pSCI->hbmCompat)
+                DeleteObject (pSCI->hbmCompat);
+            ReleaseDC    (hwnd, hdc);
+            pSCI->hbmCompat = hbmTemp;
+
+
+            //
+            // Reset the translation so the cube doesn't go spinning off into
+            //   space somewhere- we'd never see it again!
+            //
+
+            pSCI->iCurrentXTranslation =
+                pSCI->iCurrentYTranslation =
+                    pSCI->iCurrentZTranslation = 0;
+
+            //
+            // All these calculations so the cube starts out with random movements,
+            //
+
+            if ((pSCI->iCurrentXTranslationInc = (rand() % 10) + 2) > 7)
+
+                pSCI->iCurrentXTranslationInc = -pSCI->iCurrentXTranslationInc;
+
+            if ((pSCI->iCurrentYTranslationInc = (rand() % 10) + 2) <= 7)
+
+                pSCI->iCurrentYTranslationInc = -pSCI->iCurrentYTranslationInc;
+
+            if ((pSCI->iCurrentZTranslationInc = (rand() % 10) + 2) > 7)
+
+                pSCI->iCurrentZTranslationInc = -pSCI->iCurrentZTranslationInc;
+
+            pSCI->rcCubeBoundary.left   =
+                pSCI->rcCubeBoundary.top    = 0;
+            pSCI->rcCubeBoundary.right  = (int) LOWORD (lParam);
+            pSCI->rcCubeBoundary.bottom = (int) HIWORD (lParam);
+
+            pSCI->iOptions |= SPINCUBE_REPAINT_BKGND;
+
+            InvalidateRect (hwnd, NULL, FALSE);
+        }
+
+        break;
 
     case WM_DESTROY:
     {
-      PSPINCUBEINFO pSCI = (PSPINCUBEINFO) GetWindowLongPtr (hwnd,
-                                                          GWL_SPINCUBEDATA);
-      //
-      // Clean up all the resources used for this control
-      //
+        PSPINCUBEINFO pSCI = (PSPINCUBEINFO) GetWindowLongPtr (hwnd,
+                             GWL_SPINCUBEDATA);
+        //
+        // Clean up all the resources used for this control
+        //
 
-      if (IN_MOTION(hwnd))
+        if (IN_MOTION(hwnd))
 
-        KillTimer (hwnd, SPIN_EVENT);
+            KillTimer (hwnd, SPIN_EVENT);
 
-      SelectObject (pSCI->hdcCompat, pSCI->hbmSave);
-      DeleteObject (pSCI->hbmCompat);
-      DeleteDC     (pSCI->hdcCompat);
+        SelectObject (pSCI->hdcCompat, pSCI->hbmSave);
+        DeleteObject (pSCI->hbmCompat);
+        DeleteDC     (pSCI->hdcCompat);
 
-      LocalFree (LocalHandle ((LPVOID) pSCI));
+        LocalFree (LocalHandle ((LPVOID) pSCI));
 
 
-      //
-      // Decrement the global count vars
-      //
+        //
+        // Decrement the global count vars
+        //
 
-      giNumSpincubesThisProcess--;
-      giNumSpincubesAllProcesses--;
+        giNumSpincubesThisProcess--;
+        giNumSpincubesAllProcesses--;
 
-      break;
+        break;
     }
 
     default:
 
-      return (DefWindowProc(hwnd, msg, wParam, lParam));
-  }
+        return (DefWindowProc(hwnd, msg, wParam, lParam));
+    }
 
-  return ((LONG) TRUE);
+    return ((LONG) TRUE);
 }
 
 
@@ -618,57 +619,57 @@ LRESULT CALLBACK SpincubeWndProc (HWND hwnd, UINT msg, WPARAM wParam,
 LRESULT CALLBACK SpincubeDlgProc (HWND hDlg, UINT msg, WPARAM wParam,
                                   LPARAM lParam)
 {
-  switch (msg)
-  {
+    switch (msg)
+    {
     case WM_INITDIALOG :
     {
-      if (gpccs->flStyle & SS_ERASE)
+        if (gpccs->flStyle & SS_ERASE)
 
-        CheckDlgButton (hDlg, DID_ERASE, 1);
+            CheckDlgButton (hDlg, DID_ERASE, 1);
 
-      if (gpccs->flStyle & SS_INMOTION)
+        if (gpccs->flStyle & SS_INMOTION)
 
-        CheckDlgButton (hDlg, DID_INMOTION, 1);
+            CheckDlgButton (hDlg, DID_INMOTION, 1);
 
-      break;
+        break;
     }
 
     case WM_COMMAND:
 
-      switch (LOWORD(wParam))
-      {
+        switch (LOWORD(wParam))
+        {
         case DID_ERASE:
 
-          if (IsDlgButtonChecked (hDlg, DID_ERASE))
+            if (IsDlgButtonChecked (hDlg, DID_ERASE))
 
-            gpccs->flStyle |= SS_ERASE;
+                gpccs->flStyle |= SS_ERASE;
 
-          else
+            else
 
-            gpccs->flStyle &= ~SS_ERASE;
+                gpccs->flStyle &= ~SS_ERASE;
 
-          break;
+            break;
 
         case DID_INMOTION:
 
-          if (IsDlgButtonChecked (hDlg, DID_INMOTION))
+            if (IsDlgButtonChecked (hDlg, DID_INMOTION))
 
-            gpccs->flStyle |= SS_INMOTION;
+                gpccs->flStyle |= SS_INMOTION;
 
-          else
+            else
 
-            gpccs->flStyle &= ~SS_INMOTION;
+                gpccs->flStyle &= ~SS_INMOTION;
 
-          break;
+            break;
 
         case DID_OK:
 
-          EndDialog  (hDlg, 1);
-          break;
-      }
-      break;
-  }
-  return FALSE;
+            EndDialog  (hDlg, 1);
+            break;
+        }
+        break;
+    }
+    return FALSE;
 }
 
 
@@ -687,9 +688,9 @@ LRESULT CALLBACK SpincubeDlgProc (HWND hDlg, UINT msg, WPARAM wParam,
 
 LPTSTR   GetStringRes (int id)
 {
-  static TCHAR szBuffer[MAX_PATH];
+    static TCHAR szBuffer[MAX_PATH];
 
-  szBuffer[0]=0;
-  LoadString (GetModuleHandle (NULL), id, szBuffer, MAX_PATH);
-  return szBuffer;
+    szBuffer[0]=0;
+    LoadString (GetModuleHandle (NULL), id, szBuffer, MAX_PATH);
+    return szBuffer;
 }

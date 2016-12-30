@@ -1,17 +1,17 @@
-/*---------------------------------------------------------------------------
+﻿/*---------------------------------------------------------------------------
     Copyright (c) 1998 - 2000  Microsoft Corporation
-    Module Name: IpArp.exe    
+    Module Name: IpArp.exe
     File       : IpArp.cpp
     Description: This file demonstrates the use of IP Helper APIs to
                  manipulate ARP cache.
     Author:
     Frank Li           April 16, 1998
 
-    
+
     Revision History:
     Who         Wen        What
     --------    --------    ----------------------------------
-    Frank Li    04-16-98    created   
+    Frank Li    04-16-98    created
 ---------------------------------------------------------------------------*/
 
 #include "IpArp.h"
@@ -55,45 +55,45 @@ void _cdecl main(int argc, char **argv)
 
     nRet = WSAStartup(wVersionRequested, &wsaData);
     if (wsaData.wVersion != wVersionRequested)
-    {    
+    {
         fprintf(stderr,"\n Wrong version\n");
         return;
     }
 
 
-    if ((argc < 2) || (argv[1][0] != '-'))        
+    if ((argc < 2) || (argv[1][0] != '-'))
         Usage("IpArp");
-    if (strlen(argv[1]) > 2)     
-        Usage("IpArp");  
+    if (strlen(argv[1]) > 2)
+        Usage("IpArp");
 
-    switch(argv[1][1]) 
-    {    
+    switch(argv[1][1])
+    {
     case 'a':
         // Print arp table
         DoGetIpNetTable();
-        break;     
-    case 's':      
-        //Update or add an ARP Internet/Ethernet Address entry 
+        break;
+    case 's':
+        //Update or add an ARP Internet/Ethernet Address entry
         if (argc == 4)
             DoSetIpNetEntry(argv[2], argv[3]);
         else if (argc == 5)
             DoSetIpNetEntry(argv[2], argv[3], argv[4]);
         else
             Usage("IpArp");
-        break;    
-    case 'd':     
-        //Delete an Internet/Ethernet Address pair from the ARP table 
+        break;
+    case 'd':
+        //Delete an Internet/Ethernet Address pair from the ARP table
         if (argc == 3)
             DoDeleteIpNetEntry(argv[2]);
         else if (argc == 4)
             DoDeleteIpNetEntry(argv[2], argv[3]);
         else
-            Usage("IpArp");                
-        break;  
-    default:    
+            Usage("IpArp");
+        break;
+    default:
         // help
-        Usage("IpArp");        
-        break;    
+        Usage("IpArp");
+        break;
     }
     WSACleanup();
 }
@@ -130,14 +130,14 @@ void DoGetIpNetTable()
 
 //----------------------------------------------------------------------------
 // Add an arp entry with ip dotted decimal address of "pszDottedInetAddr" and
-// physical address of "pszPhysAddr" in 00-aa-bb-cc-dd-ee format on interface 
+// physical address of "pszPhysAddr" in 00-aa-bb-cc-dd-ee format on interface
 // index of "pszInterface" in hex form.
 //----------------------------------------------------------------------------
 void DoSetIpNetEntry(char* pszDottedInetAddr, char* pszPhysAddr, char* pszInterface)
 {
     DWORD dwInetAddr = 0; // ip address
     DWORD dwStatus;
-    BYTE bPhysAddr[MAXLEN_PHYSADDR]; 
+    BYTE bPhysAddr[MAXLEN_PHYSADDR];
 
     if (pszDottedInetAddr == NULL || pszPhysAddr == NULL)
     {
@@ -183,11 +183,11 @@ void DoSetIpNetEntry(char* pszDottedInetAddr, char* pszPhysAddr, char* pszInterf
     if (dwStatus != NO_ERROR)
     {
         printf("IpArp: couldn't add (%s, %s), dwStatus = %lu.\n",
-                    pszDottedInetAddr, pszPhysAddr, dwStatus);
+               pszDottedInetAddr, pszPhysAddr, dwStatus);
     }
 }
 //----------------------------------------------------------------------------
-// Delete an arp entry with ip dotted decimal address of "pszDottedInetAddr" 
+// Delete an arp entry with ip dotted decimal address of "pszDottedInetAddr"
 // and interface index of "pszInterface" in hex form.
 //----------------------------------------------------------------------------
 void DoDeleteIpNetEntry(char* pszDottedInetAddr, char* pszInterface)
@@ -225,13 +225,13 @@ void DoDeleteIpNetEntry(char* pszDottedInetAddr, char* pszInterface)
         arpEntry.dwIndex = pIpAddrTable->table[0].dwIndex;
         free(pIpAddrTable);
     }
-    
+
     arpEntry.dwAddr = dwInetAddr;
     dwStatus = DeleteIpNetEntry(&arpEntry);
     if (dwStatus != NO_ERROR)
     {
         printf("IpArp: couldn't delete (%s), dwStatus = %lu.\n",
-                    pszDottedInetAddr, dwStatus);
+               pszDottedInetAddr, dwStatus);
     }
 
 
@@ -276,21 +276,21 @@ bool InterfaceIdxToInterfaceIp(PMIB_IPADDRTABLE pIpAddrTable, DWORD dwIndex, cha
 int StringToPhysAddr(char* szInEther,  char* szOutEther)
 {
     const char DASH = '-';
-    register char c;    
-    register int val;    
+    register char c;
+    register int val;
 
     // check szInEther for the correct format
     if (strlen(szInEther) != 17)
         return (-1);
     if (szInEther[2] != DASH || szInEther[5] != DASH || szInEther[8] != DASH ||
-        szInEther[8] != DASH || szInEther[14] != DASH)
+            szInEther[8] != DASH || szInEther[14] != DASH)
         return (-1);
     if (!isxdigit(szInEther[0]) || !isxdigit(szInEther[1]) ||
-        !isxdigit(szInEther[3]) || !isxdigit(szInEther[4]) ||
-        !isxdigit(szInEther[6]) || !isxdigit(szInEther[7]) ||
-        !isxdigit(szInEther[9]) || !isxdigit(szInEther[10]) ||
-        !isxdigit(szInEther[12]) || !isxdigit(szInEther[13]) ||
-        !isxdigit(szInEther[15]) || !isxdigit(szInEther[16]))
+            !isxdigit(szInEther[3]) || !isxdigit(szInEther[4]) ||
+            !isxdigit(szInEther[6]) || !isxdigit(szInEther[7]) ||
+            !isxdigit(szInEther[9]) || !isxdigit(szInEther[10]) ||
+            !isxdigit(szInEther[12]) || !isxdigit(szInEther[13]) ||
+            !isxdigit(szInEther[15]) || !isxdigit(szInEther[16]))
         return (-1);
     // convert the 12 hex decimals back to 6 digit decimals
     for (int i = 0; i < 6; i++)
@@ -299,7 +299,7 @@ int StringToPhysAddr(char* szInEther,  char* szOutEther)
         c = toupper(szInEther[i*3]);
         c = c - (isdigit(c) ? '0' : ('A' - 10)); //offset adjustment
         val += c;
-        val = (val << 4); // val * 16 
+        val = (val << 4); // val * 16
         c = toupper(szInEther[i*3 + 1]);
         c = c - (isdigit(c) ? '0' : ('A' - 10)); // offset adjustement
         val += c;
@@ -326,7 +326,7 @@ bool PhysAddrToString(BYTE PhysAddr[], DWORD PhysAddrLen, char str[])
             sprintf_s(str+(dwIdx*3), IPADDR_BUF_SIZE-(dwIdx*3), "%02X", ((int)PhysAddr[dwIdx])&0xff);
         else
             sprintf_s(str+(dwIdx*3), IPADDR_BUF_SIZE-(dwIdx*3), "%02X-", ((int)PhysAddr[dwIdx])&0xff);
-        
+
     }
     return TRUE;
 }
@@ -374,11 +374,11 @@ void PrintIpNetTable(PMIB_IPNETTABLE pIpNetTable)
     else
     {
         printf("Error: Could not convert Interface number 0x%X to IP address.\n",
-                    pIpNetTable->table[0].dwIndex);
+               pIpNetTable->table[0].dwIndex);
         return;
     }
-    
-    
+
+
     for (i = 0; i < pIpNetTable->dwNumEntries; ++i)
     {
         if (pIpNetTable->table[i].dwIndex != dwCurrIndex)
@@ -392,7 +392,7 @@ void PrintIpNetTable(PMIB_IPNETTABLE pIpNetTable)
             else
             {
                 printf("Error: Could not convert Interface number 0x%X to IP address.\n",
-                    pIpNetTable->table[0].dwIndex);
+                       pIpNetTable->table[0].dwIndex);
                 return;
             }
         }
@@ -409,14 +409,14 @@ void PrintIpNetTable(PMIB_IPNETTABLE pIpNetTable)
         case 3:
             strcpy_s(szType, IPTYPE_BUF_SIZE, "dynamic");
             break;
-        case 4: 
+        case 4:
             strcpy_s(szType, IPTYPE_BUF_SIZE, "static");
             break;
         default:
             strcpy_s(szType, IPTYPE_BUF_SIZE, "invalidType");
         }
         printf("  %-16s      %-17s     %-11s\n", inet_ntoa(inadTmp), szPrintablePhysAddr, szType);
-        
+
     }
     if (pIpAddrTable)
         free(pIpAddrTable);
@@ -448,11 +448,11 @@ void PrintIpAddrTable(PMIB_IPADDRTABLE pIpAddrTable)
         inadTmp2.s_addr = pIpAddrTable->table[i].dwMask;
         strcpy_s(szMask, IPADDR_BUF_SIZE, inet_ntoa(inadTmp2));
         printf("  %s\t 0x%X\t %s\t %s\t %u\n",
-                szAddr, 
-                pIpAddrTable->table[i].dwIndex,
-                szMask,
-                (pIpAddrTable->table[i].dwBCastAddr ? "255.255.255.255" : "0.0.0.0"),
-                pIpAddrTable->table[i].dwReasmSize);
+               szAddr,
+               pIpAddrTable->table[i].dwIndex,
+               szMask,
+               (pIpAddrTable->table[i].dwBCastAddr ? "255.255.255.255" : "0.0.0.0"),
+               pIpAddrTable->table[i].dwReasmSize);
 
     }
 }
@@ -482,7 +482,7 @@ DWORD MyGetIpAddrTable(PMIB_IPADDRTABLE& pIpAddrTable, bool fOrder)
 
         pIpAddrTable = (PMIB_IPADDRTABLE) malloc(dwActualSize);
         assert(pIpAddrTable);
-        
+
         statusRetry = GetIpAddrTable(pIpAddrTable, &dwActualSize, fOrder);
         return statusRetry;
     }
@@ -501,7 +501,7 @@ DWORD MyGetIpNetTable(PMIB_IPNETTABLE& pIpNetTable, bool fOrder)
     DWORD status = NO_ERROR;
     DWORD statusRetry = NO_ERROR;
     DWORD dwActualSize = 0;
-    
+
     // query for buffer size needed
     dwActualSize = 0;
     status = GetIpNetTable(pIpNetTable, &dwActualSize, fOrder);
@@ -516,7 +516,7 @@ DWORD MyGetIpNetTable(PMIB_IPNETTABLE& pIpNetTable, bool fOrder)
 
         pIpNetTable = (PMIB_IPNETTABLE) malloc(dwActualSize);
         assert(pIpNetTable);
-        
+
         statusRetry = GetIpNetTable(pIpNetTable, &dwActualSize, fOrder);
 
         if (statusRetry != NO_ERROR)

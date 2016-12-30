@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -13,7 +13,7 @@
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -68,7 +68,7 @@ void CALLBACK BlockMethodComplete(
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_HEAP* heap = NULL;
@@ -78,21 +78,21 @@ int __cdecl wmain()
     static const WS_STRING serviceUrl = WS_STRING_VALUE(L"net.tcp://localhost/example");
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Create a heap to store deserialized data
     hr = WsCreateHeap(
-        /*maxSize*/ 2048, 
-        /*trimSize*/ 512, 
-        NULL, 
-        0, 
-        &heap, 
-        error);
+             /*maxSize*/ 2048,
+             /*trimSize*/ 512,
+             NULL,
+             0,
+             &heap,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -102,23 +102,23 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-    
-    
+
+
     // Initialize address of service
-    address.url = serviceUrl;                    
+    address.url = serviceUrl;
     hr = WsOpenServiceProxy(serviceProxy, &address, NULL, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     wprintf(L"Calling blocking method async\n");
     hr = BlockServiceBinding_Block(serviceProxy, heap, NULL, 0, &asyncContext, error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     wprintf(L"Waiting...\n");
     Sleep(5000L);
     wprintf(L"Now aborting service proxy\n");
@@ -127,7 +127,7 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-                   
+
 Exit:
     if (FAILED(hr))
     {
@@ -139,8 +139,8 @@ Exit:
         WsCloseServiceProxy(serviceProxy, NULL, NULL);
         WsFreeServiceProxy(serviceProxy);
     }
-    
-    
+
+
     if (heap != NULL)
     {
         WsFreeHeap(heap);

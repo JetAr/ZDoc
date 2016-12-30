@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -29,7 +29,7 @@ HRESULT CFileRepClient::ProcessMessage(
     WS_MESSAGE* requestMessage = request->GetRequestMessage();
     WS_ERROR* error = request->GetError();
 
-     // Make sure action is what we expect
+    // Make sure action is what we expect
     if (WsXmlStringEquals(receivedAction, &faultAction, error) == S_OK)
     {
         PrintInfo(L"Received fault message. Aborting.");
@@ -60,8 +60,8 @@ HRESULT CFileRepClient::ProcessMessage(
 
     // Sanity check
     if (::wcslen(userRequest->sourcePath) >= MAX_PATH ||
-        ::wcslen(userRequest->destinationPath) >= MAX_PATH ||
-        ::wcslen(userRequest->serverUri) >= MAX_PATH)
+            ::wcslen(userRequest->destinationPath) >= MAX_PATH ||
+            ::wcslen(userRequest->serverUri) >= MAX_PATH)
     {
         PrintInfo(L"Invalid request");
         hr = request->SendFault(INVALID_REQUEST);
@@ -69,8 +69,8 @@ HRESULT CFileRepClient::ProcessMessage(
     else
     {
         hr = ProcessUserRequest(request, userRequest->sourcePath,
-            userRequest->destinationPath, userRequest->serverUri, userRequest->serverProtocol,
-            userRequest->securityMode, userRequest->messageEncoding, userRequest->requestType);
+                                userRequest->destinationPath, userRequest->serverUri, userRequest->serverProtocol,
+                                userRequest->securityMode, userRequest->messageEncoding, userRequest->requestType);
     }
 
     EXIT
@@ -141,7 +141,7 @@ HRESULT CFileRepClient::ProcessUserRequest(
     // Open channel to address
     IfFailedExit(WsOpenChannel(serverChannel, &address, NULL, error));
 
-     // Initialize file request
+    // Initialize file request
     FileRequest fileRequest;
     fileRequest.filePosition = DISCOVERY_REQUEST;
     fileRequest.fileName = sourcePath;
@@ -172,20 +172,20 @@ HRESULT CFileRepClient::ProcessUserRequest(
     // Send discovery request and get file info
     FileInfo* fileInfo;
     IfFailedExit(WsRequestReply(
-        serverChannel,
-        serverRequestMessage,
-        &fileRequestMessageDescription,
-        WS_WRITE_REQUIRED_VALUE,
-        &fileRequest,
-        sizeof(fileRequest),
-        serverReplyMessage,
-        &fileInfoMessageDescription,
-        WS_READ_REQUIRED_POINTER,
-        heap,
-        &fileInfo,
-        sizeof(fileInfo),
-        NULL,
-        error));
+                     serverChannel,
+                     serverRequestMessage,
+                     &fileRequestMessageDescription,
+                     WS_WRITE_REQUIRED_VALUE,
+                     &fileRequest,
+                     sizeof(fileRequest),
+                     serverReplyMessage,
+                     &fileInfoMessageDescription,
+                     WS_READ_REQUIRED_POINTER,
+                     heap,
+                     &fileInfo,
+                     sizeof(fileInfo),
+                     NULL,
+                     error));
 
     fileLength = fileInfo->fileLength;
     chunkSize = fileInfo->chunkSize;
@@ -227,8 +227,8 @@ HRESULT CFileRepClient::ProcessUserRequest(
     fileRequest.filePosition = 0;
     while (fileRequest.filePosition < fileLength)
     {
-        IfFailedExit(ProcessChunk(chunkSize , file, fileLength, serverRequestMessage,
-            serverReplyMessage, serverChannel, error, &fileRequest));
+        IfFailedExit(ProcessChunk(chunkSize, file, fileLength, serverRequestMessage,
+                                  serverReplyMessage, serverChannel, error, &fileRequest));
     }
 
     transferTime = GetTickCount64() - transferTime;
@@ -244,7 +244,7 @@ HRESULT CFileRepClient::ProcessUserRequest(
 
     // Again failures are ignored since it is just a status message.
     StringCchPrintfW(perf, CountOf(perf), L"Transferred %I64d bytes via %u chunks in %I64d milliseconds.",
-       size.QuadPart, totalChunks, transferTime);
+                     size.QuadPart, totalChunks, transferTime);
 
     // StringCchPrintf ensures that the buffer is nullterminated even if the function failed.
     PrintInfo(perf);
@@ -357,12 +357,12 @@ HRESULT CFileRepClient::CreateServerChannel(
     if (TCP_TRANSPORT == serverTransportMode)
     {
         hr = WsCreateChannel(WS_CHANNEL_TYPE_DUPLEX_SESSION, WS_TCP_CHANNEL_BINDING, channelProperty,
-            propCount, pSecurityDescription, channel, error);
+                             propCount, pSecurityDescription, channel, error);
     }
     else // HTTP
     {
         hr = WsCreateChannel(WS_CHANNEL_TYPE_REQUEST, WS_HTTP_CHANNEL_BINDING,
-            channelProperty, propCount, pSecurityDescription, channel, error);
+                             channelProperty, propCount, pSecurityDescription, channel, error);
     }
 
     PrintVerbose(L"Leaving CFileRepClient::CreateServerChannel");
@@ -428,14 +428,14 @@ HRESULT CFileRepClient::ProcessChunk(
     fileRequestMessageDescription.bodyElementDescription = &fileRequestElement;
 
     IfFailedExit(WsSendMessage(
-        channel,
-        requestMessage,
-        &fileRequestMessageDescription,
-        WS_WRITE_REQUIRED_VALUE,
-        request,
-        sizeof(*request),
-        NULL,
-        error));
+                     channel,
+                     requestMessage,
+                     &fileRequestMessageDescription,
+                     WS_WRITE_REQUIRED_VALUE,
+                     request,
+                     sizeof(*request),
+                     NULL,
+                     error));
 
     // Receive start of message (headers).
     IfFailedExit(WsReadMessageStart(channel, replyMessage, NULL, error));
@@ -443,14 +443,14 @@ HRESULT CFileRepClient::ProcessChunk(
     // Get action value.
     WS_XML_STRING* receivedAction = NULL;
     IfFailedExit(WsGetHeader(
-        replyMessage,
-        WS_ACTION_HEADER,
-        WS_XML_STRING_TYPE,
-        WS_READ_REQUIRED_POINTER,
-        NULL,
-        &receivedAction,
-        sizeof(receivedAction),
-        error));
+                     replyMessage,
+                     WS_ACTION_HEADER,
+                     WS_XML_STRING_TYPE,
+                     WS_READ_REQUIRED_POINTER,
+                     NULL,
+                     &receivedAction,
+                     sizeof(receivedAction),
+                     error));
     // Make sure action is what we expect.
     if (WsXmlStringEquals(receivedAction, &fileReplyAction, error) != S_OK)
     {
@@ -594,7 +594,7 @@ HRESULT CFileRepClient::DeserializeAndWriteMessage(
     // Read file content end element
     IfFailedExit(WsReadEndElement(reader, NULL));
 
-     // Read the error string and write it to a heap.
+    // Read the error string and write it to a heap.
     IfFailedExit(WsCreateHeap(/*maxSize*/ 1024, /*trimSize*/ 1024, NULL, 0, &heap, NULL));
 
     // Here it pays to use WsReadElementType instead of manually parsing the element since we require heap memory anyway.
@@ -602,7 +602,7 @@ HRESULT CFileRepClient::DeserializeAndWriteMessage(
     // expected to use error messages that long. If we get back such a long message we talk to a buggy or rogue server
     // and failing is the right thing to do.
     IfFailedExit(WsReadElement(reader, &errorDescription, WS_READ_REQUIRED_POINTER, heap,
-        &errorString, sizeof(errorString), NULL));
+                               &errorString, sizeof(errorString), NULL));
     // Read file data end element
     IfFailedExit(WsReadEndElement(reader, NULL));
 
@@ -664,14 +664,14 @@ HRESULT CFileRepClient::SendUserResponse(
     userResponseMessageDescription.bodyElementDescription = &userResponseElement;
 
     hr = WsSendReplyMessage(
-        channel,
-        replyMessage,
-        &userResponseMessageDescription,
-        WS_WRITE_REQUIRED_VALUE,
-        &userResponse,
-        sizeof(userResponse),
-        requestMessage,
-        NULL, error);
+             channel,
+             replyMessage,
+             &userResponseMessageDescription,
+             WS_WRITE_REQUIRED_VALUE,
+             &userResponse,
+             sizeof(userResponse),
+             requestMessage,
+             NULL, error);
     if (FAILED(hr))
     {
         PrintError(L"CFileRepClient::SendUserResponse\n", true);

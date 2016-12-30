@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // C[!output Safe_root]PropPage.cpp : Implementation of the property page for C[!output Safe_root]
 //
@@ -76,29 +76,30 @@ STDMETHODIMP C[!output Safe_root]PropPage::Apply(void)
     lResult = key.Create(HKEY_CURRENT_USER, kwszPrefsRegKey);
     if (ERROR_SUCCESS == lResult)
     {
-[!if VSNET]
+        [!if VSNET]
         DWORD dwValue = (DWORD) m_Color;
         lResult = key.SetValue(kwszPrefsTextColor, REG_DWORD, &dwValue, sizeof(dwValue));
-[!else]
+        [!else]
         lResult = key.SetValue((DWORD) m_Color, kwszPrefsTextColor );
-[!endif]
+        [!endif]
     }
 
     // update the plug-in
     if (m_sp[!output Safe_root])
     {
         m_sp[!output Safe_root]->put_color(m_Color);
-    }   
+    }
 
     m_bDirty = FALSE; // Tell the property page to disable Apply.
-    
+
     return S_OK;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // C[!output Safe_root]PropPage::OnClickedBlue
 //
-LRESULT C[!output Safe_root]PropPage::OnClickedBlue(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled){
+LRESULT C[!output Safe_root]PropPage::OnClickedBlue(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
+{
 
     m_Color = rgbBlue;
     SetDirty(TRUE); //Enable Apply.
@@ -109,7 +110,8 @@ LRESULT C[!output Safe_root]PropPage::OnClickedBlue(WORD wNotifyCode, WORD wID, 
 /////////////////////////////////////////////////////////////////////////////
 // C[!output Safe_root]PropPage::OnClickedGreen
 //
-LRESULT C[!output Safe_root]PropPage::OnClickedGreen(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled){
+LRESULT C[!output Safe_root]PropPage::OnClickedGreen(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
+{
 
     m_Color = rgbGreen;
     SetDirty(TRUE); //Enable Apply.
@@ -120,7 +122,8 @@ LRESULT C[!output Safe_root]PropPage::OnClickedGreen(WORD wNotifyCode, WORD wID,
 /////////////////////////////////////////////////////////////////////////////
 // C[!output Safe_root]PropPage::OnClickedRed
 //
-LRESULT C[!output Safe_root]PropPage::OnClickedRed(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled){
+LRESULT C[!output Safe_root]PropPage::OnClickedRed(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
+{
 
     m_Color = rgbRed;
     SetDirty(TRUE); //Enable Apply.
@@ -141,7 +144,7 @@ LRESULT C[!output Safe_root]PropPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPA
     if (m_sp[!output Safe_root])
     {
         m_sp[!output Safe_root]->get_color(&Color);
-    }   
+    }
     else // otherwise read color from registry
     {
         CRegKey key;
@@ -151,13 +154,13 @@ LRESULT C[!output Safe_root]PropPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPA
         if (ERROR_SUCCESS == lResult)
         {
             DWORD   dwValue = 0;
-[!if VSNET]
+            [!if VSNET]
             DWORD dwType = 0;
             ULONG uLength = sizeof(dwValue);
             lResult = key.QueryValue(kwszPrefsTextColor, &dwType, &dwValue, &uLength);
-[!else]
+            [!else]
             lResult = key.QueryValue(dwValue, kwszPrefsTextColor );
-[!endif]
+            [!endif]
             if (ERROR_SUCCESS == lResult)
             {
                 Color = (COLORREF) dwValue;
@@ -165,7 +168,7 @@ LRESULT C[!output Safe_root]PropPage::OnInitDialog(UINT uMsg, WPARAM wParam, LPA
         }
     }
 
-    // Bullet the correct radio button. 
+    // Bullet the correct radio button.
     switch(Color)
     {
     case rgbGreen:

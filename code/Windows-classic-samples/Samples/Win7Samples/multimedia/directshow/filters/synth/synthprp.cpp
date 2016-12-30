@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: SynthPrp.cpp
 //
 // Desc: DirectShow sample code - implements property page for synthesizer.
@@ -31,7 +31,8 @@
 CUnknown * WINAPI CSynthProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     CUnknown *punk = new CSynthProperties(lpunk, phr);
-    if (punk == NULL) {
+    if (punk == NULL)
+    {
         *phr = E_OUTOFMEMORY;
     }
 
@@ -46,7 +47,7 @@ CUnknown * WINAPI CSynthProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr
 
 CSynthProperties::CSynthProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("Synth Property Page"), lpunk,
-        IDD_SYNTHPROP1,IDS_SYNTHPROPNAME)
+                        IDD_SYNTHPROP1,IDS_SYNTHPROPNAME)
     , m_pSynth(NULL)
     , m_iSweepStart(DefaultSweepStart)
     , m_iSweepEnd(DefaultSweepEnd)
@@ -69,7 +70,8 @@ HRESULT CSynthProperties::OnConnect(IUnknown *pUnknown)
     // Ask the filter for it's control interface
 
     HRESULT hr = pUnknown->QueryInterface(IID_ISynth2,(void **)&m_pSynth);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -97,7 +99,8 @@ HRESULT CSynthProperties::OnDisconnect()
 {
     // Release the interface
 
-    if (m_pSynth == NULL) {
+    if (m_pSynth == NULL)
+    {
         return E_UNEXPECTED;
     }
 
@@ -129,7 +132,7 @@ HRESULT CSynthProperties::OnActivate(void)
     ASSERT(m_hwndFreqSlider);
 
     m_fWindowInActive = FALSE;
-    
+
     return NOERROR;
 }
 
@@ -171,16 +174,17 @@ HRESULT CSynthProperties::OnApplyChanges(void)
 // Handles the messages for our property window
 
 INT_PTR CSynthProperties::OnReceiveMessage(HWND hwnd
-                                         , UINT uMsg
-                                         , WPARAM wParam
-                                         , LPARAM lParam)
+        , UINT uMsg
+        , WPARAM wParam
+        , LPARAM lParam)
 {
     HRESULT hr;
 
     if(m_fWindowInActive)
         return FALSE;
 
-    switch (uMsg) {
+    switch (uMsg)
+    {
 
     case WM_PROPERTYPAGE_ENABLE:
         // Our private message that our owning filter sends us when changing to a Run / Stop / Pause
@@ -208,13 +212,15 @@ INT_PTR CSynthProperties::OnReceiveMessage(HWND hwnd
 
     case WM_COMMAND:
 
-        switch (LOWORD(wParam)) {
+        switch (LOWORD(wParam))
+        {
 
         case IDC_FREQUENCYTEXT:
         {
             int iNotify = HIWORD (wParam);
 
-            if (iNotify == EN_KILLFOCUS) {
+            if (iNotify == EN_KILLFOCUS)
+            {
                 BOOL fOK;
 
                 int iPos = GetDlgItemInt (hwnd, IDC_FREQUENCYTEXT, &fOK, FALSE);
@@ -223,7 +229,8 @@ INT_PTR CSynthProperties::OnReceiveMessage(HWND hwnd
                 m_pSynth->get_SamplesPerSec(&iMaxFreq);
                 iMaxFreq /= 2;
 
-                if (!fOK || (iPos > iMaxFreq || iPos < 0)) {
+                if (!fOK || (iPos > iMaxFreq || iPos < 0))
+                {
                     int iCurrentFreq;
                     m_pSynth->get_Frequency(&iCurrentFreq);
                     SetDlgItemInt (hwnd, IDC_FREQUENCYTEXT, iCurrentFreq, FALSE);
@@ -241,12 +248,14 @@ INT_PTR CSynthProperties::OnReceiveMessage(HWND hwnd
         {
             int iNotify = HIWORD (wParam);
 
-            if (iNotify == EN_KILLFOCUS) {
+            if (iNotify == EN_KILLFOCUS)
+            {
                 BOOL fOK;
 
                 int iPos = GetDlgItemInt (hwnd, IDC_AMPLITUDETEXT, &fOK, FALSE);
 
-                if (!fOK || (iPos > MaxAmplitude || iPos < 0)) {
+                if (!fOK || (iPos > MaxAmplitude || iPos < 0))
+                {
                     int iCurrentAmplitude;
 
                     m_pSynth->get_Amplitude(&iCurrentAmplitude);
@@ -296,7 +305,7 @@ INT_PTR CSynthProperties::OnReceiveMessage(HWND hwnd
             m_pSynth->put_Channels(2);
             SetDirty();
             break;
-        
+
 
         case IDC_WAVESINE:
             m_pSynth->put_Waveform(WAVE_SINE);
@@ -317,9 +326,12 @@ INT_PTR CSynthProperties::OnReceiveMessage(HWND hwnd
 
         case IDC_OF_PCM:
             hr = m_pSynth->put_OutputFormat(SYNTH_OF_PCM);
-            if (SUCCEEDED(hr)) {
+            if (SUCCEEDED(hr))
+            {
                 EnableBitsPerSampleRadioButtons(hwnd, TRUE);
-            } else {
+            }
+            else
+            {
                 MessageBeep(MB_ICONASTERISK);
             }
 
@@ -328,9 +340,12 @@ INT_PTR CSynthProperties::OnReceiveMessage(HWND hwnd
 
         case IDC_OF_MSADPCM:
             hr = m_pSynth->put_OutputFormat(SYNTH_OF_MS_ADPCM);
-            if (SUCCEEDED(hr)) {
+            if (SUCCEEDED(hr))
+            {
                 EnableBitsPerSampleRadioButtons(hwnd, FALSE);
-            } else {
+            }
+            else
+            {
                 MessageBeep(MB_ICONASTERISK);
             }
             SetDirty();
@@ -367,48 +382,59 @@ CSynthProperties::InitPropertiesDialog(HWND hwndParent)
 
     // Sampling Frequency
     int i=0;
-    switch (m_iSamplesPerSecOriginal) {
-        case 11025: i = IDC_SAMPLINGFREQ11; break;
-        case 22050: i = IDC_SAMPLINGFREQ22; break;
-        case 44100: i = IDC_SAMPLINGFREQ44; break;
-        default:
-            ASSERT(0);  break;
+    switch (m_iSamplesPerSecOriginal)
+    {
+    case 11025:
+        i = IDC_SAMPLINGFREQ11;
+        break;
+    case 22050:
+        i = IDC_SAMPLINGFREQ22;
+        break;
+    case 44100:
+        i = IDC_SAMPLINGFREQ44;
+        break;
+    default:
+        ASSERT(0);
+        break;
     }
     CheckRadioButton(hwndParent,
-        IDC_SAMPLINGFREQ11,
-        IDC_SAMPLINGFREQ44,
-        i);
+                     IDC_SAMPLINGFREQ11,
+                     IDC_SAMPLINGFREQ44,
+                     i);
 
     // BitsPerSample
     CheckRadioButton(hwndParent,
-                IDC_BITSPERSAMPLE8,
-                IDC_BITSPERSAMPLE16,
-                IDC_BITSPERSAMPLE8 + m_iBitsPerSampleOriginal / 8 - 1);
+                     IDC_BITSPERSAMPLE8,
+                     IDC_BITSPERSAMPLE16,
+                     IDC_BITSPERSAMPLE8 + m_iBitsPerSampleOriginal / 8 - 1);
 
     // Waveform 0 == sine, 1 == square, ...
     CheckRadioButton(hwndParent,
-                IDC_WAVESINE,
-                IDC_WAVESWEEP,
-                IDC_WAVESINE + m_iWaveformOriginal);
+                     IDC_WAVESINE,
+                     IDC_WAVESWEEP,
+                     IDC_WAVESINE + m_iWaveformOriginal);
 
     // Channels
     CheckRadioButton(hwndParent,
-                IDC_CHANNELS1,
-                IDC_CHANNELS2,
-                IDC_CHANNELS1 + m_iChannelsOriginal - 1);
+                     IDC_CHANNELS1,
+                     IDC_CHANNELS2,
+                     IDC_CHANNELS1 + m_iChannelsOriginal - 1);
 
     CheckRadioButton(hwndParent,
-                IDC_OF_PCM,
-                IDC_OF_MSADPCM,
-                IDC_OF_PCM + (int)m_OutputFormat);
+                     IDC_OF_PCM,
+                     IDC_OF_MSADPCM,
+                     IDC_OF_PCM + (int)m_OutputFormat);
 
-    if(SYNTH_OF_MS_ADPCM == m_OutputFormat) {
-        EnableBitsPerSampleRadioButtons(hwndParent, FALSE); 
-    } else {
+    if(SYNTH_OF_MS_ADPCM == m_OutputFormat)
+    {
+        EnableBitsPerSampleRadioButtons(hwndParent, FALSE);
+    }
+    else
+    {
         // The synth filter only supports two output formats: SYNTH_OF_PCM and SYNTH_OF_MS_ADPCM.
         ASSERT(SYNTH_OF_PCM == m_OutputFormat);
-        
-        EnableBitsPerSampleRadioButtons(hwndParent, TRUE); 
+
+        EnableBitsPerSampleRadioButtons(hwndParent, TRUE);
     }
 
     //
@@ -422,16 +448,16 @@ CSynthProperties::InitPropertiesDialog(HWND hwndParent)
     //
 
     SendMessage(m_hwndAmplitudeSlider, TBM_SETRANGE, TRUE,
-        MAKELONG(MinAmplitude, MaxAmplitude) );
+                MAKELONG(MinAmplitude, MaxAmplitude) );
 
     SendMessage(m_hwndAmplitudeSlider, TBM_SETTIC, 0,
-        ((MinAmplitude + MaxAmplitude) / 2));
+                ((MinAmplitude + MaxAmplitude) / 2));
 
     SendMessage(m_hwndAmplitudeSlider, TBM_SETPOS, TRUE,
-        (LPARAM) (MaxAmplitude - m_iAmplitudeOriginal));
+                (LPARAM) (MaxAmplitude - m_iAmplitudeOriginal));
 
     SetDlgItemInt (hwndParent, IDC_AMPLITUDETEXT,
-        m_iAmplitudeOriginal, TRUE);
+                   m_iAmplitudeOriginal, TRUE);
 }
 
 
@@ -454,21 +480,21 @@ CSynthProperties::RecalcFreqSlider(void)
         iPos = iMaxFreq;
 
     SendMessage(m_hwndFreqSlider, TBM_SETRANGE, TRUE,
-        MAKELONG(0, iMaxFreq));
+                MAKELONG(0, iMaxFreq));
 
     SendMessage(m_hwndFreqSlider, TBM_SETTIC, 0,
-        iMaxFreq / 2);
+                iMaxFreq / 2);
 
     SendMessage(m_hwndFreqSlider, TBM_SETPOS, TRUE,
-        (LPARAM) (iMaxFreq - iPos));
+                (LPARAM) (iMaxFreq - iPos));
 
     SendMessage(m_hwndFreqSlider, TBM_SETPAGESIZE, 0, 10);
 
     SendMessage(m_hwndFreqSlider, TBM_SETSEL, TRUE,
-        MAKELONG (iMaxFreq - m_iSweepEnd, iMaxFreq - m_iSweepStart));
+                MAKELONG (iMaxFreq - m_iSweepEnd, iMaxFreq - m_iSweepStart));
 
     SetDlgItemInt (m_hwnd, IDC_FREQUENCYTEXT,
-        iPos, TRUE);
+                   iPos, TRUE);
 
 }
 
@@ -484,12 +510,14 @@ CSynthProperties::OnFreqSliderNotification(WPARAM wParam, WORD wPosition)
     int Freq;
     int SliderPos;
 
-    switch (wParam) {
+    switch (wParam)
+    {
 
     case TB_ENDTRACK:
     case TB_THUMBTRACK:
     case TB_LINEDOWN:
-    case TB_LINEUP: {
+    case TB_LINEUP:
+    {
         // max frequency of slider is half the sampling frequency
         m_pSynth->get_SamplesPerSec (&MaxFreq);
         MaxFreq /= 2;
@@ -498,22 +526,24 @@ CSynthProperties::OnFreqSliderNotification(WPARAM wParam, WORD wPosition)
         m_pSynth->put_Frequency (Freq);
 
         // Set the end of sweep to the current slider pos
-        if (!(GetKeyState (VK_SHIFT) & 0x8000)) {
+        if (!(GetKeyState (VK_SHIFT) & 0x8000))
+        {
             m_iSweepEnd = Freq;
         }
 
         // Set the start of the sweep range if SHIFT key is pressed
-        if (GetKeyState (VK_SHIFT) & 0x8000) {
+        if (GetKeyState (VK_SHIFT) & 0x8000)
+        {
             m_iSweepStart = Freq;
         }
         m_pSynth->put_SweepRange (m_iSweepStart, m_iSweepEnd);
 
         if (m_iSweepEnd > m_iSweepStart)
             SendMessage(m_hwndFreqSlider, TBM_SETSEL, TRUE,
-                MAKELONG (MaxFreq - m_iSweepEnd, MaxFreq - m_iSweepStart));
+                        MAKELONG (MaxFreq - m_iSweepEnd, MaxFreq - m_iSweepStart));
         else
             SendMessage(m_hwndFreqSlider, TBM_SETSEL, TRUE,
-                MAKELONG (MaxFreq - m_iSweepStart, MaxFreq - m_iSweepEnd));
+                        MAKELONG (MaxFreq - m_iSweepStart, MaxFreq - m_iSweepEnd));
 
         SetDlgItemInt (m_hwnd, IDC_FREQUENCYTEXT, Freq, TRUE);
 
@@ -531,12 +561,14 @@ CSynthProperties::OnFreqSliderNotification(WPARAM wParam, WORD wPosition)
 void
 CSynthProperties::OnAmpSliderNotification(WPARAM wParam, WORD wPosition)
 {
-    switch (wParam) {
+    switch (wParam)
+    {
 
     case TB_ENDTRACK:
     case TB_THUMBTRACK:
     case TB_LINEDOWN:
-    case TB_LINEUP: {
+    case TB_LINEUP:
+    {
         int Level = (int) SendMessage(m_hwndAmplitudeSlider, TBM_GETPOS, 0, 0L);
         m_pSynth->put_Amplitude (MaxAmplitude - Level);
         SetDlgItemInt (m_hwnd, IDC_AMPLITUDETEXT, MaxAmplitude - Level, TRUE);

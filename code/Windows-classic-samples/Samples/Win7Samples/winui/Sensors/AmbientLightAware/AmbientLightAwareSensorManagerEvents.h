@@ -1,10 +1,10 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation.  All rights reserved.
+// Copyright © Microsoft Corporation.  All rights reserved.
 //
 // Module:
 //        AmbientLightAwareSensorManagerEvents.h
@@ -12,9 +12,9 @@
 // Description:
 //        Implementation of ISensorManagerEvents
 //
-// Comments: 
+// Comments:
 //        This is a standard c++ class, but needs to support IUnknown methods
-//        to be properly implemented.  This class overrides 
+//        to be properly implemented.  This class overrides
 //        ISensorManagerEvents functions to receive updated information from
 //        the Sensors API when it is published.
 //

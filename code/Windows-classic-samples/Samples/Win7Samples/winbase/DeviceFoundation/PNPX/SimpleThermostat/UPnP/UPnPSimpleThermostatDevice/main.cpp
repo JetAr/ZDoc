@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -34,7 +34,7 @@ HRESULT CreateUPnPDevice(
     __deref_out BSTR* pbstrResource,
     __deref_out IUnknown** ppDevice,
     __deref_out IUPnPRegistrar** ppUPnPRegistrar
-    );
+);
 
 HRESULT ReceiveKeyboardCommands(
     __in BSTR bstrDeviceId,
@@ -42,7 +42,7 @@ HRESULT ReceiveKeyboardCommands(
     __in BSTR bstrResource,
     __in IUnknown* pDevice,
     __in IUPnPRegistrar* pUPnPRegistrar
-    );
+);
 
 //------------------------------------------------------------------------------
 // wmain
@@ -66,16 +66,16 @@ int __cdecl wmain( int argc, __in_ecount(argc) wchar_t* argv[] )
     {
         wprintf( L"CoInitialize Security..." );
         hr = CoInitializeSecurity(
-                NULL,
-                -1,
-                NULL,
-                NULL,
-                RPC_C_AUTHN_LEVEL_DEFAULT,
-                RPC_C_IMP_LEVEL_IMPERSONATE,
-                NULL,
-                EOAC_SECURE_REFS|EOAC_DISABLE_AAA,
-                NULL
-                );
+                 NULL,
+                 -1,
+                 NULL,
+                 NULL,
+                 RPC_C_AUTHN_LEVEL_DEFAULT,
+                 RPC_C_IMP_LEVEL_IMPERSONATE,
+                 NULL,
+                 EOAC_SECURE_REFS|EOAC_DISABLE_AAA,
+                 NULL
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -86,13 +86,13 @@ int __cdecl wmain( int argc, __in_ecount(argc) wchar_t* argv[] )
     if( S_OK == hr )
     {
         hr = CreateUPnPDevice(
-            DEVICE_XML_DOC,
-            &bstrDeviceId,
-            &bstrXMLDoc,
-            &bstrResource,
-            &pDevice,
-            &pUPnPRegistrar
-            );
+                 DEVICE_XML_DOC,
+                 &bstrDeviceId,
+                 &bstrXMLDoc,
+                 &bstrResource,
+                 &pDevice,
+                 &pUPnPRegistrar
+             );
     }
 
     if( S_OK == hr )
@@ -113,10 +113,10 @@ int __cdecl wmain( int argc, __in_ecount(argc) wchar_t* argv[] )
     {
         wprintf( L"Get the device's unique id..." );
         hr = pUPnPRegistrar->GetUniqueDeviceName(
-            bstrDeviceId,
-            bstrTempUDN,
-            &bstrUniqueId
-            );
+                 bstrDeviceId,
+                 bstrTempUDN,
+                 &bstrUniqueId
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -136,7 +136,7 @@ int __cdecl wmain( int argc, __in_ecount(argc) wchar_t* argv[] )
             bstrResource,
             pDevice,
             pUPnPRegistrar
-            );
+        );
     }
 
     //
@@ -206,7 +206,7 @@ HRESULT CreateUPnPDevice(
     BSTR* pbstrResource,
     IUnknown** ppDevice,
     IUPnPRegistrar** ppUPnPRegistrar
-    )
+)
 {
     BSTR                bstrXMLDoc              = NULL;
     BSTR                bstrResource            = NULL;
@@ -226,12 +226,12 @@ HRESULT CreateUPnPDevice(
     //
     wprintf( L"Create the DOM Object..." );
     hr = CoCreateInstance(
-        CLSID_DOMDocument30,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_IXMLDOMDocument,
-        (void**)&pXMLDoc
-        );
+             CLSID_DOMDocument30,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_IXMLDOMDocument,
+             (void**)&pXMLDoc
+         );
     wprintf( L"0x%x\n", hr );
 
     if( S_OK == hr )
@@ -273,12 +273,12 @@ HRESULT CreateUPnPDevice(
     {
         wprintf( L"CoCreate the simple thermostat device object..." );
         hr = CoCreateInstance(
-            __uuidof(SimpleThermostatDevice),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IUnknown),
-            (LPVOID*)&pDevice
-            );
+                 __uuidof(SimpleThermostatDevice),
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 __uuidof(IUnknown),
+                 (LPVOID*)&pDevice
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -290,12 +290,12 @@ HRESULT CreateUPnPDevice(
     {
         wprintf( L"Create the UPnP registrar object..." );
         hr = CoCreateInstance(
-            __uuidof(UPnPRegistrar),
-            NULL,
-            CLSCTX_LOCAL_SERVER,
-            __uuidof(IUPnPRegistrar),
-            (LPVOID *)&pUPnPRegistrar
-            );
+                 __uuidof(UPnPRegistrar),
+                 NULL,
+                 CLSCTX_LOCAL_SERVER,
+                 __uuidof(IUPnPRegistrar),
+                 (LPVOID *)&pUPnPRegistrar
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -317,14 +317,14 @@ HRESULT CreateUPnPDevice(
     if( S_OK == hr )
     {
         wprintf( L"RegisterDevice..." );
-        hr = pUPnPRegistrar->RegisterRunningDevice( 
-            bstrXMLDoc, 
-            pDevice,
-            bstrResource,
-            bstrResource,
-            ulLifetime,
-            pbstrDeviceId
-            );
+        hr = pUPnPRegistrar->RegisterRunningDevice(
+                 bstrXMLDoc,
+                 pDevice,
+                 bstrResource,
+                 bstrResource,
+                 ulLifetime,
+                 pbstrDeviceId
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -388,7 +388,7 @@ HRESULT ReceiveKeyboardCommands(
     BSTR bstrResource,
     IUnknown* pDevice,
     IUPnPRegistrar* pUPnPRegistrar
-    )
+)
 {
     BOOL                bExit               = FALSE;
     HRESULT             hr                  = S_OK;
@@ -400,9 +400,9 @@ HRESULT ReceiveKeyboardCommands(
     // the device after it's already running.
     //
     hr = pUPnPRegistrar->QueryInterface(
-        __uuidof(IUPnPReregistrar),
-        (void**)&pUPnPReregistrar
-        );
+             __uuidof(IUPnPReregistrar),
+             (void**)&pUPnPReregistrar
+         );
 
     if( S_OK == hr )
     {
@@ -416,13 +416,13 @@ HRESULT ReceiveKeyboardCommands(
             case 'S':
                 wprintf( L"Starting device host..." );
                 hr = pUPnPReregistrar->ReregisterRunningDevice(
-                    bstrDeviceId,
-                    bstrXMLDoc,
-                    pDevice,
-                    bstrResource,
-                    bstrResource,
-                    ulLifetime
-                    );
+                         bstrDeviceId,
+                         bstrXMLDoc,
+                         pDevice,
+                         bstrResource,
+                         bstrResource,
+                         ulLifetime
+                     );
                 wprintf( L"0x%x\n", hr );
                 break;
             case 'p':

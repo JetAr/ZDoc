@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -31,15 +31,15 @@
 //
 STDMETHODIMP CImpIDBCreateSession::CreateSession
 (
-    IUnknown*   pUnkOuter,  //@parm IN | Controlling IUnknown if being aggregated 
-    REFIID      riid,       //@parm IN | The ID of the interface 
+    IUnknown*   pUnkOuter,  //@parm IN | Controlling IUnknown if being aggregated
+    REFIID      riid,       //@parm IN | The ID of the interface
     IUnknown**  ppDBSession //@parm OUT | A pointer to memory in which to return the interface pointer
 )
 {
-	//
-	// Asserts
     //
-	assert(m_pObj);
+    // Asserts
+    //
+    assert(m_pObj);
 
     //
     // Check in-params and NULL out-params in case of error
@@ -50,9 +50,9 @@ STDMETHODIMP CImpIDBCreateSession::CreateSession
     *ppDBSession = NULL;
 
     //
-	// Check to see if the DSO is Uninitialized
+    // Check to see if the DSO is Uninitialized
     //
-	if( !m_pObj->m_fDSOInitialized )
+    if( !m_pObj->m_fDSOInitialized )
         return (E_UNEXPECTED);
 
     //
@@ -62,10 +62,10 @@ STDMETHODIMP CImpIDBCreateSession::CreateSession
         return (DB_E_OBJECTCREATIONLIMITREACHED);
 
     //
-	// We do not allow any other iid than IID_IUnknown for aggregation
+    // We do not allow any other iid than IID_IUnknown for aggregation
     //
-	if( pUnkOuter && riid != IID_IUnknown )
-		return (DB_E_NOAGGREGATION);
+    if( pUnkOuter && riid != IID_IUnknown )
+        return (DB_E_NOAGGREGATION);
 
     //
     // Open a DBSession object
@@ -73,23 +73,23 @@ STDMETHODIMP CImpIDBCreateSession::CreateSession
     CDBSession* pDBSession = new CDBSession(pUnkOuter);
 
     if( !pDBSession || !pDBSession->FInit(m_pObj) )
-	{
+    {
         SAFE_DELETE(pDBSession);
         return (E_OUTOFMEMORY);
-	}
+    }
 
     //
     // Get requested interface pointer on DBSession
     //
     HRESULT hr=pDBSession->QueryInterface(riid, (void **)ppDBSession);
 
-    if( FAILED(hr) ) 
-	{
+    if( FAILED(hr) )
+    {
         SAFE_DELETE(pDBSession);
-		return (hr);
-	}
+        return (hr);
+    }
 
-	m_pObj->m_fDBSessionCreated = TRUE;
+    m_pObj->m_fDBSessionCreated = TRUE;
     return (hr);
 }
 

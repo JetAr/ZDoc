@@ -1,4 +1,4 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+﻿/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
  EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
@@ -470,7 +470,7 @@ LONG QueryCards (IN SCARDCONTEXT hContext,
         // Prepare state array
         //
         while ((*lpszReaderName != _T('\0')) &&
-               (dwNumReaders < MAXIMUM_SMARTCARD_READERS))
+                (dwNumReaders < MAXIMUM_SMARTCARD_READERS))
         {
             rsReaders[dwNumReaders].szReader = (LPCTSTR)lpszReaderName;
             rsReaders[dwNumReaders].dwCurrentState = SCARD_STATE_UNAWARE;

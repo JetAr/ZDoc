@@ -1,17 +1,17 @@
-//---------------------------------------------------------------------------
+﻿//---------------------------------------------------------------------------
 // Microsoft OLE DB Programmer's Reference Sample
 // Copyright (C) 1998 By Microsoft Corporation.
-//	  
+//
 // @doc
-//												  
+//
 // @module PRSAMPLE.H
 //
 //---------------------------------------------------------------------------
 
 
 /////////////////////////////////////////////////////////////////
-// Includes					 
-//							
+// Includes
+//
 /////////////////////////////////////////////////////////////////
 #ifndef __PRSAMPLE_H__
 #define	__PRSAMPLE_H__
@@ -28,14 +28,14 @@
 #include <locale.h>			// setlocale
 
 /////////////////////////////////////////////////////////////////
-// Globals					 
+// Globals
 //
 /////////////////////////////////////////////////////////////////
 extern DWORD g_dwFlags;
 
 
 /////////////////////////////////////////////////////////////////
-// Defines					 							   
+// Defines
 //
 /////////////////////////////////////////////////////////////////
 #define __LONGSTRING(string) L##string
@@ -78,19 +78,19 @@ extern DWORD g_dwFlags;
 
 enum
 {
-	//Connecting
-	USE_PROMPTDATASOURCE		= 0x0001,
-	USE_ENUMERATOR				= 0x0002,
+    //Connecting
+    USE_PROMPTDATASOURCE		= 0x0001,
+    USE_ENUMERATOR				= 0x0002,
 
-	//Rowset
-	USE_COMMAND					= 0x0010,
+    //Rowset
+    USE_COMMAND					= 0x0010,
 
-	//Storage Objects
-	USE_ISEQSTREAM				= 0x0100,
+    //Storage Objects
+    USE_ISEQSTREAM				= 0x0100,
 
-	// Display options
-	DISPLAY_METHODCALLS			= 0x1000,
-	DISPLAY_INSTRUCTIONS		= 0x2000,
+    // Display options
+    DISPLAY_METHODCALLS			= 0x1000,
+    DISPLAY_INSTRUCTIONS		= 0x2000,
 };
 
 

@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -14,7 +14,7 @@
 //---------------------------------------------------------------------
 
 
-// Create a non-renewal pkcs7 request with InheritPrivateKey and 
+// Create a non-renewal pkcs7 request with InheritPrivateKey and
 // InheritTempalte flags, enroll to an enterprise CA
 
 #include <stdio.h>
@@ -42,9 +42,10 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     CERT_CONTEXT const *pCert = NULL;
     PCWSTR pwszTemplateName;
     BSTR strOldCert = NULL;
-    
+
     // Process command line arguments
-    if (argc !=  2) {
+    if (argc !=  2)
+    {
         Usage();
         hr = E_INVALIDARG;
         _JumpError(hr, error, "invalid arg");
@@ -60,7 +61,7 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     fCoInit = true;
 
 
-    
+
     /* Find a certificate first */
 
     // Find a certificate by template name
@@ -69,11 +70,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
     {
         // Enroll a cert of the template name first
         hr = enrollCertByTemplate(pwszTemplateName);
-        _JumpIfError(hr, error, "enrollCertByTemplate");    
- 
+        _JumpIfError(hr, error, "enrollCertByTemplate");
+
         // Search again
         hr = findCertByTemplate(pwszTemplateName, &pCert);
-        _JumpIfError(hr, error, "findCertByTemplate");  
+        _JumpIfError(hr, error, "findCertByTemplate");
     }
 
     // Verify the certificate chain
@@ -82,8 +83,8 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Convert PCCERT_CONTEXT to BSTR
     strOldCert = SysAllocStringByteLen(
-            (CHAR const *) pCert->pbCertEncoded, 
-            pCert->cbCertEncoded);
+                     (CHAR const *) pCert->pbCertEncoded,
+                     pCert->cbCertEncoded);
 
     if (NULL == strOldCert)
     {
@@ -95,38 +96,38 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509CertificateRequestPkcs7
     hr = CoCreateInstance(
-            __uuidof(CX509CertificateRequestPkcs7),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509CertificateRequestPkcs7),
-            (void **) &pPkcs7);
+             __uuidof(CX509CertificateRequestPkcs7),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509CertificateRequestPkcs7),
+             (void **) &pPkcs7);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509CertificateRequestPkcs7 from old cert
     hr = pPkcs7->InitializeFromCertificate(
-        ContextUser,                          
-        VARIANT_FALSE,                        
-        strOldCert,                           
-        XCN_CRYPT_STRING_BINARY,              
-        (X509RequestInheritOptions)(InheritPrivateKey|InheritTemplateFlag));
+             ContextUser,
+             VARIANT_FALSE,
+             strOldCert,
+             XCN_CRYPT_STRING_BINARY,
+             (X509RequestInheritOptions)(InheritPrivateKey|InheritTemplateFlag));
     _JumpIfError(hr, error, "InitializeFromCertificate");
-    
+
     // Create ISignerCertificate
     hr = CoCreateInstance(
-            __uuidof(CSignerCertificate),
-            NULL,   // pUnkOuter
-            CLSCTX_INPROC_SERVER, 
-            __uuidof(ISignerCertificate), 
-            (void **)&pSignerCertificate); 
-   _JumpIfError(hr, error, "CoCreateInstance");
+             __uuidof(CSignerCertificate),
+             NULL,   // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(ISignerCertificate),
+             (void **)&pSignerCertificate);
+    _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize ISignerCertificate from signing cert
     hr = pSignerCertificate->Initialize(
-            VARIANT_FALSE,
-            VerifyNone,
-            XCN_CRYPT_STRING_BINARY,
-            strOldCert);
-   _JumpIfError(hr, error, "Initialize");
+             VARIANT_FALSE,
+             VerifyNone,
+             XCN_CRYPT_STRING_BINARY,
+             strOldCert);
+    _JumpIfError(hr, error, "Initialize");
 
     // Add signing cert into Pkcs7 request
     hr = pPkcs7->put_SignerCertificate(pSignerCertificate);
@@ -134,11 +135,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Create IX509Enrollment
     hr = CoCreateInstance(
-            __uuidof(CX509Enrollment),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509Enrollment),
-            (void **) &pEnroll);
+             __uuidof(CX509Enrollment),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509Enrollment),
+             (void **) &pEnroll);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initialize IX509Enrollment
@@ -147,11 +148,11 @@ HRESULT __cdecl wmain(__in int argc, __in_ecount(argc) wchar_t *argv[])
 
     // Enroll
     hr = pEnroll->Enroll();
-    _JumpIfError(hr, error, "Enroll"); 
+    _JumpIfError(hr, error, "Enroll");
 
     // Check enrollment status
     hr = checkEnrollStatus(pEnroll);
-    _JumpIfError(hr, error, "checkEnrollStatus"); 
+    _JumpIfError(hr, error, "checkEnrollStatus");
 
 error:
     SysFreeString(strOldCert);

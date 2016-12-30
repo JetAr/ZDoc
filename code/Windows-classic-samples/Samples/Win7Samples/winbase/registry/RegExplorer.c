@@ -1,4 +1,4 @@
-
+﻿
 /******************************************************************************
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -62,7 +62,8 @@ int APIENTRY WinMain (HINSTANCE hInstance,
 
     hInst   = hInstance;
     hHeap   = HeapCreate (0, 0, 0);
-    if (hHeap == NULL) {
+    if (hHeap == NULL)
+    {
         return GetLastError();
     }
 
@@ -378,12 +379,13 @@ VOID EnumerateLevel (HWND hDlg, LPTSTR NameLBSelect,
         // you have to add a backslash to the
         // path name before appending the next
         // level child name.
-        if (strcmp (RegPath, "") != 0) {
+        if (strcmp (RegPath, "") != 0)
+        {
             CHAR *pEndOfBuffer;
             strncat_s (RegPath, RegPathLength, "\\",1);
             pEndOfBuffer = (CHAR*) _mbsrchr ((unsigned char*)&RegPath[0], '\\');
             ByteCount -= (pEndOfBuffer - RegPath);
-        } 
+        }
 
         // Add the next level child name.
         strncat_s (RegPath, RegPathLength, NameLBSelect,ByteCount);
@@ -518,8 +520,8 @@ VOID QueryKey (HWND hDlg, HANDLE hKey)
     {
 
         dwMaxPath = MAX_PATH;
-        retCode = RegEnumKeyEx( hKey,i, KeyName, 
-                                &dwMaxPath, NULL, NULL, 
+        retCode = RegEnumKeyEx( hKey,i, KeyName,
+                                &dwMaxPath, NULL, NULL,
                                 NULL,  &ftFileTime);
 
 
@@ -545,7 +547,7 @@ VOID QueryKey (HWND hDlg, HANDLE hKey)
                                      NULL,               //&bData,
                                      NULL);              //&bcData);
             if (retValue != (DWORD)ERROR_SUCCESS &&
-                retValue != ERROR_INSUFFICIENT_BUFFER)
+                    retValue != ERROR_INSUFFICIENT_BUFFER)
             {
                 LoadString(hInst, IDS_REGERR, lpBuffer, sizeof(lpBuffer));
                 sprintf_s (Buf, sizeof(Buf), lpBuffer, __LINE__, j, retValue, dwcValueName);
@@ -642,18 +644,18 @@ VOID DisplayKeyData (HWND hDlg, CHAR *RegPath, HANDLE hKeyRoot)
 // ADD A QUERY AND ALLOCATE A BUFFER FOR BDATA.
 
     retCode =
-    RegQueryInfoKey (hKey,              // Key handle.
-                     ClassName,         // Buffer for class name.
-                     &dwcClassLen,      // Length of class string.
-                     NULL,              // Reserved.
-                     &dwcSubKeys,       // Number of sub keys.
-                     &dwcMaxSubKey,     // Longest sub key size.
-                     &dwcMaxClass,      // Longest class string.
-                     &dwcValues,        // Number of values for this key.
-                     &dwcMaxValueName,  // Longest Value name.
-                     &dwcMaxValueData,  // Longest Value data.
-                     &dwcSecDesc,       // Security descriptor.
-                     &ftLastWriteTime); // Last write time.
+        RegQueryInfoKey (hKey,              // Key handle.
+                         ClassName,         // Buffer for class name.
+                         &dwcClassLen,      // Length of class string.
+                         NULL,              // Reserved.
+                         &dwcSubKeys,       // Number of sub keys.
+                         &dwcMaxSubKey,     // Longest sub key size.
+                         &dwcMaxClass,      // Longest class string.
+                         &dwcValues,        // Number of values for this key.
+                         &dwcMaxValueName,  // Longest Value name.
+                         &dwcMaxValueData,  // Longest Value data.
+                         &dwcSecDesc,       // Security descriptor.
+                         &ftLastWriteTime); // Last write time.
 
     if (retCode)
     {
@@ -671,7 +673,7 @@ VOID DisplayKeyData (HWND hDlg, CHAR *RegPath, HANDLE hKeyRoot)
         MessageBox (hDlg, lpBuffer, lpBuffer2, MB_OK);
         return;
     }
-    
+
     cbData = dwcMaxValueData;
 
 
@@ -712,7 +714,7 @@ VOID DisplayKeyData (HWND hDlg, CHAR *RegPath, HANDLE hKeyRoot)
 //    REG_MULTI_SZ                ( 7 )   // Multiple Unicode strings
 //    REG_RESOURCE_LIST           ( 8 )   // Resource list in the resource map
 //    REG_FULL_RESOURCE_DESCRIPTOR ( 9 )  // Resource list in the hardware description
-    
+
     case REG_NONE:
         LoadString(hInst, IDS_REGNONE, lpBuffer, sizeof(lpBuffer));
         SetDlgItemText (hDlg, IDE_VALUE1, lpBuffer);
@@ -723,7 +725,7 @@ VOID DisplayKeyData (HWND hDlg, CHAR *RegPath, HANDLE hKeyRoot)
         SetDlgItemText (hDlg, IDE_VALUE1, lpBuffer);
 
         outBuf = HeapAlloc (hHeap, 0, cbData + 2);
-        
+
         if (outBuf == NULL)
         {
             LoadString(hInst, IDS_MALLOCERR, lpBuffer, sizeof(lpBuffer));
@@ -821,7 +823,7 @@ VOID DisplayKeyData (HWND hDlg, CHAR *RegPath, HANDLE hKeyRoot)
         for (i=0, cStrLen=4; i < cbData; i++)
             if (!bData[i])
                 cStrLen+=4;                  // Add room for two quotes and two
-                                             // spaced per string.
+        // spaced per string.
 
         outBuf = HeapAlloc (hHeap, 0, cbData + cStrLen);
         if (outBuf == NULL)

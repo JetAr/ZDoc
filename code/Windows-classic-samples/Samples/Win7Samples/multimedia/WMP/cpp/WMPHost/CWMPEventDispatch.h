@@ -1,4 +1,4 @@
-// CWMPEventDispatch.h : Declaration of the event dispatcher
+﻿// CWMPEventDispatch.h : Declaration of the event dispatcher
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -11,40 +11,44 @@ class CWMPEventDispatch:
     public CComObjectRootEx<CComSingleThreadModel>,
     public IWMPEvents,
     public _WMPOCXEvents
-    {
+{
 public:
 
     BEGIN_COM_MAP(CWMPEventDispatch)
-        COM_INTERFACE_ENTRY(_WMPOCXEvents)
-        COM_INTERFACE_ENTRY(IWMPEvents)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(_WMPOCXEvents)
+    COM_INTERFACE_ENTRY(IWMPEvents)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
     // IDispatch methods
-    STDMETHOD(GetIDsOfNames)( REFIID /*riid*/, 
+    STDMETHOD(GetIDsOfNames)( REFIID /*riid*/,
                               __in_ecount(cNames) LPOLESTR FAR * /*rgszNames*/,
-                              unsigned int /*cNames*/, 
-                              LCID /*lcid*/, 
+                              unsigned int /*cNames*/,
+                              LCID /*lcid*/,
                               DISPID FAR * /*rgDispId*/ )
-    { return( E_NOTIMPL ); }
+    {
+        return( E_NOTIMPL );
+    }
 
-    STDMETHOD(GetTypeInfo)( unsigned int /*iTInfo*/, 
-                            LCID /*lcid*/, 
+    STDMETHOD(GetTypeInfo)( unsigned int /*iTInfo*/,
+                            LCID /*lcid*/,
                             ITypeInfo FAR *FAR * /*ppTInfo*/ )
-    { return( E_NOTIMPL ); }
+    {
+        return( E_NOTIMPL );
+    }
 
     STDMETHOD(GetTypeInfoCount)( unsigned int FAR * /*pctinfo*/ )
     {
         return( E_NOTIMPL );
     }
 
-    STDMETHOD(Invoke)( DISPID  dispIdMember,      
-                       REFIID  /*riid*/,              
-                       LCID  /*lcid*/,                
-                       WORD  /*wFlags*/,              
-                       DISPPARAMS FAR*  pDispParams,  
-                       VARIANT FAR*  /*pVarResult*/,  
-                       EXCEPINFO FAR*  /*pExcepInfo*/,  
+    STDMETHOD(Invoke)( DISPID  dispIdMember,
+                       REFIID  /*riid*/,
+                       LCID  /*lcid*/,
+                       WORD  /*wFlags*/,
+                       DISPPARAMS FAR*  pDispParams,
+                       VARIANT FAR*  /*pVarResult*/,
+                       EXCEPINFO FAR*  /*pExcepInfo*/,
                        unsigned int FAR*  /*puArgErr*/ );
 
     // IWMPEvents methods

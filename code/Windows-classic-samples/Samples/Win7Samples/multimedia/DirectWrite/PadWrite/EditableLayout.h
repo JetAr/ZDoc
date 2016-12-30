@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -74,7 +74,10 @@ public:
     }
 
 public:
-    IDWriteFactory* GetFactory() { return factory_; }
+    IDWriteFactory* GetFactory()
+    {
+        return factory_;
+    }
 
     /// Inserts a given string in the text layout's stored string at a certain text postion;
     HRESULT STDMETHODCALLTYPE InsertTextAt(
@@ -84,7 +87,7 @@ public:
         WCHAR const* textToInsert,  // [lengthToInsert]
         UINT32 textToInsertLength,
         CaretFormat* caretFormat = NULL
-        );
+    );
 
     /// Deletes a specified amount characters from the layout's stored string.
     HRESULT STDMETHODCALLTYPE RemoveTextAt(
@@ -92,23 +95,23 @@ public:
         IN OUT std::wstring& text,
         UINT32 position,
         UINT32 lengthToRemove
-        );
+    );
 
     HRESULT STDMETHODCALLTYPE Clear(
         IN OUT IDWriteTextLayout*& currentLayout,
         IN OUT std::wstring& text
-        );
+    );
 
 private:
     HRESULT STDMETHODCALLTYPE RecreateLayout(
         IN OUT IDWriteTextLayout*& currentLayout,
         const std::wstring& text
-        );
+    );
 
     static void CopyGlobalProperties(
         IDWriteTextLayout* oldLayout,
         IDWriteTextLayout* newLayout
-        );
+    );
 
     static void CopyRangedProperties(
         IDWriteTextLayout* oldLayout,
@@ -117,7 +120,7 @@ private:
         UINT32 newLayoutTextOffset,
         IDWriteTextLayout* newLayout,
         bool isOffsetNegative = false
-        );
+    );
 
     static void CopySinglePropertyRange(
         IDWriteTextLayout* oldLayout,
@@ -126,7 +129,7 @@ private:
         UINT32 startPosForNew,
         UINT32 length,
         EditableLayout::CaretFormat* caretFormat = NULL
-        );
+    );
 
 public:
     IDWriteFactory* factory_;

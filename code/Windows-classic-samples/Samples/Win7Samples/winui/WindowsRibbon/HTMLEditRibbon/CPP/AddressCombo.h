@@ -1,4 +1,4 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
+﻿// This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -23,8 +23,8 @@ class CAddressCombo : public CComboBox
 {
 // Construction
 public:
-	CAddressCombo();
-	void FillWithExplorerHistory();
+    CAddressCombo();
+    void FillWithExplorerHistory();
 // Attributes
 public:
 
@@ -32,22 +32,22 @@ public:
 public:
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddressCombo)
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CAddressCombo)
+    //}}AFX_VIRTUAL
 
 // Implementation
 public:
-	CFont m_font;
-	virtual ~CAddressCombo();
+    CFont m_font;
+    virtual ~CAddressCombo();
 
-	// Generated message map functions
+    // Generated message map functions
 protected:
-	//{{AFX_MSG(CAddressCombo)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+    //{{AFX_MSG(CAddressCombo)
+    afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+    //}}AFX_MSG
 
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 //    throughout this project.
 //
 #ifndef _INSTALL_H_
-#define _INSTALL_H_ 
+#define _INSTALL_H_
 
 #include <winsock2.h>
 #include <ws2spi.h>
@@ -104,91 +104,91 @@ typedef struct _PROVIDER
 
 BOOL
 FindLspEntries(
-        PROVIDER  **lspProviders,
-        int        *lspProviderCount,
-        int        *lpErrno
-        );
+    PROVIDER  **lspProviders,
+    int        *lspProviderCount,
+    int        *lpErrno
+);
 
 PROVIDER *
 FindMatchingLspEntryForProtocolInfo(
-        WSAPROTOCOL_INFOW *inInfo,
-        PROVIDER          *lspProviders,
-        int                lspCount,
-        BOOL               fromStartup = FALSE
-        );
+    WSAPROTOCOL_INFOW *inInfo,
+    PROVIDER          *lspProviders,
+    int                lspCount,
+    BOOL               fromStartup = FALSE
+);
 
 // Initialize the given provider by calling its WSPStartup
 int
 InitializeProvider(
-        PROVIDER *provider,
-        WORD wVersion,
-        WSAPROTOCOL_INFOW *lpProtocolInfo,
-        WSPUPCALLTABLE UpCallTable,
-        int *Error
-        );
+    PROVIDER *provider,
+    WORD wVersion,
+    WSAPROTOCOL_INFOW *lpProtocolInfo,
+    WSPUPCALLTABLE UpCallTable,
+    int *Error
+);
 
 BOOL
 LoadProviderPath(
-        PROVIDER    *loadProvider,
-        int         *lpErrno
-        );
+    PROVIDER    *loadProvider,
+    int         *lpErrno
+);
 
 // Verifies all the function pointers in the proc table are non-NULL
-int 
+int
 VerifyProcTable(
-        LPWSPPROC_TABLE lpProcTable
-        );
+    LPWSPPROC_TABLE lpProcTable
+);
 
 // Returns an array of protocol entries from the given Winsock catalog
-LPWSAPROTOCOL_INFOW 
+LPWSAPROTOCOL_INFOW
 EnumerateProviders(
-        WINSOCK_CATALOG Catalog, 
-        LPINT           TotalProtocols
-        );
+    WINSOCK_CATALOG Catalog,
+    LPINT           TotalProtocols
+);
 
 // Enumerates the given Winsock catalog into the already allocated buffer
 int
 EnumerateProvidersExisting(
-        WINSOCK_CATALOG     Catalog, 
-        WSAPROTOCOL_INFOW  *ProtocolInfo,
-        LPDWORD             ProtocolInfoSize
-        );
+    WINSOCK_CATALOG     Catalog,
+    WSAPROTOCOL_INFOW  *ProtocolInfo,
+    LPDWORD             ProtocolInfoSize
+);
 
 // Free the array of protocol entries returned from EnumerateProviders
-void 
+void
 FreeProviders(
-        LPWSAPROTOCOL_INFOW ProtocolInfo
-        );
+    LPWSAPROTOCOL_INFOW ProtocolInfo
+);
 
 // Prints a protocol entry to the console in a readable, formatted form
-void 
+void
 PrintProtocolInfo(
-        WSAPROTOCOL_INFOW  *ProtocolInfo
-        );
+    WSAPROTOCOL_INFOW  *ProtocolInfo
+);
 
 // Allocates a buffer from the LSP private heap
 void *
 LspAlloc(
-        SIZE_T  size,
-        int    *lpErrno
-        );
+    SIZE_T  size,
+    int    *lpErrno
+);
 
 // Frees a buffer previously allocated by LspAlloc
 void
 LspFree(
-        LPVOID  buf
-       );
+    LPVOID  buf
+);
 
 // Creates the private heap used by the LSP and installer
 int
 LspCreateHeap(
-        int    *lpErrno
-        );
+    int    *lpErrno
+);
 
 // Destroys the private heap
 void
 LspDestroyHeap(
-        );
+);
 
 
 #ifdef _PSDK_BLD
@@ -327,16 +327,16 @@ BOOL IsNodeOnList(PLIST_ENTRY ListHead, PLIST_ENTRY Entry);
 
 #ifdef ASSERT
 #undef ASSERT
-#endif 
+#endif
 
 #ifdef DBG
 
 // Prints a message to the debugger
-void 
+void
 dbgprint(
-        char *format,
-        ...
-        );
+    char *format,
+    ...
+);
 
 #define ASSERT(exp)                                             \
         if ( !(exp) )                                           \

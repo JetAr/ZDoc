@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@ int WINAPI WinMain(
     HINSTANCE /*hPrevInstance*/,
     LPSTR /*lpCmdLine*/,
     int /*nCmdShow*/
-    )
+)
 {
     // Ignore the return value because we want to run the program even in the
     // unlikely event that HeapSetInformation fails.
@@ -101,18 +101,18 @@ HRESULT DemoApp::Initialize()
         m_pD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
 
         m_hwnd = CreateWindow(
-            L"D2DDemoApp",
-            L"Direct2D Demo Application",
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
-            static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
-            NULL,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                     L"D2DDemoApp",
+                     L"Direct2D Demo Application",
+                     WS_OVERLAPPEDWINDOW,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
+                     static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
+                     NULL,
+                     NULL,
+                     HINST_THISCOMPONENT,
+                     this
+                 );
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
         {
@@ -147,24 +147,24 @@ HRESULT DemoApp::CreateDeviceIndependentResources()
     {
         // Create a DirectWrite factory.
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(m_pDWriteFactory),
-            reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(m_pDWriteFactory),
+                 reinterpret_cast<IUnknown **>(&m_pDWriteFactory)
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Create a DirectWrite text format object.
         hr = m_pDWriteFactory->CreateTextFormat(
-            msc_fontName,
-            NULL,
-            DWRITE_FONT_WEIGHT_NORMAL,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            msc_fontSize,
-            L"", //locale
-            &m_pTextFormat
-            );
+                 msc_fontName,
+                 NULL,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 msc_fontSize,
+                 L"", //locale
+                 &m_pTextFormat
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -197,23 +197,23 @@ HRESULT DemoApp::CreateDeviceResources()
         GetClientRect(m_hwnd, &rc);
 
         D2D1_SIZE_U size = D2D1::SizeU(
-            rc.right - rc.left,
-            rc.bottom - rc.top
-            );
+                               rc.right - rc.left,
+                               rc.bottom - rc.top
+                           );
 
         // Create a Direct2D render target.
         hr = m_pD2DFactory->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(m_hwnd, size),
-            &m_pRenderTarget
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(m_hwnd, size),
+                 &m_pRenderTarget
+             );
         if (SUCCEEDED(hr))
         {
             // Create a black brush.
             hr = m_pRenderTarget->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Black),
-                &m_pBlackBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::Black),
+                     &m_pBlackBrush
+                 );
         }
 
     }
@@ -283,7 +283,7 @@ HRESULT DemoApp::OnRender()
             m_pTextFormat,
             D2D1::RectF(0, 0, renderTargetSize.width, renderTargetSize.height),
             m_pBlackBrush
-            );
+        );
 
         hr = m_pRenderTarget->EndDraw();
 
@@ -333,17 +333,17 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pDemoApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         DemoApp *pDemoApp = reinterpret_cast<DemoApp *>(static_cast<LONG_PTR>(
-            ::GetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA
-                )));
+                                ::GetWindowLongPtrW(
+                                    hwnd,
+                                    GWLP_USERDATA
+                                )));
 
         bool wasHandled = false;
 
@@ -352,35 +352,35 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             switch (message)
             {
             case WM_SIZE:
-                {
-                    UINT width = LOWORD(lParam);
-                    UINT height = HIWORD(lParam);
-                    pDemoApp->OnResize(width, height);
-                }
-                wasHandled = true;
-                result = 0;
-                break;
+            {
+                UINT width = LOWORD(lParam);
+                UINT height = HIWORD(lParam);
+                pDemoApp->OnResize(width, height);
+            }
+            wasHandled = true;
+            result = 0;
+            break;
 
             case WM_PAINT:
             case WM_DISPLAYCHANGE:
-                {
-                    PAINTSTRUCT ps;
-                    BeginPaint(hwnd, &ps);
+            {
+                PAINTSTRUCT ps;
+                BeginPaint(hwnd, &ps);
 
-                    pDemoApp->OnRender();
-                    EndPaint(hwnd, &ps);
-                }
-                wasHandled = true;
-                result = 0;
-                break;
+                pDemoApp->OnRender();
+                EndPaint(hwnd, &ps);
+            }
+            wasHandled = true;
+            result = 0;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                wasHandled = true;
-                result = 1;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            wasHandled = true;
+            result = 1;
+            break;
             }
         }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -47,36 +47,36 @@ Description:
 class CFsrmSampleClassificationRule
 {
 public:
-	
-	// The classification property's name
-	CComBSTR m_strPropName;
 
-	// The value to set for the classification property
-	CComBSTR m_strPropValue;
+    // The classification property's name
+    CComBSTR m_strPropName;
 
-	// The string to search for in the file's name
-	CComBSTR m_strFileNameContains;
+    // The value to set for the classification property
+    CComBSTR m_strPropValue;
 
-	// The string to search for in the file's contents
-	CComBSTR m_strFileContentContains;
+    // The string to search for in the file's name
+    CComBSTR m_strFileNameContains;
 
-	CFsrmSampleClassificationRule(
-		)
-	{
-	}
+    // The string to search for in the file's contents
+    CComBSTR m_strFileContentContains;
 
-	CFsrmSampleClassificationRule(
-		LPCWSTR     pwszPropName,
-		LPCWSTR     pwszPropValue,
-		LPCWSTR		pwszFileNameContains,
-		LPCWSTR		pwszFileContentContains
-		)
-	{
-		m_strPropName = pwszPropName;
-		m_strPropValue = pwszPropValue;	
-		m_strFileNameContains = pwszFileNameContains;
-		m_strFileContentContains = pwszFileContentContains;
-	}
+    CFsrmSampleClassificationRule(
+    )
+    {
+    }
+
+    CFsrmSampleClassificationRule(
+        LPCWSTR     pwszPropName,
+        LPCWSTR     pwszPropValue,
+        LPCWSTR		pwszFileNameContains,
+        LPCWSTR		pwszFileContentContains
+    )
+    {
+        m_strPropName = pwszPropName;
+        m_strPropValue = pwszPropValue;
+        m_strFileNameContains = pwszFileNameContains;
+        m_strFileContentContains = pwszFileContentContains;
+    }
 
 };
 
@@ -100,117 +100,117 @@ typedef std::map < FSRM_OBJECT_ID, CFsrmSampleClassificationRule > FsrmClassific
 Description:
 
     This is the ATL wizard added class for the ATL object.
-	It implements the IFsrmClassifierModuleImplementation interface methods.	
+	It implements the IFsrmClassifierModuleImplementation interface methods.
 
 --*/
 
 class ATL_NO_VTABLE CFsrmSampleClassifier :
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CFsrmSampleClassifier, &CLSID_FsrmSampleClassifier>,
-	public IDispatchImpl<IFsrmClassifierModuleImplementation, &__uuidof(IFsrmClassifierModuleImplementation), &LIBID_FsrmLib, /* wMajor = */ 1>
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CFsrmSampleClassifier, &CLSID_FsrmSampleClassifier>,
+    public IDispatchImpl<IFsrmClassifierModuleImplementation, &__uuidof(IFsrmClassifierModuleImplementation), &LIBID_FsrmLib, /* wMajor = */ 1>
 {
 public:
-	CFsrmSampleClassifier(
-		)
-	{
-	}
+    CFsrmSampleClassifier(
+    )
+    {
+    }
 
     DECLARE_GET_CONTROLLING_UNKNOWN()
-	DECLARE_REGISTRY_RESOURCEID(IDR_FSRMSAMPLECLASSIFIER)
-	DECLARE_NOT_AGGREGATABLE(CFsrmSampleClassifier)
+    DECLARE_REGISTRY_RESOURCEID(IDR_FSRMSAMPLECLASSIFIER)
+    DECLARE_NOT_AGGREGATABLE(CFsrmSampleClassifier)
 
-	BEGIN_COM_MAP(CFsrmSampleClassifier)
-		COM_INTERFACE_ENTRY(IFsrmClassifierModuleImplementation)
-		COM_INTERFACE_ENTRY(IFsrmPipelineModuleImplementation)
-		COM_INTERFACE_ENTRY(IDispatch)
-	END_COM_MAP()
+    BEGIN_COM_MAP(CFsrmSampleClassifier)
+    COM_INTERFACE_ENTRY(IFsrmClassifierModuleImplementation)
+    COM_INTERFACE_ENTRY(IFsrmPipelineModuleImplementation)
+    COM_INTERFACE_ENTRY(IDispatch)
+    END_COM_MAP()
 
 
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	HRESULT FinalConstruct(
-		)
-	{
-		return S_OK;
-	}
+    HRESULT FinalConstruct(
+    )
+    {
+        return S_OK;
+    }
 
-	void FinalRelease(
-		)
-	{
-	}
-
-public:
-
+    void FinalRelease(
+    )
+    {
+    }
 
 public:
 
 
-	// IFsrmClassifierModuleImplementation Methods
 public:
-	STDMETHOD(get_LastModified)(
-		VARIANT * LastModified
-		);
 
-	STDMETHOD(UseRulesAndDefinitions)(
-		IFsrmCollection * Rules, 
-		IFsrmCollection * propertyDefinitions
-		);
 
-	STDMETHOD(OnBeginFile)(
-		IFsrmPropertyBag * propertyBag,
-                SAFEARRAY           *psaRuleIds
-		);
-
-	STDMETHOD(DoesPropertyValueApply)(
-		BSTR property, 
-		BSTR Value, 
-		VARIANT_BOOL * applyValue, 
-		GUID idRule, 
-		GUID idPropDef
-		);
-
-	STDMETHOD(GetPropertyValueToApply)(
-		BSTR property, 
-		BSTR * Value, 
-		GUID idRule, 
-		GUID idPropDef
-		);
-	
-	STDMETHOD(OnEndFile)(
-		);
-
-	// IFsrmPipelineModuleImplementation Methods
+    // IFsrmClassifierModuleImplementation Methods
 public:
-	STDMETHOD(OnLoad)(
-		IFsrmPipelineModuleDefinition * moduleDefinition, 
-		IFsrmPipelineModuleConnector * * moduleConnector
-		);
-	
-	STDMETHOD(OnUnload)(
-		);
+    STDMETHOD(get_LastModified)(
+        VARIANT * LastModified
+    );
+
+    STDMETHOD(UseRulesAndDefinitions)(
+        IFsrmCollection * Rules,
+        IFsrmCollection * propertyDefinitions
+    );
+
+    STDMETHOD(OnBeginFile)(
+        IFsrmPropertyBag * propertyBag,
+        SAFEARRAY           *psaRuleIds
+    );
+
+    STDMETHOD(DoesPropertyValueApply)(
+        BSTR property,
+        BSTR Value,
+        VARIANT_BOOL * applyValue,
+        GUID idRule,
+        GUID idPropDef
+    );
+
+    STDMETHOD(GetPropertyValueToApply)(
+        BSTR property,
+        BSTR * Value,
+        GUID idRule,
+        GUID idPropDef
+    );
+
+    STDMETHOD(OnEndFile)(
+    );
+
+    // IFsrmPipelineModuleImplementation Methods
+public:
+    STDMETHOD(OnLoad)(
+        IFsrmPipelineModuleDefinition * moduleDefinition,
+        IFsrmPipelineModuleConnector * * moduleConnector
+    );
+
+    STDMETHOD(OnUnload)(
+    );
 
 
 private:
-	// to hold a reference to the Fsrm pipeline module
-	CComPtr<IFsrmPipelineModuleDefinition> m_spDefinition;
+    // to hold a reference to the Fsrm pipeline module
+    CComPtr<IFsrmPipelineModuleDefinition> m_spDefinition;
 
-	// map to hold all classification rules' property/value pairs
-	FsrmClassificationRulesMap	m_mapFsrmClassificationRules;
+    // map to hold all classification rules' property/value pairs
+    FsrmClassificationRulesMap	m_mapFsrmClassificationRules;
 
-	// save a reference to the current property bag
-	CComPtr<IFsrmPropertyBag>   m_spCurrentPropertyBag;	
+    // save a reference to the current property bag
+    CComPtr<IFsrmPropertyBag>   m_spCurrentPropertyBag;
 
 private:
 
-	// This method searches the filename or the content of the file
-	// for the parameters specified in the classification rule's parameter section
-	HRESULT 
-	NameOrContentContains(
-		LPCWSTR szFileNameContains,
-		LPCWSTR szFileContentContains,
-		VARIANT_BOOL * bResult
-		);
+    // This method searches the filename or the content of the file
+    // for the parameters specified in the classification rule's parameter section
+    HRESULT
+    NameOrContentContains(
+        LPCWSTR szFileNameContains,
+        LPCWSTR szFileContentContains,
+        VARIANT_BOOL * bResult
+    );
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(FsrmSampleClassifier), CFsrmSampleClassifier)

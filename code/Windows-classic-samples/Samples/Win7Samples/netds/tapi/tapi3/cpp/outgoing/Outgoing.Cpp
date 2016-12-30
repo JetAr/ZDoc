@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999 - 2000 Microsoft Corporation.  All Rights Reserved.
 
@@ -58,42 +58,42 @@ ITBasicCallControl *    gpCall;
 INT_PTR
 CALLBACK
 MainDialogProc(
-               HWND hDlg,
-               UINT uMsg,
-               WPARAM wParam,
-               LPARAM lParam
-              );
+    HWND hDlg,
+    UINT uMsg,
+    WPARAM wParam,
+    LPARAM lParam
+);
 
 HRESULT
 FindAnAddress(
-              DWORD dwAddressType,
-              BSTR  * ppName
-             );
+    DWORD dwAddressType,
+    BSTR  * ppName
+);
 
 HRESULT
 GetTerminal(
-            ITStream * pStream,
-            ITTerminal ** ppTerminal
-           );
+    ITStream * pStream,
+    ITTerminal ** ppTerminal
+);
 
 HRESULT
 GetVideoRenderTerminal(
-                   ITTerminal ** ppTerminal
-                  );
+    ITTerminal ** ppTerminal
+);
 
 HRESULT
 MakeTheCall(
-            DWORD dwAddressType,
-            PWCHAR szAddressToCall
-           );
+    DWORD dwAddressType,
+    PWCHAR szAddressToCall
+);
 
 HRESULT
 DisconnectTheCall();
 
 void
 DoMessage(
-          LPWSTR pszMessage
-         );
+    LPWSTR pszMessage
+);
 
 HRESULT
 InitializeTapi();
@@ -103,20 +103,20 @@ ShutdownTapi();
 
 void
 EnableButton(
-             HWND hDlg,
-             int ID
-            );
+    HWND hDlg,
+    int ID
+);
 void
 DisableButton(
-              HWND hDlg,
-              int ID
-             );
+    HWND hDlg,
+    int ID
+);
 
 BOOL
 AddressSupportsMediaType(
-                         ITAddress * pAddress,
-                         long        lMediaType
-                        );
+    ITAddress * pAddress,
+    long        lMediaType
+);
 
 //////////////////////////////////////////////////////////
 // WinMain
@@ -124,11 +124,11 @@ AddressSupportsMediaType(
 int
 WINAPI
 WinMain(
-        HINSTANCE hInst,
-        HINSTANCE hPrevInst,
-        LPSTR lpCmdLine,
-        int nCmdShow
-       )
+    HINSTANCE hInst,
+    HINSTANCE hPrevInst,
+    LPSTR lpCmdLine,
+    int nCmdShow
+)
 {
     ghInst = hInst;
 
@@ -147,11 +147,11 @@ WinMain(
     // everything is initialized, so
     // start the main dialog box
     DialogBox(
-              ghInst,
-              MAKEINTRESOURCE(IDD_MAINDLG),
-              NULL,
-              MainDialogProc
-             );
+        ghInst,
+        MAKEINTRESOURCE(IDD_MAINDLG),
+        NULL,
+        MainDialogProc
+    );
 
 
     ShutdownTapi();
@@ -175,12 +175,12 @@ InitializeTapi()
 
     // cocreate the TAPI object
     hr = CoCreateInstance(
-                          CLSID_TAPI,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_ITTAPI,
-                          (LPVOID *)&gpTapi
-                         );
+             CLSID_TAPI,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITTAPI,
+             (LPVOID *)&gpTapi
+         );
 
     if ( FAILED(hr) )
     {
@@ -248,48 +248,48 @@ ShutdownTapi()
 void
 InitAddressTypeComboBox(
     HWND hComboBox
-    )
+)
 {
     int i;
 
     i = (int)SendMessage( hComboBox, CB_ADDSTRING, 0, (LONG_PTR)gszConferenceName );
 
     SendMessage(
-                hComboBox,
-                CB_SETITEMDATA ,
-                i,
-                (LONG_PTR)LINEADDRESSTYPE_SDP
-               );
+        hComboBox,
+        CB_SETITEMDATA,
+        i,
+        (LONG_PTR)LINEADDRESSTYPE_SDP
+    );
 
 
     i = (int)SendMessage( hComboBox, CB_ADDSTRING, 0, (LONG_PTR)gszEmailName );
 
     SendMessage(
-                hComboBox,
-                CB_SETITEMDATA ,
-                i,
-                (LONG_PTR)LINEADDRESSTYPE_EMAILNAME
-               );
+        hComboBox,
+        CB_SETITEMDATA,
+        i,
+        (LONG_PTR)LINEADDRESSTYPE_EMAILNAME
+    );
 
 
     i = (int)SendMessage( hComboBox, CB_ADDSTRING, 0, (LONG_PTR)gszMachineName );
 
     SendMessage(
-                hComboBox,
-                CB_SETITEMDATA ,
-                i,
-                (LONG_PTR)LINEADDRESSTYPE_DOMAINNAME
-               );
+        hComboBox,
+        CB_SETITEMDATA,
+        i,
+        (LONG_PTR)LINEADDRESSTYPE_DOMAINNAME
+    );
 
 
     i = (int)SendMessage( hComboBox, CB_ADDSTRING, 0, (LONG_PTR)gszPhoneNumber );
 
     SendMessage(
-                hComboBox,
-                CB_SETITEMDATA ,
-                i,
-                (LONG_PTR)LINEADDRESSTYPE_PHONENUMBER
-               );
+        hComboBox,
+        CB_SETITEMDATA,
+        i,
+        (LONG_PTR)LINEADDRESSTYPE_PHONENUMBER
+    );
 
 
     SendMessage( hComboBox, CB_SETCURSEL, i, 0 );
@@ -297,11 +297,11 @@ InitAddressTypeComboBox(
     i = (int)SendMessage( hComboBox, CB_ADDSTRING, 0, (LONG_PTR)gszIPAddress );
 
     SendMessage(
-                hComboBox,
-                CB_SETITEMDATA ,
-                i,
-                (LONG_PTR)LINEADDRESSTYPE_IPADDRESS
-               );
+        hComboBox,
+        CB_SETITEMDATA,
+        i,
+        (LONG_PTR)LINEADDRESSTYPE_IPADDRESS
+    );
 
 }
 
@@ -311,108 +311,108 @@ InitAddressTypeComboBox(
 INT_PTR
 CALLBACK
 MainDialogProc(
-               HWND hDlg,
-               UINT uMsg,
-               WPARAM wParam,
-               LPARAM lParam
-              )
+    HWND hDlg,
+    UINT uMsg,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     switch (uMsg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
+    {
+        HWND hComboBox;
+
+
+        // set up dialog
+        ghDlg = hDlg;
+
+        EnableButton( hDlg, IDOK );
+        DisableButton( hDlg, IDC_DISCONNECT );
+
+        hComboBox = GetDlgItem( hDlg, IDC_ADDRESSTYPE );
+
+        InitAddressTypeComboBox(hComboBox);
+
+        SetFocus( hComboBox );
+
+        return 0;
+    }
+
+    case WM_COMMAND:
+    {
+        if ( LOWORD(wParam) == IDCANCEL )
+        {
+            // quit
+            EndDialog( hDlg, 0 );
+
+            return 1;
+        }
+
+        // dial request
+        if ( LOWORD(wParam) == IDOK )
         {
             HWND hComboBox;
+            DWORD dwIndex;
+            DWORD dwAddressType;
+            WCHAR szAddressToCall[ADDRESSLENGTH];
 
 
-            // set up dialog
-            ghDlg = hDlg;
-
-            EnableButton( hDlg, IDOK );
-            DisableButton( hDlg, IDC_DISCONNECT );
-
+            // get the address type the user selected.
             hComboBox = GetDlgItem( hDlg, IDC_ADDRESSTYPE );
+            dwIndex = (DWORD)SendMessage( hComboBox, CB_GETCURSEL, 0, 0 );
 
-            InitAddressTypeComboBox(hComboBox);
+            dwAddressType = (DWORD)SendMessage(
+                                hComboBox,
+                                CB_GETITEMDATA,
+                                dwIndex,
+                                0
+                            );
 
-            SetFocus( hComboBox );
+            // get the address the user wants to call
+            GetDlgItemText(
+                hDlg,
+                IDC_ADDRESS,
+                szAddressToCall,
+                ADDRESSLENGTH
+            );
 
-            return 0;
+            // make the call
+            if ( S_OK == MakeTheCall(dwAddressType, szAddressToCall) )
+            {
+                EnableButton( hDlg, IDC_DISCONNECT );
+                DisableButton( hDlg, IDOK );
+            }
+            else
+            {
+                DoMessage(L"The call failed to connect");
+            }
+
+            return 1;
         }
 
-        case WM_COMMAND:
+        // disconnect request
+        if ( LOWORD( wParam ) == IDC_DISCONNECT )
         {
-            if ( LOWORD(wParam) == IDCANCEL )
+            // disconnect
+            if (S_OK == DisconnectTheCall())
             {
-                // quit
-                EndDialog( hDlg, 0 );
-
-                return 1;
+                EnableButton( hDlg, IDOK );
+                DisableButton( hDlg, IDC_DISCONNECT );
+            }
+            else
+            {
+                DoMessage(L"The call failed to disconnect");
             }
 
-            // dial request
-            if ( LOWORD(wParam) == IDOK )
-            {
-                HWND hComboBox;
-                DWORD dwIndex;
-                DWORD dwAddressType;
-                WCHAR szAddressToCall[ADDRESSLENGTH];
-
-
-                // get the address type the user selected.
-                hComboBox = GetDlgItem( hDlg, IDC_ADDRESSTYPE );
-                dwIndex = (DWORD)SendMessage( hComboBox, CB_GETCURSEL, 0, 0 );
-
-                dwAddressType = (DWORD)SendMessage(
-                                             hComboBox,
-                                             CB_GETITEMDATA,
-                                             dwIndex,
-                                             0
-                                           );
-
-                // get the address the user wants to call
-                GetDlgItemText(
-                               hDlg,
-                               IDC_ADDRESS,
-                               szAddressToCall,
-                               ADDRESSLENGTH
-                              );
-
-                // make the call
-                if ( S_OK == MakeTheCall(dwAddressType, szAddressToCall) )
-                {
-                    EnableButton( hDlg, IDC_DISCONNECT );
-                    DisableButton( hDlg, IDOK );
-                }
-                else
-                {
-                    DoMessage(L"The call failed to connect");
-                }
-
-                return 1;
-            }
-
-            // disconnect request
-            if ( LOWORD( wParam ) == IDC_DISCONNECT )
-            {
-                // disconnect
-                if (S_OK == DisconnectTheCall())
-                {
-                    EnableButton( hDlg, IDOK );
-                    DisableButton( hDlg, IDC_DISCONNECT );
-                }
-                else
-                {
-                    DoMessage(L"The call failed to disconnect");
-                }
-
-                return 1;
-            }
-
-            return 0;
+            return 1;
         }
-        default:
 
-            return 0;
+        return 0;
+    }
+    default:
+
+        return 0;
     }
 }
 
@@ -431,9 +431,9 @@ MainDialogProc(
 ////////////////////////////////////////////////////////////////////////
 HRESULT
 FindAnAddress(
-              DWORD dwAddressType,
-              BSTR  * ppName
-             )
+    DWORD dwAddressType,
+    BSTR  * ppName
+)
 {
     HRESULT                 hr = S_OK;
     BOOL                    bFoundAddress = FALSE;
@@ -526,14 +526,20 @@ FindAnAddress(
 
 BOOL
 IsVideoCaptureStream(
-                     ITStream * pStream
-                    )
+    ITStream * pStream
+)
 {
     TERMINAL_DIRECTION tdStreamDirection;
     long               lStreamMediaType;
 
-    if ( FAILED( pStream  ->get_Direction(&tdStreamDirection)   ) ) { return FALSE; }
-    if ( FAILED( pStream  ->get_MediaType(&lStreamMediaType)    ) ) { return FALSE; }
+    if ( FAILED( pStream  ->get_Direction(&tdStreamDirection)   ) )
+    {
+        return FALSE;
+    }
+    if ( FAILED( pStream  ->get_MediaType(&lStreamMediaType)    ) )
+    {
+        return FALSE;
+    }
 
     return (tdStreamDirection == TD_CAPTURE) &&
            (lStreamMediaType  == TAPIMEDIATYPE_VIDEO);
@@ -548,8 +554,8 @@ IsVideoCaptureStream(
 
 HRESULT
 EnablePreview(
-              ITStream * pStream
-             )
+    ITStream * pStream
+)
 {
     ITTerminal * pTerminal;
 
@@ -574,8 +580,8 @@ EnablePreview(
 
 HRESULT
 SelectTerminalsOnCall(
-                     ITBasicCallControl * pCall
-                     )
+    ITBasicCallControl * pCall
+)
 {
     HRESULT hr;
 
@@ -664,9 +670,9 @@ SelectTerminalsOnCall(
 
 HRESULT
 MakeTheCall(
-            DWORD dwAddressType,
-            PWCHAR szAddressToCall
-           )
+    DWORD dwAddressType,
+    PWCHAR szAddressToCall
+)
 {
     HRESULT                 hr = S_OK;
     BSTR                    bstrAddressToCall;
@@ -774,9 +780,9 @@ MakeTheCall(
 /////////////////////////////////////////////////////////
 HRESULT
 GetTerminal(
-            ITStream * pStream,
-            ITTerminal ** ppTerminal
-           )
+    ITStream * pStream,
+    ITTerminal ** ppTerminal
+)
 {
     //
     // Determine the media type and direction of this stream.
@@ -798,7 +804,7 @@ GetTerminal(
     //
 
     if ( ( lMediaType == TAPIMEDIATYPE_VIDEO ) &&
-         ( dir        == TD_RENDER ) )
+            ( dir        == TD_RENDER ) )
     {
         return GetVideoRenderTerminal(ppTerminal);
     }
@@ -820,8 +826,8 @@ GetTerminal(
         //
 
         hr = pTerminalSupport->GetDefaultStaticTerminal(lMediaType,
-                                                        dir,
-                                                        ppTerminal);
+                dir,
+                ppTerminal);
 
         pTerminalSupport->Release();
     }
@@ -838,8 +844,8 @@ GetTerminal(
 /////////////////////////////////////////////////////////
 HRESULT
 GetVideoRenderTerminal(
-                   ITTerminal ** ppTerminal
-                  )
+    ITTerminal ** ppTerminal
+)
 {
     //
     // Construct a BSTR for the correct IID.
@@ -965,15 +971,15 @@ DisconnectTheCall()
 ///////////////////////////////////////////////////////////////////
 void
 DoMessage(
-          LPWSTR pszMessage
-         )
+    LPWSTR pszMessage
+)
 {
     MessageBox(
-               ghDlg,
-               pszMessage,
-               gszTapi30,
-               MB_OK
-              );
+        ghDlg,
+        pszMessage,
+        gszTapi30,
+        MB_OK
+    );
 }
 
 ///////////////////////////////////////////////////////////////
@@ -983,24 +989,24 @@ DoMessage(
 ///////////////////////////////////////////////////////////////
 void
 EnableButton(
-             HWND hDlg,
-             int ID
-            )
+    HWND hDlg,
+    int ID
+)
 {
     SendDlgItemMessage(
-                       hDlg,
-                       ID,
-                       BM_SETSTYLE,
-                       BS_DEFPUSHBUTTON,
-                       0
-                      );
+        hDlg,
+        ID,
+        BM_SETSTYLE,
+        BS_DEFPUSHBUTTON,
+        0
+    );
     EnableWindow(
-                 GetDlgItem( hDlg, ID ),
-                 TRUE
-                );
+        GetDlgItem( hDlg, ID ),
+        TRUE
+    );
     SetFocus(
-             GetDlgItem( hDlg, ID )
-            );
+        GetDlgItem( hDlg, ID )
+    );
 }
 
 //////////////////////////////////////////////////////////////
@@ -1010,21 +1016,21 @@ EnableButton(
 //////////////////////////////////////////////////////////////
 void
 DisableButton(
-              HWND hDlg,
-              int ID
-             )
+    HWND hDlg,
+    int ID
+)
 {
     SendDlgItemMessage(
-                       hDlg,
-                       ID,
-                       BM_SETSTYLE,
-                       BS_PUSHBUTTON,
-                       0
-                      );
+        hDlg,
+        ID,
+        BM_SETSTYLE,
+        BS_PUSHBUTTON,
+        0
+    );
     EnableWindow(
-                 GetDlgItem( hDlg, ID ),
-                 FALSE
-                );
+        GetDlgItem( hDlg, ID ),
+        FALSE
+    );
 }
 
 //////////////////////////////////////////////////////////////
@@ -1036,21 +1042,21 @@ DisableButton(
 
 BOOL
 AddressSupportsMediaType(
-                         ITAddress * pAddress,
-                         long        lMediaType
-                        )
+    ITAddress * pAddress,
+    long        lMediaType
+)
 {
     VARIANT_BOOL     bSupport = VARIANT_FALSE;
     ITMediaSupport * pMediaSupport;
 
     if ( SUCCEEDED( pAddress->QueryInterface( IID_ITMediaSupport,
-                                              (void **)&pMediaSupport ) ) )
+                    (void **)&pMediaSupport ) ) )
     {
         // does it support this media type?
         pMediaSupport->QueryMediaType(
-                                      lMediaType,
-                                      &bSupport
-                                     );
+            lMediaType,
+            &bSupport
+        );
 
         pMediaSupport->Release();
     }

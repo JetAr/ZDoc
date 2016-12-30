@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: DvdCore.cpp
 //
 // Desc: Actual implementation of DVD Playback capabilities
@@ -40,11 +40,11 @@ using namespace std;
 
 namespace // empty namespace means these are only available within this .cpp file
 {
-    const WCHAR g_szBookmarkFilename[] = L"c:\\DVDSample.bmk\0";
-    const WCHAR g_szBookmarkName[] = L"DVDSampleBookmarks\0";
-    HHOOK g_hMouse = 0;
-    const UINT MOUSETIMER = 1; // the number is arbitrary, it just can't be 0.
-    const DWORD MOUSE_TIMEOUT = 5000; // the mouse should disappear after 5 seconds
+const WCHAR g_szBookmarkFilename[] = L"c:\\DVDSample.bmk\0";
+const WCHAR g_szBookmarkName[] = L"DVDSampleBookmarks\0";
+HHOOK g_hMouse = 0;
+const UINT MOUSETIMER = 1; // the number is arbitrary, it just can't be 0.
+const DWORD MOUSE_TIMEOUT = 5000; // the mouse should disappear after 5 seconds
 }
 
 
@@ -55,25 +55,25 @@ namespace // empty namespace means these are only available within this .cpp fil
 //------------------------------------------------------------------------------
 
 CDvdCore::CDvdCore(HINSTANCE hInstance, IDvdCallback * pIDC) :
-                       m_dwRenderFlags(AM_DVD_HWDEC_PREFER),
-                       m_eState(Uninitialized),
-                       m_pIDvdGB(NULL),
-                       m_pIDvdC2(NULL),
-                       m_pIDvdI2(NULL),
-                       m_pGraph(NULL),
-                       m_pIVW(NULL),
-                       m_pIME(NULL),
-                       m_pIMC(NULL),
-                       m_hInstance(hInstance),
-                       m_pIL21Dec(NULL),
-                       m_hWnd(NULL),
-                       m_dwMouseMoveTime(0),
-                       m_bFirstPlay(true),
-                       m_bFullScreenOn(false),
-                       m_ulCurTitle(0),
-                       m_ulCurChapter(0),
-                       m_bMessageSink(false),
-                       m_bUseVMR9(false)
+    m_dwRenderFlags(AM_DVD_HWDEC_PREFER),
+    m_eState(Uninitialized),
+    m_pIDvdGB(NULL),
+    m_pIDvdC2(NULL),
+    m_pIDvdI2(NULL),
+    m_pGraph(NULL),
+    m_pIVW(NULL),
+    m_pIME(NULL),
+    m_pIMC(NULL),
+    m_hInstance(hInstance),
+    m_pIL21Dec(NULL),
+    m_hWnd(NULL),
+    m_dwMouseMoveTime(0),
+    m_bFirstPlay(true),
+    m_bFullScreenOn(false),
+    m_ulCurTitle(0),
+    m_ulCurChapter(0),
+    m_bMessageSink(false),
+    m_bUseVMR9(false)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDvdCore::CDvdCore()"))) ;
 
@@ -130,8 +130,8 @@ bool CDvdCore::BuildGraph()
     if (FAILED(hr)) // IDvdGraphBuilder not successfully instantiated
     {
         DbgLog((LOG_ERROR, 0,
-            TEXT("ERROR: CoCreateInstance() for CLSID_DvdGraphBuilder failed (Error 0x%x)"),
-            hr)) ;
+                TEXT("ERROR: CoCreateInstance() for CLSID_DvdGraphBuilder failed (Error 0x%x)"),
+                hr)) ;
         return false;
     }
 
@@ -139,12 +139,12 @@ bool CDvdCore::BuildGraph()
     if (m_bUseVMR9)
     {
         //  to use VMR9, we verify the ability of a VMR9 filter to be inserted into the graph
-	    IVMRFilterConfig*	pConfig = 0;
-	    hr = m_pIDvdGB->GetDvdInterface(IID_IVMRFilterConfig9, (void**)&pConfig);
-	    if (FAILED(hr))
+        IVMRFilterConfig*	pConfig = 0;
+        hr = m_pIDvdGB->GetDvdInterface(IID_IVMRFilterConfig9, (void**)&pConfig);
+        if (FAILED(hr))
         {
             m_bUseVMR9 = false;
-		    if (IDCANCEL == MessageBox(0,
+            if (IDCANCEL == MessageBox(0,
                                        TEXT("Cannot use VMR9 in the DVD graph.\nSelect 'OK' to proceed with the default option, 'Cancel' to close the application."),
                                        TEXT("Non-critical error"), MB_ICONEXCLAMATION | MB_OKCANCEL))
             {
@@ -152,22 +152,22 @@ bool CDvdCore::BuildGraph()
                 return false;
             }
         }
-	    else
-	    {
-		    pConfig->Release();
-		    pConfig = 0;
+        else
+        {
+            pConfig->Release();
+            pConfig = 0;
             //  the graph allows the use of VMR9; set the rendering flags accordingly
-		    m_dwRenderFlags = AM_DVD_SWDEC_PREFER | AM_DVD_VMR9_ONLY;
-	    }
+            m_dwRenderFlags = AM_DVD_SWDEC_PREFER | AM_DVD_VMR9_ONLY;
+        }
     }   //  use VMR9
 
     hr = m_pIDvdGB->GetFiltergraph(&m_pGraph);
     if (FAILED(hr))
     {
         MessageBox(NULL,
-            TEXT("Cannot get the IGraphBuilder interface.")
-            TEXT("Sorry, can't play DVD-Video titles."),
-            TEXT("DVD Error!"), MB_OK) ;
+                   TEXT("Cannot get the IGraphBuilder interface.")
+                   TEXT("Sorry, can't play DVD-Video titles."),
+                   TEXT("DVD Error!"), MB_OK) ;
 
         return false ;
     }
@@ -182,9 +182,9 @@ bool CDvdCore::BuildGraph()
     if (FAILED(hr))
     {
         MessageBox(NULL,
-            TEXT("Cannot get the MediaEventEx interface.")
-            TEXT("Sorry, can't play DVD-Video titles."),
-            TEXT("DVD Error!"), MB_OK) ;
+                   TEXT("Cannot get the MediaEventEx interface.")
+                   TEXT("Sorry, can't play DVD-Video titles."),
+                   TEXT("DVD Error!"), MB_OK) ;
 
         return false ;
     }
@@ -207,7 +207,7 @@ bool CDvdCore::BuildGraph()
     // Build the Graph
     AM_DVD_RENDERSTATUS buildStatus;
     DbgLog((LOG_TRACE, 5, TEXT("Calling RenderDvdVideoVolume(<%s>, 0x%lx, 0x%lx)"),
-        m_szDiscPath, m_dwRenderFlags, &buildStatus)) ;
+            m_szDiscPath, m_dwRenderFlags, &buildStatus)) ;
 
     hr = m_pIDvdGB->RenderDvdVideoVolume(pszwDiscPath, m_dwRenderFlags, &buildStatus);
 
@@ -225,8 +225,8 @@ bool CDvdCore::BuildGraph()
             MessageBox(NULL, szBuffer, TEXT("RenderDvdVideoVolume Failed!"), MB_OK);
         }
         DbgLog((LOG_ERROR, 0,
-            TEXT("ERROR: RenderDvdVideoVolume() completely failed (Error 0x%x - %s)"),
-            hr, szBuffer)) ;
+                TEXT("ERROR: RenderDvdVideoVolume() completely failed (Error 0x%x - %s)"),
+                hr, szBuffer)) ;
         return false;
     }
 
@@ -257,18 +257,18 @@ bool CDvdCore::BuildGraph()
         if (SUCCEEDED(hr))
         {
             MessageBox(NULL,
-                TEXT("This version of the application cannot run using\n")
-                TEXT("the current DirectShow components. Please use the\n")
-                TEXT("DVDSampl.exe application."),
-                TEXT("DVD Error!"), MB_OK) ;
+                       TEXT("This version of the application cannot run using\n")
+                       TEXT("the current DirectShow components. Please use the\n")
+                       TEXT("DVDSampl.exe application."),
+                       TEXT("DVD Error!"), MB_OK) ;
             pDvdI->Release() ;
         }
         else
         {
             MessageBox(NULL,
-                TEXT("Cannot get the IDvdInfo/IDvdInfo2 interface.")
-                TEXT("Sorry, can't play DVD-Video titles."),
-                TEXT("DVD Error!"), MB_OK) ;
+                       TEXT("Cannot get the IDvdInfo/IDvdInfo2 interface.")
+                       TEXT("Sorry, can't play DVD-Video titles."),
+                       TEXT("DVD Error!"), MB_OK) ;
         }
 
         return false ;
@@ -282,18 +282,18 @@ bool CDvdCore::BuildGraph()
         if (SUCCEEDED(hr))
         {
             MessageBox(NULL,
-                TEXT("This version of the application cannot run using\n")
-                TEXT("the current DirectShow components. Please use the\n")
-                TEXT("DVDSampl.exe application."),
-                TEXT("DVD Error!"), MB_OK) ;
+                       TEXT("This version of the application cannot run using\n")
+                       TEXT("the current DirectShow components. Please use the\n")
+                       TEXT("DVDSampl.exe application."),
+                       TEXT("DVD Error!"), MB_OK) ;
             pDvdC->Release() ;
         }
         else
         {
             MessageBox(NULL,
-                TEXT("Cannot get the IDvdControl/IDvdControl2 interface.")
-                TEXT("Sorry, can't play DVD-Video titles."),
-                TEXT("DVD Error!"), MB_OK) ;
+                       TEXT("Cannot get the IDvdControl/IDvdControl2 interface.")
+                       TEXT("Sorry, can't play DVD-Video titles."),
+                       TEXT("DVD Error!"), MB_OK) ;
         }
 
         return false ;
@@ -303,9 +303,9 @@ bool CDvdCore::BuildGraph()
     if (FAILED(hr))
     {
         MessageBox(NULL,
-            TEXT("Cannot get the IMediaControl interface.")
-            TEXT("Sorry, can't play DVD-Video titles."),
-            TEXT("DVD Error!"), MB_OK) ;
+                   TEXT("Cannot get the IMediaControl interface.")
+                   TEXT("Sorry, can't play DVD-Video titles."),
+                   TEXT("DVD Error!"), MB_OK) ;
 
         return false ;
     }
@@ -314,9 +314,9 @@ bool CDvdCore::BuildGraph()
     if (FAILED(hr))
     {
         MessageBox(NULL,
-            TEXT("Cannot get the IVideoWindow interface.")
-            TEXT("Sorry, can't play DVD-Video titles."),
-            TEXT("DVD Error!"), MB_OK) ;
+                   TEXT("Cannot get the IVideoWindow interface.")
+                   TEXT("Sorry, can't play DVD-Video titles."),
+                   TEXT("DVD Error!"), MB_OK) ;
 
         return false ;
     }
@@ -437,8 +437,8 @@ DWORD CDvdCore::GetStatusText(AM_DVD_RENDERSTATUS *pStatus, PTSTR pszStatusText,
     if (pStatus->iNumStreamsFailed > 0)
     {
         hr = StringCchPrintf(pszBuff, BuffSize,
-            TEXT("* %d out of %d DVD-Video streams failed to render properly\n\0"),
-            pStatus->iNumStreamsFailed, pStatus->iNumStreams) ;
+                             TEXT("* %d out of %d DVD-Video streams failed to render properly\n\0"),
+                             pStatus->iNumStreamsFailed, pStatus->iNumStreams) ;
         if (S_OK != hr)
         {
             return 0;
@@ -586,48 +586,48 @@ HRESULT CDvdCore::Play()
 
     switch (m_eState)
     {
-        case Uninitialized:
-            return E_FAIL;
+    case Uninitialized:
+        return E_FAIL;
 
-        case Graph_Stopped2:
-            // This call will likely fail due to timing issues.  Ignore it.
-            m_pIDvdC2->PlayForwards(1.0, 0, NULL);
+    case Graph_Stopped2:
+        // This call will likely fail due to timing issues.  Ignore it.
+        m_pIDvdC2->PlayForwards(1.0, 0, NULL);
 
-            hr = m_pIMC->Run();
+        hr = m_pIMC->Run();
+        if (SUCCEEDED(hr))
+            SetState(Playing);
+        return hr;
+
+    case Nav_Stopped:
+    case Graph_Stopped1:
+        hr = m_pIMC->Run();
+        if (SUCCEEDED(hr))
+            SetState(Playing);
+        return hr;
+
+    case Nav_Paused:
+    case Graph_Paused:
+        m_pIDvdC2->PlayForwards(1.0, 0, NULL);
+
+        hr = m_pIMC->Run();
+        if (SUCCEEDED(hr))
+            SetState(Playing);
+        return hr;
+
+    case Playing:
+        if (true == m_bStillOn) // we are at a still without buttons
+        {
+            hr = m_pIDvdC2->StillOff();
             if (SUCCEEDED(hr))
-                SetState(Playing);
-            return hr;
+                m_bStillOn = false;
+        }
+        return hr;
 
-        case Nav_Stopped:
-        case Graph_Stopped1:
-            hr = m_pIMC->Run();
-            if (SUCCEEDED(hr))
-                SetState(Playing);
-            return hr;
-
-        case Nav_Paused:
-        case Graph_Paused:
-            m_pIDvdC2->PlayForwards(1.0, 0, NULL);
-
-            hr = m_pIMC->Run();
-            if (SUCCEEDED(hr))
-                SetState(Playing);
-            return hr;
-
-        case Playing:
-            if (true == m_bStillOn) // we are at a still without buttons
-            {
-                hr = m_pIDvdC2->StillOff();
-                if (SUCCEEDED(hr))
-                    m_bStillOn = false;
-            }
-            return hr;
-
-        case Scanning:
-            hr = m_pIDvdC2->PlayForwards(1.0, 0, NULL);
-            if (SUCCEEDED(hr))
-                SetState(Playing);
-            return hr;
+    case Scanning:
+        hr = m_pIDvdC2->PlayForwards(1.0, 0, NULL);
+        if (SUCCEEDED(hr))
+            SetState(Playing);
+        return hr;
     }
 
     return S_OK;
@@ -650,7 +650,8 @@ bool CDvdCore::InitMessageSink()
     DbgLog((LOG_TRACE, 5, TEXT("CDvdCore::InitMessageSink()"))) ;
 
     // register playback window
-    WNDCLASSEX wndclass = {
+    WNDCLASSEX wndclass =
+    {
         sizeof(WNDCLASSEX),
         CS_HREDRAW | CS_VREDRAW,
         CDvdCore::WndProc,
@@ -672,17 +673,17 @@ bool CDvdCore::InitMessageSink()
     RECT rPlayback = GetPlaybackWindowRect();
 
     m_hWnd = CreateWindow(
-        TEXT("EventWindow"),
-        TEXT("Video Window"),
-        WS_OVERLAPPEDWINDOW,
-        rPlayback.left,
-        rPlayback.top,
-        rPlayback.right - rPlayback.left,
-        rPlayback.bottom - rPlayback.top,
-        NULL,
-        NULL,
-        m_hInstance,
-        this); // we send the this pointer here so we can retrieve it from WM_CREATE later
+                 TEXT("EventWindow"),
+                 TEXT("Video Window"),
+                 WS_OVERLAPPEDWINDOW,
+                 rPlayback.left,
+                 rPlayback.top,
+                 rPlayback.right - rPlayback.left,
+                 rPlayback.bottom - rPlayback.top,
+                 NULL,
+                 NULL,
+                 m_hInstance,
+                 this); // we send the this pointer here so we can retrieve it from WM_CREATE later
 
     // store the pointer to this instance of CDvdCore.
     // this is so we can refer to it in the OnDvdEvent message loop
@@ -735,7 +736,7 @@ LRESULT CALLBACK CDvdCore::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPAR
     pCore = _GetWindowLongPtr<CDvdCore*>(hWnd, GWLP_USERDATA);
 
     if (NULL == pCore)
-    // this is really only necessary if you want to react to WM_CREATE messages
+        // this is really only necessary if you want to react to WM_CREATE messages
     {
         if (WM_CREATE == uMessage)
             // WM_CREATE messages return the last parameter to CreateWindow()
@@ -749,26 +750,26 @@ LRESULT CALLBACK CDvdCore::WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPAR
 
     switch (uMessage)
     {
-        case WM_TIMER:
-            return pCore->OnMouseTimer(wParam, lParam);
+    case WM_TIMER:
+        return pCore->OnMouseTimer(wParam, lParam);
 
-        case WM_SIZE:
-            return pCore->OnSize(wParam, lParam);
+    case WM_SIZE:
+        return pCore->OnSize(wParam, lParam);
 
-        case WM_KEYUP:
-            return pCore->OnKeyEvent(wParam, lParam);
+    case WM_KEYUP:
+        return pCore->OnKeyEvent(wParam, lParam);
 
-        case WM_DVD_EVENT:
-            return pCore->OnDvdEvent(uMessage, wParam, lParam);
+    case WM_DVD_EVENT:
+        return pCore->OnDvdEvent(uMessage, wParam, lParam);
 
-        case WM_MOUSEMOVE:
-        case WM_LBUTTONUP:
-        case WM_RBUTTONUP:
-        case WM_MBUTTONUP:
-            return pCore->OnMouseEvent(uMessage, wParam, lParam);
+    case WM_MOUSEMOVE:
+    case WM_LBUTTONUP:
+    case WM_RBUTTONUP:
+    case WM_MBUTTONUP:
+        return pCore->OnMouseEvent(uMessage, wParam, lParam);
 
-        case WM_CLOSE:
-            return pCore->OnClose();
+    case WM_CLOSE:
+        return pCore->OnClose();
     }
 
     return DefWindowProc(hWnd, uMessage, wParam, lParam);
@@ -885,30 +886,30 @@ bool CDvdCore::Stop()
 
     switch (m_eState)
     {
-        case Uninitialized:
-            return false;
+    case Uninitialized:
+        return false;
 
-        case Graph_Stopped2:
-            hr = m_pIDvdC2->SetOption(DVD_ResetOnStop, TRUE);  // do a complete reset
-            hr = m_pIMC->Stop();                               // just to be sure
-            hr = m_pIDvdC2->SetOption(DVD_ResetOnStop, FALSE); // restore previous settings
-            break;
+    case Graph_Stopped2:
+        hr = m_pIDvdC2->SetOption(DVD_ResetOnStop, TRUE);  // do a complete reset
+        hr = m_pIMC->Stop();                               // just to be sure
+        hr = m_pIDvdC2->SetOption(DVD_ResetOnStop, FALSE); // restore previous settings
+        break;
 
-        case Playing:
-        case Scanning:
-        case Nav_Paused:
-        case Graph_Paused:
-            hr = m_pIMC->Pause();
-            SetState(Graph_Stopped1);
-            break;
+    case Playing:
+    case Scanning:
+    case Nav_Paused:
+    case Graph_Paused:
+        hr = m_pIMC->Pause();
+        SetState(Graph_Stopped1);
+        break;
 
-        case Nav_Stopped:
-        case Graph_Stopped1:
-            hr = m_pIDvdC2->SetOption(DVD_ResetOnStop, TRUE);  // do a complete reset
-            hr = m_pIMC->Stop();                               // stop the entire graph
-            hr = m_pIDvdC2->SetOption(DVD_ResetOnStop, FALSE); // restore previous settings
-            SetState(Graph_Stopped2);
-            break;
+    case Nav_Stopped:
+    case Graph_Stopped1:
+        hr = m_pIDvdC2->SetOption(DVD_ResetOnStop, TRUE);  // do a complete reset
+        hr = m_pIMC->Stop();                               // stop the entire graph
+        hr = m_pIDvdC2->SetOption(DVD_ResetOnStop, FALSE); // restore previous settings
+        SetState(Graph_Stopped2);
+        break;
     }
 
     return true;
@@ -1141,7 +1142,7 @@ bool CDvdCore::TitleMenu()
 bool CDvdCore::EnableCaptions(bool bOn)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDvdCore::EnableCaptions(%s)"), bOn ? TEXT("True") :
-        TEXT("False"))) ;
+            TEXT("False"))) ;
 
     if (NULL == m_pIL21Dec) // if this decoder doesn't support Line 21
         return false;
@@ -1198,18 +1199,18 @@ bool CDvdCore::SaveBookmark()
 
     // first try to open an existing file
     hr = StgOpenStorage(g_szBookmarkFilename, NULL, STGM_WRITE | STGM_SHARE_EXCLUSIVE,
-        NULL, 0, &pStorage);
+                        NULL, 0, &pStorage);
     if (SUCCEEDED(hr))
     {
         // we then open a stream object within that file
         hr = pStorage->OpenStream(g_szBookmarkName, NULL, STGM_WRITE |
-            STGM_SHARE_EXCLUSIVE, 0, &pStream);
+                                  STGM_SHARE_EXCLUSIVE, 0, &pStream);
         if (FAILED(hr))
         {
             // Create a new stream so that old bookmarks can be overwritten
             hr = pStorage->CreateStream(g_szBookmarkName,
-                    STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
-                    0, 0, &pStream);
+                                        STGM_CREATE | STGM_WRITE | STGM_SHARE_EXCLUSIVE,
+                                        0, 0, &pStream);
             if (FAILED(hr))
             {
                 pBookmark->Release();
@@ -1221,7 +1222,7 @@ bool CDvdCore::SaveBookmark()
     else // if that fails, try to create a new file
     {
         hr = StgCreateDocfile(g_szBookmarkFilename, STGM_CREATE | STGM_WRITE |
-            STGM_SHARE_EXCLUSIVE, 0, &pStorage);
+                              STGM_SHARE_EXCLUSIVE, 0, &pStorage);
         if (FAILED(hr))
         {
             pBookmark->Release();
@@ -1229,7 +1230,7 @@ bool CDvdCore::SaveBookmark()
         }
         // we then create a stream object within that file
         hr = pStorage->CreateStream(g_szBookmarkName, STGM_CREATE | STGM_WRITE |
-            STGM_SHARE_EXCLUSIVE, 0, 0, &pStream);
+                                    STGM_SHARE_EXCLUSIVE, 0, 0, &pStream);
         if (FAILED(hr))
         {
             pBookmark->Release();
@@ -1277,14 +1278,14 @@ bool CDvdCore::RestoreBookmark()
     // Begin by opening the bookmark file on the drive.
     IStorage * pStorage;
     HRESULT hr = StgOpenStorage(g_szBookmarkFilename, NULL, STGM_READ | STGM_SHARE_EXCLUSIVE,
-        NULL, 0, &pStorage);
+                                NULL, 0, &pStorage);
     if (FAILED(hr))
         return false;
 
     // open a stream object within that file
     IStream * pStream;
     hr = pStorage->OpenStream(g_szBookmarkName, NULL, STGM_READ | STGM_SHARE_EXCLUSIVE, 0,
-        &pStream);
+                              &pStream);
     if (FAILED(hr))
     {
         pStorage->Release();
@@ -1326,7 +1327,7 @@ bool CDvdCore::StartFullScreen()
     if (NULL == m_pIVW)
     {
         DbgLog((LOG_ERROR, 0,
-            TEXT("CDvdCore::StartFullScreen() -- no IVideoWindow pointer yet"))) ;
+                TEXT("CDvdCore::StartFullScreen() -- no IVideoWindow pointer yet"))) ;
         return false ;
     }
 
@@ -1351,12 +1352,12 @@ bool CDvdCore::StartFullScreen()
 
     // modify the window's style
     hr = m_pIVW->put_WindowStyle(m_lOrigStyle &
-        ~(WS_BORDER | WS_CAPTION | WS_THICKFRAME)) ;  // remove these styles
+                                 ~(WS_BORDER | WS_CAPTION | WS_THICKFRAME)) ;  // remove these styles
     ASSERT(SUCCEEDED(hr)) ;
     hr = m_pIVW->put_WindowStyleEx(m_lOrigStyleEx &
-        ~(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE | WS_EX_WINDOWEDGE |
-        WS_EX_DLGMODALFRAME) |  // remove these extended styles
-        WS_EX_TOPMOST) ;
+                                   ~(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE | WS_EX_WINDOWEDGE |
+                                     WS_EX_DLGMODALFRAME) |  // remove these extended styles
+                                   WS_EX_TOPMOST) ;
     ASSERT(SUCCEEDED(hr)) ;
 
     // stretch the window to the full size of the screen
@@ -1388,7 +1389,7 @@ bool CDvdCore::StopFullScreen()
     if (NULL == m_pIVW)
     {
         DbgLog((LOG_ERROR, 0,
-            TEXT("CDvdCore::StopFullScreen() -- no IVideoWindow pointer yet"))) ;
+                TEXT("CDvdCore::StopFullScreen() -- no IVideoWindow pointer yet"))) ;
         return false ;
     }
 
@@ -1426,7 +1427,7 @@ LRESULT CDvdCore::OnDvdEvent(UINT uMessage, WPARAM wParam, LPARAM lParam)
     DbgLog((LOG_TRACE, 5, TEXT("CDvdCore::OnDvdEvent()"))) ;
 
     long lEvent;
-	LONG_PTR lParam1, lParam2;
+    LONG_PTR lParam1, lParam2;
     long lTimeOut = 0;
 
     while (SUCCEEDED(m_pIME->GetEvent(&lEvent, &lParam1, &lParam2, lTimeOut)))
@@ -1436,201 +1437,201 @@ LRESULT CDvdCore::OnDvdEvent(UINT uMessage, WPARAM wParam, LPARAM lParam)
         HRESULT hr;
         switch(lEvent)
         {
-            case EC_DVD_CURRENT_HMSF_TIME:
-            {
-                DVD_HMSF_TIMECODE * pTC = reinterpret_cast<DVD_HMSF_TIMECODE *>(&lParam1);
-                m_CurTime = *pTC;
-                m_pCallback->UpdateStatus(); // inform our client that something changed
-            }
+        case EC_DVD_CURRENT_HMSF_TIME:
+        {
+            DVD_HMSF_TIMECODE * pTC = reinterpret_cast<DVD_HMSF_TIMECODE *>(&lParam1);
+            m_CurTime = *pTC;
+            m_pCallback->UpdateStatus(); // inform our client that something changed
+        }
+        break;
+
+        case EC_DVD_CHAPTER_START:
+            m_ulCurChapter = static_cast<ULONG>(lParam1);
             break;
 
-            case EC_DVD_CHAPTER_START:
-                m_ulCurChapter = static_cast<ULONG>(lParam1);
-                break;
+        case EC_DVD_TITLE_CHANGE:
+            m_ulCurTitle = static_cast<ULONG>(lParam1);
+            break;
 
-            case EC_DVD_TITLE_CHANGE:
-                m_ulCurTitle = static_cast<ULONG>(lParam1);
-                break;
+        case EC_DVD_NO_FP_PGC:
+            hr = m_pIDvdC2->PlayTitle(1, DVD_CMD_FLAG_None, NULL);
+            ASSERT(SUCCEEDED(hr));
+            break;
 
-            case EC_DVD_NO_FP_PGC:
-                hr = m_pIDvdC2->PlayTitle(1, DVD_CMD_FLAG_None, NULL);
-                ASSERT(SUCCEEDED(hr));
-                break;
-
-            case EC_DVD_DOMAIN_CHANGE:
-                switch (lParam1)
-                {
-                    case DVD_DOMAIN_FirstPlay:  // = 1
-                    case DVD_DOMAIN_Stop:       // = 5
-                        break ;
-
-                    case DVD_DOMAIN_VideoManagerMenu:  // = 2
-                    case DVD_DOMAIN_VideoTitleSetMenu: // = 3
-                        // Inform the app to update the menu option to show "Resume" now
-                        DbgLog((LOG_TRACE, 3, TEXT("DVD Event: Domain changed to VMGM(2)/VTSM(3) (%ld)"),
-							static_cast<ULONG>(lParam1))) ;
-                        m_bMenuOn = true;  // now menu is "On"
-                        break ;
-
-                    case DVD_DOMAIN_Title:      // = 4
-                        // Inform the app to update the menu option to show "Menu" again
-                        DbgLog((LOG_TRACE, 3, TEXT("DVD Event: Title Domain (%ld)"),
-							static_cast<ULONG>(lParam1))) ;
-                        m_bMenuOn = false ; // we are no longer in a menu
-                        break ;
-                } // end of domain change switch
-                break;
-
-
-            case EC_DVD_PARENTAL_LEVEL_CHANGE:
-                {
-                    TCHAR szMsg[1000];
-                    hr = StringCchPrintf( szMsg, NUMELMS(szMsg),TEXT("Accept Parental Level Change Request to level %ld?"),
-						static_cast<ULONG>(lParam1) );
-                    if (IDYES == MessageBox(m_hWnd, szMsg,  TEXT("Accept Change?"), MB_YESNO))
-                    {
-                        m_pIDvdC2->AcceptParentalLevelChange(TRUE);
-                    }
-                    else
-                    {
-                        m_pIDvdC2->AcceptParentalLevelChange(FALSE);
-                    }
-                    break;
-                }
-
-            case EC_DVD_ERROR:
-                DbgLog((LOG_TRACE, 3, TEXT("DVD Event: Error event received (code %ld)"),
-					static_cast<ULONG>(lParam1))) ;
-                switch (lParam1)
-                {
-                case DVD_ERROR_Unexpected:
-                    MessageBox(m_hWnd,
-                        TEXT("An unexpected error (possibly incorrectly authored content)")
-                        TEXT("\nwas encountered.")
-                        TEXT("\nCan't playback this DVD-Video disc."),
-                        TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
-                    m_pIMC->Stop() ;
-                    break ;
-
-                case DVD_ERROR_CopyProtectFail:
-                    MessageBox(m_hWnd,
-                        TEXT("Key exchange for DVD copy protection failed.")
-                        TEXT("\nCan't playback this DVD-Video disc."),
-                        TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
-                    m_pIMC->Stop() ;
-                    break ;
-
-                case DVD_ERROR_InvalidDVD1_0Disc:
-                    MessageBox(m_hWnd,
-                        TEXT("This DVD-Video disc is incorrectly authored for v1.0  of the spec.")
-                        TEXT("\nCan't playback this disc."),
-                        TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
-                    m_pIMC->Stop() ;
-                    break ;
-
-                case DVD_ERROR_InvalidDiscRegion:
-                    MessageBox(m_hWnd,
-                        TEXT("This DVD-Video disc cannot be played, because it is not")
-                        TEXT("\nauthored to play in the current system region.")
-                        TEXT("\nThe region mismatch may be fixed by changing the")
-                        TEXT("\nsystem region (with DVDRgn.exe)."),
-                        TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
-                    m_pIMC->Stop() ;
-                    ChangeDvdRegion();
-                    break ;
-
-                case DVD_ERROR_LowParentalLevel:
-                    MessageBox(m_hWnd,
-                        TEXT("Player parental level is set lower than the lowest parental")
-                        TEXT("\nlevel available in this DVD-Video content.")
-                        TEXT("\nCannot playback this DVD-Video disc."),
-                        TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
-                    m_pIMC->Stop() ;
-                    break ;
-
-                case DVD_ERROR_MacrovisionFail:
-                    MessageBox(m_hWnd,
-                        TEXT("This DVD-Video content is protected by Macrovision.")
-                        TEXT("\nThe system does not satisfy Macrovision requirement.")
-                        TEXT("\nCan't continue playing this disc."),
-                        TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
-                    m_pIMC->Stop() ;
-                    break ;
-
-                case DVD_ERROR_IncompatibleSystemAndDecoderRegions:
-                    MessageBox(m_hWnd,
-                        TEXT("No DVD-Video disc can be played on this system, because ")
-                        TEXT("\nthe system region does not match the decoder region.")
-                        TEXT("\nPlease contact the manufacturer of this system."),
-                        TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
-                    m_pIMC->Stop() ;
-                    break ;
-
-                case DVD_ERROR_IncompatibleDiscAndDecoderRegions:
-                    MessageBox(m_hWnd,
-                        TEXT("This DVD-Video disc cannot be played on this system, because it is")
-                        TEXT("\nnot authored to be played in the installed decoder's region."),
-                        TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
-                    m_pIMC->Stop() ;
-                    break ;
-                }  // end of switch (lParam1)
+        case EC_DVD_DOMAIN_CHANGE:
+            switch (lParam1)
+            {
+            case DVD_DOMAIN_FirstPlay:  // = 1
+            case DVD_DOMAIN_Stop:       // = 5
                 break ;
 
-            // Next is warning
-            case EC_DVD_WARNING:
-                switch (lParam1)
-                {
-                case DVD_WARNING_InvalidDVD1_0Disc:
-                    DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: Current disc is not v1.0 spec compliant"))) ;
-                    break ;
-
-                case DVD_WARNING_FormatNotSupported:
-                    DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: The decoder does not support the new format."))) ;
-                    break ;
-
-                case DVD_WARNING_IllegalNavCommand:
-                    DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: An illegal navigation command was encountered."))) ;
-                    break ;
-
-                case DVD_WARNING_Open:
-                    DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: Could not open a file on the DVD disc."))) ;
-                    MessageBox(m_hWnd,
-                        TEXT("A file on the DVD disc could not be opened. Playback may not continue."),
-                        TEXT("Warning"), MB_OK | MB_ICONINFORMATION) ;
-                    break ;
-
-                case DVD_WARNING_Seek:
-                    DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: Could not seek in a file on the DVD disc."))) ;
-                    MessageBox(m_hWnd,
-                        TEXT("Could not move to a different part of a file on the DVD disc. Playback may not continue."),
-                        TEXT("Warning"), MB_OK | MB_ICONINFORMATION) ;
-                    break ;
-
-                case DVD_WARNING_Read:
-                    DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: Could not read a file on the DVD disc."))) ;
-                    MessageBox(m_hWnd,
-                        TEXT("Could not read part of a file on the DVD disc. Playback may not continue."),
-                        TEXT("Warning"), MB_OK | MB_ICONINFORMATION) ;
-                    break ;
-
-                default:
-                    DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: An unknown (%ld) warning received."),
-						static_cast<ULONG>(lParam1))) ;
-                    break ;
-                }
+            case DVD_DOMAIN_VideoManagerMenu:  // = 2
+            case DVD_DOMAIN_VideoTitleSetMenu: // = 3
+                // Inform the app to update the menu option to show "Resume" now
+                DbgLog((LOG_TRACE, 3, TEXT("DVD Event: Domain changed to VMGM(2)/VTSM(3) (%ld)"),
+                        static_cast<ULONG>(lParam1))) ;
+                m_bMenuOn = true;  // now menu is "On"
                 break ;
 
-            case EC_DVD_BUTTON_CHANGE:
-               break;
+            case DVD_DOMAIN_Title:      // = 4
+                // Inform the app to update the menu option to show "Menu" again
+                DbgLog((LOG_TRACE, 3, TEXT("DVD Event: Title Domain (%ld)"),
+                        static_cast<ULONG>(lParam1))) ;
+                m_bMenuOn = false ; // we are no longer in a menu
+                break ;
+            } // end of domain change switch
+            break;
 
-            case EC_DVD_STILL_ON:
-                if (TRUE == lParam1) // if there is a still without buttons, we can call StillOff
-                    m_bStillOn = true;
-                break;
 
-            case EC_DVD_STILL_OFF:
-                m_bStillOn = false; // we are no longer in a still
-                break;
+        case EC_DVD_PARENTAL_LEVEL_CHANGE:
+        {
+            TCHAR szMsg[1000];
+            hr = StringCchPrintf( szMsg, NUMELMS(szMsg),TEXT("Accept Parental Level Change Request to level %ld?"),
+                                  static_cast<ULONG>(lParam1) );
+            if (IDYES == MessageBox(m_hWnd, szMsg,  TEXT("Accept Change?"), MB_YESNO))
+            {
+                m_pIDvdC2->AcceptParentalLevelChange(TRUE);
+            }
+            else
+            {
+                m_pIDvdC2->AcceptParentalLevelChange(FALSE);
+            }
+            break;
+        }
+
+        case EC_DVD_ERROR:
+            DbgLog((LOG_TRACE, 3, TEXT("DVD Event: Error event received (code %ld)"),
+                    static_cast<ULONG>(lParam1))) ;
+            switch (lParam1)
+            {
+            case DVD_ERROR_Unexpected:
+                MessageBox(m_hWnd,
+                           TEXT("An unexpected error (possibly incorrectly authored content)")
+                           TEXT("\nwas encountered.")
+                           TEXT("\nCan't playback this DVD-Video disc."),
+                           TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
+                m_pIMC->Stop() ;
+                break ;
+
+            case DVD_ERROR_CopyProtectFail:
+                MessageBox(m_hWnd,
+                           TEXT("Key exchange for DVD copy protection failed.")
+                           TEXT("\nCan't playback this DVD-Video disc."),
+                           TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
+                m_pIMC->Stop() ;
+                break ;
+
+            case DVD_ERROR_InvalidDVD1_0Disc:
+                MessageBox(m_hWnd,
+                           TEXT("This DVD-Video disc is incorrectly authored for v1.0  of the spec.")
+                           TEXT("\nCan't playback this disc."),
+                           TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
+                m_pIMC->Stop() ;
+                break ;
+
+            case DVD_ERROR_InvalidDiscRegion:
+                MessageBox(m_hWnd,
+                           TEXT("This DVD-Video disc cannot be played, because it is not")
+                           TEXT("\nauthored to play in the current system region.")
+                           TEXT("\nThe region mismatch may be fixed by changing the")
+                           TEXT("\nsystem region (with DVDRgn.exe)."),
+                           TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
+                m_pIMC->Stop() ;
+                ChangeDvdRegion();
+                break ;
+
+            case DVD_ERROR_LowParentalLevel:
+                MessageBox(m_hWnd,
+                           TEXT("Player parental level is set lower than the lowest parental")
+                           TEXT("\nlevel available in this DVD-Video content.")
+                           TEXT("\nCannot playback this DVD-Video disc."),
+                           TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
+                m_pIMC->Stop() ;
+                break ;
+
+            case DVD_ERROR_MacrovisionFail:
+                MessageBox(m_hWnd,
+                           TEXT("This DVD-Video content is protected by Macrovision.")
+                           TEXT("\nThe system does not satisfy Macrovision requirement.")
+                           TEXT("\nCan't continue playing this disc."),
+                           TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
+                m_pIMC->Stop() ;
+                break ;
+
+            case DVD_ERROR_IncompatibleSystemAndDecoderRegions:
+                MessageBox(m_hWnd,
+                           TEXT("No DVD-Video disc can be played on this system, because ")
+                           TEXT("\nthe system region does not match the decoder region.")
+                           TEXT("\nPlease contact the manufacturer of this system."),
+                           TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
+                m_pIMC->Stop() ;
+                break ;
+
+            case DVD_ERROR_IncompatibleDiscAndDecoderRegions:
+                MessageBox(m_hWnd,
+                           TEXT("This DVD-Video disc cannot be played on this system, because it is")
+                           TEXT("\nnot authored to be played in the installed decoder's region."),
+                           TEXT("Error"), MB_OK | MB_ICONINFORMATION) ;
+                m_pIMC->Stop() ;
+                break ;
+            }  // end of switch (lParam1)
+            break ;
+
+        // Next is warning
+        case EC_DVD_WARNING:
+            switch (lParam1)
+            {
+            case DVD_WARNING_InvalidDVD1_0Disc:
+                DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: Current disc is not v1.0 spec compliant"))) ;
+                break ;
+
+            case DVD_WARNING_FormatNotSupported:
+                DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: The decoder does not support the new format."))) ;
+                break ;
+
+            case DVD_WARNING_IllegalNavCommand:
+                DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: An illegal navigation command was encountered."))) ;
+                break ;
+
+            case DVD_WARNING_Open:
+                DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: Could not open a file on the DVD disc."))) ;
+                MessageBox(m_hWnd,
+                           TEXT("A file on the DVD disc could not be opened. Playback may not continue."),
+                           TEXT("Warning"), MB_OK | MB_ICONINFORMATION) ;
+                break ;
+
+            case DVD_WARNING_Seek:
+                DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: Could not seek in a file on the DVD disc."))) ;
+                MessageBox(m_hWnd,
+                           TEXT("Could not move to a different part of a file on the DVD disc. Playback may not continue."),
+                           TEXT("Warning"), MB_OK | MB_ICONINFORMATION) ;
+                break ;
+
+            case DVD_WARNING_Read:
+                DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: Could not read a file on the DVD disc."))) ;
+                MessageBox(m_hWnd,
+                           TEXT("Could not read part of a file on the DVD disc. Playback may not continue."),
+                           TEXT("Warning"), MB_OK | MB_ICONINFORMATION) ;
+                break ;
+
+            default:
+                DbgLog((LOG_ERROR, 1, TEXT("DVD Warning: An unknown (%ld) warning received."),
+                        static_cast<ULONG>(lParam1))) ;
+                break ;
+            }
+            break ;
+
+        case EC_DVD_BUTTON_CHANGE:
+            break;
+
+        case EC_DVD_STILL_ON:
+            if (TRUE == lParam1) // if there is a still without buttons, we can call StillOff
+                m_bStillOn = true;
+            break;
+
+        case EC_DVD_STILL_OFF:
+            m_bStillOn = false; // we are no longer in a still
+            break;
 
         } // end of switch(lEvent)
 
@@ -1656,23 +1657,23 @@ LRESULT CDvdCore::OnMouseEvent(UINT uMessage, WPARAM wParam, LPARAM lParam)
 
     switch (uMessage)
     {
-        case WM_MOUSEMOVE:
-        {
-                POINT pt;
-                pt.x = GET_X_LPARAM(lParam);
-                pt.y = GET_Y_LPARAM(lParam);
-                m_pIDvdC2->SelectAtPosition(pt);
-                return 0;
-        }
+    case WM_MOUSEMOVE:
+    {
+        POINT pt;
+        pt.x = GET_X_LPARAM(lParam);
+        pt.y = GET_Y_LPARAM(lParam);
+        m_pIDvdC2->SelectAtPosition(pt);
+        return 0;
+    }
 
-        case WM_LBUTTONUP:
-        {
-                POINT pt;
-                pt.x = GET_X_LPARAM(lParam);
-                pt.y = GET_Y_LPARAM(lParam);
-                m_pIDvdC2->ActivateAtPosition(pt);
-                return 0;
-        }
+    case WM_LBUTTONUP:
+    {
+        POINT pt;
+        pt.x = GET_X_LPARAM(lParam);
+        pt.y = GET_Y_LPARAM(lParam);
+        m_pIDvdC2->ActivateAtPosition(pt);
+        return 0;
+    }
     }
 
     return DefWindowProc(m_hWnd, uMessage, wParam, lParam);
@@ -1690,30 +1691,30 @@ LRESULT CDvdCore::OnKeyEvent(WPARAM wParam, LPARAM lParam)
 
     switch (wParam)
     {
-        case VK_ESCAPE: // exit full screen
-            if (true == m_bFullScreenOn) // only do this if we are in fullscreen mode
-                StopFullScreen();
-            return 0;
+    case VK_ESCAPE: // exit full screen
+        if (true == m_bFullScreenOn) // only do this if we are in fullscreen mode
+            StopFullScreen();
+        return 0;
 
-        case VK_RETURN: // activate the currently selected button
-            m_pIDvdC2->ActivateButton();
-            return 0;
+    case VK_RETURN: // activate the currently selected button
+        m_pIDvdC2->ActivateButton();
+        return 0;
 
-        case VK_LEFT: // select the left button
-            m_pIDvdC2->SelectRelativeButton(DVD_Relative_Left);
-            return 0;
+    case VK_LEFT: // select the left button
+        m_pIDvdC2->SelectRelativeButton(DVD_Relative_Left);
+        return 0;
 
-        case VK_RIGHT: // select the right button
-            m_pIDvdC2->SelectRelativeButton(DVD_Relative_Right);
-            return 0;
+    case VK_RIGHT: // select the right button
+        m_pIDvdC2->SelectRelativeButton(DVD_Relative_Right);
+        return 0;
 
-        case VK_UP: // select the upper button
-            m_pIDvdC2->SelectRelativeButton(DVD_Relative_Upper);
-            return 0;
+    case VK_UP: // select the upper button
+        m_pIDvdC2->SelectRelativeButton(DVD_Relative_Upper);
+        return 0;
 
-        case VK_DOWN: // select the lower button
-            m_pIDvdC2->SelectRelativeButton(DVD_Relative_Lower);
-            return 0;
+    case VK_DOWN: // select the lower button
+        m_pIDvdC2->SelectRelativeButton(DVD_Relative_Lower);
+        return 0;
     }
 
     return DefWindowProc(m_hWnd, WM_KEYUP, wParam, lParam);
@@ -1728,7 +1729,7 @@ LRESULT CDvdCore::OnKeyEvent(WPARAM wParam, LPARAM lParam)
 void CDvdCore::ShowMouseCursor(bool bShow)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDvdCore::ShowMouseCursor(%s)"),
-        bShow ? TEXT("true") : TEXT("false"))) ;
+            bShow ? TEXT("true") : TEXT("false"))) ;
 
     if (true == bShow)   // display cursor
     {
@@ -1889,7 +1890,7 @@ bool CDvdCore::SetDirectory(TCHAR *szDirectory)
     else
     {
         DbgLog((LOG_ERROR, 2, TEXT("WARNING: SetDVDDirectory(%s) failed (Error 0x%lx)"),
-            szDirectory, hr)) ;
+                szDirectory, hr)) ;
         return false;
     }
 }
@@ -1907,7 +1908,7 @@ bool CDvdCore::FrameStep()
     if (Uninitialized == GetState())
     {
         DbgLog((LOG_ERROR, 2, TEXT("WARNING: DVDCore is not initialized!"),
-            szDirectory, hr)) ;
+                szDirectory, hr)) ;
         return false;
     }
 
@@ -1919,7 +1920,7 @@ bool CDvdCore::FrameStep()
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 2, TEXT("WARNING: Can't get IVideoFrameStep interface!"),
-            szDirectory, hr)) ;
+                szDirectory, hr)) ;
         return false;
     }
 
@@ -1929,7 +1930,7 @@ bool CDvdCore::FrameStep()
     if (S_FALSE == hr)
     {
         DbgLog((LOG_ERROR, 2, TEXT("WARNING: Decoder can't step"),
-            szDirectory, hr)) ;
+                szDirectory, hr)) ;
         pFS->Release();
         return false;
     }
@@ -1980,7 +1981,7 @@ bool CDvdCore::PlayChapter(ULONG ulChap)
 bool CDvdCore::PlayChapterInTitle(ULONG ulTitle, ULONG ulChapter)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDvdCore::PlayChapterInTitle() Title: %u, "
-        "Chapter: %u"), ulTitle, ulChapter)) ;
+                               "Chapter: %u"), ulTitle, ulChapter)) ;
 
     HRESULT hr = m_pIDvdC2->PlayChapterInTitle(ulTitle, ulChapter, DVD_CMD_FLAG_Block, NULL);
     if (SUCCEEDED(hr))
@@ -2003,7 +2004,7 @@ bool CDvdCore::PlayChapterInTitle(ULONG ulTitle, ULONG ulChapter)
 bool CDvdCore::PlayTime(DVD_HMSF_TIMECODE time)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CDvdCore::PlayTime() hh:mm:ss %u:%u:%u"),
-        time.bHours, time.bMinutes, time.bSeconds)) ;
+            time.bHours, time.bMinutes, time.bSeconds)) ;
 
     HRESULT hr = m_pIDvdC2->PlayAtTime(&time, DVD_CMD_FLAG_Block, NULL);
     if (SUCCEEDED(hr))
@@ -2034,17 +2035,17 @@ bool CDvdCore::ChangeDvdRegion()
 
     HRESULT hr;
     bool    bRegionChanged = false;
-    TCHAR   szCmdLine[MAX_PATH + 32]={0};  // Allow for adding of \storprop.dll
+    TCHAR   szCmdLine[MAX_PATH + 32]= {0}; // Allow for adding of \storprop.dll
 
     //
     // First find out which drive is a DVD drive with a
     // valid DVD-V disc.
     //
-    TCHAR   szDVDDrive[4]={0};
+    TCHAR   szDVDDrive[4]= {0};
     if (! GetDriveLetter (szDVDDrive, NUMELMS(szDVDDrive) ) )
     {
         DbgLog((LOG_ERROR, 1, TEXT("No DVD drive was found with DVD-Video disc.\0")
-        TEXT("Cannot change DVD region of the drive.\0")));
+                TEXT("Cannot change DVD region of the drive.\0")));
         return false;
     }
 
@@ -2062,14 +2063,14 @@ bool CDvdCore::ChangeDvdRegion()
         // Windows NT platform
         HINSTANCE       hInstDLL;
         DVDPPLAUNCHER   dvdPPLauncher;
-        CHAR            szDVDDriveA[4]={0};
+        CHAR            szDVDDriveA[4]= {0};
 
-    #ifdef UNICODE
+#ifdef UNICODE
         WideCharToMultiByte(0, 0, szDVDDrive, -1,
                             szDVDDriveA, 3, NULL, NULL );
-    #else
+#else
         StringCchCopyNA(szDVDDriveA, NUMELMS(szDVDDriveA), szDVDDrive, 3);
-    #endif  // UNICODE
+#endif  // UNICODE
         szDVDDrive[3] = 0;  // Ensure NULL termination
 
         if (!GetSystemDirectory(szCmdLine, MAX_PATH))
@@ -2123,13 +2124,13 @@ bool CDvdCore::ChangeDvdRegion()
         StartupInfo.lpReserved2     = NULL;
 
         if (CreateProcess(szAppName, szCmdLine, NULL, NULL, TRUE,
-                    NORMAL_PRIORITY_CLASS, NULL, NULL, &StartupInfo, &ProcessInfo) )
+                          NORMAL_PRIORITY_CLASS, NULL, NULL, &StartupInfo, &ProcessInfo) )
         {
             // Wait until DVDRgn.exe finishes
             WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
             DWORD dwRet = 1;
             BOOL bRet = GetExitCodeProcess(ProcessInfo.hProcess,
-                                                     &dwRet);
+                                           &dwRet);
             // If the user changed the drive region
             // successfully, the exit code of DVDRgn.exe is 0.
             if (bRet && 0 == dwRet)
@@ -2213,7 +2214,7 @@ bool CDvdCore::DoesFileExist(PTSTR pszFile)
     // open for read.
     //
     UINT uErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS |
-     SEM_NOOPENFILEERRORBOX);
+                                   SEM_NOOPENFILEERRORBOX);
     hFile = CreateFile(pszFile, GENERIC_READ,
                        FILE_SHARE_READ, NULL,
                        OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN,
@@ -2312,8 +2313,8 @@ bool CDvdCore::GetDvdText()
     }
 
     ULONG ulLangIndex = 0; // We will just grab the first language.  You might want to
-                           //ask the user which language they want to see or try to
-                           //choose one that closest matches the locale of the machine
+    //ask the user which language they want to see or try to
+    //choose one that closest matches the locale of the machine
 
     // next we get the number of strings available
     hr = m_pIDvdI2->GetDVDTextLanguageInfo(ulLangIndex, &ulNumStrings,
@@ -2322,7 +2323,7 @@ bool CDvdCore::GetDvdText()
     if (FAILED(hr))
     {
         MessageBox(m_hWnd, TEXT("There was an error getting the number of Strings"),
-            TEXT("Error!"), MB_OK);
+                   TEXT("Error!"), MB_OK);
         return false;
     }
 
@@ -2340,8 +2341,8 @@ bool CDvdCore::GetDvdText()
         DVD_TextStringType type;
 
         hr = m_pIDvdI2->GetDVDTextStringAsUnicode(ulLangIndex, ulStringIndex,
-                        buffer, sizeof(buffer)/sizeof(*buffer),
-                        &ulActualSize, &type);
+                buffer, sizeof(buffer)/sizeof(*buffer),
+                &ulActualSize, &type);
 
         if (SUCCEEDED(hr))
         {
@@ -2418,8 +2419,8 @@ bool CDvdCore::GetAudioAttributes()
             << AsStr( audioAtr.fHasMultichannelInfo != FALSE ) << endl;
 
     aString << TEXT("Number of Audio Channels = ") <<
-        static_cast<ULONG>(audioAtr.bNumberOfChannels) << endl; // the cast is only necessary to
-                                                                // allow IOStream to understand it
+            static_cast<ULONG>(audioAtr.bNumberOfChannels) << endl; // the cast is only necessary to
+    // allow IOStream to understand it
 
     aString << TEXT("Sampling Frequency = ") << audioAtr.dwFrequency << endl;
 
@@ -2512,18 +2513,18 @@ bool CDvdCore::GetVideoAttributes()
 
     aString << TEXT("Aspect: " << atrVideo.ulAspectX << TEXT(" x ") << atrVideo.ulAspectY << endl;
 
-    aString << TEXT("Frame Rate: ") << atrVideo.ulFrameRate << endl;
+                    aString << TEXT("Frame Rate: ") << atrVideo.ulFrameRate << endl;
 
-    aString << TEXT("Frame Height: ") << atrVideo.ulFrameHeight << endl;
+                    aString << TEXT("Frame Height: ") << atrVideo.ulFrameHeight << endl;
 
-    aString << TEXT("Compression Mode: ") << AsStr(atrVideo.Compression) << endl;
+                    aString << TEXT("Compression Mode: ") << AsStr(atrVideo.Compression) << endl;
 
-    aString << TEXT("Line21 Field 1: ") << AsStr(atrVideo.fLine21Field1InGOP) << endl;
+                    aString << TEXT("Line21 Field 1: ") << AsStr(atrVideo.fLine21Field1InGOP) << endl;
 
-    aString << TEXT("Line21 Field 2: ") << AsStr(atrVideo.fLine21Field2InGOP) << endl;
+                    aString << TEXT("Line21 Field 2: ") << AsStr(atrVideo.fLine21Field2InGOP) << endl;
 
-    aString << TEXT("Source Resolution: ") << atrVideo.ulSourceResolutionX << TEXT(" x ") <<
-           atrVideo.ulSourceResolutionY) << endl;
+                    aString << TEXT("Source Resolution: ") << atrVideo.ulSourceResolutionX << TEXT(" x ") <<
+                    atrVideo.ulSourceResolutionY) << endl;
 
     aString << TEXT("Is Source Letterboxed? ") << AsStr(atrVideo.fIsSourceLetterboxed) << endl;
 

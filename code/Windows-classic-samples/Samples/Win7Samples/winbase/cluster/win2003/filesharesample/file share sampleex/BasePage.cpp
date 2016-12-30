@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -88,9 +88,9 @@ CBasePropertyPage::CBasePropertyPage( void )
 //--
 /////////////////////////////////////////////////////////////////////////////
 CBasePropertyPage::CBasePropertyPage(
-      UINT  nIDTemplateIn
+    UINT  nIDTemplateIn
     , UINT  nIDCaptionIn
-    )
+)
     : CPropertyPage( nIDTemplateIn, nIDCaptionIn )
 {
     CommonConstruct();
@@ -156,7 +156,7 @@ CBasePropertyPage::CommonConstruct( void )
 HRESULT
 CBasePropertyPage::HrInit(
     CExtObject * peoInout
-    )
+)
 {
     ASSERT( peoInout != NULL );
 
@@ -203,79 +203,79 @@ CBasePropertyPage::HrInit(
 
     switch ( Cot() )
     {
-        case CLUADMEX_OT_CLUSTER:
-        {
-            CClusterData * pccd = reinterpret_cast< CClusterData * >( Peo()->PodObjData() );
-            ASSERT( pccd && (pccd->GetHCluster() != NULL) );
-            sc = cpl.ScGetClusterProperties(
-                                      pccd->GetHCluster()
-                                    , CLUSCTL_CLUSTER_GET_PRIVATE_PROPERTIES
-                                    );
-            break;
-        }
-        case CLUADMEX_OT_NODE:
-        {
-            CNodeData * pcnd = reinterpret_cast< CNodeData * >( Peo()->PodObjData() );
-            ASSERT( pcnd && (pcnd->GetHNode() != NULL) );
-            sc = cpl.ScGetNodeProperties(
-                                      pcnd->GetHNode()
-                                    , CLUSCTL_NODE_GET_PRIVATE_PROPERTIES
-                                    );
-            break;
-        }
-        case CLUADMEX_OT_GROUP:
-        {
-            CGroupData * pcgd = reinterpret_cast< CGroupData * >( Peo()->PodObjData() );
-            ASSERT( pcgd && (pcgd->GetHGroup() != NULL) );
-            sc = cpl.ScGetGroupProperties(
-                                      pcgd->GetHGroup()
-                                    , CLUSCTL_GROUP_GET_PRIVATE_PROPERTIES
-                                    );
-            break;
-        }
-        case CLUADMEX_OT_RESOURCE:
-        {
-            CResData * pcrd = reinterpret_cast< CResData * >( Peo()->PodObjData() );
-            ASSERT( pcrd && (pcrd->GetHResource() != NULL) );
-            sc = cpl.ScGetResourceProperties(
-                                      pcrd->GetHResource()
-                                    , CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES
-                                    );
-            break;
-        }
-        case CLUADMEX_OT_RESOURCETYPE:
-        {
-            CResTypeData * pcrd = reinterpret_cast< CResTypeData * >( Peo()->PodObjData() );
-            ASSERT( pcrd && (pcrd->StrName().GetLength() > 0) );
-            sc = cpl.ScGetResourceTypeProperties(
-                                      Hcluster()
-                                    , pcrd->StrName()
-                                    , CLUSCTL_RESOURCE_TYPE_GET_PRIVATE_PROPERTIES
-                                    );
-            break;
-        }
-        case CLUADMEX_OT_NETWORK:
-        {
-            CNetworkData * pcnd = reinterpret_cast< CNetworkData * >( Peo()->PodObjData() );
-            ASSERT( pcnd && (pcnd->GetHNetwork() != NULL) );
-            sc = cpl.ScGetNetworkProperties(
-                                      pcnd->GetHNetwork()
-                                    , CLUSCTL_NETWORK_GET_PRIVATE_PROPERTIES
-                                    );
-            break;
-        }
-        case CLUADMEX_OT_NETINTERFACE:
-        {
-            CNetInterfaceData * pcnd = reinterpret_cast< CNetInterfaceData * >( Peo()->PodObjData() );
-            ASSERT( pcnd && (pcnd->GetHNetInterface() != NULL) );
-            sc = cpl.ScGetNetInterfaceProperties(
-                                      pcnd->GetHNetInterface()
-                                    , CLUSCTL_NETINTERFACE_GET_PRIVATE_PROPERTIES
-                                    );
-            break;
-        }
-        default:
-            ASSERT( 0 );
+    case CLUADMEX_OT_CLUSTER:
+    {
+        CClusterData * pccd = reinterpret_cast< CClusterData * >( Peo()->PodObjData() );
+        ASSERT( pccd && (pccd->GetHCluster() != NULL) );
+        sc = cpl.ScGetClusterProperties(
+                 pccd->GetHCluster()
+                 , CLUSCTL_CLUSTER_GET_PRIVATE_PROPERTIES
+             );
+        break;
+    }
+    case CLUADMEX_OT_NODE:
+    {
+        CNodeData * pcnd = reinterpret_cast< CNodeData * >( Peo()->PodObjData() );
+        ASSERT( pcnd && (pcnd->GetHNode() != NULL) );
+        sc = cpl.ScGetNodeProperties(
+                 pcnd->GetHNode()
+                 , CLUSCTL_NODE_GET_PRIVATE_PROPERTIES
+             );
+        break;
+    }
+    case CLUADMEX_OT_GROUP:
+    {
+        CGroupData * pcgd = reinterpret_cast< CGroupData * >( Peo()->PodObjData() );
+        ASSERT( pcgd && (pcgd->GetHGroup() != NULL) );
+        sc = cpl.ScGetGroupProperties(
+                 pcgd->GetHGroup()
+                 , CLUSCTL_GROUP_GET_PRIVATE_PROPERTIES
+             );
+        break;
+    }
+    case CLUADMEX_OT_RESOURCE:
+    {
+        CResData * pcrd = reinterpret_cast< CResData * >( Peo()->PodObjData() );
+        ASSERT( pcrd && (pcrd->GetHResource() != NULL) );
+        sc = cpl.ScGetResourceProperties(
+                 pcrd->GetHResource()
+                 , CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES
+             );
+        break;
+    }
+    case CLUADMEX_OT_RESOURCETYPE:
+    {
+        CResTypeData * pcrd = reinterpret_cast< CResTypeData * >( Peo()->PodObjData() );
+        ASSERT( pcrd && (pcrd->StrName().GetLength() > 0) );
+        sc = cpl.ScGetResourceTypeProperties(
+                 Hcluster()
+                 , pcrd->StrName()
+                 , CLUSCTL_RESOURCE_TYPE_GET_PRIVATE_PROPERTIES
+             );
+        break;
+    }
+    case CLUADMEX_OT_NETWORK:
+    {
+        CNetworkData * pcnd = reinterpret_cast< CNetworkData * >( Peo()->PodObjData() );
+        ASSERT( pcnd && (pcnd->GetHNetwork() != NULL) );
+        sc = cpl.ScGetNetworkProperties(
+                 pcnd->GetHNetwork()
+                 , CLUSCTL_NETWORK_GET_PRIVATE_PROPERTIES
+             );
+        break;
+    }
+    case CLUADMEX_OT_NETINTERFACE:
+    {
+        CNetInterfaceData * pcnd = reinterpret_cast< CNetInterfaceData * >( Peo()->PodObjData() );
+        ASSERT( pcnd && (pcnd->GetHNetInterface() != NULL) );
+        sc = cpl.ScGetNetInterfaceProperties(
+                 pcnd->GetHNetInterface()
+                 , CLUSCTL_NETINTERFACE_GET_PRIVATE_PROPERTIES
+             );
+        break;
+    }
+    default:
+        ASSERT( 0 );
     } // switch: object type
 
     //
@@ -374,7 +374,7 @@ CBasePropertyPage::HrCreatePage( void )
 DWORD
 CBasePropertyPage::ScParseProperties(
     CClusPropList & rcplIn
-    )
+)
 {
     DWORD                   sc = ERROR_SUCCESS;
     DWORD                   cprop;
@@ -391,88 +391,88 @@ CBasePropertyPage::ScParseProperties(
 
         for ( pprop = Pprops(), cprop = Cprops() ; cprop > 0 ; pprop++, cprop-- )
         {
-            if ( NIStringCompareW( 
-                                   rcplIn.PszCurrentPropertyName()
-                                 , pprop->m_pwszName
-                                 , rcplIn.CbhCurrentPropertyName().pName->cbLength / sizeof( WCHAR )
-                                 ) == 0
+            if ( NIStringCompareW(
+                        rcplIn.PszCurrentPropertyName()
+                        , pprop->m_pwszName
+                        , rcplIn.CbhCurrentPropertyName().pName->cbLength / sizeof( WCHAR )
+                    ) == 0
                )
             {
                 if ( rcplIn.CpfCurrentValueFormat() == pprop->m_propFormat )
                 {
                     switch ( pprop->m_propFormat )
                     {
-                        case CLUSPROP_FORMAT_SZ:
-                        case CLUSPROP_FORMAT_EXPAND_SZ:
-                            ASSERT(     (rcplIn.CbCurrentValueLength() == (lstrlenW( rcplIn.CbhCurrentValue().pStringValue->sz ) + 1) * sizeof( WCHAR ))
+                    case CLUSPROP_FORMAT_SZ:
+                    case CLUSPROP_FORMAT_EXPAND_SZ:
+                        ASSERT(     (rcplIn.CbCurrentValueLength() == (lstrlenW( rcplIn.CbhCurrentValue().pStringValue->sz ) + 1) * sizeof( WCHAR ))
                                     ||  (   (rcplIn.CbCurrentValueLength() == 0)
-                                        &&  (rcplIn.CbhCurrentValue().pStringValue->sz[ 0 ] == L'\0') ) );
-                            *pprop->m_value.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
-                            *pprop->m_valuePrev.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+                                            &&  (rcplIn.CbhCurrentValue().pStringValue->sz[ 0 ] == L'\0') ) );
+                        *pprop->m_value.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+                        *pprop->m_valuePrev.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
 
-                            //
-                            //  See if we need to find an expanded version
-                            //
+                        //
+                        //  See if we need to find an expanded version
+                        //
 
-                            if ( pprop->m_valueEx.pstr != NULL )
+                        if ( pprop->m_valueEx.pstr != NULL )
+                        {
+                            // Copy the non-expanded one just in case there isn't an expanded version
+                            *pprop->m_valueEx.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+
+                            // See if they included an expanded version
+                            rcplIn.ScMoveToNextPropertyValue( );
+                            if ( rcplIn.CpfCurrentValueFormat( ) == CLUSPROP_FORMAT_EXPANDED_SZ )
                             {
-                                // Copy the non-expanded one just in case there isn't an expanded version
                                 *pprop->m_valueEx.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+                            } // if: found expanded version
 
-                                // See if they included an expanded version
-                                rcplIn.ScMoveToNextPropertyValue( );
-                                if ( rcplIn.CpfCurrentValueFormat( ) == CLUSPROP_FORMAT_EXPANDED_SZ )
-                                {
-                                    *pprop->m_valueEx.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
-                                } // if: found expanded version
+                        } // if: *pprop->m_valueEx.pstr is present
+                        break;
 
-                            } // if: *pprop->m_valueEx.pstr is present
-                            break;
-
-                        case CLUSPROP_FORMAT_EXPANDED_SZ:
-                            ASSERT(     (rcplIn.CbCurrentValueLength() == (lstrlenW( rcplIn.CbhCurrentValue().pStringValue->sz ) + 1) * sizeof( WCHAR ))
+                    case CLUSPROP_FORMAT_EXPANDED_SZ:
+                        ASSERT(     (rcplIn.CbCurrentValueLength() == (lstrlenW( rcplIn.CbhCurrentValue().pStringValue->sz ) + 1) * sizeof( WCHAR ))
                                     ||  (   (rcplIn.CbCurrentValueLength() == 0)
-                                        &&  (rcplIn.CbhCurrentValue().pStringValue->sz[ 0 ] == L'\0') ) );
-                            *pprop->m_value.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
-                            *pprop->m_valuePrev.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+                                            &&  (rcplIn.CbhCurrentValue().pStringValue->sz[ 0 ] == L'\0') ) );
+                        *pprop->m_value.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+                        *pprop->m_valuePrev.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
 
-                            //
-                            //  See if we need to find an expanded version
-                            //
+                        //
+                        //  See if we need to find an expanded version
+                        //
 
-                            if ( *pprop->m_valueEx.pstr ) // can not use != NULL because overloading tries to do a string compare!
+                        if ( *pprop->m_valueEx.pstr ) // can not use != NULL because overloading tries to do a string compare!
+                        {
+                            // Copy the expanded version
+                            *pprop->m_valueEx.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+
+                            // See if they included a non-expanded version
+                            rcplIn.ScMoveToNextPropertyValue( );
+                            if ( rcplIn.CpfCurrentValueFormat( ) == CLUSPROP_FORMAT_SZ )
                             {
-                                // Copy the expanded version
-                                *pprop->m_valueEx.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+                                *pprop->m_value.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+                                *pprop->m_valuePrev.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
+                            } // if: found non-expanded version
 
-                                // See if they included a non-expanded version
-                                rcplIn.ScMoveToNextPropertyValue( );
-                                if ( rcplIn.CpfCurrentValueFormat( ) == CLUSPROP_FORMAT_SZ )
-                                {
-                                    *pprop->m_value.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
-                                    *pprop->m_valuePrev.pstr = rcplIn.CbhCurrentValue().pStringValue->sz;
-                                } // if: found non-expanded version
+                        } // if: *pprop->m_valueEx.pstr is present
+                        break;
 
-                            } // if: *pprop->m_valueEx.pstr is present
-                            break;
+                    case CLUSPROP_FORMAT_DWORD:
+                    case CLUSPROP_FORMAT_LONG:
+                        ASSERT( rcplIn.CbCurrentValueLength() == sizeof( DWORD ) );
+                        *pprop->m_value.pdw = rcplIn.CbhCurrentValue().pDwordValue->dw;
+                        *pprop->m_valuePrev.pdw = rcplIn.CbhCurrentValue().pDwordValue->dw;
+                        break;
 
-                        case CLUSPROP_FORMAT_DWORD:
-                        case CLUSPROP_FORMAT_LONG:
-                            ASSERT( rcplIn.CbCurrentValueLength() == sizeof( DWORD ) );
-                            *pprop->m_value.pdw = rcplIn.CbhCurrentValue().pDwordValue->dw;
-                            *pprop->m_valuePrev.pdw = rcplIn.CbhCurrentValue().pDwordValue->dw;
-                            break;
+                    case CLUSPROP_FORMAT_BINARY:
+                    case CLUSPROP_FORMAT_MULTI_SZ:
+                        *pprop->m_value.ppb = rcplIn.CbhCurrentValue().pBinaryValue->rgb;
+                        *pprop->m_value.pcb = rcplIn.CbhCurrentValue().pBinaryValue->cbLength;
+                        *pprop->m_valuePrev.ppb = rcplIn.CbhCurrentValue().pBinaryValue->rgb;
+                        *pprop->m_valuePrev.pcb = rcplIn.CbhCurrentValue().pBinaryValue->cbLength;
+                        break;
 
-                        case CLUSPROP_FORMAT_BINARY:
-                        case CLUSPROP_FORMAT_MULTI_SZ:
-                            *pprop->m_value.ppb = rcplIn.CbhCurrentValue().pBinaryValue->rgb;
-                            *pprop->m_value.pcb = rcplIn.CbhCurrentValue().pBinaryValue->cbLength;
-                            *pprop->m_valuePrev.ppb = rcplIn.CbhCurrentValue().pBinaryValue->rgb;
-                            *pprop->m_valuePrev.pcb = rcplIn.CbhCurrentValue().pBinaryValue->cbLength;
-                            break;
-
-                        default:
-                            ASSERT(0);  // don't know how to deal with this type
+                    default:
+                        ASSERT(0);  // don't know how to deal with this type
                     } // switch: property format
 
                     //
@@ -491,10 +491,10 @@ CBasePropertyPage::ScParseProperties(
         if ( cprop == 0 )
         {
             sc = ScParseUnknownProperty(
-                          rcplIn.CbhCurrentPropertyName().pName->sz
-                        , rcplIn.CbhCurrentValue()
-                        , rcplIn.RPvlPropertyValue().CbDataLeft()
-                        );
+                     rcplIn.CbhCurrentPropertyName().pName->sz
+                     , rcplIn.CbhCurrentValue()
+                     , rcplIn.RPvlPropertyValue().CbDataLeft()
+                 );
             if ( sc != ERROR_SUCCESS )
             {
                 return sc;
@@ -545,7 +545,7 @@ CBasePropertyPage::ScParseProperties(
 int
 CBasePropertyPage::OnCreate(
     LPCREATESTRUCT lpCreateStructIn
-    )
+)
 {
     AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
@@ -631,14 +631,14 @@ CBasePropertyPage::OnDestroy( void )
 void
 CBasePropertyPage::DoDataExchange(
     CDataExchange * pDXIn
-    )
+)
 {
     if ( ! pDXIn->m_bSaveAndValidate || ! BSaved() )
     {
         AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
         //{{AFX_DATA_MAP(CBasePropertyPage)
-            // NOTE: the ClassWizard will add DDX and DDV calls here
+        // NOTE: the ClassWizard will add DDX and DDV calls here
         //}}AFX_DATA_MAP
 
         DDX_Control( pDXIn, IDC_PP_ICON, m_staticIcon );
@@ -1025,7 +1025,7 @@ CBasePropertyPage::OnChangeCtrl( void )
 void
 CBasePropertyPage::EnableNext(
     BOOL fEnableIn      // = TRUE
-    )
+)
 {
     ASSERT( BWizard() );
     ASSERT( PiWizardCallback() );
@@ -1100,9 +1100,9 @@ CBasePropertyPage::BApplyChanges( void )
 /////////////////////////////////////////////////////////////////////////////
 BOOL
 CBasePropertyPage::BBuildPropList(
-      CClusPropList &   rcplIn
+    CClusPropList &   rcplIn
     , BOOL              fNoNewPropsIn     // = FALSE
-    )
+)
 {
     BOOL                    fNewPropsFound = FALSE;
     DWORD                   cprop;
@@ -1118,52 +1118,52 @@ CBasePropertyPage::BBuildPropList(
 
         switch ( pprop->m_propFormat )
         {
-            case CLUSPROP_FORMAT_SZ:
-                rcplIn.ScAddProp(
-                          pprop->m_pwszName
-                        , *pprop->m_value.pstr
-                        , *pprop->m_valuePrev.pstr
-                        );
-                break;
+        case CLUSPROP_FORMAT_SZ:
+            rcplIn.ScAddProp(
+                pprop->m_pwszName
+                , *pprop->m_value.pstr
+                , *pprop->m_valuePrev.pstr
+            );
+            break;
 
-            case CLUSPROP_FORMAT_EXPAND_SZ:
-                rcplIn.ScAddExpandSzProp(
-                          pprop->m_pwszName
-                        , *pprop->m_value.pstr
-                        , *pprop->m_valuePrev.pstr
-                        );
-                break;
+        case CLUSPROP_FORMAT_EXPAND_SZ:
+            rcplIn.ScAddExpandSzProp(
+                pprop->m_pwszName
+                , *pprop->m_value.pstr
+                , *pprop->m_valuePrev.pstr
+            );
+            break;
 
-            case CLUSPROP_FORMAT_DWORD:
-                rcplIn.ScAddProp(
-                          pprop->m_pwszName
-                        , *pprop->m_value.pdw
-                        , *pprop->m_valuePrev.pdw
-                        );
-                break;
+        case CLUSPROP_FORMAT_DWORD:
+            rcplIn.ScAddProp(
+                pprop->m_pwszName
+                , *pprop->m_value.pdw
+                , *pprop->m_valuePrev.pdw
+            );
+            break;
 
-            case CLUSPROP_FORMAT_LONG:
-                rcplIn.ScAddProp(
-                          pprop->m_pwszName
-                        , *pprop->m_value.pl
-                        , *pprop->m_valuePrev.pl
-                        );
-                break;
+        case CLUSPROP_FORMAT_LONG:
+            rcplIn.ScAddProp(
+                pprop->m_pwszName
+                , *pprop->m_value.pl
+                , *pprop->m_valuePrev.pl
+            );
+            break;
 
-            case CLUSPROP_FORMAT_BINARY:
-            case CLUSPROP_FORMAT_MULTI_SZ:
-                rcplIn.ScAddProp(
-                          pprop->m_pwszName
-                        , *pprop->m_value.ppb
-                        , *pprop->m_value.pcb
-                        , *pprop->m_valuePrev.ppb
-                        , *pprop->m_valuePrev.pcb
-                        );
-                break;
+        case CLUSPROP_FORMAT_BINARY:
+        case CLUSPROP_FORMAT_MULTI_SZ:
+            rcplIn.ScAddProp(
+                pprop->m_pwszName
+                , *pprop->m_value.ppb
+                , *pprop->m_value.pcb
+                , *pprop->m_valuePrev.ppb
+                , *pprop->m_valuePrev.pcb
+            );
+            break;
 
-            default:
-                ASSERT( 0 ); // don't know how to deal with this type
-                return FALSE;
+        default:
+            ASSERT( 0 ); // don't know how to deal with this type
+            return FALSE;
 
         } // switch: property format
     } // for: each property
@@ -1198,9 +1198,9 @@ CBasePropertyPage::BBuildPropList(
 /////////////////////////////////////////////////////////////////////////////
 BOOL
 CBasePropertyPage::BSetPrivateProps(
-      BOOL fValidateOnlyIn   // = FALSE
+    BOOL fValidateOnlyIn   // = FALSE
     , BOOL fNoNewPropsIn     // = FALSE
-    )
+)
 {
     BOOL            fSuccess   = TRUE;
     CClusPropList   cpl( BWizard() /*bAlwaysAddProp*/ );
@@ -1237,219 +1237,219 @@ CBasePropertyPage::BSetPrivateProps(
 
             switch ( Cot() )
             {
-                case CLUADMEX_OT_NODE:
+            case CLUADMEX_OT_NODE:
+            {
+                CNodeData * pcnd = reinterpret_cast< CNodeData * >( Peo()->PodObjData() );
+                ASSERT( pcnd && (pcnd->GetHNode() != NULL) );
+
+                //
+                //  Determine which control code to use.
+                //
+
+                if ( fValidateOnlyIn )
                 {
-                    CNodeData * pcnd = reinterpret_cast< CNodeData * >( Peo()->PodObjData() );
-                    ASSERT( pcnd && (pcnd->GetHNode() != NULL) );
-
-                    //
-                    //  Determine which control code to use.
-                    //
-
-                    if ( fValidateOnlyIn )
-                    {
-                        dwControlCode = CLUSCTL_NODE_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
-                    else
-                    {
-                        dwControlCode = CLUSCTL_NODE_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
-
-                    //
-                    //  Set private properties.
-                    //
-
-                    sc = ClusterNodeControl(
-                                      pcnd->GetHNode()
-                                    , NULL   // hNode
-                                    , dwControlCode
-                                    , cpl.PbPropList()
-                                    , static_cast< DWORD >( cpl.CbPropList() )
-                                    , NULL   // lpOutBuffer
-                                    , 0      // nOutBufferSize
-                                    , &cbProps
-                                    );
-                    break;
-                } // case:
-
-                case CLUADMEX_OT_GROUP:
+                    dwControlCode = CLUSCTL_NODE_VALIDATE_PRIVATE_PROPERTIES;
+                } // if: only validating data
+                else
                 {
-                    CGroupData * pcgd = reinterpret_cast< CGroupData * >( Peo()->PodObjData() );
-                    ASSERT( pcgd && (pcgd->GetHGroup() != NULL) );
+                    dwControlCode = CLUSCTL_NODE_SET_PRIVATE_PROPERTIES;
+                } // else: setting data
 
-                    //
-                    //  Determine which control code to use.
-                    //
+                //
+                //  Set private properties.
+                //
 
-                    if ( fValidateOnlyIn )
-                    {
-                        dwControlCode = CLUSCTL_GROUP_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
-                    else
-                    {
-                        dwControlCode = CLUSCTL_GROUP_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                sc = ClusterNodeControl(
+                         pcnd->GetHNode()
+                         , NULL   // hNode
+                         , dwControlCode
+                         , cpl.PbPropList()
+                         , static_cast< DWORD >( cpl.CbPropList() )
+                         , NULL   // lpOutBuffer
+                         , 0      // nOutBufferSize
+                         , &cbProps
+                     );
+                break;
+            } // case:
 
-                    //
-                    //  Set private properties.
-                    //
+            case CLUADMEX_OT_GROUP:
+            {
+                CGroupData * pcgd = reinterpret_cast< CGroupData * >( Peo()->PodObjData() );
+                ASSERT( pcgd && (pcgd->GetHGroup() != NULL) );
 
-                    sc = ClusterGroupControl(
-                                      pcgd->GetHGroup()
-                                    , NULL   // hNode
-                                    , dwControlCode
-                                    , cpl.PbPropList()
-                                    , static_cast< DWORD >( cpl.CbPropList() )
-                                    , NULL   // lpOutBuffer
-                                    , 0      // nOutBufferSize
-                                    , &cbProps
-                                    );
-                    break;
-                } // case:
+                //
+                //  Determine which control code to use.
+                //
 
-                case CLUADMEX_OT_RESOURCE:
+                if ( fValidateOnlyIn )
                 {
-                    CResData * pcrd = reinterpret_cast< CResData * >( Peo()->PodObjData() );
-                    ASSERT( pcrd && (pcrd->GetHResource() != NULL) );
-
-                    //
-                    //  Determine which control code to use.
-                    //
-
-                    if ( fValidateOnlyIn )
-                    {
-                        dwControlCode = CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
-                    else
-                    {
-                        dwControlCode = CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
-
-                    //
-                    //  Set private properties.
-                    //
-
-                    sc = ClusterResourceControl(
-                                      pcrd->GetHResource()
-                                    , NULL   // hNode
-                                    , dwControlCode
-                                    , cpl.PbPropList()
-                                    , static_cast< DWORD >( cpl.CbPropList() )
-                                    , NULL   // lpOutBuffer
-                                    , 0      // nOutBufferSize
-                                    , &cbProps
-                                    );
-                    break;
-                } // case:
-
-                case CLUADMEX_OT_RESOURCETYPE:
+                    dwControlCode = CLUSCTL_GROUP_VALIDATE_PRIVATE_PROPERTIES;
+                } // if: only validating data
+                else
                 {
-                    CResTypeData * pcrd = reinterpret_cast< CResTypeData * >( Peo()->PodObjData() );
-                    ASSERT( pcrd && (pcrd->StrName().GetLength() > 0) );
+                    dwControlCode = CLUSCTL_GROUP_SET_PRIVATE_PROPERTIES;
+                } // else: setting data
 
-                    //
-                    //  Determine which control code to use.
-                    //
+                //
+                //  Set private properties.
+                //
 
-                    if ( fValidateOnlyIn )
-                    {
-                        dwControlCode = CLUSCTL_RESOURCE_TYPE_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
-                    else
-                    {
-                        dwControlCode = CLUSCTL_RESOURCE_TYPE_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                sc = ClusterGroupControl(
+                         pcgd->GetHGroup()
+                         , NULL   // hNode
+                         , dwControlCode
+                         , cpl.PbPropList()
+                         , static_cast< DWORD >( cpl.CbPropList() )
+                         , NULL   // lpOutBuffer
+                         , 0      // nOutBufferSize
+                         , &cbProps
+                     );
+                break;
+            } // case:
 
-                    //
-                    //  Set private properties.
-                    //
+            case CLUADMEX_OT_RESOURCE:
+            {
+                CResData * pcrd = reinterpret_cast< CResData * >( Peo()->PodObjData() );
+                ASSERT( pcrd && (pcrd->GetHResource() != NULL) );
 
-                    sc = ClusterResourceTypeControl(
-                                      Hcluster()
-                                    , pcrd->StrName()
-                                    , NULL   // hNode
-                                    , dwControlCode
-                                    , cpl.PbPropList()
-                                    , static_cast< DWORD >( cpl.CbPropList() )
-                                    , NULL   // lpOutBuffer
-                                    , 0      // nOutBufferSize
-                                    , &cbProps
-                                    );
-                    break;
-                } // case:
+                //
+                //  Determine which control code to use.
+                //
 
-                case CLUADMEX_OT_NETWORK:
+                if ( fValidateOnlyIn )
                 {
-                    CNetworkData * pcnd = reinterpret_cast< CNetworkData * >( Peo()->PodObjData() );
-                    ASSERT( pcnd && (pcnd->GetHNetwork() != NULL) );
-
-                    //
-                    //  Determine which control code to use.
-                    //
-
-                    if ( fValidateOnlyIn )
-                    {
-                        dwControlCode = CLUSCTL_NETWORK_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
-                    else
-                    {
-                        dwControlCode = CLUSCTL_NETWORK_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
-
-                    //
-                    //  Set private properties.
-                    //
-
-                    sc = ClusterNetworkControl(
-                                      pcnd->GetHNetwork()
-                                    , NULL   // hNode
-                                    , dwControlCode
-                                    , cpl.PbPropList()
-                                    , static_cast< DWORD >( cpl.CbPropList() )
-                                    , NULL   // lpOutBuffer
-                                    , 0      // nOutBufferSize
-                                    , &cbProps
-                                    );
-                    break;
-                } // case:
-
-                case CLUADMEX_OT_NETINTERFACE:
+                    dwControlCode = CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES;
+                } // if: only validating data
+                else
                 {
-                    CNetInterfaceData * pcnd = reinterpret_cast< CNetInterfaceData * >( Peo()->PodObjData() );
-                    ASSERT( pcnd && (pcnd->GetHNetInterface() != NULL) );
+                    dwControlCode = CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES;
+                } // else: setting data
 
-                    //
-                    //  Determine which control code to use.
-                    //
+                //
+                //  Set private properties.
+                //
 
-                    if ( fValidateOnlyIn )
-                    {
-                        dwControlCode = CLUSCTL_NETINTERFACE_VALIDATE_PRIVATE_PROPERTIES;
-                    } // if: only validating data
-                    else
-                    {
-                        dwControlCode = CLUSCTL_NETINTERFACE_SET_PRIVATE_PROPERTIES;
-                    } // else: setting data
+                sc = ClusterResourceControl(
+                         pcrd->GetHResource()
+                         , NULL   // hNode
+                         , dwControlCode
+                         , cpl.PbPropList()
+                         , static_cast< DWORD >( cpl.CbPropList() )
+                         , NULL   // lpOutBuffer
+                         , 0      // nOutBufferSize
+                         , &cbProps
+                     );
+                break;
+            } // case:
 
-                    //
-                    //  Set private properties.
-                    //
+            case CLUADMEX_OT_RESOURCETYPE:
+            {
+                CResTypeData * pcrd = reinterpret_cast< CResTypeData * >( Peo()->PodObjData() );
+                ASSERT( pcrd && (pcrd->StrName().GetLength() > 0) );
 
-                    sc = ClusterNetInterfaceControl(
-                                      pcnd->GetHNetInterface()
-                                    , NULL   // hNode
-                                    , dwControlCode
-                                    , cpl.PbPropList()
-                                    , static_cast< DWORD >( cpl.CbPropList() )
-                                    , NULL   // lpOutBuffer
-                                    , 0      // nOutBufferSize
-                                    , &cbProps
-                                    );
-                    break;
-                } // case:
+                //
+                //  Determine which control code to use.
+                //
 
-                default:
-                    ASSERT( 0 );
+                if ( fValidateOnlyIn )
+                {
+                    dwControlCode = CLUSCTL_RESOURCE_TYPE_VALIDATE_PRIVATE_PROPERTIES;
+                } // if: only validating data
+                else
+                {
+                    dwControlCode = CLUSCTL_RESOURCE_TYPE_SET_PRIVATE_PROPERTIES;
+                } // else: setting data
+
+                //
+                //  Set private properties.
+                //
+
+                sc = ClusterResourceTypeControl(
+                         Hcluster()
+                         , pcrd->StrName()
+                         , NULL   // hNode
+                         , dwControlCode
+                         , cpl.PbPropList()
+                         , static_cast< DWORD >( cpl.CbPropList() )
+                         , NULL   // lpOutBuffer
+                         , 0      // nOutBufferSize
+                         , &cbProps
+                     );
+                break;
+            } // case:
+
+            case CLUADMEX_OT_NETWORK:
+            {
+                CNetworkData * pcnd = reinterpret_cast< CNetworkData * >( Peo()->PodObjData() );
+                ASSERT( pcnd && (pcnd->GetHNetwork() != NULL) );
+
+                //
+                //  Determine which control code to use.
+                //
+
+                if ( fValidateOnlyIn )
+                {
+                    dwControlCode = CLUSCTL_NETWORK_VALIDATE_PRIVATE_PROPERTIES;
+                } // if: only validating data
+                else
+                {
+                    dwControlCode = CLUSCTL_NETWORK_SET_PRIVATE_PROPERTIES;
+                } // else: setting data
+
+                //
+                //  Set private properties.
+                //
+
+                sc = ClusterNetworkControl(
+                         pcnd->GetHNetwork()
+                         , NULL   // hNode
+                         , dwControlCode
+                         , cpl.PbPropList()
+                         , static_cast< DWORD >( cpl.CbPropList() )
+                         , NULL   // lpOutBuffer
+                         , 0      // nOutBufferSize
+                         , &cbProps
+                     );
+                break;
+            } // case:
+
+            case CLUADMEX_OT_NETINTERFACE:
+            {
+                CNetInterfaceData * pcnd = reinterpret_cast< CNetInterfaceData * >( Peo()->PodObjData() );
+                ASSERT( pcnd && (pcnd->GetHNetInterface() != NULL) );
+
+                //
+                //  Determine which control code to use.
+                //
+
+                if ( fValidateOnlyIn )
+                {
+                    dwControlCode = CLUSCTL_NETINTERFACE_VALIDATE_PRIVATE_PROPERTIES;
+                } // if: only validating data
+                else
+                {
+                    dwControlCode = CLUSCTL_NETINTERFACE_SET_PRIVATE_PROPERTIES;
+                } // else: setting data
+
+                //
+                //  Set private properties.
+                //
+
+                sc = ClusterNetInterfaceControl(
+                         pcnd->GetHNetInterface()
+                         , NULL   // hNode
+                         , dwControlCode
+                         , cpl.PbPropList()
+                         , static_cast< DWORD >( cpl.CbPropList() )
+                         , NULL   // lpOutBuffer
+                         , 0      // nOutBufferSize
+                         , &cbProps
+                     );
+                break;
+            } // case:
+
+            default:
+                ASSERT( 0 );
 
             } // switch: object type
 
@@ -1508,36 +1508,36 @@ CBasePropertyPage::BSetPrivateProps(
             {
                 switch ( pprop->m_propFormat )
                 {
-                    case CLUSPROP_FORMAT_SZ:
-                    case CLUSPROP_FORMAT_EXPAND_SZ:
-                        ASSERT(pprop->m_value.pstr != NULL);
-                        ASSERT(pprop->m_valuePrev.pstr != NULL);
-                        *pprop->m_valuePrev.pstr = *pprop->m_value.pstr;
-                        break;
+                case CLUSPROP_FORMAT_SZ:
+                case CLUSPROP_FORMAT_EXPAND_SZ:
+                    ASSERT(pprop->m_value.pstr != NULL);
+                    ASSERT(pprop->m_valuePrev.pstr != NULL);
+                    *pprop->m_valuePrev.pstr = *pprop->m_value.pstr;
+                    break;
 
-                    case CLUSPROP_FORMAT_DWORD:
-                    case CLUSPROP_FORMAT_LONG:
-                        ASSERT( pprop->m_value.pdw != NULL );
-                        ASSERT( pprop->m_valuePrev.pdw != NULL );
-                        *pprop->m_valuePrev.pdw = *pprop->m_value.pdw;
-                        break;
+                case CLUSPROP_FORMAT_DWORD:
+                case CLUSPROP_FORMAT_LONG:
+                    ASSERT( pprop->m_value.pdw != NULL );
+                    ASSERT( pprop->m_valuePrev.pdw != NULL );
+                    *pprop->m_valuePrev.pdw = *pprop->m_value.pdw;
+                    break;
 
-                    case CLUSPROP_FORMAT_BINARY:
-                    case CLUSPROP_FORMAT_MULTI_SZ:
-                        ASSERT( pprop->m_value.ppb != NULL );
-                        ASSERT( *pprop->m_value.ppb != NULL );
-                        ASSERT( pprop->m_value.pcb != NULL );
-                        ASSERT( pprop->m_valuePrev.ppb != NULL );
-                        ASSERT( *pprop->m_valuePrev.ppb != NULL );
-                        ASSERT( pprop->m_valuePrev.pcb != NULL );
-                        delete [] *pprop->m_valuePrev.ppb;
-                        *pprop->m_valuePrev.ppb = new BYTE[ *pprop->m_value.pcb ];
-                        CopyMemory( *pprop->m_valuePrev.ppb, *pprop->m_value.ppb, *pprop->m_value.pcb );
-                        *pprop->m_valuePrev.pcb = *pprop->m_value.pcb;
-                        break;
+                case CLUSPROP_FORMAT_BINARY:
+                case CLUSPROP_FORMAT_MULTI_SZ:
+                    ASSERT( pprop->m_value.ppb != NULL );
+                    ASSERT( *pprop->m_value.ppb != NULL );
+                    ASSERT( pprop->m_value.pcb != NULL );
+                    ASSERT( pprop->m_valuePrev.ppb != NULL );
+                    ASSERT( *pprop->m_valuePrev.ppb != NULL );
+                    ASSERT( pprop->m_valuePrev.pcb != NULL );
+                    delete [] *pprop->m_valuePrev.ppb;
+                    *pprop->m_valuePrev.ppb = new BYTE[ *pprop->m_value.pcb ];
+                    CopyMemory( *pprop->m_valuePrev.ppb, *pprop->m_value.ppb, *pprop->m_value.pcb );
+                    *pprop->m_valuePrev.pcb = *pprop->m_value.pcb;
+                    break;
 
-                    default:
-                        ASSERT( 0 ); // don't know how to deal with this type
+                default:
+                    ASSERT( 0 ); // don't know how to deal with this type
 
                 } // switch: property format
             } // for: each property
@@ -1585,9 +1585,9 @@ CBasePropertyPage::BSetPrivateProps(
 /////////////////////////////////////////////////////////////////////////////
 void
 CBasePropertyPage::DisplaySetPropsError(
-      DWORD    scIn
+    DWORD    scIn
     , UINT     idsOperIn
-    ) const
+) const
 {
     CString strErrorMsg;
     CString strOperMsg;

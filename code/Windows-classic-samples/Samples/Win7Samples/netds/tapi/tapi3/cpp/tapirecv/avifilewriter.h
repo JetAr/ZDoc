@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
@@ -8,7 +8,7 @@ Module Name:
 
 Abstract:
 
-    Declaration for the AVIFileWriter class. 
+    Declaration for the AVIFileWriter class.
 
 */
 
@@ -20,7 +20,7 @@ Abstract:
 // an abstraction for a media file open for reading
 //
 
-class CAVIFileWriter  
+class CAVIFileWriter
 {
 
 public:
@@ -29,15 +29,15 @@ public:
     //
     // initialization (including opening file)
     //
-    
-    HRESULT Initialize(IN const CHAR *psFileName, 
+
+    HRESULT Initialize(IN const CHAR *psFileName,
                        IN const WAVEFORMATEX &WaveFormat);
 
 
     //
     // zero data members
     //
-    
+
     CAVIFileWriter();
 
 
@@ -45,7 +45,7 @@ public:
     // close file
     //
 
-	virtual ~CAVIFileWriter();
+    virtual ~CAVIFileWriter();
 
 
     //
@@ -64,18 +64,18 @@ private:
 
     PAVIFILE m_pAVIFile;
 
-    
+
     //
     // audio stream
     //
-    
+
     PAVISTREAM  m_pAudioStream;
 
-    
+
     //
     // size of one sample
     //
-    
+
     LONG m_nSampleSize;
 
 

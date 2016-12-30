@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@ template<typename T> T Convert(double Value);
 
 
 //
-//  Generate samples which represent a sine wave that fits into the specified buffer.  
+//  Generate samples which represent a sine wave that fits into the specified buffer.
 //
 //  T:  Type of data holding the sample (short, int, byte, float)
 //  Buffer - Buffer to hold the samples
@@ -39,7 +39,7 @@ void GenerateSineSamples(BYTE *Buffer, size_t BufferLength, DWORD Frequency, WOR
     for (size_t i = 0 ; i < BufferLength / sizeof(T) ; i += ChannelCount)
     {
         double sinValue = sin( theta );
-        for(size_t j = 0 ;j < ChannelCount; j++)
+        for(size_t j = 0 ; j < ChannelCount; j++)
         {
             dataBuffer[i+j] = Convert<T>(sinValue);
         }
@@ -57,13 +57,13 @@ void GenerateSineSamples(BYTE *Buffer, size_t BufferLength, DWORD Frequency, WOR
 //
 //  Convert from double to float, byte, short or int32.
 //
-template<> 
+template<>
 float Convert<float>(double Value)
 {
     return (float)(Value);
 };
 
-template<> 
+template<>
 short Convert<short>(double Value)
 {
     return (short)(Value * _I16_MAX);

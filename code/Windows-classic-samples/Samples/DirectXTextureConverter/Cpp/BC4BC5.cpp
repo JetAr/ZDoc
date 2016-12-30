@@ -1,13 +1,13 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // BC4BC5.cpp
-//  
+//
 // Block-compression (BC) functionality for BC4 and BC5 (DirectX 10 texture compression)
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
-//  
+//
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // http://go.microsoft.com/fwlink/?LinkId=248926
@@ -26,10 +26,10 @@ namespace DirectX
 
 // Because these are used in SAL annotations, they need to remain macros rather than const values
 #define BLOCK_LEN 4
-    // length of each block in texel
+// length of each block in texel
 
 #define BLOCK_SIZE (BLOCK_LEN * BLOCK_LEN)
-    // total texels in a 4x4 block.
+// total texels in a 4x4 block.
 
 //------------------------------------------------------------------------------------
 // Structures
@@ -74,7 +74,7 @@ struct BC4_UNORM
     size_t GetIndex(size_t uOffset) const
     {
         return (size_t) ((data >> (3*uOffset + 16)) & 0x07);
-    }    
+    }
 
     void SetIndex(size_t uOffset, size_t uIndex)
     {
@@ -84,11 +84,11 @@ struct BC4_UNORM
 
     union
     {
-        struct 
+        struct
         {
             uint8_t red_0;
             uint8_t red_1;
-            uint8_t indices[6]; 
+            uint8_t indices[6];
         };
         uint64_t data;
     };
@@ -124,7 +124,7 @@ struct BC4_SNORM
             if (uIndex == 6)
                 return -1.0f;
             if (uIndex == 7)
-                return 1.0f;  
+                return 1.0f;
             uIndex -= 1;
             return (fred_0 * (5-uIndex) + fred_1 * uIndex) / 5.0f;
         }
@@ -133,7 +133,7 @@ struct BC4_SNORM
     size_t GetIndex(size_t uOffset) const
     {
         return (size_t) ((data >> (3*uOffset + 16)) & 0x07);
-    }    
+    }
 
     void SetIndex(size_t uOffset, size_t uIndex)
     {
@@ -143,11 +143,11 @@ struct BC4_SNORM
 
     union
     {
-        struct 
+        struct
         {
             int8_t red_0;
             int8_t red_1;
-            uint8_t indices[6]; 
+            uint8_t indices[6];
         };
         uint64_t data;
     };
@@ -164,12 +164,10 @@ static void inline FloatToSNorm( _In_ float fVal, _Out_ int8_t *piSNorm )
 
     if( _isnan( fVal ) )
         fVal = 0;
-    else
-        if( fVal > 1 )
-            fVal = 1;    // Clamp to 1
-        else
-            if( fVal < -1 )
-                fVal = -1;    // Clamp to -1
+    else if( fVal > 1 )
+        fVal = 1;    // Clamp to 1
+    else if( fVal < -1 )
+        fVal = -1;    // Clamp to -1
 
     fVal = fVal * (int8_t) ( dwMostNeg - 1 );
 
@@ -197,7 +195,7 @@ static void FindEndPointsBC4U( _In_reads_(BLOCK_SIZE) const float theTexelsU[], 
     float fBlockMax = theTexelsU[0];
     float fBlockMin = theTexelsU[0];
     for (i = 0; i < BLOCK_SIZE; ++i)
-    {    
+    {
         if (theTexelsU[i]<fBlockMin)
         {
             fBlockMin = theTexelsU[i];
@@ -216,7 +214,7 @@ static void FindEndPointsBC4U( _In_reads_(BLOCK_SIZE) const float theTexelsU[], 
     float fStart, fEnd;
 
     if (!bUsing4BlockCodec)
-    {   
+    {
         OptimizeAlpha<false>(&fStart, &fEnd, theTexelsU, 8);
 
         iStart = (uint8_t) (fStart * 255.0f);
@@ -251,7 +249,7 @@ static void FindEndPointsBC4S(_In_reads_(BLOCK_SIZE) const float theTexelsU[], _
     float fBlockMax = theTexelsU[0];
     float fBlockMin = theTexelsU[0];
     for (i = 0; i < BLOCK_SIZE; ++i)
-    {    
+    {
         if (theTexelsU[i]<fBlockMin)
         {
             fBlockMin = theTexelsU[i];
@@ -270,7 +268,7 @@ static void FindEndPointsBC4S(_In_reads_(BLOCK_SIZE) const float theTexelsU[], _
     float fStart, fEnd;
 
     if (!bUsing4BlockCodec)
-    {   
+    {
         OptimizeAlpha<true>(&fStart, &fEnd, theTexelsU, 8);
 
         FloatToSNorm(fStart, &iStart);
@@ -337,7 +335,7 @@ static void FindClosestUNORM(_Inout_ BC4_UNORM* pBC, _In_reads_(NUM_PIXELS_PER_B
 }
 
 static void FindClosestSNORM(_Inout_ BC4_SNORM* pBC, _In_reads_(NUM_PIXELS_PER_BLOCK) const float theTexelsU[])
-{    
+{
     float rGradient[8];
     int i;
     for (i = 0; i < 8; ++i)
@@ -379,9 +377,9 @@ void D3DXDecodeBC4U( XMVECTOR *pColor, const uint8_t *pBC )
 
     for (size_t i = 0; i < NUM_PIXELS_PER_BLOCK; ++i)
     {
-        #pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
+#pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
         pColor[i] = XMVectorSet( pBC4->R(i), 0, 0, 1.0f);
-    }       
+    }
 }
 
 _Use_decl_annotations_
@@ -394,9 +392,9 @@ void D3DXDecodeBC4S(XMVECTOR *pColor, const uint8_t *pBC)
 
     for (size_t i = 0; i < NUM_PIXELS_PER_BLOCK; ++i)
     {
-        #pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
+#pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
         pColor[i] = XMVectorSet( pBC4->R(i), 0, 0, 1.0f);
-    }       
+    }
 }
 
 _Use_decl_annotations_
@@ -456,9 +454,9 @@ void D3DXDecodeBC5U(XMVECTOR *pColor, const uint8_t *pBC)
 
     for (size_t i = 0; i < NUM_PIXELS_PER_BLOCK; ++i)
     {
-        #pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
+#pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
         pColor[i] = XMVectorSet(pBCR->R(i), pBCG->R(i), 0, 1.0f);
-    }       
+    }
 }
 
 _Use_decl_annotations_
@@ -472,9 +470,9 @@ void D3DXDecodeBC5S(XMVECTOR *pColor, const uint8_t *pBC)
 
     for (size_t i = 0; i < NUM_PIXELS_PER_BLOCK; ++i)
     {
-        #pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
+#pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
         pColor[i] = XMVectorSet(pBCR->R(i), pBCG->R(i), 0, 1.0f);
-    }       
+    }
 }
 
 _Use_decl_annotations_
@@ -492,7 +490,7 @@ void D3DXEncodeBC5U( uint8_t *pBC, const XMVECTOR *pColor, DWORD flags )
     float theTexelsV[NUM_PIXELS_PER_BLOCK];
 
     for (size_t i = 0; i < NUM_PIXELS_PER_BLOCK; ++i)
-    {   
+    {
         XMFLOAT4A clr;
         XMStoreFloat4A( &clr, pColor[i] );
         theTexelsU[i] = clr.x;

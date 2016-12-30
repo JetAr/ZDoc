@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -35,37 +35,37 @@ const LPCWSTR REG_VALUE_ADMIN_EXTENSIONS = L"AdminExtensions";
 
 static DWORD
 RegisterAnyCluAdminExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , LPCWSTR       pwszKeyNameIn
     , const CLSID * pClsidIn
-    );
+);
 
 static DWORD
 RegisterAnyCluAdminExtension(
-      HKEY          hKeyIn
+    HKEY          hKeyIn
     , const CLSID * pClsidIn
-    );
+);
 
 static DWORD
 UnregisterAnyCluAdminExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , LPCWSTR       pwszKeyNameIn
     , const CLSID * pClsidIn
-    );
+);
 
 static DWORD
 UnregisterAnyCluAdminExtension(
-      HKEY          hKeyIn
+    HKEY          hKeyIn
     , const CLSID * pClsidIn
-    );
+);
 
 static DWORD
 ReadValue(
-      HKEY      hKeyIn
+    HKEY      hKeyIn
     , LPCWSTR   pwszValueNameIn
     , LPWSTR *  ppwszValueOut
     , size_t *  pcchValueOut
-    );
+);
 
 /////////////////////////////////////////////////////////////////////////////
 //++
@@ -88,11 +88,11 @@ ReadValue(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 RegisterCluAdminClusterExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
-    DWORD   sc = ERROR_SUCCESS;    
+    DWORD   sc = ERROR_SUCCESS;
     HKEY    hKey = NULL;
 
     //
@@ -140,9 +140,9 @@ RegisterCluAdminClusterExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 RegisterCluAdminAllNodesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD sc = ERROR_SUCCESS;
 
@@ -173,9 +173,9 @@ RegisterCluAdminAllNodesExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 RegisterCluAdminAllGroupsExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD sc = ERROR_SUCCESS;
 
@@ -206,9 +206,9 @@ RegisterCluAdminAllGroupsExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 RegisterCluAdminAllResourcesExtension(
-      HCLUSTER       hClusterIn
+    HCLUSTER       hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -239,9 +239,9 @@ RegisterCluAdminAllResourcesExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 RegisterCluAdminAllResourceTypesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -272,9 +272,9 @@ RegisterCluAdminAllResourceTypesExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 RegisterCluAdminAllNetworksExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -305,9 +305,9 @@ RegisterCluAdminAllNetworksExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 RegisterCluAdminAllNetInterfacesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -346,10 +346,10 @@ RegisterCluAdminAllNetInterfacesExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 RegisterCluAdminResourceTypeExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , LPCWSTR       pwszResourceTypeIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     HKEY    hKey = NULL;
@@ -409,9 +409,9 @@ RegisterCluAdminResourceTypeExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 UnregisterCluAdminClusterExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     HKEY    hKey = NULL;
@@ -461,9 +461,9 @@ UnregisterCluAdminClusterExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 UnregisterCluAdminAllNodesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -494,9 +494,9 @@ UnregisterCluAdminAllNodesExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 UnregisterCluAdminAllGroupsExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -527,9 +527,9 @@ UnregisterCluAdminAllGroupsExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 UnregisterCluAdminAllResourcesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -560,9 +560,9 @@ UnregisterCluAdminAllResourcesExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 UnregisterCluAdminAllResourceTypesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -593,9 +593,9 @@ UnregisterCluAdminAllResourceTypesExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 UnregisterCluAdminAllNetworksExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -626,9 +626,9 @@ UnregisterCluAdminAllNetworksExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 UnregisterCluAdminAllNetInterfacesExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
 
@@ -661,10 +661,10 @@ UnregisterCluAdminAllNetInterfacesExtension(
 /////////////////////////////////////////////////////////////////////////////
 DWORD
 UnregisterCluAdminResourceTypeExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , LPCWSTR       pwszResourceTypeIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     HKEY    hKey = NULL;
@@ -725,10 +725,10 @@ UnregisterCluAdminResourceTypeExtension(
 /////////////////////////////////////////////////////////////////////////////
 static DWORD
 RegisterAnyCluAdminExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , LPCWSTR       pwszKeyNameIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     HKEY    hkeyCluster = NULL;
@@ -789,9 +789,9 @@ RegisterAnyCluAdminExtension(
 /////////////////////////////////////////////////////////////////////////////
 static DWORD
 RegisterAnyCluAdminExtension(
-      HKEY          hKeyIn
+    HKEY          hKeyIn
     , const CLSID * pClsidIn
-    )
+)
 {
     HRESULT     hr = S_OK;
     LPOLESTR    pwszClsid = NULL;
@@ -828,7 +828,7 @@ RegisterAnyCluAdminExtension(
     if ( (sc == ERROR_FILE_NOT_FOUND) || ( (sc == ERROR_SUCCESS) && (cchSize == 0) ) )
     {
         //
-        //  If the value was not found or it was and the length was zero then 
+        //  If the value was not found or it was and the length was zero then
         //  the extension has not been registered.
         //
 
@@ -945,12 +945,12 @@ RegisterAnyCluAdminExtension(
 
             dwType = REG_MULTI_SZ;
             sc = ClusterRegSetValue(
-                              hKeyIn
-                            , REG_VALUE_ADMIN_EXTENSIONS
-                            , dwType
-                            , (LPBYTE) pwszNewValue
-                            , static_cast< DWORD >( cchNewSize * sizeof( *pwszNewValue ) )
-                            );
+                     hKeyIn
+                     , REG_VALUE_ADMIN_EXTENSIONS
+                     , dwType
+                     , (LPBYTE) pwszNewValue
+                     , static_cast< DWORD >( cchNewSize * sizeof( *pwszNewValue ) )
+                 );
             if ( sc != ERROR_SUCCESS )
             {
                 goto Cleanup;
@@ -991,10 +991,10 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 static DWORD
 UnregisterAnyCluAdminExtension(
-      HCLUSTER      hClusterIn
+    HCLUSTER      hClusterIn
     , LPCWSTR       pwszKeyNameIn
     , const CLSID * pClsidIn
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     HKEY    hKeyCluster = NULL;
@@ -1049,9 +1049,9 @@ UnregisterAnyCluAdminExtension(
 /////////////////////////////////////////////////////////////////////////////
 static DWORD
 UnregisterAnyCluAdminExtension(
-      HKEY          hKeyIn
+    HKEY          hKeyIn
     , const CLSID * pClsidIn
-    )
+)
 {
     HRESULT     hr = S_OK;
     LPOLESTR    pwszClsid = NULL;
@@ -1088,7 +1088,7 @@ UnregisterAnyCluAdminExtension(
     if ( (sc == ERROR_FILE_NOT_FOUND) || ( (sc == ERROR_SUCCESS) && (cchSize == 0) ) )
     {
         //
-        //  If the value was not found or it was and the length was zero then 
+        //  If the value was not found or it was and the length was zero then
         //  the extension has been unregistered.
         //
 
@@ -1186,12 +1186,12 @@ UnregisterAnyCluAdminExtension(
 
             dwType = REG_MULTI_SZ;
             sc = ClusterRegSetValue(
-                              hKeyIn
-                            , REG_VALUE_ADMIN_EXTENSIONS
-                            , dwType
-                            , (LPBYTE) pwszNewValue
-                            , static_cast< DWORD >( cchNewSize * sizeof( *pwszNewValue ) )
-                            );
+                     hKeyIn
+                     , REG_VALUE_ADMIN_EXTENSIONS
+                     , dwType
+                     , (LPBYTE) pwszNewValue
+                     , static_cast< DWORD >( cchNewSize * sizeof( *pwszNewValue ) )
+                 );
             if ( sc != ERROR_SUCCESS )
             {
                 goto Cleanup;
@@ -1233,11 +1233,11 @@ Cleanup:
 /////////////////////////////////////////////////////////////////////////////
 static DWORD
 ReadValue(
-      HKEY      hKeyIn
+    HKEY      hKeyIn
     , LPCWSTR   pwszValueNameIn
     , LPWSTR *  ppwszValueOut
     , size_t *  pcchValueOut
-    )
+)
 {
     DWORD   sc = ERROR_SUCCESS;
     DWORD   cbSize = 0;
@@ -1258,7 +1258,7 @@ ReadValue(
 
     sc = ClusterRegQueryValue( hKeyIn, pwszValueNameIn, &dwType, NULL, &cbSize );
     if (   ( sc != ERROR_SUCCESS )
-        && ( sc != ERROR_MORE_DATA ) )
+            && ( sc != ERROR_MORE_DATA ) )
     {
         goto Cleanup;
     }  // if:  error occurred
@@ -1289,7 +1289,7 @@ ReadValue(
             goto Cleanup;
         } // if:
 
-         ASSERT( cchSize * sizeof( WCHAR ) == cbSize );
+        ASSERT( cchSize * sizeof( WCHAR ) == cbSize );
 
         *ppwszValueOut = pwszValue;
         pwszValue = NULL;                                   // give away ownership...

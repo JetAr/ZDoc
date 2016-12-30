@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -42,14 +42,14 @@ STDMETHODIMP CLocationEvents::OnLocationChanged(__RPC__in REFIID reportType, __R
                 }
 
                 wprintf(L"\nTimestamp: YY:%u, MM:%u, DD:%u, HH:%u, MM:%u, SS:%u, MS:%u [%I64u]\n",
-                    systemTime.wYear,
-                    systemTime.wMonth,
-                    systemTime.wDay,
-                    systemTime.wHour,
-                    systemTime.wMinute,
-                    systemTime.wSecond,
-                    systemTime.wMilliseconds,
-                    diffTime / 10000); // Display in milliseconds
+                        systemTime.wYear,
+                        systemTime.wMonth,
+                        systemTime.wDay,
+                        systemTime.wHour,
+                        systemTime.wMinute,
+                        systemTime.wSecond,
+                        systemTime.wMilliseconds,
+                        diffTime / 10000); // Display in milliseconds
 
                 m_previousTime = currentTime; // Set the previous time to the current time for the next report.
             }

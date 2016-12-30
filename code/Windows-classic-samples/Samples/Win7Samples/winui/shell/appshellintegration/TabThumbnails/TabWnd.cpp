@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -39,18 +39,18 @@ CTabWnd *CTabWnd::Create(int iTab, CMainDlg *pMainDlg)
 
         // Create the CTabWnd window offscreen.
         HWND hwnd = ::CreateWindowEx(
-            WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE,
-            c_szWindowClass,
-            szTab,
-            WS_POPUP | WS_BORDER | WS_SYSMENU | WS_CAPTION,
-            -32000,
-            -32000,
-            10,
-            10,
-            NULL,
-            NULL,
-            g_hInstance,
-            (LPVOID)pWnd);
+                        WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE,
+                        c_szWindowClass,
+                        szTab,
+                        WS_POPUP | WS_BORDER | WS_SYSMENU | WS_CAPTION,
+                        -32000,
+                        -32000,
+                        10,
+                        10,
+                        NULL,
+                        NULL,
+                        g_hInstance,
+                        (LPVOID)pWnd);
 
         if (hwnd == NULL)
         {
@@ -80,7 +80,7 @@ LRESULT CALLBACK CTabWnd::_WndProc(
     UINT message,
     WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     LRESULT lResult = 0;
 
@@ -112,79 +112,79 @@ LRESULT CTabWnd::WndProc(
     UINT message,
     WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     LRESULT lResult = 0;
 
     switch (message)
     {
-        case WM_CREATE:
+    case WM_CREATE:
+    {
+        // Set DWM window attributes to indicate we'll provide the iconic bitmap, and
+        // to always render the thumbnail using the iconic bitmap.
+        BOOL fForceIconic = TRUE;
+        BOOL fHasIconicBitmap = TRUE;
+
+        DwmSetWindowAttribute(
+            _hwnd,
+            DWMWA_FORCE_ICONIC_REPRESENTATION,
+            &fForceIconic,
+            sizeof(fForceIconic));
+
+        DwmSetWindowAttribute(
+            _hwnd,
+            DWMWA_HAS_ICONIC_BITMAP,
+            &fHasIconicBitmap,
+            sizeof(fHasIconicBitmap));
+
+        // Tell the taskbar about this tab window
+        _pMainDlg->RegisterTab(this);
+        break;
+    }
+
+    case WM_ACTIVATE:
+        // The taskbar will activate this window, so pass along the activation
+        // to the tab window outer frame.
+        if (LOWORD(wParam) == WA_ACTIVE)
         {
-            // Set DWM window attributes to indicate we'll provide the iconic bitmap, and
-            // to always render the thumbnail using the iconic bitmap.
-            BOOL fForceIconic = TRUE;
-            BOOL fHasIconicBitmap = TRUE;
-
-            DwmSetWindowAttribute(
-                _hwnd,
-                DWMWA_FORCE_ICONIC_REPRESENTATION,
-                &fForceIconic,
-                sizeof(fForceIconic));
-
-            DwmSetWindowAttribute(
-                _hwnd,
-                DWMWA_HAS_ICONIC_BITMAP,
-                &fHasIconicBitmap,
-                sizeof(fHasIconicBitmap));
-
-            // Tell the taskbar about this tab window
-            _pMainDlg->RegisterTab(this);
-            break;
+            _pMainDlg->ActivateTab(this);
         }
+        break;
 
-        case WM_ACTIVATE:
-            // The taskbar will activate this window, so pass along the activation
-            // to the tab window outer frame.
-            if (LOWORD(wParam) == WA_ACTIVE)
-            {
-                _pMainDlg->ActivateTab(this);
-            }
-            break;
-
-        case WM_SYSCOMMAND:
-            // All syscommands except for close will be passed along to the tab window
-            // outer frame. This allows functions such as move/size to occur properly.
-            if (wParam != SC_CLOSE)
-            {
-                lResult = SendMessage(_pMainDlg->GetHwnd(), WM_SYSCOMMAND, wParam, lParam);
-            }
-            else
-            {
-                lResult = ::DefWindowProc(_hwnd, message, wParam, lParam);
-            }
-            break;
-
-        case WM_CLOSE:
-            // The taskbar (or system menu) is asking this tab window to close. Ask the
-            // tab window outer frame to destroy this tab.
-            _pMainDlg->DestroyTab(this);
-            break;
-
-        case WM_DWMSENDICONICTHUMBNAIL:
-            // This tab window is being asked to provide its iconic bitmap. This indicates
-            // a thumbnail is being drawn.
-            _SendIconicRepresentation(HIWORD(lParam), LOWORD(lParam));
-            break;
-
-        case WM_DWMSENDICONICLIVEPREVIEWBITMAP:
-            // This tab window is being asked to provide a bitmap to show in live preview.
-            // This indicates the tab's thumbnail in the taskbar is being previewed.
-            _SendLivePreviewBitmap();
-            break;
-
-        default:
+    case WM_SYSCOMMAND:
+        // All syscommands except for close will be passed along to the tab window
+        // outer frame. This allows functions such as move/size to occur properly.
+        if (wParam != SC_CLOSE)
+        {
+            lResult = SendMessage(_pMainDlg->GetHwnd(), WM_SYSCOMMAND, wParam, lParam);
+        }
+        else
+        {
             lResult = ::DefWindowProc(_hwnd, message, wParam, lParam);
-            break;
+        }
+        break;
+
+    case WM_CLOSE:
+        // The taskbar (or system menu) is asking this tab window to close. Ask the
+        // tab window outer frame to destroy this tab.
+        _pMainDlg->DestroyTab(this);
+        break;
+
+    case WM_DWMSENDICONICTHUMBNAIL:
+        // This tab window is being asked to provide its iconic bitmap. This indicates
+        // a thumbnail is being drawn.
+        _SendIconicRepresentation(HIWORD(lParam), LOWORD(lParam));
+        break;
+
+    case WM_DWMSENDICONICLIVEPREVIEWBITMAP:
+        // This tab window is being asked to provide a bitmap to show in live preview.
+        // This indicates the tab's thumbnail in the taskbar is being previewed.
+        _SendLivePreviewBitmap();
+        break;
+
+    default:
+        lResult = ::DefWindowProc(_hwnd, message, wParam, lParam);
+        break;
     }
 
     return lResult;
@@ -220,7 +220,7 @@ HRESULT CTabWnd::_SendLivePreviewBitmap()
     RECT rcNCA = {};
     WINDOWPLACEMENT wp;
     if (AdjustWindowRectEx(&rcNCA, dwStyle, FALSE, dwStyleEx) != 0 &&
-        GetWindowPlacement(hwndTabFrame, &wp) != 0)
+            GetWindowPlacement(hwndTabFrame, &wp) != 0)
     {
         if (wp.flags & WPF_RESTORETOMAXIMIZED)
         {
@@ -285,31 +285,31 @@ HBITMAP CTabWnd::_CreateDIB(int nWidth, int nHeight)
             // Compute tab color: red, orange, yellow, green, blue, indigo, violet
             switch (_iTab % 7)
             {
-                case 1:
-                    nRed = 255;
-                    break;
-                case 2:
-                    nRed = 255;
-                    nGreen = 155;
-                    break;
-                case 3:
-                    nRed = 255;
-                    nGreen = 255;
-                    break;
-                case 4:
-                    nGreen = 255;
-                    break;
-                case 5:
-                    nBlue = 255;
-                    break;
-                case 6:
-                    nRed = 155;
-                    nBlue = 255;
-                    break;
-                case 0:
-                    nRed = 255;
-                    nBlue = 255;
-                    break;
+            case 1:
+                nRed = 255;
+                break;
+            case 2:
+                nRed = 255;
+                nGreen = 155;
+                break;
+            case 3:
+                nRed = 255;
+                nGreen = 255;
+                break;
+            case 4:
+                nGreen = 255;
+                break;
+            case 5:
+                nBlue = 255;
+                break;
+            case 6:
+                nRed = 155;
+                nBlue = 255;
+                break;
+            case 0:
+                nRed = 255;
+                nBlue = 255;
+                break;
             }
 
             // Fill in the pixels of the bitmap

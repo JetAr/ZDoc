@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -39,12 +39,12 @@ public:
     static HRESULT CoSetProxyBlanket( IUnknown *pIUnk )
     {
         HRESULT hr = S_OK;
-        IUnknown* pRealUnknown; 
+        IUnknown* pRealUnknown;
 
         // Try to see if it's a COM proxy.  If so, see if it's local to the process or a remote COM proxy.
         // If it's remote, set the proxy blanket
         ULONG_PTR ulRpcOptions = GetRpcOptions( pIUnk );
-        
+
         if ( SERVER_LOCALITY_PROCESS_LOCAL != ulRpcOptions )
         {
             hr = CoImpersonateClient();
@@ -57,7 +57,7 @@ public:
                     if ( S_OK == hr )
                     {
                         hr = ::CoSetProxyBlanket( pIUnk, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, COLE_DEFAULT_PRINCIPAL,
-                                              RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_STATIC_CLOAKING );
+                                                  RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_STATIC_CLOAKING );
                     }
                     if ( E_NOINTERFACE == hr )
                         hr = S_OK;  // Provider can end up being inproc if we are in the fdPHost process.  Ignore error and try to proceed.
@@ -104,7 +104,7 @@ public:
         if ( !SetThreadToken( NULL, m_hToken ))
             hr = HRESULT_FROM_WIN32( GetLastError() );
         ReleaseSRWLockShared(&srwTokenLock);
-        
+
         if ( S_OK == hr )
         {
             hr = pIUnk->QueryInterface(IID_IUnknown, (LPVOID*)&pRealUnknown );
@@ -175,7 +175,7 @@ public:
                 }
             }
 
-            // Only save the impersonation info if 
+            // Only save the impersonation info if
             // this is not a local call, and the caller is not System.
             if ( (S_OK == hr) && (!isLocalCall) && (!isLocalSystem) )
             {
@@ -206,7 +206,7 @@ public:
     BOOL ReleaseToken(DWORD dwSessionId)
     {
         BOOL bMatch = FALSE;
-        
+
         AcquireSRWLockExclusive( &srwTokenLock );
         if ( NULL != m_hToken && dwSessionId == m_dwSessionId )
         {
@@ -246,7 +246,7 @@ protected:
     {
         ULONG_PTR ulOptions = SERVER_LOCALITY_PROCESS_LOCAL;
         IRpcOptions* pRpcOptions;
-        
+
         HRESULT hr = pIUnk->QueryInterface( __uuidof( IRpcOptions ), reinterpret_cast<LPVOID*>( &pRpcOptions ) );
         if ( S_OK == hr )
         {

@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].cpp : Implementation of C[!output Safe_root]
 //
@@ -91,13 +91,13 @@ HRESULT C[!output Safe_root]::FinalConstruct()
     lResult = key.Open(HKEY_CURRENT_USER, kwszPrefsRegKey, KEY_READ);
     if (ERROR_SUCCESS == lResult)
     {
-[!if VSNET]
+        [!if VSNET]
         DWORD dwType = 0;
         ULONG uLength = sizeof(dwValue);
         lResult = key.QueryValue(kwszPrefsScaleFactor, &dwType, &dwValue, &uLength);
-[!else]
+        [!else]
         lResult = key.QueryValue(dwValue, kwszPrefsScaleFactor );
-[!endif]
+        [!endif]
         if (ERROR_SUCCESS == lResult)
         {
             m_fScaleFactor = dwValue / 65536.0;
@@ -125,9 +125,9 @@ void C[!output Safe_root]::FinalRelease()
 // Implementation of IMediaObject::GetStreamCount
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::GetStreamCount( 
-               DWORD *pcInputStreams,
-               DWORD *pcOutputStreams)
+STDMETHODIMP C[!output Safe_root]::GetStreamCount(
+    DWORD *pcInputStreams,
+    DWORD *pcOutputStreams)
 {
     HRESULT hr = S_OK;
 
@@ -155,9 +155,9 @@ STDMETHODIMP C[!output Safe_root]::GetStreamCount(
 // Implementation of IMFTransform::GetStreamCount
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::MFTGetStreamCount( 
-               DWORD *pcInputStreams,
-               DWORD *pcOutputStreams)
+STDMETHODIMP C[!output Safe_root]::MFTGetStreamCount(
+    DWORD *pcInputStreams,
+    DWORD *pcOutputStreams)
 {
     HRESULT hr = S_OK;
 
@@ -187,15 +187,15 @@ STDMETHODIMP C[!output Safe_root]::MFTGetStreamCount(
 /////////////////////////////////////////////////////////////////////////////
 
 STDMETHODIMP C[!output Safe_root]::MFTGetStreamLimits(
-               DWORD* pdwInputMinimum,
-               DWORD* pdwInputMaximum,
-               DWORD* pdwOutputMinimum,
-               DWORD* pdwOutputMaximum)
+    DWORD* pdwInputMinimum,
+    DWORD* pdwInputMaximum,
+    DWORD* pdwOutputMinimum,
+    DWORD* pdwOutputMaximum)
 {
     if ( NULL == pdwInputMinimum ||
-         NULL == pdwInputMaximum ||
-         NULL == pdwOutputMinimum ||
-         NULL == pdwOutputMaximum )
+            NULL == pdwInputMaximum ||
+            NULL == pdwOutputMinimum ||
+            NULL == pdwOutputMaximum )
     {
         return E_POINTER;
     }
@@ -215,11 +215,11 @@ STDMETHODIMP C[!output Safe_root]::MFTGetStreamLimits(
 //
 // Implementation of IMediaObject::GetInputStreamInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetInputStreamInfo( 
-               DWORD dwInputStreamIndex,
-               DWORD *pdwFlags)
-{    
+
+STDMETHODIMP C[!output Safe_root]::GetInputStreamInfo(
+    DWORD dwInputStreamIndex,
+    DWORD *pdwFlags)
+{
     if ( NULL == pdwFlags )
     {
         return E_POINTER;
@@ -245,11 +245,11 @@ STDMETHODIMP C[!output Safe_root]::GetInputStreamInfo(
 //
 // Implementation of IMFTransform::GetInputStreamInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::MFTGetInputStreamInfo( 
-               DWORD dwInputStreamID,
-               MFT_INPUT_STREAM_INFO* pStreamInfo)
-{    
+
+STDMETHODIMP C[!output Safe_root]::MFTGetInputStreamInfo(
+    DWORD dwInputStreamID,
+    MFT_INPUT_STREAM_INFO* pStreamInfo)
+{
     // The stream index must be zero.
     if ( 0 != dwInputStreamID )
     {
@@ -279,10 +279,10 @@ STDMETHODIMP C[!output Safe_root]::MFTGetInputStreamInfo(
 //
 // Implementation of IMediaObject::GetOutputStreamInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetOutputStreamInfo( 
-               DWORD dwOutputStreamIndex,
-               DWORD *pdwFlags)
+
+STDMETHODIMP C[!output Safe_root]::GetOutputStreamInfo(
+    DWORD dwOutputStreamIndex,
+    DWORD *pdwFlags)
 {
     if ( NULL == pdwFlags )
     {
@@ -307,10 +307,10 @@ STDMETHODIMP C[!output Safe_root]::GetOutputStreamInfo(
 //
 // Implementation of IMFTransform::GetOutputStreamInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::MFTGetOutputStreamInfo( 
-               DWORD dwOutputStreamID,
-               MFT_OUTPUT_STREAM_INFO* pStreamInfo)
+
+STDMETHODIMP C[!output Safe_root]::MFTGetOutputStreamInfo(
+    DWORD dwOutputStreamID,
+    MFT_OUTPUT_STREAM_INFO* pStreamInfo)
 {
     if ( 0 != dwOutputStreamID )
     {
@@ -339,11 +339,11 @@ STDMETHODIMP C[!output Safe_root]::MFTGetOutputStreamInfo(
 //
 // Implementation of IMediaObject::GetInputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetInputType ( 
-               DWORD dwInputStreamIndex,
-               DWORD dwTypeIndex,
-               DMO_MEDIA_TYPE *pmt)
+
+STDMETHODIMP C[!output Safe_root]::GetInputType (
+    DWORD dwInputStreamIndex,
+    DWORD dwTypeIndex,
+    DMO_MEDIA_TYPE *pmt)
 {
     HRESULT hr = S_OK;
 
@@ -358,7 +358,7 @@ STDMETHODIMP C[!output Safe_root]::GetInputType (
     {
         return DMO_E_NO_MORE_ITEMS;
     }
-    else if ( NULL == pmt ) 
+    else if ( NULL == pmt )
     {
         return S_OK;
     }
@@ -376,11 +376,11 @@ STDMETHODIMP C[!output Safe_root]::GetInputType (
 //
 // Implementation of IMFTransform::GetInputAvailableType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::MFTGetInputAvailableType( 
-               DWORD dwInputStreamID,
-               DWORD dwTypeIndex,
-               IMFMediaType** ppType)
+
+STDMETHODIMP C[!output Safe_root]::MFTGetInputAvailableType(
+    DWORD dwInputStreamID,
+    DWORD dwTypeIndex,
+    IMFMediaType** ppType)
 {
     HRESULT hr = S_OK;
 
@@ -395,7 +395,7 @@ STDMETHODIMP C[!output Safe_root]::MFTGetInputAvailableType(
     {
         return MF_E_NO_MORE_TYPES;
     }
-    else if ( NULL == ppType ) 
+    else if ( NULL == ppType )
     {
         return S_OK;
     }
@@ -415,11 +415,11 @@ STDMETHODIMP C[!output Safe_root]::MFTGetInputAvailableType(
 //
 // Implementation of IMediaObject::GetOutputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetOutputType( 
-               DWORD dwOutputStreamIndex,
-               DWORD dwTypeIndex,
-               DMO_MEDIA_TYPE *pmt)
+
+STDMETHODIMP C[!output Safe_root]::GetOutputType(
+    DWORD dwOutputStreamIndex,
+    DWORD dwTypeIndex,
+    DMO_MEDIA_TYPE *pmt)
 {
     HRESULT hr = S_OK;
 
@@ -434,7 +434,7 @@ STDMETHODIMP C[!output Safe_root]::GetOutputType(
     {
         return DMO_E_NO_MORE_ITEMS;
     }
-    else if ( NULL == pmt ) 
+    else if ( NULL == pmt )
     {
         return S_OK;
     }
@@ -448,7 +448,7 @@ STDMETHODIMP C[!output Safe_root]::GetOutputType(
     {
         ::ZeroMemory( pmt, sizeof( DMO_MEDIA_TYPE ) );
         pmt->majortype = MEDIATYPE_Video;
-        pmt->subtype = *k_guidValidSubtypes[dwTypeIndex];     
+        pmt->subtype = *k_guidValidSubtypes[dwTypeIndex];
     }
 
     return hr;
@@ -460,11 +460,11 @@ STDMETHODIMP C[!output Safe_root]::GetOutputType(
 //
 // Implementation of IMFTransform::GetOutputAvailableType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::MFTGetOutputAvailableType( 
-               DWORD dwOutputStreamID,
-               DWORD dwTypeIndex,
-               IMFMediaType** ppType)
+
+STDMETHODIMP C[!output Safe_root]::MFTGetOutputAvailableType(
+    DWORD dwOutputStreamID,
+    DWORD dwTypeIndex,
+    IMFMediaType** ppType)
 {
     HRESULT hr = S_OK;
 
@@ -479,7 +479,7 @@ STDMETHODIMP C[!output Safe_root]::MFTGetOutputAvailableType(
     {
         return MF_E_NO_MORE_TYPES;
     }
-    else if ( NULL == ppType ) 
+    else if ( NULL == ppType )
     {
         return S_OK;
     }
@@ -515,11 +515,11 @@ STDMETHODIMP C[!output Safe_root]::MFTGetOutputAvailableType(
 //
 // Implementation of IMediaObject::SetInputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::SetInputType( 
-               DWORD dwInputStreamIndex,
-               const DMO_MEDIA_TYPE *pmt,
-               DWORD dwFlags)
+
+STDMETHODIMP C[!output Safe_root]::SetInputType(
+    DWORD dwInputStreamIndex,
+    const DMO_MEDIA_TYPE *pmt,
+    DWORD dwFlags)
 {
     HRESULT hr = S_OK;
 
@@ -528,7 +528,7 @@ STDMETHODIMP C[!output Safe_root]::SetInputType(
         return DMO_E_INVALIDSTREAMINDEX;
     }
 
-    if ( DMO_SET_TYPEF_CLEAR & dwFlags ) 
+    if ( DMO_SET_TYPEF_CLEAR & dwFlags )
     {
         ::MoFreeMediaType(&m_mtInput);
         ::ZeroMemory(&m_mtInput, sizeof(m_mtInput));
@@ -538,7 +538,7 @@ STDMETHODIMP C[!output Safe_root]::SetInputType(
 
     if ( NULL == pmt )
     {
-       return E_POINTER;
+        return E_POINTER;
     }
 
     // validate that the input media type matches our requirements and
@@ -577,11 +577,11 @@ STDMETHODIMP C[!output Safe_root]::SetInputType(
 //
 // Implementation of IMFTransform::SetInputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::MFTSetInputType( 
-               DWORD dwInputStreamID,
-               IMFMediaType* pType,
-               DWORD dwFlags)
+
+STDMETHODIMP C[!output Safe_root]::MFTSetInputType(
+    DWORD dwInputStreamID,
+    IMFMediaType* pType,
+    DWORD dwFlags)
 {
     HRESULT hr = S_OK;
 
@@ -600,7 +600,8 @@ STDMETHODIMP C[!output Safe_root]::MFTSetInputType(
 
     DMO_MEDIA_TYPE* pmt;
     hr = pType->GetRepresentation( AM_MEDIA_TYPE_REPRESENTATION, (void**)&pmt );
-    if( FAILED( hr ) ) {
+    if( FAILED( hr ) )
+    {
         return hr;
     }
 
@@ -636,12 +637,12 @@ STDMETHODIMP C[!output Safe_root]::MFTSetInputType(
 //
 // Implementation of IMediaObject::SetOutputType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::SetOutputType( 
-               DWORD dwOutputStreamIndex,
-               const DMO_MEDIA_TYPE *pmt,
-               DWORD dwFlags)
-{ 
+
+STDMETHODIMP C[!output Safe_root]::SetOutputType(
+    DWORD dwOutputStreamIndex,
+    const DMO_MEDIA_TYPE *pmt,
+    DWORD dwFlags)
+{
     HRESULT hr = S_OK;
 
     if ( 0 != dwOutputStreamIndex )
@@ -704,11 +705,11 @@ STDMETHODIMP C[!output Safe_root]::SetOutputType(
 // Implementation of IMFTransform::SetOutputType
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::MFTSetOutputType( 
-               DWORD dwOutputStreamID,
-               IMFMediaType* pType,
-               DWORD dwFlags)
-{ 
+STDMETHODIMP C[!output Safe_root]::MFTSetOutputType(
+    DWORD dwOutputStreamID,
+    IMFMediaType* pType,
+    DWORD dwFlags)
+{
     HRESULT hr = S_OK;
 
     if ( 0 != dwOutputStreamID )
@@ -726,7 +727,8 @@ STDMETHODIMP C[!output Safe_root]::MFTSetOutputType(
 
     DMO_MEDIA_TYPE* pmt;
     hr = pType->GetRepresentation( AM_MEDIA_TYPE_REPRESENTATION, (void**)&pmt );
-    if( FAILED( hr ) ) {
+    if( FAILED( hr ) )
+    {
         return hr;
     }
 
@@ -735,7 +737,8 @@ STDMETHODIMP C[!output Safe_root]::MFTSetOutputType(
         // validate that the output media type matches our requirements and
         // and matches our input type (if set)
         hr = ValidateMediaType(pmt, &m_mtInput);
-        if( FAILED( hr ) ) {
+        if( FAILED( hr ) )
+        {
             hr = MF_E_INVALIDMEDIATYPE;
         }
     }
@@ -767,9 +770,9 @@ STDMETHODIMP C[!output Safe_root]::MFTSetOutputType(
 // Implementation of IMediaObject::GetInputCurrentType
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::GetInputCurrentType( 
-               DWORD dwInputStreamIndex,
-               DMO_MEDIA_TYPE *pmt)
+STDMETHODIMP C[!output Safe_root]::GetInputCurrentType(
+    DWORD dwInputStreamIndex,
+    DMO_MEDIA_TYPE *pmt)
 {
     HRESULT hr = S_OK;
 
@@ -801,9 +804,9 @@ STDMETHODIMP C[!output Safe_root]::GetInputCurrentType(
 // Implementation of IMFTransform::GetInputCurrentType
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::MFTGetInputCurrentType( 
-               DWORD dwInputStreamID,
-               IMFMediaType** ppType)
+STDMETHODIMP C[!output Safe_root]::MFTGetInputCurrentType(
+    DWORD dwInputStreamID,
+    IMFMediaType** ppType)
 {
     HRESULT hr = S_OK;
 
@@ -832,10 +835,10 @@ STDMETHODIMP C[!output Safe_root]::MFTGetInputCurrentType(
 //
 // Implementation of IMediaObject::GetOutputCurrentType
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetOutputCurrentType( 
-               DWORD dwOutputStreamIndex,
-               DMO_MEDIA_TYPE *pmt)
+
+STDMETHODIMP C[!output Safe_root]::GetOutputCurrentType(
+    DWORD dwOutputStreamIndex,
+    DMO_MEDIA_TYPE *pmt)
 {
     HRESULT hr = S_OK;
 
@@ -866,10 +869,10 @@ STDMETHODIMP C[!output Safe_root]::GetOutputCurrentType(
 //
 // Implementation of IMFTransform::GetOutputCurrentType
 /////////////////////////////////////////////////////////////////////////////
-    
+
 STDMETHODIMP C[!output Safe_root]::MFTGetOutputCurrentType(
-               DWORD dwOutputStreamID,
-               IMFMediaType** ppType)
+    DWORD dwOutputStreamID,
+    IMFMediaType** ppType)
 {
     HRESULT hr = S_OK;
 
@@ -898,12 +901,12 @@ STDMETHODIMP C[!output Safe_root]::MFTGetOutputCurrentType(
 //
 // Implementation of IMediaObject::GetInputSizeInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo( 
-               DWORD dwInputStreamIndex,
-               DWORD *pcbSize,
-               DWORD *pcbMaxLookahead,
-               DWORD *pcbAlignment)
+
+STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
+    DWORD dwInputStreamIndex,
+    DWORD *pcbSize,
+    DWORD *pcbMaxLookahead,
+    DWORD *pcbAlignment)
 {
     if ( 0 != dwInputStreamIndex )
     {
@@ -912,7 +915,7 @@ STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
 
     if ( NULL == pcbSize )
     {
-       return E_POINTER;
+        return E_POINTER;
     }
 
     if ( NULL == pcbMaxLookahead )
@@ -922,7 +925,7 @@ STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
 
     if ( NULL == pcbAlignment )
     {
-       return E_POINTER;
+        return E_POINTER;
     }
 
     if (GUID_NULL == m_mtInput.majortype)
@@ -936,9 +939,9 @@ STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
     // No lookahead for this plug-in.
     *pcbMaxLookahead = 0;
 
-     // No alignment requirement.
+    // No alignment requirement.
     *pcbAlignment = 1;
-  
+
     return S_OK;
 }
 
@@ -947,11 +950,11 @@ STDMETHODIMP C[!output Safe_root]::GetInputSizeInfo(
 //
 // Implementation of IMediaObject::GetOutputSizeInfo
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetOutputSizeInfo( 
-               DWORD dwOutputStreamIndex,
-               DWORD *pcbSize,
-               DWORD *pcbAlignment)
+
+STDMETHODIMP C[!output Safe_root]::GetOutputSizeInfo(
+    DWORD dwOutputStreamIndex,
+    DWORD *pcbSize,
+    DWORD *pcbAlignment)
 {
     if ( 0 != dwOutputStreamIndex )
     {
@@ -976,7 +979,7 @@ STDMETHODIMP C[!output Safe_root]::GetOutputSizeInfo(
     // Return the output sample size, in bytes.
     *pcbSize = m_dwBufferSize;
 
-     // No alignment requirement.
+    // No alignment requirement.
     *pcbAlignment = 1;
 
     return S_OK;
@@ -987,10 +990,10 @@ STDMETHODIMP C[!output Safe_root]::GetOutputSizeInfo(
 //
 // Implementation of IMediaObject::GetInputMaxLatency
 /////////////////////////////////////////////////////////////////////////////
-   
-STDMETHODIMP C[!output Safe_root]::GetInputMaxLatency( 
-               DWORD dwInputStreamIndex,
-               REFERENCE_TIME *prtMaxLatency)
+
+STDMETHODIMP C[!output Safe_root]::GetInputMaxLatency(
+    DWORD dwInputStreamIndex,
+    REFERENCE_TIME *prtMaxLatency)
 {
     return E_NOTIMPL; // Not dealing with latency in this plug-in.
 }
@@ -1000,10 +1003,10 @@ STDMETHODIMP C[!output Safe_root]::GetInputMaxLatency(
 //
 // Implementation of IMediaObject::SetInputMaxLatency
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::SetInputMaxLatency( 
-               DWORD dwInputStreamIndex,
-               REFERENCE_TIME rtMaxLatency)
+
+STDMETHODIMP C[!output Safe_root]::SetInputMaxLatency(
+    DWORD dwInputStreamIndex,
+    REFERENCE_TIME rtMaxLatency)
 {
     return E_NOTIMPL; // Not dealing with latency in this plug-in.
 }
@@ -1013,13 +1016,13 @@ STDMETHODIMP C[!output Safe_root]::SetInputMaxLatency(
 //
 // Implementation of IMediaObject::Flush
 /////////////////////////////////////////////////////////////////////////////
-    
+
 STDMETHODIMP C[!output Safe_root]::Flush( void )
 {
     m_spInputBuffer.Release();  // release smart pointer
-[!if DUALMODE]
+    [!if DUALMODE]
     m_spMFSample.Release();
-[!endif]
+    [!endif]
     m_bValidTime = false;
     m_bValidLength = false;
     m_rtTimestamp = 0;
@@ -1033,9 +1036,9 @@ STDMETHODIMP C[!output Safe_root]::Flush( void )
 //
 // Implementation of IMediaObject::Discontinuity
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::Discontinuity( 
-               DWORD dwInputStreamIndex)
+
+STDMETHODIMP C[!output Safe_root]::Discontinuity(
+    DWORD dwInputStreamIndex)
 {
     return S_OK;
 }
@@ -1045,7 +1048,7 @@ STDMETHODIMP C[!output Safe_root]::Discontinuity(
 //
 // Implementation of IMediaObject::AllocateStreamingResources
 /////////////////////////////////////////////////////////////////////////////
-    
+
 STDMETHODIMP C[!output Safe_root]::AllocateStreamingResources ( void )
 {
     // Allocate any buffers need to process the stream. This plug-in does
@@ -1059,7 +1062,7 @@ STDMETHODIMP C[!output Safe_root]::AllocateStreamingResources ( void )
 //
 // Implementation of IMediaObject::FreeStreamingResources
 /////////////////////////////////////////////////////////////////////////////
-    
+
 STDMETHODIMP C[!output Safe_root]::FreeStreamingResources( void )
 {
     m_spInputBuffer.Release(); // release smart pointer
@@ -1076,11 +1079,11 @@ STDMETHODIMP C[!output Safe_root]::FreeStreamingResources( void )
 //
 // Implementation of IMediaObject::GetInputStatus
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::GetInputStatus( 
-           DWORD dwInputStreamIndex,
-           DWORD *pdwFlags)
-{ 
+
+STDMETHODIMP C[!output Safe_root]::GetInputStatus(
+    DWORD dwInputStreamIndex,
+    DWORD *pdwFlags)
+{
     if ( 0 != dwInputStreamIndex )
     {
         return DMO_E_INVALIDSTREAMINDEX;
@@ -1109,11 +1112,11 @@ STDMETHODIMP C[!output Safe_root]::GetInputStatus(
 //
 // Implementation of IMFTransform::GetInputStatus
 /////////////////////////////////////////////////////////////////////////////
-    
+
 STDMETHODIMP C[!output Safe_root]::MFTGetInputStatus(
-           DWORD dwInputStreamID,
-           DWORD* pdwFlags)
-{ 
+    DWORD dwInputStreamID,
+    DWORD* pdwFlags)
+{
     if ( 0 != dwInputStreamID )
     {
         return MF_E_INVALIDSTREAMNUMBER;
@@ -1143,14 +1146,14 @@ STDMETHODIMP C[!output Safe_root]::MFTGetInputStatus(
 //
 // Implementation of IMediaObject::ProcessInput
 /////////////////////////////////////////////////////////////////////////////
-    
-STDMETHODIMP C[!output Safe_root]::ProcessInput( 
-               DWORD dwInputStreamIndex,
-               IMediaBuffer *pBuffer,
-               DWORD dwFlags,
-               REFERENCE_TIME rtTimestamp,
-               REFERENCE_TIME rtTimelength)
-{ 
+
+STDMETHODIMP C[!output Safe_root]::ProcessInput(
+    DWORD dwInputStreamIndex,
+    IMediaBuffer *pBuffer,
+    DWORD dwFlags,
+    REFERENCE_TIME rtTimestamp,
+    REFERENCE_TIME rtTimelength)
+{
     HRESULT hr = S_OK;
 
     if ( 0 != dwInputStreamIndex )
@@ -1207,7 +1210,7 @@ STDMETHODIMP C[!output Safe_root]::ProcessInput(
             m_bValidLength = false;
         }
     }
- 
+
     return hr;
 }
 
@@ -1218,11 +1221,11 @@ STDMETHODIMP C[!output Safe_root]::ProcessInput(
 // Implementation of IMFTransform::ProcessInput
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::MFTProcessInput( 
-               DWORD dwInputStreamID,
-               IMFSample* pSample,
-               DWORD dwFlags)
-{ 
+STDMETHODIMP C[!output Safe_root]::MFTProcessInput(
+    DWORD dwInputStreamID,
+    IMFSample* pSample,
+    DWORD dwFlags)
+{
     HRESULT hr = S_OK;
 
     if ( 0 != dwInputStreamID )
@@ -1250,7 +1253,7 @@ STDMETHODIMP C[!output Safe_root]::MFTProcessInput(
 
     return hr;
 }
-[!endif]   
+[!endif]
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1259,11 +1262,11 @@ STDMETHODIMP C[!output Safe_root]::MFTProcessInput(
 // Implementation of IMediaObject::ProcessOutput
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::ProcessOutput( 
-               DWORD dwFlags,
-               DWORD cOutputBufferCount,
-               DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
-               DWORD *pdwStatus)
+STDMETHODIMP C[!output Safe_root]::ProcessOutput(
+    DWORD dwFlags,
+    DWORD cOutputBufferCount,
+    DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+    DWORD *pdwStatus)
 {
     HRESULT hr = S_OK;
 
@@ -1341,12 +1344,12 @@ STDMETHODIMP C[!output Safe_root]::ProcessOutput(
     // If they aren't the same size or don't match the
     // expected buffer size, return an error.
     if( ( cbOutputLength != cbInputLength ) ||
-        ( cbOutputLength != m_dwBufferSize ) ||
-        ( cbInputLength  != m_dwBufferSize ) )
+            ( cbOutputLength != m_dwBufferSize ) ||
+            ( cbInputLength  != m_dwBufferSize ) )
     {
         return E_INVALIDARG;
     }
- 
+
     // Call the internal processing method, which returns the no. bytes processed
     hr = DoProcessOutput(pbOutputData, pbInputData, &cbBytesProcessed);
     if (FAILED(hr))
@@ -1359,7 +1362,7 @@ STDMETHODIMP C[!output Safe_root]::ProcessOutput(
     m_bValidLength = false;
     m_rtTimestamp = 0;
     m_rtTimelength = 0;
- 
+
     return S_OK;
 }
 
@@ -1370,11 +1373,11 @@ STDMETHODIMP C[!output Safe_root]::ProcessOutput(
 // Implementation of IMFTransform::ProcessOutput
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::MFTProcessOutput( 
-               DWORD dwFlags,
-               DWORD cOutputBufferCount,
-               MFT_OUTPUT_DATA_BUFFER* pOutputSamples,
-               DWORD* pdwStatus)
+STDMETHODIMP C[!output Safe_root]::MFTProcessOutput(
+    DWORD dwFlags,
+    DWORD cOutputBufferCount,
+    MFT_OUTPUT_DATA_BUFFER* pOutputSamples,
+    DWORD* pdwStatus)
 {
     HRESULT hr = S_OK;
 
@@ -1418,7 +1421,8 @@ STDMETHODIMP C[!output Safe_root]::MFTProcessOutput(
     DWORD        cbInputSize = 0;
     DWORD        cbBytesProcessed = 0;
 
-    do {
+    do
+    {
         hr = m_spMFSample->ConvertToContiguousBuffer( &pInputBuffer );
         if( FAILED( hr ) )
         {
@@ -1469,7 +1473,8 @@ STDMETHODIMP C[!output Safe_root]::MFTProcessOutput(
         pOutputSample->SetSampleDuration(llDuration);
 
         m_spMFSample.Release();
-    } while (false);
+    }
+    while (false);
 
     if( pbInputData != NULL )
     {
@@ -1487,7 +1492,7 @@ STDMETHODIMP C[!output Safe_root]::MFTProcessOutput(
     {
         pOutputBuffer->Release();
     }
- 
+
     return hr;
 }
 [!endif]
@@ -1499,10 +1504,12 @@ STDMETHODIMP C[!output Safe_root]::MFTProcessOutput(
 // Implementation of IMFTransform::ProcessMessage
 /////////////////////////////////////////////////////////////////////////////
 
-STDMETHODIMP C[!output Safe_root]::MFTProcessMessage( MFT_MESSAGE_TYPE eMessage, ULONG_PTR ulParam ) {
-    switch (eMessage) {
-        case MFT_MESSAGE_COMMAND_FLUSH:
-            return Flush();
+STDMETHODIMP C[!output Safe_root]::MFTProcessMessage( MFT_MESSAGE_TYPE eMessage, ULONG_PTR ulParam )
+{
+    switch (eMessage)
+    {
+    case MFT_MESSAGE_COMMAND_FLUSH:
+        return Flush();
     }
 
     return S_OK;
@@ -1571,7 +1578,8 @@ STDMETHODIMP C[!output Safe_root]::GetEnable( BOOL *pfEnable )
 //
 // Implementation of IMFGetService::GetService
 /////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP C[!output Safe_root]::GetService( REFGUID guidService, REFIID riid, LPVOID* ppvObject ) {
+STDMETHODIMP C[!output Safe_root]::GetService( REFGUID guidService, REFIID riid, LPVOID* ppvObject )
+{
     // WMP uses the CLSID of the plugin as the service identifier.
     if( guidService == CLSID_[!output Safe_root] )
     {
@@ -1594,7 +1602,7 @@ STDMETHODIMP C[!output Safe_root]::GetService( REFGUID guidService, REFIID riid,
 STDMETHODIMP C[!output Safe_root]::GetPages(CAUUID *pPages)
 {
     if( NULL == pPages )
-    { 
+    {
         return E_POINTER;
     }
 
@@ -1622,9 +1630,9 @@ STDMETHODIMP C[!output Safe_root]::GetPages(CAUUID *pPages)
 /////////////////////////////////////////////////////////////////////////////
 
 HRESULT C[!output Safe_root]::DoProcessOutput(
-                            BYTE *pbOutputData,
-                            const BYTE *pbInputData,
-                            DWORD *cbBytesProcessed)
+    BYTE *pbOutputData,
+    const BYTE *pbInputData,
+    DWORD *cbBytesProcessed)
 {
     HRESULT hr = S_OK;
     // Test whether the plug-in has been disabled by the user.
@@ -1634,7 +1642,7 @@ HRESULT C[!output Safe_root]::DoProcessOutput(
         // also do any neccesary format conversion here.
         memcpy(pbOutputData, pbInputData, m_dwBufferSize);
         *cbBytesProcessed = m_dwBufferSize;
-    
+
         return S_OK;
     }
 
@@ -1692,15 +1700,15 @@ HRESULT C[!output Safe_root]::ValidateMediaType(const DMO_MEDIA_TYPE *pmtTarget,
     HRESULT hr = S_OK;
 
     if ( NULL == pmtTarget ||
-         NULL == pmtPartner )
+            NULL == pmtPartner )
     {
         hr = E_POINTER;
     }
 
     // Make sure the target media type has the fields we require
     if( MEDIATYPE_Video != pmtTarget->majortype ||
-        ( ( FORMAT_VideoInfo != pmtTarget->formattype ) &&
-          ( FORMAT_VideoInfo2 != pmtTarget->formattype ) ) )
+            ( ( FORMAT_VideoInfo != pmtTarget->formattype ) &&
+              ( FORMAT_VideoInfo2 != pmtTarget->formattype ) ) )
     {
         hr = DMO_E_TYPE_NOT_ACCEPTED;
     }
@@ -1725,12 +1733,12 @@ HRESULT C[!output Safe_root]::ValidateMediaType(const DMO_MEDIA_TYPE *pmtTarget,
             if( *k_guidValidSubtypes[cSubTypes] == pmtTarget->subtype  )
             {
                 if( MEDIASUBTYPE_YV12 == pmtTarget->subtype || MEDIASUBTYPE_NV12 == pmtTarget->subtype )
-                {                  
+                {
                     if( bmiHeaderTarget.biBitCount != 12 )
                     {
                         bValid = false;
                         break;
-                    }                    
+                    }
                 }
 
                 bValid = true;
@@ -1743,26 +1751,26 @@ HRESULT C[!output Safe_root]::ValidateMediaType(const DMO_MEDIA_TYPE *pmtTarget,
     {
         hr = DMO_E_TYPE_NOT_ACCEPTED;
     }
-    
+
     if( SUCCEEDED( hr ) )
     {
         if( 0 == bmiHeaderTarget.biHeight ||
-            0 == bmiHeaderTarget.biWidth ||
-            sizeof( BITMAPINFOHEADER ) != bmiHeaderTarget.biSize )
+                0 == bmiHeaderTarget.biWidth ||
+                sizeof( BITMAPINFOHEADER ) != bmiHeaderTarget.biSize )
         {
             hr = DMO_E_TYPE_NOT_ACCEPTED;
         }
     }
 
     if( SUCCEEDED( hr ) )
-    {   
+    {
         hr = GetTargetRECT( pmtTarget, &rcTarget );
     }
 
     if( SUCCEEDED( hr ) )
     {
         if( ( bmiHeaderTarget.biWidth < ( rcTarget.right - rcTarget.left ) ) ||
-            ( abs ( bmiHeaderTarget.biHeight ) < ( rcTarget.bottom - rcTarget.top ) ) )
+                ( abs ( bmiHeaderTarget.biHeight ) < ( rcTarget.bottom - rcTarget.top ) ) )
         {
             hr = DMO_E_TYPE_NOT_ACCEPTED;
         }
@@ -1775,9 +1783,9 @@ HRESULT C[!output Safe_root]::ValidateMediaType(const DMO_MEDIA_TYPE *pmtTarget,
         if ( GUID_NULL != pmtPartner->majortype )
         {
             if ( ( pmtTarget->majortype != pmtPartner->majortype ) ||
-                 ( pmtTarget->subtype   != pmtPartner->subtype ) ||
-                 ( pmtTarget->formattype != pmtPartner->formattype ) ||
-                 ( pmtTarget->lSampleSize != pmtPartner->lSampleSize ) )
+                    ( pmtTarget->subtype   != pmtPartner->subtype ) ||
+                    ( pmtTarget->formattype != pmtPartner->formattype ) ||
+                    ( pmtTarget->lSampleSize != pmtPartner->lSampleSize ) )
             {
                 hr = DMO_E_TYPE_NOT_ACCEPTED;
             }
@@ -1785,11 +1793,11 @@ HRESULT C[!output Safe_root]::ValidateMediaType(const DMO_MEDIA_TYPE *pmtTarget,
             BITMAPINFOHEADER bmiHeaderPartner;
 
             hr = GetBitmapInfoHeader( pmtPartner, &bmiHeaderPartner );
-            
+
             if( SUCCEEDED( hr ) )
             {
                 if( ( bmiHeaderTarget.biWidth != bmiHeaderPartner.biWidth ) ||
-                    ( abs( bmiHeaderTarget.biHeight ) != abs( bmiHeaderPartner.biHeight ) ) )
+                        ( abs( bmiHeaderTarget.biHeight ) != abs( bmiHeaderPartner.biHeight ) ) )
                 {
                     hr = DMO_E_TYPE_NOT_ACCEPTED;
                 }
@@ -1800,7 +1808,7 @@ HRESULT C[!output Safe_root]::ValidateMediaType(const DMO_MEDIA_TYPE *pmtTarget,
             }
         }
     }
-  
+
     return hr;
 }
 
@@ -1831,7 +1839,7 @@ STDMETHODIMP C[!output Safe_root]::get_scale(double *pVal)
 STDMETHODIMP C[!output Safe_root]::put_scale(double newVal)
 {
     m_fScaleFactor = newVal;
-    
+
     return S_OK;
 }
 
@@ -1860,7 +1868,7 @@ STDMETHODIMP C[!output Safe_root]::Read( LPCWSTR pwszPropName, VARIANT *pVar, IE
         {
             return hr;
         }
-        
+
         // There is only one image. Otherwise, set to VT_ARRAY.
         pVar->vt = VT_UNKNOWN;
         // Return the IStream pointer.
@@ -1986,7 +1994,7 @@ STDMETHODIMP C[!output Safe_root]::LoadResourceImage( IStream **ppStream )
     }
 
     if ( SUCCEEDED( hr ) &&
-         NULL != spStream.p )
+            NULL != spStream.p )
     {
         // Set the size for the stream.
         ULARGE_INTEGER ulSize;
@@ -2033,7 +2041,7 @@ DWORD C[!output Safe_root]::GetSampleSize( const DMO_MEDIA_TYPE *pmt )
     if( FORMAT_VideoInfo == pmt->formattype )
     {
         VIDEOINFOHEADER *pvih;
-        
+
         pvih = (VIDEOINFOHEADER *)pmt->pbFormat;
 
         dwSize = DIBSIZE( pvih->bmiHeader );
@@ -2075,10 +2083,10 @@ HRESULT C[!output Safe_root]::GetVideoInfoParameters(
     RECT    rcTarget = { 0 };
 
     if( NULL == pbData ||
-        NULL == pdwWidth ||
-        NULL == pdwHeight ||
-        NULL == plStrideInBytes ||
-        NULL == ppbTop )
+            NULL == pdwWidth ||
+            NULL == pdwHeight ||
+            NULL == plStrideInBytes ||
+            NULL == ppbTop )
     {
         hr = E_POINTER;
     }
@@ -2090,65 +2098,65 @@ HRESULT C[!output Safe_root]::GetVideoInfoParameters(
     }
 
     if( SUCCEEDED( hr ) )
-    {   
+    {
         hr = GetTargetRECT( &m_mtInput, &rcTarget );
     }
 
     if( SUCCEEDED( hr ))
     {
-        //  For 'normal' formats, biWidth is in pixels. 
+        //  For 'normal' formats, biWidth is in pixels.
         //  Expand to bytes and round up to a multiple of 4.
         if (bmiHeader.biBitCount != 0 &&
-            0 == (7 & bmiHeader.biBitCount)) 
+                0 == (7 & bmiHeader.biBitCount))
         {
             lStride = (bmiHeader.biWidth * (bmiHeader.biBitCount / 8) + 3) & ~3;
-        } 
+        }
         else   // Otherwise, biWidth is in bytes.
         {
             lStride = bmiHeader.biWidth;
         }
 
         //  If rcTarget is empty, use the whole image.
-        if (IsRectEmpty(&rcTarget)) 
+        if (IsRectEmpty(&rcTarget))
         {
             *pdwWidth = (DWORD)bmiHeader.biWidth * (bmiHeader.biBitCount) /8;
             *pdwHeight = (DWORD)(abs(bmiHeader.biHeight));
-    
-            if (bmiHeader.biHeight < 0 || bYuv)   // Top-down bitmap. 
+
+            if (bmiHeader.biHeight < 0 || bYuv)   // Top-down bitmap.
             {
                 *plStrideInBytes = lStride; // Stride goes "down"
                 *ppbTop           = pbData; // Top row is first.
-            } 
+            }
             else        // Bottom-up bitmap
             {
                 *plStrideInBytes = -lStride;    // Stride goes "up"
                 *ppbTop = pbData + lStride * (*pdwHeight - 1);  // Bottom row is first.
             }
-        } 
+        }
         else   // rcTarget is NOT empty. Use a sub-rectangle in the image.
         {
             *pdwWidth = (DWORD)((rcTarget.right - rcTarget.left) * (bmiHeader.biBitCount)) /8;
             *pdwHeight = (DWORD)(rcTarget.bottom - rcTarget.top);
-    
+
             if (bmiHeader.biHeight < 0 || bYuv)   // Top-down bitmap.
             {
                 // Same stride as above, but first pixel is modified down
                 // and and over by the target rectangle.
-                *plStrideInBytes = lStride;     
+                *plStrideInBytes = lStride;
                 *ppbTop = pbData +
-                         lStride * rcTarget.top +
-                         (bmiHeader.biBitCount * rcTarget.left) / 8;
-            } 
+                          lStride * rcTarget.top +
+                          (bmiHeader.biBitCount * rcTarget.left) / 8;
+            }
             else  // Bottom-up bitmap.
             {
                 *plStrideInBytes = -lStride;
                 *ppbTop = pbData +
-                         lStride * (bmiHeader.biHeight - rcTarget.top - 1) +
-                         (bmiHeader.biBitCount * rcTarget.left) / 8;
+                          lStride * (bmiHeader.biHeight - rcTarget.top - 1) +
+                          (bmiHeader.biBitCount * rcTarget.left) / 8;
             }
         }
     }
-    
+
     return hr;
 }
 
@@ -2159,12 +2167,12 @@ HRESULT C[!output Safe_root]::GetVideoInfoParameters(
 ////////////////////////////////////////////////////////////////////////////////
 
 HRESULT C[!output Safe_root]::GetBitmapInfoHeader( const DMO_MEDIA_TYPE *pmt,
-                                             BITMAPINFOHEADER *pbmih)
+        BITMAPINFOHEADER *pbmih)
 {
     HRESULT hr = S_OK;
 
     if( NULL == pmt ||
-        NULL == pbmih )
+            NULL == pbmih )
     {
         hr = E_POINTER;
     }
@@ -2201,12 +2209,12 @@ HRESULT C[!output Safe_root]::GetBitmapInfoHeader( const DMO_MEDIA_TYPE *pmt,
 ////////////////////////////////////////////////////////////////////////////////
 
 HRESULT C[!output Safe_root]::GetTargetRECT( const DMO_MEDIA_TYPE *pmt,
-                                             RECT *prcTarget)
+        RECT *prcTarget)
 {
     HRESULT hr = S_OK;
 
     if( NULL == pmt ||
-        NULL == prcTarget )
+            NULL == prcTarget )
     {
         hr = E_POINTER;
     }
@@ -2256,17 +2264,17 @@ HRESULT C[!output Safe_root]::ProcessYUY2( BYTE *pbInputData, BYTE *pbOutputData
 
     // Get output info.
     hr = GetVideoInfoParameters( pbOutputData, &dwWidth, &dwHeight,
-        &lStrideOut, &pbTarget, true);
+                                 &lStrideOut, &pbTarget, true);
 
     if( SUCCEEDED( hr ) )
     {
         // Get input info.
         hr = GetVideoInfoParameters( pbInputData, &dwWidth, &dwHeight,
-            &lStrideIn, &pbSource, true);
+                                     &lStrideIn, &pbSource, true);
     }
 
     // YUY2 memory layout
-    // 
+    //
     // Byte Ordering (lowest first)
     // Y0 V0 Y1 U0
     //
@@ -2277,7 +2285,7 @@ HRESULT C[!output Safe_root]::ProcessYUY2( BYTE *pbInputData, BYTE *pbOutputData
         // dwWidth and dwHeight came from the input buffer.
         while( dwHeight-- )
         {
-            DWORD x = dwWidth; 
+            DWORD x = dwWidth;
 
             while( x-- )
             {
@@ -2331,13 +2339,13 @@ HRESULT C[!output Safe_root]::ProcessYV12( BYTE *pbInputData, BYTE *pbOutputData
 
     // Get output info.
     hr = GetVideoInfoParameters( pbOutputData, &dwWidth, &dwHeight,
-        &lStrideOut, &pbTarget, true);
+                                 &lStrideOut, &pbTarget, true);
 
     if( SUCCEEDED( hr ) )
     {
         // Get input info.
         hr = GetVideoInfoParameters( pbInputData, &dwWidth, &dwHeight,
-            &lStrideIn, &pbSource, true);
+                                     &lStrideIn, &pbSource, true);
     }
 
     // YV12 memory layout is planar
@@ -2364,7 +2372,7 @@ HRESULT C[!output Safe_root]::ProcessYV12( BYTE *pbInputData, BYTE *pbOutputData
 
         while( y-- )
         {
-            DWORD x = dwWidth/2; 
+            DWORD x = dwWidth/2;
 
             while( x-- )
             {
@@ -2409,13 +2417,13 @@ HRESULT C[!output Safe_root]::ProcessNV12( BYTE *pbInputData, BYTE *pbOutputData
 
     // Get output info.
     hr = GetVideoInfoParameters( pbOutputData, &dwWidth, &dwHeight,
-        &lStrideOut, &pbTarget, true);
+                                 &lStrideOut, &pbTarget, true);
 
     if( SUCCEEDED( hr ) )
     {
         // Get input info.
         hr = GetVideoInfoParameters( pbInputData, &dwWidth, &dwHeight,
-            &lStrideIn, &pbSource, true);
+                                     &lStrideIn, &pbSource, true);
     }
 
     // NV12 memory layout is planar for Y, packed for U and V.
@@ -2439,7 +2447,7 @@ HRESULT C[!output Safe_root]::ProcessNV12( BYTE *pbInputData, BYTE *pbOutputData
 
         while( y-- )
         {
-            DWORD x = lStrideIn; 
+            DWORD x = lStrideIn;
 
             while( x-- )
             {
@@ -2484,17 +2492,17 @@ HRESULT C[!output Safe_root]::ProcessUYVY( BYTE *pbInputData, BYTE *pbOutputData
 
     // Get output info.
     hr = GetVideoInfoParameters( pbOutputData, &dwWidth, &dwHeight,
-        &lStrideOut, &pbTarget, true);
+                                 &lStrideOut, &pbTarget, true);
 
     if( SUCCEEDED( hr ) )
     {
         // Get input info.
         hr = GetVideoInfoParameters( pbInputData, &dwWidth, &dwHeight,
-            &lStrideIn, &pbSource, true);
+                                     &lStrideIn, &pbSource, true);
     }
 
     // UYVY memory layout
-    // 
+    //
     // Byte Ordering (lowest first)
     // U0 Y0 V0 Y1
     //
@@ -2505,7 +2513,7 @@ HRESULT C[!output Safe_root]::ProcessUYVY( BYTE *pbInputData, BYTE *pbOutputData
         // dwWidth and dwHeight came from the input buffer.
         while( dwHeight-- )
         {
-            DWORD x = dwWidth; 
+            DWORD x = dwWidth;
 
             while( x-- )
             {
@@ -2559,13 +2567,13 @@ HRESULT C[!output Safe_root]::Process24Bit( BYTE *pbInputData, BYTE *pbOutputDat
 
     // Get output info.
     hr = GetVideoInfoParameters( pbOutputData, &dwWidth, &dwHeight,
-        &lStrideOut, &pbTarget, true);
+                                 &lStrideOut, &pbTarget, true);
 
     if( SUCCEEDED( hr ) )
     {
         // Get input info.
         hr = GetVideoInfoParameters( pbInputData, &dwWidth, &dwHeight,
-            &lStrideIn, &pbSource, true);
+                                     &lStrideIn, &pbSource, true);
     }
 
     if( SUCCEEDED( hr ) )
@@ -2592,7 +2600,7 @@ HRESULT C[!output Safe_root]::Process24Bit( BYTE *pbInputData, BYTE *pbOutputDat
                 // Scale the colors to the average.
                 pPixelOut[x].rgbtBlue = (BYTE)( ( lBlue - lAverage ) * m_fScaleFactor  + lAverage );
                 pPixelOut[x].rgbtGreen = (BYTE)( ( lGreen - lAverage ) * m_fScaleFactor  + lAverage );
-                pPixelOut[x].rgbtRed = (BYTE)( ( lRed - lAverage ) * m_fScaleFactor  + lAverage );          
+                pPixelOut[x].rgbtRed = (BYTE)( ( lRed - lAverage ) * m_fScaleFactor  + lAverage );
             }
 
             // Move the pointers to the next row.
@@ -2625,13 +2633,13 @@ HRESULT C[!output Safe_root]::Process32Bit( BYTE *pbInputData, BYTE *pbOutputDat
 
     // Get output info.
     hr = GetVideoInfoParameters( pbOutputData, &dwWidth, &dwHeight,
-        &lStrideOut, &pbTarget, true);
+                                 &lStrideOut, &pbTarget, true);
 
     if( SUCCEEDED( hr ) )
     {
         // Get input info.
         hr = GetVideoInfoParameters( pbInputData, &dwWidth, &dwHeight,
-            &lStrideIn, &pbSource, true);
+                                     &lStrideIn, &pbSource, true);
     }
 
     if( SUCCEEDED( hr ) )
@@ -2692,13 +2700,13 @@ HRESULT C[!output Safe_root]::Process565( BYTE *pbInputData, BYTE *pbOutputData)
 
     // Get output info.
     hr = GetVideoInfoParameters( pbOutputData, &dwWidth, &dwHeight,
-        &lStrideOut, &pbTarget, true);
+                                 &lStrideOut, &pbTarget, true);
 
     if( SUCCEEDED( hr ) )
     {
         // Get input info.
         hr = GetVideoInfoParameters( pbInputData, &dwWidth, &dwHeight,
-            &lStrideIn, &pbSource, true);
+                                     &lStrideIn, &pbSource, true);
     }
 
     if( SUCCEEDED( hr ) )
@@ -2730,7 +2738,7 @@ HRESULT C[!output Safe_root]::Process565( BYTE *pbInputData, BYTE *pbOutputData)
                 dwRed = (DWORD)( ( dwRed - dwAverage ) * m_fScaleFactor  + dwAverage );
 
                 // Return blue and red to their original precision.
-                // This effectively drops the rightmost bit before 
+                // This effectively drops the rightmost bit before
                 // we repack the colors into a WORD.
                 dwBlue >>= 1;
                 dwRed >>= 1;
@@ -2770,13 +2778,13 @@ HRESULT C[!output Safe_root]::Process555( BYTE *pbInputData, BYTE *pbOutputData)
 
     // Get output info.
     hr = GetVideoInfoParameters( pbOutputData, &dwWidth, &dwHeight,
-        &lStrideOut, &pbTarget, true);
+                                 &lStrideOut, &pbTarget, true);
 
     if( SUCCEEDED( hr ) )
     {
         // Get input info.
         hr = GetVideoInfoParameters( pbInputData, &dwWidth, &dwHeight,
-            &lStrideIn, &pbSource, true);
+                                     &lStrideIn, &pbSource, true);
     }
 
     if( SUCCEEDED( hr ) )
@@ -2826,30 +2834,37 @@ HRESULT C[!output Safe_root]::Process555( BYTE *pbInputData, BYTE *pbOutputData)
 // Translates the given DMO_MEDIA_TYPE into a newly created IMFMediaType object.
 /////////////////////////////////////////////////////////////////////////////
 
-HRESULT C[!output Safe_root]::CreateMFMediaType( DMO_MEDIA_TYPE* pmtDMOType, IMFMediaType** ppMFType ) {
+HRESULT C[!output Safe_root]::CreateMFMediaType( DMO_MEDIA_TYPE* pmtDMOType, IMFMediaType** ppMFType )
+{
     HRESULT hr = S_OK;
     IMFMediaType* pMFType = NULL;
 
-    do {
-        if( ppMFType == NULL) {
+    do
+    {
+        if( ppMFType == NULL)
+        {
             hr = E_POINTER;
             break;
         }
 
         hr = MFCreateMediaType( &pMFType );
-        if( FAILED( hr ) ) {
+        if( FAILED( hr ) )
+        {
             break;
         }
 
         hr = MFInitMediaTypeFromAMMediaType( pMFType, (AM_MEDIA_TYPE*)pmtDMOType );
-        if( FAILED( hr ) ) {
+        if( FAILED( hr ) )
+        {
             break;
         }
 
         *ppMFType = pMFType;
-    } while( false );
+    }
+    while( false );
 
-    if (FAILED(hr) && pMFType) {
+    if (FAILED(hr) && pMFType)
+    {
         pMFType->Release();
     }
 

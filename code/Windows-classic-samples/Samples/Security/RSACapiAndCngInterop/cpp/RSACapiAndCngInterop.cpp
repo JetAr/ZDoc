@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,10 +44,10 @@ BYTE Data[] =
 //  Prints error information to the console
 //
 //----------------------------------------------------------------------------
-void 
-ReportError( 
-    _In_    DWORD       dwErrCode 
-    )
+void
+ReportError(
+    _In_    DWORD       dwErrCode
+)
 {
     wprintf( L"Error: 0x%08x (%u)\n", dwErrCode, dwErrCode );
 }
@@ -58,10 +58,10 @@ ReportError(
 //  Reverses bytes for big-little endian conversion
 //
 //----------------------------------------------------------------------------
-BOOL 
+BOOL
 ReverseBytes (
     _Inout_updates_bytes_(ByteBufferLength)
-                PBYTE   ByteBuffer,
+    PBYTE   ByteBuffer,
     _In_        DWORD   ByteBufferLength)
 {
     DWORD count = 0;
@@ -71,9 +71,9 @@ ReverseBytes (
 
     for( count=0; count < ByteBufferLength/2; count++)
     {
-      TmpByteBuffer = *(ByteBuffer + count);
-      *(ByteBuffer + count) = *(ByteBuffer + ByteBufferLength - count -1);
-      *(ByteBuffer + ByteBufferLength - count -1) = TmpByteBuffer;
+        TmpByteBuffer = *(ByteBuffer + count);
+        *(ByteBuffer + count) = *(ByteBuffer + ByteBufferLength - count -1);
+        *(ByteBuffer + ByteBufferLength - count -1) = TmpByteBuffer;
     }
 
     return TRUE;
@@ -108,22 +108,22 @@ SignWithCapiVerifyWithCng(void)
     PBYTE                       Hash = NULL;
     BCRYPT_PKCS1_PADDING_INFO   PKCS1PaddingInfo = {0};
     NCRYPT_PROV_HANDLE          CngProviderHandle = 0;
-    
+
     //delete, ignore errors
     CryptAcquireContext(
-                    &CapiProviderHandle,
-                    TEXT("test"),
-                    MS_STRONG_PROV,
-                    PROV_RSA_FULL,
-                    CRYPT_DELETEKEYSET);
+        &CapiProviderHandle,
+        TEXT("test"),
+        MS_STRONG_PROV,
+        PROV_RSA_FULL,
+        CRYPT_DELETEKEYSET);
 
     //acquire handle to a csp container
     if(!CryptAcquireContext(
-                    &CapiProviderHandle,
-                    TEXT("test"),
-                    MS_STRONG_PROV,
-                    PROV_RSA_FULL,
-                    CRYPT_NEWKEYSET))
+                &CapiProviderHandle,
+                TEXT("test"),
+                MS_STRONG_PROV,
+                PROV_RSA_FULL,
+                CRYPT_NEWKEYSET))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -144,22 +144,22 @@ SignWithCapiVerifyWithCng(void)
 
     //create and sign hash with CAPI API
     if(!CryptCreateHash(
-                    CapiProviderHandle,
-                    CALG_SHA1,
-                    0,
-                    0,
-                    &CapiHashHandle))
+                CapiProviderHandle,
+                CALG_SHA1,
+                0,
+                0,
+                &CapiHashHandle))
     {
-       secStatus = HRESULT_FROM_WIN32(GetLastError());
-       ReportError(secStatus);
-       goto cleanup;
+        secStatus = HRESULT_FROM_WIN32(GetLastError());
+        ReportError(secStatus);
+        goto cleanup;
     }
 
     if(!CryptHashData(
-                    CapiHashHandle,
-                    (PBYTE)Data,
-                    sizeof(Data),
-                    0))
+                CapiHashHandle,
+                (PBYTE)Data,
+                sizeof(Data),
+                0))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -167,18 +167,18 @@ SignWithCapiVerifyWithCng(void)
     }
 
     if(!CryptSignHash(
-                    CapiHashHandle,
-                    AT_SIGNATURE, 
-                    NULL,
-                    0,
-                    NULL,
-                    &SignatureLength))
+                CapiHashHandle,
+                AT_SIGNATURE,
+                NULL,
+                0,
+                NULL,
+                &SignatureLength))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
         goto cleanup;
     }
-    
+
     Signature = (PBYTE)HeapAlloc (GetProcessHeap (), 0, SignatureLength);
     if( NULL == Signature )
     {
@@ -189,12 +189,12 @@ SignWithCapiVerifyWithCng(void)
     }
 
     if(!CryptSignHash(
-                    CapiHashHandle,
-                    AT_SIGNATURE,
-                    NULL,
-                    0,
-                    Signature,
-                    &SignatureLength))
+                CapiHashHandle,
+                AT_SIGNATURE,
+                NULL,
+                0,
+                Signature,
+                &SignatureLength))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -202,18 +202,18 @@ SignWithCapiVerifyWithCng(void)
     }
 
     if(!CryptExportKey(
-                    CapiKeyHandle,
-                    0,
-                    PUBLICKEYBLOB,
-                    0,
-                    NULL,
-                    &BlobLength))
+                CapiKeyHandle,
+                0,
+                PUBLICKEYBLOB,
+                0,
+                NULL,
+                &BlobLength))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
         goto cleanup;
     }
-     
+
     Blob = (PBYTE)HeapAlloc (GetProcessHeap (), 0, BlobLength);
     if( NULL == Blob )
     {
@@ -224,12 +224,12 @@ SignWithCapiVerifyWithCng(void)
     }
 
     if(!CryptExportKey(
-                    CapiKeyHandle,
-                    0,
-                    PUBLICKEYBLOB,
-                    0,
-                    Blob,
-                    &BlobLength))
+                CapiKeyHandle,
+                0,
+                PUBLICKEYBLOB,
+                0,
+                Blob,
+                &BlobLength))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -238,30 +238,30 @@ SignWithCapiVerifyWithCng(void)
 
     //verify with cng
     Status = BCryptOpenAlgorithmProvider(
-                                        &CngAlgHandle, 
-                                        BCRYPT_SHA1_ALGORITHM, 
-                                        NULL, 
-                                        0);
+                 &CngAlgHandle,
+                 BCRYPT_SHA1_ALGORITHM,
+                 NULL,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
 
-    Status = BCryptGetProperty( 
-                                        CngAlgHandle, 
-                                        BCRYPT_OBJECT_LENGTH,
-                                        (PBYTE)&HashObjectLength,
-                                        sizeof(DWORD),
-                                        &ResultLength, 
-                                        0);
+    Status = BCryptGetProperty(
+                 CngAlgHandle,
+                 BCRYPT_OBJECT_LENGTH,
+                 (PBYTE)&HashObjectLength,
+                 sizeof(DWORD),
+                 &ResultLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
 
-    HashObject = (PBYTE)HeapAlloc (GetProcessHeap (), 0, HashObjectLength); 
+    HashObject = (PBYTE)HeapAlloc (GetProcessHeap (), 0, HashObjectLength);
     if( NULL == HashObject )
     {
         secStatus = NTE_NO_MEMORY;
@@ -270,13 +270,13 @@ SignWithCapiVerifyWithCng(void)
 
     }
 
-    Status = BCryptGetProperty( 
-                                        CngAlgHandle, 
-                                        BCRYPT_HASH_LENGTH,
-                                        (PBYTE)&HashLength,
-                                        sizeof(DWORD),
-                                        &ResultLength, 
-                                        0);
+    Status = BCryptGetProperty(
+                 CngAlgHandle,
+                 BCRYPT_HASH_LENGTH,
+                 (PBYTE)&HashLength,
+                 sizeof(DWORD),
+                 &ResultLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -293,38 +293,38 @@ SignWithCapiVerifyWithCng(void)
 
     }
 
-   
+
     Status = BCryptCreateHash(
-                                        CngAlgHandle, 
-                                        &CngHashHandle, 
-                                        HashObject, 
-                                        HashObjectLength, 
-                                        NULL, 
-                                        0, 
-                                        0);
+                 CngAlgHandle,
+                 &CngHashHandle,
+                 HashObject,
+                 HashObjectLength,
+                 NULL,
+                 0,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
-    
+
     Status = BCryptHashData(
-                                        CngHashHandle,
-                                        (PBYTE)Data,
-                                        sizeof(Data),
-                                        0);
+                 CngHashHandle,
+                 (PBYTE)Data,
+                 sizeof(Data),
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
-       
+
     //close the hash
     Status = BCryptFinishHash(
-                                        CngHashHandle, 
-                                        Hash, 
-                                        HashLength, 
-                                        0);
+                 CngHashHandle,
+                 Hash,
+                 HashLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -335,9 +335,9 @@ SignWithCapiVerifyWithCng(void)
     ReverseBytes(Signature, SignatureLength);
 
     secStatus = NCryptOpenStorageProvider(
-                                        &CngProviderHandle, 
-                                        MS_KEY_STORAGE_PROVIDER, 
-                                        0);
+                    &CngProviderHandle,
+                    MS_KEY_STORAGE_PROVIDER,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -345,14 +345,14 @@ SignWithCapiVerifyWithCng(void)
     }
 
     secStatus = NCryptImportKey(
-                                        CngProviderHandle,
-                                        NULL,
-                                        LEGACY_RSAPUBLIC_BLOB,
-                                        NULL,
-                                        &CngTmpKeyHandle,
-                                        Blob,
-                                        BlobLength,
-                                        0);
+                    CngProviderHandle,
+                    NULL,
+                    LEGACY_RSAPUBLIC_BLOB,
+                    NULL,
+                    &CngTmpKeyHandle,
+                    Blob,
+                    BlobLength,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -363,13 +363,13 @@ SignWithCapiVerifyWithCng(void)
     PKCS1PaddingInfo.pszAlgId = NCRYPT_SHA1_ALGORITHM;
 
     secStatus = NCryptVerifySignature(
-                                        CngTmpKeyHandle,
-                                        &PKCS1PaddingInfo,
-                                        Hash,
-                                        HashLength,
-                                        Signature,
-                                        SignatureLength,
-                                        NCRYPT_PAD_PKCS1_FLAG);
+                    CngTmpKeyHandle,
+                    &PKCS1PaddingInfo,
+                    Hash,
+                    HashLength,
+                    Signature,
+                    SignatureLength,
+                    NCRYPT_PAD_PKCS1_FLAG);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -385,43 +385,43 @@ cleanup:
         CryptDestroyKey(CapiKeyHandle);
     }
 
-    if(CapiHashHandle)   
+    if(CapiHashHandle)
     {
         CryptDestroyHash(CapiHashHandle);
     }
 
-    if(CapiProviderHandle)   
+    if(CapiProviderHandle)
     {
         CryptReleaseContext(CapiProviderHandle, 0);
     }
 
-    if (CngHashHandle)   
+    if (CngHashHandle)
     {
-        BCryptDestroyHash(CngHashHandle);   
+        BCryptDestroyHash(CngHashHandle);
     }
 
-    if(CngAlgHandle)  
+    if(CngAlgHandle)
     {
         BCryptCloseAlgorithmProvider(CngAlgHandle,0);
     }
 
-    if(CngTmpKeyHandle)     
+    if(CngTmpKeyHandle)
     {
         NCryptFreeObject(CngTmpKeyHandle);
     }
 
-    if(CngProviderHandle)   
+    if(CngProviderHandle)
     {
         NCryptFreeObject(CngProviderHandle);
     }
 
     //attempt to delete container
     CryptAcquireContext(
-                    &CapiProviderHandle,
-                    TEXT("test"),
-                    MS_STRONG_PROV,
-                    PROV_RSA_FULL,
-                    CRYPT_DELETEKEYSET);
+        &CapiProviderHandle,
+        TEXT("test"),
+        MS_STRONG_PROV,
+        PROV_RSA_FULL,
+        CRYPT_DELETEKEYSET);
 
     if(HashObject)
     {
@@ -477,9 +477,9 @@ SignWithCngVerifyWithCapi(void)
 
 
     secStatus = NCryptOpenStorageProvider(
-                                        &CngProviderHandle,
-                                        MS_KEY_STORAGE_PROVIDER,
-                                        0);
+                    &CngProviderHandle,
+                    MS_KEY_STORAGE_PROVIDER,
+                    0);
 
     if( FAILED(secStatus) )
     {
@@ -488,12 +488,12 @@ SignWithCngVerifyWithCapi(void)
     }
 
     secStatus = NCryptCreatePersistedKey(
-                                        CngProviderHandle,
-                                        &CapiKeyHandle,
-                                        NCRYPT_RSA_ALGORITHM,
-                                        L"test",
-                                        0,
-                                        0);
+                    CngProviderHandle,
+                    &CapiKeyHandle,
+                    NCRYPT_RSA_ALGORITHM,
+                    L"test",
+                    0,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -510,30 +510,30 @@ SignWithCngVerifyWithCapi(void)
 
     //open alg provider handle
     Status = BCryptOpenAlgorithmProvider(
-                                        &CngAlgHandle, 
-                                        NCRYPT_SHA1_ALGORITHM, 
-                                        NULL, 
-                                        0);
-    if( !NT_SUCCESS(Status) )
-    {
-        ReportError(Status);
-        goto cleanup;
-    }
-    
-    Status = BCryptGetProperty( 
-                                        CngAlgHandle, 
-                                        BCRYPT_OBJECT_LENGTH,
-                                        (PBYTE)&HashObjectLength,
-                                        sizeof(DWORD),
-                                        &ResultLength, 
-                                        0);
+                 &CngAlgHandle,
+                 NCRYPT_SHA1_ALGORITHM,
+                 NULL,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
 
-    HashObject = (PBYTE)HeapAlloc (GetProcessHeap (), 0,HashObjectLength); 
+    Status = BCryptGetProperty(
+                 CngAlgHandle,
+                 BCRYPT_OBJECT_LENGTH,
+                 (PBYTE)&HashObjectLength,
+                 sizeof(DWORD),
+                 &ResultLength,
+                 0);
+    if( !NT_SUCCESS(Status) )
+    {
+        ReportError(Status);
+        goto cleanup;
+    }
+
+    HashObject = (PBYTE)HeapAlloc (GetProcessHeap (), 0,HashObjectLength);
     if( NULL == HashObject )
     {
         secStatus = NTE_NO_MEMORY;
@@ -543,20 +543,20 @@ SignWithCngVerifyWithCapi(void)
     }
 
     //required size of hash?
-    Status = BCryptGetProperty( 
-                                        CngAlgHandle, 
-                                        BCRYPT_HASH_LENGTH,
-                                        (PBYTE)&HashLength,
-                                        sizeof(DWORD),
-                                        &ResultLength, 
-                                        0);
+    Status = BCryptGetProperty(
+                 CngAlgHandle,
+                 BCRYPT_HASH_LENGTH,
+                 (PBYTE)&HashLength,
+                 sizeof(DWORD),
+                 &ResultLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
 
-    Hash = (PBYTE)HeapAlloc (GetProcessHeap (), 0, HashLength); 
+    Hash = (PBYTE)HeapAlloc (GetProcessHeap (), 0, HashLength);
     if( NULL == Hash )
     {
         secStatus = NTE_NO_MEMORY;
@@ -566,13 +566,13 @@ SignWithCngVerifyWithCapi(void)
     }
 
     Status = BCryptCreateHash(
-                                        CngAlgHandle, 
-                                        &CapiHashHandle, 
-                                        HashObject, 
-                                        HashObjectLength, 
-                                        NULL, 
-                                        0, 
-                                        0);
+                 CngAlgHandle,
+                 &CapiHashHandle,
+                 HashObject,
+                 HashObjectLength,
+                 NULL,
+                 0,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -580,21 +580,21 @@ SignWithCngVerifyWithCapi(void)
     }
 
     Status = BCryptHashData(
-                                        CapiHashHandle,
-                                        (PBYTE)Data,
-                                        sizeof(Data),
-                                        0);
+                 CapiHashHandle,
+                 (PBYTE)Data,
+                 sizeof(Data),
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
         goto cleanup;
     }
-  
+
     Status = BCryptFinishHash(
-                                        CapiHashHandle, 
-                                        Hash, 
-                                        HashLength, 
-                                        0);
+                 CapiHashHandle,
+                 Hash,
+                 HashLength,
+                 0);
     if( !NT_SUCCESS(Status) )
     {
         ReportError(Status);
@@ -604,21 +604,21 @@ SignWithCngVerifyWithCapi(void)
     PKCS1PaddingInfo.pszAlgId = NCRYPT_SHA1_ALGORITHM;
 
     secStatus = NCryptSignHash(
-                                        CapiKeyHandle,
-                                        &PKCS1PaddingInfo,
-                                        Hash,
-                                        HashLength,
-                                        NULL,
-                                        0,
-                                        &SignatureLength,
-                                        NCRYPT_PAD_PKCS1_FLAG);
+                    CapiKeyHandle,
+                    &PKCS1PaddingInfo,
+                    Hash,
+                    HashLength,
+                    NULL,
+                    0,
+                    &SignatureLength,
+                    NCRYPT_PAD_PKCS1_FLAG);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
     }
 
-    Signature = (PBYTE)HeapAlloc (GetProcessHeap (), 0, SignatureLength); 
+    Signature = (PBYTE)HeapAlloc (GetProcessHeap (), 0, SignatureLength);
     if( NULL == Signature )
     {
         secStatus = NTE_NO_MEMORY;
@@ -628,53 +628,53 @@ SignWithCngVerifyWithCapi(void)
     }
 
     secStatus = NCryptSignHash(
-                                        CapiKeyHandle,
-                                        &PKCS1PaddingInfo,
-                                        Hash,
-                                        HashLength,
-                                        Signature,
-                                        SignatureLength,
-                                        &SignatureLength,
-                                        NCRYPT_PAD_PKCS1_FLAG);
+                    CapiKeyHandle,
+                    &PKCS1PaddingInfo,
+                    Hash,
+                    HashLength,
+                    Signature,
+                    SignatureLength,
+                    &SignatureLength,
+                    NCRYPT_PAD_PKCS1_FLAG);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
     }
- 
+
     secStatus = NCryptExportKey(
-                                        CapiKeyHandle,
-                                        NULL,
-                                        LEGACY_RSAPUBLIC_BLOB,
-                                        NULL,
-                                        NULL,
-                                        0,
-                                        &BlobLength,
-                                        0);
+                    CapiKeyHandle,
+                    NULL,
+                    LEGACY_RSAPUBLIC_BLOB,
+                    NULL,
+                    NULL,
+                    0,
+                    &BlobLength,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
     }
- 
-    Blob = (PBYTE)HeapAlloc (GetProcessHeap (), 0, BlobLength); 
+
+    Blob = (PBYTE)HeapAlloc (GetProcessHeap (), 0, BlobLength);
     if( NULL == Blob )
     {
-       secStatus = NTE_NO_MEMORY;
-       ReportError(secStatus);
-       goto cleanup;
+        secStatus = NTE_NO_MEMORY;
+        ReportError(secStatus);
+        goto cleanup;
 
     }
-  
+
     secStatus = NCryptExportKey(
-                                        CapiKeyHandle,
-                                        NULL,
-                                        LEGACY_RSAPUBLIC_BLOB,
-                                        NULL,
-                                        Blob,
-                                        BlobLength,
-                                        &BlobLength,
-                                        0);
+                    CapiKeyHandle,
+                    NULL,
+                    LEGACY_RSAPUBLIC_BLOB,
+                    NULL,
+                    Blob,
+                    BlobLength,
+                    &BlobLength,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -685,11 +685,11 @@ SignWithCngVerifyWithCapi(void)
 
     //temporarily import the key into a verify context container and decrypt
     if(!CryptAcquireContext(
-                            &CapiLocProvHandle,
-                            NULL,
-                            MS_ENH_RSA_AES_PROV,
-                            PROV_RSA_AES,
-                            CRYPT_VERIFYCONTEXT))
+                &CapiLocProvHandle,
+                NULL,
+                MS_ENH_RSA_AES_PROV,
+                PROV_RSA_AES,
+                CRYPT_VERIFYCONTEXT))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -697,12 +697,12 @@ SignWithCngVerifyWithCapi(void)
     }
 
     if(!CryptImportKey(
-                    CapiLocProvHandle,
-                    Blob,
-                    BlobLength,
-                    0,
-                    0,
-                    &CngTmpKeyHandle))
+                CapiLocProvHandle,
+                Blob,
+                BlobLength,
+                0,
+                0,
+                &CngTmpKeyHandle))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -710,23 +710,23 @@ SignWithCngVerifyWithCapi(void)
     }
 
     if(!CryptCreateHash(
-                    CapiLocProvHandle,
-                    CALG_SHA1,
-                    0,
-                    0,
-                    &HashHandle))
+                CapiLocProvHandle,
+                CALG_SHA1,
+                0,
+                0,
+                &HashHandle))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
         goto cleanup;
     }
 
-   
+
     if(!CryptHashData(
-                    HashHandle,
-                    (PBYTE)Data,
-                    sizeof(Data),
-                    0))
+                HashHandle,
+                (PBYTE)Data,
+                sizeof(Data),
+                0))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -734,12 +734,12 @@ SignWithCngVerifyWithCapi(void)
     }
 
     if(!CryptVerifySignature(
-                    HashHandle, 
-                    Signature, 
-                    SignatureLength, 
-                    CngTmpKeyHandle,
-                    NULL, 
-                    0))
+                HashHandle,
+                Signature,
+                SignatureLength,
+                CngTmpKeyHandle,
+                NULL,
+                0))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -750,57 +750,57 @@ SignWithCngVerifyWithCapi(void)
 
 cleanup:
 
-    if(CapiHashHandle)       
+    if(CapiHashHandle)
     {
         BCryptDestroyHash(CapiHashHandle);
     }
 
-    if(CngAlgHandle)  
+    if(CngAlgHandle)
     {
         BCryptCloseAlgorithmProvider(CngAlgHandle,0);
     }
 
-    if(HashHandle)   
+    if(HashHandle)
     {
         CryptDestroyHash(HashHandle);
     }
 
-    if(CngTmpKeyHandle)     
+    if(CngTmpKeyHandle)
     {
         CryptDestroyKey(CngTmpKeyHandle);
     }
 
-    if(CapiLocProvHandle)    
+    if(CapiLocProvHandle)
     {
         CryptReleaseContext(CapiLocProvHandle, 0);
     }
 
-    if(CapiKeyHandle)        
+    if(CapiKeyHandle)
     {
         NCryptDeleteKey(CapiKeyHandle, 0);
     }
 
-    if(CngProviderHandle)   
+    if(CngProviderHandle)
     {
         NCryptFreeObject(CngProviderHandle);
     }
 
-    if(HashObject)    
+    if(HashObject)
     {
         HeapFree(GetProcessHeap(), 0, HashObject);
     }
 
-    if(Hash)          
+    if(Hash)
     {
         HeapFree(GetProcessHeap(), 0, Hash);
     }
 
-    if(Signature)     
+    if(Signature)
     {
         HeapFree(GetProcessHeap(), 0, Signature);
     }
 
-    if(Blob)          
+    if(Blob)
     {
         HeapFree(GetProcessHeap(), 0, Blob);
     }
@@ -812,7 +812,7 @@ cleanup:
 //  EncryptWithCapiDecryptWithCng
 //  Verifies the signature given the signature Blob, key Blob, and hash of the message
 //  using BCryptVerifySignature(..) , DSA-1024
-//      
+//
 //----------------------------------------------------------------------------------------
 void
 EncryptWithCapiDecryptWithCng(void)
@@ -831,11 +831,11 @@ EncryptWithCapiDecryptWithCng(void)
     NTSTATUS                    Status;
 
     if(!CryptAcquireContext(
-                    &CapiProviderHandle,
-                    TEXT("test"),
-                    MS_STRONG_PROV,
-                    PROV_RSA_FULL,
-                    CRYPT_NEWKEYSET))
+                &CapiProviderHandle,
+                TEXT("test"),
+                MS_STRONG_PROV,
+                PROV_RSA_FULL,
+                CRYPT_NEWKEYSET))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -843,10 +843,10 @@ EncryptWithCapiDecryptWithCng(void)
     }
 
     if(!CryptGenKey(
-                    CapiProviderHandle,
-                    AT_KEYEXCHANGE,
-                    CRYPT_EXPORTABLE,
-                    &CapiKeyHandle))
+                CapiProviderHandle,
+                AT_KEYEXCHANGE,
+                CRYPT_EXPORTABLE,
+                &CapiKeyHandle))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -856,13 +856,13 @@ EncryptWithCapiDecryptWithCng(void)
     MsgLength = sizeof(Data);
 
     if(!CryptEncrypt(
-                        CapiKeyHandle, 
-                        0, 
-                        TRUE, 
-                        0, 
-                        NULL, 
-                        &MsgLength,
-                        sizeof(Data)))
+                CapiKeyHandle,
+                0,
+                TRUE,
+                0,
+                NULL,
+                &MsgLength,
+                sizeof(Data)))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -885,7 +885,7 @@ EncryptWithCapiDecryptWithCng(void)
         secStatus = NTE_FAIL;
         ReportError(secStatus);
         goto cleanup;
-    } 
+    }
 
     //copy input data to buffer
     memcpy(EncryptDecryptData, (PBYTE) Data, sizeof(Data));
@@ -901,23 +901,23 @@ EncryptWithCapiDecryptWithCng(void)
                 &MsgLength,//size of data to be encrypted
                 EncryptDecryptDataLength))
     {
-       secStatus = HRESULT_FROM_WIN32(GetLastError());
-       ReportError(secStatus);
-       goto cleanup;
+        secStatus = HRESULT_FROM_WIN32(GetLastError());
+        ReportError(secStatus);
+        goto cleanup;
     }
 
     // Export the key from CAPI1: buffer length probe
     if(!CryptExportKey(
-                    CapiKeyHandle,
-                    0,
-                    PRIVATEKEYBLOB,
-                    0,
-                    NULL,
-                    &BlobLength))
+                CapiKeyHandle,
+                0,
+                PRIVATEKEYBLOB,
+                0,
+                NULL,
+                &BlobLength))
     {
-       secStatus = HRESULT_FROM_WIN32(GetLastError());
-       ReportError(secStatus);
-       goto cleanup;
+        secStatus = HRESULT_FROM_WIN32(GetLastError());
+        ReportError(secStatus);
+        goto cleanup;
     }
 
     // Allocate memory to export the key to
@@ -932,12 +932,12 @@ EncryptWithCapiDecryptWithCng(void)
 
     // Export the key value to the allocated memory buffer
     if(!CryptExportKey(
-                    CapiKeyHandle,
-                    0,
-                    PRIVATEKEYBLOB,
-                    0,
-                    Blob,
-                    &BlobLength))
+                CapiKeyHandle,
+                0,
+                PRIVATEKEYBLOB,
+                0,
+                Blob,
+                &BlobLength))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -951,9 +951,9 @@ EncryptWithCapiDecryptWithCng(void)
     // Now it is time to import the exported CAPI1 key into CNG KSP ...
     // Open Microsoft KSP
     secStatus = NCryptOpenStorageProvider(
-                                            &CngProviderHandle, 
-                                            MS_KEY_STORAGE_PROVIDER, 
-                                            0);
+                    &CngProviderHandle,
+                    MS_KEY_STORAGE_PROVIDER,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -962,12 +962,12 @@ EncryptWithCapiDecryptWithCng(void)
 
     // ... and create a persistent key in the MS KSP
     secStatus = NCryptCreatePersistedKey(
-                                        CngProviderHandle,
-                                        &CngTmpKeyHandle,
-                                        NCRYPT_RSA_ALGORITHM,
-                                        L"cngtmpkey",
-                                        0,
-                                        0);
+                    CngProviderHandle,
+                    &CngTmpKeyHandle,
+                    NCRYPT_RSA_ALGORITHM,
+                    L"cngtmpkey",
+                    0,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -976,11 +976,11 @@ EncryptWithCapiDecryptWithCng(void)
 
     // Set the property of this key: Legacy RSA private key Blob
     secStatus = NCryptSetProperty(
-                                        CngTmpKeyHandle,
-                                        LEGACY_RSAPRIVATE_BLOB,
-                                        Blob,
-                                        BlobLength,
-                                        0);
+                    CngTmpKeyHandle,
+                    LEGACY_RSAPRIVATE_BLOB,
+                    Blob,
+                    BlobLength,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -990,8 +990,8 @@ EncryptWithCapiDecryptWithCng(void)
 
     // And see that the key object is created.
     secStatus = NCryptFinalizeKey(
-                                        CngTmpKeyHandle,
-                                        0);
+                    CngTmpKeyHandle,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -1001,14 +1001,14 @@ EncryptWithCapiDecryptWithCng(void)
     // Do in place decryption by providing the same pointers
     // to the input and output buffers (Data, ResultLength) couple.
     secStatus = NCryptDecrypt(
-                                    CngTmpKeyHandle,
-                                    EncryptDecryptData,
-                                    EncryptDecryptDataLength,
-                                    NULL,
-                                    EncryptDecryptData,
-                                    EncryptDecryptDataLength,
-                                    &ResultLength,
-                                    NCRYPT_PAD_PKCS1_FLAG);
+                    CngTmpKeyHandle,
+                    EncryptDecryptData,
+                    EncryptDecryptDataLength,
+                    NULL,
+                    EncryptDecryptData,
+                    EncryptDecryptDataLength,
+                    &ResultLength,
+                    NCRYPT_PAD_PKCS1_FLAG);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -1019,55 +1019,55 @@ EncryptWithCapiDecryptWithCng(void)
     // Optional
     //
 
-    if (0 != memcmp(EncryptDecryptData, (PBYTE)Data, sizeof(Data))) 
+    if (0 != memcmp(EncryptDecryptData, (PBYTE)Data, sizeof(Data)))
     {
         secStatus = NTE_FAIL;
         ReportError(secStatus);
         goto cleanup;
-    }  
+    }
 
     Status = STATUS_SUCCESS;
     wprintf(L"Success!\n");
 
 cleanup:
 
-    if(CapiKeyHandle)    
+    if(CapiKeyHandle)
     {
         CryptDestroyKey(CapiKeyHandle);
     }
 
-    if(CapiProviderHandle)   
+    if(CapiProviderHandle)
     {
         CryptReleaseContext(CapiProviderHandle, 0);
     }
 
-    if(Blob)   
+    if(Blob)
     {
         HeapFree(GetProcessHeap(), 0, Blob);
     }
 
-    if(EncryptDecryptData)   
+    if(EncryptDecryptData)
     {
         HeapFree(GetProcessHeap(), 0, EncryptDecryptData);
     }
 
-    if(CngTmpKeyHandle)     
+    if(CngTmpKeyHandle)
     {
         NCryptDeleteKey(CngTmpKeyHandle, 0);
     }
 
-    if(CngProviderHandle)  
+    if(CngProviderHandle)
     {
         NCryptFreeObject(CngProviderHandle);
     }
 
     //attempt to delete container
     CryptAcquireContext(
-                    &CapiProviderHandle,
-                    TEXT("test"),
-                    MS_STRONG_PROV,
-                    PROV_RSA_FULL,
-                    CRYPT_DELETEKEYSET);
+        &CapiProviderHandle,
+        TEXT("test"),
+        MS_STRONG_PROV,
+        PROV_RSA_FULL,
+        CRYPT_DELETEKEYSET);
 
 }
 
@@ -1076,7 +1076,7 @@ cleanup:
 //  EncryptWithCngDecryptWithCapi
 //  Verifies the signature given the signature Blob, key Blob, and hash of the message
 //  using BCryptVerifySignature(..) , DSA-1024
-//      
+//
 //----------------------------------------------------------------------------------------
 void
 EncryptWithCngDecryptWithCapi(void)
@@ -1094,9 +1094,9 @@ EncryptWithCngDecryptWithCapi(void)
     HCRYPTPROV                  CapiLocProvHandle = 0;
 
     secStatus = NCryptOpenStorageProvider(
-                                        &CngProviderHandle,
-                                        MS_KEY_STORAGE_PROVIDER,
-                                        0);
+                    &CngProviderHandle,
+                    MS_KEY_STORAGE_PROVIDER,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -1104,12 +1104,12 @@ EncryptWithCngDecryptWithCapi(void)
     }
 
     secStatus = NCryptCreatePersistedKey(
-                                        CngProviderHandle,
-                                        &CapiKeyHandle,
-                                        NCRYPT_RSA_ALGORITHM,
-                                        L"test",
-                                        0,
-                                        0);
+                    CngProviderHandle,
+                    &CapiKeyHandle,
+                    NCRYPT_RSA_ALGORITHM,
+                    L"test",
+                    0,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -1119,16 +1119,16 @@ EncryptWithCngDecryptWithCapi(void)
     Policy = NCRYPT_ALLOW_PLAINTEXT_EXPORT_FLAG;
 
     secStatus = NCryptSetProperty(
-                                        CapiKeyHandle, 
-                                        NCRYPT_EXPORT_POLICY_PROPERTY,
-                                        (PBYTE)&Policy,
-                                        sizeof(DWORD),
-                                        NCRYPT_PERSIST_FLAG);
+                    CapiKeyHandle,
+                    NCRYPT_EXPORT_POLICY_PROPERTY,
+                    (PBYTE)&Policy,
+                    sizeof(DWORD),
+                    NCRYPT_PERSIST_FLAG);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
-    }      
+    }
 
     secStatus = NCryptFinalizeKey(CapiKeyHandle, 0);
     if( FAILED(secStatus) )
@@ -1139,23 +1139,23 @@ EncryptWithCngDecryptWithCapi(void)
 
 
     secStatus = NCryptEncrypt(
-                                        CapiKeyHandle,
-                                        (PBYTE)Data,
-                                        sizeof(Data),
-                                        NULL,
-                                        NULL,
-                                        0,
-                                        &OutputLength,
-                                        NCRYPT_PAD_PKCS1_FLAG);
+                    CapiKeyHandle,
+                    (PBYTE)Data,
+                    sizeof(Data),
+                    NULL,
+                    NULL,
+                    0,
+                    &OutputLength,
+                    NCRYPT_PAD_PKCS1_FLAG);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
     }
 
-    Output = (PBYTE)HeapAlloc (GetProcessHeap (), 0, OutputLength); 
+    Output = (PBYTE)HeapAlloc (GetProcessHeap (), 0, OutputLength);
     if( NULL == Output )
-   {
+    {
         secStatus = NTE_NO_MEMORY;
         ReportError(secStatus);
         goto cleanup;
@@ -1163,38 +1163,38 @@ EncryptWithCngDecryptWithCapi(void)
     }
 
     secStatus = NCryptEncrypt(
-                                        CapiKeyHandle,
-                                        (PBYTE)Data,
-                                        sizeof(Data),
-                                        NULL,
-                                        Output,
-                                        OutputLength,
-                                        &ResultLength,
-                                        NCRYPT_PAD_PKCS1_FLAG);
+                    CapiKeyHandle,
+                    (PBYTE)Data,
+                    sizeof(Data),
+                    NULL,
+                    Output,
+                    OutputLength,
+                    &ResultLength,
+                    NCRYPT_PAD_PKCS1_FLAG);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
     }
- 
+
 
     secStatus = NCryptExportKey(
-                                        CapiKeyHandle,
-                                        NULL,
-                                        LEGACY_RSAPRIVATE_BLOB,
-                                        NULL,
-                                        NULL,
-                                        0,
-                                        &BlobLength,
-                                        0);
+                    CapiKeyHandle,
+                    NULL,
+                    LEGACY_RSAPRIVATE_BLOB,
+                    NULL,
+                    NULL,
+                    0,
+                    &BlobLength,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
     }
- 
 
-    Blob = (PBYTE)HeapAlloc (GetProcessHeap (), 0, BlobLength); 
+
+    Blob = (PBYTE)HeapAlloc (GetProcessHeap (), 0, BlobLength);
     if( NULL == Blob )
     {
         secStatus = NTE_NO_MEMORY;
@@ -1202,16 +1202,16 @@ EncryptWithCngDecryptWithCapi(void)
         goto cleanup;
 
     }
-  
+
     secStatus = NCryptExportKey(
-                                        CapiKeyHandle,
-                                        NULL,
-                                        LEGACY_RSAPRIVATE_BLOB,
-                                        NULL,
-                                        Blob,
-                                        BlobLength,
-                                        &BlobLength,
-                                        0);
+                    CapiKeyHandle,
+                    NULL,
+                    LEGACY_RSAPRIVATE_BLOB,
+                    NULL,
+                    Blob,
+                    BlobLength,
+                    &BlobLength,
+                    0);
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -1222,11 +1222,11 @@ EncryptWithCngDecryptWithCapi(void)
 
     //temporarily import the key into a verify context container and decrypt
     if(!CryptAcquireContext(
-                        &CapiLocProvHandle,
-                        NULL,
-                        MS_STRONG_PROV,
-                        PROV_RSA_FULL,
-                        CRYPT_VERIFYCONTEXT))
+                &CapiLocProvHandle,
+                NULL,
+                MS_STRONG_PROV,
+                PROV_RSA_FULL,
+                CRYPT_VERIFYCONTEXT))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
@@ -1234,24 +1234,24 @@ EncryptWithCngDecryptWithCapi(void)
     }
 
     if(!CryptImportKey(
-                    CapiLocProvHandle,
-                    Blob,
-                    BlobLength,
-                    0,
-                    0,
-                    &CngTmpKeyHandle))
+                CapiLocProvHandle,
+                Blob,
+                BlobLength,
+                0,
+                0,
+                &CngTmpKeyHandle))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
         ReportError(secStatus);
         goto cleanup;
-    }   
+    }
 
     if(!CryptDecrypt(
-                CngTmpKeyHandle, 
-                0, 
-                TRUE, 
-                0, 
-                Output, 
+                CngTmpKeyHandle,
+                0,
+                TRUE,
+                0,
+                Output,
                 &OutputLength))
     {
         secStatus = HRESULT_FROM_WIN32(GetLastError());
@@ -1259,43 +1259,43 @@ EncryptWithCngDecryptWithCapi(void)
         goto cleanup;
     }
 
-    if (0 != memcmp(Output, (PBYTE)Data, sizeof(Data))) 
+    if (0 != memcmp(Output, (PBYTE)Data, sizeof(Data)))
     {
         secStatus = NTE_FAIL;
         ReportError(secStatus);
         goto cleanup;
-    } 
+    }
 
     wprintf(L"Success!\n");
 
 cleanup:
 
-    if(CngTmpKeyHandle)     
+    if(CngTmpKeyHandle)
     {
         CryptDestroyKey(CngTmpKeyHandle);
     }
 
-    if(CapiLocProvHandle)    
+    if(CapiLocProvHandle)
     {
         CryptReleaseContext(CapiLocProvHandle, 0);
     }
 
-    if(CapiKeyHandle)        
+    if(CapiKeyHandle)
     {
         NCryptDeleteKey(CapiKeyHandle, 0);
     }
 
-    if(CngProviderHandle)   
+    if(CngProviderHandle)
     {
         NCryptFreeObject(CngProviderHandle);
     }
 
-    if(Output)    
+    if(Output)
     {
         HeapFree(GetProcessHeap(), 0, Output);
     }
 
-    if(Blob)      
+    if(Blob)
     {
         HeapFree(GetProcessHeap(), 0, Blob);
     }
@@ -1311,12 +1311,12 @@ __cdecl
 wmain(
     _In_               int     argc,
     _In_reads_(argc)   LPWSTR  argv[]
-    )
+)
 {
     UNREFERENCED_PARAMETER(argc);
     UNREFERENCED_PARAMETER(argv);
 
-     
+
     //
     // EncryptWithCngDecryptWithCapi
     //

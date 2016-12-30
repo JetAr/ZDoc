@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,25 +21,25 @@ static const WORD LANG_ID = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
 
 // CComponentInfo
 
-class  __declspec(uuid("E19DDEC2-3FBE-4C3B-9317-679760C13AAE")) 
-CComponentInfo :
-	public INapComponentInfo
+class  __declspec(uuid("E19DDEC2-3FBE-4C3B-9317-679760C13AAE"))
+    CComponentInfo :
+    public INapComponentInfo
 {
 public:
-	CComponentInfo();
+    CComponentInfo();
 
-	~CComponentInfo();
+    ~CComponentInfo();
 
 public:
 
     // IUnknown
 
     STDMETHODIMP QueryInterface(
-        /* [in] */ __RPC__in const IID& iid, 
+        /* [in] */ __RPC__in const IID& iid,
         /* [out] */ __RPC__out void** ppv);
 
     STDMETHODIMP_(ULONG) AddRef();
-    
+
     STDMETHODIMP_(ULONG) Release();
 
     // INapComponentInfo
@@ -57,15 +57,15 @@ public:
         /* [out] */ __RPC__out MessageId * version);
 
     STDMETHODIMP GetIcon(
-        /* [out] */ __RPC__deref_out CountedString ** dllFilePath, 
+        /* [out] */ __RPC__deref_out CountedString ** dllFilePath,
         /* [out] */ __RPC__out UINT32 * iconResourceId);
 
     STDMETHODIMP ConvertErrorCodeToMessageId(
-        /* [in] */  __RPC__in HRESULT errorCode, 
+        /* [in] */  __RPC__in HRESULT errorCode,
         /* [out] */ __RPC__out MessageId * msgId);
 
     STDMETHODIMP GetLocalizedString(
-        /* [in] */  MessageId msgId, 
+        /* [in] */  MessageId msgId,
         /* [out] */ __RPC__deref_out CountedString ** string);
 
 private:

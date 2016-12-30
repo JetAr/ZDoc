@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -89,7 +89,8 @@ CComModule _Module;
 // The names of the supported Input Scopes.
 // All these names are used both to create a menu item and
 // as the parameter in IInkRecoContext::put_Factoid(name).
-const LPOLESTR gc_pwsInputScopes[] = {
+const LPOLESTR gc_pwsInputScopes[] =
+{
     L"(!IS_DEFAULT)",
     L"(!IS_URL)",
     L"(!IS_FILE_FULLFILEPATH)",
@@ -139,7 +140,8 @@ const LPOLESTR gc_pwsInputScopes[] = {
 const LONG gc_lMaxInputScopeMenuItemLength = 40;
 
 // The set of the single stroke gestures known to this application
-const InkApplicationGesture gc_igtSingleStrokeGestures[] = {
+const InkApplicationGesture gc_igtSingleStrokeGestures[] =
+{
     IAG_Scratchout, IAG_Triangle, IAG_Square, IAG_Star, IAG_Check,
     IAG_Circle, IAG_DoubleCircle, IAG_Curlicue, IAG_DoubleCurlicue,
     IAG_SemiCircleLeft, IAG_SemiCircleRight,
@@ -154,12 +156,15 @@ const InkApplicationGesture gc_igtSingleStrokeGestures[] = {
 // of gestures recommended for use in the mixed collection mode (ICM_InkAndGesture)
 // (the others still can be used in the mixed mode but it's not recommended because
 // of their similarity with some characters).
-const UINT gc_nRecommendedForMixedMode[] = {
-        0 /*Scratchout*/, 3/*Star*/, 6/*Double Circle*/,
-        7 /*Curlicue*/, 8 /*Double Curlicue*/, 25 /*Down-Left Long*/ };
+const UINT gc_nRecommendedForMixedMode[] =
+{
+    0 /*Scratchout*/, 3/*Star*/, 6/*Double Circle*/,
+    7 /*Curlicue*/, 8 /*Double Curlicue*/, 25 /*Down-Left Long*/
+};
 
 // The set of the multiple stroke gestures known to this application
-const InkApplicationGesture gc_igtMultiStrokeGestures[] = {
+const InkApplicationGesture gc_igtMultiStrokeGestures[] =
+{
     IAG_ArrowUp, IAG_ArrowDown, IAG_ArrowLeft,
     IAG_ArrowRight, IAG_Exclamation, IAG_DoubleTap
 };
@@ -168,11 +173,12 @@ const InkApplicationGesture gc_igtMultiStrokeGestures[] = {
 // (defined in EventSinks.h)
 
 const _ATL_FUNC_INFO IInkRecognitionEventsImpl<CAdvRecoApp>::mc_AtlFuncInfo =
-        {CC_STDCALL, VT_EMPTY, 3, {VT_UNKNOWN, VT_VARIANT, VT_I4}};
+{CC_STDCALL, VT_EMPTY, 3, {VT_UNKNOWN, VT_VARIANT, VT_I4}};
 
-const _ATL_FUNC_INFO IInkCollectorEventsImpl<CAdvRecoApp>::mc_AtlFuncInfo[2] = {
-        {CC_STDCALL, VT_EMPTY, 3, {VT_UNKNOWN, VT_UNKNOWN, VT_BOOL|VT_BYREF}},
-        {CC_STDCALL, VT_EMPTY, 4, {VT_UNKNOWN, VT_UNKNOWN, VT_VARIANT, VT_BOOL|VT_BYREF}}
+const _ATL_FUNC_INFO IInkCollectorEventsImpl<CAdvRecoApp>::mc_AtlFuncInfo[2] =
+{
+    {CC_STDCALL, VT_EMPTY, 3, {VT_UNKNOWN, VT_UNKNOWN, VT_BOOL|VT_BYREF}},
+    {CC_STDCALL, VT_EMPTY, 4, {VT_UNKNOWN, VT_UNKNOWN, VT_VARIANT, VT_BOOL|VT_BYREF}}
 };
 
 const TCHAR gc_szAppName[] = TEXT("Advanced Recognition");
@@ -196,11 +202,11 @@ const TCHAR gc_szAppName[] = TEXT("Advanced Recognition");
 //
 /////////////////////////////////////////////////////////
 int APIENTRY WinMain(
-        HINSTANCE hInstance,
-        HINSTANCE /*hPrevInstance*/,   // not used here
-        LPSTR     /*lpCmdLine*/,       // not used here
-        int       nCmdShow
-        )
+    HINSTANCE hInstance,
+    HINSTANCE /*hPrevInstance*/,   // not used here
+    LPSTR     /*lpCmdLine*/,       // not used here
+    int       nCmdShow
+)
 {
     int iRet = 0;
 
@@ -249,8 +255,8 @@ int APIENTRY WinMain(
 //
 /////////////////////////////////////////////////////////
 int CAdvRecoApp::Run(
-        int nCmdShow
-        )
+    int nCmdShow
+)
 {
 
     CAdvRecoApp theApp;
@@ -326,11 +332,11 @@ int CAdvRecoApp::Run(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnCreate(
-        UINT /*uMsg*/,
-        WPARAM /*wParam*/,
-        LPARAM /*lParam*/,
-        BOOL& /*bHandled*/
-        )
+    UINT /*uMsg*/,
+    WPARAM /*wParam*/,
+    LPARAM /*lParam*/,
+    BOOL& /*bHandled*/
+)
 {
     // Create child windows for ink input and recognition output,
     // listview controls for the lists of gestures, and a status bar
@@ -449,11 +455,11 @@ LRESULT CAdvRecoApp::OnCreate(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnDestroy(
-        UINT /*uMsg*/,
-        WPARAM /*wParam*/,
-        LPARAM /*lParam*/,
-        BOOL& /*bHandled*/
-        )
+    UINT /*uMsg*/,
+    WPARAM /*wParam*/,
+    LPARAM /*lParam*/,
+    BOOL& /*bHandled*/
+)
 {
     // Disable ink input and release the InkCollector object
     if (m_spIInkCollector != NULL)
@@ -499,11 +505,11 @@ LRESULT CAdvRecoApp::OnDestroy(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnSize(
-        UINT /*uMsg*/,
-        WPARAM wParam,
-        LPARAM /*lParam*/,
-        BOOL& /*bHandled*/
-        )
+    UINT /*uMsg*/,
+    WPARAM wParam,
+    LPARAM /*lParam*/,
+    BOOL& /*bHandled*/
+)
 {
     if (wParam != SIZE_MINIMIZED)
     {
@@ -534,10 +540,10 @@ LRESULT CAdvRecoApp::OnSize(
 //
 /////////////////////////////////////////////////////////
 HRESULT CAdvRecoApp::OnStroke(
-        IInkCursor* /*pIInkCursor*/,
-        IInkStrokeDisp* pIInkStroke,
-        VARIANT_BOOL* /* pbCancel */
-        )
+    IInkCursor* /*pIInkCursor*/,
+    IInkStrokeDisp* pIInkStroke,
+    VARIANT_BOOL* /* pbCancel */
+)
 {
     if (NULL == pIInkStroke)
         return E_INVALIDARG;
@@ -581,11 +587,11 @@ HRESULT CAdvRecoApp::OnStroke(
 //
 /////////////////////////////////////////////////////////
 HRESULT CAdvRecoApp::OnGesture(
-        IInkCursor* /*pIInkCursor*/,
-        IInkStrokes* pInkStrokes,
-        VARIANT vGestures,
-        VARIANT_BOOL* pbCancel
-        )
+    IInkCursor* /*pIInkCursor*/,
+    IInkStrokes* pInkStrokes,
+    VARIANT vGestures,
+    VARIANT_BOOL* pbCancel
+)
 {
     if (((VT_ARRAY | VT_DISPATCH) != vGestures.vt) || (NULL == vGestures.parray))
         return E_INVALIDARG;
@@ -619,7 +625,7 @@ HRESULT CAdvRecoApp::OnGesture(
         bAccepted = GetGestureName(idGesture, idGestureName);
     }
     else    // ignore the event (IAG_NoGesture had the highest confidence level,
-            // or something has failed
+        // or something has failed
     {
         bAccepted = false;
         idGestureName = 0;
@@ -634,18 +640,18 @@ HRESULT CAdvRecoApp::OnGesture(
         RECT rc;
         CComPtr<IInkRectangle> spIInkRect;
         if (m_spIInkRenderer != NULL
-            && pInkStrokes != NULL
-            && SUCCEEDED(pInkStrokes->GetBoundingBox(IBBM_Default, &spIInkRect))
-            && SUCCEEDED(spIInkRect->GetRectangle(&rc.top, &rc.left,
-                                                  &rc.bottom, &rc.right)))
+                && pInkStrokes != NULL
+                && SUCCEEDED(pInkStrokes->GetBoundingBox(IBBM_Default, &spIInkRect))
+                && SUCCEEDED(spIInkRect->GetRectangle(&rc.top, &rc.left,
+                             &rc.bottom, &rc.right)))
         {
             // Transform the bounding box coordinates from ink space to screen
             HDC hdc = m_wndInput.GetDC();
             if (NULL != hdc)
             {
                 if (FAILED(m_spIInkRenderer->InkSpaceToPixel((long)hdc, &rc.left, &rc.top))
-                    || FAILED(m_spIInkRenderer->InkSpaceToPixel((long)hdc, &rc.right,
-                                                                &rc.bottom)))
+                        || FAILED(m_spIInkRenderer->InkSpaceToPixel((long)hdc, &rc.right,
+                                  &rc.bottom)))
                 {
                     // Failed mapping from ink space to screen,
                     // update entire client area of the input window
@@ -668,7 +674,7 @@ HRESULT CAdvRecoApp::OnGesture(
         m_wndInput.InvalidateRect(&rc);
     }
     else // if something's failed,
-         // or the gesture is either unknown or unchecked in the list
+        // or the gesture is either unknown or unchecked in the list
     {
         // Reject the gesture. The InkCollector will fire Stroke event(s)
         // for the strokes, so they'll be handled in the OnStroke method.
@@ -701,10 +707,10 @@ HRESULT CAdvRecoApp::OnGesture(
 //
 /////////////////////////////////////////////////////////
 HRESULT CAdvRecoApp::OnRecognitionWithAlternates(
-        IInkRecognitionResult* pIInkRecoResult,
-        VARIANT /*vCustomParam*/,
-        InkRecognitionStatus /*RecognitionStatus*/
-        )
+    IInkRecognitionResult* pIInkRecoResult,
+    VARIANT /*vCustomParam*/,
+    InkRecognitionStatus /*RecognitionStatus*/
+)
 {
     if (NULL == pIInkRecoResult)
         return E_INVALIDARG;
@@ -716,11 +722,11 @@ HRESULT CAdvRecoApp::OnRecognitionWithAlternates(
     HRESULT hr;
     CComPtr<IInkRecognitionAlternates> spIInkRecoAlternates;
     hr = pIInkRecoResult->AlternatesFromSelection(
-        0,                              // in: selection start
-        -1,                             // in: selection length; -1 means "up to the last one"
-        CRecoOutputWnd::mc_iNumResults, // in: the number of alternates we're interested in
-        &spIInkRecoAlternates           // out: the receiving pointer
-        );
+             0,                              // in: selection start
+             -1,                             // in: selection length; -1 means "up to the last one"
+             CRecoOutputWnd::mc_iNumResults, // in: the number of alternates we're interested in
+             &spIInkRecoAlternates           // out: the receiving pointer
+         );
 
     // Count the returned alternates, it may be less then we asked for
     LONG lCount = 0;
@@ -768,11 +774,11 @@ HRESULT CAdvRecoApp::OnRecognitionWithAlternates(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnRecognizer(
-        WORD /*wNotifyCode*/,
-        WORD wID,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD wID,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     if (m_spIInkRecognizers == NULL || wID == m_nCmdRecognizer)
         return 0;
@@ -824,11 +830,11 @@ LRESULT CAdvRecoApp::OnRecognizer(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnInputScopeCoerce(
-        WORD /*wNotifyCode*/,
-        WORD wID,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD wID,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     // Ignore the command if the recognition context
     // has not been created
@@ -845,14 +851,14 @@ LRESULT CAdvRecoApp::OnInputScopeCoerce(
     if (FAILED(m_spIInkRecoContext->put_RecognitionFlags (m_bCoerceInputScope?IRM_None:IRM_Coerce)))
     {
         MessageBox(TEXT("Failed to reset the RecognitionFlags property!"),
-                       gc_szAppName, MB_ICONERROR | MB_OK);
+                   gc_szAppName, MB_ICONERROR | MB_OK);
         // Re-attach the stroke collection to the context
         if (m_spIInkStrokes != NULL)
         {
             m_spIInkRecoContext->putref_Strokes(m_spIInkStrokes);
         }
-            return 0;
-        }
+        return 0;
+    }
     m_bCoerceInputScope = !m_bCoerceInputScope;
 
     // Re-attach the stroke collection to the context
@@ -897,11 +903,11 @@ LRESULT CAdvRecoApp::OnInputScopeCoerce(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnInputScope(
-        WORD /*wNotifyCode*/,
-        WORD wID,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD wID,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     UINT iInputScope = wID - ID_INPUTSCOPE_FIRST;     // get the index to gc_pwsInputScopes
     // Return if user clicks on the currently selected Input Scope menu item or if
@@ -974,11 +980,11 @@ LRESULT CAdvRecoApp::OnInputScope(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnGuide(
-        WORD /*wNotifyCode*/,
-        WORD wID,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD wID,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     // Do nothing, if the InkRecoGuide object was not created,
     // or user selected the currently used type of guide.
@@ -1002,7 +1008,7 @@ LRESULT CAdvRecoApp::OnGuide(
 
     // Put the new values
     if (SUCCEEDED(m_spIInkRecoGuide->put_Rows(cRows))
-        && SUCCEEDED(m_spIInkRecoGuide->put_Columns(cColumns)))
+            && SUCCEEDED(m_spIInkRecoGuide->put_Columns(cColumns)))
     {
         HRESULT hr = S_OK;
         if (m_spIInkRecoContext != NULL)
@@ -1072,11 +1078,11 @@ LRESULT CAdvRecoApp::OnGuide(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnMode(
-        WORD /*wNotifyCode*/,
-        WORD wID,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD wID,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     // Do nothing, id user selected the same mode.
     if (wID == m_nCmdMode)
@@ -1085,22 +1091,22 @@ LRESULT CAdvRecoApp::OnMode(
     InkCollectionMode icm;
     switch (wID)
     {
-        default:
-            return 0;
-        case ID_MODE_INK:
-            icm = ICM_InkOnly;
-            break;
-        case ID_MODE_INK_AND_GESTURES:
-            icm = ICM_InkAndGesture;
-            break;
-        case ID_MODE_GESTURES:
-            icm = ICM_GestureOnly;
-            break;
+    default:
+        return 0;
+    case ID_MODE_INK:
+        icm = ICM_InkOnly;
+        break;
+    case ID_MODE_INK_AND_GESTURES:
+        icm = ICM_InkAndGesture;
+        break;
+    case ID_MODE_GESTURES:
+        icm = ICM_GestureOnly;
+        break;
     }
 
     // Disable input to switch the collection mode
     if (m_spIInkCollector != NULL
-        && SUCCEEDED(m_spIInkCollector->put_Enabled(VARIANT_FALSE)))
+            && SUCCEEDED(m_spIInkCollector->put_Enabled(VARIANT_FALSE)))
     {
         // Set the new mode
         if (SUCCEEDED(m_spIInkCollector->put_CollectionMode(icm)))
@@ -1157,11 +1163,11 @@ LRESULT CAdvRecoApp::OnMode(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnRecognize(
-        WORD /*wNotifyCode*/,
-        WORD /*wID*/,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD /*wID*/,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     if (m_spIInkRecoContext != NULL)
     {
@@ -1212,11 +1218,11 @@ LRESULT CAdvRecoApp::OnRecognize(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnClear(
-        WORD /*wNotifyCode*/,
-        WORD /*wID*/,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD /*wID*/,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     if (m_spIInkDisp != NULL)
     {
@@ -1270,11 +1276,11 @@ LRESULT CAdvRecoApp::OnClear(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnExit(
-        WORD /*wNotifyCode*/,
-        WORD /*wID*/,
-        HWND /*hWndCtl*/,
-        BOOL& /*bHandled*/
-        )
+    WORD /*wNotifyCode*/,
+    WORD /*wID*/,
+    HWND /*hWndCtl*/,
+    BOOL& /*bHandled*/
+)
 {
     // Close the application window
     SendMessage(WM_CLOSE);
@@ -1355,8 +1361,8 @@ HMENU CAdvRecoApp::LoadMenu()
             if (SUCCEEDED(spIInkRecognizer->get_Languages(&vLanguages)))
             {
                 if ((VT_ARRAY == (VT_ARRAY & vLanguages.vt))            // it should be an array
-                    && (NULL != vLanguages.parray)
-                    && (0 < vLanguages.parray->rgsabound[0].cElements)) // with at least one element
+                        && (NULL != vLanguages.parray)
+                        && (0 < vLanguages.parray->rgsabound[0].cElements)) // with at least one element
                 {
                     CComBSTR bstrName;
                     if (SUCCEEDED(spIInkRecognizer->get_Name(&bstrName)))
@@ -1436,7 +1442,7 @@ void CAdvRecoApp::UpdateInputScopeMenu()
                 if (FAILED(m_spIInkRecoContext->get_Factoid(&bstrInputScope)))
                 {
                     MessageBox(TEXT("Failed to get the context's Factoid property."),
-                                gc_szAppName, MB_ICONERROR | MB_OK);
+                               gc_szAppName, MB_ICONERROR | MB_OK);
                     return;
                 }
 
@@ -1472,7 +1478,7 @@ void CAdvRecoApp::UpdateInputScopeMenu()
                 if (FAILED(m_spIInkRecoContext->put_Factoid(bstrInputScope)))
                 {
                     MessageBox(TEXT("Failed to set the context's Factoid property."),
-                                gc_szAppName, MB_ICONERROR | MB_OK);
+                               gc_szAppName, MB_ICONERROR | MB_OK);
                 }
 
                 // Re-attach the stroke collection to the context
@@ -1504,10 +1510,10 @@ void CAdvRecoApp::UpdateInputScopeMenu()
 //
 /////////////////////////////////////////////////////////
 void CAdvRecoApp::UpdateMenuRadioItems(
-        UINT iSubMenu,
-        UINT idCheck,
-        UINT idUncheck
-        )
+    UINT iSubMenu,
+    UINT idCheck,
+    UINT idUncheck
+)
 {
     // Update the menu
     HMENU hMenu = GetMenu();
@@ -1551,8 +1557,8 @@ void CAdvRecoApp::UpdateMenuRadioItems(
 //
 /////////////////////////////////////////////////////////
 bool CAdvRecoApp::UseRecognizer(
-        IInkRecognizer* pIInkRecognizer
-        )
+    IInkRecognizer* pIInkRecognizer
+)
 {
     if (NULL == pIInkRecognizer)
         return false;
@@ -1607,8 +1613,8 @@ bool CAdvRecoApp::UseRecognizer(
     {
         UINT nFlags;
         if (m_spIInkRecoGuide != NULL &&
-            (((nGuideFlags[i] & dwCapabilities) == nGuideFlags[i])
-            || ((IRC_DontCare & dwCapabilities) == IRC_DontCare)))
+                (((nGuideFlags[i] & dwCapabilities) == nGuideFlags[i])
+                 || ((IRC_DontCare & dwCapabilities) == IRC_DontCare)))
         {
             nFlags = MF_BYCOMMAND | MF_ENABLED;
             if ((0 == nCmdGuid) || (nGuideCmds[i] == m_nCmdGuide))
@@ -1654,7 +1660,7 @@ bool CAdvRecoApp::UseRecognizer(
     if (FAILED(spNewContext->put_Factoid(bstrFactoid)))
     {
         MessageBox(TEXT("Failed to set factoid to the new recognition context!"),
-                         gc_szAppName, MB_ICONERROR | MB_OK);
+                   gc_szAppName, MB_ICONERROR | MB_OK);
     }
 
     // Attach the stroke collection to the context
@@ -1731,10 +1737,10 @@ bool CAdvRecoApp::UseRecognizer(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnLVColumnClick(
-        int idCtrl,
-        LPNMHDR /*pnmh*/,
-        BOOL& bHandled
-        )
+    int idCtrl,
+    LPNMHDR /*pnmh*/,
+    BOOL& bHandled
+)
 {
     if (mc_iSSGestLVId == idCtrl)
     {
@@ -1772,10 +1778,10 @@ LRESULT CAdvRecoApp::OnLVColumnClick(
 //
 /////////////////////////////////////////////////////////
 LRESULT CAdvRecoApp::OnLVItemChanging(
-        int idCtrl,
-        LPNMHDR pnmh,
-        BOOL& /*bHandled*/
-        )
+    int idCtrl,
+    LPNMHDR pnmh,
+    BOOL& /*bHandled*/
+)
 {
     if (m_spIInkCollector == NULL)
         return FALSE;
@@ -1803,7 +1809,7 @@ LRESULT CAdvRecoApp::OnLVItemChanging(
         }
 
         if (IAG_NoGesture != igtGesture && SUCCEEDED(
-            m_spIInkCollector->SetGestureStatus(igtGesture, bChecked ? VARIANT_TRUE : VARIANT_FALSE)))
+                    m_spIInkCollector->SetGestureStatus(igtGesture, bChecked ? VARIANT_TRUE : VARIANT_FALSE)))
         {
             // Allow the change in the control's item state
             lRet = FALSE;
@@ -1837,8 +1843,8 @@ bool CAdvRecoApp::CreateChildWindows()
 {
     if ((m_wndInput.Create(m_hWnd, CWindow::rcDefault, NULL,
                            WS_CHILD, WS_EX_CLIENTEDGE, (UINT)mc_iInputWndId) == NULL)
-        || (m_wndResults.Create(m_hWnd, CWindow::rcDefault, NULL,
-                                WS_CHILD, WS_EX_CLIENTEDGE, (UINT)mc_iOutputWndId) == NULL))
+            || (m_wndResults.Create(m_hWnd, CWindow::rcDefault, NULL,
+                                    WS_CHILD, WS_EX_CLIENTEDGE, (UINT)mc_iOutputWndId) == NULL))
     {
         return false;
     }
@@ -1917,8 +1923,8 @@ bool CAdvRecoApp::CreateChildWindows()
 
     // Create a status bar (Ignore if it fails, the application can live without it).
     m_hwndStatusBar = ::CreateStatusWindow(
-                        WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|SBARS_SIZEGRIP,
-                        NULL, m_hWnd, (UINT)mc_iStatusWndId);
+                          WS_CHILD|WS_VISIBLE|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|SBARS_SIZEGRIP,
+                          NULL, m_hWnd, (UINT)mc_iStatusWndId);
     if (NULL != m_hwndStatusBar)
     {
         ::SendMessage(m_hwndStatusBar,
@@ -1956,7 +1962,7 @@ void CAdvRecoApp::UpdateLayout()
 
     // update the size and position of the status bar
     if (::IsWindow(m_hwndStatusBar)
-        && ((DWORD)::GetWindowLong(m_hwndStatusBar, GWL_STYLE) & WS_VISIBLE))
+            && ((DWORD)::GetWindowLong(m_hwndStatusBar, GWL_STYLE) & WS_VISIBLE))
     {
         ::SendMessage(m_hwndStatusBar, WM_SIZE, 0, 0);
         RECT rectStatusBar;
@@ -1996,7 +2002,7 @@ void CAdvRecoApp::UpdateLayout()
                 if (TRUE == ListView_GetItemRect(m_hwndMSGestLV, 0, &rcItem, LVIR_BOUNDS))
                 {
                     iHeight = rcItem.top + (rcItem.bottom - rcItem.top)
-                                            * (countof(gc_igtMultiStrokeGestures) + 1);
+                              * (countof(gc_igtMultiStrokeGestures) + 1);
                 }
                 else
                 {
@@ -2011,7 +2017,7 @@ void CAdvRecoApp::UpdateLayout()
                 rcGest.bottom -= iHeight;
             }
             else if (WS_VISIBLE ==
-                    (((DWORD)::GetWindowLong(m_hwndMSGestLV, GWL_STYLE)) & WS_VISIBLE))
+                     (((DWORD)::GetWindowLong(m_hwndMSGestLV, GWL_STYLE)) & WS_VISIBLE))
             {
                 // hide the multiple stroke gesture listview control
                 ::ShowWindow(m_hwndMSGestLV, SW_HIDE);
@@ -2119,9 +2125,9 @@ void CAdvRecoApp::UpdateStatusBar()
 //
 /////////////////////////////////////////////////////////
 bool CAdvRecoApp::GetGestureName(
-        InkApplicationGesture igtGesture,
-        UINT& idGestureName
-        )
+    InkApplicationGesture igtGesture,
+    UINT& idGestureName
+)
 {
     idGestureName = IDS_GESTURE_UNKNOWN;
 

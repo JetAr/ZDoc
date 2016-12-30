@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // ThumbnailGenerator: Creates thumbnail images from video files.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -25,7 +25,7 @@ const LONGLONG MAX_FRAMES_TO_SKIP = 10;
 // ThumbnailGenerator constructor
 //-------------------------------------------------------------------
 
-ThumbnailGenerator::ThumbnailGenerator() 
+ThumbnailGenerator::ThumbnailGenerator()
     : m_pReader(NULL)
 {
     ZeroMemory(&m_format, sizeof(m_format));
@@ -81,7 +81,7 @@ HRESULT ThumbnailGenerator::OpenFile(const WCHAR* wszFileName)
         // Attempt to find a video stream.
         hr = SelectVideoStream();
     }
-    
+
     return hr;
 }
 
@@ -102,12 +102,12 @@ HRESULT ThumbnailGenerator::GetDuration(LONGLONG *phnsDuration)
     {
         return MF_E_NOT_INITIALIZED;
     }
-    
-    hr = m_pReader->GetPresentationAttribute( 
-        (DWORD)MF_SOURCE_READER_MEDIASOURCE, 
-        MF_PD_DURATION, 
-        &var 
-        );
+
+    hr = m_pReader->GetPresentationAttribute(
+             (DWORD)MF_SOURCE_READER_MEDIASOURCE,
+             MF_PD_DURATION,
+             &var
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -117,7 +117,7 @@ HRESULT ThumbnailGenerator::GetDuration(LONGLONG *phnsDuration)
 
     PropVariantClear(&var);
 
-    return hr; 
+    return hr;
 }
 
 
@@ -143,10 +143,10 @@ HRESULT ThumbnailGenerator::CanSeek(BOOL *pbCanSeek)
     *pbCanSeek = FALSE;
 
     hr = m_pReader->GetPresentationAttribute(
-        (DWORD)MF_SOURCE_READER_MEDIASOURCE,
-        MF_SOURCE_READER_MEDIASOURCE_CHARACTERISTICS,
-        &var
-        );
+             (DWORD)MF_SOURCE_READER_MEDIASOURCE,
+             MF_SOURCE_READER_MEDIASOURCE_CHARACTERISTICS,
+             &var
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -156,10 +156,10 @@ HRESULT ThumbnailGenerator::CanSeek(BOOL *pbCanSeek)
     if (SUCCEEDED(hr))
     {
         // If the source has slow seeking, we will treat it as
-        // not supporting seeking. 
+        // not supporting seeking.
 
-        if ((flags & MFMEDIASOURCE_CAN_SEEK) && 
-            !(flags & MFMEDIASOURCE_HAS_SLOW_SEEK))
+        if ((flags & MFMEDIASOURCE_CAN_SEEK) &&
+                !(flags & MFMEDIASOURCE_HAS_SLOW_SEEK))
         {
             *pbCanSeek = TRUE;
         }
@@ -182,10 +182,10 @@ HRESULT ThumbnailGenerator::CanSeek(BOOL *pbCanSeek)
 //-------------------------------------------------------------------
 
 HRESULT ThumbnailGenerator::CreateBitmaps(
-    ID2D1RenderTarget *pRT, 
-    DWORD count, 
+    ID2D1RenderTarget *pRT,
+    DWORD count,
     Sprite pSprites[]
-    )
+)
 {
     HRESULT hr = S_OK;
     BOOL bCanSeek = 0;
@@ -197,19 +197,25 @@ HRESULT ThumbnailGenerator::CreateBitmaps(
 
     hr = CanSeek(&bCanSeek);
 
-    if (FAILED(hr)) { return hr; }
+    if (FAILED(hr))
+    {
+        return hr;
+    }
 
     if (bCanSeek)
     {
         hr = GetDuration(&hnsDuration);
 
-        if (FAILED(hr)) { return hr; }
+        if (FAILED(hr))
+        {
+            return hr;
+        }
 
         hnsRangeStart = 0;
         hnsRangeEnd = hnsDuration;
 
         // We have the file duration , so we'll take bitmaps from
-        // several positions in the file. Occasionally, the first frame 
+        // several positions in the file. Occasionally, the first frame
         // in a video is black, so we don't start at time 0.
 
         hnsIncrement = (hnsRangeEnd - hnsRangeStart) / (count + 1);
@@ -223,10 +229,10 @@ HRESULT ThumbnailGenerator::CreateBitmaps(
         LONGLONG hPos = hnsIncrement * (i + 1);
 
         hr = CreateBitmap(
-            pRT, 
-            hPos, 
-            &pSprites[i]
-        );
+                 pRT,
+                 hPos,
+                 &pSprites[i]
+             );
     }
 
     return hr;
@@ -248,10 +254,10 @@ HRESULT ThumbnailGenerator::CreateBitmaps(
 //-------------------------------------------------------------------
 
 HRESULT ThumbnailGenerator::CreateBitmap(
-    ID2D1RenderTarget *pRT, 
-    LONGLONG& hnsPos, 
+    ID2D1RenderTarget *pRT,
+    LONGLONG& hnsPos,
     Sprite *pSprite
-    )
+)
 {
     HRESULT     hr = S_OK;
     DWORD       dwFlags = 0;
@@ -259,7 +265,7 @@ HRESULT ThumbnailGenerator::CreateBitmap(
     BYTE        *pBitmapData = NULL;    // Bitmap data
     DWORD       cbBitmapData = 0;       // Size of data, in bytes
     LONGLONG    hnsTimeStamp = 0;
-    BOOL        bCanSeek = FALSE;       // Can the source seek?  
+    BOOL        bCanSeek = FALSE;       // Can the source seek?
     DWORD       cSkipped = 0;           // Number of skipped frames
 
     IMFMediaBuffer *pBuffer = 0;
@@ -267,9 +273,9 @@ HRESULT ThumbnailGenerator::CreateBitmap(
     ID2D1Bitmap *pBitmap = NULL;
 
     hr = CanSeek(&bCanSeek);
-    if (FAILED(hr)) 
-    { 
-        return hr; 
+    if (FAILED(hr))
+    {
+        return hr;
     }
 
     if (bCanSeek && (hnsPos > 0))
@@ -282,7 +288,10 @@ HRESULT ThumbnailGenerator::CreateBitmap(
 
         hr = m_pReader->SetCurrentPosition(GUID_NULL, var);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
     }
 
@@ -299,15 +308,18 @@ HRESULT ThumbnailGenerator::CreateBitmap(
         IMFSample *pSampleTmp = NULL;
 
         hr = m_pReader->ReadSample(
-            (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM, 
-            0, 
-            NULL, 
-            &dwFlags, 
-            NULL, 
-            &pSampleTmp
-            );
-    
-        if (FAILED(hr)) { goto done; }
+                 (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                 0,
+                 NULL,
+                 &dwFlags,
+                 NULL,
+                 &pSampleTmp
+             );
+
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         if (dwFlags & MF_SOURCE_READERF_ENDOFSTREAM)
         {
@@ -318,8 +330,11 @@ HRESULT ThumbnailGenerator::CreateBitmap(
         {
             // Type change. Get the new format.
             hr = GetVideoFormat(&m_format);
-        
-            if (FAILED(hr)) { goto done; }
+
+            if (FAILED(hr))
+            {
+                goto done;
+            }
         }
 
         if (pSampleTmp == NULL)
@@ -342,8 +357,8 @@ HRESULT ThumbnailGenerator::CreateBitmap(
             // During this process, we might reach the end of the file, so we
             // always cache the last sample that we got (pSample).
 
-            if ( (cSkipped < MAX_FRAMES_TO_SKIP) && 
-                 (hnsTimeStamp + SEEK_TOLERANCE < hnsPos) )  
+            if ( (cSkipped < MAX_FRAMES_TO_SKIP) &&
+                    (hnsTimeStamp + SEEK_TOLERANCE < hnsPos) )
             {
                 SafeRelease(&pSampleTmp);
 
@@ -360,34 +375,43 @@ HRESULT ThumbnailGenerator::CreateBitmap(
 
     if (pSample)
     {
-        UINT32 pitch = 4 * m_format.imageWidthPels; 
+        UINT32 pitch = 4 * m_format.imageWidthPels;
 
         // Get the bitmap data from the sample, and use it to create a
-        // Direct2D bitmap object. Then use the Direct2D bitmap to 
+        // Direct2D bitmap object. Then use the Direct2D bitmap to
         // initialize the sprite.
 
         hr = pSample->ConvertToContiguousBuffer(&pBuffer);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         hr = pBuffer->Lock(&pBitmapData, NULL, &cbBitmapData);
-        
-        if (FAILED(hr)) { goto done; }
+
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         assert(cbBitmapData == (pitch * m_format.imageHeightPels));
 
-        hr = pRT->CreateBitmap( 
-            D2D1::SizeU(m_format.imageWidthPels, m_format.imageHeightPels),
-            pBitmapData,
-            pitch,
-            D2D1::BitmapProperties( 
-                // Format = RGB32
-                D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE) 
-                ),
-            &pBitmap
-            );
+        hr = pRT->CreateBitmap(
+                 D2D1::SizeU(m_format.imageWidthPels, m_format.imageHeightPels),
+                 pBitmapData,
+                 pitch,
+                 D2D1::BitmapProperties(
+                     // Format = RGB32
+                     D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_IGNORE)
+                 ),
+                 &pBitmap
+             );
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         pSprite->SetBitmap(pBitmap, m_format);
     }
@@ -440,19 +464,19 @@ HRESULT ThumbnailGenerator::SelectVideoStream()
     if (SUCCEEDED(hr))
     {
         hr = m_pReader->SetCurrentMediaType(
-            (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM, 
-            NULL,
-            pType
-            );
+                 (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                 NULL,
+                 pType
+             );
     }
 
     // Ensure the stream is selected.
     if (SUCCEEDED(hr))
     {
         hr = m_pReader->SetStreamSelection(
-            (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM, 
-            TRUE
-            );
+                 (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                 TRUE
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -467,7 +491,7 @@ HRESULT ThumbnailGenerator::SelectVideoStream()
 
 //-------------------------------------------------------------------
 // GetVideoFormat
-// 
+//
 // Gets format information for the video stream.
 //
 // iStream: Stream index.
@@ -479,7 +503,7 @@ HRESULT ThumbnailGenerator::GetVideoFormat(FormatInfo *pFormat)
     HRESULT hr = S_OK;
     UINT32  width = 0, height = 0;
     LONG lStride = 0;
-    MFRatio par = { 0 , 0 };
+    MFRatio par = { 0, 0 };
 
     FormatInfo& format = *pFormat;
 
@@ -489,11 +513,14 @@ HRESULT ThumbnailGenerator::GetVideoFormat(FormatInfo *pFormat)
 
     // Get the media type from the stream.
     hr = m_pReader->GetCurrentMediaType(
-        (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM, 
-        &pType
-        );
-    
-    if (FAILED(hr)) { goto done; }
+             (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+             &pType
+         );
+
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Make sure it is a video format.
     hr = pType->GetGUID(MF_MT_SUBTYPE, &subtype);
@@ -506,12 +533,15 @@ HRESULT ThumbnailGenerator::GetVideoFormat(FormatInfo *pFormat)
     // Get the width and height
     hr = MFGetAttributeSize(pType, MF_MT_FRAME_SIZE, &width, &height);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     // Get the stride to find out if the bitmap is top-down or bottom-up.
     lStride = (LONG)MFGetAttributeUINT32(pType, MF_MT_DEFAULT_STRIDE, 1);
 
-    format.bTopDown = (lStride > 0); 
+    format.bTopDown = (lStride > 0);
 
     // Get the pixel aspect ratio. (This value might not be set.)
     hr = MFGetAttributeRatio(pType, MF_MT_PIXEL_ASPECT_RATIO, (UINT32*)&par.Numerator, (UINT32*)&par.Denominator);
@@ -544,8 +574,8 @@ done:
 // Converts a rectangle from the source's pixel aspect ratio (PAR) to 1:1 PAR.
 // Returns the corrected rectangle.
 //
-// For example, a 720 x 486 rect with a PAR of 9:10, when converted to 1x1 PAR,  
-// is stretched to 720 x 540. 
+// For example, a 720 x 486 rect with a PAR of 9:10, when converted to 1x1 PAR,
+// is stretched to 720 x 540.
 //-----------------------------------------------------------------------------
 
 RECT CorrectAspectRatio(const RECT& src, const MFRatio& srcPAR)

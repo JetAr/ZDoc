@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -162,14 +162,14 @@ int wmain(int argc, wchar_t *argv[])
                 else if (g_AddRuleParam.Exists())
                 {
                     iRes = AddRule(g_DefaultParam.Exists() && g_DefaultParam.Get(),
-                                           g_IncludeParam.Exists() && g_IncludeParam.Get(),
-                                           g_OverrideParam.Exists(),
-                                           g_AddRuleParam.Get());
+                                   g_IncludeParam.Exists() && g_IncludeParam.Get(),
+                                   g_OverrideParam.Exists(),
+                                   g_AddRuleParam.Get());
                 }
                 else if (g_RemoveRuleParam.Exists())
                 {
                     iRes = RemoveRule(g_DefaultParam.Exists() && g_DefaultParam.Get(),
-                                              g_RemoveRuleParam.Get());
+                                      g_RemoveRuleParam.Get());
                 }
                 else if (g_RevertParam.Exists())
                 {
@@ -297,7 +297,7 @@ int EnumRoots()
         if (SUCCEEDED(hr))
         {
             while (SUCCEEDED(hr) &&
-                   S_OK == (hr = pSearchRoots->Next(1, &pSearchRoot, NULL)))
+                    S_OK == (hr = pSearchRoots->Next(1, &pSearchRoot, NULL)))
             {
                 hr = DisplayRootInfo(pSearchRoot);
                 pSearchRoot->Release();
@@ -415,7 +415,7 @@ int EnumRules()
         {
             ISearchScopeRule *pSearchScopeRule;
             while (SUCCEEDED(hr) &&
-                   S_OK == (hr = pScopeRules->Next(1, &pSearchScopeRule, NULL)))
+                    S_OK == (hr = pScopeRules->Next(1, &pSearchScopeRule, NULL)))
             {
                 hr = DisplayRule(pSearchScopeRule);
                 pSearchScopeRule->Release();
@@ -431,10 +431,10 @@ int EnumRules()
 int AddRule(BOOL fDefault, BOOL fInclude, BOOL fOverride, PCWSTR pszURL)
 {
     wcout << L"Adding new " <<
-         (fDefault ? L"default " : L"user ") <<
-         (fInclude ? L"inclusion " : L"exclusion ") <<
-         "rule " << pszURL <<
-         ((!fDefault && fOverride) ? L"overriding cildren rules" : L"" ) << endl;
+          (fDefault ? L"default " : L"user ") <<
+          (fInclude ? L"inclusion " : L"exclusion ") <<
+          "rule " << pszURL <<
+          ((!fDefault && fOverride) ? L"overriding cildren rules" : L"" ) << endl;
 
     // Crawl scope manager for that catalog
     ISearchCrawlScopeManager *pSearchCrawlScopeManager;
@@ -448,9 +448,9 @@ int AddRule(BOOL fDefault, BOOL fInclude, BOOL fOverride, PCWSTR pszURL)
         else
         {
             hr = pSearchCrawlScopeManager->AddUserScopeRule(pszURL,
-                                                             fInclude,
-                                                             fOverride,
-                                                             FF_INDEXCOMPLEXURLS);
+                    fInclude,
+                    fOverride,
+                    FF_INDEXCOMPLEXURLS);
         }
         if (SUCCEEDED(hr))
         {

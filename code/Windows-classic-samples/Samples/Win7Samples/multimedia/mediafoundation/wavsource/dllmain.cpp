@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // dllmain.cpp : Implements DLL exports and COM class factory
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -65,7 +65,7 @@ public:
     // IUnknown
     IFACEMETHODIMP QueryInterface(REFIID riid, void ** ppv)
     {
-        static const QITAB qit[] = 
+        static const QITAB qit[] =
         {
             QITABENT(CClassFactory, IClassFactory),
             { 0 }
@@ -111,8 +111,8 @@ public:
         return hr;
     }
 
-    IFACEMETHODIMP LockServer(BOOL bLock) 
-    { 
+    IFACEMETHODIMP LockServer(BOOL bLock)
+    {
         if (bLock)
         {
             DllAddRef();
@@ -181,7 +181,7 @@ HRESULT CreateRegKeyAndSetValue(const REGISTRY_ENTRY *pRegistryEntry)
     HRESULT hr;
     HKEY hKey;
 
-    LONG lRet = RegCreateKeyExW(pRegistryEntry->hkeyRoot, pRegistryEntry->pszKeyName, 
+    LONG lRet = RegCreateKeyExW(pRegistryEntry->hkeyRoot, pRegistryEntry->pszKeyName,
                                 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
     if (lRet != ERROR_SUCCESS)
     {
@@ -190,14 +190,14 @@ HRESULT CreateRegKeyAndSetValue(const REGISTRY_ENTRY *pRegistryEntry)
     else
     {
         // Registry keys for Media Foundation byte-stream handlers
-        // might be protected by Windows Resource Protection (WRP), 
+        // might be protected by Windows Resource Protection (WRP),
         // which might cause RegSetValueEx to fail silently.
 
         BOOL bIsKeyProtected = SfcIsKeyProtected(
-            pRegistryEntry->hkeyRoot,
-            pRegistryEntry->pszKeyName,
-            0
-            );
+                                   pRegistryEntry->hkeyRoot,
+                                   pRegistryEntry->pszKeyName,
+                                   0
+                               );
 
         if (bIsKeyProtected)
         {
@@ -208,8 +208,8 @@ HRESULT CreateRegKeyAndSetValue(const REGISTRY_ENTRY *pRegistryEntry)
 
 
         lRet = RegSetValueEx(hKey, pRegistryEntry->pszValueName, 0, REG_SZ,
-                            (LPBYTE) pRegistryEntry->pszData,
-                            ((DWORD) wcslen(pRegistryEntry->pszData) + 1) * sizeof(WCHAR));
+                             (LPBYTE) pRegistryEntry->pszData,
+                             ((DWORD) wcslen(pRegistryEntry->pszData) + 1) * sizeof(WCHAR));
 
         hr = HRESULT_FROM_WIN32(lRet);
 
@@ -235,18 +235,18 @@ HRESULT DeleteRegKey(const REGISTRY_ENTRY *pRegistryEntry)
     {
         hr = HRESULT_FROM_WIN32(dwError);
     }
-    return hr;    
+    return hr;
 }
 
 // Registers this COM server
 STDAPI DllRegisterServer()
 {
     HRESULT hr = S_OK;
- 
+
     WCHAR szModuleName[MAX_PATH];
 
     // List of registry entries to create.
-    const REGISTRY_ENTRY rgRegistryEntries[] = 
+    const REGISTRY_ENTRY rgRegistryEntries[] =
     {
         // RootKey             KeyName                                                              ValueName           Data
         {HKEY_LOCAL_MACHINE,   L"Software\\Classes\\CLSID\\" SZ_HANDLER_CLSID,                      NULL,               SZ_HANDLER_NAME},
@@ -283,7 +283,7 @@ STDAPI DllUnregisterServer()
     HRESULT hr = S_OK;
 
     // List of registry entries to create.
-    const REGISTRY_ENTRY rgRegistryEntries[] = 
+    const REGISTRY_ENTRY rgRegistryEntries[] =
     {
         // RootKey             KeyName                                                              ValueName           Data
         {HKEY_LOCAL_MACHINE,   L"Software\\Classes\\CLSID\\" SZ_HANDLER_CLSID,                      NULL,               SZ_HANDLER_NAME},

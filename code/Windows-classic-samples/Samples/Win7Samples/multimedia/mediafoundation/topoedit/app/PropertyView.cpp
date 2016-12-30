@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,7 +40,7 @@ HRESULT CPropertyController::ClearProperties()
     for(size_t i = 0; i < m_arrPropertyInfo.GetCount(); ++i)
     {
         m_arrPropertyInfo.GetAt(i)->Release();
-    }  
+    }
 
     m_arrPropertyInfo.RemoveAll();
     m_pView->ClearProperties();
@@ -147,8 +147,8 @@ CPropertyEditWindow::~CPropertyEditWindow()
 
         m_arrPropertyInfo.GetAt(i)->Release();
     }
-    
-    if(m_hLabelFont) 
+
+    if(m_hLabelFont)
     {
         DeleteObject(m_hLabelFont);
     }
@@ -158,13 +158,13 @@ void CPropertyEditWindow::ShowProperties(ITedPropertyInfo* pPropertyInfo)
 {
     // Don't redraw window every time we add a component
     LockWindowUpdate();
-    
+
     m_arrPropertyInfo.Add(pPropertyInfo);
     pPropertyInfo->AddRef();
 
     PropertyInfoDisplay* pDisplay = new PropertyInfoDisplay();
     m_arrPropertyInfoDisplay.Add(pDisplay);
-    
+
     RECT labelRect = m_lastRect;
 
     // Add a margin in between sets of properties
@@ -173,7 +173,7 @@ void CPropertyEditWindow::ShowProperties(ITedPropertyInfo* pPropertyInfo)
         labelRect.top += ms_LabelHeight;
         labelRect.bottom += ms_LabelHeight;
     }
-    
+
     CreateTitle(DWORD(m_arrPropertyInfo.GetCount() - 1), labelRect);
 
     DWORD dwCount = 0;
@@ -185,7 +185,7 @@ void CPropertyEditWindow::ShowProperties(ITedPropertyInfo* pPropertyInfo)
 
     m_AddButton.ShowWindow(SW_SHOW);
     m_OKButton.ShowWindow(SW_SHOW);
-    
+
     LockWindowUpdate(FALSE);
 }
 
@@ -196,7 +196,7 @@ void CPropertyEditWindow::ClearProperties()
         // Don't redraw window every time we remove a component
         LockWindowUpdate();
     }
-    
+
     for(size_t i = 0; i < m_arrPropertyInfo.GetCount(); i++)
     {
         PropertyInfoDisplay* pDisplay = m_arrPropertyInfoDisplay.GetAt(i);
@@ -209,7 +209,7 @@ void CPropertyEditWindow::ClearProperties()
             pDisplay->m_arrTooltips.GetAt(j)->DestroyWindow();
             delete pDisplay->m_arrTooltips.GetAt(j);
         }
-        
+
         delete pDisplay;
 
         m_arrTitles.GetAt(i)->DestroyWindow();
@@ -220,11 +220,11 @@ void CPropertyEditWindow::ClearProperties()
     m_arrPropertyInfo.RemoveAll();
     m_arrPropertyInfoDisplay.RemoveAll();
     m_arrTitles.RemoveAll();
-    
+
     RECT clientRect;
     GetClientRect(&clientRect);
     DWORD dwViewWidth = clientRect.right - clientRect.left - 5;
-        
+
     m_lastRect.top = 5;
     m_lastRect.left = 5;
     m_lastRect.right = m_lastRect.left + dwViewWidth / 2;
@@ -232,7 +232,7 @@ void CPropertyEditWindow::ClearProperties()
 
     m_AddButton.ShowWindow(SW_HIDE);
     m_OKButton.ShowWindow(SW_HIDE);
-    
+
     if(m_arrPropertyInfo.GetCount() > 0)
     {
         LockWindowUpdate(FALSE);
@@ -271,12 +271,12 @@ LRESULT CPropertyEditWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     buttonRect.bottom -= ms_MarginWidth;
     buttonRect.top = buttonRect.bottom - ms_ButtonHeight;
     buttonRect.left = buttonRect.right - ms_ButtonWidth;
-    
+
     m_AddButton.Create(m_hWnd, &buttonRect, LoadAtlString(IDS_ADD), WS_CHILD | BS_DEFPUSHBUTTON, 0, IDC_ADDBUTTON);
 
     buttonRect.right += ms_ButtonWidth + ms_MarginWidth;
     buttonRect.left += ms_ButtonWidth + ms_MarginWidth;
-    
+
     m_OKButton.Create(m_hWnd, &buttonRect, LoadAtlString(IDS_SAVE), WS_CHILD | BS_DEFPUSHBUTTON, 0, IDC_OKBUTTON);
 
     return 0;
@@ -296,7 +296,7 @@ LRESULT CPropertyEditWindow::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lPara
 
     SelectObject(hdc, oldBrush);
     DeleteObject(oldBrush);
-    
+
     return 1;
 }
 
@@ -310,7 +310,7 @@ LRESULT CPropertyEditWindow::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 LRESULT CPropertyEditWindow::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     bool fAllSucceeded = true;
-    
+
     for(size_t i = 0; i < m_arrPropertyInfo.GetCount(); i++)
     {
         ITedPropertyInfo* pPropertyInfo = m_arrPropertyInfo.GetAt(i);
@@ -318,9 +318,9 @@ LRESULT CPropertyEditWindow::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
         for(size_t j = 0; j < pDisplay->m_arrLabels.GetCount(); j++)
         {
             VARTYPE vt = pDisplay->m_arrVartypes.GetAt(j);
-            
+
             if(vt == VT_EMPTY || vt == VT_UNKNOWN || vt == (VT_VECTOR | VT_UI1)) continue;
-        
+
             LPWSTR strName, strValue;
 
             // Get label text (property name)
@@ -332,7 +332,11 @@ LRESULT CPropertyEditWindow::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
             // Get edit text (property value)
             int valueLen = pDisplay->m_arrEdits.GetAt(j)->GetWindowTextLength();
             strValue = new WCHAR[valueLen + 1];
-            if(NULL == strValue) { delete[] strName; continue; }
+            if(NULL == strValue)
+            {
+                delete[] strName;
+                continue;
+            }
             pDisplay->m_arrEdits.GetAt(j)->GetWindowText(strValue, valueLen + 1);
 
             HRESULT hr = pPropertyInfo->SetProperty((DWORD) j, strName, vt, strValue);
@@ -341,7 +345,7 @@ LRESULT CPropertyEditWindow::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
                 CAtlStringW strError;
                 strError.FormatMessage(IDS_E_SAVE_PROP, hr);
                 MessageBox(strError, LoadAtlString(IDS_ERROR), MB_OK);
-                
+
                 fAllSucceeded = false;
             }
 
@@ -349,7 +353,7 @@ LRESULT CPropertyEditWindow::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
             delete[] strValue;
         }
     }
-    
+
     return 0;
 }
 
@@ -365,13 +369,13 @@ LRESULT CPropertyEditWindow::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
             LPWSTR szPropertyCategory;
             TED_ATTRIBUTE_CATEGORY Category;
             m_arrPropertyInfo.GetAt(i)->GetPropertyInfoName(&szPropertyCategory, &Category);
-        
+
             dialog.AddPropertyCategory(szPropertyCategory, Category, (DWORD) i);
-        
+
             CoTaskMemFree(szPropertyCategory);
         }
     }
-    
+
     // Fill dialog properties
     if(dialog.DoModal() == IDOK)
     {
@@ -379,26 +383,26 @@ LRESULT CPropertyEditWindow::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
         CAtlStringW strName = dialog.GetChosenProperty();
         CAtlStringW strValue = dialog.GetValue();
         ITedPropertyInfo* pPropertyInfo = m_arrPropertyInfo.GetAt(dwIndex);
-        
+
         for(DWORD i = 0; i < TEDGetAttributeListLength(); i++)
         {
             if(TEDGetAttributeName(i) == strName)
             {
                 DWORD dwPropertyCount;
-                
+
                 pPropertyInfo->GetPropertyCount(&dwPropertyCount);
                 pPropertyInfo->SetProperty(dwPropertyCount, strName.GetBuffer(), TEDGetAttributeType(i), strValue.GetBuffer());
 
                 RECT clientRect;
                 GetClientRect(&clientRect);
                 DWORD dwViewWidth = clientRect.right - clientRect.left - 5;
-        
+
                 RECT rectNextLabel;
                 rectNextLabel.top = 5 + (ms_LabelHeight * dwPropertyCount);
                 rectNextLabel.left = 5;
                 rectNextLabel.right = rectNextLabel.left + dwViewWidth / 2;
                 rectNextLabel.bottom = rectNextLabel.top + ms_LabelHeight;
-                
+
                 CreatePropertyInterfaceForIndex(dwIndex, dwPropertyCount, rectNextLabel);
                 ResizeChildren();
 
@@ -436,14 +440,14 @@ Cleanup:
 HRESULT CPropertyEditWindow::CreatePropertyInterfaceForIndex(DWORD dwPropertyInfoIndex, DWORD dwIndex, RECT& labelRect)
 {
     HRESULT hr = S_OK;
-    
+
     LPWSTR strName = NULL;
     LPWSTR strValue = NULL;
     VARTYPE vt;
 
     ITedPropertyInfo* pPropertyInfo = m_arrPropertyInfo[dwPropertyInfoIndex];
     PropertyInfoDisplay* pDisplay = m_arrPropertyInfoDisplay[dwPropertyInfoIndex];
-    
+
     RECT clientRect;
     GetClientRect(&clientRect);
     DWORD dwViewWidth = clientRect.right - clientRect.left - ms_MarginWidth;
@@ -467,9 +471,9 @@ HRESULT CPropertyEditWindow::CreatePropertyInterfaceForIndex(DWORD dwPropertyInf
     RECT rectEditClient;
     CEdit* pEditWnd =  pDisplay->m_arrEdits.GetAt(pDisplay->m_arrEdits.GetCount() - 1);
     pEditWnd->GetClientRect(&rectEditClient);
-    IFC( CreatePropertyTooltip(dwPropertyInfoIndex, pEditWnd->m_hWnd, GetTextForVartype(vt), rectEditClient) ); 
+    IFC( CreatePropertyTooltip(dwPropertyInfoIndex, pEditWnd->m_hWnd, GetTextForVartype(vt), rectEditClient) );
     pEditWnd->SetToolTipControl(pDisplay->m_arrTooltips.GetAt(pDisplay->m_arrTooltips.GetCount() -1));
-    
+
     m_arrPropertyInfoDisplay[dwPropertyInfoIndex]->m_arrVartypes.Add(vt);
 
     labelRect.left = ms_MarginWidth;
@@ -481,7 +485,7 @@ HRESULT CPropertyEditWindow::CreatePropertyInterfaceForIndex(DWORD dwPropertyInf
 
 Cleanup:
     if(strName) CoTaskMemFree(strName);
-    if(strValue) CoTaskMemFree(strValue);    
+    if(strValue) CoTaskMemFree(strValue);
 
     // If there was a failure, roll back changes to the property displays
     if(FAILED(hr))
@@ -494,12 +498,12 @@ Cleanup:
             delete pDisplay->m_arrEdits[dwIndex];
             pDisplay->m_arrEdits.RemoveAt(pDisplay->m_arrEdits.GetCount() - 1);
         }
-        
+
         if(pDisplay->m_arrVartypes.GetCount() < pDisplay->m_arrTooltips.GetCount())
         {
             pDisplay->m_arrTooltips.RemoveAt(pDisplay->m_arrTooltips.GetCount() - 1);
         }
-        
+
         if(pDisplay->m_arrVartypes.GetCount() < pDisplay->m_arrLabels.GetCount())
         {
             DWORD dwIndex = DWORD( pDisplay->m_arrLabels.GetCount() - 1 );
@@ -507,17 +511,17 @@ Cleanup:
             delete pDisplay->m_arrLabels[dwIndex];
             pDisplay->m_arrLabels.RemoveAt(pDisplay->m_arrLabels.GetCount() - 1);
         }
-        
+
         labelRect = m_lastRect;
     }
-    
+
     return hr;
 }
 
 HRESULT CPropertyEditWindow::CreatePropertyLabel(DWORD dwPropertyInfoIndex, CAtlStringW strLabelText, RECT& rectLabel)
 {
     HRESULT hr = S_OK;
-    
+
     CStatic* pStatic = new CStatic();
     CHECK_ALLOC( pStatic );
     pStatic->Create(m_hWnd, &rectLabel, strLabelText, WS_CHILD | WS_VISIBLE);
@@ -540,7 +544,7 @@ HRESULT CPropertyEditWindow::CreatePropertyEdit(DWORD dwPropertyInfoIndex, CAtlS
     {
         dwStyle |= ES_READONLY;
     }
-    
+
     pEdit->Create(m_hWnd, &rectLabel, strInitialText, dwStyle);
     pEdit->SetFont(m_hLabelFont);
     m_arrPropertyInfoDisplay[dwPropertyInfoIndex]->m_arrEdits.Add(pEdit);
@@ -552,22 +556,22 @@ Cleanup:
 HRESULT CPropertyEditWindow::CreatePropertyTooltip(DWORD dwPropertyInfoIndex, HWND hWndParent, CAtlStringW strLabelText, RECT& rectTooltip)
 {
     HRESULT hr = S_OK;
-    
+
     CToolTipControl* pToolTip = new CToolTipControl();
     CHECK_ALLOC( pToolTip );
-    
+
     if(NULL == pToolTip->Create(hWndParent, rectTooltip, NULL, WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, WS_EX_TOPMOST))
     {
         assert(!L"Failed to create tooltip window");
         IFC( E_FAIL );
     }
-    
+
     pToolTip->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
     pToolTip->SendMessage(TTM_ACTIVATE, TRUE, 0);
     pToolTip->AddTool(hWndParent, strLabelText, rectTooltip, 0);
-    
+
     m_arrPropertyInfoDisplay[dwPropertyInfoIndex]->m_arrTooltips.Add(pToolTip);
-    
+
 Cleanup:
     return hr;
 }
@@ -583,7 +587,7 @@ void CPropertyEditWindow::ResizeChildren()
     {
         LockWindowUpdate();
     }
-    
+
     for(size_t i = 0; i < m_arrPropertyInfoDisplay.GetCount(); i++)
     {
         // Add an item for the margin
@@ -596,16 +600,16 @@ void CPropertyEditWindow::ResizeChildren()
         PropertyInfoDisplay* pDisplay = m_arrPropertyInfoDisplay.GetAt(i);
         for(size_t j = 0; j < pDisplay->m_arrLabels.GetCount(); j++)
         {
-            pDisplay->m_arrLabels.GetAt(j)->SetWindowPos(HWND_TOP, ms_MarginWidth, 
-                ms_MarginWidth + (cItems * ms_LabelHeight), dwViewWidth / 2, ms_LabelHeight, 0);
+            pDisplay->m_arrLabels.GetAt(j)->SetWindowPos(HWND_TOP, ms_MarginWidth,
+                    ms_MarginWidth + (cItems * ms_LabelHeight), dwViewWidth / 2, ms_LabelHeight, 0);
 
-            pDisplay->m_arrEdits.GetAt(j)->SetWindowPos(HWND_TOP, dwViewWidth / 2 + ms_MarginWidth, 
-                ms_MarginWidth + (cItems * ms_LabelHeight), dwViewWidth / 2 - ms_MarginWidth, ms_LabelHeight, 0);
-                
+            pDisplay->m_arrEdits.GetAt(j)->SetWindowPos(HWND_TOP, dwViewWidth / 2 + ms_MarginWidth,
+                    ms_MarginWidth + (cItems * ms_LabelHeight), dwViewWidth / 2 - ms_MarginWidth, ms_LabelHeight, 0);
+
             cItems++;
         }
     }
-    
+
     RECT buttonRect;
     GetClientRect(&buttonRect);
     buttonRect.right -= ms_ButtonWidth + ms_MarginWidth + ms_MarginWidth;
@@ -619,7 +623,7 @@ void CPropertyEditWindow::ResizeChildren()
     buttonRect.left += ms_ButtonWidth + ms_MarginWidth;
 
     m_OKButton.SetWindowPos(HWND_TOP, buttonRect.left, buttonRect.top, buttonRect.right - buttonRect.left, buttonRect.bottom - buttonRect.top, 0);
-    
+
     if(m_arrPropertyInfoDisplay.GetCount() > 0)
     {
         LockWindowUpdate(FALSE);
@@ -632,13 +636,27 @@ CAtlString CPropertyEditWindow::GetTextForVartype(VARTYPE vt)
 
     switch(vt)
     {
-        case VT_UI4:                nID = IDS_UINT32; break;
-        case VT_UI8:                nID = IDS_UINT64; break;
-        case VT_R8:                 nID = IDS_DOUBLE; break;
-        case VT_CLSID:              nID = IDS_GUID; break;
-        case VT_LPWSTR:             nID = IDS_STRING; break;
-        case (VT_VECTOR | VT_UI1):  nID = IDS_BYTE_ARRAY; break;
-        case VT_UNKNOWN:            nID = IDS_IUNKNOWN; break;
+    case VT_UI4:
+        nID = IDS_UINT32;
+        break;
+    case VT_UI8:
+        nID = IDS_UINT64;
+        break;
+    case VT_R8:
+        nID = IDS_DOUBLE;
+        break;
+    case VT_CLSID:
+        nID = IDS_GUID;
+        break;
+    case VT_LPWSTR:
+        nID = IDS_STRING;
+        break;
+    case (VT_VECTOR | VT_UI1):
+        nID = IDS_BYTE_ARRAY;
+        break;
+    case VT_UNKNOWN:
+        nID = IDS_IUNKNOWN;
+        break;
     }
 
     return LoadAtlString(nID);
@@ -666,13 +684,13 @@ LRESULT CPropertyAddDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
         ::SendMessage(m_hPropertyCategoryCombo, CB_ADDSTRING, 0, (LPARAM) m_arrCategories.GetAt(i).GetString());
     }
     ::SendMessage(m_hPropertyCategoryCombo, CB_SETCURSEL, 0, 0);
-    
+
     TED_ATTRIBUTE_CATEGORY DesiredCategory = TED_ATTRIBUTE_CATEGORY_NONE;
     if(m_arrCategoryIDs.GetCount() >= 1)
     {
         DesiredCategory = m_arrCategoryIDs.GetAt(0);
     }
-    
+
     for(DWORD i = 0; i < TEDGetAttributeListLength(); i++)
     {
         if(TEDGetAttributeCategory(i) == DesiredCategory)
@@ -680,23 +698,23 @@ LRESULT CPropertyAddDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
             ::SendMessage(m_hPropertyNameCombo, CB_ADDSTRING, 0, (LPARAM) TEDGetAttributeName(i) );
         }
     }
-    
+
     return 0;
 }
 
-LRESULT CPropertyAddDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled) 
+LRESULT CPropertyAddDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     HRESULT hr;
     LPWSTR strCombo = NULL;
     LPWSTR strEdit = NULL;
-    
+
     DWORD dwSelectionIndex = (DWORD) ::SendMessage(m_hPropertyCategoryCombo, CB_GETCURSEL, 0, 0);
     if(dwSelectionIndex > m_arrCategoryIndex.GetCount())
     {
         dwSelectionIndex = 0;
     }
     m_dwChosenCategory = m_arrCategoryIndex.GetAt(dwSelectionIndex);
-   
+
     int comboLength = ::GetWindowTextLength(m_hPropertyNameCombo);
     strCombo = new WCHAR[comboLength + 1];
     CHECK_ALLOC( strCombo );
@@ -714,7 +732,7 @@ Cleanup:
     delete[] strEdit;
 
     EndDialog(IDOK);
-    
+
     return 0;
 }
 
@@ -728,9 +746,9 @@ LRESULT CPropertyAddDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 LRESULT CPropertyAddDialog::OnCategoryChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     DWORD dwSelectionIndex = (DWORD) ::SendMessage(m_hPropertyCategoryCombo, CB_GETCURSEL, 0, 0);
-    
+
     TED_ATTRIBUTE_CATEGORY DesiredCategory = m_arrCategoryIDs.GetAt(dwSelectionIndex);
-    
+
     ::SendMessage(m_hPropertyNameCombo, CB_RESETCONTENT, 0, 0);
     for(DWORD i = 0; i < TEDGetAttributeListLength(); i++)
     {
@@ -739,6 +757,6 @@ LRESULT CPropertyAddDialog::OnCategoryChange(WORD wNotifyCode, WORD wID, HWND hW
             ::SendMessage(m_hPropertyNameCombo, CB_ADDSTRING, 0, (LPARAM) TEDGetAttributeName(i) );
         }
     }
-    
+
     return 0;
 }

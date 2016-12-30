@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 //
 //      This module implements the CDiscoveryProtocol class.
 //      This class implements a very ridimentary discovery protocol for
-//      sample purposes only.  
+//      sample purposes only.
 
 #include "stdafx.h"
 
@@ -23,7 +23,7 @@ class TAsyncSocketData
 public:
     TAsyncSocketData(
         ULONG bufferSize);
-    
+
     ~TAsyncSocketData();
 
     bool Init();
@@ -122,7 +122,7 @@ public:
 
 protected:
     HRESULT DispatchMsg();
-    
+
     VOID NotifyAllClientsOfErrorAndResetIO(
         HRESULT hr);
 
@@ -170,7 +170,7 @@ PWSTR AllocString(
 {
     size_t cBufLen = (wcslen(pszOriginalString) + 1) * sizeof(WCHAR);
     PVOID pBuf = malloc(cBufLen);
-    
+
     if (pBuf)
     {
         memcpy(pBuf, pszOriginalString, cBufLen);
@@ -181,7 +181,7 @@ PWSTR AllocString(
 
 
 HRESULT GetDefaultMulticastInterfaceIndex(
-    ULONG AddressFamily, 
+    ULONG AddressFamily,
     ULONG& InterfaceIndex)
 {
     HRESULT hr = S_OK;
@@ -192,18 +192,18 @@ HRESULT GetDefaultMulticastInterfaceIndex(
     ULONG i = 0;
 
     assert((   (AF_INET == AddressFamily)
-            || (AF_INET6 == AddressFamily)));
-    
+               || (AF_INET6 == AddressFamily)));
+
     for (i = 0; i < 5; ++i)
     {
         RetVal =  GetAdaptersAddresses(
-            AddressFamily, 
-            GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_UNICAST,
-            NULL, 
-            pAdapterAddresses, 
-            &BufSize);
-        
-        if (RetVal != ERROR_BUFFER_OVERFLOW) 
+                      AddressFamily,
+                      GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_UNICAST,
+                      NULL,
+                      pAdapterAddresses,
+                      &BufSize);
+
+        if (RetVal != ERROR_BUFFER_OVERFLOW)
         {
             break;
         }
@@ -212,9 +212,9 @@ HRESULT GetDefaultMulticastInterfaceIndex(
         {
             free(pAdapterAddresses);
         }
-        
+
         pAdapterAddresses = (PIP_ADAPTER_ADDRESSES) malloc(BufSize);
-        if (!pAdapterAddresses) 
+        if (!pAdapterAddresses)
         {
             RetVal = ERROR_OUTOFMEMORY;
         }
@@ -228,7 +228,7 @@ HRESULT GetDefaultMulticastInterfaceIndex(
         while (pCurrentAdapter)
         {
             if (   (IfOperStatusUp == pCurrentAdapter->OperStatus)  // Adapter is operational
-                && ((IP_ADAPTER_NO_MULTICAST & pCurrentAdapter->Flags) == 0))  // Adapter is multicast capable
+                    && ((IP_ADAPTER_NO_MULTICAST & pCurrentAdapter->Flags) == 0))  // Adapter is multicast capable
             {
                 break;
             }
@@ -364,7 +364,7 @@ TQueryDevices::~TQueryDevices()
     {
         DestroyThreadpoolEnvironment(&m_NetworkIOEnvironment);
         ZeroMemory(&m_NetworkIOEnvironment, sizeof(m_NetworkIOEnvironment));
-        
+
         DestroyThreadpoolEnvironment(&m_NetworkTimerEnvironment);
         ZeroMemory(&m_NetworkTimerEnvironment, sizeof(m_NetworkTimerEnvironment));
 
@@ -402,7 +402,7 @@ TQueryDevices::~TQueryDevices()
     }
 
     m_pFunctionDiscoveryProvider = NULL;
-    
+
 }  // TQueryDevices::~TQueryDevices
 
 HRESULT TQueryDevices::StartQuery(
@@ -426,7 +426,7 @@ HRESULT TQueryDevices::StartQuery(
     // NOTE:  Do not AddRef() pFunctionDiscoveryProvider
     // The provider owns TQueryDevices not the other way around.
     m_pFunctionDiscoveryProvider = pFunctionDiscoveryProvider;
-    
+
     // Initialize m_NetworkIOEnvironment
     InitializeThreadpoolEnvironment(&m_NetworkIOEnvironment);
     InitializeThreadpoolEnvironment(&m_NetworkTimerEnvironment);
@@ -441,7 +441,7 @@ HRESULT TQueryDevices::StartQuery(
         }
     }
 
-   if(S_OK == hr)
+    if(S_OK == hr)
     {
         if (pszInstanceQueryId)
         {
@@ -463,9 +463,9 @@ HRESULT TQueryDevices::StartQuery(
         if (pszDeviceCategory)
         {
             hr = StringCbCopy(
-                QueryMessage.szDeviceCategory, 
-                sizeof(QueryMessage.szDeviceCategory), 
-                pszDeviceCategory);
+                     QueryMessage.szDeviceCategory,
+                     sizeof(QueryMessage.szDeviceCategory),
+                     pszDeviceCategory);
         }
         else
         {
@@ -517,7 +517,7 @@ HRESULT TQueryDevices::StartQuery(
         {
             m_fWinsockInit = true;
             if (   (2 != LOBYTE(wsaData.wVersion))
-                || (2 != HIBYTE(wsaData.wVersion)))
+                    || (2 != HIBYTE(wsaData.wVersion)))
             {
                 // We needed winsock 2.2
                 hr = HRESULT_FROM_WIN32(WSAVERNOTSUPPORTED);
@@ -538,10 +538,10 @@ HRESULT TQueryDevices::StartQuery(
         addrHints.ai_protocol = IPPROTO_UDP;
 
         err = GetAddrInfo(
-            szMulticastAddress,
-            szMulticastPort,
-            &addrHints,
-            &pMulticastAddrInfo);
+                  szMulticastAddress,
+                  szMulticastPort,
+                  &addrHints,
+                  &pMulticastAddrInfo);
         if (0 != err)
         {
             hr = HRESULT_FROM_WIN32(err);
@@ -557,27 +557,27 @@ HRESULT TQueryDevices::StartQuery(
         addrHints.ai_protocol = pMulticastAddrInfo->ai_protocol;
 
         err = GetAddrInfo(
-            NULL,  // local socket
-            L"0",  // any port
-            &addrHints,
-            &pLocalAddrInfo);
+                  NULL,  // local socket
+                  L"0",  // any port
+                  &addrHints,
+                  &pLocalAddrInfo);
 
         if (0 != err)
         {
             hr = HRESULT_FROM_WIN32(err);
         }
     }
-    
+
     // Create a socket to send the Query request and receive the responses
     if (S_OK == hr)
     {
         m_hSocket = WSASocket(
-            pLocalAddrInfo->ai_family,
-            pLocalAddrInfo->ai_socktype,
-            pLocalAddrInfo->ai_protocol,
-            NULL,
-            NULL,
-            WSA_FLAG_OVERLAPPED);
+                        pLocalAddrInfo->ai_family,
+                        pLocalAddrInfo->ai_socktype,
+                        pLocalAddrInfo->ai_protocol,
+                        NULL,
+                        NULL,
+                        WSA_FLAG_OVERLAPPED);
 
         if (m_hSocket == INVALID_SOCKET)
         {
@@ -589,16 +589,16 @@ HRESULT TQueryDevices::StartQuery(
     if (S_OK == hr)
     {
         err = WSAIoctl(
-            m_hSocket,
-            SIO_UDP_CONNRESET,
-            &fDisabled,
-            sizeof(fDisabled),
-            NULL,
-            0,
-            &cByteCount,
-            NULL,
-            NULL);
-        
+                  m_hSocket,
+                  SIO_UDP_CONNRESET,
+                  &fDisabled,
+                  sizeof(fDisabled),
+                  NULL,
+                  0,
+                  &cByteCount,
+                  NULL,
+                  NULL);
+
         if (0 != err)
         {
             hr = HRESULT_FROM_WIN32(WSAGetLastError());
@@ -609,11 +609,11 @@ HRESULT TQueryDevices::StartQuery(
     if (S_OK == hr)
     {
         err = setsockopt(
-            m_hSocket,
-            SOL_SOCKET,
-            SO_RCVBUF,
-            (char*) &recvBufSize,
-            sizeof(recvBufSize));
+                  m_hSocket,
+                  SOL_SOCKET,
+                  SO_RCVBUF,
+                  (char*) &recvBufSize,
+                  sizeof(recvBufSize));
         if (0 != err)
         {
             hr = HRESULT_FROM_WIN32(WSAGetLastError());
@@ -624,8 +624,8 @@ HRESULT TQueryDevices::StartQuery(
     if (S_OK == hr)
     {
         hr = GetDefaultMulticastInterfaceIndex(
-            pMulticastAddrInfo->ai_family,
-            m_InterfaceIndex);
+                 pMulticastAddrInfo->ai_family,
+                 m_InterfaceIndex);
     }
 
     // Set the outgoing multicast interface
@@ -634,20 +634,20 @@ HRESULT TQueryDevices::StartQuery(
         if (AF_INET == pMulticastAddrInfo->ai_family)
         {
             err = setsockopt(
-                m_hSocket,
-                IPPROTO_IP,
-                IP_MULTICAST_IF,
-                (char*) &m_InterfaceIndex,
-                sizeof(m_InterfaceIndex));
+                      m_hSocket,
+                      IPPROTO_IP,
+                      IP_MULTICAST_IF,
+                      (char*) &m_InterfaceIndex,
+                      sizeof(m_InterfaceIndex));
         }
         else
         {
             err = setsockopt(
-                m_hSocket,
-                IPPROTO_IPV6,
-                IPV6_MULTICAST_IF,
-                (char*) &m_InterfaceIndex,
-                sizeof(m_InterfaceIndex));
+                      m_hSocket,
+                      IPPROTO_IPV6,
+                      IPV6_MULTICAST_IF,
+                      (char*) &m_InterfaceIndex,
+                      sizeof(m_InterfaceIndex));
         }
 
         if (0 != err)
@@ -660,9 +660,9 @@ HRESULT TQueryDevices::StartQuery(
     if (S_OK == hr)
     {
         err = bind(
-            m_hSocket,
-            pLocalAddrInfo->ai_addr,
-            (int) pLocalAddrInfo->ai_addrlen);
+                  m_hSocket,
+                  pLocalAddrInfo->ai_addr,
+                  (int) pLocalAddrInfo->ai_addrlen);
 
         if (0 != err)
         {
@@ -674,11 +674,11 @@ HRESULT TQueryDevices::StartQuery(
     if (S_OK == hr)
     {
         m_hThreadpoolIO = CreateThreadpoolIo(
-            (HANDLE) m_hSocket,
-            &ThreadpoolIOCallback,
-            this,
-            &m_NetworkIOEnvironment);
-        
+                              (HANDLE) m_hSocket,
+                              &ThreadpoolIOCallback,
+                              this,
+                              &m_NetworkIOEnvironment);
+
         if (!m_hThreadpoolIO)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -689,9 +689,9 @@ HRESULT TQueryDevices::StartQuery(
     if (S_OK == hr)
     {
         m_hQueryTimer = CreateThreadpoolTimer(
-            &QueryCompleteTimerCallback,
-            this,
-            &m_NetworkTimerEnvironment);
+                            &QueryCompleteTimerCallback,
+                            this,
+                            &m_NetworkTimerEnvironment);
 
         if (!m_hQueryTimer)
         {
@@ -718,22 +718,22 @@ HRESULT TQueryDevices::StartQuery(
     if (S_OK == hr)
     {
         hr = g_HelloByeManager.Register(
-            m_pFunctionDiscoveryProvider,
-            m_pszDeviceCategory,
-            (m_fInstanceQuery) ? &m_InstanceQueryId : NULL,
-            &m_hHelloByeRegistration);
+                 m_pFunctionDiscoveryProvider,
+                 m_pszDeviceCategory,
+                 (m_fInstanceQuery) ? &m_InstanceQueryId : NULL,
+                 &m_hHelloByeRegistration);
     }
 
     // Send the Query message
     if (S_OK == hr)
     {
         err = sendto(
-            m_hSocket, 
-            (char*) &QueryMessage,
-            sizeof(TQueryMessage),
-            0,
-            pMulticastAddrInfo->ai_addr,
-            (int) pMulticastAddrInfo->ai_addrlen);
+                  m_hSocket,
+                  (char*) &QueryMessage,
+                  sizeof(TQueryMessage),
+                  0,
+                  pMulticastAddrInfo->ai_addr,
+                  (int) pMulticastAddrInfo->ai_addrlen);
         if (err == SOCKET_ERROR)
         {
             hr = HRESULT_FROM_WIN32(WSAGetLastError());
@@ -770,9 +770,9 @@ VOID TQueryDevices::StopQuery()
     // m_fStopQueryLatch makes sure we only stop once.
 
     BOOL fStopQueryLatch = InterlockedCompareExchange(
-        (LONG*) &m_fStopQueryLatch,
-        TRUE,
-        FALSE);
+                               (LONG*) &m_fStopQueryLatch,
+                               TRUE,
+                               FALSE);
 
     if (!fStopQueryLatch)
     {
@@ -780,7 +780,7 @@ VOID TQueryDevices::StopQuery()
         if (m_hSocket != INVALID_SOCKET)
         {
             closesocket(m_hSocket);
-            m_hSocket = INVALID_SOCKET; 
+            m_hSocket = INVALID_SOCKET;
         }
 
         // Wait for all IO callbacks to complete and close the IO
@@ -801,22 +801,22 @@ HRESULT TQueryDevices::StartAsycRecv()
     int err = 0;
     DWORD Flags = 0;
 
-    // Reset the Async data 
+    // Reset the Async data
     m_AsyncSocketData.Reset();
 
     StartThreadpoolIo(m_hThreadpoolIO);
 
 // Start Asyc Recv
     err = WSARecvFrom(
-        m_hSocket,
-        &m_AsyncSocketData.m_RecvBuffer,
-        1,
-        NULL,
-        &Flags,
-        (LPSOCKADDR) &m_AsyncSocketData.m_FromAddr,
-        &m_AsyncSocketData.m_FromAddrLen,
-        &m_AsyncSocketData.m_Overlapped,
-        NULL);
+              m_hSocket,
+              &m_AsyncSocketData.m_RecvBuffer,
+              1,
+              NULL,
+              &Flags,
+              (LPSOCKADDR) &m_AsyncSocketData.m_FromAddr,
+              &m_AsyncSocketData.m_FromAddrLen,
+              &m_AsyncSocketData.m_Overlapped,
+              NULL);
 
     if (0 != err)
     {
@@ -834,12 +834,12 @@ HRESULT TQueryDevices::StartAsycRecv()
 }  // TQueryDevices::StartAsycRecv
 
 VOID CALLBACK TQueryDevices::ThreadpoolIOCallback(
-        PTP_CALLBACK_INSTANCE Instance,
-        __in PVOID pContext,
-        __in_opt PVOID pOverlapped,
-        ULONG IoResult,
-        ULONG_PTR BytesTransferred,
-        PTP_IO Io)
+    PTP_CALLBACK_INSTANCE Instance,
+    __in PVOID pContext,
+    __in_opt PVOID pOverlapped,
+    ULONG IoResult,
+    ULONG_PTR BytesTransferred,
+    PTP_IO Io)
 {
     HRESULT hr = S_OK;
     TQueryDevices* pQueryDevices = (TQueryDevices*) pContext;
@@ -847,7 +847,7 @@ VOID CALLBACK TQueryDevices::ThreadpoolIOCallback(
     TFunctionInstanceInfo* pFunctionInstanceInfo = NULL;
 
     if (   pOverlapped
-        && (WSA_OPERATION_ABORTED != IoResult))
+            && (WSA_OPERATION_ABORTED != IoResult))
     {
         if (NO_ERROR != IoResult)
         {
@@ -858,30 +858,30 @@ VOID CALLBACK TQueryDevices::ThreadpoolIOCallback(
         if (S_OK == hr)
         {
             if (   (sizeof(TReplyMessage) <= BytesTransferred)
-                && (Reply == pReplyMessage->MessageType))
+                    && (Reply == pReplyMessage->MessageType))
             {
                 // Message is valid
-                
+
                 if (   !pQueryDevices->m_fInstanceQuery
-                    || IsEqualGUID(pQueryDevices->m_InstanceQueryId, pReplyMessage->DeviceId))
+                        || IsEqualGUID(pQueryDevices->m_InstanceQueryId, pReplyMessage->DeviceId))
                 {
-                    // This is not an instance query, 
+                    // This is not an instance query,
                     // or this is the instance we are looking for.
                     // Notify the client that a device has been found
 
                     hr = TFunctionInstanceInfo::CreateInstance(
-                        &pReplyMessage->DeviceId,
-                        &pReplyMessage->DeviceInfo,
-                        &pQueryDevices->m_AsyncSocketData.m_FromAddr,
-                        pQueryDevices->m_AsyncSocketData.m_FromAddrLen,
-                        pQueryDevices->m_InterfaceIndex,
-                        &pFunctionInstanceInfo);
+                             &pReplyMessage->DeviceId,
+                             &pReplyMessage->DeviceInfo,
+                             &pQueryDevices->m_AsyncSocketData.m_FromAddr,
+                             pQueryDevices->m_AsyncSocketData.m_FromAddrLen,
+                             pQueryDevices->m_InterfaceIndex,
+                             &pFunctionInstanceInfo);
 
                     if (S_OK == hr)
                     {
                         hr = pQueryDevices->m_pFunctionDiscoveryProvider->SubmitNotifyClientOnUpdate(
-                            QUA_ADD,
-                            pFunctionInstanceInfo);
+                                 QUA_ADD,
+                                 pFunctionInstanceInfo);
 
                         pFunctionInstanceInfo->Release();
                     }
@@ -919,7 +919,7 @@ VOID CALLBACK TQueryDevices::QueryCompleteTimerCallback(
 
     // Stop the query and free resources
     pQueryDevices->StopQuery();
-    
+
     // Notify the client that the Query is complete
     hr = pQueryDevices->m_pFunctionDiscoveryProvider->SubmitNotifyClientOnEvent(FD_EVENTID_SEARCHCOMPLETE);
 
@@ -941,9 +941,9 @@ VOID CALLBACK TQueryDevices::QueryCompleteTimerCallback(
 //---------------------------------------------------------------------------
 
 TRegistrationEntry::TRegistrationEntry(
-        __in TFunctionDiscoveryProvider* pFunctionDiscoveryProvider,
-        __in_opt PCWSTR pszDeviceCategory,
-        __in_opt GUID* pInstanceQueryId):
+    __in TFunctionDiscoveryProvider* pFunctionDiscoveryProvider,
+    __in_opt PCWSTR pszDeviceCategory,
+    __in_opt GUID* pInstanceQueryId):
 
     pFunctionDiscoveryProvider(pFunctionDiscoveryProvider),
     pszDeviceCategory(pszDeviceCategory),
@@ -978,10 +978,10 @@ THelloByeManager::~THelloByeManager()
 }  // THelloByeManager::THelloByeManager
 
 HRESULT THelloByeManager::Register(
-        __in TFunctionDiscoveryProvider* pFunctionDiscoveryProvider,
-        __in_opt PCWSTR pszDeviceCategory,
-        __in_opt GUID* pInstanceQueryId,
-        __deref_out PHANDLE phRegistration)
+    __in TFunctionDiscoveryProvider* pFunctionDiscoveryProvider,
+    __in_opt PCWSTR pszDeviceCategory,
+    __in_opt GUID* pInstanceQueryId,
+    __deref_out PHANDLE phRegistration)
 {
     HRESULT hr = S_OK;
     BOOL fStartListening = false;
@@ -992,31 +992,31 @@ HRESULT THelloByeManager::Register(
         pInstanceQueryId);
 
     *phRegistration = NULL;
-    
+
     if (pRegistration)
     {
         m_RegistrationLock.AcquireExclusive();
 
-        // Add the registration to the list and 
+        // Add the registration to the list and
         // cache if the IO needs to be reset or IO needs to be started.
         m_RegistrationListLock.AcquireExclusive();
 
         fStartListening = m_RegistrationList.IsEmpty();
         fIOReset = m_fIOReset;
-        
-        m_fIOReset = false;  // reset the flag
-        
-         m_RegistrationList.InsertTail(pRegistration);
 
-         *phRegistration = (PHANDLE) pRegistration;
-        
+        m_fIOReset = false;  // reset the flag
+
+        m_RegistrationList.InsertTail(pRegistration);
+
+        *phRegistration = (PHANDLE) pRegistration;
+
         m_RegistrationListLock.ReleaseExclusive();
 
         // If IO needs to be reset, stop listenting
         if (fIOReset)
         {
             StopListening();
-            
+
             assert(fStartListening);
         }
 
@@ -1033,12 +1033,12 @@ HRESULT THelloByeManager::Register(
             m_RegistrationListLock.AcquireExclusive();
 
             m_RegistrationList.RemoveEntry(pRegistration);
-            
+
             m_RegistrationListLock.ReleaseExclusive();
 
             delete pRegistration;
         }
-        
+
         m_RegistrationLock.ReleaseExclusive();
     }
     else
@@ -1088,12 +1088,12 @@ HRESULT THelloByeManager::DispatchMsg()
         THelloMessage* pHelloMessage = (THelloMessage*) m_AsyncSocketData.m_RecvBuffer.buf;
 
         hr = TFunctionInstanceInfo::CreateInstance(
-            &pHelloMessage->DeviceId,
-            &pHelloMessage->DeviceInfo,
-            &m_AsyncSocketData.m_FromAddr,
-            m_AsyncSocketData.m_FromAddrLen,
-            m_InterfaceIndex,
-            &pFunctionInstanceInfo);
+                 &pHelloMessage->DeviceId,
+                 &pHelloMessage->DeviceInfo,
+                 &m_AsyncSocketData.m_FromAddr,
+                 m_AsyncSocketData.m_FromAddrLen,
+                 m_InterfaceIndex,
+                 &pFunctionInstanceInfo);
 
         if (S_OK == hr)
         {
@@ -1106,16 +1106,16 @@ HRESULT THelloByeManager::DispatchMsg()
             {
 
                 if (   (   pRegistrationEntry->pInstanceQueryId
-                        && (IsEqualGUID(*pRegistrationEntry->pInstanceQueryId, pHelloMessage->DeviceId)))
-                    || !pRegistrationEntry->pszDeviceCategory
-                    || (wcscmp(pRegistrationEntry->pszDeviceCategory, pHelloMessage->DeviceInfo.szDeviceCategory)))
+                           && (IsEqualGUID(*pRegistrationEntry->pInstanceQueryId, pHelloMessage->DeviceId)))
+                        || !pRegistrationEntry->pszDeviceCategory
+                        || (wcscmp(pRegistrationEntry->pszDeviceCategory, pHelloMessage->DeviceInfo.szDeviceCategory)))
                 {
                     // This is not an instance query and the device categories match
                     // or this is the instance we are looking for
 
                     hr = pRegistrationEntry->pFunctionDiscoveryProvider->SubmitNotifyClientOnUpdate(
-                            QUA_ADD,
-                            pFunctionInstanceInfo);
+                             QUA_ADD,
+                             pFunctionInstanceInfo);
 
                     if (S_OK != hr)
                     {
@@ -1134,12 +1134,12 @@ HRESULT THelloByeManager::DispatchMsg()
         TByeMessage* pByeMessage = (TByeMessage*) m_AsyncSocketData.m_RecvBuffer.buf;
 
         hr = TFunctionInstanceInfo::CreateInstance(
-                &pByeMessage->DeviceId,
-                NULL,
-                &m_AsyncSocketData.m_FromAddr,
-                m_AsyncSocketData.m_FromAddrLen,
-                m_InterfaceIndex,
-                &pFunctionInstanceInfo);
+                 &pByeMessage->DeviceId,
+                 NULL,
+                 &m_AsyncSocketData.m_FromAddr,
+                 m_AsyncSocketData.m_FromAddrLen,
+                 m_InterfaceIndex,
+                 &pFunctionInstanceInfo);
 
         if (S_OK == hr)
         {
@@ -1152,13 +1152,13 @@ HRESULT THelloByeManager::DispatchMsg()
             {
 
                 if (   !pRegistrationEntry->pInstanceQueryId
-                    || (IsEqualGUID(*pRegistrationEntry->pInstanceQueryId, pByeMessage->DeviceId)))
+                        || (IsEqualGUID(*pRegistrationEntry->pInstanceQueryId, pByeMessage->DeviceId)))
                 {
                     // This is not an instance query
                     // or this is the instance we are looking for
                     hr = pRegistrationEntry->pFunctionDiscoveryProvider->SubmitNotifyClientOnUpdate(
-                            QUA_REMOVE,
-                            pFunctionInstanceInfo);
+                             QUA_REMOVE,
+                             pFunctionInstanceInfo);
 
                     if (S_OK != hr)
                     {
@@ -1258,10 +1258,10 @@ HRESULT THelloByeManager::StartListening()
         addrHints.ai_protocol = IPPROTO_UDP;
 
         err = GetAddrInfo(
-            szMulticastAddress,
-            NULL,
-            &addrHints,
-            &pMulticastAddrInfo);
+                  szMulticastAddress,
+                  NULL,
+                  &addrHints,
+                  &pMulticastAddrInfo);
         if (0 != err)
         {
             hr = HRESULT_FROM_WIN32(err);
@@ -1277,27 +1277,27 @@ HRESULT THelloByeManager::StartListening()
         addrHints.ai_protocol = pMulticastAddrInfo->ai_protocol;
 
         err = GetAddrInfo(
-            NULL,  // local socket
-            szMulticastPort,  
-            &addrHints,
-            &pLocalAddrInfo);
+                  NULL,  // local socket
+                  szMulticastPort,
+                  &addrHints,
+                  &pLocalAddrInfo);
 
         if (0 != err)
         {
             hr = HRESULT_FROM_WIN32(err);
         }
     }
-    
+
     // Create a socket to listen on
     if (S_OK == hr)
     {
         m_hSocket = WSASocket(
-            pLocalAddrInfo->ai_family,
-            pLocalAddrInfo->ai_socktype,
-            pLocalAddrInfo->ai_protocol,
-            NULL,
-            NULL,
-            WSA_FLAG_OVERLAPPED);
+                        pLocalAddrInfo->ai_family,
+                        pLocalAddrInfo->ai_socktype,
+                        pLocalAddrInfo->ai_protocol,
+                        NULL,
+                        NULL,
+                        WSA_FLAG_OVERLAPPED);
 
         if (m_hSocket == INVALID_SOCKET)
         {
@@ -1305,16 +1305,16 @@ HRESULT THelloByeManager::StartListening()
         }
     }
 
-    // Set SO_EXCLUSIVEADDRUSE and SO_REUSEADDR for the socket 
+    // Set SO_EXCLUSIVEADDRUSE and SO_REUSEADDR for the socket
     // so that there can be multiple listeners on the same machine
     if (S_OK == hr)
     {
         err = setsockopt(
-            m_hSocket, 
-            SOL_SOCKET, 
-            SO_EXCLUSIVEADDRUSE,
-            (char*) &fDisabled,
-            sizeof(fDisabled));
+                  m_hSocket,
+                  SOL_SOCKET,
+                  SO_EXCLUSIVEADDRUSE,
+                  (char*) &fDisabled,
+                  sizeof(fDisabled));
 
         if (0 != err)
         {
@@ -1324,11 +1324,11 @@ HRESULT THelloByeManager::StartListening()
     if (S_OK == hr)
     {
         err = setsockopt(
-            m_hSocket, 
-            SOL_SOCKET, 
-            SO_REUSEADDR,
-            (char*) &fEnabled,
-            sizeof(fEnabled));
+                  m_hSocket,
+                  SOL_SOCKET,
+                  SO_REUSEADDR,
+                  (char*) &fEnabled,
+                  sizeof(fEnabled));
 
         if (0 != err)
         {
@@ -1340,11 +1340,11 @@ HRESULT THelloByeManager::StartListening()
     if (S_OK == hr)
     {
         err = setsockopt(
-            m_hSocket,
-            SOL_SOCKET,
-            SO_RCVBUF,
-            (char*) &recvBufSize,
-            sizeof(recvBufSize));
+                  m_hSocket,
+                  SOL_SOCKET,
+                  SO_RCVBUF,
+                  (char*) &recvBufSize,
+                  sizeof(recvBufSize));
         if (0 != err)
         {
             hr = HRESULT_FROM_WIN32(WSAGetLastError());
@@ -1359,8 +1359,8 @@ HRESULT THelloByeManager::StartListening()
             IP_MREQ mreq = {0};
 
             hr = GetDefaultMulticastInterfaceIndex(
-                AF_INET,
-                m_InterfaceIndex);
+                     AF_INET,
+                     m_InterfaceIndex);
 
             if (S_OK == hr)
             {
@@ -1368,11 +1368,11 @@ HRESULT THelloByeManager::StartListening()
                 memcpy(&mreq.imr_interface, &m_InterfaceIndex, sizeof(mreq.imr_interface));    // Set the interface index
 
                 err = setsockopt(
-                    m_hSocket,
-                    IPPROTO_IP,
-                    IP_ADD_MEMBERSHIP,
-                    (char*) &mreq,
-                    sizeof(mreq));
+                          m_hSocket,
+                          IPPROTO_IP,
+                          IP_ADD_MEMBERSHIP,
+                          (char*) &mreq,
+                          sizeof(mreq));
 
                 if (0 != err)
                 {
@@ -1385,8 +1385,8 @@ HRESULT THelloByeManager::StartListening()
             IPV6_MREQ mreq6 = {0};
 
             hr = GetDefaultMulticastInterfaceIndex(
-                AF_INET6,
-                m_InterfaceIndex);
+                     AF_INET6,
+                     m_InterfaceIndex);
 
             if (S_OK == hr)
             {
@@ -1395,11 +1395,11 @@ HRESULT THelloByeManager::StartListening()
                 mreq6.ipv6mr_interface = m_InterfaceIndex;
 
                 err = setsockopt(
-                    m_hSocket,
-                    IPPROTO_IPV6,
-                    IPV6_ADD_MEMBERSHIP,
-                    (char*) &mreq6,
-                    sizeof(mreq6));
+                          m_hSocket,
+                          IPPROTO_IPV6,
+                          IPV6_ADD_MEMBERSHIP,
+                          (char*) &mreq6,
+                          sizeof(mreq6));
 
                 if (0 != err)
                 {
@@ -1413,9 +1413,9 @@ HRESULT THelloByeManager::StartListening()
     if (S_OK == hr)
     {
         err = bind(
-            m_hSocket,
-            pLocalAddrInfo->ai_addr,
-            (int) pLocalAddrInfo->ai_addrlen);
+                  m_hSocket,
+                  pLocalAddrInfo->ai_addr,
+                  (int) pLocalAddrInfo->ai_addrlen);
 
         if (0 != err)
         {
@@ -1427,11 +1427,11 @@ HRESULT THelloByeManager::StartListening()
     if (S_OK == hr)
     {
         m_hThreadpoolIO = CreateThreadpoolIo(
-            (HANDLE) m_hSocket,
-            &ThreadpoolIOCallback,
-            this,
-            &m_NetworkIOEnvironment);
-        
+                              (HANDLE) m_hSocket,
+                              &ThreadpoolIOCallback,
+                              this,
+                              &m_NetworkIOEnvironment);
+
         if (!m_hThreadpoolIO)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1469,7 +1469,7 @@ VOID THelloByeManager::StopListening()
     if (m_hSocket != INVALID_SOCKET)
     {
         closesocket(m_hSocket);
-        m_hSocket = INVALID_SOCKET; 
+        m_hSocket = INVALID_SOCKET;
     }
 
     // Wait for all IO callbacks to complete and close the IO
@@ -1502,22 +1502,22 @@ HRESULT THelloByeManager::StartAsycRecv()
     int err = 0;
     DWORD Flags = 0;
 
-    // Reset he Async data 
+    // Reset he Async data
     m_AsyncSocketData.Reset();
 
     StartThreadpoolIo(m_hThreadpoolIO);
 
     // Start Asyc Recv
     err = WSARecvFrom(
-        m_hSocket,
-        &m_AsyncSocketData.m_RecvBuffer,
-        1,
-        NULL,
-        &Flags,
-        (LPSOCKADDR) &m_AsyncSocketData.m_FromAddr,
-        &m_AsyncSocketData.m_FromAddrLen,
-        &m_AsyncSocketData.m_Overlapped,
-        NULL);
+              m_hSocket,
+              &m_AsyncSocketData.m_RecvBuffer,
+              1,
+              NULL,
+              &Flags,
+              (LPSOCKADDR) &m_AsyncSocketData.m_FromAddr,
+              &m_AsyncSocketData.m_FromAddrLen,
+              &m_AsyncSocketData.m_Overlapped,
+              NULL);
 
     if (0 != err)
     {
@@ -1547,7 +1547,7 @@ VOID CALLBACK THelloByeManager::ThreadpoolIOCallback(
     TMessage* pMessage = (TMessage*) pHelloByeManager->m_AsyncSocketData.m_RecvBuffer.buf;
 
     if (   pOverlapped
-        && (WSA_OPERATION_ABORTED != IoResult))
+            && (WSA_OPERATION_ABORTED != IoResult))
     {
         if (NO_ERROR != IoResult)
         {
@@ -1558,10 +1558,10 @@ VOID CALLBACK THelloByeManager::ThreadpoolIOCallback(
         if (S_OK == hr)
         {
             if (   (sizeof(TMessage) <= BytesTransferred)
-                && (   (   (pMessage->MessageType == Hello)
-                        && (sizeof(THelloMessage) <= BytesTransferred))
-                    || (   (pMessage->MessageType == Bye)
-                        && (sizeof(TByeMessage) <= BytesTransferred))))
+                    && (   (   (pMessage->MessageType == Hello)
+                               && (sizeof(THelloMessage) <= BytesTransferred))
+                           || (   (pMessage->MessageType == Bye)
+                                  && (sizeof(TByeMessage) <= BytesTransferred))))
             {
                 // Message is valid,  Dispatch it to the client
 
@@ -1608,9 +1608,9 @@ HRESULT StartDiscoveryQuery(
     if (pQueryDevices)
     {
         hr = pQueryDevices->StartQuery(
-            pFunctionDiscoveryProvider,
-            pszDeviceCategory,
-            pszInstanceQueryId);
+                 pFunctionDiscoveryProvider,
+                 pszDeviceCategory,
+                 pszInstanceQueryId);
     }
     else
     {

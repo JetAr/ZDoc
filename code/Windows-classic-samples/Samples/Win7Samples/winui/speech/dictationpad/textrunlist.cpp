@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   TextRunList.cpp 
+*   TextRunList.cpp
 *       This module contains the implementation details of the CTextRunList
 *       class which is responsible for maintaining the collection of all the
 *       text runs in the DictationPad program as a doubly linked list.
@@ -17,21 +17,21 @@
 /**********************************************************************
 * CTextRunList::CTextRunList *
 *----------------------------*
-*	Description:  
+*	Description:
 *		Constructor.
 **********************************************************************/
-CTextRunList::CTextRunList( ITextDocument *pTextDoc ) : 
-                m_pHead( NULL ),
-                m_pTail( NULL ),
-                m_pCurrent( NULL ),
-                m_cpTextDoc( pTextDoc )
+CTextRunList::CTextRunList( ITextDocument *pTextDoc ) :
+    m_pHead( NULL ),
+    m_pTail( NULL ),
+    m_pCurrent( NULL ),
+    m_cpTextDoc( pTextDoc )
 {
 }   /* CTextRunList::CTextRunList */
 
 /**********************************************************************
 * CTextRunList::~CTextRunList *
 *-----------------------------*
-*   Description:  
+*   Description:
 *       Destructor
 *       Deletes everything in the list.
 **********************************************************************/
@@ -43,7 +43,7 @@ CTextRunList::~CTextRunList()
 /**********************************************************************
 * CTextRunList::CreateSimpleList *
 *--------------------------------*
-*   Description:  
+*   Description:
 *       Creates a simple list consisting of a single TextRun
 *       made up of the entire text of the document.
 *   Return:
@@ -63,14 +63,15 @@ HRESULT CTextRunList::CreateSimpleList()
     HRESULT hr = m_cpTextDoc->Range( 0, 0, &cpDocRange );
     if ( SUCCEEDED( hr ) )
     {
-        // Keep moving the end of the range until it reaches the end of 
-        // the document in order to get a range with the text of 
+        // Keep moving the end of the range until it reaches the end of
+        // the document in order to get a range with the text of
         // the entire document
         long lDelta;
         do
         {
             cpDocRange->MoveEnd( tomWord, 100, &lDelta );
-        }   while ( lDelta );
+        }
+        while ( lDelta );
 
         // Create a single CTextRun with this range
         CTextRun *pTextRun = new CTextRun();
@@ -80,7 +81,7 @@ HRESULT CTextRunList::CreateSimpleList()
         }
         pTextRun->SetTextRange( cpDocRange );
         pTextRun->IncrementCount();
-        
+
         // Create a single node with that CTextRun
         PTEXTRUNNODE pNode = new TEXTRUNNODE;
         if ( !pNode )
@@ -107,7 +108,7 @@ HRESULT CTextRunList::CreateSimpleList()
 *       Inserting degenerate runs is OK.
 *   Return:
 *       S_OK
-*       E_POINTER 
+*       E_POINTER
 *       E_OUTOFMEMORY
 *       Return value of CTextRunList::AddHead()
 *       Return value of CTextRunList::MoveCurrentTo()
@@ -159,8 +160,8 @@ HRESULT CTextRunList::Insert( CTextRun *pTextRun )
     {
         return hr;
     }
- 
-    // If we replaced or deleted some entire blocks, 
+
+    // If we replaced or deleted some entire blocks,
     // then we need to delete those nodes here
     PTEXTRUNNODE p = pNode->pNext;
     PTEXTRUNNODE pNextNode;
@@ -169,9 +170,9 @@ HRESULT CTextRunList::Insert( CTextRun *pTextRun )
     {
         pNextNode = p->pNext;
         if ( p->pTextRun->IsDegenerate() ||
-            ( p->pTextRun->GetEnd() <= pNode->pTextRun->GetEnd() ))
+                ( p->pTextRun->GetEnd() <= pNode->pTextRun->GetEnd() ))
         {
-            // This node has a degenerate run or a run that ends earlier than ours: 
+            // This node has a degenerate run or a run that ends earlier than ours:
             // remove it and keep going
             RemoveNode( p );
             p = pNextNode;
@@ -189,9 +190,9 @@ HRESULT CTextRunList::Insert( CTextRun *pTextRun )
     {
         pPrevNode = p->pPrev;
         if (p->pTextRun->IsDegenerate() ||
-            ( p->pTextRun->GetStart() >= pNode->pTextRun->GetStart() ))
+                ( p->pTextRun->GetStart() >= pNode->pTextRun->GetStart() ))
         {
-            // This node has a degenerate run or a run that starts later than ours: 
+            // This node has a degenerate run or a run that starts later than ours:
             // remove it and keep going
             RemoveNode( p );
             p = pPrevNode;
@@ -203,7 +204,7 @@ HRESULT CTextRunList::Insert( CTextRun *pTextRun )
         }
     }
 
-    // Adjust the text ranges of the previous and next nodes 
+    // Adjust the text ranges of the previous and next nodes
     // (This is necessary because the text is actually added before this node
     // makes it in, so the TOM has already adjusted the previous and next nodes' ranges to
     // cover this new text)
@@ -216,12 +217,12 @@ HRESULT CTextRunList::Insert( CTextRun *pTextRun )
         pNode->pPrev->pTextRun->SetEnd( pNode->pTextRun->GetStart() );
     }
 
-    // Now merge this new run in with the neighbors, if possible.  
+    // Now merge this new run in with the neighbors, if possible.
     // If pNode is degenerate (or becomes degenerate as a result of merging,
     // it will get deleted.
     bool fMadeItIn = false;
     hr = MergeIn( pNode, &fMadeItIn );
-    if ( SUCCEEDED( hr ) ) 
+    if ( SUCCEEDED( hr ) )
     {
         return fMadeItIn ? S_OK : S_FALSE;
     }
@@ -235,10 +236,10 @@ HRESULT CTextRunList::Insert( CTextRun *pTextRun )
 * CTextRunList::Speak *
 *---------------------*
 *   Description:
-*       Starts speaking at the position *plStartSpeaking and ends at 
-*       *plEndSpeaking, unless *plEndSpeaking is -1, in which case it 
+*       Starts speaking at the position *plStartSpeaking and ends at
+*       *plEndSpeaking, unless *plEndSpeaking is -1, in which case it
 *       speaks until the end of the document has been reached.
-*       Adjusts *plStartSpeaking and *plEndSpeaking to reflect the 
+*       Adjusts *plStartSpeaking and *plEndSpeaking to reflect the
 *       start and endpoints at which we actually will be speaking
 *       since they will have to be expanded if they fall in the middle
 *       of words or phrase elements.
@@ -246,13 +247,13 @@ HRESULT CTextRunList::Insert( CTextRun *pTextRun )
 *   Return:
 *       S_OK
 *       S_FALSE if there was nothing to speak
-*       E_POINTER 
+*       E_POINTER
 *       E_INVALIDARG if the speaking limits are not within range
 *       Return value of CTextRun::Speak()
 ******************************************************************************/
-HRESULT CTextRunList::Speak( ISpVoice &rVoice, 
-                            long *plStartSpeaking, 
-                            long *plEndSpeaking )
+HRESULT CTextRunList::Speak( ISpVoice &rVoice,
+                             long *plStartSpeaking,
+                             long *plEndSpeaking )
 {
     _ASSERTE( GetTailEnd() != 0 );
 
@@ -261,8 +262,8 @@ HRESULT CTextRunList::Speak( ISpVoice &rVoice,
     {
         return E_POINTER;
     }
-    if ((( *plEndSpeaking >= 0 ) && ( *plEndSpeaking < *plStartSpeaking )) || 
-        (*plStartSpeaking < 0) )
+    if ((( *plEndSpeaking >= 0 ) && ( *plEndSpeaking < *plStartSpeaking )) ||
+            (*plStartSpeaking < 0) )
     {
         return E_INVALIDARG;
     }
@@ -276,7 +277,7 @@ HRESULT CTextRunList::Speak( ISpVoice &rVoice,
     // Get p to the right spot for starting
     PTEXTRUNNODE p;
     p = Find( *plStartSpeaking );
-    
+
     // If the beginning was not found (i.e. it is at the end), then speak the entire TextRunList.
     if ( !p )
     {
@@ -284,7 +285,7 @@ HRESULT CTextRunList::Speak( ISpVoice &rVoice,
         *plEndSpeaking = GetTailEnd();
         return Speak( rVoice, plStartSpeaking, plEndSpeaking );
     }
-    
+
     if ( p->pTextRun->WithinRange( *plEndSpeaking ) )
     {
         // This block is the only one that needs speaking, since both the start and the end
@@ -298,11 +299,11 @@ HRESULT CTextRunList::Speak( ISpVoice &rVoice,
     long lFirstBlockEnd = -1;
     HRESULT hr = p->pTextRun->Speak( rVoice, plStartSpeaking, &lFirstBlockEnd );
 
-    // Spin through the list until the final node is reached or until the end of the 
+    // Spin through the list until the final node is reached or until the end of the
     // TextRunList has been reached
-    for ( p = p->pNext; 
-            SUCCEEDED(hr) && p && 
-                (( *plEndSpeaking < 0 ) || ( p->pTextRun->GetEnd() < *plEndSpeaking ));
+    for ( p = p->pNext;
+            SUCCEEDED(hr) && p &&
+            (( *plEndSpeaking < 0 ) || ( p->pTextRun->GetEnd() < *plEndSpeaking ));
             p = p->pNext )
     {
         hr = p->pTextRun->Speak( rVoice );
@@ -345,7 +346,7 @@ HRESULT CTextRunList::Speak( ISpVoice &rVoice,
 * CTextRunList::Serialize *
 *-------------------------*
 *   Description:
-*       Serializes the information in the TextRunList and writes 
+*       Serializes the information in the TextRunList and writes
 *       it to pStream.
 *   Return:
 *       S_OK
@@ -391,7 +392,7 @@ HRESULT CTextRunList::Serialize( IStream *pStream, ISpRecoContext *pRecoCtxt )
 *       S_OK
 *       E_POINTER: pStream or pRecoCtxt is NULL
 *       E_FAIL: TextRunList was not empty to begin with or the associated
-*               ITextDocument is invalid or the TextRunList contains 
+*               ITextDocument is invalid or the TextRunList contains
 *               invalid offsets
 *       E_OUTOFMEMORY
 *       Return value of IStream::Read()
@@ -422,13 +423,13 @@ HRESULT CTextRunList::Deserialize( IStream *pStream, ISpRecoContext *pRecoCtxt )
     RUNHEADER runHdr;
     ULONG cbRead = 0;
     HRESULT hr = pStream->Read( &runHdr, sizeof( RUNHEADER ), &cbRead );
-  
+
     // Keep reading until the end-of-stream RUNHEADER is encountered
     // (that RUNHEADER will have -1 as its lStart)
     long lNextPosToRead = 0;      // To check consistency of serialized list
     while ( SUCCEEDED( hr ) && ( cbRead > 0 ) && ( runHdr.lStart >= 0 ) )
     {
-        // Consistency check: Make sure this run starts where the 
+        // Consistency check: Make sure this run starts where the
         // last run left off
         if ( lNextPosToRead == runHdr.lStart )
         {
@@ -493,7 +494,7 @@ HRESULT CTextRunList::Deserialize( IStream *pStream, ISpRecoContext *pRecoCtxt )
             {
                 return hr;
             }
-*/
+            */
             // Create a CDictationRun with which to associate the phrase blob
             if ( SUCCEEDED( hr ) )
             {
@@ -507,10 +508,10 @@ HRESULT CTextRunList::Deserialize( IStream *pStream, ISpRecoContext *pRecoCtxt )
             // Initialize it with the deserialized result object
             if ( SUCCEEDED( hr ) )
             {
-                hr = ((CDictationRun *) pNewRun)->Initialize( 
-                    *cpResult, &dictHdr );
+                hr = ((CDictationRun *) pNewRun)->Initialize(
+                         *cpResult, &dictHdr );
 
-                if ( FAILED( hr ) )            
+                if ( FAILED( hr ) )
                 {
                     // Punt and make it a TextRun
                     delete pNewRun;
@@ -562,7 +563,7 @@ HRESULT CTextRunList::Deserialize( IStream *pStream, ISpRecoContext *pRecoCtxt )
             pNewNode->pTextRun = pNewRun;
             AddTail( pNewNode );
         }
-        
+
         if ( SUCCEEDED( hr ) )
         {
             // Read in the next header
@@ -592,14 +593,14 @@ HRESULT CTextRunList::Deserialize( IStream *pStream, ISpRecoContext *pRecoCtxt )
 *       E_INVALIDARG if lPos is out of range
 *       Return value of CTextRun::IsConsumeLeadingSpaces()
 ******************************************************************************/
-HRESULT CTextRunList::IsConsumeLeadingSpaces( long lPos, 
-                                            bool *pfConsumeLeadingSpaces )
+HRESULT CTextRunList::IsConsumeLeadingSpaces( long lPos,
+        bool *pfConsumeLeadingSpaces )
 {
     if ( !pfConsumeLeadingSpaces )
     {
         return E_POINTER;
     }
-    
+
     // Find the node containing this position
     PTEXTRUNNODE pNode = Find( lPos );
     if ( !pNode )
@@ -614,8 +615,8 @@ HRESULT CTextRunList::IsConsumeLeadingSpaces( long lPos,
         return E_UNEXPECTED;
     }
 
-    return pNode->pTextRun->IsConsumeLeadingSpaces( lPos, 
-        pfConsumeLeadingSpaces );
+    return pNode->pTextRun->IsConsumeLeadingSpaces( lPos,
+            pfConsumeLeadingSpaces );
 }   /* CTextRunList::ConsumeLeadingSpaces */
 
 /*****************************************************************************
@@ -636,7 +637,7 @@ HRESULT CTextRunList::HowManySpacesAfter( long lPos, UINT *puiSpaces )
     {
         return E_POINTER;
     }
-    
+
     // Find the node containing this position
     PTEXTRUNNODE pNode = Find( lPos );
     if ( !pNode )
@@ -650,7 +651,7 @@ HRESULT CTextRunList::HowManySpacesAfter( long lPos, UINT *puiSpaces )
     {
         return E_UNEXPECTED;
     }
-    
+
     return pNode->pTextRun->HowManySpacesAfter( lPos, puiSpaces );
 }   /* CTextRunList::HowManySpacesAfter */
 
@@ -690,9 +691,9 @@ PTEXTRUNNODE CTextRunList::Find( long lDest )
     }
 
     // Try to use m_pCurrent as a hint
-    if ( m_pCurrent && 
-        ( m_pCurrent->pTextRun->GetStart() <= lDest ) && 
-        ( lDest < m_pCurrent->pTextRun->GetEnd()) )
+    if ( m_pCurrent &&
+            ( m_pCurrent->pTextRun->GetStart() <= lDest ) &&
+            ( lDest < m_pCurrent->pTextRun->GetEnd()) )
     {
         return m_pCurrent;
     }
@@ -708,9 +709,9 @@ PTEXTRUNNODE CTextRunList::Find( long lDest )
     {
         return m_pTail;
     }
-    
+
     // Find whose start is closest to lDest: the head, the tail, or m_pCurrent.
-    // Note that the distance from the start (head) is just lDest, since the 
+    // Note that the distance from the start (head) is just lDest, since the
     // start position is always 0.
     long lDistFromEnd = labs( lDest - m_pTail->pTextRun->GetStart() );
     long lDistFromCurrent;
@@ -726,8 +727,8 @@ PTEXTRUNNODE CTextRunList::Find( long lDest )
     }
     bool bSearchForward;
     PTEXTRUNNODE pStartSearch;
-    if (( lDistFromCurrent < lDest ) && 
-        ( lDistFromCurrent < lDistFromEnd ))
+    if (( lDistFromCurrent < lDest ) &&
+            ( lDistFromCurrent < lDistFromEnd ))
     {
         // m_pCurrent is closer than both the head and the tail
         // Search from m_pCurrent
@@ -755,8 +756,8 @@ PTEXTRUNNODE CTextRunList::Find( long lDest )
     {
         // Forward search
         for ( p = pStartSearch;
-            p && (p->pTextRun->GetEnd() <= lDest);
-            p = p->pNext )
+                p && (p->pTextRun->GetEnd() <= lDest);
+                p = p->pNext )
             ;
 
         _ASSERTE( p );
@@ -771,8 +772,8 @@ PTEXTRUNNODE CTextRunList::Find( long lDest )
     {
         // Backwards search
         for ( p = pStartSearch;
-            p && (p->pTextRun->GetStart() > lDest);
-            p = p->pPrev )
+                p && (p->pTextRun->GetStart() > lDest);
+                p = p->pPrev )
             ;
 
         _ASSERTE( p );
@@ -791,12 +792,12 @@ PTEXTRUNNODE CTextRunList::Find( long lDest )
 * CTextRunList::MoveCurrentTo *
 *-----------------------------*
 *   Description:
-*       Moves the m_pCurrent to the TextRun node directly preceding 
+*       Moves the m_pCurrent to the TextRun node directly preceding
 *       the specified location (so that the next time we try to
 *       insert a text run, hopefully we can insert right after
 *       m_pCurrent.
 *       If lDest falls in the middle of a text run, splits that text
-*       run.  
+*       run.
 *       First tries using its old value as a hint.
 *       Postcondition: The end of m_pCurrent == lDest
 *   Return:
@@ -811,14 +812,14 @@ HRESULT CTextRunList::MoveCurrentTo( LONG lDest )
         return S_OK;
     }
 
-    // If lDest is 0, then set m_pCurrent to NULL (since there is no node preceding the 
+    // If lDest is 0, then set m_pCurrent to NULL (since there is no node preceding the
     // head
     if ( !lDest )
     {
         m_pCurrent = NULL;
         return S_OK;
     }
-    
+
     // Find() will return pNode such that cpMin <= lDest < cpMax
     PTEXTRUNNODE pNode = Find( lDest );
 
@@ -842,7 +843,7 @@ HRESULT CTextRunList::MoveCurrentTo( LONG lDest )
     {
         // lDest occurs in the middle of pNode's range, so we need to split pNode
         hr = SplitNode( pNode );
-        
+
         if ( SUCCEEDED( hr ) )
         {
             // pNode still starts at the same place, except now it ends at the start
@@ -857,17 +858,17 @@ HRESULT CTextRunList::MoveCurrentTo( LONG lDest )
 * CTextRunList::SplitNode *
 *-------------------------*
 *   Description:
-*       Called BEFORE m_pNodeToInsert is inserted into the list, in 
+*       Called BEFORE m_pNodeToInsert is inserted into the list, in
 *       order to split up pNode to accommodate the new node.
-*       
-*       Splits the given node to form a node that ends at the start position 
+*
+*       Splits the given node to form a node that ends at the start position
 *       of m_pNodeToInsert and a node that starts at the end position of
 *       m_pNodeToInsert.
 *
 *       Creates a new node to bridge the gap if necessary.
 *       See CTextRun::Split() and CDictationRun::Split()
 *   Return:
-*       S_OK 
+*       S_OK
 *       E_POINTER if pNode is NULL
 *       E_INVALIDARG if lCursorPos does not fall in the range of pNode
 *       E_OUTOFMEMORY
@@ -899,30 +900,30 @@ HRESULT CTextRunList::SplitNode( PTEXTRUNNODE pNode )
     }
 
     CTextRun *pLatterRun = NULL;
-    
+
     // Remember the start and end of m_pNodeToInsert
     const long lStart = m_pNodeToInsert->pTextRun->GetStart();
     const long lEnd = m_pNodeToInsert->pTextRun->GetEnd();
-    
-    // Call CTextRun::Split().  This might change the split locations lNewStart and lNewEnd 
+
+    // Call CTextRun::Split().  This might change the split locations lNewStart and lNewEnd
     // and will set pLatterRun to a non-NULL value if the split actually did occur.
     long lNewStart = lStart;
     long lNewEnd = lEnd;
-    HRESULT hr = pNode->pTextRun->Split( &lNewStart, 
-        &lNewEnd, m_cpTextDoc, &pLatterRun );
+    HRESULT hr = pNode->pTextRun->Split( &lNewStart,
+                                         &lNewEnd, m_cpTextDoc, &pLatterRun );
     _ASSERTE( SUCCEEDED( hr ) );
     if ( FAILED( hr ) )
     {
         return hr;
     }
-    
+
     // Adjust the range on m_pNodeToInsert if it has changed
     if (( lStart != lNewStart ) || ( lEnd != lNewEnd ))
     {
         m_pNodeToInsert->pTextRun->SetStart( lNewStart );
         m_pNodeToInsert->pTextRun->SetEnd( lNewEnd );
     }
-    
+
     if ( pLatterRun )
     {
         // A split did occur
@@ -935,17 +936,17 @@ HRESULT CTextRunList::SplitNode( PTEXTRUNNODE pNode )
         pNewNode->pTextRun = pLatterRun;
         pNewNode->pTextRun->IncrementCount();
         pNewNode->pNext = pNewNode->pPrev = NULL;
-        
+
         hr = InsertAfter( pNode, pNewNode );
         if ( FAILED( hr ) )
         {
             return hr;
         }
-        
-        // InsertAfter() would have moved m_pCurrent to the latter run (the 
-        // one associated with pNewNode).  But m_pCurrent should stay at pNode.  
+
+        // InsertAfter() would have moved m_pCurrent to the latter run (the
+        // one associated with pNewNode).  But m_pCurrent should stay at pNode.
         m_pCurrent = pNode;
-   }
+    }
 
     return S_OK;
 }   /* CTextRunList::SplitNode */
@@ -960,12 +961,12 @@ HRESULT CTextRunList::SplitNode( PTEXTRUNNODE pNode )
 *
 *       First tries to merge with each neighbor if it is a non-dictated
 *       node.
-*       
-*       Next tries to merge with dictation nodes on either side by 
+*
+*       Next tries to merge with dictation nodes on either side by
 *       temporarily including the node in the dictation node's range
 *       and seeing if it is a match for any of the missing phrase elements
 *       in that run.  The neighboring dictation runs are allowed to
-*       appropriate whatever portion of its range that they can.      
+*       appropriate whatever portion of its range that they can.
 *
 *   Return:
 *       S_OK
@@ -993,7 +994,7 @@ HRESULT CTextRunList::MergeIn( PTEXTRUNNODE pNode, bool *pfNodeMadeItIn )
         }
         return hr;
     }
-    
+
     // This run is not a CDictationRun
 
     // Do the easy merge with the neighbors if they are text nodes
@@ -1003,7 +1004,7 @@ HRESULT CTextRunList::MergeIn( PTEXTRUNNODE pNode, bool *pfNodeMadeItIn )
     if ( pNode->pPrev && !(pNode->pPrev->pTextRun->IsDict()) )
     {
         mr = pNode->pTextRun->Concatenate( pNode->pPrev->pTextRun, false );
-        
+
         // Both nodes are nondictated text, so this better have worked
         _ASSERTE( mr == E_FULLMERGE );
         _ASSERTE( pNode->pPrev->pTextRun->IsDegenerate() );
@@ -1041,13 +1042,13 @@ HRESULT CTextRunList::MergeIn( PTEXTRUNNODE pNode, bool *pfNodeMadeItIn )
         }
     }
 
-    // pNode should be surrounded by dictation nodes now, since there should never be 
+    // pNode should be surrounded by dictation nodes now, since there should never be
     // two consecutive text nodes
 
     // The concatenation for pNext must happen before that for pPrev.
     // That is because it is a lot easier to include trailing spaces before the
-    // next word in a range than it is to include preceding spaces.  
-    // Thus by concatenating onto pPrev LAST we are doing the forward Concatenate second, 
+    // next word in a range than it is to include preceding spaces.
+    // Thus by concatenating onto pPrev LAST we are doing the forward Concatenate second,
     // which is more effective in gobbling up pNode's range (our goal is to get
     // pNode's range as small as possible.
     if ( pNode->pNext )
@@ -1055,7 +1056,7 @@ HRESULT CTextRunList::MergeIn( PTEXTRUNNODE pNode, bool *pfNodeMadeItIn )
         _ASSERTE( pNode->pNext->pTextRun->IsDict() );
         _ASSERTE( pNode->pNext->pTextRun->GetStart() == pNode->pTextRun->GetEnd() );
 
-        // This concatenation may change the end of pNode's text range or 
+        // This concatenation may change the end of pNode's text range or
         // the start of pNext's text range
         pNode->pNext->pTextRun->Concatenate( pNode->pTextRun, false );
     }
@@ -1064,12 +1065,12 @@ HRESULT CTextRunList::MergeIn( PTEXTRUNNODE pNode, bool *pfNodeMadeItIn )
         _ASSERTE( pNode->pPrev->pTextRun->IsDict() );
         _ASSERTE( pNode->pPrev->pTextRun->GetEnd() == pNode->pTextRun->GetStart() );
 
-        // This concatenation may change the end of pPrev's text range or 
+        // This concatenation may change the end of pPrev's text range or
         // the start of pNode's text range
         pNode->pPrev->pTextRun->Concatenate( pNode->pTextRun, true );
     }
 
-    // If pNode now has nothing left, then remove it and try to concatenate its previous and 
+    // If pNode now has nothing left, then remove it and try to concatenate its previous and
     // next neighbors together
     if ( pNode->pTextRun->IsDegenerate() )
     {
@@ -1085,14 +1086,14 @@ HRESULT CTextRunList::MergeIn( PTEXTRUNNODE pNode, bool *pfNodeMadeItIn )
             return E_UNEXPECTED;
         }
 
-        // Concatenate pPrev and pNext.  If the pNext node is completely consumed, then 
+        // Concatenate pPrev and pNext.  If the pNext node is completely consumed, then
         // remove it as well
         if ( pPrev && pNext )
         {
             _ASSERTE( pPrev->pTextRun->GetEnd() == pNext->pTextRun->GetStart() );
-            
+
             pPrev->pTextRun->Concatenate( pNext->pTextRun, true );
-            
+
             if ( pNext->pTextRun->IsDegenerate() )
             {
                 // pNext was entirely subsumed by pPrev, so remove it
@@ -1120,12 +1121,12 @@ HRESULT CTextRunList::MergeIn( PTEXTRUNNODE pNode, bool *pfNodeMadeItIn )
 * CTextRunList::MergeInDictRun *
 *------------------------------*
 *   Description:
-*       Merges in a dictation run.  
+*       Merges in a dictation run.
 *       Since it is a new dictation run, it is complete and its range
 *       will not change.  If either neighbor is a dictation run,
 *       we need to check if the phrase elements are correct
 *       (since, of course, the new dictation run may be splitting up
-*       already-existing dictation runs).  
+*       already-existing dictation runs).
 *       If not, we may need to insert text runs on either side.
 *   Return:
 *       S_OK
@@ -1141,7 +1142,7 @@ HRESULT CTextRunList::MergeInDictRun( PTEXTRUNNODE pNode )
     HRESULT hr;
     PTEXTRUNNODE pNewTextRunNode = NULL;
     CTextRun *pNewTextRun = NULL;
-    
+
     // Make sure that the previous node still has accurate information
     if ( pNode->pPrev )
     {
@@ -1171,10 +1172,10 @@ HRESULT CTextRunList::MergeInDictRun( PTEXTRUNNODE pNode )
             }
             pNewTextRun->IncrementCount();
 
-            // That new run will cover the gap 
+            // That new run will cover the gap
             CComPtr<ITextRange> pPrevTextRange;
-            hr = m_cpTextDoc->Range( pPrev->pTextRun->GetEnd(), 
-                pNode->pTextRun->GetStart(), &pPrevTextRange );
+            hr = m_cpTextDoc->Range( pPrev->pTextRun->GetEnd(),
+                                     pNode->pTextRun->GetStart(), &pPrevTextRange );
             if ( SUCCEEDED( hr ) )
             {
                 hr = pNewTextRun->SetTextRange( pPrevTextRange );
@@ -1183,7 +1184,7 @@ HRESULT CTextRunList::MergeInDictRun( PTEXTRUNNODE pNode )
             {
                 return hr;
             }
-            
+
             // Make a new TEXTRUNNODE for the list
             pNewTextRunNode = new TEXTRUNNODE;
             if ( !pNewTextRunNode )
@@ -1192,7 +1193,7 @@ HRESULT CTextRunList::MergeInDictRun( PTEXTRUNNODE pNode )
             }
             pNewTextRunNode->pNext = pNewTextRunNode->pPrev = NULL;
             pNewTextRunNode->pTextRun = pNewTextRun;
-            
+
             // Put it right where the gap is
             hr = InsertAfter( pPrev, pNewTextRunNode );
             if ( FAILED( hr ) )
@@ -1259,12 +1260,12 @@ HRESULT CTextRunList::MergeInDictRun( PTEXTRUNNODE pNode )
             }
             pNewTextRun->IncrementCount();
 
-            // That new run will cover the gap 
+            // That new run will cover the gap
             CComPtr<ITextRange> pNextTextRange;
-            hr = m_cpTextDoc->Range( pNode->pTextRun->GetEnd(), 
-                pNext->pTextRun->GetStart(), &pNextTextRange );
+            hr = m_cpTextDoc->Range( pNode->pTextRun->GetEnd(),
+                                     pNext->pTextRun->GetStart(), &pNextTextRange );
             if ( SUCCEEDED( hr ) )
-            {    
+            {
                 hr = pNewTextRun->SetTextRange( pNextTextRange );
             }
             if ( FAILED( hr ) )
@@ -1322,15 +1323,15 @@ HRESULT CTextRunList::MergeInDictRun( PTEXTRUNNODE pNode )
 /**********************************************************************
 * CTextRunList::InsertAfter *
 *---------------------------*
-*	Description:  
+*	Description:
 *		Inserts pNodeToInsert in the list after pCurrent.
 *       If pCurrent is NULL, adds it onto the head.
 *
 * 	Return:
 *		E_POINTER if pNodeToInsert is NULL, otherwise S_OK.
 **********************************************************************/
-HRESULT CTextRunList::InsertAfter( PTEXTRUNNODE pCurrent,          
-                                   PTEXTRUNNODE pNodeToInsert )    
+HRESULT CTextRunList::InsertAfter( PTEXTRUNNODE pCurrent,
+                                   PTEXTRUNNODE pNodeToInsert )
 {
     HRESULT hr;
     if( !pNodeToInsert )
@@ -1376,14 +1377,14 @@ HRESULT CTextRunList::InsertAfter( PTEXTRUNNODE pCurrent,
 /**********************************************************************
 * CTextRunList::RemoveNode *
 *--------------------------*
-*	Description:  
+*	Description:
 *		Removes a node from the list.
 *       Decrements the text run reference counts.
 *
 * 	Return:
 *		E_POINTER if pNode is NULL, otherwise S_OK.
 **********************************************************************/
-HRESULT CTextRunList::RemoveNode( PTEXTRUNNODE pNode ) 
+HRESULT CTextRunList::RemoveNode( PTEXTRUNNODE pNode )
 {
     HRESULT hr;
     if( !pNode )
@@ -1407,17 +1408,17 @@ HRESULT CTextRunList::RemoveNode( PTEXTRUNNODE pNode )
             PTEXTRUNNODE pRight = pNode->pNext;
             pLeft->pNext = pRight;
             pRight->pPrev = pLeft;
-            
+
             // Update current node if we're removing it
             if( pNode == m_pCurrent )
             {
                 m_pCurrent = pLeft;
             }
-            
+
             // Decrement the refcount of this pNode's TextRun, then delete it
             pNode->pTextRun->DecrementCount();
             delete pNode;
-            
+
         }
         hr = S_OK;
     }
@@ -1427,14 +1428,14 @@ HRESULT CTextRunList::RemoveNode( PTEXTRUNNODE pNode )
 /**********************************************************************
 * CTextRunList::AddHead *
 *-----------------------*
-*	Description:  
+*	Description:
 *		Adds a node to the head of the list.  Sets the current
 *       pointer to the head.
 *
 * 	Return:
 *		E_POINTER if pHead is NULL, otherwise S_OK.
 **********************************************************************/
-HRESULT CTextRunList::AddHead( PTEXTRUNNODE pHead )    
+HRESULT CTextRunList::AddHead( PTEXTRUNNODE pHead )
 {
     HRESULT hr;
     if( !pHead )
@@ -1462,21 +1463,21 @@ HRESULT CTextRunList::AddHead( PTEXTRUNNODE pHead )
         }
         hr = S_OK;
     }
-    
+
     return hr;
 }   /* CTextRunList::AddHead */
 
 /**********************************************************************
 * CTextRunList::AddTail *
 *-----------------------*
-*	Description:  
+*	Description:
 *		Adds a node to the tail of the list.  Sets the current
 *       pointer to the tail.
 *
 * 	Return:
 *		E_POINTER if pTail is NULL, otherwise S_OK.
 **********************************************************************/
-HRESULT CTextRunList::AddTail( PTEXTRUNNODE pTail )   
+HRESULT CTextRunList::AddTail( PTEXTRUNNODE pTail )
 {
     HRESULT hr;
     if( !pTail )
@@ -1504,14 +1505,14 @@ HRESULT CTextRunList::AddTail( PTEXTRUNNODE pTail )
         }
         hr = S_OK;
     }
-    
+
     return hr;
 }   /* CTextRunList::AddTail */
 
 /**********************************************************************
 * CTextRunList::RemoveHead *
 *--------------------------*
-*	Description:  
+*	Description:
 *		Removes the head node from the list and decrements the
 *       text run's reference count.
 **********************************************************************/
@@ -1549,7 +1550,7 @@ void CTextRunList::RemoveHead()
 /**********************************************************************
 * CTextRunList::RemoveTail *
 *--------------------------*
-*	Description:  
+*	Description:
 *		Removes the tail node from the list and decrements the
 *       text run's reference count.
 **********************************************************************/
@@ -1562,12 +1563,12 @@ void CTextRunList::RemoveTail()
             m_pCurrent = m_pTail->pPrev;
         }
         m_pTail->pTextRun->DecrementCount();
-        
+
         // Update m_pTail
         PTEXTRUNNODE pNewTail = m_pTail->pPrev;
         delete m_pTail;
         m_pTail = pNewTail;
-       
+
         // If we have deleted the last element, then make the head NULL too
         if ( !m_pTail )
         {

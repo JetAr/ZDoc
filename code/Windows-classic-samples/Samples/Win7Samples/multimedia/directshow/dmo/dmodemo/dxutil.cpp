@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,14 +22,14 @@
 
 
 #ifndef NUMELMS
-   #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
+#define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 #include <strsafe.h>
 
 #ifdef UNICODE
-    typedef HINSTANCE (WINAPI* LPShellExecute)(HWND hwnd, LPCWSTR lpOperation, LPCWSTR lpFile, LPCWSTR lpParameters, LPCWSTR lpDirectory, INT nShowCmd);
+typedef HINSTANCE (WINAPI* LPShellExecute)(HWND hwnd, LPCWSTR lpOperation, LPCWSTR lpFile, LPCWSTR lpParameters, LPCWSTR lpDirectory, INT nShowCmd);
 #else
-    typedef HINSTANCE (WINAPI* LPShellExecute)(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, INT nShowCmd);
+typedef HINSTANCE (WINAPI* LPShellExecute)(HWND hwnd, LPCSTR lpOperation, LPCSTR lpFile, LPCSTR lpParameters, LPCSTR lpDirectory, INT nShowCmd);
 #endif
 
 bool DXUtil_FindMediaSearchParentDirs( TCHAR* strSearchPath, int cchSearch, TCHAR* strStartAt, TCHAR* strLeafName );
@@ -59,52 +59,62 @@ bool DXUtil_FindMediaSearchTypicalDirs( TCHAR* strSearchPath, int cchSearch, LPC
     //      DXSDK media path
 
     /* Search in .\ */
-    (void)StringCchCopy( strSearchPath, cchSearch, strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchCopy( strSearchPath, cchSearch, strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in ..\ */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("..\\%s"), strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("..\\%s"), strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in ..\..\ */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("..\\..\\%s"), strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("..\\..\\%s"), strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in ..\..\ */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("..\\..\\%s"), strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("..\\..\\%s"), strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in the %EXE_DIR%\ */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\%s"), strExePath, strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\%s"), strExePath, strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in the %EXE_DIR%\..\ */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\..\\%s"), strExePath, strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\..\\%s"), strExePath, strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in the %EXE_DIR%\..\..\ */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\..\\..\\%s"), strExePath, strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\..\\..\\%s"), strExePath, strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in "%EXE_DIR%\..\%EXE_NAME%\".  This matches the DirectX SDK layout */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\..\\%s\\%s"), strExePath, strExeName, strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\..\\%s\\%s"), strExePath, strExeName, strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in "%EXE_DIR%\..\..\%EXE_NAME%\".  This matches the DirectX SDK layout */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\..\\..\\%s\\%s"), strExePath, strExeName, strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s\\..\\..\\%s\\%s"), strExePath, strExeName, strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
     /* Search in DirectX SDK's media dir */
-    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s%s"), strMediaDir, strLeaf ); strSearchPath[cchSearch-1] = 0;
+    (void)StringCchPrintf( strSearchPath, cchSearch, TEXT("%s%s"), strMediaDir, strLeaf );
+    strSearchPath[cchSearch-1] = 0;
     if( GetFileAttributes( strSearchPath ) != 0xFFFFFFFF )
         return true;
 
@@ -130,14 +140,17 @@ bool DXUtil_FindMediaSearchParentDirs( TCHAR* strSearchPath, int cchSearch, TCHA
 
     while( strFilePart != NULL )
     {
-        (void)StringCchPrintf( strFullFileName, MAX_PATH, TEXT("%s\\%s"), strFullPath, strLeafName ); strFullFileName[MAX_PATH-1] = 0;
+        (void)StringCchPrintf( strFullFileName, MAX_PATH, TEXT("%s\\%s"), strFullPath, strLeafName );
+        strFullFileName[MAX_PATH-1] = 0;
         if( GetFileAttributes( strFullFileName ) != 0xFFFFFFFF )
         {
-            (void)StringCchCopy( strSearchPath, cchSearch, strFullFileName ); strSearchPath[cchSearch-1] = 0;
+            (void)StringCchCopy( strSearchPath, cchSearch, strFullFileName );
+            strSearchPath[cchSearch-1] = 0;
             return true;
         }
 
-        (void)StringCchPrintf( strSearch, MAX_PATH, TEXT("%s\\.."), strFullPath ); strSearch[MAX_PATH-1] = 0;
+        (void)StringCchPrintf( strSearch, MAX_PATH, TEXT("%s\\.."), strFullPath );
+        strSearch[MAX_PATH-1] = 0;
         GetFullPathName( strSearch, MAX_PATH, strFullPath, &strFilePart );
     }
 
@@ -171,7 +184,7 @@ HRESULT DXUtil_ReadStringRegKeyCch( HKEY hKey, LPCTSTR strRegName, TCHAR* strDes
     {
         if( dwType != REG_SZ )
         {
-            (void)StringCchCopy( strDest, cchDest , strDefault);
+            (void)StringCchCopy( strDest, cchDest, strDefault);
             strDest[cchDest-1] = 0;
             return S_FALSE;
         }
@@ -306,7 +319,7 @@ HRESULT DXUtil_WriteIntRegKey( HKEY hKey, LPCTSTR strRegName, DWORD dwValue )
 // Desc: Helper function to read a registry key BOOL
 //-----------------------------------------------------------------------------
 HRESULT DXUtil_ReadBoolRegKey( HKEY hKey, LPCTSTR strRegName, BOOL* pbDest,
-                              BOOL bDefault )
+                               BOOL bDefault )
 {
     DWORD dwType;
     DWORD dwLength = sizeof(BOOL);
@@ -600,7 +613,7 @@ VOID DXUtil_LaunchReadme( HWND hWnd, LPCTSTR strLoc )
 #ifdef UNDER_CE
     // This is not available on PocketPC
     MessageBox( hWnd, TEXT("For operating instructions, please open the ")
-                      TEXT("readme.txt file included with the project."),
+                TEXT("readme.txt file included with the project."),
                 TEXT("DirectX SDK Sample"), MB_ICONWARNING | MB_OK );
 
     return;
@@ -635,20 +648,20 @@ VOID DXUtil_LaunchReadme( HWND hWnd, LPCTSTR strLoc )
         {
             HKEY  hKey;
             LONG lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
-                                        _T("Software\\Microsoft\\DirectX SDK"),
-                                        0, KEY_READ, &hKey );
+                                         _T("Software\\Microsoft\\DirectX SDK"),
+                                         0, KEY_READ, &hKey );
             if( ERROR_SUCCESS == lResult )
             {
                 DWORD dwType;
                 DWORD dwSize = MAX_PATH * sizeof(TCHAR);
                 lResult = RegQueryValueEx( hKey, _T("DX9D4SDK Samples Path"), NULL,
-                                        &dwType, (BYTE*)strSamplePath, &dwSize );
+                                           &dwType, (BYTE*)strSamplePath, &dwSize );
                 strSamplePath[MAX_PATH-1] = 0; // RegQueryValueEx doesn't NULL term if buffer too small
 
                 if( ERROR_SUCCESS == lResult )
                 {
                     (void)StringCchPrintf( strReadmePath, 1023, TEXT("%s\\C++\\%s\\%s"),
-                                strSamplePath, strLoc, strFilename );
+                                           strSamplePath, strLoc, strFilename );
                     strReadmePath[1023] = 0;
 
                     if( GetFileAttributes( strReadmePath ) != 0xFFFFFFFF )
@@ -805,11 +818,11 @@ VOID DXUtil_LaunchReadme( HWND hWnd, LPCTSTR strLoc )
             HINSTANCE hInstShell32 = LoadLibrary(TEXT("shell32.dlTEXT("));
             if (hInstShell32 != NULL)
             {
-    #ifdef UNICODE
+#ifdef UNICODE
                 pShellExecute = (LPShellExecute)GetProcAddress(hInstShell32, _TWINCE("ShellExecuteW"));
-    #else
+#else
                 pShellExecute = (LPShellExecute)GetProcAddress(hInstShell32, _TWINCE("ShellExecuteA"));
-    #endif
+#endif
                 if( pShellExecute != NULL )
                 {
                     if( pShellExecute( hWnd, TEXT("open"), strReadmePath, NULL, NULL, SW_SHOW ) > (HINSTANCE) 32 )

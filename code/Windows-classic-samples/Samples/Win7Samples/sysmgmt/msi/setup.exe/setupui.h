@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved.
 //
@@ -39,8 +39,8 @@ enum irmProgress // progress dialog return messages
 class CDownloadUI
 {
 public:
-     CDownloadUI();
-     ~CDownloadUI();
+    CDownloadUI();
+    ~CDownloadUI();
 
     bool Initialize(HINSTANCE hInst, HWND hwndParent, LPCSTR szCaption);
     bool Terminate();
@@ -73,23 +73,44 @@ private:
 
 class CDownloadBindStatusCallback : public IBindStatusCallback
 {
- public: // IUnknown implemented virtual functions
-     HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
-     unsigned long   __stdcall AddRef();
-     unsigned long   __stdcall Release();
- public: // IBindStatusCallback implemented virtual functions
-     CDownloadBindStatusCallback(CDownloadUI* piDownloadUI);
+public: // IUnknown implemented virtual functions
+    HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
+    unsigned long   __stdcall AddRef();
+    unsigned long   __stdcall Release();
+public: // IBindStatusCallback implemented virtual functions
+    CDownloadBindStatusCallback(CDownloadUI* piDownloadUI);
     ~CDownloadBindStatusCallback();
 
-    HRESULT __stdcall OnStartBinding(DWORD, IBinding*) {return S_OK;}
-    HRESULT __stdcall GetPriority(LONG*) {return S_OK;}
-    HRESULT __stdcall OnLowResource(DWORD ) {return S_OK;}
+    HRESULT __stdcall OnStartBinding(DWORD, IBinding*)
+    {
+        return S_OK;
+    }
+    HRESULT __stdcall GetPriority(LONG*)
+    {
+        return S_OK;
+    }
+    HRESULT __stdcall OnLowResource(DWORD )
+    {
+        return S_OK;
+    }
     HRESULT __stdcall OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR szStatusText);
-    HRESULT __stdcall OnStopBinding(HRESULT, LPCWSTR ) {return S_OK;}
-    HRESULT __stdcall GetBindInfo(DWORD*, BINDINFO*) {return S_OK;}
-    HRESULT __stdcall OnDataAvailable(DWORD, DWORD, FORMATETC*, STGMEDIUM*) {return S_OK;}
-    HRESULT __stdcall OnObjectAvailable(REFIID, IUnknown*) {return S_OK;}
- private:
+    HRESULT __stdcall OnStopBinding(HRESULT, LPCWSTR )
+    {
+        return S_OK;
+    }
+    HRESULT __stdcall GetBindInfo(DWORD*, BINDINFO*)
+    {
+        return S_OK;
+    }
+    HRESULT __stdcall OnDataAvailable(DWORD, DWORD, FORMATETC*, STGMEDIUM*)
+    {
+        return S_OK;
+    }
+    HRESULT __stdcall OnObjectAvailable(REFIID, IUnknown*)
+    {
+        return S_OK;
+    }
+private:
     CDownloadUI* m_pDownloadUI; // pointer to actual UI
     int          m_iRefCnt;
     ULONG        m_ulProgressSoFar;

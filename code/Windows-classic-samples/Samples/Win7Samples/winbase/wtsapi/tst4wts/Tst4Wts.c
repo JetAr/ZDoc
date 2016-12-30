@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
 *
 * tst4wts.c
 *
@@ -23,14 +23,14 @@ typedef BOOL (WINAPI *PWTSENUMERATESERVERSW) (
     IN DWORD Version,
     OUT PWTS_SERVER_INFOW * ppServerInfo,
     OUT DWORD * pCount
-    );
+);
 typedef BOOL (WINAPI *PWTSENUMERATESERVERSA) (
     IN LPSTR pDomainName,
     IN DWORD Reserved,
     IN DWORD Version,
     OUT PWTS_SERVER_INFOA * ppServerInfo,
     OUT DWORD * pCount
-    );
+);
 
 #ifdef UNICODE
 typedef PWTSENUMERATESERVERSW PWTSENUMERATESERVERS;
@@ -45,14 +45,14 @@ PWTSENUMERATESERVERS pWTSEnumerateServers = NULL;
 
 typedef VOID (WINAPI *PWTSFREEMEMORY)(IN PVOID );
 char aWTSFreeMemory[] = "WTSFreeMemory";
-PWTSFREEMEMORY pWTSFreeMemory = NULL;    
+PWTSFREEMEMORY pWTSFreeMemory = NULL;
 
 
 /********************************************************************
  *
  *  EnumerateServers
  *
- *    Display a list of the Terminal Servers within the specified 
+ *    Display a list of the Terminal Servers within the specified
  *    Windows NT domain
  *
  *
@@ -75,10 +75,10 @@ EnumerateServers( LPTSTR pDomainName )
     _tprintf( TEXT("\nWTSEnumerateServers: domain %s\n"), pDomainName );
 
     if ( !( (*pWTSEnumerateServers)( pDomainName,
-                                    0,
-                                    1,
-                                    &pServerInfo,
-                                    &Count ) ) )
+                                     0,
+                                     1,
+                                     &pServerInfo,
+                                     &Count ) ) )
     {
         _tprintf( TEXT("WTSEnumerateServers failed, error %u\n"),
                   GetLastError() );
@@ -128,18 +128,18 @@ LoadWTSAPI(void)
      *  Get entry point for WTSEnumerateServers
      */
     pWTSEnumerateServers =
-       (PWTSENUMERATESERVERS)GetProcAddress( hWTSAPI,
-                                            aWTSEnumerateServers );
+        (PWTSENUMERATESERVERS)GetProcAddress( hWTSAPI,
+                aWTSEnumerateServers );
 
     /*
      *  Get entry point for WTSFreeMemory
      */
     pWTSFreeMemory =
-       (PWTSFREEMEMORY)GetProcAddress( hWTSAPI, aWTSFreeMemory );
+        (PWTSFREEMEMORY)GetProcAddress( hWTSAPI, aWTSFreeMemory );
 
     return(TRUE);
 }
-                                                     
+
 
 /**********************************************************************
  *
@@ -151,7 +151,7 @@ void main( INT argc, CHAR **argv )
 {
     /*
      *  Attempt to load the WTSAPI32.DLL.  If this fails, the program
-     *  will exit gracefully. 
+     *  will exit gracefully.
      *
      *  If your  application will run on both plain Windows NT and
      *  on Terminal Server, you can choose to use a reduced feature

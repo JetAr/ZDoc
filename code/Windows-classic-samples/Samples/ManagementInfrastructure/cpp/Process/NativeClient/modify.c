@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -16,8 +16,8 @@
 void Do_Modify_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, MI_Instance *modifyInstance);
 void Do_Modify_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, MI_Instance *modifyInstance);
 
-/* Do_Modify() prompts the user to input the key properties to identify the object to get, retrieves the instance from the server, 
- * allows the user to change parameters, then selects from synchronous or asynchronous. The final instance is then passed to the 
+/* Do_Modify() prompts the user to input the key properties to identify the object to get, retrieves the instance from the server,
+ * allows the user to change parameters, then selects from synchronous or asynchronous. The final instance is then passed to the
  * actual function to carry out the operation.
  */
 void Do_Modify(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const wchar_t *className)
@@ -103,11 +103,11 @@ void Do_Modify(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, const
 
     /* Select synchronous or asynchronous operation */
     synchronous = GetUserSelection(
-                L"How do you want the Modify operation to be carried out?\n"
-                L"\t[1] Synchronous\n"
-                L"\t[2] Asynchronous\n"
-                L"\t[0] back to operation choice\n",
-                L"012");
+                      L"How do you want the Modify operation to be carried out?\n"
+                      L"\t[1] Synchronous\n"
+                      L"\t[2] Asynchronous\n"
+                      L"\t[0] back to operation choice\n",
+                      L"012");
     if (synchronous == L'0')
     {
         goto operationCleanup;
@@ -143,8 +143,8 @@ operationCleanup:
 }
 
 /* Do_Modify_Synchronous() carries out an instance Modify operation synchronously, retrieving the result
- * on the same thread.  The result can be retrieved on any thread, but that would be unusual for a 
- * synchronous operation. 
+ * on the same thread.  The result can be retrieved on any thread, but that would be unusual for a
+ * synchronous operation.
  */
 void Do_Modify_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, MI_Instance *modifyInstance)
 {
@@ -165,14 +165,14 @@ void Do_Modify_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespac
      *      MI_OperationCallbacks.writeProgress
      */
 
-    /* Initiate the ModifyInstance operation.  Synchronous results are always retrieved through a call MI_Operation_GetInstance(). 
+    /* Initiate the ModifyInstance operation.  Synchronous results are always retrieved through a call MI_Operation_GetInstance().
      * All operations must be closed with a call to MI_Operation_Close(), but all results must be processed before that.
      * The operation can be cancelled via MI_Operation_Cancel(), although even then all results must be consumed before the operation
-     * is closed. 
+     * is closed.
      */
     MI_Session_ModifyInstance(miSession, 0, NULL, namespaceName, modifyInstance, NULL, &miOperation);
 
-    /* We always need to look through results until moreResults == MI_FALSE.  For synchronous operations without 
+    /* We always need to look through results until moreResults == MI_FALSE.  For synchronous operations without
      * PowerShell callbacks it is not very likely to get more than one result from MI_Operation_GetInstance,
      * but it is always best to be sure, especially if you choose to add the PowerShell callbacks at a later data
      * and forget to update the retrieval to a loop.
@@ -207,12 +207,13 @@ void Do_Modify_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespac
             }
             wprintf(L"------------------------------------------\n");
         }
-    } while (moreResults == MI_TRUE);
-    
+    }
+    while (moreResults == MI_TRUE);
+
     /* All operations must be closed.  If an operation is not closed the owning session will hang until the operations
      * are closed fully.  MI_Operation_Close will cancel an operation if it is still running, however results must be
-     * consumed before the close can complete fully.  
-     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed 
+     * consumed before the close can complete fully.
+     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed
      * (moreResults == MI_FALSE).
      */
     _miResult = MI_Operation_Close(&miOperation);
@@ -222,7 +223,7 @@ void Do_Modify_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespac
          * When an out of memory error happens, the operation will shut down as best it can.
          * Invalid parameter means a programming error happened.
          * Access denied means the security context while calling into the Close() is different from
-         * when the operation was created.  This will be a programming error and could happen if closing 
+         * when the operation was created.  This will be a programming error and could happen if closing
          * from a different thread and forgetting to impersonate.
          */
         wprintf(L"MI_Operation_Close failed, error %s\n", MI_Result_To_String(_miResult));
@@ -230,7 +231,7 @@ void Do_Modify_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespac
 }
 
 /* Do_Modify_Asynchronous() carries out an instance Modify operation asynchronously. The asynchronous callback
- * will with the final result. 
+ * will with the final result.
  */
 void Do_Modify_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, MI_Instance *modifyInstance)
 {
@@ -247,7 +248,7 @@ void Do_Modify_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespa
     if (instanceCallback_Context.asyncNotificationHandle == NULL)
     {
         wprintf(L"Failed to create a Windows Event, windows error %u\n", GetLastError());
-        return; 
+        return;
     }
 
     /* Add optional context information to callback structure so we can hold state
@@ -281,13 +282,13 @@ void Do_Modify_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespa
     MI_Session_ModifyInstance(miSession, 0, NULL, namespaceName, modifyInstance, &miOperationCallbacks, &miOperation);
 
     /* InstanceResultCallback() will always be called back for asyncronous operations, so wait for it to finish */
-    
+
     WaitForSingleObject(instanceCallback_Context.asyncNotificationHandle, INFINITE);
 
     CloseHandle(instanceCallback_Context.asyncNotificationHandle);
 
-    /* Final miResult is here if needed: instanceCallback_Context.finalResult 
-     * Any data from the callback cannot be accessed here because the lifetime of the data is 
+    /* Final miResult is here if needed: instanceCallback_Context.finalResult
+     * Any data from the callback cannot be accessed here because the lifetime of the data is
      * only valid in the callback and until the operation is closed.
      * In this sample the operation handle is closed inside the instance callback.
      */

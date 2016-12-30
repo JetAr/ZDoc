@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
   Copyright (c) 1995 Intel Corp
 
@@ -91,23 +91,23 @@ DTHandlerInit(
     HandlerFuncTable[DTCODE_WSAAccept] = DTHandler_WSAAccept;
     HandlerFuncTable[DTCODE_WSAAsyncSelect] = DTHandler_WSAAsyncSelect;
     HandlerFuncTable[DTCODE_WSACancelBlockingCall] =
-      DTHandler_WSACancelBlockingCall;
+        DTHandler_WSACancelBlockingCall;
     HandlerFuncTable[DTCODE_WSACleanup] = DTHandler_WSACleanup;
     HandlerFuncTable[DTCODE_WSACloseEvent] = DTHandler_WSACloseEvent;
     HandlerFuncTable[DTCODE_WSAConnect] = DTHandler_WSAConnect;
     HandlerFuncTable[DTCODE_WSACreateEvent] = DTHandler_WSACreateEvent;
     HandlerFuncTable[DTCODE_WSADuplicateSocketA] =
-      DTHandler_WSADuplicateSocketA;
+        DTHandler_WSADuplicateSocketA;
     HandlerFuncTable[DTCODE_WSADuplicateSocketW] =
-      DTHandler_WSADuplicateSocketW;
+        DTHandler_WSADuplicateSocketW;
     HandlerFuncTable[DTCODE_WSAEnumNetworkEvents] =
-      DTHandler_WSAEnumNetworkEvents;
+        DTHandler_WSAEnumNetworkEvents;
     HandlerFuncTable[DTCODE_WSAEnumProtocolsA] = DTHandler_WSAEnumProtocolsA;
     HandlerFuncTable[DTCODE_WSAEnumProtocolsW] = DTHandler_WSAEnumProtocolsW;
     HandlerFuncTable[DTCODE_WSAEventSelect] = DTHandler_WSAEventSelect;
     HandlerFuncTable[DTCODE_WSAGetLastError] = DTHandler_WSAGetLastError;
     HandlerFuncTable[DTCODE_WSAGetOverlappedResult] =
-      DTHandler_WSAGetOverlappedResult;
+        DTHandler_WSAGetOverlappedResult;
     HandlerFuncTable[DTCODE_WSAGetQOSByName] = DTHandler_WSAGetQOSByName;
     HandlerFuncTable[DTCODE_WSAHtonl] = DTHandler_WSAHtonl;
     HandlerFuncTable[DTCODE_WSAHtons] = DTHandler_WSAHtons;
@@ -118,24 +118,24 @@ DTHandlerInit(
     HandlerFuncTable[DTCODE_WSANtohs] = DTHandler_WSANtohs;
     HandlerFuncTable[DTCODE_WSARecv] = DTHandler_WSARecv;
     HandlerFuncTable[DTCODE_WSARecvDisconnect] =
-      DTHandler_WSARecvDisconnect;
+        DTHandler_WSARecvDisconnect;
     HandlerFuncTable[DTCODE_WSARecvFrom] = DTHandler_WSARecvFrom;
     HandlerFuncTable[DTCODE_WSAResetEvent] = DTHandler_WSAResetEvent;
     HandlerFuncTable[DTCODE_WSASend] = DTHandler_WSASend;
     HandlerFuncTable[DTCODE_WSASendDisconnect] =
-      DTHandler_WSASendDisconnect;
+        DTHandler_WSASendDisconnect;
     HandlerFuncTable[DTCODE_WSASendTo] = DTHandler_WSASendTo;
     HandlerFuncTable[DTCODE_WSASetBlockingHook] =
-      DTHandler_WSASetBlockingHook;
+        DTHandler_WSASetBlockingHook;
     HandlerFuncTable[DTCODE_WSASetEvent] = DTHandler_WSASetEvent;
     HandlerFuncTable[DTCODE_WSASetLastError] = DTHandler_WSASetLastError;
     HandlerFuncTable[DTCODE_WSASocketA] = DTHandler_WSASocketA;
     HandlerFuncTable[DTCODE_WSASocketW] = DTHandler_WSASocketW;
     HandlerFuncTable[DTCODE_WSAStartup] = DTHandler_WSAStartup;
     HandlerFuncTable[DTCODE_WSAUnhookBlockingHook] =
-      DTHandler_WSAUnhookBlockingHook;
+        DTHandler_WSAUnhookBlockingHook;
     HandlerFuncTable[DTCODE_WSAWaitForMultipleEvents] =
-      DTHandler_WSAWaitForMultipleEvents;
+        DTHandler_WSAWaitForMultipleEvents;
     HandlerFuncTable[DTCODE_gethostbyaddr] = DTHandler_gethostbyaddr;
     HandlerFuncTable[DTCODE_gethostbyname] = DTHandler_gethostbyname;
     HandlerFuncTable[DTCODE_gethostname] = DTHandler_gethostname;
@@ -146,34 +146,34 @@ DTHandlerInit(
     HandlerFuncTable[DTCODE_inet_addr] = DTHandler_inet_addr;
     HandlerFuncTable[DTCODE_inet_ntoa] = DTHandler_inet_ntoa;
     HandlerFuncTable[DTCODE_WSAAsyncGetHostByAddr] =
-      DTHandler_WSAAsyncGetHostByAddr;
+        DTHandler_WSAAsyncGetHostByAddr;
     HandlerFuncTable[DTCODE_WSAAsyncGetHostByName] =
-      DTHandler_WSAAsyncGetHostByName;
+        DTHandler_WSAAsyncGetHostByName;
     HandlerFuncTable[DTCODE_WSAAsyncGetProtoByName] =
-      DTHandler_WSAAsyncGetProtoByName;
+        DTHandler_WSAAsyncGetProtoByName;
     HandlerFuncTable[DTCODE_WSAAsyncGetProtoByNumber] =
-      DTHandler_WSAAsyncGetProtoByNumber;
+        DTHandler_WSAAsyncGetProtoByNumber;
     HandlerFuncTable[DTCODE_WSAAsyncGetServByName] =
-      DTHandler_WSAAsyncGetServByName;
+        DTHandler_WSAAsyncGetServByName;
     HandlerFuncTable[DTCODE_WSAAsyncGetServByPort] =
-      DTHandler_WSAAsyncGetServByPort;
+        DTHandler_WSAAsyncGetServByPort;
     HandlerFuncTable[DTCODE_WSACancelAsyncRequest] =
-      DTHandler_WSACancelAsyncRequest;
+        DTHandler_WSACancelAsyncRequest;
     HandlerFuncTable[DTCODE_WSPAccept] = DTHandler_WSPAccept;
     HandlerFuncTable[DTCODE_WSPAsyncSelect] = DTHandler_WSPAsyncSelect;
     HandlerFuncTable[DTCODE_WSPBind] = DTHandler_WSPBind;
     HandlerFuncTable[DTCODE_WSPCancelBlockingCall] =
-      DTHandler_WSPCancelBlockingCall;
+        DTHandler_WSPCancelBlockingCall;
     HandlerFuncTable[DTCODE_WSPCleanup] = DTHandler_WSPCleanup;
     HandlerFuncTable[DTCODE_WSPCloseSocket] = DTHandler_WSPCloseSocket;
     HandlerFuncTable[DTCODE_WSPConnect] = DTHandler_WSPConnect;
     HandlerFuncTable[DTCODE_WSPDuplicateSocket] =
-      DTHandler_WSPDuplicateSocket;
+        DTHandler_WSPDuplicateSocket;
     HandlerFuncTable[DTCODE_WSPEnumNetworkEvents] =
-      DTHandler_WSPEnumNetworkEvents;
+        DTHandler_WSPEnumNetworkEvents;
     HandlerFuncTable[DTCODE_WSPEventSelect] = DTHandler_WSPEventSelect;
     HandlerFuncTable[DTCODE_WSPGetOverlappedResult] =
-      DTHandler_WSPGetOverlappedResult;
+        DTHandler_WSPGetOverlappedResult;
     HandlerFuncTable[DTCODE_WSPGetPeerName] = DTHandler_WSPGetPeerName;
     HandlerFuncTable[DTCODE_WSPGetSockName] = DTHandler_WSPGetSockName;
     HandlerFuncTable[DTCODE_WSPGetSockOpt] = DTHandler_WSPGetSockOpt;
@@ -183,12 +183,12 @@ DTHandlerInit(
     HandlerFuncTable[DTCODE_WSPListen] = DTHandler_WSPListen;
     HandlerFuncTable[DTCODE_WSPRecv] = DTHandler_WSPRecv;
     HandlerFuncTable[DTCODE_WSPRecvDisconnect] =
-      DTHandler_WSPRecvDisconnect;
+        DTHandler_WSPRecvDisconnect;
     HandlerFuncTable[DTCODE_WSPRecvFrom] = DTHandler_WSPRecvFrom;
     HandlerFuncTable[DTCODE_WSPSelect] = DTHandler_WSPSelect;
     HandlerFuncTable[DTCODE_WSPSend] = DTHandler_WSPSend;
     HandlerFuncTable[DTCODE_WSPSendDisconnect] =
-      DTHandler_WSPSendDisconnect;
+        DTHandler_WSPSendDisconnect;
     HandlerFuncTable[DTCODE_WSPSendTo] = DTHandler_WSPSendTo;
     HandlerFuncTable[DTCODE_WSPSetSockOpt] = DTHandler_WSPSetSockOpt;
     HandlerFuncTable[DTCODE_WSPShutdown] = DTHandler_WSPShutdown;
@@ -196,20 +196,20 @@ DTHandlerInit(
     HandlerFuncTable[DTCODE_WSPStartup] = DTHandler_WSPStartup;
     HandlerFuncTable[DTCODE_WPUCloseEvent] = DTHandler_WPUCloseEvent;
     HandlerFuncTable[DTCODE_WPUCloseSocketHandle] =
-      DTHandler_WPUCloseSocketHandle;
+        DTHandler_WPUCloseSocketHandle;
     HandlerFuncTable[DTCODE_WPUCreateEvent] = DTHandler_WPUCreateEvent;
     HandlerFuncTable[DTCODE_WPUCreateSocketHandle] =
-      DTHandler_WPUCreateSocketHandle;
+        DTHandler_WPUCreateSocketHandle;
     HandlerFuncTable[DTCODE_WSCDeinstallProvider] =
-      DTHandler_WSCDeinstallProvider;
+        DTHandler_WSCDeinstallProvider;
     HandlerFuncTable[DTCODE_WSCInstallProvider] =
-      DTHandler_WSCInstallProvider;
+        DTHandler_WSCInstallProvider;
     HandlerFuncTable[DTCODE_WPUModifyIFSHandle] =
-      DTHandler_WPUModifyIFSHandle;
+        DTHandler_WPUModifyIFSHandle;
     HandlerFuncTable[DTCODE_WPUQueryBlockingCallback] =
-      DTHandler_WPUQueryBlockingCallback;
+        DTHandler_WPUQueryBlockingCallback;
     HandlerFuncTable[DTCODE_WPUQuerySocketHandleContext] =
-      DTHandler_WPUQuerySocketHandleContext;
+        DTHandler_WPUQuerySocketHandleContext;
     HandlerFuncTable[DTCODE_WPUQueueApc] = DTHandler_WPUQueueApc;
     HandlerFuncTable[DTCODE_WPUResetEvent] = DTHandler_WPUResetEvent;
     HandlerFuncTable[DTCODE_WPUSetEvent] = DTHandler_WPUSetEvent;
@@ -341,9 +341,9 @@ DTHandler_accept(
     struct sockaddr FAR **addr = va_arg(vl, struct sockaddr FAR **);
     int FAR **addrlen = va_arg(vl, int FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "accept() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "accept() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -365,8 +365,8 @@ DTHandler_bind(
     int *namelen = va_arg(vl, int *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "bind() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "bind() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -386,8 +386,8 @@ DTHandler_closesocket(
     SOCKET *s = va_arg(vl, SOCKET *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "closesocket() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "closesocket() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -409,8 +409,8 @@ DTHandler_connect(
     int *namelen = va_arg(vl, int *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "connect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "connect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -432,8 +432,8 @@ DTHandler_getpeername(
     int FAR **namelen = va_arg(vl, int FAR **);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "getpeername() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "getpeername() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -454,9 +454,9 @@ DTHandler_getsockname(
     struct sockaddr FAR **name = va_arg(vl, struct sockaddr FAR **);
     int FAR **namelen = va_arg(vl, int FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "getsockname() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "getsockname() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -480,8 +480,8 @@ DTHandler_getsockopt(
     int FAR **optlen = va_arg(vl, int FAR **);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "getsockopt() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "getsockopt() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -501,8 +501,8 @@ DTHandler_htonl(
     u_long *hostlong = va_arg(vl, u_long *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "htonl() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "htonl() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -522,8 +522,8 @@ DTHandler_htons(
     u_short *hostshort = va_arg(vl, u_short *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "htons() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "htons() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -545,8 +545,8 @@ DTHandler_ioctlsocket(
     u_long FAR **argp = va_arg(vl, u_long FAR **);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "ioctlsocket() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "ioctlsocket() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -567,8 +567,8 @@ DTHandler_listen(
     int *backlog = va_arg(vl, int *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "listen() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "listen() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -588,8 +588,8 @@ DTHandler_ntohl(
     u_long *netlong = va_arg(vl, u_long *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "ntohl() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "ntohl() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -609,8 +609,8 @@ DTHandler_ntohs(
     u_short *netshort = va_arg(vl, u_short *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "ntohs() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "ntohs() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -633,8 +633,8 @@ DTHandler_recv(
     int *flags = va_arg(vl, int *);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "recv() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "recv() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -658,9 +658,9 @@ DTHandler_recvfrom(
     struct sockaddr FAR **from = va_arg(vl, struct sockaddr FAR **);
     int FAR **fromlen = va_arg(vl, int FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "recvfrom() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "recvfrom() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -683,9 +683,9 @@ DTHandler_select(
     fd_set FAR **exceptfds = va_arg(vl, fd_set FAR **);
     struct timeval FAR **timeout = va_arg(vl, struct timeval FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "select() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "select() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -707,9 +707,9 @@ DTHandler_send(
     int *len = va_arg(vl, int *);
     int *flags = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "send() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "send() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -733,9 +733,9 @@ DTHandler_sendto(
     struct sockaddr FAR **to = va_arg(vl, struct sockaddr FAR **);
     int *tolen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "sendto() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "sendto() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -758,9 +758,9 @@ DTHandler_setsockopt(
     char FAR **optval = va_arg(vl, char FAR **);
     int *optlen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "setsockopt() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "setsockopt() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -780,9 +780,9 @@ DTHandler_shutdown(
     SOCKET *s = va_arg(vl, SOCKET *);
     int *how = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "shutdown() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "shutdown() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -803,9 +803,9 @@ DTHandler_socket(
     int *type = va_arg(vl, int *);
     int *protocol = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "socket() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "socket() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -828,9 +828,9 @@ DTHandler_WSAAccept(
     LPCONDITIONPROC *lpfnCondition = va_arg(vl, LPCONDITIONPROC *);
     DWORD *dwCallbackData = va_arg(vl, DWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAccept() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAccept() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -852,9 +852,9 @@ DTHandler_WSAAsyncSelect(
     u_int *wMsg = va_arg(vl, u_int *);
     long *lEvent = va_arg(vl, long *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAsyncSelect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAsyncSelect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -872,9 +872,9 @@ DTHandler_WSACancelBlockingCall(
 {
     int *RetVal = (int *)ReturnValue;
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSACancelBlockingCall() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSACancelBlockingCall() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -892,9 +892,9 @@ DTHandler_WSACleanup(
 {
     int *RetVal = (int *)ReturnValue;
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSACleanup() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSACleanup() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -913,9 +913,9 @@ DTHandler_WSACloseEvent(
     BOOL *RetVal = (BOOL *)ReturnValue;
     WSAEVENT *hEvent = va_arg(vl, WSAEVENT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSACloseEvent() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSACloseEvent() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -940,9 +940,9 @@ DTHandler_WSAConnect(
     LPQOS *lpSQOS = va_arg(vl, LPQOS *);
     LPQOS *lpGQOS = va_arg(vl, LPQOS *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAConnect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAConnect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -960,9 +960,9 @@ DTHandler_WSACreateEvent(
 {
     WSAEVENT *RetVal = (WSAEVENT *)ReturnValue;
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSACreateEvent() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSACreateEvent() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -983,9 +983,9 @@ DTHandler_WSADuplicateSocketA(
     DWORD *dwProcessId = va_arg(vl, DWORD *);
     LPWSAPROTOCOL_INFOA *lpProtocolInfo = va_arg(vl, LPWSAPROTOCOL_INFOA *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSADuplicateSocketA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSADuplicateSocketA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1006,9 +1006,9 @@ DTHandler_WSADuplicateSocketW(
     DWORD *dwProcessId = va_arg(vl, DWORD *);
     LPWSAPROTOCOL_INFOW *lpProtocolInfo = va_arg(vl, LPWSAPROTOCOL_INFOW *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSADuplicateSocketW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSADuplicateSocketW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1029,9 +1029,9 @@ DTHandler_WSAEnumNetworkEvents(
     WSAEVENT *hEventObject = va_arg(vl, WSAEVENT *);
     LPWSANETWORKEVENTS *lpNetworkEvents = va_arg(vl, LPWSANETWORKEVENTS *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAEnumNetworkEvents() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAEnumNetworkEvents() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1052,9 +1052,9 @@ DTHandler_WSAEnumProtocolsA(
     LPWSAPROTOCOL_INFOA *lpProtocolBuffer = va_arg(vl, LPWSAPROTOCOL_INFOA *);
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAEnumProtocolsA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAEnumProtocolsA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1075,9 +1075,9 @@ DTHandler_WSAEnumProtocolsW(
     LPWSAPROTOCOL_INFOW *lpProtocolBuffer = va_arg(vl, LPWSAPROTOCOL_INFOW *);
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAEnumProtocolsW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAEnumProtocolsW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1098,9 +1098,9 @@ DTHandler_WSAEventSelect(
     WSAEVENT *hEventObject = va_arg(vl, WSAEVENT *);
     long *lNetworkEvents = va_arg(vl, long *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAEventSelect() %s.\r\n",
-         PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAEventSelect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1118,9 +1118,9 @@ DTHandler_WSAGetLastError(
 {
     int *RetVal = (int *)ReturnValue;
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetLastError() %s.\r\n",
-         PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetLastError() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1143,9 +1143,9 @@ DTHandler_WSAGetOverlappedResult(
     BOOL *fWait = va_arg(vl, BOOL *);
     LPDWORD *lpdwFlags = va_arg(vl, LPDWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetOverlappedResult() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetOverlappedResult() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1166,9 +1166,9 @@ DTHandler_WSAGetQOSByName(
     LPWSABUF *lpQOSName = va_arg(vl, LPWSABUF *);
     LPQOS *lpQOS = va_arg(vl, LPQOS *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetQOSByName() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetQOSByName() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1189,9 +1189,9 @@ DTHandler_WSAHtonl(
     u_long *hostlong = va_arg(vl, u_long *);
     u_long FAR **lpnetlong = va_arg(vl, u_long FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAHtonl() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAHtonl() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1212,9 +1212,9 @@ DTHandler_WSAHtons(
     u_short *hostshort = va_arg(vl, u_short *);
     u_short FAR **lpnetshort = va_arg(vl, u_short FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAHtons() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAHtons() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1240,11 +1240,11 @@ DTHandler_WSAIoctl(
     LPDWORD *lpcbBytesReturned = va_arg(vl, LPDWORD *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAIoctl() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAIoctl() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1262,9 +1262,9 @@ DTHandler_WSAIsBlocking(
 {
     BOOL *RetVal = (BOOL *)ReturnValue;
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAIsBlocking() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAIsBlocking() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1290,9 +1290,9 @@ DTHandler_WSAJoinLeaf(
     LPQOS *lpGQOS = va_arg(vl, LPQOS *);
     DWORD *dwFlags = va_arg(vl, DWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAJoinLeaf() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAJoinLeaf() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1313,9 +1313,9 @@ DTHandler_WSANtohl(
     u_long *netlong = va_arg(vl, u_long *);
     u_long FAR **lphostlong = va_arg(vl, u_long FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSANtohl() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSANtohl() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1336,9 +1336,9 @@ DTHandler_WSANtohs(
     u_short *netshort = va_arg(vl, u_short *);
     u_short FAR **lphostshort = va_arg(vl, u_short FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSANtohs() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSANtohs() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1362,11 +1362,11 @@ DTHandler_WSARecv(
     LPDWORD *lpFlags = va_arg(vl, LPDWORD *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSARecv() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSARecv() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1386,9 +1386,9 @@ DTHandler_WSARecvDisconnect(
     SOCKET *s = va_arg(vl, SOCKET *);
     LPWSABUF *lpInboundDisconnectData = va_arg(vl, LPWSABUF *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSARecvDisconnect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSARecvDisconnect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1414,11 +1414,11 @@ DTHandler_WSARecvFrom(
     LPINT *lpFromlen = va_arg(vl, LPINT *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSARecvFrom() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSARecvFrom() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1437,9 +1437,9 @@ DTHandler_WSAResetEvent(
     BOOL *RetVal = (BOOL *)ReturnValue;
     WSAEVENT *hEvent = va_arg(vl, WSAEVENT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAResetEvent() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAResetEvent() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1463,11 +1463,11 @@ DTHandler_WSASend(
     DWORD *dwFlags = va_arg(vl, DWORD *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASend() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASend() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1487,9 +1487,9 @@ DTHandler_WSASendDisconnect(
     SOCKET *s = va_arg(vl, SOCKET *);
     LPWSABUF *lpOutboundDisconnectData = va_arg(vl, LPWSABUF *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASendDisconnect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASendDisconnect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1515,11 +1515,11 @@ DTHandler_WSASendTo(
     int *iTolen = va_arg(vl, int *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASendTo() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASendTo() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1538,9 +1538,9 @@ DTHandler_WSASetBlockingHook(
     FARPROC *RetVal = (FARPROC *)ReturnValue;
     FARPROC *lpBlockFunc = va_arg(vl, FARPROC *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASetBlockingHook() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASetBlockingHook() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1559,9 +1559,9 @@ DTHandler_WSASetEvent(
     BOOL *RetVal = (BOOL *)ReturnValue;
     WSAEVENT *hEvent = va_arg(vl, WSAEVENT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASetEvent() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASetEvent() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1580,9 +1580,9 @@ DTHandler_WSASetLastError(
     // WSASetLastError returns void, so ReturnValue should be NULL
     int *iError = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASetLastError() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASetLastError() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1606,9 +1606,9 @@ DTHandler_WSASocketA(
     GROUP *g = va_arg(vl, GROUP *);
     DWORD *dwFlags = va_arg(vl, DWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASocketA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASocketA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1632,9 +1632,9 @@ DTHandler_WSASocketW(
     GROUP *g = va_arg(vl, GROUP *);
     DWORD *dwFlags = va_arg(vl, DWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASocketW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASocketW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1654,9 +1654,9 @@ DTHandler_WSAStartup(
     WORD *wVersionRequested = va_arg(vl, WORD *);
     LPWSADATA *lpWSAData = va_arg(vl, LPWSADATA *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAStartup() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAStartup() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1674,9 +1674,9 @@ DTHandler_WSAUnhookBlockingHook(
 {
     int *RetVal = (int *)ReturnValue;
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAUnhookBlockingHook() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAUnhookBlockingHook() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1699,9 +1699,9 @@ DTHandler_WSAWaitForMultipleEvents(
     DWORD *dwTimeout = va_arg(vl, DWORD *);
     BOOL *fAlertable = va_arg(vl, BOOL *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAWaitForMultipleEvents() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAWaitForMultipleEvents() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1722,9 +1722,9 @@ DTHandler_gethostbyaddr(
     int *len = va_arg(vl, int *);
     int *type = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "gethostbyaddr() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "gethostbyaddr() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1743,9 +1743,9 @@ DTHandler_gethostbyname(
     struct hostent FAR **RetVal = (struct hostent FAR **)ReturnValue;
     char FAR **name = va_arg(vl, char FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "gethostbyname() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "gethostbyname() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1765,9 +1765,9 @@ DTHandler_gethostname(
     char FAR **name = va_arg(vl, char FAR **);
     int *namelen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "gethostname() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "gethostname() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1786,9 +1786,9 @@ DTHandler_getprotobyname(
     struct protoent FAR **RetVal = (struct protoent FAR **)ReturnValue;
     char FAR **name = va_arg(vl, char FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "getprotobyname() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "getprotobyname() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1807,9 +1807,9 @@ DTHandler_getprotobynumber(
     struct protoent FAR **RetVal = (struct protoent FAR **)ReturnValue;
     int *number = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "getprotobynumber() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "getprotobynumber() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1829,9 +1829,9 @@ DTHandler_getservbyname(
     char FAR **name = va_arg(vl, char FAR **);
     char FAR **proto = va_arg(vl, char FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "getservbyname() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "getservbyname() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1851,9 +1851,9 @@ DTHandler_getservbyport(
     int *port = va_arg(vl, int *);
     char FAR **proto = va_arg(vl, char FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "getservbyport() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "getservbyport() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1872,9 +1872,9 @@ DTHandler_inet_addr(
     unsigned long *RetVal = (unsigned long *)ReturnValue;
     char FAR **cp = va_arg(vl, char FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "inet_addr() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "inet_addr() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1893,9 +1893,9 @@ DTHandler_inet_ntoa(
     char FAR **RetVal = (char FAR **)ReturnValue;
     struct in_addr *in = va_arg(vl, struct in_addr *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "inet_ntoa() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "inet_ntoa() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1920,9 +1920,9 @@ DTHandler_WSAAsyncGetHostByAddr(
     char FAR **buf = va_arg(vl, char FAR **);
     int *buflen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAsyncGetHostByAddr() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAsyncGetHostByAddr() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1945,9 +1945,9 @@ DTHandler_WSAAsyncGetHostByName(
     char FAR **buf = va_arg(vl, char FAR **);
     int *buflen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAsyncGetHostByName() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAsyncGetHostByName() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1970,9 +1970,9 @@ DTHandler_WSAAsyncGetProtoByName(
     char FAR **buf = va_arg(vl, char FAR **);
     int *buflen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAsyncGetProtoByName() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAsyncGetProtoByName() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut(LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -1995,9 +1995,9 @@ DTHandler_WSAAsyncGetProtoByNumber(
     char FAR **buf = va_arg(vl, char FAR **);
     int *buflen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAsyncGetProtoByNumber() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAsyncGetProtoByNumber() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2021,9 +2021,9 @@ DTHandler_WSAAsyncGetServByName(
     char FAR **buf = va_arg(vl, char FAR **);
     int *buflen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAsyncGetServByName() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAsyncGetServByName() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2047,9 +2047,9 @@ DTHandler_WSAAsyncGetServByPort(
     char FAR **buf = va_arg(vl, char FAR **);
     int *buflen = va_arg(vl, int *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAsyncGetServByPort() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAsyncGetServByPort() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2068,9 +2068,9 @@ DTHandler_WSACancelAsyncRequest(
     int *RetVal = (int *)ReturnValue;
     HANDLE *hAsyncTaskHandle = va_arg(vl, HANDLE *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSACancelAsyncRequest() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSACancelAsyncRequest() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2094,9 +2094,9 @@ DTHandler_WSPAccept(
     DWORD *dwCallbackData = va_arg(vl, DWORD *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPAccept() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPAccept() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2119,9 +2119,9 @@ DTHandler_WSPAsyncSelect(
     long *lEvent = va_arg(vl, long *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPAsyncSelect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPAsyncSelect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2143,9 +2143,9 @@ DTHandler_WSPBind(
     INT *namelen = va_arg(vl, INT *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPBind() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPBind() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2164,9 +2164,9 @@ DTHandler_WSPCancelBlockingCall(
     INT *RetVal = (INT *)ReturnValue;
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPCancelBlockingCall() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPCancelBlockingCall() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2185,9 +2185,9 @@ DTHandler_WSPCleanup(
     INT *RetVal = (INT *)ReturnValue;
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPCleanup() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPCleanup() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2207,9 +2207,9 @@ DTHandler_WSPCloseSocket(
     SOCKET *s = va_arg(vl, SOCKET *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPCloseSocket() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPCloseSocket() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2235,9 +2235,9 @@ DTHandler_WSPConnect(
     LPQOS *lpGQOS = va_arg(vl, LPQOS *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPConnect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPConnect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2259,9 +2259,9 @@ DTHandler_WSPDuplicateSocket(
     LPWSAPROTOCOL_INFO *lpProtocolInfo = va_arg(vl, LPWSAPROTOCOL_INFO *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPDuplicateSocket() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPDuplicateSocket() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2283,9 +2283,9 @@ DTHandler_WSPEnumNetworkEvents(
     LPWSANETWORKEVENTS *lpNetworkEvents = va_arg(vl, LPWSANETWORKEVENTS *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPEnumNetworkEvents() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPEnumNetworkEvents() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2307,9 +2307,9 @@ DTHandler_WSPEventSelect(
     long *lNetworkEvents = va_arg(vl, long *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPEventSelect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPEventSelect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2333,9 +2333,9 @@ DTHandler_WSPGetOverlappedResult(
     LPDWORD *lpdwFlags = va_arg(vl, LPDWORD *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPGetOverlappedResult() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPGetOverlappedResult() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2357,9 +2357,9 @@ DTHandler_WSPGetPeerName(
     INT FAR **namelen = va_arg(vl, INT FAR **);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPGetPeerName() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPGetPeerName() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2382,9 +2382,9 @@ DTHandler_WSPGetSockName(
     INT FAR **namelen = va_arg(vl, INT FAR **);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPGetSockName() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPGetSockName() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2408,9 +2408,9 @@ DTHandler_WSPGetSockOpt(
     INT FAR **optlen = va_arg(vl, INT FAR **);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPGetSockOpt() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPGetSockOpt() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2432,9 +2432,9 @@ DTHandler_WSPGetQOSByName(
     LPQOS *lpQOS = va_arg(vl, LPQOS *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPGetQOSByName() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPGetQOSByName() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2460,13 +2460,13 @@ DTHandler_WSPIoctl(
     LPDWORD *lpcbBytesReturned = va_arg(vl, LPDWORD *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
     LPWSATHREADID *lpThreadId = va_arg(vl, LPWSATHREADID *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPIoctl() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPIoctl() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2493,9 +2493,9 @@ DTHandler_WSPJoinLeaf(
     DWORD *dwFlags = va_arg(vl, DWORD *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPJoinLeaf() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPJoinLeaf() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2516,9 +2516,9 @@ DTHandler_WSPListen(
     INT *backlog = va_arg(vl, INT *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPListen() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPListen() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2542,13 +2542,13 @@ DTHandler_WSPRecv(
     LPDWORD *lpFlags = va_arg(vl, LPDWORD *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
     LPWSATHREADID *lpThreadId = va_arg(vl, LPWSATHREADID *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPRecv() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPRecv() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2570,8 +2570,8 @@ DTHandler_WSPRecvDisconnect(
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
     StringCbPrintf(Buffer + Index, BufLen - Index - 1,
-            "WSPRecvDisconnect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+                   "WSPRecvDisconnect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2597,13 +2597,13 @@ DTHandler_WSPRecvFrom(
     LPINT *lpFromlen = va_arg(vl, LPINT *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
     LPWSATHREADID *lpThreadId = va_arg(vl, LPWSATHREADID *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPRecvFrom() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPRecvFrom() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2627,9 +2627,9 @@ DTHandler_WSPSelect(
     struct timeval FAR **timeout = va_arg(vl, struct timeval FAR **);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPSelect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPSelect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2653,13 +2653,13 @@ DTHandler_WSPSend(
     DWORD *dwFlags = va_arg(vl, DWORD *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
     LPWSATHREADID *lpThreadId = va_arg(vl, LPWSATHREADID *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPSend() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPSend() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2680,9 +2680,9 @@ DTHandler_WSPSendDisconnect(
     LPWSABUF *lpOutboundDisconnectData = va_arg(vl, LPWSABUF *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPSendDisconnect() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPSendDisconnect() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2708,13 +2708,13 @@ DTHandler_WSPSendTo(
     INT *iTolen = va_arg(vl, INT *);
     LPWSAOVERLAPPED *lpOverlapped = va_arg(vl, LPWSAOVERLAPPED *);
     LPWSAOVERLAPPED_COMPLETION_ROUTINE *lpCompletionRoutine =
-      va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
+        va_arg(vl, LPWSAOVERLAPPED_COMPLETION_ROUTINE *);
     LPWSATHREADID *lpThreadId = va_arg(vl, LPWSATHREADID *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPSendTo() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPSendTo() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2738,9 +2738,9 @@ DTHandler_WSPSetSockOpt(
     INT *optlen = va_arg(vl, INT *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPSetSockOpt() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPSetSockOpt() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2761,9 +2761,9 @@ DTHandler_WSPShutdown(
     INT *how = va_arg(vl, INT *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPShutdown() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPShutdown() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2788,9 +2788,9 @@ DTHandler_WSPSocket(
     DWORD *dwFlags = va_arg(vl, DWORD *);
     INT FAR **lpErrno = va_arg(vl, INT FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPSocket() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPSocket() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2813,9 +2813,9 @@ DTHandler_WSPStartup(
     WSPUPCALLTABLE *UpcallTable = va_arg(vl, WSPUPCALLTABLE *);
     LPWSPPROC_TABLE *lpProcTable = va_arg(vl, LPWSPPROC_TABLE *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSPStartup() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSPStartup() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2835,9 +2835,9 @@ DTHandler_WPUCloseEvent(
     WSAEVENT *hEvent = va_arg(vl, WSAEVENT *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUCloseEvent() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUCloseEvent() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2857,9 +2857,9 @@ DTHandler_WPUCloseSocketHandle(
     SOCKET *s = va_arg(vl, SOCKET *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUCloseSocketHandle() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUCloseSocketHandle() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2878,9 +2878,9 @@ DTHandler_WPUCreateEvent(
     WSAEVENT *RetVal = (WSAEVENT *)ReturnValue;
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUCreateEvent() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUCreateEvent() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2901,9 +2901,9 @@ DTHandler_WPUCreateSocketHandle(
     DWORD *dwContext = va_arg(vl, DWORD *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUCreateSocketHandle() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUCreateSocketHandle() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2923,9 +2923,9 @@ DTHandler_WSCDeinstallProvider(
     DWORD *dwProviderId = va_arg(vl, DWORD *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSCDeinstallProvider() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSCDeinstallProvider() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2949,9 +2949,9 @@ DTHandler_WSCInstallProvider(
     LPDWORD *lpdwProviderId = va_arg(vl, LPDWORD *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSCInstallProvider() %s.\r\n",
-         PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSCInstallProvider() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2972,9 +2972,9 @@ DTHandler_WPUModifyIFSHandle(
     SOCKET *ProposedHandle = va_arg(vl, SOCKET *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUModifyIFSHandle() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUModifyIFSHandle() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -2993,13 +2993,13 @@ DTHandler_WPUQueryBlockingCallback(
     int *RetVal = (int *)ReturnValue;
     DWORD *dwCatalogEntryId = va_arg(vl, DWORD *);
     LPBLOCKINGCALLBACK FAR **lplpfnCallback =
-      va_arg(vl, LPBLOCKINGCALLBACK FAR **);
+        va_arg(vl, LPBLOCKINGCALLBACK FAR **);
     LPDWORD *lpdwContext = va_arg(vl, LPDWORD *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUQueryBlockingCallback() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUQueryBlockingCallback() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3020,9 +3020,9 @@ DTHandler_WPUQuerySocketHandleContext(
     LPDWORD *lpContext = va_arg(vl, LPDWORD *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUQuerySocketHandleContext() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUQuerySocketHandleContext() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3044,9 +3044,9 @@ DTHandler_WPUQueueApc(
     DWORD *dwContext = va_arg(vl, DWORD *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUQueueApc() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUQueueApc() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3066,9 +3066,9 @@ DTHandler_WPUResetEvent(
     WSAEVENT *hEvent = va_arg(vl, WSAEVENT *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUResetEvent() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUResetEvent() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3088,9 +3088,9 @@ DTHandler_WPUSetEvent(
     WSAEVENT *hEvent = va_arg(vl, WSAEVENT *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUSetEvent() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUSetEvent() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3111,9 +3111,9 @@ DTHandler_WPUFDIsSet(
     SOCKET *s = va_arg(vl, SOCKET *);
     fd_set FAR **set = va_arg(vl, fd_set FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUFDIsSet() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUFDIsSet() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3135,9 +3135,9 @@ DTHandler_WPUGetProviderPath(
     LPINT *lpProviderDllPathLen = va_arg(vl, LPINT *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUGetProviderPath() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUGetProviderPath() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3159,9 +3159,9 @@ DTHandler_WPUPostMessage(
     WPARAM *wParam = va_arg(vl, WPARAM *);
     LPARAM *lParam = va_arg(vl, LPARAM *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WPUPostMessage() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WPUPostMessage() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3183,9 +3183,9 @@ DTHandler_WSCEnumProtocols(
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD *);
     LPINT *lpErrno = va_arg(vl, LPINT *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSCEnumProtocols() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSCEnumProtocols() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3205,9 +3205,9 @@ DTHandler___WSAFDIsSet(
     SOCKET *s = va_arg(vl, SOCKET *);
     fd_set FAR **set = va_arg(vl, fd_set FAR **);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1,  
-            "__WSAFDIsSet() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "__WSAFDIsSet() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3230,9 +3230,9 @@ DTHandler_WSAAddressToStringA(
     LPSTR *lpszAddressString= va_arg(vl, LPSTR *);
     LPDWORD *lpdwAddressStringLength= va_arg(vl, LPDWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAddressToStringA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAddressToStringA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3256,9 +3256,9 @@ DTHandler_WSAAddressToStringW(
     LPWSTR *lpszAddressString= va_arg(vl, LPWSTR *);
     LPDWORD *lpdwAddressStringLength= va_arg(vl, LPDWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAAddressToStringW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAAddressToStringW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3282,9 +3282,9 @@ DTHandler_WSAStringToAddressA(
     LPSOCKADDR *lpAddress = va_arg(vl, LPSOCKADDR*);
     LPINT *lpAddressLength = va_arg(vl, LPINT*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAStringToAddressA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAStringToAddressA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3307,9 +3307,9 @@ DTHandler_WSAStringToAddressW(
     LPSOCKADDR *lpAddress = va_arg(vl, LPSOCKADDR*);
     LPINT *lpAddressLength = va_arg(vl, LPINT*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAStringToAddressW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAStringToAddressW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3331,9 +3331,9 @@ DTHandler_WSALookupServiceBeginA(
     DWORD *dwControlFlags = va_arg(vl, DWORD*);
     LPHANDLE *lphLookup  = va_arg(vl, LPHANDLE*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSALookupServiceBeginA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSALookupServiceBeginA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3354,9 +3354,9 @@ DTHandler_WSALookupServiceBeginW(
     DWORD *dwControlFlags = va_arg(vl, DWORD*);
     LPHANDLE *lphLookup  = va_arg(vl, LPHANDLE*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSALookupServiceBeginW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSALookupServiceBeginW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3379,9 +3379,9 @@ DTHandler_WSALookupServiceNextA(
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD*);
     LPWSAQUERYSETA *lpqsResults = va_arg(vl, LPWSAQUERYSETA*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSALookupServiceNextA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSALookupServiceNextA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3403,9 +3403,9 @@ DTHandler_WSALookupServiceNextW(
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD*);
     LPWSAQUERYSETW *lpqsResults = va_arg(vl, LPWSAQUERYSETW*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSALookupServiceNextW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSALookupServiceNextW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3426,9 +3426,9 @@ DTHandler_WSALookupServiceEnd(
     int *RetVal = (int *)ReturnValue;
     HANDLE *hLookup = va_arg(vl, HANDLE*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSALookupServiceEnd() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSALookupServiceEnd() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3456,9 +3456,9 @@ DTHandler_WSAGetAddressByNameA(
     LPSTR *lpszAliasBuffer = va_arg(vl, LPSTR*);
     LPDWORD *lpdwAliasBufferLength  = va_arg(vl, LPDWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetAddressByNameA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetAddressByNameA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3484,9 +3484,9 @@ DTHandler_WSAGetAddressByNameW(
     LPWSTR *lpszAliasBuffer = va_arg(vl, LPWSTR*);
     LPDWORD *lpdwAliasBufferLength  = va_arg(vl, LPDWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetAddressByNameW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetAddressByNameW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3508,9 +3508,9 @@ DTHandler_WSAInstallServiceClassA(
     LPWSASERVICECLASSINFOA *lpServiceClassInfo =
         va_arg(vl, LPWSASERVICECLASSINFOA*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAInstallServiceClassA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAInstallServiceClassA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3530,9 +3530,9 @@ DTHandler_WSAInstallServiceClassW(
     LPWSASERVICECLASSINFOW *lpServiceClassInfo =
         va_arg(vl, LPWSASERVICECLASSINFOW*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAInstallServiceClassW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAInstallServiceClassW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3554,9 +3554,9 @@ DTHandler_WSASetServiceA(
     WSAESETSERVICEOP *essOperation = va_arg(vl, WSAESETSERVICEOP*);
     DWORD *dwControlFlags = va_arg(vl, DWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASetServiceA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASetServiceA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3578,9 +3578,9 @@ DTHandler_WSASetServiceW(
     WSAESETSERVICEOP *essOperation = va_arg(vl, WSAESETSERVICEOP*);
     DWORD *dwControlFlags = va_arg(vl, DWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSASetServiceW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSASetServiceW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3600,9 +3600,9 @@ DTHandler_WSARemoveServiceClass(
     int *RetVal = (int *)ReturnValue;
     LPGUID *lpServiceClassId = va_arg(vl, LPGUID*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSARemoveServiceClass() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSARemoveServiceClass() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3627,9 +3627,9 @@ DTHandler_WSAGetServiceClassInfoA(
     LPWSASERVICECLASSINFOA *lpServiceClassInfo =
         va_arg(vl, LPWSASERVICECLASSINFOA*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetServiceClassInfoA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetServiceClassInfoA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3653,9 +3653,9 @@ DTHandler_WSAGetServiceClassInfoW(
     LPWSASERVICECLASSINFOW *lpServiceClassInfo =
         va_arg(vl, LPWSASERVICECLASSINFOW*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetServiceClassInfoW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetServiceClassInfoW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3677,9 +3677,9 @@ DTHandler_WSAEnumNameSpaceProvidersA(
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD*);
     LPWSANAMESPACE_INFOA *Lpnspbuffer = va_arg(vl,  LPWSANAMESPACE_INFOA*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAEnumNameSpaceProvidersA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAEnumNameSpaceProvidersA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3699,9 +3699,9 @@ DTHandler_WSAEnumNameSpaceProvidersW(
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD*);
     LPWSANAMESPACE_INFOW *Lpnspbuffer = va_arg(vl,  LPWSANAMESPACE_INFOW*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAEnumNameSpaceProvidersW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAEnumNameSpaceProvidersW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3724,9 +3724,9 @@ DTHandler_WSAGetServiceClassNameByClassIdA(
     LPSTR *lpszServiceClassName = va_arg(vl, LPSTR*);
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetServiceClassNameByClassIdA() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetServiceClassNameByClassIdA() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3747,9 +3747,9 @@ DTHandler_WSAGetServiceClassNameByClassIdW(
     LPWSTR *lpszServiceClassName = va_arg(vl, LPWSTR*);
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "WSAGetServiceClassNameByClassIdW() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "WSAGetServiceClassNameByClassIdW() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3771,9 +3771,9 @@ DTHandler_NSPAddressToString(
     LPWSTR *lpszAddressString= va_arg(vl, LPWSTR *);
     LPDWORD *lpdwAddressStringLength= va_arg(vl, LPDWORD *);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPAddressToString() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPAddressToString() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3797,9 +3797,9 @@ DTHandler_NSPStringToAddress(
     LPSOCKADDR *lpAddress = va_arg(vl, LPSOCKADDR*);
     LPINT *lpAddressLength = va_arg(vl, LPINT*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPStringToAddress() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPStringToAddress() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3821,9 +3821,9 @@ DTHandler_NSPLookupServiceBegin(
     DWORD *dwControlFlags = va_arg(vl, DWORD*);
     LPHANDLE *lphLookup  = va_arg(vl, LPHANDLE*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPLookupServiceBegin() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPLookupServiceBegin() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3846,9 +3846,9 @@ DTHandler_NSPLookupServiceNext(
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD*);
     LPWSAQUERYSETW *lpqsResults = va_arg(vl, LPWSAQUERYSETW*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPLookupServiceNext() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPLookupServiceNext() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3869,9 +3869,9 @@ DTHandler_NSPLookupServiceEnd(
     int *RetVal = (int *)ReturnValue;
     HANDLE *hLookup = va_arg(vl, HANDLE*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPLookupServiceEnd() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPLookupServiceEnd() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3898,9 +3898,9 @@ DTHandler_NSPGetAddressByName(
     LPWSTR *lpszAliasBuffer = va_arg(vl, LPWSTR*);
     LPDWORD *lpdwAliasBufferLength  = va_arg(vl, LPDWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPGetAddressByName() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPGetAddressByName() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3921,9 +3921,9 @@ DTHandler_NSPInstallServiceClass(
     LPWSASERVICECLASSINFOW *lpServiceClassInfo =
         va_arg(vl, LPWSASERVICECLASSINFOW*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPInstallServiceClass() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPInstallServiceClass() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3945,9 +3945,9 @@ DTHandler_NSPSetService(
     WSAESETSERVICEOP *essOperation = va_arg(vl, WSAESETSERVICEOP*);
     DWORD *dwControlFlags = va_arg(vl, DWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPSetService() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPSetService() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3967,9 +3967,9 @@ DTHandler_NSPRemoveServiceClass(
     int *RetVal = (int *)ReturnValue;
     LPGUID *lpServiceClassId = va_arg(vl, LPGUID*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPRemoveServiceClass() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPRemoveServiceClass() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -3993,9 +3993,9 @@ DTHandler_NSPGetServiceClassInfo(
     LPWSASERVICECLASSINFOW *lpServiceClassInfo =
         va_arg(vl, LPWSASERVICECLASSINFOW*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPGetServiceClassInfo() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPGetServiceClassInfo() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }
@@ -4016,9 +4016,9 @@ DTHandler_NSPGetServiceClassNameByClassId(
     LPWSTR *lpszServiceClassName = va_arg(vl, LPWSTR*);
     LPDWORD *lpdwBufferLength = va_arg(vl, LPDWORD*);
 
-    StringCbPrintf(Buffer + Index, BufLen - Index - 1, 
-            "NSPGetServiceClassNameByClassId() %s.\r\n",
-             PreOrPost ? "called" : "returned");
+    StringCbPrintf(Buffer + Index, BufLen - Index - 1,
+                   "NSPGetServiceClassNameByClassId() %s.\r\n",
+                   PreOrPost ? "called" : "returned");
     DTTextOut( LogFileHandle, Buffer, OutputStyle);
     return(FALSE);
 }

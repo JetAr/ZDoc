@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -56,7 +56,7 @@ STDAPI CStaticCompactPropertyEditSession::DoEditSession(TfEditCookie ec)
     if (_pContext->GetProperty(c_guidPropStaticCompact, &pProperty) == S_OK)
     {
         VARIANT var;
-        var.vt = VT_I4; 
+        var.vt = VT_I4;
         var.lVal = _dwValue;
         pProperty->SetValue(ec, tfSelection.range, &var);
         pProperty->Release();
@@ -79,7 +79,7 @@ void CTextService::_AttachStaticCompactProperty(DWORD dwValue)
     ITfContext *pContext;
 
     if ((_pThreadMgr->GetFocus(&pDocMgrFocus) == S_OK) &&
-        (pDocMgrFocus != NULL))
+            (pDocMgrFocus != NULL))
     {
         if (pDocMgrFocus->GetTop(&pContext) == S_OK)
         {

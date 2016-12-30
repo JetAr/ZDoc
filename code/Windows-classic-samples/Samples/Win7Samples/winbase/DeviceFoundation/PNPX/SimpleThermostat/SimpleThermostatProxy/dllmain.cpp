@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -29,7 +29,7 @@ BOOL WINAPI DllMain(
     HINSTANCE hInstance,
     DWORD dwReason,
     LPVOID lpReserved
-    )
+)
 {
     BOOL bRet = TRUE;
 
@@ -49,10 +49,10 @@ STDAPI DllGetClassObject(
     REFCLSID rclsid,
     REFIID riid,
     LPVOID* ppv
-    )
+)
 {
     HRESULT hr = E_FAIL;
-    CSimpleThermostatProviderFactory* pCSimpleThermostatProviderFactory = NULL; 
+    CSimpleThermostatProviderFactory* pCSimpleThermostatProviderFactory = NULL;
 
     if( rclsid != CLSID_SimpleThermostatProxy )
     {
@@ -64,7 +64,7 @@ STDAPI DllGetClassObject(
     {
         return E_OUTOFMEMORY;
     }
-	
+
     hr = pCSimpleThermostatProviderFactory->QueryInterface( riid, ppv );
     pCSimpleThermostatProviderFactory->Release();
 
@@ -118,8 +118,8 @@ STDAPI DllRegisterServer()
     // Register the COM object in the registry
     //
     if( S_OK == hr &&
-        0 == StringFromGUID2( CLSID_SimpleThermostatProxy, szCLSID, ARRAYSIZE(szCLSID) ) )
-    {  
+            0 == StringFromGUID2( CLSID_SimpleThermostatProxy, szCLSID, ARRAYSIZE(szCLSID) ) )
+    {
         hr = HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER );
     }
 
@@ -131,29 +131,29 @@ STDAPI DllRegisterServer()
     if( S_OK == hr )
     {
         lResult = RegCreateKeyExW(
-            HKEY_CLASSES_ROOT,
-            szKey,
-            0,
-            NULL,
-            REG_OPTION_NON_VOLATILE,
-            KEY_SET_VALUE,
-            NULL,
-            &hKey,
-            NULL
-            );
+                      HKEY_CLASSES_ROOT,
+                      szKey,
+                      0,
+                      NULL,
+                      REG_OPTION_NON_VOLATILE,
+                      KEY_SET_VALUE,
+                      NULL,
+                      &hKey,
+                      NULL
+                  );
         hr = HRESULT_FROM_WIN32( lResult );
     }
 
     if( S_OK == hr )
     {
         lResult = RegSetValueExW(
-            hKey,
-            NULL,
-            0,
-            REG_SZ,
-            (BYTE*)OBJECT_NAME,
-            (static_cast<DWORD>(wcslen(OBJECT_NAME))+1)*sizeof(WCHAR)
-            );
+                      hKey,
+                      NULL,
+                      0,
+                      REG_SZ,
+                      (BYTE*)OBJECT_NAME,
+                      (static_cast<DWORD>(wcslen(OBJECT_NAME))+1)*sizeof(WCHAR)
+                  );
         hr = HRESULT_FROM_WIN32( lResult );
     }
     RegCloseKey( hKey );
@@ -161,52 +161,52 @@ STDAPI DllRegisterServer()
     if( S_OK == hr )
     {
         hr = StringCchPrintfW(
-            szKey,
-            ARRAYSIZE(szKey),
-            L"CLSID\\%s\\InProcServer32",
-            szCLSID
-            );
+                 szKey,
+                 ARRAYSIZE(szKey),
+                 L"CLSID\\%s\\InProcServer32",
+                 szCLSID
+             );
     }
 
     if( S_OK == hr )
     {
         lResult = RegCreateKeyExW(
-            HKEY_CLASSES_ROOT,
-            szKey,
-            0,
-            NULL,
-            REG_OPTION_NON_VOLATILE,
-            KEY_SET_VALUE,
-            NULL,
-            &hKey,
-            NULL
-            );
+                      HKEY_CLASSES_ROOT,
+                      szKey,
+                      0,
+                      NULL,
+                      REG_OPTION_NON_VOLATILE,
+                      KEY_SET_VALUE,
+                      NULL,
+                      &hKey,
+                      NULL
+                  );
         hr = HRESULT_FROM_WIN32( lResult );
     }
 
     if( S_OK == hr )
     {
         lResult = RegSetValueExW(
-            hKey,
-            NULL,
-            0,
-            REG_SZ,
-            (BYTE*)szFilename,
-            (static_cast<DWORD>(wcslen(szFilename))+1)*sizeof(WCHAR)
-            );
+                      hKey,
+                      NULL,
+                      0,
+                      REG_SZ,
+                      (BYTE*)szFilename,
+                      (static_cast<DWORD>(wcslen(szFilename))+1)*sizeof(WCHAR)
+                  );
         hr = HRESULT_FROM_WIN32( lResult );
     }
 
     if( S_OK == hr )
     {
         lResult = RegSetValueExW(
-            hKey,
-            L"ThreadingModel",
-            0,
-            REG_SZ,
-            (BYTE*)THREADING_MODEL,
-            (static_cast<DWORD>(wcslen(THREADING_MODEL))+1)*sizeof(WCHAR)
-            );
+                      hKey,
+                      L"ThreadingModel",
+                      0,
+                      REG_SZ,
+                      (BYTE*)THREADING_MODEL,
+                      (static_cast<DWORD>(wcslen(THREADING_MODEL))+1)*sizeof(WCHAR)
+                  );
         hr = HRESULT_FROM_WIN32( lResult );
     }
 
@@ -232,7 +232,7 @@ STDAPI DllUnregisterServer()
     // Register the COM object in the registry
     //
     if( 0 == StringFromGUID2( CLSID_SimpleThermostatProxy, szCLSID, ARRAYSIZE(szCLSID) ) )
-    {  
+    {
         hr = HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER );
     }
 
@@ -244,12 +244,12 @@ STDAPI DllUnregisterServer()
     if( S_OK == hr )
     {
         lResult = RegOpenKeyExW(
-            HKEY_CLASSES_ROOT,
-            L"CLSID",
-            0,
-            KEY_SET_VALUE,
-            &hKey
-            );
+                      HKEY_CLASSES_ROOT,
+                      L"CLSID",
+                      0,
+                      KEY_SET_VALUE,
+                      &hKey
+                  );
         hr = HRESULT_FROM_WIN32( lResult );
     }
 

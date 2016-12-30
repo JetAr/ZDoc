@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -55,13 +55,13 @@ SspiPromptForCredentialsW(
     __deref_out PSEC_WINNT_AUTH_IDENTITY_OPAQUE* ppAuthIdentity,
     __inout_opt PBOOL pfSave,
     __in DWORD dwFlags
-    );
+);
 
 DWORD
 SendReceive(
     HINTERNET hRequest,
     DWORD dwExpectedStatusCode
-    )
+)
 {
     DWORD dwError = ERROR_SUCCESS;
     DWORD cbWritten = 0;
@@ -94,13 +94,13 @@ WinhttpResendRequest:
 
     memset(Buffer, 'a', sizeof(Buffer));
 
-    while (cbRemaining > 0) 
+    while (cbRemaining > 0)
     {
         if (WinHttpWriteData(hRequest,
                              Buffer,
                              cbRemaining < sizeof(Buffer) ?
-                                cbRemaining : sizeof(Buffer),
-                             &cbWritten) == FALSE) 
+                             cbRemaining : sizeof(Buffer),
+                             &cbWritten) == FALSE)
         {
             dwError = GetLastError();
             goto Exit;
@@ -113,11 +113,11 @@ WinhttpResendRequest:
     // Receive response.
     //
 
-    if (WinHttpReceiveResponse(hRequest, NULL) == FALSE) 
+    if (WinHttpReceiveResponse(hRequest, NULL) == FALSE)
     {
         dwError = GetLastError();
 
-        if (dwError == ERROR_WINHTTP_RESEND_REQUEST) 
+        if (dwError == ERROR_WINHTTP_RESEND_REQUEST)
         {
             printf("WinHttpReceiveResponse failed with"
                    " ERROR_WINHTTP_RESEND_REQUEST\n");
@@ -130,12 +130,12 @@ WinhttpResendRequest:
     }
 
     if (WinHttpQueryHeaders(hRequest,
-                            WINHTTP_QUERY_FLAG_NUMBER | 
+                            WINHTTP_QUERY_FLAG_NUMBER |
                             WINHTTP_QUERY_STATUS_CODE,
                             NULL,
                             &dwStatusCode,
                             &cbStatusCode,
-                            NULL) == FALSE) 
+                            NULL) == FALSE)
     {
         dwError = GetLastError();
         printf("WinHttpQueryHeaders failed\n");
@@ -143,7 +143,7 @@ WinhttpResendRequest:
     }
 
     printf("Status=%d\n", dwStatusCode);
-    if (dwStatusCode != dwExpectedStatusCode) 
+    if (dwStatusCode != dwExpectedStatusCode)
     {
         printf("\n\n*** Unexpected Status Code ***\n\n");
     }
@@ -155,19 +155,19 @@ WinhttpResendRequest:
     if (WinHttpReadData(hRequest,
                         Buffer,
                         sizeof(Buffer),
-                        &cbRead) == FALSE) 
+                        &cbRead) == FALSE)
     {
         dwError = GetLastError();
         printf("WinHttpReadData failed\n");
         goto Exit;
     }
 
-    if (cbRead > 100) 
+    if (cbRead > 100)
     {
         cbRead = 100;
     }
 
-    if (cbRead >= sizeof(Buffer)) 
+    if (cbRead >= sizeof(Buffer))
     {
         cbRead = sizeof(Buffer) - 1;
     }
@@ -180,12 +180,12 @@ WinhttpResendRequest:
     // Drain the rest of the response.
     //
 
-    while (cbRead != 0) 
+    while (cbRead != 0)
     {
         if (WinHttpReadData(hRequest,
                             Buffer,
                             sizeof(Buffer),
-                            &cbRead) == FALSE) 
+                            &cbRead) == FALSE)
         {
             dwError = GetLastError();
             printf("WinHttpReadData failed\n");
@@ -203,7 +203,7 @@ __cdecl
 wmain (
     __in int argc,
     __in_ecount(argc) wchar_t **argv
-    )
+)
 
 /*++
 
@@ -254,7 +254,7 @@ Return Value:
                            WINHTTP_NO_PROXY_NAME,
                            WINHTTP_NO_PROXY_BYPASS,
                            0);
-    if (hSession == NULL) 
+    if (hSession == NULL)
     {
         dwError = GetLastError();
         goto Exit;
@@ -272,12 +272,12 @@ Return Value:
 
     hRequest = WinHttpOpenRequest(hConnect,
                                   L"GET",
-                                  L"/countbytes.aspx",  
+                                  L"/countbytes.aspx",
                                   NULL,
                                   NULL,
                                   pwszAcceptTypes,
                                   0);
-    if (hRequest == NULL) 
+    if (hRequest == NULL)
     {
         dwError = GetLastError();
         goto Exit;
@@ -287,11 +287,11 @@ Return Value:
     // Set autologon to high, so that we don't automatically logon or use
     // default credentials.
     //
-    
+
     if (WinHttpSetOption(hRequest,
                          WINHTTP_OPTION_AUTOLOGON_POLICY,
                          &dwAutoLogonHigh,
-                         sizeof(dwAutoLogonHigh)) == FALSE) 
+                         sizeof(dwAutoLogonHigh)) == FALSE)
     {
         dwError = GetLastError();
         printf("WinHttpSetOption autologon failed\n");
@@ -299,7 +299,7 @@ Return Value:
     }
 
     //
-    // Send and receive. Since we know what the server is doing we expect 401 + 
+    // Send and receive. Since we know what the server is doing we expect 401 +
     // Negotiate.
     //
 
@@ -313,7 +313,7 @@ Return Value:
     if (WinHttpQueryAuthSchemes(hRequest,
                                 &dwSupportedSchemes,
                                 &dwFirstScheme,
-                                &dwAuthTarget) == FALSE) 
+                                &dwAuthTarget) == FALSE)
     {
         dwError = GetLastError();
         printf("WinHttpQueryAuthSchemes failed\n");
@@ -321,11 +321,11 @@ Return Value:
     }
 
     if (dwAuthTarget != WINHTTP_AUTH_TARGET_SERVER ||
-        (dwSupportedSchemes & WINHTTP_AUTH_SCHEME_NEGOTIATE) == 0) 
+            (dwSupportedSchemes & WINHTTP_AUTH_SCHEME_NEGOTIATE) == 0)
     {
         printf("Expected target=server and scheme=negotiate, bailing ...\n");
         goto Exit;
-    } 
+    }
 
     //
     // InitializeSecurityContext and SspiPromptForCredentials have a behind the
@@ -344,10 +344,10 @@ Return Value:
     }
 
     dwError = GetLastError();
-    if (dwError == ERROR_INSUFFICIENT_BUFFER) 
+    if (dwError == ERROR_INSUFFICIENT_BUFFER)
     {
         pwszSpnUsed = (PWSTR)HeapAlloc(GetProcessHeap(), 0, cbSpnUsed);
-        if (pwszSpnUsed == NULL) 
+        if (pwszSpnUsed == NULL)
         {
             dwError = ERROR_NOT_ENOUGH_MEMORY;
             goto Exit;
@@ -356,7 +356,7 @@ Return Value:
         if (WinHttpQueryOption(hRequest,
                                WINHTTP_OPTION_SERVER_SPN_USED,
                                pwszSpnUsed,
-                               &cbSpnUsed) == FALSE) 
+                               &cbSpnUsed) == FALSE)
         {
             dwError = GetLastError();
             printf("WINHTTP_OPTION_SERVER_SPN_USED 2 failed\n");
@@ -383,21 +383,21 @@ Return Value:
     CredUiInfo.pszCaptionText = L"Sample Caption Text";
 
     dwError = SspiPromptForCredentialsW(pwszSpnUsed,
-                                       &CredUiInfo,
-                                       0,
-                                       L"Negotiate",
-                                       NULL,
-                                       &pAuthIdentityOpaque,
-                                       NULL,
-                                       0);
-    if (dwError != ERROR_SUCCESS) 
+                                        &CredUiInfo,
+                                        0,
+                                        L"Negotiate",
+                                        NULL,
+                                        &pAuthIdentityOpaque,
+                                        NULL,
+                                        0);
+    if (dwError != ERROR_SUCCESS)
     {
         printf("SspiPromptForCredentials failed\n");
         goto Exit;
     }
 
     //
-    // Only WinHttpSetCredentials(Negotiate) supports receiving a 
+    // Only WinHttpSetCredentials(Negotiate) supports receiving a
     // pAuthIdentityOpaque. (pwszUserName and pwszPassword must be NULL)
     //
 
@@ -406,7 +406,7 @@ Return Value:
                               WINHTTP_AUTH_SCHEME_NEGOTIATE,
                               NULL,
                               NULL,
-                              pAuthIdentityOpaque) == FALSE) 
+                              pAuthIdentityOpaque) == FALSE)
     {
         dwError = GetLastError();
         printf("WinHttpSetCredentials failed\n");
@@ -418,7 +418,7 @@ Return Value:
     //
 
     dwError = SendReceive(hRequest, 200);
-    if (dwError != ERROR_SUCCESS) 
+    if (dwError != ERROR_SUCCESS)
     {
         printf("SendReceive 2 failed\n");
         goto Exit;
@@ -426,12 +426,12 @@ Return Value:
 
 Exit:
 
-    if (dwError != ERROR_SUCCESS) 
+    if (dwError != ERROR_SUCCESS)
     {
         printf("dwError=%d\n", dwError);
     }
 
-    if (pAuthIdentityOpaque != NULL) 
+    if (pAuthIdentityOpaque != NULL)
     {
         //
         // BUGBUG: SspiFreeAuthIdentity should be uncommented in the Win7 RTM
@@ -442,13 +442,13 @@ Exit:
     }
 
     if (pwszSpnUsed != NULL &&
-        pwszSpnUsed != pwszServer) 
+            pwszSpnUsed != pwszServer)
     {
         HeapFree(GetProcessHeap(), 0, pwszSpnUsed);
         pwszSpnUsed = NULL;
     }
 
-    if (hRequest != NULL) 
+    if (hRequest != NULL)
     {
         WinHttpCloseHandle(hRequest);
         hRequest = NULL;

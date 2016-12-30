@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+﻿/*----------------------------------------------------------------------------
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -10,7 +10,7 @@ Copyright (C) 1999 - 2000.  Microsoft Corporation.  All rights reserved.
 ProcessMenu.cpp
 
 Description:
-Implements the functions used to process the user's selection for the 
+Implements the functions used to process the user's selection for the
 various menus.
 ----------------------------------------------------------------------------*/
 
@@ -30,7 +30,7 @@ ProcessMainMenu(WCHAR wcMenuChoice, IDiskQuotaControl* lpDiskQuotaControl)
 Parameters
     wcMenuChoice - UNICODE menu choice
 
-    lpDiskQuotaControl - Pointer to an object that implements the 
+    lpDiskQuotaControl - Pointer to an object that implements the
         IDiskQuotaControl interface.
 
 Return Value
@@ -88,7 +88,7 @@ ProcessDefaultQuotaMenu(WCHAR wcMenuChoice,
 Parameters
     wcMenuChoice - UNICODE menu choice
 
-    lpDiskQuotaControl - Pointer to an object that implements the 
+    lpDiskQuotaControl - Pointer to an object that implements the
         IDiskQuotaControl interface.
 
 Return Value
@@ -138,7 +138,7 @@ ProcessQuotaLogFlagMenu(WCHAR wcMenuChoice,
 Parameters
     wcMenuChoice - UNICODE menu choice
 
-    lpDiskQuotaControl - Pointer to an object that implements the 
+    lpDiskQuotaControl - Pointer to an object that implements the
         IDiskQuotaControl interface.
 
 Return Value
@@ -160,26 +160,26 @@ BOOL ProcessQuotaLogFlagMenu(WCHAR wcMenuChoice,
     case L'B':
     case L'b':
         lpDiskQuotaControl->
-            SetQuotaLogFlags(DISKQUOTA_SET_LOG_USER_THRESHOLD(dwQuotaLogFlags,
-                                                              TRUE));
+        SetQuotaLogFlags(DISKQUOTA_SET_LOG_USER_THRESHOLD(dwQuotaLogFlags,
+                         TRUE));
         break;
     case L'C':
     case L'c':
         lpDiskQuotaControl->
-            SetQuotaLogFlags(DISKQUOTA_SET_LOG_USER_LIMIT(dwQuotaLogFlags,
-                                                          TRUE));
+        SetQuotaLogFlags(DISKQUOTA_SET_LOG_USER_LIMIT(dwQuotaLogFlags,
+                         TRUE));
         break;
     case L'D':
     case L'd':
         lpDiskQuotaControl->
-            SetQuotaLogFlags(DISKQUOTA_SET_LOG_USER_THRESHOLD(dwQuotaLogFlags,
-                                                              FALSE));
+        SetQuotaLogFlags(DISKQUOTA_SET_LOG_USER_THRESHOLD(dwQuotaLogFlags,
+                         FALSE));
         break;
     case L'E':
     case L'e':
         lpDiskQuotaControl->
-            SetQuotaLogFlags(DISKQUOTA_SET_LOG_USER_LIMIT(dwQuotaLogFlags,
-                                                          FALSE));
+        SetQuotaLogFlags(DISKQUOTA_SET_LOG_USER_LIMIT(dwQuotaLogFlags,
+                         FALSE));
         break;
     case L'X':
     case L'x':
@@ -202,7 +202,7 @@ ProcessDefaultLimitsMenu(WCHAR wcMenuChoice,
 Parameters
     wcMenuChoice - UNICODE menu choice
 
-    lpDiskQuotaControl - Pointer to an object that implements the 
+    lpDiskQuotaControl - Pointer to an object that implements the
         IDiskQuotaControl interface.
 
 Return Value
@@ -254,7 +254,7 @@ ProcessUserManagerMenu(WCHAR wcMenuChoice,
 Parameters
     wcMenuChoice - UNICODE menu choice
 
-    lpDiskQuotaControl - Pointer to an object that implements the 
+    lpDiskQuotaControl - Pointer to an object that implements the
         IDiskQuotaControl interface.
 
 Return Value
@@ -302,7 +302,7 @@ ProcessUserManagerMenu(WCHAR wcMenuChoice,
 Parameters
     wcMenuChoice - UNICODE menu choice
 
-    lpDiskQuotaControl - Pointer to an object that implements the 
+    lpDiskQuotaControl - Pointer to an object that implements the
         IDiskQuotaControl interface.
 
 Return Value

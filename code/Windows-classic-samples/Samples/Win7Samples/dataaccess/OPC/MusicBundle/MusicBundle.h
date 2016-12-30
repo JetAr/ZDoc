@@ -1,4 +1,4 @@
-//<SnippetMusicBundle_hMusicBundleWholePage>
+﻿//<SnippetMusicBundle_hMusicBundleWholePage>
 //+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -83,7 +83,7 @@ HRESULT
 ProduceMusicBundle(
     LPCWSTR     inputDirectory,
     LPCWSTR     outputPackageName
-    );
+);
 
 //============================================================
 //                     Consumption Methods
@@ -98,5 +98,5 @@ HRESULT
 ConsumeMusicBundle(
     LPCWSTR     inputPackageName,
     LPCWSTR     outputDirectory
-    );
+);
 //</SnippetMusicBundle_hMusicBundleWholePage>

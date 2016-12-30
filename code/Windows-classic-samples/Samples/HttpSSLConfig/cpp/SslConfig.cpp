@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -64,7 +64,7 @@ ParseParameters(
     _Outptr_result_maybenull_ PWSTR* Hostname,
     _Outptr_result_maybenull_ PWSTR* CertSubjectName,
     _Outptr_result_maybenull_ PWSTR* StoreName
-    );
+);
 
 DWORD
 SniConfiguration(
@@ -72,19 +72,19 @@ SniConfiguration(
     _In_ PCWSTR Hostname,
     _In_ PCWSTR CertSubjectName,
     _In_ PCWSTR StoreName
-    );
+);
 
 DWORD
 CcsConfiguration(
     USHORT Port
-    );
+);
 
 int
 __cdecl
 wmain(
     int Argc,
     _In_reads_(Argc) PWCHAR Argv[]
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     PWSTR Hostname = NULL;
@@ -124,8 +124,8 @@ wmain(
     ApiInitialized = TRUE;
 
     if (Hostname != NULL &&
-        CertSubjectName != NULL &&
-        StoreName != NULL)
+            CertSubjectName != NULL &&
+            StoreName != NULL)
     {
         Error = SniConfiguration(Port,
                                  Hostname,
@@ -197,7 +197,7 @@ ParseParameters(
     _Outptr_result_maybenull_ PWSTR* Hostname,
     _Outptr_result_maybenull_ PWSTR* CertSubjectName,
     _Outptr_result_maybenull_ PWSTR* StoreName
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     DWORD TempPort = 0;
@@ -228,8 +228,8 @@ ParseParameters(
     TempPort = wcstoul(PortString, &Remaining, 0);
 
     if (*Remaining != L'\0' ||
-        TempPort == 0 ||
-        TempPort > USHRT_MAX)
+            TempPort == 0 ||
+            TempPort > USHRT_MAX)
     {
         wprintf(L"%s is not a valid port.\n", PortString);
         Error = ERROR_INVALID_PARAMETER;
@@ -281,7 +281,7 @@ GetCertificateHash(
     _In_ PCWSTR StoreName,
     _Out_writes_bytes_to_(*CertHashLength, *CertHashLength) PBYTE CertHash,
     _Inout_ PDWORD CertHashLength
-    )
+)
 {
     HCERTSTORE SystemStore = NULL;
     PCCERT_CONTEXT CertContext = NULL;
@@ -310,11 +310,11 @@ GetCertificateHash(
     //
 
     CertContext = CertFindCertificateInStore(SystemStore,
-                                             X509_ASN_ENCODING,
-                                             0,
-                                             CERT_FIND_SUBJECT_STR,
-                                             CertSubjectName,
-                                             NULL);
+                  X509_ASN_ENCODING,
+                  0,
+                  CERT_FIND_SUBJECT_STR,
+                  CertSubjectName,
+                  NULL);
 
     if (CertContext == NULL)
     {
@@ -380,7 +380,7 @@ SetSniConfiguration(
     _In_ PHTTP_SERVICE_CONFIG_SSL_SNI_KEY SniKey,
     _In_ PCWSTR CertSubjectName,
     _In_ PCWSTR StoreName
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     BYTE CertHash[50] = {};
@@ -432,7 +432,7 @@ Return Value:
 DWORD
 QuerySniConfiguration(
     _In_ PHTTP_SERVICE_CONFIG_SSL_SNI_KEY SniKey
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     PHTTP_SERVICE_CONFIG_SSL_SNI_SET SniConfig = NULL;
@@ -515,7 +515,7 @@ Return Value:
 DWORD
 DeleteSniConfiguration(
     _In_ PHTTP_SERVICE_CONFIG_SSL_SNI_KEY SniKey
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     HTTP_SERVICE_CONFIG_SSL_SNI_SET SniConfig = {};
@@ -558,7 +558,7 @@ SniConfiguration(
     _In_ PCWSTR Hostname,
     _In_ PCWSTR CertSubjectName,
     _In_ PCWSTR StoreName
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     HTTP_SERVICE_CONFIG_SSL_SNI_KEY SniKey = {};
@@ -629,7 +629,7 @@ Return Value:
 DWORD
 SetCcsConfiguration(
     _In_ PHTTP_SERVICE_CONFIG_SSL_CCS_KEY CcsKey
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     HTTP_SERVICE_CONFIG_SSL_CCS_SET CcsConfig = {};
@@ -664,7 +664,7 @@ Return Value:
 DWORD
 QueryCcsConfiguration(
     _In_ PHTTP_SERVICE_CONFIG_SSL_CCS_KEY CcsKey
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     PHTTP_SERVICE_CONFIG_SSL_CCS_SET CcsConfig = NULL;
@@ -747,7 +747,7 @@ Return Value:
 DWORD
 DeleteCcsConfiguration(
     _In_ PHTTP_SERVICE_CONFIG_SSL_CCS_KEY CcsKey
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     HTTP_SERVICE_CONFIG_SSL_CCS_SET CcsConfig = {};
@@ -780,7 +780,7 @@ Return Value:
 DWORD
 CcsConfiguration(
     USHORT Port
-    )
+)
 {
     DWORD Error = ERROR_SUCCESS;
     HTTP_SERVICE_CONFIG_SSL_CCS_KEY CcsKey = {};

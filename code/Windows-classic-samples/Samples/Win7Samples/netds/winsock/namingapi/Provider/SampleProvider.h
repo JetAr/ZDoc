@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -12,7 +12,7 @@ Module Name:
 
 Abstract:
 
-    This h file includes sample code for a simple nspv2 naming 
+    This h file includes sample code for a simple nspv2 naming
     provider.
 
 Feedback:

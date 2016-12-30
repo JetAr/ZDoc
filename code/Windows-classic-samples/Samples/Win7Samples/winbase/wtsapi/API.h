@@ -1,4 +1,4 @@
-// API.h : main header file for the API application
+﻿// API.h : main header file for the API application
 //
 //  Copyright 1995-1998, Citrix Systems Inc.
 //  Copyright (c) 1997 - 2000  Microsoft Corporation
@@ -12,7 +12,7 @@
 #endif // _MSC_VER >= 1000
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "resource.h"       // main symbols
@@ -33,21 +33,21 @@
 class CAPIApp : public CWinApp
 {
 public:
-	CAPIApp();
+    CAPIApp();
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAPIApp)
-	public:
-	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CAPIApp)
+public:
+    virtual BOOL InitInstance();
+    //}}AFX_VIRTUAL
 
 // Implementation
 
-	//{{AFX_MSG(CAPIApp)
-	afx_msg void OnAppAbout();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    //{{AFX_MSG(CAPIApp)
+    afx_msg void OnAppAbout();
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 

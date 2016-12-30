@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,13 +21,13 @@
 // Error Uris used to transmit errors from server service to client service.
 namespace GlobalStrings
 {
-    static const WCHAR noError[] = L"http://tempuri.org/FileRep/NoError";
-    static const WCHAR serializationFailed[] = L"http://tempuri.org/FileRep/SerializationFailed";
-    static const WCHAR invalidFileName[] = L"http://tempuri.org/FileRep/InvalidFileName";
-    static const WCHAR unableToDetermineFileLength[] = L"http://tempuri.org/FileRep/UnableToDetermineFileLength";
-    static const WCHAR invalidRequest[] = L"http://tempuri.org/FileRep/InvalidRequest";
-    static const WCHAR outOfRange[] = L"http://tempuri.org/FileRep/OutOfRange";
-    static const WCHAR unableToSetFilePointer[] = L"http://tempuri.org/FileRep/UnableToSetFilePointer";
+static const WCHAR noError[] = L"http://tempuri.org/FileRep/NoError";
+static const WCHAR serializationFailed[] = L"http://tempuri.org/FileRep/SerializationFailed";
+static const WCHAR invalidFileName[] = L"http://tempuri.org/FileRep/InvalidFileName";
+static const WCHAR unableToDetermineFileLength[] = L"http://tempuri.org/FileRep/UnableToDetermineFileLength";
+static const WCHAR invalidRequest[] = L"http://tempuri.org/FileRep/InvalidRequest";
+static const WCHAR outOfRange[] = L"http://tempuri.org/FileRep/OutOfRange";
+static const WCHAR unableToSetFilePointer[] = L"http://tempuri.org/FileRep/UnableToSetFilePointer";
 }
 
 class CChannelManager;
@@ -68,11 +68,20 @@ public:
     // A stop resets all custom state and releases all resources associated with a running instance of the service.
     HRESULT Stop();
 
-    inline bool IsRunning() { return started; }
+    inline bool IsRunning()
+    {
+        return started;
+    }
 
-    WS_LISTENER* GetListener() { return listener; }
+    WS_LISTENER* GetListener()
+    {
+        return listener;
+    }
 
-    CChannelManager* GetChannelManager() { return channelManager; }
+    CChannelManager* GetChannelManager()
+    {
+        return channelManager;
+    }
 
     virtual HRESULT ProcessMessage(
         _In_ CRequest* request,
@@ -189,11 +198,20 @@ public:
 
     void WaitForCleanup();
 
-    inline long GetChannelCount() { return totalChannels; }
+    inline long GetChannelCount()
+    {
+        return totalChannels;
+    }
 
-    inline bool IsRunning() { return running; }
+    inline bool IsRunning()
+    {
+        return running;
+    }
 
-    inline bool ShouldDestroyChannel() { return (!IsRunning() || idleChannels > maxIdleChannels); }
+    inline bool ShouldDestroyChannel()
+    {
+        return (!IsRunning() || idleChannels > maxIdleChannels);
+    }
 
 private:
     inline void PrintVerbose(
@@ -345,15 +363,30 @@ public:
         _In_opt_ WS_ERROR* error);
 
 
-    WS_CHANNEL* GetChannel() { return channel; }
+    WS_CHANNEL* GetChannel()
+    {
+        return channel;
+    }
 
-    WS_MESSAGE* GetRequestMessage() { return requestMessage; }
+    WS_MESSAGE* GetRequestMessage()
+    {
+        return requestMessage;
+    }
 
-    WS_MESSAGE* GetReplyMessage() { return replyMessage; }
+    WS_MESSAGE* GetReplyMessage()
+    {
+        return replyMessage;
+    }
 
-    WS_ERROR* GetError() { return error; }
+    WS_ERROR* GetError()
+    {
+        return error;
+    }
 
-    CFileRep* GetServer() { return server; }
+    CFileRep* GetServer()
+    {
+        return server;
+    }
 
     // We use SOAP faults to communicate to the tool errors that might be expected
     // during execution, such as file not found. For critical errors we abort the channel.
@@ -397,11 +430,11 @@ public:
         _In_ SECURITY_MODE security,
         _In_ MESSAGE_ENCODING encoding,
         _In_ DWORD chunkSize) : CFileRep(
-            errorReporting,
-            maxChannels,
-            transport,
-            security,
-            encoding)
+                errorReporting,
+                maxChannels,
+                transport,
+                security,
+                encoding)
     {
         this->chunkSize = chunkSize;
     }
@@ -447,11 +480,11 @@ public:
         _In_ TRANSPORT_MODE transport,
         _In_ SECURITY_MODE security,
         _In_ MESSAGE_ENCODING encoding) : CFileRep(
-            errorReporting,
-            maxChannels,
-            transport,
-            security,
-            encoding)
+                errorReporting,
+                maxChannels,
+                transport,
+                security,
+                encoding)
     {
     }
 

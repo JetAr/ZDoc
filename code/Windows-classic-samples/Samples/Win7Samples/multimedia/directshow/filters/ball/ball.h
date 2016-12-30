@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Ball.h
 //
 // Desc: DirectShow sample code - header file for the bouncing ball
@@ -12,7 +12,7 @@
 //------------------------------------------------------------------------------
 // { fd501041-8ebe-11ce-8183-00aa00577da1 }
 DEFINE_GUID(CLSID_BouncingBall,
-0xfd501041, 0x8ebe, 0x11ce, 0x81, 0x83, 0x00, 0xaa, 0x00, 0x57, 0x7d, 0xa1);
+            0xfd501041, 0x8ebe, 0x11ce, 0x81, 0x83, 0x00, 0xaa, 0x00, 0x57, 0x7d, 0xa1);
 
 
 //------------------------------------------------------------------------------
@@ -35,8 +35,14 @@ public:
     // Moves the ball 1 pixel in each of the x and y directions
     void MoveBall(CRefTime rt);
 
-    int GetImageWidth() { return m_iImageWidth ;}
-    int GetImageHeight() { return m_iImageHeight ;}
+    int GetImageWidth()
+    {
+        return m_iImageWidth ;
+    }
+    int GetImageHeight()
+    {
+        return m_iImageHeight ;
+    }
 
 private:
 
@@ -59,7 +65,7 @@ private:
 
     // The Y position, in pixels, of the ball in the frame
     // (0 < y < m_iAvailableHeight)
-    int m_y;    
+    int m_y;
 
     // Return the one-dimensional position of the ball at time T milliseconds
     int BallPosition(int iPixelTime, int iLength, int time, int iOffset);

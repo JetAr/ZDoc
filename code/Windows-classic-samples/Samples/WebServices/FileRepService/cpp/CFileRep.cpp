@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -45,7 +45,7 @@ HRESULT ParseTransport(
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -334,12 +334,12 @@ HRESULT CFileRep::InitializeListener()
     if (TCP_TRANSPORT == transportMode) // Create a TCP listener
     {
         IfFailedExit(WsCreateListener(WS_CHANNEL_TYPE_DUPLEX_SESSION, WS_TCP_CHANNEL_BINDING,
-            listenerProperties, WsCountOf(listenerProperties), pSecurityDescription, &listener, error));
+                                      listenerProperties, WsCountOf(listenerProperties), pSecurityDescription, &listener, error));
     }
     else // Create an HTTP listener
     {
         IfFailedExit(WsCreateListener(WS_CHANNEL_TYPE_REPLY, WS_HTTP_CHANNEL_BINDING,
-            listenerProperties, WsCountOf(listenerProperties), pSecurityDescription, &listener, error));
+                                      listenerProperties, WsCountOf(listenerProperties), pSecurityDescription, &listener, error));
     }
 
     IfFailedExit(WsOpenListener(listener, &uri, NULL, error));

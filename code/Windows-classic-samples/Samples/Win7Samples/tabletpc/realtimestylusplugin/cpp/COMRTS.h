@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,17 +25,17 @@
 class CCOMRTSApp : public CWinApp
 {
 public:
-	CCOMRTSApp();
+    CCOMRTSApp();
 
 // Overrides
-	public:
-	virtual BOOL InitInstance();
+public:
+    virtual BOOL InitInstance();
 
 // Implementation
 
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 public:
-	 virtual int ExitInstance(void);
+    virtual int ExitInstance(void);
 
 };
 

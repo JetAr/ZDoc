@@ -1,4 +1,4 @@
-//
+﻿//
 // flipdoc.cpp
 //
 // "Flip Doc" menu item handler.
@@ -55,7 +55,7 @@ void CCaseTextService::_Menu_FlipDoc(CCaseTextService *_this)
 
 Exit:
     SafeRelease(pContext);
-    pFocusDoc->Release();    
+    pFocusDoc->Release();
 }
 
 //+---------------------------------------------------------------------------

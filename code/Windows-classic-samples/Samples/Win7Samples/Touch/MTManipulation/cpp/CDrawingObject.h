@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@
 #include <math.h>
 
 // CDrawingObject class holds information about the rectangle. Instead of storing
-// two oposite angle points we do calculate them dynamically by using other 
+// two oposite angle points we do calculate them dynamically by using other
 // information that we store in this class about the rectangle. This way we do
 // not get deformation of the rectangle due to precission issues.
 class CDrawingObject
@@ -45,8 +45,8 @@ private:
     SIZE _szRect;
 
     // Zoom in/out will scale the width and the height by some factor
-    double  _dScalingFactor; 
+    double  _dScalingFactor;
 
     // Here we store total rotation angle of the rectangle (from x-axis)
-    double  _dRotationAngle; 
+    double  _dRotationAngle;
 };

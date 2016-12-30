@@ -1,4 +1,4 @@
-#ifndef _GLOBAL_H_
+﻿#ifndef _GLOBAL_H_
 #define _GLOBAL_H_
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -92,7 +92,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 #define IDM_ABOUT      1100
 
 //-------------------------------------------------------------------------
-// User Defined Messages.  These definitions are used for indicating 
+// User Defined Messages.  These definitions are used for indicating
 // network events.
 
 #define MW_DATAREADY       501
@@ -165,35 +165,35 @@ extern BOOL i_should_sleep;
 // definitions and functions are used by the message and command dispatching
 // mechanism and do not need to be changed.
 
-    // Function pointer prototype for message handling functions.
+// Function pointer prototype for message handling functions.
 typedef LRESULT (*PFNMSG)(HWND,UINT,WPARAM,LPARAM);
 
-    // Function pointer prototype for command handling functions.
+// Function pointer prototype for command handling functions.
 typedef LRESULT (*PFNCMD)(HWND,WORD,WORD,HWND);
 
-    // Enumerated type used to determine which default window procedure
-    // should be called by the message- and command-dispatching mechanism
-    // if a message or command is not handled explicitly.
+// Enumerated type used to determine which default window procedure
+// should be called by the message- and command-dispatching mechanism
+// if a message or command is not handled explicitly.
 typedef enum
 {
-   edwpNone,            // Do not call any default procedure.
-   edwpWindow,          // Call DefWindowProc.
-   edwpDialog,          // Call DefDlgProc (This should be used only for
-                        // custom dialogs - standard dialog use edwpNone).
-   edwpMDIChild,        // Call DefMDIChildProc.
-   edwpMDIFrame         // Call DefFrameProc.
+    edwpNone,            // Do not call any default procedure.
+    edwpWindow,          // Call DefWindowProc.
+    edwpDialog,          // Call DefDlgProc (This should be used only for
+    // custom dialogs - standard dialog use edwpNone).
+    edwpMDIChild,        // Call DefMDIChildProc.
+    edwpMDIFrame         // Call DefFrameProc.
 } EDWP;                // Enumeration for Default Window Procedures
 
-    // This structure maps messages to message handling functions.
+// This structure maps messages to message handling functions.
 typedef struct _MSD
 {
     UINT   uMessage;
     PFNMSG pfnmsg;
 } MSD;                 // MeSsage Dispatch structure
 
-    // This structure contains all of the information that a window
-    // procedure passes to DispMessage in order to define the message
-    // dispatching behavior for the window.
+// This structure contains all of the information that a window
+// procedure passes to DispMessage in order to define the message
+// dispatching behavior for the window.
 typedef struct _MSDI
 {
     int  cmsd;          // Number of message dispatch structs in rgmsd
@@ -201,16 +201,16 @@ typedef struct _MSDI
     EDWP edwp;          // Type of default window handler needed.
 } MSDI, FAR *LPMSDI;   // MeSsage Dipatch Information
 
-    // This structure maps command IDs to command handling functions.
+// This structure maps command IDs to command handling functions.
 typedef struct _CMD
 {
     WORD   wCommand;
     PFNCMD pfncmd;
 } CMD;                 // CoMmand Dispatch structure
 
-    // This structure contains all of the information that a command
-    // message procedure passes to DispCommand in order to define the
-    // command dispatching behavior for the window.
+// This structure contains all of the information that a command
+// message procedure passes to DispCommand in order to define the
+// command dispatching behavior for the window.
 typedef struct _CMDI
 {
     int  ccmd;          // Number of command dispatch structs in rgcmd
@@ -218,15 +218,15 @@ typedef struct _CMDI
     EDWP edwp;          // Type of default window handler needed.
 } CMDI, FAR *LPCMDI;   // CoMmand Dispatch Information
 
-    // Message and command dispatching functions.  They look up messages
-    // and commands in the dispatch tables and call the appropriate handler
-    // function.
+// Message and command dispatching functions.  They look up messages
+// and commands in the dispatch tables and call the appropriate handler
+// function.
 LRESULT DispMessage(LPMSDI, HWND, UINT, WPARAM, LPARAM);
 LRESULT DispCommand(LPCMDI, HWND, WPARAM, LPARAM);
 
-    // Message dispatch information for the main window
+// Message dispatch information for the main window
 extern MSDI msdiMain;
-    // Command dispatch information for the main window
+// Command dispatch information for the main window
 extern CMDI cmdiMain;
 
 

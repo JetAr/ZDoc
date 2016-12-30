@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,8 +12,8 @@
 extern LONG g_nComObjsInUse;
 
 CSdkShvCF::CSdkShvCF() :
-m_nRefCount(0)
-{   
+    m_nRefCount(0)
+{
     InterlockedIncrement(&g_nComObjsInUse) ;
 }
 
@@ -49,7 +49,7 @@ IFACEMETHODIMP CSdkShvCF::CreateInstance(
     }
 
     return hr;
- }
+}
 
 
 IFACEMETHODIMP CSdkShvCF::LockServer(
@@ -60,12 +60,12 @@ IFACEMETHODIMP CSdkShvCF::LockServer(
 
 
 IFACEMETHODIMP CSdkShvCF::QueryInterface(
-            /* [in] */ __RPC__in REFIID riid , 
-            /* [out] */ __RPC__deref_out void **ppObj)
+    /* [in] */ __RPC__in REFIID riid,
+    /* [out] */ __RPC__deref_out void **ppObj)
 {
     if (riid == IID_IUnknown)
     {
-        *ppObj = static_cast<IUnknown*>(this); 
+        *ppObj = static_cast<IUnknown*>(this);
         AddRef() ;
         return S_OK;
     }
@@ -87,7 +87,7 @@ IFACEMETHODIMP_(ULONG) CSdkShvCF::AddRef()
 }
 
 IFACEMETHODIMP_(ULONG) CSdkShvCF::Release()
-{     
+{
     LONG nRefCount = InterlockedDecrement(&m_nRefCount) ;
     if (nRefCount == 0)
     {

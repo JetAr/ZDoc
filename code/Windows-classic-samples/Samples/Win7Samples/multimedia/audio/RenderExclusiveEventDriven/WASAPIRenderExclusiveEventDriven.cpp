@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -29,7 +29,7 @@ bool DisableMMCSS;
 
 wchar_t *OutputEndpoint;
 
-CommandLineSwitch CmdLineArgs[] = 
+CommandLineSwitch CmdLineArgs[] =
 {
     { L"?", L"Print this help", CommandLineSwitch::SwitchTypeNone, reinterpret_cast<void **>(&ShowHelp)},
     { L"h", L"Print this help", CommandLineSwitch::SwitchTypeNone, reinterpret_cast<void **>(&ShowHelp)},
@@ -216,7 +216,7 @@ bool PickDevice(IMMDevice **DeviceToUse, bool *IsDefaultDevice, ERole *DefaultDe
             }
             break;
         }
-    } 
+    }
     else if (OutputEndpoint != NULL)
     {
         hr = deviceEnumerator->GetDevice(OutputEndpoint, &device);
@@ -345,14 +345,14 @@ int wmain(int argc, wchar_t* argv[])
             //  mix format and we can allocate the buffer that we're going to render.
             //
             //
-            //  The buffer is going to contain "TargetDuration" seconds worth of PCM data.  That means 
+            //  The buffer is going to contain "TargetDuration" seconds worth of PCM data.  That means
             //  we're going to have TargetDuration*samples/second frames multiplied by the frame size.
             //
             UINT32 renderBufferSizeInBytes = (renderer->BufferSizePerPeriod()  * renderer->FrameSize());
             size_t renderDataLength = (renderer->SamplesPerSecond() * TargetDurationInSec * renderer->FrameSize()) + (renderBufferSizeInBytes-1);
             size_t renderBufferCount = renderDataLength / (renderBufferSizeInBytes);
             //
-            //  Render buffer queue. Because we need to insert each buffer at the end of the linked list instead of at the head, 
+            //  Render buffer queue. Because we need to insert each buffer at the end of the linked list instead of at the head,
             //  we keep a pointer to a pointer to the variable which holds the tail of the current list in currentBufferTail.
             //
             RenderBuffer *renderQueue = NULL;
@@ -382,15 +382,15 @@ int wmain(int argc, wchar_t* argv[])
                 {
                 case CWASAPIRenderer::SampleTypeFloat:
                     GenerateSineSamples<float>(renderBuffer->_Buffer, renderBuffer->_BufferLength, TargetFrequency,
-                                                renderer->ChannelCount(), renderer->SamplesPerSecond(), &theta);
+                                               renderer->ChannelCount(), renderer->SamplesPerSecond(), &theta);
                     break;
                 case CWASAPIRenderer::SampleType16BitPCM:
                     GenerateSineSamples<short>(renderBuffer->_Buffer, renderBuffer->_BufferLength, TargetFrequency,
-                                                renderer->ChannelCount(), renderer->SamplesPerSecond(), &theta);
+                                               renderer->ChannelCount(), renderer->SamplesPerSecond(), &theta);
                     break;
                 }
                 //
-                //  Link the newly allocated and filled buffer into the queue.  
+                //  Link the newly allocated and filled buffer into the queue.
                 //
                 *currentBufferTail = renderBuffer;
                 currentBufferTail = &renderBuffer->_Next;
@@ -405,7 +405,8 @@ int wmain(int argc, wchar_t* argv[])
                 {
                     printf(".");
                     Sleep(1000);
-                } while (--TargetDurationInSec);
+                }
+                while (--TargetDurationInSec);
                 printf("\n");
 
                 renderer->Stop();

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,12 +14,12 @@
 
 #define IF_AUDIT_DO(x)                        \
     if (m_pSpy->Audit())                    \
-        m_pSpy->GetAuditObj()->x        
+        m_pSpy->GetAuditObj()->x
 
 
 /////////////////////////////////////////////////////////////////////////////
 // CComSpy
-class ATL_NO_VTABLE CComSpy : 
+class ATL_NO_VTABLE CComSpy :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CComSpy, &CLSID_ComSpy>,
     public CComControl<CComSpy>,
@@ -47,7 +47,7 @@ private:
     CComBSTR m_sLogFile;
     int m_cEvents;
     HWND m_hWndList;
-    BOOL m_bShowGridLines;    
+    BOOL m_bShowGridLines;
     BOOL m_bAudit;
     HFONT m_hFont;
     long m_nWidth[NUMBER_COLUMNS];
@@ -58,21 +58,27 @@ private:
 
 public:
 
-    BOOL Audit(){return m_bAudit;}
-    IComSpyAudit * GetAuditObj(){return m_spSqlAudit;}
+    BOOL Audit()
+    {
+        return m_bAudit;
+    }
+    IComSpyAudit * GetAuditObj()
+    {
+        return m_spSqlAudit;
+    }
     CComPtr<IFontDisp> m_pFont;
     CContainedWindow m_ctlSysListView32;
 
     CComSpy();
-    ~CComSpy() 
+    ~CComSpy()
     {
-        m_hWndList = NULL;    
+        m_hWndList = NULL;
 
     }
     void FinalRelease()
     {
     }
-    
+
 
     bool ShouldScroll(int nIndex);
     HRESULT ShutdownApplication(LPCWSTR pwszApplicationName);
@@ -83,57 +89,57 @@ public:
     DECLARE_REGISTRY_RESOURCEID(IDR_COMSPY)
 
     BEGIN_COM_MAP(CComSpy)
-        COM_INTERFACE_ENTRY(IComSpy)
-        COM_INTERFACE_ENTRY(IDispatch)
-        COM_INTERFACE_ENTRY_IMPL(IViewObjectEx)
-        COM_INTERFACE_ENTRY_IMPL_IID(IID_IViewObject2, IViewObjectEx)
-        COM_INTERFACE_ENTRY_IMPL_IID(IID_IViewObject, IViewObjectEx)
-        COM_INTERFACE_ENTRY_IMPL(IOleInPlaceObjectWindowless)
-        COM_INTERFACE_ENTRY_IMPL_IID(IID_IOleInPlaceObject, IOleInPlaceObjectWindowless)
-        COM_INTERFACE_ENTRY_IMPL_IID(IID_IOleWindow, IOleInPlaceObjectWindowless)
-        COM_INTERFACE_ENTRY_IMPL(IOleInPlaceActiveObject)
-        COM_INTERFACE_ENTRY_IMPL(IOleControl)
-        COM_INTERFACE_ENTRY_IMPL(IOleObject)
-        COM_INTERFACE_ENTRY_IMPL(IQuickActivate)
-        COM_INTERFACE_ENTRY_IMPL(IPersistStorage)
-        COM_INTERFACE_ENTRY_IMPL(IPersistStreamInit)
-        COM_INTERFACE_ENTRY_IMPL(ISpecifyPropertyPages)
-        COM_INTERFACE_ENTRY_IMPL(IDataObject)
-        COM_INTERFACE_ENTRY(IProvideClassInfo)
-        COM_INTERFACE_ENTRY(IProvideClassInfo2)
-        COM_INTERFACE_ENTRY(IPropertyBag)
+    COM_INTERFACE_ENTRY(IComSpy)
+    COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY_IMPL(IViewObjectEx)
+    COM_INTERFACE_ENTRY_IMPL_IID(IID_IViewObject2, IViewObjectEx)
+    COM_INTERFACE_ENTRY_IMPL_IID(IID_IViewObject, IViewObjectEx)
+    COM_INTERFACE_ENTRY_IMPL(IOleInPlaceObjectWindowless)
+    COM_INTERFACE_ENTRY_IMPL_IID(IID_IOleInPlaceObject, IOleInPlaceObjectWindowless)
+    COM_INTERFACE_ENTRY_IMPL_IID(IID_IOleWindow, IOleInPlaceObjectWindowless)
+    COM_INTERFACE_ENTRY_IMPL(IOleInPlaceActiveObject)
+    COM_INTERFACE_ENTRY_IMPL(IOleControl)
+    COM_INTERFACE_ENTRY_IMPL(IOleObject)
+    COM_INTERFACE_ENTRY_IMPL(IQuickActivate)
+    COM_INTERFACE_ENTRY_IMPL(IPersistStorage)
+    COM_INTERFACE_ENTRY_IMPL(IPersistStreamInit)
+    COM_INTERFACE_ENTRY_IMPL(ISpecifyPropertyPages)
+    COM_INTERFACE_ENTRY_IMPL(IDataObject)
+    COM_INTERFACE_ENTRY(IProvideClassInfo)
+    COM_INTERFACE_ENTRY(IProvideClassInfo2)
+    COM_INTERFACE_ENTRY(IPropertyBag)
     END_COM_MAP()
 
     BEGIN_PROPERTY_MAP(CComSpy)
-        PROP_ENTRY_TYPE_EX( "LogFile", DISPID_LOGFILE, CLSID_ComSpyPropPage, IID_IComSpy, VT_BSTR)
-        PROP_ENTRY_TYPE_EX( "ShowGridLines", DISPID_GRIDLINES, CLSID_ComSpyPropPage, IID_IComSpy, VT_BOOL)
-        PROP_ENTRY_TYPE_EX( "Audit", DISPID_AUDIT, CLSID_ComSpyPropPage, IID_IComSpy, VT_BOOL)
-        //PROP_ENTRY_EX( "ColWidth", DISPID_COLWIDTH, CLSID_ComSpyPropPage, IID_IComSpy)    
-        PROP_PAGE(CLSID_StockFontPage)
+    PROP_ENTRY_TYPE_EX( "LogFile", DISPID_LOGFILE, CLSID_ComSpyPropPage, IID_IComSpy, VT_BSTR)
+    PROP_ENTRY_TYPE_EX( "ShowGridLines", DISPID_GRIDLINES, CLSID_ComSpyPropPage, IID_IComSpy, VT_BOOL)
+    PROP_ENTRY_TYPE_EX( "Audit", DISPID_AUDIT, CLSID_ComSpyPropPage, IID_IComSpy, VT_BOOL)
+    //PROP_ENTRY_EX( "ColWidth", DISPID_COLWIDTH, CLSID_ComSpyPropPage, IID_IComSpy)
+    PROP_PAGE(CLSID_StockFontPage)
     END_PROPERTY_MAP()
 
 
     BEGIN_MSG_MAP(CComSpy)
-        MESSAGE_HANDLER(WM_PAINT, OnPaint)
-        MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
-        MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
-        MESSAGE_HANDLER(WM_CREATE, OnCreate)
+    MESSAGE_HANDLER(WM_PAINT, OnPaint)
+    MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
+    MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
+    MESSAGE_HANDLER(WM_CREATE, OnCreate)
 
     ALT_MSG_MAP(1)
-        MESSAGE_HANDLER(WM_RBUTTONDOWN, OnRButtonDown)
-        COMMAND_ID_HANDLER(ID_LOG, OnLogToFile)
-        COMMAND_ID_HANDLER(ID_CHOOSE_LOG_FILE_NAME, OnChooseLogFile)
-        COMMAND_ID_HANDLER(ID_SAVE, OnSave)
-        COMMAND_ID_HANDLER(ID_CLEAR, OnClear)
-        COMMAND_ID_HANDLER(ID_OPTIONS_GRID_LINES, OnToggleGridLines)    
-        COMMAND_ID_HANDLER(ID_AUDIT, OnToggleAudit)    
-        COMMAND_ID_HANDLER(ID_SHOW_ON_SCREEN, OnToggleShowOnScreen)
-        COMMAND_ID_HANDLER(IDM_ABOUT, OnAbout)
-        MESSAGE_HANDLER(WM_INITMENU, OnInitMenu)
-        COMMAND_ID_HANDLER(IDM_SELECT_APPLICATIONS, OnSelectApplications)
-        COMMAND_ID_HANDLER(ID_CHOOSEFONT, OnChooseFont)
-        MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-        COMMAND_RANGE_HANDLER(ID_DEBUG_BEGIN, ID_DEBUG_END, OnDebugApplication)
+    MESSAGE_HANDLER(WM_RBUTTONDOWN, OnRButtonDown)
+    COMMAND_ID_HANDLER(ID_LOG, OnLogToFile)
+    COMMAND_ID_HANDLER(ID_CHOOSE_LOG_FILE_NAME, OnChooseLogFile)
+    COMMAND_ID_HANDLER(ID_SAVE, OnSave)
+    COMMAND_ID_HANDLER(ID_CLEAR, OnClear)
+    COMMAND_ID_HANDLER(ID_OPTIONS_GRID_LINES, OnToggleGridLines)
+    COMMAND_ID_HANDLER(ID_AUDIT, OnToggleAudit)
+    COMMAND_ID_HANDLER(ID_SHOW_ON_SCREEN, OnToggleShowOnScreen)
+    COMMAND_ID_HANDLER(IDM_ABOUT, OnAbout)
+    MESSAGE_HANDLER(WM_INITMENU, OnInitMenu)
+    COMMAND_ID_HANDLER(IDM_SELECT_APPLICATIONS, OnSelectApplications)
+    COMMAND_ID_HANDLER(ID_CHOOSEFONT, OnChooseFont)
+    MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+    COMMAND_RANGE_HANDLER(ID_DEBUG_BEGIN, ID_DEBUG_END, OnDebugApplication)
     END_MSG_MAP()
 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -156,7 +162,7 @@ public:
 
 
     STDMETHOD(Close)(DWORD dwSaveOption);
-        
+
     STDMETHOD(SetObjectRects)(LPCRECT prcPos,LPCRECT prcClip)
     {
         IOleInPlaceObjectWindowlessImpl<CComSpy>::SetObjectRects(prcPos, prcClip);
@@ -164,9 +170,9 @@ public:
         cx = prcPos->right - prcPos->left;
         cy = prcPos->bottom - prcPos->top;
         ::SetWindowPos(m_ctlSysListView32.m_hWnd, NULL, 0,
-            0, cx, cy, SWP_NOZORDER | SWP_NOACTIVATE);
+                       0, cx, cy, SWP_NOZORDER | SWP_NOACTIVATE);
 
-        
+
         return S_OK;
     }
 
@@ -215,7 +221,7 @@ public:
 
     HRESULT IPersistStreamInit_Load(LPSTREAM pStm, const ATL_PROPMAP_ENTRY* pMap);
     HRESULT IPersistStreamInit_Save(LPSTREAM pStm, BOOL /* fClearDirty */,
-        const ATL_PROPMAP_ENTRY* pMap);
+                                    const ATL_PROPMAP_ENTRY* pMap);
 
 
 };

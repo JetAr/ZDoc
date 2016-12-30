@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -31,7 +31,7 @@ typedef struct _QueryContext
     OVERLAPPED      QueryOverlapped;
     PADDRINFOEX     QueryResults;
     HANDLE          CompleteEvent;
-}QUERY_CONTEXT, *PQUERY_CONTEXT;
+} QUERY_CONTEXT, *PQUERY_CONTEXT;
 
 VOID
 WINAPI
@@ -39,14 +39,14 @@ QueryCompleteCallback(
     _In_ DWORD Error,
     _In_ DWORD Bytes,
     _In_ LPOVERLAPPED Overlapped
-    );
+);
 
 int
 __cdecl
 wmain(
     _In_ int Argc,
     _In_reads_(Argc) PWCHAR Argv[]
-    )
+)
 {
     INT                 Error = ERROR_SUCCESS;
     WSADATA             wsaData;
@@ -182,7 +182,7 @@ QueryCompleteCallback(
     _In_ DWORD Error,
     _In_ DWORD Bytes,
     _In_ LPOVERLAPPED Overlapped
-    )
+)
 {
     PQUERY_CONTEXT  QueryContext = NULL;
     PADDRINFOEX     QueryResults = NULL;

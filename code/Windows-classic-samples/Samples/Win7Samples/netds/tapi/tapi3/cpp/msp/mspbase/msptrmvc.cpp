@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1998-1999 Microsoft Corporation
 
@@ -33,7 +33,7 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
     IN    CComPtr<IMoniker>    pMoniker,
     IN    MSP_HANDLE           htAddress,
     OUT   ITTerminal         **ppTerm
-    )
+)
 {
     USES_CONVERSION;
 
@@ -46,14 +46,14 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
     if ( !ppTerm)
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::CreateTerminal : "
-            "bad terminal pointer; returning E_POINTER"));
+             "bad terminal pointer; returning E_POINTER"));
         return E_POINTER;
     }
 
     if ( !pMoniker)
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::CreateTerminal : "
-            "bad moniker pointer; returning E_POINTER"));
+             "bad moniker pointer; returning E_POINTER"));
         return E_POINTER;
     }
 
@@ -65,17 +65,17 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
     //
     CComPtr<IPropertyBag> pBag;
     hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
-        LOG((MSP_ERROR, 
-            "CVideoCaptureTerminal::CreateTerminal (BindToStorage) - returning  %8x", hr));
+        LOG((MSP_ERROR,
+             "CVideoCaptureTerminal::CreateTerminal (BindToStorage) - returning  %8x", hr));
         return hr;
     }
 
     VARIANT var;
     var.vt = VT_BSTR;
     hr = pBag->Read(L"FriendlyName", &var, 0);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::CreateTerminal (IPropertyBag::Read) - returning  %8x", hr));
         return hr;
@@ -107,7 +107,7 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::CreateTerminal - "
-            "Internal QI failed; returning 0x%08x", hr));
+             "Internal QI failed; returning 0x%08x", hr));
 
         delete pLclTerm;
         return hr;
@@ -125,7 +125,7 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::CreateTerminal - "
-            "Initialize failed; returning 0x%08x", hr));
+             "Initialize failed; returning 0x%08x", hr));
 
         (*ppTerm)->Release();
         return hr;
@@ -152,7 +152,7 @@ HRESULT CVideoCaptureTerminal::CreateFilters()
     if ( m_pIFilter != NULL )
     {
         LOG((MSP_TRACE, "CVideoCaptureTerminal::CreateFilters() - "
-            "already have a filter - exit S_OK"));
+             "already have a filter - exit S_OK"));
 
         return S_OK;
     }
@@ -168,9 +168,9 @@ HRESULT CVideoCaptureTerminal::CreateFilters()
         // reset the filer interface - it's a CComPointer so this releases it
 
         m_pIFilter = NULL;
- 
+
         LOG((MSP_ERROR, "CVideoCaptureTerminal::CreateFilters() - "
-            "BindToObject failed - exit 0x%08x", hr));
+             "BindToObject failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -183,16 +183,16 @@ HRESULT CVideoCaptureTerminal::CreateFilters()
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-HRESULT 
+HRESULT
 CVideoCaptureTerminal::FindCapturePin(
-    )
+)
 {
     LOG((MSP_TRACE, "CVideoCaptureTerminal::FindCapturePin() - enter"));
 
     if ( m_pIPin != NULL )
     {
         LOG((MSP_INFO, "CVideoCaptureTerminal::FindCapturePin() - "
-            "already called, so we already have a pin - exit S_OK"));
+             "already called, so we already have a pin - exit S_OK"));
 
         return S_OK;
     }
@@ -200,30 +200,30 @@ CVideoCaptureTerminal::FindCapturePin(
     HRESULT hr;
     CComPtr<IEnumPins> pIEnumPins;
     ULONG cFetched;
- 
+
     //
     // Find the capture pin for the filter.
     //
 
     if (FAILED(hr = m_pIFilter->EnumPins(&pIEnumPins)))
     {
-        LOG((MSP_ERROR, 
-            "CVideoCaptureTerminal::FindCapturePin - can't enum pins %8x",
-            hr));
+        LOG((MSP_ERROR,
+             "CVideoCaptureTerminal::FindCapturePin - can't enum pins %8x",
+             hr));
         return hr;
     }
 
     IPin * pIPin;
 
-    // Enumerate all the pins and break on the 
+    // Enumerate all the pins and break on the
     // first pin that meets requirement.
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &cFetched) != S_OK)
         {
-            LOG((MSP_ERROR, 
-                "CVideoCaptureTerminal::FindCapturePin - can't get a pin %8x",
-                hr));
+            LOG((MSP_ERROR,
+                 "CVideoCaptureTerminal::FindCapturePin - can't get a pin %8x",
+                 hr));
             return (hr == S_FALSE) ? E_FAIL : hr;
         }
 
@@ -237,9 +237,9 @@ CVideoCaptureTerminal::FindCapturePin(
 
         if (FAILED(hr = pIPin->QueryDirection(&dir)))
         {
-            LOG((MSP_ERROR, 
-                "CVideoCaptureTerminal::FindCapturePin - can't query pin direction %8x",
-                hr));
+            LOG((MSP_ERROR,
+                 "CVideoCaptureTerminal::FindCapturePin - can't query pin direction %8x",
+                 hr));
             pIPin->Release();
             return hr;
         }
@@ -255,7 +255,7 @@ CVideoCaptureTerminal::FindCapturePin(
     m_pIPin = pIPin;
 
     LOG((MSP_TRACE, "CVideoCaptureTerminal::FindCapturePin - exit S_OK"));
-  
+
     return S_OK;
 }
 
@@ -263,16 +263,16 @@ CVideoCaptureTerminal::FindCapturePin(
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-HRESULT 
+HRESULT
 CVideoCaptureTerminal::AddFiltersToGraph(
-    )
+)
 {
     LOG((MSP_TRACE, "CVideoCaptureTerminal::AddFiltersToGraph called"));
-    
+
     if (m_pGraph == NULL)
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::AddFiltersToGraph - "
-            "no graph - exit E_UNEXPECTED"));
+             "no graph - exit E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -284,7 +284,7 @@ CVideoCaptureTerminal::AddFiltersToGraph(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::AddFiltersToGraph - "
-            "CreateFilters failed - exit 0x%08x", hr));
+             "CreateFilters failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -299,7 +299,7 @@ CVideoCaptureTerminal::AddFiltersToGraph(
     // a failure.
     //
 
-    try 
+    try
     {
         USES_CONVERSION;
         hr = m_pGraph->AddFilter(m_pIFilter, T2CW(m_szName));
@@ -307,7 +307,7 @@ CVideoCaptureTerminal::AddFiltersToGraph(
     catch (...)
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::AddFiltersToGraph - T2CW threw an exception - "
-            "return E_OUTOFMEMORY"));
+             "return E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -315,7 +315,7 @@ CVideoCaptureTerminal::AddFiltersToGraph(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::AddFiltersToGraph - "
-            "AddFilter failed - exit 0x%08x", hr));
+             "AddFilter failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -329,7 +329,7 @@ CVideoCaptureTerminal::AddFiltersToGraph(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CVideoCaptureTerminal::AddFiltersToGraph - "
-            "FindCapturePin failed - exit 0x%08x", hr));
+             "FindCapturePin failed - exit 0x%08x", hr));
 
         return hr;
     }

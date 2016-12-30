@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -10,29 +10,29 @@
 //      RnrCs.cpp
 //
 // Abstract:
-//      In a traditional Winsock 1.1 client/server program, the server 
-//      binds itself to a well known port of a particular protocol family. 
-//      Then, any client can talk to the server only if it knows the server's 
-//      addressing infomation which includes the server's address, protocol, 
+//      In a traditional Winsock 1.1 client/server program, the server
+//      binds itself to a well known port of a particular protocol family.
+//      Then, any client can talk to the server only if it knows the server's
+//      addressing infomation which includes the server's address, protocol,
 //      and socket type.
 //
 //      The Winsock 2 Name Resolution and Registration (RnR) provides a unified
 //      API set for client to search for registered services without having any
-//      prior knowledge of addressing information. Basically, a server wants to 
+//      prior knowledge of addressing information. Basically, a server wants to
 //      register its existence within one or more name spaces through a friendly
 //      service instance name and associate itself to a service class GUID.
-//      Client application will be able to find the addressing 
+//      Client application will be able to find the addressing
 //      information of a server by the friendly name and class GUID
 //      in a name space.
-//      
-//      In this sample, the server program converts the user supplied Type Id 
-//      into a service class GUID by SVCID_NETWARE() macro. (You can also 
-//      generate your own service class GUID using uuidgen.exe or guidgen.exe 
-//      and distribute this GUID to your client program.) It then checks the 
-//      availability of various kind of name space providers and install this 
-//      service class by filling out the relevant service class information 
-//      with NS_NTDS (NT Directory Service name space provider available in Windows 2000) 
-//      and/or NS_SAP (Service Advertising Protocol name space provider available 
+//
+//      In this sample, the server program converts the user supplied Type Id
+//      into a service class GUID by SVCID_NETWARE() macro. (You can also
+//      generate your own service class GUID using uuidgen.exe or guidgen.exe
+//      and distribute this GUID to your client program.) It then checks the
+//      availability of various kind of name space providers and install this
+//      service class by filling out the relevant service class information
+//      with NS_NTDS (NT Directory Service name space provider available in Windows 2000)
+//      and/or NS_SAP (Service Advertising Protocol name space provider available
 //      both in Windows NT 4 and Windows 2000) name spaces whenever they are available.
 //      If NS_NTDS has been installed, it binds itself to UDP protocol addresses
 //      and a port number dynamically chosen by the system. If NS_SAP has been
@@ -42,35 +42,35 @@
 //      For each bound non-blocking socket addresses, the server tries to
 //      receive any datagram sent by any client and print out the client's socket
 //      addressing information if a datagram is received.
-//      When a user hits CTRL-C, the server program will unregister this 
+//      When a user hits CTRL-C, the server program will unregister this
 //      service instance, remove the service class and close all sockets.
 //
 //      The client program converts the user supplied Type Id into a service
 //      class GUID by SVCID_NETWARE() macro, such that it can find any SAP
-//      predefined services (e.g. file server Type Id is 4) or the corresponding 
-//      advertised server program. If the user supplies a service name, it 
-//      will just look up the service with the same service name and Type Id. 
-//      If the user supplies a wild card "*" for the service name, it will try 
+//      predefined services (e.g. file server Type Id is 4) or the corresponding
+//      advertised server program. If the user supplies a service name, it
+//      will just look up the service with the same service name and Type Id.
+//      If the user supplies a wild card "*" for the service name, it will try
 //      to look up all registered services with the same
 //      Type Id. For each service program found, it prints out the socket addressing
-//      information of the service program and sends a message to it.  
+//      information of the service program and sends a message to it.
 //
-//      NOTE: 
+//      NOTE:
 //      (1) To exploit the NS_NTDS name space (Active Directory):
-//          (a) client and server machines should have Windows 2000 or later installed and both 
+//          (a) client and server machines should have Windows 2000 or later installed and both
 //              machines should be members of a Windows 2000 domain.
-//          (b) If the server program is running in the security context of Domain Admins, 
-//              you should have no problem in publishing the service. 
+//          (b) If the server program is running in the security context of Domain Admins,
+//              you should have no problem in publishing the service.
 //          (c) If the server program is running in the context of a Domain Users, Domain
-//              Admins have to modify the access control list (ACLs) on the WinsockServices 
+//              Admins have to modify the access control list (ACLs) on the WinsockServices
 //              container:
-//              From the Active Directory Users and Computers MMC snap-in, access the View menu 
-//              and select Advanced Features. Under the System container is another container 
-//              listed as WinsockServices. Open the WinsockServices container, 
+//              From the Active Directory Users and Computers MMC snap-in, access the View menu
+//              and select Advanced Features. Under the System container is another container
+//              listed as WinsockServices. Open the WinsockServices container,
 //              right-click Properties->Security, add your desired user/group with Full Control
 //              permission. Make sure this applies onto "this object and all child objects"
 //              by clicking the "Advanced..." button and "View/Edit..." your selected permission
-//              entry. 
+//              entry.
 //      (2) To advertise in the SAP name space, server program machine should have
 //          NWLink IPX/SPX Compatible Transport protocol and SAP Agent service installed.
 //      (3) To lookup servers in the SAP name space, client program machine should have
@@ -99,12 +99,12 @@
 // Build:
 //  Use the headers and libs from the April98 Platform SDK or later.
 //  Link with ws2_32.lib
-//      
+//
 // Author: Frank K. Li - Microsoft Developer Support
 //
 //----------------------------------------------------------------------------
 #ifdef _IA64_
-    #pragma warning (disable: 4127 4267)
+#pragma warning (disable: 4127 4267)
 #endif
 
 #include <winsock2.h>
@@ -112,7 +112,7 @@
 #include <wspiapi.h>
 #include <svcguid.h>
 #include <wsipx.h>
-#include <wsnwlink.h> 
+#include <wsnwlink.h>
 #include <nspapi.h>
 
 #include <stdio.h>
@@ -188,7 +188,7 @@ void Usage(char * pszProgramName)
 void __cdecl main (int argc, char *argv[])
 {
     char * pszServerName = "MyServer";   // default server instance name
-    int    nServerType = 200;            // default server type id   
+    int    nServerType = 200;            // default server type id
     char * pszNSProvider = "NS_ALL";
     DWORD  dwNameSpace = NS_ALL;
     int i = 0;
@@ -241,14 +241,14 @@ void __cdecl main (int argc, char *argv[])
         // check user input
         if (strcmp(pszServerName, "*") == 0)
         {
-            printf("You can't supply wildcard (*) server instance name to run this server\n"); 
+            printf("You can't supply wildcard (*) server instance name to run this server\n");
             Usage(argv[0]);
             return;
         }
     }
 
     __try
-    {   
+    {
         // init winsock
         WSADATA wd;
         int nRet;
@@ -270,7 +270,7 @@ void __cdecl main (int argc, char *argv[])
         }
 
     }
-    __finally 
+    __finally
     {
         if (fServer)
         {
@@ -293,9 +293,9 @@ void __cdecl main (int argc, char *argv[])
 //
 //  PURPOSE:  The driver for the server side code. It forms the global
 //            class id "g_MyGuid" for this service class, installs this
-//            service class, advertises the service name "pszServerName" with 
-//            the associated bound SOCKADDR addresses and then loop through 
-//            for data sent by client. This routine returns if user hits "Ctrl-C" 
+//            service class, advertises the service name "pszServerName" with
+//            the associated bound SOCKADDR addresses and then loop through
+//            for data sent by client. This routine returns if user hits "Ctrl-C"
 //            or any error encountered.
 //
 //  RETURNS:
@@ -306,20 +306,20 @@ void __cdecl main (int argc, char *argv[])
 BOOL DoRnrServer(char * pszServerName, int  nServerType)
 {
     // I am using SVCID_NETWARE macro to form a common class id for the
-    // client and server program such that the client program can also query 
+    // client and server program such that the client program can also query
     // some known SAP services on the network without running this program
     // as a server.
     // You can also generate your own class id by uuidgen.exe or guidgen.exe and
     // distribute the class id to client program.
     //
     // Please check svcguid.h for details about the macro.
-    GUID guidNW = SVCID_NETWARE(nServerType); 
+    GUID guidNW = SVCID_NETWARE(nServerType);
 
     memcpy(&g_MyGuid, &guidNW, sizeof(GUID));
 
     if (!SetConsoleCtrlHandler(CtrlHandler, TRUE))
     {
-        printf ("SetConsoleCtrlHandler failed to install console handler: %d\n", 
+        printf ("SetConsoleCtrlHandler failed to install console handler: %d\n",
                 GetLastError());
         return FALSE;
     }
@@ -365,10 +365,10 @@ BOOL DoRnrServer(char * pszServerName, int  nServerType)
 //  FUNCTION: InstallClass(int nServerType)
 //
 //  PURPOSE:  Install a service class in NTDS and SAP name spaces if they are
-//            available on this machine. "nServerType" is a numerical number used 
-//            to generate a service class id by using SVCID_NETWARE macro as shown in 
+//            available on this machine. "nServerType" is a numerical number used
+//            to generate a service class id by using SVCID_NETWARE macro as shown in
 //            the main program.
-//            The name of this service class is obtained by composing "nServerType" 
+//            The name of this service class is obtained by composing "nServerType"
 //            with the string "TypeId.
 //
 //  RETURNS:
@@ -451,7 +451,7 @@ BOOL InstallClass(int nServerType)
 
     if (fSap)
     {
-        // SAP setup 
+        // SAP setup
         printf("SAP name space class installation\n");
 
         aNameSpaceClassInfo[i].lpszName = SERVICE_TYPE_VALUE_CONN;
@@ -492,8 +492,8 @@ BOOL InstallClass(int nServerType)
 BOOL Advertise(char* pszServerName)
 {
     int nRet = 0;
-    int i=0;              // number of socket created           
-    int nNumOfCSAddr = 0; // number of bound socket addresses 
+    int i=0;              // number of socket created
+    int nNumOfCSAddr = 0; // number of bound socket addresses
 
     // Advertizing
 
@@ -513,8 +513,8 @@ BOOL Advertise(char* pszServerName)
     {
         SOCKET_ADDRESS_LIST *slist=NULL;
         struct addrinfo *res=NULL,
-        *resptr=NULL,
-        hints;
+                             *resptr=NULL,
+                              hints;
         char            *addrbuf=NULL;
         DWORD            dwBytes=0;
 
@@ -611,7 +611,7 @@ BOOL Advertise(char* pszServerName)
 
                 g_aCSAddr[j].iSocketType = SOCK_DGRAM;
                 g_aCSAddr[j].iProtocol = IPPROTO_UDP;
-                g_aCSAddr[j].LocalAddr.lpSockaddr = (struct sockaddr *)&g_aSockAddr[j]; 
+                g_aCSAddr[j].LocalAddr.lpSockaddr = (struct sockaddr *)&g_aSockAddr[j];
                 g_aCSAddr[j].LocalAddr.iSockaddrLength = slist->Address[j].iSockaddrLength;
                 g_aCSAddr[j].RemoteAddr.lpSockaddr = (struct sockaddr *)&g_aSockAddr[j];
                 g_aCSAddr[j].RemoteAddr.iSockaddrLength = slist->Address[j].iSockaddrLength;
@@ -623,7 +623,7 @@ BOOL Advertise(char* pszServerName)
             // Go to the next address
             resptr = resptr->ai_next;
 
-            // Free the address buffer 
+            // Free the address buffer
             HeapFree(GetProcessHeap(), 0, addrbuf);
             addrbuf = NULL;
         }
@@ -693,7 +693,7 @@ BOOL Advertise(char* pszServerName)
 
             g_aCSAddr[nNumOfCSAddr].iSocketType = SOCK_DGRAM;
             g_aCSAddr[nNumOfCSAddr].iProtocol = NSPROTO_IPX;
-            g_aCSAddr[nNumOfCSAddr].LocalAddr.lpSockaddr = (struct sockaddr *)&g_aSockAddr[nNumOfCSAddr]; 
+            g_aCSAddr[nNumOfCSAddr].LocalAddr.lpSockaddr = (struct sockaddr *)&g_aSockAddr[nNumOfCSAddr];
             g_aCSAddr[nNumOfCSAddr].LocalAddr.iSockaddrLength = sizeof(sa_ipx);
             g_aCSAddr[nNumOfCSAddr].RemoteAddr.lpSockaddr = (struct sockaddr *)&g_aSockAddr[nNumOfCSAddr];
             g_aCSAddr[nNumOfCSAddr].RemoteAddr.iSockaddrLength = sizeof(sa_ipx);
@@ -776,7 +776,7 @@ BOOL GetBoundIpxAddr(SOCKET soc, SOCKADDR_IPX * pSaIpx, int nAdapter)
 //  FUNCTION: CheckAvailableNameSpaceProviders(BOOL& fNsSap, BOOL& fNsNtds)
 //
 //  PURPOSE:  Check the avaliable name space providers, set fNsSap to TRUE if
-//            SAP is available, and fNsNtds to TRUE if NT Directory Service 
+//            SAP is available, and fNsNtds to TRUE if NT Directory Service
 //            is avaialble.
 //
 //  RETURNS:
@@ -859,7 +859,7 @@ BOOL ServerRecv()
     int      nBytesReceived = 0;
     char     szBuf[1024] = {'\0'};
     SOCKADDR_STORAGE sa_peer = {0};
-    int      nPeerAddrLen = 0; 
+    int      nPeerAddrLen = 0;
 
     for (int i = 0; i < g_nNumOfUsedSocks; i++)
     {
@@ -893,7 +893,7 @@ BOOL ServerRecv()
 
 //---------------------------------------------------------------------------
 //  FUNCTION: BOOL WINAPI CtrlHandler ( DWORD dwEvent )
-//  Intercept CTRL-C or CTRL-BRK events and cause the server to 
+//  Intercept CTRL-C or CTRL-BRK events and cause the server to
 //  initiate shutdown and cleanup.
 //---------------------------------------------------------------------------
 BOOL WINAPI CtrlHandler (   DWORD dwEvent )
@@ -918,15 +918,16 @@ BOOL WINAPI CtrlHandler (   DWORD dwEvent )
         if (nRet == SOCKET_ERROR)
         {
             printf("WSASetService DELETE error %d\n", WSAGetLastError());
-        } else
+        }
+        else
             printf(" Deleted.\n");
-        
+
         printf("Removing Service class ");
 
         if (SUCCEEDED(hRet = StringCchPrintfW(szGuid,
                                               sizeof(szGuid)/sizeof(szGuid[0]),
                                               L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-                                              g_MyGuid.Data1,                    
+                                              g_MyGuid.Data1,
                                               g_MyGuid.Data2,
                                               g_MyGuid.Data3,
                                               g_MyGuid.Data4[0],
@@ -949,7 +950,8 @@ BOOL WINAPI CtrlHandler (   DWORD dwEvent )
         if (nRet == SOCKET_ERROR)
         {
             printf("WSARemoveServiceClass error %d\n", WSAGetLastError());
-        } else
+        }
+        else
             printf(" Removed.\n");
 
         for (i = 0; i < g_nMaxNumOfSocks; i++)
@@ -978,7 +980,7 @@ BOOL WINAPI CtrlHandler (   DWORD dwEvent )
 //  FUNCTION: void DoRnrClient (int nServiceType, char * pszServerName, DWORD dwNameSpace)
 //
 //  PURPOSE: Given the service type id "nServiceType", the server instance name
-//           "pszServerName" and the name space to query "dwNameSpace", 
+//           "pszServerName" and the name space to query "dwNameSpace",
 //           perform name resolution to the server and send a message to it.
 //           If "nServiceType" is some known SAP Id such as Print Queue (3),
 //           File Server (4), Job Server (5), Print Server (7), Archive
@@ -995,7 +997,7 @@ void DoRnrClient (int nServiceType, char * pszServerName, DWORD dwNameSpace)
     static char szName[100] = {'\0'};
     BOOL fKnownSapId = FALSE;
     DWORD dwLength = 0;
-    BYTE abyBuf[sizeof(WSAQUERYSET) + OFFSET] = {0}; // provide a sufficient large 
+    BYTE abyBuf[sizeof(WSAQUERYSET) + OFFSET] = {0}; // provide a sufficient large
     // buffer for returned query set
     WSAQUERYSET * pQS = (WSAQUERYSETA*) abyBuf;
     HRESULT hRet;
@@ -1003,26 +1005,26 @@ void DoRnrClient (int nServiceType, char * pszServerName, DWORD dwNameSpace)
     if(FAILED(hRet = StringCchCopy(szName,
                                    sizeof(szName)/sizeof(szName[0]),
                                    pszServerName
-                                   )))
+                                  )))
     {
         printf("StringCchCopy failed: 0x%x\n",hRet);
         return;
     }
-    
+
     SecureZeroMemory (&qs, sizeof (WSAQUERYSET));
     qs.dwSize = sizeof (WSAQUERYSET);
-    qs.lpszServiceInstanceName = szName; 
+    qs.lpszServiceInstanceName = szName;
     qs.lpServiceClassId = &guid;
     qs.dwNameSpace = dwNameSpace;
-    qs.dwNumberOfProtocols = g_nMaxNumOfSocks; 
-    qs.lpafpProtocols = afp; 
+    qs.dwNumberOfProtocols = g_nMaxNumOfSocks;
+    qs.lpafpProtocols = afp;
 
     SecureZeroMemory (abyBuf, sizeof (WSAQUERYSET) + OFFSET);
     dwLength = sizeof(WSAQUERYSET) + OFFSET;
 
     // some well known SAP name space services
     if (nServiceType == 3 || nServiceType == 4 || nServiceType == 5 ||
-        nServiceType == 7 || nServiceType == 9 || nServiceType == 36 || nServiceType == 71)
+            nServiceType == 7 || nServiceType == 9 || nServiceType == 36 || nServiceType == 71)
         fKnownSapId = TRUE;
 
     if (WSALookupServiceBegin ( &qs,
@@ -1036,7 +1038,8 @@ void DoRnrClient (int nServiceType, char * pszServerName, DWORD dwNameSpace)
     printf ("Performing Query for service (type, name) = (%d, %s) . . .\n\n", nServiceType, pszServerName);
 
     if (strcmp(pszServerName, "*") == 0)
-    {   // enumerate all service instances
+    {
+        // enumerate all service instances
         for (;;)
         {
             dwResult = WSALookupServiceNext(hLookup,
@@ -1116,16 +1119,16 @@ void DoRnrClient (int nServiceType, char * pszServerName, DWORD dwNameSpace)
                     if (! fKnownSapId)
                         ClientSend(&(pQS->lpcsaBuffer[i]));
                 }
-            }       
+            }
         }
         WSALookupServiceEnd (hLookup);
-    }   
+    }
 }
 
 //---------------------------------------------------------------------------
 //  FUNCTION: void ClientSend(CSADDR_INFO* lpcsaBuffer)
 //
-//  PURPOSE: Given the server socket address info "lpcsaBuffer", 
+//  PURPOSE: Given the server socket address info "lpcsaBuffer",
 //           send a message to the peer.
 //---------------------------------------------------------------------------
 void ClientSend(CSADDR_INFO* lpcsaBuffer)
@@ -1143,11 +1146,11 @@ void ClientSend(CSADDR_INFO* lpcsaBuffer)
     if (fHostname == FALSE)
     {
         GetComputerName(szName, &ulSize);
-        
+
         if (FAILED(hRet = StringCchCat(szMessage,
                                        sizeof(szMessage)/sizeof(szMessage[0]),
                                        szName
-                                       )))
+                                      )))
         {
             printf("StringCchCat failed: 0x%x\n",hRet);
             return;
@@ -1160,7 +1163,7 @@ void ClientSend(CSADDR_INFO* lpcsaBuffer)
     // information, it can just do the common sequence of
     // socket, connect, send/recv and closesocket by using the
     // discovered RemoteAddr.
-    s = socket(lpcsaBuffer->RemoteAddr.lpSockaddr->sa_family, 
+    s = socket(lpcsaBuffer->RemoteAddr.lpSockaddr->sa_family,
                lpcsaBuffer->iSocketType,
                lpcsaBuffer->iProtocol);
 
@@ -1205,8 +1208,7 @@ void PrintError (char* errfunc)
     fflush (stdout);
     if (WSASERVICE_NOT_FOUND == WSAGetLastError())
         fprintf (stderr, "No matches found.\n");
-    else
-        if (WSA_E_NO_MORE == WSAGetLastError() || WSAENOMORE == WSAGetLastError())
+    else if (WSA_E_NO_MORE == WSAGetLastError() || WSAENOMORE == WSAGetLastError())
         fprintf (stderr, "No more matches. \n");
     else
         fprintf (stderr, "Function %s failed with error %d\n", errfunc, WSAGetLastError());
@@ -1242,60 +1244,60 @@ void GetSockAddrString(SOCKADDR_STORAGE* pSAddr, int addrlen, char * dest, int d
     {
     case AF_INET:
     case AF_INET6:
-        {   
-            char host[NI_MAXHOST],
-            serv[NI_MAXSERV];
-            int  hostlen = NI_MAXHOST,
-            servlen = NI_MAXSERV,
-            rc;
+    {
+        char host[NI_MAXHOST],
+             serv[NI_MAXSERV];
+        int  hostlen = NI_MAXHOST,
+             servlen = NI_MAXSERV,
+             rc;
 
-            rc = getnameinfo((SOCKADDR*)pSAddr, addrlen, host, hostlen, serv, servlen,
-                             NI_NUMERICHOST | NI_NUMERICSERV);
-            if (rc != 0)
-            {
-                if (FAILED(hRet = StringCchPrintf(dest,destlen-1,"getnameinfo failed: %d",rc)))
-                {
-                    printf("StringCchPrintf failed: 0x%x\n",hRet);
-                    return;
-                }
-
-                return;
-            }
-
-            if (FAILED(hRet = StringCchPrintf(dest,destlen-1,"%s:%s",host,serv)))
+        rc = getnameinfo((SOCKADDR*)pSAddr, addrlen, host, hostlen, serv, servlen,
+                         NI_NUMERICHOST | NI_NUMERICSERV);
+        if (rc != 0)
+        {
+            if (FAILED(hRet = StringCchPrintf(dest,destlen-1,"getnameinfo failed: %d",rc)))
             {
                 printf("StringCchPrintf failed: 0x%x\n",hRet);
                 return;
             }
 
-
-
+            return;
         }
-        break;
+
+        if (FAILED(hRet = StringCchPrintf(dest,destlen-1,"%s:%s",host,serv)))
+        {
+            printf("StringCchPrintf failed: 0x%x\n",hRet);
+            return;
+        }
+
+
+
+    }
+    break;
     case AF_IPX:
-        { 
-            PSOCKADDR_IPX pIpxAddr = (PSOCKADDR_IPX) pSAddr;
+    {
+        PSOCKADDR_IPX pIpxAddr = (PSOCKADDR_IPX) pSAddr;
 
-            if (FAILED(hRet = StringCchPrintf(dest, destlen-1,
-                                              "%02X%02X%02X%02X.%02X%02X%02X%02X%02X%02X:%04X", 
-                                              (unsigned char)pIpxAddr->sa_netnum[0],
-                                              (unsigned char)pIpxAddr->sa_netnum[1],
-                                              (unsigned char)pIpxAddr->sa_netnum[2],
-                                              (unsigned char)pIpxAddr->sa_netnum[3],
-                                              (unsigned char)pIpxAddr->sa_nodenum[0],
-                                              (unsigned char)pIpxAddr->sa_nodenum[1],
-                                              (unsigned char)pIpxAddr->sa_nodenum[2],
-                                              (unsigned char)pIpxAddr->sa_nodenum[3],
-                                              (unsigned char)pIpxAddr->sa_nodenum[4],
-                                              (unsigned char)pIpxAddr->sa_nodenum[5],
-                                              ntohs(pIpxAddr->sa_socket)
-                                              )))
-            {
-                printf("StringCchPrintf failed: 0x%x\n",hRet);
-                return;
-            }
+        if (FAILED(hRet = StringCchPrintf(dest, destlen-1,
+                                          "%02X%02X%02X%02X.%02X%02X%02X%02X%02X%02X:%04X",
+                                          (unsigned char)pIpxAddr->sa_netnum[0],
+                                          (unsigned char)pIpxAddr->sa_netnum[1],
+                                          (unsigned char)pIpxAddr->sa_netnum[2],
+                                          (unsigned char)pIpxAddr->sa_netnum[3],
+                                          (unsigned char)pIpxAddr->sa_nodenum[0],
+                                          (unsigned char)pIpxAddr->sa_nodenum[1],
+                                          (unsigned char)pIpxAddr->sa_nodenum[2],
+                                          (unsigned char)pIpxAddr->sa_nodenum[3],
+                                          (unsigned char)pIpxAddr->sa_nodenum[4],
+                                          (unsigned char)pIpxAddr->sa_nodenum[5],
+                                          ntohs(pIpxAddr->sa_socket)
+                                         )))
+        {
+            printf("StringCchPrintf failed: 0x%x\n",hRet);
+            return;
         }
-        break;
+    }
+    break;
     default:
         if(FAILED(hRet = StringCchCopy(dest,destlen-1,"Unknown socket address family")))
         {
@@ -1328,7 +1330,7 @@ void DumpServiceClassInfo(LPWSASERVICECLASSINFO lpSci)
     if (FAILED(hRet = StringCchPrintfW(szGuid,
                                        sizeof(szGuid)/sizeof(szGuid[0]),
                                        L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-                                       TempGuid.Data1,                    
+                                       TempGuid.Data1,
                                        TempGuid.Data2,
                                        TempGuid.Data3,
                                        TempGuid.Data4[0],

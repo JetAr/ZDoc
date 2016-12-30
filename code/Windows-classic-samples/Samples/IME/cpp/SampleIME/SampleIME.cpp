@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -121,7 +121,7 @@ STDAPI CSampleIME::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
     *ppvObj = nullptr;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextInputProcessor))
+            IsEqualIID(riid, IID_ITfTextInputProcessor))
     {
         *ppvObj = (ITfTextInputProcessor *)this;
     }
@@ -290,7 +290,7 @@ STDAPI CSampleIME::Deactivate()
 
     ITfContext* pContext = _pContext;
     if (_pContext)
-    {   
+    {
         pContext->AddRef();
         _EndComposition(_pContext);
     }
@@ -338,7 +338,7 @@ STDAPI CSampleIME::Deactivate()
     if (_pDocMgrLastFocused)
     {
         _pDocMgrLastFocused->Release();
-		_pDocMgrLastFocused = nullptr;
+        _pDocMgrLastFocused = nullptr;
     }
 
     return S_OK;
@@ -385,8 +385,8 @@ HRESULT CSampleIME::GetFunction(__RPC__in REFGUID rguid, __RPC__in REFIID riid, 
 {
     HRESULT hr = E_NOINTERFACE;
 
-    if ((IsEqualGUID(rguid, GUID_NULL)) 
-        && (IsEqualGUID(riid, __uuidof(ITfFnSearchCandidateProvider))))
+    if ((IsEqualGUID(rguid, GUID_NULL))
+            && (IsEqualGUID(riid, __uuidof(ITfFnSearchCandidateProvider))))
     {
         hr = _pITfFnSearchCandidateProvider->QueryInterface(riid, (void**)ppunk);
     }

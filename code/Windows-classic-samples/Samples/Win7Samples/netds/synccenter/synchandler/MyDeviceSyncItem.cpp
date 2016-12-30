@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -671,10 +671,10 @@ HRESULT CMyDeviceSyncItem::GetShellItemObject(__in REFIID riid, __out void **ppv
     LPWSTR pszPath = NULL;
 
     HRESULT hr = SHGetKnownFolderPath(
-        _folderID,
-        0,           /* dwFlags */
-        NULL,        /* hToken */
-        &pszPath);
+                     _folderID,
+                     0,           /* dwFlags */
+                     NULL,        /* hToken */
+                     &pszPath);
 
     if (SUCCEEDED(hr))
     {
@@ -826,7 +826,7 @@ HRESULT CMyDeviceSyncItem::_QueryIconLocationRegValue(
 HRESULT CMyDeviceSyncItem::_GetIconLocation(
     __out_ecount(cchLocation)     LPWSTR      pszLocation,
     __in                          size_t      cchLocation
-    )
+)
 {
     IExtractIconW *pei = NULL;
     HRESULT hr = GetShellItemObject(IID_PPV_ARGS(&pei));

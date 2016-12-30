@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -43,7 +43,7 @@ static WCHAR c_szMenuItemDescriptionOpenClose[] = L"Open";
 //----------------------------------------------------------------------------
 
 class CLangBarItemButton : public ITfLangBarItemButton,
-                           public ITfSource
+    public ITfSource
 {
 public:
     CLangBarItemButton(CTextService *pTextService);
@@ -133,8 +133,8 @@ STDAPI CLangBarItemButton::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfLangBarItem) ||
-        IsEqualIID(riid, IID_ITfLangBarItemButton))
+            IsEqualIID(riid, IID_ITfLangBarItem) ||
+            IsEqualIID(riid, IID_ITfLangBarItemButton))
     {
         *ppvObj = (ITfLangBarItemButton *)this;
     }
@@ -251,31 +251,31 @@ STDAPI CLangBarItemButton::OnClick(TfLBIClick click, POINT pt, const RECT *prcAr
 
 STDAPI CLangBarItemButton::InitMenu(ITfMenu *pMenu)
 {
-    // 
+    //
     // Add the fisrt menu item.
-    // 
+    //
     pMenu->AddMenuItem(MENUITEM_INDEX_0,
-                       0, 
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescription0, 
-                       (ULONG)wcslen(c_szMenuItemDescription0), 
+                       0,
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescription0,
+                       (ULONG)wcslen(c_szMenuItemDescription0),
                        NULL);
 
-    // 
+    //
     // Add the second menu item.
-    // 
+    //
     pMenu->AddMenuItem(MENUITEM_INDEX_1,
-                       0, 
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescription1, 
-                       (ULONG)wcslen(c_szMenuItemDescription1), 
+                       0,
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescription1,
+                       (ULONG)wcslen(c_szMenuItemDescription1),
                        NULL);
 
-    // 
+    //
     // Add the keyboard open close item.
-    // 
+    //
     DWORD dwFlags = 0;
     if (_pTextService->_IsKeyboardDisabled())
         dwFlags |= TF_LBMENUF_GRAYED;
@@ -283,11 +283,11 @@ STDAPI CLangBarItemButton::InitMenu(ITfMenu *pMenu)
         dwFlags |= TF_LBMENUF_CHECKED;
 
     pMenu->AddMenuItem(MENUITEM_INDEX_OPENCLOSE,
-                       dwFlags, 
-                       NULL, 
-                       NULL, 
-                       c_szMenuItemDescriptionOpenClose, 
-                       (ULONG)wcslen(c_szMenuItemDescriptionOpenClose), 
+                       dwFlags,
+                       NULL,
+                       NULL,
+                       c_szMenuItemDescriptionOpenClose,
+                       (ULONG)wcslen(c_szMenuItemDescriptionOpenClose),
                        NULL);
 
     return S_OK;
@@ -308,16 +308,16 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
     //
     switch (wID)
     {
-        case MENUITEM_INDEX_0:
-            break;
+    case MENUITEM_INDEX_0:
+        break;
 
-        case MENUITEM_INDEX_1:
-            break;
+    case MENUITEM_INDEX_1:
+        break;
 
-        case MENUITEM_INDEX_OPENCLOSE:
-            fOpen = _pTextService->_IsKeyboardOpen();
-            _pTextService->_SetKeyboardOpen(fOpen ? FALSE : TRUE);
-            break;
+    case MENUITEM_INDEX_OPENCLOSE:
+        fOpen = _pTextService->_IsKeyboardOpen();
+        _pTextService->_SetKeyboardOpen(fOpen ? FALSE : TRUE);
+        break;
     }
 
     return S_OK;
@@ -332,7 +332,7 @@ STDAPI CLangBarItemButton::OnMenuSelect(UINT wID)
 STDAPI CLangBarItemButton::GetIcon(HICON *phIcon)
 {
     *phIcon = (HICON)LoadImage(g_hInst, TEXT("IDI_TEXTSERVICE"), IMAGE_ICON, 16, 16, 0);
- 
+
     return (*phIcon != NULL) ? S_OK : E_FAIL;
 }
 
@@ -393,9 +393,9 @@ STDAPI CLangBarItemButton::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCoo
 
 STDAPI CLangBarItemButton::UnadviseSink(DWORD dwCookie)
 {
-    // 
+    //
     // Check the given cookie.
-    // 
+    //
     if (dwCookie != TEXTSERVICE_LANGBARITEMSINK_COOKIE)
         return CONNECT_E_NOCONNECTION;
 

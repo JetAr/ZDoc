@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -27,25 +27,27 @@ CAzTask::CAzTask(void):CAzBase<IAzTask>()
 CAzTask::~CAzTask(void)
 {
 }
-CAzTask::CAzTask(IAzTask *pNative,bool pisNew):CAzBase<IAzTask>(pNative,pisNew){
+CAzTask::CAzTask(IAzTask *pNative,bool pisNew):CAzBase<IAzTask>(pNative,pisNew)
+{
 }
 
 /*++
 
 Routine description:
 
-    This method copies links from the source task to *this* 
+    This method copies links from the source task to *this*
     task
 
 Arguments: srcTask - Source Task
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
-HRESULT CAzTask::CopyLinks(CAzTask &srcTask) {
+HRESULT CAzTask::CopyLinks(CAzTask &srcTask)
+{
 
     CAzLogging::Entering(_TEXT("CopyLinks"));
 
@@ -57,7 +59,8 @@ HRESULT CAzTask::CopyLinks(CAzTask &srcTask) {
 
     CAzLogging::Log(hr,_TEXT("Getting Tasks for Task"),COLE2T(getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
         hr=InitializeUsingSafeArray(cVVar,&IAzTask::AddTask);
 
         CAzLogging::Log(hr,_TEXT("Setting Task links for role"),COLE2T(getName()));
@@ -77,18 +80,19 @@ HRESULT CAzTask::CopyLinks(CAzTask &srcTask) {
 
 Routine description:
 
-    This method copies properties from the source task to *this* 
+    This method copies properties from the source task to *this*
     task
 
 Arguments: srcTask - Source Task
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
-HRESULT CAzTask::Copy(CAzTask &srcTask) {
+HRESULT CAzTask::Copy(CAzTask &srcTask)
+{
 
     CAzLogging::Exiting(_TEXT("Copy"));
 
@@ -98,13 +102,15 @@ HRESULT CAzTask::Copy(CAzTask &srcTask) {
 
     CComBSTR bstrData;
 
-    for (long i=0 ; i < m_numberOfProps ; i++) {
+    for (long i=0 ; i < m_numberOfProps ; i++)
+    {
 
         hr=srcTask.m_native->GetProperty(m_props[i],CComVariant(), &cVVar);
 
-        CAzLogging::Log(hr,_TEXT("Getting IAzTask Property ID:"),COLE2T(srcTask.getName()),m_props[i]);			
+        CAzLogging::Log(hr,_TEXT("Getting IAzTask Property ID:"),COLE2T(srcTask.getName()),m_props[i]);
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=m_native->SetProperty(m_props[i],cVVar,CComVariant());
 
@@ -112,13 +118,14 @@ HRESULT CAzTask::Copy(CAzTask &srcTask) {
 
             cVVar.Clear();
         }
-    }	
+    }
 
     hr=srcTask.m_native->get_BizRuleImportedPath(&bstrData);
 
     CAzLogging::Log(hr,_TEXT("Getting BizRuleImportedPath for Task"),COLE2T(getName()));
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
         hr=m_native->put_BizRuleImportedPath(bstrData);
 
@@ -143,11 +150,12 @@ HRESULT CAzTask::Copy(CAzTask &srcTask) {
 
     cVVar.Clear();
 
-    if (CAzGlobalOptions::m_bVersionTwo) {
+    if (CAzGlobalOptions::m_bVersionTwo)
+    {
 
-            hr = CopyVersion2Constructs(srcTask);
+        hr = CopyVersion2Constructs(srcTask);
 
-            CAzLogging::Log(hr,_TEXT("Copying bizrule properties for Task"),COLE2T(srcTask.getName()));
+        CAzLogging::Log(hr,_TEXT("Copying bizrule properties for Task"),COLE2T(srcTask.getName()));
     }
 
     hr=m_native->Submit(0,CComVariant());
@@ -173,14 +181,15 @@ Arguments: Source Task
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
-HRESULT CAzTask::CopyVersion2Constructs(CAzTask &srcTask) {
+HRESULT CAzTask::CopyVersion2Constructs(CAzTask &srcTask)
+{
 
-    static unsigned int rgProperties[]={AZ_PROP_TASK_BIZRULE,AZ_PROP_TASK_BIZRULE_LANGUAGE,AZ_PROP_TASK_BIZRULE_IMPORTED_PATH};
+    static unsigned int rgProperties[]= {AZ_PROP_TASK_BIZRULE,AZ_PROP_TASK_BIZRULE_LANGUAGE,AZ_PROP_TASK_BIZRULE_IMPORTED_PATH};
 
     CComVariant cVVar;
 
@@ -189,13 +198,15 @@ HRESULT CAzTask::CopyVersion2Constructs(CAzTask &srcTask) {
     if (!CAzGlobalOptions::m_bVersionTwo)
         goto lDone;
 
-    for (long i=0;i<3;i++) {
+    for (long i=0; i<3; i++)
+    {
 
         hr=srcTask.m_native->GetProperty(rgProperties[i],CComVariant(), &cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting IAzTask Property ID:"),COLE2T(srcTask.getName()),rgProperties[i]);
 
-        if (SUCCEEDED(hr) && (SysStringByteLen(cVVar.bstrVal))!=0) {
+        if (SUCCEEDED(hr) && (SysStringByteLen(cVVar.bstrVal))!=0)
+        {
 
             hr=m_native->SetProperty(rgProperties[i],cVVar,CComVariant());
 
@@ -214,10 +225,11 @@ lDone:
 const unsigned char CAzTask::m_numberOfProps=5;
 
 // All the properties which are "Settable" for IAzTask
-const unsigned int CAzTask::m_props[]={
-        AZ_PROP_APPLICATION_DATA,        
-        AZ_PROP_TASK_BIZRULE_LANGUAGE,
-        AZ_PROP_TASK_BIZRULE,
-        AZ_PROP_DESCRIPTION,
-        AZ_PROP_TASK_IS_ROLE_DEFINITION
-    };
+const unsigned int CAzTask::m_props[]=
+{
+    AZ_PROP_APPLICATION_DATA,
+    AZ_PROP_TASK_BIZRULE_LANGUAGE,
+    AZ_PROP_TASK_BIZRULE,
+    AZ_PROP_DESCRIPTION,
+    AZ_PROP_TASK_IS_ROLE_DEFINITION
+};

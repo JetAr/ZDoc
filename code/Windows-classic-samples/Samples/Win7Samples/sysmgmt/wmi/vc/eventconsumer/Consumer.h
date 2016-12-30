@@ -1,11 +1,11 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
 // File:  Consumer.h
 //
 // Description: Event consumer class definition
-//    
+//
 //
 // History:
 //
@@ -17,8 +17,8 @@
 class CConsumer : public IWbemUnboundObjectSink
 {
 public:
-	CConsumer(CListBox      *pOutputList);
-	~CConsumer();
+    CConsumer(CListBox      *pOutputList);
+    ~CConsumer();
 
     // IUnknown members
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
@@ -26,13 +26,13 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 
     STDMETHOD(IndicateToConsumer)(IWbemClassObject *pLogicalConsumer,
-									long lNumObjects,
-									IWbemClassObject **ppObjects);
+                                  long lNumObjects,
+                                  IWbemClassObject **ppObjects);
 
 private:
 
-	DWORD m_cRef;
-	LPCTSTR ErrorString(HRESULT hRes);
-	LPWSTR ValueToString(VARIANT *pValue, WCHAR **pbuf);
-	CListBox        *m_pOutputList;
+    DWORD m_cRef;
+    LPCTSTR ErrorString(HRESULT hRes);
+    LPWSTR ValueToString(VARIANT *pValue, WCHAR **pbuf);
+    CListBox        *m_pOutputList;
 };

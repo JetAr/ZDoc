@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,18 +31,21 @@ class CPropertyInfo : public ITedPropertyInfo
 public:
     CPropertyInfo();
     virtual ~CPropertyInfo();
-    
+
     virtual HRESULT STDMETHODCALLTYPE GetPropertyInfoName(__out LPWSTR* szName, __out TED_ATTRIBUTE_CATEGORY* pCategory) = 0;
     virtual HRESULT STDMETHODCALLTYPE GetPropertyCount(DWORD* pdwCount) = 0;
     virtual HRESULT STDMETHODCALLTYPE GetProperty(DWORD dwIndex, __out LPWSTR* strName, __out LPWSTR* strValue) = 0;
     virtual HRESULT STDMETHODCALLTYPE GetPropertyType(DWORD dwIndex, __out VARTYPE* vt)  = 0;
-    virtual HRESULT STDMETHODCALLTYPE IsWriteable() { return S_OK; }
-    
+    virtual HRESULT STDMETHODCALLTYPE IsWriteable()
+    {
+        return S_OK;
+    }
+
     virtual HRESULT STDMETHODCALLTYPE SetProperty(DWORD dwIndex, __in LPCWSTR strName, VARTYPE vt, __in LPCWSTR strValue) = 0;
 
     static KeyStringTypeTriplet ms_AttributeKeyStrings[];
     static KeyStringPair ms_AttributeValueStrings[];
-    
+
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppInterface);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
@@ -68,9 +71,9 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetPropertyCount(DWORD* pdwCount);
     virtual HRESULT STDMETHODCALLTYPE GetProperty(DWORD dwIndex, __out LPWSTR* strName, __out LPWSTR* strValue);
     virtual HRESULT STDMETHODCALLTYPE GetPropertyType(DWORD dwIndex, __out VARTYPE* vt);
-    
+
     virtual HRESULT STDMETHODCALLTYPE SetProperty(DWORD dwIndex, __in LPCWSTR strName, VARTYPE vt, __in LPCWSTR strValue);
-    
+
 private:
     CComPtr<IMFTopologyNode> m_spNode;
     CComPtr<IPropertyStore> m_spNodePropertyStore;
@@ -87,9 +90,9 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetPropertyCount(DWORD* pdwCount);
     virtual HRESULT STDMETHODCALLTYPE GetProperty(DWORD dwIndex, __out LPWSTR* strName, __out LPWSTR* strValue);
     virtual HRESULT STDMETHODCALLTYPE GetPropertyType(DWORD dwIndex, __out VARTYPE* vt);
-    
+
     virtual HRESULT STDMETHODCALLTYPE SetProperty(DWORD dwIndex, __in LPCWSTR strName, VARTYPE vt, __in LPCWSTR strValue);
-    
+
 private:
     CComPtr<IMFMediaType> m_spUpstreamType;
     CComPtr<IMFMediaType> m_spDownstreamType;
@@ -100,14 +103,14 @@ class CAttributesPropertyInfo : public CPropertyInfo
 public:
     CAttributesPropertyInfo(CComPtr<IMFAttributes> spAttributes, CAtlString strName, TED_ATTRIBUTE_CATEGORY Category);
     virtual ~CAttributesPropertyInfo();
-    
+
     virtual HRESULT STDMETHODCALLTYPE GetPropertyInfoName(__out LPWSTR* szName, __out TED_ATTRIBUTE_CATEGORY* pCategory);
     virtual HRESULT STDMETHODCALLTYPE GetPropertyCount(DWORD* pdwCount);
     virtual HRESULT STDMETHODCALLTYPE GetProperty(DWORD dwIndex, __out LPWSTR* strName, __out LPWSTR* strValue);
     virtual HRESULT STDMETHODCALLTYPE GetPropertyType(DWORD dwIndex, __out VARTYPE* vt);
-    
+
     virtual HRESULT STDMETHODCALLTYPE SetProperty(DWORD dwIndex, __in LPCWSTR strName, VARTYPE vt, __in LPCWSTR strValue);
-    
+
 private:
     CComPtr<IMFAttributes> m_spAttributes;
     CAtlString m_strName;
@@ -119,13 +122,16 @@ class COTAPropertyInfo : public CPropertyInfo
 public:
     COTAPropertyInfo(CComPtr<IMFOutputTrustAuthority>* arrOTA, DWORD cOTACount);
     virtual ~COTAPropertyInfo();
-    
+
     virtual HRESULT STDMETHODCALLTYPE GetPropertyInfoName(__out LPWSTR* szName, __out TED_ATTRIBUTE_CATEGORY* pCategory);
     virtual HRESULT STDMETHODCALLTYPE GetPropertyCount(DWORD* pdwCount);
     virtual HRESULT STDMETHODCALLTYPE GetProperty(DWORD dwIndex, __out LPWSTR* strName, __out LPWSTR* strValue);
     virtual HRESULT STDMETHODCALLTYPE GetPropertyType(DWORD dwIndex, __out VARTYPE* vt);
-    virtual HRESULT STDMETHODCALLTYPE IsWriteable() { return S_FALSE; }
-    
+    virtual HRESULT STDMETHODCALLTYPE IsWriteable()
+    {
+        return S_FALSE;
+    }
+
     virtual HRESULT STDMETHODCALLTYPE SetProperty(DWORD dwIndex, __in LPCWSTR strName, VARTYPE vt, __in LPCWSTR strValue);
 
 private:

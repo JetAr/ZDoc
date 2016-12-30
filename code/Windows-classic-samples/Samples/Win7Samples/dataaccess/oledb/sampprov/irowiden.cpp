@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -28,40 +28,40 @@
 //
 STDMETHODIMP CImpIRowsetIdentity::IsSameRow
 (
-	HROW hThisRow,	//@parm IN | The handle of an active row
-	HROW hThatRow	//@parm IN | The handle of an active row
+    HROW hThisRow,	//@parm IN | The handle of an active row
+    HROW hThatRow	//@parm IN | The handle of an active row
 )
 {
-	//
-	// Asserts
     //
-	assert(m_pObj);
-	assert(m_pObj->m_prowbitsIBuffer);
-	assert(m_pObj->m_pFileio);
+    // Asserts
+    //
+    assert(m_pObj);
+    assert(m_pObj->m_prowbitsIBuffer);
+    assert(m_pObj->m_pFileio);
 
     //
-	// Check validity of input handles
+    // Check validity of input handles
     //
-	if( m_pObj->m_prowbitsIBuffer->IsSlotSet((ULONG)hThisRow) != S_OK ||
-		m_pObj->m_prowbitsIBuffer->IsSlotSet((ULONG)hThatRow) != S_OK )
-		return (DB_E_BADROWHANDLE);
+    if( m_pObj->m_prowbitsIBuffer->IsSlotSet((ULONG)hThisRow) != S_OK ||
+            m_pObj->m_prowbitsIBuffer->IsSlotSet((ULONG)hThatRow) != S_OK )
+        return (DB_E_BADROWHANDLE);
 
     //
-	// Obtain a pointers to corresponding row buffers.
+    // Obtain a pointers to corresponding row buffers.
     //
-	PROWBUFF prowbuffThis = m_pObj->GetRowBuff((DBCOUNTITEM)hThisRow, TRUE);
-	PROWBUFF prowbuffThat = m_pObj->GetRowBuff((DBCOUNTITEM)hThatRow, TRUE);
+    PROWBUFF prowbuffThis = m_pObj->GetRowBuff((DBCOUNTITEM)hThisRow, TRUE);
+    PROWBUFF prowbuffThat = m_pObj->GetRowBuff((DBCOUNTITEM)hThatRow, TRUE);
 
     //
-	// Check to see if the row is Deleted
+    // Check to see if the row is Deleted
     //
-	if( m_pObj->m_pFileio->IsDeleted((DBBKMARK) prowbuffThis->pbBmk) == S_OK ||
-		m_pObj->m_pFileio->IsDeleted((DBBKMARK) prowbuffThat->pbBmk) == S_OK )
-		return (DB_E_DELETEDROW);
-	
+    if( m_pObj->m_pFileio->IsDeleted((DBBKMARK) prowbuffThis->pbBmk) == S_OK ||
+            m_pObj->m_pFileio->IsDeleted((DBBKMARK) prowbuffThat->pbBmk) == S_OK )
+        return (DB_E_DELETEDROW);
+
     //
-	// Check for a released row handle (most likely). 
+    // Check for a released row handle (most likely).
     //
-	return (hThisRow == hThatRow) ? S_OK : S_FALSE;
+    return (hThisRow == hThatRow) ? S_OK : S_FALSE;
 }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -30,7 +30,7 @@ CLayoutManager::~CLayoutManager()
     SafeRelease(&m_pAnimationTimer);
     SafeRelease(&m_pTransitionLibrary);
     SafeRelease(&m_pTransitionFactory);
-    
+
     // Do not delete m_thumbs, as client owns that
 }
 
@@ -43,7 +43,7 @@ HRESULT CLayoutManager::Initialize(
     IUIAnimationTransitionFactory *pTransitionFactory,
     UINT uThumbCount,
     CThumbnail *thumbs
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -60,40 +60,40 @@ HRESULT CLayoutManager::Initialize(
     m_pTransitionFactory->AddRef();
 
     // Store a pointer to thumbnail array
-    
+
     m_uThumbCount = uThumbCount;
     m_thumbs = thumbs;
 
     return hr;
 }
-                                                        
+
 // Arranges the thumbnails randomly
 
 HRESULT CLayoutManager::Arrange(
     D2D1_SIZE_F sizeClient
-    )
+)
 {
-    // Create storyboard for all the thumbnail transitions    
+    // Create storyboard for all the thumbnail transitions
 
     IUIAnimationStoryboard *pStoryboard;
     HRESULT hr = m_pAnimationManager->CreateStoryboard(
-        &pStoryboard
-        );
+                     &pStoryboard
+                 );
     if (SUCCEEDED(hr))
     {
         // Arrange the thumbnails, adding transitions to move each thumbnail to a random new location
-    
+
         for (UINT i = 0; i < m_uThumbCount; i++)
         {
             D2D1_SIZE_F size = m_thumbs[i].GetSize();
             DOUBLE xDest = RandomFromRange(
-                size.width * 0.5,
-                sizeClient.width - size.width * 0.5
-                );
+                               size.width * 0.5,
+                               sizeClient.width - size.width * 0.5
+                           );
             DOUBLE yDest = RandomFromRange(
-                sizeClient.height * 0.25 + size.height * 0.5,
-                sizeClient.height * 0.75 - size.height * 0.5
-                );
+                               sizeClient.height * 0.25 + size.height * 0.5,
+                               sizeClient.height * 0.75 - size.height * 0.5
+                           );
 
             // Get the current position
             // Note that this technique is valid only when the storyboard will begin playing immediately
@@ -109,40 +109,40 @@ HRESULT CLayoutManager::Arrange(
                     // Add transitions for x and y movement
 
                     if (fabs(xDest - xCur) > fabs(yDest - yCur))
-		            {
-		                // If the thumbnail has further to travel horizontally than vertically, use a parabolic transition
-		                // on X that will determine the duration of the storyboard, and stretch an accelerate-decelerate
-		                // transition on Y to have the same duration.
-            		    
-        		        hr = AddThumbnailTransitions(
-        		            pStoryboard,
-        		            m_thumbs[i].m_pAnimationVariableX,
-        		            xDest,
-        		            m_thumbs[i].m_pAnimationVariableY,
-        		            yDest
-        		            );
-        		    }
-        		    else
-        		    {
-		                // If the thumbnail has further to travel vertically than horizontally, use a parabolic transition
-		                // on Y that will determine the duration of the storyboard, and stretch an accelerate-decelerate
-		                // transition on X to have the same duration.
-            		    
-        		        hr = AddThumbnailTransitions(
-        		            pStoryboard,
-        		            m_thumbs[i].m_pAnimationVariableY,
-        		            yDest,
-        		            m_thumbs[i].m_pAnimationVariableX,
-        		            xDest
-        		            );
-        		    }
+                    {
+                        // If the thumbnail has further to travel horizontally than vertically, use a parabolic transition
+                        // on X that will determine the duration of the storyboard, and stretch an accelerate-decelerate
+                        // transition on Y to have the same duration.
+
+                        hr = AddThumbnailTransitions(
+                                 pStoryboard,
+                                 m_thumbs[i].m_pAnimationVariableX,
+                                 xDest,
+                                 m_thumbs[i].m_pAnimationVariableY,
+                                 yDest
+                             );
+                    }
+                    else
+                    {
+                        // If the thumbnail has further to travel vertically than horizontally, use a parabolic transition
+                        // on Y that will determine the duration of the storyboard, and stretch an accelerate-decelerate
+                        // transition on X to have the same duration.
+
+                        hr = AddThumbnailTransitions(
+                                 pStoryboard,
+                                 m_thumbs[i].m_pAnimationVariableY,
+                                 yDest,
+                                 m_thumbs[i].m_pAnimationVariableX,
+                                 xDest
+                             );
+                    }
                 }
             }
 
             if (FAILED(hr))
-		    {
-		        break;
-		    }
+            {
+                break;
+            }
         }
 
         if (SUCCEEDED(hr))
@@ -160,16 +160,16 @@ HRESULT CLayoutManager::Arrange(
 
 HRESULT CLayoutManager::Attract(
     DOUBLE finalYValue
-    )
+)
 {
     const DOUBLE ACCELERATION = 2500.0;
 
-    // Create storyboard for all the thumbnail transitions    
+    // Create storyboard for all the thumbnail transitions
 
     IUIAnimationStoryboard *pStoryboard;
     HRESULT hr = m_pAnimationManager->CreateStoryboard(
-        &pStoryboard
-        );
+                     &pStoryboard
+                 );
     if (SUCCEEDED(hr))
     {
         // Add transitions to move each thumbnail to the final y value
@@ -178,23 +178,23 @@ HRESULT CLayoutManager::Attract(
         {
             // Compute an offset to align the thumbnail's edge with the final value,
             // rather than its center
-        
+
             D2D1_SIZE_F size = m_thumbs[i].GetSize();
             DOUBLE offset = (finalYValue > 0.0 ? -1.0 : 1.0) * size.height * 0.5;
-            
+
             IUIAnimationTransition *pTransition;
             hr = CAttractInterpolator::CreateTransition(
-                m_pTransitionFactory,
-                finalYValue + offset,
-                ACCELERATION,
-                &pTransition
-                );
+                     m_pTransitionFactory,
+                     finalYValue + offset,
+                     ACCELERATION,
+                     &pTransition
+                 );
             if (SUCCEEDED(hr))
             {
                 hr = pStoryboard->AddTransition(
-                    m_thumbs[i].m_pAnimationVariableY,
-                    pTransition
-                    );
+                         m_thumbs[i].m_pAnimationVariableY,
+                         pTransition
+                     );
                 pTransition->Release();
             }
 
@@ -225,7 +225,7 @@ HRESULT CLayoutManager::AddThumbnailTransitions(
     DOUBLE valuePrimary,
     IUIAnimationVariable *pVariableSecondary,
     DOUBLE valueSecondary
-    )
+)
 {
     const DOUBLE ACCELERATION = 2000;
     const DOUBLE ACCELERATION_RATIO = 0.3;
@@ -233,49 +233,49 @@ HRESULT CLayoutManager::AddThumbnailTransitions(
 
     IUIAnimationTransition *pTransitionPrimary;
     HRESULT hr = m_pTransitionLibrary->CreateParabolicTransitionFromAcceleration(
-        valuePrimary,
-        0.0,
-        ACCELERATION,
-        &pTransitionPrimary
-        );
+                     valuePrimary,
+                     0.0,
+                     ACCELERATION,
+                     &pTransitionPrimary
+                 );
     if (SUCCEEDED(hr))
     {
         hr = pStoryboard->AddTransition(
-	        pVariablePrimary,
-	        pTransitionPrimary
-	        );
-	    if (SUCCEEDED(hr))
-	    {
-	        UI_ANIMATION_KEYFRAME keyframeEnd;
-	        hr = pStoryboard->AddKeyframeAfterTransition(
-	            pTransitionPrimary,
-	            &keyframeEnd
-	            );
-	        if (SUCCEEDED(hr))
-	        {
+                 pVariablePrimary,
+                 pTransitionPrimary
+             );
+        if (SUCCEEDED(hr))
+        {
+            UI_ANIMATION_KEYFRAME keyframeEnd;
+            hr = pStoryboard->AddKeyframeAfterTransition(
+                     pTransitionPrimary,
+                     &keyframeEnd
+                 );
+            if (SUCCEEDED(hr))
+            {
                 IUIAnimationTransition *pTransitionSecondary;
-	            hr = m_pTransitionLibrary->CreateAccelerateDecelerateTransition(
-	                1.0,    // Will be overwritten, so unimportant
-	                valueSecondary,
-			        ACCELERATION_RATIO,
-			        DECELERATION_RATIO,    
-	                &pTransitionSecondary
-	                );
+                hr = m_pTransitionLibrary->CreateAccelerateDecelerateTransition(
+                         1.0,    // Will be overwritten, so unimportant
+                         valueSecondary,
+                         ACCELERATION_RATIO,
+                         DECELERATION_RATIO,
+                         &pTransitionSecondary
+                     );
                 if (SUCCEEDED(hr))
                 {
                     hr = pStoryboard->AddTransitionBetweenKeyframes(
-                        pVariableSecondary,
-                        pTransitionSecondary,
-                        UI_ANIMATION_KEYFRAME_STORYBOARD_START,
-                        keyframeEnd
-                        );
+                             pVariableSecondary,
+                             pTransitionSecondary,
+                             UI_ANIMATION_KEYFRAME_STORYBOARD_START,
+                             keyframeEnd
+                         );
                     pTransitionSecondary->Release();
-                }	            
-	        }
-	    }
-	    
-	    pTransitionPrimary->Release();
-	}
+                }
+            }
+        }
+
+        pTransitionPrimary->Release();
+    }
 
     return hr;
 }
@@ -284,19 +284,19 @@ HRESULT CLayoutManager::AddThumbnailTransitions(
 
 HRESULT CLayoutManager::ScheduleStoryboard(
     IUIAnimationStoryboard *pStoryboard
-    )
+)
 {
     UI_ANIMATION_SECONDS secondsNow;
     HRESULT hr = m_pAnimationTimer->GetTime(
-        &secondsNow
-        );
+                     &secondsNow
+                 );
     if (SUCCEEDED(hr))
     {
         hr = pStoryboard->Schedule(
-            secondsNow
-            );
+                 secondsNow
+             );
     }
-    
+
     return hr;
 }
 
@@ -305,7 +305,7 @@ HRESULT CLayoutManager::ScheduleStoryboard(
 DOUBLE CLayoutManager::RandomFromRange(
     DOUBLE minimum,
     DOUBLE maximum
-    )
+)
 {
-     return minimum + (maximum - minimum) * rand() / RAND_MAX;
+    return minimum + (maximum - minimum) * rand() / RAND_MAX;
 }

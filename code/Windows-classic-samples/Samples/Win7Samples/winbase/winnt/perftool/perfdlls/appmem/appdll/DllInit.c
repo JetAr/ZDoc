@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -81,93 +81,95 @@ Return Value:
 
 --*/
 {
-   DWORD   dwLength;
-   LPWSTR  pSlash;
-   LPWSTR  pPeriod;
-   LPWSTR  pThisChar;
-   LPWSTR  pSrc, pDest;
-   WORD    wThisChar;
+    DWORD   dwLength;
+    LPWSTR  pSlash;
+    LPWSTR  pPeriod;
+    LPWSTR  pThisChar;
+    LPWSTR  pSrc, pDest;
+    WORD    wThisChar;
 
-   // validate the input arguments
-   if ((wcszLongName == NULL) || (wcszShortName == 0))
-   {
-      return FALSE;
-   }
+    // validate the input arguments
+    if ((wcszLongName == NULL) || (wcszShortName == 0))
+    {
+        return FALSE;
+    }
 
-   // get the length of the string passed in
-   dwLength = lstrlenW(wcszLongName);
+    // get the length of the string passed in
+    dwLength = lstrlenW(wcszLongName);
 
-   if (* wcszLongName > 0)
-   {   // some name has been passed in
-      pSlash    =
-      pPeriod   =
-      pThisChar = (LPWSTR) wcszLongName;
-      wThisChar = 0;
+    if (* wcszLongName > 0)
+    {
+        // some name has been passed in
+        pSlash    =
+            pPeriod   =
+                pThisChar = (LPWSTR) wcszLongName;
+        wThisChar = 0;
 
-      //
-      //  go from beginning to end and find last backslash and
-      //  last period in name
-      //
+        //
+        //  go from beginning to end and find last backslash and
+        //  last period in name
+        //
 
-      while (* pThisChar != 0)
-      { // go until null
-         if (* pThisChar == L'\\')
-         {
-            pSlash = pThisChar;
-         }
-         else if (* pThisChar == L'.')
-         {
-            pPeriod = pThisChar;
-         }
-         pThisChar ++;    // point to next char
-         wThisChar ++;
-         if ((DWORD) wThisChar >= dwLength)
-         {
-            break;
-         }
-      }
+        while (* pThisChar != 0)
+        {
+            // go until null
+            if (* pThisChar == L'\\')
+            {
+                pSlash = pThisChar;
+            }
+            else if (* pThisChar == L'.')
+            {
+                pPeriod = pThisChar;
+            }
+            pThisChar ++;    // point to next char
+            wThisChar ++;
+            if ((DWORD) wThisChar >= dwLength)
+            {
+                break;
+            }
+        }
 
-      // if pPeriod is still pointing to the beginning of the
-      // string, then no period was found
+        // if pPeriod is still pointing to the beginning of the
+        // string, then no period was found
 
-      if (pPeriod == (LPWSTR) wcszLongName)
-      {
-         pPeriod = pThisChar; // set to end of string;
-      }
-      else
-      {
-         // if a period was found, then see if the extension is
-         // .EXE, if so leave it, if not, then use end of string
-         // (i.e. include extension in name)
+        if (pPeriod == (LPWSTR) wcszLongName)
+        {
+            pPeriod = pThisChar; // set to end of string;
+        }
+        else
+        {
+            // if a period was found, then see if the extension is
+            // .EXE, if so leave it, if not, then use end of string
+            // (i.e. include extension in name)
 
-         // using CompareString instead of lstrcmpi due to locale issues
-         if (CompareStringW( LOCALE_INVARIANT,
-             NORM_IGNORECASE,
-             pPeriod, MAX_PATH,
-             L".EXE", 5 ) != CSTR_EQUAL)
-         {
-            pPeriod = pThisChar;
-         }
-      }
+            // using CompareString instead of lstrcmpi due to locale issues
+            if (CompareStringW( LOCALE_INVARIANT,
+                                NORM_IGNORECASE,
+                                pPeriod, MAX_PATH,
+                                L".EXE", 5 ) != CSTR_EQUAL)
+            {
+                pPeriod = pThisChar;
+            }
+        }
 
-      if (pSlash != wcszLongName)
-      {
-         pSlash ++; // point to first char past slash
-      }
+        if (pSlash != wcszLongName)
+        {
+            pSlash ++; // point to first char past slash
+        }
 
-      // copy characters between period (or end of string) and
-      // slash (or start of string) to make image name
+        // copy characters between period (or end of string) and
+        // slash (or start of string) to make image name
 
-      pSrc  = pSlash;
-      pDest = wcszShortName;
+        pSrc  = pSlash;
+        pDest = wcszShortName;
 
-      while (pSrc < pPeriod)
-      {
-         * pDest ++ = * pSrc ++;
-      }
-      * pDest = 0;
-   }
-   return TRUE;
+        while (pSrc < pPeriod)
+        {
+            * pDest ++ = * pSrc ++;
+        }
+        * pDest = 0;
+    }
+    return TRUE;
 }
 
 static
@@ -190,66 +192,66 @@ Description:
 
 --*/
 {
-   LONG    status;
-   TCHAR   szMappedObject[] = SHARED_MEMORY_OBJECT_NAME;
-   WCHAR   szLongName[MAX_PATH];
+    LONG    status;
+    TCHAR   szMappedObject[] = SHARED_MEMORY_OBJECT_NAME;
+    WCHAR   szLongName[MAX_PATH];
 
-   // save this DLL handle
-   ThisDLLHandle = DllHandle;
+    // save this DLL handle
+    ThisDLLHandle = DllHandle;
 
-   // disable thread attach & detach calls to save the overhead
-   // since we don't care about them.
-   DisableThreadLibraryCalls(DllHandle);
+    // disable thread attach & detach calls to save the overhead
+    // since we don't care about them.
+    DisableThreadLibraryCalls(DllHandle);
 
-   // open & initialize shared memory file
-   SetLastError(ERROR_SUCCESS);   // just to clear it out
+    // open & initialize shared memory file
+    SetLastError(ERROR_SUCCESS);   // just to clear it out
 
-   // open/create shared memory used by the application to pass performance values
-   status = GetSharedMemoryDataHeader(
-                                     & hAppMemSharedMemory, & pDataHeader,
-                                     FALSE); // read/write access is required
-   // here the memory block should be initialized and ready for use
-   if (status == ERROR_SUCCESS)
-   {
-      if (pDataHeader != NULL && pDataHeader->dwFirstFreeOffset != 0)
-      {
-         // then there are blocks left so get the next free
-         pAppData = FIRST_FREE(pDataHeader);
-         // update free list to make next item the first in list
-         pDataHeader->dwFirstFreeOffset  = pAppData->dwOffsetOfNext;
+    // open/create shared memory used by the application to pass performance values
+    status = GetSharedMemoryDataHeader(
+                 & hAppMemSharedMemory, & pDataHeader,
+                 FALSE); // read/write access is required
+    // here the memory block should be initialized and ready for use
+    if (status == ERROR_SUCCESS)
+    {
+        if (pDataHeader != NULL && pDataHeader->dwFirstFreeOffset != 0)
+        {
+            // then there are blocks left so get the next free
+            pAppData = FIRST_FREE(pDataHeader);
+            // update free list to make next item the first in list
+            pDataHeader->dwFirstFreeOffset  = pAppData->dwOffsetOfNext;
 
-         // insert the new item into the head of the in use list
-         pAppData->dwOffsetOfNext        = pDataHeader->dwFirstInUseOffset;
-         pDataHeader->dwFirstInUseOffset = (DWORD) ((LPBYTE) pAppData - (LPBYTE) pDataHeader);
+            // insert the new item into the head of the in use list
+            pAppData->dwOffsetOfNext        = pDataHeader->dwFirstInUseOffset;
+            pDataHeader->dwFirstInUseOffset = (DWORD) ((LPBYTE) pAppData - (LPBYTE) pDataHeader);
 
-         // now initialize this instance's data
-         pAppData->dwProcessId           = GetCurrentProcessId();
-         pAppData->hProcessHeap          = NULL;
-         pAppData->dwApplicationBytes    = 0;
-         pAppData->dwAllocCalls          = 0;
-         pAppData->dwReAllocCalls        = 0;
-         pAppData->dwFreeCalls           = 0;
-         pAppData->dwReserved1           = 0;
-         pAppData->dwReserved2           = 0;
+            // now initialize this instance's data
+            pAppData->dwProcessId           = GetCurrentProcessId();
+            pAppData->hProcessHeap          = NULL;
+            pAppData->dwApplicationBytes    = 0;
+            pAppData->dwAllocCalls          = 0;
+            pAppData->dwReAllocCalls        = 0;
+            pAppData->dwFreeCalls           = 0;
+            pAppData->dwReserved1           = 0;
+            pAppData->dwReserved2           = 0;
 
-         GetModuleFileNameW(NULL, szLongName, MAX_PATH);
-         TrimProcessName(szLongName, pAppData->wcszInstanceName);
+            GetModuleFileNameW(NULL, szLongName, MAX_PATH);
+            TrimProcessName(szLongName, pAppData->wcszInstanceName);
 
-         pDataHeader->dwInstanceCount ++;    // increment count
-      }
-      else
-      {
-         // no more free slots left
-      }
-   }
-   else
-   {
-      // unable to open shared memory file
-      // even though this is an error we should return true so as to
-      // not abort the application. No performance data will be
-      // collected though.
-   }
-   return TRUE;
+            pDataHeader->dwInstanceCount ++;    // increment count
+        }
+        else
+        {
+            // no more free slots left
+        }
+    }
+    else
+    {
+        // unable to open shared memory file
+        // even though this is an error we should return true so as to
+        // not abort the application. No performance data will be
+        // collected though.
+    }
+    return TRUE;
 }
 
 static
@@ -258,70 +260,70 @@ DllProcessDetach(
     IN  HANDLE DllHandle
 )
 {
-   PAPPMEM_INSTANCE pPrevItem;
+    PAPPMEM_INSTANCE pPrevItem;
 
-   // remove instance for this app
-   if ((pAppData != NULL) && (pDataHeader != NULL))
-   {
-      // lock memory block
-      // zero the fields out first
-      pAppData->dwProcessId        = 0;
-      pAppData->hProcessHeap       = NULL;
-      pAppData->dwApplicationBytes = 0;
-      pAppData->dwAllocCalls       = 0;
-      pAppData->dwReAllocCalls     = 0;
-      pAppData->dwFreeCalls        = 0;
-      memset(& pAppData->wcszInstanceName[0], 0, (MAX_SIZEOF_INSTANCE_NAME * sizeof (WCHAR)));
-      pAppData->dwReserved1        = 0;
-      pAppData->dwReserved2        = 0;
-      // move from in use (busy) list back to the free list
-      if ((pDataHeader->dwFirstFreeOffset != 0) && (pDataHeader->dwFirstInUseOffset != 0))
-      {
-         // find previous item in busy list
-         if (FIRST_INUSE(pDataHeader) != pAppData)
-         {
-            // not the first so walk down the list
-            pPrevItem = FIRST_INUSE(pDataHeader);
-            while (APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext) != pAppData)
+    // remove instance for this app
+    if ((pAppData != NULL) && (pDataHeader != NULL))
+    {
+        // lock memory block
+        // zero the fields out first
+        pAppData->dwProcessId        = 0;
+        pAppData->hProcessHeap       = NULL;
+        pAppData->dwApplicationBytes = 0;
+        pAppData->dwAllocCalls       = 0;
+        pAppData->dwReAllocCalls     = 0;
+        pAppData->dwFreeCalls        = 0;
+        memset(& pAppData->wcszInstanceName[0], 0, (MAX_SIZEOF_INSTANCE_NAME * sizeof (WCHAR)));
+        pAppData->dwReserved1        = 0;
+        pAppData->dwReserved2        = 0;
+        // move from in use (busy) list back to the free list
+        if ((pDataHeader->dwFirstFreeOffset != 0) && (pDataHeader->dwFirstInUseOffset != 0))
+        {
+            // find previous item in busy list
+            if (FIRST_INUSE(pDataHeader) != pAppData)
             {
-               pPrevItem = APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext);
-               if (pPrevItem->dwOffsetOfNext == 0) break; // end of list
-            }
-            if (APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext) == pAppData)
-            {
-               APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext)->dwOffsetOfNext = pAppData->dwOffsetOfNext;
+                // not the first so walk down the list
+                pPrevItem = FIRST_INUSE(pDataHeader);
+                while (APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext) != pAppData)
+                {
+                    pPrevItem = APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext);
+                    if (pPrevItem->dwOffsetOfNext == 0) break; // end of list
+                }
+                if (APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext) == pAppData)
+                {
+                    APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext)->dwOffsetOfNext = pAppData->dwOffsetOfNext;
+                }
+                else
+                {
+                    // it was never in the busy list (?!?)
+                }
             }
             else
             {
-               // it was never in the busy list (?!?)
+                // this is the first in the list so update it
+                pDataHeader->dwFirstInUseOffset = pAppData->dwOffsetOfNext;
             }
-         }
-         else
-         {
-            // this is the first in the list so update it
-            pDataHeader->dwFirstInUseOffset = pAppData->dwOffsetOfNext;
-         }
-         // here, pAppData has been removed from the InUse list and now
-         // it must be inserted back at the beginning of the free list
-         pAppData->dwOffsetOfNext       = pDataHeader->dwFirstFreeOffset;
-         pDataHeader->dwFirstFreeOffset = (DWORD)((LPBYTE) pAppData - (LPBYTE) pDataHeader);
-      }
-   }
+            // here, pAppData has been removed from the InUse list and now
+            // it must be inserted back at the beginning of the free list
+            pAppData->dwOffsetOfNext       = pDataHeader->dwFirstFreeOffset;
+            pDataHeader->dwFirstFreeOffset = (DWORD)((LPBYTE) pAppData - (LPBYTE) pDataHeader);
+        }
+    }
 
-   // decrement instance counter
-   if (pDataHeader != NULL)
-       pDataHeader->dwInstanceCount --;    // decrement count
+    // decrement instance counter
+    if (pDataHeader != NULL)
+        pDataHeader->dwInstanceCount --;    // decrement count
 
-   // close shared memory file handle
+    // close shared memory file handle
 
-   if (hAppMemSharedMemory != NULL) CloseHandle(hAppMemSharedMemory);
+    if (hAppMemSharedMemory != NULL) CloseHandle(hAppMemSharedMemory);
 
-   // clear pointers
-   hAppMemSharedMemory = NULL;
-   pDataHeader = NULL;
-   pAppData = NULL;
+    // clear pointers
+    hAppMemSharedMemory = NULL;
+    pDataHeader = NULL;
+    pAppData = NULL;
 
-   return TRUE;
+    return TRUE;
 }
 
 BOOL
@@ -332,20 +334,20 @@ DllMain(
     IN LPVOID ReservedAndUnused
 )
 {
-   ReservedAndUnused;
+    ReservedAndUnused;
 
-   switch (Reason)
-   {
-   case DLL_PROCESS_ATTACH:
-      return DllProcessAttach(DLLHandle);
+    switch (Reason)
+    {
+    case DLL_PROCESS_ATTACH:
+        return DllProcessAttach(DLLHandle);
 
-   case DLL_PROCESS_DETACH:
-      return DllProcessDetach(DLLHandle);
+    case DLL_PROCESS_DETACH:
+        return DllProcessDetach(DLLHandle);
 
-   case DLL_THREAD_ATTACH:
-   case DLL_THREAD_DETACH:
-      return TRUE;
-   }
-   return TRUE;
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+        return TRUE;
+    }
+    return TRUE;
 }
 

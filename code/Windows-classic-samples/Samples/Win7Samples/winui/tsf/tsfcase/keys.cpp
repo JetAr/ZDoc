@@ -1,4 +1,4 @@
-//
+﻿//
 // keys.cpp
 //
 // ITfKeyEventSink implementation.

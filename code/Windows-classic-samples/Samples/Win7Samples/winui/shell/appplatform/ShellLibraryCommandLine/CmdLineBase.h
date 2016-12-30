@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -38,7 +38,10 @@ public:
 
 protected:
     // methods to be overridden by the command implementation
-    virtual HRESULT v_ProcessArguments( PCWSTR*, int) { return S_OK; }
+    virtual HRESULT v_ProcessArguments( PCWSTR*, int)
+    {
+        return S_OK;
+    }
     virtual HRESULT v_ExecuteCommand() = 0;
     virtual void v_PrintInstructions() const {}
 
@@ -88,7 +91,10 @@ protected:
             delete _pHead;
         }
 
-        __inline bool IsEmpty() const { return _pHead == NULL; }
+        __inline bool IsEmpty() const
+        {
+            return _pHead == NULL;
+        }
 
         HRESULT Add(PCWSTR pszKey, VALUE **ppValue)
         {

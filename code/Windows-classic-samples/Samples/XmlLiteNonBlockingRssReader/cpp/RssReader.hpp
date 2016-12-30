@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <stdio.h>
 #include <ole2.h>
@@ -25,7 +25,7 @@ public:
 
     // IBindStatusCallback
     virtual HRESULT STDMETHODCALLTYPE OnStartBinding(DWORD dwReserved, __RPC__in_opt IBinding *pib);
-    virtual HRESULT STDMETHODCALLTYPE GetPriority(__RPC__out LONG *pnPriority);        
+    virtual HRESULT STDMETHODCALLTYPE GetPriority(__RPC__out LONG *pnPriority);
     virtual HRESULT STDMETHODCALLTYPE OnLowResource(DWORD reserved);
     virtual HRESULT STDMETHODCALLTYPE OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, __RPC__in_opt LPCWSTR szStatusText);
     virtual HRESULT STDMETHODCALLTYPE OnStopBinding(HRESULT hresult, __RPC__in_opt LPCWSTR szError);

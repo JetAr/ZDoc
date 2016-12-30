@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -123,7 +123,7 @@ STDAPI CExtentMonitorTextService::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextInputProcessor))
+            IsEqualIID(riid, IID_ITfTextInputProcessor))
     {
         *ppvObj = (ITfTextInputProcessor *)this;
     }
@@ -214,13 +214,13 @@ STDAPI CExtentMonitorTextService::Activate(ITfThreadMgr *pThreadMgr, TfClientId 
     _EnsureRangeExtentViewer();
     _EnsureRangeFromPointViewer();
 
-    // 
+    //
     //  If there is the focus document manager already,
     //  we advise the TextEditSink.
-    // 
+    //
     ITfDocumentMgr *pDocMgrFocus;
     if ((_pThreadMgr->GetFocus(&pDocMgrFocus) == S_OK) &&
-        (pDocMgrFocus != NULL))
+            (pDocMgrFocus != NULL))
     {
         OnSetFocus(pDocMgrFocus, NULL);
         pDocMgrFocus->Release();
@@ -377,8 +377,8 @@ HRESULT CExtentMonitorTextService::GetNonTransitoryDim(ITfDocumentMgr *pDocMgr, 
         {
             VARIANT var;
             VariantInit(&var);
-            if (SUCCEEDED(pComp->GetValue(&var)) && 
-                var.vt == VT_UNKNOWN && var.punkVal)
+            if (SUCCEEDED(pComp->GetValue(&var)) &&
+                    var.vt == VT_UNKNOWN && var.punkVal)
             {
                 ITfDocumentMgr  *pDocMgrParent = NULL;
                 if (SUCCEEDED(var.punkVal->QueryInterface(IID_ITfDocumentMgr, (void**)&pDocMgrParent)))

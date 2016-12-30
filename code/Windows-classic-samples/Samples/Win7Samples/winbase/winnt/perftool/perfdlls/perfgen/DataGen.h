@@ -1,4 +1,4 @@
-/*++ 
+﻿/*++
 
 Copyright (c) 1995 - 2000 Microsoft Corporation
 
@@ -26,10 +26,10 @@ Revision History:
 
 #ifndef _DATAGEN_H_
 #define _DATAGEN_H_
- 
+
 //
 //  insure packing is done to the 8 byte align longlong data values. This
-//  will eliminate alignment faults on RISC platforms. The fields can be 
+//  will eliminate alignment faults on RISC platforms. The fields can be
 //  manually arranged to minimize or eliminate wasted space if necessary.
 //
 #pragma pack (8)
@@ -50,7 +50,8 @@ Revision History:
 //  This is the counter structure presently returned by the generator
 //
 
-typedef struct _SIGGEN_DATA_DEFINITION {
+typedef struct _SIGGEN_DATA_DEFINITION
+{
     PERF_OBJECT_TYPE		SigGenObjectType;
     PERF_COUNTER_DEFINITION	SineWaveDef;
     PERF_COUNTER_DEFINITION	TriangleWaveDef;
@@ -59,12 +60,13 @@ typedef struct _SIGGEN_DATA_DEFINITION {
 } SIGGEN_DATA_DEFINITION;
 
 //
-// This is the block of data that corresponds to each instance of the 
+// This is the block of data that corresponds to each instance of the
 // object. This structure will immediately follow the instance definition
 // data structure
 //
 
-typedef struct _SIGGEN_COUNTER {
+typedef struct _SIGGEN_COUNTER
+{
     PERF_COUNTER_BLOCK      CounterBlock;
     DWORD                   dwReserved;         // for 8-byte alignment
     DWORD                   dwSineWaveValue;

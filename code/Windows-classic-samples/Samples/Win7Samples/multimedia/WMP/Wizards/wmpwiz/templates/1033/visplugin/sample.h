@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].h : Declaration of the C[!output Safe_root]
 //
@@ -18,7 +18,8 @@
 [!endif]
 
 // preset values
-enum {
+enum
+{
     PRESET_BARS = 0,
     PRESET_SCOPE,
     PRESET_COUNT
@@ -26,13 +27,13 @@ enum {
 
 /////////////////////////////////////////////////////////////////////////////
 // C[!output Safe_root]
-class ATL_NO_VTABLE C[!output Safe_root] : 
+class ATL_NO_VTABLE C[!output Safe_root] :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<C[!output Safe_root], &CLSID_[!output Safe_root]>,
     public IDispatchImpl<I[!output Safe_root], &IID_I[!output Safe_root], &LIBID_[!output SAFE_ROOT]Lib>,
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     public IWMPEvents,
-[!endif]
+    [!endif]
     public IWMPEffects2
 {
 private:
@@ -47,19 +48,19 @@ public:
     C[!output Safe_root]();
     ~C[!output Safe_root]();
 
-DECLARE_REGISTRY_RESOURCEID(IDR_[!output SAFE_ROOT])
+    DECLARE_REGISTRY_RESOURCEID(IDR_[!output SAFE_ROOT])
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(C[!output Safe_root])
+    BEGIN_COM_MAP(C[!output Safe_root])
     COM_INTERFACE_ENTRY(I[!output Safe_root])
     COM_INTERFACE_ENTRY(IDispatch)
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     COM_INTERFACE_ENTRY(IWMPEvents)
-[!endif]
+    [!endif]
     COM_INTERFACE_ENTRY(IWMPEffects)
     COM_INTERFACE_ENTRY(IWMPEffects2)
-END_COM_MAP()
+    END_COM_MAP()
 
 public:
 
@@ -75,13 +76,22 @@ public:
     STDMETHOD(Render)(TimedLevel *pLevels, HDC hdc, RECT *rc);
     STDMETHOD(MediaInfo)(LONG lChannelCount, LONG lSampleRate, BSTR bstrTitle);
     STDMETHOD(GetCapabilities)(DWORD * pdwCapabilities);
-    STDMETHOD(GoFullscreen)(BOOL fFullScreen) { return E_NOTIMPL; };
-    STDMETHOD(RenderFullScreen)(TimedLevel *pLevels) { return E_NOTIMPL; };
-[!if HASPROPERTYPAGE]
+    STDMETHOD(GoFullscreen)(BOOL fFullScreen)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHOD(RenderFullScreen)(TimedLevel *pLevels)
+    {
+        return E_NOTIMPL;
+    };
+    [!if HASPROPERTYPAGE]
     STDMETHOD(DisplayPropertyPage)(HWND hwndOwner);
-[!else]
-    STDMETHOD(DisplayPropertyPage)(HWND hwndOwner) { return E_NOTIMPL; };
-[!endif]
+    [!else]
+    STDMETHOD(DisplayPropertyPage)(HWND hwndOwner)
+    {
+        return E_NOTIMPL;
+    };
+    [!endif]
     STDMETHOD(GetTitle)(BSTR *bstrTitle);
     STDMETHOD(GetPresetTitle)(LONG nPreset, BSTR *bstrPresetTitle);
     STDMETHOD(GetPresetCount)(LONG *pnPresetCount);
@@ -95,7 +105,7 @@ public:
     STDMETHOD(NotifyNewMedia)(IWMPMedia *pMedia);
     STDMETHOD(OnWindowMessage)(UINT msg, WPARAM WParam, LPARAM LParam, LRESULT *plResultParam );
     STDMETHOD(RenderWindowed)(TimedLevel *pLevels, BOOL fRequiredRender );
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
 
     // IWMPEvents methods
     void STDMETHODCALLTYPE OpenStateChange( long NewState );
@@ -143,21 +153,21 @@ public:
     void STDMETHODCALLTYPE MouseDown( short nButton, short nShiftState, long fX, long fY );
     void STDMETHODCALLTYPE MouseMove( short nButton, short nShiftState, long fX, long fY );
     void STDMETHODCALLTYPE MouseUp( short nButton, short nShiftState, long fX, long fY );
-[!endif]
-[!if HASPROPERTYPAGE]
+    [!endif]
+    [!if HASPROPERTYPAGE]
 
     WCHAR        m_wszPluginText[MAX_PATH];
-[!endif]
+    [!endif]
 
 private:
     void         ReleaseCore();
 
     HWND                        m_hwndParent;
     CComPtr<IWMPCore>           m_spCore;
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     CComPtr<IConnectionPoint>   m_spConnectionPoint;
     DWORD                       m_dwAdviseCookie;
-[!endif]
+    [!endif]
 };
 
 #endif //__[!output SAFE_ROOT]_H_

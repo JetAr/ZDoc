@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -41,13 +41,13 @@ HRESULT CALLBACK CustomCreateChannel(
 
     // Create the underlying channel using the passed in parameters
     hr = WsCreateChannel(
-        channelType,
-        layeredChannelParameters->channelBinding,
-        layeredChannelParameters->channelProperties,
-        layeredChannelParameters->channelPropertyCount,
-        layeredChannelParameters->securityDescription,
-        &customChannel->channel,
-        error);
+             channelType,
+             layeredChannelParameters->channelBinding,
+             layeredChannelParameters->channelProperties,
+             layeredChannelParameters->channelPropertyCount,
+             layeredChannelParameters->securityDescription,
+             &customChannel->channel,
+             error);
     if (FAILED(hr))
     {
         goto Exit;

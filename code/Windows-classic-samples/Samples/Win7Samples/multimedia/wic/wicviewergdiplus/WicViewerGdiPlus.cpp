@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -67,7 +67,7 @@ int WINAPI wWinMain(
         Gdiplus::GdiplusStartupInput gdiplusStartupInput;
         ULONG_PTR gdiplusToken;
 
-        // Checking return status from GdiplusStartup 
+        // Checking return status from GdiplusStartup
         Gdiplus::Status status = Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 
         if(status == Gdiplus::Ok)
@@ -141,11 +141,11 @@ HRESULT DemoApp::Initialize(HINSTANCE hInstance)
 
     // Create WIC factory
     hr = CoCreateInstance(
-        CLSID_WICImagingFactory,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_PPV_ARGS(&m_pIWICFactory)
-        );
+             CLSID_WICImagingFactory,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_PPV_ARGS(&m_pIWICFactory)
+         );
 
     // Register window class
     WNDCLASSEX wcex;
@@ -173,18 +173,18 @@ HRESULT DemoApp::Initialize(HINSTANCE hInstance)
     {
         // Create window
         HWND hWnd = CreateWindow(
-            L"WICViewerGDIPlus",
-            L"WIC Viewer GDI Plus Sample",
-            WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            640,
-            480,
-            NULL,
-            NULL,
-            hInstance,
-            this
-            );
+                        L"WICViewerGDIPlus",
+                        L"WIC Viewer GDI Plus Sample",
+                        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+                        CW_USEDEFAULT,
+                        CW_USEDEFAULT,
+                        640,
+                        480,
+                        NULL,
+                        NULL,
+                        hInstance,
+                        this
+                    );
 
         hr = hWnd ? S_OK : E_FAIL;
     }
@@ -199,7 +199,7 @@ HRESULT DemoApp::Initialize(HINSTANCE hInstance)
 HRESULT DemoApp::CreateDIBFromFile(HWND hWnd)
 {
     HRESULT hr = S_OK;
-    
+
     WCHAR szFileName[MAX_PATH];
 
     // Step 1: Create the open dialog box and locate the image file
@@ -211,12 +211,12 @@ HRESULT DemoApp::CreateDIBFromFile(HWND hWnd)
         IWICBitmapDecoder *pDecoder = NULL;
 
         hr = m_pIWICFactory->CreateDecoderFromFilename(
-            szFileName,                      // Image to be decoded
-            NULL,                            // Do not prefer a particular vendor
-            GENERIC_READ,                    // Desired read access to the file
-            WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
-            &pDecoder                        // Pointer to the decoder
-            );
+                 szFileName,                      // Image to be decoded
+                 NULL,                            // Do not prefer a particular vendor
+                 GENERIC_READ,                    // Desired read access to the file
+                 WICDecodeMetadataCacheOnDemand,  // Cache metadata when needed
+                 &pDecoder                        // Pointer to the decoder
+             );
 
         // Retrieve the first frame of the image from the decoder
         IWICBitmapFrameDecode *pFrame = NULL;
@@ -232,8 +232,8 @@ HRESULT DemoApp::CreateDIBFromFile(HWND hWnd)
         {
             SafeRelease(m_pOriginalBitmapSource);
             hr = pFrame->QueryInterface(
-                IID_IWICBitmapSource, 
-                reinterpret_cast<void **>(&m_pOriginalBitmapSource));
+                     IID_IWICBitmapSource,
+                     reinterpret_cast<void **>(&m_pOriginalBitmapSource));
         }
 
         // Step 3: Scale the original IWICBitmapSource to the client rect size
@@ -287,7 +287,7 @@ BOOL DemoApp::LocateImageFile(HWND hWnd, LPWSTR pszFileName, DWORD cchFileName)
     ofn.lpstrTitle      = L"Open Image";
     ofn.Flags           = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
 
-    // Display the Open dialog box. 
+    // Display the Open dialog box.
     return GetOpenFileName(&ofn);
 }
 
@@ -319,37 +319,37 @@ HRESULT DemoApp::ConvertBitmapSource(HWND hWnd, IWICBitmapSource **ppToRenderBit
         if (SUCCEEDED(hr))
         {
             hr = pScaler->Initialize(
-                m_pOriginalBitmapSource, 
-                rcClient.right - rcClient.left, 
-                rcClient.bottom - rcClient.top, 
-                WICBitmapInterpolationModeFant);
+                     m_pOriginalBitmapSource,
+                     rcClient.right - rcClient.left,
+                     rcClient.bottom - rcClient.top,
+                     WICBitmapInterpolationModeFant);
         }
 
-        // Format convert the bitmap into 32bppBGR, a convenient 
-        // pixel format for GDI+ rendering 
+        // Format convert the bitmap into 32bppBGR, a convenient
+        // pixel format for GDI+ rendering
         if (SUCCEEDED(hr))
         {
             IWICFormatConverter *pConverter = NULL;
 
             hr = m_pIWICFactory->CreateFormatConverter(&pConverter);
 
-            // Format convert to 32bppBGR 
+            // Format convert to 32bppBGR
             if (SUCCEEDED(hr))
             {
                 hr = pConverter->Initialize(
-                    pScaler,                         // Input bitmap to convert
-                    GUID_WICPixelFormat32bppBGR,     // Destination pixel format
-                    WICBitmapDitherTypeNone,         // Specified dither patterm
-                    NULL,                            // Specify a particular palette 
-                    0.f,                             // Alpha threshold
-                    WICBitmapPaletteTypeCustom       // Palette translation type
-                    );
+                         pScaler,                         // Input bitmap to convert
+                         GUID_WICPixelFormat32bppBGR,     // Destination pixel format
+                         WICBitmapDitherTypeNone,         // Specified dither patterm
+                         NULL,                            // Specify a particular palette
+                         0.f,                             // Alpha threshold
+                         WICBitmapPaletteTypeCustom       // Palette translation type
+                     );
 
-                // Store the converted bitmap as ppToRenderBitmapSource 
+                // Store the converted bitmap as ppToRenderBitmapSource
                 if (SUCCEEDED(hr))
                 {
                     hr = pConverter->QueryInterface(
-                        IID_PPV_ARGS(ppToRenderBitmapSource));
+                             IID_PPV_ARGS(ppToRenderBitmapSource));
                 }
             }
 
@@ -385,7 +385,7 @@ HRESULT DemoApp::CreateDIBSectionFromBitmapSource(IWICBitmapSource *pToRenderBit
 
     if (SUCCEEDED(hr))
     {
-        hr = pToRenderBitmapSource->GetSize(&width, &height); 
+        hr = pToRenderBitmapSource->GetSize(&width, &height);
     }
 
     UINT cbStride = 0;
@@ -417,11 +417,11 @@ HRESULT DemoApp::CreateDIBSectionFromBitmapSource(IWICBitmapSource *pToRenderBit
 
             // Extract the image into the GDI+ Bitmap
             hr = pToRenderBitmapSource->CopyPixels(
-                &rc,
-                cbStride,
-                cbBufferSize,
-                m_pbBuffer
-                );
+                     &rc,
+                     cbStride,
+                     cbBufferSize,
+                     m_pbBuffer
+                 );
 
             if (SUCCEEDED(hr))
             {
@@ -431,12 +431,12 @@ HRESULT DemoApp::CreateDIBSectionFromBitmapSource(IWICBitmapSource *pToRenderBit
                     cbStride,
                     PixelFormat32bppRGB,
                     m_pbBuffer
-                    );
-                 
+                );
+
                 hr = m_pGdiPlusBitmap ? S_OK : E_FAIL;
 
                 if (SUCCEEDED(hr))
-                { 
+                {
                     if (m_pGdiPlusBitmap->GetLastStatus() != Gdiplus::Ok)
                     {
                         hr = E_FAIL;
@@ -509,53 +509,53 @@ LRESULT DemoApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
-        case WM_COMMAND:
+    case WM_COMMAND:
+    {
+        // Parse the menu selections:
+        switch (LOWORD(wParam))
         {
-            // Parse the menu selections:
-            switch (LOWORD(wParam))
+        case IDM_FILE:
+        {
+            if (SUCCEEDED(CreateDIBFromFile(hWnd)))
             {
-                case IDM_FILE:
-                {
-                    if (SUCCEEDED(CreateDIBFromFile(hWnd)))
-                    {
-                        InvalidateRect(hWnd, NULL, TRUE);
-                    }
-                    else
-                    {
-                        MessageBox(NULL, L"Failed to load image, select another one.", L"Application Error", MB_ICONEXCLAMATION | MB_OK);
-                    }
-                    break;
-                }
-                case IDM_EXIT:
-                {
-                    PostMessage(hWnd, WM_CLOSE, 0, 0);
-                    break;
-                }
+                InvalidateRect(hWnd, NULL, TRUE);
+            }
+            else
+            {
+                MessageBox(NULL, L"Failed to load image, select another one.", L"Application Error", MB_ICONEXCLAMATION | MB_OK);
             }
             break;
-         }
-        case WM_SIZE:
+        }
+        case IDM_EXIT:
         {
-            IWICBitmapSource *pToRenderBitmapSource = NULL;
+            PostMessage(hWnd, WM_CLOSE, 0, 0);
+            break;
+        }
+        }
+        break;
+    }
+    case WM_SIZE:
+    {
+        IWICBitmapSource *pToRenderBitmapSource = NULL;
 
-            if (SUCCEEDED(ConvertBitmapSource(hWnd, &pToRenderBitmapSource)))
-            {
-                CreateDIBSectionFromBitmapSource(pToRenderBitmapSource);
-                SafeRelease(pToRenderBitmapSource);
-            }
-            break;
-        }
-        case WM_PAINT:
+        if (SUCCEEDED(ConvertBitmapSource(hWnd, &pToRenderBitmapSource)))
         {
-            return OnPaint(hWnd);
+            CreateDIBSectionFromBitmapSource(pToRenderBitmapSource);
+            SafeRelease(pToRenderBitmapSource);
         }
-        case WM_DESTROY:
-        {
-            PostQuitMessage(0);
-            break;
-        }
-        default:
-            return DefWindowProc(hWnd, uMsg, wParam, lParam);
+        break;
+    }
+    case WM_PAINT:
+    {
+        return OnPaint(hWnd);
+    }
+    case WM_DESTROY:
+    {
+        PostQuitMessage(0);
+        break;
+    }
+    default:
+        return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
 
     return 0;
@@ -572,15 +572,15 @@ LRESULT DemoApp::OnPaint(HWND hWnd)
     HDC hdc = BeginPaint(hWnd, &ps);
 
     if (hdc)
-    {       
+    {
         Gdiplus::Graphics graphics(hdc);
 
         if (m_pGdiPlusBitmap)
         {
             // Create rendering area
             Gdiplus::SizeF sizef = Gdiplus::SizeF(
-                (Gdiplus::REAL)m_pGdiPlusBitmap->GetWidth(),
-                (Gdiplus::REAL)m_pGdiPlusBitmap->GetHeight());
+                                       (Gdiplus::REAL)m_pGdiPlusBitmap->GetWidth(),
+                                       (Gdiplus::REAL)m_pGdiPlusBitmap->GetHeight());
 
             Gdiplus::RectF rcClient = Gdiplus::RectF(Gdiplus::PointF(0,0), sizef);
             // Render the Bitmap
@@ -593,4 +593,4 @@ LRESULT DemoApp::OnPaint(HWND hWnd)
     }
 
     return lRet;
-}  
+}

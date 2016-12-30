@@ -1,12 +1,12 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            NetWrite.cpp
 //
-// Abstract:            CNetWrite class implementation. 
-//                      
+// Abstract:            CNetWrite class implementation.
+//
 //
 //*****************************************************************************
 
@@ -48,7 +48,7 @@ CNetWrite::CNetWrite()
 CNetWrite::~CNetWrite()
 {
     CloseHandle( m_hEvent );
-    
+
     SAFE_RELEASE( m_pWriterHeaderInfo );
     SAFE_RELEASE( m_pWriterAdvanced );
     SAFE_RELEASE( m_pWriter );
@@ -58,16 +58,16 @@ CNetWrite::~CNetWrite()
     SAFE_RELEASE( m_pReaderHeaderInfo );
     SAFE_RELEASE( m_pReaderAdvanced );
     SAFE_RELEASE( m_pReader );
-    
+
     CoUninitialize();
 }
 
 
 //----------------------------------------------------------------------------
 // Name: CNetWrite::OnSample()
-// Desc: Called when the reader object delivers an uncompressed sample. 
+// Desc: Called when the reader object delivers an uncompressed sample.
 
-// Note: This method implements the IWMReaderCallback::OnSample method. See the 
+// Note: This method implements the IWMReaderCallback::OnSample method. See the
 //       SDK documentation for a description of the parameters.
 //
 //       The CNetWrite object configures the reader to deliver compressed
@@ -75,11 +75,11 @@ CNetWrite::~CNetWrite()
 //       Therefore, if this method is called, it is an error.
 //----------------------------------------------------------------------------
 
-HRESULT CNetWrite::OnSample( DWORD dwOutputNum, 
-                            QWORD cnsSampleTime,
-                            QWORD cnsSampleDuration, 
-                            DWORD dwFlags,
-                            INSSBuffer __RPC_FAR *pSample, void __RPC_FAR *pvContext )
+HRESULT CNetWrite::OnSample( DWORD dwOutputNum,
+                             QWORD cnsSampleTime,
+                             QWORD cnsSampleDuration,
+                             DWORD dwFlags,
+                             INSSBuffer __RPC_FAR *pSample, void __RPC_FAR *pvContext )
 {
     if( m_hEvent != NULL )
     {
@@ -87,38 +87,38 @@ HRESULT CNetWrite::OnSample( DWORD dwOutputNum,
         //The samples are expected in OnStreamSample.
         //
         _tprintf( _T( "Error: Received a decompressed sample from the reader.\n" ) );
-        
+
         m_hrAsync = E_UNEXPECTED;
         SetEvent( m_hEvent );
     }
-    
+
     return S_OK;
 }
 
 
 //----------------------------------------------------------------------------
 // Name: CNetWrite::OnStatus()
-// Desc: Receives a status message from the reader object or the push sink. 
+// Desc: Receives a status message from the reader object or the push sink.
 //
-// Note: This method implements the IWMStatusCallback::OnStatus method. See the 
+// Note: This method implements the IWMStatusCallback::OnStatus method. See the
 //       SDK documentation for a description of the parameters.
 //----------------------------------------------------------------------------
 
 
-HRESULT CNetWrite::OnStatus( WMT_STATUS Status, 
-                            HRESULT hr, 
-                            WMT_ATTR_DATATYPE dwType, 
-                            BYTE __RPC_FAR *pValue, 
-                            void __RPC_FAR *pvContext )
+HRESULT CNetWrite::OnStatus( WMT_STATUS Status,
+                             HRESULT hr,
+                             WMT_ATTR_DATATYPE dwType,
+                             BYTE __RPC_FAR *pValue,
+                             void __RPC_FAR *pvContext )
 {
     // Check whether the push sink object is the caller.
     BOOL fFromPushSink = ( m_pPushSink != NULL && pvContext == ( void * ) m_pPushSink );
 
     // For some status messages, we expect the CNetWrite object is waiting
     // to receive the message. Signal to the waiting thread by calling SetEvent.
-    // We also signal to the thread if there is an error message. 
+    // We also signal to the thread if there is an error message.
 
-    // Handle status messages from the push sink. 
+    // Handle status messages from the push sink.
     if( fFromPushSink )
     {
         switch(Status)
@@ -133,7 +133,7 @@ HRESULT CNetWrite::OnStatus( WMT_STATUS Status,
 
         case WMT_OPENED:
 
-			_tprintf( _T(  "Connected to server.\n" ) );
+            _tprintf( _T(  "Connected to server.\n" ) );
 
             m_hrAsync = hr;
             SetEvent( m_hEvent );  // Unblock the thread that is waiting.
@@ -145,56 +145,56 @@ HRESULT CNetWrite::OnStatus( WMT_STATUS Status,
 
             m_bEOF = true;
             m_hrAsync = hr;
-            SetEvent( m_hEvent ); 
+            SetEvent( m_hEvent );
 
             break;
         }
-        
+
         return S_OK;
     }
 
-    // Handle status messages from the reader. 
+    // Handle status messages from the reader.
 
     switch(Status)
     {
-        
-    case WMT_OPENED:
-      
-		if( SUCCEEDED( hr ))
-		{
-			_tprintf( _T(  "The reader completed opening the input file.\n" ) );
-		}
 
-		m_hrAsync = hr;
+    case WMT_OPENED:
+
+        if( SUCCEEDED( hr ))
+        {
+            _tprintf( _T(  "The reader completed opening the input file.\n" ) );
+        }
+
+        m_hrAsync = hr;
         SetEvent( m_hEvent );  // Unblock the thread that is waiting.
-        
+
         break;
-        
+
     case WMT_EOF:
-        
+
         m_bEOF = true;
         _tprintf( _T(  "EndOfStream detected in reader.\n" ) );
-        
+
         m_hrAsync = hr;
         SetEvent( m_hEvent );
-        
+
         break;
-        
+
     case WMT_STARTED:
         // Ask the reader object to deliver another block of time.
         m_qwTime = 0;
         m_qwTime += 1000 * 10000;
-        
+
         hr = m_pReaderAdvanced->DeliverTime( m_qwTime );
         m_hrAsync = hr;
 
         break;
 
     case WMT_CLOSED:
-       
+
         m_hrAsync = hr;
         SetEvent( m_hEvent );  // Unblock the thread that is waiting.
-        
+
         break;
 
     case WMT_ERROR:
@@ -205,39 +205,39 @@ HRESULT CNetWrite::OnStatus( WMT_STATUS Status,
         SetEvent( m_hEvent );
 
         break;
-    }    
+    }
 
     return S_OK;
 }
 
 //----------------------------------------------------------------------------
 // Name: CNetWrite::OnStreamSample()
-// Desc: Called when the reader object delivers a compressed sample. 
+// Desc: Called when the reader object delivers a compressed sample.
 //
-// Note: This method implements the IWMReaderCallbackAdvanced::OnStreamSample 
+// Note: This method implements the IWMReaderCallbackAdvanced::OnStreamSample
 //       method. See the SDK documentation for a description of the parameters.
 //----------------------------------------------------------------------------
 
-HRESULT CNetWrite::OnStreamSample( WORD wStreamNum, 
-                                  QWORD cnsSampleTime, 
-                                  QWORD cnsSampleDuration, 
-                                  DWORD dwFlags, 
-                                  INSSBuffer __RPC_FAR *pSample, 
-                                  void __RPC_FAR *pvContext )
+HRESULT CNetWrite::OnStreamSample( WORD wStreamNum,
+                                   QWORD cnsSampleTime,
+                                   QWORD cnsSampleDuration,
+                                   DWORD dwFlags,
+                                   INSSBuffer __RPC_FAR *pSample,
+                                   void __RPC_FAR *pvContext )
 {
     _tprintf( _T( "StreamSample: num=%d, time=%d, duration=%d, flags=%d.\n" ),
-        wStreamNum, ( DWORD )cnsSampleTime, cnsSampleDuration, dwFlags );
+              wStreamNum, ( DWORD )cnsSampleTime, cnsSampleDuration, dwFlags );
 
     if( m_pWriterAdvanced != NULL )
     {
         // Give the sample to the writer object.
 
         HRESULT hr = m_pWriterAdvanced->WriteStreamSample( wStreamNum,
-                                                           cnsSampleTime,
-                                                           0,
-                                                           cnsSampleDuration,
-                                                           dwFlags,
-                                                           pSample );
+                     cnsSampleTime,
+                     0,
+                     cnsSampleDuration,
+                     dwFlags,
+                     pSample );
 
         if( FAILED( hr ) )
         {
@@ -257,7 +257,7 @@ HRESULT CNetWrite::OnStreamSample( WORD wStreamNum,
 // Desc: Called when the reader object has delivered all of the data that this
 //       object requested.
 //
-// Note: This method implements the IWMReaderCallbackAdvanced::OnTime method. 
+// Note: This method implements the IWMReaderCallbackAdvanced::OnTime method.
 //       See the SDK documentation for a description of the parameters.
 //
 //       This method gets called because the CNetWrite object is driving the
@@ -271,10 +271,10 @@ HRESULT CNetWrite::OnTime( QWORD cnsCurrentTime, void __RPC_FAR *pvContext)
     {
         m_qwTime += 10000000;
         HRESULT hr=m_pReaderAdvanced->DeliverTime( m_qwTime );
-		if(FAILED(hr))
-			return hr;
+        if(FAILED(hr))
+            return hr;
     }
-    
+
     return S_OK;
 }
 
@@ -286,7 +286,7 @@ HRESULT CNetWrite::OnTime( QWORD cnsCurrentTime, void __RPC_FAR *pvContext)
 HRESULT CNetWrite::Init()
 {
     HRESULT hr = S_OK;
-    
+
     // Initialize the COM library.
     hr = CoInitialize( NULL );
     if( FAILED( hr ) )
@@ -294,53 +294,53 @@ HRESULT CNetWrite::Init()
         _tprintf( _T( "CoInitialize failed: hr = 0x%08x\n" ), hr );
         return hr;
     }
-    
+
     //
     // Create the reader and writer. Query for additional interfaces.
     //
-	hr = WMCreateReader( NULL, 0, &m_pReader );
+    hr = WMCreateReader( NULL, 0, &m_pReader );
 
-	if( FAILED( hr ) )
-	{
-		_tprintf( _T( "Could not create reader (hr=0x%08x).\n" ), hr );
-		return hr;
-	}
-    
+    if( FAILED( hr ) )
+    {
+        _tprintf( _T( "Could not create reader (hr=0x%08x).\n" ), hr );
+        return hr;
+    }
+
     hr = m_pReader->QueryInterface( IID_IWMReaderAdvanced, ( void** )&m_pReaderAdvanced );
     if( FAILED( hr ) )
     {
         _tprintf( _T( "Could not QI for IWMReaderAdvanced (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
-	hr = WMCreateWriter( NULL, &m_pWriter );
-	if( FAILED( hr ) )
-	{
-		_tprintf( _T(  "Could not create Writer (hr=0x%08x).\n" ), hr );
-		return hr;
-	}
-    
+
+    hr = WMCreateWriter( NULL, &m_pWriter );
+    if( FAILED( hr ) )
+    {
+        _tprintf( _T(  "Could not create Writer (hr=0x%08x).\n" ), hr );
+        return hr;
+    }
+
     hr = m_pWriter->QueryInterface( IID_IWMWriterAdvanced, ( void** ) &m_pWriterAdvanced );
     if( FAILED( hr ) )
     {
         _tprintf( _T( "Could not QI for IWMWriterAdvanced (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
+
     hr = m_pReader->QueryInterface( IID_IWMHeaderInfo, ( VOID ** )&m_pReaderHeaderInfo );
     if( FAILED( hr ) )
     {
         _tprintf( _T( "Could not QI for IWMHeaderInfo (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
+
     hr = m_pWriter->QueryInterface( IID_IWMHeaderInfo, ( VOID ** )&m_pWriterHeaderInfo );
     if( FAILED( hr ) )
     {
         _tprintf( _T( "Could not QI for IWMHeaderInfo (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
+
     return hr;
 }
 
@@ -352,17 +352,17 @@ HRESULT CNetWrite::Init()
 HRESULT CNetWrite::WritetoNet()
 {
     if(   m_hEvent			== NULL ||
-          m_pWriterAdvanced	== NULL ||
-          m_pReaderAdvanced	== NULL || 
-        ( m_pNetSink == NULL && m_pPushSink == NULL ) )
+            m_pWriterAdvanced	== NULL ||
+            m_pReaderAdvanced	== NULL ||
+            ( m_pNetSink == NULL && m_pPushSink == NULL ) )
     {
         return E_UNEXPECTED;
     }
-    
+
     HRESULT hr = S_OK;
 
     //
-    // Start writing. 
+    // Start writing.
     //
 
     // First, prepare the writer object for writing. Then start the reader.
@@ -373,7 +373,7 @@ HRESULT CNetWrite::WritetoNet()
         _tprintf( _T(  "BeginWriting on IWMWriter failed (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
+
     hr = m_pReader->Start( 0, 0, 1.0, 0 );
     if( FAILED( hr ) )
     {
@@ -381,10 +381,10 @@ HRESULT CNetWrite::WritetoNet()
         return hr;
     }
 
-    // Wait for all of the read and write operations to finish. 
+    // Wait for all of the read and write operations to finish.
     WaitForSingleObject( m_hEvent, INFINITE );
 
-    // Check the status of the operation. 
+    // Check the status of the operation.
     if( FAILED( m_hrAsync ) )
     {
         _tprintf( _T(  "Net writing failed (hr=0x%08x).\n" ), m_hrAsync );
@@ -401,21 +401,21 @@ HRESULT CNetWrite::WritetoNet()
         _tprintf( _T(  "Could not Stop IWMReader (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
+
     hr = m_pWriter->Flush();
     if( FAILED( hr ) )
     {
         _tprintf( _T(  "Could not Flush on IWMWriter (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
+
     hr = m_pWriter->EndWriting( );
     if( FAILED( hr ) )
     {
         _tprintf( _T(  "Could not EndWriting on IWMWriter (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
+
     hr = m_pReader->Close();
     if( FAILED( hr ) )
     {
@@ -425,14 +425,14 @@ HRESULT CNetWrite::WritetoNet()
 
     // Remove the network sink from the writer.
     if( m_pNetSink != NULL )
-    {   
+    {
         hr = m_pWriterAdvanced->RemoveSink( m_pNetSink );
         if( FAILED( hr ) )
         {
             _tprintf( _T(  "Could not remove the Network Sink (hr=0x%08x).\n" ),  hr );
             return hr;
         }
-    
+
         hr = m_pNetSink->Close();
         if( FAILED( hr ) )
         {
@@ -440,17 +440,17 @@ HRESULT CNetWrite::WritetoNet()
             return hr;
         }
     }
-    
+
     // Remove the push sink from the writer.
     if( m_pPushSink != NULL )
-    {   
+    {
         hr = m_pWriterAdvanced->RemoveSink( m_pPushSink );
         if( FAILED( hr ) )
         {
             _tprintf( _T(  "Could not remove the Push Sink (hr=0x%08x).\n" ),  hr );
             return hr;
         }
-    
+
         // End the push session and cancel the advise connection with the push sink.
 
         hr = m_pPushSink->EndSession();
@@ -463,8 +463,8 @@ HRESULT CNetWrite::WritetoNet()
         if( m_pPushSinkCallbackCtrl != NULL )
         {
             hr = m_pPushSinkCallbackCtrl->Unadvise( this, ( void * ) m_pPushSink );
-			if(FAILED(hr))
-				return hr;
+            if(FAILED(hr))
+                return hr;
         }
     }
 
@@ -472,7 +472,7 @@ HRESULT CNetWrite::WritetoNet()
     // Wait for the reader to tell us that it is closed.
     //
     WaitForSingleObject( m_hEvent, 10000 );
-    
+
     return hr;
 }
 
@@ -496,13 +496,13 @@ HRESULT CNetWrite::Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxC
         return E_INVALIDARG;
     }
 
-	if( dwPortNum > 0xFFFF )
-	{
-		_tprintf( _T( "Invalid port number.\n" ) );
-		return E_INVALIDARG;
-	}
+    if( dwPortNum > 0xFFFF )
+    {
+        _tprintf( _T( "Invalid port number.\n" ) );
+        return E_INVALIDARG;
+    }
 
-	if( m_pWriterAdvanced == NULL || m_pReaderAdvanced == NULL )
+    if( m_pWriterAdvanced == NULL || m_pReaderAdvanced == NULL )
     {
         return E_UNEXPECTED;
     }
@@ -534,35 +534,35 @@ HRESULT CNetWrite::Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxC
 
         // Set up a callback for event notifications.
 
-        hr = m_pPushSink->QueryInterface( IID_IWMRegisterCallback, 
+        hr = m_pPushSink->QueryInterface( IID_IWMRegisterCallback,
                                           ( void ** ) &m_pPushSinkCallbackCtrl );
 
         if( FAILED( hr ) )
         {
-			return hr;
-		}
-         
-		hr = m_pPushSinkCallbackCtrl->Advise( this, ( void * ) m_pPushSink );
-		if( FAILED( hr ) )
-		{
-			return hr;
+            return hr;
+        }
+
+        hr = m_pPushSinkCallbackCtrl->Advise( this, ( void * ) m_pPushSink );
+        if( FAILED( hr ) )
+        {
+            return hr;
         }
     }
-    
+
     //
     // Create an event for handling asynchronous calls.
     //
 
     m_hrAsync = S_OK;
- 
-	if( m_hEvent != NULL)
-	{
-		CloseHandle(m_hEvent);
-	}
 
-	m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL );
+    if( m_hEvent != NULL)
+    {
+        CloseHandle(m_hEvent);
+    }
 
-	if( NULL ==  m_hEvent )
+    m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL );
+
+    if( NULL ==  m_hEvent )
     {
         DWORD err = GetLastError();
         _tprintf( _T( "Could not Create Event: (hr=0x%08x).\n" ), err );
@@ -580,48 +580,48 @@ HRESULT CNetWrite::Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxC
             _tprintf( _T( "Could not Set Network protocol (hr=0x%08x).\n" ), hr );
             return hr;
         }
-    
+
         hr = m_pNetSink->Open( &dwPortNum);
         if( FAILED( hr ) )
         {
             _tprintf( _T( "Network sink failed to open port no %d (hr=0x%08x).\n" ),
-                dwPortNum, hr );
+                      dwPortNum, hr );
             return hr;
         }
-    
-        // Find the host URL, to display to the user. 
+
+        // Find the host URL, to display to the user.
         DWORD cchURL = 0;
-    
+
         hr = m_pNetSink->GetHostURL( NULL, &cchURL );
         if( FAILED( hr ) )
         {
             _tprintf( _T( "Could not get the host URL from IWMWriterNEtworkSink (hr=0x%08x).\n" ),
-                hr );
+                      hr );
             return hr;
         }
-    
+
         WCHAR *pwszURL = new WCHAR[cchURL];
         if( pwszURL == NULL )
         {
             _tprintf( _T( "Insufficient Memory" ) );
             return E_OUTOFMEMORY;
         }
-    
+
         hr = m_pNetSink->GetHostURL( pwszURL, &cchURL );
         if( FAILED( hr ) )
         {
             _tprintf( _T( "Could not get the host URL from IWMWriterNetworkSink (hr=0x%08x).\n" ),
-                hr );
-			SAFE_ARRAYDELETE (pwszURL);
+                      hr );
+            SAFE_ARRAYDELETE (pwszURL);
             return hr;
         }
-    
+
         _tprintf( _T( "Connect to %ws\n" ), pwszURL );
-    
+
         Sleep( 1000 );
-    
+
         SAFE_ARRAYDELETE (pwszURL);
-    
+
         //
         // Set the maximum number of clients that can connect to the port.
         //
@@ -631,7 +631,7 @@ HRESULT CNetWrite::Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxC
             _tprintf( _T( "Could not Set maximum clients (hr=0x%08x).\n" ), hr );
             return hr;
         }
-    
+
         //
         // Add the network sink to the writer.
         //
@@ -682,17 +682,17 @@ HRESULT CNetWrite::Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxC
             return hr;
         }
     }
-    
+
     //
     // Open the requested file.
     //
     hr = m_pReader->Open(pwszFile, this, NULL );
     if( FAILED( hr ) )
     {
-        _tprintf( _T( "Could not open file %ws (hr=0x%08x).\n" ), pwszFile ,hr );
+        _tprintf( _T( "Could not open file %ws (hr=0x%08x).\n" ), pwszFile,hr );
         return hr;
     }
-    
+
     //
     // Wait for the open to finish.
     //
@@ -701,120 +701,121 @@ HRESULT CNetWrite::Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxC
         _tprintf( _T( "Timed out whiletrying to open the input file\n" ) );
         return E_FAIL;
     }
-    
+
     if( FAILED( m_hrAsync ) )
     {
-		hr = m_hrAsync;
+        hr = m_hrAsync;
         _tprintf( _T( "Open failed (hr=0x%08x).\n" ), m_hrAsync );
         return hr;
     }
     //
     // Turn on manual stream selection, so we get all streams. This prevents the reader
     // from disabling any streams if there are mutual exclusions on some streams.
-    //	
+    //
     hr = m_pReaderAdvanced->SetManualStreamSelection( TRUE );
     if( FAILED( hr ) )
     {
         _tprintf( _T(  "Failed to set manual stream selection (hr=0x%08x).\n" ), hr );
         return hr;
     }
-    
+
 
     IWMProfile			*pProfile = NULL;
     IWMStreamConfig		*pStream  = NULL;
 
     // Declare a dummy 'do' loop. On failure, we can break from the loop.
-	do
-	{
-			hr = m_pReader->QueryInterface( IID_IWMProfile, ( VOID ** )&pProfile );
-			if( FAILED( hr ) )
-			{
-				_tprintf( _T(  "Could not QI for IWMProfile (hr=0x%08x).\n" ), hr );
-				break;
-			}
-		    
-            // Loop through all the output streams on the reader. For each stream, configure 
-            // the reader to deliver compressed samples. This prevents the reader from decoding
-            // each sample. (We want to give the writer compressed samples.)
+    do
+    {
+        hr = m_pReader->QueryInterface( IID_IWMProfile, ( VOID ** )&pProfile );
+        if( FAILED( hr ) )
+        {
+            _tprintf( _T(  "Could not QI for IWMProfile (hr=0x%08x).\n" ), hr );
+            break;
+        }
 
-			DWORD dwStreams = 0;
-			hr = pProfile->GetStreamCount( &dwStreams );
-			if( FAILED( hr ) )
-			{
-				_tprintf( _T(  "GetStreamCount on IWMProfile failed (hr=0x%08x).\n" ), hr );
-				break;
-			}
-		    
-			for ( DWORD i = 0; i < dwStreams; i++ )
-			{
-				hr = pProfile->GetStream( i, &pStream );
-				if( FAILED( hr ) )
-				{
-					_tprintf( _T(  "Could not get Stream %d of %d from IWMProfile (hr=0x%08x).\n" ),
-						i, dwStreams, hr );
-					break;
-				}
-		        
-				WORD wStreamNumber = 0;
-				//
-				//Get the stream number of the current stream.
-				//
-				hr = pStream->GetStreamNumber( &wStreamNumber );
-				if( FAILED( hr ) )
-				{
-					_tprintf( _T(  "Could not get stream number from IWMStreamConfig %d of %d (hr=0x%08x).\n" ),
-						i, dwStreams, hr );
-					break;
-				}
-		        
-				SAFE_RELEASE( pStream );
-				//
-				//Set the stream to be received in compressed mode.
-				//
-				hr = m_pReaderAdvanced->SetReceiveStreamSamples( wStreamNumber, TRUE );
-				if( FAILED( hr ) )
-				{
-					_tprintf( _T(  "Could not SetReceivedStreamSamples for stream number %d (hr=0x%08x).\n" ),
-						wStreamNumber, hr );
-					break;
-				}
-			}
-		    
-			if( FAILED( hr ) )
-				break;
+        // Loop through all the output streams on the reader. For each stream, configure
+        // the reader to deliver compressed samples. This prevents the reader from decoding
+        // each sample. (We want to give the writer compressed samples.)
 
-			//
-			// Turn on the user clock. The CNetWrite object will drive the clock, in order
-            // to make the reader run as quickly as possible.
-			//
-			hr = m_pReaderAdvanced->SetUserProvidedClock( TRUE );
-			if( FAILED( hr ) )
-			{
-				_tprintf( _T( "SetUserProvidedClock failed (hr=0x%08x).\n" ), hr );
-				break;
-			}
-		    
-			//
-			// Set same profile on the writer object that we got from the reader.
-			//
-			hr = m_pWriter->SetProfile( pProfile );
-			if( FAILED( hr ) )
-			{
-				_tprintf( _T(  "Could not set profile on IWMWriter (hr=0x%08x).\n" ), hr );
-				break;
-			}
-	} while(FALSE);
+        DWORD dwStreams = 0;
+        hr = pProfile->GetStreamCount( &dwStreams );
+        if( FAILED( hr ) )
+        {
+            _tprintf( _T(  "GetStreamCount on IWMProfile failed (hr=0x%08x).\n" ), hr );
+            break;
+        }
 
-	SAFE_RELEASE( pStream );
+        for ( DWORD i = 0; i < dwStreams; i++ )
+        {
+            hr = pProfile->GetStream( i, &pStream );
+            if( FAILED( hr ) )
+            {
+                _tprintf( _T(  "Could not get Stream %d of %d from IWMProfile (hr=0x%08x).\n" ),
+                          i, dwStreams, hr );
+                break;
+            }
+
+            WORD wStreamNumber = 0;
+            //
+            //Get the stream number of the current stream.
+            //
+            hr = pStream->GetStreamNumber( &wStreamNumber );
+            if( FAILED( hr ) )
+            {
+                _tprintf( _T(  "Could not get stream number from IWMStreamConfig %d of %d (hr=0x%08x).\n" ),
+                          i, dwStreams, hr );
+                break;
+            }
+
+            SAFE_RELEASE( pStream );
+            //
+            //Set the stream to be received in compressed mode.
+            //
+            hr = m_pReaderAdvanced->SetReceiveStreamSamples( wStreamNumber, TRUE );
+            if( FAILED( hr ) )
+            {
+                _tprintf( _T(  "Could not SetReceivedStreamSamples for stream number %d (hr=0x%08x).\n" ),
+                          wStreamNumber, hr );
+                break;
+            }
+        }
+
+        if( FAILED( hr ) )
+            break;
+
+        //
+        // Turn on the user clock. The CNetWrite object will drive the clock, in order
+        // to make the reader run as quickly as possible.
+        //
+        hr = m_pReaderAdvanced->SetUserProvidedClock( TRUE );
+        if( FAILED( hr ) )
+        {
+            _tprintf( _T( "SetUserProvidedClock failed (hr=0x%08x).\n" ), hr );
+            break;
+        }
+
+        //
+        // Set same profile on the writer object that we got from the reader.
+        //
+        hr = m_pWriter->SetProfile( pProfile );
+        if( FAILED( hr ) )
+        {
+            _tprintf( _T(  "Could not set profile on IWMWriter (hr=0x%08x).\n" ), hr );
+            break;
+        }
+    }
+    while(FALSE);
+
+    SAFE_RELEASE( pStream );
     SAFE_RELEASE( pProfile );
 
-	if(FAILED(hr))
-	{
-		return hr;		// Something has failed within the do-while loop. 
-	}
-    
+    if(FAILED(hr))
+    {
+        return hr;		// Something has failed within the do-while loop.
+    }
+
     DWORD   cInputs = 0;
-    
+
     hr = m_pWriter->GetInputCount( &cInputs );
     if( FAILED( hr ) )
     {
@@ -822,7 +823,7 @@ HRESULT CNetWrite::Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxC
         return hr;
     }
 
-    // Loop through all of the inputs on the writer. For each input, set the 
+    // Loop through all of the inputs on the writer. For each input, set the
     // input properties to NULL. This tells the writer not to encode the
     // samples it receives. We do this because we are getting encoded samples
     // from the reader.
@@ -830,88 +831,88 @@ HRESULT CNetWrite::Configure( DWORD dwPortNum, const WCHAR *pwszFile, UINT nMaxC
     for( DWORD i = 0; i < cInputs; i++ )
     {
         hr = m_pWriter->SetInputProps( i, NULL );
-		if(FAILED(hr))
-		{
-			return hr;
-		}
+        if(FAILED(hr))
+        {
+            return hr;
+        }
     }
-    
+
     //
-    // Copy header attributes from the reader to the writer. 
+    // Copy header attributes from the reader to the writer.
     //
     hr = WriteHeader( g_wszWMTitle);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMAuthor);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMDescription);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMRating);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMCopyright);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMAlbumTitle);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMTrack);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMPromotionURL);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMAlbumCoverURL);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMGenre);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMYear);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMGenreID);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMMCDI);
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMBannerImageType );
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMBannerImageData );
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMBannerImageURL );
     if( FAILED( hr ) )
         return hr;
-    
+
     hr = WriteHeader( g_wszWMCopyrightURL );
     if( FAILED( hr ) )
         return hr;
-    
+
     //
     // Header has been written. Write the script (if any).
     //
     hr = WriteScript();
-    
+
     return hr;
 }
 
@@ -929,26 +930,26 @@ HRESULT CNetWrite::WriteHeader(const WCHAR *pwszName)
     WMT_ATTR_DATATYPE	type;
     HRESULT				hr = S_OK;
     BYTE*				pValue = NULL;
-    
+
     //
     // Get the number of bytes to allocate for the attribute data.
     //
     hr = m_pReaderHeaderInfo->GetAttributeByName( &nstreamNum,
-        pwszName,
-        &type,
-        NULL,
-        &cbLength );
+            pwszName,
+            &type,
+            NULL,
+            &cbLength );
     if( FAILED( hr ) && hr != ASF_E_NOTFOUND )
     {
         _tprintf( _T( "GetAttributeByName failed for Attribute name %ws (hr=0x%08x).\n" ), pwszName, hr);
         return hr;
     }
-    
+
     if( cbLength == 0 && hr == ASF_E_NOTFOUND )
     {
         return S_OK;
     }
-    
+
     // Allocate a buffer.
     pValue = new BYTE[ cbLength ];
     if( NULL == pValue )
@@ -962,32 +963,32 @@ HRESULT CNetWrite::WriteHeader(const WCHAR *pwszName)
     {
         // Get the value of the attribute from the reader.
         hr = m_pReaderHeaderInfo->GetAttributeByName( &nstreamNum,
-            pwszName,
-            &type,
-            pValue,
-            &cbLength );
+                pwszName,
+                &type,
+                pValue,
+                &cbLength );
         if( FAILED( hr ) )
         {
             _tprintf( _T( "GetAttributeByName failed for Attribute name %ws (hr=0x%08x).\n" ),
-                pwszName, hr);
+                      pwszName, hr);
             break;
         }
 
         // Set the attribute on the writer.
         hr = m_pWriterHeaderInfo->SetAttribute( nstreamNum,
-						pwszName,
+                                                pwszName,
                                                 type,
                                                 pValue,
                                                 cbLength );
         if( FAILED( hr ) )
         {
             _tprintf( _T( "SetAttribute failed for Attribute name %ws (hr=0x%08x).\n" ),
-                pwszName, hr);
+                      pwszName, hr);
             break;
         }
     }
     while(FALSE);
-    
+
     SAFE_ARRAYDELETE( pValue );
     return hr;
 }
@@ -998,7 +999,7 @@ HRESULT CNetWrite::WriteHeader(const WCHAR *pwszName)
 //----------------------------------------------------------------------------
 HRESULT CNetWrite::WriteScript()
 {
-    
+
     HRESULT	hr = S_OK;
     WCHAR*	pwszCommand = NULL;
     WCHAR*	pwszType = NULL;
@@ -1006,7 +1007,7 @@ HRESULT CNetWrite::WriteScript()
     WORD	cScript = 0;
     WORD  	cchTypeLen = 0;
     WORD	cchCommandLen = 0;
-    
+
 
     // Get the number of scripts in the header. This might be zero.
     hr = m_pReaderHeaderInfo->GetScriptCount( &cScript );
@@ -1015,29 +1016,29 @@ HRESULT CNetWrite::WriteScript()
         _tprintf( _T( "GetScriptCount failed (hr=0x%08x).\n" ), hr);
         return hr;
     }
-    
+
     // Loop through the scripts. For each script, copy it to the writer's header.
     for( int i = 0; i < cScript; i++)
     {
         //
         // Get the memory required for this script.
         //
-        hr = m_pReaderHeaderInfo->GetScript( (WORD)i ,
-					                         NULL ,
-                                             &cchTypeLen ,
-                                             NULL ,
-                                             &cchCommandLen ,
+        hr = m_pReaderHeaderInfo->GetScript( (WORD)i,
+                                             NULL,
+                                             &cchTypeLen,
+                                             NULL,
+                                             &cchCommandLen,
                                              &cnsScriptTime );
         if( FAILED( hr ) )
         {
             _tprintf( _T( "GetScript failed for Script no %d (hr=0x%08x).\n" ), i, hr );
             break;
         }
-        
+
         // Allocate buffers.
         pwszType	= new WCHAR[cchTypeLen];
         pwszCommand = new WCHAR[cchCommandLen];
-        
+
         if( pwszType == NULL || pwszCommand == NULL)
         {
             _tprintf( _T( "Insufficient Memory" ) );
@@ -1047,11 +1048,11 @@ HRESULT CNetWrite::WriteScript()
         //
         // Get the script.
         //
-        hr = m_pReaderHeaderInfo->GetScript( (WORD)i ,
-					                         pwszType ,
-                                             &cchTypeLen ,
-                                             pwszCommand ,
-                                             &cchCommandLen ,
+        hr = m_pReaderHeaderInfo->GetScript( (WORD)i,
+                                             pwszType,
+                                             &cchTypeLen,
+                                             pwszCommand,
+                                             &cchCommandLen,
                                              &cnsScriptTime );
         if( FAILED( hr ) )
         {
@@ -1061,26 +1062,26 @@ HRESULT CNetWrite::WriteScript()
         //
         // Add the script to the writer.
         //
-        hr = m_pWriterHeaderInfo->AddScript( pwszType ,
-					     pwszCommand ,
+        hr = m_pWriterHeaderInfo->AddScript( pwszType,
+                                             pwszCommand,
                                              cnsScriptTime );
         if( FAILED( hr ) )
         {
             _tprintf( _T( "AddScript failed for Script no %d (hr=0x%08x).\n" ), i, hr);
             break;
         }
-        
+
         SAFE_ARRAYDELETE( pwszType );
         SAFE_ARRAYDELETE( pwszCommand );
-        
+
         pwszType = pwszCommand = NULL;
-        
+
         cchTypeLen		= 0;
         cchCommandLen	= 0;
     }
-    
+
     SAFE_ARRAYDELETE( pwszType );
     SAFE_ARRAYDELETE( pwszCommand );
-    
-    return hr;	
+
+    return hr;
 }

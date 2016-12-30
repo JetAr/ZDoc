@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 // [!output root].cpp : Implementation of C[!output Safe_root]
 //
@@ -17,16 +17,16 @@
 // Constructor
 
 C[!output Safe_root]::C[!output Safe_root]() :
-m_hwndParent(NULL),
-m_clrForeground(0x0000FF),
-m_nPreset(0)
+    m_hwndParent(NULL),
+    m_clrForeground(0x0000FF),
+    m_nPreset(0)
 {
-[!if HASPROPERTYPAGE]
+    [!if HASPROPERTYPAGE]
     wcsncpy_s(m_wszPluginText, sizeof(m_wszPluginText) / sizeof(m_wszPluginText[0]), L"[!output root] Plugin", sizeof(m_wszPluginText) / sizeof(m_wszPluginText[0]));
-[!endif]
-[!if LISTENTOEVENTS]
+    [!endif]
+    [!if LISTENTOEVENTS]
     m_dwAdviseCookie = 0;
-[!endif]
+    [!endif]
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -71,36 +71,36 @@ STDMETHODIMP C[!output Safe_root]::Render(TimedLevel *pLevels, HDC hdc, RECT *pr
     HPEN hOldPen= static_cast<HPEN>(::SelectObject( hdc, hNewPen ));
 
     ::FillRect( hdc, prc, hNewBrush );
-    
+
     // draw using the current preset
     switch (m_nPreset)
     {
     case PRESET_BARS:
+    {
+        // Walk through the frequencies until we run out of levels or drawing surface.
+        for (int x = prc->left; x < prc->right && x < (SA_BUFFER_SIZE-1); ++x)
         {
-            // Walk through the frequencies until we run out of levels or drawing surface.
-            for (int x = prc->left; x < prc->right && x < (SA_BUFFER_SIZE-1); ++x)
-            {
-                int y = static_cast<int>(((prc->bottom - prc->top)/256.0f) * pLevels->frequency[0][x - (prc->left - 1)]);
-                ::MoveToEx( hdc, x, prc->bottom, NULL );  
-                ::LineTo(hdc, x, prc->bottom - y); 
-            }
+            int y = static_cast<int>(((prc->bottom - prc->top)/256.0f) * pLevels->frequency[0][x - (prc->left - 1)]);
+            ::MoveToEx( hdc, x, prc->bottom, NULL );
+            ::LineTo(hdc, x, prc->bottom - y);
         }
-        break;
+    }
+    break;
 
     case PRESET_SCOPE:
+    {
+        // Walk through the waveform data until we run out of samples or drawing surface.
+        int y = static_cast<int>(((prc->bottom - prc->top)/256.0f) * pLevels->waveform[0][0]);
+        ::MoveToEx( hdc, prc->left, y, NULL );
+        for (int x = prc->left; x < prc->right && x < (SA_BUFFER_SIZE-1); ++x)
         {
-            // Walk through the waveform data until we run out of samples or drawing surface.
-            int y = static_cast<int>(((prc->bottom - prc->top)/256.0f) * pLevels->waveform[0][0]);
-            ::MoveToEx( hdc, prc->left, y, NULL );  
-            for (int x = prc->left; x < prc->right && x < (SA_BUFFER_SIZE-1); ++x)
-            {
-                y = static_cast<int>(((prc->bottom - prc->top)/256.0f) * pLevels->waveform[0][x - (prc->left - 1)]);
-                ::LineTo(hdc, x, y); 
-            }
+            y = static_cast<int>(((prc->bottom - prc->top)/256.0f) * pLevels->waveform[0][x - (prc->left - 1)]);
+            ::LineTo(hdc, x, y);
         }
-        break;
     }
-        
+    break;
+    }
+
     if (hNewBrush)
     {
         ::DeleteObject( hNewBrush );
@@ -111,7 +111,7 @@ STDMETHODIMP C[!output Safe_root]::Render(TimedLevel *pLevels, HDC hdc, RECT *pr
         ::SelectObject( hdc, hOldPen );
         ::DeleteObject( hNewPen );
     }
-    
+
     return S_OK;
 }
 
@@ -171,8 +171,8 @@ STDMETHODIMP C[!output Safe_root]::GetTitle(BSTR* bstrTitle)
     }
 
     CComBSTR bstrTemp;
-    bstrTemp.LoadString(IDS_EFFECTNAME); 
-        
+    bstrTemp.LoadString(IDS_EFFECTNAME);
+
     if ((!bstrTemp) || (0 == bstrTemp.Length()))
     {
         return E_FAIL;
@@ -200,18 +200,18 @@ STDMETHODIMP C[!output Safe_root]::GetPresetTitle(LONG nPreset, BSTR *bstrPreset
     }
 
     CComBSTR bstrTemp;
-    
+
     switch (nPreset)
     {
     case PRESET_BARS:
-        bstrTemp.LoadString(IDS_BARSPRESETNAME); 
+        bstrTemp.LoadString(IDS_BARSPRESETNAME);
         break;
 
     case PRESET_SCOPE:
-        bstrTemp.LoadString(IDS_SCOPEPRESETNAME); 
+        bstrTemp.LoadString(IDS_SCOPEPRESETNAME);
         break;
     }
-    
+
     if ((!bstrTemp) || (0 == bstrTemp.Length()))
     {
         return E_FAIL;
@@ -291,7 +291,7 @@ STDMETHODIMP C[!output Safe_root]::SetCore(IWMPCore * pCore)
 
     m_spCore = pCore;
 
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     // connect up the event interface
     CComPtr<IConnectionPointContainer>  spConnectionContainer;
 
@@ -312,7 +312,7 @@ STDMETHODIMP C[!output Safe_root]::SetCore(IWMPCore * pCore)
         }
     }
 
-[!endif]
+    [!endif]
     return hr;
 }
 
@@ -382,7 +382,7 @@ STDMETHODIMP C[!output Safe_root]::OnWindowMessage(UINT msg, WPARAM WParam, LPAR
 //////////////////////////////////////////////////////////////////////////////
 STDMETHODIMP C[!output Safe_root]::RenderWindowed(TimedLevel *pLevels, BOOL fRequiredRender )
 {
-    // NULL parent window should not happen 
+    // NULL parent window should not happen
     if (NULL == m_hwndParent)
     {
         return E_UNEXPECTED;
@@ -402,7 +402,7 @@ STDMETHODIMP C[!output Safe_root]::RenderWindowed(TimedLevel *pLevels, BOOL fReq
     ::GetClientRect(m_hwndParent, &rParent);
 
     Render(pLevels, hdc, &rParent);
-    
+
     ::ReleaseDC(m_hwndParent, hdc);
 
     return S_OK;
@@ -414,7 +414,7 @@ STDMETHODIMP C[!output Safe_root]::RenderWindowed(TimedLevel *pLevels, BOOL fReq
 //////////////////////////////////////////////////////////////////////////////
 void C[!output Safe_root]::ReleaseCore()
 {
-[!if LISTENTOEVENTS]
+    [!if LISTENTOEVENTS]
     if (m_spConnectionPoint)
     {
         if (0 != m_dwAdviseCookie)
@@ -425,7 +425,7 @@ void C[!output Safe_root]::ReleaseCore()
         m_spConnectionPoint = NULL;
     }
 
-[!endif]
+    [!endif]
     if (m_spCore)
     {
         m_spCore = NULL;
@@ -457,7 +457,7 @@ STDMETHODIMP C[!output Safe_root]::put_foregroundColor(BSTR newVal)
 // Helper function used to convert a string into a COLORREF.
 //////////////////////////////////////////////////////////////////////////////
 HRESULT C[!output Safe_root]::WzToColor(const WCHAR *pwszColor, COLORREF *pcrColor)
-{ 
+{
     if (NULL == pwszColor)
     {
         //NULL color string passed in
@@ -475,7 +475,7 @@ HRESULT C[!output Safe_root]::WzToColor(const WCHAR *pwszColor, COLORREF *pcrCol
         //NULL output color DWORD passed in
         return E_POINTER;
     }
-    
+
     if (lstrlenW(pwszColor) != 7)
     {
         //hex color string is not of the correct length
@@ -503,7 +503,7 @@ HRESULT C[!output Safe_root]::WzToColor(const WCHAR *pwszColor, COLORREF *pcrCol
         }
         else
         {
-           //Invalid hex digit in color string
+            //Invalid hex digit in color string
             return E_INVALIDARG;
         }
     }
@@ -511,7 +511,7 @@ HRESULT C[!output Safe_root]::WzToColor(const WCHAR *pwszColor, COLORREF *pcrCol
     *pcrColor = SwapBytes(dwRet);
 
     return S_OK;
-} 
+}
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -529,7 +529,7 @@ HRESULT C[!output Safe_root]::ColorToWz( BSTR* pbstrColor, COLORREF crColor)
     HRESULT hr  = S_OK;
 
     swprintf_s( wsz, sizeof(wsz)/sizeof(wsz[0]), L"#%06X", SwapBytes(crColor) );
-    
+
     *pbstrColor = ::SysAllocString( wsz );
 
     if (!pbstrColor)
@@ -543,7 +543,7 @@ HRESULT C[!output Safe_root]::ColorToWz( BSTR* pbstrColor, COLORREF crColor)
 
 //////////////////////////////////////////////////////////////////////////////
 // C[!output Safe_root]::SwapBytes
-// Used to convert between a DWORD and COLORREF.  Simply swaps the lowest 
+// Used to convert between a DWORD and COLORREF.  Simply swaps the lowest
 // and 3rd order bytes.
 //////////////////////////////////////////////////////////////////////////////
 inline DWORD C[!output Safe_root]::SwapBytes(DWORD dwRet)

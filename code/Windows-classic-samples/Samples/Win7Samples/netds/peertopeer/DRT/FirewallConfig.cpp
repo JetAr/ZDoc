@@ -1,4 +1,4 @@
-// FirewallConfig.cpp - Based on MSDN Sample code for the Windows Firewall COM interface.
+﻿// FirewallConfig.cpp - Based on MSDN Sample code for the Windows Firewall COM interface.
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -24,10 +24,10 @@ HRESULT OpenFirewallForDrtSdkSample(BOOL fOpenPortForPNRP)
 
     // Initialize COM.
     hr = CoInitializeEx(
-                0,
-                COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE
-                );
-    
+             0,
+             COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE
+         );
+
     // Ignore RPC_E_CHANGED_MODE. Since we don't care what the mode is,
     // we'll just use the existing mode.
     hrComInitialized = hr;
@@ -39,7 +39,7 @@ HRESULT OpenFirewallForDrtSdkSample(BOOL fOpenPortForPNRP)
             goto error;
         }
     }
-    
+
     WindowsFirewallInitialize(&fwProfile);
     if (FAILED(hr))
     {
@@ -53,25 +53,25 @@ HRESULT OpenFirewallForDrtSdkSample(BOOL fOpenPortForPNRP)
         printf("WindowsFirewallIsOn failed: 0x%08lx\n", hr);
         goto error;
     }
-   
+
     if(fFirewallOn)
     {
         hr = GetModuleFileName(
-                NULL,
-                lpFilename,
-                1024);
+                 NULL,
+                 lpFilename,
+                 1024);
         if (FAILED(hr))
         {
             printf("GetModuleFileName failed: 0x%08lx\n", hr);
             goto error;
         }
-        
+
         // Add DrtSdkSample to the authorized application collection.
         hr = WindowsFirewallAddApp(
-                fwProfile,
-                lpFilename,
-                L"DrtSdkSample"
-                );
+                 fwProfile,
+                 lpFilename,
+                 L"DrtSdkSample"
+             );
         if (FAILED(hr))
         {
             printf("WindowsFirewallAddApp failed: 0x%08lx\n", hr);
@@ -87,15 +87,15 @@ HRESULT OpenFirewallForDrtSdkSample(BOOL fOpenPortForPNRP)
                 printf("WindowsFirewallPortAdd failed: 0x%08lx\n", hr);
                 goto error;
             }
-        }   
-   
+        }
+
     }
 
 error:
-   
+
     // Release the firewall profile.
     WindowsFirewallCleanup(fwProfile);
-   
+
     // Uninitialize COM.
     if (SUCCEEDED(hrComInitialized))
     {
@@ -117,12 +117,12 @@ HRESULT WindowsFirewallInitialize(OUT INetFwProfile** fwProfile)
 
     // Create an instance of the firewall settings manager.
     hr = CoCreateInstance(
-            __uuidof(NetFwMgr),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(INetFwMgr),
-            (void**)&fwMgr
-            );
+             __uuidof(NetFwMgr),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(INetFwMgr),
+             (void**)&fwMgr
+         );
     if (FAILED(hr))
     {
         printf("CoCreateInstance failed: 0x%08lx\n", hr);
@@ -279,10 +279,10 @@ error:
 
 
 HRESULT WindowsFirewallAppIsEnabled(
-            IN INetFwProfile* fwProfile,
-            IN const wchar_t* fwProcessImageFileName,
-            OUT BOOL* fwAppEnabled
-            )
+    IN INetFwProfile* fwProfile,
+    IN const wchar_t* fwProcessImageFileName,
+    OUT BOOL* fwAppEnabled
+)
 {
     HRESULT hr = S_OK;
     BSTR fwBstrProcessImageFileName = NULL;
@@ -359,10 +359,10 @@ error:
 
 
 HRESULT WindowsFirewallAddApp(
-            IN INetFwProfile* fwProfile,
-            IN const wchar_t* fwProcessImageFileName,
-            IN const wchar_t* fwName
-            )
+    IN INetFwProfile* fwProfile,
+    IN const wchar_t* fwProcessImageFileName,
+    IN const wchar_t* fwName
+)
 {
     HRESULT hr = S_OK;
     BOOL fwAppEnabled;
@@ -377,10 +377,10 @@ HRESULT WindowsFirewallAddApp(
 
     // First check to see if the application is already authorized.
     hr = WindowsFirewallAppIsEnabled(
-            fwProfile,
-            fwProcessImageFileName,
-            &fwAppEnabled
-            );
+             fwProfile,
+             fwProcessImageFileName,
+             &fwAppEnabled
+         );
     if (FAILED(hr))
     {
         printf("WindowsFirewallAppIsEnabled failed: 0x%08lx\n", hr);
@@ -391,7 +391,7 @@ HRESULT WindowsFirewallAddApp(
     if (!fwAppEnabled)
     {
         wprintf(L"Adding firewall exception for %s\n", fwName);
-        
+
         // Retrieve the authorized application collection.
         hr = fwProfile->get_AuthorizedApplications(&fwApps);
         if (FAILED(hr))
@@ -402,12 +402,12 @@ HRESULT WindowsFirewallAddApp(
 
         // Create an instance of an authorized application.
         hr = CoCreateInstance(
-                __uuidof(NetFwAuthorizedApplication),
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                __uuidof(INetFwAuthorizedApplication),
-                (void**)&fwApp
-                );
+                 __uuidof(NetFwAuthorizedApplication),
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 __uuidof(INetFwAuthorizedApplication),
+                 (void**)&fwApp
+             );
         if (FAILED(hr))
         {
             printf("CoCreateInstance failed: 0x%08lx\n", hr);
@@ -458,10 +458,10 @@ HRESULT WindowsFirewallAddApp(
 
         // Check if the app is still not added
         hr = WindowsFirewallAppIsEnabled(
-                fwProfile,
-                fwProcessImageFileName,
-                &fwAppEnabled
-                );
+                 fwProfile,
+                 fwProcessImageFileName,
+                 &fwAppEnabled
+             );
         if (FAILED(hr))
         {
             printf("WindowsFirewallAppIsEnabled failed: 0x%08lx\n", hr);
@@ -498,11 +498,11 @@ error:
 
 
 HRESULT WindowsFirewallPortIsEnabled(
-            IN INetFwProfile* fwProfile,
-            IN LONG portNumber,
-            IN NET_FW_IP_PROTOCOL ipProtocol,
-            OUT BOOL* fwPortEnabled
-            )
+    IN INetFwProfile* fwProfile,
+    IN LONG portNumber,
+    IN NET_FW_IP_PROTOCOL ipProtocol,
+    OUT BOOL* fwPortEnabled
+)
 {
     HRESULT hr = S_OK;
     VARIANT_BOOL fwEnabled;
@@ -565,11 +565,11 @@ error:
 
 
 HRESULT WindowsFirewallPortAdd(
-            IN INetFwProfile* fwProfile,
-            IN LONG portNumber,
-            IN NET_FW_IP_PROTOCOL ipProtocol,
-            IN const wchar_t* name
-            )
+    IN INetFwProfile* fwProfile,
+    IN LONG portNumber,
+    IN NET_FW_IP_PROTOCOL ipProtocol,
+    IN const wchar_t* name
+)
 {
     HRESULT hr = S_OK;
     BOOL fwPortEnabled;
@@ -582,11 +582,11 @@ HRESULT WindowsFirewallPortAdd(
 
     // First check to see if the port is already added.
     hr = WindowsFirewallPortIsEnabled(
-            fwProfile,
-            portNumber,
-            ipProtocol,
-            &fwPortEnabled
-            );
+             fwProfile,
+             portNumber,
+             ipProtocol,
+             &fwPortEnabled
+         );
     if (FAILED(hr))
     {
         printf("WindowsFirewallPortIsEnabled failed: 0x%08lx\n", hr);
@@ -607,12 +607,12 @@ HRESULT WindowsFirewallPortAdd(
 
         // Create an instance of an open port.
         hr = CoCreateInstance(
-                __uuidof(NetFwOpenPort),
-                NULL,
-                CLSCTX_INPROC_SERVER,
-                __uuidof(INetFwOpenPort),
-                (void**)&fwOpenPort
-                );
+                 __uuidof(NetFwOpenPort),
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 __uuidof(INetFwOpenPort),
+                 (void**)&fwOpenPort
+             );
         if (FAILED(hr))
         {
             printf("CoCreateInstance failed: 0x%08lx\n", hr);
@@ -661,11 +661,11 @@ HRESULT WindowsFirewallPortAdd(
         }
 
         hr = WindowsFirewallPortIsEnabled(
-                fwProfile,
-                portNumber,
-                ipProtocol,
-                &fwPortEnabled
-                );
+                 fwProfile,
+                 portNumber,
+                 ipProtocol,
+                 &fwPortEnabled
+             );
         if (FAILED(hr))
         {
             printf("WindowsFirewallPortIsEnabled failed: 0x%08lx\n", hr);
@@ -676,7 +676,7 @@ HRESULT WindowsFirewallPortAdd(
         {
             printf("ERROR: Could not enable firewall port exception, try running as administrator.\n");
         }
-        
+
     }
 
 error:

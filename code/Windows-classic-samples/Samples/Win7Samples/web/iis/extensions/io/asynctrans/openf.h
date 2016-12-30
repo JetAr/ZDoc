@@ -1,4 +1,4 @@
-/* Copyright(c) 1995-2002 Microsoft Corporation
+﻿/* Copyright(c) 1995-2002 Microsoft Corporation
 
 	Module Name:
 

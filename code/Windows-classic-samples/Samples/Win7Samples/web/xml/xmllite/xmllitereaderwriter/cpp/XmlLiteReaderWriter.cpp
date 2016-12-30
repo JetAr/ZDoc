@@ -1,12 +1,12 @@
-//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------
 // This file is part of the Windows SDK Code Samples.
-// 
+//
 // Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 // This source code is intended only as a supplement to Microsoft
 // Development Tools and/or on-line documentation.  See these other
 // materials for detailed information regarding Microsoft code samples.
-// 
+//
 // THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 // KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 // IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -21,14 +21,14 @@
 //implement filestream that derives from IStream
 class FileStream : public IStream
 {
-    FileStream(HANDLE hFile) 
-    { 
-        _refcount = 1; 
+    FileStream(HANDLE hFile)
+    {
+        _refcount = 1;
         _hFile = hFile;
     }
 
-    ~FileStream() 
-    { 
+    ~FileStream()
+    {
         if (_hFile != INVALID_HANDLE_VALUE)
         {
             ::CloseHandle(_hFile);
@@ -39,41 +39,42 @@ public:
     HRESULT static OpenFile(LPCWSTR pName, IStream ** ppStream, bool fWrite)
     {
         HANDLE hFile = ::CreateFileW(pName, fWrite ? GENERIC_WRITE : GENERIC_READ, FILE_SHARE_READ,
-            NULL, fWrite ? CREATE_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+                                     NULL, fWrite ? CREATE_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
         if (hFile == INVALID_HANDLE_VALUE)
             return HRESULT_FROM_WIN32(GetLastError());
-        
+
         *ppStream = new FileStream(hFile);
-        
+
         if(*ppStream == NULL)
             CloseHandle(hFile);
-            
+
         return S_OK;
     }
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID iid, void ** ppvObject)
-    { 
+    {
         if (iid == __uuidof(IUnknown)
-            || iid == __uuidof(IStream)
-            || iid == __uuidof(ISequentialStream))
+                || iid == __uuidof(IStream)
+                || iid == __uuidof(ISequentialStream))
         {
             *ppvObject = static_cast<IStream*>(this);
             AddRef();
             return S_OK;
-        } else
-            return E_NOINTERFACE; 
+        }
+        else
+            return E_NOINTERFACE;
     }
 
-    virtual ULONG STDMETHODCALLTYPE AddRef(void) 
-    { 
-        return (ULONG)InterlockedIncrement(&_refcount); 
+    virtual ULONG STDMETHODCALLTYPE AddRef(void)
+    {
+        return (ULONG)InterlockedIncrement(&_refcount);
     }
 
-    virtual ULONG STDMETHODCALLTYPE Release(void) 
+    virtual ULONG STDMETHODCALLTYPE Release(void)
     {
         ULONG res = (ULONG) InterlockedDecrement(&_refcount);
-        if (res == 0) 
+        if (res == 0)
             delete this;
         return res;
     }
@@ -95,44 +96,44 @@ public:
     // IStream Interface
 public:
     virtual HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER)
-    { 
-        return E_NOTIMPL;   
+    {
+        return E_NOTIMPL;
     }
-    
+
     virtual HRESULT STDMETHODCALLTYPE CopyTo(IStream*, ULARGE_INTEGER, ULARGE_INTEGER*,
-        ULARGE_INTEGER*) 
-    { 
-        return E_NOTIMPL;   
+            ULARGE_INTEGER*)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE Commit(DWORD)                                      
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE Commit(DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE Revert(void)                                       
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE Revert(void)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)              
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)            
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
+    {
+        return E_NOTIMPL;
     }
-    
-    virtual HRESULT STDMETHODCALLTYPE Clone(IStream **)                                  
-    { 
-        return E_NOTIMPL;   
+
+    virtual HRESULT STDMETHODCALLTYPE Clone(IStream **)
+    {
+        return E_NOTIMPL;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER liDistanceToMove, DWORD dwOrigin,
-        ULARGE_INTEGER* lpNewFilePointer)
-    { 
+                                           ULARGE_INTEGER* lpNewFilePointer)
+    {
         DWORD dwMoveMethod;
 
         switch(dwOrigin)
@@ -146,7 +147,7 @@ public:
         case STREAM_SEEK_END:
             dwMoveMethod = FILE_END;
             break;
-        default:   
+        default:
             return STG_E_INVALIDFUNCTION;
             break;
         }
@@ -157,7 +158,7 @@ public:
         return S_OK;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Stat(STATSTG* pStatstg, DWORD grfStatFlag) 
+    virtual HRESULT STDMETHODCALLTYPE Stat(STATSTG* pStatstg, DWORD grfStatFlag)
     {
         if (GetFileSizeEx(_hFile, (PLARGE_INTEGER) &pStatstg->cbSize) == 0)
             return HRESULT_FROM_WIN32(GetLastError());
@@ -208,7 +209,7 @@ int _tmain(int argc, WCHAR* argv[])
     pReader->SetProperty(XmlReaderProperty_DtdProcessing, DtdProcessing_Prohibit);
 
     if (FAILED(hr = CreateXmlReaderInputWithEncodingCodePage(pFileStream, NULL, 65001, FALSE,
-                                                             L"c:\temp", &pReaderInput)))
+                    L"c:\temp", &pReaderInput)))
     {
         wprintf(L"Error creating xml reader with encoding code page, error is %08.8lx", hr);
         return -1;
@@ -221,7 +222,7 @@ int _tmain(int argc, WCHAR* argv[])
     }
 
     if (FAILED(hr = CreateXmlWriterOutputWithEncodingCodePage(pOutFileStream, NULL, 65001,
-                                                              &pWriterOutput)))
+                    &pWriterOutput)))
     {
         wprintf(L"Error creating xml reader with encoding code page, error is %08.8lx", hr);
         return -1;
@@ -288,56 +289,56 @@ int _tmain(int argc, WCHAR* argv[])
     {
 
         // WriteNode will move the reader to the next node, so inside the While Read loop, it is
-        // essential that we use WriteNodeShallow, which will not move the reader. 
+        // essential that we use WriteNodeShallow, which will not move the reader.
         // If not, a node will be skipped every time you use WriteNode in the while loop.
 
         switch (nodeType)
         {
         case XmlNodeType_Element:
+        {
+            if (pReader->IsEmptyElement())
             {
-                if (pReader->IsEmptyElement())
+                if (FAILED(hr = pWriter->WriteNodeShallow(pReader, FALSE)))
                 {
+                    wprintf(L"Error writing WriteNodeShallow, error is %08.8lx", hr);
+                    return -1;
+                }
+            }
+            else
+            {
+                // if you are not interested in the length it may be faster to use
+                // NULL for the length parameter
+                if (FAILED(hr = pReader->GetQualifiedName(&pQName, NULL)))
+                {
+                    wprintf(L"Error reading element name, error is %08.8lx", hr);
+                    return -1;
+                }
+
+                //if the element is price, then discount price by 25%
+                if (wcscmp(pQName, L"price") == 0)
+                {
+                    inPrice = TRUE;
                     if (FAILED(hr = pWriter->WriteNodeShallow(pReader, FALSE)))
                     {
                         wprintf(L"Error writing WriteNodeShallow, error is %08.8lx", hr);
                         return -1;
                     }
+
+
                 }
                 else
                 {
-                    // if you are not interested in the length it may be faster to use 
-                    // NULL for the length parameter
-                    if (FAILED(hr = pReader->GetQualifiedName(&pQName, NULL)))
+                    inPrice = FALSE;
+                    if (FAILED(hr = pWriter->WriteNodeShallow(pReader, FALSE)))
                     {
-                        wprintf(L"Error reading element name, error is %08.8lx", hr);
+                        wprintf(L"Error writing WriteNodeShallow, error is %08.8lx", hr);
                         return -1;
                     }
-                    
-                    //if the element is price, then discount price by 25%   
-                    if (wcscmp(pQName, L"price") == 0)
-                    {
-                        inPrice = TRUE;
-                        if (FAILED(hr = pWriter->WriteNodeShallow(pReader, FALSE)))
-                        {
-                            wprintf(L"Error writing WriteNodeShallow, error is %08.8lx", hr);
-                            return -1;
-                        }
 
-
-                    }
-                    else
-                    {
-                        inPrice = FALSE;
-                        if (FAILED(hr = pWriter->WriteNodeShallow(pReader, FALSE)))
-                        {
-                            wprintf(L"Error writing WriteNodeShallow, error is %08.8lx", hr);
-                            return -1;
-                        }
-
-                    }
                 }
             }
-            break;
+        }
+        break;
         case XmlNodeType_Text:
             if (inPrice == TRUE)
             {
@@ -346,7 +347,7 @@ int _tmain(int argc, WCHAR* argv[])
                     wprintf(L"Error reading value, error is %08.8lx", hr);
                     return -1;
                 }
-                
+
                 //apply discount to the node
                 originalPrice = _wtof(pValue);
                 newPrice = originalPrice * 0.75;
@@ -360,7 +361,7 @@ int _tmain(int argc, WCHAR* argv[])
 
                 //write attributes if any
                 if (FAILED(hr = pWriter->WriteAttributeString(NULL, L"originalPrice", NULL,
-                                                              pValue)))
+                                pValue)))
                 {
                     wprintf(L"Error writing WriteAttributeString, error is %08.8lx", hr);
                     return -1;
@@ -394,10 +395,10 @@ int _tmain(int argc, WCHAR* argv[])
                 wprintf(L"Error reading element name, error is %08.8lx", hr);
                 return -1;
             }
-            
+
             if (wcscmp(pQName, L"price") == 0)  //if the end element is price, then reset inPrice
                 inPrice = FALSE;
-            
+
             if (FAILED(hr = pWriter->WriteFullEndElement()))
             {
                 wprintf(L"Error writing WriteFullEndElement, error is %08.8lx", hr);
@@ -405,14 +406,14 @@ int _tmain(int argc, WCHAR* argv[])
             }
             break;
         default:
+        {
+            if (FAILED(hr = pWriter->WriteNodeShallow(pReader, FALSE)))
             {
-                if (FAILED(hr = pWriter->WriteNodeShallow(pReader, FALSE)))
-                {
-                    wprintf(L"Error writing WriteNodeShallow, error is %08.8lx", hr);
-                    return -1;
-                }
+                wprintf(L"Error writing WriteNodeShallow, error is %08.8lx", hr);
+                return -1;
             }
-            break;
+        }
+        break;
         }
 
     }

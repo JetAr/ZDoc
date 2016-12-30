@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,7 +10,7 @@
 //
 
 #ifdef _IA64_
-	#pragma warning(disable:4127 4706 4267)
+#pragma warning(disable:4127 4706 4267)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -35,10 +35,10 @@ BOOL DoGracefulShutdown(SOCKET sock);
 
 void Usage(char *szProgramName)
 {
-   fprintf(stderr, "Usage: %s [-n Server] [-e Endpoint] [-l Iterations]\n\n", szProgramName);
-   fprintf(stderr, "   Server:     server name or IP address (default localhost)\n");
-   fprintf(stderr, "   Endpoint:   port to connect to (default %s)\n", DEFAULT_PORT);
-   fprintf(stderr, "   Iterations: number of messages to send (default %d)\n", DEFAULT_ITERATIONS);
+    fprintf(stderr, "Usage: %s [-n Server] [-e Endpoint] [-l Iterations]\n\n", szProgramName);
+    fprintf(stderr, "   Server:     server name or IP address (default localhost)\n");
+    fprintf(stderr, "   Endpoint:   port to connect to (default %s)\n", DEFAULT_PORT);
+    fprintf(stderr, "   Iterations: number of messages to send (default %d)\n", DEFAULT_ITERATIONS);
 }
 
 #pragma warning(push)
@@ -66,40 +66,40 @@ int __cdecl main(int argc, char **argv)
             {
                 switch(tolower(argv[i][1]))
                 {
-                    case 'n':
-                        if (i + 1 < argc)
-                            pszServerName = argv[++i];
-                        break;
+                case 'n':
+                    if (i + 1 < argc)
+                        pszServerName = argv[++i];
+                    break;
 
-                    case 'e':
-                        if (i + 1 < argc)
-                            pszPort = argv[++i];
-                        break;
+                case 'e':
+                    if (i + 1 < argc)
+                        pszPort = argv[++i];
+                    break;
 
-                    case 'l':
-                        if (i + 1 < argc && argv[i+1])
+                case 'l':
+                    if (i + 1 < argc && argv[i+1])
+                    {
+                        if (argv[i+1][0] != '-')  // "-l 6"
                         {
-                            if (argv[i+1][0] != '-')  // "-l 6"
-                            {
-                                nIterations = atoi(argv[i+1]);
-                                i++;
-                            }
-                            else if (isdigit(argv[i+1][1])) // "-l -6"
-                            {
-                                nIterations = 0;
-                                i++;
-                            }
-                            else // "-l -e 2000"
-                                nIterations = LOOP_FOREVER;
+                            nIterations = atoi(argv[i+1]);
+                            i++;
                         }
-                        else // "-e 2000 -l"
+                        else if (isdigit(argv[i+1][1])) // "-l -6"
+                        {
+                            nIterations = 0;
+                            i++;
+                        }
+                        else // "-l -e 2000"
                             nIterations = LOOP_FOREVER;
+                    }
+                    else // "-e 2000 -l"
+                        nIterations = LOOP_FOREVER;
 
-                        break;
+                    break;
 
-                    default:
-                        Usage(argv[0]);
-                        exit(-1);
+                default:
+                    Usage(argv[0]);
+                    exit(-1);
                 }
             }
             else
@@ -115,8 +115,8 @@ int __cdecl main(int argc, char **argv)
 
     // Install the CTRL+BREAK and CTRL+C Handler
     if (SetConsoleCtrlHandler((PHANDLER_ROUTINE)ConsoleCtrlHandler,
-                TRUE)
-            == FALSE) 
+                              TRUE)
+            == FALSE)
         fprintf(stderr, "SetConsoleCtrlHandler failed: %d", GetLastError());
 
     if ((nStatus = WSAStartup(0x202,&wsaData)) != 0)
@@ -142,15 +142,15 @@ int __cdecl main(int argc, char **argv)
         fprintf(stderr, "No matching addresses found. "
                 "getaddrinfo returned res = NULL\n");
         goto CLEANUP;
-    }	
+    }
 
     gsConnect = WSASocket(
-            res->ai_family, 
-            res->ai_socktype, 
-            res->ai_protocol,
-            NULL,
-            0,
-            0);
+                    res->ai_family,
+                    res->ai_socktype,
+                    res->ai_protocol,
+                    NULL,
+                    0,
+                    0);
 
     if (gsConnect == INVALID_SOCKET)
     {
@@ -179,12 +179,12 @@ int __cdecl main(int argc, char **argv)
         printf("Sending --> %s", szBuf);
 
         nStatus = WSASend(gsConnect,
-                &wsaBuf,
-                1,
-                &dwSent,
-                dwFlags,
-                (LPWSAOVERLAPPED) NULL,
-                0);
+                          &wsaBuf,
+                          1,
+                          &dwSent,
+                          dwFlags,
+                          (LPWSAOVERLAPPED) NULL,
+                          0);
 
         if (nStatus == SOCKET_ERROR)
         {
@@ -253,7 +253,7 @@ BOOL DoGracefulShutdown(SOCKET sock)
     hEvent = WSACreateEvent();
     if (hEvent == WSA_INVALID_EVENT)
     {
-        fprintf(stderr, "DoGracefulShutdown: WSACreateEvent failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: WSACreateEvent failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }
@@ -261,31 +261,32 @@ BOOL DoGracefulShutdown(SOCKET sock)
     lNetworkEvents = FD_CLOSE;
     if (WSAEventSelect(sock, hEvent, lNetworkEvents) != 0)
     {
-        fprintf(stderr, "DoGracefulShutdown: WSAEventSelect failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: WSAEventSelect failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }
 
     if (shutdown(sock, SD_SEND) != 0)
     {
-        fprintf(stderr, "DoGracefulShutdown: shutdown failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: shutdown failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }
 
     if (WaitForSingleObject(hEvent, INFINITE) != WAIT_OBJECT_0)
     {
-        fprintf(stderr, "DoGracefulShutdown: WaitForSingleObject failed: %d\n", 
+        fprintf(stderr, "DoGracefulShutdown: WaitForSingleObject failed: %d\n",
                 WSAGetLastError());
         goto CLEANUP;
     }
 
-    do 
+    do
     {
         char buf[128];
 
         status = recv(sock, buf, sizeof(buf), 0);
-    } while (!(status == 0 || status == SOCKET_ERROR));
+    }
+    while (!(status == 0 || status == SOCKET_ERROR));
 
     if (closesocket(sock) != 0)
     {

@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   srengui.cpp 
+*   srengui.cpp
 *       This file contains the implementation of the CSrEngineUI class.
 *       This implements ISpTokenUI. This is used by the app to display UI.
 *       The methods here can either be called by the app directly from ISpObjectToken,
@@ -21,8 +21,8 @@
 /****************************************************************************
 * CSrEngineUI::IsUISupported *
 *----------------------------*
-*   Description:  
-*       Determine if the UI is supported. A reference to the main SR engine 
+*   Description:
+*       Determine if the UI is supported. A reference to the main SR engine
 *       object (if it has been created), can be obtained from punkObject.
 *       If none-NULL this may be an ISpRecoContext, from which an engine
 *       extension interface can be obtained.
@@ -53,7 +53,7 @@ STDMETHODIMP CSrEngineUI::IsUISupported(const WCHAR * pszTypeOfUI, void * pvExtr
 /****************************************************************************
 * CSrEngineUI::DisplayUI *
 *------------------------*
-*   Description:  
+*   Description:
 *       Display the UI requested
 *
 *   Return:
@@ -69,16 +69,16 @@ STDMETHODIMP CSrEngineUI::DisplayUI(HWND hwndParent, const WCHAR * pszTitle, con
             MessageBoxW(hwndParent, L"Developer Sample Engine: Replace this with real engine properties dialog.", pszTitle, MB_OK);
         }
     }
-    
+
     if (wcscmp(pszTypeOfUI, SPDUI_UserTraining) == 0)
     {
         MessageBoxW(hwndParent, L"Developer Sample Engine: Replace this with real user training wizard / dialog.", pszTitle, MB_OK);
     }
-    
+
     if (wcscmp(pszTypeOfUI, SPDUI_MicTraining) == 0)
     {
         MessageBoxW(hwndParent, L"Developer Sample Engine: Replace this with real microphone training wizard / dialog.", pszTitle, MB_OK);
     }
-    
+
     return S_OK;
 }

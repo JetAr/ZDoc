@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -41,21 +41,34 @@ public:
     CTedTopologyPin();
     CTedTopologyPin(IMFTopologyNode * pNode, DWORD nIndex);
     ~CTedTopologyPin();
-    
-    void SetPNode(IMFTopologyNode* pNode) { m_pNode = pNode; }
-    void SetIndex(DWORD nIndex) { m_nIndex = nIndex; }
 
-    IMFTopologyNode * PNode() { return m_pNode; }
-    DWORD Index() { return m_nIndex; }
-    
-private:    
+    void SetPNode(IMFTopologyNode* pNode)
+    {
+        m_pNode = pNode;
+    }
+    void SetIndex(DWORD nIndex)
+    {
+        m_nIndex = nIndex;
+    }
+
+    IMFTopologyNode * PNode()
+    {
+        return m_pNode;
+    }
+    DWORD Index()
+    {
+        return m_nIndex;
+    }
+
+private:
     CComPtr<IMFTopologyNode> m_pNode;
     DWORD m_nIndex;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-class CTedTopologyConnection {
+class CTedTopologyConnection
+{
 public:
     CTedTopologyConnection(int nOutputNodeID, int nOutputPinID, int nInputNodeID, int nInputPinID);
     CTedTopologyConnection(CTedConnectionMemo* pMemo);
@@ -66,7 +79,7 @@ public:
     int GetInputPinID() const;
 
     CTedConnectionMemo* CreateMemo() const;
-    
+
 private:
     int m_nOutputNodeID;
     int m_nOutputPinID;
@@ -81,7 +94,7 @@ class CTedTopologyNode
 public:
     CTedTopologyNode();
     virtual ~CTedTopologyNode();
-    
+
     enum TED_NODE_TYPE
     {
         TED_SEQUENCER_NODE,
@@ -90,14 +103,14 @@ public:
         TED_OUTPUT_NODE,
         TED_TEE_NODE
     };
-    
+
     // Accessors //
     virtual HWND GetVideoWindow() const;
     CVisualComponent* GetVisual() const;
     virtual CVisualPin* GetVisualInputPin(int pinID);
     virtual CVisualPin* GetVisualOutputPin(int pinID);
     int GetID() const;
-    HRESULT GetNodeID(DWORD dwIndex, TOPOID& NodeID);    
+    HRESULT GetNodeID(DWORD dwIndex, TOPOID& NodeID);
     CAtlStringW GetLabel() const;
     bool IsOrphaned();
 
@@ -107,10 +120,10 @@ public:
     virtual HRESULT GetPin(DWORD nInput, CTedTopologyPin & Pin, bool inputPin) = 0;
     virtual TED_NODE_TYPE GetType() = 0;
     virtual CTedNodeMemo* CreateMemo() const = 0;
-    
+
     // Mutators //
     HRESULT CopyAttributes(IMFTopologyNode* pNode, DWORD dwIndex = 0);
-   
+
 protected:
     HRESULT Init(const CAtlStringW& label, bool fAutoInserted = false);
     HRESULT InitContainer(const CAtlStringW& label, bool fAutoInserted = false);
@@ -152,19 +165,22 @@ public:
     CTedNodeMemo* CreateMemo() const;
     virtual DWORD GetMFNodeCount() const;
     virtual IMFTopologyNode* GetMFNode(DWORD nIndex) const;
-    CAtlStringW GetURL() { return m_strSourceURL; }
+    CAtlStringW GetURL()
+    {
+        return m_strSourceURL;
+    }
     TED_NODE_TYPE GetType();
     DWORD GetIndexOf(TOPOID nodeID);
     virtual CVisualPin* GetVisualInputPin(int pinID);
     virtual CVisualPin* GetVisualOutputPin(int pinID);
-    
-    IMFMediaSource* GetMFSource() 
-    { 
-        return m_spSource; 
+
+    IMFMediaSource* GetMFSource()
+    {
+        return m_spSource;
     }
-    bool IsInitializedFromMFSource() 
-    { 
-        return m_bInitializedFromMFSource; 
+    bool IsInitializedFromMFSource()
+    {
+        return m_bInitializedFromMFSource;
     }
 
     // Mutators //
@@ -173,7 +189,7 @@ public:
     HRESULT CopyAttributes(IMFTopologyNode* pNode, DWORD dwIndex = 0);
     void FlagExternalShutdownRequired();
     HRESULT SelectValidStreams();
-    
+
 protected:
     // Non-public Helpers //
     HRESULT CreateMFSource();
@@ -185,7 +201,7 @@ protected:
 private:
     CComPtr<IMFMediaSource> m_spSource;
     CComPtr<IMFPresentationDescriptor> m_spPD;
-    
+
     CAtlStringW m_strSourceURL;
     bool m_fIsProtected;
 
@@ -193,7 +209,7 @@ private:
     CAtlArray<CComPtr<IMFTopologyNode> > m_Nodes;
 
     bool m_fExternalShutdownRequired;
-    
+
     static CComPtr<IMFSourceResolver> ms_spResolver;
     static bool m_bIsResolverCreated;
     bool m_bInitializedFromMFSource;
@@ -207,13 +223,13 @@ public:
     // Initialization //
     CTedOutputNode();
     virtual ~CTedOutputNode();
-    
+
     HRESULT Init(IMFActivate * pActivate, const CAtlStringW& label);
     HRESULT Init(IMFMediaSink* pSink, const CAtlStringW& label);
     HRESULT Init(IMFActivate* pActivate, CTedOutputMemo* pMemo);
     HRESULT Init(IMFMediaSink* pSink, CTedOutputMemo* pMemo);
     HRESULT Init(IMFStreamSink* pStreamSink, const CAtlStringW& label);
-    
+
     // Accessors //
     HRESULT GetPin(DWORD nInput, CTedTopologyPin & Pin, bool inputPin);
     virtual DWORD GetMFNodeCount() const;
@@ -221,13 +237,16 @@ public:
     TED_NODE_TYPE GetType();
     CVisualPin* GetVisualInputPin(int pinID);
     CVisualPin* GetVisualOutputPin(int pinID);
-    virtual CTedNodeMemo* CreateMemo() const { return NULL; }
-    
+    virtual CTedNodeMemo* CreateMemo() const
+    {
+        return NULL;
+    }
+
     // Mutators //
     HRESULT WrapStreamSink(CLogger* pLogger);
     void ShutdownMFSink();
     void FlagExternalShutdownRequired();
-    
+
 protected:
     // Non-public Helepers //
     HRESULT InitFromSink(IMFMediaSink* pSink);
@@ -281,7 +300,7 @@ public:
     HRESULT Init(GUID gidCustomSinkID, const CAtlStringW& label);
     HRESULT Init(IMFMediaSink* pSink, const CAtlStringW& label);
     HRESULT Init(CTedCustomOutputMemo* pMemo);
-    
+
     // Accessors //
     CTedNodeMemo* CreateMemo() const;
 private:
@@ -311,13 +330,13 @@ public:
     HRESULT CopyMediaTypes(IMFTopologyNode* pOldNode);
     HRESULT WrapTransform(CLogger* pLogger);
     HRESULT ResetD3DManager();
-        
+
 protected:
     //Non-public Helpers //
     HRESULT InitTransform(CLSID dmoCLSID);
     HRESULT InitTransform(IMFTransform* pTransform);
     HRESULT InitTransform(IMFActivate* pTransformActivate);
-    
+
 private:
     CLSID m_clsid;
     CComPtr<IMFTopologyNode> m_spTransformNode;
@@ -339,10 +358,10 @@ public:
     virtual DWORD GetMFNodeCount() const;
     virtual IMFTopologyNode* GetMFNode(DWORD nIndex) const;
     TED_NODE_TYPE GetType();
-    
+
     // Mutators //
     void NotifyConnection();
-    
+
 private:
     CComPtr<IMFTopologyNode> m_spTeeNode;
     DWORD m_nNextOutputIndex;
@@ -355,7 +374,7 @@ class CTedEditorVisualObjectEventHandler : public CVisualObjectEventHandler
 {
 public:
     CTedEditorVisualObjectEventHandler(CTedTopologyEditor* pEditor);
-    
+
     void NotifyObjectDeleted(CVisualObject* pVisualObj);
 
 private:
@@ -368,7 +387,7 @@ public:
     ~CTedNodeCreator();
 
     static CTedNodeCreator* GetSingleton();
-    
+
     HRESULT CreateSource(const CAtlStringW& strSourceURL, IMFMediaSource* pFromSource, CTedSourceNode** ppSourceNode);
     HRESULT CreateCaptureSource(IMFMediaSource* pSource, CTedSourceNode** ppSourceNode);
     HRESULT CreateSAR(CTedAudioOutputNode** ppSAR);
@@ -397,12 +416,15 @@ public:
     HRESULT NewTopology();
 
     // Accessors - General //
-    bool IsSaved() { return m_fSaved; }
+    bool IsSaved()
+    {
+        return m_fSaved;
+    }
     HRESULT GetTopology(IMFTopology** ppTopo, BOOL* pfIsProtected);
     bool HasSource();
     DWORD GetNodeCount();
     CTedTopologyNode* GetNode(DWORD dwIndex);
-    
+
     // Accessors - Find //
     CTedTopologyConnection* FindDownstreamConnection(int nBeginNodeID, int nBeginPinID);
     CTedTopologyConnection* FindUpstreamConnection(int nEndNodeID, int nEndPinID);
@@ -413,7 +435,7 @@ public:
     HRESULT SpyNodeWithVisual(CVisualObject* pVisual);
     HRESULT ShowTopology(IMFTopology* pTopo, LPCWSTR szSourceURL);
     void SetEditable(BOOL fEditable);
-   
+
     // Mutators - Create New Node //
     HRESULT AddNode(CTedTopologyNode* pNode);
 
@@ -429,7 +451,7 @@ public:
     void RemoveOldConnectors(CVisualPin* pPin, CVisualPin* pOtherPin);
     void RemoveAllConnectors();
     void RemoveAllConnectorsForComponent(CVisualComponent* pComponent);
-   
+
     // Mutators - Serialization //
     HRESULT SaveTopology(const CAtlStringW& fileName);
     HRESULT LoadTopology(const CAtlStringW& fileName);
@@ -439,10 +461,10 @@ protected:
     HRESULT AddComponent(CTedTopologyNode * pNode);
     HRESULT LoadTopologyObject(ITedDataLoader* pLoader, const CAtlStringW& strObjName);
     HRESULT ApplyLoadedConnections();
-    HRESULT ConnectMFNodes(   CTedTopologyNode * pUpNode, 
-                                            long nUpPin, 
-                                            CTedTopologyNode * pDownNode, 
-                                            long nDownPin);
+    HRESULT ConnectMFNodes(   CTedTopologyNode * pUpNode,
+                              long nUpPin,
+                              CTedTopologyNode * pDownNode,
+                              long nDownPin);
     bool HasMultipleSources();
     HRESULT ResetD3DManagers();
 
@@ -459,7 +481,7 @@ protected:
     CTedTopologyNode* FindNodeWithID(int id);
     CTedSourceNode* FindSourceNode(TOPOID nodeID);
     CTedTopologyNode* FindNodeByTopoID(TOPOID nodeID);
-   
+
 private:
     const static int MARGIN_SIZE;
 
@@ -471,14 +493,14 @@ private:
     BOOL m_fReadOnly;
 
     int m_nProtectedSourceCount;
-    
+
     // pointer to view
     CTopoViewerWindow* m_pView;
 
     // topology for edit
     CComPtr<IMFTopology> m_spTopology;
 
-    // array of nodes 
+    // array of nodes
     CAtlArray<CTedTopologyNode*> m_Nodes;
     CAtlArray<CTedTopologyConnection*> m_Connections;
     CAtlStringW m_strSourceURL;
@@ -491,7 +513,7 @@ private:
     bool m_fSaved;
     bool m_fShutdownSources;
     BOOL m_fEditable;
-    
+
     CComPtr<IMFSequencerSource> m_spSequencer;
     MFSequencerElementId m_LastSeqID;
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -37,15 +37,15 @@
 
 // Different types of accepts that are supported by the server.
 
-// This flag indicates the server to use select() and do a 
+// This flag indicates the server to use select() and do a
 // non-blocking accept with single thread.
 const BYTE NON_BLOCKING_ACCEPT = 1;
 
-// This flag indicates the server to use WSAAsyncSelect() to get 
+// This flag indicates the server to use WSAAsyncSelect() to get
 // Window messages and call accept on receiving FD_ACCEPT event.
 const BYTE ASYNC_SELECT_ACCEPT = 2;
 
-// This is the message that'll be sent to the server by winsock if 
+// This is the message that'll be sent to the server by winsock if
 // any of the registered socket events happen in the AsyncSelect case.
 // Any value above the WM_USER can be used to avoid collision with the standard
 // Windows messages.
@@ -85,7 +85,7 @@ typedef struct _SOCK_INFO
     SOCKET sock;                // socket handle
     BOOL   isSocketListening;   // TRUE if the socket is listening
     struct _SOCK_INFO *prev,    // previous structure in the list
-                      *next;    // next structure in the list
+               *next;    // next structure in the list
     DATA_BUFFER recdData;       // details of data buffer that's recd/sent
     int     nTotalRecd;         // total number of bytes recd so far
     int     nTotalSent;         // total number of bytes sent so far
@@ -93,7 +93,7 @@ typedef struct _SOCK_INFO
 } SOCK_INFO, *PSOCK_INFO;
 
 
-// This structure bundles all the global variables needed between 
+// This structure bundles all the global variables needed between
 // different functions into a global context.
 typedef struct _AcceptContext
 {

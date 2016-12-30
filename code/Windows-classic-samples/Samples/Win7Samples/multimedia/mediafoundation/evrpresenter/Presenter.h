@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // Presenter.h : Defines the presenter object.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -15,13 +15,13 @@
 
 #pragma once
 
-// RENDER_STATE: Defines the state of the presenter. 
+// RENDER_STATE: Defines the state of the presenter.
 enum RENDER_STATE
 {
     RENDER_STATE_STARTED = 1,
     RENDER_STATE_STOPPED,
     RENDER_STATE_PAUSED,
-    RENDER_STATE_SHUTDOWN,  // Initial state. 
+    RENDER_STATE_SHUTDOWN,  // Initial state.
 
     // State transitions:
 
@@ -40,7 +40,7 @@ enum FRAMESTEP_STATE
     FRAMESTEP_WAITING_START,    // Frame stepping, but the clock is not started.
     FRAMESTEP_PENDING,          // Clock is started. Waiting for samples.
     FRAMESTEP_SCHEDULED,        // Submitted a sample for rendering.
-    FRAMESTEP_COMPLETE          // Sample was rendered. 
+    FRAMESTEP_COMPLETE          // Sample was rendered.
 
     // State transitions:
 
@@ -59,10 +59,10 @@ enum FRAMESTEP_STATE
 //  Description: Implements the custom presenter.
 //-----------------------------------------------------------------------------
 
-class EVRCustomPresenter : 
-    BaseObject,  
-    RefCountedObject, 
-    // COM interfaces:
+class EVRCustomPresenter :
+    BaseObject,
+    RefCountedObject,
+// COM interfaces:
     public IMFVideoDeviceID,
     public IMFVideoPresenter, // Inherits IMFClockStateSink
     public IMFRateSupport,
@@ -106,31 +106,64 @@ public:
     STDMETHOD(ReleaseServicePointers)();
 
     // IMFVideoDisplayControl methods
-    STDMETHOD(GetNativeVideoSize)(SIZE* pszVideo, SIZE* pszARVideo) { return E_NOTIMPL; }
-    STDMETHOD(GetIdealVideoSize)(SIZE* pszMin, SIZE* pszMax) { return E_NOTIMPL; }
+    STDMETHOD(GetNativeVideoSize)(SIZE* pszVideo, SIZE* pszARVideo)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHOD(GetIdealVideoSize)(SIZE* pszMin, SIZE* pszMax)
+    {
+        return E_NOTIMPL;
+    }
     STDMETHOD(SetVideoPosition)(const MFVideoNormalizedRect* pnrcSource, const LPRECT prcDest);
     STDMETHOD(GetVideoPosition)(MFVideoNormalizedRect* pnrcSource, LPRECT prcDest);
-    STDMETHOD(SetAspectRatioMode)(DWORD dwAspectRatioMode) { return E_NOTIMPL; }
-    STDMETHOD(GetAspectRatioMode)(DWORD* pdwAspectRatioMode) { return E_NOTIMPL; }
+    STDMETHOD(SetAspectRatioMode)(DWORD dwAspectRatioMode)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHOD(GetAspectRatioMode)(DWORD* pdwAspectRatioMode)
+    {
+        return E_NOTIMPL;
+    }
     STDMETHOD(SetVideoWindow)(HWND hwndVideo);
     STDMETHOD(GetVideoWindow)(HWND* phwndVideo);
     STDMETHOD(RepaintVideo)();
-    STDMETHOD(GetCurrentImage)(BITMAPINFOHEADER* pBih, BYTE** pDib, DWORD* pcbDib, LONGLONG* pTimeStamp) { return E_NOTIMPL; }
-    STDMETHOD(SetBorderColor)(COLORREF Clr) { return E_NOTIMPL; }
-    STDMETHOD(GetBorderColor)(COLORREF* pClr) { return E_NOTIMPL; }
-    STDMETHOD(SetRenderingPrefs)(DWORD dwRenderFlags) { return E_NOTIMPL; }
-    STDMETHOD(GetRenderingPrefs)(DWORD* pdwRenderFlags) { return E_NOTIMPL; }
-    STDMETHOD(SetFullscreen)(BOOL bFullscreen) { return E_NOTIMPL; }
-    STDMETHOD(GetFullscreen)(BOOL* pbFullscreen) { return E_NOTIMPL; }
+    STDMETHOD(GetCurrentImage)(BITMAPINFOHEADER* pBih, BYTE** pDib, DWORD* pcbDib, LONGLONG* pTimeStamp)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHOD(SetBorderColor)(COLORREF Clr)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHOD(GetBorderColor)(COLORREF* pClr)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHOD(SetRenderingPrefs)(DWORD dwRenderFlags)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHOD(GetRenderingPrefs)(DWORD* pdwRenderFlags)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHOD(SetFullscreen)(BOOL bFullscreen)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHOD(GetFullscreen)(BOOL* pbFullscreen)
+    {
+        return E_NOTIMPL;
+    }
 
 protected:
     EVRCustomPresenter(HRESULT& hr);
     virtual ~EVRCustomPresenter();
 
-    // CheckShutdown: 
+    // CheckShutdown:
     //     Returns MF_E_SHUTDOWN if the presenter is shutdown.
     //     Call this at the start of any methods that should fail after shutdown.
-    inline HRESULT CheckShutdown() const 
+    inline HRESULT CheckShutdown() const
     {
         if (m_RenderState == RENDER_STATE_SHUTDOWN)
         {
@@ -149,7 +182,10 @@ protected:
     }
 
     // IsScrubbing: Scrubbing occurs when the frame rate is 0.
-    inline BOOL IsScrubbing() const { return m_fRate == 0.0f; }
+    inline BOOL IsScrubbing() const
+    {
+        return m_fRate == 0.0f;
+    }
 
     // NotifyEvent: Send an event to the EVR through its IMediaEventSink interface.
     void NotifyEvent(long EventCode, LONG_PTR Param1, LONG_PTR Param2)
@@ -180,7 +216,7 @@ protected:
     HRESULT CheckEndOfStream();
 
     // Managing samples
-    void    ProcessOutputLoop();   
+    void    ProcessOutputLoop();
     HRESULT ProcessOutput();
     HRESULT DeliverSample(IMFSample *pSample, BOOL bRepaint);
     HRESULT TrackSample(IMFSample *pSample);
@@ -201,7 +237,7 @@ protected:
 
 protected:
 
-    // FrameStep: Holds information related to frame-stepping. 
+    // FrameStep: Holds information related to frame-stepping.
     // Note: The purpose of this structure is simply to organize the data in one variable.
     struct FrameStep
     {
@@ -221,7 +257,7 @@ protected:
     RENDER_STATE                m_RenderState;          // Rendering state.
     FrameStep                   m_FrameStep;            // Frame-stepping information.
 
-    CritSec                     m_ObjectLock;           // Serializes our public methods.  
+    CritSec                     m_ObjectLock;           // Serializes our public methods.
 
     // Samples and scheduling
     Scheduler                   m_scheduler;            // Manages scheduling of samples.

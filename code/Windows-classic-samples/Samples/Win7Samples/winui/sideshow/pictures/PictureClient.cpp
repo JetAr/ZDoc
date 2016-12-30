@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,7 +21,7 @@ static const APPLICATION_ID PICS_APPLICATION_ID =
 { 0xba1ad8, 0x5381, 0x449b, { 0x9a, 0x13, 0x55, 0x1f, 0xa4, 0xad, 0xe0, 0xf2 } };
 
 CPictureClient::CPictureClient()
-: m_pContent(NULL), m_pEvents(NULL), m_hThread(NULL)
+    : m_pContent(NULL), m_pEvents(NULL), m_hThread(NULL)
 {
     m_applicationID = PICS_APPLICATION_ID;
 
@@ -35,12 +35,12 @@ CPictureClient::CPictureClient()
     // directory change events.
     //
     m_hThread = CreateThread(
-              NULL,     // Default security attributes
-              0,        // Default initial stack size
-              CPictureClient::DirectoryThreadProc,
-              this, // pass this as parameter
-              0,        // Create flags
-              NULL);    // No thread ID
+                    NULL,     // Default security attributes
+                    0,        // Default initial stack size
+                    CPictureClient::DirectoryThreadProc,
+                    this, // pass this as parameter
+                    0,        // Create flags
+                    NULL);    // No thread ID
 
 }
 
@@ -82,7 +82,7 @@ void CPictureClient::AddContent()
             // Set the event sink for platform events
             //
             m_pEvents = new CBaseEvents();
-            
+
             if (NULL != m_pEvents)
             {
                 //
@@ -90,13 +90,13 @@ void CPictureClient::AddContent()
                 //
                 CDeviceEvent<CPictureClient>* pDeviceAddHandler = new CDeviceEvent<CPictureClient>(this, &CPictureClient::DeviceAdd);
                 m_pEvents->RegisterDeviceAddEvent(pDeviceAddHandler);
-                
+
                 CDeviceEvent<CPictureClient>* pDeviceRemoveHandler = new CDeviceEvent<CPictureClient>(this, &CPictureClient::DeviceRemove);
                 m_pEvents->RegisterDeviceRemoveEvent(pDeviceRemoveHandler);
-                
+
                 CContentMissingEvent<CPictureClient>* pContentMissing = new CContentMissingEvent<CPictureClient>(this, &CPictureClient::ContentMissing);
                 m_pEvents->RegisterContentMissingEvent(pContentMissing);
-                
+
                 (void)m_pContentMgr->SetEventSink(m_pEvents);
             }
         }
@@ -105,7 +105,7 @@ void CPictureClient::AddContent()
         // Add the content and picture data to the platform
         //
         AddContentItem(m_pContent);
-        
+
         //
         // If there are no pictures, then we send a content page that indicates
         // to the user that they need to add pictures to their picture
@@ -137,17 +137,17 @@ void CPictureClient::AddContent()
 }
 
 HRESULT CPictureClient::DeviceAdd(
-        ISideShowCapabilities* /*pIDevice*/
-        )
+    ISideShowCapabilities* /*pIDevice*/
+)
 {
     AddContent();
-    
+
     return S_OK;
 }
 
 HRESULT CPictureClient::DeviceRemove(
-        ISideShowCapabilities* /*pIDevice*/
-        )
+    ISideShowCapabilities* /*pIDevice*/
+)
 {
     if (m_pContentMgr != NULL)
     {
@@ -158,7 +158,7 @@ HRESULT CPictureClient::DeviceRemove(
             if (pCapabilitiesCollection != NULL)
             {
                 pCapabilitiesCollection->AddRef();
-                
+
                 //
                 // If the count of devices == 0, then we can take down the
                 // Gadget and let the SideShow lifetime manager bring it
@@ -168,24 +168,24 @@ HRESULT CPictureClient::DeviceRemove(
                 hr = pCapabilitiesCollection->GetCount(&cDevices);
                 if (SUCCEEDED(hr) && cDevices == 0)
                 {
-                    ::PostThreadMessage(g_threadID, 
-                                        WM_QUIT, 
-                                        NULL, 
+                    ::PostThreadMessage(g_threadID,
+                                        WM_QUIT,
+                                        NULL,
                                         NULL);
                 }
-                
+
                 pCapabilitiesCollection->Release();
             }
         }
     }
-    
+
     return S_OK;
 }
 
 HRESULT CPictureClient::ContentMissing(
-        const CONTENT_ID contentId,
-        ISideShowContent** ppIContent
-        )
+    const CONTENT_ID contentId,
+    ISideShowContent** ppIContent
+)
 {
     HRESULT hr = E_FAIL;
 
@@ -229,31 +229,31 @@ DWORD WINAPI CPictureClient::DirectoryThreadProc(LPVOID ThreadParameter)
 {
     WCHAR wszPicPath[MAX_PATH];
     BOOL retVal = SHGetSpecialFolderPath(
-            NULL,
-            wszPicPath,
-            CSIDL_MYPICTURES,
-            0);
-            
+                      NULL,
+                      wszPicPath,
+                      CSIDL_MYPICTURES,
+                      0);
+
     if (TRUE == retVal)
     {
         CPictureClient* pThis = (CPictureClient*)ThreadParameter;
         HANDLE dirChange = FindFirstChangeNotification(
-                      wszPicPath,
-                      FALSE,
-                      FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_SIZE);
-    
+                               wszPicPath,
+                               FALSE,
+                               FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_SIZE);
+
         while (INVALID_HANDLE_VALUE != dirChange)
         {
             WaitForSingleObject(dirChange, INFINITE);
             pThis->RemoveAllContent();
             pThis->AddContent();
-            
+
             if (FALSE == FindNextChangeNotification(dirChange))
             {
                 break;
             }
         }
     }
-    
+
     return 0;
 }

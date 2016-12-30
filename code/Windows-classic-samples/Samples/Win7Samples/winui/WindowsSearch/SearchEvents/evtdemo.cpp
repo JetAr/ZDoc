@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -244,7 +244,7 @@ class ATL_NO_VTABLE CRowsetEventListener :
 public:
 
     BEGIN_COM_MAP(CRowsetEventListener)
-        COM_INTERFACE_ENTRY(IRowsetEvents)
+    COM_INTERFACE_ENTRY(IRowsetEvents)
     END_COM_MAP()
 
     // IRowsetEvents
@@ -427,7 +427,7 @@ void WatchEvents( PCWSTR pwszQuerySQL, PRIORITY_LEVEL priority, DWORD dwTimeout 
 int wmain(int argc, wchar_t *argv[])
 {
     if ( (argc <= 1) ||
-         (argc == 2 && ((0 == wcscmp(argv[1], L"-?")) || (0 == wcscmp(argv[1], L"/?")) )) )
+            (argc == 2 && ((0 == wcscmp(argv[1], L"-?")) || (0 == wcscmp(argv[1], L"/?")) )) )
     {
         printf( "Allows monitoring and prioritization of indexer URLs.\n\n" );
         printf( "Eventing [drive:][path] [/p[:]priority] [/t[:]duration]\n\n" );

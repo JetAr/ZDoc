@@ -1,4 +1,4 @@
-/**********************************************************************/
+﻿/**********************************************************************/
 /*                                                                    */
 /*      TOOLBAR.C                                                     */
 /*                                                                    */
@@ -149,8 +149,8 @@ void UpdateButton(UINT iID, UINT iFlags)
 {
     int iCurrentFlags;
 
-    iCurrentFlags = (int)SendMessage(hWndToolBar, 
-                                     TB_GETSTATE, 
+    iCurrentFlags = (int)SendMessage(hWndToolBar,
+                                     TB_GETSTATE,
                                      iID, 0L);
 
     if (iCurrentFlags & TBSTATE_PRESSED)
@@ -158,29 +158,29 @@ void UpdateButton(UINT iID, UINT iFlags)
         iFlags |= TBSTATE_PRESSED;
     }
 
-    SendMessage(hWndToolBar, 
-                TB_SETSTATE, 
-                iID, 
+    SendMessage(hWndToolBar,
+                TB_SETSTATE,
+                iID,
                 MAKELPARAM(iFlags, 0));
     return;
 }
 
 void UpdateShowOpenStatusButton(BOOL fOpen)
 {
- 
-    SendMessage(hWndToolBar, 
-                TB_CHANGEBITMAP, 
-                IDM_OPENSTATUS, 
+
+    SendMessage(hWndToolBar,
+                TB_CHANGEBITMAP,
+                IDM_OPENSTATUS,
                 MAKELPARAM((fOpen ? IDTBB_OPEN : IDTBB_CLOSE), 0));
     return;
 }
 
 void UpdateShowCandButton()
 {
- 
-    SendMessage(hWndToolBar, 
-                TB_CHANGEBITMAP, 
-                IDM_SHOWCAND, 
+
+    SendMessage(hWndToolBar,
+                TB_CHANGEBITMAP,
+                IDM_SHOWCAND,
                 MAKELPARAM((fShowCand ? IDTBB_SHOWCAND : IDTBB_NOSHOWCAND), 0));
     return;
 }
@@ -192,24 +192,24 @@ void UpdateModeButton(DWORD dwConv)
 
     switch (dwConv & IME_CMODE_LANGUAGE)
     {
-        case IME_CMODE_ALPHANUMERIC:
-            nIDTBB = IDTBB_ALPHA;
-            break;
+    case IME_CMODE_ALPHANUMERIC:
+        nIDTBB = IDTBB_ALPHA;
+        break;
 
-        case IME_CMODE_NATIVE:
-            nIDTBB = IDTBB_NATIVE;
-            break;
+    case IME_CMODE_NATIVE:
+        nIDTBB = IDTBB_NATIVE;
+        break;
 
-        case (IME_CMODE_NATIVE | IME_CMODE_KATAKANA):
-            nIDTBB = IDTBB_KATAKANA;
-            break;
+    case (IME_CMODE_NATIVE | IME_CMODE_KATAKANA):
+        nIDTBB = IDTBB_KATAKANA;
+        break;
 
-        default:
-            nIDTBB = IDTBB_ALPHA;
-            break;
+    default:
+        nIDTBB = IDTBB_ALPHA;
+        break;
 
     }
-    SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_NATIVEMODE, 
+    SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_NATIVEMODE,
                 MAKELPARAM(nIDTBB, 0));
 
     if (dwConv & IME_CMODE_FULLSHAPE)
@@ -219,7 +219,7 @@ void UpdateModeButton(DWORD dwConv)
     else
     {
         nIDTBB = IDTBB_HALF;
-        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_FULLHALF, 
+        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_FULLHALF,
                     MAKELPARAM(nIDTBB, 0));
     }
 
@@ -231,7 +231,7 @@ void UpdateModeButton(DWORD dwConv)
     else
     {
         nIDTBB = IDTBB_NOROMAN;
-        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_ROMAN, 
+        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_ROMAN,
                     MAKELPARAM(nIDTBB, 0));
     }
 
@@ -243,7 +243,7 @@ void UpdateModeButton(DWORD dwConv)
     else
     {
         nIDTBB = IDTBB_NOCHARCODE;
-        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_CHARCODE, 
+        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_CHARCODE,
                     MAKELPARAM(nIDTBB, 0));
     }
 
@@ -255,7 +255,7 @@ void UpdateModeButton(DWORD dwConv)
     else
     {
         nIDTBB = IDTBB_NOHANJA;
-        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_HANJA, 
+        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_HANJA,
                     MAKELPARAM(nIDTBB, 0));
     }
 
@@ -267,7 +267,7 @@ void UpdateModeButton(DWORD dwConv)
     else
     {
         nIDTBB = IDTBB_NOSOFTKBD;
-        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_SOFTKBD, 
+        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_SOFTKBD,
                     MAKELPARAM(nIDTBB, 0));
     }
 
@@ -279,7 +279,7 @@ void UpdateModeButton(DWORD dwConv)
     else
     {
         nIDTBB = IDTBB_NOEUDC;
-        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_EUDC, 
+        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_EUDC,
                     MAKELPARAM(nIDTBB, 0));
     }
 
@@ -291,7 +291,7 @@ void UpdateModeButton(DWORD dwConv)
     else
     {
         nIDTBB = IDTBB_NOSYMBOL;
-        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_SYMBOL, 
+        SendMessage(hWndToolBar, TB_CHANGEBITMAP, IDM_SYMBOL,
                     MAKELPARAM(nIDTBB, 0));
     }
 

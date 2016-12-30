@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,8 +22,8 @@ CGlanceContent::~CGlanceContent()
 void CGlanceContent::LoadContent(DWORD* pdwSize, BYTE** ppbData)
 {
     if (NULL == pdwSize ||
-        NULL == ppbData ||
-        NULL == m_pContent)
+            NULL == ppbData ||
+            NULL == m_pContent)
     {
         return;
     }
@@ -36,7 +36,7 @@ void CGlanceContent::LoadContent(DWORD* pdwSize, BYTE** ppbData)
     {
         //
         // Handle the error
-        //        
+        //
     }
     else
     {
@@ -53,7 +53,7 @@ void CGlanceContent::LoadContent(DWORD* pdwSize, BYTE** ppbData)
             // Handle the error
             //
         }
-    }   
+    }
 }
 
 void CGlanceContent::FreeContent(BYTE** ppbData)

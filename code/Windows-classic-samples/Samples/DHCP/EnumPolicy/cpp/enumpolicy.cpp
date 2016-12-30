@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -85,25 +85,25 @@ int __cdecl main(void)
     for(;;)
     {
         dwError = DhcpV4EnumPolicies(
-                    pwszServer,        // Server IP Address, a value of NULL reflects the current server (where the program is executed)
-                    &resumeHandle,     // Resume Handle
-                    preferredMax,      // Preferred maximum
-                    (dwScopeId==0),    // fGlobalPolicy, global policy or scope level policy
-                    dwScopeId,         // Subnet Address
-                    &enumPoliciesInfo, // DHCP_POLICY_ARRAY containing policies
-                    &dwElementsRead,   // Total number of elements read
-                    &dwElementsTotal   // Total number of elements
-                    );
+                      pwszServer,        // Server IP Address, a value of NULL reflects the current server (where the program is executed)
+                      &resumeHandle,     // Resume Handle
+                      preferredMax,      // Preferred maximum
+                      (dwScopeId==0),    // fGlobalPolicy, global policy or scope level policy
+                      dwScopeId,         // Subnet Address
+                      &enumPoliciesInfo, // DHCP_POLICY_ARRAY containing policies
+                      &dwElementsRead,   // Total number of elements read
+                      &dwElementsTotal   // Total number of elements
+                  );
         if ((NO_ERROR != dwError) &&
-            (ERROR_MORE_DATA != dwError) &&
-            (ERROR_NO_MORE_ITEMS != dwError ))
+                (ERROR_MORE_DATA != dwError) &&
+                (ERROR_NO_MORE_ITEMS != dwError ))
         {
             wprintf(L"Error in enumerating policies. Error = %d\n",dwError);
             break;
         }
         if (dwElementsRead && enumPoliciesInfo)
         {
-            //operate on enumPoliciesInfo, for example in the below snippet, we are printing the names of the 
+            //operate on enumPoliciesInfo, for example in the below snippet, we are printing the names of the
             // enumerated policies.
             for ( dwIdx = 0; dwIdx < enumPoliciesInfo->NumElements; dwIdx++ )
             {

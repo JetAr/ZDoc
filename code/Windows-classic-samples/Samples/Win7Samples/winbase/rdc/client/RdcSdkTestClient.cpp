@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -62,7 +62,7 @@ class LocalRdcFileReader : public IRdcFileReader
 public:
 
     LocalRdcFileReader()
-            : m_Handle ( INVALID_HANDLE_VALUE )
+        : m_Handle ( INVALID_HANDLE_VALUE )
     {}
 
     virtual ~LocalRdcFileReader()
@@ -178,7 +178,7 @@ class MyFileTransferRdcFileReader : public IRdcFileReader
 {
 public:
     MyFileTransferRdcFileReader()
-            : m_SignatureLevel ( ( ULONG ) - 1 )
+        : m_SignatureLevel ( ( ULONG ) - 1 )
     {}
     virtual ~MyFileTransferRdcFileReader()
     {}
@@ -388,17 +388,19 @@ DebugHresult SignatureFileInfo::OpenRemoteFile (
 
     m_Filename[ ARRAYSIZE ( m_Filename ) - 1 ] = 0;
 
-    COSERVERINFO serverInfo = {
-                                  0,
-                                  ( LPWSTR ) sourceMachineName,
-                                  0,
-                                  0
-                              };
-    MULTI_QI mQI = {
-                       &__uuidof ( IRdcFileTransfer ),
-                       0,
-                       S_OK
-                   };
+    COSERVERINFO serverInfo =
+    {
+        0,
+        ( LPWSTR ) sourceMachineName,
+        0,
+        0
+    };
+    MULTI_QI mQI =
+    {
+        &__uuidof ( IRdcFileTransfer ),
+        0,
+        S_OK
+    };
     hr = CoCreateInstanceEx (
              __uuidof ( RdcFileTransfer ),
              0,

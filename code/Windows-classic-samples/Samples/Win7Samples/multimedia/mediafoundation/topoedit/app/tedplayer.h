@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -52,15 +52,15 @@ public: \
         pThis->Callback( pResult ); \
         return S_OK; \
     } \
-} m_x##Callback; 
+} m_x##Callback;
 
 ////////////////////////////////////////////////////////
 //
-   
+
 #define METHODASYNCCALLBACK(Callback, Parent) \
     METHODASYNCCALLBACKEX(Callback, Parent, 0, MFASYNC_CALLBACK_QUEUE_STANDARD)
 
-    
+
 ///////////////////////////////////////////////////////////////////////////////
 // window for video playback
 class CTedVideoWindow
@@ -71,18 +71,18 @@ public:
     ~CTedVideoWindow();
 
     void Init(CTedApp * pApp);
-    
-protected:    
+
+protected:
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    
+
     BEGIN_MSG_MAP(CTedVideoWindow)
-        MESSAGE_HANDLER(WM_CREATE, OnCreate)
-        MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-        MESSAGE_HANDLER(WM_SIZE, OnSize)
-        MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
+    MESSAGE_HANDLER(WM_CREATE, OnCreate)
+    MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+    MESSAGE_HANDLER(WM_SIZE, OnSize)
+    MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand)
     END_MSG_MAP()
 };
 
@@ -92,15 +92,15 @@ class CTedMediaFileRenderer
 {
 public:
     CTedMediaFileRenderer(LPCWSTR szFileName, ITedVideoWindowHandler* pVideoWindowHandler, HRESULT& hr);
-    
+
     HRESULT Load(IMFTopology** ppOutputTopology);
-    
+
 protected:
     HRESULT CreatePartialTopology(IMFTopology** ppPartialTopology);
     HRESULT CreateSource(IMFMediaSource** ppSource);
     HRESULT BuildTopologyFromSource(IMFTopology* pTopology, IMFMediaSource* pSource);
     HRESULT CreateRendererForStream(IMFStreamDescriptor* pSD, IMFTopologyNode** ppRendererNode);
-    
+
 private:
     LPCWSTR m_szFileName;
     CComPtr<ITedVideoWindowHandler> m_spVideoWindowHandler;
@@ -130,13 +130,13 @@ public:
     LONG AddRef();
     LONG Release();
 
-    HRESULT Reset();    
+    HRESULT Reset();
 
     HRESULT GetFullTopology(IMFTopology ** ppFullTopo);
     HRESULT GetPartialTopology(IMFTopology ** ppPartialTopo);
 
     HRESULT SetTopology(CComPtr<IMFTopology> pPartialTopo, BOOL fTranscode);
-    
+
     HRESULT Start();
     HRESULT Stop();
     HRESULT Pause();
@@ -151,9 +151,9 @@ public:
     bool IsPlaying() const;
     bool IsPaused() const;
     bool IsTopologySet() const;
-    
+
     void SetCustomTopoloader(GUID gidTopoloader);
-    
+
     HRESULT GetCapabilities(DWORD* pdwCaps);
 
 protected:
@@ -165,7 +165,7 @@ protected:
     HRESULT HandleEvent(IMFMediaEvent* pEvent);
     HRESULT HandleSessionStarted(IMFMediaEvent* pEvent);
     HRESULT HandleNotifyPresentationTime(IMFMediaEvent* pEvent);
-    
+
     HRESULT InitFromSession();
     HRESULT RemoveResamplerNode(IMFTopology* pTopology);
 
@@ -174,32 +174,32 @@ private:
 
     CTedApp * m_pApp;
     CTedMediaEventHandler* m_pMediaEventHandler;
-    
+
     CComPtr<IMFMediaSession> m_spSession;
     CComPtr<IMFMediaSession> m_spClearSession;
     CComPtr<IMFMediaSession> m_spProtectedSession;
     CComPtr<IMFMediaSource> m_spSource;
     CAtlArray<IMFTopology*> m_aTopologies;
     IMFContentProtectionManager* m_pCPM;
-    
+
     CComPtr<IMFTopology> m_spFullTopology;
     CComPtr<IMFPresentationClock> m_spSessionClock;
 
     // sequencer for multiple sources and using the same source in two consecutive topologies
     MFSequencerElementId m_LastSeqID;
-    
+
     bool m_fReceivedTime;
     MFTIME m_hnsStartTime;
     MFTIME m_hnsOffsetTime;
     MFTIME m_hnsStartTimeAtOutput;
     MFTIME m_hnsDuration;
     MFTIME m_hnsMediastartOffset;
-    
+
     bool m_bIsPlaying;
     bool m_bIsPaused;
     bool m_fTopologySet;
     BOOL m_fIsTranscoding;
-    
+
     GUID m_gidCustomTopoloader;
     bool m_fPendingClearCustomTopoloader;
     bool m_fPendingProtectedCustomTopoloader;

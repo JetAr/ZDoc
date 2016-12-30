@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -20,45 +20,57 @@
 
 
 /////////////////////////////////////////////////////////////////
-// CDataset 
+// CDataset
 //
 /////////////////////////////////////////////////////////////////
 class CDataset : public CDataAccess
 {
 public:
-	//Constructors
-	CDataset(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	~CDataset();
-	
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //Constructors
+    CDataset(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    ~CDataset();
 
-	//Pure Virtual
-	virtual WCHAR*			GetObjectName()			{ return L"Dataset";		} 
-	virtual UINT			GetObjectMenu()			{ return IDM_DATASETMENU;	}
-	virtual LONG			GetObjectImage()		{ return IMAGE_CUBE;		}
-	virtual REFIID			GetDefaultInterface()	{ return IID_IMDDataset;	}
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	virtual HRESULT			DisplayObject();
+    //Pure Virtual
+    virtual WCHAR*			GetObjectName()
+    {
+        return L"Dataset";
+    }
+    virtual UINT			GetObjectMenu()
+    {
+        return IDM_DATASETMENU;
+    }
+    virtual LONG			GetObjectImage()
+    {
+        return IMAGE_CUBE;
+    }
+    virtual REFIID			GetDefaultInterface()
+    {
+        return IID_IMDDataset;
+    }
 
-	// Members
-	virtual HRESULT			GetAxisInfo(DBCOUNTITEM* pcAxis, MDAXISINFO** prgAxisInfo);
-	virtual HRESULT			FreeAxisInfo(DBCOUNTITEM* pcAxis, MDAXISINFO** prgAxisInfo);
-	virtual HRESULT			GetAxisRowset(CAggregate* pCAggregate, DBCOUNTITEM iAxis, REFIID riid, ULONG cPropSets, DBPROPSET* rgPropSets, IUnknown** ppIUnknown);
-	virtual HRESULT			GetCellData(DBORDINAL ulStartCell, DBORDINAL ulEndCell);
+    virtual HRESULT			DisplayObject();
 
-	//[MANADATORY]
-	IMDDataset*				m_pIMDDataset;
+    // Members
+    virtual HRESULT			GetAxisInfo(DBCOUNTITEM* pcAxis, MDAXISINFO** prgAxisInfo);
+    virtual HRESULT			FreeAxisInfo(DBCOUNTITEM* pcAxis, MDAXISINFO** prgAxisInfo);
+    virtual HRESULT			GetAxisRowset(CAggregate* pCAggregate, DBCOUNTITEM iAxis, REFIID riid, ULONG cPropSets, DBPROPSET* rgPropSets, IUnknown** ppIUnknown);
+    virtual HRESULT			GetCellData(DBORDINAL ulStartCell, DBORDINAL ulEndCell);
 
-	//[OPTIONAL]
-	IMDFind*				m_pIMDFind;
-	IMDRangeRowset*			m_pIMDRangeRowset;
+    //[MANADATORY]
+    IMDDataset*				m_pIMDDataset;
 
-	// Data
-	DBCOUNTITEM				m_cAxis;
-	MDAXISINFO*				m_rgAxisInfo;
+    //[OPTIONAL]
+    IMDFind*				m_pIMDFind;
+    IMDRangeRowset*			m_pIMDRangeRowset;
+
+    // Data
+    DBCOUNTITEM				m_cAxis;
+    MDAXISINFO*				m_rgAxisInfo;
 };
 
 

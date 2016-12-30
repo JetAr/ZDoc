@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,7 +24,7 @@ public:
 // Dialog Data
     enum { IDD = IDD_HOSTEDNETWORK_DIALOG };
 
-    protected:
+protected:
     virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 private:
@@ -70,7 +70,7 @@ private:
     // whether the app is running with admin privilege
     BOOL m_bIsAdmin;
 
-    // whether ICS is allowed 
+    // whether ICS is allowed
     bool m_bIsICSAllowed;
 
     // private methods
@@ -121,9 +121,15 @@ private:
 
     void PostDeviceNotification(CWlanDevice *, int);
 
-    void ClearNotifications() {m_NotificationOutputList.ResetContent();};
+    void ClearNotifications()
+    {
+        m_NotificationOutputList.ResetContent();
+    };
 
-    void PostErrorMessage(LPCWSTR msg) {::MessageBox(m_hWnd, msg, NULL, MB_ICONERROR|MB_OK);};
+    void PostErrorMessage(LPCWSTR msg)
+    {
+        ::MessageBox(m_hWnd, msg, NULL, MB_ICONERROR|MB_OK);
+    };
 
     BOOL IsUserAdmin();
 

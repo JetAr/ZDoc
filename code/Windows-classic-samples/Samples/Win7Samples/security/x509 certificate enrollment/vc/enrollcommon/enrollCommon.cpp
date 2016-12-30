@@ -1,12 +1,12 @@
-//---------------------------------------------------------------------
+﻿//---------------------------------------------------------------------
 //  This file is part of the Microsoft .NET Framework SDK Code Samples.
-// 
+//
 //  Copyright (C) Microsoft Corporation.  All rights reserved.
-// 
+//
 //This source code is intended only as a supplement to Microsoft
 //Development Tools and/or on-line documentation.  See these other
 //materials for detailed information regarding Microsoft code samples.
-// 
+//
 //THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
 //KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -37,16 +37,16 @@ convertWszToSz(
     for (;;)
     {
         cch = WideCharToMultiByte(
-            GetACP(),
-            0,          // dwFlags
-            pwc,
-            cwc,        // cchWideChar, -1 => null terminated
-            *ppsz,
-            cch,
-            NULL,
-            NULL);
-        if (0 >= cch && 
-            (0 != cch || (0 != cwc && (MAXLONG != cwc || L'\0' != *pwc))))
+                  GetACP(),
+                  0,          // dwFlags
+                  pwc,
+                  cwc,        // cchWideChar, -1 => null terminated
+                  *ppsz,
+                  cch,
+                  NULL,
+                  NULL);
+        if (0 >= cch &&
+                (0 != cch || (0 != cwc && (MAXLONG != cwc || L'\0' != *pwc))))
         {
             hr = GetLastError();
             _PrintError(hr, "WideCharToMultiByte");
@@ -227,11 +227,11 @@ checkEnrollStatus(
 
     // Get IX509EnrollmentStatus
     hr = pEnroll->get_Status(&pStatus);
-    _JumpIfError(hr, error, "get_Status"); 
+    _JumpIfError(hr, error, "get_Status");
 
     // Get enrollment status
     hr = pStatus->get_Status(&EnrollStatus);
-    _JumpIfError(hr, error, "get_Status"); 
+    _JumpIfError(hr, error, "get_Status");
 
     // Get enrollment HRESULT
     hr = pStatus->get_Error(&hEnrollError);
@@ -239,11 +239,11 @@ checkEnrollStatus(
 
     // Get enrollment error text
     hr = pStatus->get_ErrorText(&strErrorText);
-    _JumpIfError(hr, error, "get_ErrorText"); 
+    _JumpIfError(hr, error, "get_ErrorText");
 
     // Get enrollment info text
     hr = pStatus->get_Text(&strText);
-    _JumpIfError(hr, error, "get_Text"); 
+    _JumpIfError(hr, error, "get_Text");
 
     if (Enrolled != EnrollStatus) // Not enrolled
     {
@@ -282,12 +282,12 @@ findCertByKeyUsage(
 
     // Open user MY store
     hStore = CertOpenStore(
-            CERT_STORE_PROV_SYSTEM_W,
-            X509_ASN_ENCODING,
-            NULL,
-            CERT_SYSTEM_STORE_CURRENT_USER,
-            L"MY"  );
-    
+                 CERT_STORE_PROV_SYSTEM_W,
+                 X509_ASN_ENCODING,
+                 NULL,
+                 CERT_SYSTEM_STORE_CURRENT_USER,
+                 L"MY"  );
+
     if (NULL == hStore)
     {
         hr = GetLastError();
@@ -305,15 +305,15 @@ findCertByKeyUsage(
 
         // Get key usage
         if (!CertGetIntendedKeyUsage(
-                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                pCert->pCertInfo,
-                &KeyUsage,
-                1))
+                    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+                    pCert->pCertInfo,
+                    &KeyUsage,
+                    1))
         {
             break;
         }
 
-        // Check if key usage matches       
+        // Check if key usage matches
         if ((KeyUsage & usageFlags) == usageFlags)
         {
             fMatch = TRUE;
@@ -334,7 +334,7 @@ error:
     {
         CertCloseStore(hStore, 0);
     }
-    return hr;   
+    return hr;
 
 }
 
@@ -355,12 +355,12 @@ findCertByEKU(
 
     // Open user MY store
     hStore = CertOpenStore(
-            CERT_STORE_PROV_SYSTEM_W,
-            X509_ASN_ENCODING,
-            NULL,
-            CERT_SYSTEM_STORE_CURRENT_USER,
-            L"MY"  );
-    
+                 CERT_STORE_PROV_SYSTEM_W,
+                 X509_ASN_ENCODING,
+                 NULL,
+                 CERT_SYSTEM_STORE_CURRENT_USER,
+                 L"MY"  );
+
     if (NULL == hStore)
     {
         hr = GetLastError();
@@ -380,10 +380,10 @@ findCertByEKU(
         {
             // Get enhanced key usage OIDs
             if (!CertGetEnhancedKeyUsage(
-                pCert,
-                CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
-                pKeyUsage,
-                &cbKeyUsage))
+                        pCert,
+                        CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG,
+                        pKeyUsage,
+                        &cbKeyUsage))
             {
                 break;
             }
@@ -392,14 +392,14 @@ findCertByEKU(
                 break;  // EKU extension fetched; break out of while loop
             }
             pKeyUsage = (CERT_ENHKEY_USAGE *)LocalAlloc
-                    (LMEM_FIXED, cbKeyUsage);
+                        (LMEM_FIXED, cbKeyUsage);
             if (NULL == pKeyUsage)
             {
                 hr = E_OUTOFMEMORY;
                 _JumpError(hr, error, "out of memory");
             }
         }
-        
+
         if (NULL != pKeyUsage)
         {
             if (0 == pKeyUsage->cUsageIdentifier)
@@ -413,10 +413,10 @@ findCertByEKU(
             else
             {
                 for (i = 0; i < pKeyUsage->cUsageIdentifier; i++)
-                {   
+                {
                     if (0 == strcmp(
-                        pKeyUsage->rgpszUsageIdentifier[i],
-                        pszObjId))
+                                pKeyUsage->rgpszUsageIdentifier[i],
+                                pszObjId))
                     {
                         fMatch = TRUE;  // found matching EKU OID
                         break;
@@ -444,16 +444,16 @@ error:
     {
         LocalFree(pKeyUsage);
     }
-     if (NULL != hStore)
+    if (NULL != hStore)
     {
         CertCloseStore(hStore, 0);
     }
-    return hr;   
+    return hr;
 
 }
 
 // Find a cert in user my store that has a string template
-// name matches pwszNameTemplate or OID template name 
+// name matches pwszNameTemplate or OID template name
 // matches pszObjIdTemplate
 // Return S_OK is succeeds
 HRESULT
@@ -475,7 +475,7 @@ findCertByTemplate(
     PSTR pszObjIdTemplate = NULL;
     __bound DWORD cb;
 
-    if (NULL == pwszNameTemplate) 
+    if (NULL == pwszNameTemplate)
     {
         hr = CRYPT_E_NOT_FOUND;
         _JumpError(hr, error, "findOIDFromTemplateName");
@@ -486,12 +486,12 @@ findCertByTemplate(
 
     // Open user MY store
     hStore = CertOpenStore(
-            CERT_STORE_PROV_SYSTEM_W,
-            X509_ASN_ENCODING,
-            NULL,
-            CERT_SYSTEM_STORE_CURRENT_USER,
-            L"MY"  );
-    
+                 CERT_STORE_PROV_SYSTEM_W,
+                 X509_ASN_ENCODING,
+                 NULL,
+                 CERT_SYSTEM_STORE_CURRENT_USER,
+                 L"MY"  );
+
     if (NULL == hStore)
     {
         hr = GetLastError();
@@ -506,7 +506,7 @@ findCertByTemplate(
         {
             break;
         }
-        
+
         cExtension = pCert->pCertInfo->cExtension;
         rgExtension = pCert->pCertInfo->rgExtension;
 
@@ -515,28 +515,28 @@ findCertByTemplate(
         if (NULL != pwszNameTemplate)
         {
             pExt = CertFindExtension(
-                szOID_ENROLL_CERTTYPE_EXTENSION,
-                cExtension,
-                const_cast<CERT_EXTENSION *>(rgExtension));
-            
+                       szOID_ENROLL_CERTTYPE_EXTENSION,
+                       cExtension,
+                       const_cast<CERT_EXTENSION *>(rgExtension));
+
             if (NULL != pExt)
             {
                 if (!CryptDecodeObjectEx(
-                        X509_ASN_ENCODING,
-                        X509_UNICODE_ANY_STRING,
-                        pExt->Value.pbData,
-                        pExt->Value.cbData,
-                        CRYPT_DECODE_ALLOC_FLAG,       // dwFlags
-                        NULL,
-                        (VOID **) &pName,
-                        &cb))
+                            X509_ASN_ENCODING,
+                            X509_UNICODE_ANY_STRING,
+                            pExt->Value.pbData,
+                            pExt->Value.cbData,
+                            CRYPT_DECODE_ALLOC_FLAG,       // dwFlags
+                            NULL,
+                            (VOID **) &pName,
+                            &cb))
 
                 {
-                    
+
                     hr = GetLastError();
                     _JumpError(hr, error, "CryptDecodeObjectEx");
                 }
-                
+
                 cb = (pName->Value.cbData + 1) * sizeof(WCHAR);
                 pwszCertTypeNameV1 = (WCHAR *) LocalAlloc(LMEM_FIXED, cb);
                 if (NULL == pwszCertTypeNameV1)
@@ -545,7 +545,7 @@ findCertByTemplate(
                     _JumpError(hr, error, "LocalAlloc");
                 }
                 CopyMemory(pwszCertTypeNameV1, pName->Value.pbData, cb);
-            
+
                 if (0 == _wcsicmp(pwszNameTemplate, pwszCertTypeNameV1))
                 {
                     fMatch = TRUE;
@@ -557,24 +557,24 @@ findCertByTemplate(
         if (NULL != pszObjIdTemplate && !fMatch)
         {
             pExt = CertFindExtension(
-                szOID_CERTIFICATE_TEMPLATE,
-                cExtension,
-                const_cast<CERT_EXTENSION *>(rgExtension));
-        
+                       szOID_CERTIFICATE_TEMPLATE,
+                       cExtension,
+                       const_cast<CERT_EXTENSION *>(rgExtension));
+
             if (NULL != pExt)
             {
                 if (!CryptDecodeObjectEx(
-                        X509_ASN_ENCODING,
-                        X509_CERTIFICATE_TEMPLATE,
-                        pExt->Value.pbData,
-                        pExt->Value.cbData,
-                        CRYPT_DECODE_ALLOC_FLAG,       // dwFlags
-                        NULL,
-                        (VOID **) &pTemplate,
-                        &cb))
+                            X509_ASN_ENCODING,
+                            X509_CERTIFICATE_TEMPLATE,
+                            pExt->Value.pbData,
+                            pExt->Value.cbData,
+                            CRYPT_DECODE_ALLOC_FLAG,       // dwFlags
+                            NULL,
+                            (VOID **) &pTemplate,
+                            &cb))
 
                 {
-                    
+
                     hr = GetLastError();
                     _JumpError(hr, error, "CryptDecodeObjectEx");
                 }
@@ -585,9 +585,9 @@ findCertByTemplate(
                     break;
                 }
                 if (!convertSzToWsz(
-                        &pwszCertTypeObjId, 
-                        pTemplate->pszObjId, 
-                        -1))
+                            &pwszCertTypeObjId,
+                            pTemplate->pszObjId,
+                            -1))
                 {
                     hr = E_OUTOFMEMORY;
                     _JumpError(hr, error, "convertSzToWsz");
@@ -654,7 +654,7 @@ HRESULT
 verifyCertContext(
     __in CERT_CONTEXT const *pCert,
     __in_opt PSTR pszEKU)
-   
+
 {
     HRESULT hr = S_OK;
     CERT_CHAIN_PARA ChainParams;
@@ -669,25 +669,25 @@ verifyCertContext(
     {
         ChainParams.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
         ChainParams.RequestedUsage.Usage.cUsageIdentifier = 1;
-        ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier = 
+        ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier =
             const_cast<char **>(&pszEKU);
     }
 
     // Get the chain and verify the cert:
     if (!CertGetCertificateChain(
-                            NULL,   // hChainEngine
-                            pCert,      // pCertContext
-                            NULL, // pTime
-                            NULL,   // hAdditionalStore
-                            &ChainParams,   // pChainPara
-                            0,      // dwFlags
-                            NULL,       // pvReserved
-                            &pChainContext))    // ppChainContext
+                NULL,   // hChainEngine
+                pCert,      // pCertContext
+                NULL, // pTime
+                NULL,   // hAdditionalStore
+                &ChainParams,   // pChainPara
+                0,      // dwFlags
+                NULL,       // pvReserved
+                &pChainContext))    // ppChainContext
     {
         hr = GetLastError();
         _JumpError(hr, error, "CertGetCertificateChain");
     }
- 
+
     ZeroMemory(&ChainPolicy, sizeof(ChainPolicy));
     ChainPolicy.cbSize = sizeof(ChainPolicy);
     ChainPolicy.dwFlags = CERT_CHAIN_POLICY_IGNORE_NOT_TIME_NESTED_FLAG;
@@ -696,12 +696,12 @@ verifyCertContext(
     PolicyStatus.cbSize = sizeof(PolicyStatus);
     PolicyStatus.lChainIndex = -1;
     PolicyStatus.lElementIndex = -1;
-    
+
     if (!CertVerifyCertificateChainPolicy(
-            CERT_CHAIN_POLICY_BASE,
-            pChainContext,
-            &ChainPolicy,
-            &PolicyStatus))
+                CERT_CHAIN_POLICY_BASE,
+                pChainContext,
+                &ChainPolicy,
+                &PolicyStatus))
     {
         hr = GetLastError();
         _JumpError(hr, error, "CertVerifyCertificateChainPolicy");
@@ -726,9 +726,9 @@ enrollCertByTemplate(
     __in PCWSTR pwszTemplateName)
 {
     HRESULT hr = S_OK;
-    IX509Enrollment* pEnroll = NULL; 
+    IX509Enrollment* pEnroll = NULL;
     BSTR strTemplateName = NULL;
-    
+
     // Allocate BSTR for template name
     strTemplateName = SysAllocString(pwszTemplateName);
     if (NULL == strTemplateName)
@@ -739,26 +739,26 @@ enrollCertByTemplate(
 
     // Create IX509Enrollment
     hr = CoCreateInstance(
-            __uuidof(CX509Enrollment),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509Enrollment),
-            (void **) &pEnroll);
+             __uuidof(CX509Enrollment),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509Enrollment),
+             (void **) &pEnroll);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Initiate IX509Enrollment
     hr = pEnroll->InitializeFromTemplateName(
-            ContextUser,        
-            strTemplateName); 
+             ContextUser,
+             strTemplateName);
     _JumpIfError(hr, error, "InitializeFromTemplateName");
 
     // Enroll
     hr = pEnroll->Enroll();
-    _JumpIfError(hr, error, "Enroll"); 
+    _JumpIfError(hr, error, "Enroll");
 
     // Check enrollment status
     hr = checkEnrollStatus(pEnroll);
-    _JumpIfError(hr, error, "checkEnrollStatus"); 
+    _JumpIfError(hr, error, "checkEnrollStatus");
 
 error:
     SysFreeString(strTemplateName);
@@ -780,7 +780,7 @@ decConvertFromUnicode(
         WCHAR *pwcIn = (WCHAR *) *ppb;
         DWORD cwcIn = *pcb;
         bool fUnicode = true;
-    
+
         if (wcBOM == pwcIn[0] || wcBOMBIGENDIAN == pwcIn[0])
         {
             if (wcBOMBIGENDIAN == pwcIn[0])
@@ -798,9 +798,9 @@ decConvertFromUnicode(
 
                 switch (wc)
                 {
-                    case L'\t':
-                    case L'\r':
-                    case L'\n':
+                case L'\t':
+                case L'\r':
+                case L'\n':
                     continue;
                 }
                 if (L' ' > wc || L'~' < wc)
@@ -813,7 +813,7 @@ decConvertFromUnicode(
         if (fUnicode)
         {
             PSTR pszT;
-        
+
             if (!convertWszToSz(&pszT, pwcIn, cwcIn))
             {
                 hr = E_OUTOFMEMORY;
@@ -849,13 +849,13 @@ DecodeFileW(
     DWORD cbOut;
 
     hFile = CreateFile(
-            pszfn,
-            GENERIC_READ,
-            FILE_SHARE_READ,
-            NULL,
-            OPEN_EXISTING,
-            0,
-            NULL);
+                pszfn,
+                GENERIC_READ,
+                FILE_SHARE_READ,
+                NULL,
+                OPEN_EXISTING,
+                0,
+                NULL);
     if (INVALID_HANDLE_VALUE == hFile)
     {
         hr = GetLastError();
@@ -870,11 +870,11 @@ DecodeFileW(
     cbIn = GetFileSize(hFile, NULL);
     if (INVALID_FILE_SIZE == cbIn || 0 == cbIn)
     {
-        if (0 == cbIn) 
+        if (0 == cbIn)
         {
             hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
-        } 
-        else 
+        }
+        else
         {
             hr = GetLastError();
         }
@@ -914,13 +914,13 @@ DecodeFileW(
         // Decode file contents.
 
         if (!CryptStringToBinaryA(
-                        (PCSTR) pbIn,
-                        cbIn,
-                        Flags,
-                        pbOut,
-                        &cbOut,
-                        NULL,
-                        NULL))
+                    (PCSTR) pbIn,
+                    cbIn,
+                    Flags,
+                    pbOut,
+                    &cbOut,
+                    NULL,
+                    NULL))
         {
             hr = GetLastError();
             _JumpError(hr, error, "CryptStringToBinaryA");
@@ -934,13 +934,13 @@ DecodeFileW(
         }
 
         if (!CryptStringToBinaryA(
-                        (PCSTR) pbIn,
-                        cbIn,
-                        Flags,
-                        pbOut,
-                        &cbOut,
-                        NULL,
-                        NULL))
+                    (PCSTR) pbIn,
+                    cbIn,
+                    Flags,
+                    pbOut,
+                    &cbOut,
+                    NULL,
+                    NULL))
         {
             hr = GetLastError();
             _JumpError(hr, error, "CryptStringToBinaryA");
@@ -1013,7 +1013,7 @@ EncodeToFileW(
             hr = GetLastError();
             _JumpError(hr, error, "CryptBinaryToStringW");
         }
-    
+
         // move the string (overwrite the terminating L'\0') to make room
         // for wcBOM.
 
@@ -1057,28 +1057,28 @@ EncodeToFileW(
     // Write encoded certificate to file
 
     hFile = CreateFile(
-            pszfn,
-            GENERIC_WRITE,
-            0,
-            NULL,
-            CREATE_NEW,
-            0,
-            NULL);
-
-    if (INVALID_HANDLE_VALUE == hFile)
-    {
-        hr = GetLastError();
-        if (fForceOverWrite && 
-            HRESULT_FROM_WIN32(ERROR_FILE_EXISTS) == HRESULT_FROM_WIN32(hr))
-        {
-            hFile = CreateFile(
                 pszfn,
                 GENERIC_WRITE,
                 0,
                 NULL,
-                CREATE_ALWAYS,
+                CREATE_NEW,
                 0,
                 NULL);
+
+    if (INVALID_HANDLE_VALUE == hFile)
+    {
+        hr = GetLastError();
+        if (fForceOverWrite &&
+                HRESULT_FROM_WIN32(ERROR_FILE_EXISTS) == HRESULT_FROM_WIN32(hr))
+        {
+            hFile = CreateFile(
+                        pszfn,
+                        GENERIC_WRITE,
+                        0,
+                        NULL,
+                        CREATE_ALWAYS,
+                        0,
+                        NULL);
         }
         if (INVALID_HANDLE_VALUE == hFile)
         {
@@ -1134,14 +1134,14 @@ findOIDFromTemplateName(
     IObjectId* pObjectId = NULL;
     BSTR strTemplateName = NULL;
     BSTR strTemplateOID = NULL;
-    
+
     // Create IX509CertificateRequestPkcs10
     hr = CoCreateInstance(
-            __uuidof(CX509CertificateRequestPkcs10),
-            NULL,       // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IX509CertificateRequestPkcs10),
-            (void **) &pPkcs10);
+             __uuidof(CX509CertificateRequestPkcs10),
+             NULL,       // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IX509CertificateRequestPkcs10),
+             (void **) &pPkcs10);
     _JumpIfError(hr, error, "CoCreateInstance");
 
     // Allocate BSTR for template name
@@ -1154,8 +1154,8 @@ findOIDFromTemplateName(
 
     // Initialize IX509CertificateRequestPkcs10
     hr = pPkcs10->InitializeFromTemplateName(
-            ContextUser,
-            strTemplateName);
+             ContextUser,
+             strTemplateName);
     _JumpIfError(hr, error, "InitializeFromTemplateName");
 
     // Initialize IX509CertificateRequestPkcs10

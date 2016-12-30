@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -124,11 +124,20 @@ private:
     }
 
 protected:
-    UINT GetTotalFiles() { return _cFilesTotal; }
+    UINT GetTotalFiles()
+    {
+        return _cFilesTotal;
+    }
 
     virtual PCWSTR GetFileName() = 0;
-    virtual HRESULT WriteHeader() { return S_OK; }
-    virtual HRESULT WriteFooter() { return S_OK; }
+    virtual HRESULT WriteHeader()
+    {
+        return S_OK;
+    }
+    virtual HRESULT WriteFooter()
+    {
+        return S_OK;
+    }
     virtual HRESULT FormatItem(ULONG ulDuration, PCWSTR pszName, PCWSTR pszPath) = 0;
 
     DWORD _dwThreadID;          // post WM_QUIT here when done
@@ -326,7 +335,10 @@ class CWPLPlaylistCreator : public CPlaylistCreator
 public:
 
 protected:
-    virtual PCWSTR GetFileName() { return L"New Playlist.wpl"; }
+    virtual PCWSTR GetFileName()
+    {
+        return L"New Playlist.wpl";
+    }
 
     HRESULT WriteHeader()
     {
@@ -349,7 +361,10 @@ protected:
 class CM3UPlaylistCreator : public CPlaylistCreator
 {
 protected:
-    virtual PCWSTR GetFileName() { return L"New Playlist.m3u"; }
+    virtual PCWSTR GetFileName()
+    {
+        return L"New Playlist.m3u";
+    }
 
     HRESULT WriteHeader()
     {
@@ -503,7 +518,7 @@ HRESULT RegisterApp()
     WCHAR const c_szCreateWPLPlaylistVerb[] = L"CreateWPLPlaylist";
 
     HRESULT hr = reCreateWPLPlaylist.RegisterPlayerVerbs(rgAssociationElementsMusic, ARRAYSIZE(rgAssociationElementsMusic),
-        c_szCreateWPLPlaylistVerb, c_szCreateWPLPlaylistDescription);
+                 c_szCreateWPLPlaylistVerb, c_szCreateWPLPlaylistDescription);
 
     if (SUCCEEDED(hr))
     {
@@ -513,7 +528,7 @@ HRESULT RegisterApp()
         CRegisterExtension reCreateM3ULPlaylist(__uuidof(CPlaylistCreatorApp::CCreateM3UPlaylistVerb));
 
         hr = reCreateM3ULPlaylist.RegisterPlayerVerbs(rgAssociationElementsMusic, ARRAYSIZE(rgAssociationElementsMusic),
-            c_szCreateM3UPlaylistVerb, c_szCreateM3UPlaylistDescription);
+                c_szCreateM3UPlaylistVerb, c_szCreateM3UPlaylistDescription);
     }
     return hr;
 }

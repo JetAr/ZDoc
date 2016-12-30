@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: Linklist.h
 // Desc: Linked list class.
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -6,8 +6,8 @@
 
 
 // Notes:
-// 
-// This class template implements a simple double-linked list. 
+//
+// This class template implements a simple double-linked list.
 // Objects are held as pointers. (Does not use STL's copy semantics.)
 // The Clear() method takes a functor object that releases the objects.
 
@@ -38,18 +38,21 @@ protected:
             this->item = item;
         }
 
-        T* Item() const { return item; }
+        T* Item() const
+        {
+            return item;
+        }
     };
 
 
 
 protected:
     Node    m_anchor;  // Anchor node for the linked list.
-    DWORD   m_count;   // Number of items in the list	
-	
-	Node    *m_pEnum;   // Enumeration node
+    DWORD   m_count;   // Number of items in the list
 
-    void InvalidateEnumerator() 
+    Node    *m_pEnum;   // Enumeration node
+
+    void InvalidateEnumerator()
     {
         m_pEnum = NULL;
     }
@@ -62,11 +65,11 @@ protected:
     Node* Back() const
     {
         return m_anchor.prev;
-    }	
+    }
 
     virtual HRESULT InsertAfter(T* item, Node *pBefore)
     {
-        if (item == NULL || pBefore == NULL) 
+        if (item == NULL || pBefore == NULL)
         {
             return E_POINTER;
         }
@@ -78,7 +81,7 @@ protected:
         }
 
         Node *pAfter = pBefore->next;
-        
+
         pBefore->next = pNode;
         pAfter->prev = pNode;
 
@@ -87,12 +90,12 @@ protected:
 
         m_count++;
 
-		InvalidateEnumerator(); 
+        InvalidateEnumerator();
 
         return S_OK;
     }
 
-	virtual HRESULT GetItem(Node *pNode, T** ppItem)
+    virtual HRESULT GetItem(Node *pNode, T** ppItem)
     {
         if (pNode == NULL || ppItem == NULL)
         {
@@ -110,7 +113,7 @@ protected:
         }
     }
 
-	
+
     // RemoveItem:
     // Removes a node and optionally returns the item.
     // ppItem can be NULL.
@@ -158,8 +161,8 @@ public:
         m_anchor.prev = &m_anchor;
 
         m_count = 0;
-   
-		m_pEnum = NULL;
+
+        m_pEnum = NULL;
     }
 
     virtual ~List()
@@ -239,11 +242,14 @@ public:
     }
 
     // GetCount: Returns the number of items in the list.
-    DWORD GetCount() const { return m_count; } 
+    DWORD GetCount() const
+    {
+        return m_count;
+    }
 
     bool IsEmpty() const
-    {	
-		return (GetCount() == 0);
+    {
+        return (GetCount() == 0);
     }
 
     // Clear: Takes a functor object whose operator()
@@ -269,39 +275,39 @@ public:
 
         m_count = 0;
     }
-		
-	// Enumerator functions
-	void ResetEnumerator()
-	{
-		m_pEnum = Front();
-	}
 
-	HRESULT Next(T **ppItem)
-	{
-		if (ppItem == NULL)
-		{
-			return E_POINTER;
-		}
+    // Enumerator functions
+    void ResetEnumerator()
+    {
+        m_pEnum = Front();
+    }
 
-		if (m_pEnum == NULL)
-		{
-			return E_FAIL; // Needs reset
-		}
+    HRESULT Next(T **ppItem)
+    {
+        if (ppItem == NULL)
+        {
+            return E_POINTER;
+        }
 
-		if (m_pEnum == &m_anchor)
-		{
-			return __HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
-		}
+        if (m_pEnum == NULL)
+        {
+            return E_FAIL; // Needs reset
+        }
 
-		HRESULT hr = GetItem(m_pEnum, ppItem);
+        if (m_pEnum == &m_anchor)
+        {
+            return __HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
+        }
 
-		if (SUCCEEDED(hr))
-		{
-			m_pEnum = m_pEnum->next;
-		}
-		return hr;
-	}	
-		
+        HRESULT hr = GetItem(m_pEnum, ppItem);
+
+        if (SUCCEEDED(hr))
+        {
+            m_pEnum = m_pEnum->next;
+        }
+        return hr;
+    }
+
 };
 
 
@@ -313,7 +319,7 @@ public:
 
 class ComAutoRelease
 {
-public: 
+public:
     void operator()(IUnknown *p)
     {
         if (p)
@@ -322,10 +328,10 @@ public:
         }
     }
 };
-    
+
 class MemDelete
 {
-public: 
+public:
     void operator()(void *p)
     {
         if (p)
@@ -336,12 +342,12 @@ public:
 };
 
 
- //ComPtrList class
- //Derived class that makes it safer to store COM pointers in the List<> class.
- //It automatically AddRef's the pointers that are inserted onto the list
- //(unless the insertion method fails). 
+//ComPtrList class
+//Derived class that makes it safer to store COM pointers in the List<> class.
+//It automatically AddRef's the pointers that are inserted onto the list
+//(unless the insertion method fails).
 
- //T must be a COM interface type.
+//T must be a COM interface type.
 
 template <class T>
 class ComPtrList : public List<T>
@@ -364,8 +370,8 @@ protected:
         }
         return hr;
     }
-	
-	HRESULT GetItem(Node *pNode, T** ppItem)
+
+    HRESULT GetItem(Node *pNode, T** ppItem)
     {
         HRESULT hr = List<T>::GetItem(pNode, ppItem);
         if (SUCCEEDED(hr))
@@ -378,7 +384,7 @@ protected:
     HRESULT RemoveItem(Node *pNode, T **ppItem)
     {
         // ppItem can be NULL, but we need to get the
-        // item so that we can release it. 
+        // item so that we can release it.
 
         // If ppItem is not NULL, we will AddRef it on the way out/
 
@@ -399,7 +405,7 @@ protected:
 
         return hr;
     }
-	
+
 };
 
 template <class T, bool NULLABLE = FALSE>
@@ -436,7 +442,10 @@ protected:
             }
         }
 
-        Ptr Item() const { return item; }
+        Ptr Item() const
+        {
+            return item;
+        }
     };
 
 public:
@@ -599,7 +608,7 @@ public:
         {
             if (n->item)
             {
-                n->item->Release();  
+                n->item->Release();
                 n->item = NULL;
             }
 
@@ -683,7 +692,10 @@ public:
 
 
     // GetCount: Returns the number of items in the list.
-    DWORD GetCount() const { return m_count; }
+    DWORD GetCount() const
+    {
+        return m_count;
+    }
 
     bool IsEmpty() const
     {

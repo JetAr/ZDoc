@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: perflog.cpp
 //
 // Desc: Macros for DirectShow performance logging.
@@ -28,7 +28,7 @@ PerflogCallback (
     __in PVOID Context,
     __out ULONG* BufferSize,
     __in PVOID Buffer
-    );
+);
 
 //
 // Event tracing function pointers.
@@ -47,7 +47,7 @@ ULONG
     IN LPCWSTR MofImagePath,
     IN LPCWSTR MofResourceName,
     OUT PTRACEHANDLE RegistrationHandle
-    );
+);
 
 #define REGISTERTRACEGUIDS_NAME "RegisterTraceGuidsW"
 
@@ -63,7 +63,7 @@ ULONG
     IN LPCSTR MofImagePath,
     IN LPCSTR MofResourceName,
     __out OUT PTRACEHANDLE RegistrationHandle
-    );
+);
 
 #define REGISTERTRACEGUIDS_NAME "RegisterTraceGuidsA"
 
@@ -72,28 +72,28 @@ ULONG
 ULONG
 (__stdcall * _UnregisterTraceGuids) (
     TRACEHANDLE RegistrationHandle
-    );
+);
 
 TRACEHANDLE
 (__stdcall * _GetTraceLoggerHandle) (
     __in PVOID Buffer
-    );
+);
 
 UCHAR
 (__stdcall * _GetTraceEnableLevel) (
     TRACEHANDLE TraceHandle
-    );
+);
 
 ULONG
 (__stdcall * _GetTraceEnableFlags) (
     TRACEHANDLE TraceHandle
-    );
+);
 
 ULONG
 (__stdcall * _TraceEvent) (
     TRACEHANDLE TraceHandle,
     __in PEVENT_TRACE_HEADER EventTrace
-    );
+);
 
 HINSTANCE _Advapi32;
 
@@ -122,7 +122,7 @@ const INT iDEBUGINFO = 1024; // Used to format strings
 VOID
 PerflogReadModuleLevel(
     HINSTANCE hInstance
-    )
+)
 {
     LONG lReturn;                   // Create key return value
     TCHAR szInfo[iDEBUGINFO];       // Constructs key names
@@ -132,18 +132,22 @@ PerflogReadModuleLevel(
     DWORD dwKeySize, dwKeyType, dwKeyValue;
 
     DWORD dwSize = GetModuleFileName(
-        (hInstance ? hInstance : GetModuleHandle( NULL )),
-        szFullName,
-        iDEBUGINFO );
+                       (hInstance ? hInstance : GetModuleHandle( NULL )),
+                       szFullName,
+                       iDEBUGINFO );
 
-    if (0 == dwSize || iDEBUGINFO == dwSize) {
+    if (0 == dwSize || iDEBUGINFO == dwSize)
+    {
         return;
     }
 
     pName = _tcsrchr(szFullName,'\\');
-    if (pName == NULL) {
+    if (pName == NULL)
+    {
         pName = szFullName;
-    } else {
+    }
+    else
+    {
         pName++;
     }
 
@@ -159,18 +163,19 @@ PerflogReadModuleLevel(
             KEY_QUERY_VALUE,      // Desired security access
             &hModuleKey );        // Opened handle buffer
 
-    if (lReturn != ERROR_SUCCESS) {
+    if (lReturn != ERROR_SUCCESS)
+    {
         return;
     }
 
     dwKeySize = sizeof(DWORD);
     lReturn = RegQueryValueEx(
-        hModuleKey,                 // Handle to an open key
-        TEXT("PERFLOG"),
-        NULL,                       // Reserved field
-        &dwKeyType,                 // Returns the field type
-        (LPBYTE) &dwKeyValue,       // Returns the field's value
-        &dwKeySize );               // Number of bytes transferred
+                  hModuleKey,                 // Handle to an open key
+                  TEXT("PERFLOG"),
+                  NULL,                       // Reserved field
+                  &dwKeyType,                 // Returns the field type
+                  (LPBYTE) &dwKeyValue,       // Returns the field's value
+                  &dwKeySize );               // Number of bytes transferred
 
     if ((lReturn == ERROR_SUCCESS) && (dwKeyType == REG_DWORD))
     {
@@ -183,7 +188,7 @@ PerflogReadModuleLevel(
 BOOL PerflogInitIfEnabled(
     IN HINSTANCE hInstance,
     __in IN PPERFLOG_LOGGING_PARAMS LogParams
-    )
+)
 {
     PerflogReadModuleLevel( hInstance );
     if (PerflogModuleLevel)
@@ -199,7 +204,7 @@ BOOL PerflogInitIfEnabled(
 BOOL
 PerflogInitialize (
     __in IN PPERFLOG_LOGGING_PARAMS LogParams
-    )
+)
 {
     ULONG status;
 
@@ -209,7 +214,8 @@ PerflogInitialize (
     //
 
     _Advapi32 = GetModuleHandle (_T("ADVAPI32.DLL"));
-    if (_Advapi32 == NULL) {
+    if (_Advapi32 == NULL)
+    {
         return FALSE;
     }
 
@@ -221,10 +227,11 @@ PerflogInitialize (
     *((FARPROC*) &_TraceEvent) = GetProcAddress (_Advapi32, "TraceEvent");
 
     if (_RegisterTraceGuids == NULL ||
-        _UnregisterTraceGuids == NULL ||
-        _GetTraceEnableLevel == NULL ||
-        _GetTraceEnableFlags == NULL ||
-        _TraceEvent == NULL) {
+            _UnregisterTraceGuids == NULL ||
+            _GetTraceEnableLevel == NULL ||
+            _GetTraceEnableFlags == NULL ||
+            _TraceEvent == NULL)
+    {
 
         return FALSE;
     }
@@ -256,9 +263,10 @@ PerflogInitialize (
 VOID
 PerflogShutdown (
     VOID
-    )
+)
 {
-    if (!EventTracingAvailable) {
+    if (!EventTracingAvailable)
+    {
         return;
     }
 
@@ -279,7 +287,7 @@ PerflogCallback (
     __in PVOID Context,
     __out ULONG* BufferSize,
     __in PVOID Buffer
-    )
+)
 {
     ULONG status;
 
@@ -289,7 +297,8 @@ PerflogCallback (
 
     status = ERROR_SUCCESS;
 
-    switch (RequestCode) {
+    switch (RequestCode)
+    {
 
     case WMI_ENABLE_EVENTS:
         PerflogTraceHandle = _GetTraceLoggerHandle (Buffer);
@@ -307,7 +316,8 @@ PerflogCallback (
         status = ERROR_INVALID_PARAMETER;
     }
 
-    if (OnStateChanged != NULL) {
+    if (OnStateChanged != NULL)
+    {
         OnStateChanged();
     }
 
@@ -322,9 +332,10 @@ PerflogCallback (
 VOID
 PerflogTraceEvent (
     __in PEVENT_TRACE_HEADER Event
-    )
+)
 {
-    if (!EventTracingAvailable) {
+    if (!EventTracingAvailable)
+    {
         return;
     }
 
@@ -335,9 +346,10 @@ VOID
 PerflogTraceEventLevel(
     ULONG Level,
     __in PEVENT_TRACE_HEADER Event
-    )
+)
 {
-    if ((!EventTracingAvailable) || (Level <= PerflogModuleLevel)) {
+    if ((!EventTracingAvailable) || (Level <= PerflogModuleLevel))
+    {
         return;
     }
 

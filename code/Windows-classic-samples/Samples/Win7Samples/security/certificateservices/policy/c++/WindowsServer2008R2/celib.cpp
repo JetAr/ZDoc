@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -42,41 +42,41 @@ ceDecodeObject(
     *pcbStructInfo = 0;
     while (TRUE)
     {
-	b = CryptDecodeObject(
-		    dwEncodingType,
-		    lpszStructType,
-		    pbEncoded,
-		    cbEncoded,
-		    0,                  // dwFlags
-		    *ppvStructInfo,
-		    pcbStructInfo);
-	if (b && 0 == *pcbStructInfo)
-	{
-	    SetLastError((DWORD) HRESULT_FROM_WIN32(ERROR_INVALID_DATA));
-	    b = FALSE;
-	}
-	if (!b)
-	{
-	    if (NULL != *ppvStructInfo)
-	    {
-		HRESULT hr = GetLastError();
+        b = CryptDecodeObject(
+                dwEncodingType,
+                lpszStructType,
+                pbEncoded,
+                cbEncoded,
+                0,                  // dwFlags
+                *ppvStructInfo,
+                pcbStructInfo);
+        if (b && 0 == *pcbStructInfo)
+        {
+            SetLastError((DWORD) HRESULT_FROM_WIN32(ERROR_INVALID_DATA));
+            b = FALSE;
+        }
+        if (!b)
+        {
+            if (NULL != *ppvStructInfo)
+            {
+                HRESULT hr = GetLastError();
 
-		LocalFree(*ppvStructInfo);
-		*ppvStructInfo = NULL;
-		SetLastError(hr);
-	    }
-	    break;
-	}
-	if (NULL != *ppvStructInfo)
-	{
-	    break;
-	}
-	*ppvStructInfo = (BYTE *) LocalAlloc(LMEM_FIXED, *pcbStructInfo);
-	if (NULL == *ppvStructInfo)
-	{
-	    b = FALSE;
-	    break;
-	}
+                LocalFree(*ppvStructInfo);
+                *ppvStructInfo = NULL;
+                SetLastError(hr);
+            }
+            break;
+        }
+        if (NULL != *ppvStructInfo)
+        {
+            break;
+        }
+        *ppvStructInfo = (BYTE *) LocalAlloc(LMEM_FIXED, *pcbStructInfo);
+        if (NULL == *ppvStructInfo)
+        {
+            b = FALSE;
+            break;
+        }
     }
     return(b);
 }
@@ -103,39 +103,39 @@ ceEncodeObject(
     *pcbEncoded = 0;
     while (TRUE)
     {
-	b = CryptEncodeObject(
-		    dwEncodingType,
-		    lpszStructType,
-		    const_cast<VOID *>(pvStructInfo),
-		    *ppbEncoded,
-		    pcbEncoded);
-	if (b && 0 == *pcbEncoded)
-	{
-	    SetLastError((DWORD) HRESULT_FROM_WIN32(ERROR_INVALID_DATA));
-	    b = FALSE;
-	}
-	if (!b)
-	{
-	    if (NULL != *ppbEncoded)
-	    {
-		HRESULT hr = GetLastError();
+        b = CryptEncodeObject(
+                dwEncodingType,
+                lpszStructType,
+                const_cast<VOID *>(pvStructInfo),
+                *ppbEncoded,
+                pcbEncoded);
+        if (b && 0 == *pcbEncoded)
+        {
+            SetLastError((DWORD) HRESULT_FROM_WIN32(ERROR_INVALID_DATA));
+            b = FALSE;
+        }
+        if (!b)
+        {
+            if (NULL != *ppbEncoded)
+            {
+                HRESULT hr = GetLastError();
 
-		LocalFree(*ppbEncoded);
-		*ppbEncoded = NULL;
-		SetLastError(hr);
-	    }
-	    break;
-	}
-	if (NULL != *ppbEncoded)
-	{
-	    break;
-	}
-	*ppbEncoded = (BYTE *) LocalAlloc(LMEM_FIXED, *pcbEncoded);
-	if (NULL == *ppbEncoded)
-	{
-	    b = FALSE;
-	    break;
-	}
+                LocalFree(*ppbEncoded);
+                *ppbEncoded = NULL;
+                SetLastError(hr);
+            }
+            break;
+        }
+        if (NULL != *ppbEncoded)
+        {
+            break;
+        }
+        *ppbEncoded = (BYTE *) LocalAlloc(LMEM_FIXED, *pcbEncoded);
+        if (NULL == *ppbEncoded)
+        {
+            b = FALSE;
+            break;
+        }
     }
     return(b);
 }
@@ -157,17 +157,17 @@ ceGetOIDNameA(
     // If that fails, look it up withoput restricting the group.
 
     pInfo = CryptFindOIDInfo(
-			CRYPT_OID_INFO_OID_KEY,
-			(VOID *) pszObjId,
-			CRYPT_EXT_OR_ATTR_OID_GROUP_ID);
+                CRYPT_OID_INFO_OID_KEY,
+                (VOID *) pszObjId,
+                CRYPT_EXT_OR_ATTR_OID_GROUP_ID);
 
     if (NULL == pInfo || NULL == pInfo->pwszName || L'\0' == pInfo->pwszName[0])
     {
-	pInfo = CryptFindOIDInfo(CRYPT_OID_INFO_OID_KEY, (VOID *) pszObjId, 0);
+        pInfo = CryptFindOIDInfo(CRYPT_OID_INFO_OID_KEY, (VOID *) pszObjId, 0);
     }
     if (NULL != pInfo && NULL != pInfo->pwszName && L'\0' != pInfo->pwszName[0])
     {
-	pwszName = pInfo->pwszName;
+        pwszName = pInfo->pwszName;
     }
     return(pwszName);
 }
@@ -182,14 +182,14 @@ ceGetOIDName(
 
     if (!ceConvertWszToSz(&pszObjId, pwszObjId, -1))
     {
-	_JumpError(E_OUTOFMEMORY, error, "ceConvertWszToSz");
+        _JumpError(E_OUTOFMEMORY, error, "ceConvertWszToSz");
     }
     pwszName = ceGetOIDNameA(pszObjId);
 
 error:
     if (NULL != pszObjId)
     {
-	LocalFree(pszObjId);
+        LocalFree(pszObjId);
     }
     return(pwszName);
 }
@@ -203,11 +203,11 @@ ceDuplicateString(
     size_t len = wcslen(pwsz) + 1;
 
     pwszOut = (WCHAR *) LocalAlloc(
-				LMEM_FIXED,
-				len * sizeof(pwsz[0]));
+                  LMEM_FIXED,
+                  len * sizeof(pwsz[0]));
     if (NULL != pwszOut)
     {
-	StringCchCopy(pwszOut, len, pwsz);
+        StringCchCopy(pwszOut, len, pwsz);
     }
     return(pwszOut);
 }
@@ -225,38 +225,38 @@ ceConvertWszToSz(
     *ppsz = NULL;
     while (TRUE)
     {
-	cch = WideCharToMultiByte(
-			GetACP(),
-			0,          // dwFlags
-			pwc,
-			cwc,        // cchWideChar, -1 => null terminated
-			*ppsz,
-			cch,
-			NULL,
-			NULL);
-	if (0 >= cch)
-	{
-	    DWORD err;
+        cch = WideCharToMultiByte(
+                  GetACP(),
+                  0,          // dwFlags
+                  pwc,
+                  cwc,        // cchWideChar, -1 => null terminated
+                  *ppsz,
+                  cch,
+                  NULL,
+                  NULL);
+        if (0 >= cch)
+        {
+            DWORD err;
 
-	    err = GetLastError();
-	    ceERRORPRINTLINE("WideCharToMultiByte", err);
-	    if (NULL != *ppsz)
-	    {
-		LocalFree(*ppsz);
-		*ppsz = NULL;
-	    }
-	    break;
-	}
-	if (NULL != *ppsz)
-	{
-	    fOk = TRUE;
-	    break;
-	}
-	*ppsz = (CHAR *) LocalAlloc(LMEM_FIXED, cch + 1);
-	if (NULL == *ppsz)
-	{
-	    break;
-	}
+            err = GetLastError();
+            ceERRORPRINTLINE("WideCharToMultiByte", err);
+            if (NULL != *ppsz)
+            {
+                LocalFree(*ppsz);
+                *ppsz = NULL;
+            }
+            break;
+        }
+        if (NULL != *ppsz)
+        {
+            fOk = TRUE;
+            break;
+        }
+        *ppsz = (CHAR *) LocalAlloc(LMEM_FIXED, cch + 1);
+        if (NULL == *ppsz)
+        {
+            break;
+        }
     }
     return(fOk);
 }
@@ -274,22 +274,23 @@ ceConvertWszToBstr(
     ceFreeBstr(pbstr);
     do
     {
-	bstr = NULL;
-	if (NULL != pwc)
-	{
-	    if (-1 == cb)
-	    {
-		cb = (DWORD)wcslen(pwc) * sizeof(WCHAR);
-	    }
-	    bstr = SysAllocStringByteLen((char const *) pwc, cb);
-	    if (NULL == bstr)
-	    {
-		break;
-	    }
-	}
-	*pbstr = bstr;
-	fOk = TRUE;
-    } while (FALSE);
+        bstr = NULL;
+        if (NULL != pwc)
+        {
+            if (-1 == cb)
+            {
+                cb = (DWORD)wcslen(pwc) * sizeof(WCHAR);
+            }
+            bstr = SysAllocStringByteLen((char const *) pwc, cb);
+            if (NULL == bstr)
+            {
+                break;
+            }
+        }
+        *pbstr = bstr;
+        fOk = TRUE;
+    }
+    while (FALSE);
     return(fOk);
 }
 
@@ -306,30 +307,30 @@ ceConvertSzToWsz(
     *ppwsz = NULL;
     while (TRUE)
     {
-	cwc = MultiByteToWideChar(GetACP(), 0, pch, cch, *ppwsz, cwc);
-	if (0 >= cwc)
-	{
-	    DWORD err;
+        cwc = MultiByteToWideChar(GetACP(), 0, pch, cch, *ppwsz, cwc);
+        if (0 >= cwc)
+        {
+            DWORD err;
 
-	    err = GetLastError();
-	    ceERRORPRINTLINE("MultiByteToWideChar", err);
-	    if (NULL != *ppwsz)
-	    {
-		LocalFree(*ppwsz);
-		*ppwsz = NULL;
-	    }
-	    break;
-	}
-	if (NULL != *ppwsz)
-	{
-	    fOk = TRUE;
-	    break;
-	}
-	*ppwsz = (WCHAR *) LocalAlloc(LMEM_FIXED, (cwc + 1) * sizeof(WCHAR));
-	if (NULL == *ppwsz)
-	{
-	    break;
-	}
+            err = GetLastError();
+            ceERRORPRINTLINE("MultiByteToWideChar", err);
+            if (NULL != *ppwsz)
+            {
+                LocalFree(*ppwsz);
+                *ppwsz = NULL;
+            }
+            break;
+        }
+        if (NULL != *ppwsz)
+        {
+            fOk = TRUE;
+            break;
+        }
+        *ppwsz = (WCHAR *) LocalAlloc(LMEM_FIXED, (cwc + 1) * sizeof(WCHAR));
+        if (NULL == *ppwsz)
+        {
+            break;
+        }
     }
     return(fOk);
 }
@@ -348,29 +349,29 @@ ceConvertSzToBstr(
     ceFreeBstr(pbstr);
     if (-1 == cch)
     {
-	cch = (LONG)strlen(pch);
+        cch = (LONG)strlen(pch);
     }
     while (TRUE)
     {
-	cwc = MultiByteToWideChar(GetACP(), 0, pch, cch, bstr, cwc);
-	if (0 >= cwc)
-	{
-	    //hr = ceHLastError();
-	    //printf("MultiByteToWideChar returned %d (%x)\n", hr, hr);
-	    break;
-	}
-	if (!IsNullBStr(bstr))
-	{
-	    bstr[cwc] = L'\0';
-	    *pbstr = bstr;
-	    fOk = TRUE;
-	    break;
-	}
-	bstr = SysAllocStringLen(NULL, cwc);
-	if (NULL == bstr)
-	{
-	    break;
-	}
+        cwc = MultiByteToWideChar(GetACP(), 0, pch, cch, bstr, cwc);
+        if (0 >= cwc)
+        {
+            //hr = ceHLastError();
+            //printf("MultiByteToWideChar returned %d (%x)\n", hr, hr);
+            break;
+        }
+        if (!IsNullBStr(bstr))
+        {
+            bstr[cwc] = L'\0';
+            *pbstr = bstr;
+            fOk = TRUE;
+            break;
+        }
+        bstr = SysAllocStringLen(NULL, cwc);
+        if (NULL == bstr)
+        {
+            break;
+        }
     }
     return(fOk);
 }
@@ -394,12 +395,12 @@ ceHError(
     if (S_OK != hr && S_FALSE != hr && !FAILED(hr))
     {
         hr = HRESULT_FROM_WIN32(hr);
-	if ((HRESULT) 0 == HRESULT_CODE(hr))
-	{
-	    // A call failed without properly setting an error condition!
-	    hr = E_UNEXPECTED;
-	}
-	assert(FAILED(hr));
+        if ((HRESULT) 0 == HRESULT_CODE(hr))
+        {
+            // A call failed without properly setting an error condition!
+            hr = E_UNEXPECTED;
+        }
+        assert(FAILED(hr));
     }
     return(hr);
 }
@@ -424,20 +425,20 @@ ceErrorPrintLine(
     HRESULT hr2;
 
     hr2 = StringCbPrintfA(
-		ach,
-		sizeof(ach),
-		"CeLib: Error: %hs(%u): %hs%hs%ws%hs 0x%x (%d)\n",
-		pszFile,
-		line,
-		pszMessage,
-		NULL == pwszData? "" : szLPAREN,
-		NULL == pwszData? L"" : pwszData,
-		NULL == pwszData? "" : szRPAREN,
-		hr,
-		hr);
+              ach,
+              sizeof(ach),
+              "CeLib: Error: %hs(%u): %hs%hs%ws%hs 0x%x (%d)\n",
+              pszFile,
+              line,
+              pszMessage,
+              NULL == pwszData? "" : szLPAREN,
+              NULL == pwszData? L"" : pwszData,
+              NULL == pwszData? "" : szRPAREN,
+              hr,
+              hr);
     if (STRSAFE_E_INSUFFICIENT_BUFFER == hr2)
     {
-	StringCbCopyA(&ach[sizeof(ach) - 5], 5, "...\n");
+        StringCbCopyA(&ach[sizeof(ach) - 5], 5, "...\n");
     }
     OutputDebugStringA(ach);
     fprintf(stderr, "%hs", ach);
@@ -459,11 +460,11 @@ ceDateToFileTime(
     }
     else
     {
-	if (!VariantTimeToSystemTime(*pDate, &st))
-	{
-	    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
-	    _JumpError(hr, error, "VariantTimeToSystemTime");
-	}
+        if (!VariantTimeToSystemTime(*pDate, &st))
+        {
+            hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
+            _JumpError(hr, error, "VariantTimeToSystemTime");
+        }
     }
 
     if (!SystemTimeToFileTime(&st, pft))
@@ -516,49 +517,58 @@ ceMakeExprDateTime(
     fSysTimeDelta = FALSE;
     switch (enumPeriod)
     {
-	case ENUM_PERIOD_WEEKS:   llDelta *= CVT_WEEKS;    break;
-	case ENUM_PERIOD_DAYS:    llDelta *= CVT_DAYS;     break;
-	case ENUM_PERIOD_HOURS:   llDelta *= CVT_HOURS;    break;
-	case ENUM_PERIOD_MINUTES: llDelta *= CVT_MINUTES;  break;
-	case ENUM_PERIOD_SECONDS: 			   break;
-	default:
-	    fSysTimeDelta = TRUE;
-	    break;
+    case ENUM_PERIOD_WEEKS:
+        llDelta *= CVT_WEEKS;
+        break;
+    case ENUM_PERIOD_DAYS:
+        llDelta *= CVT_DAYS;
+        break;
+    case ENUM_PERIOD_HOURS:
+        llDelta *= CVT_HOURS;
+        break;
+    case ENUM_PERIOD_MINUTES:
+        llDelta *= CVT_MINUTES;
+        break;
+    case ENUM_PERIOD_SECONDS:
+        break;
+    default:
+        fSysTimeDelta = TRUE;
+        break;
     }
     if (fSysTimeDelta)
     {
-	SYSTEMTIME SystemTime;
+        SYSTEMTIME SystemTime;
 
-	FileTimeToSystemTime(&llft.ft, &SystemTime);
-	switch (enumPeriod)
-	{
-	    case ENUM_PERIOD_MONTHS:
-		if (0 > lDelta)
-		{
-		    DWORD dwDelta = (DWORD) -lDelta;
+        FileTimeToSystemTime(&llft.ft, &SystemTime);
+        switch (enumPeriod)
+        {
+        case ENUM_PERIOD_MONTHS:
+            if (0 > lDelta)
+            {
+                DWORD dwDelta = (DWORD) -lDelta;
 
-		    SystemTime.wYear -= (WORD) (dwDelta / 12) + 1;
-		    SystemTime.wMonth += 12 - (WORD) (dwDelta % 12);
-		}
-		else
-		{
-		    SystemTime.wMonth = (WORD) lDelta + SystemTime.wMonth;
-		}
-		if (12 < SystemTime.wMonth)
-		{
-		    SystemTime.wYear += (SystemTime.wMonth - 1) / 12;
-		    SystemTime.wMonth = ((SystemTime.wMonth - 1) % 12) + 1;
-		}
-		break;
+                SystemTime.wYear -= (WORD) (dwDelta / 12) + 1;
+                SystemTime.wMonth += 12 - (WORD) (dwDelta % 12);
+            }
+            else
+            {
+                SystemTime.wMonth = (WORD) lDelta + SystemTime.wMonth;
+            }
+            if (12 < SystemTime.wMonth)
+            {
+                SystemTime.wYear += (SystemTime.wMonth - 1) / 12;
+                SystemTime.wMonth = ((SystemTime.wMonth - 1) % 12) + 1;
+            }
+            break;
 
-	    case ENUM_PERIOD_YEARS:
-		SystemTime.wYear = (WORD) lDelta + SystemTime.wYear;
-		break;
+        case ENUM_PERIOD_YEARS:
+            SystemTime.wYear = (WORD) lDelta + SystemTime.wYear;
+            break;
 
-	    default:
-		SystemTime.wYear += 1;
-		break;
-	}
+        default:
+            SystemTime.wYear += 1;
+            break;
+        }
 
 DoConvert:
         if (!SystemTimeToFileTime(&SystemTime, &llft.ft))
@@ -607,7 +617,7 @@ DoConvert:
     }
     else
     {
-	llft.ll += llDelta * CVT_BASE;
+        llft.ll += llDelta * CVT_BASE;
     }
     *pft = llft.ft;
 }
@@ -667,17 +677,17 @@ ceTranslatePeriodUnits(
 
     for (put = g_aut; put < &g_aut[CUNITSTABLEMAX]; put++)
     {
-	if (0 == celstrcmpiL(pwszPeriod, put->pwszString))
-	{
-	    *penumPeriod = put->enumPeriod;
-	    if (0 > lCount)
-	    {
-		lCount = MAXLONG;
-	    }
-	    *plCount = lCount;
-	    hr = S_OK;
-	    goto error;
-	}
+        if (0 == celstrcmpiL(pwszPeriod, put->pwszString))
+        {
+            *penumPeriod = put->enumPeriod;
+            if (0 > lCount)
+            {
+                lCount = MAXLONG;
+            }
+            *plCount = lCount;
+            hr = S_OK;
+            goto error;
+        }
     }
     hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
@@ -716,88 +726,88 @@ ceVerifyObjIdA(
     ainfo.rgValue = NULL;
 
     if (!ceEncodeObject(
-		    X509_ASN_ENCODING,
-		    PKCS_ATTRIBUTE,
-		    &ainfo,
-		    0,
-		    FALSE,
-		    &pbEncoded,
-		    &cbEncoded))
+                X509_ASN_ENCODING,
+                PKCS_ATTRIBUTE,
+                &ainfo,
+                0,
+                FALSE,
+                &pbEncoded,
+                &cbEncoded))
     {
-	hr = ceHLastError();
-	_JumpError(hr, error, "ceEncodeObject");
+        hr = ceHLastError();
+        _JumpError(hr, error, "ceEncodeObject");
     }
 
     if (!ceDecodeObject(
-		    X509_ASN_ENCODING,
-		    PKCS_ATTRIBUTE,
-		    pbEncoded,
-		    cbEncoded,
-		    FALSE,
-		    (VOID **) &painfo,
-		    &cbainfo))
+                X509_ASN_ENCODING,
+                PKCS_ATTRIBUTE,
+                pbEncoded,
+                cbEncoded,
+                FALSE,
+                (VOID **) &painfo,
+                &cbainfo))
     {
-	hr = ceHLastError();
-	_JumpError(hr, error, "ceDecodeObject");
+        hr = ceHLastError();
+        _JumpError(hr, error, "ceDecodeObject");
     }
 
     hr = E_INVALIDARG;
     if (0 != strcmp(ainfo.pszObjId, painfo->pszObjId))
     {
-	_JumpError(hr, error, "bad ObjId: decode mismatch");
+        _JumpError(hr, error, "bad ObjId: decode mismatch");
     }
     for (psz = painfo->pszObjId; '\0' != *psz; psz++)
     {
-	// must be a digit or a dot separator
+        // must be a digit or a dot separator
 
-	if (!isdigit((unsigned char)*psz))
-	{
-	    if ('.' != *psz)
-	    {
-		_JumpError(hr, error, "bad ObjId: bad char");
-	    }
+        if (!isdigit((unsigned char)*psz))
+        {
+            if ('.' != *psz)
+            {
+                _JumpError(hr, error, "bad ObjId: bad char");
+            }
 
-	    // can't have dot at start, double dots or dot at end
+            // can't have dot at start, double dots or dot at end
 
-	    if (psz == painfo->pszObjId || '.' == psz[1] || '\0' == psz[1])
-	    {
-		_JumpError(hr, error, "bad ObjId: dot location");
-	    }
-	}
+            if (psz == painfo->pszObjId || '.' == psz[1] || '\0' == psz[1])
+            {
+                _JumpError(hr, error, "bad ObjId: dot location");
+            }
+        }
     }
     psz = strchr(painfo->pszObjId, '.');
     if (NULL == psz)
     {
-	_JumpError(hr, error, "bad ObjId: must have at least one dot");
+        _JumpError(hr, error, "bad ObjId: must have at least one dot");
     }
     i = atoi(painfo->pszObjId);
     switch (i)
     {
-	case 0:
-	case 1:
-	    i = atoi(++psz);
-	    if (0 > i || 39 < i)
-	    {
-		_JumpError(hr, error, "bad ObjId: 0. or 1. must be followed by 0..39");
-	    }
-	    break;
+    case 0:
+    case 1:
+        i = atoi(++psz);
+        if (0 > i || 39 < i)
+        {
+            _JumpError(hr, error, "bad ObjId: 0. or 1. must be followed by 0..39");
+        }
+        break;
 
-	case 2:
-	    break;
+    case 2:
+        break;
 
-	default:
-	    _JumpError(hr, error, "bad ObjId: must start with 0, 1 or 2");
+    default:
+        _JumpError(hr, error, "bad ObjId: must start with 0, 1 or 2");
     }
     hr = S_OK;
 
 error:
     if (NULL != pbEncoded)
     {
-    	LocalFree(pbEncoded);
+        LocalFree(pbEncoded);
     }
     if (NULL != painfo)
     {
-    	LocalFree(painfo);
+        LocalFree(painfo);
     }
     return(hr);
 }
@@ -812,8 +822,8 @@ ceVerifyObjId(
 
     if (!ceConvertWszToSz(&pszObjId, pwszObjId, -1))
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "ceConvertWszToSz");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "ceConvertWszToSz");
     }
     hr = ceVerifyObjIdA(pszObjId);
     _JumpIfErrorStr(hr, error, "ceVerifyObjIdA", pwszObjId);
@@ -821,7 +831,7 @@ ceVerifyObjId(
 error:
     if (NULL != pszObjId)
     {
-    	LocalFree(pszObjId);
+        LocalFree(pszObjId);
     }
     return(hr);
 }
@@ -834,18 +844,18 @@ ceFreeStringArrayA(
 
     if (NULL != apsz)
     {
-	for (ppsz = apsz; NULL != *ppsz; ppsz++)
-	{
-	    LocalFree(*ppsz);
-	}
-	LocalFree(apsz);
+        for (ppsz = apsz; NULL != *ppsz; ppsz++)
+        {
+            LocalFree(*ppsz);
+        }
+        LocalFree(apsz);
     }
 }
 
 HRESULT
 ceVerifyAndConvertWszToSzObjIds(
     __in_opt CSPZZWSTR ppwszObjIds,
-   __out DWORD* pdwcObjIds,
+    __out DWORD* pdwcObjIds,
     __deref_out PZPSTR *pppszObjIds)
 {
     HRESULT hr;
@@ -934,72 +944,72 @@ ceVerifyAltNameString(
 
     switch (NameChoice)
     {
-	case CERT_ALT_NAME_RFC822_NAME:
-	    Entry.pwszRfc822Name = strName;
-	    break;
+    case CERT_ALT_NAME_RFC822_NAME:
+        Entry.pwszRfc822Name = strName;
+        break;
 
-	case CERT_ALT_NAME_DNS_NAME:
-	    Entry.pwszDNSName = strName;
-	    break;
+    case CERT_ALT_NAME_DNS_NAME:
+        Entry.pwszDNSName = strName;
+        break;
 
-	case CERT_ALT_NAME_URL:
-	    Entry.pwszURL = strName;
-	    break;
+    case CERT_ALT_NAME_URL:
+        Entry.pwszURL = strName;
+        break;
 
-	case CERT_ALT_NAME_REGISTERED_ID:
-	    if (!ceConvertWszToSz(&pszObjectId, strName, -1))
-	    {
-		hr = E_OUTOFMEMORY;
-		ceERRORPRINTLINE("ceConvertWszToSz", hr);
-		goto error;
-	    }
-	    Entry.pszRegisteredID = pszObjectId;
-	    break;
+    case CERT_ALT_NAME_REGISTERED_ID:
+        if (!ceConvertWszToSz(&pszObjectId, strName, -1))
+        {
+            hr = E_OUTOFMEMORY;
+            ceERRORPRINTLINE("ceConvertWszToSz", hr);
+            goto error;
+        }
+        Entry.pszRegisteredID = pszObjectId;
+        break;
 
-	case CERT_ALT_NAME_OTHER_NAME:
-	    Entry.pOtherName = &OtherName;
-	    OtherName.pszObjId = szOID_NT_PRINCIPAL_NAME;
-	    OtherName.Value.cbData = SysStringByteLen(strName);
-	    OtherName.Value.pbData = (BYTE *) strName;
-	    break;
+    case CERT_ALT_NAME_OTHER_NAME:
+        Entry.pOtherName = &OtherName;
+        OtherName.pszObjId = szOID_NT_PRINCIPAL_NAME;
+        OtherName.Value.cbData = SysStringByteLen(strName);
+        OtherName.Value.pbData = (BYTE *) strName;
+        break;
 
-	case CERT_ALT_NAME_DIRECTORY_NAME:
-	    Entry.DirectoryName.cbData = SysStringByteLen(strName);
-	    Entry.DirectoryName.pbData = (BYTE *) strName;
-	    break;
+    case CERT_ALT_NAME_DIRECTORY_NAME:
+        Entry.DirectoryName.cbData = SysStringByteLen(strName);
+        Entry.DirectoryName.pbData = (BYTE *) strName;
+        break;
 
-	case CERT_ALT_NAME_IP_ADDRESS:
-	    Entry.IPAddress.cbData = SysStringByteLen(strName);
-	    Entry.IPAddress.pbData = (BYTE *) strName;
-	    break;
+    case CERT_ALT_NAME_IP_ADDRESS:
+        Entry.IPAddress.cbData = SysStringByteLen(strName);
+        Entry.IPAddress.pbData = (BYTE *) strName;
+        break;
 
-	//case CERT_ALT_NAME_X400_ADDRESS:
-	//case CERT_ALT_NAME_EDI_PARTY_NAME:
-	default:
-	    hr = E_INVALIDARG;
-	    ceERRORPRINTLINE("NameChoice", hr);
-	    goto error;
+    //case CERT_ALT_NAME_X400_ADDRESS:
+    //case CERT_ALT_NAME_EDI_PARTY_NAME:
+    default:
+        hr = E_INVALIDARG;
+        ceERRORPRINTLINE("NameChoice", hr);
+        goto error;
 
     }
 
     // Encode CERT_ALT_NAME_INFO:
 
     if (!CryptEncodeObject(
-		    X509_ASN_ENCODING,
-		    X509_ALTERNATE_NAME,
-		    &AltName,
-		    NULL,
-		    &cbEncoded))
+                X509_ASN_ENCODING,
+                X509_ALTERNATE_NAME,
+                &AltName,
+                NULL,
+                &cbEncoded))
     {
-	hr = ceHLastError();
-	ceERRORPRINTLINE("ceEncodeObject", hr);
-	goto error;
+        hr = ceHLastError();
+        ceERRORPRINTLINE("ceEncodeObject", hr);
+        goto error;
     }
 
 error:
     if (NULL != pszObjectId)
     {
-	LocalFree(pszObjectId);
+        LocalFree(pszObjectId);
     }
     return(hr);
 }
@@ -1022,7 +1032,7 @@ ceDispatchSetErrorInfoSub(
 
     if (NULL != pwszIDispatchMethod)
     {
-	pwszError = ceGetErrorMessageText(hrError, TRUE);
+        pwszError = ceGetErrorMessageText(hrError, TRUE);
     }
 
     hr = CreateErrorInfo(&pCreateErrorInfo);
@@ -1030,32 +1040,32 @@ ceDispatchSetErrorInfoSub(
 
     if (NULL != piid)
     {
-	hr = pCreateErrorInfo->SetGUID(*piid);
-	_PrintIfError(hr, "SetGUID");
+        hr = pCreateErrorInfo->SetGUID(*piid);
+        _PrintIfError(hr, "SetGUID");
     }
     if (NULL != pwszSource)
     {
-	hr = pCreateErrorInfo->SetSource(const_cast<WCHAR *>(pwszSource));
-	_PrintIfError(hr, "SetSource");
+        hr = pCreateErrorInfo->SetSource(const_cast<WCHAR *>(pwszSource));
+        _PrintIfError(hr, "SetSource");
     }
     if (NULL != pwszDescription)
     {
-	hr = pCreateErrorInfo->SetDescription(
-					const_cast<WCHAR *>(pwszDescription));
-	_PrintIfError(hr, "SetDescription");
+        hr = pCreateErrorInfo->SetDescription(
+                 const_cast<WCHAR *>(pwszDescription));
+        _PrintIfError(hr, "SetDescription");
     }
     if (NULL != pwszHelpFile)
     {
-	hr = pCreateErrorInfo->SetHelpFile(const_cast<WCHAR *>(pwszHelpFile));
-	_PrintIfError(hr, "SetHelpFile");
+        hr = pCreateErrorInfo->SetHelpFile(const_cast<WCHAR *>(pwszHelpFile));
+        _PrintIfError(hr, "SetHelpFile");
 
-	hr = pCreateErrorInfo->SetHelpContext(dwHelpFileContext);
-	_PrintIfError(hr, "SetHelpContext");
+        hr = pCreateErrorInfo->SetHelpContext(dwHelpFileContext);
+        _PrintIfError(hr, "SetHelpContext");
     }
 
     hr = pCreateErrorInfo->QueryInterface(
-				    IID_IErrorInfo,
-				    (VOID **) &pErrorInfo);
+             IID_IErrorInfo,
+             (VOID **) &pErrorInfo);
     _JumpIfError(hr, error, "QueryInterface");
 
     SetErrorInfo(0, pErrorInfo);
@@ -1064,15 +1074,15 @@ ceDispatchSetErrorInfoSub(
 error:
     if (NULL != pwszError)
     {
-	LocalFree(const_cast<WCHAR *>(pwszError));
+        LocalFree(const_cast<WCHAR *>(pwszError));
     }
     if (NULL != pErrorInfo)
     {
-	pErrorInfo->Release();
+        pErrorInfo->Release();
     }
     if (NULL != pCreateErrorInfo)
     {
-	pCreateErrorInfo->Release();
+        pCreateErrorInfo->Release();
     }
     return(hr);
 }
@@ -1093,50 +1103,50 @@ ceDispatchSetErrorInfo(
     if (NULL == pwszDescription)
     {
         hr = E_POINTER;
-	_JumpError(hr, error, "NULL pointer");
+        _JumpError(hr, error, "NULL pointer");
     }
     assert(FAILED(hrError));
     pwszError = ceGetErrorMessageText(hrError, TRUE);
     if (NULL == pwszError)
     {
-	_PrintError(E_OUTOFMEMORY, "ceGetErrorMessageText");
+        _PrintError(E_OUTOFMEMORY, "ceGetErrorMessageText");
     }
     else
     {
-	len = wcslen(pwszDescription) + 1 + wcslen(pwszError) + 1;
-	pwszText = (WCHAR *) LocalAlloc(
-	    LMEM_FIXED,
-	    len * sizeof(WCHAR));
-	if (NULL == pwszText)
-	{
-	    _PrintError(E_OUTOFMEMORY, "LocalAlloc");
-	}
-	else
-	{
-	    StringCchCopy(pwszText, len, pwszDescription);
-	    StringCchCat(pwszText, len, L" ");
-	    StringCchCat(pwszText, len, pwszError);
-	}
+        len = wcslen(pwszDescription) + 1 + wcslen(pwszError) + 1;
+        pwszText = (WCHAR *) LocalAlloc(
+                       LMEM_FIXED,
+                       len * sizeof(WCHAR));
+        if (NULL == pwszText)
+        {
+            _PrintError(E_OUTOFMEMORY, "LocalAlloc");
+        }
+        else
+        {
+            StringCchCopy(pwszText, len, pwszDescription);
+            StringCchCat(pwszText, len, L" ");
+            StringCchCat(pwszText, len, pwszError);
+        }
     }
     hr = ceDispatchSetErrorInfoSub(
-			hrError,
-			NULL,		// pwszIDispatchMethod
-			NULL != pwszText?
-			    pwszText : const_cast<WCHAR *>(pwszDescription),
-			pwszProgId,
-			piid,
-			NULL,		// pwszHelpFile
-			0);		// dwHelpFileContext
+             hrError,
+             NULL,		// pwszIDispatchMethod
+             NULL != pwszText?
+             pwszText : const_cast<WCHAR *>(pwszDescription),
+             pwszProgId,
+             piid,
+             NULL,		// pwszHelpFile
+             0);		// dwHelpFileContext
     _PrintIfError(hr, "ceDispatchSetErrorInfoSub");
 
 error:
     if (NULL != pwszText)
     {
-	LocalFree(pwszText);
+        LocalFree(pwszText);
     }
     if (NULL != pwszError)
     {
-	LocalFree(const_cast<WCHAR *>(pwszError));
+        LocalFree(const_cast<WCHAR *>(pwszError));
     }
     return(hrError);	// return input error!
 }
@@ -1164,11 +1174,11 @@ ceWtoI(
 
     assert(NULL != pfValid);
     cTmp = FoldString(
-        MAP_FOLDDIGITS,
-        string,
-        -1,
-        szTmp,
-        cTmp);
+               MAP_FOLDDIGITS,
+               string,
+               -1,
+               szTmp,
+               cTmp);
     if (cTmp == 0)
     {
         hr = ceHLastError();
@@ -1176,25 +1186,25 @@ ceWtoI(
         {
             hr = S_OK;
             cTmp = FoldString(
-                MAP_FOLDDIGITS,
-                string,
-                -1,
-                NULL,
-                0);
+                       MAP_FOLDDIGITS,
+                       string,
+                       -1,
+                       NULL,
+                       0);
 
             szTmp = (WCHAR*)LocalAlloc(LMEM_FIXED, cTmp*sizeof(WCHAR));
-	    if (NULL == szTmp)
-	    {
-		hr = E_OUTOFMEMORY;
-		_JumpError(hr, error, "LocalAlloc");
-	    }
+            if (NULL == szTmp)
+            {
+                hr = E_OUTOFMEMORY;
+                _JumpError(hr, error, "LocalAlloc");
+            }
 
             cTmp = FoldString(
-                MAP_FOLDDIGITS,
-                string,
-                -1,
-                szTmp,
-                cTmp);
+                       MAP_FOLDDIGITS,
+                       string,
+                       -1,
+                       szTmp,
+                       cTmp);
 
             if (cTmp == 0)
                 hr = ceHLastError();
@@ -1204,31 +1214,31 @@ ceWtoI(
     pwsz = szTmp;
     if (NULL == pwsz)
     {
-	hr = E_UNEXPECTED;
-	_JumpError(hr, error, "internal error");
+        hr = E_UNEXPECTED;
+        _JumpError(hr, error, "internal error");
     }
     while (iswspace(*pwsz))
     {
-	pwsz++;
+        pwsz++;
     }
     while (iswdigit(*pwsz))
     {
-	fSawDigit = TRUE;
-	pwsz++;
+        fSawDigit = TRUE;
+        pwsz++;
     }
     while (iswspace(*pwsz))
     {
-	pwsz++;
+        pwsz++;
     }
     if (L'\0' == *pwsz)
     {
-	*pfValid = fSawDigit;
+        *pfValid = fSawDigit;
     }
     i = _wtoi(szTmp);
 
 error:
     if (szTmp && (szTmp != szBuf))
-       LocalFree(szTmp);
+        LocalFree(szTmp);
 
     return i;
 }
@@ -1246,35 +1256,35 @@ ceGetMachineDnsName(
     *ppwszDnsName = NULL;
     while (TRUE)
     {
-	cwc = 0;
-	if (!GetComputerNameEx(NameType, NULL, &cwc))
-	{
-	    hr = ceHLastError();
-	    if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr &&
-		ComputerNameDnsFullyQualified == NameType)
-	    {
-		_PrintError(hr, "GetComputerNameEx(DnsFullyQualified) -- switching to NetBIOS");
-		NameType = ComputerNameNetBIOS;
-		continue;
-	    }
-	    if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
-	    {
-		_JumpError(hr, error, "GetComputerNameEx");
-	    }
-	    break;
-	}
+        cwc = 0;
+        if (!GetComputerNameEx(NameType, NULL, &cwc))
+        {
+            hr = ceHLastError();
+            if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr &&
+                    ComputerNameDnsFullyQualified == NameType)
+            {
+                _PrintError(hr, "GetComputerNameEx(DnsFullyQualified) -- switching to NetBIOS");
+                NameType = ComputerNameNetBIOS;
+                continue;
+            }
+            if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
+            {
+                _JumpError(hr, error, "GetComputerNameEx");
+            }
+            break;
+        }
     }
     pwszDnsName = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
     if (NULL == pwszDnsName)
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "LocalAlloc");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "LocalAlloc");
     }
 
     if (!GetComputerNameEx(NameType, pwszDnsName, &cwc))
     {
-	hr = ceHLastError();
-	_JumpError(hr, error, "GetComputerNameEx");
+        hr = ceHLastError();
+        _JumpError(hr, error, "GetComputerNameEx");
     }
 
     *ppwszDnsName = pwszDnsName;
@@ -1284,7 +1294,7 @@ ceGetMachineDnsName(
 error:
     if (NULL != pwszDnsName)
     {
-	LocalFree(pwszDnsName);
+        LocalFree(pwszDnsName);
     }
     return(hr);
 }
@@ -1306,8 +1316,8 @@ ceGetComputerNames(
     pwszOldName = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
     if (NULL == pwszOldName)
     {
-	    hr = E_OUTOFMEMORY;
-	    _JumpError(hr, error, "LocalAlloc");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "LocalAlloc");
     }
     if (!GetComputerName(pwszOldName, &cwc))
     {
@@ -1324,7 +1334,7 @@ ceGetComputerNames(
 error:
     if (NULL != pwszOldName)
     {
-	LocalFree(pwszOldName);
+        LocalFree(pwszOldName);
     }
     return(hr);
 }
@@ -1346,47 +1356,47 @@ _IsConfigLocal(
     *pfLocal = FALSE;
     if (NULL != ppwszMachine)
     {
-	*ppwszMachine = NULL;
+        *ppwszMachine = NULL;
     }
 
     while (L'\\' == *pwszConfig)
     {
-	pwszConfig++;
+        pwszConfig++;
     }
     pwsz = wcschr(pwszConfig, L'\\');
     if (NULL != pwsz)
     {
-	cwc = SAFE_SUBTRACT_POINTERS(pwsz, pwszConfig);
+        cwc = SAFE_SUBTRACT_POINTERS(pwsz, pwszConfig);
     }
     else
     {
-	cwc = wcslen(pwszConfig);
+        cwc = wcslen(pwszConfig);
     }
     pwszMachine = (WCHAR *) LocalAlloc(LMEM_FIXED, (cwc + 1) * sizeof(WCHAR));
     if (NULL == pwszMachine)
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "LocalAlloc");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "LocalAlloc");
     }
     CopyMemory(pwszMachine, pwszConfig, cwc * sizeof(WCHAR));
     pwszMachine[cwc] = L'\0';
 
     if (0 == celstrcmpiL(pwszMachine, pwszDnsName) ||
-	0 == celstrcmpiL(pwszMachine, pwszOldName))
+            0 == celstrcmpiL(pwszMachine, pwszOldName))
     {
-	*pfLocal = TRUE;
+        *pfLocal = TRUE;
     }
     if (NULL != ppwszMachine)
     {
-	*ppwszMachine = pwszMachine;
-	pwszMachine = NULL;
+        *ppwszMachine = pwszMachine;
+        pwszMachine = NULL;
     }
     hr = S_OK;
 
 error:
     if (NULL != pwszMachine)
     {
-	LocalFree(pwszMachine);
+        LocalFree(pwszMachine);
     }
     return(hr);
 }
@@ -1405,28 +1415,28 @@ ceIsConfigLocal(
     *pfLocal = FALSE;
     if (NULL != ppwszMachine)
     {
-	*ppwszMachine = NULL;
+        *ppwszMachine = NULL;
     }
 
     hr = ceGetComputerNames(&pwszDnsName, &pwszOldName);
     _JumpIfError(hr, error, "ceGetComputerNames");
 
     hr = _IsConfigLocal(
-		    pwszConfig,
-		    pwszDnsName,
-		    pwszOldName,
-		    ppwszMachine,
-		    pfLocal);
+             pwszConfig,
+             pwszDnsName,
+             pwszOldName,
+             ppwszMachine,
+             pfLocal);
     _JumpIfError(hr, error, "_IsConfigLocal");
 
 error:
     if (NULL != pwszDnsName)
     {
-	LocalFree(pwszDnsName);
+        LocalFree(pwszDnsName);
     }
     if (NULL != pwszOldName)
     {
-	LocalFree(pwszOldName);
+        LocalFree(pwszOldName);
     }
     return(hr);
 }
@@ -1447,24 +1457,24 @@ ceBuildPathAndExt(
     cwc = wcslen(pwszDir) + 1 + wcslen(pwszFile) + 1;
     if (NULL != pwszExt)
     {
-	cwc += wcslen(pwszExt);
+        cwc += wcslen(pwszExt);
     }
 
     pwsz = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
     if (NULL == pwsz)
     {
-	hr = E_OUTOFMEMORY;
-	_JumpError(hr, error, "LocalAlloc");
+        hr = E_OUTOFMEMORY;
+        _JumpError(hr, error, "LocalAlloc");
     }
     StringCchCopy(pwsz, cwc, pwszDir);
     if (L'\\' != pwsz[wcslen(pwsz) - 1])
     {
-	StringCchCat(pwsz, cwc, L"\\");
+        StringCchCat(pwsz, cwc, L"\\");
     }
     StringCchCat(pwsz, cwc, pwszFile);
     if (NULL != pwszExt)
     {
-	StringCchCat(pwsz, cwc, pwszExt);
+        StringCchCat(pwsz, cwc, pwszExt);
     }
     *ppwszPath = pwsz;
     hr = S_OK;
@@ -1486,13 +1496,13 @@ celstrcmpiL(
     // CSTR_GREATER_THAN(3) - CSTR_EQUAL(2) == 1 string 1 greater than string 2
 
     return(CompareString(
-		LOCALE_INVARIANT,
-		NORM_IGNORECASE,
-		pwsz1,
-		-1,
-		pwsz2,
-		-1) -
-	    CSTR_EQUAL);
+               LOCALE_INVARIANT,
+               NORM_IGNORECASE,
+               pwsz1,
+               -1,
+               pwsz2,
+               -1) -
+           CSTR_EQUAL);
 }
 
 
@@ -1527,16 +1537,16 @@ ceLoadSystem32Library(
     if (cwcDir != GetSystemDirectory(pwszPath, cwcDir))
     {
         hr = ceHLastError();
-	if (S_OK == hr)
-	{
-	    hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
-	}
+        if (S_OK == hr)
+        {
+            hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
+        }
         _JumpError(hr, error, "GetSystemDirectory");
     }
 
     if (L'\\' != pwszPath[wcslen(pwszPath) - 1])
     {
-	StringCchCat(pwszPath, cwc + 1, L"\\");
+        StringCchCat(pwszPath, cwc + 1, L"\\");
     }
     StringCchCat(pwszPath, cwc + 1, pwszLibFileName);
 
@@ -1551,12 +1561,12 @@ ceLoadSystem32Library(
 error:
     if (NULL != pwszPath)
     {
-	LocalFree(pwszPath);
+        LocalFree(pwszPath);
     }
     if (NULL == hmod)
     {
-	assert(S_OK != hr);
-	SetLastError(hr);
+        assert(S_OK != hr);
+        SetLastError(hr);
     }
     return(hmod);
 }

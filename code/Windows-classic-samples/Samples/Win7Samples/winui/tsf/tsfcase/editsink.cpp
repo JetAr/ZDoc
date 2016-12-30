@@ -1,4 +1,4 @@
-//
+﻿//
 // editsink.cpp
 //
 // ITfTextEditSink implementation.
@@ -25,7 +25,7 @@ STDAPI CCaseTextService::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly
 
     // did the selection change?
     if (pEditRecord->GetSelectionStatus(&fSelectionChanged) == S_OK &&
-        fSelectionChanged)
+            fSelectionChanged)
     {
         _pSnoopWnd->_UpdateText(ecReadOnly, pContext, NULL);
         return S_OK;

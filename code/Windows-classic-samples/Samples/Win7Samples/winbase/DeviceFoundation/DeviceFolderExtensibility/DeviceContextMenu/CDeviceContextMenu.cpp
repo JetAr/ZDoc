@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -17,7 +17,7 @@
 #include <new>
 
 // Needed before including devpkey.h as there's no lib with the DEVPKEY objects
-#include <initguid.h> 
+#include <initguid.h>
 #include <devpkey.h>
 
 // Sample Headers
@@ -59,9 +59,9 @@ CDeviceContextMenu::~CDeviceContextMenu()
 //      Get the context menu item's display name
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenu::GetTitle(
-    __in IShellItemArray* psiItemArray, 
+    __in IShellItemArray* psiItemArray,
     __out LPWSTR* ppszName
-    ) 
+)
 {
     UNREFERENCED_PARAMETER( psiItemArray );
 
@@ -87,10 +87,10 @@ IFACEMETHODIMP CDeviceContextMenu::GetTitle(
 //      Get the context menu item's icon resource string
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenu::GetIcon(
-    __in IShellItemArray* psiItemArray, 
+    __in IShellItemArray* psiItemArray,
     __out LPWSTR* ppszIcon
-    ) 
-{ 
+)
+{
     UNREFERENCED_PARAMETER( psiItemArray );
 
     // this sample uses the mouse icon
@@ -105,10 +105,10 @@ IFACEMETHODIMP CDeviceContextMenu::GetIcon(
 //      Get the context menu item's tooltip string
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenu::GetToolTip(
-    __in IShellItemArray* psiItemArray, 
+    __in IShellItemArray* psiItemArray,
     __out LPWSTR* ppszInfotip
-    ) 
-{ 
+)
+{
     UNREFERENCED_PARAMETER( psiItemArray );
 
     HRESULT hr = E_FAIL;
@@ -132,8 +132,8 @@ IFACEMETHODIMP CDeviceContextMenu::GetToolTip(
 //
 //      Get the context menu item's canonical name
 //------------------------------------------------------------------------------
-IFACEMETHODIMP CDeviceContextMenu::GetCanonicalName( __out GUID* pguidCommandName ) 
-{ 
+IFACEMETHODIMP CDeviceContextMenu::GetCanonicalName( __out GUID* pguidCommandName )
+{
     *pguidCommandName = __uuidof(DeviceContextMenu);
     return S_OK;
 } // CDeviceContextMenu::GetCanonicalName
@@ -142,13 +142,13 @@ IFACEMETHODIMP CDeviceContextMenu::GetCanonicalName( __out GUID* pguidCommandNam
 //------------------------------------------------------------------------------
 // CDeviceContextMenu::GetState
 //
-//      Get the context menu item's state 
+//      Get the context menu item's state
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenu::GetState(
-    __in_opt IShellItemArray* psiItemArray, 
-    BOOL fOkToBeSlow, 
+    __in_opt IShellItemArray* psiItemArray,
+    BOOL fOkToBeSlow,
     __out EXPCMDSTATE* pCmdState
-    ) 
+)
 {
     UNREFERENCED_PARAMETER( psiItemArray );
     UNREFERENCED_PARAMETER( fOkToBeSlow );
@@ -180,7 +180,7 @@ IFACEMETHODIMP CDeviceContextMenu::GetState(
 IFACEMETHODIMP CDeviceContextMenu::Invoke(
     __in IShellItemArray* psiItemArray,
     __in IBindCtx* pbc
-    )
+)
 {
     UNREFERENCED_PARAMETER( pbc );
 
@@ -198,7 +198,7 @@ IFACEMETHODIMP CDeviceContextMenu::Invoke(
 
     PropVariantInit( &pv );
 
-    // 
+    //
     // The selected device is the only shell item in the shell item array.
     // Use GetItemAt with index 0 to get the shell item corresponding to the
     // selected device.
@@ -211,14 +211,14 @@ IFACEMETHODIMP CDeviceContextMenu::Invoke(
     //
     // Get the IShellItem2 interface of the shell item, so we can
     // access its properties from the shell item directly or from
-    // the devnode(s) of the device. 
+    // the devnode(s) of the device.
     //
     if( S_OK == hr )
     {
-        hr = pShellItem->QueryInterface( 
-            __uuidof(pShellItem2), 
-            reinterpret_cast<void**>(&pShellItem2)
-            );
+        hr = pShellItem->QueryInterface(
+                 __uuidof(pShellItem2),
+                 reinterpret_cast<void**>(&pShellItem2)
+             );
     }
 
     //
@@ -229,14 +229,14 @@ IFACEMETHODIMP CDeviceContextMenu::Invoke(
 
     //
     // Get device's properties directly from the shell item object. In
-    // this case we'll get the name. 
+    // this case we'll get the name.
     //
     if( S_OK == hr )
     {
         hr = pShellItem2->GetProperty( PKEY_ItemNameDisplay, &pv );
     }
     if( S_OK == hr &&
-        VT_LPWSTR == pv.vt )
+            VT_LPWSTR == pv.vt )
     {
         hr = SHStrDup( pv.pwszVal, &pszName );
     }
@@ -258,7 +258,7 @@ IFACEMETHODIMP CDeviceContextMenu::Invoke(
     // launch an relevant device related application based on
     // contextual information from the properties (if needed).
     //
-    // A separate thread is used here to avoid blocking the main UI 
+    // A separate thread is used here to avoid blocking the main UI
     // thread while the message box exists.
     //
     if( S_OK == hr )
@@ -283,9 +283,9 @@ IFACEMETHODIMP CDeviceContextMenu::Invoke(
     {
         CoTaskMemFree( pszHardwareID );
     }
-        
+
     PropVariantClear( &pv );
-   
+
     return hr;
 } // CDeviceContextMenu::Invoke
 
@@ -295,40 +295,40 @@ IFACEMETHODIMP CDeviceContextMenu::Invoke(
 //
 //      Get the context menu item's flags
 //------------------------------------------------------------------------------
-IFACEMETHODIMP CDeviceContextMenu::GetFlags( __out EXPCMDFLAGS* pFlags ) 
-{ 
+IFACEMETHODIMP CDeviceContextMenu::GetFlags( __out EXPCMDFLAGS* pFlags )
+{
     *pFlags = ECF_DEFAULT;
-    return S_OK; 
+    return S_OK;
 }// CDeviceContextMenu::GetFlags
 
 
 //------------------------------------------------------------------------------
 // CDeviceContextMenu::EnumSubCommands
 //
-//     Returns an IEnumExplorerCommand instance used to enumerate sub commands 
-//     of the current command when the context menu item has submenus. 
+//     Returns an IEnumExplorerCommand instance used to enumerate sub commands
+//     of the current command when the context menu item has submenus.
 //     It's not implemented in this sample.
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenu::EnumSubCommands(
     __deref_out IEnumExplorerCommand** ppEnum
-    ) 
-{ 
+)
+{
     UNREFERENCED_PARAMETER( ppEnum );
 
-    return E_NOTIMPL; 
+    return E_NOTIMPL;
 }// CDeviceContextMenu::EnumSubCommands
 
 
 //------------------------------------------------------------------------------
 // CDeviceContextMenu::Initialize
 //
-//      Initializes the context menu handler with the application-specified 
-//      context menu items name and its properties from the property bag. 
+//      Initializes the context menu handler with the application-specified
+//      context menu items name and its properties from the property bag.
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenu::Initialize(
-    __in PCWSTR pszCommandName, 
+    __in PCWSTR pszCommandName,
     __in IPropertyBag* ppb
-    )
+)
 {
     UNREFERENCED_PARAMETER( ppb );
 
@@ -354,9 +354,9 @@ IFACEMETHODIMP CDeviceContextMenu::Initialize(
 // CDeviceContextMenu::QueryInterface
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenu::QueryInterface(
-    __in REFIID riid, 
+    __in REFIID riid,
     __deref_out void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -418,7 +418,7 @@ IFACEMETHODIMP_(ULONG) CDeviceContextMenu::Release()
 //------------------------------------------------------------------------------
 // CDeviceContextMenu::GetDeviceHardwareID
 //
-//      Get device hardware id from the devnode(s) of the device. You can get 
+//      Get device hardware id from the devnode(s) of the device. You can get
 //      device properties that cannot be obtained directly from the shell item object
 //      throught the device devnode(s).
 //
@@ -434,15 +434,15 @@ IFACEMETHODIMP_(ULONG) CDeviceContextMenu::Release()
 //          This property is a vectory of strings of the Device Interface Paths
 //          of all your device's devnodes. Use of this property use not shown in
 //          this sample, but if you find the property helpful for your scenario
-//          you can use it. 
+//          you can use it.
 //------------------------------------------------------------------------------
 HRESULT CDeviceContextMenu::GetDeviceHardwareID(
     __in IShellItem2* pShellItem2,
     __out PWSTR* ppszHardwareID
-    )
+)
 {
     DWORD           cbBuffer            = 0;
-    HDEVINFO        devInfo             = {0}; 
+    HDEVINFO        devInfo             = {0};
     SP_DEVINFO_DATA devInfoData         = {0};
     DEVPROPTYPE     devPropType         = 0;
     HRESULT         hr                  = S_OK;
@@ -461,10 +461,10 @@ HRESULT CDeviceContextMenu::GetDeviceHardwareID(
         hr = pShellItem2->GetProperty( PKEY_Devices_FunctionPaths, &pv );
     }
     if( S_OK == hr &&
-        ((VT_VECTOR | VT_LPWSTR) != pv.vt ||
-        ( 0 == pv.calpwstr.cElems ) ) )
+            ((VT_VECTOR | VT_LPWSTR) != pv.vt ||
+             ( 0 == pv.calpwstr.cElems ) ) )
     {
-        // Function Paths doesn't exist or is the wrong type or empty. 
+        // Function Paths doesn't exist or is the wrong type or empty.
         // This should never happen, but its good practice to check anyway.
         hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
     }
@@ -480,7 +480,7 @@ HRESULT CDeviceContextMenu::GetDeviceHardwareID(
     // figure out which one contains the properties you're after. In this sample
     // we're just attempting to get one device hardware id from the devnode who's
     // Device Instance Path is in the FunctionPaths list retreived from the shell
-    // object. 
+    // object.
     //
 
     //
@@ -503,18 +503,18 @@ HRESULT CDeviceContextMenu::GetDeviceHardwareID(
         devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
         if( FALSE == SetupDiOpenDeviceInfo(
-                        devInfo,
-                        pv.calpwstr.pElems[0],
-                        NULL, 
-                        0, 
-                        &devInfoData 
-                        ) )
+                    devInfo,
+                    pv.calpwstr.pElems[0],
+                    NULL,
+                    0,
+                    &devInfoData
+                ) )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
     }
 
-    // You can ask for properties defined in devpkey.h. Some keys in 
+    // You can ask for properties defined in devpkey.h. Some keys in
     // FunctionDiscoveryKey.h are also available on devnodes; For example,
     // devnodes from PnP-X (Network Devices) will have PKEY_PNPX properties
     // set on them. These can be retreived with SetupDi* calls as well.
@@ -523,10 +523,10 @@ HRESULT CDeviceContextMenu::GetDeviceHardwareID(
     // superset of DEVPROPTYPEs. The mapping on many property types is
     // straight forward. DEVPROP_TYPE_STRING and VT_LPWSTR
     // are the same, for example. Below we'll get a PnP-X property so it's
-    // clear how this works. 
+    // clear how this works.
     //
     // One case where the mapping isn't exact, is VT_VECTOR | VT_LPWSTR
-    // (vector of strings), which in the devnode is stored as a 
+    // (vector of strings), which in the devnode is stored as a
     // DEVPROP_TYPE_STRING_LIST (REG_MULTI_SZ style string list). Keep this
     // in mind when asking for PKEY types from a devnode vs. DEVPKEY types.
     //
@@ -536,18 +536,18 @@ HRESULT CDeviceContextMenu::GetDeviceHardwareID(
     //
     if( S_OK == hr )
     {
-        // Get the required buffer size 
+        // Get the required buffer size
         if( FALSE == SetupDiGetDeviceProperty(
-                        devInfo,
-                        &devInfoData,
-                        &DEVPKEY_Device_HardwareIds,
-                        &devPropType,
-                        NULL,
-                        0,
-                        &cbBuffer,
-                        0 
-                        ) &&
-            ERROR_INSUFFICIENT_BUFFER != GetLastError() )
+                    devInfo,
+                    &devInfoData,
+                    &DEVPKEY_Device_HardwareIds,
+                    &devPropType,
+                    NULL,
+                    0,
+                    &cbBuffer,
+                    0
+                ) &&
+                ERROR_INSUFFICIENT_BUFFER != GetLastError() )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
@@ -566,22 +566,22 @@ HRESULT CDeviceContextMenu::GetDeviceHardwareID(
     if( S_OK == hr )
     {
         if( FALSE == SetupDiGetDeviceProperty(
-                        devInfo,
-                        &devInfoData,
-                        &DEVPKEY_Device_HardwareIds,
-                        &devPropType,
-                        pBuffer,
-                        cbBuffer,
-                        NULL,
-                        0 
-                        ) )
+                    devInfo,
+                    &devInfoData,
+                    &DEVPKEY_Device_HardwareIds,
+                    &devPropType,
+                    pBuffer,
+                    cbBuffer,
+                    NULL,
+                    0
+                ) )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
         }
     }
 
     if( S_OK == hr &&
-        DEVPROP_TYPE_STRING_LIST == devPropType )
+            DEVPROP_TYPE_STRING_LIST == devPropType )
     {
         //
         // Get the first Hardware ID from the list
@@ -619,11 +619,11 @@ DWORD WINAPI _ExecuteThreadProc( __in LPVOID pVoid )
 {
     HRESULT hr                  = S_OK;
     WCHAR   szTitle[MAX_PATH]   = {0};
-    
+
     DllIncLockCount();
 
     if( NULL == LoadString(
-         g_hInstance, IDS_ContextMenu_Title, szTitle, ARRAYSIZE(szTitle)) )
+                g_hInstance, IDS_ContextMenu_Title, szTitle, ARRAYSIZE(szTitle)) )
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }

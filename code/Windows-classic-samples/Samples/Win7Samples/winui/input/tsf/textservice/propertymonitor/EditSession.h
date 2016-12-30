@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -45,7 +45,7 @@ public:
         *ppvObj = NULL;
 
         if (IsEqualIID(riid, IID_IUnknown) ||
-            IsEqualIID(riid, IID_ITfEditSession))
+                IsEqualIID(riid, IID_ITfEditSession))
         {
             *ppvObj = (ITfLangBarItemButton *)this;
         }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,10 +21,10 @@
 ****************************************************************************/
 static
 HRESULT
-CALLBACK 
+CALLBACK
 SAMPLE_FILE_DATA_PROVIDER_CLOSE(
     void                *pvCallbackState
-    )
+)
 {
     HRESULT hr = NO_ERROR;
     HANDLE hFile = (HANDLE)pvCallbackState;
@@ -49,13 +49,13 @@ SAMPLE_FILE_DATA_PROVIDER_CLOSE(
 ****************************************************************************/
 static
 HRESULT
-CALLBACK 
+CALLBACK
 SAMPLE_FILE_DATA_PROVIDER_READ(
     void                *pvCallbackState,
-	BYTE                *pbData,
+    BYTE                *pbData,
     ULONG               cbData,
-	ULONG               *pcbRead
-    )
+    ULONG               *pcbRead
+)
 {
     HRESULT hr = NO_ERROR;
     HANDLE hFile = (HANDLE)pvCallbackState;
@@ -64,14 +64,13 @@ SAMPLE_FILE_DATA_PROVIDER_READ(
     {
         hr = E_INVALIDARG;
     }
-    else
-    if( !ReadFile( 
-                                    hFile,
-                                    pbData,
-                                    cbData,
-                                    pcbRead,
-                                    NULL 
-                                    ))
+    else if( !ReadFile(
+                 hFile,
+                 pbData,
+                 cbData,
+                 pcbRead,
+                 NULL
+             ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
     }
@@ -88,12 +87,12 @@ SAMPLE_FILE_DATA_PROVIDER_READ(
 
  For more information, see documentation on CryptXmlDigestReference.
 ****************************************************************************/
-HRESULT 
-WINAPI 
+HRESULT
+WINAPI
 HrSampleResolveExternalXmlReference(
-	LPCWSTR                 wszUri,
+    LPCWSTR                 wszUri,
     CRYPT_XML_DATA_PROVIDER *pProviderOut
-    )
+)
 {
     HRESULT                 hr = S_FALSE;
     HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -114,7 +113,7 @@ HrSampleResolveExternalXmlReference(
     {
         goto CleanUp;
     }
-    
+
     LPWSTR wsUri = (LPWSTR)wszUri;
     cw = lstrlenW( wsUri );
 
@@ -122,24 +121,24 @@ HrSampleResolveExternalXmlReference(
     // Try http
     //
 
-    if( ( cw > cwHttp && 
+    if( ( cw > cwHttp &&
             CSTR_EQUAL == CompareStringW(
-                                        LOCALE_NEUTRAL,
-                                        NORM_IGNORECASE,
-                                        wsUri,
-                                        cwHttp,
-                                        _wsHttp,
-                                        cwHttp
-                                        )) ||
-        ( cw > cwHttps && 
-            CSTR_EQUAL == CompareStringW(
-                                        LOCALE_NEUTRAL,
-                                        NORM_IGNORECASE,
-                                        wsUri,
-                                        cwHttps,
-                                        _wsHttps,
-                                        cwHttps
-                                        )))
+                LOCALE_NEUTRAL,
+                NORM_IGNORECASE,
+                wsUri,
+                cwHttp,
+                _wsHttp,
+                cwHttp
+            )) ||
+            ( cw > cwHttps &&
+              CSTR_EQUAL == CompareStringW(
+                  LOCALE_NEUTRAL,
+                  NORM_IGNORECASE,
+                  wsUri,
+                  cwHttps,
+                  _wsHttps,
+                  cwHttps
+              )))
     {
         //
         // TODO: Retrive from HTTP
@@ -149,16 +148,15 @@ HrSampleResolveExternalXmlReference(
         hr = E_NOTIMPL;
         goto CleanUp;
     }
-    else
-    if( cw > cwFile && 
-            CSTR_EQUAL == CompareStringW(
-                                        LOCALE_NEUTRAL,
-                                        NORM_IGNORECASE,
-                                        wsUri,
-                                        cwFile,
-                                        _wsFile,
-                                        cwFile
-                                        ))
+    else if( cw > cwFile &&
+             CSTR_EQUAL == CompareStringW(
+                 LOCALE_NEUTRAL,
+                 NORM_IGNORECASE,
+                 wsUri,
+                 cwFile,
+                 _wsFile,
+                 cwFile
+             ))
     {
         wsUri += cwFile;
     }
@@ -178,14 +176,14 @@ HrSampleResolveExternalXmlReference(
     //
 
     hFile = CreateFileW(
-                                        wsUri,
-                                        GENERIC_READ,
-                                        FILE_SHARE_READ,
-                                        NULL,
-                                        OPEN_EXISTING,
-                                        FILE_ATTRIBUTE_NORMAL,
-                                        NULL
-                                        );
+                wsUri,
+                GENERIC_READ,
+                FILE_SHARE_READ,
+                NULL,
+                OPEN_EXISTING,
+                FILE_ATTRIBUTE_NORMAL,
+                NULL
+            );
     if( INVALID_HANDLE_VALUE != hFile )
     {
         pProviderOut->pvCallbackState = hFile;

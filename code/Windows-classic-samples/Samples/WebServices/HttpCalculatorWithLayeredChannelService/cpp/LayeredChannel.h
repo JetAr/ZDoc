@@ -1,11 +1,11 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved
 
-// A structure containing parameters passed to the custom channel 
+// A structure containing parameters passed to the custom channel
 // using WS_CHANNEL_PROPERTY_CUSTOM_CHANNEL_PARAMETERS.
 struct LayeredChannelParameters
 {

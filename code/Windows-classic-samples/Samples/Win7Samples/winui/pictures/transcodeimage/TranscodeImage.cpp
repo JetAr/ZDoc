@@ -1,14 +1,14 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 // TranscodeImage.cpp : Demonstrates the use of the TranscodeImage method.
-// The application takes two command line arguments.  
+// The application takes two command line arguments.
 // First argument: the path of the image file to transcode.
 // Second argument: the path at which to save the transcoded file.
 //
 // THIS CODE AND INIFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE. 
+// PARTICULAR PURPOSE.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //////////////////////////////////////////////////////////////////////
@@ -27,10 +27,10 @@ void DisplayErrorMessage(DWORD errorCode);
 // constants
 
 // Transcoded image will fit in a box of the requested height and width
-const int REQUESTED_WIDTH = 100;  
-const int REQUESTED_HEIGHT = 100; 
-// Requested format may be TI_BITMAP or TI_JPEG. 
-const TI_FLAGS REQUESTED_FORMAT = TI_BITMAP; 
+const int REQUESTED_WIDTH = 100;
+const int REQUESTED_HEIGHT = 100;
+// Requested format may be TI_BITMAP or TI_JPEG.
+const TI_FLAGS REQUESTED_FORMAT = TI_BITMAP;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -57,7 +57,8 @@ int _tmain(int argc, _TCHAR* argv[])
     {
         pwszCommandLineArg1 = argv[1];
         pwszCommandLineArg2 = argv[2];
-    } else // TODO: accept size arguments
+    }
+    else   // TODO: accept size arguments
     {
         wprintf(L"%s %s %s\n", L"Wrong # of arguments.  Usage:", argv[0], L"sourceimagepath destinationimagepath");
         hr = E_INVALIDARG;
@@ -67,12 +68,12 @@ int _tmain(int argc, _TCHAR* argv[])
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
     if SUCCEEDED(hr)
     {
-    hr = CoCreateInstance(
-        CLSID_ImageTranscode, 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        IID_ITranscodeImage, 
-        (LPVOID*)&pTransImg);
+        hr = CoCreateInstance(
+                 CLSID_ImageTranscode,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_ITranscodeImage,
+                 (LPVOID*)&pTransImg);
     }
 
     // Get a pointer to an ITEMIDLIST by parsing the first command line argument
@@ -94,7 +95,7 @@ int _tmain(int argc, _TCHAR* argv[])
         if (hFile == INVALID_HANDLE_VALUE)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
-            
+
         }
         CloseHandle(hFile);
     }
@@ -111,13 +112,13 @@ int _tmain(int argc, _TCHAR* argv[])
     if SUCCEEDED(hr)
     {
         hr = pTransImg->TranscodeImage(
-            pItemToTranscode, 
-            REQUESTED_WIDTH, 
-            REQUESTED_HEIGHT, 
-            REQUESTED_FORMAT,
-            pImgStream, 
-            &uActualX, 
-            &uActualY);
+                 pItemToTranscode,
+                 REQUESTED_WIDTH,
+                 REQUESTED_HEIGHT,
+                 REQUESTED_FORMAT,
+                 pImgStream,
+                 &uActualX,
+                 &uActualY);
     }
 
     // Write the stream containing the transcoded image to the destination file.
@@ -143,17 +144,17 @@ int _tmain(int argc, _TCHAR* argv[])
 
 void DisplayErrorMessage(DWORD errorCode)
 {
-        WCHAR lpMsgBuf[256];
-        ZeroMemory(lpMsgBuf, 256 * sizeof(WCHAR));
-        FormatMessage(
-            FORMAT_MESSAGE_FROM_SYSTEM,
-            NULL,
-            errorCode,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-            lpMsgBuf,
-            256, // size of output buffer 
-            NULL );
-        MessageBox(NULL, lpMsgBuf, L"Error", MB_OK);
+    WCHAR lpMsgBuf[256];
+    ZeroMemory(lpMsgBuf, 256 * sizeof(WCHAR));
+    FormatMessage(
+        FORMAT_MESSAGE_FROM_SYSTEM,
+        NULL,
+        errorCode,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        lpMsgBuf,
+        256, // size of output buffer
+        NULL );
+    MessageBox(NULL, lpMsgBuf, L"Error", MB_OK);
 
 }
 

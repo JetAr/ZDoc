@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,9 +9,9 @@
 #include <manipulations_i.c>
 #include <new>
 
-CCoreObject::CCoreObject(HWND hwnd, int iTimerId, CD2DDriver* d2dDriver) : 
-    m_hWnd(hwnd), 
-    m_iTimerId(iTimerId), 
+CCoreObject::CCoreObject(HWND hwnd, int iTimerId, CD2DDriver* d2dDriver) :
+    m_hWnd(hwnd),
+    m_iTimerId(iTimerId),
     m_d2dDriver(d2dDriver),
     doDrawing(NULL),
     manipulationProc(NULL),
@@ -20,27 +20,27 @@ CCoreObject::CCoreObject(HWND hwnd, int iTimerId, CD2DDriver* d2dDriver) :
 }
 
 BOOL CCoreObject::Initialize()
-{   
+{
     BOOL success = SUCCEEDED(CoInitializeEx(NULL, COINIT_APARTMENTTHREADED));
 
-     // Create an instance of the COM manipulation processor
+    // Create an instance of the COM manipulation processor
     if(success)
     {
         success = SUCCEEDED(CoCreateInstance(CLSID_ManipulationProcessor,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_IUnknown,
-            (VOID**)(&manipulationProc)));
+                                             NULL,
+                                             CLSCTX_INPROC_SERVER,
+                                             IID_IUnknown,
+                                             (VOID**)(&manipulationProc)));
     }
 
     // Create an instance of the COM inertia processor
     if(success)
     {
         success = SUCCEEDED(CoCreateInstance(CLSID_InertiaProcessor,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_IUnknown,
-            (VOID**)(&inertiaProc)));
+                                             NULL,
+                                             CLSCTX_INPROC_SERVER,
+                                             IID_IUnknown,
+                                             (VOID**)(&inertiaProc)));
     }
 
     // Create graphical representation of this core object
@@ -54,12 +54,12 @@ BOOL CCoreObject::Initialize()
         }
     }
 
-    // Create manipulation event sink for this core object 
+    // Create manipulation event sink for this core object
     // and setup connection point to manipulation processor
     if(success)
     {
         manipulationEventSink = new (std::nothrow) CManipulationEventSink(m_hWnd, this, m_iTimerId, FALSE);
-        
+
         if(manipulationEventSink == NULL)
         {
             success = FALSE;
@@ -71,7 +71,7 @@ BOOL CCoreObject::Initialize()
         }
     }
 
-    // Create inertia event sink for this core object 
+    // Create inertia event sink for this core object
     // and setup connection point to inertia processor
     if(success)
     {

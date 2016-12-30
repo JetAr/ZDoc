@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -37,19 +37,19 @@ CHAR    g_szModuleName[MAX_PATH+1];
 VOID
 SetModuleName(
     CHAR *  szModuleName
-    );
+);
 
 VOID
 IsapiAssert(
     CHAR *  szExpr,
     CHAR *  szFile,
     DWORD   dwLine
-    );
+);
 
 VOID
 WriteDebug(
     CHAR *  szFormat,
     ...
-    );
+);
 
 #endif  // _isapidebug_h

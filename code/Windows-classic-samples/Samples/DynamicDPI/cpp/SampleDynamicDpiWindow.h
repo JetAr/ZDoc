@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -57,7 +57,7 @@ private:
     CSampleEngine m_engine;
 
 private:
-	RECT CalcWindowRectNewDpi(_In_ RECT oldRect, _In_ float oldDpi, _In_ float newDPI);
+    RECT CalcWindowRectNewDpi(_In_ RECT oldRect, _In_ float oldDpi, _In_ float newDPI);
     FLOAT GetNewDpi(RECT rect);
     float GetDpiForWindow();
 };

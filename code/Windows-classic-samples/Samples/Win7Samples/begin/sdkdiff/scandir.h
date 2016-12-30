@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -35,7 +35,7 @@
  *
  */
 
- /* handle to the list of files scanned */
+/* handle to the list of files scanned */
 typedef struct dirlist FAR * DIRLIST;
 
 /* handle to one item within the list of files */
@@ -170,7 +170,7 @@ DWORD dir_getattr(DIRITEM item);
 
 /* MUST CALL dir_startcopy first and dir_endcopy after.
  * create a copy of the file, in the new root directory. creates sub-dirs as
- * necessary. 
+ * necessary.
  *
  * returns TRUE for success and FALSE for failure.
  */
@@ -215,11 +215,12 @@ int dir_compwildcard(DIRLIST dleft, DIRLIST dright, LPSTR lname, LPSTR rname);
 BOOL dir_compsequencenumber(DIRITEM dleft, DIRITEM dright, int *pcmpvalue);
 
 #ifndef WIN32
-    /* FILETIME structure from WIN32 */
-    typedef struct _FILETIME { /* ft */
-        DWORD dwLowDateTime;
-        DWORD dwHighDateTime;
-    } FILETIME;
+/* FILETIME structure from WIN32 */
+typedef struct _FILETIME   /* ft */
+{
+    DWORD dwLowDateTime;
+    DWORD dwHighDateTime;
+} FILETIME;
 #define CONST const
 
 long CompareFileTime( CONST FILETIME * lpft1,  /* address of first file time */

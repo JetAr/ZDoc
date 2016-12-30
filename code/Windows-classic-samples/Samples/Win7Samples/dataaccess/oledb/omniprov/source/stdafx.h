@@ -1,4 +1,4 @@
-// stdafx.h : include file for standard system include files,
+﻿// stdafx.h : include file for standard system include files,
 //      or project specific include files that are used frequently,
 //      but are changed infrequently
 
@@ -11,8 +11,8 @@
 #define _ATL_DEBUG_QI
 // When the OLEDB_SERVICES key is set to -1 it is assumed that the Provider
 // supports Aggregation.
-// With _ATL_DEBUG_INTERFACES - 
-// _QIThunk::Release does not handle the aggregated release properly. Hence, 
+// With _ATL_DEBUG_INTERFACES -
+// _QIThunk::Release does not handle the aggregated release properly. Hence,
 // do not use _ATL_DEBUG_INTERFACES with the OLEDB_SERVICES key set to -1
 
 //#define _ATL_DEBUG_INTERFACES

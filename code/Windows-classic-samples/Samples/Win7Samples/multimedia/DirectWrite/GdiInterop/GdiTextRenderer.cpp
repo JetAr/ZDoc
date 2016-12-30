@@ -1,24 +1,24 @@
-
+﻿
 /************************************************************************
  *
  * File: GdiTextRenderer.cpp
  *
- * Description: 
- * 
- * 
+ * Description:
+ *
+ *
  *  This file is part of the Microsoft Windows SDK Code Samples.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  ************************************************************************/
 
 #include "GdiInterop.h"
@@ -34,11 +34,11 @@
 GdiTextRenderer::GdiTextRenderer(
     IDWriteBitmapRenderTarget* bitmapRenderTarget,
     IDWriteRenderingParams* renderingParams
-    )
-:
-cRefCount_(0), 
-pRenderTarget_(bitmapRenderTarget),
-pRenderingParams_(renderingParams)
+)
+    :
+    cRefCount_(0),
+    pRenderTarget_(bitmapRenderTarget),
+    pRenderingParams_(renderingParams)
 {
     pRenderTarget_->AddRef();
     pRenderingParams_->AddRef();
@@ -76,7 +76,7 @@ STDMETHODIMP GdiTextRenderer::DrawGlyphRun(
     __in DWRITE_GLYPH_RUN const* glyphRun,
     __in DWRITE_GLYPH_RUN_DESCRIPTION const* glyphRunDescription,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -84,15 +84,15 @@ STDMETHODIMP GdiTextRenderer::DrawGlyphRun(
     RECT dirtyRect = {0};
 
     hr = pRenderTarget_->DrawGlyphRun(
-        baselineOriginX,
-        baselineOriginY,
-        measuringMode,
-        glyphRun,
-        pRenderingParams_,
-        RGB(0,200,255),
-        &dirtyRect
-        );
-    
+             baselineOriginX,
+             baselineOriginY,
+             measuringMode,
+             glyphRun,
+             pRenderingParams_,
+             RGB(0,200,255),
+             &dirtyRect
+         );
+
 
     return hr;
 }
@@ -112,7 +112,7 @@ STDMETHODIMP GdiTextRenderer::DrawUnderline(
     FLOAT baselineOriginY,
     __in DWRITE_UNDERLINE const* underline,
     IUnknown* clientDrawingEffect
-    )
+)
 {
 // Not implemented
     return E_NOTIMPL;
@@ -133,7 +133,7 @@ STDMETHODIMP GdiTextRenderer::DrawStrikethrough(
     FLOAT baselineOriginY,
     __in DWRITE_STRIKETHROUGH const* strikethrough,
     IUnknown* clientDrawingEffect
-    )
+)
 {
 // Not implemented
     return E_NOTIMPL;
@@ -156,7 +156,7 @@ STDMETHODIMP GdiTextRenderer::DrawInlineObject(
     BOOL isSideways,
     BOOL isRightToLeft,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // Not implemented
     return E_NOTIMPL;
@@ -209,7 +209,7 @@ STDMETHODIMP_(unsigned long) GdiTextRenderer::Release()
 STDMETHODIMP GdiTextRenderer::IsPixelSnappingDisabled(
     __maybenull void* clientDrawingContext,
     __out BOOL* isDisabled
-    )
+)
 {
     *isDisabled = FALSE;
     return S_OK;
@@ -226,7 +226,7 @@ STDMETHODIMP GdiTextRenderer::IsPixelSnappingDisabled(
 STDMETHODIMP GdiTextRenderer::GetCurrentTransform(
     __maybenull void* clientDrawingContext,
     __out DWRITE_MATRIX* transform
-    )
+)
 {
     //forward the render target's transform
     pRenderTarget_->GetCurrentTransform(transform);
@@ -244,7 +244,7 @@ STDMETHODIMP GdiTextRenderer::GetCurrentTransform(
 STDMETHODIMP GdiTextRenderer::GetPixelsPerDip(
     __maybenull void* clientDrawingContext,
     __out FLOAT* pixelsPerDip
-    )
+)
 {
     *pixelsPerDip = pRenderTarget_->GetPixelsPerDip();
     return S_OK;
@@ -261,7 +261,7 @@ STDMETHODIMP GdiTextRenderer::GetPixelsPerDip(
 STDMETHODIMP GdiTextRenderer::QueryInterface(
     IID const& riid,
     void** ppvObject
-    )
+)
 {
     if (__uuidof(IDWriteTextRenderer) == riid)
     {

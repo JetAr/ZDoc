@@ -16,7 +16,7 @@
 InlineImage::InlineImage(
     IWICBitmapSource* image,
     unsigned int index
-    )
+)
     :   image_(SafeAcquire(image))
 {
     // Pass the index of the image in the sequence of concatenated sequence
@@ -57,7 +57,7 @@ HRESULT STDMETHODCALLTYPE InlineImage::Draw(
     BOOL isSideways,
     BOOL isRightToLeft,
     IUnknown* clientDrawingEffect
-    )
+)
 {
     // Go from the text renderer interface back to the actual render target.
     RenderTarget* renderTarget = NULL;
@@ -79,7 +79,7 @@ HRESULT STDMETHODCALLTYPE InlineImage::Draw(
 
 HRESULT STDMETHODCALLTYPE InlineImage::GetMetrics(
     OUT DWRITE_INLINE_OBJECT_METRICS* metrics
-    )
+)
 {
     DWRITE_INLINE_OBJECT_METRICS inlineMetrics = {};
     inlineMetrics.width     = rect_.right  - rect_.left;
@@ -92,7 +92,7 @@ HRESULT STDMETHODCALLTYPE InlineImage::GetMetrics(
 
 HRESULT STDMETHODCALLTYPE InlineImage::GetOverhangMetrics(
     OUT DWRITE_OVERHANG_METRICS* overhangs
-    )
+)
 {
     overhangs->left      = 0;
     overhangs->top       = 0;
@@ -105,7 +105,7 @@ HRESULT STDMETHODCALLTYPE InlineImage::GetOverhangMetrics(
 HRESULT STDMETHODCALLTYPE InlineImage::GetBreakConditions(
     OUT DWRITE_BREAK_CONDITION* breakConditionBefore,
     OUT DWRITE_BREAK_CONDITION* breakConditionAfter
-    )
+)
 {
     *breakConditionBefore = DWRITE_BREAK_CONDITION_NEUTRAL;
     *breakConditionAfter  = DWRITE_BREAK_CONDITION_NEUTRAL;
@@ -115,46 +115,46 @@ HRESULT STDMETHODCALLTYPE InlineImage::GetBreakConditions(
 
 namespace
 {
-    HRESULT LoadAndLockResource(
-        const wchar_t* resourceName,
-        const wchar_t* resourceType,
-        OUT UINT8** fileData,
-        OUT DWORD* fileSize
-        )
-    {
-        HRSRC resourceHandle = NULL;
-        HGLOBAL resourceDataHandle = NULL;
-        *fileData = NULL;
-        *fileSize = 0;
+HRESULT LoadAndLockResource(
+    const wchar_t* resourceName,
+    const wchar_t* resourceType,
+    OUT UINT8** fileData,
+    OUT DWORD* fileSize
+)
+{
+    HRSRC resourceHandle = NULL;
+    HGLOBAL resourceDataHandle = NULL;
+    *fileData = NULL;
+    *fileSize = 0;
 
-        // Locate the resource handle in our DLL.
-        resourceHandle = FindResourceW(
-            HINST_THISCOMPONENT,
-            resourceName,
-            resourceType
-            );
-        if (resourceHandle == NULL)
-            return E_FAIL;
+    // Locate the resource handle in our DLL.
+    resourceHandle = FindResourceW(
+                         HINST_THISCOMPONENT,
+                         resourceName,
+                         resourceType
+                     );
+    if (resourceHandle == NULL)
+        return E_FAIL;
 
-        // Load the resource.
-        resourceDataHandle = LoadResource(
-            HINST_THISCOMPONENT,
-            resourceHandle);
-        if (resourceDataHandle == NULL)
-            return E_FAIL;
+    // Load the resource.
+    resourceDataHandle = LoadResource(
+                             HINST_THISCOMPONENT,
+                             resourceHandle);
+    if (resourceDataHandle == NULL)
+        return E_FAIL;
 
-        // Lock it to get a system memory pointer.
-        *fileData = (BYTE*)LockResource(resourceDataHandle);
-        if (*fileData == NULL)
-            return E_FAIL;
+    // Lock it to get a system memory pointer.
+    *fileData = (BYTE*)LockResource(resourceDataHandle);
+    if (*fileData == NULL)
+        return E_FAIL;
 
-        // Calculate the size.
-        *fileSize = SizeofResource(HINST_THISCOMPONENT, resourceHandle);
-        if (*fileSize == 0)
-            return E_FAIL;
+    // Calculate the size.
+    *fileSize = SizeofResource(HINST_THISCOMPONENT, resourceHandle);
+    if (*fileSize == 0)
+        return E_FAIL;
 
-        return S_OK;
-    }
+    return S_OK;
+}
 }
 
 
@@ -163,7 +163,7 @@ HRESULT InlineImage::LoadImageFromResource(
     const wchar_t* resourceType,
     IWICImagingFactory* wicFactory,
     OUT IWICBitmapSource** bitmap
-    )
+)
 {
     // Loads an image from a resource into the given bitmap.
 
@@ -195,11 +195,11 @@ HRESULT InlineImage::LoadImageFromResource(
     if (SUCCEEDED(hr))
     {
         hr = wicFactory->CreateDecoderFromStream(
-                stream,
-                NULL,
-                WICDecodeMetadataCacheOnLoad,
-                &decoder
-                );
+                 stream,
+                 NULL,
+                 WICDecodeMetadataCacheOnLoad,
+                 &decoder
+             );
     }
 
     // Create the initial frame.
@@ -217,13 +217,13 @@ HRESULT InlineImage::LoadImageFromResource(
     if (SUCCEEDED(hr))
     {
         hr = converter->Initialize(
-                source,
-                GUID_WICPixelFormat32bppPBGRA,
-                WICBitmapDitherTypeNone,
-                NULL,
-                0.f,
-                WICBitmapPaletteTypeMedianCut
-                );
+                 source,
+                 GUID_WICPixelFormat32bppPBGRA,
+                 WICBitmapDitherTypeNone,
+                 NULL,
+                 0.f,
+                 WICBitmapPaletteTypeMedianCut
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -244,7 +244,7 @@ HRESULT InlineImage::LoadImageFromFile(
     const wchar_t* fileName,
     IWICImagingFactory* wicFactory,
     OUT IWICBitmapSource** bitmap
-    )
+)
 {
     // Loads an image from a file into the given bitmap.
 
@@ -258,12 +258,12 @@ HRESULT InlineImage::LoadImageFromFile(
     if (SUCCEEDED(hr))
     {
         hr = wicFactory->CreateDecoderFromFilename(
-                fileName,
-                NULL,
-                GENERIC_READ,
-                WICDecodeMetadataCacheOnLoad,
-                &decoder
-                );
+                 fileName,
+                 NULL,
+                 GENERIC_READ,
+                 WICDecodeMetadataCacheOnLoad,
+                 &decoder
+             );
     }
 
     // Create the initial frame.
@@ -281,13 +281,13 @@ HRESULT InlineImage::LoadImageFromFile(
     if (SUCCEEDED(hr))
     {
         hr = converter->Initialize(
-                source,
-                GUID_WICPixelFormat32bppPBGRA,
-                WICBitmapDitherTypeNone,
-                NULL,
-                0.f,
-                WICBitmapPaletteTypeMedianCut
-                );
+                 source,
+                 GUID_WICPixelFormat32bppPBGRA,
+                 WICBitmapDitherTypeNone,
+                 NULL,
+                 0.f,
+                 WICBitmapPaletteTypeMedianCut
+             );
     }
 
     if (SUCCEEDED(hr))

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -34,19 +34,19 @@ void RegisterForDestinationCostChangeNotifications();
 void RegisterForConnectionCostChangeNotifications();
 
 //
-//Gets machine cost and data plan status, and displays to the user, along with suggested appropriate actions based on the 
+//Gets machine cost and data plan status, and displays to the user, along with suggested appropriate actions based on the
 //retrieved cost and data plan status values.
 //
 void GetMachineCostandDataPlanStatus();
 
 //
-//Gets destination based cost and data plan status, and displays to the user, along with suggested appropriate actions based on the 
+//Gets destination based cost and data plan status, and displays to the user, along with suggested appropriate actions based on the
 //retrieved cost and data plan status values.
 //
 void GetDestinationCostandDataPlanStatus();
 
 //
-//Gets connection cost and data plan status, and displays to the user, along with suggested appropriate actions based on the 
+//Gets connection cost and data plan status, and displays to the user, along with suggested appropriate actions based on the
 //retrieved cost and data plan status values.
 //
 void GetConnectionCostandDataPlanStatus();
@@ -72,7 +72,7 @@ void UnRegisterForConnectionCostChangeNotifications();
 void FreeMemoryAndExit();
 
 //
-// Takes cost and data plan status as input, and suggests appropriate actions to the user based on the 
+// Takes cost and data plan status as input, and suggests appropriate actions to the user based on the
 // cost and data plan status values.
 //
 void CostBasedSuggestions(_In_ DWORD cost, _In_ const NLM_DATAPLAN_STATUS *pDataPlanStatus);

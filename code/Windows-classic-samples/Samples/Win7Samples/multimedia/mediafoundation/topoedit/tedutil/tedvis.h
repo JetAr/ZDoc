@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,90 +26,146 @@ class CVisualContainer;
 class CVisualPoint
 {
 public:
-	CVisualPoint() 
-		: m_x(0)
-		, m_y(0)
-	{;
-	}
+    CVisualPoint()
+        : m_x(0)
+        , m_y(0)
+    {
+        ;
+    }
 
-	CVisualPoint(double x, double y) 
-		: m_x(x)
-		, m_y(y)
-	{;
-	}
+    CVisualPoint(double x, double y)
+        : m_x(x)
+        , m_y(y)
+    {
+        ;
+    }
 
-	double x() { return m_x; }
-	double y() { return m_y; }
+    double x()
+    {
+        return m_x;
+    }
+    double y()
+    {
+        return m_y;
+    }
 
-	void Move(double x, double y) { m_x = x; m_y = y; }
-	void Add(double x, double y) { m_x += x; m_y += y; }
-	void Sub(double x, double y) { m_x -= x; m_y -= y; }
+    void Move(double x, double y)
+    {
+        m_x = x;
+        m_y = y;
+    }
+    void Add(double x, double y)
+    {
+        m_x += x;
+        m_y += y;
+    }
+    void Sub(double x, double y)
+    {
+        m_x -= x;
+        m_y -= y;
+    }
 
-	bool operator!=(const CVisualPoint& rhs) {
-		if(m_x != rhs.m_x || m_y != rhs.m_y) return true;
+    bool operator!=(const CVisualPoint& rhs)
+    {
+        if(m_x != rhs.m_x || m_y != rhs.m_y) return true;
 
-		return false;
-	}
+        return false;
+    }
 
 private:
 
-	double m_x;
-	double m_y;
+    double m_x;
+    double m_y;
 };
 
 class CVisualSize
 {
 public:
-	double m_cx;
-	double m_cy;
+    double m_cx;
+    double m_cy;
 };
 
 class CVisualRect
 {
 public:
-    CVisualRect() 
-    	: m_x(0)
-    	, m_y(0)
-    	, m_w(0)
-    	, m_h(0)
-    {;
+    CVisualRect()
+        : m_x(0)
+        , m_y(0)
+        , m_w(0)
+        , m_h(0)
+    {
+        ;
     }
 
-    CVisualRect(double x, double y, double w, double h) 
-    	: m_x(x)
-    	, m_y(y)
-    	, m_w(w)
-    	, m_h(h)
-    {;
+    CVisualRect(double x, double y, double w, double h)
+        : m_x(x)
+        , m_y(y)
+        , m_w(w)
+        , m_h(h)
+    {
+        ;
     }
 
-    double x() { return m_x; }
-    double y() { return m_y; }
-    double w() { return m_w; }
-    double h() { return m_h; }
-    double right() { return m_x + m_w; }
-    double bottom() { return m_y + m_h; }
+    double x()
+    {
+        return m_x;
+    }
+    double y()
+    {
+        return m_y;
+    }
+    double w()
+    {
+        return m_w;
+    }
+    double h()
+    {
+        return m_h;
+    }
+    double right()
+    {
+        return m_x + m_w;
+    }
+    double bottom()
+    {
+        return m_y + m_h;
+    }
 
-    void Move(double x, double y) { m_x = x; m_y = y; }
-    void Add(double x, double y) { m_x += x; m_y += y; }
-    void Expand(double w, double h) { m_w += w; m_h += h; }
-    BOOL IsIn(CVisualPoint & pt) { return (pt.x() >= m_x && pt.y() >= m_y && pt.x() <= right() && pt.y() <= bottom()); }
+    void Move(double x, double y)
+    {
+        m_x = x;
+        m_y = y;
+    }
+    void Add(double x, double y)
+    {
+        m_x += x;
+        m_y += y;
+    }
+    void Expand(double w, double h)
+    {
+        m_w += w;
+        m_h += h;
+    }
+    BOOL IsIn(CVisualPoint & pt)
+    {
+        return (pt.x() >= m_x && pt.y() >= m_y && pt.x() <= right() && pt.y() <= bottom());
+    }
     BOOL IsIn(CVisualRect& rect);
-	
+
 private:
-	double m_x;
-	double m_y;
-	double m_w;
-	double m_h;
+    double m_x;
+    double m_y;
+    double m_w;
+    double m_h;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 class CVisualCoordinateTransform
 {
 public:
     CVisualCoordinateTransform();
-    
+
     POINT VisualToScreen(CVisualPoint & vis);
     RECT VisualToScreen(CVisualRect & vis);
 
@@ -138,12 +194,15 @@ public:
 
     BOOL SelectSmallFont();
     void DeselectSmallFont();
-    
+
     BOOL SelectPen(COLORREF color, int width);
     void DeselectPen();
     BOOL SelectSolidBrush(COLORREF color);
-    
-    HDC DC() { return m_hBgBuffer; }
+
+    HDC DC()
+    {
+        return m_hBgBuffer;
+    }
 
     void MapPoint(CVisualPoint & vis, POINT & disp);
     void MapRect(CVisualRect & vis, RECT & disp);
@@ -156,9 +215,10 @@ public:
             , m_yCoord(0)
             , m_hNewBrush(NULL)
             , m_hOldBrush(NULL)
-        {;
+        {
+            ;
         }
-        
+
         double m_xCoord;
         double m_yCoord;
 
@@ -170,7 +230,7 @@ public:
     };
 
     void ShiftCoordinates(double xOffset, double yOffset);
-        
+
 private:
     HDC m_hdc;
     HDC m_hBgBuffer;
@@ -187,20 +247,35 @@ private:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 class CCommandHandler
 {
 public:
-    virtual BOOL OnLButtonDown(CVisualObject * pObj, CVisualPoint & pt) { return FALSE; }
-    virtual BOOL OnLButtonUp(CVisualObject * pObj, CVisualPoint & pt) { return FALSE; }
-    virtual BOOL OnMouseMove(CVisualObject * pObj, CVisualPoint & pt) { return FALSE; }
-    virtual BOOL OnLButtonDoubleClick(CVisualObject* pObj, CVisualPoint& pt) { return FALSE; }
-    virtual BOOL OnFocus(CVisualObject* pObj) { return FALSE; }
+    virtual BOOL OnLButtonDown(CVisualObject * pObj, CVisualPoint & pt)
+    {
+        return FALSE;
+    }
+    virtual BOOL OnLButtonUp(CVisualObject * pObj, CVisualPoint & pt)
+    {
+        return FALSE;
+    }
+    virtual BOOL OnMouseMove(CVisualObject * pObj, CVisualPoint & pt)
+    {
+        return FALSE;
+    }
+    virtual BOOL OnLButtonDoubleClick(CVisualObject* pObj, CVisualPoint& pt)
+    {
+        return FALSE;
+    }
+    virtual BOOL OnFocus(CVisualObject* pObj)
+    {
+        return FALSE;
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-class CVisualObject 
+class CVisualObject
 {
 public:
     enum OBJECT_TYPE
@@ -212,10 +287,11 @@ public:
         CONTAINER,
     };
 
-    enum CONNECTION_TYPE {
+    enum CONNECTION_TYPE
+    {
         NONE,
         INPUT,
-        OUTPUT  
+        OUTPUT
     };
 
     CVisualObject(CVisualRect & Rect)
@@ -226,7 +302,8 @@ public:
         , m_dwIndex(0)
         , m_bIsSelected(false)
         , m_pContainer(NULL)
-    {;
+    {
+        ;
     }
 
     CVisualObject()
@@ -236,46 +313,90 @@ public:
         , m_dwIndex(0)
         , m_bIsSelected(false)
         , m_pContainer(NULL)
-    {;
+    {
+        ;
     }
-    
-    virtual ~CVisualObject() {
+
+    virtual ~CVisualObject()
+    {
 
     }
 
     virtual CONNECTION_TYPE GetConnectionType() const = 0;
 
     virtual void Draw(CVisualDrawContext & Ctx) = 0;
-    virtual BOOL HitTest(CVisualPoint & pt, CVisualObject** ppObj) { return FALSE; }
+    virtual BOOL HitTest(CVisualPoint & pt, CVisualObject** ppObj)
+    {
+        return FALSE;
+    }
     virtual void NotifyRemoved(CVisualObject* removed) = 0;
 
     // derived component can overwrite move method to move dependent objects
-    virtual void Move(double x, double y) { m_Rect.Move(x, y); }
-    virtual void AddPosition(double x, double y) { m_Rect.Add(x, y); }
-    
-    CVisualRect & Rect() { return m_Rect; }
+    virtual void Move(double x, double y)
+    {
+        m_Rect.Move(x, y);
+    }
+    virtual void AddPosition(double x, double y)
+    {
+        m_Rect.Add(x, y);
+    }
+
+    CVisualRect & Rect()
+    {
+        return m_Rect;
+    }
 
     // get/set handler
-    virtual void SetHandler(CCommandHandler* pHandler) { m_pHandler = pHandler; }
-    CCommandHandler * GetHandler() { return m_pHandler; }
+    virtual void SetHandler(CCommandHandler* pHandler)
+    {
+        m_pHandler = pHandler;
+    }
+    CCommandHandler * GetHandler()
+    {
+        return m_pHandler;
+    }
 
     // get/set user data
-    void SetData(LONG_PTR pData) { m_pData = pData; }
-    LONG_PTR GetData() { return m_pData; }
+    void SetData(LONG_PTR pData)
+    {
+        m_pData = pData;
+    }
+    LONG_PTR GetData()
+    {
+        return m_pData;
+    }
 
-    void SetIndex(DWORD dwIndex) { m_dwIndex = dwIndex; }
-    DWORD GetIndex() { return m_dwIndex; }
-    
+    void SetIndex(DWORD dwIndex)
+    {
+        m_dwIndex = dwIndex;
+    }
+    DWORD GetIndex()
+    {
+        return m_dwIndex;
+    }
+
     // get visual type
-    OBJECT_TYPE Type() { return m_Type; }
-    
+    OBJECT_TYPE Type()
+    {
+        return m_Type;
+    }
+
     virtual void Select(bool bIsSelected);
-    bool IsSelected() { return m_bIsSelected; }
+    bool IsSelected()
+    {
+        return m_bIsSelected;
+    }
 
     virtual bool IsDependent(CVisualObject* pOtherObj) const = 0;
-    
-    CVisualContainer* GetContainer() { return m_pContainer; }
-    void SetContainer(CVisualContainer* pContainer) { m_pContainer = pContainer; }
+
+    CVisualContainer* GetContainer()
+    {
+        return m_pContainer;
+    }
+    void SetContainer(CVisualContainer* pContainer)
+    {
+        m_pContainer = pContainer;
+    }
 
     virtual bool ContainsVisual(CVisualObject* pVisual);
 
@@ -310,9 +431,15 @@ public:
     // draw connector
     void Draw(CVisualDrawContext& Ctx);
 
-    CVisualPoint & Left() { return m_Left; }
-    CVisualPoint & Right() { return m_Right; }
-    
+    CVisualPoint & Left()
+    {
+        return m_Left;
+    }
+    CVisualPoint & Right()
+    {
+        return m_Right;
+    }
+
     virtual bool IsDependent(CVisualObject* pOtherObj) const;
 
     virtual BOOL HitTest(CVisualPoint& pt, CVisualObject** ppObj);
@@ -339,16 +466,25 @@ public:
 
     // returns point for connector in screen coordinates
     CVisualPoint GetConnectorPoint();
-    
-    CVisualConnector * GetConnector() { return m_pConnector; }
-    void SetConnector(CVisualConnector* pConnector) { m_pConnector = pConnector; }
-    
+
+    CVisualConnector * GetConnector()
+    {
+        return m_pConnector;
+    }
+    void SetConnector(CVisualConnector* pConnector)
+    {
+        m_pConnector = pConnector;
+    }
+
     virtual void Select(bool selected);
 
     virtual bool IsDependent(CVisualObject* pOtherObj) const;
 
-    void Highlight(bool fHighlight = true) { m_fHighlight = fHighlight; }
-    
+    void Highlight(bool fHighlight = true)
+    {
+        m_fHighlight = fHighlight;
+    }
+
 private:
     CVisualComponent * m_pOwner;
     CVisualConnector * m_pConnector;
@@ -387,7 +523,7 @@ public:
 class CVisualNode : public CVisualComponent
 {
 public:
-     enum
+    enum
     {
         COMP_DEF_WIDTH = 100,
         COMP_DEF_HEIGHT = 100,
@@ -413,20 +549,26 @@ public:
 
     CVisualPin* GetInputPinByIndex(size_t nIndex);
     CVisualPin* GetOutputPinByIndex(size_t nIndex);
-    size_t GetInputPinCount() { return m_InputPins.GetCount(); }
-    size_t GetOutputPinCount() { return m_OutputPins.GetCount(); }
+    size_t GetInputPinCount()
+    {
+        return m_InputPins.GetCount();
+    }
+    size_t GetOutputPinCount()
+    {
+        return m_OutputPins.GetCount();
+    }
     CVisualPin* GetInputPin(int nPinID);
     CVisualPin* GetOutputPin(int nPinID);
 
     void FlagTopoLoadError(size_t nIndex, bool fError = true);
 
-protected:        
+protected:
     void RecalcPins();
     void PositionPins(size_t nPins, CVisualObject::CONNECTION_TYPE Dir);
 
 private:
     static CCommandHandler* ms_pPinHandler;
-    
+
     CAtlArray<CVisualPin*> m_InputPins;
     CAtlArray<CVisualPin*> m_OutputPins;
     bool m_fTopoError;
@@ -459,7 +601,7 @@ public:
     void Move(double x, double y);
     void AddPosition(double x, double y);
     void NotifyRemoved(CVisualObject* removed);
-    
+
     virtual bool IsDependent(CVisualObject* pOtherObj) const;
 
     void AddComponent(CVisualComponent* pComponent);
@@ -474,7 +616,7 @@ public:
     void SetParent(CVisualContainer* pParent);
 
     void SetHandler(CCommandHandler* pHandler);
-    
+
     CVisualPin* GetInputPinByIndex(size_t nIndex);
     CVisualPin* GetOutputPinByIndex(size_t nIndex);
     size_t GetInputPinCount();
@@ -505,7 +647,7 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 class CVisualTree
 {
 public:
@@ -515,7 +657,7 @@ public:
     HRESULT AddVisual(CVisualObject* pVisual, bool fEnsureOpenSpace = true);
     void RemoveVisual(CVisualObject* pVisual);
 
-    void Draw(CVisualDrawContext & Ctx);	
+    void Draw(CVisualDrawContext & Ctx);
 
     BOOL HitTest(CVisualPoint & pt, CVisualObject** ppObj);
 
@@ -525,8 +667,11 @@ public:
 
     void GetMaxExtent(UINT32& maxXExtent, UINT32& maxYExtent);
     bool IsOccupied(CVisualObject* pObj);
-    
-    void SetEventHandler(CVisualObjectEventHandler* pEventHandler) { m_pEventHandler = pEventHandler; }
+
+    void SetEventHandler(CVisualObjectEventHandler* pEventHandler)
+    {
+        m_pEventHandler = pEventHandler;
+    }
 
 protected:
     CAtlArray<CVisualObject *> m_Objects;

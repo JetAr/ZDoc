@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -134,7 +134,7 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructInstance(context, &CIM_ConcreteJob_rtti,
-        (MI_Instance*)&self->__instance);
+                                        (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clone(
@@ -142,7 +142,7 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clone(
     _Outptr_ CIM_ConcreteJob** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Boolean MI_CALL CIM_ConcreteJob_IsA(
@@ -174,11 +174,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_InstanceID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_InstanceID(
@@ -186,19 +186,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_InstanceID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_InstanceID(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        0);
+               (MI_Instance*)&self->__instance,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Caption(
@@ -206,11 +206,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Caption(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Caption(
@@ -218,19 +218,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Caption(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_Caption(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Description(
@@ -238,11 +238,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Description(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Description(
@@ -250,19 +250,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Description(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_Description(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        2);
+               (MI_Instance*)&self->__instance,
+               2);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_ElementName(
@@ -270,11 +270,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_ElementName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_ElementName(
@@ -282,19 +282,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_ElementName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_ElementName(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        3);
+               (MI_Instance*)&self->__instance,
+               3);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_InstallDate(
@@ -318,11 +318,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Name(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Name(
@@ -330,19 +330,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Name(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_Name(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        5);
+               (MI_Instance*)&self->__instance,
+               5);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_OperationalStatus(
@@ -354,11 +354,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_OperationalStatus(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        6,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        0);
+               (MI_Instance*)&self->__instance,
+               6,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_OperationalStatus(
@@ -370,19 +370,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_OperationalStatus(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        6,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               6,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_OperationalStatus(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        6);
+               (MI_Instance*)&self->__instance,
+               6);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_StatusDescriptions(
@@ -394,11 +394,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_StatusDescriptions(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        7,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        0);
+               (MI_Instance*)&self->__instance,
+               7,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_StatusDescriptions(
@@ -410,19 +410,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_StatusDescriptions(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        7,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               7,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_StatusDescriptions(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        7);
+               (MI_Instance*)&self->__instance,
+               7);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Status(
@@ -430,11 +430,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Status(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Status(
@@ -442,19 +442,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Status(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_Status(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        8);
+               (MI_Instance*)&self->__instance,
+               8);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_HealthState(
@@ -542,11 +542,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_JobStatus(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        14,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               14,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_JobStatus(
@@ -554,19 +554,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_JobStatus(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        14,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               14,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_JobStatus(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        14);
+               (MI_Instance*)&self->__instance,
+               14);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_TimeSubmitted(
@@ -750,11 +750,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Notify(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        26,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               26,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Notify(
@@ -762,19 +762,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Notify(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        26,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               26,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_Notify(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        26);
+               (MI_Instance*)&self->__instance,
+               26);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Owner(
@@ -782,11 +782,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Owner(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        27,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               27,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Owner(
@@ -794,19 +794,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_Owner(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        27,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               27,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_Owner(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        27);
+               (MI_Instance*)&self->__instance,
+               27);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_Priority(
@@ -878,11 +878,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_ErrorDescription(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        32,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               32,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_ErrorDescription(
@@ -890,19 +890,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_ErrorDescription(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        32,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               32,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_ErrorDescription(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        32);
+               (MI_Instance*)&self->__instance,
+               32);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_RecoveryAction(
@@ -926,11 +926,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_OtherRecoveryAction(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        34,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               34,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_OtherRecoveryAction(
@@ -938,19 +938,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_SetPtr_OtherRecoveryAction(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        34,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               34,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Clear_OtherRecoveryAction(
     _Inout_ CIM_ConcreteJob* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        34);
+               (MI_Instance*)&self->__instance,
+               34);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_Set_JobState(
@@ -1024,7 +1024,7 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_KillJob_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &CIM_ConcreteJob_KillJob_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_KillJob_Clone(
@@ -1032,7 +1032,7 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_KillJob_Clone(
     _Outptr_ CIM_ConcreteJob_KillJob** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_KillJob_Destruct(
@@ -1110,7 +1110,7 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_RequestStateChange_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &CIM_ConcreteJob_RequestStateChange_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_RequestStateChange_Clone(
@@ -1118,7 +1118,7 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_RequestStateChange_Clone(
     _Outptr_ CIM_ConcreteJob_RequestStateChange** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_RequestStateChange_Destruct(
@@ -1211,7 +1211,7 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_GetError_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &CIM_ConcreteJob_GetError_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_GetError_Clone(
@@ -1219,7 +1219,7 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_GetError_Clone(
     _Outptr_ CIM_ConcreteJob_GetError** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_GetError_Destruct(
@@ -1262,11 +1262,11 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_GetError_Set_Error(
     _In_ const CIM_Error* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&x,
-        MI_INSTANCE,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&x,
+               MI_INSTANCE,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_GetError_SetPtr_Error(
@@ -1274,19 +1274,19 @@ MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_GetError_SetPtr_Error(
     _In_ const CIM_Error* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&x,
-        MI_INSTANCE,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&x,
+               MI_INSTANCE,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_ConcreteJob_GetError_Clear_Error(
     _Inout_ CIM_ConcreteJob_GetError* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 

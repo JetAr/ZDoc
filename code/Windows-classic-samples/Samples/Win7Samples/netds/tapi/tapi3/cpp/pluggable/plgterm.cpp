@@ -1,4 +1,4 @@
-// PlgTerm.cpp: implementation of the CPlgTermSample class.
+﻿// PlgTerm.cpp: implementation of the CPlgTermSample class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -14,11 +14,11 @@
 //////////////////////////////////////////////////////////////////////
 
 CPlgTermSample::CPlgTermSample()
-	:m_pEventSink(NULL),
-	m_bKnownSafeContext(FALSE)
+    :m_pEventSink(NULL),
+     m_bKnownSafeContext(FALSE)
 {
 
-	LOG((MSP_TRACE, "CPlgTermSample::CPlgTermSample enter"));
+    LOG((MSP_TRACE, "CPlgTermSample::CPlgTermSample enter"));
 
 }
 
@@ -28,39 +28,39 @@ CPlgTermSample::CPlgTermSample()
 
 CPlgTermSample::~CPlgTermSample()
 {
-	LOG((MSP_TRACE, "CPlgTermSample::~CPlgTermSample enter"));
+    LOG((MSP_TRACE, "CPlgTermSample::~CPlgTermSample enter"));
 
     //
     // if we have an event sink, release it
     //
     if( NULL != m_pEventSink )
     {
-		LOG((MSP_TRACE, "CPlgTermSample::~CPlgTermSample release sink"));
+        LOG((MSP_TRACE, "CPlgTermSample::~CPlgTermSample release sink"));
         m_pEventSink->Release();
         m_pEventSink = NULL;
     }
 
     //
-	// Release free thread marshaler
-	//
+    // Release free thread marshaler
+    //
     if( m_pFTM )
     {
         m_pFTM->Release();
         m_pFTM = NULL;
     }
 
-	LOG((MSP_TRACE, "CPlgTermSample::~CPlgTermSample exit"));
+    LOG((MSP_TRACE, "CPlgTermSample::~CPlgTermSample exit"));
 }
 
 
-    //
-    // ITPlgSampleEvent methods
-    //
+//
+// ITPlgSampleEvent methods
+//
 
 HRESULT CPlgTermSample::FireEvent( long lEventCode)
 {
-	LOG((MSP_TRACE, "CPlgTermSample::FireEvent enter"));
-	//
+    LOG((MSP_TRACE, "CPlgTermSample::FireEvent enter"));
+    //
     // we need a sink before we can fire an event
     //
 
@@ -91,7 +91,7 @@ HRESULT CPlgTermSample::FireEvent( long lEventCode)
     // put the pointer to our IDispatch interface in the structure
     //
 
-    HRESULT hr = _InternalQueryInterface(IID_IDispatch, 
+    HRESULT hr = _InternalQueryInterface(IID_IDispatch,
                                          reinterpret_cast<void**>(&(mspEventInfo.MSP_PRIVATE_EVENT_INFO.pEvent)));
 
     if (FAILED(hr))
@@ -110,14 +110,14 @@ HRESULT CPlgTermSample::FireEvent( long lEventCode)
     {
 
         //
-        // release all interfaces that we are holding. 
+        // release all interfaces that we are holding.
         // fire event failed so no one else will release them for us.
         //
         mspEventInfo.MSP_PRIVATE_EVENT_INFO.pEvent->Release();
         mspEventInfo.MSP_PRIVATE_EVENT_INFO.pEvent=NULL;
-		
+
         LOG((MSP_ERROR, "CPlgTermSample::FireEvent on sink failed - exit hr=0x%08", hr));
-       
+
         return hr;
     }
 
@@ -138,9 +138,9 @@ HRESULT CPlgTermSample::FireEvent( long lEventCode)
 
 HRESULT CPlgTermSample::RegisterSink(
     IN  ITPluggableTerminalEventSink *pSink
-    )
+)
 {
-	LOG((MSP_TRACE, "CPlgTermSample::RegisterSink enter"));
+    LOG((MSP_TRACE, "CPlgTermSample::RegisterSink enter"));
 
     //
     // Critical section
@@ -152,10 +152,10 @@ HRESULT CPlgTermSample::RegisterSink(
     // Validates argument
     //
 
-    if (!pSink)	
+    if (!pSink)
     {
         LOG((MSP_ERROR, "CPlgTermSample::RegisterSink - "
-			"ITPluggableTerminalEventSink invalid pointer - exit 0x%08x", E_POINTER));
+             "ITPluggableTerminalEventSink invalid pointer - exit 0x%08x", E_POINTER));
         return E_POINTER;
     }
 
@@ -175,7 +175,7 @@ HRESULT CPlgTermSample::RegisterSink(
     // Set the new event sink
     //
 
-	LOG((MSP_TRACE, "CPlgTermSample::RegisterSink - keeping new sink [%p]",pSink));
+    LOG((MSP_TRACE, "CPlgTermSample::RegisterSink - keeping new sink [%p]",pSink));
 
     m_pEventSink = pSink;
     m_pEventSink->AddRef();
@@ -218,11 +218,11 @@ HRESULT CPlgTermSample::UnregisterSink()
 
 
 HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
-	    IN  IID                   iidTerminalClass,
-	    IN  DWORD                 dwMediaType,
-	    IN  TERMINAL_DIRECTION    Direction,
-        IN  MSP_HANDLE            htAddress
-        )
+    IN  IID                   iidTerminalClass,
+    IN  DWORD                 dwMediaType,
+    IN  TERMINAL_DIRECTION    Direction,
+    IN  MSP_HANDLE            htAddress
+)
 
 {
 
@@ -235,13 +235,13 @@ HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
     if (TD_RENDER != Direction)
     {
         LOG((MSP_ERROR, "CPlgTermSample::InitializeDynamic"
-				" - bad direction [%d] requested. returning 0x%08x", 
-				Direction, E_INVALIDARG));
-        
+             " - bad direction [%d] requested. returning 0x%08x",
+             Direction, E_INVALIDARG));
+
         return E_INVALIDARG;
     }
 
-    
+
     //
     // make sure the mediatype is correct - TAPIMEDIATYPE_AUDIO - is how we set it in registry
     //
@@ -251,8 +251,8 @@ HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
     {
 
         LOG((MSP_ERROR, "CPlgTermSample::InitializeDynamic"
-				" - bad media type [%d] requested. returning 0x%08x", 
-				dwMediaType, E_INVALIDARG));
+             " - bad media type [%d] requested. returning 0x%08x",
+             dwMediaType, E_INVALIDARG));
 
         return E_INVALIDARG;
     }
@@ -264,7 +264,7 @@ HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
     // Call the base class method
     //
     LOG((MSP_TRACE, "CPlgTermSample::InitializeDynamic - CBaseTerminal::Initialize with"
-                "dwMediaType = 0x%08x, Direction = 0x%08x", dwMediaType, Direction));
+         "dwMediaType = 0x%08x, Direction = 0x%08x", dwMediaType, Direction));
 
     HRESULT hr;
     hr = CBaseTerminal::Initialize(iidTerminalClass,
@@ -275,7 +275,7 @@ HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlgTermSample::InitializeDynamic - "
-                "base class method failed - 0x%08x", hr));
+             "base class method failed - 0x%08x", hr));
         return hr;
     }
 
@@ -287,7 +287,7 @@ HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlgTermSample::InitializeDynamic - "
-                "SetTerminalInfo failed - 0x%08x", hr));
+             "SetTerminalInfo failed - 0x%08x", hr));
 
         return hr;
     }
@@ -301,7 +301,7 @@ HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlgTermSample::InitializeDynamic - "
-				"CreateFilter failed - 0x%08x", hr));
+             "CreateFilter failed - 0x%08x", hr));
         return hr;
     }
 
@@ -314,12 +314,12 @@ HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlgTermSample::InitializeDynamic - "
-            "FindPin failed - 0x%08x", hr));
+             "FindPin failed - 0x%08x", hr));
     }
 
     m_bKnownSafeContext = TRUE;
 
-	LOG((MSP_TRACE, "CPlgTermSample::InitializeDynamic exit - 0x%08x", hr));
+    LOG((MSP_TRACE, "CPlgTermSample::InitializeDynamic exit - 0x%08x", hr));
     return hr;
 
 }
@@ -330,12 +330,12 @@ HRESULT STDMETHODCALLTYPE CPlgTermSample::InitializeDynamic(
 
 DWORD CPlgTermSample::GetSupportedMediaTypes()
 {
-    
+
     LOG((MSP_TRACE, "CPlgTermSample::GetSupportedMediaTypes enter "));
 
     CLock lock(m_CritSec);
 
-    
+
     DWORD dwMediaType = TAPIMEDIATYPE_AUDIO; //we set this in registry
 
 
@@ -363,7 +363,7 @@ HRESULT CPlgTermSample::AddFiltersToGraph()
     if ( m_pGraph == NULL)
     {
         LOG((MSP_ERROR, "CPlgTermSample::AddFiltersToGraph - "
-				"we have no graph - returning 0x%08x", E_UNEXPECTED));
+             "we have no graph - returning 0x%08x", E_UNEXPECTED));
         return E_UNEXPECTED;
     }
 
@@ -374,7 +374,7 @@ HRESULT CPlgTermSample::AddFiltersToGraph()
     if ( m_pIFilter == NULL)
     {
         LOG((MSP_ERROR, "CPlgTermSample::AddFiltersToGraph - "
-				"we have no filter - returning 0x%08x", E_UNEXPECTED));
+             "we have no filter - returning 0x%08x", E_UNEXPECTED));
         return E_UNEXPECTED;
     }
 
@@ -389,7 +389,7 @@ HRESULT CPlgTermSample::AddFiltersToGraph()
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlgTermSample::AddFiltersToGraph - "
-				"can not add filter "));
+             "can not add filter "));
 
     }
 
@@ -406,13 +406,13 @@ HRESULT CPlgTermSample::SetTerminalInfo()
 {
     LOG((MSP_TRACE, "CPlgTermSample::SetTerminalInfo - enter"));
 
-	//
-    // set terminals's name for ITTerminal::get_Name 
+    //
+    // set terminals's name for ITTerminal::get_Name
     //
 
     size_t nStringMaxSize = sizeof(m_szName)/sizeof(TCHAR);
 
-    wcsncpy_s(m_szName,nStringMaxSize , SZTERMNAME, min(_tcslen(SZTERMNAME), nStringMaxSize));
+    wcsncpy_s(m_szName,nStringMaxSize, SZTERMNAME, min(_tcslen(SZTERMNAME), nStringMaxSize));
 
 
     //
@@ -451,23 +451,23 @@ HRESULT CPlgTermSample::CreateFilter()
     if( NULL == pFilter )
     {
         LOG((MSP_ERROR, "CPlgTermSample::CreateFilter - "
-                "create filter failed - returning 0x%08x", E_OUTOFMEMORY));
+             "create filter failed - returning 0x%08x", E_OUTOFMEMORY));
         return E_OUTOFMEMORY;
     }
 
     // COM Rule
     pFilter->AddRef();
 
-	//
-	// Get the pin
-	//
+    //
+    // Get the pin
+    //
 
-	HRESULT hr = pFilter->Initialize( );
+    HRESULT hr = pFilter->Initialize( );
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlgTermSample::CreateFilter - "
-                "Initialize private failed - returning 0x%08x", hr));
-		pFilter->Release();
+             "Initialize private failed - returning 0x%08x", hr));
+        pFilter->Release();
         return hr;
     }
 
@@ -477,15 +477,15 @@ HRESULT CPlgTermSample::CreateFilter()
     //
 
     hr = pFilter->QueryInterface(
-        IID_IBaseFilter,
-        (void**)&m_pIFilter
-        );
+             IID_IBaseFilter,
+             (void**)&m_pIFilter
+         );
 
     if( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CPlgTermSample::CreateFilter - "
-            "QI for IBaseFilter failed"));
-    }    
+             "QI for IBaseFilter failed"));
+    }
     else
     {
         pFilter->InitializePrivate(this);
@@ -514,7 +514,7 @@ HRESULT CPlgTermSample::FindPin()
     if (m_pIFilter == NULL)
     {
         LOG((MSP_ERROR, "CPlgTermSample::FindPin - "
-				"filter object is NULL - returning 0x%08x", E_UNEXPECTED));
+             "filter object is NULL - returning 0x%08x", E_UNEXPECTED));
         return E_UNEXPECTED;
     }
 
@@ -525,7 +525,7 @@ HRESULT CPlgTermSample::FindPin()
     if (m_pIPin != NULL)
     {
         LOG((MSP_ERROR, "CPlgTermSample::FindPin - "
-				"already got a pin - returning 0x%08x", E_UNEXPECTED));
+             "already got a pin - returning 0x%08x", E_UNEXPECTED));
         return E_UNEXPECTED;
     }
 
@@ -540,7 +540,7 @@ HRESULT CPlgTermSample::FindPin()
     if (FAILED(hr = m_pIFilter->EnumPins(&pIEnumPins)))
     {
         LOG((MSP_ERROR, "CPlgTermSample::FindPin - "
-				"cannot enum pins - returning 0x%08x", hr));
+             "cannot enum pins - returning 0x%08x", hr));
         return hr;
     }
 
@@ -551,7 +551,7 @@ HRESULT CPlgTermSample::FindPin()
     if (S_OK != (hr = pIEnumPins->Next(1, &m_pIPin, &cFetched)))
     {
         LOG((MSP_ERROR, "CPlgTermSample::FindPin - "
-				"cannot get a pin - returning 0x%08x", hr));
+             "cannot get a pin - returning 0x%08x", hr));
 
         hr = (hr == S_FALSE) ? E_FAIL : hr;
     }
@@ -566,17 +566,17 @@ HRESULT CPlgTermSample::FindPin()
 //
 //  SetInterfaceSafetyOptions
 //
-//  this is a safeguard to prevent using this terminal in scripting outside 
+//  this is a safeguard to prevent using this terminal in scripting outside
 //  terminal manager context.
 //
-//  if we detect that InitializeDynamic has not been called, this method will 
+//  if we detect that InitializeDynamic has not been called, this method will
 //  fail thus marking the object as unsafe for scripting
 //
 //////////////////////////////////////////////////////////////////////////////
 
-HRESULT CPlgTermSample::SetInterfaceSafetyOptions(REFIID riid, 
-                                                    DWORD dwOptionSetMask, 
-                                                    DWORD dwEnabledOptions)
+HRESULT CPlgTermSample::SetInterfaceSafetyOptions(REFIID riid,
+        DWORD dwOptionSetMask,
+        DWORD dwEnabledOptions)
 {
 
     CLock lock(m_CritSec);
@@ -586,11 +586,11 @@ HRESULT CPlgTermSample::SetInterfaceSafetyOptions(REFIID riid,
     // check if we are running in safe context
     //
 
-    if (!m_bKnownSafeContext) 
+    if (!m_bKnownSafeContext)
     {
 
         //
-        // we have not been initialized properly... someone evil is trying to 
+        // we have not been initialized properly... someone evil is trying to
         // use this terminal. NO!
         //
 
@@ -602,9 +602,9 @@ HRESULT CPlgTermSample::SetInterfaceSafetyOptions(REFIID riid,
     // we are known to safe, so simply delegate request to the base class
     //
 
-    return CMSPObjectSafetyImpl::SetInterfaceSafetyOptions(riid, 
-                                                           dwOptionSetMask, 
-                                                           dwEnabledOptions);
+    return CMSPObjectSafetyImpl::SetInterfaceSafetyOptions(riid,
+            dwOptionSetMask,
+            dwEnabledOptions);
 }
 
 
@@ -612,17 +612,17 @@ HRESULT CPlgTermSample::SetInterfaceSafetyOptions(REFIID riid,
 //
 //  GetInterfaceSafetyOptions
 //
-//  this is a safeguard to prevent using this terminal in scripting outside 
+//  this is a safeguard to prevent using this terminal in scripting outside
 //  terminal manager context.
 //
-//  if we detect that InitializeDynamic has not been called, this method will 
+//  if we detect that InitializeDynamic has not been called, this method will
 //  fail thus marking the object as unsafe for scripting
 //
 //////////////////////////////////////////////////////////////////////////////
 
-HRESULT CPlgTermSample::GetInterfaceSafetyOptions(REFIID riid, 
-                                                    DWORD *pdwSupportedOptions, 
-                                                    DWORD *pdwEnabledOptions)
+HRESULT CPlgTermSample::GetInterfaceSafetyOptions(REFIID riid,
+        DWORD *pdwSupportedOptions,
+        DWORD *pdwEnabledOptions)
 {
 
     CLock lock(m_CritSec);
@@ -632,11 +632,11 @@ HRESULT CPlgTermSample::GetInterfaceSafetyOptions(REFIID riid,
     // check if we are running in safe context
     //
 
-    if (!m_bKnownSafeContext) 
+    if (!m_bKnownSafeContext)
     {
 
         //
-        // we have not been initialized properly... someone evil is trying to 
+        // we have not been initialized properly... someone evil is trying to
         // use this terminal. NO!
         //
 
@@ -648,9 +648,9 @@ HRESULT CPlgTermSample::GetInterfaceSafetyOptions(REFIID riid,
     // we are known to safe, so simply delegate request to the base class
     //
 
-    return CMSPObjectSafetyImpl::GetInterfaceSafetyOptions(riid, 
-                                                           pdwSupportedOptions,
-                                                           pdwEnabledOptions);
+    return CMSPObjectSafetyImpl::GetInterfaceSafetyOptions(riid,
+            pdwSupportedOptions,
+            pdwEnabledOptions);
 }
 
 
@@ -660,12 +660,12 @@ HRESULT CPlgTermSample::FinalConstruct(void)
     LOG((MSP_TRACE, "CPlgTermSample::FinalConstruct - enter"));
 
     HRESULT hr = CoCreateFreeThreadedMarshaler( GetControllingUnknown(),
-                                                & m_pFTM );
+                 & m_pFTM );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CFPTerminal::FinalConstruct - "
-            "create FTM returned 0x%08x; exit", hr));
+             "create FTM returned 0x%08x; exit", hr));
 
         return hr;
     }

@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // vmr9compositor.cpp : Defines the entry point for the application.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -52,8 +52,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
-	MSG msg;
-	HACCEL hAccelTable;
+    MSG msg;
+    HACCEL hAccelTable;
 
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
@@ -73,7 +73,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     // Main message loop:
     while (GetMessage(&msg, NULL, 0, 0))
     {
-        if( IsWindow(g_hWndControl) && IsDialogMessage(g_hWndControl, &msg)) {
+        if( IsWindow(g_hWndControl) && IsDialogMessage(g_hWndControl, &msg))
+        {
             continue;
         }
 
@@ -92,7 +93,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     g_graph = NULL;
     CoUninitialize();
 
-	return (int) msg.wParam;
+    return (int) msg.wParam;
 }
 
 
@@ -104,8 +105,8 @@ BOOL GetMoviePath(TCHAR *szBuffer, DWORD cchBuffer)
     szBuffer[0] = NULL;
 
     static const TCHAR szFilter[]
-                            = TEXT("Video Files (.AVI, .MPG, .MPEG, .VOB, .QT, .WMV)\0*.AVI;*.MPG;*.MPEG;*.VOB;*.QT;*.WMV\0") \
-                              TEXT("All Files (*.*)\0*.*\0\0");
+        = TEXT("Video Files (.AVI, .MPG, .MPEG, .VOB, .QT, .WMV)\0*.AVI;*.MPG;*.MPEG;*.VOB;*.QT;*.WMV\0") \
+          TEXT("All Files (*.*)\0*.*\0\0");
     ofn.lStructSize         = sizeof(OPENFILENAME);
     ofn.hwndOwner           = g_hWnd;
     ofn.hInstance           = NULL;
@@ -144,7 +145,7 @@ HRESULT ConfigureVMR9(HWND window)
     FAIL_RET( CoCreateInstance(CLSID_VideoMixingRenderer9, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**)&g_filter) );
 
     // Configure the VMR-9.
-    // Set the maximum number of video streams, and set windowless mode. 
+    // Set the maximum number of video streams, and set windowless mode.
     FAIL_RET( g_filter->QueryInterface(IID_IVMRFilterConfig9, reinterpret_cast<void**>(&filterConfig)) );
 
     FAIL_RET( filterConfig->SetNumberOfStreams( MAX_VIDEO_STREAMS ) );
@@ -181,7 +182,7 @@ HRESULT StartGraph(HWND window)
 
     ofn.lStructSize         = sizeof(OPENFILENAME);
     ofn.hwndOwner           = g_hWnd;
-    ofn.lpstrFilter         = TEXT("Video Files (.AVI, .MPG, .MPEG, .VOB, .WMV)\0*.AVI;*.MPG;*.MPEG;*.VOB;*.WMV\0") 
+    ofn.lpstrFilter         = TEXT("Video Files (.AVI, .MPG, .MPEG, .VOB, .WMV)\0*.AVI;*.MPG;*.MPEG;*.VOB;*.WMV\0")
                               TEXT("All Files (*.*)\0*.*\0\0");
     ofn.nFilterIndex        = 1;
     ofn.lpstrFile           = selectList.BufferPtr();
@@ -189,9 +190,9 @@ HRESULT StartGraph(HWND window)
     ofn.lpstrTitle          = TEXT("Select a video file to play...");
     ofn.Flags               = OFN_HIDEREADONLY | OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
     ofn.lpstrDefExt         = TEXT("AVI");
-    
+
     // Launch the Open File dialog.
-	DWORD result = GetOpenFileName(&ofn);
+    DWORD result = GetOpenFileName(&ofn);
 
     // Check for errors.
     if (CommDlgExtendedError() != 0)
@@ -236,13 +237,13 @@ HRESULT StartGraph(HWND window)
             break;
         }
 
-		hr = g_graph->RenderFile( pFileName, NULL );
+        hr = g_graph->RenderFile( pFileName, NULL );
 
         CoTaskMemFree(pFileName);
 
         FAIL_RET(hr);
 
-	}
+    }
 
     // Run the graph.
 
@@ -270,23 +271,23 @@ HRESULT StartGraph(HWND window)
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
-	WNDCLASSEX wcex;
+    WNDCLASSEX wcex;
 
-	wcex.cbSize = sizeof(WNDCLASSEX);
+    wcex.cbSize = sizeof(WNDCLASSEX);
 
-	wcex.style			= CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc	= (WNDPROC)WndProc;
-	wcex.cbClsExtra		= 0;
-	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= hInstance;
-	wcex.hIcon			= NULL;
-	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground	= NULL;
-	wcex.lpszMenuName	= (LPCTSTR)IDC_VMR9COMPOSITOR;
-	wcex.lpszClassName	= szWindowClass;
-	wcex.hIconSm		= NULL;
+    wcex.style			= CS_HREDRAW | CS_VREDRAW;
+    wcex.lpfnWndProc	= (WNDPROC)WndProc;
+    wcex.cbClsExtra		= 0;
+    wcex.cbWndExtra		= 0;
+    wcex.hInstance		= hInstance;
+    wcex.hIcon			= NULL;
+    wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground	= NULL;
+    wcex.lpszMenuName	= (LPCTSTR)IDC_VMR9COMPOSITOR;
+    wcex.lpszClassName	= szWindowClass;
+    wcex.hIconSm		= NULL;
 
-	return RegisterClassEx(&wcex);
+    return RegisterClassEx(&wcex);
 }
 
 //
@@ -301,22 +302,22 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow, HWND& hWnd)
 {
-   hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance; // Store instance handle in our global variable
 
-   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-                       100, 100, 600, 500,
-                       NULL, NULL, hInstance, NULL);
+    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+                        100, 100, 600, 500,
+                        NULL, NULL, hInstance, NULL);
 
-   if (!hWnd)
-      return FALSE;
+    if (!hWnd)
+        return FALSE;
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
 
-   g_hWndControl = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_CONTROL) ,hWnd, (DLGPROC)ControlWndProc );
-   ShowWindow( g_hWndControl, nCmdShow );
+    g_hWndControl = CreateDialog(hInstance, MAKEINTRESOURCE(IDD_CONTROL),hWnd, (DLGPROC)ControlWndProc );
+    ShowWindow( g_hWndControl, nCmdShow );
 
-   return TRUE;
+    return TRUE;
 }
 
 void PaintWindow(HWND hWnd)
@@ -353,7 +354,8 @@ void PaintWindow(HWND hWnd)
 
 void MoveWindow()
 {
-    if( g_windowlessControl == NULL ) {
+    if( g_windowlessControl == NULL )
+    {
         return;
     }
 
@@ -380,68 +382,68 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
-        case WM_COMMAND:
-            wmId    = LOWORD(wParam);
-            wmEvent = HIWORD(wParam);
+    case WM_COMMAND:
+        wmId    = LOWORD(wParam);
+        wmEvent = HIWORD(wParam);
 
-            // Parse the menu selections:
-            switch (wmId)
+        // Parse the menu selections:
+        switch (wmId)
+        {
+        case ID_FILE_START:
+            hr = StartGraph(g_hWnd);
+            if( FAILED(hr) )
             {
-                case ID_FILE_START:
-                    hr = StartGraph(g_hWnd);
-                    if( FAILED(hr) )
-                    {
-                        return 0;
-                    }
-                    break;
-
-                case IDM_ABOUT:
-                   DialogBox(hInst, (LPCTSTR)IDD_ABOUTBOX, hWnd, (DLGPROC)About);
-                   break;
-
-                case IDM_EXIT:
-                   DestroyWindow(hWnd);
-                   break;
-
-                default:
-                   return DefWindowProc(hWnd, message, wParam, lParam);
+                return 0;
             }
             break;
 
-        case WM_PAINT:
-            PaintWindow(hWnd);
+        case IDM_ABOUT:
+            DialogBox(hInst, (LPCTSTR)IDD_ABOUTBOX, hWnd, (DLGPROC)About);
             break;
 
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            break;
-
-        case WM_MOVE:
-        case WM_SIZE:
-            MoveWindow();
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
             break;
 
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
-   }
-   return 0;
+        }
+        break;
+
+    case WM_PAINT:
+        PaintWindow(hWnd);
+        break;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+
+    case WM_MOVE:
+    case WM_SIZE:
+        MoveWindow();
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
 }
 
 // Message handler for about box.
 LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	switch (message)
-	{
-	case WM_INITDIALOG:
-		return TRUE;
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        return TRUE;
 
-	case WM_COMMAND:
-		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-		{
-			EndDialog(hDlg, LOWORD(wParam));
-			return TRUE;
-		}
-		break;
-	}
-	return FALSE;
+    case WM_COMMAND:
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+        {
+            EndDialog(hDlg, LOWORD(wParam));
+            return TRUE;
+        }
+        break;
+    }
+    return FALSE;
 }

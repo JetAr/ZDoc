@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,8 +13,8 @@
 
 ResourceFontFileEnumerator::ResourceFontFileEnumerator(
     IDWriteFactory* factory
-    ) : 
-    refCount_(0), 
+) :
+    refCount_(0),
     factory_(SafeAcquire(factory)),
     currentFile_(),
     nextIndex_(0)
@@ -24,7 +24,7 @@ ResourceFontFileEnumerator::ResourceFontFileEnumerator(
 HRESULT ResourceFontFileEnumerator::Initialize(
     UINT const* resourceIDs,    // [resourceCount]
     UINT32 resourceCount
-    )
+)
 {
     try
     {
@@ -76,11 +76,11 @@ HRESULT STDMETHODCALLTYPE ResourceFontFileEnumerator::MoveNext(OUT BOOL* hasCurr
     if (nextIndex_ < resourceIDs_.size())
     {
         hr = factory_->CreateCustomFontFileReference(
-                &resourceIDs_[nextIndex_],
-                sizeof(UINT),
-                ResourceFontFileLoader::GetLoader(),
-                &currentFile_
-                );
+                 &resourceIDs_[nextIndex_],
+                 sizeof(UINT),
+                 ResourceFontFileLoader::GetLoader(),
+                 &currentFile_
+             );
 
         if (SUCCEEDED(hr))
         {

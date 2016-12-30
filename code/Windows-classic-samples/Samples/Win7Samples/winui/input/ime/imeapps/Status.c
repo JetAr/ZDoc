@@ -1,4 +1,4 @@
-/**********************************************************************/
+﻿/**********************************************************************/
 /*                                                                    */
 /*      STATUS.C                                                      */
 /*                                                                    */
@@ -51,13 +51,13 @@ BOOL CreateStatus(HWND hWnd)
     int i;
     int nWidth = 0;
 
-    hWndStatus = CreateStatusWindow(WS_CHILD | WS_VISIBLE, NULL ,
+    hWndStatus = CreateStatusWindow(WS_CHILD | WS_VISIBLE, NULL,
                                     hWnd,  STATUS_ID);
 
 
     if (!hWndStatus)
     {
-        return FALSE; 
+        return FALSE;
     }
 
     pPartsWidth = (int *)LocalAlloc(LPTR,sizeof(int) * NUM_PARTS);
@@ -96,7 +96,7 @@ void SetStatusItems(HWND hWnd)
     {
         ClearConvModeParts();
     }
-    
+
     ImmReleaseContext(hWnd,hIMC);
 }
 
@@ -119,27 +119,27 @@ void SetConvModeParts(DWORD dwConvMode)
 {
     switch (dwConvMode & IME_CMODE_LANGUAGE)
     {
-        case IME_CMODE_ALPHANUMERIC:
-            SendMessage(hWndStatus,SB_SETTEXT,
-                        SBITEM_NATIVEMODE,(LPARAM)&szImeAlpha);
-            break;
+    case IME_CMODE_ALPHANUMERIC:
+        SendMessage(hWndStatus,SB_SETTEXT,
+                    SBITEM_NATIVEMODE,(LPARAM)&szImeAlpha);
+        break;
 
-        case IME_CMODE_NATIVE:
-            SendMessage(hWndStatus,SB_SETTEXT,
-                        SBITEM_NATIVEMODE,(LPARAM)&szImeNative);
+    case IME_CMODE_NATIVE:
+        SendMessage(hWndStatus,SB_SETTEXT,
+                    SBITEM_NATIVEMODE,(LPARAM)&szImeNative);
 
-            break;
+        break;
 
-        case (IME_CMODE_NATIVE | IME_CMODE_KATAKANA):
-            SendMessage(hWndStatus,SB_SETTEXT,
-                        SBITEM_NATIVEMODE,(LPARAM)&szImeKatakana);
+    case (IME_CMODE_NATIVE | IME_CMODE_KATAKANA):
+        SendMessage(hWndStatus,SB_SETTEXT,
+                    SBITEM_NATIVEMODE,(LPARAM)&szImeKatakana);
 
-            break;
+        break;
 
-        default:
-            SendMessage(hWndStatus,SB_SETTEXT,
-                        SBITEM_NATIVEMODE,(LPARAM)&szImeNull);
-            break;
+    default:
+        SendMessage(hWndStatus,SB_SETTEXT,
+                    SBITEM_NATIVEMODE,(LPARAM)&szImeNull);
+        break;
     }
 
 
@@ -223,7 +223,7 @@ void SetConvModeParts(DWORD dwConvMode)
     {
         SendMessage(hWndStatus,SB_SETTEXT,SBITEM_EUDC,(LPARAM)&szImeNull);
     }
-    
+
 
     if (dwConvMode & IME_CMODE_SYMBOL)
     {

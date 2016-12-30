@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -92,7 +92,7 @@ void SetPresenceInformation()
     WCHAR               wzNumBuf[INPUT_BUFSIZE];
     WCHAR               wzStringBuf[STRING_BUFSIZE];
     int                 nInput = 0;
- 
+
     // get input from user to fill out presence info
     wprintf(L"Enter a number for what status you want to set for your current presence status\n"
             L"1. Out to lunch\n"
@@ -106,7 +106,7 @@ void SetPresenceInformation()
 
     GET_PROMPT_RESPONSE(hr, wzNumBuf);
 
-    // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0    
+    // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0
     nInput = _wtoi(wzNumBuf);
     if (nInput < 1  || nInput > 7)
     {
@@ -117,7 +117,7 @@ void SetPresenceInformation()
 
     // Convert the input value to a status value
     presInfo.status = (PEER_PRESENCE_STATUS) nInput;
-    
+
     // enter presence status to set for yourself
     wprintf(L"Now input your detailed status as freeform text [none]: ");
     GET_PROMPT_RESPONSE(hr, wzStringBuf);

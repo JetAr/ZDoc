@@ -1,14 +1,14 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   Common.h 
+*   Common.h
 *       This module contains the definitions used by all modules in the
-*       CoffeeShop5 application.         
+*       CoffeeShop5 application.
 ******************************************************************************/
 
 #define NORMAL_LOADSTRING  100                  // Normal size of loaded strings
@@ -30,7 +30,7 @@
 #define MINMAX_HEIGHT   480                     // Window height
 #define TIMEOUT         12000                   // Timer fires on this interval in ms
 #define MIN_ORDER_INTERVAL   2500               // Minimum utterance time for a false reco to be
-                                                // considered a possible order
+// considered a possible order
 #define DYN_TTSVOICERULE     1001               // ID for the dynamic tts voice rule
 
 typedef LRESULT (*PMSGHANDLER) (HWND, UINT, WPARAM, LPARAM );  // typedef msg handler
@@ -39,4 +39,4 @@ typedef struct tagID_TEXT
 {
     ULONG   ulId;
     WCHAR   *pwstrCoMemText;
-}ID_TEXT;
+} ID_TEXT;

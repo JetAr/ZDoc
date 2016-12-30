@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -17,7 +17,7 @@
 //
 //  function:   _CFaxServerNotify
 //
-//  Synopsis:   _CFaxServerNotify constructor 
+//  Synopsis:   _CFaxServerNotify constructor
 //
 //  Arguments:  none
 //
@@ -41,7 +41,7 @@ _CFaxServerNotify::_CFaxServerNotify()
 //
 //  function:   ~_CFaxServerNotify
 //
-//  Synopsis:   _CFaxServerNotify destructor 
+//  Synopsis:   _CFaxServerNotify destructor
 //
 //  Arguments:  none
 //
@@ -66,7 +66,7 @@ _CFaxServerNotify::~_CFaxServerNotify()
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnOutgoingJobAdded(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     BSTR bstrJobId)
 {
     ValidateFaxServer(pFaxServer);
@@ -74,7 +74,7 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingJobAdded(
     {
         _tprintf( TEXT("FaxServerNotify: JobId in OnOutgoingJobAdded is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: OUTGOING JOB ADDED: %s \n"), bstrJobId);
     return S_OK;
 }
@@ -92,7 +92,7 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingJobAdded(
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnOutgoingJobRemoved(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     BSTR bstrJobId)
 {
     ValidateFaxServer(pFaxServer);
@@ -100,7 +100,7 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingJobRemoved(
     {
         _tprintf( TEXT("FaxServerNotify: JobId in OnOutgoingJobRemoved is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: OUTGOING JOB REMOVED: %s \n"), bstrJobId);
     return S_OK;
 }
@@ -117,18 +117,18 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingJobRemoved(
 //
 //  Returns:    S_OK if successful
 //
-//----------------------------------------------------------------------------    
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnOutgoingJobChanged(
-    IFaxServer2 *pFaxServer, 
-    BSTR bstrJobId, 
+    IFaxServer2 *pFaxServer,
+    BSTR bstrJobId,
     IFaxJobStatus *pJobStatus)
- {
+{
     ValidateFaxServer(pFaxServer);
     if (bstrJobId == NULL || pJobStatus == NULL)
     {
         _tprintf( TEXT("FaxServerNotify: JobId or JobStatus in OnOutgoingJobChanged is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: OUTGOING JOB CHANGED: %s \n"), bstrJobId);
     if (pJobStatus != NULL)
     {
@@ -141,14 +141,14 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingJobChanged(
 //
 //  function:   OnServerShutDown
 //
-//  Synopsis:   Handles server shutdown event. 
-//              This is raised when fax service is stopped.  
+//  Synopsis:   Handles server shutdown event.
+//              This is raised when fax service is stopped.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnServerShutDown(IFaxServer2 *pFaxServer)
 {
     ValidateFaxServer(pFaxServer);
@@ -160,16 +160,16 @@ STDMETHODIMP _CFaxServerNotify::OnServerShutDown(IFaxServer2 *pFaxServer)
 //
 //  function:   OnIncomingJobAdded
 //
-//  Synopsis:   Handles Incoming Job added event. 
+//  Synopsis:   Handles Incoming Job added event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              bstrJobId  : Job id of the added job
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnIncomingJobAdded(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     BSTR bstrJobId)
 {
     ValidateFaxServer(pFaxServer);
@@ -177,7 +177,7 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingJobAdded(
     {
         _tprintf( TEXT("FaxServerNotify: JobId in OnIncomingJobAdded is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: INCOMING JOB ADDED: %s \n"), bstrJobId);
     return S_OK;
 }
@@ -186,16 +186,16 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingJobAdded(
 //
 //  function:   OnIncomingJobRemoved
 //
-//  Synopsis:   Handles Incoming Job removed event. 
+//  Synopsis:   Handles Incoming Job removed event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              bstrJobId  : Job id of the removed job
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnIncomingJobRemoved(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     BSTR bstrJobId)
 {
     ValidateFaxServer(pFaxServer);
@@ -203,8 +203,8 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingJobRemoved(
     {
         _tprintf( TEXT("FaxServerNotify: JobId in OnIncomingJobRemoved is NULL \n"));
         return E_INVALIDARG;
-    }        
-    _tprintf( TEXT("FaxServerNotify: INCOMING JOB REMOVED: %s \n"), bstrJobId);  
+    }
+    _tprintf( TEXT("FaxServerNotify: INCOMING JOB REMOVED: %s \n"), bstrJobId);
     return S_OK;
 }
 
@@ -212,7 +212,7 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingJobRemoved(
 //
 //  function:   OnIncomingJobChanged
 //
-//  Synopsis:   Handles Incoming Job changed event. 
+//  Synopsis:   Handles Incoming Job changed event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              bstrJobId  : Job id of the removed job
@@ -220,18 +220,18 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingJobRemoved(
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnIncomingJobChanged(
-    IFaxServer2 *pFaxServer, 
-    BSTR bstrJobId, 
+    IFaxServer2 *pFaxServer,
+    BSTR bstrJobId,
     IFaxJobStatus *pJobStatus)
 {
-   ValidateFaxServer(pFaxServer);
+    ValidateFaxServer(pFaxServer);
     if (bstrJobId == NULL || pJobStatus == NULL)
     {
         _tprintf( TEXT("FaxServerNotify: JobId or JobStatus in OnIncomingJobChanged is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: INCOMING JOB CHANGED: %s \n"), bstrJobId);
     if (pJobStatus != NULL)
     {
@@ -244,16 +244,16 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingJobChanged(
 //
 //  function:   OnIncomingMessageAdded
 //
-//  Synopsis:   Handles Incoming Message added event. 
+//  Synopsis:   Handles Incoming Message added event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              bstrMessageId  : Id of the added message
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnIncomingMessageAdded(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     BSTR bstrMessageId)
 {
     ValidateFaxServer(pFaxServer);
@@ -261,7 +261,7 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingMessageAdded(
     {
         _tprintf( TEXT("FaxServerNotify: Id in OnIncomingMessageAdded is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: INCOMING MESSAGE ADDED: %s \n"), bstrMessageId);
     return S_OK;
 }
@@ -270,16 +270,16 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingMessageAdded(
 //
 //  function:   OnIncomingMessageRemoved
 //
-//  Synopsis:   Handles Incoming Message removed event. 
+//  Synopsis:   Handles Incoming Message removed event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              bstrMessageId  : Id of the removed message
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnIncomingMessageRemoved(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     BSTR bstrMessageId)
 {
     ValidateFaxServer(pFaxServer);
@@ -287,25 +287,25 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingMessageRemoved(
     {
         _tprintf( TEXT("FaxServerNotify: Id in OnIncomingMessageRemovd is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: INCOMING MESSAGE REMOVED: %s \n"), bstrMessageId);
-    return S_OK;    
+    return S_OK;
 }
 
 //+---------------------------------------------------------------------------
 //
 //  function:   OnOutgoingMessageAdded
 //
-//  Synopsis:   Handles Outgoing Message Added event. 
+//  Synopsis:   Handles Outgoing Message Added event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              bstrMessageId  : Id of the added message
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnOutgoingMessageAdded(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     BSTR bstrMessageId)
 {
     ValidateFaxServer(pFaxServer);
@@ -313,7 +313,7 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingMessageAdded(
     {
         _tprintf( TEXT("FaxServerNotify: Id in OnOutgoingMessageAdded is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: OUTGOING MESSAGE ADDED: %s \n"), bstrMessageId);
     return S_OK;
 }
@@ -322,16 +322,16 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingMessageAdded(
 //
 //  function:   OnOutgoingMessageRemoved
 //
-//  Synopsis:   Handles Outgoing Message Removed event. 
+//  Synopsis:   Handles Outgoing Message Removed event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              bstrMessageId  : Id of the removed message
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnOutgoingMessageRemoved(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     BSTR bstrMessageId)
 {
     ValidateFaxServer(pFaxServer);
@@ -339,22 +339,22 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingMessageRemoved(
     {
         _tprintf( TEXT("FaxServerNotify: Id in OnOutgoingMessageRemovd is NULL \n"));
         return E_INVALIDARG;
-    }        
+    }
     _tprintf( TEXT("FaxServerNotify: OUTGOING MESSAGE REMOVED: %s \n"), bstrMessageId);
-    return S_OK;   
+    return S_OK;
 }
 
 //+---------------------------------------------------------------------------
 //
 //  function:   OnReceiptOptionsChange
 //
-//  Synopsis:   Handles Receipts Config change event. 
+//  Synopsis:   Handles Receipts Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
 //  Returns:    S_OK if successful
 //
-//---------------------------------------------------------------------------- 
+//----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnReceiptOptionsChange(
     IFaxServer2 *pFaxServer)
 {
@@ -367,7 +367,7 @@ STDMETHODIMP _CFaxServerNotify::OnReceiptOptionsChange(
 //
 //  function:   OnActivityLoggingConfigChange
 //
-//  Synopsis:   Handles Activity Logging Config change event. 
+//  Synopsis:   Handles Activity Logging Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -386,7 +386,7 @@ STDMETHODIMP _CFaxServerNotify::OnActivityLoggingConfigChange(
 //
 //  function:   OnSecurityConfigChange
 //
-//  Synopsis:   Handles Security Config change event. 
+//  Synopsis:   Handles Security Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -405,7 +405,7 @@ STDMETHODIMP _CFaxServerNotify::OnSecurityConfigChange(
 //
 //  function:   OnEventLoggingConfigChange
 //
-//  Synopsis:   Handles Event Logging Config change event. 
+//  Synopsis:   Handles Event Logging Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -424,7 +424,7 @@ STDMETHODIMP _CFaxServerNotify::OnEventLoggingConfigChange(
 //
 //  function:   OnOutgoingQueueConfigChange
 //
-//  Synopsis:   Handles Outgoing Config change event. 
+//  Synopsis:   Handles Outgoing Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -443,7 +443,7 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingQueueConfigChange(
 //
 //  function:   OnOutgoingArchiveConfigChange
 //
-//  Synopsis:   Handles Outgoing Archive Config change event. 
+//  Synopsis:   Handles Outgoing Archive Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -462,7 +462,7 @@ STDMETHODIMP _CFaxServerNotify::OnOutgoingArchiveConfigChange(
 //
 //  function:   OnIncomingArchiveConfigChange
 //
-//  Synopsis:   Handles Imcoming Archive Config change event. 
+//  Synopsis:   Handles Imcoming Archive Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -481,7 +481,7 @@ STDMETHODIMP _CFaxServerNotify::OnIncomingArchiveConfigChange(
 //
 //  function:   OnDevicesConfigChange
 //
-//  Synopsis:   Handles Devices Config change event. 
+//  Synopsis:   Handles Devices Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -500,7 +500,7 @@ STDMETHODIMP _CFaxServerNotify::OnDevicesConfigChange(
 //
 //  function:   OnOutboundRoutingGroupsConfigChange
 //
-//  Synopsis:   Handles Outbound Routing Groups Config change event. 
+//  Synopsis:   Handles Outbound Routing Groups Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -519,7 +519,7 @@ STDMETHODIMP _CFaxServerNotify::OnOutboundRoutingGroupsConfigChange(
 //
 //  function:   OnOutboundRoutingRulesConfigChange
 //
-//  Synopsis:   Handles Outbound Routing Rules Config change event. 
+//  Synopsis:   Handles Outbound Routing Rules Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -538,7 +538,7 @@ STDMETHODIMP _CFaxServerNotify::OnOutboundRoutingRulesConfigChange(
 //
 //  function:   OnServerActivityChange
 //
-//  Synopsis:   Handles Server Activity change event. 
+//  Synopsis:   Handles Server Activity change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              lIncomingMessages : Number of incoming messages
@@ -550,16 +550,16 @@ STDMETHODIMP _CFaxServerNotify::OnOutboundRoutingRulesConfigChange(
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnServerActivityChange(
-    IFaxServer2 *pFaxServer, 
+    IFaxServer2 *pFaxServer,
     long lIncomingMessages,
-    long lRoutingMessages, 
-    long lOutgoingMessages, 
+    long lRoutingMessages,
+    long lOutgoingMessages,
     long lQueuedMessages)
 {
     ValidateFaxServer(pFaxServer);
     _tprintf(TEXT("FaxServerNotify: SERVER ACTIVITY CHANGE \n"));
     _tprintf(TEXT("FaxServerNotify: Incoming: %d, Routing: %d, Outgoing: %d, Queued: %d \n"),
-    lIncomingMessages, lRoutingMessages, lOutgoingMessages, lQueuedMessages);
+             lIncomingMessages, lRoutingMessages, lOutgoingMessages, lQueuedMessages);
     return S_OK;
 }
 
@@ -567,7 +567,7 @@ STDMETHODIMP _CFaxServerNotify::OnServerActivityChange(
 //
 //  function:   OnQueuesStatusChange
 //
-//  Synopsis:   Handles Queue Status change event. 
+//  Synopsis:   Handles Queue Status change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              bOutgoingQueueBlocked : Is outgoing queue blocked?
@@ -578,15 +578,15 @@ STDMETHODIMP _CFaxServerNotify::OnServerActivityChange(
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnQueuesStatusChange(
-    IFaxServer2 *pFaxServer, 
-    VARIANT_BOOL bOutgoingQueueBlocked, 
+    IFaxServer2 *pFaxServer,
+    VARIANT_BOOL bOutgoingQueueBlocked,
     VARIANT_BOOL bOutgoingQueuePaused,
     VARIANT_BOOL bIncomingQueueBlocked)
 {
     ValidateFaxServer(pFaxServer);
     _tprintf(TEXT("FaxServerNotify: QUEUE STATUS CHANGE \n"));
-    _tprintf(TEXT("FaxServerNotify: Out Queue Blocked: %d, Out Queue Paused: %d, In Queue Blocked:%d \n"), 
-        bOutgoingQueueBlocked, bOutgoingQueuePaused, bIncomingQueueBlocked);
+    _tprintf(TEXT("FaxServerNotify: Out Queue Blocked: %d, Out Queue Paused: %d, In Queue Blocked:%d \n"),
+             bOutgoingQueueBlocked, bOutgoingQueuePaused, bIncomingQueueBlocked);
     return S_OK;
 }
 
@@ -594,22 +594,22 @@ STDMETHODIMP _CFaxServerNotify::OnQueuesStatusChange(
 //
 //  function:   OnNewCall
 //
-//  Synopsis:   Handles new call event. 
+//  Synopsis:   Handles new call event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //              lCallId    : Specifies the new call's id
-//              lDeviceId  : Specifies the device id of the device receiving 
+//              lDeviceId  : Specifies the device id of the device receiving
 //                           the incoming call
-//              bstrCallerId : Null terminated string that identifies the 
+//              bstrCallerId : Null terminated string that identifies the
 //                             calling device for the new call
 //
 //  Returns:    S_OK if successful
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnNewCall(
-    IFaxServer2 *pFaxServer, 
-    long lCallId, 
-    long lDeviceId, 
+    IFaxServer2 *pFaxServer,
+    long lCallId,
+    long lDeviceId,
     BSTR bstrCallerId)
 {
     ValidateFaxServer(pFaxServer);
@@ -622,10 +622,10 @@ STDMETHODIMP _CFaxServerNotify::OnNewCall(
 //
 //  function:   OnDeviceStatusChange
 //
-//  Synopsis:   Handles device status change event. 
+//  Synopsis:   Handles device status change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
-//              lDeviceId  : Specifies the device id of the device 
+//              lDeviceId  : Specifies the device id of the device
 //              bPoweredOff: True if the device powered off?
 //              bSending   : True if device is sending a fax
 //              bReceiving : True if device is receiving a fax
@@ -635,17 +635,17 @@ STDMETHODIMP _CFaxServerNotify::OnNewCall(
 //
 //----------------------------------------------------------------------------
 STDMETHODIMP _CFaxServerNotify::OnDeviceStatusChange(
-    IFaxServer2 *pFaxServer, 
-    long lDeviceId, 
-    VARIANT_BOOL bPoweredOff, 
-    VARIANT_BOOL bSending, 
+    IFaxServer2 *pFaxServer,
+    long lDeviceId,
+    VARIANT_BOOL bPoweredOff,
+    VARIANT_BOOL bSending,
     VARIANT_BOOL bReceiving,
     VARIANT_BOOL bRinging)
 {
     ValidateFaxServer(pFaxServer);
     _tprintf(TEXT("FaxServerNotify: DEVICE STATUS CHANGE \n"));
     _tprintf( TEXT("FaxServerNotify: Device ID: %d, PoweredOff: %d, Send: %d, Receive: %d, Ringing: %d \n"),
-        lDeviceId, bPoweredOff, bSending, bReceiving, bRinging);
+              lDeviceId, bPoweredOff, bSending, bReceiving, bRinging);
     return S_OK;
 }
 
@@ -653,7 +653,7 @@ STDMETHODIMP _CFaxServerNotify::OnDeviceStatusChange(
 //
 //  function:   OnGeneralServerConfigChanged
 //
-//  Synopsis:   Handles Server Config change event. 
+//  Synopsis:   Handles Server Config change event.
 //
 //  Arguments:  pFaxServer : Fax Server object
 //
@@ -672,7 +672,7 @@ STDMETHODIMP _CFaxServerNotify::OnGeneralServerConfigChanged(
 //
 //  function:   ValidateFaxServer
 //
-//  Synopsis:   Checks if the FaxServer object is valid 
+//  Synopsis:   Checks if the FaxServer object is valid
 //
 //  Arguments:  pFaxServer : Fax Server object
 //

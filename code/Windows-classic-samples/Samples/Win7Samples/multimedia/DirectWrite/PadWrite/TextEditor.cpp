@@ -23,72 +23,72 @@
 
 namespace
 {
-    // Private helper functions.
+// Private helper functions.
 
-    inline D2D1::Matrix3x2F& Cast(DWRITE_MATRIX& matrix)
-    {
-        // DWrite's matrix, D2D's matrix, and GDI's XFORM
-        // are all compatible.
-        return *reinterpret_cast<D2D1::Matrix3x2F*>(&matrix);
-    }
+inline D2D1::Matrix3x2F& Cast(DWRITE_MATRIX& matrix)
+{
+    // DWrite's matrix, D2D's matrix, and GDI's XFORM
+    // are all compatible.
+    return *reinterpret_cast<D2D1::Matrix3x2F*>(&matrix);
+}
 
-    inline DWRITE_MATRIX& Cast(D2D1::Matrix3x2F& matrix)
-    {
-        return *reinterpret_cast<DWRITE_MATRIX*>(&matrix);
-    }
+inline DWRITE_MATRIX& Cast(D2D1::Matrix3x2F& matrix)
+{
+    return *reinterpret_cast<DWRITE_MATRIX*>(&matrix);
+}
 
-    inline int RoundToInt(float x)
-    {
-        return static_cast<int>(floor(x + .5));
-    }
+inline int RoundToInt(float x)
+{
+    return static_cast<int>(floor(x + .5));
+}
 
-    inline double DegreesToRadians(float degrees)
-    {
-        return degrees * M_PI * 2.0f / 360.0f;
-    }
+inline double DegreesToRadians(float degrees)
+{
+    return degrees * M_PI * 2.0f / 360.0f;
+}
 
-    inline float GetDeterminant(DWRITE_MATRIX const& matrix)
-    {
-        return matrix.m11 * matrix.m22 - matrix.m12 * matrix.m21;
-    }
+inline float GetDeterminant(DWRITE_MATRIX const& matrix)
+{
+    return matrix.m11 * matrix.m22 - matrix.m12 * matrix.m21;
+}
 
-    void ComputeInverseMatrix(
-        DWRITE_MATRIX const& matrix,
-        OUT DWRITE_MATRIX& result
-        )
-    {
-        // Used for hit-testing, mouse scrolling, panning, and scroll bar sizing.
+void ComputeInverseMatrix(
+    DWRITE_MATRIX const& matrix,
+    OUT DWRITE_MATRIX& result
+)
+{
+    // Used for hit-testing, mouse scrolling, panning, and scroll bar sizing.
 
-        float invdet = 1.f / GetDeterminant(matrix);
-        result.m11 =  matrix.m22 * invdet;
-        result.m12 = -matrix.m12 * invdet;
-        result.m21 = -matrix.m21 * invdet;
-        result.m22 =  matrix.m11 * invdet;
-        result.dx  = (matrix.m21 * matrix.dy  - matrix.dx  * matrix.m22) * invdet;
-        result.dy  = (matrix.dx  * matrix.m12 - matrix.m11 * matrix.dy)  * invdet;
-    }
+    float invdet = 1.f / GetDeterminant(matrix);
+    result.m11 =  matrix.m22 * invdet;
+    result.m12 = -matrix.m12 * invdet;
+    result.m21 = -matrix.m21 * invdet;
+    result.m22 =  matrix.m11 * invdet;
+    result.dx  = (matrix.m21 * matrix.dy  - matrix.dx  * matrix.m22) * invdet;
+    result.dy  = (matrix.dx  * matrix.m12 - matrix.m11 * matrix.dy)  * invdet;
+}
 
-    D2D1_POINT_2F GetPageSize(IDWriteTextLayout* textLayout)
-    {
-        // Use the layout metrics to determine how large the page is, taking
-        // the maximum of the content size and layout's maximal dimensions.
+D2D1_POINT_2F GetPageSize(IDWriteTextLayout* textLayout)
+{
+    // Use the layout metrics to determine how large the page is, taking
+    // the maximum of the content size and layout's maximal dimensions.
 
-        DWRITE_TEXT_METRICS textMetrics;
-        textLayout->GetMetrics(&textMetrics);
+    DWRITE_TEXT_METRICS textMetrics;
+    textLayout->GetMetrics(&textMetrics);
 
-        float width  = std::max(textMetrics.layoutWidth, textMetrics.left + textMetrics.width);
-        float height = std::max(textMetrics.layoutHeight, textMetrics.height);
+    float width  = std::max(textMetrics.layoutWidth, textMetrics.left + textMetrics.width);
+    float height = std::max(textMetrics.layoutHeight, textMetrics.height);
 
-        D2D1_POINT_2F pageSize = {width, height};
-        return pageSize;
-    }
+    D2D1_POINT_2F pageSize = {width, height};
+    return pageSize;
+}
 
-    bool IsLandscapeAngle(float angle)
-    {
-        // Returns true if the angle is rotated 90 degrees clockwise
-        // or anticlockwise (or any multiple of that).
-        return fmod(abs(angle) + 45.0f, 180.0f) >= 90.0f;
-    }
+bool IsLandscapeAngle(float angle)
+{
+    // Returns true if the angle is rotated 90 degrees clockwise
+    // or anticlockwise (or any multiple of that).
+    return fmod(abs(angle) + 45.0f, 180.0f) >= 90.0f;
+}
 }
 
 
@@ -118,13 +118,13 @@ ATOM TextEditor::RegisterWindowClass()
 
 
 TextEditor::TextEditor(IDWriteFactory* factory)
-:   renderTarget_(),
-    pageBackgroundEffect_(),
-    textSelectionEffect_(),
-    imageSelectionEffect_(),
-    caretBackgroundEffect_(),
-    textLayout_(),
-    layoutEditor_(factory)
+    :   renderTarget_(),
+        pageBackgroundEffect_(),
+        textSelectionEffect_(),
+        imageSelectionEffect_(),
+        caretBackgroundEffect_(),
+        textLayout_(),
+        layoutEditor_(factory)
 {
     // Creates editor window.
 
@@ -139,7 +139,7 @@ HRESULT TextEditor::Create(
     IDWriteTextFormat* textFormat,
     IDWriteFactory* factory,
     OUT TextEditor** textEditor
-    )
+)
 {
     *textEditor = NULL;
     HRESULT hr  = S_OK;
@@ -150,7 +150,7 @@ HRESULT TextEditor::Create(
     {
         return E_OUTOFMEMORY;
     }
-    
+
     hr = newTextEditor->Initialize(parentHwnd, text, textFormat);
     if (FAILED(hr))
         SafeRelease(&newTextEditor);
@@ -178,13 +178,13 @@ HRESULT TextEditor::Initialize(HWND parentHwnd, const wchar_t* text, IDWriteText
     // Create an ideal layout for the text editor based on the text and format,
     // favoring document layout over pixel alignment.
     hr = layoutEditor_.GetFactory()->CreateTextLayout(
-            text_.c_str(),
-            static_cast<UINT32>(text_.size()),
-            textFormat,
-            580,            // maximum width
-            420,            // maximum height
-            &textLayout_
-            );
+             text_.c_str(),
+             static_cast<UINT32>(text_.size()),
+             textFormat,
+             580,            // maximum width
+             420,            // maximum height
+             &textLayout_
+         );
 
     if (FAILED(hr))
         return hr;
@@ -205,28 +205,28 @@ HRESULT TextEditor::Initialize(HWND parentHwnd, const wchar_t* text, IDWriteText
     caretBackgroundEffect_ = SafeAcquire(new(std::nothrow) DrawingEffect(0xFF000000 | D2D1::ColorF::Black));
 
     if (pageBackgroundEffect_  == NULL
-    ||  textSelectionEffect_   == NULL
-    ||  imageSelectionEffect_  == NULL
-    ||  caretBackgroundEffect_ == NULL)
+            ||  textSelectionEffect_   == NULL
+            ||  imageSelectionEffect_  == NULL
+            ||  caretBackgroundEffect_ == NULL)
     {
         return E_OUTOFMEMORY;
     }
 
     // Create text editor window (hwnd is stored in the create event)
     CreateWindowEx(
-            WS_EX_STATICEDGE,
-            L"DirectWriteEdit",
-            L"",
-            WS_CHILDWINDOW|WS_VSCROLL|WS_VISIBLE,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            parentHwnd,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+        WS_EX_STATICEDGE,
+        L"DirectWriteEdit",
+        L"",
+        WS_CHILDWINDOW|WS_VSCROLL|WS_VISIBLE,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        CW_USEDEFAULT,
+        parentHwnd,
+        NULL,
+        HINST_THISCOMPONENT,
+        this
+    );
     if (hwnd_ == NULL)
         return HRESULT_FROM_WIN32(GetLastError());
 
@@ -285,16 +285,16 @@ LRESULT CALLBACK TextEditor::WindowProc(HWND hwnd, UINT message, WPARAM wParam, 
     switch (message)
     {
     case WM_NCCREATE:
-        {
-            // Associate the data structure with this window handle.
-            CREATESTRUCT* pcs = reinterpret_cast<CREATESTRUCT*>(lParam);
-            window = reinterpret_cast<TextEditor*>(pcs->lpCreateParams);
-            window->hwnd_ = hwnd;
-            window->AddRef(); // implicit reference via HWND
-            SetWindowLongPtr(hwnd, GWLP_USERDATA, PtrToUlong(window));
+    {
+        // Associate the data structure with this window handle.
+        CREATESTRUCT* pcs = reinterpret_cast<CREATESTRUCT*>(lParam);
+        window = reinterpret_cast<TextEditor*>(pcs->lpCreateParams);
+        window->hwnd_ = hwnd;
+        window->AddRef(); // implicit reference via HWND
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, PtrToUlong(window));
 
-            return DefWindowProc(hwnd, message, wParam, lParam);
-        }
+        return DefWindowProc(hwnd, message, wParam, lParam);
+    }
 
     case WM_PAINT:
     case WM_DISPLAYCHANGE:
@@ -346,12 +346,12 @@ LRESULT CALLBACK TextEditor::WindowProc(HWND hwnd, UINT message, WPARAM wParam, 
         break;
 
     case WM_SETFOCUS:
-        {
-            RectF rect;
-            window->GetCaretRect(rect);
-            window->UpdateSystemCaret(rect);
-        }
-        break;
+    {
+        RectF rect;
+        window->GetCaretRect(rect);
+        window->UpdateSystemCaret(rect);
+    }
+    break;
 
     case WM_KILLFOCUS:
         DestroyCaret();
@@ -363,28 +363,28 @@ LRESULT CALLBACK TextEditor::WindowProc(HWND hwnd, UINT message, WPARAM wParam, 
 
     case WM_MOUSEWHEEL:
     case WM_MOUSEHWHEEL:
+    {
+        // Retrieve the lines-to-scroll or characters-to-scroll user setting,
+        // using a default value if the API failed.
+        UINT userSetting;
+        BOOL success = SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &userSetting, 0);
+        if (success == FALSE)
+            userSetting = 1;
+
+        // Set x,y scroll difference,
+        // depending on whether horizontal or vertical scroll.
+        float zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+        float yScroll = (zDelta / WHEEL_DELTA) * userSetting;
+        float xScroll = 0;
+        if (message == WM_MOUSEHWHEEL)
         {
-            // Retrieve the lines-to-scroll or characters-to-scroll user setting,
-            // using a default value if the API failed.
-            UINT userSetting;
-            BOOL success = SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &userSetting, 0);
-            if (success == FALSE)
-                userSetting = 1;
-
-            // Set x,y scroll difference,
-            // depending on whether horizontal or vertical scroll.
-            float zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
-            float yScroll = (zDelta / WHEEL_DELTA) * userSetting;
-            float xScroll = 0;
-            if (message == WM_MOUSEHWHEEL)
-            {
-                xScroll = -yScroll;
-                yScroll = 0;
-            }
-
-            window->OnMouseScroll(xScroll, yScroll);
+            xScroll = -yScroll;
+            yScroll = 0;
         }
-        break;
+
+        window->OnMouseScroll(xScroll, yScroll);
+    }
+    break;
 
     case WM_VSCROLL:
     case WM_HSCROLL:
@@ -392,12 +392,12 @@ LRESULT CALLBACK TextEditor::WindowProc(HWND hwnd, UINT message, WPARAM wParam, 
         break;
 
     case WM_SIZE:
-        {
-            UINT width  = LOWORD(lParam);
-            UINT height = HIWORD(lParam);
-            window->OnSize(width, height);
-        }
-        break;
+    {
+        UINT width  = LOWORD(lParam);
+        UINT height = HIWORD(lParam);
+        window->OnSize(width, height);
+    }
+    break;
 
     default:
         return DefWindowProc(hwnd, message, wParam, lParam);
@@ -461,7 +461,7 @@ void TextEditor::DrawPage(RenderTarget& target)
             NULL,
             0, // metrics count
             &actualHitTestCount
-            );
+        );
     }
 
     // Allocate enough room to return all hit-test metrics.
@@ -477,7 +477,7 @@ void TextEditor::DrawPage(RenderTarget& target)
             &hitTestMetrics[0],
             static_cast<UINT32>(hitTestMetrics.size()),
             &actualHitTestCount
-            );
+        );
     }
 
     // Draw the selection ranges behind the text.
@@ -492,13 +492,14 @@ void TextEditor::DrawPage(RenderTarget& target)
         for (size_t i = 0; i < actualHitTestCount; ++i)
         {
             const DWRITE_HIT_TEST_METRICS& htm = hitTestMetrics[i];
-            RectF highlightRect = {
+            RectF highlightRect =
+            {
                 htm.left,
                 htm.top,
                 (htm.left + htm.width),
                 (htm.top  + htm.height)
             };
-            
+
             target.FillRectangle(highlightRect, *textSelectionEffect_);
         }
 
@@ -532,13 +533,14 @@ void TextEditor::DrawPage(RenderTarget& target)
             if (htm.isText)
                 continue; // Only draw selection if not text.
 
-            RectF highlightRect = {
+            RectF highlightRect =
+            {
                 htm.left,
                 htm.top,
                 (htm.left + htm.width),
                 (htm.top  + htm.height)
             };
-            
+
             target.FillRectangle(highlightRect, *imageSelectionEffect_);
         }
 
@@ -565,7 +567,7 @@ void TextEditor::OnScroll(UINT message, UINT request)
 
     SCROLLINFO scrollInfo = {sizeof(scrollInfo)};
     scrollInfo.fMask = SIF_ALL;
- 
+
     int barOrientation = (message == WM_VSCROLL) ? SB_VERT : SB_HORZ;
 
     if (!GetScrollInfo(hwnd_, barOrientation, &scrollInfo) )
@@ -576,15 +578,29 @@ void TextEditor::OnScroll(UINT message, UINT request)
 
     switch (request)
     {
-    case SB_TOP:        scrollInfo.nPos  = scrollInfo.nMin;      break;
-    case SB_BOTTOM:     scrollInfo.nPos  = scrollInfo.nMax;      break;
-    case SB_LINEUP:     scrollInfo.nPos -= 10;                   break;
-    case SB_LINEDOWN:   scrollInfo.nPos += 10;                   break;
-    case SB_PAGEUP:     scrollInfo.nPos -= scrollInfo.nPage;     break;
-    case SB_PAGEDOWN:   scrollInfo.nPos += scrollInfo.nPage;     break;
-    case SB_THUMBTRACK: scrollInfo.nPos  = scrollInfo.nTrackPos; break;
+    case SB_TOP:
+        scrollInfo.nPos  = scrollInfo.nMin;
+        break;
+    case SB_BOTTOM:
+        scrollInfo.nPos  = scrollInfo.nMax;
+        break;
+    case SB_LINEUP:
+        scrollInfo.nPos -= 10;
+        break;
+    case SB_LINEDOWN:
+        scrollInfo.nPos += 10;
+        break;
+    case SB_PAGEUP:
+        scrollInfo.nPos -= scrollInfo.nPage;
+        break;
+    case SB_PAGEDOWN:
+        scrollInfo.nPos += scrollInfo.nPage;
+        break;
+    case SB_THUMBTRACK:
+        scrollInfo.nPos  = scrollInfo.nTrackPos;
+        break;
     default:
-         break;
+        break;
     }
 
     if (scrollInfo.nPos < 0)
@@ -595,7 +611,7 @@ void TextEditor::OnScroll(UINT message, UINT request)
     scrollInfo.fMask = SIF_POS;
     SetScrollInfo(hwnd_, barOrientation, &scrollInfo, TRUE);
 
-    // If the position has changed, scroll the window 
+    // If the position has changed, scroll the window
     if (scrollInfo.nPos != oldPosition)
     {
         // Need the view matrix in case the editor is flipped/mirrored/rotated.
@@ -605,7 +621,8 @@ void TextEditor::OnScroll(UINT message, UINT request)
         float inversePos = float(scrollInfo.nMax - scrollInfo.nPage - scrollInfo.nPos);
 
         D2D1_POINT_2F scaledSize = {pageTransform._11 + pageTransform._21,
-                                    pageTransform._12 + pageTransform._22};
+                                    pageTransform._12 + pageTransform._22
+                                   };
 
         // Adjust the correct origin.
         if ((barOrientation == SB_VERT) ^ IsLandscapeAngle(angle_))
@@ -640,7 +657,8 @@ void TextEditor::UpdateScrollInfo()
     // Transform vector of viewport size
     D2D1_POINT_2F clientSize = {float(clientRect.right), float(clientRect.bottom)};
     D2D1_POINT_2F scaledSize = {clientSize.x * pageTransform._11 + clientSize.y * pageTransform._21,
-                                clientSize.x * pageTransform._12 + clientSize.y * pageTransform._22};
+                                clientSize.x * pageTransform._12 + clientSize.y * pageTransform._22
+                               };
 
     float x = originX_;
     float y = originY_;
@@ -863,12 +881,12 @@ void TextEditor::OnKeyPress(UINT32 keyCode)
             UINT32 count = 1;
             // Need special case for surrogate pairs and CR/LF pair.
             if (absolutePosition >= 2
-            &&  absolutePosition <= text_.size())
+                    &&  absolutePosition <= text_.size())
             {
                 wchar_t charBackOne = text_[absolutePosition - 1];
                 wchar_t charBackTwo = text_[absolutePosition - 2];
                 if ((IsLowSurrogate(charBackOne) && IsHighSurrogate(charBackTwo))
-                ||  (charBackOne == '\n' && charBackTwo == '\r'))
+                        ||  (charBackOne == '\n' && charBackTwo == '\r'))
                 {
                     count = 2;
                 }
@@ -899,7 +917,7 @@ void TextEditor::OnKeyPress(UINT32 keyCode)
                 &caretX,
                 &caretY,
                 &hitTestMetrics
-                );
+            );
 
             layoutEditor_.RemoveTextAt(textLayout_, text_, hitTestMetrics.textPosition, hitTestMetrics.length);
 
@@ -1034,7 +1052,7 @@ DWRITE_TEXT_RANGE TextEditor::GetSelectionRange()
 
 void TextEditor::GetLineMetrics(
     OUT std::vector<DWRITE_LINE_METRICS>& lineMetrics
-    )
+)
 {
     // Retrieves the line metrics, used for caret navigation, up/down and home/end.
 
@@ -1052,7 +1070,7 @@ void TextEditor::GetLineFromPosition(
     UINT32 textPosition,
     OUT UINT32* lineOut,
     OUT UINT32* linePositionOut
-    )
+)
 {
     // Given the line metrics, determines the current line and starting text
     // position of that line by summing up the lengths. When the starting
@@ -1094,7 +1112,7 @@ void TextEditor::AlignCaretToNearestCluster(bool isTrailingHit, bool skipZeroWid
         &caretX,
         &caretY,
         &hitTestMetrics
-        );
+    );
 
     // The caret position itself is always the leading edge.
     // An additional offset indicates a trailing edge when non-zero.
@@ -1137,14 +1155,14 @@ bool TextEditor::SetSelectionFromPoint(float x, float y, bool extendSelection)
         &isTrailingHit,
         &isInside,
         &caretMetrics
-        );
+    );
 
     // Update current selection according to click or mouse drag.
     SetSelection(
         isTrailingHit ? SetSelectionModeAbsoluteTrailing : SetSelectionModeAbsoluteLeading,
         caretMetrics.textPosition,
         extendSelection
-        );
+    );
 
     return true;
 }
@@ -1172,9 +1190,9 @@ bool TextEditor::SetSelection(SetSelectionMode moveMode, UINT32 advance, bool ex
             // special check for CR/LF pair
             absolutePosition = caretPosition_ + caretPositionOffset_;
             if (absolutePosition >= 1
-            &&  absolutePosition < text_.size()
-            &&  text_[absolutePosition - 1] == '\r'
-            &&  text_[absolutePosition    ] == '\n')
+                    &&  absolutePosition < text_.size()
+                    &&  text_[absolutePosition - 1] == '\r'
+                    &&  text_[absolutePosition    ] == '\n')
             {
                 caretPosition_ = absolutePosition - 1;
                 AlignCaretToNearestCluster(false, true);
@@ -1189,9 +1207,9 @@ bool TextEditor::SetSelection(SetSelectionMode moveMode, UINT32 advance, bool ex
         // special check for CR/LF pair
         absolutePosition = caretPosition_ + caretPositionOffset_;
         if (absolutePosition >= 1
-        &&  absolutePosition < text_.size()
-        &&  text_[absolutePosition - 1] == '\r'
-        &&  text_[absolutePosition]     == '\n')
+                &&  absolutePosition < text_.size()
+                &&  text_[absolutePosition - 1] == '\r'
+                &&  text_[absolutePosition]     == '\n')
         {
             caretPosition_ = absolutePosition + 1;
             AlignCaretToNearestCluster(false, true);
@@ -1218,174 +1236,174 @@ bool TextEditor::SetSelection(SetSelectionMode moveMode, UINT32 advance, bool ex
                 &caretX,
                 &caretY,
                 &hitTestMetrics
-                );
+            );
             caretPosition_ = std::min(caretPosition_, hitTestMetrics.textPosition + hitTestMetrics.length);
         }
         break;
 
     case SetSelectionModeUp:
     case SetSelectionModeDown:
+    {
+        // Retrieve the line metrics to figure out what line we are on.
+        std::vector<DWRITE_LINE_METRICS> lineMetrics;
+        GetLineMetrics(lineMetrics);
+
+        UINT32 linePosition;
+        GetLineFromPosition(
+            &lineMetrics.front(),
+            static_cast<UINT32>(lineMetrics.size()),
+            caretPosition_,
+            &line,
+            &linePosition
+        );
+
+        // Move up a line or down
+        if (moveMode == SetSelectionModeUp)
         {
-            // Retrieve the line metrics to figure out what line we are on.
-            std::vector<DWRITE_LINE_METRICS> lineMetrics;
-            GetLineMetrics(lineMetrics);
-
-            UINT32 linePosition;
-            GetLineFromPosition(
-                &lineMetrics.front(),
-                static_cast<UINT32>(lineMetrics.size()),
-                caretPosition_,
-                &line,
-                &linePosition
-                );
-
-            // Move up a line or down
-            if (moveMode == SetSelectionModeUp)
-            {
-                if (line <= 0)
-                    break; // already top line
-                line--;
-                linePosition -= lineMetrics[line].length;
-            }
-            else
-            {
-                linePosition += lineMetrics[line].length;
-                line++;
-                if (line >= lineMetrics.size())
-                    break; // already bottom line
-            }
-
-            // To move up or down, we need three hit-testing calls to determine:
-            // 1. The x of where we currently are.
-            // 2. The y of the new line.
-            // 3. New text position from the determined x and y.
-            // This is because the characters are variable size.
-
-            DWRITE_HIT_TEST_METRICS hitTestMetrics;
-            float caretX, caretY, dummyX;
-
-            // Get x of current text position
-            textLayout_->HitTestTextPosition(
-                caretPosition_,
-                caretPositionOffset_ > 0, // trailing if nonzero, else leading edge
-                &caretX,
-                &caretY,
-                &hitTestMetrics
-                );
-
-            // Get y of new position
-            textLayout_->HitTestTextPosition(
-                linePosition,
-                false, // leading edge
-                &dummyX,
-                &caretY,
-                &hitTestMetrics
-                );
-
-            // Now get text position of new x,y.
-            BOOL isInside, isTrailingHit;
-            textLayout_->HitTestPoint(
-                caretX,
-                caretY,
-                &isTrailingHit,
-                &isInside,
-                &hitTestMetrics
-                );
-
-            caretPosition_       = hitTestMetrics.textPosition;
-            caretPositionOffset_ = isTrailingHit ? (hitTestMetrics.length > 0) : 0;
+            if (line <= 0)
+                break; // already top line
+            line--;
+            linePosition -= lineMetrics[line].length;
         }
-        break;
+        else
+        {
+            linePosition += lineMetrics[line].length;
+            line++;
+            if (line >= lineMetrics.size())
+                break; // already bottom line
+        }
+
+        // To move up or down, we need three hit-testing calls to determine:
+        // 1. The x of where we currently are.
+        // 2. The y of the new line.
+        // 3. New text position from the determined x and y.
+        // This is because the characters are variable size.
+
+        DWRITE_HIT_TEST_METRICS hitTestMetrics;
+        float caretX, caretY, dummyX;
+
+        // Get x of current text position
+        textLayout_->HitTestTextPosition(
+            caretPosition_,
+            caretPositionOffset_ > 0, // trailing if nonzero, else leading edge
+            &caretX,
+            &caretY,
+            &hitTestMetrics
+        );
+
+        // Get y of new position
+        textLayout_->HitTestTextPosition(
+            linePosition,
+            false, // leading edge
+            &dummyX,
+            &caretY,
+            &hitTestMetrics
+        );
+
+        // Now get text position of new x,y.
+        BOOL isInside, isTrailingHit;
+        textLayout_->HitTestPoint(
+            caretX,
+            caretY,
+            &isTrailingHit,
+            &isInside,
+            &hitTestMetrics
+        );
+
+        caretPosition_       = hitTestMetrics.textPosition;
+        caretPositionOffset_ = isTrailingHit ? (hitTestMetrics.length > 0) : 0;
+    }
+    break;
 
     case SetSelectionModeLeftWord:
     case SetSelectionModeRightWord:
+    {
+        // To navigate by whole words, we look for the canWrapLineAfter
+        // flag in the cluster metrics.
+
+        // First need to know how many clusters there are.
+        std::vector<DWRITE_CLUSTER_METRICS> clusterMetrics;
+        UINT32 clusterCount;
+        textLayout_->GetClusterMetrics(NULL, 0, &clusterCount);
+
+        if (clusterCount == 0)
+            break;
+
+        // Now we actually read them.
+        clusterMetrics.resize(clusterCount);
+        textLayout_->GetClusterMetrics(&clusterMetrics.front(), clusterCount, &clusterCount);
+
+        caretPosition_ = absolutePosition;
+
+        UINT32 clusterPosition  = 0;
+        UINT32 oldCaretPosition = caretPosition_;
+
+        if (moveMode == SetSelectionModeLeftWord)
         {
-            // To navigate by whole words, we look for the canWrapLineAfter
-            // flag in the cluster metrics.
-
-            // First need to know how many clusters there are.
-            std::vector<DWRITE_CLUSTER_METRICS> clusterMetrics;
-            UINT32 clusterCount;
-            textLayout_->GetClusterMetrics(NULL, 0, &clusterCount);
-
-            if (clusterCount == 0)
-                break;
-
-            // Now we actually read them.
-            clusterMetrics.resize(clusterCount);
-            textLayout_->GetClusterMetrics(&clusterMetrics.front(), clusterCount, &clusterCount);
-
-            caretPosition_ = absolutePosition;
-
-            UINT32 clusterPosition  = 0;
-            UINT32 oldCaretPosition = caretPosition_;
-
-            if (moveMode == SetSelectionModeLeftWord)
+            // Read through the clusters, keeping track of the farthest valid
+            // stopping point just before the old position.
+            caretPosition_       = 0;
+            caretPositionOffset_ = 0; // leading edge
+            for (UINT32 cluster  = 0; cluster < clusterCount; ++cluster)
             {
-                // Read through the clusters, keeping track of the farthest valid
-                // stopping point just before the old position.
-                caretPosition_       = 0;
-                caretPositionOffset_ = 0; // leading edge
-                for (UINT32 cluster  = 0; cluster < clusterCount; ++cluster)
+                clusterPosition += clusterMetrics[cluster].length;
+                if (clusterMetrics[cluster].canWrapLineAfter)
                 {
-                    clusterPosition += clusterMetrics[cluster].length;
-                    if (clusterMetrics[cluster].canWrapLineAfter)
-                    {
-                        if (clusterPosition >= oldCaretPosition)
-                            break;
+                    if (clusterPosition >= oldCaretPosition)
+                        break;
 
-                        // Update in case we pass this point next loop.
-                        caretPosition_ = clusterPosition;
-                    }
-                }
-            }
-            else // SetSelectionModeRightWord
-            {
-                // Read through the clusters, looking for the first stopping point
-                // after the old position.
-                for (UINT32 cluster = 0; cluster < clusterCount; ++cluster)
-                {
-                    UINT32 clusterLength = clusterMetrics[cluster].length;
-                    caretPosition_       = clusterPosition;
-                    caretPositionOffset_ = clusterLength; // trailing edge
-                    if (clusterPosition >= oldCaretPosition && clusterMetrics[cluster].canWrapLineAfter)
-                        break; // first stopping point after old position.
-
-                    clusterPosition += clusterLength;
+                    // Update in case we pass this point next loop.
+                    caretPosition_ = clusterPosition;
                 }
             }
         }
-        break;
+        else // SetSelectionModeRightWord
+        {
+            // Read through the clusters, looking for the first stopping point
+            // after the old position.
+            for (UINT32 cluster = 0; cluster < clusterCount; ++cluster)
+            {
+                UINT32 clusterLength = clusterMetrics[cluster].length;
+                caretPosition_       = clusterPosition;
+                caretPositionOffset_ = clusterLength; // trailing edge
+                if (clusterPosition >= oldCaretPosition && clusterMetrics[cluster].canWrapLineAfter)
+                    break; // first stopping point after old position.
+
+                clusterPosition += clusterLength;
+            }
+        }
+    }
+    break;
 
     case SetSelectionModeHome:
     case SetSelectionModeEnd:
+    {
+        // Retrieve the line metrics to know first and last position
+        // on the current line.
+        std::vector<DWRITE_LINE_METRICS> lineMetrics;
+        GetLineMetrics(lineMetrics);
+
+        GetLineFromPosition(
+            &lineMetrics.front(),
+            static_cast<UINT32>(lineMetrics.size()),
+            caretPosition_,
+            &line,
+            &caretPosition_
+        );
+
+        caretPositionOffset_ = 0;
+        if (moveMode == SetSelectionModeEnd)
         {
-            // Retrieve the line metrics to know first and last position
-            // on the current line.
-            std::vector<DWRITE_LINE_METRICS> lineMetrics;
-            GetLineMetrics(lineMetrics);
-
-            GetLineFromPosition(
-                &lineMetrics.front(),
-                static_cast<UINT32>(lineMetrics.size()),
-                caretPosition_,
-                &line,
-                &caretPosition_
-                );
-
-            caretPositionOffset_ = 0;
-            if (moveMode == SetSelectionModeEnd)
-            {
-                // Place the caret at the last character on the line,
-                // excluding line breaks. In the case of wrapped lines,
-                // newlineLength will be 0.
-                UINT32 lineLength    = lineMetrics[line].length - lineMetrics[line].newlineLength;
-                caretPositionOffset_ = std::min(lineLength, 1u);
-                caretPosition_      += lineLength - caretPositionOffset_;
-                AlignCaretToNearestCluster(true);
-            }
+            // Place the caret at the last character on the line,
+            // excluding line breaks. In the case of wrapped lines,
+            // newlineLength will be 0.
+            UINT32 lineLength    = lineMetrics[line].length - lineMetrics[line].newlineLength;
+            caretPositionOffset_ = std::min(lineLength, 1u);
+            caretPosition_      += lineLength - caretPositionOffset_;
+            AlignCaretToNearestCluster(true);
         }
-        break;
+    }
+    break;
 
     case SetSelectionModeFirst:
         caretPosition_       = 0;
@@ -1420,7 +1438,7 @@ bool TextEditor::SetSelection(SetSelectionMode moveMode, UINT32 advance, bool ex
         caretAnchor_ = absolutePosition;
 
     bool caretMoved = (absolutePosition != oldAbsolutePosition)
-                   || (caretAnchor_     != oldCaretAnchor);
+                      || (caretAnchor_     != oldCaretAnchor);
 
     if (caretMoved)
     {
@@ -1459,7 +1477,7 @@ void TextEditor::GetCaretRect(OUT RectF& rect)
         &caretX,
         &caretY,
         &caretMetrics
-        );
+    );
 
     // If a selection exists, draw the caret using the
     // line size rather than the font size.
@@ -1475,7 +1493,7 @@ void TextEditor::GetCaretRect(OUT RectF& rect)
             &caretMetrics,
             1,
             &actualHitTestCount
-            );
+        );
 
         caretY = caretMetrics.top;
     }
@@ -1665,7 +1683,7 @@ void TextEditor::PasteFromClipboard()
                     caretPosition_ + caretPositionOffset_,
                     text,
                     characterCount
-                    );
+                );
                 GlobalUnlock(hClipboardData);
             }
         }
@@ -1682,13 +1700,13 @@ HRESULT TextEditor::InsertText(const wchar_t* text)
     UINT32 absolutePosition = caretPosition_ + caretPositionOffset_;
 
     return layoutEditor_.InsertTextAt(
-                textLayout_,
-                text_,
-                absolutePosition,
-                text,
-                static_cast<UINT32>(wcsnlen(text, UINT32_MAX)),
-                &caretFormat_
-                );
+               textLayout_,
+               text_,
+               absolutePosition,
+               text,
+               static_cast<UINT32>(wcsnlen(text, UINT32_MAX)),
+               &caretFormat_
+           );
 }
 
 
@@ -1757,7 +1775,8 @@ void TextEditor::GetViewMatrix(OUT DWRITE_MATRIX* matrix) const
     GetClientRect(hwnd_, &rect);
 
     // Translate the origin to 0,0
-    DWRITE_MATRIX translationMatrix = {
+    DWRITE_MATRIX translationMatrix =
+    {
         1, 0,
         0, 1,
         -originX_, -originY_
@@ -1775,7 +1794,8 @@ void TextEditor::GetViewMatrix(OUT DWRITE_MATRIX* matrix) const
         sinValue = floor(sinValue + .5);
     }
 
-    DWRITE_MATRIX rotationMatrix = {
+    DWRITE_MATRIX rotationMatrix =
+    {
         float( cosValue * scaleX_), float(sinValue * scaleX_),
         float(-sinValue * scaleY_), float(cosValue * scaleY_),
         0, 0
@@ -1783,7 +1803,8 @@ void TextEditor::GetViewMatrix(OUT DWRITE_MATRIX* matrix) const
 
     // Set the origin in the center of the window
     float centeringFactor = .5f;
-    DWRITE_MATRIX centerMatrix = {
+    DWRITE_MATRIX centerMatrix =
+    {
         1, 0,
         0, 1,
         floor(float(rect.right * centeringFactor)), floor(float(rect.bottom * centeringFactor))

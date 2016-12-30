@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,24 +21,24 @@
  * while ensuring that it does not interfere with other programs writing/deleting
  * these files.
  *
- * To achieve this goal, the program takes a directory as a command line argument, 
- * enumerates the files in the directory using the FindFirstFileEx()/FindNextFile() API, 
+ * To achieve this goal, the program takes a directory as a command line argument,
+ * enumerates the files in the directory using the FindFirstFileEx()/FindNextFile() API,
  * opens each file, obtains the new (CACHE_OPLOCK_LEVEL_READ | CACHE_OPLOCK_LEVEL_HANDLE)
- * (shortened as RH  in the comments) oplock, and attempts to read the entire file 
+ * (shortened as RH  in the comments) oplock, and attempts to read the entire file
  * sequentially, while holding this oplock.
  *
  * If any other process attempts to open the file for writing/deleting, the oplock would
  * break, and the open attempt by that process would be blocked until this program
- * acknowledges the break or closes the file handle. This program checks the status of 
+ * acknowledges the break or closes the file handle. This program checks the status of
  * the oplock and abandons the checksum operation if a break occurs.
  *
  * While holding the oplock, all I/O that we issue must be asynchronous. If we ever
- * wait for any I/O to complete, we must monitor simultaneously for oplock breaks 
+ * wait for any I/O to complete, we must monitor simultaneously for oplock breaks
  * as well. Limiting the operations that are performed while holding an oplock will
  * make it is easier to avoid deadlock scenarios.
  *
  * The key routines in this program are:
- *      SimpleCheckSumAlgorithm          
+ *      SimpleCheckSumAlgorithm
  *           Implements a simple checksum algorithm
  *
  *      PerformCheckSumOperation
@@ -59,8 +59,9 @@
  * maintained by this program.
  *
  */
-  
-typedef struct _OPLOCK_COMMUNICATION {
+
+typedef struct _OPLOCK_COMMUNICATION
+{
     OVERLAPPED OverLapped;
     REQUEST_OPLOCK_INPUT_BUFFER Request;
 } OPLOCK_COMMUNICATION, *POPLOCK_COMMUNICATION;
@@ -74,7 +75,8 @@ DWORD SimpleCheckSumAlgorithm(PVOID Buffer, DWORD Length, DWORD PartialCheckSum,
 {
     DWORD i;
     PUCHAR TmpBuffer = (PUCHAR) Buffer;
-    for (i = 0 ; i < Length ; i++) {
+    for (i = 0 ; i < Length ; i++)
+    {
         PartialCheckSum = ((PartialCheckSum << 8)|(PartialCheckSum >> 24)) ^ TmpBuffer[i];
     }
     *Counter += i;
@@ -83,16 +85,16 @@ DWORD SimpleCheckSumAlgorithm(PVOID Buffer, DWORD Length, DWORD PartialCheckSum,
 
 
 /*
- *  This is the routine that performs the checksum operation on 
- *  a single file. This routine wants to ensure that the checksum that 
- *  it computes is valid, therefore it opens the file without sharing 
+ *  This is the routine that performs the checksum operation on
+ *  a single file. This routine wants to ensure that the checksum that
+ *  it computes is valid, therefore it opens the file without sharing
  *  it for DELETE or WRITE.
  *
- *  Without Oplocks, any other process attempting to open this file 
+ *  Without Oplocks, any other process attempting to open this file
  *  for DELETE or WRITE will receive a sharing violation. By obtaining
  *  an oplock level of CACHE_OPLOCK_LEVEL_READ | CACHE_OPLOCK_LEVEL_HANDLE,
- *  it ensures that when any create that is incompatable with our 
- *  sharing mode is issued, the create request will be pended and this 
+ *  it ensures that when any create that is incompatable with our
+ *  sharing mode is issued, the create request will be pended and this
  *  routine will be notified via the breaking of the oplock.
  *  When this routine acknowledges the break of the oplock by closing
  *  the handle, the pending open operation will be allowed to proceed,
@@ -118,16 +120,17 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
 
     FileHandle = CreateFile( FilePath,
                              GENERIC_READ,
-                             FILE_SHARE_READ, 
+                             FILE_SHARE_READ,
                              NULL,
                              OPEN_EXISTING,
                              FILE_FLAG_OVERLAPPED,
                              NULL );
 
-    if (INVALID_HANDLE_VALUE == FileHandle) {
+    if (INVALID_HANDLE_VALUE == FileHandle)
+    {
         _tprintf(_T("Error 0x%x Opening %s\n"), GetLastError(), FilePath );
         return;
-    }   
+    }
 
     //
     //   Obtain an RH Oplock on the file. This Oplock will break to a level of
@@ -147,14 +150,15 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
                                 &Response,
                                 sizeof( Response ),
                                 NULL,
-                                &OplockInfo->OverLapped ); 
+                                &OplockInfo->OverLapped );
 
     //
     // If the above routine returns FALSE, and the last error is ERROR_IO_PENDING,
     // we have obtained the oplock.
     //
 
-    if (bSuccess || (ERROR_IO_PENDING != GetLastError())) {
+    if (bSuccess || (ERROR_IO_PENDING != GetLastError()))
+    {
         _tprintf( _T("We failed to acquire the oplock, the error code was 0x%x\n"), GetLastError() );
         CloseHandle(FileHandle);
         return;
@@ -162,14 +166,15 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
 
 
     //
-    // We obtained the Oplock and may safely operate on the file, secure in 
+    // We obtained the Oplock and may safely operate on the file, secure in
     // the knowledge that it cannot change while we are working on it.
     // We now read through the file, checksumming as we go.
     //
 
     ReadOverLapped.hEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 
-    if (ReadOverLapped.hEvent == INVALID_HANDLE_VALUE) {
+    if (ReadOverLapped.hEvent == INVALID_HANDLE_VALUE)
+    {
         _tprintf(_T("Failed to create event"));
         CloseHandle(FileHandle);
         return;
@@ -182,8 +187,9 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
     KeyEvents[0] =  OplockInfo->OverLapped.hEvent;
     KeyEvents[1] =  ReadOverLapped.hEvent;
 
-    while (ResultValid){
-        
+    while (ResultValid)
+    {
+
         DWORD BytesRead;
 
         ReadOverLapped.Offset = Offset.LowPart;
@@ -195,16 +201,21 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
                              &BytesRead,
                              &ReadOverLapped );
 
-        if (!bSuccess) {
+        if (!bSuccess)
+        {
 
-            if (ERROR_IO_PENDING != GetLastError()) {
+            if (ERROR_IO_PENDING != GetLastError())
+            {
 
-                if (ERROR_HANDLE_EOF == GetLastError()) {  
+                if (ERROR_HANDLE_EOF == GetLastError())
+                {
                     //
                     // We reached end of this file
                     //
                     break;
-                } else {
+                }
+                else
+                {
                     _tprintf( _T("Error 0x%x, while reading the file\n"), GetLastError() );
                     ResultValid = FALSE;
                     break;
@@ -219,10 +230,10 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
             // !!! IMPORTANT NOTE !!!
             // It is important to ensure that we do not perform any
             // operation that may result in us blocking while we hold an
-            // oplock. All I/O that we perform while we hold the oplock 
+            // oplock. All I/O that we perform while we hold the oplock
             // should be asynchronous. If that is not possible, then such
             // operations should be performed in a separate thread.
-            // 
+            //
             // If we are waiting for any I/O to complete in this thread
             // we must use the WaitForMultipleObjects() API to monitor
             // simultaneously for the oplock break as well.
@@ -237,43 +248,48 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
             // event associated with the Read operation, the oplock must
             // have broken.
             //
-            
-            if (RetVal != WAIT_OBJECT_0 + 1 ) {
+
+            if (RetVal != WAIT_OBJECT_0 + 1 )
+            {
                 ResultValid = FALSE;
                 _tprintf( _T( "Oplock Break: From 0x%x to 0x%x before we finished reading.\n"),
-                               Response.OriginalOplockLevel,
-                               Response.NewOplockLevel );                
+                          Response.OriginalOplockLevel,
+                          Response.NewOplockLevel );
                 break;
             }
-            
+
             if (!GetOverlappedResult( FileHandle,
                                       &ReadOverLapped,
                                       &BytesRead,
-                                      FALSE )) {
+                                      FALSE ))
+            {
 
-                if (ERROR_HANDLE_EOF == GetLastError()) {  
+                if (ERROR_HANDLE_EOF == GetLastError())
+                {
                     //
                     // We reached end of this file
                     //
                     break;
-                } else {
+                }
+                else
+                {
                     _tprintf( _T("Asynchronous Error 0x%x, while reading the file\n"), GetLastError() );
                     ResultValid = FALSE;
                     break;
                 }
             }
-                
-        } 
-                    
+
+        }
+
         //
         // Compute the checksum
         //
 
         PartialCheckSum = SimpleCheckSumAlgorithm( Buffer,
-                                                   BytesRead,
-                                                   PartialCheckSum,
-                                                   &BytesSummedCounter);
-                    
+                          BytesRead,
+                          PartialCheckSum,
+                          &BytesSummedCounter);
+
         //
         // Advance to the next offset in the file.
         //
@@ -285,15 +301,18 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
 
     CloseHandle( ReadOverLapped.hEvent );
 
-    if (ResultValid) {
+    if (ResultValid)
+    {
 
         _tprintf(_T("Checksum is 0x%08x, Analyzed %d bytes.\n"),PartialCheckSum,BytesSummedCounter);
 
-    } else {
+    }
+    else
+    {
 
         _tprintf(_T("Checksum is unknown\n"));
     }
-        
+
     //
     //  This Close will either:
     //   Release the oplock (If the oplock hadn't been broken)
@@ -305,12 +324,12 @@ VOID PerformCheckSumOperation(TCHAR * FilePath, PVOID Buffer, POPLOCK_COMMUNICAT
 }
 
 /*
- *  This routine will be passed the path to a directory. It will compute the 
- *  checksum of all the files in that directory by calling the 
+ *  This routine will be passed the path to a directory. It will compute the
+ *  checksum of all the files in that directory by calling the
  *  PerformChecksumOperation() routine on each file.
  *
  */
- 
+
 void ScanAndComputeCheckSum(_TCHAR * Path)
 {
     HANDLE FileEnumerationHandle;
@@ -333,11 +352,12 @@ void ScanAndComputeCheckSum(_TCHAR * Path)
     OplockInfo.Request.Flags = REQUEST_OPLOCK_INPUT_FLAG_REQUEST;
 
     OplockInfo.OverLapped.hEvent = CreateEvent( NULL,
-                                                TRUE,
-                                                FALSE,
-                                                NULL );
+                                   TRUE,
+                                   FALSE,
+                                   NULL );
 
-    if (INVALID_HANDLE_VALUE == OplockInfo.OverLapped.hEvent) {
+    if (INVALID_HANDLE_VALUE == OplockInfo.OverLapped.hEvent)
+    {
 
         _tprintf(_T("Failed to create oplock event\n"));
         return;
@@ -349,7 +369,8 @@ void ScanAndComputeCheckSum(_TCHAR * Path)
 
     Buffer = malloc( CHECKSUM_BLOCK_SIZE );
 
-    if (NULL == Buffer) {
+    if (NULL == Buffer)
+    {
 
         _tprintf(_T("Failed to allocate memory for read buffer"));
         CloseHandle( OplockInfo.OverLapped.hEvent );
@@ -364,13 +385,14 @@ void ScanAndComputeCheckSum(_TCHAR * Path)
     ZeroMemory( &FindFileData, sizeof( FindFileData ) );
 
     FileEnumerationHandle = FindFirstFileEx( SearchString,
-                                             FindExInfoBasic,
-                                             &FindFileData,
-                                             FindExSearchNameMatch,
-                                             NULL,
-                                             FIND_FIRST_EX_LARGE_FETCH );
+                            FindExInfoBasic,
+                            &FindFileData,
+                            FindExSearchNameMatch,
+                            NULL,
+                            FIND_FIRST_EX_LARGE_FETCH );
 
-    if (INVALID_HANDLE_VALUE == FileEnumerationHandle) {
+    if (INVALID_HANDLE_VALUE == FileEnumerationHandle)
+    {
 
         _tprintf(_T("Unable to list files under %s"),Path);
         free( Buffer );
@@ -378,19 +400,21 @@ void ScanAndComputeCheckSum(_TCHAR * Path)
         return;
     }
 
-    do {
+    do
+    {
         _tprintf(_T("Processing File %s\n"), FindFileData.cFileName);
 
         //
         // Construct full path to the file.
         //
 
-        _stprintf_s(FilePath, ARRAYSIZE(FilePath), _T("%s\\%s"), Path , FindFileData.cFileName);
+        _stprintf_s(FilePath, ARRAYSIZE(FilePath), _T("%s\\%s"), Path, FindFileData.cFileName);
 
         PerformCheckSumOperation( FilePath, Buffer, &OplockInfo );
-        
+
         MoreFiles = FindNextFile( FileEnumerationHandle, &FindFileData );
-    } while ( MoreFiles );
+    }
+    while ( MoreFiles );
 
     FindClose( FileEnumerationHandle );
     free( Buffer );
@@ -407,11 +431,14 @@ INT __cdecl _tmain(INT argc, WCHAR* argv[])
 {
     _tprintf(_T("Windows-7 Oplocks SDK Sample Program.\n"));
 
-    if (argc > 1) {
+    if (argc > 1)
+    {
 
         ScanAndComputeCheckSum( argv[1] );
 
-    } else {
+    }
+    else
+    {
 
         _tprintf(_T("Supply the path of the directory to scan files for generating checksum\n"));
     }

@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // WavByteStreamHandler.h: Bytestream handler for .wav files.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -27,20 +27,20 @@ public:
 
     // IMFByteStreamHandler
 
-    STDMETHODIMP BeginCreateObject( 
-            /* [in] */ IMFByteStream *pByteStream,
-            /* [in] */ LPCWSTR pwszURL,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IPropertyStore *pProps,
-            /* [out] */ IUnknown **ppIUnknownCancelCookie,
-            /* [in] */ IMFAsyncCallback *pCallback,
-            /* [in] */ IUnknown *punkState);
-        
-    STDMETHODIMP EndCreateObject( 
-            /* [in] */ IMFAsyncResult *pResult,
-            /* [out] */ MF_OBJECT_TYPE *pObjectType,
-            /* [out] */ IUnknown **ppObject);
-        
+    STDMETHODIMP BeginCreateObject(
+        /* [in] */ IMFByteStream *pByteStream,
+        /* [in] */ LPCWSTR pwszURL,
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ IPropertyStore *pProps,
+        /* [out] */ IUnknown **ppIUnknownCancelCookie,
+        /* [in] */ IMFAsyncCallback *pCallback,
+        /* [in] */ IUnknown *punkState);
+
+    STDMETHODIMP EndCreateObject(
+        /* [in] */ IMFAsyncResult *pResult,
+        /* [out] */ MF_OBJECT_TYPE *pObjectType,
+        /* [out] */ IUnknown **ppObject);
+
     STDMETHODIMP CancelObjectCreation(IUnknown *pIUnknownCancelCookie);
     STDMETHODIMP GetMaxNumberOfBytesRequiredForResolution(QWORD* pqwBytes);
 

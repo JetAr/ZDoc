@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -28,67 +28,67 @@ DWORD g_dwEapTraceId;
 
 int __cdecl main()
 {
-	DWORD retCode = 0;
+    DWORD retCode = 0;
 
-	//"SampleSupplicant.log" - the trace file that will be generated.
-	g_dwEapTraceId = TraceRegister(L"SampleSupplicant");
+    //"SampleSupplicant.log" - the trace file that will be generated.
+    g_dwEapTraceId = TraceRegister(L"SampleSupplicant");
 
-	//
-	// Create the heap we'll be using for memory allocations.
-	//
-	retCode = InitializeHeap();
-	if (retCode != NO_ERROR)
-	{
-		goto Cleanup;
-	}
+    //
+    // Create the heap we'll be using for memory allocations.
+    //
+    retCode = InitializeHeap();
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
 
-	//
-	// Initialize the resources used for authentication.
-	//
-	retCode = Initialize();
-	if (retCode != NO_ERROR)
-	{
-		goto Cleanup;
-	}
+    //
+    // Initialize the resources used for authentication.
+    //
+    retCode = Initialize();
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
 
-	//
-	// Fake the presence of a NAS (Access Point, Remote Access Server) that will send the supplicant the 
-	// identity request. Here, we generate ourselves the Identity Request Packet.
-	//
-	retCode = MakeIdentityRequestMessage(&g_pIdentityRequest, &g_dwIdentityRequestPacketLen);
-	if (retCode != NO_ERROR)
-	{
-		goto Cleanup;
-	}
+    //
+    // Fake the presence of a NAS (Access Point, Remote Access Server) that will send the supplicant the
+    // identity request. Here, we generate ourselves the Identity Request Packet.
+    //
+    retCode = MakeIdentityRequestMessage(&g_pIdentityRequest, &g_dwIdentityRequestPacketLen);
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
 
-	//
-	// Begin the actual authentication.
-	//
-	retCode = BeginAuthentication();
-	if (retCode != NO_ERROR)
-	{
-		goto Cleanup;
-	}
+    //
+    // Begin the actual authentication.
+    //
+    retCode = BeginAuthentication();
+    if (retCode != NO_ERROR)
+    {
+        goto Cleanup;
+    }
 
 Cleanup:
-	//
-	//Clean up the resources used for authentication.
-	//
-	CleanUp();
-	
-	//
-	//Free the buffer that stores the initial Identity Request Packet.
-	//
-	if(g_pIdentityRequest != NULL)
-		FreeMemory((PVOID *)&g_pIdentityRequest);
+    //
+    //Clean up the resources used for authentication.
+    //
+    CleanUp();
 
-	TraceDeregister(g_dwEapTraceId);
-	g_dwEapTraceId = INVALID_TRACEID;
-	
-	//
-	// Clean up our internal heap.
-	//
-	CleanupHeap();
+    //
+    //Free the buffer that stores the initial Identity Request Packet.
+    //
+    if(g_pIdentityRequest != NULL)
+        FreeMemory((PVOID *)&g_pIdentityRequest);
 
-	return retCode;
+    TraceDeregister(g_dwEapTraceId);
+    g_dwEapTraceId = INVALID_TRACEID;
+
+    //
+    // Clean up our internal heap.
+    //
+    CleanupHeap();
+
+    return retCode;
 }

@@ -1,4 +1,4 @@
-#include "StreamSink.h"
+﻿#include "StreamSink.h"
 
 GUID const* const DX11VideoRenderer::CStreamSink::s_pVideoFormats[] =
 {
@@ -346,10 +346,10 @@ HRESULT DX11VideoRenderer::CStreamSink::PlaceMarker(MFSTREAMSINK_MARKER_TYPE eMa
     if (SUCCEEDED(hr))
     {
         hr = CMarker::Create(
-            eMarkerType,
-            pvarMarkerValue,
-            pvarContextValue,
-            &pMarker);
+                 eMarkerType,
+                 pvarMarkerValue,
+                 pvarContextValue,
+                 &pMarker);
     }
 
     if (SUCCEEDED(hr))
@@ -483,7 +483,8 @@ HRESULT DX11VideoRenderer::CStreamSink::GetEvent(DWORD dwFlags, __RPC__deref_out
 
     IMFMediaEventQueue* pQueue = NULL;
 
-    { // scope for lock
+    {
+        // scope for lock
 
         CAutoLock lock(&m_critSec);
 
@@ -805,20 +806,20 @@ HRESULT DX11VideoRenderer::CStreamSink::SetCurrentMediaType(IMFMediaType* pMedia
         pMediaType->GetGUID(MF_MT_SUBTYPE, &guidSubtype);
 
         if ((guidSubtype == MFVideoFormat_NV12) ||
-            (guidSubtype == MFVideoFormat_YV12) ||
-            (guidSubtype == MFVideoFormat_IYUV) ||
-            (guidSubtype == MFVideoFormat_YVU9) ||
-            (guidSubtype == MFVideoFormat_I420))
+                (guidSubtype == MFVideoFormat_YV12) ||
+                (guidSubtype == MFVideoFormat_IYUV) ||
+                (guidSubtype == MFVideoFormat_YVU9) ||
+                (guidSubtype == MFVideoFormat_I420))
         {
             m_imageBytesPP.Numerator = 3;
             m_imageBytesPP.Denominator = 2;
         }
         else if ((guidSubtype == MFVideoFormat_YUY2)||
-            (guidSubtype == MFVideoFormat_RGB555)   ||
-            (guidSubtype == MFVideoFormat_RGB565)   ||
-            (guidSubtype == MFVideoFormat_UYVY)     ||
-            (guidSubtype == MFVideoFormat_YVYU)     ||
-            (guidSubtype == MEDIASUBTYPE_V216))
+                 (guidSubtype == MFVideoFormat_RGB555)   ||
+                 (guidSubtype == MFVideoFormat_RGB565)   ||
+                 (guidSubtype == MFVideoFormat_UYVY)     ||
+                 (guidSubtype == MFVideoFormat_YVYU)     ||
+                 (guidSubtype == MEDIASUBTYPE_V216))
         {
             m_imageBytesPP.Numerator = 2;
             m_imageBytesPP.Denominator = 1;
@@ -854,10 +855,10 @@ HRESULT DX11VideoRenderer::CStreamSink::SetCurrentMediaType(IMFMediaType* pMedia
         if (SUCCEEDED(GetFrameRate(pMediaType, &fps)) && (fps.Numerator != 0) && (fps.Denominator != 0))
         {
             if (MFVideoInterlace_FieldInterleavedUpperFirst == m_unInterlaceMode ||
-                MFVideoInterlace_FieldInterleavedLowerFirst == m_unInterlaceMode ||
-                MFVideoInterlace_FieldSingleUpper == m_unInterlaceMode ||
-                MFVideoInterlace_FieldSingleLower == m_unInterlaceMode ||
-                MFVideoInterlace_MixedInterlaceOrProgressive == m_unInterlaceMode)
+                    MFVideoInterlace_FieldInterleavedLowerFirst == m_unInterlaceMode ||
+                    MFVideoInterlace_FieldSingleUpper == m_unInterlaceMode ||
+                    MFVideoInterlace_FieldSingleLower == m_unInterlaceMode ||
+                    MFVideoInterlace_MixedInterlaceOrProgressive == m_unInterlaceMode)
             {
                 fps.Numerator*=2;
             }
@@ -1016,10 +1017,10 @@ HRESULT DX11VideoRenderer::CStreamSink::GetMaxRate(BOOL fThin, float* pflRate)
         else
         {
             if (MFVideoInterlace_FieldInterleavedUpperFirst == m_unInterlaceMode ||
-                MFVideoInterlace_FieldInterleavedLowerFirst == m_unInterlaceMode ||
-                MFVideoInterlace_FieldSingleUpper == m_unInterlaceMode           ||
-                MFVideoInterlace_FieldSingleLower == m_unInterlaceMode           ||
-                MFVideoInterlace_MixedInterlaceOrProgressive == m_unInterlaceMode)
+                    MFVideoInterlace_FieldInterleavedLowerFirst == m_unInterlaceMode ||
+                    MFVideoInterlace_FieldSingleUpper == m_unInterlaceMode           ||
+                    MFVideoInterlace_FieldSingleLower == m_unInterlaceMode           ||
+                    MFVideoInterlace_MixedInterlaceOrProgressive == m_unInterlaceMode)
             {
                 unNumerator*=2;
             }

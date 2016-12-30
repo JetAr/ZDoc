@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,15 +25,15 @@ public:
     HRESULT Initialize( );
     HRESULT ListFunctionInstances( const WCHAR* pszCategory );
     HRESULT WaitForChange( DWORD dwTimeout,
-        const WCHAR* pszCategory,
-        QueryUpdateAction eAction );
+                           const WCHAR* pszCategory,
+                           QueryUpdateAction eAction );
 
     // IUnknown implementation
 public:
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv)
     {
         if (riid == __uuidof(IFunctionDiscoveryNotification) ||
-            riid == __uuidof(IUnknown))
+                riid == __uuidof(IUnknown))
         {
             *ppv = static_cast<IFunctionDiscoveryNotification *>(this);
             AddRef();

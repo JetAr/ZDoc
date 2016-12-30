@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation
 
@@ -22,19 +22,21 @@ Revision History:
 
 #define NELEMENTS(x) (sizeof (x) / sizeof (*(x)))
 
-// Overload '<' operator on GUIDs. This is required for defining 
+// Overload '<' operator on GUIDs. This is required for defining
 // map<GUID, IUnknown *> type.
 
-inline bool operator<(const GUID &rguid1, const GUID &rguid2) {
+inline bool operator<(const GUID &rguid1, const GUID &rguid2)
+{
     return (memcmp((void *)&rguid1, (void *)&rguid2, sizeof(GUID)) < 0);
 }
 
 template<class T> inline void
 SAFE_DELETE(
     T& x
-    )
+)
 {
-    if (x != NULL) {
+    if (x != NULL)
+    {
         delete x;
         x = NULL;
     }
@@ -43,9 +45,10 @@ SAFE_DELETE(
 template<class T> inline void
 SAFE_RELEASE(
     T& x
-    )
+)
 {
-    if (x != NULL) {
+    if (x != NULL)
+    {
         x->Release();
         x = NULL;
     }
@@ -54,7 +57,7 @@ SAFE_RELEASE(
 template<class T> inline void
 SAFE_COFREE(
     T& x
-    )
+)
 {
     //
     // CoTaskMemFree allows NULL arguments, so
@@ -67,9 +70,10 @@ SAFE_COFREE(
 inline void
 SAFE_FREESID(
     PSID& x
-    )
+)
 {
-    if (x != NULL) {
+    if (x != NULL)
+    {
         FreeSid( x );
         x = NULL;
     }
@@ -78,9 +82,10 @@ SAFE_FREESID(
 inline void
 SAFE_CLOSE(
     HANDLE& x
-    )
+)
 {
-    if (x != INVALID_HANDLE_VALUE) {
+    if (x != INVALID_HANDLE_VALUE)
+    {
         CloseHandle( x );
         x = INVALID_HANDLE_VALUE;
     }
@@ -90,32 +95,38 @@ inline void
 THROW_ON_FAILED(
     const char* /*strMessage*/,
     HRESULT hr
-    )
+)
 {
-    if (FAILED(hr)) { 
-        throw hr; 
+    if (FAILED(hr))
+    {
+        throw hr;
     }
 }
 
-class AutoLock {
- public:
-    AutoLock( CRITICAL_SECTION& cs ) : m_pLock( &cs ) {
+class AutoLock
+{
+public:
+    AutoLock( CRITICAL_SECTION& cs ) : m_pLock( &cs )
+    {
         EnterCriticalSection( m_pLock );
     };
 
-    ~AutoLock() {
+    ~AutoLock()
+    {
         Unlock();
     };
 
 #pragma warning(suppress: 26135)
-    void Unlock() {
-        if (m_pLock != NULL) {
+    void Unlock()
+    {
+        if (m_pLock != NULL)
+        {
             LeaveCriticalSection( m_pLock );
             m_pLock = NULL;
         }
     };
-    
- private:
+
+private:
     CRITICAL_SECTION* m_pLock;
 };
 
@@ -126,61 +137,61 @@ class AutoLock {
 LPSTR
 NewString(
     LPCSTR pszSource
-    );
+);
 
 LPWSTR
 NewString(
     LPCWSTR pwszSource
-    );
+);
 
 LPWSTR
 NewString(
     std::wstring& wsSrc
-    );
+);
 
 std::string
 GuidToString(
     GUID& guid
-    );
+);
 
 std::wstring
 GuidToWString(
     GUID& guid
-    );
+);
 
 GUID
 WStringToGuid(
     std::wstring& value
-    );
+);
 
 HRESULT
 UnicodeToAnsi(
     __in LPCWSTR pwszIn,
     __out LPSTR&  pszOut
-    );
+);
 
 HRESULT
 AnsiToUnicode(
     __in LPCSTR pszIn,
     __out LPWSTR& pwszOut
-    );
+);
 
 HRESULT
 AnsiToGuid(
     LPCSTR szString,
     GUID& guid
-    );
+);
 
 LPSTR
 GuidToAnsi(
     GUID& guid
-    );
+);
 
 HRESULT
 GetEnvVar(
     std::wstring& var,
     std::wstring& value
-    );
+);
 
 //
 // Tracing
@@ -190,20 +201,23 @@ void
 TraceMsg(
     LPCWSTR msg,
     ...
-    );
+);
 
-class FuncTrace {
- public:
+class FuncTrace
+{
+public:
     FuncTrace(LPCWSTR function)
-     : m_function(function) {
+        : m_function(function)
+    {
         TraceMsg(L"Entering: %s\n", m_function);
     }
 
-    ~FuncTrace() {
+    ~FuncTrace()
+    {
         TraceMsg(L"Exiting: %s\n", m_function);
     }
 
- private:
+private:
     LPCWSTR m_function;
 };
 
@@ -213,4 +227,4 @@ void
 LogEvent(
     LPCWSTR pFormat,
     ...
-    );
+);

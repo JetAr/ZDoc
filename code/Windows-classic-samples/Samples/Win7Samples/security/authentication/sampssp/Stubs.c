@@ -1,4 +1,4 @@
-/*+-----------------------------------------------------------------------
+﻿/*+-----------------------------------------------------------------------
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -278,7 +278,7 @@ LocateBuffer(PSecBufferDesc Buffer, ULONG MinimumSize)
     for (Index = 0; Index < Buffer->cBuffers  ; Index++)
     {
         if (((Buffer->pBuffers[Index].BufferType) & ~SECBUFFER_ATTRMASK)
-            == SECBUFFER_TOKEN)
+                == SECBUFFER_TOKEN)
         {
 
             //
@@ -369,7 +369,7 @@ AcquireCredentialsHandleW(
     void SEC_FAR *              pvGetKeyArgument,   // Value to pass to GetKey()
     PCredHandle                 phCredential,       // (out) Cred Handle
     PTimeStamp                  ptsExpiry           // (out) Lifetime (optional)
-    )
+)
 {
     PCREDENTIAL NewCredential = NULL;
 
@@ -417,7 +417,7 @@ AcquireCredentialsHandleW(
 SECURITY_STATUS SEC_ENTRY
 FreeCredentialsHandle(
     PCredHandle                 phCredential        // Handle to free
-    )
+)
 {
     if (DeleteCredential(phCredential->dwUpper))
     {
@@ -464,7 +464,7 @@ InitializeSecurityContextW(
     PSecBufferDesc              pOutput,            // (inout) Output Buffers
     unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
     PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
-    )
+)
 {
     PCREDENTIAL Credential = NULL;
     PSEC_CONTEXT Context = NULL;
@@ -534,7 +534,9 @@ InitializeSecurityContextW(
 
         return(SEC_I_CONTINUE_NEEDED);
 
-    } else {
+    }
+    else
+    {
         //
         // This is the second call. Lookup the old context.
         //
@@ -546,7 +548,7 @@ InitializeSecurityContextW(
         }
 
         if ((Context->State != FirstInit) &&
-            (Context->State != SecondInit))
+                (Context->State != SecondInit))
         {
             return(SEC_E_INVALID_HANDLE);
         }
@@ -691,7 +693,7 @@ AcceptSecurityContext(
     PSecBufferDesc              pOutput,            // (inout) Output buffers
     unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attributes
     PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
-    )
+)
 {
     PCREDENTIAL Credential = NULL;
     PSEC_CONTEXT Context = NULL;
@@ -790,7 +792,9 @@ AcceptSecurityContext(
 
         return(SEC_I_CONTINUE_NEEDED);
 
-    } else {
+    }
+    else
+    {
         //
         // This is the second call. Lookup the old context.
         //
@@ -801,7 +805,7 @@ AcceptSecurityContext(
             return(SEC_E_INVALID_HANDLE);
         }
         if ((Context->State != FirstAccept) &&
-            (Context->State != SecondAccept))
+                (Context->State != SecondAccept))
         {
             return(SEC_E_INVALID_HANDLE);
         }
@@ -861,7 +865,7 @@ AcceptSecurityContext(
 SECURITY_STATUS SEC_ENTRY
 DeleteSecurityContext(
     PCtxtHandle                 phContext           // Context to delete
-    )
+)
 {
     if (DeleteContext(phContext->dwUpper))
     {
@@ -899,7 +903,7 @@ SECURITY_STATUS SEC_ENTRY
 ApplyControlToken(
     PCtxtHandle                 phContext,          // Context to modify
     PSecBufferDesc              pInput              // Input token to apply
-    )
+)
 {
     return(SEC_E_UNSUPPORTED_FUNCTION);
 
@@ -933,14 +937,14 @@ SECURITY_STATUS SEC_ENTRY
 EnumerateSecurityPackagesW(
     unsigned long SEC_FAR *     pcPackages,         // Receives num. packages
     PSecPkgInfoW SEC_FAR *      ppPackageInfo       // Receives array of info
-    )
+)
 {
     SECURITY_STATUS SecStatus;
 
     SecStatus = QuerySecurityPackageInfoW(
                     PACKAGE_NAME,
                     ppPackageInfo
-                    );
+                );
     if (SecStatus == SEC_E_OK)
     {
         *pcPackages = 1;
@@ -975,7 +979,7 @@ SECURITY_STATUS SEC_ENTRY
 QuerySecurityPackageInfoW(
     LPWSTR                      pszPackageName,     // Name of package
     PSecPkgInfoW SEC_FAR *      ppPackageInfo        // Receives package info
-    )
+)
 {
     PSecPkgInfoW PackageInfo;
     ULONG PackageInfoSize;
@@ -987,8 +991,8 @@ QuerySecurityPackageInfoW(
     }
 
     PackageInfoSize = sizeof(SecPkgInfoW) +
-                        (wcslen(PACKAGE_NAME) + 1 +
-                         wcslen(PACKAGE_COMMENT) + 1) * sizeof(WCHAR);
+                      (wcslen(PACKAGE_NAME) + 1 +
+                       wcslen(PACKAGE_COMMENT) + 1) * sizeof(WCHAR);
 
     PackageInfo = (PSecPkgInfoW) LocalAlloc(0,PackageInfoSize);
     if (PackageInfo == NULL)
@@ -1042,7 +1046,7 @@ QuerySecurityPackageInfoW(
 SECURITY_STATUS SEC_ENTRY
 FreeContextBuffer(
     void SEC_FAR *      pvContextBuffer
-    )
+)
 {
     LocalFree(pvContextBuffer);
     return(SEC_E_OK);
@@ -1075,7 +1079,7 @@ SECURITY_STATUS SEC_ENTRY
 CompleteAuthToken(
     PCtxtHandle                 phContext,          // Context to complete
     PSecBufferDesc              pToken              // Token to complete
-    )
+)
 {
 
     return(SEC_E_OK);
@@ -1107,7 +1111,7 @@ CompleteAuthToken(
 SECURITY_STATUS SEC_ENTRY
 ImpersonateSecurityContext(
     PCtxtHandle                 phContext           // Context to impersonate
-    )
+)
 {
     return(SEC_E_OK);
 }
@@ -1137,7 +1141,7 @@ ImpersonateSecurityContext(
 SECURITY_STATUS SEC_ENTRY
 RevertSecurityContext(
     PCtxtHandle                 phContext           // Context from which to re
-    )
+)
 {
     return(SEC_E_OK);
 }
@@ -1169,7 +1173,7 @@ QueryContextAttributesW(
     PCtxtHandle                 phContext,          // Context to query
     unsigned long               ulAttribute,        // Attribute to query
     void SEC_FAR *              pBuffer             // Buffer for attributes
-    )
+)
 {
     PSEC_CONTEXT Context;
     PSecPkgContext_Sizes ContextSizes;
@@ -1184,7 +1188,8 @@ QueryContextAttributesW(
         return(SEC_E_INVALID_HANDLE);
     }
 
-    switch(ulAttribute) {
+    switch(ulAttribute)
+    {
     case SECPKG_ATTR_SIZES:
         ContextSizes = (PSecPkgContext_Sizes) pBuffer;
         ContextSizes->cbMaxSignature = PACKAGE_SIGNATURE_SIZE;
@@ -1260,12 +1265,12 @@ QueryCredentialsAttributesW(
     PCredHandle                 phCredentials,      // Credentials to query
     unsigned long               ulAttribute,        // Attribute to query
     void SEC_FAR *              pBuffer             // Buffer for attributes
-    )
+)
 {
     return( pspPackages[phCredentials->dwLower].pftTableW->QueryCredentialsAttributesW(
-                                        phCredentials,
-                                        ulAttribute,
-                                        pBuffer ) );
+                phCredentials,
+                ulAttribute,
+                pBuffer ) );
 }
 
 #endif

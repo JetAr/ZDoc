@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999 - 2000 Microsoft Corporation
 
@@ -24,11 +24,11 @@ Abstract:
 // CSampleMSPStream
 /////////////////////////////////////////////////////////////////////////////
 class CSampleMSPStream : public CMSPStream
-    //  if you want to allow your object to be used in scripting apps
-    //  it has to expose IObjectSafety interface. if your object is safe for 
-    //  scripting on all of its interfaces, you can use the implementation
-    //  of IObjectSafety from MSPUtils.h
-    //, public CMSPObjectSafetyImpl
+//  if you want to allow your object to be used in scripting apps
+//  it has to expose IObjectSafety interface. if your object is safe for
+//  scripting on all of its interfaces, you can use the implementation
+//  of IObjectSafety from MSPUtils.h
+//, public CMSPObjectSafetyImpl
 
 {
 public:
@@ -55,11 +55,11 @@ public:
 
     //
     // Required base class overrides.
-    // 
+    //
 
     STDMETHOD (get_Name) (
         OUT     BSTR *                  ppName
-        );
+    );
 
     //
     // We override these methods to implement our terminal handling.
@@ -70,11 +70,11 @@ public:
 
     STDMETHOD (SelectTerminal) (
         IN      ITTerminal *            pTerminal
-        );
+    );
 
     STDMETHOD (UnselectTerminal) (
         IN     ITTerminal *             pTerminal
-        );
+    );
 
     STDMETHOD (StartStream) ();
 
@@ -90,7 +90,7 @@ public:
         IN  long lEventCode,
         IN  long lParam1,
         IN  long lParam2
-        );
+    );
 
     //
     // Public methods specific to our implementation.

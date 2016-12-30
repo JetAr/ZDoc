@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -25,33 +25,38 @@
 // These GUID comes from PropertyTextService\Globals.cpp
 //
 /* b4126de5-6f8f-11d7-a6ee-00065b84435c */
-const GUID c_guidPropStaticCompact = {
+const GUID c_guidPropStaticCompact =
+{
     0xb4126de5,
     0x6f8f,
     0x11d7,
     {0xa6, 0xee, 0x00, 0x06, 0x5b, 0x84, 0x43, 0x5c}
-  };
+};
 /* b4126de6-6f8f-11d7-a6ee-00065b84435c */
-const GUID c_guidPropStatic = {
+const GUID c_guidPropStatic =
+{
     0xb4126de6,
     0x6f8f,
     0x11d7,
     {0xa6, 0xee, 0x00, 0x06, 0x5b, 0x84, 0x43, 0x5c}
-  };
+};
 /* b4126de7-6f8f-11d7-a6ee-00065b84435c */
-const GUID c_guidPropCustom = {
+const GUID c_guidPropCustom =
+{
     0xb4126de7,
     0x6f8f,
     0x11d7,
     {0xa6, 0xee, 0x00, 0x06, 0x5b, 0x84, 0x43, 0x5c}
-  };
+};
 
-typedef struct tag_GUIDINFO {
+typedef struct tag_GUIDINFO
+{
     const GUID  *pguid;
     WCHAR       szDesc[50];
 } GUIDINFO;
 
-GUIDINFO g_giKnownGuids[] = {
+GUIDINFO g_giKnownGuids[] =
+{
     {&GUID_PROP_TEXTOWNER,     L"GUID_PROP_TEXTOWNER"},
     {&GUID_PROP_ATTRIBUTE,     L"GUID_PROP_ATTRIBUTE"},
     {&GUID_PROP_LANGID,        L"GUID_PROP_LANGID"},
@@ -61,7 +66,8 @@ GUIDINFO g_giKnownGuids[] = {
     {&c_guidPropStaticCompact, L"Property TextService Static Compact"},
     {&c_guidPropStatic,        L"Property TextService Static"},
     {&c_guidPropCustom,        L"Property TextService Custom"},
-    {&GUID_NULL,           L""}};
+    {&GUID_NULL,           L""}
+};
 
 //+---------------------------------------------------------------------------
 //
@@ -72,7 +78,8 @@ GUIDINFO g_giKnownGuids[] = {
 BOOL CLSIDToStringW(REFGUID refGUID, WCHAR *pch)
 {
     static const BYTE GuidMap[] = {3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
-                                   8, 9, '-', 10, 11, 12, 13, 14, 15};
+                                   8, 9, '-', 10, 11, 12, 13, 14, 15
+                                  };
 
     static const WCHAR szDigits[] = L"0123456789ABCDEF";
 
@@ -261,13 +268,13 @@ HRESULT CPropertyMonitorTextService::_GetTextExtent(TfEditCookie ec, ITfRange *p
         _GetTextLengthInRange(ec, pStart, pacp);
 
         //
-        // Getting the length of the range is ordinal action. 
+        // Getting the length of the range is ordinal action.
         //
         _GetTextLengthInRange(ec, pRange, pcch);
 
         pStart->Release();
     }
-    
+
     pContext->Release();
     return S_OK;
 }
@@ -292,7 +299,7 @@ void CPropertyMonitorTextService::_DumpPropertyRange(REFGUID rguid, TfEditCookie
 
         VARIANT var;
         VariantInit(&var);
-        
+
         if (SUCCEEDED(pprop->GetValue(ec, prange, &var)))
         {
 
@@ -421,7 +428,7 @@ void CPropertyMonitorTextService::_DumpProperties(TfEditCookie ec, ITfContext *p
         goto Exit;
 
     ClearStream(_pMemStream);
- 
+
     while (penum->Next(1, &pprop, NULL) == S_OK)
     {
         IEnumTfRanges *penumRanges;
@@ -479,30 +486,30 @@ void CPropertyMonitorTextService::_DumpRange(TfEditCookie ec, ITfRange *prange)
 void CPropertyMonitorTextService::_DumpVariant(VARIANT *pvar)
 {
     WCHAR sz[512];
-     
+
     switch (pvar->vt)
     {
-        case VT_EMPTY:
-             AddStringToStream(_pMemStream, L"VT_EMPTY");
-             break;
-        case VT_NULL:
-             AddStringToStream(_pMemStream, L"VT_NULL");
-             break;
-        case VT_I4:
-             StringCchPrintf(sz, ARRAYSIZE(sz), L"VT_I4:0x%08x", pvar->lVal);
-             AddStringToStream(_pMemStream, sz);
-             break;
-        case VT_BSTR:
-             AddStringToStream(_pMemStream, L"VT_BSTR:");
-             AddStringToStream(_pMemStream, pvar->bstrVal);
-             break;
-        case VT_UNKNOWN:
-             StringCchPrintf(sz, ARRAYSIZE(sz), L"VT_UNKNOWN:0x%08x", pvar->lVal);
-             AddStringToStream(_pMemStream, sz);
-             break;
-        default:
-             StringCchPrintf(sz, ARRAYSIZE(sz), L"VT_0x%04x", pvar->vt);
-             AddStringToStream(_pMemStream, sz);
-             break;
-     }
+    case VT_EMPTY:
+        AddStringToStream(_pMemStream, L"VT_EMPTY");
+        break;
+    case VT_NULL:
+        AddStringToStream(_pMemStream, L"VT_NULL");
+        break;
+    case VT_I4:
+        StringCchPrintf(sz, ARRAYSIZE(sz), L"VT_I4:0x%08x", pvar->lVal);
+        AddStringToStream(_pMemStream, sz);
+        break;
+    case VT_BSTR:
+        AddStringToStream(_pMemStream, L"VT_BSTR:");
+        AddStringToStream(_pMemStream, pvar->bstrVal);
+        break;
+    case VT_UNKNOWN:
+        StringCchPrintf(sz, ARRAYSIZE(sz), L"VT_UNKNOWN:0x%08x", pvar->lVal);
+        AddStringToStream(_pMemStream, sz);
+        break;
+    default:
+        StringCchPrintf(sz, ARRAYSIZE(sz), L"VT_0x%04x", pvar->vt);
+        AddStringToStream(_pMemStream, sz);
+        break;
+    }
 }

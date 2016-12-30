@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -31,19 +31,19 @@
              the DLL is initialized, Thread Attached, and other times.
              Refer to SDK documentation, as to the different ways this
              may be called.
-             
+
              The DllMain function should perform additional initialization
              tasks required by the DLL.  In this example, no initialization
              tasks are required.  DllMain should return a value of 1 if
              the initialization is successful.
-           
+
 *******************************************************************************/
 BOOL APIENTRY DllMain(HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReserved)
 {
     return 1;
-        UNREFERENCED_PARAMETER(hInst);
-        UNREFERENCED_PARAMETER(ul_reason_being_called);
-        UNREFERENCED_PARAMETER(lpReserved);
+    UNREFERENCED_PARAMETER(hInst);
+    UNREFERENCED_PARAMETER(ul_reason_being_called);
+    UNREFERENCED_PARAMETER(lpReserved);
 }
 
 
@@ -75,7 +75,8 @@ INT APIENTRY StartSelection(
 
     /* Otherwise, set origin to current location */
 
-    else {
+    else
+    {
         lpSelectRect->left = ptCurrent.x;
         lpSelectRect->top = ptCurrent.y;
     }
@@ -102,36 +103,37 @@ INT APIENTRY UpdateSelection(
 
     hDC = GetDC(hWnd);
 
-    switch (fFlags & SL_TYPE) {
+    switch (fFlags & SL_TYPE)
+    {
 
-        case SL_BOX:
-            OldROP = (SHORT)SetROP2(hDC, R2_NOTXORPEN);
-            MoveToEx(hDC, lpSelectRect->left, lpSelectRect->top, NULL);
-            LineTo(hDC, lpSelectRect->right, lpSelectRect->top);
-            LineTo(hDC, lpSelectRect->right, lpSelectRect->bottom);
-            LineTo(hDC, lpSelectRect->left, lpSelectRect->bottom);
-            LineTo(hDC, lpSelectRect->left, lpSelectRect->top);
-            LineTo(hDC, ptCurrent.x, lpSelectRect->top);
-            LineTo(hDC, ptCurrent.x, ptCurrent.y);
-            LineTo(hDC, lpSelectRect->left, ptCurrent.y);
-            LineTo(hDC, lpSelectRect->left, lpSelectRect->top);
-            SetROP2(hDC, OldROP);
-            break;
-    
-        case SL_BLOCK:
-            PatBlt(hDC,
-                lpSelectRect->left,
-                lpSelectRect->bottom,
-                lpSelectRect->right - lpSelectRect->left,
-                ptCurrent.y - lpSelectRect->bottom,
-                DSTINVERT);
-            PatBlt(hDC,
-                lpSelectRect->right,
-                lpSelectRect->top,
-                ptCurrent.x - lpSelectRect->right,
-                ptCurrent.y - lpSelectRect->top,
-                DSTINVERT);
-            break;
+    case SL_BOX:
+        OldROP = (SHORT)SetROP2(hDC, R2_NOTXORPEN);
+        MoveToEx(hDC, lpSelectRect->left, lpSelectRect->top, NULL);
+        LineTo(hDC, lpSelectRect->right, lpSelectRect->top);
+        LineTo(hDC, lpSelectRect->right, lpSelectRect->bottom);
+        LineTo(hDC, lpSelectRect->left, lpSelectRect->bottom);
+        LineTo(hDC, lpSelectRect->left, lpSelectRect->top);
+        LineTo(hDC, ptCurrent.x, lpSelectRect->top);
+        LineTo(hDC, ptCurrent.x, ptCurrent.y);
+        LineTo(hDC, lpSelectRect->left, ptCurrent.y);
+        LineTo(hDC, lpSelectRect->left, lpSelectRect->top);
+        SetROP2(hDC, OldROP);
+        break;
+
+    case SL_BLOCK:
+        PatBlt(hDC,
+               lpSelectRect->left,
+               lpSelectRect->bottom,
+               lpSelectRect->right - lpSelectRect->left,
+               ptCurrent.y - lpSelectRect->bottom,
+               DSTINVERT);
+        PatBlt(hDC,
+               lpSelectRect->right,
+               lpSelectRect->top,
+               ptCurrent.x - lpSelectRect->right,
+               ptCurrent.y - lpSelectRect->top,
+               DSTINVERT);
+        break;
     }
     lpSelectRect->right = ptCurrent.x;
     lpSelectRect->bottom = ptCurrent.y;
@@ -174,26 +176,27 @@ INT APIENTRY ClearSelection(
     INT2DWORD OldROP;
 
     hDC = GetDC(hWnd);
-    switch (fFlags & SL_TYPE) {
+    switch (fFlags & SL_TYPE)
+    {
 
-        case SL_BOX:
-            OldROP = SetROP2(hDC, R2_NOTXORPEN);
-            MoveToEx(hDC, lpSelectRect->left, lpSelectRect->top, NULL);
-            LineTo(hDC, lpSelectRect->right, lpSelectRect->top);
-            LineTo(hDC, lpSelectRect->right, lpSelectRect->bottom);
-            LineTo(hDC, lpSelectRect->left, lpSelectRect->bottom);
-            LineTo(hDC, lpSelectRect->left, lpSelectRect->top);
-            SetROP2(hDC, OldROP);
-            break;
+    case SL_BOX:
+        OldROP = SetROP2(hDC, R2_NOTXORPEN);
+        MoveToEx(hDC, lpSelectRect->left, lpSelectRect->top, NULL);
+        LineTo(hDC, lpSelectRect->right, lpSelectRect->top);
+        LineTo(hDC, lpSelectRect->right, lpSelectRect->bottom);
+        LineTo(hDC, lpSelectRect->left, lpSelectRect->bottom);
+        LineTo(hDC, lpSelectRect->left, lpSelectRect->top);
+        SetROP2(hDC, OldROP);
+        break;
 
-        case SL_BLOCK:
-            PatBlt(hDC,
-                lpSelectRect->left,
-                lpSelectRect->top,
-                lpSelectRect->right - lpSelectRect->left,
-                lpSelectRect->bottom - lpSelectRect->top,
-                DSTINVERT);
-            break;
+    case SL_BLOCK:
+        PatBlt(hDC,
+               lpSelectRect->left,
+               lpSelectRect->top,
+               lpSelectRect->right - lpSelectRect->left,
+               lpSelectRect->bottom - lpSelectRect->top,
+               DSTINVERT);
+        break;
     }
     ReleaseDC(hWnd, hDC);
     return 1;

@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -52,5 +52,5 @@ protected:
 private:
     std::function<void ()> m_mouseClickedFunction;
     virtual void OnPointerDown(float x, float y);
-    virtual void OnPointerUp(float x, float y); 
+    virtual void OnPointerUp(float x, float y);
 };

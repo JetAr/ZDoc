@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
                    Microsoft RPC Version 2.0
            Copyright Microsoft Corp. 1992 - 2000
                         xmit Example
@@ -71,9 +71,12 @@ void __cdecl main(int argc, char * argv[])
     int i;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
@@ -104,7 +107,8 @@ void __cdecl main(int argc, char * argv[])
                                    pszEndpoint,
                                    pszSecurity);  // Security descriptor
     printf("RpcServerUseProtseqEp returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -112,7 +116,8 @@ void __cdecl main(int argc, char * argv[])
                                  NULL,   // MgrTypeUuid
                                  NULL);  // MgrEpv; null means use default
     printf("RpcServerRegisterIf returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -121,15 +126,18 @@ void __cdecl main(int argc, char * argv[])
                              cMaxCalls,
                              fDontWait);
     printf("RpcServerListen returned: 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
-    if (fDontWait) {
+    if (fDontWait)
+    {
         printf("Calling RpcMgmtWaitServerListen\n");
         status = RpcMgmtWaitServerListen();  //  wait operation
         printf("RpcMgmtWaitServerListen returned: 0x%x\n", status);
-        if (status) {
+        if (status)
+        {
             exit(status);
         }
     }

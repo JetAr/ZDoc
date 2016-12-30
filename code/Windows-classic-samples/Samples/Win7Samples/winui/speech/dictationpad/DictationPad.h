@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   DictationPad.h 
+*   DictationPad.h
 *       This module contains the base definitions for the DictationPad
 *       application.
 ******************************************************************************/
@@ -20,8 +20,8 @@ typedef enum DPFLAGS
 {
     DP_DICTATION_MODE     = ( 1L << 0 ),    // Toggles between dictation and command mode
     DP_WHOLE_WORD_SEL     = ( 1L << 1 ),    // Indicates that whole words should be selected
-    DP_MICROPHONE_ON      = ( 1L << 2 ),    // Indicates that the "mic" is on (really that 
-                                            // the appropriate grammars are active
+    DP_MICROPHONE_ON      = ( 1L << 2 ),    // Indicates that the "mic" is on (really that
+    // the appropriate grammars are active
     DP_SHARED_RECOGNIZER  = ( 1L << 3 ),    // Shared reco engine (false if engine is inproc)
     DP_IS_SPEAKING        = ( 1L << 4 ),    // Indicates that we are in the midst of a playback
     DP_GRAMMARS_ACTIVE    = ( 1L << 5 ),    // Indicates the the "mic" is on
@@ -61,7 +61,7 @@ typedef struct SPEAKINFO
 struct PROPERTYMAP
 {
     DWORD   dwPropertyID;   // The specific property Id
-    UINT    uiMessage;      // Speicific msg that will be sent to the apps client window 
+    UINT    uiMessage;      // Speicific msg that will be sent to the apps client window
     WPARAM  wParam;         // First param - value is dependent upon the msg
     LPARAM  lParam;         // Second param - value is dependent upon the msg
 };
@@ -90,27 +90,27 @@ private:
 
     // Window proc
     static LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
-    
+
     // Initialization methods
     BOOL InitializeWindow( HWND hWnd );
     void SetTooltipText( LPARAM lParam );
-    
+
     // Methods to process typed input and other notifications from the edit window
     HRESULT UpdateList( long lStart, long lEnd );   // Updates the list by inserting a block
     void ProcessMsgFilter( MSGFILTER *pMsgFilter ); // Handle the various notificaton events
-                                                    // that we were interested in
-    HRESULT ProcessSelChange( SELCHANGE *pSelChange);                     
-                                                    // Handle notification of selection change
-                                                    // (this is how keyboard input gets processed)
+    // that we were interested in
+    HRESULT ProcessSelChange( SELCHANGE *pSelChange);
+    // Handle notification of selection change
+    // (this is how keyboard input gets processed)
 
     // Playback
     HRESULT DoPlay();                               // Executes a playback
     HRESULT StartSpeaking( long lStartSpeakRange,   // Called before a playback starts
-                            long lEndSpeakRange);                           
+                           long lEndSpeakRange);
     void EndSpeaking();                             // Called when a playback is through
 
     // File new/open/save/close
-    HRESULT DoFileNew();                            // Opens a new file 
+    HRESULT DoFileNew();                            // Opens a new file
     HRESULT DoFileOpen( __in_opt LPTSTR lpFileName );        // Opens a file from GetOpenFileName
     HRESULT DoFileSave( bool fTextOnly = false );   // Saves a file in the appropriate format
     HRESULT DoFileSaveAs();                         // Gets a name from GetSaveFileName and saves
@@ -122,7 +122,7 @@ private:
     HRESULT InitializeSAPIObjs();                   // Set up the SAPI objects
     HRESULT InitSAPICallback( HWND hWnd );          // Hook up the client window for SAPI notifications
     HRESULT LoadGrammars();                         // Load the various grammars
-    
+
     // SR and TTS notification functions
     bool SRDictEventHandler( void );                // Handle notifications from the dictation context
     bool SRCCEventHandler( void );                  // Handle notifications from the C&C context
@@ -131,15 +131,15 @@ private:
 
     // Methods to process events from the SR engine
     bool ProcessDictationModeCommands( ISpRecoResult &rResult );
-                                                    // Process commands recognized while in dictation mode
+    // Process commands recognized while in dictation mode
     bool ProcessCommandModeCommands( ISpRecoResult &rResult );
-                                                    // Process commands recognized while in command mode
+    // Process commands recognized while in command mode
     bool ProcessDictation( ISpRecoResult &rResult, int eEventId );
-                                                    // Process dictation recognitions
+    // Process dictation recognitions
     bool ProcessDictationHypothesis( ISpRecoResult &rResult );
-                                                    // Process dictation hypotheses
+    // Process dictation hypotheses
 
-    // Switching between the two recognition contexts 
+    // Switching between the two recognition contexts
     HRESULT SetMode( bool fDictationMode );         // Switches between dictation and command modes
 
     // Controlling the "mic" (really, whether grammar rules are active)
@@ -147,7 +147,7 @@ private:
 
     // Add/delete Words UI
     HRESULT RunAddDeleteUI();                       // Starts up the Add/Delete words UI
-                                                    // with in params as appropriate
+    // with in params as appropriate
 private:
     // Win32-related handles
     HACCEL m_hAccelTable;               // handle to the accelerators
@@ -168,16 +168,16 @@ private:
     TCHAR *m_pszFile;                   // Name of the current file
 
 
-    // Richedit/TOM 
+    // Richedit/TOM
     CComPtr<IRichEditOle> m_cpRichEdit;         // OLE interface to the rich edit control
     CComPtr<ITextDocument> m_cpTextDoc;
     CComPtr<ITextSelection> m_cpTextSel;
-    
+
     // SAPI objects
     CComPtr<ISpRecognizer> m_cpRecoEngine;    // SR engine
     CComPtr<ISpRecoContext> m_cpDictRecoCtxt;   // Recognition context for dictation
     CComPtr<ISpRecoContext> m_cpCCRecoCtxt;     // Recognition context for C&C
-    CComPtr<ISpRecoGrammar> m_cpDictGrammar;    // Dictation grammar 
+    CComPtr<ISpRecoGrammar> m_cpDictGrammar;    // Dictation grammar
     CComPtr<ISpRecoGrammar> m_cpDictCCGrammar;  // Grammar for the few commands that are accessible while dictating
     CComPtr<ISpRecoGrammar> m_cpCCGrammar;      // Grammar for full command & control mode
     CComPtr<ISpVoice> m_cpVoice;                // TTS voice
@@ -185,7 +185,7 @@ private:
     // Event interests
     const ULONGLONG m_ullDictInterest;          // Events in which DictationPad will be interested in
     const ULONGLONG m_ullCCInterest;
-    
+
     // Classes related to CDictationPad
     CTextRunList *m_pTextRunList;               // List of dictated and non-dictated runs (textrunlist.cpp)
     CRecoEventMgr *m_pRecoEventMgr;             // Handles placement of recognized text (recomgr.cpp)
@@ -197,9 +197,9 @@ private:
 
 // In DictationPad.cpp
 LRESULT CALLBACK About( HWND, UINT, WPARAM, LPARAM );
-DWORD CALLBACK EditStreamCallbackReadIn( DWORD_PTR dwCookie, LPBYTE pbBuff, ULONG cb, ULONG *pcb );       
-DWORD CALLBACK EditStreamCallbackWriteOut( DWORD_PTR dwCookie, LPBYTE pbBuff, ULONG cb, ULONG *pcb ); 
-int MessageBoxFromResource( HWND hWnd, UINT uID, LPCTSTR lpCaption, UINT uType );      
+DWORD CALLBACK EditStreamCallbackReadIn( DWORD_PTR dwCookie, LPBYTE pbBuff, ULONG cb, ULONG *pcb );
+DWORD CALLBACK EditStreamCallbackWriteOut( DWORD_PTR dwCookie, LPBYTE pbBuff, ULONG cb, ULONG *pcb );
+int MessageBoxFromResource( HWND hWnd, UINT uID, LPCTSTR lpCaption, UINT uType );
 
 // In dictpad_sapi.cpp
 void HighlightAndBringIntoView( ITextDocument &rTextDoc, long lStart, long lEnd );

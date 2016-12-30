@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -25,25 +25,27 @@ CAzOperation::CAzOperation(void):CAzBase<IAzOperation>()
 CAzOperation::~CAzOperation(void)
 {
 }
-CAzOperation::CAzOperation(IAzOperation *pNative,bool pisNew):CAzBase<IAzOperation>(pNative,pisNew){
+CAzOperation::CAzOperation(IAzOperation *pNative,bool pisNew):CAzBase<IAzOperation>(pNative,pisNew)
+{
 }
 
 /*++
 
 Routine description:
 
-    This method copies properties from the source operation to *this* 
+    This method copies properties from the source operation to *this*
     operation
 
 Arguments: srcOp - Source Operation
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
-HRESULT CAzOperation::Copy(CAzOperation &srcOp) {
+HRESULT CAzOperation::Copy(CAzOperation &srcOp)
+{
 
     CAzLogging::Entering(_TEXT("Copy"));
 

@@ -1,4 +1,4 @@
-#define IDD_DIALOG1     101
+﻿#define IDD_DIALOG1     101
 #define IDC_DEVICES     1001
 #define IDC_NAME        1002
 #define IDC_PORT        1003

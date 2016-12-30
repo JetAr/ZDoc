@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -29,8 +29,8 @@ HRESULT CSdkShvModule::RegisterSdkShv() throw()
 
     ZeroMemory (&shvInfo, sizeof(shvInfo));
     hr = pSHVMgmt.CoCreateInstance(CLSID_NapServerManagement,
-                           NULL,
-                           CLSCTX_INPROC_SERVER);
+                                   NULL,
+                                   CLSCTX_INPROC_SERVER);
     if (FAILED(hr))
     {
         DebugPrintfW(L"RegisterSdkShv: CoCreateInstance Failed with %#x",hr);
@@ -44,14 +44,14 @@ HRESULT CSdkShvModule::RegisterSdkShv() throw()
         goto Cleanup;
     }
 
-     hr = pSHVMgmt->RegisterSystemHealthValidator(&shvInfo,(CLSID *)&__uuidof(CSampleShv));
-       if (FAILED(hr))
+    hr = pSHVMgmt->RegisterSystemHealthValidator(&shvInfo,(CLSID *)&__uuidof(CSampleShv));
+    if (FAILED(hr))
     {
-        DebugPrintfW(L"RegisterSdkShv:: RegisterSystemHealthValidator failed %#x", hr); 
+        DebugPrintfW(L"RegisterSdkShv:: RegisterSystemHealthValidator failed %#x", hr);
         goto Cleanup;
     }
 
-    Cleanup:
+Cleanup:
     FreeComponentRegistration(&shvInfo);
     return hr;
 }
@@ -65,22 +65,22 @@ HRESULT CSdkShvModule::UnregisterSdkShv() throw()
     // Need to CoCreate again since the COM object created in
     // RegisterSdkShv has been discarded
     hr = pSHVMgmt.CoCreateInstance(CLSID_NapServerManagement,
-                               NULL,
-                               CLSCTX_INPROC_SERVER);
-       if (FAILED(hr))
-       {
+                                   NULL,
+                                   CLSCTX_INPROC_SERVER);
+    if (FAILED(hr))
+    {
         DebugPrintfW(L"UnregisterSdkShv: CoCreateInstance Failed with %#x",hr);
         goto Cleanup;
-       }
+    }
 
-       hr = pSHVMgmt->UnregisterSystemHealthValidator(QuarSampleSystemHealthId);
-       if (FAILED(hr))
+    hr = pSHVMgmt->UnregisterSystemHealthValidator(QuarSampleSystemHealthId);
+    if (FAILED(hr))
     {
         DebugPrintfW(L"UnregisterSdkShv: UnregisterSystemHealthValidator Failed with %#x",hr);
         goto Cleanup;
     }
-    
-    Cleanup:    
+
+Cleanup:
     return hr;
 }
 
@@ -91,7 +91,7 @@ HRESULT CSdkShvModule::FillShvComponentRegistrationInfo (NapComponentRegistratio
 
     shvInfo->id = QuarSampleSystemHealthId;
     shvInfo->infoClsid = SHV_CLSID_INFO;
-	shvInfo->configClsid = CLSID_SDK_SHV_UI;
+    shvInfo->configClsid = CLSID_SDK_SHV_UI;
 
     hr = FillCountedString(SDK_SHV_friendlyName, &(shvInfo->friendlyName));
     if (FAILED(hr))

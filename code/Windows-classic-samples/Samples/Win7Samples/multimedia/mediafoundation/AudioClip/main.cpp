@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // AudioClip sample
 //
@@ -10,17 +10,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
-// This console application demonstrates using the Media Foundation 
+// This console application demonstrates using the Media Foundation
 // source reader to extract decoded audio from an audio/video file.
 //
-// The application reads audio data from an input file and writes 
+// The application reads audio data from an input file and writes
 // uncompressed PCM audio to a WAVE file.
 //
-// The input file must be a media format supported by Media Foundation, 
-// and must have  an audio stream. The audio stream can be an encoded 
-// format, such as Windows Media Audio. 
+// The input file must be a media format supported by Media Foundation,
+// and must have  an audio stream. The audio stream can be an encoded
+// format, such as Windows Media Audio.
 //
-////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////
 
 #pragma warning(disable:4127)  // Disable warning C4127: conditional expression is constant
 
@@ -44,7 +44,7 @@ template <class T> void SafeRelease(T **ppT)
     }
 }
 
-HRESULT WriteWaveFile(IMFSourceReader*, HANDLE, LONG); 
+HRESULT WriteWaveFile(IMFSourceReader*, HANDLE, LONG);
 HRESULT ConfigureAudioStream(IMFSourceReader*, IMFMediaType**);
 HRESULT WriteWaveHeader(HANDLE, IMFMediaType*, DWORD*);
 DWORD   CalculateMaxAudioDataSize(IMFMediaType*, DWORD, DWORD);
@@ -54,7 +54,7 @@ HRESULT WriteToFile(HANDLE, void*, DWORD);
 
 int wmain(int argc, wchar_t* argv[])
 {
-    (void)HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0); 
+    (void)HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
 
     if (argc != 3)
     {
@@ -64,7 +64,7 @@ int wmain(int argc, wchar_t* argv[])
 
     const WCHAR *wszSourceFile = argv[1];
     const WCHAR *wszTargetFile = argv[2];
-    
+
     const LONG MAX_AUDIO_DURATION_MSEC = 5000; // 5 seconds
 
     HRESULT hr = S_OK;
@@ -85,10 +85,10 @@ int wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         hr = MFCreateSourceReaderFromURL(
-            wszSourceFile,
-            NULL,
-            &pReader
-            );
+                 wszSourceFile,
+                 NULL,
+                 &pReader
+             );
 
         if (FAILED(hr))
         {
@@ -100,14 +100,14 @@ int wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         hFile = CreateFile(
-            wszTargetFile,
-            GENERIC_WRITE,
-            FILE_SHARE_READ,
-            NULL,
-            CREATE_ALWAYS,
-            0,
-            NULL
-            );
+                    wszTargetFile,
+                    GENERIC_WRITE,
+                    FILE_SHARE_READ,
+                    NULL,
+                    CREATE_ALWAYS,
+                    0,
+                    NULL
+                );
 
         if (hFile == INVALID_HANDLE_VALUE)
         {
@@ -153,7 +153,7 @@ HRESULT WriteWaveFile(
     IMFSourceReader *pReader,   // Pointer to the source reader.
     HANDLE hFile,               // Handle to the output file.
     LONG msecAudioData          // Maximum amount of audio data to write, in msec.
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -196,7 +196,7 @@ HRESULT WriteWaveFile(
 //-------------------------------------------------------------------
 // CalculateMaxAudioDataSize
 //
-// Calculates how much audio to write to the WAVE file, given the 
+// Calculates how much audio to write to the WAVE file, given the
 // audio format and the maximum duration of the WAVE file.
 //-------------------------------------------------------------------
 
@@ -204,7 +204,7 @@ DWORD CalculateMaxAudioDataSize(
     IMFMediaType *pAudioType,    // The PCM audio format.
     DWORD cbHeader,              // The size of the WAVE file header.
     DWORD msecAudioData          // Maximum duration, in milliseconds.
-    )
+)
 {
     UINT32 cbBlockSize = 0;         // Audio frame size, in bytes.
     UINT32 cbBytesPerSecond = 0;    // Bytes per second.
@@ -214,11 +214,11 @@ DWORD CalculateMaxAudioDataSize(
     cbBlockSize = MFGetAttributeUINT32(pAudioType, MF_MT_AUDIO_BLOCK_ALIGNMENT, 0);
     cbBytesPerSecond = MFGetAttributeUINT32(pAudioType, MF_MT_AUDIO_AVG_BYTES_PER_SECOND, 0);
 
-    // Calculate the maximum amount of audio data to write. 
+    // Calculate the maximum amount of audio data to write.
     // This value equals (duration in seconds x bytes/second), but cannot
     // exceed the maximum size of the data chunk in the WAVE file.
 
-        // Size of the desired audio clip in bytes:
+    // Size of the desired audio clip in bytes:
     DWORD cbAudioClipSize = (DWORD)MulDiv(cbBytesPerSecond, msecAudioData, 1000);
 
     // Largest possible size of the data chunk:
@@ -244,7 +244,7 @@ DWORD CalculateMaxAudioDataSize(
 HRESULT ConfigureAudioStream(
     IMFSourceReader *pReader,   // Pointer to the source reader.
     IMFMediaType **ppPCMAudio   // Receives the audio format.
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -270,28 +270,28 @@ HRESULT ConfigureAudioStream(
     if (SUCCEEDED(hr))
     {
         hr = pReader->SetCurrentMediaType(
-            (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, 
-            NULL,
-            pPartialType
-            );
+                 (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+                 NULL,
+                 pPartialType
+             );
     }
 
     // Get the complete uncompressed format.
     if (SUCCEEDED(hr))
     {
         hr = pReader->GetCurrentMediaType(
-            (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, 
-            &pUncompressedAudioType
-            );
+                 (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+                 &pUncompressedAudioType
+             );
     }
 
     // Ensure the stream is selected.
     if (SUCCEEDED(hr))
     {
         hr = pReader->SetStreamSelection(
-            (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM, 
-            TRUE
-            );
+                 (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+                 TRUE
+             );
     }
 
     // Return the PCM format to the caller.
@@ -318,8 +318,8 @@ HRESULT ConfigureAudioStream(
 HRESULT WriteWaveHeader(
     HANDLE hFile,               // Output file.
     IMFMediaType *pMediaType,   // PCM audio format.
-    DWORD *pcbWritten           // Receives the size of the header.    
-    )
+    DWORD *pcbWritten           // Receives the size of the header.
+)
 {
     HRESULT hr = S_OK;
     UINT32 cbFormat = 0;
@@ -330,24 +330,25 @@ HRESULT WriteWaveHeader(
 
     // Convert the PCM audio format into a WAVEFORMATEX structure.
     hr = MFCreateWaveFormatExFromMFMediaType(
-        pMediaType,
-        &pWav,
-        &cbFormat
-        );
+             pMediaType,
+             &pWav,
+             &cbFormat
+         );
 
 
     // Write the 'RIFF' header and the start of the 'fmt ' chunk.
 
     if (SUCCEEDED(hr))
     {
-        DWORD header[] = { 
+        DWORD header[] =
+        {
             // RIFF header
-            FCC('RIFF'), 
-            0, 
-            FCC('WAVE'),  
+            FCC('RIFF'),
+            0,
+            FCC('WAVE'),
             // Start of 'fmt ' chunk
-            FCC('fmt '), 
-            cbFormat 
+            FCC('fmt '),
+            cbFormat
         };
 
         DWORD dataHeader[] = { FCC('data'), 0 };
@@ -381,7 +382,7 @@ HRESULT WriteWaveHeader(
 //-------------------------------------------------------------------
 // WriteWaveData
 //
-// Decodes PCM audio data from the source file and writes it to 
+// Decodes PCM audio data from the source file and writes it to
 // the WAVE file.
 //-------------------------------------------------------------------
 
@@ -390,7 +391,7 @@ HRESULT WriteWaveData(
     IMFSourceReader *pReader,   // Source reader.
     DWORD cbMaxAudioData,       // Maximum amount of audio data (bytes).
     DWORD *pcbDataWritten       // Receives the amount of data written.
-    )
+)
 {
     HRESULT hr = S_OK;
     DWORD cbAudioData = 0;
@@ -407,15 +408,18 @@ HRESULT WriteWaveData(
 
         // Read the next sample.
         hr = pReader->ReadSample(
-            (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM,
-            0,
-            NULL,
-            &dwFlags,
-            NULL,
-            &pSample
-            );
+                 (DWORD)MF_SOURCE_READER_FIRST_AUDIO_STREAM,
+                 0,
+                 NULL,
+                 &dwFlags,
+                 NULL,
+                 &pSample
+             );
 
-        if (FAILED(hr)) { break; }
+        if (FAILED(hr))
+        {
+            break;
+        }
 
         if (dwFlags & MF_SOURCE_READERF_CURRENTMEDIATYPECHANGED)
         {
@@ -433,17 +437,23 @@ HRESULT WriteWaveData(
             printf("No sample\n");
             continue;
         }
-        
+
         // Get a pointer to the audio data in the sample.
 
         hr = pSample->ConvertToContiguousBuffer(&pBuffer);
 
-        if (FAILED(hr)) { break; }
+        if (FAILED(hr))
+        {
+            break;
+        }
 
 
         hr = pBuffer->Lock(&pAudioData, NULL, &cbBuffer);
 
-        if (FAILED(hr)) { break; }
+        if (FAILED(hr))
+        {
+            break;
+        }
 
 
         // Make sure not to exceed the specified maximum size.
@@ -455,13 +465,19 @@ HRESULT WriteWaveData(
         // Write this data to the output file.
         hr = WriteToFile(hFile, pAudioData, cbBuffer);
 
-        if (FAILED(hr)) { break; }
+        if (FAILED(hr))
+        {
+            break;
+        }
 
         // Unlock the buffer.
         hr = pBuffer->Unlock();
         pAudioData = NULL;
 
-        if (FAILED(hr)) { break; }
+        if (FAILED(hr))
+        {
+            break;
+        }
 
         // Update running total of audio data.
         cbAudioData += cbBuffer;
@@ -505,7 +521,7 @@ HRESULT FixUpChunkSizes(
     HANDLE hFile,           // Output file.
     DWORD cbHeader,         // Size of the 'fmt ' chuck.
     DWORD cbAudioData       // Size of the 'data' chunk.
-    )
+)
 {
     HRESULT hr = S_OK;
 

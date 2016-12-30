@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -104,13 +104,13 @@ LRESULT CmdConnect(HWND hwnd, WORD wCommand, WORD wNotify, HWND hwndCtrl)
     // Start dialog box
     if(DialogBox(hInst, "ConnectBox", hwnd, (DLGPROC)Connect))
     {
-        
+
         // We have a connection!  Set up message notification if
         // data ready to be read or if connection is closed on us
         if (WSAAsyncSelect(sock,
                            hwnd,
                            MW_DATAREADY,
-                           FD_READ | FD_CLOSE) == SOCKET_ERROR) 
+                           FD_READ | FD_CLOSE) == SOCKET_ERROR)
         {
             MessageBox(hwnd, "WSAAsyncSelect Failed!", NULL, MB_OK);
             CleanUp();
@@ -197,7 +197,7 @@ LRESULT MsgConnectInit(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
 
     // Create a font to use
     if(NULL == (hfontDlg = CreateFont(14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                          VARIABLE_PITCH | FF_SWISS, "")))
+                                      VARIABLE_PITCH | FF_SWISS, "")))
         return FALSE;
 
     // Center the dialog over the application window
@@ -215,7 +215,7 @@ LRESULT MsgConnectInit(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
         return FALSE;
     if(FALSE == SetDlgItemText(hdlg, CD_SOCKET, szConnectSocket))
         return FALSE;
-     
+
     return TRUE;
 }
 
@@ -239,13 +239,13 @@ LRESULT MsgConnectInit(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //    the command messages for the Connect dialog box.
 //
 
-LRESULT MsgConnectCommand(HWND   hwnd, 
-                        UINT   uMessage, 
-                        WPARAM wparam, 
-                        LPARAM lparam)
+LRESULT MsgConnectCommand(HWND   hwnd,
+                          UINT   uMessage,
+                          WPARAM wparam,
+                          LPARAM lparam)
 {
     uMessage;
-    
+
     return DispCommand(&cmdiConnect, hwnd, wparam, lparam);
 }
 
@@ -315,7 +315,7 @@ LRESULT CmdConnectNow(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
     AtoH((char *)szConnectNode, (char *)&RemAddr.sa_nodenum, 6);  // Network order
 
     GetDlgItemText(hdlg, CD_SOCKET, szConnectSocket, 5);          // Get Socket Number
-    AtoH((char *)szConnectSocket, (char *)&RemAddr.sa_socket, 2); // Network order                  
+    AtoH((char *)szConnectSocket, (char *)&RemAddr.sa_socket, 2); // Network order
 
     RemAddr.sa_family = AF_IPX;                                   // IPX Family
     wVersionRequested = MAKEWORD(1, 1);
@@ -338,7 +338,8 @@ LRESULT CmdConnectNow(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
                   SOCK_SEQPACKET,    // Message mode data xfers
                   NSPROTO_SPX);      // SPX = Connection Oriented
 
-    if(sock == INVALID_SOCKET) {
+    if(sock == INVALID_SOCKET)
+    {
         SetDlgItemText(hdlg, CD_STATUS, "ERROR on socket()");
         WSACleanup();
         return TRUE;

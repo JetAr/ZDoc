@@ -1,8 +1,8 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
-// 
+//
 // Copyright (C) 1999 - 2000  Microsoft Corporation.  All Rights Reserved.
 //
 // Module:
@@ -31,15 +31,15 @@
 //
 // Build:
 //    cl rcvall.c parser.c resolve.c ws2_32.lib
-// 
+//
 //       OR
-//     
+//
 //    nmake.exe
 //
 
 #ifdef _IA64_
-    #pragma warning(disable:4127 4706)
-#endif 
+#pragma warning(disable:4127 4706)
+#endif
 
 #include <winsock2.h>
 #include <mstcpip.h>
@@ -69,7 +69,7 @@ int              g_iFamilyMap[] = {AF_INET, AF_INET6};
 SOCKADDR_STORAGE g_saSourceAddress = {0},         // Source address to filter
                  g_saDestinationAddress = {0};    // Destination address to filter
 unsigned long    g_ulFilterMask=0;          // Indicates which fields in IP hdr to
-                                            //    filter on.
+//    filter on.
 
 //
 // Function Prototypes
@@ -80,7 +80,7 @@ void PrintInterfaceList();
 
 //
 // Function: usage
-// 
+//
 // Description:
 //    Prints usage information.
 //
@@ -107,7 +107,7 @@ void usage(char *progname)
 
 //
 // Function: ValidateArgs
-// 
+//
 // Description:
 //    This function parses the command line arguments and
 //    sets global variables to indicate how the app should act.
@@ -115,13 +115,13 @@ void usage(char *progname)
 int ValidateArgs(int argc, char **argv)
 {
     struct addrinfo *resif=NULL,
-                    *ressrc=NULL,
-                    *resdest=NULL;
+                         *ressrc=NULL,
+                          *resdest=NULL;
     char            *lpInterface=NULL,
-                    *lpSourceAddress=NULL,
-                    *lpDestinationAddress=NULL,
-                    *lpSourcePort=NULL,
-                    *lpDestinationPort=NULL;
+                     *lpSourceAddress=NULL,
+                      *lpDestinationAddress=NULL,
+                       *lpSourcePort=NULL,
+                        *lpDestinationPort=NULL;
     int    rc = 0, i = 0;
 
     rc = NO_ERROR;
@@ -132,7 +132,7 @@ int ValidateArgs(int argc, char **argv)
     //
     // Parse the command line
     //
-    for (i=1; i < argc ;i++)
+    for (i=1; i < argc ; i++)
     {
         if ((strlen(argv[i]) >= 2) && ((argv[i][0] == '-') || (argv[i][0] == '/')))
         {
@@ -146,18 +146,18 @@ int ValidateArgs(int argc, char **argv)
                 {
                     g_dwIoControlCode = SIO_RCVALL;
                     g_dwIoControlValue= RCVALL_ON;
-                } 
+                }
                 else if ( _strnicmp(argv[i+1], "igmp", 4) == 0 )
                 {
                     g_dwIoControlCode = SIO_RCVALL_IGMPMCAST;
                     g_dwProtocol = IPPROTO_IGMP;
                     g_dwIoControlValue= RCVALL_ON;
-                } 
+                }
                 else if ( _strnicmp(argv[i+1], "multicast", 9) == 0 )
                 {
                     g_dwIoControlCode = SIO_RCVALL_MCAST;
                     g_dwIoControlValue= RCVALL_ON;
-                } 
+                }
                 else if ( _strnicmp(argv[i+1], "socket", 6) == 0 )
                 {
                     g_dwIoControlCode = SIO_RCVALL;
@@ -180,11 +180,13 @@ int ValidateArgs(int argc, char **argv)
                 {
                     lpSourceAddress = argv[++i];
                     g_ulFilterMask |= FILTER_MASK_SOURCE_ADDRESS;
-                } else if ( tolower(argv[i][2]) == 'p' )
+                }
+                else if ( tolower(argv[i][2]) == 'p' )
                 {
                     lpSourcePort = argv[++i];
                     g_ulFilterMask |= FILTER_MASK_SOURCE_PORT;
-                } else
+                }
+                else
                 {
                     return SOCKET_ERROR;
                 }
@@ -197,11 +199,13 @@ int ValidateArgs(int argc, char **argv)
                 {
                     lpDestinationAddress = argv[++i];
                     g_ulFilterMask |= FILTER_MASK_DESTINATION_ADDRESS;
-                } else if ( tolower(argv[i][2]) == 'p' )
+                }
+                else if ( tolower(argv[i][2]) == 'p' )
                 {
                     lpDestinationPort = argv[++i];
                     g_ulFilterMask |= FILTER_MASK_DESTINATION_PORT;
-                } else
+                }
+                else
                 {
                     return SOCKET_ERROR;
                 }
@@ -246,10 +250,11 @@ int ValidateArgs(int argc, char **argv)
         ressrc = ResolveAddress(lpSourceAddress, lpSourcePort, resif->ai_family, 0, 0);
         if (ressrc == NULL)
         {
-            fprintf(stderr, "\nUnable to resolve source filter: %d\n\n", 
+            fprintf(stderr, "\nUnable to resolve source filter: %d\n\n",
                     WSAGetLastError());
             rc = SOCKET_ERROR;
-        } else
+        }
+        else
         {
             // Copy the source address filter
             memcpy(&g_saSourceAddress, ressrc->ai_addr, ressrc->ai_addrlen);
@@ -267,7 +272,8 @@ int ValidateArgs(int argc, char **argv)
             fprintf(stderr, "\nUnable to resolve destination filter: %d\n\n",
                     WSAGetLastError());
             rc = SOCKET_ERROR;
-        } else
+        }
+        else
         {
             // Copy the destination address filter
             memcpy(&g_saDestinationAddress, resdest->ai_addr, resdest->ai_addrlen);
@@ -294,25 +300,25 @@ void PrintInterfaceList()
     char                *buf=NULL;
     DWORD                dwBytesRet = 0;
     int                  rc = 0,
-    i  = 0, j = 0, k = 0;
+                         i  = 0, j = 0, k = 0;
 
     k = 0;
-    for (i=0; i < sizeof(g_iFamilyMap)/sizeof(int) ;i++)
+    for (i=0; i < sizeof(g_iFamilyMap)/sizeof(int) ; i++)
     {
         s = socket(g_iFamilyMap[i], SOCK_STREAM, 0);
         if (s != INVALID_SOCKET)
         {
             rc = WSAIoctl(
-                         s, 
-                         SIO_ADDRESS_LIST_QUERY, 
-                         NULL, 
-                         0, 
-                         NULL, 
-                         0,
-                         &dwBytesRet, 
-                         NULL, 
-                         NULL
-                         );
+                     s,
+                     SIO_ADDRESS_LIST_QUERY,
+                     NULL,
+                     0,
+                     NULL,
+                     0,
+                     &dwBytesRet,
+                     NULL,
+                     NULL
+                 );
             if ((rc == SOCKET_ERROR) && (GetLastError() == WSAEFAULT))
             {
                 char addrbuf[INET6_ADDRSTRLEN] = {'\0'};
@@ -326,21 +332,21 @@ void PrintInterfaceList()
                         closesocket(s);
                         s = INVALID_SOCKET;
                     }
-                    
+
                     return;
                 }
 
                 rc = WSAIoctl(
-                             s, 
-                             SIO_ADDRESS_LIST_QUERY, 
-                             NULL, 
-                             0, 
-                             buf, 
-                             dwBytesRet, 
-                             &dwBytesRet, 
-                             NULL, 
-                             NULL
-                             );
+                         s,
+                         SIO_ADDRESS_LIST_QUERY,
+                         NULL,
+                         0,
+                         buf,
+                         dwBytesRet,
+                         &dwBytesRet,
+                         NULL,
+                         NULL
+                     );
                 if (rc == SOCKET_ERROR)
                 {
                     if (buf) HeapFree(GetProcessHeap(), 0, buf);
@@ -354,21 +360,22 @@ void PrintInterfaceList()
 
                 // Display the addresses
                 slist = (SOCKET_ADDRESS_LIST *)buf;
-                for (j=0; j < slist->iAddressCount ;j++)
+                for (j=0; j < slist->iAddressCount ; j++)
                 {
                     FormatAddress(
-                                 slist->Address[j].lpSockaddr,
-                                 slist->Address[j].iSockaddrLength,
-                                 addrbuf,
-                                 INET6_ADDRSTRLEN
-                                 );
-                    printf("               %-2d ........ %s\n", 
+                        slist->Address[j].lpSockaddr,
+                        slist->Address[j].iSockaddrLength,
+                        addrbuf,
+                        INET6_ADDRSTRLEN
+                    );
+                    printf("               %-2d ........ %s\n",
                            ++k, addrbuf);
                 }
 
                 if(buf) HeapFree(GetProcessHeap(), 0, buf);
 
-            } else
+            }
+            else
             {
                 // Unexpected failure
                 fprintf(stderr, "WSAIoctl: SIO_ADDRESS_LIST_QUERY failed with unexpected error: %d\n",
@@ -379,7 +386,8 @@ void PrintInterfaceList()
                 closesocket(s);
                 s = INVALID_SOCKET;
             }
-        } else
+        }
+        else
         {
             fprintf(stderr, "socket failed: %d\n", WSAGetLastError());
             return;
@@ -509,7 +517,7 @@ int __cdecl main(int argc, char **argv)
 
     //
     // Start receiving IP datagrams until interrupted
-    // 
+    //
     while (1)
     {
         wbuf.len = MAX_IP_SIZE;
@@ -525,12 +533,12 @@ int __cdecl main(int argc, char **argv)
         // Decode the IP header
         //
         rc = DecodeIPHeader(
-                           rcvbuf,
-                           dwBytesRet, 
-                           g_ulFilterMask,
-                           (SOCKADDR *)&g_saSourceAddress,
-                           (SOCKADDR *)&g_saDestinationAddress
-                           );
+                 rcvbuf,
+                 dwBytesRet,
+                 g_ulFilterMask,
+                 (SOCKADDR *)&g_saSourceAddress,
+                 (SOCKADDR *)&g_saDestinationAddress
+             );
         if (rc != NO_ERROR)
         {
             printf("Error decoding IP header!\n");

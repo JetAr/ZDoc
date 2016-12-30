@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,7 +36,7 @@ private:
 
     HRESULT RenderMainContent(
         float time
-        );
+    );
 
     HRESULT RenderTextInfo();
 
@@ -45,26 +45,26 @@ private:
     void OnResize(
         UINT width,
         UINT height
-        );
+    );
 
     void OnMouseMove(
         LPARAM lParam
-        );
+    );
 
     void OnKeyDown(
         SHORT vkey
-        );
+    );
 
     void OnWheel(
         WPARAM w
-        );
+    );
 
     static LRESULT CALLBACK WndProc(
         HWND hWnd,
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
 private:
     HWND m_hwnd;

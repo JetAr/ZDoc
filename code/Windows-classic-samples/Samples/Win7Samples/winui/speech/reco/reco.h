@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /****************************************************************************
 * Reco.H *
@@ -57,7 +57,7 @@ public:
 /****************************************************************************
 * CRecoDlgListItem *
 *------------------*
-*   
+*
 *   This class stores the recognition result as well as a text string associated
 *   with the recognition.  Note that the string will sometimes be <noise> and
 *   the pResult will be NULL.  In other cases the string will be <Unrecognized>
@@ -74,10 +74,22 @@ public:
         m_fHypothesis(fHypothesis)
     {}
 
-    ISpRecoResult * GetRecoResult() const { return m_cpRecoResult; }
-    int GetTextLength() const { return m_dstr.Length(); }
-    const WCHAR * GetText() const { return m_dstr; }
-    BOOL IsHypothesis() const { return m_fHypothesis; }
+    ISpRecoResult * GetRecoResult() const
+    {
+        return m_cpRecoResult;
+    }
+    int GetTextLength() const
+    {
+        return m_dstr.Length();
+    }
+    const WCHAR * GetText() const
+    {
+        return m_dstr;
+    }
+    BOOL IsHypothesis() const
+    {
+        return m_fHypothesis;
+    }
 
 private:
     CComPtr<ISpRecoResult>  m_cpRecoResult;
@@ -128,7 +140,7 @@ private:
     void EmulateRecognition(__in WCHAR *pszText);
     void UpdateGrammarStatusWindow();
     HRESULT ConstructRuleDisplay(const SPPHRASERULE *pRule, CSpDynamicString & dstr, ULONG ulLevel);
-    HRESULT ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, const SPPHRASEPROPERTY *pProp, 
+    HRESULT ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, const SPPHRASEPROPERTY *pProp,
                                      CSpDynamicString & dstr, ULONG ulLevel);
     BOOL UpdatePropWindow(const CRecoDlgListItem * pli);
     HRESULT UpdateGrammarState(WORD wIdOfChangedControl);
@@ -145,7 +157,7 @@ private:
 
 //
 //  Member data
-//  
+//
 private:
     const HINSTANCE                 m_hInstance;                    // Instance handle of process
     HWND                            m_hDlg;                         // Window handle of dialog
@@ -157,7 +169,7 @@ private:
     CComPtr<ISpRecoContext>         m_cpRecoCtxt;                   // Recognition context
     CComPtr<ISpRecognizer>          m_cpRecognizer;                 // Recognition instance
     CComPtr<ISpPhoneConverter>      m_cpPhoneConv;                  // Phone converter
-    BOOL                            m_bInSound;                    
+    BOOL                            m_bInSound;
     BOOL                            m_bGotReco;
     TCHAR                           m_szGrammarFile[MAX_PATH];      // Fully qualified file path
     TCHAR                           m_szGrammarFileTitle[MAX_PATH]; // Name of the file (no path)
@@ -224,11 +236,11 @@ private:
 
 class CAlternatesDlgClass
 {
-  public:
+public:
     CAlternatesDlgClass()
     {
         m_ulNumAltsReturned = 0;
-        memset( m_Alts, 0, NUM_ALTS * sizeof(ISpPhraseAlt*) ); 
+        memset( m_Alts, 0, NUM_ALTS * sizeof(ISpPhraseAlt*) );
     }
 
     ~CAlternatesDlgClass()

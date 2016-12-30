@@ -1,4 +1,4 @@
-// SmartPtr.h
+﻿// SmartPtr.h
 //
 // Defines a smart pointer class that does not depend on any ATL headers
 
@@ -23,7 +23,7 @@ bool AreComObjectsEqual(T1 *p1, T2 *p2)
         // One is NULL and one is not
         bResult = false;
     }
-    else 
+    else
     {
         // Both are not NULL. Compare IUnknowns.
         IUnknown *pUnk1 = NULL;
@@ -43,8 +43,8 @@ bool AreComObjectsEqual(T1 *p1, T2 *p2)
 
 // _NoAddRefOrRelease:
 // This is a version of our COM interface that dis-allows AddRef
-// and Release. All ref-counting should be done by the SmartPtr 
-// object, so we want to dis-allow calling AddRef or Release 
+// and Release. All ref-counting should be done by the SmartPtr
+// object, so we want to dis-allow calling AddRef or Release
 // directly. The operator-> returns a _NoAddRefOrRelease pointer
 // instead of returning the raw COM pointer. (This behavior is the
 // same as ATL's CComPtr class.)
@@ -87,8 +87,8 @@ public:
     }
 
     // Dtor
-    ~SmartPtr() 
-    { 
+    ~SmartPtr()
+    {
         if (m_ptr)
         {
             m_ptr->Release();
@@ -113,13 +113,13 @@ public:
             }
         }
         return *this;
-  }
+    }
 
     // address-of operator
-	T** operator&()
-	{
-		return &m_ptr;
-	}
+    T** operator&()
+    {
+        return &m_ptr;
+    }
 
     // dereference operator
     _NoAddRefOrRelease<T>* operator->()
@@ -154,19 +154,19 @@ public:
         return result;
     }
 
-	// Attach to an existing interface (does not AddRef)
-	void Attach(T* p) 
-	{
-		if (m_ptr)
+    // Attach to an existing interface (does not AddRef)
+    void Attach(T* p)
+    {
+        if (m_ptr)
         {
-			m_ptr->Release();
+            m_ptr->Release();
         }
-		m_ptr = p;
-	}
+        m_ptr = p;
+    }
 
 
-        
-	// Detach the interface (does not Release)
+
+    // Detach the interface (does not Release)
     T* Detach()
     {
         T* p = m_ptr;

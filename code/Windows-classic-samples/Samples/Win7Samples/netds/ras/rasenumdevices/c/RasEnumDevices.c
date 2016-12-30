@@ -1,16 +1,16 @@
-//
-//       This is a part of the Microsoft Source Code Samples. 
+﻿//
+//       This is a part of the Microsoft Source Code Samples.
 //       Copyright 1993 - 2002 Microsoft Corporation.
-//       All rights reserved. 
-//       This source code is only intended as a supplement to 
+//       All rights reserved.
+//       This source code is only intended as a supplement to
 //       Microsoft Development Tools and/or WinHelp documentation.
-//       See these sources for detailed information regarding the 
+//       See these sources for detailed information regarding the
 //       Microsoft samples programs.
 //
 
 //
 //		RasEnumDevices.c
-//		
+//
 //		Usage:
 //		RasEnumDevices
 //
@@ -33,12 +33,12 @@
 
 int __cdecl main(void)
 {
-	DWORD	        i = 0;
-	DWORD	        dwRet = 0;
-	DWORD	        cb = sizeof(RASDEVINFO);
-	DWORD	        cDevices = 0;
-	LPRASDEVINFO    lpRasDevInfo;
-	LPRASDEVINFO    lpTempRasDevInfo;
+    DWORD	        i = 0;
+    DWORD	        dwRet = 0;
+    DWORD	        cb = sizeof(RASDEVINFO);
+    DWORD	        cDevices = 0;
+    LPRASDEVINFO    lpRasDevInfo;
+    LPRASDEVINFO    lpTempRasDevInfo;
     BOOL            fSuccess = FALSE;
     TCHAR           szTempBuf[256] = {0};
 
@@ -52,9 +52,9 @@ int __cdecl main(void)
     }
 
     lpRasDevInfo->dwSize = sizeof(RASDEVINFO);
-	
+
     dwRet = RasEnumDevices(lpRasDevInfo, &cb, &cDevices);
-    
+
     switch(dwRet)   // Check whether RasEnumDevices succeeded
     {
     case ERROR_BUFFER_TOO_SMALL:
@@ -82,29 +82,29 @@ int __cdecl main(void)
         break;
 
     case ERROR_SUCCESS:
-            fSuccess = TRUE;
-            break;
+        fSuccess = TRUE;
+        break;
 
     default:
         printf("RasEnumDevices failed: Error = %d\n", dwRet);
         goto done;
     }
-    
-	if (fSuccess)
-	{
-		printf("The following RAS capable devices were found on this machine:\n\n");
-		printf("Device\t\t\tCategory\n\n");
-		lpTempRasDevInfo = lpRasDevInfo;
-		for (i = 0; i < cDevices; i++)
-		{
-            ZeroMemory((LPVOID)szTempBuf, sizeof(szTempBuf));  
+
+    if (fSuccess)
+    {
+        printf("The following RAS capable devices were found on this machine:\n\n");
+        printf("Device\t\t\tCategory\n\n");
+        lpTempRasDevInfo = lpRasDevInfo;
+        for (i = 0; i < cDevices; i++)
+        {
+            ZeroMemory((LPVOID)szTempBuf, sizeof(szTempBuf));
             StringCchPrintf(szTempBuf, CELEMS(szTempBuf), "%s\t%s\n",lpTempRasDevInfo->szDeviceName, lpTempRasDevInfo->szDeviceType);
-			printf(szTempBuf);
-			lpTempRasDevInfo++;
-		}
-	}
+            printf(szTempBuf);
+            lpTempRasDevInfo++;
+        }
+    }
 
 done:
-	HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasDevInfo);
-	return (int)dwRet;
+    HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasDevInfo);
+    return (int)dwRet;
 }

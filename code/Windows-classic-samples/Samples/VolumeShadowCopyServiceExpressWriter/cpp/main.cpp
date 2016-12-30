@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation
 
@@ -273,7 +273,7 @@ bool RunSamples()
     //
 
     bResult = CreateAndRegister();          // Execute on target machine to
-                                            // create and register Writer
+    // create and register Writer
 
     CHECK_CONDITION(bResult, L"CreateAndRegister failed");
 
@@ -296,14 +296,14 @@ bool RunSamples()
     //
 
     bResult = CreateAndSaveToFile();        // Execute during development to
-                                            // create Express Writer metadata file
+    // create Express Writer metadata file
 
     CHECK_CONDITION(bResult, L"CreateAndSaveToFile failed");
 
     bResult = LoadFromFileAndRegister();    // Execute on the target machine to
-                                            // load Express Writer metadata from
-                                            // file and register Express Writer in
-                                            // the system
+    // load Express Writer metadata from
+    // file and register Express Writer in
+    // the system
 
     CHECK_CONDITION(bResult, L"LoadFromFileAndRegister failed");
 

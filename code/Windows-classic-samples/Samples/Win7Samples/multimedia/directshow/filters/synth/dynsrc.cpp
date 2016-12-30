@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: DynSrc.cpp
 //
 // Desc: DirectShow sample code - implements CDynamicSource, which is a
@@ -31,9 +31,10 @@ CDynamicSource::CDynamicSource(TCHAR *pName, LPUNKNOWN lpunk, CLSID clsid, HRESU
       m_evFilterStoppingEvent(TRUE)
 {
     ASSERT(phr);
-    
+
     // Make sure the event was successfully created.
-    if( NULL == (HANDLE)m_evFilterStoppingEvent ) {
+    if( NULL == (HANDLE)m_evFilterStoppingEvent )
+    {
         if (phr)
             *phr = E_FAIL;
     }
@@ -50,7 +51,8 @@ CDynamicSource::CDynamicSource(CHAR *pName, LPUNKNOWN lpunk, CLSID clsid, HRESUL
     ASSERT(phr);
 
     // Make sure the event was successfully created.
-    if( NULL == (HANDLE)m_evFilterStoppingEvent ) {
+    if( NULL == (HANDLE)m_evFilterStoppingEvent )
+    {
         if (phr)
             *phr = E_FAIL;
     }
@@ -64,7 +66,7 @@ CDynamicSource::CDynamicSource(CHAR *pName, LPUNKNOWN lpunk, CLSID clsid, HRESUL
 CDynamicSource::~CDynamicSource()
 {
     /*  Free our pins and pin array */
-    while (m_iPins != 0) 
+    while (m_iPins != 0)
     {
         // deleting the pins causes them to be removed from the array...
         delete m_paStreams[m_iPins - 1];
@@ -82,7 +84,7 @@ HRESULT CDynamicSource::AddPin(CDynamicSourceStream *pStream)
     // This function holds the filter state lock because
     // it changes the number of pins.  The number of pins
     // cannot be change while another thread is calling
-    // IMediaFilter::Run(), IMediaFilter::Stop(), 
+    // IMediaFilter::Run(), IMediaFilter::Stop(),
     // IMediaFilter::Pause() or IBaseFilter::FindPin().
     CAutoLock lock(&m_cStateLock);
 
@@ -95,7 +97,7 @@ HRESULT CDynamicSource::AddPin(CDynamicSourceStream *pStream)
     if (paStreams == NULL)
         return E_OUTOFMEMORY;
 
-    if (m_paStreams != NULL) 
+    if (m_paStreams != NULL)
     {
         CopyMemory((PVOID)paStreams, (PVOID)m_paStreams,
                    m_iPins * sizeof(m_paStreams[0]));
@@ -120,9 +122,9 @@ HRESULT CDynamicSource::RemovePin(CDynamicSourceStream *pStream)
     // This function holds the filter state lock because
     // it changes the number of pins.  The number of pins
     // cannot be change while another thread is calling
-    // IMediaFilter::Run(), IMediaFilter::Stop(), 
+    // IMediaFilter::Run(), IMediaFilter::Stop(),
     // IMediaFilter::Pause() or IBaseFilter::FindPin().
-    CAutoLock lock(&m_cStateLock);    
+    CAutoLock lock(&m_cStateLock);
 
     // This function holds the pin state lock because it
     // uses m_iPins and m_paStreams.
@@ -184,16 +186,16 @@ STDMETHODIMP CDynamicSource::FindPin(LPCWSTR Id, IPin **ppPin)
 // FindPinNumber
 //
 // return the number of the pin with this IPin* or -1 if none
-int CDynamicSource::FindPinNumber(IPin *iPin) 
+int CDynamicSource::FindPinNumber(IPin *iPin)
 {
 
     // This function holds the pin state lock because it
     // uses m_iPins and m_paStreams.
     CAutoLock alPinStateLock(&m_csPinStateLock);
 
-    for (int i=0; i<m_iPins; ++i) 
+    for (int i=0; i<m_iPins; ++i)
     {
-        if ((IPin *)(m_paStreams[i]) == iPin) 
+        if ((IPin *)(m_paStreams[i]) == iPin)
         {
             return i;
         }
@@ -207,7 +209,7 @@ int CDynamicSource::FindPinNumber(IPin *iPin)
 // GetPinCount
 //
 // Returns the number of pins this filter has
-int CDynamicSource::GetPinCount(void) 
+int CDynamicSource::GetPinCount(void)
 {
 
     // This function holds the pin state lock because it
@@ -247,13 +249,13 @@ STDMETHODIMP CDynamicSource::Stop(void)
 
     HRESULT hr = CBaseFilter::Stop();
 
-    // The following code ensures that a pins thread will be destroyed even 
+    // The following code ensures that a pins thread will be destroyed even
     // if the pin is disconnected when CBaseFilter::Stop() is called.
     int nCurrentPin;
     CDynamicSourceStream* pOutputPin;
     {
         // This code holds the pin state lock because it
-        // does not want the number of pins to change 
+        // does not want the number of pins to change
         // while it executes.
         CAutoLock alPinStateLock(&m_csPinStateLock);
 
@@ -352,7 +354,7 @@ STDMETHODIMP CDynamicSourceStream::QueryId(LPWSTR *pId)
     // FindPinNumber returns -1 for an invalid pin
     int i = 1+ m_pFilter->FindPinNumber(this);
 
-    if(i<1) 
+    if(i<1)
         return VFW_E_NOT_FOUND;
 
     *pId = (LPWSTR)CoTaskMemAlloc(4*sizeof(WCHAR));
@@ -379,7 +381,7 @@ CDynamicSourceStream::CDynamicSourceStream(
       m_pFilter(ps),
       m_fReconnectOutputPin(false)
 {
-    ASSERT(phr);   
+    ASSERT(phr);
     *phr = m_pFilter->AddPin(this);
 }
 
@@ -556,7 +558,8 @@ DWORD CDynamicSourceStream::ThreadProc(void)
             Reply((DWORD) E_UNEXPECTED);
         }
 
-    } while(com != CMD_INIT);
+    }
+    while(com != CMD_INIT);
 
     DbgLog((LOG_TRACE, 1, TEXT("CDynamicSourceStream worker thread initializing")));
 
@@ -580,30 +583,31 @@ DWORD CDynamicSourceStream::ThreadProc(void)
 
         switch(cmd)
         {
-            case CMD_EXIT:
-                Reply(NOERROR);
-                break;
+        case CMD_EXIT:
+            Reply(NOERROR);
+            break;
 
-            case CMD_RUN:
-                DbgLog((LOG_ERROR, 1, TEXT("CMD_RUN received before a CMD_PAUSE???")));
-                // !!! fall through
+        case CMD_RUN:
+            DbgLog((LOG_ERROR, 1, TEXT("CMD_RUN received before a CMD_PAUSE???")));
+        // !!! fall through
 
-            case CMD_PAUSE:
-                Reply(NOERROR);
-                DoBufferProcessingLoop();
-                break;
+        case CMD_PAUSE:
+            Reply(NOERROR);
+            DoBufferProcessingLoop();
+            break;
 
-            case CMD_STOP:
-                Reply(NOERROR);
-                break;
+        case CMD_STOP:
+            Reply(NOERROR);
+            break;
 
-            default:
-                DbgLog((LOG_ERROR, 1, TEXT("Unknown command %d received!"), cmd));
-                Reply((DWORD) E_NOTIMPL);
-                break;
+        default:
+            DbgLog((LOG_ERROR, 1, TEXT("Unknown command %d received!"), cmd));
+            Reply((DWORD) E_NOTIMPL);
+            break;
         }
 
-    } while(cmd != CMD_EXIT);
+    }
+    while(cmd != CMD_EXIT);
 
     hr = OnThreadDestroy(); // tidy up.
     if(FAILED(hr))
@@ -722,7 +726,8 @@ HRESULT CDynamicSourceStream::DoBufferProcessingLoop(void)
             Reply((DWORD) E_UNEXPECTED);
             DbgLog((LOG_ERROR, 1, TEXT("Unexpected command!!!")));
         }
-    } while(com != CMD_STOP);
+    }
+    while(com != CMD_STOP);
 
     return S_FALSE;
 }

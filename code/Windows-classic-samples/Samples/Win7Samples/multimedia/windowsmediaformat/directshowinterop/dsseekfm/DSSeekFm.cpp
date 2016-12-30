@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -32,9 +32,9 @@
 
 // Function prototypes
 HRESULT RenderOutputPins(IGraphBuilder *pGB, IBaseFilter *pFilter);
-HRESULT FrameNumberToTime( IWMSyncReader * pSyncReader, WORD wFrameSeekStream, 
+HRESULT FrameNumberToTime( IWMSyncReader * pSyncReader, WORD wFrameSeekStream,
                            QWORD qwFrame, REFERENCE_TIME * prtFrameTime );
-BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader, 
+BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader,
                       WORD *pwFrameSeekStream, QWORD * pqwTotalFrames );
 void Msg(__in LPTSTR szFormat, ...);
 
@@ -50,11 +50,11 @@ HRESULT CreateFilterGraph(IGraphBuilder **pGraph)
     HRESULT hr;
 
     // Create the Filter Graph Manager object.
-    hr = CoCreateInstance(CLSID_FilterGraph, 
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_IGraphBuilder,
-        (void **) pGraph);
+    hr = CoCreateInstance(CLSID_FilterGraph,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          IID_IGraphBuilder,
+                          (void **) pGraph);
 
     if(FAILED(hr))
     {
@@ -78,10 +78,10 @@ HRESULT CreateFilter(REFCLSID clsid, IBaseFilter **ppFilter)
     HRESULT hr;
 
     hr = CoCreateInstance(clsid,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_IBaseFilter,
-        (void **) ppFilter);
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          IID_IBaseFilter,
+                          (void **) ppFilter);
 
     if(FAILED(hr))
     {
@@ -122,7 +122,8 @@ LONG WaitForCompletion( IGraphBuilder *pGraph )
         // Wait 10ms for an event
         hr = pEvent->WaitForCompletion(10, &lEvCode);
 
-    } while(lEvCode == 0);
+    }
+    while(lEvCode == 0);
 
     pEvent->Release();
     return lEvCode;
@@ -134,12 +135,12 @@ LONG WaitForCompletion( IGraphBuilder *pGraph )
 //       If so, the method returns the stream number and the number of frames.
 //
 // wszFile:           Specifies the file name.
-// ppSyncReader:      Receives a pointer to the synchronous reader's IWMSyncReader 
+// ppSyncReader:      Receives a pointer to the synchronous reader's IWMSyncReader
 //                    interface.
 // pwFrameSeekStream: Receives the stream number of the seekable stream.
 // pqqTotalFrames:    Receives the number of frames in the stream.
 //------------------------------------------------------------------------------
-BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader, 
+BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader,
                       WORD *pwFrameSeekStream, QWORD *pqwTotalFrames )
 {
     if( !ppSyncReader || !pwFrameSeekStream )
@@ -152,8 +153,8 @@ BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader,
     if( FAILED( hr ) )
     {
         _tprintf(_T("Couldn't create the synchronous reader for ASF frame seeking! hr=0x%x\nPlayback aborted.\n\n"), hr);
-    } 
-    
+    }
+
     if( SUCCEEDED( hr ) )
     {
         // Open the source file.
@@ -169,10 +170,10 @@ BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader,
         CComPtr <IWMProfile> pProfile;
 
         hr = (*ppSyncReader)->QueryInterface( IID_IWMProfile, (void **) &pProfile );
-        if( SUCCEEDED( hr ) ) 
+        if( SUCCEEDED( hr ) )
         {
 
-            // Loop through each stream and check the "NumberOfFrames" attribute in the 
+            // Loop through each stream and check the "NumberOfFrames" attribute in the
             // ASF header for that stream number. This attribute is present if the stream
             // has been indexed by frame.
 
@@ -190,7 +191,7 @@ BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader,
                     hr = pProfile->GetStream( dw, &pConfig );
                     if( SUCCEEDED( hr ) )
                     {
-                        // Get the stream number for this stream. 
+                        // Get the stream number for this stream.
                         hr = pConfig->GetStreamNumber( &wStreamNum );
                         if( SUCCEEDED( hr ) )
                         {
@@ -199,7 +200,7 @@ BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader,
                             hr = (*ppSyncReader)->QueryInterface( IID_IWMHeaderInfo, (void **) &pWMHI );
                             if( SUCCEEDED( hr ) )
                             {
-                                // Check whether the header contains a "NumberOfFrames" attribute 
+                                // Check whether the header contains a "NumberOfFrames" attribute
                                 // (g_wszWMNumberOfFrames) for this stream. If so, the value of the
                                 // attribute is the number of frames in the stream.
 
@@ -212,13 +213,13 @@ BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader,
                                                                &Type,
                                                                (BYTE *) &qwFrames,
                                                                &cbLength);
-                                if( SUCCEEDED( hr ) ) 
+                                if( SUCCEEDED( hr ) )
                                 {
                                     // This stream is seekable by frame. Return the stream number
                                     // and the number of frames.
                                     *pwFrameSeekStream = wStreamNum;
                                     *pqwTotalFrames = qwFrames;
-                                } 
+                                }
                             }
                         }
                     }
@@ -235,11 +236,11 @@ BOOL IsFrameSeekable( LPCWSTR wszFile, IWMSyncReader ** ppSyncReader,
 // Desc: Converts a frame number to a reference time (100-nanosecond units).
 //
 // pSyncReader:      Pointer to the synchronous reader's IWMSyncReader interface.
-// wFrameSeekStream: Specifies the stream number. 
+// wFrameSeekStream: Specifies the stream number.
 // qwFrame:          Specifies the frame number.
 // prtFrameTime:     Receives the reference time.
 //------------------------------------------------------------------------------
-HRESULT FrameNumberToTime( IWMSyncReader * pSyncReader, WORD wFrameSeekStream, 
+HRESULT FrameNumberToTime( IWMSyncReader * pSyncReader, WORD wFrameSeekStream,
                            QWORD qwFrame, REFERENCE_TIME * prtFrameTime )
 {
     if( !pSyncReader || !prtFrameTime )
@@ -248,41 +249,41 @@ HRESULT FrameNumberToTime( IWMSyncReader * pSyncReader, WORD wFrameSeekStream,
     // Use the Windows Media Format SDK synchronous reader object to seek to
     // the specified frame. The reader object returns the presentation time
     // for the next sample.
-    
+
     // Seek to the specified frame number.
     HRESULT hr = pSyncReader->SetRangeByFrame( wFrameSeekStream, qwFrame, 0 );
     if( FAILED( hr ) )
     {
         _tprintf(_T("SetRangeByFrameFailed... hr=0x%x\nPlayback aborted.\n\n"), hr);
     }
-    else 
+    else
     {
         // Get the next sample and return the presentation time to the caller.
         INSSBuffer * pINSSBuffer;
         QWORD qwSampleTime, qwSampleDuration;
         DWORD dwFlags;
         WORD idStream;
-        
-        hr = pSyncReader->GetNextSample( 
-                                       wFrameSeekStream,
-                                       &pINSSBuffer,
-                                       &qwSampleTime,
-                                       &qwSampleDuration,
-                                       &dwFlags,
-                                       NULL,
-                                       &idStream );
+
+        hr = pSyncReader->GetNextSample(
+                 wFrameSeekStream,
+                 &pINSSBuffer,
+                 &qwSampleTime,
+                 &qwSampleDuration,
+                 &dwFlags,
+                 NULL,
+                 &idStream );
         if( SUCCEEDED( hr ) )
         {
             pINSSBuffer->Release();
-            *prtFrameTime = qwSampleTime;                
+            *prtFrameTime = qwSampleTime;
         }
     }
 
-    return hr;  
+    return hr;
 }
 //------------------------------------------------------------------------------
 // Name: RenderOutputPins()
-// Desc: Renders every output pin on a specified filter. 
+// Desc: Renders every output pin on a specified filter.
 //
 // pGB:     Pointer to the Filter Graph Manager.
 // pFilter: Pointer to the filter.
@@ -314,7 +315,7 @@ HRESULT RenderOutputPins(IGraphBuilder *pGB, IBaseFilter *pFilter)
 
             if (VFW_E_NOT_CONNECTED == hr)
             {
-                // This pin is not connected to another filter yet. Check 
+                // This pin is not connected to another filter yet. Check
                 // whether it is an output pin. If so, use the Filter Graph
                 // Manager's Render() method to render the pin.
 
@@ -327,7 +328,7 @@ HRESULT RenderOutputPins(IGraphBuilder *pGB, IBaseFilter *pFilter)
             pPin->Release();
 
             // If there was an error, stop enumerating.
-            if (FAILED(hr))                      
+            if (FAILED(hr))
                 break;
         }
     }
@@ -339,12 +340,12 @@ HRESULT RenderOutputPins(IGraphBuilder *pGB, IBaseFilter *pFilter)
 
 //------------------------------------------------------------------------------
 // Name: SeekASF()
-// Desc: Parse the command line and play the specified file, 
+// Desc: Parse the command line and play the specified file,
 //       with optional seeking.
 //------------------------------------------------------------------------------
 HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
 {
-    HRESULT hr;    
+    HRESULT hr;
     WCHAR wszFile[256];
     int i = 1;
     int iFrameStart = 0;
@@ -381,7 +382,7 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
 
             // Skip 3 arguments here
             i += 2;
-        } 
+        }
         else if((i+1 < argc) && lstrcmpiA(argv[i] + 1, "l") == 0)
         {
             fLoopSeekToEnd = TRUE;
@@ -389,13 +390,13 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
 
             // Skip 2 arguments here
             i++;
-        } 
+        }
         i++;
     }
 
     // Fail with usage information if improper number of arguments
     if(argc < i+1 || ( fLoopSeekToEnd && !fSeekByFrame ) || bAbortWithUsage ||
-       (fSeekByFrame && iFramesToPlay < 0))
+            (fSeekByFrame && iFramesToPlay < 0))
     {
         if( fLoopSeekToEnd && !fSeekByFrame )
         {
@@ -429,7 +430,7 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
         return E_FAIL;
     }
 
-    // Create the DirectShow Filter Graph Manager. 
+    // Create the DirectShow Filter Graph Manager.
     hr = CreateFilterGraph(&pGraph);
     if(FAILED(hr))
     {
@@ -459,7 +460,7 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
         _tprintf(_T("QI for IFileSourceFilter failed!  hr=0x%x\n"), hr);
         return hr;
     }
-    
+
     // Load the source file.
     hr = pFS->Load( wszFile, NULL );
     if(FAILED(hr))
@@ -480,14 +481,14 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
             return hr;
         }
     }
-    
+
     IWMSyncReader * pSyncReader = NULL;
     WORD wFrameSeekStream = 0;
 
     // Check whether the ASF file can be seeked by frame number. If so, this method
     // call returns the stream number and the total number of frames in the stream.
-    if( !IsFrameSeekable( wszFile, &pSyncReader, &wFrameSeekStream, &qwTotalFrames ) 
-        && fSeekByFrame)
+    if( !IsFrameSeekable( wszFile, &pSyncReader, &wFrameSeekStream, &qwTotalFrames )
+            && fSeekByFrame)
     {
         _tprintf(_T("The selected ASF file isn't frame seekable.\n"));
         return E_FAIL;
@@ -519,8 +520,8 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
     if( fSeekByFrame && iFrameStart > 0 )
     {
         // The WM ASF Reader filter does not directly support frame seeking. Therefore, we use
-        // the Windows Media Format SDK to create a separate instance of the synchronous 
-        // reader object. We seek the reader object to the desired frame number and retrieve the 
+        // the Windows Media Format SDK to create a separate instance of the synchronous
+        // reader object. We seek the reader object to the desired frame number and retrieve the
         // presentation time. Then we use that time vaue to seek the DirectShow filter graph.
 
         do
@@ -532,18 +533,18 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
 
                 // Check if we're trying to seek past the end of the file.
                 if( ( iFrameStart > (int)qwTotalFrames ) ||
-                    ( iFrameStop >  (int)qwTotalFrames ) )
+                        ( iFrameStop >  (int)qwTotalFrames ) )
                 {
                     _tprintf(_T("Playback finished: Attempting to seek past last frame number!\n")
-                             _T("         (requested: start %d, stop %d, total frames: %d \n"),  
-                            iFrameStart, iFrameStop, (LONG)qwTotalFrames);
+                             _T("         (requested: start %d, stop %d, total frames: %d \n"),
+                             iFrameStart, iFrameStop, (LONG)qwTotalFrames);
                     hr = S_OK;
                     break;
                 }
 
                 // Convert the requested frame number to a reference time (100-nanosecond units).
 
-                hr = FrameNumberToTime( pSyncReader, wFrameSeekStream, 
+                hr = FrameNumberToTime( pSyncReader, wFrameSeekStream,
                                         (QWORD) iFrameStart, &rtStart );
                 if(FAILED(hr))
                 {
@@ -552,12 +553,12 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
                 else if( 0 < iFramesToPlay ) // If iFramesToPlay == 0, it means to play to the end of the file.
                 {
                     // Convert the stop frame number to a reference time.
-                    hr = FrameNumberToTime( pSyncReader, wFrameSeekStream, 
+                    hr = FrameNumberToTime( pSyncReader, wFrameSeekStream,
                                             (WORD) iFrameStop, &rtStop );
                     if(FAILED(hr))
                     {
                         _tprintf(_T("Failed to convert stop frame number to frame time!  hr=0x%x\n"), hr);
-                    }       
+                    }
                 }
 
                 // Perform the seek.
@@ -573,9 +574,9 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
                                             &rtStop,  (iFramesToPlay > 0 ) ? AM_SEEKING_AbsolutePositioning : 0 );
                     if(FAILED(hr))
                     {
-                        _tprintf(_T("Failed seek (rtStart = %dms, rtStop = %dms)!  hr=0x%x\n"), 
-                                (LONG) (rtStart/10000), (LONG)(rtStop/10000), hr);
-                    }       
+                        _tprintf(_T("Failed seek (rtStart = %dms, rtStop = %dms)!  hr=0x%x\n"),
+                                 (LONG) (rtStart/10000), (LONG)(rtStop/10000), hr);
+                    }
                 }
 
                 // Begin playback of the filter graph.
@@ -583,7 +584,7 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
                 {
                     hr = pMC->Run();
                     if(FAILED(hr))
-                    {       
+                    {
                         _tprintf(_T("Failed to run the graph!  hr=0x%x\nPlayback aborted.\n\n"), hr);
                     }
                     else
@@ -594,8 +595,8 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
 
                         lCompletionEvent = WaitForCompletion(pGraph);
 
-                        if( EC_USERABORT  == lCompletionEvent || 
-                            EC_ERRORABORT == lCompletionEvent )
+                        if( EC_USERABORT  == lCompletionEvent ||
+                                EC_ERRORABORT == lCompletionEvent )
                         {
                             _tprintf(_T("Playback aborted.\n"));
                             break;
@@ -609,10 +610,11 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
             }
 
             // If we are looping, calculate the next starting frame.
-            iFrameStart += iFrameIncForLoopSeek; 
+            iFrameStart += iFrameIncForLoopSeek;
 
-        } while( fLoopSeekToEnd && SUCCEEDED( hr ) );
-        
+        }
+        while( fLoopSeekToEnd && SUCCEEDED( hr ) );
+
         // Stop the graph.
         hr = pMC->Stop();
     }
@@ -624,20 +626,20 @@ HRESULT SeekASF(int argc, __in_ecount(argc) LPSTR argv[])
 
         hr = pMC->Run();
         if(FAILED(hr))
-        {       
+        {
             _tprintf(_T("Failed to run the graph!  hr=0x%x\nPlayback aborted.\n\n"), hr);
         }
         else
         {
             lCompletionEvent = WaitForCompletion(pGraph);
-            if( EC_USERABORT  == lCompletionEvent || 
-                EC_ERRORABORT == lCompletionEvent )
+            if( EC_USERABORT  == lCompletionEvent ||
+                    EC_ERRORABORT == lCompletionEvent )
             {
                 _tprintf(_T("Playback aborted.\n"));
             }
             else
                 _tprintf(_T("Playback complete.\n"));
-    
+
             // Stop the graph
             hr = pMC->Stop();
         }
@@ -654,7 +656,7 @@ int __cdecl
 main(
     int argc,
     __in_ecount(argc) LPSTR argv[]
-    )
+)
 {
     // Initialize COM.
     HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);

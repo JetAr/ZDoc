@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -23,56 +23,56 @@ static char THIS_FILE[] = __FILE__;
 
 
 /*
- *	CDlgDest	
+ *	CDlgDest
  *	MFC stuff
  */
 
 /////////////////////////////////////////////////////////////////////////////
 // CDlgDest dialog
-void 
+void
 CDlgDest::DoDataExchange
 (
-	CDataExchange* pDX
+    CDataExchange* pDX
 )
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgDest)
-	DDX_Control(pDX, IDC_SPEAKERFLAGS, m_cChannelMask);
-	DDX_Control(pDX, IDC_AVEBITS, m_cAveBitsPerSec);
-	DDX_Control(pDX, IDC_REMIX, m_cRemix);
-	DDX_Control(pDX, IDC_EDIT_VALIDBITS, m_cValidBits);
-	DDX_Control(pDX, IDC_CHANNELS, m_cChannels);
-	DDX_Control(pDX, IDC_OUTPUT, m_cOutput);
-	DDX_Control(pDX, IDC_COMBO_BITDEPTH, m_comboBitDepth);
-	DDX_Control(pDX, IDC_COMBO_SAMPLERATE, m_comboSampleRate);
-	DDX_Control(pDX, IDC_COMBO_WAVEFORMAT, m_comboFormat);
-	DDX_Control(pDX, IDC_PLAY, m_butPlay);
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CDlgDest)
+    DDX_Control(pDX, IDC_SPEAKERFLAGS, m_cChannelMask);
+    DDX_Control(pDX, IDC_AVEBITS, m_cAveBitsPerSec);
+    DDX_Control(pDX, IDC_REMIX, m_cRemix);
+    DDX_Control(pDX, IDC_EDIT_VALIDBITS, m_cValidBits);
+    DDX_Control(pDX, IDC_CHANNELS, m_cChannels);
+    DDX_Control(pDX, IDC_OUTPUT, m_cOutput);
+    DDX_Control(pDX, IDC_COMBO_BITDEPTH, m_comboBitDepth);
+    DDX_Control(pDX, IDC_COMBO_SAMPLERATE, m_comboSampleRate);
+    DDX_Control(pDX, IDC_COMBO_WAVEFORMAT, m_comboFormat);
+    DDX_Control(pDX, IDC_PLAY, m_butPlay);
     DDX_Control(pDX, IDC_STOP, m_butStop);
-	DDX_Text(pDX, IDC_EDIT_VALIDBITS, m_wValidBitsPerSample);
-	DDV_MinMaxUInt(pDX, m_wValidBitsPerSample, 0, 65535);
-	DDX_Text(pDX, IDC_SPEAKERFLAGS, m_strChannelMask);
-	//}}AFX_DATA_MAP
+    DDX_Text(pDX, IDC_EDIT_VALIDBITS, m_wValidBitsPerSample);
+    DDV_MinMaxUInt(pDX, m_wValidBitsPerSample, 0, 65535);
+    DDX_Text(pDX, IDC_SPEAKERFLAGS, m_strChannelMask);
+    //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgDest, CDialog)
-	//{{AFX_MSG_MAP(CDlgDest)
-	ON_BN_CLICKED(IDC_REMIX, OnRemix)
-	ON_BN_CLICKED(IDC_PLAY, OnPlay)
+    //{{AFX_MSG_MAP(CDlgDest)
+    ON_BN_CLICKED(IDC_REMIX, OnRemix)
+    ON_BN_CLICKED(IDC_PLAY, OnPlay)
     ON_BN_CLICKED(IDC_STOP, OnStop)
-	ON_CBN_SELENDOK(IDC_COMBO_SAMPLERATE, OnComboSamplerate)
-	ON_CBN_SELENDOK(IDC_COMBO_WAVEFORMAT, OnComboWaveformat)
-	ON_CBN_SELENDOK(IDC_COMBO_BITDEPTH, OnComboBitdepth)
-	ON_EN_KILLFOCUS(IDC_EDIT_VALIDBITS, OnEditValidbits)
-	ON_WM_CTLCOLOR()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_LBUTTONUP()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
+    ON_CBN_SELENDOK(IDC_COMBO_SAMPLERATE, OnComboSamplerate)
+    ON_CBN_SELENDOK(IDC_COMBO_WAVEFORMAT, OnComboWaveformat)
+    ON_CBN_SELENDOK(IDC_COMBO_BITDEPTH, OnComboBitdepth)
+    ON_EN_KILLFOCUS(IDC_EDIT_VALIDBITS, OnEditValidbits)
+    ON_WM_CTLCOLOR()
+    ON_WM_LBUTTONDOWN()
+    ON_WM_LBUTTONUP()
+    ON_WM_MOUSEMOVE()
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /*
- *	CDlgDest	
+ *	CDlgDest
  *	construction
  */
 
@@ -81,20 +81,20 @@ END_MESSAGE_MAP()
 // ----------------------------------------------------------------------------------
 CDlgDest::CDlgDest
 (
-	CWnd* pParent /*=NULL*/
+    CWnd* pParent /*=NULL*/
 )
-  : CDialog(CDlgDest::IDD, pParent),
-    m_pwndParent(pParent),
-    m_pbData(NULL),
-    m_fPlayable(FALSE),
-    m_fDragging(FALSE),
-	m_cbData( 0 ),
-    m_lpwhdr( 0 )
+    : CDialog(CDlgDest::IDD, pParent),
+      m_pwndParent(pParent),
+      m_pbData(NULL),
+      m_fPlayable(FALSE),
+      m_fDragging(FALSE),
+      m_cbData( 0 ),
+      m_lpwhdr( 0 )
 {
-	//{{AFX_DATA_INIT(CDlgDest)
-	m_wValidBitsPerSample = 0;
-	m_strChannelMask = _T("0x00000000");
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(CDlgDest)
+    m_wValidBitsPerSample = 0;
+    m_strChannelMask = _T("0x00000000");
+    //}}AFX_DATA_INIT
 
     m_wfExt.Format.wFormatTag = WAVE_FORMAT_PCM;
     m_wfExt.Format.cbSize = 0;
@@ -115,18 +115,18 @@ CDlgDest::CDlgDest
 CDlgDest::~CDlgDest
 ()
 {
-	SafeLocalFree( m_pbData );
+    SafeLocalFree( m_pbData );
     SafeLocalFree( m_lpwhdr );
 }
 
 // ----------------------------------------------------------------------------------
 // Create
 // ----------------------------------------------------------------------------------
-void 
+void
 CDlgDest::Create
 (
     void
-)  
+)
 {
     CDialog::Create(CDlgDest::IDD, m_pwndParent);
 }
@@ -144,11 +144,11 @@ CONST_GUID_REP cgrFormats[] =
 UINT    rgnSampleRate[]	= { 8000, 11025, 16000, 22050, 32000, 44100, 48000, 96000 };
 UINT    rgnBitDepth[]	= { 8, 16, 24, 32 };
 
-BOOL 
+BOOL
 CDlgDest::OnInitDialog
-() 
+()
 {
-	CDialog::OnInitDialog();
+    CDialog::OnInitDialog();
 
     int c,i;
 
@@ -176,12 +176,12 @@ CDlgDest::OnInitDialog
     m_comboBitDepth.SelectString(0, "16");
     m_comboFormat.SelectString(0, "WAVE_FORMAT_PCM");
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;  // return TRUE unless you set the focus to a control
+    // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 /*
- *	CDlgDest	
+ *	CDlgDest
  *	operations
  */
 
@@ -189,9 +189,9 @@ CDlgDest::OnInitDialog
 // OnRemix
 //	traverses the list of source channels and mixes them according to the user settings
 // ----------------------------------------------------------------------------------
-void 
+void
 CDlgDest::OnRemix
-() 
+()
 {
     CDlgSrc *	pdlgSrc		= 0;
     ULONG       cMaxSamples = 0;
@@ -211,38 +211,38 @@ CDlgDest::OnRemix
     // determine the max number of samples
     //
     ULONG   cSamplesSrcThisFormat = 0;
-	for
-	(
-		pos = g_listSources.GetHeadPosition();
-		pos;
-	)
+    for
+    (
+        pos = g_listSources.GetHeadPosition();
+        pos;
+    )
     {
         pdlgSrc = g_listSources.GetNext(pos);
 
         cSamplesSrcThisFormat = MulDiv(
-											m_wfExt.Format.nSamplesPerSec, 
-											pdlgSrc->m_cSamples, 
-											pdlgSrc->m_wfx.nSamplesPerSec
-									);
+                                    m_wfExt.Format.nSamplesPerSec,
+                                    pdlgSrc->m_cSamples,
+                                    pdlgSrc->m_wfx.nSamplesPerSec
+                                );
         cMaxSamples = max(cMaxSamples, cSamplesSrcThisFormat);
     }
 
     //
-	//	determine the length of the buffer required 
-	//
+    //	determine the length of the buffer required
+    //
     cbSample = m_wfExt.Format.nChannels * m_wfExt.Format.wBitsPerSample / 8;
     m_cbData = cbSample * cMaxSamples;
     m_pbData = (PBYTE)LocalAlloc(LPTR, m_cbData);
     if( 0 == m_pbData)
-	{
-		MessageBox( "Insufficient memory to complete the task.", "MultiChan : Error", MB_OK | MB_ICONSTOP );
-		return;
-	}
+    {
+        MessageBox( "Insufficient memory to complete the task.", "MultiChan : Error", MB_OK | MB_ICONSTOP );
+        return;
+    }
 
     //
     // copy data from each src to the dst
     //
-	
+
     MMRESULT        mmRes;
     HACMSTREAM      has;
     ULONG           cbConversion;
@@ -252,31 +252,31 @@ CDlgDest::OnRemix
     BOOL            fRes = FALSE;
     WAVEFORMATEX    wfxConversion;
 
-	wfxConversion.wFormatTag		= WAVE_FORMAT_PCM;
-	wfxConversion.cbSize			= 0;
-	wfxConversion.nChannels			= 1;
-	wfxConversion.nSamplesPerSec	= m_wfExt.Format.nSamplesPerSec;
-	wfxConversion.wBitsPerSample	= m_wfExt.Format.wBitsPerSample;
-	wfxConversion.nBlockAlign		= wfxConversion.wBitsPerSample / 8;
-	wfxConversion.nAvgBytesPerSec	= wfxConversion.nBlockAlign * wfxConversion.nSamplesPerSec;
+    wfxConversion.wFormatTag		= WAVE_FORMAT_PCM;
+    wfxConversion.cbSize			= 0;
+    wfxConversion.nChannels			= 1;
+    wfxConversion.nSamplesPerSec	= m_wfExt.Format.nSamplesPerSec;
+    wfxConversion.wBitsPerSample	= m_wfExt.Format.wBitsPerSample;
+    wfxConversion.nBlockAlign		= wfxConversion.wBitsPerSample / 8;
+    wfxConversion.nAvgBytesPerSec	= wfxConversion.nBlockAlign * wfxConversion.nSamplesPerSec;
 
-	//
-	// for each SRC (src dialog), convert it's buffer into 1 channel of the Dst format
-	//
-	for
-	(
-	    pos = g_listSources.GetHeadPosition();
-		pos;
-	)
+    //
+    // for each SRC (src dialog), convert it's buffer into 1 channel of the Dst format
+    //
+    for
+    (
+        pos = g_listSources.GetHeadPosition();
+        pos;
+    )
     {
         pdlgSrc = g_listSources.GetNext(pos);
 
-        // 
+        //
         // first, convert dlg format to dest format using ACM
         //
-		
+
         // open an appropriate ACM driver
-        mmRes = 
+        mmRes =
             acmStreamOpen
             (
                 &has,
@@ -286,18 +286,18 @@ CDlgDest::OnRemix
                 NULL,   //wFilter,
                 NULL,
                 0,
-                ACM_STREAMOPENF_NONREALTIME 
+                ACM_STREAMOPENF_NONREALTIME
             );
 
         if(!TrapMMError(mmRes, "acmStreamOpen"))
             break;
-		
-		//
+
+        //
         //	how big a buffer do we need to convert this one channel?
-		//	in any case, acm overestimates the size of the buffer needed 
-		//	if the acm size is used when copying we will exceed the boundaries of our allocated m_pbData
-		//	
-        mmRes = 
+        //	in any case, acm overestimates the size of the buffer needed
+        //	if the acm size is used when copying we will exceed the boundaries of our allocated m_pbData
+        //
+        mmRes =
             acmStreamSize
             (
                 has,
@@ -318,12 +318,12 @@ CDlgDest::OnRemix
         }
 
         // be prepared!
-		ZeroMemory(&ash, sizeof(ACMSTREAMHEADER));
-		ash.cbStruct	= sizeof(ACMSTREAMHEADER);
-		ash.pbSrc		= (PBYTE)pdlgSrc->m_pvData;
-		ash.cbSrcLength = pdlgSrc->m_cbData;      
-		ash.pbDst		= (PBYTE)pvConversion;
-		ash.cbDstLength = cbConversion;
+        ZeroMemory(&ash, sizeof(ACMSTREAMHEADER));
+        ash.cbStruct	= sizeof(ACMSTREAMHEADER);
+        ash.pbSrc		= (PBYTE)pdlgSrc->m_pvData;
+        ash.cbSrcLength = pdlgSrc->m_cbData;
+        ash.pbDst		= (PBYTE)pvConversion;
+        ash.cbDstLength = cbConversion;
 
         mmRes = acmStreamPrepareHeader(has, &ash, 0);
         if(!TrapMMError(mmRes, "acmStreamPrepareHeader"))
@@ -343,68 +343,69 @@ CDlgDest::OnRemix
         //
         // now copy the data from conversion buffer to final output buffer
         //
-        cSamplesOut =	( cbConversion > m_cbData ) ? 
-						( m_cbData / wfxConversion.nBlockAlign ) : 
-						( cbConversion / wfxConversion.nBlockAlign );
+        cSamplesOut =	( cbConversion > m_cbData ) ?
+                        ( m_cbData / wfxConversion.nBlockAlign ) :
+                        ( cbConversion / wfxConversion.nBlockAlign );
 
         switch(wfxConversion.nBlockAlign)
         {
-            case 1:     // 8-bit
+        case 1:     // 8-bit
+        {
+            // stagger dest
+            PBYTE   pbDst = m_pbData + pdlgSrc->m_nChannel;
+            PBYTE   pbSrc = (PBYTE)pvConversion;
+
+            for(nSample = 0; nSample < cSamplesOut; nSample++)
             {
-                // stagger dest
-                PBYTE   pbDst = m_pbData + pdlgSrc->m_nChannel;
-                PBYTE   pbSrc = (PBYTE)pvConversion;
-
-                for(nSample = 0; nSample < cSamplesOut; nSample++)
-                {
-                    *pbDst = *pbSrc++;
-                    pbDst += m_wfExt.Format.nChannels;
-                }
-
-                break;
+                *pbDst = *pbSrc++;
+                pbDst += m_wfExt.Format.nChannels;
             }
 
-            case 2:     // 16-bit
+            break;
+        }
+
+        case 2:     // 16-bit
+        {
+            // stagger dest
+            PUSHORT pusDst = ((PUSHORT)m_pbData) + pdlgSrc->m_nChannel;
+            PUSHORT pusSrc = (PUSHORT)pvConversion;
+
+            for(nSample = 0; nSample < cSamplesOut; nSample++)
             {
-                // stagger dest
-                PUSHORT pusDst = ((PUSHORT)m_pbData) + pdlgSrc->m_nChannel;
-                PUSHORT pusSrc = (PUSHORT)pvConversion;
-
-                for(nSample = 0; nSample < cSamplesOut; nSample++)
-                {
-                    *pusDst = *pusSrc++;
-                    pusDst += m_wfExt.Format.nChannels;
-                }
-
-                break;
+                *pusDst = *pusSrc++;
+                pusDst += m_wfExt.Format.nChannels;
             }
 
-            case 3:     // 24-bit
+            break;
+        }
+
+        case 3:     // 24-bit
+        {
+            typedef struct
             {
-                typedef struct {
-                    BYTE b[3];
-                } S24BITS, *PS24BITS;
+                BYTE b[3];
+            } S24BITS, *PS24BITS;
 
-                // stagger dest
-                PS24BITS psDst = ((PS24BITS)m_pbData) + pdlgSrc->m_nChannel;
-                PS24BITS psSrc = (PS24BITS)pvConversion;
+            // stagger dest
+            PS24BITS psDst = ((PS24BITS)m_pbData) + pdlgSrc->m_nChannel;
+            PS24BITS psSrc = (PS24BITS)pvConversion;
 
-                for(nSample = 0; nSample < cSamplesOut; nSample++)
-                {
-                    *psDst = *psSrc++;
-                    psDst += m_wfExt.Format.nChannels;
-                }
-
-                break;
+            for(nSample = 0; nSample < cSamplesOut; nSample++)
+            {
+                *psDst = *psSrc++;
+                psDst += m_wfExt.Format.nChannels;
             }
 
-            default:
-                ASSERT(0);
+            break;
+        }
+
+        default:
+            ASSERT(0);
         }
 
         // clean up
         SafeLocalFree( pvConversion );
-	}
+    }
 
     if(fRes)
     {
@@ -417,11 +418,11 @@ CDlgDest::OnRemix
 // ----------------------------------------------------------------------------------
 // OnPlay
 // ----------------------------------------------------------------------------------
-void 
+void
 CDlgDest::OnPlay
-() 
+()
 {
-	MMRESULT	mmRes       = MMSYSERR_NOERROR;
+    MMRESULT	mmRes       = MMSYSERR_NOERROR;
 
     //
     //  must not be in use
@@ -438,7 +439,7 @@ CDlgDest::OnPlay
         }
     }
 
-	m_lpwhdr->dwBufferLength = m_cbData;
+    m_lpwhdr->dwBufferLength = m_cbData;
     m_lpwhdr->lpData = ( char * )m_pbData;
 
     //
@@ -451,14 +452,14 @@ CDlgDest::OnPlay
                             ( DWORD_PTR )this,				//  object issuing the request
                             CALLBACK_FUNCTION				//  callback via function
                        );
-	if(TrapMMError(mmRes, "waveOutOpen"))
-	{
+    if(TrapMMError(mmRes, "waveOutOpen"))
+    {
         //
         //  prepare the header
         //
-		mmRes = waveOutPrepareHeader(g_hwo, m_lpwhdr, sizeof(WAVEHDR));
-		if(TrapMMError(mmRes, "waveOutPrepareHeader"))
-		{
+        mmRes = waveOutPrepareHeader(g_hwo, m_lpwhdr, sizeof(WAVEHDR));
+        if(TrapMMError(mmRes, "waveOutPrepareHeader"))
+        {
             //
             //  revert playable state
             //
@@ -467,8 +468,8 @@ CDlgDest::OnPlay
             //
             //  start singing
             //
-			mmRes = waveOutWrite(g_hwo, m_lpwhdr, sizeof(WAVEHDR));
-			TrapMMError(mmRes, "waveOutWrite");
+            mmRes = waveOutWrite(g_hwo, m_lpwhdr, sizeof(WAVEHDR));
+            TrapMMError(mmRes, "waveOutWrite");
 
         }       //  prepare header
     }           //  open
@@ -477,13 +478,13 @@ CDlgDest::OnPlay
 // ----------------------------------------------------------------------------------
 // OnStop
 // ----------------------------------------------------------------------------------
-void 
+void
 CDlgDest::OnStop
 ()
 {
     MMRESULT    mmRes       = MMSYSERR_NOERROR;
 
-    //  
+    //
     //  ensure validity
     //
     ASSERT( g_hwo );
@@ -500,14 +501,14 @@ CDlgDest::OnStop
 //
 //	RecalcDependant
 //
-void 
+void
 CDlgDest::RecalcDependantVariables
 ()
 {
     m_wfExt.Format.nBlockAlign		= m_wfExt.Format.wBitsPerSample * m_wfExt.Format.nChannels / 8;
     m_wfExt.Format.nAvgBytesPerSec	= m_wfExt.Format.nBlockAlign * m_wfExt.Format.nSamplesPerSec;
 
-	// update UI
+    // update UI
     char sz[100];
     StringCchPrintfA(sz, 100, "%d", m_wfExt.Format.nAvgBytesPerSec);
     SetDlgItemText(IDC_AVEBITS, sz);
@@ -515,7 +516,7 @@ CDlgDest::RecalcDependantVariables
 
 
 /*
- *	CDlgDest	
+ *	CDlgDest
  *	UI operations
  */
 
@@ -523,54 +524,54 @@ CDlgDest::RecalcDependantVariables
 // ----------------------------------------------------------------------------------
 // track combobox changes
 // ----------------------------------------------------------------------------------
-void 
+void
 CDlgDest::OnComboSamplerate
-() 
+()
 {
-    m_wfExt.Format.nSamplesPerSec = ( DWORD )m_comboSampleRate.GetItemData(m_comboSampleRate.GetCurSel());	
+    m_wfExt.Format.nSamplesPerSec = ( DWORD )m_comboSampleRate.GetItemData(m_comboSampleRate.GetCurSel());
     RecalcDependantVariables();
 }
 
-void 
+void
 CDlgDest::OnComboBitdepth
-() 
+()
 {
-    m_wfExt.Format.wBitsPerSample = (USHORT)m_comboBitDepth.GetItemData(m_comboBitDepth.GetCurSel());	
+    m_wfExt.Format.wBitsPerSample = (USHORT)m_comboBitDepth.GetItemData(m_comboBitDepth.GetCurSel());
     m_wfExt.Samples.wValidBitsPerSample = min(m_wfExt.Samples.wValidBitsPerSample, m_wfExt.Format.wBitsPerSample);
     m_wValidBitsPerSample = m_wfExt.Samples.wValidBitsPerSample;
     RecalcDependantVariables();
     UpdateData(FALSE);      // update m_wValidBitsPerSample display
 }
 
-void 
+void
 CDlgDest::OnComboWaveformat
-() 
+()
 {
-    m_wfExt.Format.wFormatTag = (WORD)m_comboFormat.GetItemData(m_comboFormat.GetCurSel());	
+    m_wfExt.Format.wFormatTag = (WORD)m_comboFormat.GetItemData(m_comboFormat.GetCurSel());
     switch(m_wfExt.Format.wFormatTag)
     {
-        case WAVE_FORMAT_PCM:
-            m_wfExt.Format.cbSize = 0;
-            break;
+    case WAVE_FORMAT_PCM:
+        m_wfExt.Format.cbSize = 0;
+        break;
 
-        case WAVE_FORMAT_IEEE_FLOAT:
-            m_wfExt.Format.cbSize = 0;
-            break;
+    case WAVE_FORMAT_IEEE_FLOAT:
+        m_wfExt.Format.cbSize = 0;
+        break;
 
-        case WAVE_FORMAT_EXTENSIBLE:
-            m_wfExt.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
-            break;
+    case WAVE_FORMAT_EXTENSIBLE:
+        m_wfExt.Format.cbSize = sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+        break;
 
-        default:
-            MessageBox("Format type not supported", "MultiChan : Warning", MB_ICONWARNING | MB_OK);
-            break;
+    default:
+        MessageBox("Format type not supported", "MultiChan : Warning", MB_ICONWARNING | MB_OK);
+        break;
     }
 }
 
 // ----------------------------------------------------------------------------------
 // Update
 // ----------------------------------------------------------------------------------
-void 
+void
 CDlgDest::Update
 ()
 {
@@ -595,50 +596,50 @@ CDlgDest::Update
     //
     m_wfExt.dwChannelMask = 0;
 
-	for
-	(	
-		POSITION    pos		= g_listSources.GetHeadPosition();
-		pos;
-	)
-	{
+    for
+    (
+        POSITION    pos		= g_listSources.GetHeadPosition();
+        pos;
+    )
+    {
         //
-		//	iterative step
-		//
-		pdlgSrc = g_listSources.GetNext(pos);
+        //	iterative step
+        //
+        pdlgSrc = g_listSources.GetNext(pos);
 
         if( !(SPEAKER_NOT_SPECIFIED & pdlgSrc->m_dwChannelMask) )
-            m_wfExt.dwChannelMask |= pdlgSrc->m_dwChannelMask;    
-	}	//	for
+            m_wfExt.dwChannelMask |= pdlgSrc->m_dwChannelMask;
+    }	//	for
 
     m_wfExt.dwChannelMask &= 0x7fffffff;        //	correct any deviations
 
-	//
-	// set up a proper WAVEFORMATEXTENSIBLE (number of channels = the number of SRC dialogs that were created)
-	//
-	m_wfExt.Format.nChannels = (WORD)g_listSources.GetCount();
-	if(m_wfExt.Format.nChannels > 2)
-	{
-		m_wfExt.Format.wFormatTag	= WAVE_FORMAT_EXTENSIBLE;
-		m_wfExt.Format.cbSize		= sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
-		m_comboFormat.SelectString(0, "WAVE_FORMAT_EXTENSIBLE");
-	}
+    //
+    // set up a proper WAVEFORMATEXTENSIBLE (number of channels = the number of SRC dialogs that were created)
+    //
+    m_wfExt.Format.nChannels = (WORD)g_listSources.GetCount();
+    if(m_wfExt.Format.nChannels > 2)
+    {
+        m_wfExt.Format.wFormatTag	= WAVE_FORMAT_EXTENSIBLE;
+        m_wfExt.Format.cbSize		= sizeof(WAVEFORMATEXTENSIBLE) - sizeof(WAVEFORMATEX);
+        m_comboFormat.SelectString(0, "WAVE_FORMAT_EXTENSIBLE");
+    }
 
-	RecalcDependantVariables();
-	m_wValidBitsPerSample = m_wfExt.Samples.wValidBitsPerSample;
+    RecalcDependantVariables();
+    m_wValidBitsPerSample = m_wfExt.Samples.wValidBitsPerSample;
 
-	// update UI
-	char sz[100];
-	StringCchPrintfA(sz, 100, "%d", m_wfExt.Format.nChannels);
-	SetDlgItemText(IDC_CHANNELS, sz);
+    // update UI
+    char sz[100];
+    StringCchPrintfA(sz, 100, "%d", m_wfExt.Format.nChannels);
+    SetDlgItemText(IDC_CHANNELS, sz);
 
-	m_strChannelMask.Format("0x%08x", m_wfExt.dwChannelMask);
-	UpdateData(FALSE);
+    m_strChannelMask.Format("0x%08x", m_wfExt.dwChannelMask);
+    UpdateData(FALSE);
 
 }
 
-void 
+void
 CDlgDest::OnEditValidbits
-() 
+()
 {
     UpdateData(TRUE);
     m_wfExt.Samples.wValidBitsPerSample = LOWORD(m_wValidBitsPerSample);
@@ -647,25 +648,25 @@ CDlgDest::OnEditValidbits
 // ----------------------------------------------------------------------------------
 // dummy implementations to prevent dlgs from disappearing when user hits enter or esc
 // ----------------------------------------------------------------------------------
-void CDlgDest::OnOK() 
+void CDlgDest::OnOK()
 {
     // do nothing
 }
 
-void CDlgDest::OnCancel() 
+void CDlgDest::OnCancel()
 {
     // do nothing
 }
 
-HBRUSH 
+HBRUSH
 CDlgDest::OnCtlColor
 (
-	CDC*	pDC, 
-	CWnd*	pWnd, 
-	UINT	nCtlColor
-) 
+    CDC*	pDC,
+    CWnd*	pWnd,
+    UINT	nCtlColor
+)
 {
-	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+    HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
 
     if((nCtlColor == CTLCOLOR_STATIC))
     {
@@ -676,19 +677,19 @@ CDlgDest::OnCtlColor
             return GetSysColorBrush(COLOR_ACTIVECAPTION);
         }
     }
-    
-	return hbr;
+
+    return hbr;
 }
 
-void 
+void
 CDlgDest::OnLButtonDown
 (
-	UINT	nFlags, 
-	CPoint	point
-) 
+    UINT	nFlags,
+    CPoint	point
+)
 {
-	RECT    rcClient;
-    
+    RECT    rcClient;
+
     m_cOutput.GetClientRect(&rcClient);
     m_cOutput.MapWindowPoints(this, &rcClient);
     m_fDragging = PtInRect(&rcClient, point);
@@ -706,27 +707,27 @@ CDlgDest::OnLButtonDown
     SetWindowPos(&wndTop, 0,0,0,0, SWP_NOMOVE | SWP_NOSIZE);
 }
 
-void 
+void
 CDlgDest::OnLButtonUp
 (
-	UINT	nFlags, 
-	CPoint	point
-) 
+    UINT	nFlags,
+    CPoint	point
+)
 {
-	m_fDragging = FALSE;
+    m_fDragging = FALSE;
     ReleaseCapture();
 
-	CDialog::OnLButtonUp(nFlags, point);
+    CDialog::OnLButtonUp(nFlags, point);
 }
 
-void 
+void
 CDlgDest::OnMouseMove
 (
-	UINT	nFlags, 
-	CPoint	point
-) 
+    UINT	nFlags,
+    CPoint	point
+)
 {
-	RECT    rcClientParent;
+    RECT    rcClientParent;
 
     GetParent()->GetClientRect(&rcClientParent);
     GetParent()->MapWindowPoints(this, &rcClientParent);
@@ -755,12 +756,12 @@ CDlgDest::OnMouseMove
 }
 
 /*
- *	CDlgDest	
+ *	CDlgDest
  *	message processing
  */
 
 
-LRESULT 
+LRESULT
 CDlgDest::WindowProc
 (
     UINT    nMessage,
@@ -772,31 +773,31 @@ CDlgDest::WindowProc
 
     switch( nMessage )
     {
-        case    WM_START_PLAYBACK:
-            {
-                break;
-            }
-        case    WM_STOP_PLAYBACK:
-            {
-                //
-                //  revert playable state
-                //
-                WaveTogglePlayback( WAVE_TOGGLE_DESTINATION, WAVE_TOGGLE_ALLOW );
+    case    WM_START_PLAYBACK:
+    {
+        break;
+    }
+    case    WM_STOP_PLAYBACK:
+    {
+        //
+        //  revert playable state
+        //
+        WaveTogglePlayback( WAVE_TOGGLE_DESTINATION, WAVE_TOGGLE_ALLOW );
 
-                //
-                //  unprepare and release
-                //
-                mmRes = waveOutUnprepareHeader( g_hwo, m_lpwhdr, sizeof( WAVEHDR ) );
-                if( TrapMMError( mmRes, "waveOutUnprepareHeader" ) )
-                {
-                    mmRes = waveOutClose( g_hwo );
-                    TrapMMError( mmRes, "waveOutClose" );
+        //
+        //  unprepare and release
+        //
+        mmRes = waveOutUnprepareHeader( g_hwo, m_lpwhdr, sizeof( WAVEHDR ) );
+        if( TrapMMError( mmRes, "waveOutUnprepareHeader" ) )
+        {
+            mmRes = waveOutClose( g_hwo );
+            TrapMMError( mmRes, "waveOutClose" );
 
-                    g_hwo = 0;
-                }
+            g_hwo = 0;
+        }
 
-                break;
-            }
+        break;
+    }
     }
     return( CWnd::WindowProc( nMessage, wParam, lParam ) );
 }

@@ -1,4 +1,4 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+﻿/*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 Copyright (c) 1992 - 2000  Microsoft Corporation
 
@@ -10,8 +10,8 @@ Abstract:
 
     Sample SNMP Extension Agent for Windows NT.
 
-    These files (testdll.c, testmib.c, and testmib.h) provide an example of 
-    how to structure an Extension Agent DLL which works in conjunction with 
+    These files (testdll.c, testmib.c, and testmib.h) provide an example of
+    how to structure an Extension Agent DLL which works in conjunction with
     the SNMP Extendible Agent for Windows NT.
 
     Extensive comments have been included to describe its structure and
@@ -56,7 +56,7 @@ DWORD dwTimeZero = 0;
 
 // Extension Agent DLLs that generate traps must create a Win32 Event object
 // to communicate occurence of traps to the Extendible Agent.  The event
-// handle is given to the Extendible Agent when the Extension Agent is 
+// handle is given to the Extendible Agent when the Extension Agent is
 // initialized, it should be NULL if traps will not be generated.  This
 // example Extension Agent simulates the occurance of traps with hSimulateTrap.
 
@@ -64,34 +64,34 @@ HANDLE hSimulateTrap = NULL;
 
 
 // This is a standard Win32 DLL entry point.  See the Win32 SDK for more
-// information on its arguments and their meanings.  This example DLL does 
+// information on its arguments and their meanings.  This example DLL does
 // not perform any special actions using this mechanism.
 
 BOOL WINAPI DllMain(
     HANDLE hDll,
     DWORD  dwReason,
     LPVOID lpReserved)
-    {
+{
     switch(dwReason)
-        {
-        case DLL_PROCESS_ATTACH:
-        case DLL_PROCESS_DETACH:
-        case DLL_THREAD_ATTACH:
-        case DLL_THREAD_DETACH:
-        default:
-            break;
+    {
+    case DLL_PROCESS_ATTACH:
+    case DLL_PROCESS_DETACH:
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    default:
+        break;
 
-        } // end switch()
+    } // end switch()
 
     return TRUE;
 
-    } // end DllEntryPoint()
+} // end DllEntryPoint()
 
 
 // Extension Agent DLLs provide the following entry point to coordinate the
 // initializations of the Extension Agent and the Extendible Agent.  The
 // Extendible Agent provides the Extension Agent with a time zero reference;
-// and the Extension Agent provides the Extendible Agent with an Event handle 
+// and the Extension Agent provides the Extendible Agent with an Event handle
 // for communicating occurence of traps, and an object identifier representing
 // the root of the MIB subtree that the Extension Agent supports.
 
@@ -99,7 +99,7 @@ BOOL WINAPI SnmpExtensionInit(
     IN  DWORD               dwTimeZeroReference,
     OUT HANDLE              *hPollForTrapEvent,
     OUT AsnObjectIdentifier *supportedView)
-    {
+{
 
     // Record the time reference provided by the Extendible Agent.
 
@@ -111,9 +111,9 @@ BOOL WINAPI SnmpExtensionInit(
     // when a trap has occured.  This is explained further later in this file.
 
     if ((*hPollForTrapEvent = CreateEvent(NULL, FALSE, FALSE, NULL)) == NULL)
-        {
+    {
         // Indicate error?, be sure that NULL is returned to Extendible Agent.
-        }
+    }
 
 
     // Indicate the MIB view supported by this Extension Agent, an object
@@ -122,7 +122,7 @@ BOOL WINAPI SnmpExtensionInit(
     *supportedView = MIB_OidPrefix; // NOTE!  structure copy
 
 
-    // Record the trap Event.  This example Extension Agent simulates traps by 
+    // Record the trap Event.  This example Extension Agent simulates traps by
     // generating a trap after every given number of processed requests.
 
     hSimulateTrap = *hPollForTrapEvent;
@@ -132,14 +132,14 @@ BOOL WINAPI SnmpExtensionInit(
 
     return TRUE;
 
-    } // end SnmpExtensionInit()
+} // end SnmpExtensionInit()
 
 
 // Extension Agent DLLs provide the following entry point to communcate traps
 // to the Extendible Agent.  The Extendible Agent will query this entry point
 // when the trap Event (supplied at initialization time) is asserted, which
-// indicates that zero or more traps may have occured.  The Extendible Agent 
-// will repetedly call this entry point until FALSE is returned, indicating 
+// indicates that zero or more traps may have occured.  The Extendible Agent
+// will repetedly call this entry point until FALSE is returned, indicating
 // that all outstanding traps have been processed.
 
 BOOL WINAPI SnmpExtensionTrap(
@@ -148,7 +148,7 @@ BOOL WINAPI SnmpExtensionTrap(
     OUT AsnInteger          *specificTrap,
     OUT AsnTimeticks        *timeStamp,
     OUT RFC1157VarBindList  *variableBindings)
-    {
+{
     // The body of this routine is an extremely simple example/simulation of
     // the trap functionality.  A real implementation will be more complex.
 
@@ -171,7 +171,7 @@ BOOL WINAPI SnmpExtensionTrap(
     // The following if/else support the simulation.
 
     if (whichTime == 0)
-        {
+    {
         whichTime = 1;    // Supports the simulation.
 
 
@@ -193,9 +193,9 @@ BOOL WINAPI SnmpExtensionTrap(
         // Indicate that valid trap data exists in the parameters.
 
         return TRUE;
-        }
+    }
     else
-        {
+    {
         whichTime = 0;    // Supports the simulation.
 
 
@@ -203,9 +203,9 @@ BOOL WINAPI SnmpExtensionTrap(
         // refer to any valid data.
 
         return FALSE;
-        }
+    }
 
-    } // end SnmpExtensionTrap()
+} // end SnmpExtensionTrap()
 
 
 // Extension Agent DLLs provide the following entry point to resolve queries
@@ -217,7 +217,7 @@ BOOL WINAPI SnmpExtensionQuery(
     IN OUT RFC1157VarBindList *variableBindings,
     OUT AsnInteger            *errorStatus,
     OUT AsnInteger            *errorIndex)
-    {
+{
     static unsigned long requestCount = 0;  // Supports the trap simulation.
     UINT    I;
 
@@ -225,32 +225,32 @@ BOOL WINAPI SnmpExtensionQuery(
     // Iterate through the variable bindings list to resolve individual
     // variable bindings.
 
-    for ( I=0;I < variableBindings->len;I++ )
-        {
+    for ( I=0; I < variableBindings->len; I++ )
+    {
         *errorStatus = ResolveVarBind( &variableBindings->list[I],
                                        requestType );
 
 
         // Test and handle case where Get Next past end of MIB view supported
-        // by this Extension Agent occurs.  Special processing is required to 
-        // communicate this situation to the Extendible Agent so it can take 
+        // by this Extension Agent occurs.  Special processing is required to
+        // communicate this situation to the Extendible Agent so it can take
         // appropriate action, possibly querying other Extension Agents.
 
         if ( *errorStatus == SNMP_ERRORSTATUS_NOSUCHNAME &&
-             requestType == MIB_ACTION_GETNEXT )
-           {
-           *errorStatus = SNMP_ERRORSTATUS_NOERROR;
+                requestType == MIB_ACTION_GETNEXT )
+        {
+            *errorStatus = SNMP_ERRORSTATUS_NOERROR;
 
 
-           // Modify variable binding of such variables so the OID points
-           // just outside the MIB view supported by this Extension Agent.
-           // The Extendible Agent tests for this, and takes appropriate
-           // action.
+            // Modify variable binding of such variables so the OID points
+            // just outside the MIB view supported by this Extension Agent.
+            // The Extendible Agent tests for this, and takes appropriate
+            // action.
 
-           SnmpUtilOidFree( &variableBindings->list[I].name );
-           SnmpUtilOidCpy( &variableBindings->list[I].name, &MIB_OidPrefix );
-           variableBindings->list[I].name.ids[MIB_PREFIX_LEN-1] ++;
-           }
+            SnmpUtilOidFree( &variableBindings->list[I].name );
+            SnmpUtilOidCpy( &variableBindings->list[I].name, &MIB_OidPrefix );
+            variableBindings->list[I].name.ids[MIB_PREFIX_LEN-1] ++;
+        }
 
 
         // If an error was indicated, communicate error status and error
@@ -259,11 +259,11 @@ BOOL WINAPI SnmpExtensionQuery(
         // packet.
 
         if ( *errorStatus != SNMP_ERRORSTATUS_NOERROR )
-           {
-	   *errorIndex = I+1;
-	   goto Exit;
-	   }
+        {
+            *errorIndex = I+1;
+            goto Exit;
         }
+    }
 
 Exit:
 
@@ -278,7 +278,7 @@ Exit:
 
     return SNMPAPI_NOERROR;
 
-    } // end SnmpExtensionQuery()
+} // end SnmpExtensionQuery()
 
 
 //-------------------------------- END --------------------------------------

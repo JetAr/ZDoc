@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 #ifndef _INC_TTSAPP
 #define _INC_TTSAPP
@@ -53,8 +53,8 @@ class CTTSApp
 {
 public:
     CTTSApp(HINSTANCE hInstance) :
-    m_hInst(hInstance), m_hWnd(0)
-	{
+        m_hInst(hInstance), m_hWnd(0)
+    {
         m_bPause                = FALSE; // pause audio?
         m_bStop                 = TRUE;  // stop audio?
         m_DefaultVolume         = 0;     // default volume
@@ -62,15 +62,15 @@ public:
         m_DefaultFormatIndex    = 0;     // default output format
         m_pszwFileText          = NULL;  // text from file
         m_szWFileName[0]        = NULL;  // wide text from file
-	}
-	~CTTSApp() 
-	{
+    }
+    ~CTTSApp()
+    {
         // delete any allocated memory
         if( m_pszwFileText )
         {
             delete m_pszwFileText;
         }
-	}
+    }
 
     // Member Functions
     static LRESULT CALLBACK DlgProcMain (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -93,12 +93,12 @@ private:
     void HandleScroll( HWND hCtl );
     void MainHandleCommand( int id, HWND hWndControl, UINT codeNotify );
     void MainHandleClose();
-	void HandleSpeak ();
+    void HandleSpeak ();
     void EnableSpeakButtons( BOOL fEnable );
-    
+
 //
 //  Member data
-//  
+//
 private:
     const HINSTANCE     m_hInst;
     HWND                m_hWnd;

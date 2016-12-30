@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
   Copyright (c) 1995 Intel Corp
 
@@ -26,15 +26,25 @@
 // Name:     Stack_c
 // Purpose:  A general purpose stack.
 // Context:  Can be used anywhere.
-template<class T> class Stack_c : private NIDeque_c<T> {
+template<class T> class Stack_c : private NIDeque_c<T>
+{
 
-    public:
-                Stack_c() : NIDeque_c<T>() {}
-        	    ~Stack_c()       {}
-        inline BOOL Push(T Data) {return NIDeque_c<T>::InsertIntoFront(Data);}
-        inline BOOL	Pop(T &Data) {return
-                                  NIDeque_c<T>::RemoveFromFront(Data);}
-	    inline BOOL IsEmpty()    {return NIDeque_c<T>::IsEmpty();}
+public:
+    Stack_c() : NIDeque_c<T>() {}
+    ~Stack_c()       {}
+    inline BOOL Push(T Data)
+    {
+        return NIDeque_c<T>::InsertIntoFront(Data);
+    }
+    inline BOOL	Pop(T &Data)
+    {
+        return
+            NIDeque_c<T>::RemoveFromFront(Data);
+    }
+    inline BOOL IsEmpty()
+    {
+        return NIDeque_c<T>::IsEmpty();
+    }
 };
 
 #endif

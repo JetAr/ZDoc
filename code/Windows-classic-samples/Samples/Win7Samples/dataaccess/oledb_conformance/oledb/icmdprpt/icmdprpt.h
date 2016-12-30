@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -68,8 +68,9 @@ const WCHAR wszPropertySet[]=L"WARNING: IDBProperties::GetPropertiesInfo says th
 #define DESCRIPTION_SIZE	256		//Maximum length of description, same as Kagera
 
 //Enum for command properties
-enum EPROPERTYATTR	{INTERFACE_MANDATORY, INTERFACE_NOT_SUPPORTED, INTERFACE_SUPPORTED, 
-					ROWSET_NOT_SUPPORTED, ROWSET_NOT_SETTABLE, ROWSET_SETTABLE, PROPERTY_INVALID};
+enum EPROPERTYATTR	{INTERFACE_MANDATORY, INTERFACE_NOT_SUPPORTED, INTERFACE_SUPPORTED,
+                     ROWSET_NOT_SUPPORTED, ROWSET_NOT_SETTABLE, ROWSET_SETTABLE, PROPERTY_INVALID
+                   };
 
 
 #endif 	//_ICMDPRPT_H_

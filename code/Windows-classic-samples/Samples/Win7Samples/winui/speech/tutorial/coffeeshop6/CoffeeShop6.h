@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   CoffeeShop6.h 
+*   CoffeeShop6.h
 *       This module contains the base definitions for the CoffeeShop6 tutorial
 *       application.
 ******************************************************************************/
@@ -36,7 +36,7 @@ LRESULT             OfficePaneProc( HWND hWnd, UINT message, WPARAM wParam, LPAR
 void                HandleFalseReco(ISpRecoResult *pRecoResult, HWND hWnd);
 LRESULT             ManageEmployeesPaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
 void                ManageEmployeesPaneCleanup( __in_ecount_opt(ulNumTokens) WCHAR** ppszTokenIds,
-                                                CSpDynamicString*  ppcDescriptionString, ULONG ulNumTokens);
+        CSpDynamicString*  ppcDescriptionString, ULONG ulNumTokens);
 LRESULT             ChangeNamePaneProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
 
 
@@ -49,6 +49,6 @@ void                EntryPanePaint( HWND hWnd, LPCTSTR szName );
 void                CounterPanePaint( HWND hWnd, LPCTSTR szCounterDisplay );
 void                OfficePanePaint( HWND hWnd, LPCTSTR szName );
 void                ManageEmployeesPanePaint( HWND hWnd, ULONG ulNumTokens, CSpDynamicString* ppcDescriptionString,
-											  ULONG ulCurToken, UINT iEnumType );
+        ULONG ulCurToken, UINT iEnumType );
 void                ChangeNamePanePaint( HWND hWnd, LPCTSTR szCounterDisplay);
 

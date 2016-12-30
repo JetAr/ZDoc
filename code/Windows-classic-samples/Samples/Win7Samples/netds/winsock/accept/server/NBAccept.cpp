@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 // Module Name: NBAccept.cpp
 //
 // Description:
-//             This file contains the functions for implementing the 
+//             This file contains the functions for implementing the
 // non-blocking version of the accept. It uses many of the common functions
 // defined in Common.cpp.
 
@@ -19,14 +19,14 @@
 /*
     This function is the entry point for the Non-blocking Accept implementation.
     It waits on select for each of the listening/accepted sockets until any
-    event is signalled. If a listening socket gets signalled, it performs 
+    event is signalled. If a listening socket gets signalled, it performs
     accept. If an accepted socket gets signalled, it performs read and echoes
     back the data.
 */
 void NonBlockingAcceptMain()
 {
     // prints a "i am still awake" message every few seconds.
-    const long HEART_BEAT_INTERVAL = 30;     
+    const long HEART_BEAT_INTERVAL = 30;
     PSOCK_INFO pSockInfo,
                pNextSock;
     FD_SET readFDSet;
@@ -34,7 +34,7 @@ void NonBlockingAcceptMain()
     int nReady;
     BOOL bSocketError;
     int nSocksInFDSet;
-    
+
     printf("Entering NonBlockingAcceptMain()\n");
 
     // process the available sockets in the global socket list.
@@ -48,8 +48,8 @@ void NonBlockingAcceptMain()
 
         // include each socket in the FD_SET. For listening sockets,
         // read means a new connection is available.
-        for(pSockInfo = g_AcceptContext.pSockList;  pSockInfo != NULL; 
-                                                    pSockInfo = pSockInfo->next)
+        for(pSockInfo = g_AcceptContext.pSockList;  pSockInfo != NULL;
+                pSockInfo = pSockInfo->next)
         {
             // the FD_SET will take only upto FD_SETSIZE number of sockets.
             // so, we signal an error if we exceed the MAX_CLIENTS which is
@@ -77,7 +77,7 @@ void NonBlockingAcceptMain()
 
         // currently we use only the read set, which signals all the
         // three events required:
-        //      accept for listening sockets, 
+        //      accept for listening sockets,
         //      read for connected sockets and
         //      close for both type of sockets on error.
         nReady = select(0, &readFDSet, NULL, NULL, &interval);
@@ -85,8 +85,8 @@ void NonBlockingAcceptMain()
         {
             printf("ERROR: select failed. Error = %d\n", WSAGetLastError());
 
-            // pause so as not to output frequently in case of repeated errors.        
-            Sleep(3000); 
+            // pause so as not to output frequently in case of repeated errors.
+            Sleep(3000);
             continue;
         }
 
@@ -94,7 +94,7 @@ void NonBlockingAcceptMain()
         if (nReady == 0)
         {
             printf("No connections/data in the last %d seconds. \n",
-                                                HEART_BEAT_INTERVAL);
+                   HEART_BEAT_INTERVAL);
             continue;
         }
 
@@ -102,7 +102,7 @@ void NonBlockingAcceptMain()
         // since nReady indicates how many sockets are in the signalled
         // state, we don't need to loop if we have already processed that
         // many sockets.
-        pSockInfo = g_AcceptContext.pSockList;  
+        pSockInfo = g_AcceptContext.pSockList;
         while (pSockInfo != NULL && nReady > 0)
         {
             // check if this socket is set.
@@ -140,14 +140,14 @@ void NonBlockingAcceptMain()
                     // socket.
                     if (bSocketError)
                     {
-                        // close the socket 
+                        // close the socket
                         closesocket(pSockInfo->sock);
                         printf("Closed socket %d. "
                                "Total Bytes Recd = %d, "
                                "Total Bytes Sent = %d\n",
-                                pSockInfo->sock, 
-                                pSockInfo->nTotalRecd,
-                                pSockInfo->nTotalSent);
+                               pSockInfo->sock,
+                               pSockInfo->nTotalRecd,
+                               pSockInfo->nTotalSent);
 
                         // delete the SockInfo structure and free the memory.
                         pNextSock = pSockInfo->next;

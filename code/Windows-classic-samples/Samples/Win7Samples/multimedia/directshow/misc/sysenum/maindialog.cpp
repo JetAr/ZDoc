@@ -1,4 +1,4 @@
-#include "SysEnum.h"
+﻿#include "SysEnum.h"
 #include "MainDialog.h"
 
 
@@ -15,8 +15,9 @@ typedef struct _category_info
 // The DirectShow reference documentation lists a set of filter categories
 // for which you can enumerate corresponding filters.  See 'Filter Categories'
 // under 'DirectShow->Reference->Constants and GUIDS' in the DirectX docs.
-const CATEGORY_INFO_DS categories[] = {
-    
+const CATEGORY_INFO_DS categories[] =
+{
+
     &CLSID_AudioInputDeviceCategory, TEXT("Audio Capture Devices\0"),
     &CLSID_AudioCompressorCategory,  TEXT("Audio Compressors\0"),
     &CLSID_AudioRendererCategory,    TEXT("Audio Renderers\0"),
@@ -32,80 +33,80 @@ const CATEGORY_INFO_DS categories[] = {
 
 /// MainDialog
 
-MainDialog::MainDialog() 
-  : CBaseDialog(IDD_SYSENUM_DIALOG),
-    m_pSysDevEnum(NULL),
-	m_bShowAllCategories(FALSE)
+MainDialog::MainDialog()
+    : CBaseDialog(IDD_SYSENUM_DIALOG),
+      m_pSysDevEnum(NULL),
+      m_bShowAllCategories(FALSE)
 {
 }
 
 MainDialog::~MainDialog()
 {
-	SAFE_RELEASE(m_pSysDevEnum);
+    SAFE_RELEASE(m_pSysDevEnum);
 }
 
 
 HRESULT MainDialog::OnInitDialog()
 {
-	HRESULT hr;
+    HRESULT hr;
 
-    // Create the filter mapper that will be used for all queries    
+    // Create the filter mapper that will be used for all queries
     hr = CoCreateInstance(
-		CLSID_SystemDeviceEnum, 
-        NULL, CLSCTX_INPROC, IID_ICreateDevEnum, 
-        (void **) &m_pSysDevEnum);
+             CLSID_SystemDeviceEnum,
+             NULL, CLSCTX_INPROC, IID_ICreateDevEnum,
+             (void **) &m_pSysDevEnum);
 
 
-	if (SUCCEEDED(hr))
-	{
-		InitializeControls();
-	}
+    if (SUCCEEDED(hr))
+    {
+        InitializeControls();
+    }
 
-	FillCategoryList();
+    FillCategoryList();
 
-	return hr;
+    return hr;
 }
 
 
 INT_PTR MainDialog::OnCommand(HWND hControl, WORD idControl, WORD msg)
 {
-	switch (idControl)
-	{
-	case IDC_LIST_DEVICES:
-		if (msg == LBN_SELCHANGE)
-		{
-			OnSelchangeListDevices();
-		}
-		break;
+    switch (idControl)
+    {
+    case IDC_LIST_DEVICES:
+        if (msg == LBN_SELCHANGE)
+        {
+            OnSelchangeListDevices();
+        }
+        break;
 
-	case IDC_LIST_FILTERS:
-		if (msg == LBN_SELCHANGE)
-		{
-			OnSelchangeListFilters();
-		}
-		break;
+    case IDC_LIST_FILTERS:
+        if (msg == LBN_SELCHANGE)
+        {
+            OnSelchangeListFilters();
+        }
+        break;
 
-	case IDC_CHECK_SHOWALL:
-		if (msg == BN_CLICKED)
-		{
-			OnCheckShowall();
-		}
-		break;
-	}
+    case IDC_CHECK_SHOWALL:
+        if (msg == BN_CLICKED)
+        {
+            OnCheckShowall();
+        }
+        break;
+    }
 
-	return 1;
+    return 1;
 }
 
 ///////////////////////////////////////////////////////////////////////
 // Name: InitializeControls
-// Desc: Associates the control wrapper classes with the 
+// Desc: Associates the control wrapper classes with the
 //       correct windows for the control.
 ///////////////////////////////////////////////////////////////////////
 
 void MainDialog::InitializeControls()
 {
-	m_FilterList.SetWindow(GetDlgItem(IDC_LIST_FILTERS));
-	m_DeviceList.SetWindow(GetDlgItem(IDC_LIST_DEVICES));
+    m_FilterList.SetWindow(GetDlgItem(IDC_LIST_FILTERS));
+    m_DeviceList.SetWindow(GetDlgItem(IDC_LIST_DEVICES));
 }
 
 
@@ -117,7 +118,7 @@ void MainDialog::FillCategoryList()
 
     if (m_bShowAllCategories)
     {
-        // Emulate the behavior of GraphEdit by enumerating all 
+        // Emulate the behavior of GraphEdit by enumerating all
         // categories in the system
         DisplayFullCategorySet();
     }
@@ -139,14 +140,14 @@ void MainDialog::FillCategoryList()
 
 void MainDialog::OnSelchangeListDevices()
 {
-    HRESULT hr;    
+    HRESULT hr;
     IEnumMoniker *pEnumCat = NULL;
 
     // Get the currently selected category name
     UINT nItem;
     const CLSID *clsid;
-    
-	m_DeviceList.GetCurrentSelection(&nItem);
+
+    m_DeviceList.GetCurrentSelection(&nItem);
 
     if (m_bShowAllCategories)
     {
@@ -163,63 +164,63 @@ void MainDialog::OnSelchangeListDevices()
     // If the CLSID wasn't allocated earlier, then fail
     if (clsid != NULL)
     {
-		//
-		// WARNING!
-		//
-		// Some third-party filters throw an exception (int 3) during enumeration
-		// on Debug builds, often due to heap corruption in RtlFreeHeap().
-		// Sometimes it is done intentionally to prevent reverse engineering.
-		// 
-		// This is not an issue on Release builds.
-		//
+        //
+        // WARNING!
+        //
+        // Some third-party filters throw an exception (int 3) during enumeration
+        // on Debug builds, often due to heap corruption in RtlFreeHeap().
+        // Sometimes it is done intentionally to prevent reverse engineering.
+        //
+        // This is not an issue on Release builds.
+        //
 
-		// Enumerate all filters of the selected category  
-		hr = m_pSysDevEnum->CreateClassEnumerator(*clsid, &pEnumCat, 0);
+        // Enumerate all filters of the selected category
+        hr = m_pSysDevEnum->CreateClassEnumerator(*clsid, &pEnumCat, 0);
 
-		// Enumerate all filters using the category enumerator
-		if (SUCCEEDED(hr))
-		{
-			hr = EnumFilters(pEnumCat);
-		}
+        // Enumerate all filters using the category enumerator
+        if (SUCCEEDED(hr))
+        {
+            hr = EnumFilters(pEnumCat);
+        }
 
-		// Go ahead and select the first filter in the list, if it exists
-		if (SUCCEEDED(hr) && m_FilterList.Count() > 0)
-		{
-			m_FilterList.Select(0);
-			OnSelchangeListFilters();
-		}
-	}
+        // Go ahead and select the first filter in the list, if it exists
+        if (SUCCEEDED(hr) && m_FilterList.Count() > 0)
+        {
+            m_FilterList.Select(0);
+            OnSelchangeListFilters();
+        }
+    }
     SAFE_RELEASE(pEnumCat);
 }
 
 
 void MainDialog::OnSelchangeListFilters()
 {
-	const size_t FILE_NAME_LEN = 512;
+    const size_t FILE_NAME_LEN = 512;
 
-	TCHAR szFileName[FILE_NAME_LEN];
+    TCHAR szFileName[FILE_NAME_LEN];
     const CLSID *clsid;
 
     // Get the currently selected category name
     UINT nItem;
-	m_FilterList.GetCurrentSelection(&nItem);
-    
+    m_FilterList.GetCurrentSelection(&nItem);
+
     // Read the CLSID pointer from the list box's item data
     clsid = (CLSID *) m_FilterList.GetItem(nItem);
 
     // Find the filter filename in the registry (by CLSID)
     if (clsid != 0)
-	{
-		HRESULT hr = GetFilenameByCLSID(clsid, szFileName, FILE_NAME_LEN);
-		if (SUCCEEDED(hr))
-		{
-			SetDlgItemText(IDC_STATIC_FILENAME, szFileName);
-		}
-		else
-		{
-			SetDlgItemText(IDC_STATIC_FILENAME, TEXT("<Unknown>"));
-		}
-	}
+    {
+        HRESULT hr = GetFilenameByCLSID(clsid, szFileName, FILE_NAME_LEN);
+        if (SUCCEEDED(hr))
+        {
+            SetDlgItemText(IDC_STATIC_FILENAME, szFileName);
+        }
+        else
+        {
+            SetDlgItemText(IDC_STATIC_FILENAME, TEXT("<Unknown>"));
+        }
+    }
 }
 
 
@@ -239,94 +240,94 @@ void MainDialog::DisplayFullCategorySet()
 
     IEnumMoniker *pEmCat = 0;
     ICreateDevEnum *pCreateDevEnum = NULL;
-	IPropertyBag *pPropBag = NULL;
+    IPropertyBag *pPropBag = NULL;
 
     // Create the system device enumerator.
     hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER,
                           IID_ICreateDevEnum, (void**)&pCreateDevEnum);
 
-	if (SUCCEEDED(hr))
-	{
-		// Use the meta-category that contains a list of all categories.
-		// This emulates the behavior of GraphEdit.
-		hr = pCreateDevEnum->CreateClassEnumerator(
-							CLSID_ActiveMovieCategories, &pEmCat, 0);
+    if (SUCCEEDED(hr))
+    {
+        // Use the meta-category that contains a list of all categories.
+        // This emulates the behavior of GraphEdit.
+        hr = pCreateDevEnum->CreateClassEnumerator(
+                 CLSID_ActiveMovieCategories, &pEmCat, 0);
 
-		if (hr == S_FALSE)
-		{
-			// If CreateClassEnumerator returns S_OK, it means this
-			// category does not exist or is empty. For the meta-category,
-			// that would qualify as a failure!
-			hr = E_FAIL;
-		}
-	}
+        if (hr == S_FALSE)
+        {
+            // If CreateClassEnumerator returns S_OK, it means this
+            // category does not exist or is empty. For the meta-category,
+            // that would qualify as a failure!
+            hr = E_FAIL;
+        }
+    }
 
-	// Enumerate over every category and get the category CLSID and description.
+    // Enumerate over every category and get the category CLSID and description.
     if (SUCCEEDED(hr))
     {
         IMoniker *pMCat = NULL;
 
         while (S_OK == pEmCat->Next(1, &pMCat, NULL))
         {
-			VARIANT varCatName;
-			VariantInit(&varCatName);
+            VARIANT varCatName;
+            VariantInit(&varCatName);
 
-			VARIANT varCatClsid;
-			VariantInit(&varCatClsid);
+            VARIANT varCatClsid;
+            VariantInit(&varCatClsid);
 
-			CLSID clsidCat;
+            CLSID clsidCat;
 
             // Associate moniker with a file
             hr = pMCat->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pPropBag);
-			
-			// Read CLSID string from property bag
-			if (SUCCEEDED(hr))
-			{
-				hr = pPropBag->Read(L"CLSID", &varCatClsid, 0);
-			}
 
-			// Convert to a CLSID
-			if (SUCCEEDED(hr))
-			{
-				hr = CLSIDFromString(varCatClsid.bstrVal, &clsidCat);
-			}
+            // Read CLSID string from property bag
+            if (SUCCEEDED(hr))
+            {
+                hr = pPropBag->Read(L"CLSID", &varCatClsid, 0);
+            }
 
-			// Read the category name. If that fails, use the CLSID string.
-			if (SUCCEEDED(hr))
-			{
-				HRESULT hrTmp = pPropBag->Read(L"FriendlyName", &varCatName, 0);
+            // Convert to a CLSID
+            if (SUCCEEDED(hr))
+            {
+                hr = CLSIDFromString(varCatClsid.bstrVal, &clsidCat);
+            }
 
-				// Add category name and CLSID to list box
-				if(SUCCEEDED(hrTmp))
-				{
-					hr = AddFilterCategory(varCatName.bstrVal, clsidCat);
-				}
-				else
-				{
-					hr = AddFilterCategory(varCatClsid.bstrVal, clsidCat);
-				}
-				nClasses++;
-			}
+            // Read the category name. If that fails, use the CLSID string.
+            if (SUCCEEDED(hr))
+            {
+                HRESULT hrTmp = pPropBag->Read(L"FriendlyName", &varCatName, 0);
 
-			SAFE_RELEASE(pMCat);
-			SAFE_RELEASE(pPropBag);
-			VariantClear(&varCatName);
-			VariantClear(&varCatClsid);
+                // Add category name and CLSID to list box
+                if(SUCCEEDED(hrTmp))
+                {
+                    hr = AddFilterCategory(varCatName.bstrVal, clsidCat);
+                }
+                else
+                {
+                    hr = AddFilterCategory(varCatClsid.bstrVal, clsidCat);
+                }
+                nClasses++;
+            }
 
-			if (FAILED(hr))
-			{
-				break;
-			}
+            SAFE_RELEASE(pMCat);
+            SAFE_RELEASE(pPropBag);
+            VariantClear(&varCatName);
+            VariantClear(&varCatClsid);
+
+            if (FAILED(hr))
+            {
+                break;
+            }
         } // for loop
     }
 
     // Update listbox title with number of classes
-	if (SUCCEEDED(hr))
-	{
-	    SetNumClasses(nClasses);
-	}
+    if (SUCCEEDED(hr))
+    {
+        SetNumClasses(nClasses);
+    }
 
-	SAFE_RELEASE(pEmCat);
+    SAFE_RELEASE(pEmCat);
     SAFE_RELEASE(pCreateDevEnum);
 
 }
@@ -354,23 +355,23 @@ HRESULT MainDialog::EnumFilters(IEnumMoniker *pEnumCat)
     while (pEnumCat->Next(1, &pMoniker, NULL) == S_OK)
     {
         IPropertyBag *pPropBag = NULL;
-		CLSID clsidFilter;
+        CLSID clsidFilter;
 
-		VARIANT varName;
+        VARIANT varName;
         VARIANT varFilterClsid;
 
-		VariantInit(&varName);
-		VariantInit(&varFilterClsid);
+        VariantInit(&varName);
+        VariantInit(&varFilterClsid);
 
         // Associate moniker with a file
-        hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, 
-                                    (void **)&pPropBag);
+        hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag,
+                                     (void **)&pPropBag);
 
-		// Read filter name from property bag
-		if (SUCCEEDED(hr))
-		{
-			hr = pPropBag->Read(L"FriendlyName", &varName, 0);
-		}
+        // Read filter name from property bag
+        if (SUCCEEDED(hr))
+        {
+            hr = pPropBag->Read(L"FriendlyName", &varName, 0);
+        }
 
         // Read filter's CLSID from property bag.  This CLSID string will be
         // converted to a binary CLSID and passed to AddFilter(), which will
@@ -379,10 +380,10 @@ HRESULT MainDialog::EnumFilters(IEnumMoniker *pEnumCat)
         // the listbox, we'll read the stored CLSID, convert it to a string,
         // and use it to find the filter's filename in the registry.
 
-		if (SUCCEEDED(hr))
-		{
-			// Read CLSID string from property bag
-			hr = pPropBag->Read(L"CLSID", &varFilterClsid, 0);
+        if (SUCCEEDED(hr))
+        {
+            // Read CLSID string from property bag
+            hr = pPropBag->Read(L"CLSID", &varFilterClsid, 0);
 
             // Add filter name and CLSID to listbox
             if (SUCCEEDED(hr))
@@ -391,20 +392,20 @@ HRESULT MainDialog::EnumFilters(IEnumMoniker *pEnumCat)
             }
             else if (hr == E_PROP_ID_UNSUPPORTED)
             {
-                clsidFilter = GUID_NULL; // No CLSID is listed. 
+                clsidFilter = GUID_NULL; // No CLSID is listed.
                 hr = S_OK;
             }
         }
 
-		// Add filter name and filename to listbox
-		if(SUCCEEDED(hr))
-		{
-	        nFilters++;
-			AddFilter(varName.bstrVal, clsidFilter);
-		}
+        // Add filter name and filename to listbox
+        if(SUCCEEDED(hr))
+        {
+            nFilters++;
+            AddFilter(varName.bstrVal, clsidFilter);
+        }
 
-		VariantClear(&varName);
-		VariantClear(&varFilterClsid);
+        VariantClear(&varName);
+        VariantClear(&varFilterClsid);
 
         // Cleanup interfaces
         SAFE_RELEASE(pPropBag);
@@ -421,34 +422,34 @@ void MainDialog::SetNumClasses(int nClasses)
     TCHAR szClasses[64];
 
     HRESULT hr = StringCchPrintf(
-		szClasses, 
-		NUMELMS(szClasses), 
-		TEXT("System Device Classes (%d found)\0"), 
-		nClasses
-	);
+                     szClasses,
+                     NUMELMS(szClasses),
+                     TEXT("System Device Classes (%d found)\0"),
+                     nClasses
+                 );
 
-	SetDlgItemText(IDC_STATIC_CLASSES, szClasses);
+    SetDlgItemText(IDC_STATIC_CLASSES, szClasses);
 }
 
 void MainDialog::SetNumFilters(int nFilters)
 {
-    TCHAR szFilters[64]={0};
+    TCHAR szFilters[64]= {0};
 
     HRESULT hr;
-	hr = StringCchPrintf(szFilters, NUMELMS(szFilters), 
-			TEXT("Registered Filters (%d found)\0"), nFilters);
+    hr = StringCchPrintf(szFilters, NUMELMS(szFilters),
+                         TEXT("Registered Filters (%d found)\0"), nFilters);
 
-	if (SUCCEEDED(hr))
-	{
-		SetDlgItemText(IDC_STATIC_FILTERS, szFilters);
-	}
+    if (SUCCEEDED(hr))
+    {
+        SetDlgItemText(IDC_STATIC_FILTERS, szFilters);
+    }
 }
 
 
 void MainDialog::ClearDeviceList(void)
 {
     CLSID *pStoredId = NULL;
-    
+
     UINT nCount = m_DeviceList.Count();
 
     // Delete any CLSID pointers that were stored in the listbox item data
@@ -471,7 +472,7 @@ void MainDialog::ClearDeviceList(void)
 void MainDialog::ClearFilterList(void)
 {
     CLSID *pStoredId = NULL;
-    
+
     UINT nCount = m_FilterList.Count();
 
     // Delete any CLSID pointers that were stored in the listbox item data
@@ -494,43 +495,43 @@ void MainDialog::ClearFilterList(void)
 
 HRESULT MainDialog::AddFilterCategory(const TCHAR *szCatDesc, const GUID& CatGuid)
 {
-    // Allocate a new CLSID, whose pointer will be stored in 
+    // Allocate a new CLSID, whose pointer will be stored in
     // the listbox.  When the listbox is cleared, these will be deleted.
     CLSID *pclsid = new CLSID;
 
     if (!pclsid)
-	{
-		return E_OUTOFMEMORY;
-	}
+    {
+        return E_OUTOFMEMORY;
+    }
 
-	*pclsid = CatGuid;
-	
+    *pclsid = CatGuid;
+
 
     // Add the category name and a pointer to its CLSID to the list box
-	BOOL result = m_DeviceList.AddItem(szCatDesc, pclsid);
+    BOOL result = m_DeviceList.AddItem(szCatDesc, pclsid);
 
-	return (result ? S_OK : E_FAIL);
+    return (result ? S_OK : E_FAIL);
 }
 
 
 HRESULT MainDialog::AddFilter(const TCHAR *szFilterName, const GUID& CatGuid)
 {
-    // Allocate a new CLSID, whose pointer will be stored in 
+    // Allocate a new CLSID, whose pointer will be stored in
     // the listbox.  When the listbox is cleared, these will be deleted.
     CLSID *pclsid = new CLSID;
 
-	if (!pclsid)
-	{
-		return E_OUTOFMEMORY;
-	}
+    if (!pclsid)
+    {
+        return E_OUTOFMEMORY;
+    }
 
     // Copy the CLSID.
     memcpy(pclsid, &CatGuid, sizeof(GUID));
 
     // Add the category name and a pointer to its CLSID to the list box
-	BOOL result = m_FilterList.AddItem(szFilterName, pclsid);
+    BOOL result = m_FilterList.AddItem(szFilterName, pclsid);
 
-	return (result ? S_OK : E_FAIL);
+    return (result ? S_OK : E_FAIL);
 }
 
 

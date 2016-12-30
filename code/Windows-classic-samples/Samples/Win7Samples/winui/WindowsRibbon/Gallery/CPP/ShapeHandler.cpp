@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,10 +24,10 @@ extern CRenderer   g_renderer;
 //
 //
 STDMETHODIMP CShapeHandler::Execute(UINT nCmdID,
-                   UI_EXECUTIONVERB verb, 
-                   __in_opt const PROPERTYKEY* key,
-                   __in_opt const PROPVARIANT* ppropvarValue,
-                   __in_opt IUISimplePropertySet* pCommandExecutionProperties)
+                                    UI_EXECUTIONVERB verb,
+                                    __in_opt const PROPERTYKEY* key,
+                                    __in_opt const PROPVARIANT* ppropvarValue,
+                                    __in_opt IUISimplePropertySet* pCommandExecutionProperties)
 {
     UNREFERENCED_PARAMETER(nCmdID);
     UNREFERENCED_PARAMETER(pCommandExecutionProperties);
@@ -42,7 +42,7 @@ STDMETHODIMP CShapeHandler::Execute(UINT nCmdID,
     switch (verb)
     {
     case UI_EXECUTIONVERB_PREVIEW:
-        // Show a preview of a new shape.    
+        // Show a preview of a new shape.
         param.eShapeType = (SHAPE_TYPE)selected;
         g_renderer.UpdateRenderParam(param);
         hr = S_OK;
@@ -56,7 +56,7 @@ STDMETHODIMP CShapeHandler::Execute(UINT nCmdID,
         break;
     case UI_EXECUTIONVERB_EXECUTE:
         if ( key && *key == UI_PKEY_SelectedItem)
-        {      
+        {
             // Update the renderer with the newly-selected shape.
             param.eShapeType = (SHAPE_TYPE)selected;
             g_renderer.UpdateRenderParam(param);
@@ -77,9 +77,9 @@ STDMETHODIMP CShapeHandler::Execute(UINT nCmdID,
 //
 //
 STDMETHODIMP CShapeHandler::UpdateProperty(UINT nCmdID,
-                              __in REFPROPERTYKEY key,
-                              __in_opt const PROPVARIANT* ppropvarCurrentValue,
-                              __out PROPVARIANT* ppropvarNewValue)
+        __in REFPROPERTYKEY key,
+        __in_opt const PROPVARIANT* ppropvarCurrentValue,
+        __out PROPVARIANT* ppropvarNewValue)
 {
     UNREFERENCED_PARAMETER(nCmdID);
 
@@ -217,7 +217,7 @@ HRESULT CShapeHandler::CreateInstance(__deref_out CShapeHandler **ppHandler)
     {
         return E_POINTER;
     }
-    
+
     *ppHandler = NULL;
 
     HRESULT hr = S_OK;
@@ -227,7 +227,7 @@ HRESULT CShapeHandler::CreateInstance(__deref_out CShapeHandler **ppHandler)
     if (pHandler != NULL)
     {
         *ppHandler = pHandler;
-        
+
     }
     else
     {
@@ -269,7 +269,7 @@ STDMETHODIMP CShapeHandler::QueryInterface(REFIID iid, void** ppv)
     {
         *ppv = static_cast<IUICommandHandler*>(this);
     }
-    else 
+    else
     {
         *ppv = NULL;
         return E_NOINTERFACE;

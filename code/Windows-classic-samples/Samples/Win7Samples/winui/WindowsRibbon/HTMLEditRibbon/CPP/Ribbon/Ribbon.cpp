@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@
 #include "MRU.h"
 
 /////////////////////////////////////////////////////////////////////////////
-// CRibbonBar 
+// CRibbonBar
 
 BEGIN_MESSAGE_MAP(CRibbonBar, CToolBar)
     //{{AFX_MSG_MAP(CRibbonBar)
@@ -53,14 +53,14 @@ public:
 
         *ppApplication = NULL;
         HRESULT hr = S_OK;
-       
+
         CApplication* pApplication = new CApplication();
 
         if (pApplication != NULL)
         {
             pApplication->m_pMainFrame = pFrame;
             // pApplication->m_cRef is 1.
-            *ppApplication = pApplication;  
+            *ppApplication = pApplication;
         }
         else
         {
@@ -105,7 +105,7 @@ public:
         {
             *ppv = static_cast<IUICommandHandler*>(this);
         }
-        else 
+        else
         {
             *ppv = NULL;
             return E_NOINTERFACE;
@@ -116,11 +116,11 @@ public:
     }
 
     // IUIApplication methods.
-    STDMETHODIMP OnViewChanged(UINT32 /*nViewID*/, 
-        __in UI_VIEWTYPE /*typeID*/, 
-        __in IUnknown* pView, 
-        UI_VIEWVERB verb, 
-        INT32 /*uReasonCode*/)
+    STDMETHODIMP OnViewChanged(UINT32 /*nViewID*/,
+                               __in UI_VIEWTYPE /*typeID*/,
+                               __in IUnknown* pView,
+                               UI_VIEWVERB verb,
+                               INT32 /*uReasonCode*/)
     {
         HRESULT hr;
 
@@ -152,18 +152,18 @@ public:
         return S_OK;
     }
 
-    STDMETHODIMP OnCreateUICommand(UINT32 /*nCmdID*/, 
-       __in UI_COMMANDTYPE /*typeID*/,
-       __deref_out IUICommandHandler** ppCommandHandler)
+    STDMETHODIMP OnCreateUICommand(UINT32 /*nCmdID*/,
+                                   __in UI_COMMANDTYPE /*typeID*/,
+                                   __deref_out IUICommandHandler** ppCommandHandler)
     {
         // This application uses one command handler for all ribbon commands.
         return QueryInterface(IID_PPV_ARGS(ppCommandHandler));
     }
 
-    STDMETHODIMP OnDestroyUICommand(UINT32 /*commandId*/, 
-        __in UI_COMMANDTYPE /*typeID*/,  
-        __in_opt  IUICommandHandler* /*commandHandler*/)
-    {        
+    STDMETHODIMP OnDestroyUICommand(UINT32 /*commandId*/,
+                                    __in UI_COMMANDTYPE /*typeID*/,
+                                    __in_opt  IUICommandHandler* /*commandHandler*/)
+    {
         return E_NOTIMPL;
     }
 
@@ -171,53 +171,53 @@ public:
 
     // User action callback, with transient execution parameters.
     STDMETHODIMP Execute(UINT nCmdID,
-        UI_EXECUTIONVERB /*verb*/, 
-        __in_opt const PROPERTYKEY* key,
-        __in_opt const PROPVARIANT* ppropvarValue,
-        __in_opt IUISimplePropertySet* /*pCommandExecutionProperties*/)
-    {       
+                         UI_EXECUTIONVERB /*verb*/,
+                         __in_opt const PROPERTYKEY* key,
+                         __in_opt const PROPVARIANT* ppropvarValue,
+                         __in_opt IUISimplePropertySet* /*pCommandExecutionProperties*/)
+    {
         HRESULT hr = S_OK;
         switch(nCmdID)
         {
         case IDC_FONT:
+        {
+            if (key != NULL && ppropvarValue != NULL)
             {
-                if (key != NULL && ppropvarValue != NULL)
+                IPropertyStore* pPropertyStore = NULL;
+                UIPropertyToInterface(*key, *ppropvarValue, &pPropertyStore);
+                if (pPropertyStore)
                 {
-                    IPropertyStore* pPropertyStore = NULL;
-                    UIPropertyToInterface(*key, *ppropvarValue, &pPropertyStore);
-                    if (pPropertyStore)
-                    {
-                        // Set font to the HTML editor.
-                        hr = SetFont(m_pMainFrame, pPropertyStore);
-                        pPropertyStore->Release();
-                    }
+                    // Set font to the HTML editor.
+                    hr = SetFont(m_pMainFrame, pPropertyStore);
+                    pPropertyStore->Release();
                 }
-                break;
             }
+            break;
+        }
         case IDC_MRULIST:
+        {
+            if (key != NULL && UI_PKEY_SelectedItem == *key)
             {
-                if (key != NULL && UI_PKEY_SelectedItem == *key)
+                UINT uSelectedMRUItem = 0xffffffff;
+                if (ppropvarValue != NULL && SUCCEEDED(UIPropertyToUInt32(*key, *ppropvarValue, &uSelectedMRUItem)))
                 {
-                    UINT uSelectedMRUItem = 0xffffffff;
-                    if (ppropvarValue != NULL && SUCCEEDED(UIPropertyToUInt32(*key, *ppropvarValue, &uSelectedMRUItem)))
-                    {
-                        ASSERT(uSelectedMRUItem < RECENT_FILE_COUNT);
-                        ::SendMessage(*m_pMainFrame, WM_COMMAND, uSelectedMRUItem + ID_FILE_MRU_FILE1, 0);
-                    }
+                    ASSERT(uSelectedMRUItem < RECENT_FILE_COUNT);
+                    ::SendMessage(*m_pMainFrame, WM_COMMAND, uSelectedMRUItem + ID_FILE_MRU_FILE1, 0);
                 }
-                break;
             }
+            break;
+        }
         default:
             ::SendMessage(*m_pMainFrame, WM_COMMAND, nCmdID, 0);
         }
         return hr;
     }
 
-    STDMETHODIMP UpdateProperty(UINT32 nCmdID, 
-        __in REFPROPERTYKEY key,
-        __in_opt  const PROPVARIANT *currentValue,
-        __out PROPVARIANT *newValue) 
-    {   
+    STDMETHODIMP UpdateProperty(UINT32 nCmdID,
+                                __in REFPROPERTYKEY key,
+                                __in_opt  const PROPVARIANT *currentValue,
+                                __out PROPVARIANT *newValue)
+    {
         HRESULT hr = E_NOTIMPL;
         if(UI_PKEY_Enabled == key)
         {
@@ -269,7 +269,7 @@ public:
 
 private:
     CApplication()
-        : m_cRef(1) 
+        : m_cRef(1)
         , m_pMainFrame(NULL)
     {
     }
@@ -302,12 +302,12 @@ __checkReturn HRESULT InitRibbon(__in CMainFrame* pMainFrame, __deref_out_opt IU
     {
         return hr;
     }
-    
+
     // Instantiate the CApplication object.
     CApplication* pAppObject = NULL;
     IUIApplication* pApplication = NULL;
     hr = CApplication::CreateInstance(pMainFrame, &pAppObject);
-    
+
     if (FAILED(hr))
     {
         goto done;
@@ -315,7 +315,7 @@ __checkReturn HRESULT InitRibbon(__in CMainFrame* pMainFrame, __deref_out_opt IU
 
 #pragma warning( disable : 6011)    // pAppObject cannot be NULL.
     hr = pAppObject->QueryInterface(IID_PPV_ARGS(&pApplication));
-#pragma warning( default : 6011)    
+#pragma warning( default : 6011)
 
     if (FAILED(hr))
     {
@@ -357,7 +357,7 @@ done:
     return hr;
 }
 
-void DestroyRibbon(__in IUnknown* pFramework) 
+void DestroyRibbon(__in IUnknown* pFramework)
 {
     IUIFramework* pUIFramework;
     pFramework->QueryInterface(IID_PPV_ARGS(&pUIFramework));

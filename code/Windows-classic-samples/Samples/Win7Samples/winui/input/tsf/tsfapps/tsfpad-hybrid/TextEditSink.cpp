@@ -1,4 +1,4 @@
-#include "private.h"
+﻿#include "private.h"
 #include "TextEditSink.h"
 #include "TextEditor.h"
 #include "DisplayAttribute.h"
@@ -20,7 +20,7 @@ STDAPI CTextEditSink::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextEditSink))
+            IsEqualIID(riid, IID_ITfTextEditSink))
     {
         *ppvObj = (ITfTextEditSink *)this;
     }
@@ -79,9 +79,9 @@ STDAPI CTextEditSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEdi
     {
         IEnumTfRanges *pEnum;
         if (SUCCEEDED(pEditRecord->GetTextAndPropertyUpdates(TF_GTP_INCL_TEXT,
-                                                             pDispAttrProps->GetPropTablePointer(),
-                                                             pDispAttrProps->Count(),
-                                                             &pEnum)) && pEnum)
+                      pDispAttrProps->GetPropTablePointer(),
+                      pDispAttrProps->Count(),
+                      &pEnum)) && pEnum)
         {
             ITfRange *pRange;
             if (pEnum->Next(1, &pRange, NULL) == S_OK)
@@ -92,12 +92,12 @@ STDAPI CTextEditSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEdi
                 _pEditor->ClearCompositionRenderInfo();
 
                 // We read the display attribute for entire range.
-                // It could be optimized by filtering the only delta with ITfEditRecord interface. 
+                // It could be optimized by filtering the only delta with ITfEditRecord interface.
                 ITfRange *pRangeEntire = NULL;
                 ITfRange *pRangeEnd = NULL;
                 if (SUCCEEDED(pic->GetStart(ecReadOnly, &pRangeEntire)) &&
-                    SUCCEEDED(pic->GetEnd(ecReadOnly, &pRangeEnd)) &&
-                    SUCCEEDED(pRangeEntire->ShiftEndToRange(ecReadOnly, pRangeEnd, TF_ANCHOR_END)))
+                        SUCCEEDED(pic->GetEnd(ecReadOnly, &pRangeEnd)) &&
+                        SUCCEEDED(pRangeEntire->ShiftEndToRange(ecReadOnly, pRangeEnd, TF_ANCHOR_END)))
                 {
                     IEnumTfRanges *pEnumRanges;
                     ITfReadOnlyProperty *pProp = NULL;
@@ -130,7 +130,7 @@ STDAPI CTextEditSink::OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEdi
                     pRangeEntire->Release();
                 if (pRangeEnd)
                     pRangeEnd->Release();
- 
+
             }
             pEnum->Release();
         }

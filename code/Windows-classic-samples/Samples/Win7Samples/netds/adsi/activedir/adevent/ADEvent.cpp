@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
 
    File:          ADEvent.cpp
 
-   Description:   
+   Description:
 
 **************************************************************************/
 
@@ -43,8 +43,8 @@ BOOL DeleteEntireKey(HKEY hKey, LPTSTR pszSubKey);
 **************************************************************************/
 
 // {08698521-653C-4386-B206-DFA3C0F904E5}
-DEFINE_GUID(CLSID_AdminEventHandler, 
-0x8698521, 0x653c, 0x4386, 0xb2, 0x6, 0xdf, 0xa3, 0xc0, 0xf9, 0x4, 0xe5);
+DEFINE_GUID(CLSID_AdminEventHandler,
+            0x8698521, 0x653c, 0x4386, 0xb2, 0x6, 0xdf, 0xa3, 0xc0, 0xf9, 0x4, 0xe5);
 
 HINSTANCE   g_hInst;
 UINT        g_DllRefCount;
@@ -57,8 +57,8 @@ TCHAR       g_szMainTitle[] = TEXT("Sample AD Admin Notification Handler");
 
 **************************************************************************/
 
-extern "C" BOOL WINAPI DllMain(  HINSTANCE hInstance, 
-                                 DWORD dwReason, 
+extern "C" BOOL WINAPI DllMain(  HINSTANCE hInstance,
+                                 DWORD dwReason,
                                  LPVOID lpReserved)
 {
     switch(dwReason)
@@ -67,9 +67,9 @@ extern "C" BOOL WINAPI DllMain(  HINSTANCE hInstance,
         g_hInst = hInstance;
         break;
     }
-   
+
     return TRUE;
-}                                 
+}
 
 /**************************************************************************
 
@@ -88,8 +88,8 @@ STDAPI DllCanUnloadNow(void)
 
 **************************************************************************/
 
-STDAPI DllGetClassObject(   REFCLSID rclsid, 
-                            REFIID riid, 
+STDAPI DllGetClassObject(   REFCLSID rclsid,
+                            REFIID riid,
                             LPVOID *ppReturn)
 {
     *ppReturn = NULL;
@@ -99,19 +99,19 @@ STDAPI DllGetClassObject(   REFCLSID rclsid,
     {
         return CLASS_E_CLASSNOTAVAILABLE;
     }
-       
+
     //create a CClassFactory object and check it for validity
     CClassFactory *pClassFactory = new CClassFactory();
     if(NULL == pClassFactory)
     {
         return E_OUTOFMEMORY;
     }
-       
+
     //get the QueryInterface return for our return value
     HRESULT hr = pClassFactory->QueryInterface(riid, ppReturn);
 
-    //call Release to decement the ref count - creating the object set it to one 
-    //and QueryInterface incremented it - since its being used externally (not by 
+    //call Release to decement the ref count - creating the object set it to one
+    //and QueryInterface incremented it - since its being used externally (not by
     //us), we only want the ref count to be 1
     pClassFactory->Release();
 
@@ -131,7 +131,7 @@ typedef struct _REGSTRUCT
     LPTSTR lpszSubKey;
     LPTSTR lpszValueName;
     LPTSTR lpszData;
-}REGSTRUCT, *LPREGSTRUCT;
+} REGSTRUCT, *LPREGSTRUCT;
 
 STDAPI DllRegisterServer(void)
 {
@@ -168,7 +168,8 @@ STDAPI DllRegisterServer(void)
     REGSTRUCT ClsidEntries[] = {HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s"),                                   NULL,                   g_szMainTitle,
                                 HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s\\InprocServer32"),                   NULL,                   TEXT("%s"),
                                 HKEY_CLASSES_ROOT,   TEXT("CLSID\\%s\\InprocServer32"),                   TEXT("ThreadingModel"), TEXT("Apartment"),
-                                NULL,                NULL,                                                NULL,                   NULL};
+                                NULL,                NULL,                                                NULL,                   NULL
+                               };
 
     for(i = 0; ClsidEntries[i].hRootKey; i++)
     {
@@ -184,7 +185,7 @@ STDAPI DllRegisterServer(void)
                                     NULL,
                                     &hKey,
                                     &dwDisp);
-           
+
         if(NOERROR == lResult)
         {
             TCHAR szData[MAX_PATH] = TEXT("");
@@ -278,8 +279,8 @@ CClassFactory::~CClassFactory()
 
 **************************************************************************/
 
-STDMETHODIMP CClassFactory::QueryInterface(  REFIID riid, 
-                                             LPVOID FAR * ppReturn)
+STDMETHODIMP CClassFactory::QueryInterface(  REFIID riid,
+        LPVOID FAR * ppReturn)
 {
     *ppReturn = NULL;
 
@@ -287,11 +288,11 @@ STDMETHODIMP CClassFactory::QueryInterface(  REFIID riid,
     {
         *ppReturn = (LPUNKNOWN)(LPCLASSFACTORY)this;
     }
-       
+
     if(IsEqualIID(riid, IID_IClassFactory))
     {
         *ppReturn = (LPCLASSFACTORY)this;
-    }   
+    }
 
     if(*ppReturn)
     {
@@ -300,7 +301,7 @@ STDMETHODIMP CClassFactory::QueryInterface(  REFIID riid,
     }
 
     return E_NOINTERFACE;
-}                                             
+}
 
 /**************************************************************************
 
@@ -327,7 +328,7 @@ STDMETHODIMP_(DWORD) CClassFactory::Release()
         delete this;
         return 0;
     }
-       
+
     return m_ObjRefCount;
 }
 
@@ -337,9 +338,9 @@ STDMETHODIMP_(DWORD) CClassFactory::Release()
 
 **************************************************************************/
 
-STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown, 
-                                             REFIID riid, 
-                                             LPVOID FAR * ppObject)
+STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown,
+        REFIID riid,
+        LPVOID FAR * ppObject)
 {
     *ppObject = NULL;
 
@@ -355,7 +356,7 @@ STDMETHODIMP CClassFactory::CreateInstance(  LPUNKNOWN pUnknown,
     {
         return E_OUTOFMEMORY;
     }
-      
+
     //get the QueryInterface return for our return value
     HRESULT hr = pAdminNotifyHandler->QueryInterface(riid, ppObject);
 
@@ -421,8 +422,8 @@ CAdminNotifyHandler::~CAdminNotifyHandler()
 
 **************************************************************************/
 
-STDMETHODIMP CAdminNotifyHandler::QueryInterface( REFIID riid, 
-                                            LPVOID FAR * ppReturn)
+STDMETHODIMP CAdminNotifyHandler::QueryInterface( REFIID riid,
+        LPVOID FAR * ppReturn)
 {
     *ppReturn = NULL;
 
@@ -436,7 +437,7 @@ STDMETHODIMP CAdminNotifyHandler::QueryInterface( REFIID riid,
     if(IsEqualIID(riid, IID_IDsAdminNotifyHandler))
     {
         *ppReturn = (IDsAdminNotifyHandler*)this;
-    }   
+    }
 
     if(*ppReturn)
     {
@@ -445,7 +446,7 @@ STDMETHODIMP CAdminNotifyHandler::QueryInterface( REFIID riid,
     }
 
     return E_NOINTERFACE;
-}                                             
+}
 
 /**************************************************************************
 
@@ -472,7 +473,7 @@ STDMETHODIMP_(DWORD) CAdminNotifyHandler::Release()
         delete this;
         return 0;
     }
-       
+
     return m_ObjRefCount;
 }
 
@@ -487,19 +488,19 @@ STDMETHODIMP_(DWORD) CAdminNotifyHandler::Release()
 
 **************************************************************************/
 
-STDMETHODIMP CAdminNotifyHandler::Initialize(IDataObject* pExtraInfo, 
-                                             ULONG* puEventFlags)
+STDMETHODIMP CAdminNotifyHandler::Initialize(IDataObject* pExtraInfo,
+        ULONG* puEventFlags)
 {
     OutputDebugString(TEXT("CAdminNotifyHandler::Initialize\n"));
-    
+
     if(NULL == puEventFlags)
     {
         return E_INVALIDARG;
     }
-    
+
     //Tell the host which events the handler wants to receive.
     *puEventFlags = DSA_NOTIFY_ALL;
-    
+
     return S_OK;
 }
 
@@ -509,10 +510,10 @@ STDMETHODIMP CAdminNotifyHandler::Initialize(IDataObject* pExtraInfo,
 
 **************************************************************************/
 
-STDMETHODIMP CAdminNotifyHandler::Begin(ULONG uEvent, 
-                                        IDataObject* pArg1, 
-                                        IDataObject* pArg2, 
-                                        ULONG* puFlags, 
+STDMETHODIMP CAdminNotifyHandler::Begin(ULONG uEvent,
+                                        IDataObject* pArg1,
+                                        IDataObject* pArg2,
+                                        ULONG* puFlags,
                                         BSTR* pBstr)
 {
     OutputDebugString(TEXT("CAdminNotifyHandler::Begin\n"));
@@ -529,7 +530,7 @@ STDMETHODIMP CAdminNotifyHandler::Begin(ULONG uEvent,
     {
         return E_INVALIDARG;
     }
-    
+
     //release any data objects this handler may already have
     End();
 
@@ -568,7 +569,7 @@ STDMETHODIMP CAdminNotifyHandler::Begin(ULONG uEvent,
 
             GlobalUnlock(stm.hGlobal);
         }
-    
+
         ReleaseStgMedium(&stm);
     }
 
@@ -597,13 +598,13 @@ STDMETHODIMP CAdminNotifyHandler::Begin(ULONG uEvent,
 
                 GlobalUnlock(stm.hGlobal);
             }
-    
+
             ReleaseStgMedium(&stm);
         }
     }
 
     *puFlags = DSA_NOTIFY_FLAG_ADDITIONAL_DATA |
-                DSA_NOTIFY_FLAG_FORCE_ADDITIONAL_DATA;
+               DSA_NOTIFY_FLAG_FORCE_ADDITIONAL_DATA;
 
     WCHAR   wszTitle[MAX_PATH];
     LocalToWideChar(wszTitle, ARRAYSIZE(wszTitle), g_szMainTitle, MAX_PATH);
@@ -621,7 +622,7 @@ STDMETHODIMP CAdminNotifyHandler::Begin(ULONG uEvent,
 STDMETHODIMP CAdminNotifyHandler::Notify(ULONG nItem, ULONG uFlags)
 {
     OutputDebugString(TEXT("CAdminNotifyHandler::Notify\n"));
-    
+
     return S_OK;
 }
 
@@ -649,29 +650,29 @@ STDMETHODIMP CAdminNotifyHandler::End(void)
     return S_OK;
 }
 
-    
+
 /**************************************************************************
 
     WideCharToLocal()
-   
+
 **************************************************************************/
 
 int WideCharToLocal(LPTSTR pLocal, size_t buffSize, LPWSTR pWide, DWORD dwChars)
 {
     *pLocal = 0;
 
-    #ifdef UNICODE
+#ifdef UNICODE
     wcsncpy_s(pLocal, buffSize, pWide, dwChars);
-    #else
-    WideCharToMultiByte(    CP_ACP, 
-                            0, 
-                            pWide, 
-                            -1, 
-                            pLocal, 
-                            dwChars, 
-                            NULL, 
+#else
+    WideCharToMultiByte(    CP_ACP,
+                            0,
+                            pWide,
+                            -1,
+                            pLocal,
+                            dwChars,
+                            NULL,
                             NULL);
-    #endif
+#endif
 
     return lstrlen(pLocal);
 }
@@ -679,23 +680,23 @@ int WideCharToLocal(LPTSTR pLocal, size_t buffSize, LPWSTR pWide, DWORD dwChars)
 /**************************************************************************
 
     LocalToWideChar()
-   
+
 **************************************************************************/
 
 int LocalToWideChar(LPWSTR pWide, size_t buffSize, LPTSTR pLocal, DWORD dwChars)
 {
     *pWide = 0;
 
-    #ifdef UNICODE
+#ifdef UNICODE
     wcsncpy_s(pWide, buffSize, pLocal, dwChars);
-    #else
-    MultiByteToWideChar(    CP_ACP, 
-                            0, 
-                            pLocal, 
-                            -1, 
-                            pWide, 
-                            dwChars); 
-    #endif
+#else
+    MultiByteToWideChar(    CP_ACP,
+                            0,
+                            pLocal,
+                            -1,
+                            pWide,
+                            dwChars);
+#endif
 
     return lstrlenW(pWide);
 }
@@ -728,7 +729,7 @@ BOOL DeleteEntireKey(HKEY hKey, LPTSTR pszSubKey)
 
             dwSize = MAX_PATH;
         }
-   
+
         RegCloseKey(hEnumKey);
     }
     else

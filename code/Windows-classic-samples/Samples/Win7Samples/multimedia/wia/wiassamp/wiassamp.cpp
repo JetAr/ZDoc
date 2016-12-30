@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
  *
  *  (C) COPYRIGHT MICROSOFT CORPORATION
  *
@@ -12,7 +12,7 @@
  *
  *  DESCRIPTION: Simple command line program which demonstrates the following
  *               WIA procedures:
- *               
+ *
  *               o  Enumerating devices
  *               o  Reading properties
  *               o  Setting properties
@@ -107,7 +107,7 @@ public:
     ULONG CALLBACK AddRef()
     {
         return InterlockedIncrement(&m_cRef);
-    }    
+    }
     ULONG CALLBACK Release()
     {
         LONG cRef = InterlockedDecrement(&m_cRef);
@@ -117,7 +117,7 @@ public:
         }
         return cRef;
     }
-    
+
     //
     // IWiaDataCallback functions
     //
@@ -159,7 +159,7 @@ HRESULT TransferWiaItem( IWiaItem *pWiaItem )
     {
         return E_INVALIDARG;
     }
-    
+
     //
     // Get the IWiaPropertyStorage interface so we can set required properties
     //
@@ -340,7 +340,7 @@ HRESULT PrintItemName( IWiaItem *pWiaItem )
             // properties could not be read, so we have to check the return
             // types for each requested item.
             //
-            
+
             //
             // Check the return type for the device ID
             //
@@ -487,7 +487,7 @@ HRESULT ReadSomeWiaProperties( IWiaPropertyStorage *pWiaPropertyStorage )
         // properties could not be read, so we have to check the return
         // types for each requested item.
         //
-        
+
         //
         // Check the return type for the device ID
         //
@@ -520,7 +520,7 @@ HRESULT ReadSomeWiaProperties( IWiaPropertyStorage *pWiaPropertyStorage )
             //
             _tprintf( TEXT("WIA_DIP_DEV_DESC: %ws\n"), PropVar[2].bstrVal );
         }
-        
+
         //
         // Free the returned PROPVARIANTs
         //
@@ -570,11 +570,11 @@ HRESULT EnumerateItems( IWiaItem *pWiaItem )
     // If it is a folder, or it has attachments, enumerate its children
     //
     if (lItemType & WiaItemTypeFolder ||
-        lItemType & WiaItemTypeHasAttachments)
+            lItemType & WiaItemTypeHasAttachments)
     {
         //
         // Get the child item enumerator for this item
-        //    
+        //
         IEnumWiaItem *pEnumWiaItem = NULL;
         hr = pWiaItem->EnumChildItems( &pEnumWiaItem );
         if (SUCCEEDED(hr))
@@ -786,7 +786,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr *pWiaDevMgr )
                     ReportError( TEXT("Error calling pWiaEnumDevInfo->Next"), hr );
                 }
             }
-            
+
             //
             // If the result of the enumeration is S_FALSE, since this
             // is normal, we will change it to S_OK.
@@ -824,7 +824,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr *pWiaDevMgr )
     return hr;
 }
 
-extern "C" 
+extern "C"
 int __cdecl _tmain( int, TCHAR *[] )
 {
     //

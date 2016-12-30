@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -45,7 +45,7 @@ HRESULT CSimpleThermostatProviderFactory::CreateInstance(
     IUnknown* pUnkOuter,
     REFIID riid,
     void** ppvObject
-    )
+)
 {
     HRESULT hr  = E_FAIL;
     CSimpleThermostatServiceProvider* pCSimpleThermostatServiceProvider = NULL;
@@ -65,7 +65,7 @@ HRESULT CSimpleThermostatProviderFactory::CreateInstance(
     {
         return E_OUTOFMEMORY;
     }
-	
+
     hr = pCSimpleThermostatServiceProvider->QueryInterface( riid, ppvObject );
     pCSimpleThermostatServiceProvider->Release();
 
@@ -78,7 +78,7 @@ HRESULT CSimpleThermostatProviderFactory::CreateInstance(
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatProviderFactory::LockServer(
     BOOL bLock
-    )
+)
 {
     if( TRUE == bLock )
     {
@@ -101,9 +101,9 @@ HRESULT CSimpleThermostatProviderFactory::LockServer(
 // CSimpleThermostatProviderFactory::QueryInterface
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatProviderFactory::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

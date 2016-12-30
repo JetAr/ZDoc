@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,9 +11,9 @@
 #include "resource.h"
 
 CFCSampleAppRichEditManager::CFCSampleAppRichEditManager(HWND hWnd, HINSTANCE hInst) : m_hwnd(hWnd)
-                                                                             , m_hInst(hInst)
-                                                                             , m_uHeight(0)
-                                                                             , m_hWndEdit(NULL)
+    , m_hInst(hInst)
+    , m_uHeight(0)
+    , m_hWndEdit(NULL)
 {
     ZeroMemory(&m_charDefaultFormat, sizeof(m_charDefaultFormat));
     m_charDefaultFormat.cbSize = sizeof(CHARFORMAT2);
@@ -24,10 +24,10 @@ CFCSampleAppRichEditManager::CFCSampleAppRichEditManager(HWND hWnd, HINSTANCE hI
     // Change these.
     m_charDefaultFormat.dwMask |= CFM_FACE | CFM_SIZE | CFM_COLOR | CFM_BACKCOLOR;
     m_charDefaultFormat.dwEffects |= CFE_AUTOCOLOR | CFE_AUTOBACKCOLOR;
-    
+
     WCHAR wszDefaultFont[MAX_LOADSTRING] = {0};
     LoadString(m_hInst, IDS_DEFAULTTEXTFONT, wszDefaultFont, MAX_LOADSTRING);
-    
+
     StringCchCopyW(m_charDefaultFormat.szFaceName, ARRAYSIZE(m_charDefaultFormat.szFaceName), wszDefaultFont);
     m_charDefaultFormat.yHeight = (LONG)(24 * TWIPS_PER_POINT);
 }
@@ -52,9 +52,9 @@ HRESULT CFCSampleAppRichEditManager::_CreateRichEdit()
         GetClientRect(m_hwnd, &rc);
 
         m_hWndEdit = CreateWindowEx(0, RICHEDIT_CLASS, L"",
-            ES_MULTILINE | WS_VISIBLE | WS_CHILD | WS_BORDER | WS_TABSTOP, 
-            0, m_uHeight, rc.right, rc.bottom - m_uHeight, 
-            m_hwnd, NULL, m_hInst, NULL);
+                                    ES_MULTILINE | WS_VISIBLE | WS_CHILD | WS_BORDER | WS_TABSTOP,
+                                    0, m_uHeight, rc.right, rc.bottom - m_uHeight,
+                                    m_hwnd, NULL, m_hInst, NULL);
         if (m_hWndEdit)
         {
             SendMessage(m_hWndEdit, (UINT) EM_SETEVENTMASK, 0, (LPARAM) ENM_SELCHANGE);
@@ -104,7 +104,7 @@ void CFCSampleAppRichEditManager::SetValues(__in IPropertyStore *pps)
     {
         CHARFORMAT2 charFormat;
         GetCharFormat2FromIPropertyStore(pps, &charFormat);
-    
+
         SendMessage(m_hWndEdit, (UINT) EM_SETCHARFORMAT, (WPARAM) SCF_SELECTION, (LPARAM)&charFormat);
     }
     else
@@ -131,10 +131,10 @@ void CFCSampleAppRichEditManager::SetPreviewValues(__in IPropertyStore *pps)
 {
     CHARFORMAT2 charFormat;
     GetCharFormat2FromIPropertyStore(pps, &charFormat);
-    
+
     SendMessage(m_hWndEdit, (UINT) EM_SETCHARFORMAT, (WPARAM) SCF_SELECTION, (LPARAM)&charFormat);
 }
-     
+
 // Cancel preview for the selection in the RichEdit control.
 void CFCSampleAppRichEditManager::CancelPreview(__in IPropertyStore *pps)
 {

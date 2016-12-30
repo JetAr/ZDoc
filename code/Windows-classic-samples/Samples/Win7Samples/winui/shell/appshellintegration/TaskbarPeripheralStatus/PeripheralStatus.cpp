@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -57,54 +57,54 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
     }
     else switch (message)
-    {
+        {
         case WM_COMMAND:
         {
             int const wmId = LOWORD(wParam);
             switch (wmId)
             {
-                case IDM_OVERLAY1:
-                case IDM_OVERLAY2:
-                case IDM_OVERLAY_CLEAR:
-                    if (g_pTaskbarList)
+            case IDM_OVERLAY1:
+            case IDM_OVERLAY2:
+            case IDM_OVERLAY_CLEAR:
+                if (g_pTaskbarList)
+                {
+                    // Choose which icon to set as the overlay
+                    HICON hIcon = NULL; // for IDM_OVERLAY_CLEAR
+                    if (wmId == IDM_OVERLAY1)
                     {
-                        // Choose which icon to set as the overlay
-                        HICON hIcon = NULL; // for IDM_OVERLAY_CLEAR
-                        if (wmId == IDM_OVERLAY1)
-                        {
-                            hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_OVERLAY1));
-                        }
-                        else if (wmId == IDM_OVERLAY2)
-                        {
-                            hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_OVERLAY2));
-                        }
-
-                        // Set the window's overlay icon, possibly NULL value
-                        g_pTaskbarList->SetOverlayIcon(hWnd, hIcon, NULL);
-
-                        if (hIcon)
-                        {
-                            // need to cleanup the icon as we no longer need it
-                            DestroyIcon(hIcon);
-                        }
+                        hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_OVERLAY1));
                     }
-                    break;
-
-                case IDM_SIMULATEPROGRESS:
-                    // If simulated progress isn't underway, start it
-                    if (g_pTaskbarList && g_nTimerId == 0)
+                    else if (wmId == IDM_OVERLAY2)
                     {
-                        g_nTimerId = SetTimer(hWnd, 1, 50, NULL);
-                        g_nProgress = 0;
+                        hIcon = LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_OVERLAY2));
                     }
-                    break;
 
-                case IDM_EXIT:
-                    DestroyWindow(hWnd);
-                    break;
+                    // Set the window's overlay icon, possibly NULL value
+                    g_pTaskbarList->SetOverlayIcon(hWnd, hIcon, NULL);
 
-                default:
-                    return DefWindowProc(hWnd, message, wParam, lParam);
+                    if (hIcon)
+                    {
+                        // need to cleanup the icon as we no longer need it
+                        DestroyIcon(hIcon);
+                    }
+                }
+                break;
+
+            case IDM_SIMULATEPROGRESS:
+                // If simulated progress isn't underway, start it
+                if (g_pTaskbarList && g_nTimerId == 0)
+                {
+                    g_nTimerId = SetTimer(hWnd, 1, 50, NULL);
+                    g_nProgress = 0;
+                }
+                break;
+
+            case IDM_EXIT:
+                DestroyWindow(hWnd);
+                break;
+
+            default:
+                return DefWindowProc(hWnd, message, wParam, lParam);
             }
             break;
         }
@@ -160,7 +160,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
-    }
+        }
     return 0;
 }
 
@@ -188,7 +188,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int nCmdShow)
         LoadString(hInstance, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
 
         HWND hWnd = CreateWindowEx(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, 400, 400, NULL, NULL, hInstance, NULL);
+                                   CW_USEDEFAULT, CW_USEDEFAULT, 400, 400, NULL, NULL, hInstance, NULL);
         if (hWnd)
         {
             ShowWindow(hWnd, nCmdShow);

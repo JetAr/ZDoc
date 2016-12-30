@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,8 +31,8 @@ void FlushCurrentLine()
 //
 //********************************************************************************************
 
-DWORD GetPreferredAddress(_In_ DWORD numElement, 
-                          _In_reads_(numElement) SOCKADDR_IN6 *pAddrList, 
+DWORD GetPreferredAddress(_In_ DWORD numElement,
+                          _In_reads_(numElement) SOCKADDR_IN6 *pAddrList,
                           _Out_ SOCKADDR_STORAGE *pPreferredAddr)
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -51,7 +51,7 @@ DWORD GetPreferredAddress(_In_ DWORD numElement,
     //This do--while(FALSE) loop is used to break in between based on error conditions
     do
     {
-        // Initialize WinSock 
+        // Initialize WinSock
         dwErr = WSAStartup(wVersionRequested, &wsaData);
         if (dwErr != ERROR_SUCCESS)
         {
@@ -60,7 +60,7 @@ DWORD GetPreferredAddress(_In_ DWORD numElement,
         }
 
         fWSAStarted = TRUE;
-            
+
         // create socket
         socketIoctl = WSASocket(AF_INET6, SOCK_DGRAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
         if (socketIoctl == INVALID_SOCKET)
@@ -70,7 +70,7 @@ DWORD GetPreferredAddress(_In_ DWORD numElement,
             break;
         }
 
-        dwSize = SIZEOF_SOCKET_ADDRESS_LIST(numElement);        
+        dwSize = SIZEOF_SOCKET_ADDRESS_LIST(numElement);
         pSocketAddrList = reinterpret_cast<SOCKET_ADDRESS_LIST *>(new BYTE[dwSize]);
         if (pSocketAddrList == NULL)
         {
@@ -78,13 +78,13 @@ DWORD GetPreferredAddress(_In_ DWORD numElement,
             wprintf(L"out of memory, (dwErr = %#x).", dwErr);
             break;
         }
-        
+
         for (i = 0; i < numElement; i++ )
         {
             pSocketAddrList->Address[i].lpSockaddr = (LPSOCKADDR)(pAddrList + i);
             pSocketAddrList->Address[i].iSockaddrLength = sizeof(SOCKADDR_IN6);
         }
-    
+
         pSocketAddrList->iAddressCount = numElement;
 
         // sort addresses
@@ -98,8 +98,8 @@ DWORD GetPreferredAddress(_In_ DWORD numElement,
                     &dwBytes,
                     NULL,
                     NULL
-                    );
-        
+                );
+
         if (dwErr == SOCKET_ERROR)
         {
             dwErr = WSAGetLastError();
@@ -123,8 +123,9 @@ DWORD GetPreferredAddress(_In_ DWORD numElement,
             (reinterpret_cast<SOCKADDR_IN6 *> (pPreferredAddr))->sin6_scope_id = pBestAddress->sin6_scope_id;
             (reinterpret_cast<SOCKADDR_IN6 *> (pPreferredAddr))->sin6_port = pBestAddress->sin6_port;
         }
-    }while(FALSE);
-    
+    }
+    while(FALSE);
+
     if (socketIoctl != INVALID_SOCKET)
     {
         closesocket(socketIoctl);
@@ -184,7 +185,7 @@ HRESULT ConvertStringToSockAddr(_In_ LPWSTR destIPAddr, _Out_ SOCKADDR_STORAGE *
             {
                 addrCount ++;
             }
-            destAddrList = new (std::nothrow) SOCKADDR_IN6[addrCount]; 
+            destAddrList = new (std::nothrow) SOCKADDR_IN6[addrCount];
             ZeroMemory (destAddrList, (sizeof(SOCKADDR_IN6) * addrCount));
             for (ptr = result; ((ptr != NULL) && (count<addrCount)) ; ptr = ptr->ai_next)
             {
@@ -193,11 +194,11 @@ HRESULT ConvertStringToSockAddr(_In_ LPWSTR destIPAddr, _Out_ SOCKADDR_STORAGE *
                     //Map IPv4 to mapped IPV6 to sort consistent IPv6 list using CreateSortedAddressPairs()
                     pDestSockAddrIn = reinterpret_cast<SOCKADDR_IN *>(ptr->ai_addr);
                     IN6ADDR_SETV4MAPPED(&(destAddrList[count]),reinterpret_cast<IN_ADDR *>(&(pDestSockAddrIn->sin_addr)),
-                        IN4ADDR_SCOPE_ID(pDestSockAddrIn), pDestSockAddrIn->sin_port);
+                                        IN4ADDR_SCOPE_ID(pDestSockAddrIn), pDestSockAddrIn->sin_port);
                 }
                 else if (ptr->ai_family == AF_INET6)
                 {
-                    
+
                     destAddrList[count] = *(reinterpret_cast<SOCKADDR_IN6 *>(result->ai_addr));
                 }
                 else
@@ -208,7 +209,7 @@ HRESULT ConvertStringToSockAddr(_In_ LPWSTR destIPAddr, _Out_ SOCKADDR_STORAGE *
                 }
                 count++;
             }
-            
+
             // determine the preferred IP address
             dwErr = GetPreferredAddress(addrCount,
                                         destAddrList,
@@ -217,13 +218,14 @@ HRESULT ConvertStringToSockAddr(_In_ LPWSTR destIPAddr, _Out_ SOCKADDR_STORAGE *
             {
                 wprintf(L"WSAIoctl failed, (dwErr = %#x).", dwErr );
                 hr = HRESULT_FROM_WIN32(dwErr);
-            }            
+            }
         }
         else
         {
             hr = HRESULT_FROM_WIN32(dwErr);
         }
-    }while (FALSE);
+    }
+    while (FALSE);
     if (fWSAStarted)
     {
         WSACleanup();
@@ -246,12 +248,12 @@ HRESULT ConvertStringToSockAddr(_In_ LPWSTR destIPAddr, _Out_ SOCKADDR_STORAGE *
 //********************************************************************************************
 
 void GetInterfaceType (_In_ GUID interfaceGUID, _In_ HRESULT hr)
-{   
+{
     NET_LUID interfaceLUID = {0};
     MIB_IF_ROW2 mib;
     if (hr == S_OK)
     {
-        // Get interface LUID 
+        // Get interface LUID
         DWORD dwError = ConvertInterfaceGuidToLuid(&interfaceGUID,&interfaceLUID);
         if (dwError == NO_ERROR)
         {
@@ -267,8 +269,8 @@ void GetInterfaceType (_In_ GUID interfaceGUID, _In_ HRESULT hr)
         hr = HRESULT_FROM_WIN32(dwError);
     }
     DisplayError(hr);
-}  
-                
+}
+
 
 
 //********************************************************************************************
@@ -284,8 +286,8 @@ BOOL IsDataPlanStatusAvailable(_In_ const NLM_DATAPLAN_STATUS *pDataPlanStatus)
     // usage data is valid only if both planUsage and lastUpdatedTime are valid
     //
     if (pDataPlanStatus->UsageData.UsageInMegabytes != NLM_UNKNOWN_DATAPLAN_STATUS
-        && (pDataPlanStatus->UsageData.LastSyncTime.dwHighDateTime != 0 
-            || pDataPlanStatus->UsageData.LastSyncTime.dwLowDateTime != 0))
+            && (pDataPlanStatus->UsageData.LastSyncTime.dwHighDateTime != 0
+                || pDataPlanStatus->UsageData.LastSyncTime.dwLowDateTime != 0))
     {
         isAvailable = TRUE;
     }
@@ -301,8 +303,8 @@ BOOL IsDataPlanStatusAvailable(_In_ const NLM_DATAPLAN_STATUS *pDataPlanStatus)
     {
         isAvailable = TRUE;
     }
-    else if (pDataPlanStatus->NextBillingCycle.dwHighDateTime != 0 
-            || pDataPlanStatus->NextBillingCycle.dwLowDateTime != 0)
+    else if (pDataPlanStatus->NextBillingCycle.dwHighDateTime != 0
+             || pDataPlanStatus->NextBillingCycle.dwLowDateTime != 0)
     {
         isAvailable = TRUE;
 
@@ -327,22 +329,22 @@ void DisplayCostDescription (_In_ DWORD cost)
     {
         wprintf(L"Cost                  : Unknown\n");
     }
-    
+
     else if (cost & NLM_CONNECTION_COST_UNRESTRICTED)
     {
         wprintf(L"Cost                  : Unrestricted\n");
     }
-    
+
     else if (cost & NLM_CONNECTION_COST_FIXED)
     {
         wprintf(L"Cost                  : Fixed\n");
     }
-    
+
     else if (cost & NLM_CONNECTION_COST_VARIABLE)
     {
         wprintf(L"Cost                  : Variable\n");
     }
-    
+
     if (cost & NLM_CONNECTION_COST_OVERDATALIMIT)
     {
         wprintf(L"OverDataLimit         : Yes\n");
@@ -362,7 +364,7 @@ void DisplayCostDescription (_In_ DWORD cost)
     {
         wprintf(L"Approaching DataLimit : No\n");
     }
-    
+
     if (cost & NLM_CONNECTION_COST_CONGESTED)
     {
         wprintf(L"Congested             : Yes\n");
@@ -372,11 +374,11 @@ void DisplayCostDescription (_In_ DWORD cost)
     {
         wprintf(L"Congested             : No\n");
     }
-    
+
     if (cost & NLM_CONNECTION_COST_ROAMING)
     {
         wprintf(L"Roaming               : Yes\n");
-    }   
+    }
 
     else
     {
@@ -399,10 +401,10 @@ void DisplayDataPlanStatus (_In_ const NLM_DATAPLAN_STATUS *pDataPlanStatus)
     }
     else
     {
-        WCHAR szGuid[39]={0};
+        WCHAR szGuid[39]= {0};
         StringFromGUID2(pDataPlanStatus->InterfaceGuid, szGuid, 39);
         wprintf(L"Interface ID                              :   %s\n",szGuid);
-        
+
         //check for default or unknown value
         if (pDataPlanStatus->UsageData.UsageInMegabytes != NLM_UNKNOWN_DATAPLAN_STATUS)
         {
@@ -416,7 +418,7 @@ void DisplayDataPlanStatus (_In_ const NLM_DATAPLAN_STATUS *pDataPlanStatus)
         }
         if (pDataPlanStatus->DataLimitInMegabytes != NLM_UNKNOWN_DATAPLAN_STATUS)
         {
-            wprintf(L"Data Limit in Megabytes                   :   %d\n", pDataPlanStatus->DataLimitInMegabytes);                             
+            wprintf(L"Data Limit in Megabytes                   :   %d\n", pDataPlanStatus->DataLimitInMegabytes);
         }
         if (pDataPlanStatus->InboundBandwidthInKbps != NLM_UNKNOWN_DATAPLAN_STATUS)
         {
@@ -430,11 +432,11 @@ void DisplayDataPlanStatus (_In_ const NLM_DATAPLAN_STATUS *pDataPlanStatus)
         {
             wprintf(L"Next Billing Cycle                        :   ");
             PrintFileTime (pDataPlanStatus->NextBillingCycle);
-        }   
+        }
         if (pDataPlanStatus->MaxTransferSizeInMegabytes != NLM_UNKNOWN_DATAPLAN_STATUS)
         {
             wprintf(L"Maximum Transfer Size in Megabytes   :   %d\n", pDataPlanStatus->MaxTransferSizeInMegabytes);
-        }   
+        }
     }
 
 }
@@ -454,10 +456,10 @@ void PrintFileTime(_In_ FILETIME time)
 
     // Convert filetime to local time.
     FileTimeToSystemTime(&time, &stUTC);
-    SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);      
-    wprintf(L"%02d/%02d/%d  %02d:%02d:%02d\n", 
-           stLocal.wMonth, stLocal.wDay, stLocal.wYear,stLocal.wHour, stLocal.wMinute, stLocal.wSecond);
-}     
+    SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+    wprintf(L"%02d/%02d/%d  %02d:%02d:%02d\n",
+            stLocal.wMonth, stLocal.wDay, stLocal.wYear,stLocal.wHour, stLocal.wMinute, stLocal.wSecond);
+}
 
 
 //********************************************************************************************
@@ -474,19 +476,19 @@ void DisplayError(_In_ HRESULT hr)
     {
         HRESULT hr;
         PWSTR description;
-    } validErrors[] = 
+    } validErrors[] =
     {
-      {E_OUTOFMEMORY,                           L"Error: Failed to allocate necessary memory"},
-      {E_NOINTERFACE,                           L"Error: Network cost API is only supported on WIN8 client machine."},
-      {E_POINTER,                               L"Error: Pointer is not valid"},
-      {E_PENDING,                               L"Error: In the process of determining cost. If you already registered for cost change, notification will be raised when cost change is determined"},
-      {HRESULT_FROM_WIN32(ERROR_NO_NETWORK),    L"Error: Machine might have lost connectivity, No network found"},     
+        {E_OUTOFMEMORY,                           L"Error: Failed to allocate necessary memory"},
+        {E_NOINTERFACE,                           L"Error: Network cost API is only supported on WIN8 client machine."},
+        {E_POINTER,                               L"Error: Pointer is not valid"},
+        {E_PENDING,                               L"Error: In the process of determining cost. If you already registered for cost change, notification will be raised when cost change is determined"},
+        {HRESULT_FROM_WIN32(ERROR_NO_NETWORK),    L"Error: Machine might have lost connectivity, No network found"},
     };
     if (hr != S_OK)
     {
         for(int eindex=0;
-            eindex < sizeof(validErrors) / sizeof(struct errorDescription);
-            eindex++ )
+                eindex < sizeof(validErrors) / sizeof(struct errorDescription);
+                eindex++ )
         {
             if (hr == validErrors[eindex].hr)
             {
@@ -514,8 +516,8 @@ HRESULT GetConnectionFromGUID(_In_ INetworkListManager *pManager, _In_ GUID conn
     CComPtr<IEnumNetworkConnections> pNetworkConnections;
     GUID guid;
     *ppConnection = NULL;
-    
-    hr = pManager->GetNetworkConnections(&pNetworkConnections);  
+
+    hr = pManager->GetNetworkConnections(&pNetworkConnections);
     if (SUCCEEDED(hr))
     {
         while (!bDone)
@@ -530,12 +532,12 @@ HRESULT GetConnectionFromGUID(_In_ INetworkListManager *pManager, _In_ GUID conn
                     if (IsEqualGUID(guid,connID))
                     {
                         *ppConnection = pConnection;
-                        (*ppConnection)->AddRef(); 
+                        (*ppConnection)->AddRef();
                         bFound = TRUE;
                         break;
                     }
                 }
-            } 
+            }
             else
             {
                 bDone = TRUE;
@@ -561,7 +563,7 @@ HRESULT GetDestinationAddress(_Out_ DESTINATION_INFO *pDestIPAddr)
     WCHAR destAddress[IP_ADDRESS_SIZE] = {0};
     NLM_SOCKADDR destSocketAddress = {0};
     ZeroMemory (pDestIPAddr, sizeof(DESTINATION_INFO));
-    
+
     //The feature allow registration for multiple destination addresses, the sample SDK restricts to one Destination address
     wprintf(L"Please enter the destination address :\n");
     wscanf_s(L"%s",destAddress,IP_ADDRESS_SIZE-1);

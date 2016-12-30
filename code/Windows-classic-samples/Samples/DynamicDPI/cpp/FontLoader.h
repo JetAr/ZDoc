@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -14,14 +14,14 @@
 //  for DirectWrite to call to load document/application-specific font to the
 //  system. The font loader's lifetime is tied to the factory it's registered to.
 class FontLoader :  public IDWriteFontCollectionLoader,
-                    public IDWriteFontFileEnumerator,
-                    public IDWriteFontFileLoader
+    public IDWriteFontFileEnumerator,
+    public IDWriteFontFileLoader
 {
 public:
     FontLoader(
         _In_ std::wstring path,
         _In_ IDWriteFactory* dwriteFactory
-        );
+    );
 
     HRESULT Load();
 
@@ -29,7 +29,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
         REFIID uuid,
         _Outptr_ void** object
-        ) override;
+    ) override;
 
     virtual ULONG STDMETHODCALLTYPE AddRef() override;
 
@@ -41,7 +41,7 @@ public:
         _In_reads_bytes_(fontCollectionKeySize) void const* fontCollectionKey,
         UINT32 fontCollectionKeySize,
         _Outptr_ IDWriteFontFileEnumerator** fontFileEnumerator
-        ) override;
+    ) override;
 
     // IDWriteFontFileEnumerator
     virtual HRESULT STDMETHODCALLTYPE MoveNext(OUT BOOL* hasCurrentFile) override;
@@ -53,7 +53,7 @@ public:
         _In_reads_bytes_(fontFileReferenceKeySize) void const* fontFileReferenceKey,
         UINT32 fontFileReferenceKeySize,
         _Outptr_ IDWriteFontFileStream** fontFileStream
-        ) override;
+    ) override;
 
 private:
     // Reference counter

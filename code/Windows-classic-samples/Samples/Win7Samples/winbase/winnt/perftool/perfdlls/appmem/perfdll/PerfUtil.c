@@ -1,4 +1,4 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+﻿/*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -96,30 +96,30 @@ MonBuildInstanceDefinition(
             Name            -   Name of this instance
 --*/
 {
-   DWORD NameLength = 0;
-   WCHAR * pName;
+    DWORD NameLength = 0;
+    WCHAR * pName;
 
-   //
-   //  Include trailing null in name size
-   //
+    //
+    //  Include trailing null in name size
+    //
 
-   NameLength = lstrlenW(Name) * sizeof(WCHAR);
-   if (NameLength > 0)
-   {
-      NameLength += sizeof(WCHAR); // to include the terminating NULL
-   }
+    NameLength = lstrlenW(Name) * sizeof(WCHAR);
+    if (NameLength > 0)
+    {
+        NameLength += sizeof(WCHAR); // to include the terminating NULL
+    }
 
-   pBuffer->ByteLength             = sizeof(PERF_INSTANCE_DEFINITION) + DWORD_MULTIPLE(NameLength);
-   pBuffer->ParentObjectTitleIndex = ParentObjectTitleIndex;
-   pBuffer->ParentObjectInstance   = ParentObjectInstance;
-   pBuffer->UniqueID               = UniqueID;
-   pBuffer->NameOffset             = sizeof(PERF_INSTANCE_DEFINITION);
-   pBuffer->NameLength             = NameLength;
-   pName = (PWCHAR) & pBuffer[1];
-   wcsncpy_s(pName, lstrlenW(Name) + 1, Name, _TRUNCATE);
+    pBuffer->ByteLength             = sizeof(PERF_INSTANCE_DEFINITION) + DWORD_MULTIPLE(NameLength);
+    pBuffer->ParentObjectTitleIndex = ParentObjectTitleIndex;
+    pBuffer->ParentObjectInstance   = ParentObjectInstance;
+    pBuffer->UniqueID               = UniqueID;
+    pBuffer->NameOffset             = sizeof(PERF_INSTANCE_DEFINITION);
+    pBuffer->NameLength             = NameLength;
+    pName = (PWCHAR) & pBuffer[1];
+    wcsncpy_s(pName, lstrlenW(Name) + 1, Name, _TRUNCATE);
 
-   * pBufferNext = (PVOID) ((PCHAR) pBuffer + pBuffer->ByteLength);
-   return TRUE;
+    * pBufferNext = (PVOID) ((PCHAR) pBuffer + pBuffer->ByteLength);
+    return TRUE;
 }
 
 HANDLE
@@ -143,66 +143,66 @@ Return Value:
 
 --*/
 {
-   HKEY  hAppKey;
-   CHAR  LogLevelKeyName[]   = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib";
-   CHAR  LogLevelValueName[] = "EventLogLevel";
-   LONG  lStatus;
-   DWORD dwLogLevel;
-   DWORD dwValueType;
-   DWORD dwValueSize;
+    HKEY  hAppKey;
+    CHAR  LogLevelKeyName[]   = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib";
+    CHAR  LogLevelValueName[] = "EventLogLevel";
+    LONG  lStatus;
+    DWORD dwLogLevel;
+    DWORD dwValueType;
+    DWORD dwValueSize;
 
-   // if global value of the logging level not initialized or is disabled,
-   //  check the registry to see if it should be updated.
+    // if global value of the logging level not initialized or is disabled,
+    //  check the registry to see if it should be updated.
 
-   if (! MESSAGE_LEVEL)
-   {
+    if (! MESSAGE_LEVEL)
+    {
 
-      lStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                             LogLevelKeyName,
-                             0,
-                             KEY_READ,
-                             & hAppKey);
-      if (lStatus == ERROR_SUCCESS)
-      {
-         dwValueSize = sizeof(dwLogLevel);
-         lStatus = RegQueryValueEx(hAppKey,
-                                   LogLevelValueName,
-                                   (LPDWORD) NULL,
-                                   & dwValueType,
-                                   (LPBYTE) & dwLogLevel,
-                                   & dwValueSize);
-         if (lStatus == ERROR_SUCCESS)
-         {
-            MESSAGE_LEVEL = dwLogLevel;
-         }
-         else
-         {
+        lStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                               LogLevelKeyName,
+                               0,
+                               KEY_READ,
+                               & hAppKey);
+        if (lStatus == ERROR_SUCCESS)
+        {
+            dwValueSize = sizeof(dwLogLevel);
+            lStatus = RegQueryValueEx(hAppKey,
+                                      LogLevelValueName,
+                                      (LPDWORD) NULL,
+                                      & dwValueType,
+                                      (LPBYTE) & dwLogLevel,
+                                      & dwValueSize);
+            if (lStatus == ERROR_SUCCESS)
+            {
+                MESSAGE_LEVEL = dwLogLevel;
+            }
+            else
+            {
+                MESSAGE_LEVEL = MESSAGE_LEVEL_DEFAULT;
+            }
+            RegCloseKey(hAppKey);
+        }
+        else
+        {
             MESSAGE_LEVEL = MESSAGE_LEVEL_DEFAULT;
-         }
-         RegCloseKey(hAppKey);
-      }
-      else
-      {
-         MESSAGE_LEVEL = MESSAGE_LEVEL_DEFAULT;
-      }
-   }
+        }
+    }
 
-   if (hEventLog == NULL)
-   {
-      hEventLog = RegisterEventSource(
-                                     (LPTSTR) NULL, // Use Local Machine
-                                     APP_NAME);     // event log app name to find in registry
-      if (hEventLog != NULL)
-      {
-         REPORT_INFORMATION(UTIL_LOG_OPEN, LOG_DEBUG);
-      }
-   }
+    if (hEventLog == NULL)
+    {
+        hEventLog = RegisterEventSource(
+                        (LPTSTR) NULL, // Use Local Machine
+                        APP_NAME);     // event log app name to find in registry
+        if (hEventLog != NULL)
+        {
+            REPORT_INFORMATION(UTIL_LOG_OPEN, LOG_DEBUG);
+        }
+    }
 
-   if (hEventLog != NULL)
-   {
-      dwLogUsers ++; // increment count of perfctr log users
-   }
-   return (hEventLog);
+    if (hEventLog != NULL)
+    {
+        dwLogUsers ++; // increment count of perfctr log users
+    }
+    return (hEventLog);
 }
 
 VOID
@@ -224,15 +224,16 @@ Return Value:
 
 --*/
 {
-   if (hEventLog != NULL)
-   {
-      dwLogUsers --;         // decrement usage
-      if (dwLogUsers <= 0)
-      {    // and if we're the last, then close up log
-         REPORT_INFORMATION(UTIL_CLOSING_LOG, LOG_DEBUG);
-         DeregisterEventSource(hEventLog);
-      }
-   }
+    if (hEventLog != NULL)
+    {
+        dwLogUsers --;         // decrement usage
+        if (dwLogUsers <= 0)
+        {
+            // and if we're the last, then close up log
+            REPORT_INFORMATION(UTIL_CLOSING_LOG, LOG_DEBUG);
+            DeregisterEventSource(hEventLog);
+        }
+    }
 }
 
 DWORD
@@ -270,79 +271,79 @@ Return Value
 
 --*/
 {
-   WCHAR   *pwcArgChar, *pwcTypeChar;
-   BOOL    bFound;
+    WCHAR   *pwcArgChar, *pwcTypeChar;
+    BOOL    bFound;
 
-   if (lpValue == 0)
-   {
-      return QUERY_GLOBAL;
-   }
-   else if (* lpValue == 0)
-   {
-      return QUERY_GLOBAL;
-   }
+    if (lpValue == 0)
+    {
+        return QUERY_GLOBAL;
+    }
+    else if (* lpValue == 0)
+    {
+        return QUERY_GLOBAL;
+    }
 
-   // check for "Global" request
+    // check for "Global" request
 
-   pwcArgChar  = lpValue;
-   pwcTypeChar = GLOBAL_STRING;
-   bFound      = TRUE;  // assume found until contradicted
+    pwcArgChar  = lpValue;
+    pwcTypeChar = GLOBAL_STRING;
+    bFound      = TRUE;  // assume found until contradicted
 
-   // check to the length of the shortest string
+    // check to the length of the shortest string
 
-   while ((* pwcArgChar != 0) && (* pwcTypeChar != 0))
-   {
-      if (* pwcArgChar ++ != * pwcTypeChar ++)
-      {
-         bFound = FALSE; // no match
-         break;          // bail out now
-      }
-   }
+    while ((* pwcArgChar != 0) && (* pwcTypeChar != 0))
+    {
+        if (* pwcArgChar ++ != * pwcTypeChar ++)
+        {
+            bFound = FALSE; // no match
+            break;          // bail out now
+        }
+    }
 
-   if (bFound) return QUERY_GLOBAL;
+    if (bFound) return QUERY_GLOBAL;
 
-   // check for "Foreign" request
+    // check for "Foreign" request
 
-   pwcArgChar  = lpValue;
-   pwcTypeChar = FOREIGN_STRING;
-   bFound      = TRUE;  // assume found until contradicted
+    pwcArgChar  = lpValue;
+    pwcTypeChar = FOREIGN_STRING;
+    bFound      = TRUE;  // assume found until contradicted
 
-   // check to the length of the shortest string
+    // check to the length of the shortest string
 
-   while ((* pwcArgChar != 0) && (* pwcTypeChar != 0))
-   {
-      if (* pwcArgChar ++ != * pwcTypeChar ++)
-      {
-         bFound = FALSE; // no match
-         break;          // bail out now
-      }
-   }
+    while ((* pwcArgChar != 0) && (* pwcTypeChar != 0))
+    {
+        if (* pwcArgChar ++ != * pwcTypeChar ++)
+        {
+            bFound = FALSE; // no match
+            break;          // bail out now
+        }
+    }
 
-   if (bFound) return QUERY_FOREIGN;
+    if (bFound) return QUERY_FOREIGN;
 
-   // check for "Costly" request
+    // check for "Costly" request
 
-   pwcArgChar  = lpValue;
-   pwcTypeChar = COSTLY_STRING;
-   bFound      = TRUE;  // assume found until contradicted
+    pwcArgChar  = lpValue;
+    pwcTypeChar = COSTLY_STRING;
+    bFound      = TRUE;  // assume found until contradicted
 
-   // check to the length of the shortest string
+    // check to the length of the shortest string
 
-   while ((* pwcArgChar != 0) && (* pwcTypeChar != 0))
-   {
-      if (* pwcArgChar ++ != * pwcTypeChar ++)
-      {
-         bFound = FALSE; // no match
-         break;          // bail out now
-      }
-   }
+    while ((* pwcArgChar != 0) && (* pwcTypeChar != 0))
+    {
+        if (* pwcArgChar ++ != * pwcTypeChar ++)
+        {
+            bFound = FALSE; // no match
+            break;          // bail out now
+        }
+    }
 
-   if (bFound) return QUERY_COSTLY;
+    if (bFound) return QUERY_COSTLY;
 
-   // if not Global and not Foreign and not Costly,
-   // then it must be an item list
+    // if not Global and not Foreign and not Costly,
+    // then it must be an item list
 
-   return QUERY_ITEMS;
+    return QUERY_ITEMS;
 }
 
 BOOL
@@ -372,73 +373,73 @@ Return Value:
 
 --*/
 {
-   DWORD   dwThisNumber;
-   WCHAR * pwcThisChar;
-   BOOL    bValidNumber;
-   BOOL    bNewItem;
-   WCHAR   wcDelimiter;    // could be an argument to be more flexible
+    DWORD   dwThisNumber;
+    WCHAR * pwcThisChar;
+    BOOL    bValidNumber;
+    BOOL    bNewItem;
+    WCHAR   wcDelimiter;    // could be an argument to be more flexible
 
-   if (lpwszUnicodeList == 0) return FALSE;    // null pointer, # not founde
+    if (lpwszUnicodeList == 0) return FALSE;    // null pointer, # not founde
 
-   pwcThisChar  = lpwszUnicodeList;
-   dwThisNumber = 0;
-   wcDelimiter  = (WCHAR)' ';
-   bValidNumber = FALSE;
-   bNewItem     = TRUE;
+    pwcThisChar  = lpwszUnicodeList;
+    dwThisNumber = 0;
+    wcDelimiter  = (WCHAR)' ';
+    bValidNumber = FALSE;
+    bNewItem     = TRUE;
 
-   while (TRUE)
-   {
-      switch (EvalThisChar(* pwcThisChar, wcDelimiter))
-      {
-      case DIGIT:
-         // if this is the first digit after a delimiter, then
-         // set flags to start computing the new number
-         if (bNewItem)
-         {
-            bNewItem     = FALSE;
-            bValidNumber = TRUE;
-         }
-         if (bValidNumber)
-         {
-            dwThisNumber *= 10;
-            dwThisNumber += (* pwcThisChar - (WCHAR) '0');
-         }
-         break;
+    while (TRUE)
+    {
+        switch (EvalThisChar(* pwcThisChar, wcDelimiter))
+        {
+        case DIGIT:
+            // if this is the first digit after a delimiter, then
+            // set flags to start computing the new number
+            if (bNewItem)
+            {
+                bNewItem     = FALSE;
+                bValidNumber = TRUE;
+            }
+            if (bValidNumber)
+            {
+                dwThisNumber *= 10;
+                dwThisNumber += (* pwcThisChar - (WCHAR) '0');
+            }
+            break;
 
-      case DELIMITER:
-         // a delimter is either the delimiter character or the
-         // end of the string ('\0') if when the delimiter has been
-         // reached a valid number was found, then compare it to the
-         // number from the argument list. if this is the end of the
-         // string and no match was found, then return.
-         //
-         if (bValidNumber)
-         {
-            if (dwThisNumber == dwNumber) return TRUE;
+        case DELIMITER:
+            // a delimter is either the delimiter character or the
+            // end of the string ('\0') if when the delimiter has been
+            // reached a valid number was found, then compare it to the
+            // number from the argument list. if this is the end of the
+            // string and no match was found, then return.
+            //
+            if (bValidNumber)
+            {
+                if (dwThisNumber == dwNumber) return TRUE;
+                bValidNumber = FALSE;
+            }
+            if (* pwcThisChar == 0)
+            {
+                return FALSE;
+            }
+            else
+            {
+                bNewItem     = TRUE;
+                dwThisNumber = 0;
+            }
+            break;
+
+        case INVALID:
+            // if an invalid character was encountered, ignore all
+            // characters up to the next delimiter and then start fresh.
+            // the invalid number is not compared.
             bValidNumber = FALSE;
-         }
-         if (* pwcThisChar == 0)
-         {
-            return FALSE;
-         }
-         else
-         {
-            bNewItem     = TRUE;
-            dwThisNumber = 0;
-         }
-         break;
+            break;
 
-      case INVALID:
-         // if an invalid character was encountered, ignore all
-         // characters up to the next delimiter and then start fresh.
-         // the invalid number is not compared.
-         bValidNumber = FALSE;
-         break;
+        default:
+            break;
 
-      default:
-         break;
-
-      }
-      pwcThisChar ++;
-   }
+        }
+        pwcThisChar ++;
+    }
 }   // IsNumberInUnicodeList

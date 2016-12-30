@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -190,7 +190,7 @@ public:
     MUTEX_TYPE GetMutexType( );
     void SetMutexType( MUTEX_TYPE mtType );
 
-    BOOL InObject( CStream* pStream ); 
+    BOOL InObject( CStream* pStream );
     INT StreamCount();
     HRESULT AddStream( CStream* pStream );
     HRESULT RemoveStream( CStream* pStream );
@@ -240,8 +240,8 @@ public: // From CProfileObject
     virtual HRESULT NotifyObjectDeleted( CProfileObject* pDeletedObject );
 
 public:
-	void SetBufferWindow( DWORD dwBufferWindow );
-	DWORD GetBufferWindow();
+    void SetBufferWindow( DWORD dwBufferWindow );
+    DWORD GetBufferWindow();
     GUID GetBandwidthSharingType();
     void SetBandwidthSharingType( GUID guidType );
 
@@ -250,7 +250,7 @@ public:
 
     HRESULT AddStream( CStream* pStream );
     HRESULT RemoveStream( CStream* pStream );
-    BOOL InObject( CStream* pStream ); 
+    BOOL InObject( CStream* pStream );
     HRESULT RemoveAllStreams();
     INT StreamCount();
     HRESULT GetStream( INT nStreamIndex, CStream** ppStream );
@@ -258,7 +258,7 @@ public:
     CBandwidthSharingObject();
 
 protected:
-	DWORD m_dwBufferWindow;
+    DWORD m_dwBufferWindow;
     virtual ~CBandwidthSharingObject();
 
     DWORD m_dwSharedBitrate;

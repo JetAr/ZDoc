@@ -1,4 +1,4 @@
-// RemoteHost.cpp: implementation of the RemoteHost class.
+﻿// RemoteHost.cpp: implementation of the RemoteHost class.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -87,12 +87,12 @@ HRESULT CRemoteHost::GetScriptableObject(BSTR * pbstrName, IDispatch ** ppDispat
 // GetCustomUIMode()
 // When UI mode of the player OCX is set to custom, this function is called
 // to give the skin file path that will be loaded to the player OCX.
-// 
+//
 //***************************************************************************
 HRESULT CRemoteHost::GetCustomUIMode(BSTR * pbstrFile)
 {
     HRESULT     hr = E_POINTER;
-    if (pbstrFile) 
+    if (pbstrFile)
     {
         WCHAR       wszCurDir[MAX_PATH];
         CComBSTR    bstrSkinPath = L"file://";

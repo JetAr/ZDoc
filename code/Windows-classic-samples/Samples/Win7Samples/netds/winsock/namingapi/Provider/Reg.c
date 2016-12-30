@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -64,9 +64,9 @@ INT CopyString(PCWSTR wzSrc, __deref_out PWSTR *pwzDest)
 
 // Utility routine to allocate memory and copy an array of CSADDR_INFO
 //
-INT CopyAddrs(__in_ecount(cAddrs) CSADDR_INFO *rgAddrsSrc, 
-                                  DWORD cAddrs,
-                      __deref_out CSADDR_INFO **prgAddrsDest)
+INT CopyAddrs(__in_ecount(cAddrs) CSADDR_INFO *rgAddrsSrc,
+              DWORD cAddrs,
+              __deref_out CSADDR_INFO **prgAddrsDest)
 {
     INT err = NO_ERROR;
     ULONG i = 0;
@@ -150,7 +150,7 @@ BOOL FindRegistration(PCWSTR pcwzEmailAddress, PCWSTR pcwzServiceName, __out Reg
     for (i = 0; i < g_cRegistrations; i++)
     {
         if ( (_wcsicmp(pcwzEmailAddress, g_Registrations[i].pwzEmailAddress) == 0) &&
-             (_wcsicmp(pcwzServiceName,  g_Registrations[i].pwzServiceName) == 0)
+                (_wcsicmp(pcwzServiceName,  g_Registrations[i].pwzServiceName) == 0)
            )
         {
             break;
@@ -184,8 +184,8 @@ INT AddRegistration(__in LPWSAQUERYSET2 pQuerySet)
         err = WSA_NOT_ENOUGH_MEMORY;
         goto cleanup;
     }
-    
-    err = CopyString(pQuerySet->lpszServiceInstanceName, 
+
+    err = CopyString(pQuerySet->lpszServiceInstanceName,
                      &g_Registrations[g_cRegistrations].pwzEmailAddress);
 
     if (err != NO_ERROR)
@@ -200,21 +200,21 @@ INT AddRegistration(__in LPWSAQUERYSET2 pQuerySet)
         goto cleanup;
     }
 
-    err = CopyAddrs(pQuerySet->lpcsaBuffer, 
-                    pQuerySet->dwNumberOfCsAddrs, 
+    err = CopyAddrs(pQuerySet->lpcsaBuffer,
+                    pQuerySet->dwNumberOfCsAddrs,
                     &g_Registrations[g_cRegistrations].prgAddresses);
-            
+
     if (err != NO_ERROR)
     {
         goto cleanup;
     }
 
-    printf("Registration for %S (service = %S) added.\n", 
-            pQuerySet->lpszServiceInstanceName,
-            pQuerySet->lpszContext);
+    printf("Registration for %S (service = %S) added.\n",
+           pQuerySet->lpszServiceInstanceName,
+           pQuerySet->lpszContext);
     g_Registrations[g_cRegistrations].cAddresses = pQuerySet->dwNumberOfCsAddrs;
     g_cRegistrations++;
-    
+
     LeaveCriticalSection(&g_cs);
 
     return err;
@@ -268,7 +268,7 @@ INT RemoveRegistration(__in LPWSAQUERYSET2 pQuerySet)
     for (i = 0; i < g_cRegistrations; i++)
     {
         if ( (wcscmp(pQuerySet->lpszServiceInstanceName, g_Registrations[i].pwzEmailAddress) == 0) &&
-             (wcscmp(pQuerySet->lpszContext, g_Registrations[i].pwzServiceName) == 0)
+                (wcscmp(pQuerySet->lpszContext, g_Registrations[i].pwzServiceName) == 0)
            )
         {
             // found registration to remove

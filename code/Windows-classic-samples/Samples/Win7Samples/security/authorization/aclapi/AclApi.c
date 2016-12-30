@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -64,14 +64,14 @@ Abstract:
 void
 DisplayLastError(
     LPSTR szAPI
-    );
+);
 
 int
 __cdecl
 main(
     int argc,
     char *argv[]
-    )
+)
 {
     LPTSTR FileName;
     LPTSTR TrusteeName;
@@ -88,7 +88,8 @@ main(
     DWORD dwError;
     BOOL bSuccess = FALSE; // assume failure
 
-    if(argc < 4) {
+    if(argc < 4)
+    {
         printf("Usage: %s <filename> {/Deny | /Grant | /Revoke | /Set} [<trustee>] [<permissions>] [<InheritFlag>]\n", argv[0]);
         return RTN_USAGE;
     }
@@ -97,22 +98,27 @@ main(
     TrusteeName = argv[3];
 
     if ( (0 == _stricmp(argv[2], "/Deny") ) ||
-        (0 == _stricmp(argv[2], "/D") ) )
+            (0 == _stricmp(argv[2], "/D") ) )
     {
-      option = DENY_ACCESS;
-    } else if ( ( (0 == _stricmp(argv[2], "/Revoke") ) ||
-                 (0 == _stricmp(argv[2], "/R") ) ) )
+        option = DENY_ACCESS;
+    }
+    else if ( ( (0 == _stricmp(argv[2], "/Revoke") ) ||
+                (0 == _stricmp(argv[2], "/R") ) ) )
     {
-      option = REVOKE_ACCESS;
-    } else if ( (0 == _stricmp(argv[2], "/Set") ) ||
-               (0 == _stricmp(argv[2], "/S") ) )
+        option = REVOKE_ACCESS;
+    }
+    else if ( (0 == _stricmp(argv[2], "/Set") ) ||
+              (0 == _stricmp(argv[2], "/S") ) )
     {
-      option = SET_ACCESS;
-    } else if ( (0 == _stricmp(argv[2], "/Grant") ) ||
-               (0 == _stricmp(argv[2], "/G") ) )
+        option = SET_ACCESS;
+    }
+    else if ( (0 == _stricmp(argv[2], "/Grant") ) ||
+              (0 == _stricmp(argv[2], "/G") ) )
     {
-      option = GRANT_ACCESS;
-    } else {
+        option = GRANT_ACCESS;
+    }
+    else
+    {
         printf("Invalid action specified\n");
         return RTN_ERROR;
     }
@@ -124,7 +130,7 @@ main(
 
     if (argc > 5)
     {
-       InheritFlag = atol( argv[5] );
+        InheritFlag = atol( argv[5] );
     }
 
     //
@@ -132,41 +138,43 @@ main(
     //
 
     dwError = GetNamedSecurityInfo(
-                        FileName,
-                        SE_FILE_OBJECT,
-                        DACL_SECURITY_INFORMATION,
-                        NULL,
-                        NULL,
-                        &ExistingDacl,
-                        NULL,
-                        &psd
-                        );
+                  FileName,
+                  SE_FILE_OBJECT,
+                  DACL_SECURITY_INFORMATION,
+                  NULL,
+                  NULL,
+                  &ExistingDacl,
+                  NULL,
+                  &psd
+              );
 
-    if(dwError != ERROR_SUCCESS) {
+    if(dwError != ERROR_SUCCESS)
+    {
         DisplayLastError("GetNamedSecurityInfo");
         return RTN_ERROR;
     }
 
     BuildExplicitAccessWithName(
-            &explicitaccess,
-            TrusteeName,
-            AccessMask,
-            option,
-            InheritFlag
-            );
+        &explicitaccess,
+        TrusteeName,
+        AccessMask,
+        option,
+        InheritFlag
+    );
 
     //
     // add specified access to the object
     //
 
     dwError = SetEntriesInAcl(
-            1,
-            &explicitaccess,
-            ExistingDacl,
-            &NewAcl
-            );
+                  1,
+                  &explicitaccess,
+                  ExistingDacl,
+                  &NewAcl
+              );
 
-    if(dwError != ERROR_SUCCESS) {
+    if(dwError != ERROR_SUCCESS)
+    {
         DisplayLastError("SetEntriesInAcl");
         goto cleanup;
     }
@@ -176,16 +184,17 @@ main(
     //
 
     dwError = SetNamedSecurityInfo(
-                    FileName,
-                    SE_FILE_OBJECT, // object type
-                    DACL_SECURITY_INFORMATION,
-                    NULL,
-                    NULL,
-                    NewAcl,
-                    NULL
-                    );
+                  FileName,
+                  SE_FILE_OBJECT, // object type
+                  DACL_SECURITY_INFORMATION,
+                  NULL,
+                  NULL,
+                  NewAcl,
+                  NULL
+              );
 
-    if(dwError != ERROR_SUCCESS) {
+    if(dwError != ERROR_SUCCESS)
+    {
         DisplayLastError("SetNamedSecurityInfo");
         goto cleanup;
     }
@@ -207,7 +216,7 @@ cleanup:
 void
 DisplayLastError(
     LPSTR szAPI
-    )
+)
 {
     HMODULE hModule = NULL; // default to system source
     DWORD dwLastError = GetLastError();
@@ -215,19 +224,20 @@ DisplayLastError(
     DWORD dwBufferLength;
 
     DWORD dwFormatFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_IGNORE_INSERTS |
-        FORMAT_MESSAGE_FROM_SYSTEM ;
+                          FORMAT_MESSAGE_IGNORE_INSERTS |
+                          FORMAT_MESSAGE_FROM_SYSTEM ;
 
     //
     // if dwLastError is in the network range, load the message source
     //
 
-    if(dwLastError >= NERR_BASE && dwLastError <= MAX_NERR) {
+    if(dwLastError >= NERR_BASE && dwLastError <= MAX_NERR)
+    {
         hModule = LoadLibraryEx(
-            TEXT("netmsg.dll"),
-            NULL,
-            LOAD_LIBRARY_AS_DATAFILE
-            );
+                      TEXT("netmsg.dll"),
+                      NULL,
+                      LOAD_LIBRARY_AS_DATAFILE
+                  );
 
         if(hModule != NULL)
             dwFormatFlags |= FORMAT_MESSAGE_FROM_HMODULE;
@@ -241,14 +251,14 @@ DisplayLastError(
     //
 
     if(dwBufferLength = FormatMessageA(
-        dwFormatFlags,
-        hModule, // module to get message from (NULL == system)
-        dwLastError,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
-        (LPSTR) &MessageBuffer,
-        0,
-        NULL
-        ))
+                            dwFormatFlags,
+                            hModule, // module to get message from (NULL == system)
+                            dwLastError,
+                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
+                            (LPSTR) &MessageBuffer,
+                            0,
+                            NULL
+                        ))
     {
         DWORD dwBytesWritten;
 
@@ -261,7 +271,7 @@ DisplayLastError(
             dwBufferLength,
             &dwBytesWritten,
             NULL
-            );
+        );
 
         //
         // free the buffer allocated by the system

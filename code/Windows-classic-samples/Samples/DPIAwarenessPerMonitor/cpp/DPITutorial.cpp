@@ -1,4 +1,4 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //  PARTICULAR PURPOSE.
@@ -126,13 +126,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     // Create main window and pushbutton window
     hWnd = CreateWindow(g_szWindowClass, g_szTitle, WS_OVERLAPPEDWINDOW, g_Dpi.Scale(100), g_Dpi.Scale(100),
-        g_Dpi.Scale(WINDOW_WIDTH), g_Dpi.Scale(WINDOW_HEIGHT), NULL, NULL, hInstance, NULL);
-    
+                        g_Dpi.Scale(WINDOW_WIDTH), g_Dpi.Scale(WINDOW_HEIGHT), NULL, NULL, hInstance, NULL);
+
     if (!hWnd)
     {
         return FALSE;
     }
-    
+
     hWndButton = CreateWindow(L"BUTTON", L"&Rescale", WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON, 0, 0, 0, 0, hWnd, (HMENU) IDM_RESCALE_NOW, hInstance, NULL);
 
     // Load bitmaps for each scaling factor
@@ -156,7 +156,7 @@ HFONT CreateScaledFont(int g_nFontHeight)
 {
     LOGFONT lf;
     HFONT   hFont;
-    
+
     memset(&lf, 0, sizeof(lf));
     lf.lfQuality = CLEARTYPE_QUALITY;
     lf.lfHeight = -g_nFontHeight;
@@ -196,7 +196,7 @@ void CreateFonts(HWND hWnd)
     return;
 }
 
-// 
+//
 // RenderWindow - Draw the elements of the window: background color, rectangle (frame for bitmap),
 //   bitmap (selected from resources based on DPI), and text (using a font based on the DPI)
 //   The GetAwareness return value is used as an index into the string & color arrays
@@ -235,22 +235,22 @@ void RenderWindow(HWND hWnd)
     {
         switch (g_Dpi.GetScale())
         {
-            case 125:
-                hbmpScaled = g_hBmp[1];
-                break;
+        case 125:
+            hbmpScaled = g_hBmp[1];
+            break;
 
-            case 150:
-                hbmpScaled = g_hBmp[2];
-                break;
+        case 150:
+            hbmpScaled = g_hBmp[2];
+            break;
 
-            case 200:
-                hbmpScaled = g_hBmp[3];
-                break;
+        case 200:
+            hbmpScaled = g_hBmp[3];
+            break;
 
-            default:
-                hbmpScaled = g_hBmp[0];
-			    break;
-	    }
+        default:
+            hbmpScaled = g_hBmp[0];
+            break;
+        }
     }
     hdcMem = CreateCompatibleDC(NULL);
     hbmpTemp = SelectBitmap(hdcMem, hbmpScaled);
@@ -270,7 +270,7 @@ void RenderWindow(HWND hWnd)
     SelectObject(hdc, g_hButtonFont);
     hWndButton = GetWindow(hWnd, GW_CHILD);
     SetWindowPos(hWndButton, HWND_TOP, rcClient.left + nPad, rcClient.bottom - g_Dpi.Scale(BUTTON_HEIGHT) - nPad,
-        g_Dpi.Scale(BUTTON_WIDTH), g_Dpi.Scale(BUTTON_HEIGHT), SWP_SHOWWINDOW);
+                 g_Dpi.Scale(BUTTON_WIDTH), g_Dpi.Scale(BUTTON_HEIGHT), SWP_SHOWWINDOW);
     SendMessage(hWndButton, WM_SETFONT, (WPARAM) g_hButtonFont, TRUE);
     UpdateWindow(hWndButton);
     EnableWindow(hWndButton, ((g_Dpi.GetAwareness() == PROCESS_PER_MONITOR_DPI_AWARE) && (g_bRescaleOnDpiChanged == false)) ? TRUE : FALSE);
@@ -325,146 +325,146 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
-        case WM_CREATE:
-            // Initialize window rect
-            GetWindowRect(hWnd, &rcNewScale);
+    case WM_CREATE:
+        // Initialize window rect
+        GetWindowRect(hWnd, &rcNewScale);
 
-            // Initialize menu bar
-            hMenu = GetMenu(hWnd);
+        // Initialize menu bar
+        hMenu = GetMenu(hWnd);
 
-            // Set the default (selected) state of the menu item
-            mii.cbSize = sizeof(MENUITEMINFO);
-            mii.fMask = MIIM_STATE;
-            mii.fState = (g_bRescaleOnDpiChanged == true) ? MFS_CHECKED : MFS_UNCHECKED;
-            SetMenuItemInfo(hMenu, IDM_RESCALE_ON_DPICHANGED, FALSE, &mii);
+        // Set the default (selected) state of the menu item
+        mii.cbSize = sizeof(MENUITEMINFO);
+        mii.fMask = MIIM_STATE;
+        mii.fState = (g_bRescaleOnDpiChanged == true) ? MFS_CHECKED : MFS_UNCHECKED;
+        SetMenuItemInfo(hMenu, IDM_RESCALE_ON_DPICHANGED, FALSE, &mii);
 
-            // Disable the "Rescale on DPICHANGED" menu item unless the app is DPI Aware
-            if (g_Dpi.GetAwareness() == PROCESS_PER_MONITOR_DPI_AWARE)
-            {
-                break;
-            }
-
-            mii.cbSize = sizeof(MENUITEMINFO);
-            mii.fMask = MIIM_STATE;
-            mii.fState = MFS_DISABLED;
-            SetMenuItemInfo(hMenu, IDM_RESCALE_ON_DPICHANGED, FALSE, &mii);
+        // Disable the "Rescale on DPICHANGED" menu item unless the app is DPI Aware
+        if (g_Dpi.GetAwareness() == PROCESS_PER_MONITOR_DPI_AWARE)
+        {
             break;
+        }
 
-        case WM_DPICHANGED:
-            // This message tells the program that most of its window is on a monitor with a new DPI.
-            // The wParam contains the new DPI, and the lParam contains a rect which defines the window
-            // rectangle scaled to the new DPI.
+        mii.cbSize = sizeof(MENUITEMINFO);
+        mii.fMask = MIIM_STATE;
+        mii.fState = MFS_DISABLED;
+        SetMenuItemInfo(hMenu, IDM_RESCALE_ON_DPICHANGED, FALSE, &mii);
+        break;
 
-            g_Dpi.SetScale(LOWORD(wParam));  // Set the new DPI, retrieved from the wParam
+    case WM_DPICHANGED:
+        // This message tells the program that most of its window is on a monitor with a new DPI.
+        // The wParam contains the new DPI, and the lParam contains a rect which defines the window
+        // rectangle scaled to the new DPI.
 
-            if (g_Dpi.GetAwareness() != PROCESS_PER_MONITOR_DPI_AWARE)
-            {
-                break;
-            }
+        g_Dpi.SetScale(LOWORD(wParam));  // Set the new DPI, retrieved from the wParam
 
-            lprcNewScale = (LPRECT) lParam;  // Get the window rectangle scaled for the new DPI, retrieved from the lParam
-            CopyRect(&rcNewScale, lprcNewScale);  // Save the rectangle for the on-demand rescale option (IDM_RESCALE_NOW)
+        if (g_Dpi.GetAwareness() != PROCESS_PER_MONITOR_DPI_AWARE)
+        {
+            break;
+        }
 
-            if (g_bRescaleOnDpiChanged)
+        lprcNewScale = (LPRECT) lParam;  // Get the window rectangle scaled for the new DPI, retrieved from the lParam
+        CopyRect(&rcNewScale, lprcNewScale);  // Save the rectangle for the on-demand rescale option (IDM_RESCALE_NOW)
+
+        if (g_bRescaleOnDpiChanged)
+        {
+            // For the new DPI: resize the window, select new fonts, and re-render window content
+            SetWindowPos(hWnd,
+                         HWND_TOP,
+                         lprcNewScale->left,
+                         lprcNewScale->top,
+                         RectWidth(*lprcNewScale),
+                         RectHeight(*lprcNewScale),
+                         SWP_NOZORDER | SWP_NOACTIVATE);
+            CreateFonts(hWnd);
+            RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
+        }
+        break;
+
+    case WM_PAINT:
+        RenderWindow(hWnd);
+        break;
+
+    case WM_EXITSIZEMOVE:
+        if (g_bRescaleOnDpiChanged)
+        {
+            // Refresh the window to display its new position
+            RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
+        }
+        break;
+
+    case WM_COMMAND:
+        // Respond to user input from the keyboard or menu options
+
+        switch (LOWORD(wParam))
+        {
+        case IDM_RESCALE_NOW:  // The "Rescale" pushbutton was clicked
+            if (!g_bRescaleOnDpiChanged)
             {
                 // For the new DPI: resize the window, select new fonts, and re-render window content
                 SetWindowPos(hWnd,
-                    HWND_TOP,
-                    lprcNewScale->left,
-                    lprcNewScale->top,
-                    RectWidth(*lprcNewScale),
-                    RectHeight(*lprcNewScale),
-                    SWP_NOZORDER | SWP_NOACTIVATE);
+                             HWND_TOP,
+                             0,  // Position origin ignored (per SWP_NOMOVE)
+                             0,  // Position origin ignored (per SWP_NOMOVE)
+                             RectWidth(rcNewScale),
+                             RectHeight(rcNewScale),
+                             SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
                 CreateFonts(hWnd);
                 RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
+                SetFocus(hWnd);  // Return focus from pushbutton to main window
             }
             break;
 
-        case WM_PAINT:
+        case IDM_RESCALE_ON_DPICHANGED:  // The "Rescale on DPICHANGED" menu item was selected
+            g_bRescaleOnDpiChanged = !g_bRescaleOnDpiChanged;
+
+            hMenu = GetMenu(hWnd);  // Toggle the selected/unselected state of the menu item
+            mii.cbSize = sizeof(MENUITEMINFO);
+            mii.fMask = MIIM_STATE;
+            mii.fState = (g_bRescaleOnDpiChanged) ? MFS_CHECKED : MFS_UNCHECKED;
+            SetMenuItemInfo(hMenu, IDM_RESCALE_ON_DPICHANGED, FALSE, &mii);
+
+            hWndButton = GetWindow(hWnd, GW_CHILD);  // Toggle the enabled/disabled state of the pushbutton
+            EnableWindow(hWndButton, (g_bRescaleOnDpiChanged == false) ? TRUE : FALSE);
             RenderWindow(hWnd);
             break;
 
-        case WM_EXITSIZEMOVE:
-            if (g_bRescaleOnDpiChanged)
+        case IDM_FONT_INCREASE:
+            g_nFontHeight += 5;
+            if (g_nFontHeight > WINDOW_HEIGHT / 5)
             {
-                // Refresh the window to display its new position
-                RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
+                g_nFontHeight = WINDOW_HEIGHT / 5;
             }
+            CreateFonts(hWnd);
+            RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
             break;
 
-        case WM_COMMAND:
-            // Respond to user input from the keyboard or menu options
-
-            switch (LOWORD(wParam))
+        case IDM_FONT_DECREASE:
+            g_nFontHeight -= 5;
+            if (g_nFontHeight < 10)
             {
-                case IDM_RESCALE_NOW:  // The "Rescale" pushbutton was clicked
-                    if (!g_bRescaleOnDpiChanged)
-                    {
-                        // For the new DPI: resize the window, select new fonts, and re-render window content
-                        SetWindowPos(hWnd,
-                            HWND_TOP,
-                            0,  // Position origin ignored (per SWP_NOMOVE)
-                            0,  // Position origin ignored (per SWP_NOMOVE)
-                            RectWidth(rcNewScale),
-                            RectHeight(rcNewScale),
-                            SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-                        CreateFonts(hWnd);
-                        RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
-                        SetFocus(hWnd);  // Return focus from pushbutton to main window
-                    }
-                    break;
-
-                case IDM_RESCALE_ON_DPICHANGED:  // The "Rescale on DPICHANGED" menu item was selected
-                    g_bRescaleOnDpiChanged = !g_bRescaleOnDpiChanged;
-
-                    hMenu = GetMenu(hWnd);  // Toggle the selected/unselected state of the menu item
-                    mii.cbSize = sizeof(MENUITEMINFO);
-                    mii.fMask = MIIM_STATE;
-                    mii.fState = (g_bRescaleOnDpiChanged) ? MFS_CHECKED : MFS_UNCHECKED;
-                    SetMenuItemInfo(hMenu, IDM_RESCALE_ON_DPICHANGED, FALSE, &mii);
-
-                    hWndButton = GetWindow(hWnd, GW_CHILD);  // Toggle the enabled/disabled state of the pushbutton
-                    EnableWindow(hWndButton, (g_bRescaleOnDpiChanged == false) ? TRUE : FALSE);
-                    RenderWindow(hWnd);
-                    break;
-
-                case IDM_FONT_INCREASE:
-                    g_nFontHeight += 5;
-                    if (g_nFontHeight > WINDOW_HEIGHT / 5)
-                    {
-                        g_nFontHeight = WINDOW_HEIGHT / 5;
-                    }
-                    CreateFonts(hWnd);
-                    RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
-                    break;
-
-                case IDM_FONT_DECREASE:
-                    g_nFontHeight -= 5;
-                    if (g_nFontHeight < 10)
-                    {
-                        g_nFontHeight = 10;
-                    }
-                    CreateFonts(hWnd);
-                    RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
-                    break;
-
-                case IDM_EXIT:
-                    DestroyWindow(hWnd);
-                    break;
-
-                default:
-                    return DefWindowProc(hWnd, message, wParam, lParam);
+                g_nFontHeight = 10;
             }
+            CreateFonts(hWnd);
+            RedrawWindow(hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
             break;
 
-        case WM_DESTROY:
-            DeleteObject(g_hButtonFont);
-            DeleteObject(g_hTextFont);
-            PostQuitMessage(0);
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
             break;
 
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
+        }
+        break;
+
+    case WM_DESTROY:
+        DeleteObject(g_hButtonFont);
+        DeleteObject(g_hTextFont);
+        PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
     return lRet;

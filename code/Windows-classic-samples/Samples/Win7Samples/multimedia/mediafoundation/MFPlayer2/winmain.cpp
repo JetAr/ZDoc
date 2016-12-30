@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // File: winmain.cpp
 // Application entry-point.
@@ -40,7 +40,7 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPWSTR /*l
     }
 
     // Initialize our custom slider class.
-    hr = Slider_Init(); 
+    hr = Slider_Init();
     if (FAILED(hr))
     {
         MessageBox(NULL, L"Slider_Init failed.", NULL, MB_ICONSTOP);

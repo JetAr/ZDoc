@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -39,12 +39,12 @@ STDMETHODIMP CBitmapWnd::QueryInterface(REFIID iid, LPVOID *ppvObj)
 {
     if (ppvObj == NULL)
     {
-	    return E_POINTER;
+        return E_POINTER;
     }
 
     if (iid == IID_IUnknown)
     {
-	    *ppvObj = (IUnknown *) this;
+        *ppvObj = (IUnknown *) this;
     }
     else
     {
@@ -52,7 +52,7 @@ STDMETHODIMP CBitmapWnd::QueryInterface(REFIID iid, LPVOID *ppvObj)
         return E_NOINTERFACE;
     }
 
-	AddRef();
+    AddRef();
     return S_OK;
 }
 
@@ -108,7 +108,7 @@ ATOM CBitmapWnd::Register()
 // CBitmapWnd::WindowProc
 //
 
-LRESULT 
+LRESULT
 CALLBACK
 CBitmapWnd::WindowProc(
     HWND   hWnd,
@@ -119,48 +119,48 @@ CBitmapWnd::WindowProc(
 {
     switch (uMsg)
     {
-        case WM_CREATE:
-        {
-            LPCREATESTRUCT pcs = (LPCREATESTRUCT) lParam;
+    case WM_CREATE:
+    {
+        LPCREATESTRUCT pcs = (LPCREATESTRUCT) lParam;
 
-            LPMDICREATESTRUCT pmdics = (LPMDICREATESTRUCT) pcs->lpCreateParams;
+        LPMDICREATESTRUCT pmdics = (LPMDICREATESTRUCT) pcs->lpCreateParams;
 
-            CBitmapWnd *that = (CBitmapWnd *) pmdics->lParam;
+        CBitmapWnd *that = (CBitmapWnd *) pmdics->lParam;
 
-            that->AddRef();
+        that->AddRef();
 
-            SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) that);
+        SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) that);
 
-            break;
-        }
+        break;
+    }
 
-        case WM_DESTROY:
-        {
-            CBitmapWnd *that = (CBitmapWnd *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
+    case WM_DESTROY:
+    {
+        CBitmapWnd *that = (CBitmapWnd *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-            SetWindowLongPtr(hWnd, GWLP_USERDATA, NULL);
+        SetWindowLongPtr(hWnd, GWLP_USERDATA, NULL);
 
-            that->Release();
+        that->Release();
 
-            break;
-        }
+        break;
+    }
 
-        case WM_PAINT:
-        {
-            CBitmapWnd *that = (CBitmapWnd *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
+    case WM_PAINT:
+    {
+        CBitmapWnd *that = (CBitmapWnd *) GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-            that->OnPaint(hWnd);
+        that->OnPaint(hWnd);
 
-            break;
-        }
+        break;
+    }
     }
 
     return DefMDIChildProc(
-        hWnd,
-        uMsg,
-        wParam,
-        lParam
-    );
+               hWnd,
+               uMsg,
+               wParam,
+               lParam
+           );
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -211,17 +211,17 @@ LRESULT CBitmapWnd::OnPaint(HWND hWnd)
             }
             else
             {
-                // If the image is larger than the window, resize and center 
+                // If the image is larger than the window, resize and center
                 // the image while keeping the aspect ratio
 
                 UINT nStretchedWidth  = nWindowWidth;
                 UINT nStretchedHeight = MulDiv(nBitmapHeight, nWindowWidth, nBitmapWidth);
 
-			    if (nStretchedHeight > nWindowHeight)
-			    {
-				    nStretchedWidth  = MulDiv(nBitmapWidth, nWindowHeight, nBitmapHeight);
-				    nStretchedHeight = nWindowHeight;
-			    }
+                if (nStretchedHeight > nWindowHeight)
+                {
+                    nStretchedWidth  = MulDiv(nBitmapWidth, nWindowHeight, nBitmapHeight);
+                    nStretchedHeight = nWindowHeight;
+                }
 
                 rDest.X      = (nWindowWidth - nStretchedWidth) / 2;
                 rDest.Y      = (nWindowHeight - nStretchedHeight) / 2;
@@ -237,7 +237,7 @@ LRESULT CBitmapWnd::OnPaint(HWND hWnd)
         }
 
         graphics.Clear((DWORD)Gdiplus::Color::White);
-        
+
         EndPaint(hWnd, &ps);
     }
 

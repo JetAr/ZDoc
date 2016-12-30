@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -15,7 +15,7 @@
 using namespace Microsoft::WRL;
 using namespace Microsoft::WRL::Details;
 
-class CXMLHttpRequestPostStream : 
+class CXMLHttpRequestPostStream :
     public Microsoft::WRL::RuntimeClass<RuntimeClassFlags<ClassicCom>, ISequentialStream>
 {
 private:
@@ -29,7 +29,7 @@ private:
     CXMLHttpRequestPostStream();
 
     ~CXMLHttpRequestPostStream();
-    
+
     friend Microsoft::WRL::ComPtr<CXMLHttpRequestPostStream> Microsoft::WRL::Details::Make<CXMLHttpRequestPostStream>();
 
 public:

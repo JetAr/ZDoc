@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // MyCompositor.h: Defines the custom compositor.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -23,18 +23,18 @@ public:
 
 public:
     // IVMRImageCompositor9
-    virtual HRESULT STDMETHODCALLTYPE InitCompositionDevice( 
+    virtual HRESULT STDMETHODCALLTYPE InitCompositionDevice(
         /* [in] */ IUnknown *pD3DDevice);
-    
-    virtual HRESULT STDMETHODCALLTYPE TermCompositionDevice( 
+
+    virtual HRESULT STDMETHODCALLTYPE TermCompositionDevice(
         /* [in] */ IUnknown *pD3DDevice);
-    
-    virtual HRESULT STDMETHODCALLTYPE SetStreamMediaType( 
+
+    virtual HRESULT STDMETHODCALLTYPE SetStreamMediaType(
         /* [in] */ DWORD dwStrmID,
         /* [in] */ AM_MEDIA_TYPE *pmt,
         /* [in] */ BOOL fTexture);
-    
-    virtual HRESULT STDMETHODCALLTYPE CompositeImage( 
+
+    virtual HRESULT STDMETHODCALLTYPE CompositeImage(
         /* [in] */ IUnknown *pD3DDevice,
         /* [in] */ IDirect3DSurface9 *pddsRenderTarget,
         /* [in] */ AM_MEDIA_TYPE *pmtRenderTarget,
@@ -43,9 +43,9 @@ public:
         /* [in] */ D3DCOLOR dwClrBkGnd,
         /* [in] */ VMR9VideoStreamInfo *pVideoStreamInfo,
         /* [in] */ UINT cStreams);
-    
+
     // IUnknown
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
         REFIID riid,
         void** ppvObject);
 
@@ -60,20 +60,23 @@ protected:
     static HRESULT SetUpFog( IDirect3DDevice9* d3ddev );
     HRESULT CreateTexture( IDirect3DDevice9* d3ddev, DWORD x, DWORD y  );
 
-	SmartPtr<IDirect3DTexture9> GetTexture( 
-							IDirect3DDevice9* d3ddev,
-							VMR9VideoStreamInfo *pVideoStreamInfo
-							);
+    SmartPtr<IDirect3DTexture9> GetTexture(
+        IDirect3DDevice9* d3ddev,
+        VMR9VideoStreamInfo *pVideoStreamInfo
+    );
 
 private:
     struct CUSTOMVERTEX
     {
-        struct Position {
-            Position() : 
-                x(0.0f),y(0.0f),z(0.0f) {            
+        struct Position
+        {
+            Position() :
+                x(0.0f),y(0.0f),z(0.0f)
+            {
             };
             Position(float x_, float y_, float z_) :
-                x(x_),y(y_),z(z_) {
+                x(x_),y(y_),z(z_)
+            {
             };
             float x,y,z;
         };

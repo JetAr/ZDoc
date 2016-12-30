@@ -1,9 +1,9 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
-// @doc 
+// @doc
 //
 // @module IDBCRCMD.CPP | This is the IDBCreateCommand.
 //
@@ -34,34 +34,34 @@ DECLARE_MODULE_VERSION(832461938);
 //
 BOOL ModuleInit(CThisTestModule * pThisTestModule)
 {
-	IDBCreateSession* pIDBCreateSession	= NULL;
-	IDBCreateCommand* pIDBCreateCommand = NULL;
-	BOOL bValue = FALSE;
+    IDBCreateSession* pIDBCreateSession	= NULL;
+    IDBCreateCommand* pIDBCreateCommand = NULL;
+    BOOL bValue = FALSE;
 
-	TESTC(CommonModuleInit(pThisTestModule));
+    TESTC(CommonModuleInit(pThisTestModule));
 
-	// IDBCreateSession
-	TESTC(VerifyInterface(pThisTestModule->m_pIUnknown, IID_IDBCreateSession,
-						DATASOURCE_INTERFACE, (IUnknown**)&pIDBCreateSession));
-		
-	// IDBCreateCommand
-	if(!VerifyInterface(pThisTestModule->m_pIUnknown2, IID_IDBCreateCommand,
-							SESSION_INTERFACE, (IUnknown**)&pIDBCreateCommand))
-	{
-		odtLog << L"Commands are not supported by this Provider." << ENDL;
-		bValue = TEST_SKIPPED;
-		goto CLEANUP;
-	}
+    // IDBCreateSession
+    TESTC(VerifyInterface(pThisTestModule->m_pIUnknown, IID_IDBCreateSession,
+                          DATASOURCE_INTERFACE, (IUnknown**)&pIDBCreateSession));
 
-	bValue = TRUE;
+    // IDBCreateCommand
+    if(!VerifyInterface(pThisTestModule->m_pIUnknown2, IID_IDBCreateCommand,
+                        SESSION_INTERFACE, (IUnknown**)&pIDBCreateCommand))
+    {
+        odtLog << L"Commands are not supported by this Provider." << ENDL;
+        bValue = TEST_SKIPPED;
+        goto CLEANUP;
+    }
+
+    bValue = TRUE;
 
 CLEANUP:
-	
-	// Release the Interfaces
-	SAFE_RELEASE(pIDBCreateSession);
-	SAFE_RELEASE(pIDBCreateCommand);
-	return bValue;
-}	
+
+    // Release the Interfaces
+    SAFE_RELEASE(pIDBCreateSession);
+    SAFE_RELEASE(pIDBCreateCommand);
+    return bValue;
+}
 
 //--------------------------------------------------------------------
 // @func Module level termination routine
@@ -72,8 +72,8 @@ CLEANUP:
 //
 BOOL ModuleTerminate(CThisTestModule * pThisTestModule)
 {
-	return CommonModuleTerminate(pThisTestModule);
-}	
+    return CommonModuleTerminate(pThisTestModule);
+}
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -82,66 +82,66 @@ BOOL ModuleTerminate(CThisTestModule * pThisTestModule)
 // @class TCIDBCRCMD Base Class for IDBCreateCommand:CreateCommand Testcases
 class TCIDBCRCMD : public CRowset
 {
-	public:
-		// @cmember Constructor
-		TCIDBCRCMD(LPWSTR wstrTestCaseName) : CRowset(wstrTestCaseName)
-		{
-			m_pIDBCreateSession	= NULL;
-			m_pIDBCreateCommand = NULL;
-		};
+public:
+    // @cmember Constructor
+    TCIDBCRCMD(LPWSTR wstrTestCaseName) : CRowset(wstrTestCaseName)
+    {
+        m_pIDBCreateSession	= NULL;
+        m_pIDBCreateCommand = NULL;
+    };
 
-		// @cmember Destructor
-		virtual ~TCIDBCRCMD(){};
+    // @cmember Destructor
+    virtual ~TCIDBCRCMD() {};
 
-		BOOL	InitializeRowObject();
+    BOOL	InitializeRowObject();
 
-	protected:
-		// @cmember IDBCreateSession Interface
-		IDBCreateSession*	m_pIDBCreateSession;
-		// @cmember IDBCreateCommand Interface
-		IDBCreateCommand*	m_pIDBCreateCommand;
-		// @cmember CRowObject pointer
-		CRowObject*			m_pCRowObject;		
-		// @cmember Row handle
-		HROW				m_hRow;
+protected:
+    // @cmember IDBCreateSession Interface
+    IDBCreateSession*	m_pIDBCreateSession;
+    // @cmember IDBCreateCommand Interface
+    IDBCreateCommand*	m_pIDBCreateCommand;
+    // @cmember CRowObject pointer
+    CRowObject*			m_pCRowObject;
+    // @cmember Row handle
+    HROW				m_hRow;
 };
 
 
 // @class TCZOMBIE Base Class for IDBCreateCommand:ZombieCommand Testcases
 class TCZOMBIE : public CTransaction
 {
-	public:
-		// @cmember Constructor
-		TCZOMBIE(LPWSTR wstrTestCaseName) : CTransaction(wstrTestCaseName) 
-		{
-			m_fRowCommand = FALSE;
-		};
+public:
+    // @cmember Constructor
+    TCZOMBIE(LPWSTR wstrTestCaseName) : CTransaction(wstrTestCaseName)
+    {
+        m_fRowCommand = FALSE;
+    };
 
-		// @cmember Destructor
-		virtual ~TCZOMBIE(){};
+    // @cmember Destructor
+    virtual ~TCZOMBIE() {};
 
-	protected:
-		// @cmember flag to indicate source of IDBCreateCommand
-		BOOL	m_fRowCommand;
+protected:
+    // @cmember flag to indicate source of IDBCreateCommand
+    BOOL	m_fRowCommand;
 };
 
 
 // @class TCMULTICMD Base Class for IDBCreateCommand:MultipleObject Testcases
 class TCMULTICMD : public TCIDBCRCMD
 {
-	public:
-		// @cmember Constructor
-		TCMULTICMD(LPWSTR wstrTestCaseName) : TCIDBCRCMD(wstrTestCaseName)
-		{
-			m_pIDBCreateSession	= NULL;
-			m_pIDBCreateCommand = NULL;
-		};
+public:
+    // @cmember Constructor
+    TCMULTICMD(LPWSTR wstrTestCaseName) : TCIDBCRCMD(wstrTestCaseName)
+    {
+        m_pIDBCreateSession	= NULL;
+        m_pIDBCreateCommand = NULL;
+    };
 
-		// @cmember Destructor
-		virtual ~TCMULTICMD(){};
+    // @cmember Destructor
+    virtual ~TCMULTICMD() {};
 
-		// @cmember Tests QI on IUnknown from the ICommand Pointer
-		int TestInterface(IID iid, BOOL mandatory);
+    // @cmember Tests QI on IUnknown from the ICommand Pointer
+    int TestInterface(IID iid, BOOL mandatory);
 };
 
 
@@ -154,36 +154,37 @@ class TCMULTICMD : public TCIDBCRCMD
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::CreateCommand
 //
-class TCIDBCRCMD_CreateCommand : public TCIDBCRCMD { 
+class TCIDBCRCMD_CreateCommand : public TCIDBCRCMD
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
+
 public:
-	~TCIDBCRCMD_CreateCommand (void) {};								
-    TCIDBCRCMD_CreateCommand ( wchar_t* pwszTestCaseName) : TCIDBCRCMD(pwszTestCaseName) { };	
- 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
-	
-	// {{ TCW_TESTVARS()
-	// @cmember E_NOINTERFACE - Invalid REFIID
-	int Variation_1();
-	// @cmember E_NOINTERFACE - IID_IDBInitialize REFIID
-	int Variation_2();
-	// @cmember E_NOINTERFACE - IID_IDBCreateCommand REFIID
-	int Variation_3();
-	// @cmember E_INVALIDARG - NULL pCommand
-	int Variation_4();
-	// @cmember S_OK - IID_ICommand for REFIID
-	int Variation_5();
-	// @cmember S_OK - IID_ICommandText for REFIID
-	int Variation_6();
-	// @cmember S_OK - IID_IColumnsInfo for REFIID
-	int Variation_7();
-	// }} TCW_TESTVARS_END
+    ~TCIDBCRCMD_CreateCommand (void) {};
+    TCIDBCRCMD_CreateCommand ( wchar_t* pwszTestCaseName) : TCIDBCRCMD(pwszTestCaseName) { };
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
+
+    // {{ TCW_TESTVARS()
+    // @cmember E_NOINTERFACE - Invalid REFIID
+    int Variation_1();
+    // @cmember E_NOINTERFACE - IID_IDBInitialize REFIID
+    int Variation_2();
+    // @cmember E_NOINTERFACE - IID_IDBCreateCommand REFIID
+    int Variation_3();
+    // @cmember E_INVALIDARG - NULL pCommand
+    int Variation_4();
+    // @cmember S_OK - IID_ICommand for REFIID
+    int Variation_5();
+    // @cmember S_OK - IID_ICommandText for REFIID
+    int Variation_6();
+    // @cmember S_OK - IID_IColumnsInfo for REFIID
+    int Variation_7();
+    // }} TCW_TESTVARS_END
 };
 
 
@@ -191,33 +192,34 @@ public:
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::CreateCommand
 //
-class TCIDBCRCMD_CreateCommand_FromSession : public TCIDBCRCMD_CreateCommand { 
+class TCIDBCRCMD_CreateCommand_FromSession : public TCIDBCRCMD_CreateCommand
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
+
 public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCIDBCRCMD_CreateCommand_FromSession,TCIDBCRCMD_CreateCommand);
-	// }} TCW_DECLARE_FUNCS_END
- 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCIDBCRCMD_CreateCommand_FromSession,TCIDBCRCMD_CreateCommand);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 // {{ TCW_TESTCASE(TCIDBCRCMD_CreateCommand_FromSession)
 #define THE_CLASS TCIDBCRCMD_CreateCommand_FromSession
 BEG_TEST_CASE(TCIDBCRCMD_CreateCommand_FromSession, TCIDBCRCMD_CreateCommand, L"IDBCreateCommand::CreateCommand")
-	TEST_VARIATION(1, 		L"E_NOINTERFACE - Invalid REFIID")
-	TEST_VARIATION(2, 		L"E_NOINTERFACE - IID_IDBInitialize REFIID")
-	TEST_VARIATION(3, 		L"E_NOINTERFACE - IID_IDBCreateCommand REFIID")
-	TEST_VARIATION(4, 		L"E_INVALIDARG - NULL pCommand")
-	TEST_VARIATION(5, 		L"S_OK - IID_ICommand for REFIID")
-	TEST_VARIATION(6, 		L"S_OK - IID_ICommandText for REFIID")
-	TEST_VARIATION(7, 		L"S_OK - IID_IColumnsInfo for REFIID")
+TEST_VARIATION(1, 		L"E_NOINTERFACE - Invalid REFIID")
+TEST_VARIATION(2, 		L"E_NOINTERFACE - IID_IDBInitialize REFIID")
+TEST_VARIATION(3, 		L"E_NOINTERFACE - IID_IDBCreateCommand REFIID")
+TEST_VARIATION(4, 		L"E_INVALIDARG - NULL pCommand")
+TEST_VARIATION(5, 		L"S_OK - IID_ICommand for REFIID")
+TEST_VARIATION(6, 		L"S_OK - IID_ICommandText for REFIID")
+TEST_VARIATION(7, 		L"S_OK - IID_IColumnsInfo for REFIID")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -228,33 +230,34 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::CreateCommand
 //
-class TCIDBCRCMD_CreateCommand_FromRow : public TCIDBCRCMD_CreateCommand { 
+class TCIDBCRCMD_CreateCommand_FromRow : public TCIDBCRCMD_CreateCommand
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
+
 public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCIDBCRCMD_CreateCommand_FromRow,TCIDBCRCMD_CreateCommand);
-	// }} TCW_DECLARE_FUNCS_END
- 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCIDBCRCMD_CreateCommand_FromRow,TCIDBCRCMD_CreateCommand);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 // {{ TCW_TESTCASE(TCIDBCRCMD_CreateCommand_FromRow)
 #define THE_CLASS TCIDBCRCMD_CreateCommand_FromRow
 BEG_TEST_CASE(TCIDBCRCMD_CreateCommand_FromRow, TCIDBCRCMD, L"IDBCreateCommand::CreateCommand")
-	TEST_VARIATION(1, 		L"E_NOINTERFACE - Invalid REFIID")
-	TEST_VARIATION(2, 		L"E_NOINTERFACE - IID_IDBInitialize REFIID")
-	TEST_VARIATION(3, 		L"E_NOINTERFACE - IID_IDBCreateCommand REFIID")
-	TEST_VARIATION(4, 		L"E_INVALIDARG - NULL pCommand")
-	TEST_VARIATION(5, 		L"S_OK - IID_ICommand for REFIID")
-	TEST_VARIATION(6, 		L"S_OK - IID_ICommandText for REFIID")
-	TEST_VARIATION(7, 		L"S_OK - IID_IColumnsInfo for REFIID")
+TEST_VARIATION(1, 		L"E_NOINTERFACE - Invalid REFIID")
+TEST_VARIATION(2, 		L"E_NOINTERFACE - IID_IDBInitialize REFIID")
+TEST_VARIATION(3, 		L"E_NOINTERFACE - IID_IDBCreateCommand REFIID")
+TEST_VARIATION(4, 		L"E_INVALIDARG - NULL pCommand")
+TEST_VARIATION(5, 		L"S_OK - IID_ICommand for REFIID")
+TEST_VARIATION(6, 		L"S_OK - IID_ICommandText for REFIID")
+TEST_VARIATION(7, 		L"S_OK - IID_IColumnsInfo for REFIID")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -264,42 +267,43 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::MultipleObjects
 //
-class TCMULTICMD_QueryInterface : public TCMULTICMD { 
+class TCMULTICMD_QueryInterface : public TCMULTICMD
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
-public:
-	~TCMULTICMD_QueryInterface(void) {} ;								
-    TCMULTICMD_QueryInterface( wchar_t* pwszTestCaseName) : TCMULTICMD(pwszTestCaseName) { };	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
-	
-	// @cmember S_OK - ICommand
-	int Variation_1();
-	// @cmember S_OK - ICommandText
-	int Variation_2();
-	// @cmember S_OK - ICommandWithParameters
-	int Variation_3();
-	// @cmember S_OK - ICommandPrepare
-	int Variation_4();
-	// @cmember S_OK - ICommandProperties
-	int Variation_5();
-	// @cmember S_OK - IColumnsInfo
-	int Variation_6();
-	// @cmember S_OK - IColumnsRowset
-	int Variation_7();
-	// @cmember S_OK - IAccessor
-	int Variation_8();
-	// @cmember S_OK - ISupportErrorInfo
-	int Variation_9();
-	// @cmember S_OK - IConvertType
-	int Variation_10();
-	// @cmember S_OK - IUnknown
-	int Variation_11();
+public:
+    ~TCMULTICMD_QueryInterface(void) {} ;
+    TCMULTICMD_QueryInterface( wchar_t* pwszTestCaseName) : TCMULTICMD(pwszTestCaseName) { };
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
+
+    // @cmember S_OK - ICommand
+    int Variation_1();
+    // @cmember S_OK - ICommandText
+    int Variation_2();
+    // @cmember S_OK - ICommandWithParameters
+    int Variation_3();
+    // @cmember S_OK - ICommandPrepare
+    int Variation_4();
+    // @cmember S_OK - ICommandProperties
+    int Variation_5();
+    // @cmember S_OK - IColumnsInfo
+    int Variation_6();
+    // @cmember S_OK - IColumnsRowset
+    int Variation_7();
+    // @cmember S_OK - IAccessor
+    int Variation_8();
+    // @cmember S_OK - ISupportErrorInfo
+    int Variation_9();
+    // @cmember S_OK - IConvertType
+    int Variation_10();
+    // @cmember S_OK - IUnknown
+    int Variation_11();
 };
 
 
@@ -307,37 +311,38 @@ public:
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::MultipleObjects
 //
-class TCMULTICMD_QueryInterface_FromSession : public TCMULTICMD_QueryInterface { 
+class TCMULTICMD_QueryInterface_FromSession : public TCMULTICMD_QueryInterface
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
-public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCMULTICMD_QueryInterface_FromSession,TCMULTICMD_QueryInterface);
-	// }} TCW_DECLARE_FUNCS_END
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+public:
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCMULTICMD_QueryInterface_FromSession,TCMULTICMD_QueryInterface);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 // {{ TCW_TESTCASE(TCMULTICMD_QueryInterface_FromSession)
 #define THE_CLASS TCMULTICMD_QueryInterface_FromSession
 BEG_TEST_CASE(TCMULTICMD_QueryInterface_FromSession, TCMULTICMD_QueryInterface, L"IDBCreateCommand::MultipleObjects")
-	TEST_VARIATION(1, 		L"S_OK - ICommand")
-	TEST_VARIATION(2, 		L"S_OK - ICommandText")
-	TEST_VARIATION(3, 		L"S_OK - ICommandWithParameters")
-	TEST_VARIATION(4, 		L"S_OK - ICommandPrepare")
-	TEST_VARIATION(5, 		L"S_OK - ICommandProperties")
-	TEST_VARIATION(6, 		L"S_OK - IColumnsInfo")
-	TEST_VARIATION(7, 		L"S_OK - IColumnsRowset")
-	TEST_VARIATION(8, 		L"S_OK - IAccessor")
-	TEST_VARIATION(9, 		L"S_OK - ISupportErrorInfo")
-	TEST_VARIATION(10, 		L"S_OK - IConvertType")
-	TEST_VARIATION(11, 		L"S_OK - IUnknown")
+TEST_VARIATION(1, 		L"S_OK - ICommand")
+TEST_VARIATION(2, 		L"S_OK - ICommandText")
+TEST_VARIATION(3, 		L"S_OK - ICommandWithParameters")
+TEST_VARIATION(4, 		L"S_OK - ICommandPrepare")
+TEST_VARIATION(5, 		L"S_OK - ICommandProperties")
+TEST_VARIATION(6, 		L"S_OK - IColumnsInfo")
+TEST_VARIATION(7, 		L"S_OK - IColumnsRowset")
+TEST_VARIATION(8, 		L"S_OK - IAccessor")
+TEST_VARIATION(9, 		L"S_OK - ISupportErrorInfo")
+TEST_VARIATION(10, 		L"S_OK - IConvertType")
+TEST_VARIATION(11, 		L"S_OK - IUnknown")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -348,37 +353,38 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::MultipleObjects
 //
-class TCMULTICMD_QueryInterface_FromRow : public TCMULTICMD_QueryInterface { 
+class TCMULTICMD_QueryInterface_FromRow : public TCMULTICMD_QueryInterface
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
-public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCMULTICMD_QueryInterface_FromRow,TCMULTICMD_QueryInterface);
-	// }} TCW_DECLARE_FUNCS_END
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+public:
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCMULTICMD_QueryInterface_FromRow,TCMULTICMD_QueryInterface);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 // {{ TCW_TESTCASE(TCMULTICMD_QueryInterface_FromRow)
 #define THE_CLASS TCMULTICMD_QueryInterface_FromRow
 BEG_TEST_CASE(TCMULTICMD_QueryInterface_FromRow, TCMULTICMD_QueryInterface, L"IDBCreateCommand::MultipleObjects")
-	TEST_VARIATION(1, 		L"S_OK - ICommand")
-	TEST_VARIATION(2, 		L"S_OK - ICommandText")
-	TEST_VARIATION(3, 		L"S_OK - ICommandWithParameters")
-	TEST_VARIATION(4, 		L"S_OK - ICommandPrepare")
-	TEST_VARIATION(5, 		L"S_OK - ICommandProperties")
-	TEST_VARIATION(6, 		L"S_OK - IColumnsInfo")
-	TEST_VARIATION(7, 		L"S_OK - IColumnsRowset")
-	TEST_VARIATION(8, 		L"S_OK - IAccessor")
-	TEST_VARIATION(9, 		L"S_OK - ISupportErrorInfo")
-	TEST_VARIATION(10, 		L"S_OK - IConvertType")
-	TEST_VARIATION(11, 		L"S_OK - IUnknown")
+TEST_VARIATION(1, 		L"S_OK - ICommand")
+TEST_VARIATION(2, 		L"S_OK - ICommandText")
+TEST_VARIATION(3, 		L"S_OK - ICommandWithParameters")
+TEST_VARIATION(4, 		L"S_OK - ICommandPrepare")
+TEST_VARIATION(5, 		L"S_OK - ICommandProperties")
+TEST_VARIATION(6, 		L"S_OK - IColumnsInfo")
+TEST_VARIATION(7, 		L"S_OK - IColumnsRowset")
+TEST_VARIATION(8, 		L"S_OK - IAccessor")
+TEST_VARIATION(9, 		L"S_OK - ISupportErrorInfo")
+TEST_VARIATION(10, 		L"S_OK - IConvertType")
+TEST_VARIATION(11, 		L"S_OK - IUnknown")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -388,30 +394,31 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::ZombieCommand
 //
-class TCZOMBIE_Zombie : public TCZOMBIE { 
+class TCZOMBIE_Zombie : public TCZOMBIE
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
+
 public:
-	~TCZOMBIE_Zombie(void) {} ;								
-    TCZOMBIE_Zombie( wchar_t* pwszTestCaseName) : TCZOMBIE(pwszTestCaseName) { };	
+    ~TCZOMBIE_Zombie(void) {} ;
+    TCZOMBIE_Zombie( wchar_t* pwszTestCaseName) : TCZOMBIE(pwszTestCaseName) { };
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
-	// @cmember TestTxn
-	int TestTxn(ETXN eTxn, BOOL fRetaining);
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
+    // @cmember TestTxn
+    int TestTxn(ETXN eTxn, BOOL fRetaining);
 
-	// @cmember S_OK - Abort IDBCreateCommand with fRetaining=TRUE
-	int Variation_1();
-	// @cmember S_OK - Commit IDBCreateCommand with fRetaining=TRUE
-	int Variation_2();
-	// @cmember S_OK - Abort IDBCreateCommand with fRetaining=FALSE
-	int Variation_3();
-	// @cmember S_OK - Commit IDBCreateCommand with fRetaining=FALSE
-	int Variation_4();
+    // @cmember S_OK - Abort IDBCreateCommand with fRetaining=TRUE
+    int Variation_1();
+    // @cmember S_OK - Commit IDBCreateCommand with fRetaining=TRUE
+    int Variation_2();
+    // @cmember S_OK - Abort IDBCreateCommand with fRetaining=FALSE
+    int Variation_3();
+    // @cmember S_OK - Commit IDBCreateCommand with fRetaining=FALSE
+    int Variation_4();
 
 };
 
@@ -420,30 +427,31 @@ public:
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::ZombieCommand
 //
-class TCZOMBIE_Zombie_FromSession : public TCZOMBIE_Zombie { 
+class TCZOMBIE_Zombie_FromSession : public TCZOMBIE_Zombie
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
+
 public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCZOMBIE_Zombie_FromSession,TCZOMBIE_Zombie);
-	// }} TCW_DECLARE_FUNCS_END
- 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCZOMBIE_Zombie_FromSession,TCZOMBIE_Zombie);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 // {{ TCW_TESTCASE(TCZOMBIE_Zombie_FromSession)
 #define THE_CLASS TCZOMBIE_Zombie_FromSession
 BEG_TEST_CASE(TCZOMBIE_Zombie_FromSession, TCZOMBIE_Zombie, L"IDBCreateCommand::ZombieCommand")
-	TEST_VARIATION(1, 		L"S_OK - Abort IDBCreateCommand with fRetaining=TRUE")
-	TEST_VARIATION(2, 		L"S_OK - Commit IDBCreateCommand with fRetaining=TRUE")
-	TEST_VARIATION(3, 		L"S_OK - Abort IDBCreateCommand with fRetaining=FALSE")
-	TEST_VARIATION(4, 		L"S_OK - Commit IDBCreateCommand with fRetaining=FALSE")
+TEST_VARIATION(1, 		L"S_OK - Abort IDBCreateCommand with fRetaining=TRUE")
+TEST_VARIATION(2, 		L"S_OK - Commit IDBCreateCommand with fRetaining=TRUE")
+TEST_VARIATION(3, 		L"S_OK - Abort IDBCreateCommand with fRetaining=FALSE")
+TEST_VARIATION(4, 		L"S_OK - Commit IDBCreateCommand with fRetaining=FALSE")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -454,30 +462,31 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::ZombieCommand
 //
-class TCZOMBIE_Zombie_FromRow : public TCZOMBIE_Zombie { 
+class TCZOMBIE_Zombie_FromRow : public TCZOMBIE_Zombie
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
+
 public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCZOMBIE_Zombie_FromRow,TCZOMBIE_Zombie);
-	// }} TCW_DECLARE_FUNCS_END
- 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCZOMBIE_Zombie_FromRow,TCZOMBIE_Zombie);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 // {{ TCW_TESTCASE(TCZOMBIE_Zombie_FromRow)
 #define THE_CLASS TCZOMBIE_Zombie_FromRow
 BEG_TEST_CASE(TCZOMBIE_Zombie_FromRow, TCZOMBIE_Zombie, L"IDBCreateCommand::ZombieCommand")
-	TEST_VARIATION(1, 		L"S_OK - Abort IDBCreateCommand with fRetaining=TRUE")
-	TEST_VARIATION(2, 		L"S_OK - Commit IDBCreateCommand with fRetaining=TRUE")
-	TEST_VARIATION(3, 		L"S_OK - Abort IDBCreateCommand with fRetaining=FALSE")
-	TEST_VARIATION(4, 		L"S_OK - Commit IDBCreateCommand with fRetaining=FALSE")
+TEST_VARIATION(1, 		L"S_OK - Abort IDBCreateCommand with fRetaining=TRUE")
+TEST_VARIATION(2, 		L"S_OK - Commit IDBCreateCommand with fRetaining=TRUE")
+TEST_VARIATION(3, 		L"S_OK - Abort IDBCreateCommand with fRetaining=FALSE")
+TEST_VARIATION(4, 		L"S_OK - Commit IDBCreateCommand with fRetaining=FALSE")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -487,26 +496,27 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::CommandLimit
 //
-class TCIDBCRCMD_CommandLimit : public TCIDBCRCMD { 
+class TCIDBCRCMD_CommandLimit : public TCIDBCRCMD
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
+
 public:
-	~TCIDBCRCMD_CommandLimit(void) {};								
-    TCIDBCRCMD_CommandLimit( wchar_t* pwszTestCaseName) : TCIDBCRCMD(pwszTestCaseName) { };	
+    ~TCIDBCRCMD_CommandLimit(void) {};
+    TCIDBCRCMD_CommandLimit( wchar_t* pwszTestCaseName) : TCIDBCRCMD(pwszTestCaseName) { };
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 
-	// @cmember S_OK - 100 Command Objects
-	int Variation_1();
-	// @cmember S_OK - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_TRUE
-	int Variation_2();
-	// @cmember DB_E_OBJECTOPEN - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_FALSE
-	int Variation_3();
+    // @cmember S_OK - 100 Command Objects
+    int Variation_1();
+    // @cmember S_OK - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_TRUE
+    int Variation_2();
+    // @cmember DB_E_OBJECTOPEN - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_FALSE
+    int Variation_3();
 };
 
 
@@ -514,29 +524,30 @@ public:
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::CommandLimit
 //
-class TCIDBCRCMD_CommandLimit_FromSession : public TCIDBCRCMD_CommandLimit { 
+class TCIDBCRCMD_CommandLimit_FromSession : public TCIDBCRCMD_CommandLimit
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
-public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCIDBCRCMD_CommandLimit_FromSession,TCIDBCRCMD_CommandLimit);
-	// }} TCW_DECLARE_FUNCS_END
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+public:
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCIDBCRCMD_CommandLimit_FromSession,TCIDBCRCMD_CommandLimit);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 // {{ TCW_TESTCASE(TCIDBCRCMD_CommandLimit_FromSession)
 #define THE_CLASS TCIDBCRCMD_CommandLimit_FromSession
 BEG_TEST_CASE(TCIDBCRCMD_CommandLimit_FromSession, TCIDBCRCMD_CommandLimit, L"IDBCreateCommand::CommandLimit")
-	TEST_VARIATION(1, 		L"S_OK - 100 Command Objects")
-	TEST_VARIATION(2, 		L"S_OK - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_TRUE")
-	TEST_VARIATION(3, 		L"DB_E_OBJECTOPEN - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_FALSE")
+TEST_VARIATION(1, 		L"S_OK - 100 Command Objects")
+TEST_VARIATION(2, 		L"S_OK - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_TRUE")
+TEST_VARIATION(3, 		L"DB_E_OBJECTOPEN - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_FALSE")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -547,29 +558,30 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class IDBCreateCommand::CommandLimit
 //
-class TCIDBCRCMD_CommandLimit_FromRow : public TCIDBCRCMD_CommandLimit { 
+class TCIDBCRCMD_CommandLimit_FromRow : public TCIDBCRCMD_CommandLimit
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
-public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCIDBCRCMD_CommandLimit_FromRow,TCIDBCRCMD_CommandLimit);
-	// }} TCW_DECLARE_FUNCS_END
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+public:
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCIDBCRCMD_CommandLimit_FromRow,TCIDBCRCMD_CommandLimit);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 // {{ TCW_TESTCASE(TCIDBCRCMD_CommandLimit_FromRow)
 #define THE_CLASS TCIDBCRCMD_CommandLimit_FromRow
 BEG_TEST_CASE(TCIDBCRCMD_CommandLimit_FromRow, TCIDBCRCMD_CommandLimit, L"IDBCreateCommand::CommandLimit")
-	TEST_VARIATION(1, 		L"S_OK - 100 Command Objects")
-	TEST_VARIATION(2, 		L"S_OK - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_TRUE")
-	TEST_VARIATION(3, 		L"DB_E_OBJECTOPEN - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_FALSE")
+TEST_VARIATION(1, 		L"S_OK - 100 Command Objects")
+TEST_VARIATION(2, 		L"S_OK - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_TRUE")
+TEST_VARIATION(3, 		L"DB_E_OBJECTOPEN - 2 Command Objects with DBPROP_MULTIPLECONNECTIONS set to VARIANT_FALSE")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -579,26 +591,27 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class Extended Errors
 //
-class TCExtendedErrors : public TCIDBCRCMD { 
+class TCExtendedErrors : public TCIDBCRCMD
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
+
 public:
-	~TCExtendedErrors(void) {};								
-    TCExtendedErrors( wchar_t* pwszTestCaseName) : TCIDBCRCMD(pwszTestCaseName) { };	
- 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
-	
-	// @cmember Valid IDBCreateCommand calls with previous error object existing.
-	int Variation_1();
-	// @cmember Invalid IDBCreateCommand calls with previous error object existing.
-	int Variation_2();
-	// @cmember Invalid IDBCreateCommand calls with no previous error object existing.
-	int Variation_3();
+    ~TCExtendedErrors(void) {};
+    TCExtendedErrors( wchar_t* pwszTestCaseName) : TCIDBCRCMD(pwszTestCaseName) { };
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
+
+    // @cmember Valid IDBCreateCommand calls with previous error object existing.
+    int Variation_1();
+    // @cmember Invalid IDBCreateCommand calls with previous error object existing.
+    int Variation_2();
+    // @cmember Invalid IDBCreateCommand calls with no previous error object existing.
+    int Variation_3();
 };
 
 
@@ -606,30 +619,31 @@ public:
 //--------------------------------------------------------------------
 // @class Extended Errors
 //
-class TCExtendedErrors_FromSession : public TCExtendedErrors { 
+class TCExtendedErrors_FromSession : public TCExtendedErrors
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
-public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCExtendedErrors_FromSession,TCExtendedErrors);
-	// }} TCW_DECLARE_FUNCS_END
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+public:
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCExtendedErrors_FromSession,TCExtendedErrors);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 
 // {{ TCW_TESTCASE(TCExtendedErrors_FromSession)
 #define THE_CLASS TCExtendedErrors_FromSession
 BEG_TEST_CASE(TCExtendedErrors_FromSession, TCExtendedErrors, L"Extended Errors")
-	TEST_VARIATION(1, 		L"Valid IDBCreateCommand calls with previous error object existing.")
-	TEST_VARIATION(2, 		L"Invalid IDBCreateCommand calls with previous error object existing.")
-	TEST_VARIATION(3, 		L"Invalid IDBCreateCommand calls with no previous error object existing.")
+TEST_VARIATION(1, 		L"Valid IDBCreateCommand calls with previous error object existing.")
+TEST_VARIATION(2, 		L"Invalid IDBCreateCommand calls with previous error object existing.")
+TEST_VARIATION(3, 		L"Invalid IDBCreateCommand calls with no previous error object existing.")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -640,30 +654,31 @@ END_TEST_CASE()
 //--------------------------------------------------------------------
 // @class Extended Errors
 //
-class TCExtendedErrors_FromRow : public TCExtendedErrors { 
+class TCExtendedErrors_FromRow : public TCExtendedErrors
+{
 private:
-	// @cmember Static array of variations
-	DECLARE_TEST_CASE_DATA();
-	
-public:
-	// {{ TCW_DECLARE_FUNCS
-	// @cmember Execution Routine
-	DECLARE_TEST_CASE_FUNCS(TCExtendedErrors_FromRow,TCExtendedErrors);
-	// }} TCW_DECLARE_FUNCS_END
+    // @cmember Static array of variations
+    DECLARE_TEST_CASE_DATA();
 
-	// @cmember Initialization Routine
-	virtual BOOL Init();
-	// @cmember Termination Routine
-	virtual BOOL Terminate();
+public:
+    // {{ TCW_DECLARE_FUNCS
+    // @cmember Execution Routine
+    DECLARE_TEST_CASE_FUNCS(TCExtendedErrors_FromRow,TCExtendedErrors);
+    // }} TCW_DECLARE_FUNCS_END
+
+    // @cmember Initialization Routine
+    virtual BOOL Init();
+    // @cmember Termination Routine
+    virtual BOOL Terminate();
 };
 
 
 // {{ TCW_TESTCASE(TCExtendedErrors_FromRow)
 #define THE_CLASS TCExtendedErrors_FromRow
 BEG_TEST_CASE(TCExtendedErrors_FromRow, TCExtendedErrors, L"Extended Errors")
-	TEST_VARIATION(1, 		L"Valid IDBCreateCommand calls with previous error object existing.")
-	TEST_VARIATION(2, 		L"Invalid IDBCreateCommand calls with previous error object existing.")
-	TEST_VARIATION(3, 		L"Invalid IDBCreateCommand calls with no previous error object existing.")
+TEST_VARIATION(1, 		L"Valid IDBCreateCommand calls with previous error object existing.")
+TEST_VARIATION(2, 		L"Invalid IDBCreateCommand calls with previous error object existing.")
+TEST_VARIATION(3, 		L"Invalid IDBCreateCommand calls with no previous error object existing.")
 END_TEST_CASE()
 #undef THE_CLASS
 // }} TCW_TESTCASE_END
@@ -674,16 +689,16 @@ END_TEST_CASE()
 
 // {{ TCW_TESTMODULE(ThisModule)
 TEST_MODULE(10, ThisModule, gwszModuleDescrip)
-	TEST_CASE(1, TCIDBCRCMD_CreateCommand_FromSession)
-	TEST_CASE(2, TCIDBCRCMD_CreateCommand_FromRow)
-	TEST_CASE(3, TCMULTICMD_QueryInterface_FromSession)
-	TEST_CASE(4, TCMULTICMD_QueryInterface_FromRow)
-	TEST_CASE(5, TCZOMBIE_Zombie_FromSession)
-	TEST_CASE(6, TCZOMBIE_Zombie_FromRow)
-	TEST_CASE(7, TCIDBCRCMD_CommandLimit_FromSession)
-	TEST_CASE(8, TCIDBCRCMD_CommandLimit_FromRow)
-	TEST_CASE(9, TCExtendedErrors_FromSession)
-	TEST_CASE(10, TCExtendedErrors_FromRow)
+TEST_CASE(1, TCIDBCRCMD_CreateCommand_FromSession)
+TEST_CASE(2, TCIDBCRCMD_CreateCommand_FromRow)
+TEST_CASE(3, TCMULTICMD_QueryInterface_FromSession)
+TEST_CASE(4, TCMULTICMD_QueryInterface_FromRow)
+TEST_CASE(5, TCZOMBIE_Zombie_FromSession)
+TEST_CASE(6, TCZOMBIE_Zombie_FromRow)
+TEST_CASE(7, TCIDBCRCMD_CommandLimit_FromSession)
+TEST_CASE(8, TCIDBCRCMD_CommandLimit_FromRow)
+TEST_CASE(9, TCExtendedErrors_FromSession)
+TEST_CASE(10, TCExtendedErrors_FromRow)
 END_TEST_MODULE()
 // }} TCW_TESTMODULE_END
 
@@ -702,14 +717,14 @@ END_TEST_MODULE()
 //
 BOOL TCIDBCRCMD_CreateCommand::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCIDBCRCMD::Init())
-	// }}
-	{
-		return TRUE;
-	}
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCIDBCRCMD::Init())
+        // }}
+    {
+        return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 // {{ TCW_VAR_PROTOTYPE(1)
@@ -720,22 +735,22 @@ BOOL TCIDBCRCMD_CreateCommand::Init()
 //
 int TCIDBCRCMD_CreateCommand::Variation_1()
 {
-	TBEGIN;
+    TBEGIN;
 
-	ICommand* pCommand = INVALID(ICommand*);
+    ICommand* pCommand = INVALID(ICommand*);
 
-	// IRowset isn't a valid REFIID on CreateCommand
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_IRowset, 
-								(IUnknown**)&pCommand), E_NOINTERFACE);
-	TESTC(!pCommand);
+    // IRowset isn't a valid REFIID on CreateCommand
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_IRowset,
+            (IUnknown**)&pCommand), E_NOINTERFACE);
+    TESTC(!pCommand);
 
 CLEANUP:
 
-	// Release Object
+    // Release Object
     if( pCommand != INVALID(ICommand*) )
-		SAFE_RELEASE(pCommand);
+        SAFE_RELEASE(pCommand);
 
-	TRETURN;
+    TRETURN;
 }
 // }}
 
@@ -748,22 +763,22 @@ CLEANUP:
 //
 int TCIDBCRCMD_CreateCommand::Variation_2()
 {
-	TBEGIN;
+    TBEGIN;
 
-	ICommand* pCommand = INVALID(ICommand*);
+    ICommand* pCommand = INVALID(ICommand*);
 
-	// IDBInitialize isn't a valid REFIID on CreateCommand
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_IDBInitialize, 
-								(IUnknown**)&pCommand), E_NOINTERFACE);
-	TESTC(!pCommand);
+    // IDBInitialize isn't a valid REFIID on CreateCommand
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_IDBInitialize,
+            (IUnknown**)&pCommand), E_NOINTERFACE);
+    TESTC(!pCommand);
 
 CLEANUP:
 
-	// Release Object
+    // Release Object
     if( pCommand != INVALID(ICommand*) )
-		SAFE_RELEASE(pCommand);
+        SAFE_RELEASE(pCommand);
 
-	TRETURN;
+    TRETURN;
 }
 // }}
 
@@ -776,22 +791,22 @@ CLEANUP:
 //
 int TCIDBCRCMD_CreateCommand::Variation_3()
 {
-	TBEGIN;
+    TBEGIN;
 
-	ICommand* pCommand = INVALID(ICommand*);
+    ICommand* pCommand = INVALID(ICommand*);
 
-	// IDBCreateCommand isn't a valid REFIID on CreateCommand
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_IDBCreateCommand, 
-								(IUnknown**)&pCommand), E_NOINTERFACE);
-	TESTC(!pCommand);
+    // IDBCreateCommand isn't a valid REFIID on CreateCommand
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_IDBCreateCommand,
+            (IUnknown**)&pCommand), E_NOINTERFACE);
+    TESTC(!pCommand);
 
 CLEANUP:
 
-	// Release Object
+    // Release Object
     if( pCommand != INVALID(ICommand*) )
-		SAFE_RELEASE(pCommand);
+        SAFE_RELEASE(pCommand);
 
-	TRETURN;
+    TRETURN;
 }
 // }}
 
@@ -804,15 +819,15 @@ CLEANUP:
 //
 int TCIDBCRCMD_CreateCommand::Variation_4()
 {
-	TBEGIN;
+    TBEGIN;
 
-	// NULL pICommand on CreateCommand 
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, 
-								IID_ICommand, NULL), E_INVALIDARG);
+    // NULL pICommand on CreateCommand
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL,
+            IID_ICommand, NULL), E_INVALIDARG);
 
 CLEANUP:
 
-	TRETURN;
+    TRETURN;
 }
 // }}
 
@@ -825,21 +840,21 @@ CLEANUP:
 //
 int TCIDBCRCMD_CreateCommand::Variation_5()
 {
-	TBEGIN;
+    TBEGIN;
 
-	ICommand* pCommand = NULL;
+    ICommand* pCommand = NULL;
 
-	// CreateCommand with IID_ICommand
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand, 
-											(IUnknown**)&pCommand), S_OK);
-	TESTC(pCommand != NULL);
+    // CreateCommand with IID_ICommand
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+            (IUnknown**)&pCommand), S_OK);
+    TESTC(pCommand != NULL);
 
 CLEANUP:
 
-	// Release Object
-	SAFE_RELEASE_(pCommand);
+    // Release Object
+    SAFE_RELEASE_(pCommand);
 
-	TRETURN;
+    TRETURN;
 }
 // }}
 
@@ -852,21 +867,21 @@ CLEANUP:
 //
 int TCIDBCRCMD_CreateCommand::Variation_6()
 {
-	TBEGIN;
+    TBEGIN;
 
-	ICommand* pCommand = NULL;
+    ICommand* pCommand = NULL;
 
-	// CreateCommand with IID_ICommandText
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommandText, 
-											(IUnknown**)&pCommand), S_OK);
-	TESTC(pCommand != NULL);
+    // CreateCommand with IID_ICommandText
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommandText,
+            (IUnknown**)&pCommand), S_OK);
+    TESTC(pCommand != NULL);
 
 CLEANUP:
 
-	// Release Object
-	SAFE_RELEASE_(pCommand);
+    // Release Object
+    SAFE_RELEASE_(pCommand);
 
-	TRETURN;
+    TRETURN;
 }
 // }}
 
@@ -879,21 +894,21 @@ CLEANUP:
 //
 int TCIDBCRCMD_CreateCommand::Variation_7()
 {
-	TBEGIN;
+    TBEGIN;
 
-	ICommand* pCommand = NULL;
+    ICommand* pCommand = NULL;
 
-	// CreateCommand with IID_IColumnsInfo
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_IColumnsInfo, 
-												(IUnknown**)&pCommand), S_OK);
-	TESTC(pCommand != NULL);
+    // CreateCommand with IID_IColumnsInfo
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_IColumnsInfo,
+            (IUnknown**)&pCommand), S_OK);
+    TESTC(pCommand != NULL);
 
 CLEANUP:
 
-	// Release Object
-	SAFE_RELEASE_(pCommand);
+    // Release Object
+    SAFE_RELEASE_(pCommand);
 
-	TRETURN;
+    TRETURN;
 }
 // }}
 
@@ -905,9 +920,9 @@ CLEANUP:
 // @rdesc TRUE or FALSE
 //
 BOOL TCIDBCRCMD_CreateCommand::Terminate()
-{	
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCIDBCRCMD::Terminate());
+{
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCIDBCRCMD::Terminate());
 }	// }}
 // }}
 // }}
@@ -920,24 +935,24 @@ BOOL TCIDBCRCMD_CreateCommand::Terminate()
 //
 BOOL TCIDBCRCMD_CreateCommand_FromSession::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCIDBCRCMD_CreateCommand::Init())
-	// }}
-	{
-		// QueryInterface for a IDBCreateSession
-		TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown, IID_IDBCreateSession, 
-						DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
-		
-		// QueryInterface for a IDBCreateCommand
-		TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown2, IID_IDBCreateCommand, 
-							SESSION_INTERFACE, (IUnknown**)&m_pIDBCreateCommand));
-		
-		return TRUE;
-	}
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCIDBCRCMD_CreateCommand::Init())
+        // }}
+    {
+        // QueryInterface for a IDBCreateSession
+        TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown, IID_IDBCreateSession,
+                              DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
+
+        // QueryInterface for a IDBCreateCommand
+        TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown2, IID_IDBCreateCommand,
+                              SESSION_INTERFACE, (IUnknown**)&m_pIDBCreateCommand));
+
+        return TRUE;
+    }
 
 CLEANUP:
 
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -949,12 +964,12 @@ CLEANUP:
 //
 BOOL TCIDBCRCMD_CreateCommand_FromSession::Terminate()
 {
-	// Release the Interfaces
-	SAFE_RELEASE(m_pIDBCreateSession);
-	SAFE_RELEASE(m_pIDBCreateCommand);
-	
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCIDBCRCMD::Terminate());
+    // Release the Interfaces
+    SAFE_RELEASE(m_pIDBCreateSession);
+    SAFE_RELEASE(m_pIDBCreateCommand);
+
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCIDBCRCMD::Terminate());
 }	// }}
 // }}
 // }}
@@ -967,14 +982,14 @@ BOOL TCIDBCRCMD_CreateCommand_FromSession::Terminate()
 //
 BOOL TCIDBCRCMD_CreateCommand_FromRow::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCIDBCRCMD_CreateCommand::Init())
-	// }}
-	{
-		return InitializeRowObject();
-	}
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCIDBCRCMD_CreateCommand::Init())
+        // }}
+    {
+        return InitializeRowObject();
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -986,15 +1001,15 @@ BOOL TCIDBCRCMD_CreateCommand_FromRow::Init()
 //
 BOOL TCIDBCRCMD_CreateCommand_FromRow::Terminate()
 {
-	// Destroy the row object
-	SAFE_DELETE(m_pCRowObject);
+    // Destroy the row object
+    SAFE_DELETE(m_pCRowObject);
 
-	// Release the Interfaces
-	SAFE_RELEASE(m_pIDBCreateCommand);
-	SAFE_RELEASE(m_pIDBCreateSession);
-	
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCIDBCRCMD::Terminate());
+    // Release the Interfaces
+    SAFE_RELEASE(m_pIDBCreateCommand);
+    SAFE_RELEASE(m_pIDBCreateSession);
+
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCIDBCRCMD::Terminate());
 }	// }}
 // }}
 // }}
@@ -1013,15 +1028,15 @@ BOOL TCIDBCRCMD_CreateCommand_FromRow::Terminate()
 // @rdesc TRUE or FALSE
 //
 BOOL TCMULTICMD_QueryInterface::Init()
-{	
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCMULTICMD::Init())
-	// }}
-	{
-		return TRUE;
-	}
-	
-	return FALSE;
+{
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCMULTICMD::Init())
+        // }}
+    {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 
@@ -1033,8 +1048,8 @@ BOOL TCMULTICMD_QueryInterface::Init()
 //
 int TCMULTICMD_QueryInterface::Variation_1()
 {
-	// ICommand REFIID is mandatory 
-	return TestInterface(IID_ICommand,TRUE);
+    // ICommand REFIID is mandatory
+    return TestInterface(IID_ICommand,TRUE);
 }
 // }}
 
@@ -1047,8 +1062,8 @@ int TCMULTICMD_QueryInterface::Variation_1()
 //
 int TCMULTICMD_QueryInterface::Variation_2()
 {
-	// ICommandText REFIID is mandatory 
-	return TestInterface(IID_ICommandText,TRUE);
+    // ICommandText REFIID is mandatory
+    return TestInterface(IID_ICommandText,TRUE);
 }
 // }}
 
@@ -1061,8 +1076,8 @@ int TCMULTICMD_QueryInterface::Variation_2()
 //
 int TCMULTICMD_QueryInterface::Variation_3()
 {
-	// ICommandWithParameters REFIID is not mandatory 
-	return TestInterface(IID_ICommandWithParameters,FALSE);
+    // ICommandWithParameters REFIID is not mandatory
+    return TestInterface(IID_ICommandWithParameters,FALSE);
 }
 // }}
 
@@ -1075,8 +1090,8 @@ int TCMULTICMD_QueryInterface::Variation_3()
 //
 int TCMULTICMD_QueryInterface::Variation_4()
 {
-	// ICommandPrepare REFIID is not mandatory 
-	return TestInterface(IID_ICommandPrepare,FALSE);
+    // ICommandPrepare REFIID is not mandatory
+    return TestInterface(IID_ICommandPrepare,FALSE);
 }
 // }}
 
@@ -1089,8 +1104,8 @@ int TCMULTICMD_QueryInterface::Variation_4()
 //
 int TCMULTICMD_QueryInterface::Variation_5()
 {
-	// ICommandProperties REFIID is mandatory 
-	return TestInterface(IID_ICommandProperties,FALSE);
+    // ICommandProperties REFIID is mandatory
+    return TestInterface(IID_ICommandProperties,FALSE);
 }
 // }}
 
@@ -1103,8 +1118,8 @@ int TCMULTICMD_QueryInterface::Variation_5()
 //
 int TCMULTICMD_QueryInterface::Variation_6()
 {
-	// IColumnsInfo REFIID is mandatory 
-	return TestInterface(IID_IColumnsInfo,TRUE);
+    // IColumnsInfo REFIID is mandatory
+    return TestInterface(IID_IColumnsInfo,TRUE);
 }
 // }}
 
@@ -1117,8 +1132,8 @@ int TCMULTICMD_QueryInterface::Variation_6()
 //
 int TCMULTICMD_QueryInterface::Variation_7()
 {
-	// IColumnsRowset REFIID is not mandatory 
-	return TestInterface(IID_IColumnsRowset,FALSE);
+    // IColumnsRowset REFIID is not mandatory
+    return TestInterface(IID_IColumnsRowset,FALSE);
 }
 // }}
 
@@ -1131,8 +1146,8 @@ int TCMULTICMD_QueryInterface::Variation_7()
 //
 int TCMULTICMD_QueryInterface::Variation_8()
 {
-	// IAccessor REFIID is mandatory 
-	return TestInterface(IID_IAccessor,TRUE);
+    // IAccessor REFIID is mandatory
+    return TestInterface(IID_IAccessor,TRUE);
 }
 // }}
 
@@ -1145,8 +1160,8 @@ int TCMULTICMD_QueryInterface::Variation_8()
 //
 int TCMULTICMD_QueryInterface::Variation_9()
 {
-	// ISupportErrorInfo REFIID is not mandatory 
-	return TestInterface(IID_ISupportErrorInfo,FALSE);
+    // ISupportErrorInfo REFIID is not mandatory
+    return TestInterface(IID_ISupportErrorInfo,FALSE);
 }
 // }}
 
@@ -1159,8 +1174,8 @@ int TCMULTICMD_QueryInterface::Variation_9()
 //
 int TCMULTICMD_QueryInterface::Variation_10()
 {
-	// IConvertType REFIID is mandatory 
-	return TestInterface(IID_IConvertType,TRUE);
+    // IConvertType REFIID is mandatory
+    return TestInterface(IID_IConvertType,TRUE);
 }
 // }}
 
@@ -1173,8 +1188,8 @@ int TCMULTICMD_QueryInterface::Variation_10()
 //
 int TCMULTICMD_QueryInterface::Variation_11()
 {
-	// IUnknown REFIID is mandatory 
-	return TestInterface(IID_IUnknown,TRUE);
+    // IUnknown REFIID is mandatory
+    return TestInterface(IID_IUnknown,TRUE);
 }
 // }}
 
@@ -1187,8 +1202,8 @@ int TCMULTICMD_QueryInterface::Variation_11()
 //
 BOOL TCMULTICMD_QueryInterface::Terminate()
 {
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCMULTICMD::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCMULTICMD::Terminate());
 }	// }}
 // }}
 // }}
@@ -1199,25 +1214,25 @@ BOOL TCMULTICMD_QueryInterface::Terminate()
 // @rdesc TRUE or FALSE
 //
 BOOL TCMULTICMD_QueryInterface_FromSession::Init()
-{	
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCMULTICMD_QueryInterface::Init())
-	// }}
-	{
-		// QueryInterface for a IDBCreateSession
-		TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown, IID_IDBCreateSession, 
-						DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
-		
-		// QueryInterface for a IDBCreateCommand
-		TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown2, IID_IDBCreateCommand, 
-							SESSION_INTERFACE, (IUnknown**)&m_pIDBCreateCommand));
-			
-		return TRUE;
-	}
+{
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCMULTICMD_QueryInterface::Init())
+        // }}
+    {
+        // QueryInterface for a IDBCreateSession
+        TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown, IID_IDBCreateSession,
+                              DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
+
+        // QueryInterface for a IDBCreateCommand
+        TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown2, IID_IDBCreateCommand,
+                              SESSION_INTERFACE, (IUnknown**)&m_pIDBCreateCommand));
+
+        return TRUE;
+    }
 
 CLEANUP:
-	
-	return FALSE;
+
+    return FALSE;
 }
 
 
@@ -1229,12 +1244,12 @@ CLEANUP:
 //
 BOOL TCMULTICMD_QueryInterface_FromSession::Terminate()
 {
-	// Release the Interfaces
-	SAFE_RELEASE(m_pIDBCreateSession);
-	SAFE_RELEASE(m_pIDBCreateCommand);
+    // Release the Interfaces
+    SAFE_RELEASE(m_pIDBCreateSession);
+    SAFE_RELEASE(m_pIDBCreateCommand);
 
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCMULTICMD_QueryInterface::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCMULTICMD_QueryInterface::Terminate());
 }	// }}
 // }}
 // }}
@@ -1246,15 +1261,15 @@ BOOL TCMULTICMD_QueryInterface_FromSession::Terminate()
 // @rdesc TRUE or FALSE
 //
 BOOL TCMULTICMD_QueryInterface_FromRow::Init()
-{	
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCMULTICMD_QueryInterface::Init())
-	// }}
-	{
-		return InitializeRowObject();
-	}
-	
-	return FALSE;
+{
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCMULTICMD_QueryInterface::Init())
+        // }}
+    {
+        return InitializeRowObject();
+    }
+
+    return FALSE;
 }
 
 
@@ -1266,15 +1281,15 @@ BOOL TCMULTICMD_QueryInterface_FromRow::Init()
 //
 BOOL TCMULTICMD_QueryInterface_FromRow::Terminate()
 {
-	// Destroy the row object
-	SAFE_DELETE(m_pCRowObject);
+    // Destroy the row object
+    SAFE_DELETE(m_pCRowObject);
 
-	// Release the Interfaces
-	SAFE_RELEASE(m_pIDBCreateCommand);
-	SAFE_RELEASE(m_pIDBCreateSession);
+    // Release the Interfaces
+    SAFE_RELEASE(m_pIDBCreateCommand);
+    SAFE_RELEASE(m_pIDBCreateSession);
 
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCMULTICMD_QueryInterface::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCMULTICMD_QueryInterface::Terminate());
 }	// }}
 // }}
 // }}
@@ -1294,29 +1309,29 @@ BOOL TCMULTICMD_QueryInterface_FromRow::Terminate()
 //
 BOOL TCZOMBIE_Zombie::Init()
 {
-	// Check to see if Transactions are usable
-	if(!IsUsableInterface(SESSION_INTERFACE, IID_ITransactionLocal))
-		return TEST_SKIPPED;
+    // Check to see if Transactions are usable
+    if(!IsUsableInterface(SESSION_INTERFACE, IID_ITransactionLocal))
+        return TEST_SKIPPED;
 
-	// Initialize to a invalid pointer
-	m_pITransactionLocal = INVALID(ITransactionLocal*);
-	
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCZOMBIE::Init())
-	// }}
-	{
-		return TRUE;
-	}
-	
-	// Check to see if ITransaction is supported
+    // Initialize to a invalid pointer
+    m_pITransactionLocal = INVALID(ITransactionLocal*);
+
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCZOMBIE::Init())
+        // }}
+    {
+        return TRUE;
+    }
+
+    // Check to see if ITransaction is supported
     if( !m_pITransactionLocal )
-		return TEST_SKIPPED;
+        return TEST_SKIPPED;
 
     // Clear the bad pointer value
-	if(m_pITransactionLocal == INVALID(ITransactionLocal*))
-		m_pITransactionLocal = NULL;
+    if(m_pITransactionLocal == INVALID(ITransactionLocal*))
+        m_pITransactionLocal = NULL;
 
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -1328,8 +1343,8 @@ BOOL TCZOMBIE_Zombie::Init()
 //
 int TCZOMBIE_Zombie::Variation_1()
 {
-	// S_OK - Abort IDBCreateCommand with fRetaining=TRUE
-	return TestTxn(ETXN_ABORT, TRUE);
+    // S_OK - Abort IDBCreateCommand with fRetaining=TRUE
+    return TestTxn(ETXN_ABORT, TRUE);
 }
 // }}
 
@@ -1342,8 +1357,8 @@ int TCZOMBIE_Zombie::Variation_1()
 //
 int TCZOMBIE_Zombie::Variation_2()
 {
-	// S_OK - Commit IDBCreateCommand with fRetaining=TRUE
-	return TestTxn(ETXN_COMMIT, TRUE);
+    // S_OK - Commit IDBCreateCommand with fRetaining=TRUE
+    return TestTxn(ETXN_COMMIT, TRUE);
 }
 // }}
 
@@ -1356,8 +1371,8 @@ int TCZOMBIE_Zombie::Variation_2()
 //
 int TCZOMBIE_Zombie::Variation_3()
 {
-	// S_OK - Abort IDBCreateCommand with fRetaining=FALSE
-	return TestTxn(ETXN_ABORT, FALSE);
+    // S_OK - Abort IDBCreateCommand with fRetaining=FALSE
+    return TestTxn(ETXN_ABORT, FALSE);
 }
 // }}
 
@@ -1370,8 +1385,8 @@ int TCZOMBIE_Zombie::Variation_3()
 //
 int TCZOMBIE_Zombie::Variation_4()
 {
-	// S_OK - Commit IDBCreateCommand with fRetaining=FALSE
-	return TestTxn(ETXN_COMMIT, FALSE);
+    // S_OK - Commit IDBCreateCommand with fRetaining=FALSE
+    return TestTxn(ETXN_COMMIT, FALSE);
 }
 // }}
 
@@ -1384,8 +1399,8 @@ int TCZOMBIE_Zombie::Variation_4()
 //
 BOOL TCZOMBIE_Zombie::Terminate()
 {
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCZOMBIE::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCZOMBIE::Terminate());
 }	// }}
 // }}
 // }}
@@ -1397,17 +1412,17 @@ BOOL TCZOMBIE_Zombie::Terminate()
 // @rdesc TRUE or FALSE
 //
 BOOL TCZOMBIE_Zombie_FromSession::Init()
-{	
-	BOOL fPass = TCZOMBIE_Zombie::Init();
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(fPass == TRUE)
-	// }}
-	{
-		m_fRowCommand = FALSE;
-		return RegisterInterface(SESSION_INTERFACE,IID_IDBCreateCommand,0,NULL);
-	}
+{
+    BOOL fPass = TCZOMBIE_Zombie::Init();
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(fPass == TRUE)
+        // }}
+    {
+        m_fRowCommand = FALSE;
+        return RegisterInterface(SESSION_INTERFACE,IID_IDBCreateCommand,0,NULL);
+    }
 
-	return fPass;
+    return fPass;
 }
 
 
@@ -1419,8 +1434,8 @@ BOOL TCZOMBIE_Zombie_FromSession::Init()
 //
 BOOL TCZOMBIE_Zombie_FromSession::Terminate()
 {
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCZOMBIE_Zombie::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCZOMBIE_Zombie::Terminate());
 }	// }}
 // }}
 // }}
@@ -1432,22 +1447,22 @@ BOOL TCZOMBIE_Zombie_FromSession::Terminate()
 // @rdesc TRUE or FALSE
 //
 BOOL TCZOMBIE_Zombie_FromRow::Init()
-{	
-	BOOL fPass = TCZOMBIE_Zombie::Init();
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(fPass == TRUE)
-	// }}
-	{
-		m_fRowCommand = TRUE;
-		// Even if IDBCreateCommand is support on the session,
-		// it may not be supported on a row object
-		if(!RegisterInterface(ROW_INTERFACE,IID_IDBCreateCommand,0,NULL))
-			return TEST_SKIPPED;
-		else
-			return TRUE;
-	}
+{
+    BOOL fPass = TCZOMBIE_Zombie::Init();
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(fPass == TRUE)
+        // }}
+    {
+        m_fRowCommand = TRUE;
+        // Even if IDBCreateCommand is support on the session,
+        // it may not be supported on a row object
+        if(!RegisterInterface(ROW_INTERFACE,IID_IDBCreateCommand,0,NULL))
+            return TEST_SKIPPED;
+        else
+            return TRUE;
+    }
 
-	return fPass;
+    return fPass;
 }
 
 
@@ -1459,8 +1474,8 @@ BOOL TCZOMBIE_Zombie_FromRow::Init()
 //
 BOOL TCZOMBIE_Zombie_FromRow::Terminate()
 {
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCZOMBIE_Zombie::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCZOMBIE_Zombie::Terminate());
 }	// }}
 // }}
 // }}
@@ -1480,14 +1495,14 @@ BOOL TCZOMBIE_Zombie_FromRow::Terminate()
 //
 BOOL TCIDBCRCMD_CommandLimit::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCIDBCRCMD::Init())
-	// }}
-	{
-		return TRUE;
-	}
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCIDBCRCMD::Init())
+        // }}
+    {
+        return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -1499,49 +1514,49 @@ BOOL TCIDBCRCMD_CommandLimit::Init()
 //
 int TCIDBCRCMD_CommandLimit::Variation_1()
 {
-	BOOL		fSuccess = TRUE;
-	ICommand*	rgpCommand[MAX_CMDOBJ];
-	HRESULT		hr = E_FAIL;
-	ULONG		udCmdCount = 0;
+    BOOL		fSuccess = TRUE;
+    ICommand*	rgpCommand[MAX_CMDOBJ];
+    HRESULT		hr = E_FAIL;
+    ULONG		udCmdCount = 0;
 
-	// LOOP 100 times creating ICommands
-	for(udCmdCount=0; udCmdCount < MAX_CMDOBJ; udCmdCount++)
-	{
-		// ICommand REFIID on IDBCreateCommand 
-		hr=m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand, 
-									  (IUnknown**)&rgpCommand[udCmdCount]);
-		
-		// If this fails on the 1st CreateCommand return E_FAIL
-		if((hr != S_OK) || (!rgpCommand[udCmdCount]))
-		{
-			// Return FALSE because of an ERROR
-			if(((hr == S_OK) && (!rgpCommand[udCmdCount])) ||
-			   ((hr != S_OK) && (!udCmdCount)))
-				fSuccess = FALSE;
+    // LOOP 100 times creating ICommands
+    for(udCmdCount=0; udCmdCount < MAX_CMDOBJ; udCmdCount++)
+    {
+        // ICommand REFIID on IDBCreateCommand
+        hr=m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+                                              (IUnknown**)&rgpCommand[udCmdCount]);
 
-			break;
-		}
-	}
+        // If this fails on the 1st CreateCommand return E_FAIL
+        if((hr != S_OK) || (!rgpCommand[udCmdCount]))
+        {
+            // Return FALSE because of an ERROR
+            if(((hr == S_OK) && (!rgpCommand[udCmdCount])) ||
+                    ((hr != S_OK) && (!udCmdCount)))
+                fSuccess = FALSE;
 
-	// Display the number of Commands created
-	odtLog <<L"IDBCreateCommand created " <<udCmdCount <<L" objects." <<ENDL;
-	
-	// Checking ref count is correct after release
-	for(udCmdCount; udCmdCount > 0; udCmdCount--)
-		SAFE_RELEASE_(rgpCommand[udCmdCount-1]);
+            break;
+        }
+    }
 
-	// Create 1 more ICommand to see if Release really worked
-	if(!CHECK(hr=m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
-						(IUnknown**)&rgpCommand[0]), S_OK) || (!rgpCommand[0]))
-		fSuccess = FALSE;
+    // Display the number of Commands created
+    odtLog <<L"IDBCreateCommand created " <<udCmdCount <<L" objects." <<ENDL;
 
-	// Release the Interfaces
-	SAFE_RELEASE_(rgpCommand[0]);
+    // Checking ref count is correct after release
+    for(udCmdCount; udCmdCount > 0; udCmdCount--)
+        SAFE_RELEASE_(rgpCommand[udCmdCount-1]);
 
-	if(fSuccess)
-		return TEST_PASS;
-	else
-		return TEST_FAIL;
+    // Create 1 more ICommand to see if Release really worked
+    if(!CHECK(hr=m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+                 (IUnknown**)&rgpCommand[0]), S_OK) || (!rgpCommand[0]))
+        fSuccess = FALSE;
+
+    // Release the Interfaces
+    SAFE_RELEASE_(rgpCommand[0]);
+
+    if(fSuccess)
+        return TEST_PASS;
+    else
+        return TEST_FAIL;
 }
 // }}
 
@@ -1555,46 +1570,46 @@ int TCIDBCRCMD_CommandLimit::Variation_1()
 //
 int TCIDBCRCMD_CommandLimit::Variation_2()
 {
-	BOOL		fSuccess = FALSE;
-	ICommand*	rgpCommand[2];
-	HRESULT		hr = E_FAIL;
+    BOOL		fSuccess = FALSE;
+    ICommand*	rgpCommand[2];
+    HRESULT		hr = E_FAIL;
 
-	// Check to see if the provider supports DBPROP_MULTIPLECONNECTIONS
-	if( !::GetProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, m_pIDBCreateSession) ||
-		!SettableProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, m_pIDBCreateSession) )
-	{
-		odtLog << L"DBPROP_MULTIPLECONNECTIONS can not be set to VARIANT_TRUE." << ENDL;
-		return TEST_SKIPPED;
-	}
+    // Check to see if the provider supports DBPROP_MULTIPLECONNECTIONS
+    if( !::GetProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, m_pIDBCreateSession) ||
+            !SettableProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, m_pIDBCreateSession) )
+    {
+        odtLog << L"DBPROP_MULTIPLECONNECTIONS can not be set to VARIANT_TRUE." << ENDL;
+        return TEST_SKIPPED;
+    }
 
-	// ICommand REFIID on IDBCreateCommand 
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand, 
-											(IUnknown**)&rgpCommand[0]),S_OK);
-	
-	// ICommand REFIID on IDBCreateCommand 
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand, 
-											(IUnknown**)&rgpCommand[1]),S_OK);
-	
-	// Release the Interfaces
-	SAFE_RELEASE(rgpCommand[0]);
+    // ICommand REFIID on IDBCreateCommand
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+            (IUnknown**)&rgpCommand[0]),S_OK);
 
-	// Create 1 more ICommand to see if Release really worked
-	TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
-											(IUnknown**)&rgpCommand[0]), S_OK);
+    // ICommand REFIID on IDBCreateCommand
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+            (IUnknown**)&rgpCommand[1]),S_OK);
 
-	COMPARE(rgpCommand[1] != NULL, TRUE);
-	fSuccess = TRUE;
+    // Release the Interfaces
+    SAFE_RELEASE(rgpCommand[0]);
+
+    // Create 1 more ICommand to see if Release really worked
+    TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+            (IUnknown**)&rgpCommand[0]), S_OK);
+
+    COMPARE(rgpCommand[1] != NULL, TRUE);
+    fSuccess = TRUE;
 
 CLEANUP:
 
-	// Release the Interfaces
-	SAFE_RELEASE(rgpCommand[0]);
-	SAFE_RELEASE_(rgpCommand[1]);
+    // Release the Interfaces
+    SAFE_RELEASE(rgpCommand[0]);
+    SAFE_RELEASE_(rgpCommand[1]);
 
-	if(fSuccess)
-		return TEST_PASS;
-	else
-		return TEST_FAIL;
+    if(fSuccess)
+        return TEST_PASS;
+    else
+        return TEST_FAIL;
 }
 // }}
 
@@ -1608,71 +1623,71 @@ CLEANUP:
 //
 int TCIDBCRCMD_CommandLimit::Variation_3()
 {
-	BOOL				fSuccess = FALSE;
-	HRESULT				hr = E_FAIL;
-	ULONG				cPropSets  = 0;
-	DBPROPSET *			rgPropSets = NULL;
-	ICommand*			rgpCommand[2]	  = {NULL,NULL};
-	IDBProperties *		pIDBProperties	  = NULL;
-	IDBCreateSession *	pIDBCreateSession = NULL;
-	IDBCreateCommand *	pIDBCreateCommand = NULL;
+    BOOL				fSuccess = FALSE;
+    HRESULT				hr = E_FAIL;
+    ULONG				cPropSets  = 0;
+    DBPROPSET *			rgPropSets = NULL;
+    ICommand*			rgpCommand[2]	  = {NULL,NULL};
+    IDBProperties *		pIDBProperties	  = NULL;
+    IDBCreateSession *	pIDBCreateSession = NULL;
+    IDBCreateCommand *	pIDBCreateCommand = NULL;
 
-	// Create a fresh DataSource
-	TESTC_(GetModInfo()->CreateProvider(NULL,IID_IDBProperties,
-										(IUnknown**)&pIDBProperties), S_OK);
-	
-	TESTC_(InitializeDataSource(pIDBProperties), S_OK);
+    // Create a fresh DataSource
+    TESTC_(GetModInfo()->CreateProvider(NULL,IID_IDBProperties,
+                                        (IUnknown**)&pIDBProperties), S_OK);
 
-	// Check to see if the provider supports DBPROP_MULTIPLECONNECTIONS
-	if( !SupportedProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, pIDBProperties) ||
-		(::GetProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, pIDBProperties) &&
-		 !SettableProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, pIDBProperties)) )
-	{
-		odtLog << L"DBPROP_MULTIPLECONNECTIONS can not be set to VARIANT_FALSE." << ENDL;
-		SAFE_RELEASE(pIDBProperties);
-		return TEST_SKIPPED;
-	}
+    TESTC_(InitializeDataSource(pIDBProperties), S_OK);
 
-	// Set the Property to VARIANT_TRUE
-	TESTC_(::SetProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, 
-								&cPropSets, &rgPropSets, DBTYPE_BOOL, (ULONG_PTR) VARIANT_FALSE), S_OK);
+    // Check to see if the provider supports DBPROP_MULTIPLECONNECTIONS
+    if( !SupportedProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, pIDBProperties) ||
+            (::GetProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, pIDBProperties) &&
+             !SettableProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE, pIDBProperties)) )
+    {
+        odtLog << L"DBPROP_MULTIPLECONNECTIONS can not be set to VARIANT_FALSE." << ENDL;
+        SAFE_RELEASE(pIDBProperties);
+        return TEST_SKIPPED;
+    }
 
-	TESTC_(pIDBProperties->SetProperties(cPropSets, rgPropSets), S_OK);
+    // Set the Property to VARIANT_TRUE
+    TESTC_(::SetProperty(DBPROP_MULTIPLECONNECTIONS, DBPROPSET_DATASOURCE,
+                         &cPropSets, &rgPropSets, DBTYPE_BOOL, (ULONG_PTR) VARIANT_FALSE), S_OK);
 
-	// Get a new Session object
-	QTESTC(VerifyInterface(pIDBProperties, IID_IDBCreateSession, 
-						DATASOURCE_INTERFACE, (IUnknown**)&pIDBCreateSession));
+    TESTC_(pIDBProperties->SetProperties(cPropSets, rgPropSets), S_OK);
 
-	TESTC_(pIDBCreateSession->CreateSession(NULL, IID_IDBCreateCommand, 
-											(IUnknown**)&pIDBCreateCommand), S_OK);
+    // Get a new Session object
+    QTESTC(VerifyInterface(pIDBProperties, IID_IDBCreateSession,
+                           DATASOURCE_INTERFACE, (IUnknown**)&pIDBCreateSession));
 
-	// ICommand REFIID on IDBCreateCommand 
-	TESTC_(pIDBCreateCommand->CreateCommand(NULL, IID_ICommand, 
-											(IUnknown**)&rgpCommand[0]),S_OK);
-	
-	// ICommand REFIID on IDBCreateCommand 
-	TEST2C_(pIDBCreateCommand->CreateCommand(NULL, IID_ICommand, 
-											(IUnknown**)&rgpCommand[1]),S_OK,DB_E_OBJECTOPEN);
-	SAFE_RELEASE(rgpCommand[1]);
-	
-	TEST2C_(pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
-											(IUnknown**)&rgpCommand[1]),S_OK,DB_E_OBJECTOPEN);
-	fSuccess = TRUE;
+    TESTC_(pIDBCreateSession->CreateSession(NULL, IID_IDBCreateCommand,
+                                            (IUnknown**)&pIDBCreateCommand), S_OK);
+
+    // ICommand REFIID on IDBCreateCommand
+    TESTC_(pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+                                            (IUnknown**)&rgpCommand[0]),S_OK);
+
+    // ICommand REFIID on IDBCreateCommand
+    TEST2C_(pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+            (IUnknown**)&rgpCommand[1]),S_OK,DB_E_OBJECTOPEN);
+    SAFE_RELEASE(rgpCommand[1]);
+
+    TEST2C_(pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+            (IUnknown**)&rgpCommand[1]),S_OK,DB_E_OBJECTOPEN);
+    fSuccess = TRUE;
 
 CLEANUP:
 
-	// Release the Interfaces
-	SAFE_RELEASE(rgpCommand[0]);
-	SAFE_RELEASE_(rgpCommand[1]);
-	SAFE_RELEASE(pIDBProperties);
-	SAFE_RELEASE(pIDBCreateCommand);
-	SAFE_RELEASE(pIDBCreateSession);
-	::FreeProperties(&cPropSets, &rgPropSets);
+    // Release the Interfaces
+    SAFE_RELEASE(rgpCommand[0]);
+    SAFE_RELEASE_(rgpCommand[1]);
+    SAFE_RELEASE(pIDBProperties);
+    SAFE_RELEASE(pIDBCreateCommand);
+    SAFE_RELEASE(pIDBCreateSession);
+    ::FreeProperties(&cPropSets, &rgPropSets);
 
-	if(fSuccess)
-		return TEST_PASS;
-	else
-		return TEST_FAIL;
+    if(fSuccess)
+        return TEST_PASS;
+    else
+        return TEST_FAIL;
 }
 // }}
 
@@ -1685,8 +1700,8 @@ CLEANUP:
 //
 BOOL TCIDBCRCMD_CommandLimit::Terminate()
 {
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCIDBCRCMD::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCIDBCRCMD::Terminate());
 }	// }}
 // }}
 // }}
@@ -1699,22 +1714,22 @@ BOOL TCIDBCRCMD_CommandLimit::Terminate()
 //
 BOOL TCIDBCRCMD_CommandLimit_FromSession::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCIDBCRCMD_CommandLimit::Init())
-	// }}
-	{
-		// IDBCreateSession
-		TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown,IID_IDBCreateSession,
-							DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
-		
-		// IDBCreateCommand
-		TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown2,IID_IDBCreateCommand,
-							SESSION_INTERFACE, (IUnknown**)&m_pIDBCreateCommand));
-		return TRUE;
-	}
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCIDBCRCMD_CommandLimit::Init())
+        // }}
+    {
+        // IDBCreateSession
+        TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown,IID_IDBCreateSession,
+                              DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
+
+        // IDBCreateCommand
+        TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown2,IID_IDBCreateCommand,
+                              SESSION_INTERFACE, (IUnknown**)&m_pIDBCreateCommand));
+        return TRUE;
+    }
 
 CLEANUP:
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -1726,12 +1741,12 @@ CLEANUP:
 //
 BOOL TCIDBCRCMD_CommandLimit_FromSession::Terminate()
 {
-	// Release the Interfaces
-	SAFE_RELEASE(m_pIDBCreateSession);
-	SAFE_RELEASE(m_pIDBCreateCommand);
+    // Release the Interfaces
+    SAFE_RELEASE(m_pIDBCreateSession);
+    SAFE_RELEASE(m_pIDBCreateCommand);
 
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCIDBCRCMD_CommandLimit::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCIDBCRCMD_CommandLimit::Terminate());
 }	// }}
 // }}
 // }}
@@ -1744,14 +1759,14 @@ BOOL TCIDBCRCMD_CommandLimit_FromSession::Terminate()
 //
 BOOL TCIDBCRCMD_CommandLimit_FromRow::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCIDBCRCMD_CommandLimit::Init())
-	// }}
-	{
-		return InitializeRowObject();
-	}
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCIDBCRCMD_CommandLimit::Init())
+        // }}
+    {
+        return InitializeRowObject();
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -1763,15 +1778,15 @@ BOOL TCIDBCRCMD_CommandLimit_FromRow::Init()
 //
 BOOL TCIDBCRCMD_CommandLimit_FromRow::Terminate()
 {
-	// Destroy the row object
-	SAFE_DELETE(m_pCRowObject);
+    // Destroy the row object
+    SAFE_DELETE(m_pCRowObject);
 
-	// Release the Interfaces
-	SAFE_RELEASE(m_pIDBCreateCommand);
-	SAFE_RELEASE(m_pIDBCreateSession);
+    // Release the Interfaces
+    SAFE_RELEASE(m_pIDBCreateCommand);
+    SAFE_RELEASE(m_pIDBCreateSession);
 
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCIDBCRCMD_CommandLimit::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCIDBCRCMD_CommandLimit::Terminate());
 }	// }}
 // }}
 // }}
@@ -1791,14 +1806,14 @@ BOOL TCIDBCRCMD_CommandLimit_FromRow::Terminate()
 //
 BOOL TCExtendedErrors::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCIDBCRCMD::Init())
-	// }}
-	{
-		return TRUE;
-	}
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCIDBCRCMD::Init())
+        // }}
+    {
+        return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -1810,28 +1825,28 @@ BOOL TCExtendedErrors::Init()
 //
 int TCExtendedErrors::Variation_1()
 {
-	BOOL	  fSuccess	= FALSE;
-	HRESULT   hr		= E_FAIL;
-	ICommand* pCommand  = NULL;
-	
-	// Cause an Error
-	m_pExtError->CauseError();
+    BOOL	  fSuccess	= FALSE;
+    HRESULT   hr		= E_FAIL;
+    ICommand* pCommand  = NULL;
 
-	// CreateCommand with IID_ICommand
-	if(CHECK(hr=m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand, 
-							(IUnknown**)&pCommand), S_OK) && (pCommand))
-		fSuccess = TRUE;
+    // Cause an Error
+    m_pExtError->CauseError();
 
-	// Do extended check following CreateCommand
-	fSuccess &= XCHECK(m_pIDBCreateCommand, IID_IDBCreateCommand, hr);	
- 
-	// Release the Command
-	SAFE_RELEASE_(pCommand);
+    // CreateCommand with IID_ICommand
+    if(CHECK(hr=m_pIDBCreateCommand->CreateCommand(NULL, IID_ICommand,
+                (IUnknown**)&pCommand), S_OK) && (pCommand))
+        fSuccess = TRUE;
 
-	if(fSuccess)
-		return TEST_PASS;
-	else
-		return TEST_FAIL;
+    // Do extended check following CreateCommand
+    fSuccess &= XCHECK(m_pIDBCreateCommand, IID_IDBCreateCommand, hr);
+
+    // Release the Command
+    SAFE_RELEASE_(pCommand);
+
+    if(fSuccess)
+        return TEST_PASS;
+    else
+        return TEST_FAIL;
 }
 // }}
 
@@ -1844,28 +1859,28 @@ int TCExtendedErrors::Variation_1()
 //
 int TCExtendedErrors::Variation_2()
 {
-	BOOL	  fSuccess	= FALSE;
-	HRESULT   hr		= E_FAIL;
-	ICommand* pCommand  = NULL;
+    BOOL	  fSuccess	= FALSE;
+    HRESULT   hr		= E_FAIL;
+    ICommand* pCommand  = NULL;
 
-	// Cause an Error
-	m_pExtError->CauseError();
-  
- 	// IID_IDBCreateCommand REFIID on CreateCommand 
-	if(CHECK(hr=m_pIDBCreateCommand->CreateCommand(NULL, IID_IDBCreateCommand, 
-							(IUnknown**)&pCommand), E_NOINTERFACE) && (!pCommand))
-		fSuccess = TRUE;
-  	
-	//Do extended check following CreateCommand
-	fSuccess &= XCHECK(m_pIDBCreateCommand, IID_IDBCreateCommand, hr);	
+    // Cause an Error
+    m_pExtError->CauseError();
 
-	// Release the Command
-	SAFE_RELEASE_(pCommand);
+    // IID_IDBCreateCommand REFIID on CreateCommand
+    if(CHECK(hr=m_pIDBCreateCommand->CreateCommand(NULL, IID_IDBCreateCommand,
+                (IUnknown**)&pCommand), E_NOINTERFACE) && (!pCommand))
+        fSuccess = TRUE;
 
-	if(fSuccess)
-		return TEST_PASS;
-	else
-		return TEST_FAIL;
+    //Do extended check following CreateCommand
+    fSuccess &= XCHECK(m_pIDBCreateCommand, IID_IDBCreateCommand, hr);
+
+    // Release the Command
+    SAFE_RELEASE_(pCommand);
+
+    if(fSuccess)
+        return TEST_PASS;
+    else
+        return TEST_FAIL;
 }
 // }}
 
@@ -1878,21 +1893,21 @@ int TCExtendedErrors::Variation_2()
 //
 int TCExtendedErrors::Variation_3()
 {
-	BOOL	  fSuccess	= FALSE;
-	HRESULT   hr		= E_FAIL;
+    BOOL	  fSuccess	= FALSE;
+    HRESULT   hr		= E_FAIL;
 
-	// NULL pICommand on CreateCommand 
-	if(CHECK(hr=m_pIDBCreateCommand->CreateCommand(NULL, 
-										IID_ICommand, NULL), E_INVALIDARG))
-		fSuccess = TRUE;
+    // NULL pICommand on CreateCommand
+    if(CHECK(hr=m_pIDBCreateCommand->CreateCommand(NULL,
+                IID_ICommand, NULL), E_INVALIDARG))
+        fSuccess = TRUE;
 
-	// Do extended check following CreateCommand
-	fSuccess &= XCHECK(m_pIDBCreateCommand, IID_IDBCreateCommand, hr);	
-	
-	if(fSuccess)
-		return TEST_PASS;
-	else
-		return TEST_FAIL;
+    // Do extended check following CreateCommand
+    fSuccess &= XCHECK(m_pIDBCreateCommand, IID_IDBCreateCommand, hr);
+
+    if(fSuccess)
+        return TEST_PASS;
+    else
+        return TEST_FAIL;
 }
 // }}
 
@@ -1905,8 +1920,8 @@ int TCExtendedErrors::Variation_3()
 //
 BOOL TCExtendedErrors::Terminate()
 {
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCIDBCRCMD::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCIDBCRCMD::Terminate());
 }	// }}
 
 // }}
@@ -1919,23 +1934,23 @@ BOOL TCExtendedErrors::Terminate()
 //
 BOOL TCExtendedErrors_FromSession::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCExtendedErrors::Init())
-	// }}
-	{
-		// IDBCreateSession
-		TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown,IID_IDBCreateSession,
-							DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
-		
-		// IDBCreateCommand
-		TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown2,IID_IDBCreateCommand,
-							SESSION_INTERFACE, (IUnknown**)&m_pIDBCreateCommand));
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCExtendedErrors::Init())
+        // }}
+    {
+        // IDBCreateSession
+        TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown,IID_IDBCreateSession,
+                              DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
 
-		return TRUE;
-	}
+        // IDBCreateCommand
+        TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown2,IID_IDBCreateCommand,
+                              SESSION_INTERFACE, (IUnknown**)&m_pIDBCreateCommand));
+
+        return TRUE;
+    }
 
 CLEANUP:
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -1947,12 +1962,12 @@ CLEANUP:
 //
 BOOL TCExtendedErrors_FromSession::Terminate()
 {
-	// Release Interfaces
-	SAFE_RELEASE(m_pIDBCreateSession);
-	SAFE_RELEASE(m_pIDBCreateCommand);
+    // Release Interfaces
+    SAFE_RELEASE(m_pIDBCreateSession);
+    SAFE_RELEASE(m_pIDBCreateCommand);
 
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCExtendedErrors::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCExtendedErrors::Terminate());
 }	// }}
 
 
@@ -1963,14 +1978,14 @@ BOOL TCExtendedErrors_FromSession::Terminate()
 //
 BOOL TCExtendedErrors_FromRow::Init()
 {
-	// {{ TCW_INIT_BASECLASS_CHECK
-	if(TCExtendedErrors::Init())
-	// }}
-	{
-		return InitializeRowObject();
-	}
+    // {{ TCW_INIT_BASECLASS_CHECK
+    if(TCExtendedErrors::Init())
+        // }}
+    {
+        return InitializeRowObject();
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 
@@ -1982,15 +1997,15 @@ BOOL TCExtendedErrors_FromRow::Init()
 //
 BOOL TCExtendedErrors_FromRow::Terminate()
 {
-	// Destroy the row object
-	SAFE_DELETE(m_pCRowObject);
+    // Destroy the row object
+    SAFE_DELETE(m_pCRowObject);
 
-	// Release the Interfaces
-	SAFE_RELEASE(m_pIDBCreateCommand);
-	SAFE_RELEASE(m_pIDBCreateSession);
+    // Release the Interfaces
+    SAFE_RELEASE(m_pIDBCreateCommand);
+    SAFE_RELEASE(m_pIDBCreateSession);
 
-	// {{ TCW_TERM_BASECLASS_CHECK2
-	return(TCExtendedErrors::Terminate());
+    // {{ TCW_TERM_BASECLASS_CHECK2
+    return(TCExtendedErrors::Terminate());
 }	// }}
 
 
@@ -2001,43 +2016,43 @@ BOOL TCExtendedErrors_FromRow::Terminate()
 //
 BOOL TCIDBCRCMD::InitializeRowObject()
 {
-	HRESULT	hr = E_FAIL;
-	CRowset Rowset;
+    HRESULT	hr = E_FAIL;
+    CRowset Rowset;
 
-	m_pCRowObject = NULL;
-	m_pIDBCreateCommand = NULL;
-	m_pIDBCreateSession = NULL;
-	
-	// IDBCreateSession
-	TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown,IID_IDBCreateSession,
-						DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
-		
-	//Create a new row object 
-	m_pCRowObject = new CRowObject;
-	TESTC(m_pCRowObject != NULL);	
+    m_pCRowObject = NULL;
+    m_pIDBCreateCommand = NULL;
+    m_pIDBCreateSession = NULL;
 
-	//Create the Rowset object and obtain first row
-	hr = Rowset.CreateRowset();
-	if (hr==DB_E_NOTSUPPORTED)
-			TESTC_PROVIDER(FALSE);
+    // IDBCreateSession
+    TESTC(VerifyInterface(m_pThisTestModule->m_pIUnknown,IID_IDBCreateSession,
+                          DATASOURCE_INTERFACE, (IUnknown**)&m_pIDBCreateSession));
 
-	TESTC_(hr, S_OK);
-	TESTC_(Rowset.GetNextRows(&m_hRow),S_OK);
+    //Create a new row object
+    m_pCRowObject = new CRowObject;
+    TESTC(m_pCRowObject != NULL);
 
-	//Now create the row object.
-	QTESTC(SUCCEEDED(hr = m_pCRowObject->CreateRowObject(Rowset.pIRowset(), m_hRow)));
-	Rowset.ReleaseRows(m_hRow);
+    //Create the Rowset object and obtain first row
+    hr = Rowset.CreateRowset();
+    if (hr==DB_E_NOTSUPPORTED)
+        TESTC_PROVIDER(FALSE);
 
-	if(!VerifyInterface(m_pCRowObject->pIRow(), IID_IDBCreateCommand, ROW_INTERFACE,(IUnknown**)&m_pIDBCreateCommand))
-		return TEST_SKIPPED;
+    TESTC_(hr, S_OK);
+    TESTC_(Rowset.GetNextRows(&m_hRow),S_OK);
 
-	return TEST_PASS;
+    //Now create the row object.
+    QTESTC(SUCCEEDED(hr = m_pCRowObject->CreateRowObject(Rowset.pIRowset(), m_hRow)));
+    Rowset.ReleaseRows(m_hRow);
+
+    if(!VerifyInterface(m_pCRowObject->pIRow(), IID_IDBCreateCommand, ROW_INTERFACE,(IUnknown**)&m_pIDBCreateCommand))
+        return TEST_SKIPPED;
+
+    return TEST_PASS;
 
 CLEANUP:
-	if (hr==E_NOINTERFACE || hr==DB_E_NOTSUPPORTED)
-		return TEST_SKIPPED;
-	else
-		return TEST_FAIL;
+    if (hr==E_NOINTERFACE || hr==DB_E_NOTSUPPORTED)
+        return TEST_SKIPPED;
+    else
+        return TEST_FAIL;
 }
 
 
@@ -2048,39 +2063,41 @@ CLEANUP:
 //
 int TCMULTICMD::TestInterface(IID iid, BOOL mandatory)
 {
-	TBEGIN;
+    TBEGIN;
 
-	ICommand* pCommand  = NULL;
-	IUnknown* pIUnknown = NULL;
-	
-	// Check the levels
-	if( mandatory || IsReqInterface(COMMAND_INTERFACE, iid) ) 
-	{
-		// CreateCommand with a mandatory interface should return S_OK
-		TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, iid, (IUnknown**)&pCommand), S_OK);
-		TESTC(DefaultObjectTesting(pCommand, COMMAND_INTERFACE));
-	}
-	else
-	{
-		// CreateCommand should return S_OK or E_NOINTERFACE
-		HRESULT hr=m_pIDBCreateCommand->CreateCommand(NULL, iid, (IUnknown**)&pCommand);
-		
-		// Check the returncode and pointer
-		if( hr == E_NOINTERFACE ) {
-			TESTC(!pCommand);
-		}
-		else {
-			TESTC(DefaultObjectTesting(pCommand, COMMAND_INTERFACE));
-		}
-	}
+    ICommand* pCommand  = NULL;
+    IUnknown* pIUnknown = NULL;
+
+    // Check the levels
+    if( mandatory || IsReqInterface(COMMAND_INTERFACE, iid) )
+    {
+        // CreateCommand with a mandatory interface should return S_OK
+        TESTC_(m_pIDBCreateCommand->CreateCommand(NULL, iid, (IUnknown**)&pCommand), S_OK);
+        TESTC(DefaultObjectTesting(pCommand, COMMAND_INTERFACE));
+    }
+    else
+    {
+        // CreateCommand should return S_OK or E_NOINTERFACE
+        HRESULT hr=m_pIDBCreateCommand->CreateCommand(NULL, iid, (IUnknown**)&pCommand);
+
+        // Check the returncode and pointer
+        if( hr == E_NOINTERFACE )
+        {
+            TESTC(!pCommand);
+        }
+        else
+        {
+            TESTC(DefaultObjectTesting(pCommand, COMMAND_INTERFACE));
+        }
+    }
 
 CLEANUP:
-	
-	// Release Interfaces
-	SAFE_RELEASE(pIUnknown);
-	SAFE_RELEASE_(pCommand);
 
-	TRETURN;
+    // Release Interfaces
+    SAFE_RELEASE(pIUnknown);
+    SAFE_RELEASE_(pCommand);
+
+    TRETURN;
 }
 
 
@@ -2091,58 +2108,58 @@ CLEANUP:
 //
 int TCZOMBIE_Zombie::TestTxn(ETXN eTxn, BOOL fRetaining)
 {
-	int					fPassFail			= TEST_FAIL;	// ReturnValue
-	HRESULT				ExpectedHr			= E_UNEXPECTED;	// Expected HRESULT
-	DBCOUNTITEM			cRowsObtained		= 0;			// Number of rows returned, should be 1
-	HROW *				rghRows				= NULL;			// Array of Row Handles
-	IDBCreateCommand *	pIDBCreateCommand	= NULL;			// IDBCreateCommand
-	ICommand *			pICommand			= NULL;			// ICommand Pointer
+    int					fPassFail			= TEST_FAIL;	// ReturnValue
+    HRESULT				ExpectedHr			= E_UNEXPECTED;	// Expected HRESULT
+    DBCOUNTITEM			cRowsObtained		= 0;			// Number of rows returned, should be 1
+    HROW *				rghRows				= NULL;			// Array of Row Handles
+    IDBCreateCommand *	pIDBCreateCommand	= NULL;			// IDBCreateCommand
+    ICommand *			pICommand			= NULL;			// ICommand Pointer
 
-	// Retrieve an Interface pointer to IDBCreateCommand within a Transaction
-	TESTC(StartTransaction(SELECT_ALLFROMTBL, (IUnknown**)&pIDBCreateCommand));
+    // Retrieve an Interface pointer to IDBCreateCommand within a Transaction
+    TESTC(StartTransaction(SELECT_ALLFROMTBL, (IUnknown**)&pIDBCreateCommand));
 
-	// Obtain the ABORT or COMMIT PRESERVE flag and adjust ExpectedHr 
-	if( ((eTxn == ETXN_COMMIT) && (m_fCommitPreserve)) ||
-	    ((eTxn == ETXN_ABORT)  && (m_fAbortPreserve)) )
-		ExpectedHr = S_OK;
+    // Obtain the ABORT or COMMIT PRESERVE flag and adjust ExpectedHr
+    if( ((eTxn == ETXN_COMMIT) && (m_fCommitPreserve)) ||
+            ((eTxn == ETXN_ABORT)  && (m_fAbortPreserve)) )
+        ExpectedHr = S_OK;
 
-	// Commit or Abort the transaction, with retention as specified
-	if( eTxn == ETXN_COMMIT )
-		TESTC(GetCommit(fRetaining));
+    // Commit or Abort the transaction, with retention as specified
+    if( eTxn == ETXN_COMMIT )
+        TESTC(GetCommit(fRetaining));
 
-	if( eTxn == ETXN_ABORT )
-		TESTC(GetAbort(fRetaining));
+    if( eTxn == ETXN_ABORT )
+        TESTC(GetAbort(fRetaining));
 
-	// Test zombie
-	TESTC_(m_pIRowset->GetNextRows(0,0,1,&cRowsObtained,&rghRows), ExpectedHr);
-	
-	// Release the row handle on the 1st rowset
-	TESTC_(m_pIRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL), S_OK);
-	PROVIDER_FREE(rghRows);
+    // Test zombie
+    TESTC_(m_pIRowset->GetNextRows(0,0,1,&cRowsObtained,&rghRows), ExpectedHr);
 
-	// Cleanup Transactions
-	CleanUpTransaction(fRetaining ? S_OK : XACT_E_NOTRANSACTION);
+    // Release the row handle on the 1st rowset
+    TESTC_(m_pIRowset->ReleaseRows(cRowsObtained, rghRows, NULL, NULL, NULL), S_OK);
+    PROVIDER_FREE(rghRows);
 
-	if( m_fRowCommand )
-	{
-		// CreateCommand with IID_ICommand
-		TESTC_(pIDBCreateCommand->CreateCommand(NULL, 
-									IID_ICommand, (IUnknown**)&pICommand), ExpectedHr);
-		fPassFail = TEST_PASS;
-	}
-	else
-	{
-		// CreateCommand with IID_ICommand
-		TESTC_(pIDBCreateCommand->CreateCommand(NULL, 
-									IID_ICommand, (IUnknown**)&pICommand), S_OK);
-		fPassFail = TEST_PASS;
-	}
+    // Cleanup Transactions
+    CleanUpTransaction(fRetaining ? S_OK : XACT_E_NOTRANSACTION);
+
+    if( m_fRowCommand )
+    {
+        // CreateCommand with IID_ICommand
+        TESTC_(pIDBCreateCommand->CreateCommand(NULL,
+                                                IID_ICommand, (IUnknown**)&pICommand), ExpectedHr);
+        fPassFail = TEST_PASS;
+    }
+    else
+    {
+        // CreateCommand with IID_ICommand
+        TESTC_(pIDBCreateCommand->CreateCommand(NULL,
+                                                IID_ICommand, (IUnknown**)&pICommand), S_OK);
+        fPassFail = TEST_PASS;
+    }
 
 CLEANUP:
 
-	// Release the ICommand and IDBCreateCommand
-	SAFE_RELEASE_(pICommand);
-	SAFE_RELEASE(pIDBCreateCommand);
+    // Release the ICommand and IDBCreateCommand
+    SAFE_RELEASE_(pICommand);
+    SAFE_RELEASE(pIDBCreateCommand);
 
-	return fPassFail;
+    return fPassFail;
 }

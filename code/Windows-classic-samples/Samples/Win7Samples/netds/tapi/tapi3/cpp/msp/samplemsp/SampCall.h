@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999 - 2000 Microsoft Corporation
 
@@ -25,11 +25,11 @@ Abstract:
 /////////////////////////////////////////////////////////////////////////////
 
 class CSampleMSPCall : public CMSPCallMultiGraph
-    //  if you want to allow your object to be used in scripting apps
-    //  it has to expose IObjectSafety interface. if your object is safe for 
-    //  scripting on all of its interfaces, you can use the implementation
-    //  of IObjectSafety from MSPUtils.h
-    //, public CMSPObjectSafetyImpl
+//  if you want to allow your object to be used in scripting apps
+//  it has to expose IObjectSafety interface. if your object is safe for
+//  scripting on all of its interfaces, you can use the implementation
+//  of IObjectSafety from MSPUtils.h
+//, public CMSPObjectSafetyImpl
 
 {
 public:
@@ -55,19 +55,19 @@ public:
         IN      MSP_HANDLE          htCall,
         IN      DWORD               dwReserved,
         IN      DWORD               dwMediaType
-        );
+    );
 
     virtual HRESULT CreateStreamObject(
         IN      DWORD               dwMediaType,
         IN      TERMINAL_DIRECTION  Direction,
         IN      IMediaEvent *       pGraph,
         IN      ITStream **         ppStream
-        );
+    );
 
     virtual HRESULT ReceiveTSPCallData(
         IN      PBYTE               pBuffer,
         IN      DWORD               dwSize
-        );
+    );
 
     //
     // We override these to make sure the number of
@@ -78,14 +78,14 @@ public:
         IN      DWORD               dwMediaType,
         IN      TERMINAL_DIRECTION  Direction,
         IN OUT  ITStream **         ppStream
-        );
-    
+    );
+
     STDMETHOD (RemoveStream) (
         IN      ITStream *          pStream
-        );                      
+    );
 
 protected:
-    // 
+    //
     // Protected data members.
     //
 

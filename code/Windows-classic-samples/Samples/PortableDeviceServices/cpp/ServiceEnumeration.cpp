@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -235,7 +235,7 @@ void DisplayDeviceInformation(
     {
         wprintf(L"! Failed to get the device PnP identifier, hr = 0x%lx\n", hr);
     }
-    
+
     CoTaskMemFree(pnpDeviceID);
     pnpDeviceID = nullptr;
 }
@@ -253,13 +253,13 @@ void EumerateContactsServices(
     // CoCreate the IPortableDeviceManager interface to enumerate
     // portable devices and to get information about them.
     HRESULT hr = CoCreateInstance(CLSID_PortableDeviceManager,
-                          nullptr,
-                          CLSCTX_INPROC_SERVER,
-                          IID_PPV_ARGS(&deviceManager));
+                                  nullptr,
+                                  CLSCTX_INPROC_SERVER,
+                                  IID_PPV_ARGS(&deviceManager));
 
     if (FAILED(hr))
     {
-        wprintf(L"! Failed to CoCreateInstance CLSID_PortableDeviceManager, hr = 0x%lx\n", hr); 
+        wprintf(L"! Failed to CoCreateInstance CLSID_PortableDeviceManager, hr = 0x%lx\n", hr);
     }
     else
     {
@@ -449,7 +449,7 @@ void ChooseDeviceService(
                 // Successfully opened a service, set the result
                 *service = serviceTemp.Detach();
             }
-            
+
         }
         else
         {

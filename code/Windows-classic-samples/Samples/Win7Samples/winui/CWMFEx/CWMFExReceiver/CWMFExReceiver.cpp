@@ -1,4 +1,4 @@
-
+﻿
 //////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -28,7 +28,8 @@ DWORD ChangeFilter(HWND hwnd, UINT uMsg, DWORD dwMsgFlt)
     fSuccess = ChangeWindowMessageFilterEx(hwnd, uMsg, dwMsgFlt, &ChangeFilterStruct);
     dwMsgFltInfo = ChangeFilterStruct.ExtStatus;
 
-    if (!fSuccess) {
+    if (!fSuccess)
+    {
         wprintf(L"\nChangeWindowMessageFilterEx failed with %lu", GetLastError());
         dwMsgFltInfo = MSGFLTINFO_ERROR;
     }
@@ -38,14 +39,15 @@ DWORD ChangeFilter(HWND hwnd, UINT uMsg, DWORD dwMsgFlt)
 
 LRESULT CALLBACK CWMFExWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    switch(uMsg) {
-        case CWMFEX_CONTROL:
-            return ChangeFilter(hwnd, (UINT)lParam, (DWORD)wParam);
-        case WM_CLOSE:
-            PostQuitMessage(0);
-            break;
-        default:
-            break;
+    switch(uMsg)
+    {
+    case CWMFEX_CONTROL:
+        return ChangeFilter(hwnd, (UINT)lParam, (DWORD)wParam);
+    case WM_CLOSE:
+        PostQuitMessage(0);
+        break;
+    default:
+        break;
     }
     DefWindowProc(hwnd, uMsg, wParam, lParam);
     return CWMFEX_ACK;
@@ -62,7 +64,8 @@ HWND CreateTheWindow(HINSTANCE hInstance)
     wndclass.lpszClassName = WNDCLASSNAME;
     wndclass.hbrBackground = (HBRUSH)COLOR_WINDOW;
 
-    if (0 == RegisterClass(&wndclass)) {
+    if (0 == RegisterClass(&wndclass))
+    {
         wprintf(L"\nRegisterClass failed with %lu", GetLastError());
         return NULL;
     }
@@ -78,7 +81,8 @@ HWND CreateTheWindow(HINSTANCE hInstance)
                         NULL,
                         hInstance,
                         NULL);
-    if (hwnd == NULL) {
+    if (hwnd == NULL)
+    {
         wprintf(L"\nCreateWindow failed with %lu", GetLastError());
     }
 
@@ -86,7 +90,7 @@ HWND CreateTheWindow(HINSTANCE hInstance)
 }
 
 int __cdecl wmain (
-    int argc, 
+    int argc,
     wchar_t *argv[])
 {
     UNREFERENCED_PARAMETER(argc);
@@ -96,18 +100,21 @@ int __cdecl wmain (
     MSG msg;
 
     hwnd = CreateTheWindow(GetModuleHandle(NULL));
-    if (hwnd == NULL) {
+    if (hwnd == NULL)
+    {
         return 0;
     }
 
     // Allow control message CWMFEX_CONTROL so that sender can control this window
 
-    if (MSGFLTINFO_ERROR == ChangeFilter(hwnd, CWMFEX_CONTROL, MSGFLT_ALLOW)) {
+    if (MSGFLTINFO_ERROR == ChangeFilter(hwnd, CWMFEX_CONTROL, MSGFLT_ALLOW))
+    {
         DestroyWindow(hwnd);
         return 0;
     }
 
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }

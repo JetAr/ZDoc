@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,16 +26,16 @@ HRESULT CNetCostEventSink::StartListeningForEvents(_In_ REFIID riid, _In_opt_ DE
         *ppSinkCostMgr = NULL;
 
         // Create our CNetCostEventSink object that will be used to advise to the Connection point
-        CNetCostEventSink *pMgrEventSink = new (std::nothrow) CNetCostEventSink(pDestAddress, riid);   
-        
+        CNetCostEventSink *pMgrEventSink = new (std::nothrow) CNetCostEventSink(pDestAddress, riid);
+
         if (pMgrEventSink)
         {
-            pMgrEventSink->m_hThread = CreateThread(NULL, 
-                                                0, 
-                                                &StartListeningForEventsThread, 
-                                                pMgrEventSink, 
-                                                0, 
-                                                &(pMgrEventSink->m_dwThreadId));
+            pMgrEventSink->m_hThread = CreateThread(NULL,
+                                                    0,
+                                                    &StartListeningForEventsThread,
+                                                    pMgrEventSink,
+                                                    0,
+                                                    &(pMgrEventSink->m_dwThreadId));
 
             if (pMgrEventSink->m_hThread == INVALID_HANDLE_VALUE)
             {
@@ -91,7 +91,7 @@ DWORD WINAPI CNetCostEventSink::StartListeningForEventsThread(_In_ LPVOID pArg)
 //********************************************************************************************
 // Function: ListenForEvents
 //
-// Description: The main listener function. Listens, and waits on a Message Loop. 
+// Description: The main listener function. Listens, and waits on a Message Loop.
 //
 //********************************************************************************************
 HRESULT CNetCostEventSink::ListenForEvents()
@@ -99,8 +99,8 @@ HRESULT CNetCostEventSink::ListenForEvents()
     HRESULT hr = S_OK;
     CComPtr<IConnectionPointContainer> pCpc;
     CComPtr<IUnknown> pSink;
-    hr = CoCreateInstance(CLSID_NetworkListManager, NULL, 
-        CLSCTX_ALL, __uuidof(INetworkCostManager), (LPVOID*)&m_pCostManager);
+    hr = CoCreateInstance(CLSID_NetworkListManager, NULL,
+                          CLSCTX_ALL, __uuidof(INetworkCostManager), (LPVOID*)&m_pCostManager);
 
     if (SUCCEEDED(hr))
     {
@@ -131,13 +131,13 @@ HRESULT CNetCostEventSink::ListenForEvents()
         BOOL bRet;
         MSG msg;
         while((bRet = GetMessage(&msg, NULL, 0, 0 )) != 0)
-        { 
+        {
             if (bRet == -1)
             {
                 break;
             }
-            TranslateMessage(&msg); 
-            DispatchMessage(&msg); 
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
     }
     return hr;
@@ -156,7 +156,7 @@ HRESULT CNetCostEventSink::StopListeningForEvents()
     {
         hr = m_pConnectionPoint->Unadvise(m_dwCookie);
     }
-    
+
     if (m_hThread != INVALID_HANDLE_VALUE)
     {
         PostThreadMessage(m_dwThreadId, WM_QUIT, 0, 0);
@@ -188,7 +188,7 @@ CNetCostEventSink::CNetCostEventSink(_In_opt_ DESTINATION_INFO *pDestAddress, _I
 {
     ZeroMemory(m_destSockAddr.addrString, IP_ADDRESS_SIZE*sizeof(WCHAR));
     ZeroMemory(&m_defaultInterfaceGuid, sizeof(GUID));
-    
+
     if (pDestAddress)
     {
         wmemcpy(m_destSockAddr.addrString, pDestAddress->addrString,wcslen(pDestAddress->addrString));
@@ -198,7 +198,7 @@ CNetCostEventSink::CNetCostEventSink(_In_opt_ DESTINATION_INFO *pDestAddress, _I
 
 CNetCostEventSink::~CNetCostEventSink()
 {
-    
+
 }
 
 //********************************************************************************************
@@ -214,8 +214,8 @@ STDMETHODIMP CNetCostEventSink::QueryInterface (_In_ REFIID riid, _Out_ LPVOID* 
         QITABENT(CNetCostEventSink, INetworkCostManagerEvents),
         QITABENT(CNetCostEventSink, INetworkConnectionCostEvents),
         { 0 }
-    };    
-    return QISearch(this, rgqit, riid, ppv);    
+    };
+    return QISearch(this, rgqit, riid, ppv);
 }
 
 STDMETHODIMP_(ULONG) CNetCostEventSink::AddRef(VOID)
@@ -244,20 +244,20 @@ STDMETHODIMP_(ULONG) CNetCostEventSink::Release(VOID)
 STDMETHODIMP CNetCostEventSink::CostChanged (_In_ DWORD cost, _In_opt_ NLM_SOCKADDR *pSockAddr)
 {
     SYSTEMTIME LocalTime;
-    
+
     GetLocalTime( &LocalTime );
     wprintf(L"\n***********************************\n");
     if (pSockAddr)
     {
         wprintf(L"Cost Change for Destination address : %s\n",g_pSinkDestCostMgr->m_destSockAddr.addrString);
     }
-    
+
     else
     {
         wprintf(L"Machine Cost changed\n");
     }
-    
-    DisplayCostDescription(cost);    
+
+    DisplayCostDescription(cost);
     return S_OK;
 }
 
@@ -285,8 +285,8 @@ STDMETHODIMP CNetCostEventSink::DataPlanStatusChanged (_In_opt_ NLM_SOCKADDR *pS
     {
         wprintf(L"Machine Data Plan Status Changed\n");
     }
-    
-    hr = m_pCostManager->GetDataPlanStatus(&dataPlanStatus, pSockAddr);            
+
+    hr = m_pCostManager->GetDataPlanStatus(&dataPlanStatus, pSockAddr);
     if (hr == S_OK)
     {
         //If there is an interface change, applications should disconnect and reconnect to the new interface
@@ -315,9 +315,9 @@ STDMETHODIMP CNetCostEventSink::ConnectionCostChanged (_In_ GUID connectionId, _
     GetLocalTime( &LocalTime );
     wprintf(L"\n***********************************\n");
     wprintf(L"Connection Cost Changed\n");
-    
+
     //get connection ID
-    WCHAR szGuid[39]={0};
+    WCHAR szGuid[39]= {0};
     StringFromGUID2( connectionId, szGuid, 39 );
     wprintf(L"Connection ID    :    %s\n", szGuid);
     DisplayCostDescription(cost);
@@ -344,25 +344,25 @@ STDMETHODIMP CNetCostEventSink::ConnectionDataPlanStatusChanged (_In_ GUID conne
     wprintf(L"\n***********************************\n");
     wprintf(L"Connection data plan status changed\n");
     //get connection ID
-    WCHAR szGuid[39]={0};
+    WCHAR szGuid[39]= {0};
     StringFromGUID2( connectionId, szGuid, 39 );
-    wprintf(L"Connection ID    :    %s\n", szGuid);        
+    wprintf(L"Connection ID    :    %s\n", szGuid);
     hr = CoCreateInstance(CLSID_NetworkListManager, NULL, CLSCTX_ALL, IID_PPV_ARGS(&pLocalNLM));
     if (SUCCEEDED(hr))
     {
         hr = GetConnectionFromGUID(pLocalNLM, connectionId, &pConnection);
     }
-    
+
     if (SUCCEEDED(hr))
     {
-        hr = pConnection->QueryInterface(IID_PPV_ARGS(&pConnectionCost));    
+        hr = pConnection->QueryInterface(IID_PPV_ARGS(&pConnectionCost));
     }
-    
+
     if (SUCCEEDED(hr))
     {
-        hr = pConnectionCost->GetDataPlanStatus(&dataPlanStatus);       
+        hr = pConnectionCost->GetDataPlanStatus(&dataPlanStatus);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         DisplayDataPlanStatus(&dataPlanStatus);

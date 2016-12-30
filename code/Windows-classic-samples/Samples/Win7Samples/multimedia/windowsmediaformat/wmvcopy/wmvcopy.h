@@ -1,11 +1,11 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            WMVCopy.h
 //
-// Abstract:            Interface of CWMVCopy class. 
+// Abstract:            Interface of CWMVCopy class.
 //
 //*****************************************************************************
 
@@ -23,18 +23,18 @@
 ////////////////////////////////////////////////////////////////////////////////
 // This class is used to copy a WMV file
 ////////////////////////////////////////////////////////////////////////////////
-class CWMVCopy : public IWMReaderCallback, 
-                 public IWMReaderCallbackAdvanced
+class CWMVCopy : public IWMReaderCallback,
+    public IWMReaderCallbackAdvanced
 {
 public:
     CWMVCopy();
     ~CWMVCopy();
 
     //
-    // Copy the input file to the output file                  
+    // Copy the input file to the output file
     //
-    HRESULT Copy( const WCHAR * pwszInputFile, 
-                  const WCHAR * pwszOutputFile, 
+    HRESULT Copy( const WCHAR * pwszInputFile,
+                  const WCHAR * pwszOutputFile,
                   QWORD qwMaxDuration,
                   BOOL fMoveScriptStream );
 
@@ -43,62 +43,62 @@ public:
     // IWMReaderCallback interface
     //
     virtual HRESULT STDMETHODCALLTYPE OnSample( /* [in] */ DWORD dwOutputNum,
-                                                /* [in] */ QWORD qwSampleTime,
-                                                /* [in] */ QWORD qwSampleDuration,
-                                                /* [in] */ DWORD dwFlags,
-                                                /* [in] */ INSSBuffer __RPC_FAR * pSample,
-                                                /* [in] */ void __RPC_FAR * pvContext);
+            /* [in] */ QWORD qwSampleTime,
+            /* [in] */ QWORD qwSampleDuration,
+            /* [in] */ DWORD dwFlags,
+            /* [in] */ INSSBuffer __RPC_FAR * pSample,
+            /* [in] */ void __RPC_FAR * pvContext);
 
     //
     // IWMReaderAdvanced interface
     //
     virtual HRESULT STDMETHODCALLTYPE OnStatus( /* [in] */ WMT_STATUS Status,
-                                                /* [in] */ HRESULT hr,
-                                                /* [in] */ WMT_ATTR_DATATYPE dwType,
-                                                /* [in] */ BYTE __RPC_FAR * pValue,
-                                                /* [in] */ void __RPC_FAR * pvContext);
+            /* [in] */ HRESULT hr,
+            /* [in] */ WMT_ATTR_DATATYPE dwType,
+            /* [in] */ BYTE __RPC_FAR * pValue,
+            /* [in] */ void __RPC_FAR * pvContext);
 
     virtual HRESULT STDMETHODCALLTYPE OnStreamSample( /* [in] */ WORD wStreamNum,
-                                                      /* [in] */ QWORD cnsSampleTime,
-                                                      /* [in] */ QWORD cnsSampleDuration,
-                                                      /* [in] */ DWORD dwFlags,
-                                                      /* [in] */ INSSBuffer __RPC_FAR * pSample,
-                                                      /* [in] */ void __RPC_FAR * pvContext);
+            /* [in] */ QWORD cnsSampleTime,
+            /* [in] */ QWORD cnsSampleDuration,
+            /* [in] */ DWORD dwFlags,
+            /* [in] */ INSSBuffer __RPC_FAR * pSample,
+            /* [in] */ void __RPC_FAR * pvContext);
 
     virtual HRESULT STDMETHODCALLTYPE OnTime( /* [in] */ QWORD qwCurrentTime,
-                                              /* [in] */ void __RPC_FAR * pvContext);
+            /* [in] */ void __RPC_FAR * pvContext);
 
     virtual HRESULT STDMETHODCALLTYPE OnStreamSelection( /* [in] */ WORD wStreamCount,
-                                                         /* [in] */ WORD __RPC_FAR * pStreamNumbers,
-                                                         /* [in] */ WMT_STREAM_SELECTION __RPC_FAR * pSelections,
-                                                         /* [in] */ void __RPC_FAR * pvContext);
+            /* [in] */ WORD __RPC_FAR * pStreamNumbers,
+            /* [in] */ WMT_STREAM_SELECTION __RPC_FAR * pSelections,
+            /* [in] */ void __RPC_FAR * pvContext);
 
     virtual HRESULT STDMETHODCALLTYPE OnOutputPropsChanged( /* [in] */ DWORD dwOutputNum,
-                                                            /* [in] */ WM_MEDIA_TYPE __RPC_FAR * pMediaType,
-                                                            /* [in] */ void __RPC_FAR * pvContext );
+            /* [in] */ WM_MEDIA_TYPE __RPC_FAR * pMediaType,
+            /* [in] */ void __RPC_FAR * pvContext );
 
     virtual HRESULT STDMETHODCALLTYPE AllocateForOutput( /* [in] */ DWORD dwOutputNum,
-                                                         /* [in] */ DWORD cbBuffer,
-                                                         /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
-                                                         /* [in] */ void __RPC_FAR * pvContext);
+            /* [in] */ DWORD cbBuffer,
+            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
+            /* [in] */ void __RPC_FAR * pvContext);
 
     virtual HRESULT STDMETHODCALLTYPE AllocateForStream( /* [in] */ WORD wStreamNum,
-                                                         /* [in] */ DWORD cbBuffer,
-                                                         /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
-                                                         /* [in] */ void __RPC_FAR * pvContext);
+            /* [in] */ DWORD cbBuffer,
+            /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
+            /* [in] */ void __RPC_FAR * pvContext);
 
     //
     // IUnknown interface
     //
     virtual HRESULT STDMETHODCALLTYPE QueryInterface( /* [in] */ REFIID riid,
-                                                      /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR * ppvObject);
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR * ppvObject);
 
     virtual ULONG STDMETHODCALLTYPE AddRef();
 
     virtual ULONG STDMETHODCALLTYPE Release();
 
 protected:
-    
+
     HRESULT CreateReader( const WCHAR * pwszInputFile );
 
     HRESULT GetProfileInfo();

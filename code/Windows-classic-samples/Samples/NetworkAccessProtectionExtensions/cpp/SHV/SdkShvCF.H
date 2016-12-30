@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Unknwn.h"
 
 class CSdkShvCF :  public IClassFactory
@@ -10,10 +10,10 @@ public:
 
 public:
 
-    //IUnknown interface 
+    //IUnknown interface
 
     IFACEMETHOD(QueryInterface)(
-        /* [in] */ __RPC__in REFIID riid , 
+        /* [in] */ __RPC__in REFIID riid,
         /* [out] */ __RPC__deref_out void **ppObj);
 
     IFACEMETHOD_(ULONG, AddRef)();
@@ -30,7 +30,7 @@ public:
         /* [out] */ __RPC__deref_out void **ppvObject);
 
     IFACEMETHOD(LockServer)(
-        /* [in] */ BOOL /*fLock*/) ; 
+        /* [in] */ BOOL /*fLock*/) ;
 
 protected:
 

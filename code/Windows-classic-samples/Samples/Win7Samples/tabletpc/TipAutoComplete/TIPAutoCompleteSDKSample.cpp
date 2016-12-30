@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,19 +31,19 @@ WCHAR s_rgwzList[MAX_ENTRY][MAX_STRING];
 
 const static PCWSTR s_wzListBackup[] =
 {
-    L"Aphrodite", 
+    L"Aphrodite",
     L"Apollo",
-    L"Ares", 
-    L"Artemis", 
-    L"Athena", 
-    L"Demeter", 
-    L"Dionysus", 
-    L"Hades", 
-    L"Hephaestus", 
-    L"Hera", 
-    L"Hermes", 
-    L"Hestia", 
-    L"Poseidon", 
+    L"Ares",
+    L"Artemis",
+    L"Athena",
+    L"Demeter",
+    L"Dionysus",
+    L"Hades",
+    L"Hephaestus",
+    L"Hera",
+    L"Hermes",
+    L"Hestia",
+    L"Poseidon",
     L"Zeus"
 };
 
@@ -261,41 +261,41 @@ LRESULT CTipACDialog::EditWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
-        case WM_SETTEXT:
-            ShowAutoCompleteDropdown(FALSE);
-            break;
+    case WM_SETTEXT:
+        ShowAutoCompleteDropdown(FALSE);
+        break;
 
-        case WM_SETFOCUS:
-            break;
+    case WM_SETFOCUS:
+        break;
 
-        case WM_KILLFOCUS:
+    case WM_KILLFOCUS:
+    {
+        HWND hwndGetFocus = (HWND)wParam;
+        if (m_hwndEdit != hwndGetFocus)
         {
-            HWND hwndGetFocus = (HWND)wParam;
-            if (m_hwndEdit != hwndGetFocus)
+            if (m_hwndDropdown && (GetFocus() != m_hwndDropdown))
             {
-                if (m_hwndDropdown && (GetFocus() != m_hwndDropdown))
-                {
-                    ShowAutoCompleteDropdown(FALSE);
-                }
+                ShowAutoCompleteDropdown(FALSE);
             }
-            break;
         }
+        break;
+    }
 
-        case WM_DESTROY:
+    case WM_DESTROY:
+    {
+        RemoveWindowSubclass(m_hwndEdit, s_EditWndProc, 0);
+        if (m_pTipACClient)
         {
-            RemoveWindowSubclass(m_hwndEdit, s_EditWndProc, 0);
-            if (m_pTipACClient)
-            {
 #ifdef _DEBUG
-                HRESULT hr = m_pTipACClient->UnadviseProvider(m_hwndEdit, static_cast<ITipAutoCompleteProvider *>(this));
-                assert(SUCCEEDED(hr) && "Failed in call to UnadviseProvider");
+            HRESULT hr = m_pTipACClient->UnadviseProvider(m_hwndEdit, static_cast<ITipAutoCompleteProvider *>(this));
+            assert(SUCCEEDED(hr) && "Failed in call to UnadviseProvider");
 #else // !_DEBUG
-                m_pTipACClient->UnadviseProvider(m_hwndEdit, static_cast<ITipAutoCompleteProvider *>(this));
+            m_pTipACClient->UnadviseProvider(m_hwndEdit, static_cast<ITipAutoCompleteProvider *>(this));
 #endif // _DEBUG
-                m_pTipACClient = NULL;
-            }
-            break;
+            m_pTipACClient = NULL;
         }
+        break;
+    }
     }
 
     return DefSubclassProc(m_hwndEdit, uMsg, wParam, lParam);
@@ -305,59 +305,59 @@ LRESULT CTipACDialog::DropDownWndProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
-        case WM_NCCREATE:
-            OnListViewCreate();
-            return (NULL != m_hwndListView);
+    case WM_NCCREATE:
+        OnListViewCreate();
+        return (NULL != m_hwndListView);
 
-        case WM_DESTROY:
+    case WM_DESTROY:
+    {
+        ShowAutoCompleteDropdown(FALSE);
+
+        SetWindowLongPtr(m_hwndDropdown, GWLP_USERDATA, (LONG_PTR)NULL);
+
+        HWND hwnd = m_hwndDropdown;
+        m_hwndDropdown = NULL;
+        if (NULL != m_hwndListView)
         {
-            ShowAutoCompleteDropdown(FALSE);
-
-            SetWindowLongPtr(m_hwndDropdown, GWLP_USERDATA, (LONG_PTR)NULL);
-
-            HWND hwnd = m_hwndDropdown;
-            m_hwndDropdown = NULL;
-            if (NULL != m_hwndListView)
-            {
-                DestroyWindow(m_hwndListView);
-                m_hwndListView = NULL;
-            }
-
-            /// scroll window? Grip window?
-
-            // The dropdown incremented this object's ref count
-            Release();
-            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+            DestroyWindow(m_hwndListView);
+            m_hwndListView = NULL;
         }
 
-        case WM_SIZE:
+        /// scroll window? Grip window?
+
+        // The dropdown incremented this object's ref count
+        Release();
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    }
+
+    case WM_SIZE:
+    {
+        int nWidth = LOWORD(lParam);
+        int nHeight = HIWORD(lParam);
+
+        MoveWindow(m_hwndListView, 0, 0, nWidth, nHeight, TRUE);
+
+        break;
+    }
+
+    case WM_MOUSEACTIVATE:
+        // We don't want mouse clicks to activate us and take focus from the edit box.
+        return (LRESULT)MA_NOACTIVATE;
+
+    case WM_DRAWITEM:
+        DropDownDrawItem((LPDRAWITEMSTRUCT)lParam);
+        break;
+
+    case WM_NOTIFY:
+    {
+        LRESULT lResult = DropDownNotify((LPNMHDR)lParam);
+        if (lResult)
         {
-            int nWidth = LOWORD(lParam);
-            int nHeight = HIWORD(lParam);
-
-            MoveWindow(m_hwndListView, 0, 0, nWidth, nHeight, TRUE);
-
-            break;
+            return lResult;
         }
 
-        case WM_MOUSEACTIVATE:
-            // We don't want mouse clicks to activate us and take focus from the edit box.
-            return (LRESULT)MA_NOACTIVATE;
-
-        case WM_DRAWITEM:
-            DropDownDrawItem((LPDRAWITEMSTRUCT)lParam);
-            break;
-
-        case WM_NOTIFY:
-        {
-            LRESULT lResult = DropDownNotify((LPNMHDR)lParam);
-            if (lResult)
-            {
-                return lResult;
-            }
-
-            break;
-        }
+        break;
+    }
     }
 
     return DefWindowProc(m_hwndDropdown, uMsg, wParam, lParam);
@@ -396,67 +396,67 @@ BOOL CTipACDialog::DropDownNotify(LPNMHDR pnmhdr)
 
     switch (pnmhdr->code)
     {
-        case LVN_GETDISPINFO:
+    case LVN_GETDISPINFO:
+    {
+        assert(pnmhdr->hwndFrom == m_hwndListView);
+        LV_DISPINFO *pdi = (LV_DISPINFO *)pnmhdr;
+        if (pdi->item.mask & LVIF_TEXT)
         {
-            assert(pnmhdr->hwndFrom == m_hwndListView);
-            LV_DISPINFO *pdi = (LV_DISPINFO *)pnmhdr;
-            if (pdi->item.mask & LVIF_TEXT)
-            {
-                SendMessage(m_hwndListbox, LB_GETTEXT, pdi->item.iItem, (LPARAM)pdi->item.pszText);
-            }
-            break;
+            SendMessage(m_hwndListbox, LB_GETTEXT, pdi->item.iItem, (LPARAM)pdi->item.pszText);
         }
+        break;
+    }
 
-        case LVN_ITEMCHANGED:
-        {
-            const NMLISTVIEW *pnmv = (const NMLISTVIEW *)pnmhdr;
-            if (!m_fInHotTracking &&
+    case LVN_ITEMCHANGED:
+    {
+        const NMLISTVIEW *pnmv = (const NMLISTVIEW *)pnmhdr;
+        if (!m_fInHotTracking &&
                 (pnmv->uChanged & LVIF_STATE) && (pnmv->uNewState & (LVIS_FOCUSED | LVIS_SELECTED)))
-            {
-                SendMessage(m_hwndListbox, LB_GETTEXT, pnmv->iItem, (LPARAM)wzBuf);
-                m_wzPending[0] = NULL;
-                SetWindowText(m_hwndEdit, wzBuf);
-                int cch = lstrlen(wzBuf);
-                SendMessage(m_hwndEdit, EM_SETSEL, cch, cch);
-            }
-            break;
-        }
-
-        case LVN_ENDSCROLL:
-            InvalidateRect(m_hwndListView, NULL, TRUE);
-            break;
-
-        case LVN_ITEMACTIVATE:
         {
-            const NMITEMACTIVATE *pnmia = (const NMITEMACTIVATE *)pnmhdr;
-            SendMessage(m_hwndListbox, LB_GETTEXT, pnmia->iItem, (LPARAM)wzBuf);
+            SendMessage(m_hwndListbox, LB_GETTEXT, pnmv->iItem, (LPARAM)wzBuf);
             m_wzPending[0] = NULL;
-
-            // Inform the TIP that the user made a selection.
-            // This causes the text in the TIP to be discarded.
-            m_pTipACClient->UserSelection();
-
             SetWindowText(m_hwndEdit, wzBuf);
-            SendMessage(m_hwndEdit, EM_SETSEL, 0, -1);
-            ShowAutoCompleteDropdown(FALSE);
-            break;
+            int cch = lstrlen(wzBuf);
+            SendMessage(m_hwndEdit, EM_SETSEL, cch, cch);
         }
+        break;
+    }
 
-        case LVN_HOTTRACK:
+    case LVN_ENDSCROLL:
+        InvalidateRect(m_hwndListView, NULL, TRUE);
+        break;
+
+    case LVN_ITEMACTIVATE:
+    {
+        const NMITEMACTIVATE *pnmia = (const NMITEMACTIVATE *)pnmhdr;
+        SendMessage(m_hwndListbox, LB_GETTEXT, pnmia->iItem, (LPARAM)wzBuf);
+        m_wzPending[0] = NULL;
+
+        // Inform the TIP that the user made a selection.
+        // This causes the text in the TIP to be discarded.
+        m_pTipACClient->UserSelection();
+
+        SetWindowText(m_hwndEdit, wzBuf);
+        SendMessage(m_hwndEdit, EM_SETSEL, 0, -1);
+        ShowAutoCompleteDropdown(FALSE);
+        break;
+    }
+
+    case LVN_HOTTRACK:
+    {
+        const NMLISTVIEW *pnmlv = (const NMLISTVIEW *)pnmhdr;
+        LVHITTESTINFO lvh;
+        lvh.pt = pnmlv->ptAction;
+        int iItem = ListView_HitTest(m_hwndListView, &lvh);
+        if (-1 != iItem)
         {
-            const NMLISTVIEW *pnmlv = (const NMLISTVIEW *)pnmhdr;
-            LVHITTESTINFO lvh;
-            lvh.pt = pnmlv->ptAction;
-            int iItem = ListView_HitTest(m_hwndListView, &lvh);
-            if (-1 != iItem)
-            {
-                m_fInHotTracking = TRUE;
-                ListView_SetItemState(m_hwndListView, iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED | LVIS_CUT | LVIS_DROPHILITED);
-                SendMessage(m_hwndListView, LVM_ENSUREVISIBLE, iItem, (LPARAM)FALSE);
-                m_fInHotTracking = FALSE;
-            }
-            return TRUE; // we processed this
+            m_fInHotTracking = TRUE;
+            ListView_SetItemState(m_hwndListView, iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED | LVIS_CUT | LVIS_DROPHILITED);
+            SendMessage(m_hwndListView, LVM_ENSUREVISIBLE, iItem, (LPARAM)FALSE);
+            m_fInHotTracking = FALSE;
         }
+        return TRUE; // we processed this
+    }
     }
 
     return FALSE;
@@ -702,8 +702,8 @@ void CTipACDialog::SetTipMode()
             // The dropdown holds a ref on this object
             AddRef();
             m_hwndDropdown = CreateWindowEx(dwExStyle, s_wzClassName, s_wzDropdownTitle,
-                WS_POPUP | WS_BORDER | WS_CLIPCHILDREN, 0, 0, 100, 400,
-                NULL, NULL, g_hInstance, this);
+                                            WS_POPUP | WS_BORDER | WS_CLIPCHILDREN, 0, 0, 100, 400,
+                                            NULL, NULL, g_hInstance, this);
             if (NULL == m_hwndDropdown)
             {
                 Release();
@@ -741,8 +741,9 @@ void CTipACDialog::PopulateList()
             wcsncpy_s(s_rgwzList[m_iLineCount], MAX_STRING, szInput, cch);
             m_iLineCount++;
 
-            SendMessage(m_hwndListbox, LB_ADDSTRING, 0, (LPARAM)szInput);   
-        } while (pszInput);
+            SendMessage(m_hwndListbox, LB_ADDSTRING, 0, (LPARAM)szInput);
+        }
+        while (pszInput);
     }
     else
     {
@@ -768,15 +769,15 @@ void CTipACDialog::OnCommand(HWND hwnd, UINT, WPARAM wParam, LPARAM)
         break;
 
     case IDC_LIST1:
+    {
+        LRESULT iSel = SendMessage(m_hwndListbox, LB_GETCURSEL, 0, (LPARAM)0);
+        if (-1 != iSel)
         {
-            LRESULT iSel = SendMessage(m_hwndListbox, LB_GETCURSEL, 0, (LPARAM)0);
-            if (-1 != iSel)
-            {
-                SendMessage(m_hwndListbox, LB_GETTEXT, iSel, (LPARAM)szSelectedText);
-                SetWindowText(m_hwndEdit, szSelectedText);
-            }
+            SendMessage(m_hwndListbox, LB_GETTEXT, iSel, (LPARAM)szSelectedText);
+            SetWindowText(m_hwndEdit, szSelectedText);
         }
-        break;
+    }
+    break;
 
     case IDC_EDIT1:
         if (EN_UPDATE == HIWORD(wParam))
@@ -859,7 +860,7 @@ void CTipACDialog::DisplayMatchedOutput(WCHAR * pszInput)
 STDAPI_(int) wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int)
 {
     g_hInstance = hInstance;
-    
+
     HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
     if (SUCCEEDED(hr))
     {

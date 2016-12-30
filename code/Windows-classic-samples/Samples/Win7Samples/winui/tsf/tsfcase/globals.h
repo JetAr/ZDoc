@@ -1,4 +1,4 @@
-//
+﻿//
 // globals.h
 //
 // Global variable declarations.
@@ -35,7 +35,7 @@ void InsertTextAtSelection(TfEditCookie ec, ITfContext *pContext, const WCHAR *p
     {                           \
         (punk)->Release();      \
     }                           \
-}                   
+}
 
 #define SafeReleaseClear(punk)  \
 {                               \
@@ -44,7 +44,7 @@ void InsertTextAtSelection(TfEditCookie ec, ITfContext *pContext, const WCHAR *p
         (punk)->Release();      \
         (punk) = NULL;          \
     }                           \
-}                   
+}
 
 extern HINSTANCE g_hInst;
 

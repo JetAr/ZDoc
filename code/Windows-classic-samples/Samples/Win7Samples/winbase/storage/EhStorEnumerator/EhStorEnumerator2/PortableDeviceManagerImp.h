@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -129,7 +129,7 @@ public:
         m_szManufacturer = NULL;
         m_szDescription = NULL;
     }
-    
+
     virtual ~CPortableDeviceDesc()
     {
         if (m_szPnpID)
@@ -151,36 +151,48 @@ public:
         }
     }
 
-    LPCTSTR get_PnpID() { return m_szPnpID; }
+    LPCTSTR get_PnpID()
+    {
+        return m_szPnpID;
+    }
     void set_PnpID(LPCTSTR s)
     {
         if (s)
         {
-            if (m_szPnpID) {
+            if (m_szPnpID)
+            {
                 free(m_szPnpID);
             }
             m_szPnpID = _tcsdup(s);
         }
     }
 
-    LPCTSTR get_Manufacturer() { return m_szManufacturer; }
+    LPCTSTR get_Manufacturer()
+    {
+        return m_szManufacturer;
+    }
     void set_Manufacturer(LPCTSTR s)
     {
         if (s)
         {
-            if (m_szManufacturer) {
+            if (m_szManufacturer)
+            {
                 free(m_szManufacturer);
             }
             m_szManufacturer = _tcsdup(s);
         }
     }
 
-    LPCTSTR get_Description() { return m_szDescription; }
+    LPCTSTR get_Description()
+    {
+        return m_szDescription;
+    }
     void set_Description(LPCTSTR s)
     {
         if (s)
         {
-            if (m_szDescription) {
+            if (m_szDescription)
+            {
                 free(m_szDescription);
             }
             m_szDescription = _tcsdup(s);
@@ -237,49 +249,65 @@ public:
     {
         if (szHint)
         {
-            if (m_szAdminHint) {
+            if (m_szAdminHint)
+            {
                 free(m_szAdminHint);
             }
             m_szAdminHint = _tcsdup(szHint);
         }
     }
-    LPCTSTR get_AdminHint() { return m_szAdminHint; }
+    LPCTSTR get_AdminHint()
+    {
+        return m_szAdminHint;
+    }
 
     void set_UserHint(LPCTSTR szHint)
     {
         if (szHint)
         {
-            if (m_szUserHint) {
+            if (m_szUserHint)
+            {
                 free(m_szUserHint);
             }
             m_szUserHint = _tcsdup(szHint);
         }
     }
-    LPCTSTR get_UserHint() { return m_szUserHint; }
+    LPCTSTR get_UserHint()
+    {
+        return m_szUserHint;
+    }
 
     void set_UserName(LPCTSTR szUserName)
     {
         if (szUserName)
         {
-            if (m_szUserName) {
+            if (m_szUserName)
+            {
                 free(m_szUserName);
             }
             m_szUserName = _tcsdup(szUserName);
         }
     }
-    LPCTSTR get_UserName() { return m_szUserName; }
+    LPCTSTR get_UserName()
+    {
+        return m_szUserName;
+    }
 
     void set_SiloName(LPCTSTR szSiloName)
     {
         if (szSiloName)
         {
-            if (m_szSiloName) {
+            if (m_szSiloName)
+            {
                 free(m_szSiloName);
             }
             m_szSiloName = _tcsdup(szSiloName);
         }
     }
-    LPCTSTR get_SiloName() { return m_szSiloName; }
+    LPCTSTR get_SiloName()
+    {
+        return m_szSiloName;
+    }
 
     ENHANCED_STORAGE_PASSWORD_SILO_INFORMATION SiloInfo;
     DWORD   dwAuthnState;
@@ -389,9 +417,9 @@ public:
                                LPCTSTR szUserPasswordHint);
     HRESULT PasswordDeleteUser(LPCTSTR szAdminPassword);
     HRESULT PasswordInitializeUserPassword(
-                                LPCTSTR szAdminPassword,
-                                LPCTSTR szUserPassword,
-                                LPCTSTR szUserPasswordHint);
+        LPCTSTR szAdminPassword,
+        LPCTSTR szUserPassword,
+        LPCTSTR szUserPasswordHint);
     HRESULT PasswordInitializeToManufacturerState(LPCTSTR szSID);
 
     // certificate silo

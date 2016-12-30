@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -127,7 +127,7 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructInstance(context, &CIM_Service_rtti,
-        (MI_Instance*)&self->__instance);
+                                        (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clone(
@@ -135,7 +135,7 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Clone(
     _Outptr_ CIM_Service** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Boolean MI_CALL CIM_Service_IsA(
@@ -167,11 +167,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_InstanceID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_InstanceID(
@@ -179,19 +179,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_InstanceID(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        0,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               0,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_InstanceID(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        0);
+               (MI_Instance*)&self->__instance,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_Caption(
@@ -199,11 +199,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_Caption(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_Caption(
@@ -211,19 +211,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_Caption(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        1,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               1,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_Caption(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        1);
+               (MI_Instance*)&self->__instance,
+               1);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_Description(
@@ -231,11 +231,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_Description(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_Description(
@@ -243,19 +243,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_Description(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_Description(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        2);
+               (MI_Instance*)&self->__instance,
+               2);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_ElementName(
@@ -263,11 +263,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_ElementName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_ElementName(
@@ -275,19 +275,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_ElementName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        3,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               3,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_ElementName(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        3);
+               (MI_Instance*)&self->__instance,
+               3);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_InstallDate(
@@ -311,11 +311,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_Name(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_Name(
@@ -323,19 +323,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_Name(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        5,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               5,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_Name(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        5);
+               (MI_Instance*)&self->__instance,
+               5);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_OperationalStatus(
@@ -347,11 +347,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_OperationalStatus(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        6,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        0);
+               (MI_Instance*)&self->__instance,
+               6,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_OperationalStatus(
@@ -363,19 +363,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_OperationalStatus(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        6,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               6,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_OperationalStatus(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        6);
+               (MI_Instance*)&self->__instance,
+               6);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_StatusDescriptions(
@@ -387,11 +387,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_StatusDescriptions(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        7,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        0);
+               (MI_Instance*)&self->__instance,
+               7,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_StatusDescriptions(
@@ -403,19 +403,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_StatusDescriptions(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        7,
-        (MI_Value*)&arr,
-        MI_STRINGA,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               7,
+               (MI_Value*)&arr,
+               MI_STRINGA,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_StatusDescriptions(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        7);
+               (MI_Instance*)&self->__instance,
+               7);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_Status(
@@ -423,11 +423,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_Status(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_Status(
@@ -435,19 +435,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_Status(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        8,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               8,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_Status(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        8);
+               (MI_Instance*)&self->__instance,
+               8);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_HealthState(
@@ -551,11 +551,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_OtherEnabledState(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        15,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               15,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_OtherEnabledState(
@@ -563,19 +563,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_OtherEnabledState(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        15,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               15,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_OtherEnabledState(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        15);
+               (MI_Instance*)&self->__instance,
+               15);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_RequestedState(
@@ -635,11 +635,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_AvailableRequestedStates(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        19,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        0);
+               (MI_Instance*)&self->__instance,
+               19,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_AvailableRequestedStates(
@@ -651,19 +651,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_AvailableRequestedStates(
     arr.data = (void*)data;
     arr.size = size;
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        19,
-        (MI_Value*)&arr,
-        MI_UINT16A,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               19,
+               (MI_Value*)&arr,
+               MI_UINT16A,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_AvailableRequestedStates(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        19);
+               (MI_Instance*)&self->__instance,
+               19);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_TransitioningToState(
@@ -687,11 +687,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_SystemCreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        21,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               21,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_SystemCreationClassName(
@@ -699,19 +699,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_SystemCreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        21,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               21,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_SystemCreationClassName(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        21);
+               (MI_Instance*)&self->__instance,
+               21);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_SystemName(
@@ -719,11 +719,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_SystemName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        22,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               22,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_SystemName(
@@ -731,19 +731,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_SystemName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        22,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               22,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_SystemName(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        22);
+               (MI_Instance*)&self->__instance,
+               22);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_CreationClassName(
@@ -751,11 +751,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_CreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        23,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               23,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_CreationClassName(
@@ -763,19 +763,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_CreationClassName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        23,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               23,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_CreationClassName(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        23);
+               (MI_Instance*)&self->__instance,
+               23);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_PrimaryOwnerName(
@@ -783,11 +783,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_PrimaryOwnerName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        24,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               24,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_PrimaryOwnerName(
@@ -795,19 +795,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_PrimaryOwnerName(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        24,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               24,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_PrimaryOwnerName(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        24);
+               (MI_Instance*)&self->__instance,
+               24);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_PrimaryOwnerContact(
@@ -815,11 +815,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_PrimaryOwnerContact(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        25,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               25,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_PrimaryOwnerContact(
@@ -827,19 +827,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_PrimaryOwnerContact(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        25,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               25,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_PrimaryOwnerContact(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        25);
+               (MI_Instance*)&self->__instance,
+               25);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_StartMode(
@@ -847,11 +847,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_Set_StartMode(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        26,
-        (MI_Value*)&str,
-        MI_STRING,
-        0);
+               (MI_Instance*)&self->__instance,
+               26,
+               (MI_Value*)&str,
+               MI_STRING,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_StartMode(
@@ -859,19 +859,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_SetPtr_StartMode(
     _In_z_ const MI_Char* str)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        26,
-        (MI_Value*)&str,
-        MI_STRING,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               26,
+               (MI_Value*)&str,
+               MI_STRING,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Clear_StartMode(
     _Inout_ CIM_Service* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        26);
+               (MI_Instance*)&self->__instance,
+               26);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_Set_Started(
@@ -915,7 +915,7 @@ MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &CIM_Service_RequestStateChange_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_Clone(
@@ -923,7 +923,7 @@ MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_Clone(
     _Outptr_ CIM_Service_RequestStateChange** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_Destruct(
@@ -982,11 +982,11 @@ MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_Set_Job(
     _In_ const CIM_ConcreteJob* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        0);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               0);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_SetPtr_Job(
@@ -994,19 +994,19 @@ MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_SetPtr_Job(
     _In_ const CIM_ConcreteJob* x)
 {
     return self->__instance.ft->SetElementAt(
-        (MI_Instance*)&self->__instance,
-        2,
-        (MI_Value*)&x,
-        MI_REFERENCE,
-        MI_FLAG_BORROW);
+               (MI_Instance*)&self->__instance,
+               2,
+               (MI_Value*)&x,
+               MI_REFERENCE,
+               MI_FLAG_BORROW);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_Clear_Job(
     _Inout_ CIM_Service_RequestStateChange* self)
 {
     return self->__instance.ft->ClearElementAt(
-        (MI_Instance*)&self->__instance,
-        2);
+               (MI_Instance*)&self->__instance,
+               2);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_RequestStateChange_Set_TimeoutPeriod(
@@ -1047,7 +1047,7 @@ MI_INLINE MI_Result MI_CALL CIM_Service_StartService_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &CIM_Service_StartService_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_StartService_Clone(
@@ -1055,7 +1055,7 @@ MI_INLINE MI_Result MI_CALL CIM_Service_StartService_Clone(
     _Outptr_ CIM_Service_StartService** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_StartService_Destruct(
@@ -1115,7 +1115,7 @@ MI_INLINE MI_Result MI_CALL CIM_Service_StopService_Construct(
     _In_ MI_Context* context)
 {
     return MI_Context_ConstructParameters(context, &CIM_Service_StopService_rtti,
-        (MI_Instance*)&self->__instance);
+                                          (MI_Instance*)&self->__instance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_StopService_Clone(
@@ -1123,7 +1123,7 @@ MI_INLINE MI_Result MI_CALL CIM_Service_StopService_Clone(
     _Outptr_ CIM_Service_StopService** newInstance)
 {
     return MI_Instance_Clone(
-        &self->__instance, (MI_Instance**)newInstance);
+               &self->__instance, (MI_Instance**)newInstance);
 }
 
 MI_INLINE MI_Result MI_CALL CIM_Service_StopService_Destruct(

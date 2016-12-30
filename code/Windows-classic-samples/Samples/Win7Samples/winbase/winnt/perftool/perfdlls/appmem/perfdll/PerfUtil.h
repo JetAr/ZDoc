@@ -1,4 +1,4 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+﻿/*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -57,12 +57,12 @@ VOID MonCloseEventLog ();
 DWORD GetQueryType (IN LPWSTR);
 BOOL IsNumberInUnicodeList (DWORD, LPWSTR);
 BOOL MonBuildInstanceDefinition(
-                               PERF_INSTANCE_DEFINITION *pBuffer,
-                               PVOID *pBufferNext,
-                               DWORD ParentObjectTitleIndex,
-                               DWORD ParentObjectInstance,
-                               DWORD UniqueID,
-                               LPWSTR  Name
-                               );
+    PERF_INSTANCE_DEFINITION *pBuffer,
+    PVOID *pBufferNext,
+    DWORD ParentObjectTitleIndex,
+    DWORD ParentObjectInstance,
+    DWORD UniqueID,
+    LPWSTR  Name
+);
 
 #endif  //_PERFUTIL_H_

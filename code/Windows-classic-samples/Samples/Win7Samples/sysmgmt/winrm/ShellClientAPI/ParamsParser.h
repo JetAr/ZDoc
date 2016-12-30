@@ -1,7 +1,7 @@
-/******************************************************************************
+﻿/******************************************************************************
  * <copyright file="ParamsParser.h" company="Microsoft">
  *     Copyright (c) Microsoft Corporation.  All rights reserved.
- * </copyright>                                                                
+ * </copyright>
  *****************************************************************************/
 
 #ifndef _PARAMSPARSER_H_

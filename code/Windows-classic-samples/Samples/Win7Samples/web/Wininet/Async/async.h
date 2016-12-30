@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  Copyright (c) 2002 - 2006 Microsoft Corporation.  All Rights Reserved.
 
  THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  PARTICULAR PURPOSE.
 
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
+ THIS CODE IS NOT SUPPORTED BY MICROSOFT.
 
 --*/
 
@@ -32,7 +32,7 @@
 
 //Pointer to RtlNtStatusToDosError
 typedef ULONG ( NTAPI * PRtlNtStatusToDosError) (
-			      IN NTSTATUS Status );
+    IN NTSTATUS Status );
 
 //Structure containing the Session and Connect handles
 typedef struct _MAIN_CONTEXT
@@ -73,23 +73,23 @@ typedef struct
     OVERLAPPED lpo;
     APP_CONTEXT *aContext;
     char buffer[BUFFER_LEN];
-}IO_BUF;
+} IO_BUF;
 
 //WinInet Callback function
-VOID CALLBACK CallBack( HINTERNET, 
-                        __in DWORD_PTR, 
-                        DWORD, 
+VOID CALLBACK CallBack( HINTERNET,
+                        __in DWORD_PTR,
+                        DWORD,
                         __in_bcount(dwStatusInformationLength)LPVOID,
                         DWORD dwStatusInformationLength);
 
 //File IO related functions
 DWORD DoReadFile(__in APP_CONTEXT*);
 DWORD DoCompleteReadFile(__in APP_CONTEXT* );
-VOID CALLBACK WriteFileCallBack(DWORD ,
-                                DWORD ,
+VOID CALLBACK WriteFileCallBack(DWORD,
+                                DWORD,
                                 __in LPOVERLAPPED);
-VOID CALLBACK ReadFileCallBack(DWORD ,
-                               DWORD ,
+VOID CALLBACK ReadFileCallBack(DWORD,
+                               DWORD,
                                __in LPOVERLAPPED);
 
 //Network IO related functions

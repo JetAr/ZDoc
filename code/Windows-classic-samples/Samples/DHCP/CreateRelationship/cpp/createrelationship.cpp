@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ Assumptions:
 // This routine frees  LPDHCP_FAILOVER_RELATIONSHIP and its internal elements.
 VOID FreeRelationshipMemory(LPDHCP_FAILOVER_RELATIONSHIP pFailRel)
 {
-    if (NULL != pFailRel) 
+    if (NULL != pFailRel)
     {
         //Frees pScopes
         if (NULL != pFailRel->pScopes)
@@ -44,19 +44,19 @@ VOID FreeRelationshipMemory(LPDHCP_FAILOVER_RELATIONSHIP pFailRel)
 void FreeSubnetInfoVQ(LPDHCP_SUBNET_INFO_VQ pSubnetInfoVQ)
 {
     // Frees NetBios Name
-    if(pSubnetInfoVQ->PrimaryHost.NetBiosName) 
+    if(pSubnetInfoVQ->PrimaryHost.NetBiosName)
         DhcpRpcFreeMemory(pSubnetInfoVQ->PrimaryHost.NetBiosName);
 
     //Frees host name
-    if(pSubnetInfoVQ->PrimaryHost.HostName) 
+    if(pSubnetInfoVQ->PrimaryHost.HostName)
         DhcpRpcFreeMemory(pSubnetInfoVQ->PrimaryHost.HostName);
 
     // Frees Subnet Name
-    if(pSubnetInfoVQ->SubnetName) 
-        DhcpRpcFreeMemory(pSubnetInfoVQ->SubnetName);    
+    if(pSubnetInfoVQ->SubnetName)
+        DhcpRpcFreeMemory(pSubnetInfoVQ->SubnetName);
 
     // Frees subnet comment
-    if(pSubnetInfoVQ->SubnetComment) 
+    if(pSubnetInfoVQ->SubnetComment)
         DhcpRpcFreeMemory(pSubnetInfoVQ->SubnetComment);
 
     DhcpRpcFreeMemory(pSubnetInfoVQ);
@@ -73,7 +73,7 @@ DWORD ChangeScopeStates(_In_ LPWSTR pServer, _Inout_ LPDHCP_IP_ARRAY pArray, DHC
         dwError = DhcpGetSubnetInfoVQ(pServer,pArray->Elements[dwIndex],&pSubnetInfoVQ);
         if(ERROR_SUCCESS != dwError)
             return dwError;
-        
+
         // set the scope state to dwState
         pSubnetInfoVQ->SubnetState= dwState;
         dwError = DhcpSetSubnetInfoVQ(pServer,pArray->Elements[dwIndex],pSubnetInfoVQ);
@@ -134,7 +134,7 @@ int __cdecl main(void)
         wprintf(L"HeapAlloc failed. Not enough memory\n");
         goto cleanup;
     }
-    
+
     // Number of scopes in the relationship = 1
     pRelationship->pScopes->NumElements = 1;
     pRelationship->pScopes->Elements=(LPDHCP_IP_ADDRESS)HeapAlloc(GetProcessHeap(),HEAP_ZERO_MEMORY, sizeof(DHCP_IP_ADDRESS));
@@ -187,27 +187,29 @@ int __cdecl main(void)
     // Deactivate scopes on partner server
     dwError = DeactivateScopes(pRelationship->SecondaryServerName, pRelationship->pScopes);
     if( ERROR_SUCCESS != dwError)
-    {        wprintf(L"Failed to deactivate scopes on partner server\n");
+    {
+        wprintf(L"Failed to deactivate scopes on partner server\n");
         goto cleanup;
     }
     // Deactivate scopes on current server
     dwError = DeactivateScopes(pRelationship->PrimaryServerName, pRelationship->pScopes);
     if( ERROR_SUCCESS != dwError)
-    {        wprintf(L"Failed to deactivate scopes on primary server\n");
+    {
+        wprintf(L"Failed to deactivate scopes on primary server\n");
         goto ActivateSecAndCleanup;
     }
     //Creates the relationship
     dwError = DhcpV4FailoverCreateRelationship(
-                        pPartnerRelationship->SecondaryServerName,
-                        pPartnerRelationship);
+                  pPartnerRelationship->SecondaryServerName,
+                  pPartnerRelationship);
     if( ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverCreateRelationship failed with Error = %d\n",dwError);
         goto ActivatePriAndCleanup;
     }
     dwError = DhcpV4FailoverCreateRelationship(
-                        pwszServer,
-                        pRelationship);
+                  pwszServer,
+                  pRelationship);
     if( ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverCreateRelationship failed with Error = %d\n",dwError);

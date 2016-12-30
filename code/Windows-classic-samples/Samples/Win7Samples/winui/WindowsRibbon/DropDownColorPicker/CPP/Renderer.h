@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,10 +22,10 @@ class CRenderer
 public:
     void Initialize(HWND hwnd);
     void Execute(UI_EXECUTIONVERB verb, ColorProperty color);
-    void ClearColorGrid();    
+    void ClearColorGrid();
     COLORREF GetColor(int index);
     void Draw(HDC hdc, UINT ribbonHeight);
-    
+
 private:
     HBRUSH CreateBrushFromColorProp(ColorProperty* colorProp);
 

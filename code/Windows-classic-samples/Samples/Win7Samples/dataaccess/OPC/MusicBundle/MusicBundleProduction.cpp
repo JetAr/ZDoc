@@ -1,4 +1,4 @@
-//<SnippetMusicBundle_cppProductionWholePage>
+﻿//<SnippetMusicBundle_cppProductionWholePage>
 /*****************************************************************************
 *
 * File: MusicBundleProduction.cpp
@@ -20,13 +20,13 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -51,7 +51,8 @@
 // the user of the application.
 
 // Track names.
-static LPCWSTR g_trackNames[] = {
+static LPCWSTR g_trackNames[] =
+{
     L"\\Tracks\\CrystalFree.wma",
     L"\\Tracks\\Sire.wma",
     L"\\Tracks\\SmallPines.wma",
@@ -59,7 +60,8 @@ static LPCWSTR g_trackNames[] = {
 };
 
 // Lyric file names. One-to-one mapping with track names.
-static LPCWSTR g_lyricsNames[] = {
+static LPCWSTR g_lyricsNames[] =
+{
     L"\\Lyrics\\CrystalFree.txt",
     L"\\Lyrics\\Sire.txt",
     L"\\Lyrics\\SmallPines.txt",
@@ -90,14 +92,14 @@ AddPartToBundle(
     IOpcFactory  *opcFactory,
     LPCWSTR  contentFileName,     // File that contains the content to be stored in the part to add.
     IOpcPartSet  *packagePartSet, // Represents the set of parts (excluding Relationships parts)
-                                  // in a package.
+    // in a package.
     LPCWSTR  contentType,         // The content type of the content to be stored in the part.
     OPC_COMPRESSION_OPTIONS  compressionOptions, // Level of compression to use on the part.
     LPCWSTR  inputDirectory,      // Directory location of the file specified in contentFileName.
     IOpcPartUri  **createdPartUri,// Represents the part name. The caller must release the interface.
     IOpcPart  **createdPart = NULL// Optional. Represents the part to add to the package. The caller must
-                                  // release the interface.
-    )
+                              // release the interface.
+)
 {
     HRESULT hr = S_OK;
     IOpcPart * part = NULL;
@@ -119,24 +121,24 @@ AddPartToBundle(
         // Create the part as an empty part, and add it to the set of parts
         // in the package.
         hr = packagePartSet->CreatePart(
-                *createdPartUri,
-                contentType,
-                compressionOptions,
-                &part
-                );
+                 *createdPartUri,
+                 contentType,
+                 compressionOptions,
+                 &part
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         // Add content to the empty part.
         hr = WriteFileContentToPart(
-                opcFactory,
-                inputDirectory,
-                contentFileName,
-                part
-                );
+                 opcFactory,
+                 inputDirectory,
+                 contentFileName,
+                 part
+             );
     }
-    
+
     if (SUCCEEDED(hr) && createdPart != NULL)
     {
         // The createdPart out parameter was specified.
@@ -152,7 +154,7 @@ AddPartToBundle(
         part->Release();
         part = NULL;
     }
-    
+
     return hr;
 }
 
@@ -166,7 +168,7 @@ AddPartToBundle(
 //       List part's relationship set.
 // 2. Lyrics part:
 //     + Adds a Lryics part to the music bundle.
-//     + Creates a relationship where the source is the Track part that was 
+//     + Creates a relationship where the source is the Track part that was
 //       added to the music bundle and the target is the Tark part by creating
 //       the relationship from the Track part's relationship set.
 ///////////////////////////////////////////////////////////////////////////////
@@ -174,16 +176,16 @@ HRESULT
 AddTrackAndLyricsToBundle(
     IOpcFactory  *opcFactory,
     IOpcPartSet  *packagePartSet, // Represents the set of parts (excluding Relationships parts) in
-                                  // a package.
+    // a package.
     IOpcRelationshipSet  *trackListRelationshipSet, // Represents the Relationships part containing
-                                                    // relationships that have the Track List part
-                                                    // as their target.
-    LPCWSTR inputDirectory,       // Directory location of the files specified in trackName and 
-                                  // lyricsName.
+    // relationships that have the Track List part
+    // as their target.
+    LPCWSTR inputDirectory,       // Directory location of the files specified in trackName and
+    // lyricsName.
     LPCWSTR trackName,            // Name of file that contains the track data.
     LPCWSTR lyricsName            // Name of tile that contains lyrics data.
-    
-    )
+
+)
 {
     HRESULT hr = S_OK;
     IOpcPartUri * trackPartUri = NULL;
@@ -193,15 +195,15 @@ AddTrackAndLyricsToBundle(
 
     // Add a Track part that contains track data to the package.
     hr = AddPartToBundle(
-            opcFactory,
-            trackName,
-            packagePartSet,
-            g_trackContentType,
-            OPC_COMPRESSION_NONE,
-            inputDirectory,
-            &trackPartUri,
-            &trackPart
-            );
+             opcFactory,
+             trackName,
+             packagePartSet,
+             g_trackContentType,
+             OPC_COMPRESSION_NONE,
+             inputDirectory,
+             &trackPartUri,
+             &trackPart
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -209,34 +211,34 @@ AddTrackAndLyricsToBundle(
         // relationship set that represents the Relationships part containing
         // relationships that have the Track List part as their source.
         hr = trackListRelationshipSet->CreateRelationship(
-                NULL,                         // Use auto-generated relationship ID.
-                g_trackRelationshipType,
-                trackPartUri,                 // Relationship target's URI.
-                OPC_URI_TARGET_MODE_INTERNAL, // Relationship's target is internal.
-                NULL                          // No pointer needed since returned relationship not required.
-                );
+                 NULL,                         // Use auto-generated relationship ID.
+                 g_trackRelationshipType,
+                 trackPartUri,                 // Relationship target's URI.
+                 OPC_URI_TARGET_MODE_INTERNAL, // Relationship's target is internal.
+                 NULL                          // No pointer needed since returned relationship not required.
+             );
     }
 
-    
+
     if (SUCCEEDED(hr))
     {
         // Add a Lyrics part that contains lyrics for added track.
         hr = AddPartToBundle(
-                opcFactory,
-                lyricsName,
-                packagePartSet,
-                g_lyricsContentType,
-                OPC_COMPRESSION_NORMAL,
-                inputDirectory,
-                &lyricsPartUri
-                );
+                 opcFactory,
+                 lyricsName,
+                 packagePartSet,
+                 g_lyricsContentType,
+                 OPC_COMPRESSION_NORMAL,
+                 inputDirectory,
+                 &lyricsPartUri
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         // Get relationship set for Track part. The relationship set
         // represents the Relationship part that stores relationships that have
-        // the Track part as their source. 
+        // the Track part as their source.
         hr = trackPart->GetRelationshipSet(&trackRelationshipSet);
     }
 
@@ -245,14 +247,14 @@ AddTrackAndLyricsToBundle(
         // Add a relationship to the Track part's Relationships part,
         // represented as a relationship object in the relationship object set.
         hr = trackRelationshipSet->CreateRelationship(
-                NULL,                         // Use auto-generated relationship ID.
-                g_lyricsRelationshipType,
-                lyricsPartUri,                // Relationship target's URI.
-                OPC_URI_TARGET_MODE_INTERNAL, // Relationship's target is internal.
-                NULL                          // No pointer needed since returned relationship not required.
-                );
+                 NULL,                         // Use auto-generated relationship ID.
+                 g_lyricsRelationshipType,
+                 lyricsPartUri,                // Relationship target's URI.
+                 OPC_URI_TARGET_MODE_INTERNAL, // Relationship's target is internal.
+                 NULL                          // No pointer needed since returned relationship not required.
+             );
     }
-    
+
     // Release resources
     if (trackPartUri)
     {
@@ -290,37 +292,37 @@ HRESULT
 AddAlbumArtToBundle(
     IOpcFactory  *opcFactory,
     IOpcPartSet  *packagePartSet, // Represents the set of parts (excluding Relationships parts)
-                                  // in a package.
+    // in a package.
     IOpcRelationshipSet  *packageRelationshipSet, // Represents the Relationships part that stores
-                                                  // package relationships.
+    // package relationships.
     LPCWSTR  inputDirectory       // Directory location of the files specified in trackName and
-                                  // lyricsName.
-    )
+    // lyricsName.
+)
 {
     HRESULT hr = S_OK;
     IOpcPartUri * albumArtPartUri = NULL;
-    
+
     // Add Album Art part.
     hr = AddPartToBundle(
-            opcFactory,
-            g_albumArt,
-            packagePartSet,
-            g_albumArtContentType,
-            OPC_COMPRESSION_NONE,
-            inputDirectory,
-            &albumArtPartUri
-            );
-    
+             opcFactory,
+             g_albumArt,
+             packagePartSet,
+             g_albumArtContentType,
+             OPC_COMPRESSION_NONE,
+             inputDirectory,
+             &albumArtPartUri
+         );
+
     if (SUCCEEDED(hr))
     {
         // Add a package relationship that has the Album Art part as its target.
         hr = packageRelationshipSet->CreateRelationship(
-                NULL,                         // Use auto-generated relationship ID.
-                g_albumArtRelationshipType,
-                albumArtPartUri,              // Relationship target's URI.
-                OPC_URI_TARGET_MODE_INTERNAL, // Relationship's target is internal.
-                NULL                          // No pointer needed since returned relationship not required.
-                );
+                 NULL,                         // Use auto-generated relationship ID.
+                 g_albumArtRelationshipType,
+                 albumArtPartUri,              // Relationship target's URI.
+                 OPC_URI_TARGET_MODE_INTERNAL, // Relationship's target is internal.
+                 NULL                          // No pointer needed since returned relationship not required.
+             );
     }
 
     // Release resources
@@ -329,7 +331,7 @@ AddAlbumArtToBundle(
         albumArtPartUri->Release();
         albumArtPartUri = NULL;
     }
-    
+
     return hr;
 }
 
@@ -343,12 +345,12 @@ HRESULT
 AddTrackListToBundle(
     IOpcFactory  *opcFactory,
     IOpcPartSet  *packagePartSet, // Represents the set of parts (excluding Relationships parts)
-                                  // in a package.
+    // in a package.
     IOpcRelationshipSet  *packageRelationshipSet, // The relationship set that stores package
-                                                  // relationships.
+    // relationships.
     LPCWSTR  inputDirectory       // Directory location of the files specified in trackName and
-                                  // lyricsName.
-    )
+    // lyricsName.
+)
 {
     HRESULT hr = S_OK;
     IOpcPartUri * trackListPartUri = NULL;
@@ -357,27 +359,27 @@ AddTrackListToBundle(
 
     // Add Track List part.
     hr = AddPartToBundle(
-            opcFactory,
-            g_trackList,
-            packagePartSet,
-            g_trackListContentType,
-            OPC_COMPRESSION_NORMAL,
-            inputDirectory,
-            &trackListPartUri,
-            &trackListPart
-            );
-    
+             opcFactory,
+             g_trackList,
+             packagePartSet,
+             g_trackListContentType,
+             OPC_COMPRESSION_NORMAL,
+             inputDirectory,
+             &trackListPartUri,
+             &trackListPart
+         );
+
     if (SUCCEEDED(hr))
     {
         // Add a package relationship that has the Track List part as its
         // target.
         hr = packageRelationshipSet->CreateRelationship(
-                NULL,                         // Use auto-generated relationship ID.
-                g_trackListRelationshipType,
-                trackListPartUri,             // Relationship target's URI.
-                OPC_URI_TARGET_MODE_INTERNAL, // Relationship's target is internal.
-                NULL                          // No pointer needed since returned relationship not required.
-                );
+                 NULL,                         // Use auto-generated relationship ID.
+                 g_trackListRelationshipType,
+                 trackListPartUri,             // Relationship target's URI.
+                 OPC_URI_TARGET_MODE_INTERNAL, // Relationship's target is internal.
+                 NULL                          // No pointer needed since returned relationship not required.
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -387,7 +389,7 @@ AddTrackListToBundle(
         // source.
         hr = trackListPart->GetRelationshipSet(&trackListRelationshipSet);
     }
-    
+
     if(SUCCEEDED(hr))
     {
         // Add all track and lyric files to the music bundle as Track parts
@@ -395,13 +397,13 @@ AddTrackListToBundle(
         for (int i = 0; i < countof(g_trackNames) && SUCCEEDED(hr); i++)
         {
             hr = AddTrackAndLyricsToBundle(
-                    opcFactory, 
-                    packagePartSet,
-                    trackListRelationshipSet, 
-                    inputDirectory, 
-                    g_trackNames[i], 
-                    g_lyricsNames[i]
-                    );
+                     opcFactory,
+                     packagePartSet,
+                     trackListRelationshipSet,
+                     inputDirectory,
+                     g_trackNames[i],
+                     g_lyricsNames[i]
+                 );
         }
     }
 
@@ -428,25 +430,25 @@ AddTrackListToBundle(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Description: 
+// Description:
 // Creates a package relationship that targets the album website and adds the
-// relationship to the package relationship set. 
+// relationship to the package relationship set.
 ///////////////////////////////////////////////////////////////////////////////
 HRESULT
 AddAlbumWebsiteToBundle(
     IOpcRelationshipSet  *packageRelationshipSet // Relationship set that has all package relationships.
-    )
+)
 {
     HRESULT hr = S_OK;
     IUri * uri = NULL;
 
     // Create the URI for the Album Website.
     hr = CreateUri(
-            g_albumWebsite,
-            Uri_CREATE_CANONICALIZE,
-            0,
-            &uri
-            );
+             g_albumWebsite,
+             Uri_CREATE_CANONICALIZE,
+             0,
+             &uri
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -454,14 +456,14 @@ AddAlbumWebsiteToBundle(
         // mode of the relationship is "External" because the website is
         // a resource that exists outside of the package.
         hr = packageRelationshipSet->CreateRelationship(
-                NULL,                         // Use auto-generated relationship ID.
-                g_albumWebsiteRelationshipType,
-                uri,                          // Relationship target's URI.
-                OPC_URI_TARGET_MODE_EXTERNAL, // Relationship's target is external.
-                NULL                          // No pointer needed since returned relationship not required.
-                );
+                 NULL,                         // Use auto-generated relationship ID.
+                 g_albumWebsiteRelationshipType,
+                 uri,                          // Relationship target's URI.
+                 OPC_URI_TARGET_MODE_EXTERNAL, // Relationship's target is external.
+                 NULL                          // No pointer needed since returned relationship not required.
+             );
     }
-    
+
     // Release resources
     if (uri)
     {
@@ -479,7 +481,7 @@ AddAlbumWebsiteToBundle(
 ///////////////////////////////////////////////////////////////////////////////
 // Description:
 // Creates a package that is a music bundle, in compliance with both the OPC
-// specification and the Music Bundle specification, which can be found in 
+// specification and the Music Bundle specification, which can be found in
 // MusicBundle.h. Given the directory that contains all the files needed, this
 // method creates all parts and relationships for the new music bundle and
 // saves resultant package.
@@ -491,7 +493,7 @@ HRESULT
 ProduceMusicBundle(
     LPCWSTR inputDirectory,   // Parent directory that contains files to add to the music bundle.
     LPCWSTR outputPackageName // Name of the music bundle package to create.
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -503,22 +505,22 @@ ProduceMusicBundle(
 
     // Create a new factory.
     hr = CoCreateInstance(
-            __uuidof(OpcFactory),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IOpcFactory),
-            (LPVOID*)&opcFactory
-            );
+             __uuidof(OpcFactory),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IOpcFactory),
+             (LPVOID*)&opcFactory
+         );
 
     if (SUCCEEDED(hr))
     {
         // Create the new, empty music bundle.
         hr = opcFactory->CreatePackage(&opcPackage);
     }
-    
+
     if (SUCCEEDED(hr))
     {
-        // Get the set of parts in the package. Parts (that are not 
+        // Get the set of parts in the package. Parts (that are not
         // Relationships parts) to be included in the music bundle to be
         // created will be created in this set.
         hr = opcPackage->GetPartSet(&packagePartSet);
@@ -531,28 +533,28 @@ ProduceMusicBundle(
         // set.
         hr = opcPackage->GetRelationshipSet(&packageRelationshipSet);
     }
-    
+
     // Populate the music bundle.
 
     if (SUCCEEDED(hr))
     {
         // Add the Album Art part to the package.
         hr = AddAlbumArtToBundle(
-                opcFactory,
-                packagePartSet,
-                packageRelationshipSet,
-                inputDirectory
-                );
+                 opcFactory,
+                 packagePartSet,
+                 packageRelationshipSet,
+                 inputDirectory
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Add the Track List part, and Track and Lyrics parts to package.
         hr = AddTrackListToBundle(
-                opcFactory,
-                packagePartSet,
-                packageRelationshipSet,
-                inputDirectory
-                );
+                 opcFactory,
+                 packagePartSet,
+                 packageRelationshipSet,
+                 inputDirectory
+             );
     }
     if (SUCCEEDED(hr))
     {
@@ -567,21 +569,21 @@ ProduceMusicBundle(
     {
         // Create a writable stream over the name of the package to be created.
         hr = opcFactory->CreateStreamOnFile(
-                outputPackageName,
-                OPC_STREAM_IO_WRITE,
-                NULL,
-                FILE_ATTRIBUTE_NORMAL,
-                &fileStream
-                );
+                 outputPackageName,
+                 OPC_STREAM_IO_WRITE,
+                 NULL,
+                 FILE_ATTRIBUTE_NORMAL,
+                 &fileStream
+             );
     }
     if (SUCCEEDED(hr))
     {
         // Serialize package content to the writable stream.
         hr = opcFactory->WritePackageToStream(
-                opcPackage,
-                OPC_WRITE_DEFAULT,
-                fileStream
-                );
+                 opcPackage,
+                 OPC_WRITE_DEFAULT,
+                 fileStream
+             );
     }
 
     // Release resources

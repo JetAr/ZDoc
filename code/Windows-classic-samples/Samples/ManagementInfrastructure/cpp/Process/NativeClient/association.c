@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -63,7 +63,7 @@ void Do_Association(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, 
     {
         roleProperty = _roleProperty;
     }
-    /* Ask for the association result role property filter.  This allows for filtering based on the property name within 
+    /* Ask for the association result role property filter.  This allows for filtering based on the property name within
      * the association class itself that points to the result class.
      */
     GetUserInputString(L"result role property", _resultRoleProperty, sizeof(_resultRoleProperty)/sizeof(_resultRoleProperty[0]), L"");
@@ -74,19 +74,19 @@ void Do_Association(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, 
 
     /* Asks user if full result instances are required, or just the key properties */
     keysOnly = GetUserSelection(
-                L"How do you want the Associator operation to return property keys only?\n"
-                L"\t[1] All instance properties\n"
-                L"\t[2] Instance key properties only\n"
-                L"\t[0] back to operation choice\n",
-                L"012");
+                   L"How do you want the Associator operation to return property keys only?\n"
+                   L"\t[1] All instance properties\n"
+                   L"\t[2] Instance key properties only\n"
+                   L"\t[0] back to operation choice\n",
+                   L"012");
 
     /* ASk user if synchronous or asynchronous operation is required. */
     synchronous = GetUserSelection(
-                L"How do you want the Associator operation to be carried out?\n"
-                L"\t[1] Synchronous\n"
-                L"\t[2] Asynchronous\n"
-                L"\t[0] back to operation choice\n",
-                L"012");
+                      L"How do you want the Associator operation to be carried out?\n"
+                      L"\t[1] Synchronous\n"
+                      L"\t[2] Asynchronous\n"
+                      L"\t[0] back to operation choice\n",
+                      L"012");
     switch(synchronous)
     {
     case L'1':
@@ -109,8 +109,8 @@ void Do_Association(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, 
 }
 
 /* Do_Association_Synchronous() carries out an instance association operation synchronously, retrieving all results
- * on the same thread.  The results can be retrieved on any thread, but that would be unusual for a 
- * synchronous operation. 
+ * on the same thread.  The results can be retrieved on any thread, but that would be unusual for a
+ * synchronous operation.
  */
 void Do_Association_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, MI_Instance *keyInstance, MI_Boolean keysOnly, _In_opt_z_ MI_Char *associationClass, _In_opt_z_ MI_Char *resultClass, _In_opt_z_ MI_Char *roleProperty, _In_opt_z_ MI_Char *resultRoleProperty)
 {
@@ -131,10 +131,10 @@ void Do_Association_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *nam
      *      MI_OperationCallbacks.writeProgress
      */
 
-    /* Initiate the associator operation.  Synchronous results are always retrieved through a call MI_Operation_GetInstance(). 
+    /* Initiate the associator operation.  Synchronous results are always retrieved through a call MI_Operation_GetInstance().
      * All operations must be closed with a call to MI_Operation_Close(), but all results must be processed before that.
      * The operation can be cancelled via MI_Operation_Cancel(), although even then all results must be consumed before the operation
-     * is closed. 
+     * is closed.
      */
     MI_Session_AssociatorInstances(miSession, 0, NULL, namespaceName, keyInstance, associationClass, resultClass, roleProperty, resultRoleProperty, keysOnly, NULL, &miOperation);
 
@@ -161,7 +161,8 @@ void Do_Association_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *nam
             instanceCount++;
         }
 
-    } while (miResult == MI_RESULT_OK && moreResults == MI_TRUE);
+    }
+    while (miResult == MI_RESULT_OK && moreResults == MI_TRUE);
 
     /* moreResults == MI_FALSE, dump the final outcome of the operation */
     wprintf(L"------------------------------------------\n");
@@ -178,8 +179,8 @@ void Do_Association_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *nam
 
     /* All operations must be closed.  If an operation is not closed the owning session will hang until the operations
      * are closed fully.  MI_Operation_Close will cancel an operation if it is still running, however results must be
-     * consumed before the close can complete fully.  
-     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed 
+     * consumed before the close can complete fully.
+     * For synchronous operations the MI_Operation_Close() method is synchronous until the final result has been consumed
      * (moreResults == MI_FALSE).
      */
     _miResult = MI_Operation_Close(&miOperation);
@@ -189,7 +190,7 @@ void Do_Association_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *nam
          * When an out of memory error happens, the operation will shut down as best it can.
          * Invalid parameter means a programming error happened.
          * Access denied means the security context while calling into the Close() is different from
-         * when the operation was created.  This will be a programming error and could happen if closing 
+         * when the operation was created.  This will be a programming error and could happen if closing
          * from a different thread and forgetting to impersonate.
          */
         wprintf(L"MI_Operation_Close failed, error %s\n", MI_Result_To_String(_miResult));
@@ -197,7 +198,7 @@ void Do_Association_Synchronous(MI_Session *miSession, _In_z_ const wchar_t *nam
 }
 
 /* Do_Association_Asynchronous() carries out an instance association operation asynchronously. The asynchronous callback
- * will keep being called until moreResults==MI_FALSE. 
+ * will keep being called until moreResults==MI_FALSE.
  */
 void Do_Association_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *namespaceName, MI_Instance *keyInstance, MI_Boolean keysOnly, _In_opt_z_ MI_Char *associationClass, _In_opt_z_ MI_Char *resultClass, _In_opt_z_ MI_Char *roleProperty, _In_opt_z_ MI_Char *resultRoleProperty)
 {
@@ -214,7 +215,7 @@ void Do_Association_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *na
     if (instanceCallback_Context.asyncNotificationHandle == NULL)
     {
         wprintf(L"Failed to create a Windows Event, windows error %u\n", GetLastError());
-        goto NoHandleError; 
+        goto NoHandleError;
     }
     instanceCallback_Context.keysOnly = keysOnly;
 
@@ -248,13 +249,13 @@ void Do_Association_Asynchronous(MI_Session *miSession, _In_z_ const wchar_t *na
     MI_Session_AssociatorInstances(miSession, 0, NULL, namespaceName, keyInstance, associationClass, resultClass, roleProperty, resultRoleProperty, keysOnly, &miOperationCallbacks, &miOperation);
 
     /* InstanceResultCallback() will always be called back for asyncronous operations, so wait for it to finish */
-    
+
     WaitForSingleObject(instanceCallback_Context.asyncNotificationHandle, INFINITE);
 
     CloseHandle(instanceCallback_Context.asyncNotificationHandle);
 
-    /* Final miResult is here if needed: instanceCallback_Context.finalResult 
-     * Any data from the callback cannot be accessed here because the lifetime of the data is 
+    /* Final miResult is here if needed: instanceCallback_Context.finalResult
+     * Any data from the callback cannot be accessed here because the lifetime of the data is
      * only valid in the callback and until the operation is closed.
      * In this sample the operation handle is closed inside the instance callback.
      */

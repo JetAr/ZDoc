@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -91,7 +91,7 @@ Cleanup:
 void DoSHARegistration ( CSdkShaModule * sdkShaModule ) throw()
 {
     HRESULT hr = S_OK;
-    
+
     // Register SHA with NapAgent
     hr = sdkShaModule->RegisterSdkSha();
     if (FAILED(hr))
@@ -129,8 +129,8 @@ void DoSHAExecution ( ) throw()
 
     // Create binding.
     hr = binding.CoCreateInstance(CLSID_NapSystemHealthAgentBinding,
-                                            NULL,
-                                            CLSCTX_INPROC_SERVER);
+                                  NULL,
+                                  CLSCTX_INPROC_SERVER);
     if (FAILED(hr))
     {
         wprintf(L"\nSHA main: Failed to create an instance to QuarSystemHealthAgentBinding (error = %x)\n", hr);
@@ -148,8 +148,8 @@ void DoSHAExecution ( ) throw()
     hr = binding->Initialize(QuarSampleSystemHealthId,callback);
     if (FAILED(hr))
     {
-         wprintf(L"\nSHA main: Failed to call QuarSystemHealthAgentBinding-> Initialize (error = %x)\n", hr);
-         goto Cleanup;
+        wprintf(L"\nSHA main: Failed to call QuarSystemHealthAgentBinding-> Initialize (error = %x)\n", hr);
+        goto Cleanup;
     }
 
 
@@ -168,24 +168,24 @@ void DoSHAExecution ( ) throw()
         {
             switch (input)
             {
-                case L'1':
-                    wprintf(L"SDKSHA::calling notifySohChange");
-                    hr = binding->NotifySoHChange();
-                    break;
-                case L'2':
-                    wprintf(L"SDKSHA::calling FlushCache");
-                    hr = binding->FlushCache();
-                    break;
-                case L'3':
-                    wprintf(L"SDKSHA::setting SoH to UNHEALTHY");
-                    g_setHealthySoh = false;
-                    break;
-                case L'4':
-                    wprintf(L"SDKSHA::setting SoH to HEALTHY");
-                    g_setHealthySoh = true;
-                    break;
-                default:
-                    wprintf(L"SDKSHA::invalid option(): %#x\n", input);
+            case L'1':
+                wprintf(L"SDKSHA::calling notifySohChange");
+                hr = binding->NotifySoHChange();
+                break;
+            case L'2':
+                wprintf(L"SDKSHA::calling FlushCache");
+                hr = binding->FlushCache();
+                break;
+            case L'3':
+                wprintf(L"SDKSHA::setting SoH to UNHEALTHY");
+                g_setHealthySoh = false;
+                break;
+            case L'4':
+                wprintf(L"SDKSHA::setting SoH to HEALTHY");
+                g_setHealthySoh = true;
+                break;
+            default:
+                wprintf(L"SDKSHA::invalid option(): %#x\n", input);
             }
             if (FAILED (hr))
             {
@@ -197,18 +197,18 @@ void DoSHAExecution ( ) throw()
             Sleep (1000);
         }
 
-		//set up for next loop
-		input = 0;
-		showSdkShaInterfaceOptions();
-		input = getwchar();
+        //set up for next loop
+        input = 0;
+        showSdkShaInterfaceOptions();
+        input = getwchar();
     }
 
     // Stopping the SHA
     hr = binding->Uninitialize();
     if (FAILED(hr))
     {
-         wprintf(L"\nSHA main: Failed to call QuarSystemHealthAgentBinding-> Uninitialize (error = %x)\n", hr);
-         goto Cleanup;
+        wprintf(L"\nSHA main: Failed to call QuarSystemHealthAgentBinding-> Uninitialize (error = %x)\n", hr);
+        goto Cleanup;
     }
 
     wprintf(L"\nSHA stopped successfully \n");
@@ -252,7 +252,7 @@ DWORD __cdecl wmain(DWORD argc, WCHAR * pArgv[])  throw()
                                -1,
                                NULL,
                                NULL,
-                               RPC_C_AUTHN_LEVEL_PKT, 
+                               RPC_C_AUTHN_LEVEL_PKT,
                                RPC_C_IMP_LEVEL_IMPERSONATE,
                                NULL,
                                EOAC_NONE,
@@ -267,33 +267,33 @@ DWORD __cdecl wmain(DWORD argc, WCHAR * pArgv[])  throw()
     actionCode = GetActionFromParams( pArgv[1] );
     switch (actionCode)
     {
-        case DOREGISTER:
-                wprintf(L"\nSHA main: Action code is DOREGISTER, proceeding\n");
-                DoSHARegistration(&_AtlModule);
-                break;
+    case DOREGISTER:
+        wprintf(L"\nSHA main: Action code is DOREGISTER, proceeding\n");
+        DoSHARegistration(&_AtlModule);
+        break;
 
-        case DOUNREGISTER:
-                wprintf(L"\nSHA main: Action code is DOUNREGISTER, proceeding\n");
-                DoSHAUnregistration(&_AtlModule);
-                break;
+    case DOUNREGISTER:
+        wprintf(L"\nSHA main: Action code is DOUNREGISTER, proceeding\n");
+        DoSHAUnregistration(&_AtlModule);
+        break;
 
-        case DOEXECUTE:
-                wprintf(L"\nSHA main: Action code is DOEXECUTE, proceeding\n");
-                DoSHAExecution();
-                break;
+    case DOEXECUTE:
+        wprintf(L"\nSHA main: Action code is DOEXECUTE, proceeding\n");
+        DoSHAExecution();
+        break;
 
-        default:
-                wprintf(L"\nSHA main: No action code, or unrecognized, proceeding\n");
-                showSdkShaExecutionOptions();
-                break;
+    default:
+        wprintf(L"\nSHA main: No action code, or unrecognized, proceeding\n");
+        showSdkShaExecutionOptions();
+        break;
     }
 
-    Cleanup:
-        if (comInitialized)
-        {
-            CoUninitialize();
-        }
-        return 0;
+Cleanup:
+    if (comInitialized)
+    {
+        CoUninitialize();
+    }
+    return 0;
 }
 
 

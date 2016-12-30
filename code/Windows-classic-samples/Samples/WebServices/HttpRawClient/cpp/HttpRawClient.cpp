@@ -1,4 +1,4 @@
-#ifndef UNICODE
+﻿#ifndef UNICODE
 #define UNICODE
 #endif
 #include "Windows.h"
@@ -20,12 +20,12 @@ HRESULT ReadHeader(
     ULONG headerLength = sizeof(headerBuffer);
 
     if (!WinHttpQueryHeaders(
-        requestHandle,
-        queryFlags,
-        NULL,
-        headerBuffer,
-        &headerLength,
-        WINHTTP_NO_HEADER_INDEX))
+                requestHandle,
+                queryFlags,
+                NULL,
+                headerBuffer,
+                &headerLength,
+                WINHTTP_NO_HEADER_INDEX))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
@@ -91,13 +91,13 @@ HRESULT PerformRequest(
 
     // Open a request
     requestHandle = WinHttpOpenRequest(
-        connectionHandle,
-        post ? L"POST" : L"GET",
-        L"/example",
-        NULL,
-        WINHTTP_NO_REFERER,
-        WINHTTP_DEFAULT_ACCEPT_TYPES,
-        0);
+                        connectionHandle,
+                        post ? L"POST" : L"GET",
+                        L"/example",
+                        NULL,
+                        WINHTTP_NO_REFERER,
+                        WINHTTP_DEFAULT_ACCEPT_TYPES,
+                        0);
     if (requestHandle == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -106,13 +106,13 @@ HRESULT PerformRequest(
 
     // Send the request
     if (!WinHttpSendRequest(
-        requestHandle,
-        post ? contentTypeHeader : WINHTTP_NO_ADDITIONAL_HEADERS,
-        0,
-        post ? const_cast<char*>(postData) : WINHTTP_NO_REQUEST_DATA,
-        post ? postDataLength : 0,
-        post ? postDataLength : 0,
-        NULL))
+                requestHandle,
+                post ? contentTypeHeader : WINHTTP_NO_ADDITIONAL_HEADERS,
+                0,
+                post ? const_cast<char*>(postData) : WINHTTP_NO_REQUEST_DATA,
+                post ? postDataLength : 0,
+                post ? postDataLength : 0,
+                NULL))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
@@ -145,53 +145,53 @@ Exit:
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     HINTERNET sessionHandle = NULL;
     HINTERNET connectionHandle = NULL;
     HINTERNET requestHandle = NULL;
-    
-    
-    
+
+
+
     // Get a session handle
     sessionHandle = WinHttpOpen(
-        L"",
-        WINHTTP_ACCESS_TYPE_NO_PROXY,
-        WINHTTP_NO_PROXY_NAME,
-        WINHTTP_NO_PROXY_BYPASS,
-        0);
+                        L"",
+                        WINHTTP_ACCESS_TYPE_NO_PROXY,
+                        WINHTTP_NO_PROXY_NAME,
+                        WINHTTP_NO_PROXY_BYPASS,
+                        0);
     if (sessionHandle == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
     }
-    
+
     // Get a connection handle
     connectionHandle = WinHttpConnect(
-        sessionHandle,
-        L"localhost",
-        80,
-        0);
+                           sessionHandle,
+                           L"localhost",
+                           80,
+                           0);
     if (connectionHandle == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
     }
-    
+
     // Perform a POST request
     hr = PerformRequest(connectionHandle, TRUE);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Perform a GET request
     hr = PerformRequest(connectionHandle, FALSE);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
 Exit:
     if (requestHandle != NULL)
     {
@@ -205,8 +205,8 @@ Exit:
     {
         WinHttpCloseHandle(sessionHandle);
     }
-    
-    
+
+
     if (FAILED(hr))
     {
         wprintf(L"Error 0x%08lx\n", hr);

@@ -1,4 +1,4 @@
-//
+﻿//
 // mark.h
 //
 // CMarkTextService declaration.
@@ -10,15 +10,15 @@
 class CLangBarItemButton;
 
 class CMarkTextService : public ITfTextInputProcessor,
-                         public ITfDisplayAttributeProvider,
-                         public ITfCreatePropertyStore,
-                         public ITfThreadMgrEventSink,
-                         public ITfTextEditSink,
-                         public ITfCompositionSink,
-                         public ITfCleanupContextDurationSink,
-                         public ITfCleanupContextSink,
-                         public ITfCompartmentEventSink,
-                         public ITfKeyEventSink
+    public ITfDisplayAttributeProvider,
+    public ITfCreatePropertyStore,
+    public ITfThreadMgrEventSink,
+    public ITfTextEditSink,
+    public ITfCompositionSink,
+    public ITfCleanupContextDurationSink,
+    public ITfCleanupContextSink,
+    public ITfCompartmentEventSink,
+    public ITfKeyEventSink
 {
 public:
     CMarkTextService();
@@ -162,7 +162,7 @@ private:
 
     ITfThreadMgr *_pThreadMgr;
     TfClientId _tfClientId;
-    
+
     ITfComposition *_pComposition; // pointer to an ongoing composition, or NULL if there is none
 
     BOOL _fCleaningUp;

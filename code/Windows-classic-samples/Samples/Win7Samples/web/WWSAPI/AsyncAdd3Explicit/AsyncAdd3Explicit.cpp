@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -12,9 +12,9 @@
 
 // Worker function that adds two numbers
 HRESULT DoAdd(
-    __in int a, 
-    __in int b, 
-    __out int* result, 
+    __in int a,
+    __in int b,
+    __out int* result,
     __in_opt WS_ERROR* error)
 {
     HRESULT hr;
@@ -23,7 +23,7 @@ HRESULT DoAdd(
     // To illustrate error handling, we won't support negative numbers
     if (a < 0 || b < 0)
     {
-        // Add error information to error object  
+        // Add error information to error object
         if (error != NULL)
         {
             WsAddErrorString(error, &errorString);
@@ -59,10 +59,10 @@ DWORD WINAPI AdderThread(
 
     // Do the addition
     HRESULT hr = DoAdd(
-        addParameters->a, 
-        addParameters->b, 
-        addParameters->sumPointer, 
-        addParameters->error);
+                     addParameters->a,
+                     addParameters->b,
+                     addParameters->sumPointer,
+                     addParameters->error);
 
     // Make a copy of the async context
     WS_ASYNC_CONTEXT asyncContext = addParameters->asyncContext;
@@ -79,10 +79,10 @@ DWORD WINAPI AdderThread(
 
 // An example of a function that can be called asynchronously
 HRESULT Add(
-    __in int a, 
-    __in int b, 
-    __out int* sumPointer, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in int a,
+    __in int b,
+    __out int* sumPointer,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     if (asyncContext == NULL)
@@ -151,8 +151,8 @@ struct ADD_STATE
 };
 
 HRESULT CALLBACK Add2(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
     __in ADD_STATE* addState)
 {
     if (SUCCEEDED(hr))
@@ -169,8 +169,8 @@ HRESULT CALLBACK Add2(
 }
 
 void CALLBACK Add2(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
     __in void* state)
 {
     ADD_STATE* addState = (ADD_STATE*)state;
@@ -180,8 +180,8 @@ void CALLBACK Add2(
 }
 
 HRESULT CALLBACK Add1(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
     __in ADD_STATE* addState)
 {
     if (SUCCEEDED(hr))
@@ -202,8 +202,8 @@ HRESULT CALLBACK Add1(
 }
 
 void CALLBACK Add1(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
     __in void* state)
 {
     ADD_STATE* addState = (ADD_STATE*)state;
@@ -213,12 +213,12 @@ void CALLBACK Add1(
 }
 
 HRESULT CALLBACK AddThree(
-    __in ADD_STATE* addState, 
-    __in int a, 
-    __in int b, 
-    __in int c, 
-    __out int* result, 
-    __in_opt const WS_ASYNC_CONTEXT* asyncContext, 
+    __in ADD_STATE* addState,
+    __in int a,
+    __in int b,
+    __in int c,
+    __out int* result,
+    __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
     HRESULT hr = S_OK;
@@ -254,8 +254,8 @@ HRESULT CALLBACK AddThree(
 }
 
 void CALLBACK AddThreeComplete(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
     __in void* state)
 {
     UNREFERENCED_PARAMETER(hr);
@@ -268,34 +268,34 @@ void CALLBACK AddThreeComplete(
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
-    
+
     // Some numbers to add asynchronously
     // Add has the behavior that if the second parameter is 0, it will perform synchronously
-    int ints[] = 
-    { 
+    int ints[] =
+    {
         1, 0, 0, // First add sync,  second add sync
         2, 1, 0, // First add async, second add sync
         3, 0, 2, // First add sync,  second add async
         4, 3, 2, // First add async, second add async
     };
-    
+
     // Set up the event that will get signalled each time AddThree is complete
     HANDLE handle = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (handle == NULL)
     {
         goto Exit;
     }
-    
+
     // Set up the callback to use when performing the addition asynchronously
     WS_ASYNC_CONTEXT addThreeComplete;
     addThreeComplete.callback = AddThreeComplete;
     addThreeComplete.callbackState = handle;
-    
+
     // Declare private data for AddThree
     ADD_STATE addState;
-    
+
     // Perform the additions synchronously and asynchronously
     for (ULONG loop = 0; loop < 2; loop++)
     {
@@ -303,7 +303,7 @@ int __cdecl wmain()
         for (ULONG i = 0; i < sizeof(ints) / sizeof(int); i += 3)
         {
             wprintf(L"Adding %d,%d,%d %s...\n", ints[i], ints[i + 1], ints[i + 2], (loop == 0 ? L"synchronously" : L"asynchronously"));
-    
+
             // Set up how the function will be called
             WS_ASYNC_CONTEXT* asyncContext;
             if (loop == 0)
@@ -316,11 +316,11 @@ int __cdecl wmain()
                 // Perform the addition asynchronously
                 asyncContext = &addThreeComplete;
             }
-    
+
             // Perform the addition
             int sum;
             hr = AddThree(&addState, ints[i], ints[i + 1], ints[i + 2], &sum, asyncContext, NULL);
-    
+
             if (hr == WS_S_ASYNC)
             {
                 // If the operation is being performed asynchronously, then wait for it to complete
@@ -336,7 +336,7 @@ int __cdecl wmain()
             }
         }
     }
-    Exit:
+Exit:
     if (handle != NULL)
     {
         CloseHandle(handle);

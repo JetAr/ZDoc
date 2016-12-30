@@ -24,11 +24,11 @@ HRESULT ShowMessageIfFailed(HRESULT functionResult, const wchar_t* message);
 
 
 int APIENTRY wWinMain(
-    HINSTANCE   hInstance, 
+    HINSTANCE   hInstance,
     HINSTANCE   hPrevInstance,
     LPWSTR      commandLine,
     int         nCmdShow
-    )
+)
 {
     // The Microsoft Security Development Lifecycle recommends that all
     // applications include the following call to ensure that heap corruptions
@@ -56,13 +56,13 @@ HRESULT MainWindow::Initialize()
     // Create the DWrite factory.
 
     hr = ShowMessageIfFailed(
-            DWriteCreateFactory(
-                DWRITE_FACTORY_TYPE_SHARED,
-                __uuidof(IDWriteFactory),
-                reinterpret_cast<IUnknown**>(&dwriteFactory_)
-                ),
-            L"Could not create DirectWrite factory! DWriteCreateFactory()" FAILURE_LOCATION
-        );
+             DWriteCreateFactory(
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&dwriteFactory_)
+             ),
+             L"Could not create DirectWrite factory! DWriteCreateFactory()" FAILURE_LOCATION
+         );
 
     //////////////////////////////
     // Create the main window
@@ -72,24 +72,24 @@ HRESULT MainWindow::Initialize()
         MainWindow::RegisterWindowClass();
 
         CreateWindow(
-                g_windowClassName,
-                TEXT(APPLICATION_TITLE),
-                WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN,
-                CW_USEDEFAULT, CW_USEDEFAULT,
-                800,
-                600,
-                NULL,
-                NULL,
-                HINST_THISCOMPONENT,
-                this
-                );
+            g_windowClassName,
+            TEXT(APPLICATION_TITLE),
+            WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN,
+            CW_USEDEFAULT, CW_USEDEFAULT,
+            800,
+            600,
+            NULL,
+            NULL,
+            HINST_THISCOMPONENT,
+            this
+        );
 
         if (hwnd_ == NULL)
         {
             hr = ShowMessageIfFailed(
-                    HRESULT_FROM_WIN32(GetLastError()),
-                    L"Could not create main demo window! CreateWindow()"  FAILURE_LOCATION
-                );
+                     HRESULT_FROM_WIN32(GetLastError()),
+                     L"Could not create main demo window! CreateWindow()"  FAILURE_LOCATION
+                 );
         }
         else
         {
@@ -115,9 +115,9 @@ HRESULT MainWindow::Initialize()
             HDC hdc = GetDC(hwnd_);
 
             hr = ShowMessageIfFailed(
-                    gdiInterop->CreateBitmapRenderTarget(hdc, clientRect.right, clientRect.bottom, &renderTarget_),
-                    L"Could not create render target! CreateBitmapRenderTarget()" FAILURE_LOCATION
-                    );
+                     gdiInterop->CreateBitmapRenderTarget(hdc, clientRect.right, clientRect.bottom, &renderTarget_),
+                     L"Could not create render target! CreateBitmapRenderTarget()" FAILURE_LOCATION
+                 );
 
             ReleaseDC(hwnd_, hdc);
         }
@@ -134,8 +134,8 @@ HRESULT MainWindow::Initialize()
         SafeSet(&flowLayout_,       new(std::nothrow) FlowLayout(dwriteFactory_));
 
         if (flowLayoutSource_ == NULL
-        ||  flowLayoutSink_   == NULL
-        ||  flowLayout_       == NULL)
+                ||  flowLayoutSink_   == NULL
+                ||  flowLayout_       == NULL)
         {
             hr = E_OUTOFMEMORY;
         }
@@ -199,32 +199,32 @@ LRESULT CALLBACK MainWindow::WindowProc(HWND hwnd, UINT message, WPARAM wParam, 
     switch (message)
     {
     case WM_NCCREATE:
-        {
-            // Associate the data structure with this window handle.
-            CREATESTRUCT* pcs = reinterpret_cast<CREATESTRUCT*>(lParam);
-            window = reinterpret_cast<MainWindow*>(pcs->lpCreateParams);
-            window->hwnd_ = hwnd;
-            SetWindowLongPtr(hwnd, GWLP_USERDATA, PtrToUlong(window));
-        }
-        return DefWindowProc(hwnd, message, wParam, lParam);
+    {
+        // Associate the data structure with this window handle.
+        CREATESTRUCT* pcs = reinterpret_cast<CREATESTRUCT*>(lParam);
+        window = reinterpret_cast<MainWindow*>(pcs->lpCreateParams);
+        window->hwnd_ = hwnd;
+        SetWindowLongPtr(hwnd, GWLP_USERDATA, PtrToUlong(window));
+    }
+    return DefWindowProc(hwnd, message, wParam, lParam);
 
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            BeginPaint(hwnd, &ps);
-            window->OnPaint(ps);
-            EndPaint(hwnd, &ps);
-        }
-        break;
+    {
+        PAINTSTRUCT ps;
+        BeginPaint(hwnd, &ps);
+        window->OnPaint(ps);
+        EndPaint(hwnd, &ps);
+    }
+    break;
 
     case WM_PRINTCLIENT:
-        {
-            PAINTSTRUCT ps = {};
-            ps.hdc = (HDC)wParam;
-            GetClientRect(hwnd, &ps.rcPaint);
-            window->OnPaint(ps);
-        }
-        break;
+    {
+        PAINTSTRUCT ps = {};
+        ps.hdc = (HDC)wParam;
+        GetClientRect(hwnd, &ps.rcPaint);
+        window->OnPaint(ps);
+    }
+    break;
 
     case WM_ERASEBKGND: // don't want flicker
         return true;
@@ -272,7 +272,7 @@ void MainWindow::OnCommand(UINT commandId)
         break;
 
     case CommandIdTextLatin:
-    case CommandIdTextArabic: 
+    case CommandIdTextArabic:
     case CommandIdTextJapanese:
         SetLayoutText(commandId);
         ReflowLayout();
@@ -314,7 +314,7 @@ void MainWindow::OnPaint(const PAINTSTRUCT& ps)
         ps.rcPaint.left,
         ps.rcPaint.top,
         SRCCOPY | NOMIRRORBITMAP
-        );
+    );
 }
 
 
@@ -352,9 +352,9 @@ void MainWindow::OnMove()
 
     SafeRelease(&renderingParams_);
     dwriteFactory_->CreateMonitorRenderingParams(
-                    MonitorFromWindow(hwnd_, MONITOR_DEFAULTTONEAREST),
-                    &renderingParams_
-                    );
+        MonitorFromWindow(hwnd_, MONITOR_DEFAULTTONEAREST),
+        &renderingParams_
+    );
 
     if (renderingParams_ == NULL)
         return;
@@ -375,7 +375,7 @@ STDMETHODIMP MainWindow::ReflowLayout()
 
     if (FAILED(hr = flowLayoutSink_->Reset()))
         return hr;
-    
+
     if (FAILED(hr = flowLayout_->FlowText(flowLayoutSource_, flowLayoutSink_)))
         return hr;
 
@@ -547,35 +547,35 @@ STDMETHODIMP MainWindow::SetLayoutText(UINT commandId)
 
     IDWriteTextFormat* textFormat = NULL;
     hr = ShowMessageIfFailed(
-            dwriteFactory_->CreateTextFormat(
-                fontName,
-                NULL,
-                DWRITE_FONT_WEIGHT_NORMAL,
-                DWRITE_FONT_STYLE_NORMAL,
-                DWRITE_FONT_STRETCH_NORMAL,
-                14, // fontSize
-                localeName,
-                &textFormat
-                ),
-            L"Could not create text format for custom layout! CreateTextFormat()"  FAILURE_LOCATION
-            );
+             dwriteFactory_->CreateTextFormat(
+                 fontName,
+                 NULL,
+                 DWRITE_FONT_WEIGHT_NORMAL,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 14, // fontSize
+                 localeName,
+                 &textFormat
+             ),
+             L"Could not create text format for custom layout! CreateTextFormat()"  FAILURE_LOCATION
+         );
 
     if (SUCCEEDED(hr))
     {
         textFormat->SetReadingDirection(readingDirection);
 
         hr = ShowMessageIfFailed(
-                flowLayout_->SetTextFormat(textFormat),
-                L"Could not set text format on custom layout! SetTextFormat()"  FAILURE_LOCATION
-                );
+                 flowLayout_->SetTextFormat(textFormat),
+                 L"Could not set text format on custom layout! SetTextFormat()"  FAILURE_LOCATION
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         hr = ShowMessageIfFailed(
-                flowLayout_->AnalyzeText(text, static_cast<UINT32>(wcsnlen(text, UINT32_MAX))),
-                L"Text analysis failed! FlowLayout::AnalyzeText()"  FAILURE_LOCATION
-                );
+                 flowLayout_->AnalyzeText(text, static_cast<UINT32>(wcsnlen(text, UINT32_MAX))),
+                 L"Text analysis failed! FlowLayout::AnalyzeText()"  FAILURE_LOCATION
+             );
     }
 
     SafeRelease(&textFormat);

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@ STDAPI CSampleIME::OnEndEdit(__RPC__in_opt ITfContext *pContext, TfEditCookie ec
 
     //
     // did the selection change?
-    // The selection change includes the movement of caret as well. 
+    // The selection change includes the movement of caret as well.
     // The caret position is represent as the empty selection range when
     // there is no selection.
     //
@@ -31,7 +31,7 @@ STDAPI CSampleIME::OnEndEdit(__RPC__in_opt ITfContext *pContext, TfEditCookie ec
         return E_INVALIDARG;
     }
     if (SUCCEEDED(pEditRecord->GetSelectionStatus(&isSelectionChanged)) &&
-        isSelectionChanged)
+            isSelectionChanged)
     {
         // If the selection is moved to out side of the current composition,
         // we terminate the composition. This TextService supports only one

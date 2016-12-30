@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -66,20 +66,20 @@ void MyAssert(BOOL exp)
 {
     if (exp == FALSE)
     {
-        #ifdef MY_DEBUG
+#ifdef MY_DEBUG
         *(int *)(0) = 0;
-        #else
+#else
         assert(exp);
-        #endif
+#endif
     }
 }
 
 //
 // Helper function of allocating memory from process heap
-// 
+//
 // Argument:
 //      dwBytes     number of bytes to allocate.
-//  
+//
 // Return value:
 //      allocated memory address
 //
@@ -90,7 +90,7 @@ LPVOID AllocateMemory(SIZE_T dwBytes)
 
 //
 // Helper function of freeing memory
-// 
+//
 // Argument:
 //      lpMem       memory address to free.
 //
@@ -179,7 +179,7 @@ void StartPollingThread()
         g_nActiveIndicationClass ++;
         if (g_nActiveIndicationClass == 1)
         {
-            // This is the first indication class, need to 
+            // This is the first indication class, need to
             // create the polling thread to start the polling
             MyAssert(g_hPollingThread == NULL);
             g_hPollingThread = CreateThread(NULL, 0, PollingThreadProc, &g_Arg, 0, 0);
@@ -223,10 +223,10 @@ void StopPollingThread()
 
 //
 // Helper function used to set namespace into which the provider is loaded
-// 
+//
 // Argument:
 //      lpwszNamespace     The namespace that loaded provider.
-//  
+//
 // Return value:
 //      MI_RESULT_OK means set namespace successfully, otherwise failed.
 //
@@ -245,9 +245,9 @@ MI_Result SetNamespace(_In_opt_z_ const MI_Char *lpwszNamespace)
             wcscpy_s(lpwszNamespaceTemp, nNamespaceLength, lpwszNamespace);
             // set g_lpwszNamespace threadsafely
             if (InterlockedCompareExchangePointer(
-                (PVOID*)(&g_lpwszNamespace),
-                lpwszNamespaceTemp,
-                NULL) != NULL)
+                        (PVOID*)(&g_lpwszNamespace),
+                        lpwszNamespaceTemp,
+                        NULL) != NULL)
             {
                 FreeMemory(lpwszNamespaceTemp);
             }
@@ -258,15 +258,15 @@ MI_Result SetNamespace(_In_opt_z_ const MI_Char *lpwszNamespace)
 
 //
 // Helper function used to enable ServiceStarted indication
-// 
+//
 // Argument:
 //      context     The context used to post indication to client.
-//  
+//
 // Return value:
 //      Enable result
 //
 MI_Result EnableServiceStartedIndication(__in MI_Context *context,
-                                         _In_opt_z_ const MI_Char *lpwszNamespace)
+        _In_opt_z_ const MI_Char *lpwszNamespace)
 {
     MI_Result r = SetNamespace(lpwszNamespace);
     if (r != MI_RESULT_OK)
@@ -275,16 +275,16 @@ MI_Result EnableServiceStartedIndication(__in MI_Context *context,
     }
     g_Arg.contextForStarted = context;
     StartPollingThread();
-    
+
     return MI_RESULT_OK;
 }
 
 //
 // Helper function used to disable ServiceStarted indication
-// 
+//
 // Argument:
 //      context     The context used to post indication to client.
-//  
+//
 // Return value:
 //      Disable result
 //
@@ -299,15 +299,15 @@ MI_Result DisableServiceStartedIndication(__in MI_Context *context)
 
 //
 // Helper function used to enable ServiceStopped indication
-// 
+//
 // Argument:
 //      context     The context used to post indication to client.
-//  
+//
 // Return value:
 //      Enable result
 //
 MI_Result EnableServiceStoppedIndication(__in MI_Context *context,
-                                         _In_opt_z_ const MI_Char *lpwszNamespace)
+        _In_opt_z_ const MI_Char *lpwszNamespace)
 {
     MI_Result r = SetNamespace(lpwszNamespace);
     if (r != MI_RESULT_OK)
@@ -324,7 +324,7 @@ MI_Result EnableServiceStoppedIndication(__in MI_Context *context,
 //
 // Argument:
 //      context     The context used to post indication to client.
-//  
+//
 // Return value:
 //      Disable result
 //
@@ -382,7 +382,7 @@ DWORD FindAndAddIfNotFound(
     pService = (WindowsService*)AllocateMemory(sizeof(WindowsService));
     if (pService == NULL)
     {
-        // out of memory, return 
+        // out of memory, return
         return ERROR_NOT_ENOUGH_MEMORY;
     }
     {
@@ -419,15 +419,16 @@ DWORD FindAndAddIfNotFound(
 //  #define SERVICE_PAUSED                         0x00000007
 
 // Service Status values
-static MI_Char *SERVICE_STATUS_VALUE[] = {
+static MI_Char *SERVICE_STATUS_VALUE[] =
+{
     MI_T("Unknown"),
-	MI_T("Stopped"),
-	MI_T("Starting"),
-	MI_T("Stopping"),
-	MI_T("Running"),
-	MI_T("ContinuePending"),
-	MI_T("PausePending"),
-	MI_T("Paused")
+    MI_T("Stopped"),
+    MI_T("Starting"),
+    MI_T("Stopping"),
+    MI_T("Running"),
+    MI_T("ContinuePending"),
+    MI_T("PausePending"),
+    MI_T("Paused")
 };
 
 //
@@ -488,11 +489,11 @@ void SendIndication(
         return;
     }
     wcscpy_s(lpQueryBuffer,
-        nQueryBufferLength,
-        g_pQueryTemplate);
+             nQueryBufferLength,
+             g_pQueryTemplate);
     wcscpy_s(lpQueryBuffer + g_nQueryTemplateLength,
-        nQueryBufferLength - g_nQueryTemplateLength,
-        serviceName);
+             nQueryBufferLength - g_nQueryTemplateLength,
+             serviceName);
     lpQueryBuffer[nQueryBufferLength - 2] = L'\'';
     lpQueryBuffer[nQueryBufferLength - 1] = L'\0';
 
@@ -502,24 +503,24 @@ void SendIndication(
     // to client, it is mandatory to set both sourceInstance and
     // previousInstance properties.
     MI_Session_QueryInstances(&miSession,
-        0,
-        NULL,
-        namespaceName,
-        MI_T("WQL"),
-        lpQueryBuffer,
-        NULL,
-        &miOperation);
+                              0,
+                              NULL,
+                              namespaceName,
+                              MI_T("WQL"),
+                              lpQueryBuffer,
+                              NULL,
+                              &miOperation);
     do
     {
         MI_Instance *miInstance;
         MI_Result _miResult;
 
         _miResult = MI_Operation_GetInstance(&miOperation,
-            &miInstance,
-            &moreResults,
-            &miResult,
-            &errorString,
-            &errorDetails);
+                                             &miInstance,
+                                             &moreResults,
+                                             &miResult,
+                                             &errorString,
+                                             &errorDetails);
 
         if (_miResult != MI_RESULT_OK)
         {
@@ -569,7 +570,8 @@ void SendIndication(
                     }
                     // post indication back to client
                     MSFT_WindowsServiceStarted_Post(&started, miContext, 0, L"");
-                } while (FALSE);
+                }
+                while (FALSE);
                 MSFT_WindowsServiceStarted_Destruct(&started);
             }
             else if (dwIndicationType == 1)
@@ -618,7 +620,8 @@ void SendIndication(
                 MSFT_WindowsServiceStopped_Destruct(&stopped);
             }
         }
-    } while (FALSE); // we only expect one result instance
+    }
+    while (FALSE);   // we only expect one result instance
     FreeMemory(lpQueryBuffer);
     MI_Operation_Close(&miOperation);
 }
@@ -638,32 +641,32 @@ void GenerateIndication(
     // generate the event if necessary
     if (pArg->contextForStarted != NULL)
     {
-        if ((dwOriginalState !=  SERVICE_RUNNING) && 
-           (pServiceStatus->ServiceStatus.dwCurrentState == SERVICE_RUNNING))
+        if ((dwOriginalState !=  SERVICE_RUNNING) &&
+                (pServiceStatus->ServiceStatus.dwCurrentState == SERVICE_RUNNING))
         {
             // trigger service started indication
             // SourceInstance & PreviousInstance should read from service
             // provider directly.
             SendIndication(pArg->contextForStarted,
-                0,
-                dwOriginalState,
-                g_lpwszNamespace,
-                pServiceStatus->lpServiceName);
+                           0,
+                           dwOriginalState,
+                           g_lpwszNamespace,
+                           pServiceStatus->lpServiceName);
         }
     }
     if (pArg->contextForStopped != NULL)
     {
-        if ((dwOriginalState !=  SERVICE_STOPPED) && 
-           (pServiceStatus->ServiceStatus.dwCurrentState == SERVICE_STOPPED))
+        if ((dwOriginalState !=  SERVICE_STOPPED) &&
+                (pServiceStatus->ServiceStatus.dwCurrentState == SERVICE_STOPPED))
         {
             // trigger service stopped indication
             // SourceInstance & PreviousInstance should read from service
             // provider directly.
             SendIndication(pArg->contextForStopped,
-                1,
-                dwOriginalState,
-                g_lpwszNamespace,
-                pServiceStatus->lpServiceName);
+                           1,
+                           dwOriginalState,
+                           g_lpwszNamespace,
+                           pServiceStatus->lpServiceName);
         }
     }
 }
@@ -672,10 +675,10 @@ void GenerateIndication(
 // This function is invoked from polling thread, which poll all services status
 // and generate MSFT_WindowsServiceStarted and MSFT_WindowsServiceStopped indication
 // on demand.
-// 
+//
 // Argument:
 //      lpParameter     parameter passed to polling thread
-// 
+//
 // Return value:
 //      Thread execution result
 //
@@ -700,14 +703,14 @@ DWORD WINAPI PollingThreadProc(__in  LPVOID lpParameter)
         ENUM_SERVICE_STATUS * lpServiceArray = NULL;
         // Enumerate all services installed on current machine
         BOOL returnValue = EnumServicesStatus(
-            hSvcCtlMgr,
-            SERVICE_WIN32,
-            SERVICE_STATE_ALL,
-            NULL,
-            0,
-            &dwBytesNeeded,
-            &dwServiceCount,
-            &dwResumeHandle);
+                               hSvcCtlMgr,
+                               SERVICE_WIN32,
+                               SERVICE_STATE_ALL,
+                               NULL,
+                               0,
+                               &dwBytesNeeded,
+                               &dwServiceCount,
+                               &dwResumeHandle);
 
         if (!returnValue)
         {
@@ -723,14 +726,14 @@ DWORD WINAPI PollingThreadProc(__in  LPVOID lpParameter)
 
                 dwResumeHandle = 0;
                 returnValue = EnumServicesStatus(
-                    hSvcCtlMgr,
-                    SERVICE_WIN32,
-                    SERVICE_STATE_ALL,
-                    lpServiceArray,
-                    dwBytesNeeded,
-                    &dwBytesNeeded,
-                    &dwServiceCount,
-                    &dwResumeHandle);
+                                  hSvcCtlMgr,
+                                  SERVICE_WIN32,
+                                  SERVICE_STATE_ALL,
+                                  lpServiceArray,
+                                  dwBytesNeeded,
+                                  &dwBytesNeeded,
+                                  &dwServiceCount,
+                                  &dwResumeHandle);
                 if (!returnValue)
                 {
                     errorToReturn = GetLastError();

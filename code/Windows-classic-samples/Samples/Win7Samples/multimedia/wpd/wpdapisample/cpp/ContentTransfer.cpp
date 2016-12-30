@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -131,7 +131,8 @@ HRESULT StreamCopy(
                 printf("Read %d bytes from the source stream...Wrote %d bytes to the destination stream...\n", cbBytesRead, cbBytesWritten);
             }
 
-        } while (SUCCEEDED(hr) && (cbBytesRead > 0));
+        }
+        while (SUCCEEDED(hr) && (cbBytesRead > 0));
 
         // If the caller supplied a pcbWritten parameter and we
         // and we are successful, set it to cbTotalBytesWritten
@@ -158,7 +159,7 @@ HRESULT StreamCopy(
 void TransferContentFromDevice(
     IPortableDevice* pDevice)
 {
-	//<SnippetTransferFrom1>
+    //<SnippetTransferFrom1>
     HRESULT                            hr                   = S_OK;
     WCHAR                              szSelection[81]      = {0};
     CComPtr<IPortableDeviceContent>    pContent;
@@ -183,10 +184,10 @@ void TransferContentFromDevice(
     {
         printf("An invalid object identifier was specified, aborting content transfer\n");
     }
-	//</SnippetTransferFrom1>
-	// 1) get an IPortableDeviceContent interface from the IPortableDevice interface to
+    //</SnippetTransferFrom1>
+    // 1) get an IPortableDeviceContent interface from the IPortableDevice interface to
     // access the content-specific methods.
-	//<SnippetTransferFrom2>
+    //<SnippetTransferFrom2>
     if (SUCCEEDED(hr))
     {
         hr = pDevice->Content(&pContent);
@@ -195,10 +196,10 @@ void TransferContentFromDevice(
             printf("! Failed to get IPortableDeviceContent from IPortableDevice, hr = 0x%lx\n",hr);
         }
     }
-	//</SnippetTransferFrom2>
+    //</SnippetTransferFrom2>
     // 2) Get an IPortableDeviceResources interface from the IPortableDeviceContent interface to
     // access the resource-specific methods.
-	//<SnippetTransferFrom3>
+    //<SnippetTransferFrom3>
     if (SUCCEEDED(hr))
     {
         hr = pContent->Transfer(&pResources);
@@ -207,10 +208,10 @@ void TransferContentFromDevice(
             printf("! Failed to get IPortableDeviceResources from IPortableDeviceContent, hr = 0x%lx\n",hr);
         }
     }
-	//</SnippetTransferFrom3>
+    //</SnippetTransferFrom3>
     // 3) Get the IStream (with READ access) and the optimal transfer buffer size
     // to begin the transfer.
-	//<SnippetTransferFrom4>
+    //<SnippetTransferFrom4>
     if (SUCCEEDED(hr))
     {
         hr = pResources->GetStream(szSelection,             // Identifier of the object we want to transfer
@@ -223,12 +224,12 @@ void TransferContentFromDevice(
             printf("! Failed to get IStream (representing object data on the device) from IPortableDeviceResources, hr = 0x%lx\n",hr);
         }
     }
-	//</SnippetTransferFrom4>
+    //</SnippetTransferFrom4>
 
     // 4) Read the WPD_OBJECT_ORIGINAL_FILE_NAME property so we can properly name the
     // transferred object.  Some content objects may not have this property, so a
     // fall-back case has been provided below. (i.e. Creating a file named <objectID>.data )
-	//<SnippetTransferFrom5>
+    //<SnippetTransferFrom5>
     if (SUCCEEDED(hr))
     {
         hr = pContent->Properties(&pProperties);
@@ -253,10 +254,10 @@ void TransferContentFromDevice(
             printf("! Failed to get IPortableDeviceProperties from IPortableDeviceContent, hr = 0x%lx\n", hr);
         }
     }
-	//</SnippetTransferFrom5>
+    //</SnippetTransferFrom5>
     // 5) Create a destination for the data to be written to.  In this example we are
     // creating a temporary file which is named the same as the object identifier string.
-	//<SnippetTransferFrom6>
+    //<SnippetTransferFrom6>
     if (SUCCEEDED(hr))
     {
         hr = SHCreateStreamOnFile(strOriginalFileName, STGM_CREATE|STGM_WRITE, &pFinalFileStream);
@@ -265,10 +266,10 @@ void TransferContentFromDevice(
             printf("! Failed to create a temporary file named (%ws) to transfer object (%ws), hr = 0x%lx\n",(PWSTR)strOriginalFileName.GetString(), szSelection, hr);
         }
     }
-	//</SnippetTransferFrom6>
+    //</SnippetTransferFrom6>
     // 6) Read on the object's data stream and write to the final file's data stream using the
     // driver supplied optimal transfer buffer size.
-	//<SnippetTransferFrom7>
+    //<SnippetTransferFrom7>
     if (SUCCEEDED(hr))
     {
         DWORD cbTotalBytesWritten = 0;
@@ -288,7 +289,7 @@ void TransferContentFromDevice(
             printf("* Transferred object '%ws' to '%ws'.\n", szSelection, (PWSTR)strOriginalFileName.GetString());
         }
     }
-	//</SnippetTransferFrom7>
+    //</SnippetTransferFrom7>
 }
 
 // Deletes a selected object from the device.
@@ -583,11 +584,11 @@ HRESULT GetRequiredPropertiesForAllContentTypes(
         WCHAR szFileName[MAX_PATH] = {0};
         WCHAR szFileExt[MAX_PATH]  = {0};
         if (_wsplitpath_s(pszFilePath, NULL,0,NULL,0,
-                           szFileName,ARRAYSIZE(szFileName),
-                           szFileExt, ARRAYSIZE(szFileExt)))
+                          szFileName,ARRAYSIZE(szFileName),
+                          szFileExt, ARRAYSIZE(szFileExt)))
         {
             hr = E_INVALIDARG;
-            printf("! Failed to split the file path, hr = 0x%lx\n",hr);    
+            printf("! Failed to split the file path, hr = 0x%lx\n",hr);
 
         }
 
@@ -718,9 +719,9 @@ HRESULT GetRequiredPropertiesForContentType(
         {
             // Fill out required properties for ALL content types
             hr = GetRequiredPropertiesForAllContentTypes(pObjectProperties,
-                                                         pszParentObjectID,
-                                                         pszFilePath,
-                                                         pFileStream);
+                    pszParentObjectID,
+                    pszFilePath,
+                    pFileStream);
             if (SUCCEEDED(hr))
             {
                 // Fill out required properties for specific content types.
@@ -781,7 +782,7 @@ void TransferContentToDevice(
         printf("! A NULL IPortableDevice interface pointer was received\n");
         return;
     }
-	//<SnippetContentTransfer1>
+    //<SnippetContentTransfer1>
     HRESULT                             hr = S_OK;
     WCHAR                               szSelection[81]        = {0};
     WCHAR                               szFilePath[MAX_PATH]   = {0};
@@ -799,10 +800,10 @@ void TransferContentToDevice(
     {
         printf("An invalid object identifier was specified, aborting content transfer\n");
     }
-	//</SnippetContentTransfer1>
+    //</SnippetContentTransfer1>
     // 1) Get an IPortableDeviceContent interface from the IPortableDevice interface to
     // access the content-specific methods.
-	//<SnippetContentTransfer2>
+    //<SnippetContentTransfer2>
     if (SUCCEEDED(hr))
     {
         hr = pDevice->Content(&pContent);
@@ -811,10 +812,10 @@ void TransferContentToDevice(
             printf("! Failed to get IPortableDeviceContent from IPortableDevice, hr = 0x%lx\n",hr);
         }
     }
-	//</SnippetContentTransfer2>
+    //</SnippetContentTransfer2>
     // 2) Present the user with a File Open dialog.  Our sample is
     // restricting the types to user-specified forms.
-	//<SnippetContentTransfer3>
+    //<SnippetContentTransfer3>
     if (SUCCEEDED(hr))
     {
         OPENFILENAME OpenFileNameInfo   = {0};
@@ -834,10 +835,10 @@ void TransferContentToDevice(
             hr = E_ABORT;
         }
     }
-	//</SnippetContentTransfer3>
+    //</SnippetContentTransfer3>
 
     // 3) Open the image file and add required properties about the file being transferred
-	//<SnippetContentTransfer4>
+    //<SnippetContentTransfer4>
 
     if (SUCCEEDED(hr))
     {
@@ -849,10 +850,10 @@ void TransferContentToDevice(
             // Get the required properties needed to properly describe the data being
             // transferred to the device.
             hr = GetRequiredPropertiesForContentType(guidContentType,           // Content type of the data
-                                                     szSelection,              // Parent to transfer the data under
-                                                     szFilePath,               // Full file path to the data file
-                                                     pFileStream,               // Open IStream that contains the data
-                                                     &pFinalObjectProperties);  // Returned properties describing the data
+                    szSelection,              // Parent to transfer the data under
+                    szFilePath,               // Full file path to the data file
+                    pFileStream,               // Open IStream that contains the data
+                    &pFinalObjectProperties);  // Returned properties describing the data
             if (FAILED(hr))
             {
                 printf("! Failed to get required properties needed to transfer a file to the device, hr = 0x%lx\n", hr);
@@ -864,15 +865,15 @@ void TransferContentToDevice(
             printf("! Failed to open file named (%ws) to transfer to device, hr = 0x%lx\n",szFilePath, hr);
         }
     }
-	//</SnippetContentTransfer4>
-	//<SnippetContentTransfer5>
+    //</SnippetContentTransfer4>
+    //<SnippetContentTransfer5>
     // 4) Transfer for the content to the device
     if (SUCCEEDED(hr))
     {
         hr = pContent->CreateObjectWithPropertiesAndData(pFinalObjectProperties,    // Properties describing the object data
-                                                         &pTempStream,              // Returned object data stream (to transfer the data to)
-                                                         &cbOptimalTransferSize,    // Returned optimal buffer size to use during transfer
-                                                         NULL);
+                &pTempStream,              // Returned object data stream (to transfer the data to)
+                &cbOptimalTransferSize,    // Returned optimal buffer size to use during transfer
+                NULL);
 
         // Once we have a the IStream returned from CreateObjectWithPropertiesAndData,
         // QI for IPortableDeviceDataStream so we can use the additional methods
@@ -928,7 +929,7 @@ void TransferContentToDevice(
             hr = pFinalObjectDataStream->GetObjectID(&pszNewlyCreatedObject);
             if (SUCCEEDED(hr))
             {
-                printf("The file '%ws' was transferred to the device.\nThe newly created object's ID is '%ws'\n",szFilePath ,pszNewlyCreatedObject);
+                printf("The file '%ws' was transferred to the device.\nThe newly created object's ID is '%ws'\n",szFilePath,pszNewlyCreatedObject);
             }
 
             if (FAILED(hr))
@@ -941,7 +942,7 @@ void TransferContentToDevice(
             pszNewlyCreatedObject = NULL;
         }
     }
-	//</SnippetContentTransfer5>
+    //</SnippetContentTransfer5>
 }
 
 // Transfers a user selected file to the device as a new WPD_RESOURCE_CONTACT_PHOTO resource
@@ -1305,7 +1306,7 @@ void TransferContactToDevice(
         printf("! A NULL IPortableDevice interface pointer was received\n");
         return;
     }
-	//<SnippetTransfer1>
+    //<SnippetTransfer1>
     HRESULT                             hr = S_OK;
     WCHAR                               szSelection[81]        = {0};
     CComPtr<IPortableDeviceValues>      pFinalObjectProperties;
@@ -1318,10 +1319,10 @@ void TransferContactToDevice(
     {
         printf("An invalid object identifier was specified, aborting content transfer\n");
     }
-	//</SnippetTransfer1>
+    //</SnippetTransfer1>
     // 1) Get an IPortableDeviceContent interface from the IPortableDevice interface to
     // access the content-specific methods.
-	//<SnippetTransfer2>
+    //<SnippetTransfer2>
     if (SUCCEEDED(hr))
     {
         hr = pDevice->Content(&pContent);
@@ -1330,13 +1331,13 @@ void TransferContactToDevice(
             printf("! Failed to get IPortableDeviceContent from IPortableDevice, hr = 0x%lx\n",hr);
         }
     }
-	//</SnippetTransfer2>
+    //</SnippetTransfer2>
     // 2) Get the properties that describe the object being created on the device
 
     if (SUCCEEDED(hr))
     {
         hr = GetRequiredPropertiesForPropertiesOnlyContact(szSelection,              // Parent to transfer the data under
-                                                           &pFinalObjectProperties);  // Returned properties describing the data
+                &pFinalObjectProperties);  // Returned properties describing the data
         if (FAILED(hr))
         {
             printf("! Failed to get required properties needed to transfer an image file to the device, hr = 0x%lx\n", hr);
@@ -1344,12 +1345,12 @@ void TransferContactToDevice(
     }
 
     // 3) Transfer the content to the device by creating a properties-only object
-	//<SnippetTransfer3>
+    //<SnippetTransfer3>
     if (SUCCEEDED(hr))
     {
         PWSTR pszNewlyCreatedObject = NULL;
         hr = pContent->CreateObjectWithPropertiesOnly(pFinalObjectProperties,    // Properties describing the object data
-                                                      &pszNewlyCreatedObject);
+                &pszNewlyCreatedObject);
         if (SUCCEEDED(hr))
         {
             printf("The contact was transferred to the device.\nThe newly created object's ID is '%ws'\n",pszNewlyCreatedObject);
@@ -1364,7 +1365,7 @@ void TransferContactToDevice(
         CoTaskMemFree(pszNewlyCreatedObject);
         pszNewlyCreatedObject = NULL;
     }
-	//</SnippetTransfer3>
+    //</SnippetTransfer3>
 }
 
 // Creates a properties-only object on the device which is
@@ -1428,7 +1429,7 @@ void CreateFolderOnDevice(
     {
         PWSTR pszNewlyCreatedObject = NULL;
         hr = pContent->CreateObjectWithPropertiesOnly(pFinalObjectProperties,    // Properties describing the object data
-                                                      &pszNewlyCreatedObject);
+                &pszNewlyCreatedObject);
         if (SUCCEEDED(hr))
         {
             printf("The folder was created on the device.\nThe newly created object's ID is '%ws'\n",pszNewlyCreatedObject);
@@ -1484,8 +1485,8 @@ HRESULT GetPropertiesForUpdateData(
         WCHAR szFileName[MAX_PATH] = {0};
         WCHAR szFileExt[MAX_PATH]  = {0};
         if (_wsplitpath_s(pszFilePath, NULL,0,NULL,0,
-                           szFileName,ARRAYSIZE(szFileName),
-                           szFileExt, ARRAYSIZE(szFileExt)))
+                          szFileName,ARRAYSIZE(szFileName),
+                          szFileExt, ARRAYSIZE(szFileExt)))
         {
             hr = E_INVALIDARG;
             printf("! Failed to split the file path, hr = 0x%lx\n",hr);
@@ -1527,12 +1528,12 @@ HRESULT GetPropertiesForUpdateData(
             }
         }
     }
-    
+
     return hr;
 }
 
 
-// Updates a selected object's properties and data (WPD_RESOURCE_DEFAULT).  
+// Updates a selected object's properties and data (WPD_RESOURCE_DEFAULT).
 void UpdateContentOnDevice(
     IPortableDevice* pDevice,
     REFGUID          ContentType,
@@ -1568,7 +1569,7 @@ void UpdateContentOnDevice(
     if (SUCCEEDED(hr))
     {
         CComPtr<IPortableDeviceContent> pContent;
-    
+
         hr = pDevice->Content(&pContent);
         if (FAILED(hr))
         {
@@ -1672,9 +1673,9 @@ void UpdateContentOnDevice(
     if (SUCCEEDED(hr))
     {
         hr = pContent2->UpdateObjectWithPropertiesAndData(szSelection,
-                                                         pFinalObjectProperties,    // Properties describing the object data
-                                                         &pTempStream,              // Returned object data stream (to transfer the data to)
-                                                         &cbOptimalTransferSize);   // Returned optimal buffer size to use during transfer
+                pFinalObjectProperties,    // Properties describing the object data
+                &pTempStream,              // Returned object data stream (to transfer the data to)
+                &cbOptimalTransferSize);   // Returned optimal buffer size to use during transfer
 
         // Once we have a the IStream returned from UpdateObjectWithPropertiesAndData,
         // QI for IPortableDeviceDataStream so we can use the additional methods

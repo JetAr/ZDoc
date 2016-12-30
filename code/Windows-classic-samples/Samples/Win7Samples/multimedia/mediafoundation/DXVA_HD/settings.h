@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // Settings.h
 //
 // Contains application constants.
@@ -37,7 +37,7 @@ const UINT VIDEO_MAIN_HEIGHT = 480;
 const RECT VIDEO_MAIN_RECT   = {0, 0, VIDEO_MAIN_WIDTH, VIDEO_MAIN_HEIGHT};
 
 const UINT DEST_BORDER = 20;
-const RECT VIDEO_MAIN_DEST_RECT = { DEST_BORDER, DEST_BORDER, VIDEO_MAIN_WIDTH - DEST_BORDER, VIDEO_MAIN_HEIGHT - DEST_BORDER }; 
+const RECT VIDEO_MAIN_DEST_RECT = { DEST_BORDER, DEST_BORDER, VIDEO_MAIN_WIDTH - DEST_BORDER, VIDEO_MAIN_HEIGHT - DEST_BORDER };
 
 // Substreams
 const UINT SUB_STREAM_COUNT  = 1;
@@ -80,7 +80,7 @@ const DWORD NUM_EX_COLORS = ARRAYSIZE(EX_COLOR_INFO);
 // Background colors
 const DXVAHD_COLOR_RGBA BACKGROUND_COLORS[] =
 {
-    // White         // Red         // Yellow       // Green     
+    // White         // Red         // Yellow       // Green
     { 1, 1, 1, 1 }, { 1, 0, 0, 1 }, { 1, 1, 0, 1 }, { 0, 1, 0, 1},
 
     // Cyan         // Blue         // Magenta      // Black
@@ -91,7 +91,7 @@ const DXVAHD_COLOR_RGBA BACKGROUND_COLORS[] =
 const DWORD NUM_BACKGROUND_COLORS = ARRAYSIZE(BACKGROUND_COLORS);
 
 // ProcAmp filters
-const DXVAHD_FILTER PROCAMP_FILTERS[] = 
+const DXVAHD_FILTER PROCAMP_FILTERS[] =
 {
     DXVAHD_FILTER_BRIGHTNESS,
     DXVAHD_FILTER_CONTRAST,
@@ -99,4 +99,4 @@ const DXVAHD_FILTER PROCAMP_FILTERS[] =
     DXVAHD_FILTER_SATURATION
 };
 
-const DWORD NUM_FILTERS = ARRAYSIZE(PROCAMP_FILTERS); 
+const DWORD NUM_FILTERS = ARRAYSIZE(PROCAMP_FILTERS);

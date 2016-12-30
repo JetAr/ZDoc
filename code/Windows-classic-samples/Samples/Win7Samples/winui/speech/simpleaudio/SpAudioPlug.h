@@ -1,9 +1,9 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 // SpAudioPlug.h: Definition of the SpAudioPlug class
 //
@@ -26,7 +26,7 @@ template <class T>
 class CCriticalSectionLock
 {
 private:
-T*  m_pObject;
+    T*  m_pObject;
 
 public:
     CCriticalSectionLock(T* pObject)
@@ -44,7 +44,7 @@ public:
 template <class T>
 class CBasicQueueByArray
 {
-    private:
+private:
     typedef CCriticalSectionLock< CBasicQueueByArray<T> > CRITICAL_SECTION_AUTO_LOCK;
 
     T* m_pCoMemAlloc;
@@ -65,54 +65,54 @@ class CBasicQueueByArray
     ULONG _SpaceSize();
     ULONG _DataSize();
 
-    
-    public:
-        CBasicQueueByArray();
-        CBasicQueueByArray(ULONG ulQueueSize, HRESULT *phr);
-        ~CBasicQueueByArray()
-        {
-            DeleteCriticalSection(&m_CriticalSection);
-            if (m_pCoMemAlloc)
-            {
-                ::CoTaskMemFree(m_pCoMemAlloc);
-            }
-        }
 
-        void Lock()
+public:
+    CBasicQueueByArray();
+    CBasicQueueByArray(ULONG ulQueueSize, HRESULT *phr);
+    ~CBasicQueueByArray()
+    {
+        DeleteCriticalSection(&m_CriticalSection);
+        if (m_pCoMemAlloc)
         {
-            EnterCriticalSection(&m_CriticalSection);
+            ::CoTaskMemFree(m_pCoMemAlloc);
         }
+    }
 
-        void Unlock()
-        {
-            LeaveCriticalSection(&m_CriticalSection);
-        }
+    void Lock()
+    {
+        EnterCriticalSection(&m_CriticalSection);
+    }
+
+    void Unlock()
+    {
+        LeaveCriticalSection(&m_CriticalSection);
+    }
 
 
-        HRESULT Resize(ULONG ulNewQueueSize);
+    HRESULT Resize(ULONG ulNewQueueSize);
 
-        HRESULT Init
-            (ULONG ulQueueSize, HANDLE hSpaceAvailable, HANDLE hDataAvailable, ULONG ulSpaceNotifySize, ULONG ulDataNotifySize);
-        ULONG QueueSize();
+    HRESULT Init
+    (ULONG ulQueueSize, HANDLE hSpaceAvailable, HANDLE hDataAvailable, ULONG ulSpaceNotifySize, ULONG ulDataNotifySize);
+    ULONG QueueSize();
 
-        void InsertHead(T* pElements, ULONG ulCount, ULONG * pulReturnCount);
-        void RemoveTail(T* pElements, ULONG ulCount, ULONG * pulReturnCount);
-        void ResetPos();
-        ULONGLONG GetTotalOut()
-        {
-            CRITICAL_SECTION_AUTO_LOCK csl(this);
-            return m_ullTotalOut;
-        }
-        ULONGLONG GetTotalIn()
-        {
-            CRITICAL_SECTION_AUTO_LOCK csl(this);
-            return m_ullTotalIn;
-        }
-        ULONG DataSize()
-        {
-            CRITICAL_SECTION_AUTO_LOCK csl(this);
-            return _DataSize();
-        }
+    void InsertHead(T* pElements, ULONG ulCount, ULONG * pulReturnCount);
+    void RemoveTail(T* pElements, ULONG ulCount, ULONG * pulReturnCount);
+    void ResetPos();
+    ULONGLONG GetTotalOut()
+    {
+        CRITICAL_SECTION_AUTO_LOCK csl(this);
+        return m_ullTotalOut;
+    }
+    ULONGLONG GetTotalIn()
+    {
+        CRITICAL_SECTION_AUTO_LOCK csl(this);
+        return m_ullTotalIn;
+    }
+    ULONG DataSize()
+    {
+        CRITICAL_SECTION_AUTO_LOCK csl(this);
+        return _DataSize();
+    }
 
 
 };
@@ -121,41 +121,41 @@ class CBasicQueueByArray
 // SpAudioPlug
 
 class SpAudioPlug :
-	public ISpAudio,
+    public ISpAudio,
     public ISpEventSource,
     public ISpEventSink,
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<SpAudioPlug,&CLSID_SpAudioPlug>,
-	public IDispatchImpl<ISpAudioPlug, &IID_ISpAudioPlug, &LIBID_SIMPLEAUDIOLib>,
-	public IDispatchImpl<ISpeechAudio, &IID_ISpeechAudio, &LIBID_SIMPLEAUDIOLib>
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<SpAudioPlug,&CLSID_SpAudioPlug>,
+    public IDispatchImpl<ISpAudioPlug, &IID_ISpAudioPlug, &LIBID_SIMPLEAUDIOLib>,
+    public IDispatchImpl<ISpeechAudio, &IID_ISpeechAudio, &LIBID_SIMPLEAUDIOLib>
 
 {
 public:
-	SpAudioPlug();
+    SpAudioPlug();
     HRESULT FinalConstruct();
     void FinalRelease();
 
-BEGIN_COM_MAP(SpAudioPlug)
-	COM_INTERFACE_ENTRY(ISpAudioPlug)
+    BEGIN_COM_MAP(SpAudioPlug)
+    COM_INTERFACE_ENTRY(ISpAudioPlug)
     COM_INTERFACE_ENTRY(ISequentialStream)
     COM_INTERFACE_ENTRY(IStream)
     COM_INTERFACE_ENTRY(ISpStreamFormat)
-	COM_INTERFACE_ENTRY(ISpAudio)
+    COM_INTERFACE_ENTRY(ISpAudio)
     COM_INTERFACE_ENTRY(ISpNotifySource)
     COM_INTERFACE_ENTRY(ISpEventSource)
     COM_INTERFACE_ENTRY(ISpEventSink)
-	COM_INTERFACE_ENTRY2(IDispatch, ISpeechAudio)
-	COM_INTERFACE_ENTRY(ISpeechAudio)
-	COM_INTERFACE_ENTRY(ISpeechBaseStream)
-END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(SpAudioPlug) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+    COM_INTERFACE_ENTRY2(IDispatch, ISpeechAudio)
+    COM_INTERFACE_ENTRY(ISpeechAudio)
+    COM_INTERFACE_ENTRY(ISpeechBaseStream)
+    END_COM_MAP()
+//DECLARE_NOT_AGGREGATABLE(SpAudioPlug)
+// Remove the comment from the line above if you don't want your object to
+// support aggregation.
 
-DECLARE_REGISTRY_RESOURCEID(IDR_SpAudioPlug)
+    DECLARE_REGISTRY_RESOURCEID(IDR_SpAudioPlug)
 
 // ISpAudioPlug
-	STDMETHODIMP Init(VARIANT_BOOL fWrite, SpeechAudioFormatType FormatType);
+    STDMETHODIMP Init(VARIANT_BOOL fWrite, SpeechAudioFormatType FormatType);
     STDMETHODIMP SetData(VARIANT vData, long * pWritten);
     STDMETHODIMP GetData(VARIANT* vData);
 
@@ -186,8 +186,8 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SpAudioPlug)
     STDMETHODIMP GetBufferInfo(SPAUDIOBUFFERINFO * pInfo);
     STDMETHODIMP GetDefaultFormat(GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx);
     STDMETHODIMP_(HANDLE) EventHandle();
-	STDMETHODIMP GetVolumeLevel(ULONG *pLevel);
-	STDMETHODIMP SetVolumeLevel(ULONG Level);
+    STDMETHODIMP GetVolumeLevel(ULONG *pLevel);
+    STDMETHODIMP SetVolumeLevel(ULONG Level);
     STDMETHODIMP GetBufferNotifySize(ULONG *pcbSize);
     STDMETHODIMP SetBufferNotifySize(ULONG cbSize);
 
@@ -201,50 +201,92 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SpAudioPlug)
     STDMETHODIMP GetEventInterest(ULONGLONG * pullEventInterest);
 
     //--- ISpeechBaseStream ----------------------------------------
-    STDMETHODIMP get_Format(ISpeechAudioFormat** ppStreamFormat) { return E_NOTIMPL; };
-    STDMETHODIMP putref_Format(ISpeechAudioFormat* pFormat) { return E_NOTIMPL; };
-    STDMETHODIMP Read(VARIANT* pvtBuffer, long NumBytes, long* pRead) { return E_NOTIMPL;}
-    STDMETHODIMP Write(VARIANT vtBuffer, long* pWritten) { return E_NOTIMPL;}
-    STDMETHODIMP Seek(VARIANT Pos, SpeechStreamSeekPositionType Origin, VARIANT* pNewPosition) { return E_NOTIMPL; };
+    STDMETHODIMP get_Format(ISpeechAudioFormat** ppStreamFormat)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP putref_Format(ISpeechAudioFormat* pFormat)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP Read(VARIANT* pvtBuffer, long NumBytes, long* pRead)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHODIMP Write(VARIANT vtBuffer, long* pWritten)
+    {
+        return E_NOTIMPL;
+    }
+    STDMETHODIMP Seek(VARIANT Pos, SpeechStreamSeekPositionType Origin, VARIANT* pNewPosition)
+    {
+        return E_NOTIMPL;
+    };
 
     //--- ISpeechAudio ----------------------------------
-	STDMETHODIMP SetState( SpeechAudioState State ) { return E_NOTIMPL; };
-	STDMETHODIMP get_Status( ISpeechAudioStatus** ppStatus ) { return E_NOTIMPL; };
-    STDMETHODIMP get_BufferInfo(ISpeechAudioBufferInfo** ppBufferInfo) { return E_NOTIMPL; };
-    STDMETHODIMP get_DefaultFormat(ISpeechAudioFormat** ppStreamFormat) { return E_NOTIMPL; };
-    STDMETHODIMP get_Volume(long* pVolume) { return E_NOTIMPL; };
-    STDMETHODIMP put_Volume(long Volume) { return E_NOTIMPL; };
-    STDMETHODIMP get_BufferNotifySize(long* pBufferNotifySize) { return E_NOTIMPL; };
-    STDMETHODIMP put_BufferNotifySize(long BufferNotifySize) { return E_NOTIMPL; };
-    STDMETHODIMP get_EventHandle(long* pEventHandle) { return E_NOTIMPL; };
+    STDMETHODIMP SetState( SpeechAudioState State )
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP get_Status( ISpeechAudioStatus** ppStatus )
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP get_BufferInfo(ISpeechAudioBufferInfo** ppBufferInfo)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP get_DefaultFormat(ISpeechAudioFormat** ppStreamFormat)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP get_Volume(long* pVolume)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP put_Volume(long Volume)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP get_BufferNotifySize(long* pBufferNotifySize)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP put_BufferNotifySize(long BufferNotifySize)
+    {
+        return E_NOTIMPL;
+    };
+    STDMETHODIMP get_EventHandle(long* pEventHandle)
+    {
+        return E_NOTIMPL;
+    };
 
-        void Lock()
-        {
-            EnterCriticalSection(&m_CriticalSection);
-        }
+    void Lock()
+    {
+        EnterCriticalSection(&m_CriticalSection);
+    }
 
-        void Unlock()
-        {
-            LeaveCriticalSection(&m_CriticalSection);
-        }
+    void Unlock()
+    {
+        LeaveCriticalSection(&m_CriticalSection);
+    }
 
 
 private:
-        SPAUDIOSTATE m_State;
-        CSpStreamFormat m_Format;
-        CBasicQueueByArray<BYTE> m_Queue;
-        SPAUDIOBUFFERINFO m_BufferInfo;
-        ULONG m_cbEventBias;
-        BOOL m_fWrite;
-        HANDLE m_hQueueHasDataEvent; //The event is signaled by SetData/GetData thread or SAPI SetState thread. Read/Write thread waits for this event.
-        HANDLE m_hQueueHasSpaceEvent; //The event is signaled by Read/Write thread or SAPI SetState thread , SetData/GetData thread waits for this event.
+    SPAUDIOSTATE m_State;
+    CSpStreamFormat m_Format;
+    CBasicQueueByArray<BYTE> m_Queue;
+    SPAUDIOBUFFERINFO m_BufferInfo;
+    ULONG m_cbEventBias;
+    BOOL m_fWrite;
+    HANDLE m_hQueueHasDataEvent; //The event is signaled by SetData/GetData thread or SAPI SetState thread. Read/Write thread waits for this event.
+    HANDLE m_hQueueHasSpaceEvent; //The event is signaled by Read/Write thread or SAPI SetState thread , SetData/GetData thread waits for this event.
 
-        ULONG m_ulBufferNotifySize;
-        HANDLE m_autohAPIEvent; //When there are m_ulBufferNotifySize data available
-        BOOL m_fautohAPIEventSet;
-        CRITICAL_SECTION m_CriticalSection;
+    ULONG m_ulBufferNotifySize;
+    HANDLE m_autohAPIEvent; //When there are m_ulBufferNotifySize data available
+    BOOL m_fautohAPIEventSet;
+    CRITICAL_SECTION m_CriticalSection;
 
-        void _ProcessEvent();
+    void _ProcessEvent();
 
 };
 

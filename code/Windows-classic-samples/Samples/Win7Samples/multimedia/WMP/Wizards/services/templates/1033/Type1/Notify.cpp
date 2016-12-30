@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "[!output root].h"
 
 ////////////////////////////////////////////////////////////////////
@@ -13,107 +13,107 @@
 extern CONTENT_PARTNER_GLOBALS g;
 
 HRESULT STDMETHODCALLTYPE C[!output Safe_root]::SetCallback(
-   IWMPContentPartnerCallback* pCallback)
-{  
-   HRESULT hr = S_OK;
-   VARIANT context;
+    IWMPContentPartnerCallback* pCallback)
+{
+    HRESULT hr = S_OK;
+    VARIANT context;
 
-   VariantInit(&context);
+    VariantInit(&context);
 
-   if(pCallback)
-   {
-      // Store the callback interface pointer.
-      m_spCallback = pCallback;
+    if(pCallback)
+    {
+        // Store the callback interface pointer.
+        m_spCallback = pCallback;
 
-      m_spCallback->Notify(wmpcnNewCatalogAvailable, &context);
-   }
-   else
-   {
-      hr = this->ShutdownThreads();
-      m_spCallback.Release();
-   }
+        m_spCallback->Notify(wmpcnNewCatalogAvailable, &context);
+    }
+    else
+    {
+        hr = this->ShutdownThreads();
+        m_spCallback.Release();
+    }
 
-   return hr;
+    return hr;
 }
 
 HRESULT STDMETHODCALLTYPE C[!output Safe_root]::Notify(
-   WMPPartnerNotification type, 
-   VARIANT* /*pContext*/)
+    WMPPartnerNotification type,
+    VARIANT* /*pContext*/)
 {
-   HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-   ATLTRACE2("%x: Notify: type = %d.\n", GetCurrentThreadId(), type);
+    ATLTRACE2("%x: Notify: type = %d.\n", GetCurrentThreadId(), type);
 
-   switch(type)
-   {
-   case wmpsnBackgroundProcessingBegin:
+    switch(type)
+    {
+    case wmpsnBackgroundProcessingBegin:
 
-      // ToDo: If this is the first notification to begin
-      // background processing, create a background-processing
-      // thread.
+        // ToDo: If this is the first notification to begin
+        // background processing, create a background-processing
+        // thread.
 
-      // ToDo: Set an event (put it in the signaled state)
-      // so that the background-processing thread can run.
-      break;
+        // ToDo: Set an event (put it in the signaled state)
+        // so that the background-processing thread can run.
+        break;
 
-   case wmpsnBackgroundProcessingEnd:
+    case wmpsnBackgroundProcessingEnd:
 
-      // ToDo: Reset an event (put it in the non-signaled state)
-      // so that the background-processing thread will wait.
-      break;
+        // ToDo: Reset an event (put it in the non-signaled state)
+        // so that the background-processing thread will wait.
+        break;
 
-   case wmpsnCatalogDownloadFailure:
-   
-      // ToDo: Extract the error code from pContext->scode
-      // and take appropriate action. 
-      break;
+    case wmpsnCatalogDownloadFailure:
 
-   case wmpsnCatalogDownloadComplete:
+        // ToDo: Extract the error code from pContext->scode
+        // and take appropriate action.
+        break;
 
-      // ToDo: Set state indicating that catalog download is complete.
-      break;
+    case wmpsnCatalogDownloadComplete:
 
-   default:
+        // ToDo: Set state indicating that catalog download is complete.
+        break;
 
-      hr = E_UNEXPECTED;
-      break;
-   }
+    default:
 
-   return hr;
-}    
-  
-HRESULT STDMETHODCALLTYPE C[!output Safe_root]::StationEvent( 
-   BSTR bstrStationEventType,
-   ULONG /*StationId*/,
-   ULONG /*PlaylistIndex*/,
-   ULONG /*TrackID*/,
-   BSTR /*TrackData*/,
-   DWORD /*dwSecondsPlayed*/)
+        hr = E_UNEXPECTED;
+        break;
+    }
+
+    return hr;
+}
+
+HRESULT STDMETHODCALLTYPE C[!output Safe_root]::StationEvent(
+    BSTR bstrStationEventType,
+    ULONG /*StationId*/,
+    ULONG /*PlaylistIndex*/,
+    ULONG /*TrackID*/,
+    BSTR /*TrackData*/,
+    DWORD /*dwSecondsPlayed*/)
 {
-   HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-   ATLTRACE2("%x: StationEvent: bstrStationEventType = %d.\n", GetCurrentThreadId(), bstrStationEventType);
+    ATLTRACE2("%x: StationEvent: bstrStationEventType = %d.\n", GetCurrentThreadId(), bstrStationEventType);
 
-   if(NULL == bstrStationEventType)
-   {
-      hr = E_INVALIDARG;
-   }
-   else if( 0 == wcscmp(g_szStationEvent_Started, bstrStationEventType) )
-   {
-      // ToDo: Log Started event.
-   }
-   else if( 0 == wcscmp(g_szStationEvent_Complete, bstrStationEventType) )
-   {
-      // ToDo: Log Completed event.
-   }
-   else if( 0 == wcscmp(g_szStationEvent_Skipped, bstrStationEventType) )
-   {
-      // ToDo: Log Skipped event.
-   }
-   else
-   {
-      hr = E_INVALIDARG;
-   }
+    if(NULL == bstrStationEventType)
+    {
+        hr = E_INVALIDARG;
+    }
+    else if( 0 == wcscmp(g_szStationEvent_Started, bstrStationEventType) )
+    {
+        // ToDo: Log Started event.
+    }
+    else if( 0 == wcscmp(g_szStationEvent_Complete, bstrStationEventType) )
+    {
+        // ToDo: Log Completed event.
+    }
+    else if( 0 == wcscmp(g_szStationEvent_Skipped, bstrStationEventType) )
+    {
+        // ToDo: Log Skipped event.
+    }
+    else
+    {
+        hr = E_INVALIDARG;
+    }
 
-   return hr;
+    return hr;
 }

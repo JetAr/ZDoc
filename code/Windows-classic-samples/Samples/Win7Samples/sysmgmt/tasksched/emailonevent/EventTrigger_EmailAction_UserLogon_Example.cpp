@@ -1,13 +1,13 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved
 
-// The example companies, organizations, products, domain names, 
+// The example companies, organizations, products, domain names,
 // e-mail addresses, logos, people, places, and events depicted herein are fictitious.
-// No association with any real company, organization, product, domain name, 
+// No association with any real company, organization, product, domain name,
 // email address, logo, person, places, or events is intended or should be inferred.
 
 #define _WIN32_DCOM
@@ -24,7 +24,7 @@
 
 /********************************************************************
  This sample schedules a task to start notepad.exe 30 seconds after
- the system is booted. 
+ the system is booted.
 ********************************************************************/
 
 int __cdecl wmain()
@@ -40,15 +40,15 @@ int __cdecl wmain()
 
     //  Set general COM security levels.
     hr = CoInitializeSecurity(
-        NULL,
-        -1,
-        NULL,
-        NULL,
-        RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-        RPC_C_IMP_LEVEL_IMPERSONATE,
-        NULL,
-        0,
-        NULL);
+             NULL,
+             -1,
+             NULL,
+             NULL,
+             RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+             RPC_C_IMP_LEVEL_IMPERSONATE,
+             NULL,
+             0,
+             NULL);
 
     if( FAILED(hr) )
     {
@@ -63,23 +63,23 @@ int __cdecl wmain()
 
 
     //  ------------------------------------------------------
-    //  Create an instance of the Task Service. 
+    //  Create an instance of the Task Service.
     ITaskService *pService = NULL;
     hr = CoCreateInstance( CLSID_TaskScheduler,
                            NULL,
                            CLSCTX_INPROC_SERVER,
                            IID_ITaskService,
-                           (void**)&pService );  
+                           (void**)&pService );
     if (FAILED(hr))
     {
-          printf("\nFailed to CoCreate an instance of the TaskService class: %x", hr);
-          CoUninitialize();
-          return 1;
+        printf("\nFailed to CoCreate an instance of the TaskService class: %x", hr);
+        CoUninitialize();
+        return 1;
     }
-        
+
     //  Connect to the task service.
     hr = pService->Connect(_variant_t(), _variant_t(),
-        _variant_t(), _variant_t());
+                           _variant_t(), _variant_t());
     if( FAILED(hr) )
     {
         printf("\nITaskService::Connect failed: %x", hr );
@@ -92,7 +92,7 @@ int __cdecl wmain()
     //  Get the pointer to the root task folder.  This folder will hold the
     //  new task that is registered.
     ITaskFolder *pRootFolder = NULL;
-    hr = pService->GetFolder( _bstr_t( L"\\") , &pRootFolder );
+    hr = pService->GetFolder( _bstr_t( L"\\"), &pRootFolder );
     if( FAILED(hr) )
     {
         printf("\nCannot get Root Folder pointer: %x", hr );
@@ -100,14 +100,14 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     // If the same task exists, remove it.
     pRootFolder->DeleteTask( _bstr_t( wszTaskName), 0  );
-    
+
     //  Create the task builder object to create the task.
     ITaskDefinition *pTask = NULL;
     hr = pService->NewTask( 0, &pTask );
-    
+
     pService->Release();  // COM clean up.  Pointer is no longer used.
     if (FAILED(hr))
     {
@@ -116,7 +116,7 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-        
+
     //  ------------------------------------------------------
     //  Get the registration info for setting the identification.
     IRegistrationInfo *pRegInfo= NULL;
@@ -129,7 +129,7 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     hr = pRegInfo->put_Author( L"Author Name" );
     pRegInfo->Release();  // COM clean up.  Pointer is no longer used.
     if( FAILED(hr) )
@@ -153,8 +153,8 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
-    //  Set setting values for the task.  
+
+    //  Set setting values for the task.
     hr = pSettings->put_StartWhenAvailable(VARIANT_BOOL(true));
     pSettings->Release();  // COM clean up.  Pointer is no longer used.
     if( FAILED(hr) )
@@ -178,10 +178,10 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     //  Create the event trigger for the task.
     ITrigger *pTrigger = NULL;
-    
+
     hr = pTriggerCollection->Create( TASK_TRIGGER_EVENT, &pTrigger );
     pTriggerCollection->Release();
     if( FAILED(hr) )
@@ -191,11 +191,11 @@ int __cdecl wmain()
         pTask->Release();
         CoUninitialize();
         return 1;
-    }     
-    
+    }
+
     IEventTrigger *pEventTrigger = NULL;
-    hr = pTrigger->QueryInterface( 
-        IID_IEventTrigger, (void**) &pEventTrigger );
+    hr = pTrigger->QueryInterface(
+             IID_IEventTrigger, (void**) &pEventTrigger );
     pTrigger->Release();
     if( FAILED(hr) )
     {
@@ -204,13 +204,13 @@ int __cdecl wmain()
         pTask->Release();
         CoUninitialize();
         return 1;
-    } 
-    
+    }
+
     hr = pEventTrigger->put_Id( _bstr_t( L"Trigger1" ) );
     if( FAILED(hr) )
-       printf("\nCannot put the trigger ID: %x", hr);
+        printf("\nCannot put the trigger ID: %x", hr);
 
-    //  Set the task to start at a certain time. The time 
+    //  Set the task to start at a certain time. The time
     //  format should be YYYY-MM-DDTHH:MM:SS(+-)(timezone).
     //  For example, the start boundary below
     //  is January 1st 2005 at 12:05
@@ -230,20 +230,20 @@ int __cdecl wmain()
     //  Define the event query for the event trigger.
     //  The following query string defines a subscription to all
     //  level 2 events in the System channel.
-    hr = pEventTrigger->put_Subscription( 
-        L"<QueryList> <Query Id='1'> <Select Path='System'>*[System/Level=2]</Select></Query></QueryList>" );
+    hr = pEventTrigger->put_Subscription(
+             L"<QueryList> <Query Id='1'> <Select Path='System'>*[System/Level=2]</Select></Query></QueryList>" );
     pEventTrigger->Release();
     if( FAILED(hr) )
     {
-        printf("\nCannot put the event query: %x", hr);  
+        printf("\nCannot put the event query: %x", hr);
         pRootFolder->Release();
         pTask->Release();
         CoUninitialize();
         return 1;
-    }              
+    }
 
     //  ------------------------------------------------------
-    //  Add an action to the task. This task will send an e-mail.     
+    //  Add an action to the task. This task will send an e-mail.
     IActionCollection *pActionCollection = NULL;
 
     //  Get the task action collection pointer.
@@ -256,7 +256,7 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-        
+
     //  Create the action, specifying that it will send an e-mail.
     IAction *pAction = NULL;
     hr = pActionCollection->Create( TASK_ACTION_SEND_EMAIL, &pAction );
@@ -316,20 +316,20 @@ int __cdecl wmain()
         CoUninitialize();
         return 1;
     }
-    
+
     hr = pEmailAction->put_Subject(L"An event has occurred");
     if( FAILED(hr) )
         printf("\nCannot put the subject information: %x", hr);
-    
+
     hr = pEmailAction->put_Body(L"A level 2 event occurred in the system channel.");
     if( FAILED(hr) )
         printf("\nCannot put the e-mail body information: %x", hr);
-    
+
     pEmailAction->Release();
 
     //  ------------------------------------------------------
     //  Securely get the user name and password. The task will
-    //  be created to run with the credentials from the supplied 
+    //  be created to run with the credentials from the supplied
     //  user name and password.
     CREDUI_INFO cui;
     TCHAR pszName[CREDUI_MAX_USERNAME_LENGTH] = TEXT("");
@@ -348,40 +348,40 @@ int __cdecl wmain()
 
     //  Create the UI asking for the credentials.
     dwErr = CredUIPromptForCredentials(
-        &cui,                             //  CREDUI_INFO structure
-        TEXT(""),                         //  Target for credentials
-        NULL,                             //  Reserved
-        0,                                //  Reason
-        pszName,                          //  User name
-        CREDUI_MAX_USERNAME_LENGTH,       //  Max number for user name
-        pszPwd,                           //  Password
-        CREDUI_MAX_PASSWORD_LENGTH,       //  Max number for password
-        &fSave,                           //  State of save check box
-        CREDUI_FLAGS_GENERIC_CREDENTIALS |  //  Flags
-        CREDUI_FLAGS_ALWAYS_SHOW_UI |
-        CREDUI_FLAGS_DO_NOT_PERSIST);  
+                &cui,                             //  CREDUI_INFO structure
+                TEXT(""),                         //  Target for credentials
+                NULL,                             //  Reserved
+                0,                                //  Reason
+                pszName,                          //  User name
+                CREDUI_MAX_USERNAME_LENGTH,       //  Max number for user name
+                pszPwd,                           //  Password
+                CREDUI_MAX_PASSWORD_LENGTH,       //  Max number for password
+                &fSave,                           //  State of save check box
+                CREDUI_FLAGS_GENERIC_CREDENTIALS |  //  Flags
+                CREDUI_FLAGS_ALWAYS_SHOW_UI |
+                CREDUI_FLAGS_DO_NOT_PERSIST);
 
     if(dwErr)
     {
         printf("\nDid not get credentials.");
         pRootFolder->Release();
-        pTask->Release();    
+        pTask->Release();
         CoUninitialize();
-        return 1;      
+        return 1;
     }
-    
+
     //  ------------------------------------------------------
     //  Save the task in the root folder.
     IRegisteredTask *pRegisteredTask = NULL;
     hr = pRootFolder->RegisterTaskDefinition(
-            _bstr_t( wszTaskName ),
-            pTask,
-            TASK_CREATE_OR_UPDATE, 
-            _variant_t(_bstr_t(pszName)), 
-            _variant_t(_bstr_t(pszPwd)), 
-            TASK_LOGON_PASSWORD,
-            _variant_t(L""),
-            &pRegisteredTask);
+             _bstr_t( wszTaskName ),
+             pTask,
+             TASK_CREATE_OR_UPDATE,
+             _variant_t(_bstr_t(pszName)),
+             _variant_t(_bstr_t(pszPwd)),
+             TASK_LOGON_PASSWORD,
+             _variant_t(L""),
+             &pRegisteredTask);
     if( FAILED(hr) )
     {
         printf("\nError saving the Task : %x", hr );
@@ -392,7 +392,7 @@ int __cdecl wmain()
         SecureZeroMemory(pszPwd, sizeof(pszPwd));
         return 1;
     }
-    
+
     printf("\n Success! Task successfully registered. " );
 
     //  Clean up.

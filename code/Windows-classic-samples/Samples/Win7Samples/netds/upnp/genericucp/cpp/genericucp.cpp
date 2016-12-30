@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,9 +26,9 @@ CComModule _Module;
 // CGenericUCPApp
 
 BEGIN_MESSAGE_MAP(CGenericUCPApp, CWinApp)
-	//{{AFX_MSG_MAP(CGenericUCPApp)
-	//}}AFX_MSG_MAP
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
+    //{{AFX_MSG_MAP(CGenericUCPApp)
+    //}}AFX_MSG_MAP
+    ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -48,41 +48,42 @@ CGenericUCPApp theApp;
 
 BOOL CGenericUCPApp::InitInstance()
 {
-	
-	AfxInitRichEdit();
 
-	AfxEnableControlContainer();
+    AfxInitRichEdit();
 
-	CCommandLineInfo cmdInfo;
-	ParseCommandLine(cmdInfo);
+    AfxEnableControlContainer();
 
-	if (cmdInfo.m_bRunEmbedded || cmdInfo.m_bRunAutomated)
-	{
-		return TRUE;
-	}
+    CCommandLineInfo cmdInfo;
+    ParseCommandLine(cmdInfo);
 
-
-	if(CoInitialize(NULL)!=S_OK){
-		TRACE(_T("CoInitialize failed\n"));
-		return FALSE; // Return if COM initialization failed
-	}
-
-	// Standard initialization
-	
-	CGenericUCPDlg dlg;
-	m_pMainWnd = &dlg;
-
-	dlg.DoModal();
+    if (cmdInfo.m_bRunEmbedded || cmdInfo.m_bRunAutomated)
+    {
+        return TRUE;
+    }
 
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
-	return FALSE;
+    if(CoInitialize(NULL)!=S_OK)
+    {
+        TRACE(_T("CoInitialize failed\n"));
+        return FALSE; // Return if COM initialization failed
+    }
+
+    // Standard initialization
+
+    CGenericUCPDlg dlg;
+    m_pMainWnd = &dlg;
+
+    dlg.DoModal();
+
+
+    // Since the dialog has been closed, return FALSE so that we exit the
+    //  application, rather than start the application's message pump.
+    return FALSE;
 }
 
 
 int CGenericUCPApp::ExitInstance()
 {
-	CoUninitialize();// Uninitialize the COM
-	return 0;
+    CoUninitialize();// Uninitialize the COM
+    return 0;
 }

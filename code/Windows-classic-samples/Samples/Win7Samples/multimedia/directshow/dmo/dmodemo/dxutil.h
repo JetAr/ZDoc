@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,7 +24,7 @@
 
 //-----------------------------------------------------------------------------
 // Name: DXUtil_Read*RegKey() and DXUtil_Write*RegKey()
-// Desc: Helper functions to read/write a string registry key 
+// Desc: Helper functions to read/write a string registry key
 //-----------------------------------------------------------------------------
 HRESULT DXUtil_WriteStringRegKey( HKEY hKey, LPCTSTR strRegName, LPCTSTR strValue );
 HRESULT DXUtil_WriteFloatRegKey( HKEY hKey, LPCTSTR strRegName, FLOAT fValue );
@@ -49,11 +49,12 @@ HRESULT DXUtil_ReadBoolRegKey( HKEY hKey, LPCTSTR strRegName, BOOL* pbValue, BOO
 //          TIMER_ADVANCE         - to advance the timer by 0.1 seconds
 //          TIMER_GETABSOLUTETIME - to get the absolute system time
 //          TIMER_GETAPPTIME      - to get the current time
-//          TIMER_GETELAPSEDTIME  - to get the time that elapsed between 
+//          TIMER_GETELAPSEDTIME  - to get the time that elapsed between
 //                                  TIMER_GETELAPSEDTIME calls
 //-----------------------------------------------------------------------------
 enum TIMER_COMMAND { TIMER_RESET, TIMER_START, TIMER_STOP, TIMER_ADVANCE,
-                     TIMER_GETABSOLUTETIME, TIMER_GETAPPTIME, TIMER_GETELAPSEDTIME };
+                     TIMER_GETABSOLUTETIME, TIMER_GETAPPTIME, TIMER_GETELAPSEDTIME
+                   };
 FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command );
 
 
@@ -72,11 +73,11 @@ VOID DXUtil_LaunchReadme( HWND hWnd, LPCTSTR strLoc = NULL );
 VOID    DXUtil_Trace( LPCTSTR strMsg, ... );
 
 #if defined(DEBUG) | defined(_DEBUG)
-    #define DXTRACE             DXUtil_Trace
-    #define DXTRACE_ERR(str,hr) (DXUtil_Trace(str), hr)
+#define DXTRACE             DXUtil_Trace
+#define DXTRACE_ERR(str,hr) (DXUtil_Trace(str), hr)
 #else
-    #define DXTRACE                 sizeof
-    #define DXTRACE_ERR(str,hr)     (hr)
+#define DXTRACE                 sizeof
+#define DXTRACE_ERR(str,hr)     (hr)
 #endif
 
 
@@ -110,9 +111,15 @@ public:
     HRESULT Add( void* pEntry );
     void Remove( UINT Entry );
     void* GetPtr( UINT Entry );
-    UINT Count( void ) { return m_NumEntries; }
+    UINT Count( void )
+    {
+        return m_NumEntries;
+    }
     bool Contains( void* pEntryData );
-    void Clear( void ) { m_NumEntries = 0; }
+    void Clear( void )
+    {
+        m_NumEntries = 0;
+    }
 };
 
 //-----------------------------------------------------------------------------
@@ -128,18 +135,18 @@ public:
 
 __inline int GetScrollPos(HWND hWnd, int nBar)
 {
-	SCROLLINFO si;
-	memset(&si, 0, sizeof(si));
-	si.cbSize = sizeof(si);
-	si.fMask = SIF_POS;
-	if (!GetScrollInfo(hWnd, nBar, &si))
-	{
-		return 0;
-	}
-	else
-	{
-		return si.nPos;
-	}
+    SCROLLINFO si;
+    memset(&si, 0, sizeof(si));
+    si.cbSize = sizeof(si);
+    si.fMask = SIF_POS;
+    if (!GetScrollInfo(hWnd, nBar, &si))
+    {
+        return 0;
+    }
+    else
+    {
+        return si.nPos;
+    }
 }
 
 #else // !UNDER_CE

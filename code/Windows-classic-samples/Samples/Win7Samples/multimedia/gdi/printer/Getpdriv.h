@@ -1,11 +1,11 @@
-
+﻿
 /******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
+*       This is a part of the Microsoft Source Code Samples.
 *       Copyright 1993 - 2000 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
+*       All rights reserved.
+*       This source code is only intended as a supplement to
 *       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
+*       See these sources for detailed information regarding the
 *       Microsoft samples programs.
 \******************************************************************************/
 
@@ -29,16 +29,18 @@
 
 char *gaDrvInfo[] =
 
-    {   "DRIVER_INFO_1",
-        "  pName\t\t%s",
+{
+    "DRIVER_INFO_1",
+    "  pName\t\t%s",
 
-        "DRIVER_INFO_2",
-        "  cVersion\t%ld",
-        "  pName\t\t%s",
-        "  pEnvironment\t%s",
-        "  pDriverPath\t%s",
-        "  pDataFile\t%s",
-        "  pConfigFile\t%s" };
+    "DRIVER_INFO_2",
+    "  cVersion\t%ld",
+    "  pName\t\t%s",
+    "  pEnvironment\t%s",
+    "  pDriverPath\t%s",
+    "  pDataFile\t%s",
+    "  pConfigFile\t%s"
+};
 
 
 

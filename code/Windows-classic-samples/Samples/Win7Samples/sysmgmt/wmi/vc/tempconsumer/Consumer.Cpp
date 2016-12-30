@@ -1,4 +1,4 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
@@ -32,8 +32,11 @@ class CMySink : public IWbemObjectSink
     UINT m_cRef;
 
 public:
-    CMySink() { m_cRef = 1; }
-   ~CMySink() { }
+    CMySink()
+    {
+        m_cRef = 1;
+    }
+    ~CMySink() { }
 
     //
     // IUnknown members
@@ -43,16 +46,16 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE Indicate(
-            /* [in] */ long lObjectCount,
-            /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObjArray
-            );
+        /* [in] */ long lObjectCount,
+        /* [size_is][in] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObjArray
+    );
 
     virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetStatus(
-            /* [in] */ long lFlags,
-            /* [in] */ HRESULT hResult,
-            /* [in] */ BSTR strParam,
-            /* [in] */ IWbemClassObject __RPC_FAR *pObjParam
-            );
+        /* [in] */ long lFlags,
+        /* [in] */ HRESULT hResult,
+        /* [in] */ BSTR strParam,
+        /* [in] */ IWbemClassObject __RPC_FAR *pObjParam
+    );
 };
 
 
@@ -104,35 +107,35 @@ ULONG CMySink::Release()
 HRESULT CMySink::Indicate(
     long lObjectCount,
     IWbemClassObject __RPC_FAR *__RPC_FAR *ppObjArray
-    )
+)
 {
     printf("Indicate called with %d object(s)\n", lObjectCount);
 
     // Get the info from the object.
     // =============================
-    
+
     for (long i = 0; i < lObjectCount; i++)
     {
         IWbemClassObject *pObj = ppObjArray[i];
-        
+
         // If here, we know the object is one of the kind we asked for.
         // ============================================================
 
         CVARIANT vName;
         HRESULT hr = pObj->Get(CBSTR(L"Name"), 0, &vName, 0, 0);
-		if (FAILED(hr))
-		{
-			//could fail due to out of memory condition (CBSTR constructor failed
-			//to allocate internal BSTR)
-		}
+        if (FAILED(hr))
+        {
+            //could fail due to out of memory condition (CBSTR constructor failed
+            //to allocate internal BSTR)
+        }
         CVARIANT vValue;
         hr = pObj->Get(CBSTR(L"Value"), 0, &vValue, 0, 0);
-		if (FAILED(hr))
-		{
-			//could fail due to out of memory condition (CBSTR constructor failed
-			//to allocate internal BSTR)
-		}
-        
+        if (FAILED(hr))
+        {
+            //could fail due to out of memory condition (CBSTR constructor failed
+            //to allocate internal BSTR)
+        }
+
         printf("Event info %S %u\n", vName.GetStr(), vValue.GetLONG());
     }
 
@@ -149,10 +152,10 @@ HRESULT CMySink::SetStatus(
     /* [in] */ HRESULT hResult,
     /* [in] */ BSTR strParam,
     /* [in] */ IWbemClassObject __RPC_FAR *pObjParam
-    )
+)
 {
     // Not called during event delivery.
-        
+
     return WBEM_NO_ERROR;
 }
 
@@ -163,18 +166,18 @@ HRESULT CMySink::SetStatus(
 BOOL ExecuteQuery(
     IWbemObjectSink *pDestSink,
     IWbemServices *pSvc
-    )
+)
 {
     CBSTR Language(L"WQL");
     CBSTR Query(L"select * from MyEvent");
 
     HRESULT hRes = pSvc->ExecNotificationQueryAsync(
-        Language,
-        Query,
-        0,                  // Flags
-        0,                  // Context
-        pDestSink
-        );
+                       Language,
+                       Query,
+                       0,                  // Flags
+                       0,                  // Context
+                       pDestSink
+                   );
 
     if (hRes != 0)
         return FALSE;
@@ -191,40 +194,40 @@ BOOL ExecuteQuery(
 void main(int argc, char **argv)
 {
     HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
-	if (FAILED(hr))
-	{
-	    printf("\nCoInitializeEx returned 0x%x", hr);
-		return;
-	}
+    if (FAILED(hr))
+    {
+        printf("\nCoInitializeEx returned 0x%x", hr);
+        return;
+    }
 
 
-	//  NOTE:
-	//  When using asynchronous WMI API's remotely in an environment where the "Local System" account 
-	//  has no network identity (such as non-Kerberos domains), the authentication level of 
-	//  RPC_C_AUTHN_LEVEL_NONE is needed. However, lowering the authentication level to 
-	//  RPC_C_AUTHN_LEVEL_NONE makes your application less secure. It is wise to
-	//	use semi-synchronous API's for accessing WMI data and events instead of the asynchronous ones.
+    //  NOTE:
+    //  When using asynchronous WMI API's remotely in an environment where the "Local System" account
+    //  has no network identity (such as non-Kerberos domains), the authentication level of
+    //  RPC_C_AUTHN_LEVEL_NONE is needed. However, lowering the authentication level to
+    //  RPC_C_AUTHN_LEVEL_NONE makes your application less secure. It is wise to
+    //	use semi-synchronous API's for accessing WMI data and events instead of the asynchronous ones.
 
-    hr = CoInitializeSecurity( NULL, -1, NULL, NULL, 
-											RPC_C_AUTHN_LEVEL_PKT_PRIVACY, 
-											RPC_C_IMP_LEVEL_IMPERSONATE, 
-											NULL, 
-											EOAC_SECURE_REFS, //change to EOAC_NONE if you change dwAuthnLevel to RPC_C_AUTHN_LEVEL_NONE
-											NULL );
-	if (FAILED(hr))
-	{
-	    printf("\nCoInitializeSecurity returned 0x%x", hr);
-		return;
-	}
+    hr = CoInitializeSecurity( NULL, -1, NULL, NULL,
+                               RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+                               RPC_C_IMP_LEVEL_IMPERSONATE,
+                               NULL,
+                               EOAC_SECURE_REFS, //change to EOAC_NONE if you change dwAuthnLevel to RPC_C_AUTHN_LEVEL_NONE
+                               NULL );
+    if (FAILED(hr))
+    {
+        printf("\nCoInitializeSecurity returned 0x%x", hr);
+        return;
+    }
 
     IWbemLocator *pLoc = 0;
 
     hr = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER,
-            IID_IWbemLocator, (LPVOID *) &pLoc);
+                          IID_IWbemLocator, (LPVOID *) &pLoc);
 
-   if (FAILED(hr))
+    if (FAILED(hr))
     {
-		printf("Failed to create IWbemLocator object. Error: 0x%x\n", hr );
+        printf("Failed to create IWbemLocator object. Error: 0x%x\n", hr );
         CoUninitialize();
         return;
     }
@@ -236,15 +239,15 @@ void main(int argc, char **argv)
     IWbemServices *pSvc = 0;
 
     HRESULT hRes = pLoc->ConnectServer(
-            CBSTR(L"\\\\.\\ROOT\\DEFAULT"),
-            NULL,
-            NULL,
-            0,
-            0,
-            0,
-            0,
-            &pSvc
-            );
+                       CBSTR(L"\\\\.\\ROOT\\DEFAULT"),
+                       NULL,
+                       NULL,
+                       0,
+                       0,
+                       0,
+                       0,
+                       &pSvc
+                   );
 
     if (hRes)
     {
@@ -264,9 +267,9 @@ void main(int argc, char **argv)
     // ===================
 
     CMySink *pSink = new CMySink;
-	if (pSink == NULL)
-	{
-		printf("Could not allocate sink: out of memory");
+    if (pSink == NULL)
+    {
+        printf("Could not allocate sink: out of memory");
         CoUninitialize();
         return;
     }
@@ -280,7 +283,7 @@ void main(int argc, char **argv)
     {
 
         int input = 'a';
-		while((input = getchar()) != '\n');
+        while((input = getchar()) != '\n');
 
         pSvc->CancelAsyncCall(pSink);
     }

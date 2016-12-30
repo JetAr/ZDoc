@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -166,7 +166,7 @@ HRESULT SetPropertyValue(PCWSTR pszFilename, PCWSTR pszCanonicalName, PCWSTR psz
             wprintf(L"Error %x: getting the propertystore for the item.\n", hr);
         }
     }
-     else
+    else
     {
         wprintf(L"Invalid property specified: %s\n", pszCanonicalName);
     }
@@ -190,7 +190,7 @@ HRESULT GetPropertyDescription(PCWSTR pszCanonicalName)
         }
         ppd->Release();
     }
-     else
+    else
     {
         wprintf(L"Invalid property specified: %s\n", pszCanonicalName);
     }

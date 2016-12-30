@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,8 @@
 #define MAX_BUFF_SIZE       8192
 #define MAX_WORKER_THREAD   16
 
-typedef enum _IO_OPERATION {
+typedef enum _IO_OPERATION
+{
     ClientIoAccept,
     ClientIoRead,
     ClientIoWrite
@@ -27,14 +28,15 @@ typedef enum _IO_OPERATION {
 //
 // data to be associated for every I/O operation on a socket
 //
-typedef struct _PER_IO_CONTEXT {
+typedef struct _PER_IO_CONTEXT
+{
     WSAOVERLAPPED               Overlapped;
     char                        Buffer[MAX_BUFF_SIZE];
     WSABUF                      wsabuf;
     int                         nTotalBytes;
     int                         nSentBytes;
     IO_OPERATION                IOOperation;
-    SOCKET                      SocketAccept; 
+    SOCKET                      SocketAccept;
 
     struct _PER_IO_CONTEXT      *pIOContextForward;
 } PER_IO_CONTEXT, *PPER_IO_CONTEXT;
@@ -48,16 +50,17 @@ typedef struct _PER_IO_CONTEXT {
 //
 // data to be associated with every socket added to the IOCP
 //
-typedef struct _PER_SOCKET_CONTEXT {
+typedef struct _PER_SOCKET_CONTEXT
+{
     SOCKET                      Socket;
 
     LPFN_ACCEPTEX               fnAcceptEx;
 
-	//
+    //
     //linked list for all outstanding i/o on the socket
-	//
-    PPER_IO_CONTEXT             pIOContext;  
-    struct _PER_SOCKET_CONTEXT  *pCtxtBack; 
+    //
+    PPER_IO_CONTEXT             pIOContext;
+    struct _PER_SOCKET_CONTEXT  *pCtxtBack;
     struct _PER_SOCKET_CONTEXT  *pCtxtForward;
 } PER_SOCKET_CONTEXT, *PPER_SOCKET_CONTEXT;
 
@@ -65,23 +68,23 @@ BOOL ValidOptions(int argc, char *argv[]);
 
 BOOL WINAPI CtrlHandler(
     DWORD dwEvent
-    );
+);
 
 BOOL CreateListenSocket(void);
 
 BOOL CreateAcceptSocket(
     BOOL fUpdateIOCP
-    );
+);
 
 DWORD WINAPI WorkerThread (
     LPVOID WorkContext
-    );
+);
 
 PPER_SOCKET_CONTEXT UpdateCompletionPort(
     SOCKET s,
     IO_OPERATION ClientIo,
     BOOL bAddToList
-    );
+);
 //
 // bAddToList is FALSE for listening socket, and TRUE for connection sockets.
 // As we maintain the context for listening socket in a global structure, we
@@ -91,22 +94,22 @@ PPER_SOCKET_CONTEXT UpdateCompletionPort(
 VOID CloseClient (
     PPER_SOCKET_CONTEXT lpPerSocketContext,
     BOOL bGraceful
-    );
+);
 
 PPER_SOCKET_CONTEXT CtxtAllocate(
-    SOCKET s, 
+    SOCKET s,
     IO_OPERATION ClientIO
-    );
+);
 
 VOID CtxtListFree(
-    );
+);
 
 VOID CtxtListAddTo (
     PPER_SOCKET_CONTEXT lpPerSocketContext
-    );
+);
 
 VOID CtxtListDeleteFrom(
     PPER_SOCKET_CONTEXT lpPerSocketContext
-    );
+);
 
 #endif

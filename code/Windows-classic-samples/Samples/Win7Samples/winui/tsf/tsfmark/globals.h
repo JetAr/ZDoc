@@ -1,4 +1,4 @@
-//
+﻿//
 // globals.h
 //
 // Global variable declarations.
@@ -38,7 +38,7 @@ BOOL IsEqualUnknown(IUnknown *interface1, IUnknown *interface2);
     {                           \
         (punk)->Release();      \
     }                           \
-}                   
+}
 
 #define SafeReleaseClear(punk)  \
 {                               \
@@ -47,7 +47,7 @@ BOOL IsEqualUnknown(IUnknown *interface1, IUnknown *interface2);
         (punk)->Release();      \
         (punk) = NULL;          \
     }                           \
-}                   
+}
 
 extern HINSTANCE g_hInst;
 

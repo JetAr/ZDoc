@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -25,13 +25,13 @@ class CMessageCredential;
 
 class CSampleProvider : public ICredentialProvider
 {
-  public:
+public:
     // IUnknown
     IFACEMETHODIMP_(ULONG) AddRef()
     {
         return ++_cRef;
     }
-    
+
     IFACEMETHODIMP_(ULONG) Release()
     {
         LONG cRef = --_cRef;
@@ -52,7 +52,7 @@ class CSampleProvider : public ICredentialProvider
         return QISearch(this, qit, riid, ppv);
     }
 
-  public:
+public:
     IFACEMETHODIMP SetUsageScenario(__in CREDENTIAL_PROVIDER_USAGE_SCENARIO cpus, __in DWORD dwFlags);
     IFACEMETHODIMP SetSerialization(__in const CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs);
 
@@ -65,7 +65,7 @@ class CSampleProvider : public ICredentialProvider
     IFACEMETHODIMP GetCredentialCount(__out DWORD* pdwCount,
                                       __out_range(<,*pdwCount) DWORD* pdwDefault,
                                       __out BOOL* pbAutoLogonWithDefault);
-    IFACEMETHODIMP GetCredentialAt(__in DWORD dwIndex, 
+    IFACEMETHODIMP GetCredentialAt(__in DWORD dwIndex,
                                    __deref_out ICredentialProviderCredential** ppcpc);
 
     friend HRESULT CSample_CreateInstance(__in REFIID riid, __deref_out void** ppv);
@@ -73,17 +73,17 @@ class CSampleProvider : public ICredentialProvider
 public:
     void OnConnectStatusChanged();
 
-  protected:
+protected:
     CSampleProvider();
     __override ~CSampleProvider();
-    
+
 private:
     CCommandWindow              *_pCommandWindow;       // Emulates external events.
     LONG                        _cRef;                  // Reference counter.
     CSampleCredential           *_pCredential;          // Our "connected" credential.
     CMessageCredential          *_pMessageCredential;   // Our "disconnected" credential.
     ICredentialProviderEvents   *_pcpe;                    // Used to tell our owner to re-enumerate credentials.
-    UINT_PTR                    _upAdviseContext;       // Used to tell our owner who we are when asking to 
-                                                        // re-enumerate credentials.
+    UINT_PTR                    _upAdviseContext;       // Used to tell our owner who we are when asking to
+    // re-enumerate credentials.
     CREDENTIAL_PROVIDER_USAGE_SCENARIO      _cpus;
 };

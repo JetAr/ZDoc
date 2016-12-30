@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@ wchar_t const APP_DESCRIPTION[] = L"Location API SDK Asynchronous Sample";
 #include <atlcom.h>
 #include <LocationApi.h> // This is the main Location API header
 
-class CInitializeATL : public CAtlExeModuleT<CInitializeATL>{};
+class CInitializeATL : public CAtlExeModuleT<CInitializeATL> {};
 CInitializeATL g_InitializeATL; // Initializes ATL for this application. This also does CoInitialize for us
 
 int wmain()

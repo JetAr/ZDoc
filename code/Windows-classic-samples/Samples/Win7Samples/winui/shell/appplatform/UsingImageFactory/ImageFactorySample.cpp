@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -54,7 +54,7 @@ INT_PTR CALLBACK  DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     switch (message)
     {
     case WM_INITDIALOG:
-        SendDlgItemMessage(hDlg, IDC_STATIC1, STM_SETIMAGE , IMAGE_BITMAP, (LPARAM)lParam);
+        SendDlgItemMessage(hDlg, IDC_STATIC1, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)lParam);
         nReturn = TRUE;
 
     case WM_COMMAND:

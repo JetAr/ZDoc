@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -52,12 +52,12 @@ void DebugHelper::DebugVPrintfW(LPCWSTR pFormat, va_list vl)
     SYSTEMTIME st = {0};
 
     if (debugOutputBuffer &&
-        debugOutputBufferTemp)
+            debugOutputBufferTemp)
     {
         GetLocalTime(&st);
 
         // Print the line's prefix.
-        hr = StringCbPrintfW(debugOutputBufferTemp, 
+        hr = StringCbPrintfW(debugOutputBufferTemp,
                              debugOutputBufferLen,
                              L"[T%d: %02u/%02u/%02u @ %02u:%02u:%02u.%03u] %s\n",
                              GetCurrentThreadId(),
@@ -98,9 +98,9 @@ void DebugHelper::DebugVPrintfW(LPCWSTR pFormat, va_list vl)
         OutputDebugStringW(L"DebugHelper: Bad temporary buffer pointers\n");
         goto Cleanup;
     }
-        
 
-    Cleanup:
+
+Cleanup:
     if (FAILED(hr))
     {
         // Fail in a useful manner -- just display the caller's literal
@@ -115,7 +115,7 @@ void DebugHelper::DebugVPrintfW(LPCWSTR pFormat, va_list vl)
     return;
 }
 
-    
+
 // Constructor.
 DebugHelper::DebugHelper()
 {
@@ -151,16 +151,16 @@ void DebugHelper::Initialize()
 
     // Buffer #1: final output string.
     debugOutputBuffer     = (PWCHAR)HeapAlloc( heapHandle, HEAP_ZERO_MEMORY,
-                                               debugOutputBufferLen);
+                            debugOutputBufferLen);
 
     // Buffer #2: intermediate output string; contains data prepended to every
     //            debug output string, such as a timestamp.
     debugOutputBufferTemp = (PWCHAR)HeapAlloc( heapHandle, HEAP_ZERO_MEMORY,
-                                               debugOutputBufferLen);
+                            debugOutputBufferLen);
 
     // Make sure we either have both buffers, or neither buffer.
-    if (debugOutputBuffer == NULL || 
-        debugOutputBufferTemp == NULL)
+    if (debugOutputBuffer == NULL ||
+            debugOutputBufferTemp == NULL)
     {
         OutputDebugStringW(L"\n"
                            L"DebugHelper::Initialize(): Failed to create formatted output string buffers!\n"
@@ -175,7 +175,7 @@ void DebugHelper::Initialize()
     // Report that the class is completely initialized.
     OutputDebugStringW(L"DebugHelper::Initialize(): Initialization completed successfully.\n");
 
- Cleanup:
+Cleanup:
     return;
 }
 

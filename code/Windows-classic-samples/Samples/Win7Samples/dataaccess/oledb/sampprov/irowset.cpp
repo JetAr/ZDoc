@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -29,15 +29,15 @@
 //      @flag OTHER                  | Other HRESULTs returned by called functions
 //
 STDMETHODIMP CImpIRowset::GetData
-    (
+(
     HROW        hRow,       //@parm IN | Row Handle
     HACCESSOR   hAccessor,  //@parm IN | Accessor to use
     void       *pData       //@parm OUT | Pointer to buffer where data should go.
-    )
+)
 {
     PACCESSOR		pAccessor;
     DBORDINAL		cCols;
-	DBORDINAL		cBind;
+    DBORDINAL		cBind;
     ROWBUFF			*pRowBuff;
     COLUMNDATA		*pColumnData;
     DBBINDING		*pBinding;
@@ -55,12 +55,12 @@ STDMETHODIMP CImpIRowset::GetData
     DWORD			dwPart;
     HRESULT			hr;
 
-	DBCOLUMNINFO *	rgdbcolumninfo = NULL;
+    DBCOLUMNINFO *	rgdbcolumninfo = NULL;
 
     // Coerce data for row 'hRow', according to hAccessor.
     // Put in location 'pData'.  Offsets and types are in hAccessor's bindings.
     //
-	// Return S_OK if all columns retrieved with successful status
+    // Return S_OK if all columns retrieved with successful status
     // Return DB_S_ERRORSOCCURED on failure to retrieve one or more column values
     // Return DB_E_ERRORSOCCURED on failure to retrieve all column values
 
@@ -87,29 +87,29 @@ STDMETHODIMP CImpIRowset::GetData
     if (m_pObj->m_prowbitsIBuffer->IsSlotSet( (ULONG) hRow ) != S_OK)
         return ResultFromScode( DB_E_BADROWHANDLE );
 
-	// Ensure a place to put data, unless the accessor is the null accessor then
+    // Ensure a place to put data, unless the accessor is the null accessor then
     // a NULL pData is okay.
     if ( pData == NULL && cBindings != 0 )
         return ResultFromScode( E_INVALIDARG );
 
-	// Check to see if we have a DC
-	if( !g_pIDataConvert)
-		return (E_FAIL);
+    // Check to see if we have a DC
+    if( !g_pIDataConvert)
+        return (E_FAIL);
 
     // Internal error for a 0 reference count on this row,
     // since we depend on the slot-set stuff.
     pRowBuff = m_pObj->GetRowBuff( (DBCOUNTITEM) hRow, TRUE );
     assert( pRowBuff->ulRefCount );
 
-	// Check for the Deleted Row
-	if ( m_pObj->m_pFileio->IsDeleted( (DBBKMARK) pRowBuff->pbBmk ) == S_OK )
+    // Check for the Deleted Row
+    if ( m_pObj->m_pFileio->IsDeleted( (DBBKMARK) pRowBuff->pbBmk ) == S_OK )
         return ResultFromScode( DB_E_DELETEDROW );
 
     cErrorCount = 0;
-	rgdbcolumninfo = m_pObj->m_pFileio->GetColInfo();
+    rgdbcolumninfo = m_pObj->m_pFileio->GetColInfo();
     for (cBind=0; cBind < cBindings; cBind++)
-	{
-		cCols = pBinding[cBind].iOrdinal;
+    {
+        cCols = pBinding[cBind].iOrdinal;
 
         // make sure column number is in range
         if ( !(0 < cCols && cCols <= m_pObj->m_cCols) )
@@ -130,28 +130,28 @@ STDMETHODIMP CImpIRowset::GetData
         pdwDstStatus   = dwPart & DBPART_STATUS ? (ULONG *) ((BYTE*) pData + pBinding[cBind].obStatus) : NULL;
 
         hr = g_pIDataConvert->DataConvert(
-                dwSrcType,
-                dwDstType,
-                ulSrcLength,
-                pulDstLength,
-                pSrc,
-                pDst,
-                cbDstMaxLength,
-                dwSrcStatus,
-                pdwDstStatus,
-                pBinding[cBind].bPrecision,	// bPrecision for conversion to DBNUMERIC
-				pBinding[cBind].bScale,		// bScale for conversion to DBNUMERIC
-				DBDATACONVERT_DEFAULT);
-        
-		// rounding or truncation or can't coerce
-		if (hr != S_OK)
+                 dwSrcType,
+                 dwDstType,
+                 ulSrcLength,
+                 pulDstLength,
+                 pSrc,
+                 pDst,
+                 cbDstMaxLength,
+                 dwSrcStatus,
+                 pdwDstStatus,
+                 pBinding[cBind].bPrecision,	// bPrecision for conversion to DBNUMERIC
+                 pBinding[cBind].bScale,		// bScale for conversion to DBNUMERIC
+                 DBDATACONVERT_DEFAULT);
+
+        // rounding or truncation or can't coerce
+        if (hr != S_OK)
             cErrorCount++;
-	}
+    }
 
     // We report any lossy conversions with a special status.
     // Note that DB_S_ERRORSOCCURED is a success, rather than failure.
-	return cErrorCount ? ( cErrorCount < cBindings ) ? 
-		( DB_S_ERRORSOCCURRED ) : ( DB_E_ERRORSOCCURRED ) : ( S_OK );
+    return cErrorCount ? ( cErrorCount < cBindings ) ?
+           ( DB_S_ERRORSOCCURRED ) : ( DB_E_ERRORSOCCURRED ) : ( S_OK );
 }
 
 
@@ -171,13 +171,13 @@ STDMETHODIMP CImpIRowset::GetData
 //      @flag OTHER                     | Other HRESULTs returned by called functions
 //
 STDMETHODIMP CImpIRowset::GetNextRows
-    (
+(
     HCHAPTER    hChapter,        //@parm IN | The Chapter handle.
     DBROWOFFSET lRowOffset,      //@parm IN | Rows to skip before reading
     DBROWCOUNT  cRows,           //@parm IN | Number of rows to fetch
     DBCOUNTITEM *pcRowsObtained, //@parm OUT | Number of rows obtained
     HROW        **prghRows       //@parm OUT | Array of Hrows obtained
-    )
+)
 {
     ULONG		cRowsTmp;
     ULONG		cSlotAlloc =0;
@@ -185,16 +185,16 @@ STDMETHODIMP CImpIRowset::GetNextRows
     ULONG		cRowFirst, cRowLast;
     PROWBUFF	prowbuff;
     HRESULT		hr;
-	BOOL		fCanHoldRows = FALSE;
-	DBPROPIDSET	rgPropertyIDSets[1];
-	ULONG		cPropertySets;
-	DBPROPSET*	prgPropertySets;
-	DBPROPID	rgPropId[1];
+    BOOL		fCanHoldRows = FALSE;
+    DBPROPIDSET	rgPropertyIDSets[1];
+    ULONG		cPropertySets;
+    DBPROPSET*	prgPropertySets;
+    DBPROPID	rgPropId[1];
 
 
     // init out-params
-	if ( pcRowsObtained )
-		*pcRowsObtained = 0;
+    if ( pcRowsObtained )
+        *pcRowsObtained = 0;
 
     // Check validity of arguments.
     if ( pcRowsObtained == NULL || prghRows == NULL )
@@ -213,25 +213,25 @@ STDMETHODIMP CImpIRowset::GetNextRows
         return ResultFromScode( DB_E_CANTSCROLLBACKWARDS );
 
     // Get the value of the DBPROP_CANHOLDROWS property
-	rgPropertyIDSets[0].guidPropertySet	= DBPROPSET_ROWSET;
-	rgPropertyIDSets[0].rgPropertyIDs	= rgPropId;
-	rgPropertyIDSets[0].cPropertyIDs	= 1;
-	rgPropId[0]							= DBPROP_CANHOLDROWS;
+    rgPropertyIDSets[0].guidPropertySet	= DBPROPSET_ROWSET;
+    rgPropertyIDSets[0].rgPropertyIDs	= rgPropId;
+    rgPropertyIDSets[0].cPropertyIDs	= 1;
+    rgPropId[0]							= DBPROP_CANHOLDROWS;
 
-    m_pObj->m_pUtilProp->GetProperties( 
-									PROPSET_ROWSET,
-									1, 
-									rgPropertyIDSets,
-									&cPropertySets,
-									&prgPropertySets );
+    m_pObj->m_pUtilProp->GetProperties(
+        PROPSET_ROWSET,
+        1,
+        rgPropertyIDSets,
+        &cPropertySets,
+        &prgPropertySets );
 
-	// Get the Prompt value
-	if( V_BOOL(&prgPropertySets->rgProperties->vValue) == VARIANT_TRUE )
-		fCanHoldRows = TRUE;
+    // Get the Prompt value
+    if( V_BOOL(&prgPropertySets->rgProperties->vValue) == VARIANT_TRUE )
+        fCanHoldRows = TRUE;
 
-	// Free the memory
-	SAFE_FREE(prgPropertySets[0].rgProperties);	
-	SAFE_FREE(prgPropertySets);
+    // Free the memory
+    SAFE_FREE(prgPropertySets[0].rgProperties);
+    SAFE_FREE(prgPropertySets);
 
     // Are there any unreleased rows?
     if( ((m_pObj->m_prowbitsIBuffer)->ArrayEmpty() != S_OK) && (!fCanHoldRows) )
@@ -249,44 +249,44 @@ STDMETHODIMP CImpIRowset::GetNextRows
     // Fetch Data
     //
     if (lRowOffset)
-        {
+    {
         // Calculate the new position
         m_pObj->m_irowFilePos += lRowOffset;
 
         // Check if skip causes END_OF_ROWSET
         if (m_pObj->m_irowFilePos > m_pObj->m_pFileio->GetRowCnt() ||
-            m_pObj->m_irowFilePos <= 0)
-            {
+                m_pObj->m_irowFilePos <= 0)
+        {
             m_pObj->m_dwStatus |= STAT_ENDOFCURSOR;
             return ResultFromScode( DB_S_ENDOFROWSET );
-            }
         }
+    }
 
-	if (FAILED( hr = GetNextSlots( m_pObj->m_pIBuffer, (ULONG)cRows, &cRowFirst )))
+    if (FAILED( hr = GetNextSlots( m_pObj->m_pIBuffer, (ULONG)cRows, &cRowFirst )))
         return hr;
 
     cSlotAlloc = (ULONG)cRows;
 
     for (irow =1; irow <= cRows; irow++)
-        {
-		// Setup the row
-		prowbuff = m_pObj->GetRowBuff( cRowFirst + irow - 1, TRUE );
-		memset(prowbuff->cdData, 0, m_pObj->m_cbRowSize);
-		if (FAILED( m_pObj->Rebind((BYTE *) prowbuff)))
-			return ResultFromScode( E_FAIL );
+    {
+        // Setup the row
+        prowbuff = m_pObj->GetRowBuff( cRowFirst + irow - 1, TRUE );
+        memset(prowbuff->cdData, 0, m_pObj->m_cbRowSize);
+        if (FAILED( m_pObj->Rebind((BYTE *) prowbuff)))
+            return ResultFromScode( E_FAIL );
 
-		// Get the Data from the File into the row buffer
+        // Get the Data from the File into the row buffer
         if (S_FALSE == ( hr = m_pObj->m_pFileio->Fetch( m_pObj->m_irowFilePos + irow )))
-            {
+        {
             m_pObj->m_dwStatus |= STAT_ENDOFCURSOR;
             break;
-            }
+        }
         else
-            {
+        {
             if (FAILED( hr ))
                 return ResultFromScode( E_FAIL );
-            }
         }
+    }
 
     cRowsTmp = (ULONG)(irow - 1); //Irow will be +1 because of For Loop
     m_pObj->m_irowLastFilePos = m_pObj->m_irowFilePos;
@@ -306,8 +306,8 @@ STDMETHODIMP CImpIRowset::GetNextRows
     //
 
     *pcRowsObtained = cRowsTmp;
-    
-	if ( *prghRows == NULL && cRowsTmp )
+
+    if ( *prghRows == NULL && cRowsTmp )
         *prghRows = (HROW *) PROVIDER_ALLOC( cRows*sizeof( HROW ));
 
     if ( *prghRows == NULL  && cRowsTmp )
@@ -347,7 +347,7 @@ STDMETHODIMP CImpIRowset::GetNextRows
             return hr;
 
     for (irow = (LONG) (cRowFirst), ih =0; irow <= (LONG) cRowLast; irow++, ih++)
-        {
+    {
         // Increment the rows-read count,
         // then store it as the bookmark in the very first DWORD of the row.
         prowbuff = m_pObj->GetRowBuff( irow, TRUE );
@@ -364,7 +364,7 @@ STDMETHODIMP CImpIRowset::GetNextRows
         m_pObj->m_ulRowRefCount++;
 
         (*prghRows)[ih] = (HROW) ( irow );
-        }
+    }
 
     if (m_pObj->m_dwStatus & STAT_ENDOFCURSOR)
         return ResultFromScode( DB_S_ENDOFROWSET );
@@ -385,13 +385,13 @@ STDMETHODIMP CImpIRowset::GetNextRows
 // 			@flag E_INVALIDARG 				| rghRows was a NULL pointer and crow > 0
 //
 STDMETHODIMP CImpIRowset::ReleaseRows
-    (
+(
     DBCOUNTITEM		cRows,          //@parm IN | Number of rows to release
     const HROW		rghRows[],      //@parm IN | Array of handles of rows to be released
-	DBROWOPTIONS	rgRowOptions[],	//@parm IN | Additional Options
-	DBREFCOUNT		rgRefCounts[],	//@parm OUT | array of ref counts of released rows
-	DBROWSTATUS		rgRowStatus[]	//@parm OUT | status array of for input rows
-    )
+    DBROWOPTIONS	rgRowOptions[],	//@parm IN | Additional Options
+    DBREFCOUNT		rgRefCounts[],	//@parm OUT | array of ref counts of released rows
+    DBROWSTATUS		rgRowStatus[]	//@parm OUT | status array of for input rows
+)
 {
     HRESULT hr			  = S_OK;
     DBCOUNTITEM chRow	  = 0L;
@@ -403,50 +403,50 @@ STDMETHODIMP CImpIRowset::ReleaseRows
         return ResultFromScode( E_INVALIDARG );
 
     while ( chRow < cRows )
-	{
+    {
         // check the row handle
-		hr = (m_pObj->m_prowbitsIBuffer)->IsSlotSet((ULONG) rghRows[chRow]);
+        hr = (m_pObj->m_prowbitsIBuffer)->IsSlotSet((ULONG) rghRows[chRow]);
         if ( (hr == S_OK) && (m_pObj->m_ulRowRefCount) &&
-			 (pRowBuff=m_pObj->GetRowBuff((DBCOUNTITEM) rghRows[chRow], TRUE)) && 
-			 (pRowBuff->ulRefCount) )
-		{
+                (pRowBuff=m_pObj->GetRowBuff((DBCOUNTITEM) rghRows[chRow], TRUE)) &&
+                (pRowBuff->ulRefCount) )
+        {
             // Found valid row, so decrement reference counts.
             // (Internal error for refcount to be 0 here, since slot set.)
             --pRowBuff->ulRefCount;
             --m_pObj->m_ulRowRefCount;
 
-			// stuff new refcount into caller's array
-			if ( rgRefCounts )
-				rgRefCounts[chRow] = pRowBuff->ulRefCount;
+            // stuff new refcount into caller's array
+            if ( rgRefCounts )
+                rgRefCounts[chRow] = pRowBuff->ulRefCount;
 
-			if ( rgRowStatus )
-				rgRowStatus[chRow] = DBROWSTATUS_S_OK;
+            if ( rgRowStatus )
+                rgRowStatus[chRow] = DBROWSTATUS_S_OK;
 
             if ( pRowBuff->ulRefCount == 0 )
                 ReleaseSlots( m_pObj->m_pIBuffer, (ULONG) rghRows[chRow], 1 );
-		}
+        }
         else
-		{
+        {
             // It is an error for client to try to release a row
             // for which "IsSetSlot" is false.  Client gave us an invalid handle.
             // Ignore it (we can't release it...) and report error when done.
-			if ( rgRefCounts )
-				rgRefCounts[chRow] = 0;
+            if ( rgRefCounts )
+                rgRefCounts[chRow] = 0;
 
-			if ( rgRowStatus )
-				rgRowStatus[chRow] = DBROWSTATUS_E_INVALID;
+            if ( rgRowStatus )
+                rgRowStatus[chRow] = DBROWSTATUS_E_INVALID;
 
             ++ cErrors;
-		}
+        }
 
-		chRow++;
-	}
+        chRow++;
+    }
 
-	// If everything went OK except errors in rows use DB_S_ERRORSOCCURRED.
-	return cErrors ? ( cErrors < cRows ) ? 
-			ResultFromScode( DB_S_ERRORSOCCURRED ) : 
-		 	ResultFromScode( DB_E_ERRORSOCCURRED ) : 
-		 	ResultFromScode( S_OK );
+    // If everything went OK except errors in rows use DB_S_ERRORSOCCURRED.
+    return cErrors ? ( cErrors < cRows ) ?
+           ResultFromScode( DB_S_ERRORSOCCURRED ) :
+           ResultFromScode( DB_E_ERRORSOCCURRED ) :
+           ResultFromScode( S_OK );
 }
 
 
@@ -467,17 +467,17 @@ STDMETHODIMP CImpIRowset::ReleaseRows
 //      @flag DB_E_ROWSNOTRELEASED  | All HROWs must be released before calling
 //
 STDMETHODIMP CImpIRowset::RestartPosition
-    (
+(
     HCHAPTER    hChapter        //@parm IN | The Chapter handle.
-    )
-{    
-	// make sure all rows have been released
-	// Fail even if CANHOLDROWS is true
+)
+{
+    // make sure all rows have been released
+    // Fail even if CANHOLDROWS is true
     if( ((m_pObj->m_prowbitsIBuffer)->ArrayEmpty() != S_OK) )
         return ResultFromScode( DB_E_ROWSNOTRELEASED );
 
     // set "next fetch" position to the start of the rowset
-	m_pObj->m_irowFilePos = 0;
+    m_pObj->m_irowFilePos = 0;
 
     // clear "end of cursor" flag
     m_pObj->m_dwStatus &= ~STAT_ENDOFCURSOR;
@@ -497,12 +497,12 @@ STDMETHODIMP CImpIRowset::RestartPosition
 // 			@flag E_INVALIDARG 				| rghRows was a NULL pointer and crow > 0
 
 STDMETHODIMP  CImpIRowset::AddRefRows
-    (
+(
     DBCOUNTITEM     cRows,          // @parm IN     | Number of rows to refcount
     const HROW      rghRows[],      // @parm IN     | Array of row handles to refcount
     DBREFCOUNT		rgRefCounts[],  // @parm OUT    | Array of refcounts
     DBROWSTATUS     rgRowStatus[]   // @parm OUT    | Array of row status
-    )
+)
 {
     HRESULT hr			  = S_OK;
     DBCOUNTITEM chRow	  = 0L;
@@ -515,47 +515,47 @@ STDMETHODIMP  CImpIRowset::AddRefRows
 
     // for each of the HROWs the caller provided...
     for (chRow = 0; chRow < cRows; chRow++)
-	{
+    {
         // check the row handle
-		if( ((m_pObj->m_prowbitsIBuffer)->IsSlotSet((ULONG) rghRows[chRow]) == S_OK) &&
-			(pRowBuff=m_pObj->GetRowBuff((DBCOUNTITEM) rghRows[chRow], TRUE )) &&
-			(m_pObj->m_pFileio->IsDeleted((DBBKMARK) pRowBuff->pbBmk) != S_OK) )
-		{
-			// bump refcount
-			pRowBuff = m_pObj->GetRowBuff((DBCOUNTITEM) rghRows[chRow], TRUE );
-			assert( pRowBuff->ulRefCount != 0 );
-			assert( m_pObj->m_ulRowRefCount != 0 );
-			++pRowBuff->ulRefCount;
-			++m_pObj->m_ulRowRefCount;
+        if( ((m_pObj->m_prowbitsIBuffer)->IsSlotSet((ULONG) rghRows[chRow]) == S_OK) &&
+                (pRowBuff=m_pObj->GetRowBuff((DBCOUNTITEM) rghRows[chRow], TRUE )) &&
+                (m_pObj->m_pFileio->IsDeleted((DBBKMARK) pRowBuff->pbBmk) != S_OK) )
+        {
+            // bump refcount
+            pRowBuff = m_pObj->GetRowBuff((DBCOUNTITEM) rghRows[chRow], TRUE );
+            assert( pRowBuff->ulRefCount != 0 );
+            assert( m_pObj->m_ulRowRefCount != 0 );
+            ++pRowBuff->ulRefCount;
+            ++m_pObj->m_ulRowRefCount;
 
-			// stuff new refcount into caller's array
-			if ( rgRefCounts )
-				rgRefCounts[chRow] = pRowBuff->ulRefCount;
+            // stuff new refcount into caller's array
+            if ( rgRefCounts )
+                rgRefCounts[chRow] = pRowBuff->ulRefCount;
 
-			if ( rgRowStatus )
-				rgRowStatus[chRow] = DBROWSTATUS_S_OK;
-		}
-		else
-		{
-			if ( rgRefCounts )
-				rgRefCounts[chRow] = 0;
+            if ( rgRowStatus )
+                rgRowStatus[chRow] = DBROWSTATUS_S_OK;
+        }
+        else
+        {
+            if ( rgRefCounts )
+                rgRefCounts[chRow] = 0;
 
-			if ( rgRowStatus )
-			{
-				if ( pRowBuff && m_pObj->m_pFileio->IsDeleted((DBBKMARK) pRowBuff->pbBmk) == S_OK )
-					rgRowStatus[chRow] = DBROWSTATUS_E_DELETED;
-				else
-					rgRowStatus[chRow] = DBROWSTATUS_E_INVALID;
-			}
+            if ( rgRowStatus )
+            {
+                if ( pRowBuff && m_pObj->m_pFileio->IsDeleted((DBBKMARK) pRowBuff->pbBmk) == S_OK )
+                    rgRowStatus[chRow] = DBROWSTATUS_E_DELETED;
+                else
+                    rgRowStatus[chRow] = DBROWSTATUS_E_INVALID;
+            }
 
             ++ cErrors;
-		}
-	}
+        }
+    }
 
-	// If everything went OK except errors in rows use DB_S_ERRORSOCCURRED.
-	return cErrors ? ( cErrors < cRows ) ? 
-			ResultFromScode( DB_S_ERRORSOCCURRED ) : 
-		 	ResultFromScode( DB_E_ERRORSOCCURRED ) : 
-		 	ResultFromScode( S_OK );
+    // If everything went OK except errors in rows use DB_S_ERRORSOCCURRED.
+    return cErrors ? ( cErrors < cRows ) ?
+           ResultFromScode( DB_S_ERRORSOCCURRED ) :
+           ResultFromScode( DB_E_ERRORSOCCURRED ) :
+           ResultFromScode( S_OK );
 }
 

@@ -1,4 +1,4 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+﻿/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
 #include "DataWriter2Event.h"
 
@@ -26,17 +26,17 @@ STDMETHODIMP_(VOID) CTestDataWriter2Event::Update(IDispatch* objectDispatch, IDi
 
 
     if ((SUCCEEDED(progress->get_ElapsedTime(&elapsedTime)            )) &&
-        (SUCCEEDED(progress->get_RemainingTime(&remainingTime)        )) &&
-        (SUCCEEDED(progress->get_TotalTime(&totalTime)                )) &&
-        (SUCCEEDED(progress->get_CurrentAction(&currentAction)        )) &&
-        (SUCCEEDED(progress->get_StartLba(&startLba)                  )) &&
-        (SUCCEEDED(progress->get_SectorCount(&sectorCount)            )) &&
-        (SUCCEEDED(progress->get_LastReadLba(&lastReadLba)            )) &&
-        (SUCCEEDED(progress->get_LastWrittenLba(&lastWrittenLba)      )) &&
-        (SUCCEEDED(progress->get_TotalSystemBuffer(&totalSystemBuffer))) &&
-        (SUCCEEDED(progress->get_UsedSystemBuffer(&usedSystemBuffer)  )) &&
-        (SUCCEEDED(progress->get_FreeSystemBuffer(&freeSystemBuffer)  ))
-        )
+            (SUCCEEDED(progress->get_RemainingTime(&remainingTime)        )) &&
+            (SUCCEEDED(progress->get_TotalTime(&totalTime)                )) &&
+            (SUCCEEDED(progress->get_CurrentAction(&currentAction)        )) &&
+            (SUCCEEDED(progress->get_StartLba(&startLba)                  )) &&
+            (SUCCEEDED(progress->get_SectorCount(&sectorCount)            )) &&
+            (SUCCEEDED(progress->get_LastReadLba(&lastReadLba)            )) &&
+            (SUCCEEDED(progress->get_LastWrittenLba(&lastWrittenLba)      )) &&
+            (SUCCEEDED(progress->get_TotalSystemBuffer(&totalSystemBuffer))) &&
+            (SUCCEEDED(progress->get_UsedSystemBuffer(&usedSystemBuffer)  )) &&
+            (SUCCEEDED(progress->get_FreeSystemBuffer(&freeSystemBuffer)  ))
+       )
     {
         if (currentAction == IMAPI_FORMAT2_DATA_WRITE_ACTION_VALIDATING_MEDIA)
         {

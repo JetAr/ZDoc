@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,7 +26,7 @@ HWAVEOUT                    g_hwo           = 0;
 // CChildView
 
 CChildView::CChildView()
-  : m_cChannels(0)
+    : m_cChannels(0)
 {
     m_sizeInitPos.cx = 100;
     m_sizeInitPos.cy = 40;
@@ -39,19 +39,19 @@ CChildView::~CChildView()
 
 
 BEGIN_MESSAGE_MAP(CChildView,CWnd )
-	//{{AFX_MSG_MAP(CChildView)
-	ON_WM_PAINT()
-	ON_COMMAND(IDM_MIXER_MERGE, OnMixerMerge)
-	ON_UPDATE_COMMAND_UI(IDM_MIXER_MERGE, OnUpdateMixerMerge)
-	ON_COMMAND(IDM_MIXER_PLAY, OnMixerPlay)
-	ON_UPDATE_COMMAND_UI(IDM_MIXER_PLAY, OnUpdateMixerPlay)
+    //{{AFX_MSG_MAP(CChildView)
+    ON_WM_PAINT()
+    ON_COMMAND(IDM_MIXER_MERGE, OnMixerMerge)
+    ON_UPDATE_COMMAND_UI(IDM_MIXER_MERGE, OnUpdateMixerMerge)
+    ON_COMMAND(IDM_MIXER_PLAY, OnMixerPlay)
+    ON_UPDATE_COMMAND_UI(IDM_MIXER_PLAY, OnUpdateMixerPlay)
     ON_COMMAND( IDM_MIXER_STOP, OnMixerStop )
     ON_UPDATE_COMMAND_UI( IDM_MIXER_STOP, OnUpdateMixerStop )
-	ON_COMMAND(ID_FILE_SAVE, OnFileSave)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnUpdateFileSave)
-	ON_EN_SETFOCUS(IDC_EDIT_VALIDBITS, OnSetfocusEditValidbits)
-	ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
-	//}}AFX_MSG_MAP
+    ON_COMMAND(ID_FILE_SAVE, OnFileSave)
+    ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnUpdateFileSave)
+    ON_EN_SETFOCUS(IDC_EDIT_VALIDBITS, OnSetfocusEditValidbits)
+    ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
@@ -59,23 +59,23 @@ END_MESSAGE_MAP()
 // CChildView message handlers
 
 // ----------------------------------------------------------------------------------------
-BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs) 
+BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	if (!CWnd::PreCreateWindow(cs))
-		return FALSE;
+    if (!CWnd::PreCreateWindow(cs))
+        return FALSE;
 
-	cs.dwExStyle |= WS_EX_CLIENTEDGE;
-	cs.style &= ~WS_BORDER;
-	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS, 
-		::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_APPWORKSPACE+1), NULL);
+    cs.dwExStyle |= WS_EX_CLIENTEDGE;
+    cs.style &= ~WS_BORDER;
+    cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS,
+                                       ::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_APPWORKSPACE+1), NULL);
 
-	return TRUE;
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnPaint() 
+void CChildView::OnPaint()
 {
-	CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this); // device context for painting
 }
 
 // ----------------------------------------------------------------------------------
@@ -94,17 +94,17 @@ dlgproc
 }
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnFileOpen() 
+void CChildView::OnFileOpen()
 {
     DWORD           dwThreadID  = 0;
 
     //
     // std file open dialog
     //
-    CFileDialog dlg(    TRUE, 
-                        "*.wav", 
-                        NULL, 
-                        OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST, 
+    CFileDialog dlg(    TRUE,
+                        "*.wav",
+                        NULL,
+                        OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST,
                         "Wave Files (*.wav)|*.wav|All Files (*.*)|*.*||"
                    );
     if(IDOK != dlg.DoModal())
@@ -121,20 +121,20 @@ void CChildView::OnFileOpen()
 
     ZeroMemory(&pwfx, sizeof(WAVEFORMATEX));
 
-	hFile = WaveOpenFile(dlg.GetPathName(), &pwfx, &cbData);
+    hFile = WaveOpenFile(dlg.GetPathName(), &pwfx, &cbData);
 
-	ASSERT( 0 != pwfx );
+    ASSERT( 0 != pwfx );
 
     if(IsValidHandle(hFile) && pwfx && cbData)
     {
 
         ULONG   cbRead;
         PVOID   pvData = LocalAlloc(LPTR, cbData);
-		if( 0 == pvData )
-		{
-			MessageBox( "Insufficient memory to complete the task.", "MultiChan : Error", MB_OK | MB_ICONSTOP );
-			return;
-		}
+        if( 0 == pvData )
+        {
+            MessageBox( "Insufficient memory to complete the task.", "MultiChan : Error", MB_OK | MB_ICONSTOP );
+            return;
+        }
 
         //
         // read the data into a buffer
@@ -172,18 +172,18 @@ void CChildView::OnFileOpen()
                 //
                 //  currently only 18 speaker positions are defined
                 //  any channel above 18 will be assigned a non specified speaker
-                //  it is the sole responsibility of the driver to deal with 
+                //  it is the sole responsibility of the driver to deal with
                 //  unspecified speaker masks
                 //
                 if(g_pdlgDest)
                 {
                     for
-					(	
-						dwChanMsk = SPEAKER_FRONT_LEFT; 
-                        dwChanMsk & g_pdlgDest->m_wfExt.dwChannelMask; 
+                    (
+                        dwChanMsk = SPEAKER_FRONT_LEFT;
+                        dwChanMsk & g_pdlgDest->m_wfExt.dwChannelMask;
                         dwChanMsk <<= 1
-					)
-                            ;
+                    )
+                        ;
 
                     if( SPEAKER_NOT_SPECIFIED != dwChanMsk )
                         g_pdlgDest->m_wfExt.dwChannelMask |= dwChanMsk;
@@ -197,7 +197,7 @@ void CChildView::OnFileOpen()
                     if( c >= SPEAKERS_USED )
                     {
                         dwChanMsk = SPEAKER_NOT_SPECIFIED;
-                    }   
+                    }
                     else
                     {
                         dwChanMsk = cdrSpeakers[c].dwConstant;
@@ -210,15 +210,15 @@ void CChildView::OnFileOpen()
                 StringCchPrintfA(szTitle, MAX_PATH, "\"%s\" channel %d of %d", dlg.GetFileTitle(), c, pwfx->nChannels);
                 pdlgSrcNew->Create(szTitle, m_sizeInitPos, dwChanMsk);
 
-				//
+                //
                 // pull the c-th channel of data out of this wave file
-				//	also treat return codes
-				//
+                //	also treat return codes
+                //
                 if( !pdlgSrcNew->AquireData(pwfx, pvData, cbData, c) )
-				{
-					MessageBox( "Only max 2 channel PCM formats are accepted as input.", "MultiChan : Error", MB_OK | MB_ICONSTOP );
-					break;
-				}
+                {
+                    MessageBox( "Only max 2 channel PCM formats are accepted as input.", "MultiChan : Error", MB_OK | MB_ICONSTOP );
+                    break;
+                }
 
                 //
                 // the next dialog created should be cascaded
@@ -241,7 +241,7 @@ void CChildView::OnFileOpen()
 }
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnFileSave() 
+void CChildView::OnFileSave()
 {
     // std file open dialog
     CFileDialog dlg(FALSE, "*.wav", NULL, OFN_PATHMUSTEXIST, "Wave Files (*.wav)|*.wav|All Files (*.*)|*.*||");
@@ -253,9 +253,9 @@ void CChildView::OnFileSave()
 }
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnUpdateFileSave(CCmdUI* pCmdUI) 
+void CChildView::OnUpdateFileSave(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(g_pdlgDest && g_pdlgDest->m_fPlayable);
+    pCmdUI->Enable(g_pdlgDest && g_pdlgDest->m_fPlayable);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -306,27 +306,27 @@ BOOL CChildView::UpdateDialogs(void)
 }
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnMixerMerge() 
+void CChildView::OnMixerMerge()
 {
-	g_pdlgDest->OnRemix();
+    g_pdlgDest->OnRemix();
 }
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnUpdateMixerMerge(CCmdUI* pCmdUI) 
+void CChildView::OnUpdateMixerMerge(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable( (0 != g_pdlgDest) && (0 != g_listSources.GetHeadPosition()) );
+    pCmdUI->Enable( (0 != g_pdlgDest) && (0 != g_listSources.GetHeadPosition()) );
 }
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnMixerPlay() 
+void CChildView::OnMixerPlay()
 {
     g_pdlgDest->OnPlay();
 }
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnUpdateMixerPlay(CCmdUI* pCmdUI) 
+void CChildView::OnUpdateMixerPlay(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(g_pdlgDest && g_pdlgDest->m_fPlayable);
+    pCmdUI->Enable(g_pdlgDest && g_pdlgDest->m_fPlayable);
 }
 
 // ----------------------------------------------------------------------------------------
@@ -340,38 +340,38 @@ void CChildView::OnUpdateMixerStop( CCmdUI* pCmdUI )
 {}
 
 // ----------------------------------------------------------------------------------------
-void CChildView::OnSetfocusEditValidbits() 
+void CChildView::OnSetfocusEditValidbits()
 {
-	// TODO: Add your control notification handler code here
-	ASSERT(0);
+    // TODO: Add your control notification handler code here
+    ASSERT(0);
 }
 
 // ----------------------------------------------------------------------------------------
-LRESULT CChildView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) 
+LRESULT CChildView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
     {
-        case WM_COMMAND:
-            {
-                if(wParam == IDC_EDIT_VALIDBITS)
-                {
-                    OutputDebugString("WM_COMMAND\n");
-                }
-                break;
-            }
-
-        case WM_CTLCOLOR:
-            {
-                if ( HIWORD(lParam) == IDC_EDIT_VALIDBITS) 
-                {
-                    SetBkColor((HDC)wParam, RGB(128,128,128));
-                    SetTextColor((HDC)wParam, RGB(255, 255, 255) );
-                    return (LRESULT)GetStockObject(LTGRAY_BRUSH);
-                }
-                break;
-            }
+    case WM_COMMAND:
+    {
+        if(wParam == IDC_EDIT_VALIDBITS)
+        {
+            OutputDebugString("WM_COMMAND\n");
+        }
+        break;
     }
-	
-	return CWnd ::WindowProc(message, wParam, lParam);
+
+    case WM_CTLCOLOR:
+    {
+        if ( HIWORD(lParam) == IDC_EDIT_VALIDBITS)
+        {
+            SetBkColor((HDC)wParam, RGB(128,128,128));
+            SetTextColor((HDC)wParam, RGB(255, 255, 255) );
+            return (LRESULT)GetStockObject(LTGRAY_BRUSH);
+        }
+        break;
+    }
+    }
+
+    return CWnd ::WindowProc(message, wParam, lParam);
 }
 

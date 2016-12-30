@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -87,13 +87,14 @@ InitBarClass(HINSTANCE hInstance)
 INT_PTR
 APIENTRY
 BarWndProc(
-          HWND hWnd,
-          UINT message,
-          WPARAM wParam,
-          LPARAM lParam
-          )
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
-    switch (message) {
+    switch (message)
+    {
     case WM_CREATE:
 
         hpenSame = CreatePen(PS_SOLID, 1, RGB(0,0,0));
@@ -127,7 +128,8 @@ BarWndProc(
         break;
 
     case WM_COMMAND:
-        switch (GET_WM_COMMAND_ID(wParam, lParam)) {
+        switch (GET_WM_COMMAND_ID(wParam, lParam))
+        {
         case IDM_MONOCOLS:
             DeleteObject(hpenLeft);
             DeleteObject(hpenRight);
@@ -175,11 +177,14 @@ BarDrawPosition(HWND hwndBar, HDC hdcIn, BOOL bErase)
     int left_first, left_last, right_first, right_last, linenr;
 
     /* get a hdc if we weren't given one */
-    if (hdcIn == NULL) {
+    if (hdcIn == NULL)
+    {
         hdc = GetDC(hwndBar);
         if (!hdc)
             return;
-    } else {
+    }
+    else
+    {
         hdc = hdcIn;
     }
 
@@ -195,7 +200,8 @@ BarDrawPosition(HWND hwndBar, HDC hdcIn, BOOL bErase)
     rcRight.right = rcRight.left +  (cx * R_POS_WIDTH / 100);
 
     /* erase the whole marker section if requested */
-    if (bErase) {
+    if (bErase)
+    {
         rcLeft.top = rc.top;
         rcLeft.bottom = rc.bottom;
         rcRight.top = rc.top;
@@ -215,9 +221,11 @@ BarDrawPosition(HWND hwndBar, HDC hdcIn, BOOL bErase)
     /* get the handles to the two lists of sections */
     view = (VIEW) SendMessage(hwndClient, TM_CURRENTVIEW, 0, 0);
     /* make sure we are in expand mode */
-    if (view_isexpanded(view) == FALSE) {
+    if (view_isexpanded(view) == FALSE)
+    {
         /* get rid of the dc if we made it ourselves */
-        if (hdcIn == NULL) {
+        if (hdcIn == NULL)
+        {
             ReleaseDC(hwndBar, hdc);
         }
         return;
@@ -232,9 +240,11 @@ BarDrawPosition(HWND hwndBar, HDC hdcIn, BOOL bErase)
      * picture for a single file is not very exciting.
      */
 
-    if ((listleft == NULL) || (listright == NULL)) {
+    if ((listleft == NULL) || (listright == NULL))
+    {
         /* get rid of the dc if we made it ourselves */
-        if (hdcIn == NULL) {
+        if (hdcIn == NULL)
+        {
             ReleaseDC(hwndBar, hdc);
         }
         return;
@@ -259,12 +269,15 @@ BarDrawPosition(HWND hwndBar, HDC hdcIn, BOOL bErase)
      */
     left_first = left_last = right_first = right_last = 0;
 
-    for (i = toprow; i <= endrow; i++) {
+    for (i = toprow; i <= endrow; i++)
+    {
         linenr = view_getlinenr_left(view, i);
 
-        if (linenr > 0) {
+        if (linenr > 0)
+        {
 
-            if (left_first == 0) {
+            if (left_first == 0)
+            {
                 left_first = linenr;
             }
             left_first = min(left_first, linenr);
@@ -272,8 +285,10 @@ BarDrawPosition(HWND hwndBar, HDC hdcIn, BOOL bErase)
         }
 
         linenr = view_getlinenr_right(view, i);
-        if (linenr > 0) {
-            if (right_first == 0) {
+        if (linenr > 0)
+        {
+            if (right_first == 0)
+            {
                 right_first = linenr;
             }
             right_first = min(right_first, linenr);
@@ -291,7 +306,8 @@ BarDrawPosition(HWND hwndBar, HDC hdcIn, BOOL bErase)
     FillRect(hdc, &rcRight, hbrSideBar);
 
     /* get rid of the dc if we made it ourselves */
-    if (hdcIn == NULL) {
+    if (hdcIn == NULL)
+    {
         ReleaseDC(hwndBar, hdc);
     }
 }
@@ -328,7 +344,8 @@ BarPaint(HWND hwnd)
     view = (VIEW) SendMessage(hwndClient, TM_CURRENTVIEW, 0, 0);
 
     /* make sure we are in expand mode */
-    if (view_isexpanded(view) == FALSE) {
+    if (view_isexpanded(view) == FALSE)
+    {
         return;
     }
 
@@ -340,7 +357,8 @@ BarPaint(HWND hwnd)
     /*
      * don't bother if there is only one list - not very interesting
      */
-    if ((listleft == NULL) || (listright == NULL)) {
+    if ((listleft == NULL) || (listright == NULL))
+    {
         EndPaint(hwnd, &ps);
         return;
     }
@@ -368,16 +386,19 @@ BarPaint(HWND hwnd)
     cy = (int)(rc.bottom - rc.top);
 
     /* draw all the left sections and links */
-    for ( sec=(SECTION)List_First(listleft);  sec!=NULL;  sec = (SECTION)List_Next((LPVOID)sec)) {
+    for ( sec=(SECTION)List_First(listleft);  sec!=NULL;  sec = (SECTION)List_Next((LPVOID)sec))
+    {
         DrawSection(hdc, cx, cy, total_lines, sec, STATE_LEFTONLY);
 
-        if (section_getlink(sec) != NULL) {
+        if (section_getlink(sec) != NULL)
+        {
             DrawLink(hdc, cx, cy, total_lines, sec);
         }
     }
 
     /* draw all the right sections */
-    for ( sec=(SECTION)List_First(listright);  sec!=NULL;  sec = (SECTION)List_Next((LPVOID)sec)) {
+    for ( sec=(SECTION)List_First(listright);  sec!=NULL;  sec = (SECTION)List_Next((LPVOID)sec))
+    {
         DrawSection(hdc, cx, cy, total_lines, sec, STATE_RIGHTONLY);
     }
 
@@ -404,19 +425,28 @@ DrawSection(HDC hdc, int cx, int cy, int lines, SECTION sec, int sidecode)
 
 
     /* left or right  - set bar position and width*/
-    if (sidecode == STATE_LEFTONLY) {
-        if (section_getlink(sec) != NULL) {
+    if (sidecode == STATE_LEFTONLY)
+    {
+        if (section_getlink(sec) != NULL)
+        {
             x1 = L_MATCH_START;
             x2 = L_MATCH_WIDTH;
-        } else {
+        }
+        else
+        {
             x1 = L_UNMATCH_START;
             x2 = L_UNMATCH_WIDTH;
         }
-    } else {
-        if (section_getlink(sec) != NULL) {
+    }
+    else
+    {
+        if (section_getlink(sec) != NULL)
+        {
             x1 = R_MATCH_START;
             x2 = R_MATCH_WIDTH;
-        } else {
+        }
+        else
+        {
             x1 = R_UNMATCH_START;
             x2 = R_UNMATCH_WIDTH;
         }
@@ -427,13 +457,18 @@ DrawSection(HDC hdc, int cx, int cy, int lines, SECTION sec, int sidecode)
 
 
     /* select pens and brushes */
-    if (section_getlink(sec) != NULL) {
+    if (section_getlink(sec) != NULL)
+    {
         hpenOld = (HPEN)SelectObject(hdc, hpenSame);
         hbrOld = (HBRUSH)SelectObject(hdc, hbrSame);
-    } else if (sidecode == STATE_LEFTONLY) {
+    }
+    else if (sidecode == STATE_LEFTONLY)
+    {
         hpenOld = (HPEN)SelectObject(hdc, hpenLeft);
         hbrOld = (HBRUSH)SelectObject(hdc, hbrLeft);
-    } else {
+    }
+    else
+    {
         hpenOld = (HPEN)SelectObject(hdc, hpenRight);
         hbrOld = (HBRUSH)SelectObject(hdc, hbrRight);
     }
@@ -513,11 +548,16 @@ BarClick(HWND hwnd, int x, int y)
     xleft = xleft * (rc.right - rc.left) / 100;
     xright = xright * (rc.right - rc.left) / 100;
 
-    if (x < xleft) {
+    if (x < xleft)
+    {
         bIsLeft = TRUE;
-    } else if (x > xright) {
+    }
+    else if (x > xright)
+    {
         bIsLeft = FALSE;
-    } else {
+    }
+    else
+    {
         /* click was between the two bars - ignore it */
         return;
     }
@@ -530,7 +570,8 @@ BarClick(HWND hwnd, int x, int y)
     view = (VIEW) SendMessage(hwndClient, TM_CURRENTVIEW, 0, 0);
 
     /* make sure we are in expand mode */
-    if (view_isexpanded(view) == FALSE) {
+    if (view_isexpanded(view) == FALSE)
+    {
         return;
     }
 
@@ -542,7 +583,8 @@ BarClick(HWND hwnd, int x, int y)
     /* ignore the click if only one list of sections, since in
      * this case there is nothing drawn for him to click on.
      */
-    if ((listleft == NULL) || (listright == NULL)) {
+    if ((listleft == NULL) || (listright == NULL))
+    {
         return;
     }
 
@@ -565,12 +607,17 @@ BarClick(HWND hwnd, int x, int y)
     linenr = (int) (((long) total_lines * y) / (rc.bottom - rc.top)) + 1;
 
     /* check that the line is valid */
-    if (bIsLeft) {
-        if (linenr > tot_left) {
+    if (bIsLeft)
+    {
+        if (linenr > tot_left)
+        {
             return;
         }
-    } else {
-        if (linenr > tot_right) {
+    }
+    else
+    {
+        if (linenr > tot_right)
+        {
             return;
         }
     }
@@ -578,14 +625,19 @@ BarClick(HWND hwnd, int x, int y)
     /* search the current view, looking for a row with this
      * line nr on the correct side
      */
-    for (i = 0; i < view_getrowcount(view); i++) {
-        if (bIsLeft) {
+    for (i = 0; i < view_getrowcount(view); i++)
+    {
+        if (bIsLeft)
+        {
             that = view_getlinenr_left(view,i);
-        } else {
+        }
+        else
+        {
             that = view_getlinenr_right(view,i);
         }
 
-        if (linenr == that) {
+        if (linenr == that)
+        {
             /* found the matching line- select it in the
              * table window
              */

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,14 +9,14 @@
 
 Title: Verifying Publisher Key of a signed binary
 
-This sample demonstrates how Win32 applications can verify that a 
-file with an Authenticode signature originates from a specific  
-software publisher using WinVerifyTrust and associated helper APIs.  
+This sample demonstrates how Win32 applications can verify that a
+file with an Authenticode signature originates from a specific
+software publisher using WinVerifyTrust and associated helper APIs.
 
-The example demonstrates verifying a files signature, getting the 
-publisher certificate from the signature, calculating a SHA1 hash 
-of a publisher's signing key, and comparing it against a list of 
-known good SHA1 hash values. 
+The example demonstrates verifying a files signature, getting the
+publisher certificate from the signature, calculating a SHA1 hash
+of a publisher's signing key, and comparing it against a list of
+known good SHA1 hash values.
 
 ****************************************************************/
 
@@ -41,11 +41,12 @@ known good SHA1 hash values.
 //
 //
 //  Key Id Hash(sha1): d9 48 12 73 f8 4e 89 90 64 47 bf 6b 85 5f b6 cb e2 3d 63 d6
-//                     
+//
 //  DON'T USE: Key Id Hash(rfc-sha1):
 //
 //--------------------------------------------------------------------------
-static const BYTE PublisherKeyList[][SHA1_HASH_LEN] = {
+static const BYTE PublisherKeyList[][SHA1_HASH_LEN] =
+{
     //
     // The following is the sha1 key identifier for my publisher certificate
     //  CN = Contoso
@@ -55,8 +56,8 @@ static const BYTE PublisherKeyList[][SHA1_HASH_LEN] = {
     //  C = US
     //
     {
-		0xd9, 0x48, 0x12, 0x73, 0xf8, 0x4e, 0x89, 0x90, 0x64, 0x47, 
-		0xbf, 0x6b, 0x85, 0x5f, 0xb6, 0xcb, 0xe2, 0x3d, 0x63, 0xd6
+        0xd9, 0x48, 0x12, 0x73, 0xf8, 0x4e, 0x89, 0x90, 0x64, 0x47,
+        0xbf, 0x6b, 0x85, 0x5f, 0xb6, 0xcb, 0xe2, 0x3d, 0x63, 0xd6
     },
 };
 
@@ -73,19 +74,19 @@ IsTrustedKey(
     PCCERT_CONTEXT pCertContext,
     const BYTE KeyList[][SHA1_HASH_LEN],
     DWORD KeyCount
-    )
+)
 {
     BYTE rgbKeyId[SHA1_HASH_LEN];
     DWORD cbKeyId;
     cbKeyId = SHA1_HASH_LEN;
     if (!CryptHashPublicKeyInfo(
-            NULL,               // hCryptProv
-            CALG_SHA1,
-            0,                  // dwFlags
-            X509_ASN_ENCODING,
-            &pCertContext->pCertInfo->SubjectPublicKeyInfo,
-            rgbKeyId,
-            &cbKeyId) || SHA1_HASH_LEN != cbKeyId)
+                NULL,               // hCryptProv
+                CALG_SHA1,
+                0,                  // dwFlags
+                X509_ASN_ENCODING,
+                &pCertContext->pCertInfo->SubjectPublicKeyInfo,
+                rgbKeyId,
+                &cbKeyId) || SHA1_HASH_LEN != cbKeyId)
     {
         return FALSE;
     }
@@ -110,7 +111,7 @@ static
 BOOL
 IsTrustedPublisherKey(
     PCCERT_CHAIN_CONTEXT pChainContext
-    )
+)
 {
     PCERT_SIMPLE_CHAIN pChain;
     PCCERT_CONTEXT pCertContext;
@@ -137,7 +138,7 @@ IsTrustedPublisherKey(
 BOOL
 IsFilePublisherTrusted(
     LPCWSTR pwszFileName
-    )
+)
 {
     BOOL trusted = FALSE;
     DWORD lastError;
@@ -147,7 +148,7 @@ IsFilePublisherTrusted(
     // Initialize structure for WinVerifyTrust call
     //
 
-	WINTRUST_DATA wtd = { 0 };
+    WINTRUST_DATA wtd = { 0 };
     WINTRUST_FILE_INFO wtfi = { 0 };
 
     wtd.cbStruct = sizeof(WINTRUST_DATA);
@@ -174,7 +175,7 @@ IsFilePublisherTrusted(
     if (S_OK != WinVerifyTrust((HWND)INVALID_HANDLE_VALUE, &wvtProvGuid, &wtd))
     {
         lastError = GetLastError();
-		goto Cleanup;
+        goto Cleanup;
     }
 
     //
@@ -201,7 +202,7 @@ IsFilePublisherTrusted(
     //
     // Check for Publisher Key Trust
     //
-	if (!IsTrustedPublisherKey(pProvSigner->pChainContext))
+    if (!IsTrustedPublisherKey(pProvSigner->pChainContext))
     {
         goto Cleanup;
     }
@@ -243,7 +244,7 @@ static void Usage(void)
     printf("\n");
 }
 
-int _cdecl wmain(int argc, __in_ecount(argc) wchar_t * argv[]) 
+int _cdecl wmain(int argc, __in_ecount(argc) wchar_t * argv[])
 {
     int status;
     BOOL trusted;
@@ -255,21 +256,25 @@ int _cdecl wmain(int argc, __in_ecount(argc) wchar_t * argv[])
         {
             switch(argv[0][1])
             {
-                case 'h':
-                default:
-                    goto BadUsage;
+            case 'h':
+            default:
+                goto BadUsage;
             }
-        } else {
+        }
+        else
+        {
             if (pwszFileName == NULL)
                 pwszFileName = argv[0];
-            else {
+            else
+            {
                 printf("Too many arguments\n");
                 goto BadUsage;
             }
         }
     }
 
-    if (pwszFileName == NULL) {
+    if (pwszFileName == NULL)
+    {
         printf("missing FileName \n");
         goto BadUsage;
     }
@@ -300,5 +305,5 @@ ErrorReturn:
 BadUsage:
     Usage();
     goto ErrorReturn;
-    
+
 }

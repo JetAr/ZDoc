@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -28,7 +28,7 @@ void InsertTextAtSelection(TfEditCookie ec, ITfContext *pContext, const WCHAR *p
 class CInsertHelloEditSession : public CEditSessionBase
 {
 public:
-    CInsertHelloEditSession(ITfContext *pContext) : CEditSessionBase(pContext) 
+    CInsertHelloEditSession(ITfContext *pContext) : CEditSessionBase(pContext)
     {
     }
 
@@ -122,7 +122,7 @@ void CTextService::InsertHello()
 
 Exit:
     if (pContext)
-        pContext->Release();    
+        pContext->Release();
 
-    pDocMgrFocus->Release();    
+    pDocMgrFocus->Release();
 }

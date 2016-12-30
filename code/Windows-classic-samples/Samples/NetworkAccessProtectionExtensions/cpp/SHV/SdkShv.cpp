@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,7 +25,7 @@ BOOL APIENTRY DllMain(_In_ HANDLE hModule,
     if (reason == DLL_PROCESS_ATTACH)
     {
         // Save module handle for the registration method
-		g_hModule = (HMODULE)hModule ;
+        g_hModule = (HMODULE)hModule ;
     }
 
     return TRUE ;
@@ -36,7 +36,7 @@ BOOL APIENTRY DllMain(_In_ HANDLE hModule,
 STDAPI DllCanUnloadNow(void)
 {
     // A DLL is no longer in use when it is not managing any existing objects
-    // (the reference count on all of its objects is 0). 
+    // (the reference count on all of its objects is 0).
     if (g_nComObjsInUse == 0)
     {
         return S_OK;
@@ -52,7 +52,7 @@ STDAPI DllCanUnloadNow(void)
 _Check_return_
 STDAPI  DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFIID riid, _Outptr_ LPVOID FAR* ppv)
 {
-    HRESULT hr = CLASS_E_CLASSNOTAVAILABLE; 
+    HRESULT hr = CLASS_E_CLASSNOTAVAILABLE;
 
     //Check if the requested COM object is implemented in this DLL
     if (rclsid == CLSID_SampleShv)
@@ -64,7 +64,7 @@ STDAPI  DllGetClassObject(_In_ REFCLSID rclsid, _In_ REFIID riid, _Outptr_ LPVOI
         }
         else
         {
-            hr = pShaFact->QueryInterface(riid , ppv);
+            hr = pShaFact->QueryInterface(riid, ppv);
 
             if (FAILED(hr))
             {
@@ -114,7 +114,7 @@ STDAPI DllUnregisterServer(void)
     {
         ret = hr;
     }
-   
+
     return ret;
 }
 

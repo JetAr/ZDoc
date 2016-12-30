@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -89,7 +89,7 @@ LRESULT CmdAbout(HWND hwnd, WORD wCommand, WORD wNotify, HWND hwndCtrl)
     hwndCtrl;
     wNotify;
     wCommand;
-    
+
     DialogBox(hInst, "AboutBox", hwnd, (DLGPROC)About);
     return 0;
 }
@@ -145,7 +145,7 @@ LRESULT CALLBACK About(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
 
 LRESULT MsgAboutInit(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
-    #define POINTSIZE 8
+#define POINTSIZE 8
 
     char  szFullPath[256];
     DWORD dwVerHnd;
@@ -169,20 +169,20 @@ LRESULT MsgAboutInit(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
     iPointSize *= -1;
 
     if(NULL == (hFontCopyright = CreateFont(iPointSize,
-                                0, 0, 0,
-                                FW_DONTCARE,
-                                0, 0, 0, 0,
-                                0, 0, 0, 0,
-                                "System"
-                                )))
+                                            0, 0, 0,
+                                            FW_DONTCARE,
+                                            0, 0, 0, 0,
+                                            0, 0, 0, 0,
+                                            "System"
+                                           )))
     {
         return FALSE;
     }
-                                            
 
-    SendDlgItemMessage(hdlg, 
-                       IDD_VERLAST, 
-                       WM_SETFONT, 
+
+    SendDlgItemMessage(hdlg,
+                       IDD_VERLAST,
+                       WM_SETFONT,
                        (WPARAM)hFontCopyright,
                        0L);
 
@@ -251,13 +251,13 @@ LRESULT MsgAboutInit(HWND hdlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
 //    the command messages for the about dialog box.
 //
 
-LRESULT MsgAboutCommand(HWND   hwnd, 
-                        UINT   uMessage, 
-                        WPARAM wparam, 
+LRESULT MsgAboutCommand(HWND   hwnd,
+                        UINT   uMessage,
+                        WPARAM wparam,
                         LPARAM lparam)
 {
     uMessage;
-    
+
     return DispCommand(&cmdiAbout, hwnd, wparam, lparam);
 }
 
@@ -284,9 +284,9 @@ LRESULT CmdAboutDone(HWND hdlg, WORD wCommand, WORD wNotify, HWND hwndCtrl)
     hwndCtrl;
     wNotify;
     wCommand;
-    
+
     if (hFontCopyright)
-       DeleteObject(hFontCopyright);
+        DeleteObject(hFontCopyright);
 
     EndDialog(hdlg, TRUE);          // Exit the dialog
     return TRUE;

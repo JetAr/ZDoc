@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -38,66 +38,66 @@ Description:
 --*/
 
 class ATL_NO_VTABLE CTextTokenizer :
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CTextTokenizer, &CLSID_TextTokenizer>,
-	public IDispatchImpl<ITextTokenizer, &IID_ITextTokenizer, &LIBID_FsrmTextReaderLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CTextTokenizer, &CLSID_TextTokenizer>,
+    public IDispatchImpl<ITextTokenizer, &IID_ITextTokenizer, &LIBID_FsrmTextReaderLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 public:
-	CTextTokenizer()
-	{
-	}
+    CTextTokenizer()
+    {
+    }
 
-DECLARE_REGISTRY_RESOURCEID(IDR_TEXTTOKENIZER)
+    DECLARE_REGISTRY_RESOURCEID(IDR_TEXTTOKENIZER)
 
-DECLARE_NOT_AGGREGATABLE(CTextTokenizer)
+    DECLARE_NOT_AGGREGATABLE(CTextTokenizer)
 
-BEGIN_COM_MAP(CTextTokenizer)
-	COM_INTERFACE_ENTRY(ITextTokenizer)
-	COM_INTERFACE_ENTRY(IDispatch)
-END_COM_MAP()
+    BEGIN_COM_MAP(CTextTokenizer)
+    COM_INTERFACE_ENTRY(ITextTokenizer)
+    COM_INTERFACE_ENTRY(IDispatch)
+    END_COM_MAP()
 
 
 
-	DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	HRESULT FinalConstruct()
-	{
-		return S_OK;
-	}
+    HRESULT FinalConstruct()
+    {
+        return S_OK;
+    }
 
-	void FinalRelease();	
+    void FinalRelease();
 
 public:
 
-	// ITextTokenizer interface methods
+    // ITextTokenizer interface methods
 
-	STDMETHOD(InitializeWithPropertyBag)(IUnknown * propertyBag);
-	STDMETHOD(DoesContainWordsFromList)(SAFEARRAY* pWordList, VARIANT_BOOL* pBooleanResult);
-	STDMETHOD(Cleanup)();
-
-private:
-
-	CComPtr<IFilter> m_pIFilter;
-	CComQIPtr<IPersistStream> m_pIPersistStream;
+    STDMETHOD(InitializeWithPropertyBag)(IUnknown * propertyBag);
+    STDMETHOD(DoesContainWordsFromList)(SAFEARRAY* pWordList, VARIANT_BOOL* pBooleanResult);
+    STDMETHOD(Cleanup)();
 
 private:
 
-	// Called for each chunk to determine if it contains
-	// any of the words passed in the array
-	HRESULT
-	DoesChunkContainWordsFromList(
-		wstring *pszChunk,
-		SAFEARRAY* pWordList, 
-		VARIANT_BOOL* pBooleanResult
-		);
+    CComPtr<IFilter> m_pIFilter;
+    CComQIPtr<IPersistStream> m_pIPersistStream;
 
-	// Iterates of the IFilter chunks of the file
-	// For each chunk, calls DoesChunkContainWordsFromList
-	HRESULT
-	ProcessChunks(
-		SAFEARRAY* pWordList, 
-		VARIANT_BOOL* pBooleanResult
-		);
+private:
+
+    // Called for each chunk to determine if it contains
+    // any of the words passed in the array
+    HRESULT
+    DoesChunkContainWordsFromList(
+        wstring *pszChunk,
+        SAFEARRAY* pWordList,
+        VARIANT_BOOL* pBooleanResult
+    );
+
+    // Iterates of the IFilter chunks of the file
+    // For each chunk, calls DoesChunkContainWordsFromList
+    HRESULT
+    ProcessChunks(
+        SAFEARRAY* pWordList,
+        VARIANT_BOOL* pBooleanResult
+    );
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(TextTokenizer), CTextTokenizer)

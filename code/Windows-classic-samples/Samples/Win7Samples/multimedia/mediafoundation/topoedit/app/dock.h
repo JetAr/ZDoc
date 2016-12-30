@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,13 +7,13 @@
 
 #pragma once
 
-class CDock 
+class CDock
     : public CWindowImpl<CDock>
 {
 public:
     CDock();
     ~CDock();
-    
+
     enum AREA_MOVE_TYPE
     {
         MOVE_NO,
@@ -21,23 +21,23 @@ public:
         MOVE_VERTICAL,
     };
 
-    enum STOCK_AREA        
+    enum STOCK_AREA
     {
         STOCK_AREA_LEFT,
         STOCK_AREA_RIGHT,
         STOCK_AREA_TOP,
         STOCK_AREA_BOTTOM,
     };
-    
+
     class CFixedPos
     {
-    public:        
+    public:
         double left;
         double top;
         LONG width;
         LONG height;
     };
-    
+
     class CArea
     {
     public:
@@ -59,13 +59,13 @@ public:
 
         // flag to indicate if user can move area
         AREA_MOVE_TYPE m_MoveType;
-        
+
         // optional window associated with
         CWindow * m_pWindow;
 
         // valid from position modification until next resize
         BOOL m_fLocked;
-        
+
         // runtime only. iteration for resize
         DWORD m_nResizeIter;
     };
@@ -79,25 +79,25 @@ public:
     void UpdateDock();
     void MoveSplitter(CWindow* pSplitter, LONG x, LONG y);
 
-protected:    
+protected:
     void ResizeDock(long nWidth, long nHeight);
     void ResizePane(CDock::CArea* pArea);
     BOOL CanResize(CDock::CArea* pArea);
-        
+
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-    
+
     BEGIN_MSG_MAP(CDock)
-        MESSAGE_HANDLER(WM_CREATE, OnCreate)
-        MESSAGE_HANDLER(WM_SIZE, OnSize)
+    MESSAGE_HANDLER(WM_CREATE, OnCreate)
+    MESSAGE_HANDLER(WM_SIZE, OnSize)
     END_MSG_MAP()
 
-private:    
+private:
     CAtlArray<CArea*> m_Areas;
 
     LONG m_nHeight;
     LONG m_nWidth;
-    
+
     CArea m_StockLeft;
     CArea m_StockRight;
     CArea m_StockTop;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,13 +16,13 @@
 #include <windowsx.h>
 #include <mmsystem.h>
 #include <memory.h>
-#include "muldiv32.h" 
+#include "muldiv32.h"
 #include "smf.h"
 #include "smfi.h"
 #include "debug.h"
 
 PRIVATE UINT grbChanMsgLen[] =
-{ 
+{
     0,                      /* 0x   not a status byte   */
     0,                      /* 1x   not a status byte   */
     0,                      /* 2x   not a status byte   */
@@ -38,7 +38,7 @@ PRIVATE UINT grbChanMsgLen[] =
     2,                      /* Cx   Program change      */
     2,                      /* Dx   Chan pressure       */
     3,                      /* Ex   Pitch bend change   */
-    0,                      /* Fx   SysEx (see below)   */             
+    0,                      /* Fx   SysEx (see below)   */
 } ;
 
 /******************************************************************************
@@ -54,11 +54,11 @@ PRIVATE UINT grbChanMsgLen[] =
 *   SMF_SUCCESS The events were successfully read.
 *   SMF_NO_MEMORY Out of memory to build key frames.
 *   SMF_INVALID_FILE A disk or parse error occured on the file.
-* 
+*
 * This function validates the format of and existing MIDI or RMI file
 * and builds the handle structure which will refer to it for the
 * lifetime of the instance.
-*  
+*
 * The file header information will be read and verified, and
 * smfBuildTrackIndices will be called on every existing track
 * to build keyframes and validate the track format.
@@ -77,7 +77,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
     WORD                    wMemory;
     DWORD                   dwLeft;
     HPBYTE                  hpbImage;
-    
+
     DWORD                   idxTrack;
     EVENT                   event;
     BOOL                    fFirst;
@@ -99,7 +99,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
     */
     dwLeft   = pSmf->cbImage;
     hpbImage = pSmf->hpbImage;
-    
+
     if (dwLeft < sizeof(CHUNKHDR))
         return SMF_INVALID_FILE;
 
@@ -107,7 +107,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
 
     dwLeft   -= sizeof(CHUNKHDR);
     hpbImage += sizeof(CHUNKHDR);
-    
+
     if (pCh->fourccType != FOURCC_MThd)
         return SMF_INVALID_FILE;
 
@@ -119,7 +119,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
 
     dwLeft   -= dwLength;
     hpbImage += dwLength;
-    
+
     pSmf->dwFormat       = (DWORD)(WORDSWAP(pFh->wFormat));
     pSmf->dwTracks       = (DWORD)(WORDSWAP(pFh->wTracks));
     pSmf->dwTimeDivision = (DWORD)(WORDSWAP(pFh->wDivision));
@@ -127,7 +127,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
     /*
     ** We've successfully parsed the header. Now try to build the track
     ** index.
-    ** 
+    **
     ** We only check out the track header chunk here; the track will be
     ** preparsed after we do a quick integretiy check.
     */
@@ -142,7 +142,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
 
     pSmf = *ppSmf = pSmfTemp;
     pTrk = pSmf->rTracks;
-    
+
     for (idx=0; idx<pSmf->dwTracks; idx++)
     {
         if (dwLeft < sizeof(CHUNKHDR))
@@ -155,7 +155,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
 
         if (pCh->fourccType != FOURCC_MTrk)
             return SMF_INVALID_FILE;
-        
+
         pTrk->idxTrack      = (DWORD)(hpbImage - pSmf->hpbImage);
         pTrk->smti.cbLength = DWORDSWAP(pCh->dwLength);
 
@@ -175,10 +175,10 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
     ** (1) Build tempo map so we can convert to/from ticks quickly
     ** (2) Determine actual tick length of file
     ** (3) Validate all events in all tracks
-    */ 
+    */
     pSmf->tkPosition = 0;
     pSmf->fdwSMF &= ~SMF_F_EOF;
-    
+
     for (pTrk = pSmf->rTracks, idxTrack = pSmf->dwTracks; idxTrack--; pTrk++)
     {
         pTrk->pSmf              = pSmf;
@@ -191,8 +191,8 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
 
     while (SMF_SUCCESS == (smfrc = smfGetNextEvent(pSmf, (EVENT BSTACK *)&event, MAX_TICKS)))
     {
-        if (MIDI_META == event.abEvent[0] && 
-            MIDI_META_TEMPO == event.abEvent[1])
+        if (MIDI_META == event.abEvent[0] &&
+                MIDI_META_TEMPO == event.abEvent[1])
         {
             if (3 != event.cbParm)
             {
@@ -205,7 +205,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
                 {
                     LocalUnlock(pSmf->hTempoMap);
                 }
-                
+
                 pSmf->cTempoMapAlloc += C_TEMPO_MAP_CHK;
                 fFirst = FALSE;
                 if (0 == pSmf->cTempoMap)
@@ -231,7 +231,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
                 /* Inserting first event and the absolute time is zero.
                 ** Use defaults of 500,000 uSec/qn from MIDI spec
                 */
-                
+
                 pTempo = &pSmf->pTempoMap[pSmf->cTempoMap++];
 
                 pTempo->tkTempo = 0;
@@ -261,29 +261,29 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
         }
     }
 
-	if (0 == pSmf->cTempoMap)
-	{
-		DPF(1, "File contains no tempo map! Insert default tempo.");
+    if (0 == pSmf->cTempoMap)
+    {
+        DPF(1, "File contains no tempo map! Insert default tempo.");
 
-		hLocal = LocalAlloc(LHND, sizeof(TEMPOMAPENTRY));
-		if (!hLocal)
-			return SMF_NO_MEMORY;
+        hLocal = LocalAlloc(LHND, sizeof(TEMPOMAPENTRY));
+        if (!hLocal)
+            return SMF_NO_MEMORY;
 
         pSmf->pTempoMap = (PTEMPOMAPENTRY)LocalLock(pSmf->hTempoMap = hLocal);
-		pSmf->cTempoMap = 1;
-		pSmf->cTempoMapAlloc = 1;
+        pSmf->cTempoMap = 1;
+        pSmf->cTempoMapAlloc = 1;
 
-		pSmf->pTempoMap->tkTempo = 0;
+        pSmf->pTempoMap->tkTempo = 0;
         pSmf->pTempoMap->msBase  = 0;
         pSmf->pTempoMap->dwTempo = MIDI_DEFAULT_TEMPO;
-	}
+    }
 
     if (SMF_END_OF_FILE == smfrc || SMF_SUCCESS == smfrc)
     {
         pSmf->tkLength = pSmf->tkPosition;
         smfrc = SMF_SUCCESS;
     }
-        
+
     return smfrc;
 }
 
@@ -311,7 +311,7 @@ SMFRESULT FNLOCAL smfBuildFileIndex(
 * information about one event in the file will be returned in pEvent.
 *
 * Merging data from all tracks into one stream is performed here.
-* 
+*
 * pEvent->tkDelta will contain the tick delta for the event.
 *
 * pEvent->abEvent will contain a description of the event.
@@ -391,13 +391,13 @@ SMFRESULT FNLOCAL smfGetNextEvent(
 
     pTrkFound       = NULL;
     tkMinRelTime    = MAX_TICKS;
-    
+
     for (pTrk = pSmf->rTracks, idxTrack = pSmf->dwTracks; idxTrack--; pTrk++)
     {
         if (pTrk->fdwTrack & SMF_TF_EOT)
             continue;
 
-        
+
         if (!smfGetVDword(pTrk->hpbImage, pTrk->cbLeft, (DWORD BSTACK *)&tkEventDelta))
         {
             DPF(1, "Hit end of track w/o end marker!");
@@ -425,7 +425,7 @@ SMFRESULT FNLOCAL smfGetNextEvent(
     {
         return SMF_REACHED_TKMAX;
     }
-        
+
 
     pTrk->hpbImage += (dwGot = smfGetVDword(pTrk->hpbImage, pTrk->cbLeft, (DWORD BSTACK *)&tkEventDelta));
     pTrk->cbLeft   -= dwGot;
@@ -445,7 +445,7 @@ SMFRESULT FNLOCAL smfGetNextEvent(
     pSmf->tkPosition = pTrk->tkPosition;
 
     bEvent = *pTrk->hpbImage++;
-    
+
     if (MIDI_MSG > bEvent)
     {
         if (0 == pTrk->bRunningStatus)
@@ -465,7 +465,7 @@ SMFRESULT FNLOCAL smfGetNextEvent(
     else if (MIDI_SYSEX > bEvent)
     {
         pTrk->bRunningStatus = bEvent;
-        
+
         dwGotTotal = 2;
         pEvent->abEvent[0] = bEvent;
         pEvent->abEvent[1] = *pTrk->hpbImage++;
@@ -497,7 +497,7 @@ SMFRESULT FNLOCAL smfGetNextEvent(
         {
             return SMF_INVALID_FILE;
         }
-        
+
         if (0 == (dwGot = smfGetVDword(pTrk->hpbImage, pTrk->cbLeft - 2, (DWORD BSTACK *)&cbEvent)))
         {
             return SMF_INVALID_FILE;
@@ -543,11 +543,11 @@ SMFRESULT FNLOCAL smfGetNextEvent(
 * A variable length DWORD stored in a MIDI file contains one or more
 * bytes. Each byte except the last has the high bit set; only the
 * low 7 bits are significant.
-*  
+*
 *****************************************************************************/
 DWORD FNLOCAL smfGetVDword(
-    HPBYTE                  hpbImage,                                
-    DWORD                   dwLeft,                               
+    HPBYTE                  hpbImage,
+    DWORD                   dwLeft,
     DWORD BSTACK *          pDw)
 {
     BYTE                    b;
@@ -555,7 +555,7 @@ DWORD FNLOCAL smfGetVDword(
 
     assert(hpbImage != NULL);
     assert(pDw != NULL);
-    
+
     *pDw = 0;
 
     do
@@ -568,9 +568,10 @@ DWORD FNLOCAL smfGetVDword(
         b = *hpbImage++;
         dwLeft--;
         dwUsed++;
-        
+
         *pDw = (*pDw << 7) | (b & 0x7F);
-    } while (b&0x80);
+    }
+    while (b&0x80);
 
     return dwUsed;
 }

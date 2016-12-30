@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -21,20 +21,22 @@
 // GUID for the preserved keys.
 //
 /* 6a0bde41-6adf-11d7-a6ea-00065b84435c */
-static const GUID GUID_PRESERVEDKEY_ONOFF = { 
+static const GUID GUID_PRESERVEDKEY_ONOFF =
+{
     0x6a0bde41,
     0x6adf,
     0x11d7,
     {0xa6, 0xea, 0x00, 0x06, 0x5b, 0x84, 0x43, 0x5c}
-  };
+};
 
 /* 6a0bde42-6adf-11d7-a6ea-00065b84435c */
-static const GUID GUID_PRESERVEDKEY_F6 = { 
+static const GUID GUID_PRESERVEDKEY_F6 =
+{
     0x6a0bde42,
     0x6adf,
     0x11d7,
     {0xa6, 0xea, 0x00, 0x06, 0x5b, 0x84, 0x43, 0x5c}
-  };
+};
 
 
 //
@@ -75,7 +77,7 @@ BOOL CTextService::_IsKeyEaten(ITfContext *pContext, WPARAM wParam)
     // The candidate list handles the keys through ITfContextKeyEventSink.
     //
     if (_pCandidateList &&
-        _pCandidateList->_IsContextCandidateWindow(pContext))
+            _pCandidateList->_IsContextCandidateWindow(pContext))
     {
         return FALSE;
     }
@@ -83,13 +85,13 @@ BOOL CTextService::_IsKeyEaten(ITfContext *pContext, WPARAM wParam)
     // eat only keys that CKeyHandlerEditSession can hadles.
     switch (wParam)
     {
-        case VK_LEFT:
-        case VK_RIGHT:
-        case VK_RETURN:
-        case VK_SPACE:
-            if (_IsComposing())
-                return TRUE;
-            return FALSE;
+    case VK_LEFT:
+    case VK_RIGHT:
+    case VK_RETURN:
+    case VK_SPACE:
+        if (_IsComposing())
+            return TRUE;
+        return FALSE;
     }
 
     if (wParam >= 'A' && wParam <= 'Z')
@@ -256,21 +258,21 @@ BOOL CTextService::_InitPreservedKey()
         return FALSE;
 
     // register Alt+~ key
-    hr = pKeystrokeMgr->PreserveKey(_tfClientId, 
+    hr = pKeystrokeMgr->PreserveKey(_tfClientId,
                                     GUID_PRESERVEDKEY_ONOFF,
                                     &c_pkeyOnOff0,
                                     c_szPKeyOnOff,
                                     lstrlen(c_szPKeyOnOff));
 
     // register KANJI key
-    hr = pKeystrokeMgr->PreserveKey(_tfClientId, 
+    hr = pKeystrokeMgr->PreserveKey(_tfClientId,
                                     GUID_PRESERVEDKEY_ONOFF,
                                     &c_pkeyOnOff1,
                                     c_szPKeyOnOff,
                                     lstrlen(c_szPKeyOnOff));
 
     // register F6 key
-    hr = pKeystrokeMgr->PreserveKey(_tfClientId, 
+    hr = pKeystrokeMgr->PreserveKey(_tfClientId,
                                     GUID_PRESERVEDKEY_F6,
                                     &c_pkeyF6,
                                     c_szPKeyF6,

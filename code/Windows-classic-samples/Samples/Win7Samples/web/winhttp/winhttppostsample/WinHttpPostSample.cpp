@@ -1,6 +1,6 @@
-// WinHttpPostSample.cpp : Defines the entry point for the console application.
+﻿// WinHttpPostSample.cpp : Defines the entry point for the console application.
 //
-// Copyright (c) Microsoft Corporation. All rights reserved. 
+// Copyright (c) Microsoft Corporation. All rights reserved.
 
 
 #include <tchar.h>
@@ -30,12 +30,15 @@ public:
             delete [] _szAlloc;
     }
 
-    operator LPCWSTR() const { return _szAlloc;}
+    operator LPCWSTR() const
+    {
+        return _szAlloc;
+    }
 
     BOOL Set(LPCWSTR szIn, DWORD dwLen)
     {
         LPWSTR szNew;
-        
+
         szNew = new WCHAR[dwLen+1];
 
         if (szNew == NULL)
@@ -67,10 +70,10 @@ int _tmain(int argc, _TCHAR* argv[])
     DWORD dwTemp;
 
     //
-    //  Make sure we got three or four params 
+    //  Make sure we got three or four params
     //(the first is the executeable name, rest are user params)
     //
-    
+
     if (argc != 4)
     {
         if (argc == 3)
@@ -114,9 +117,9 @@ int _tmain(int argc, _TCHAR* argv[])
     urlComponents.dwUrlPathLength = 1;
 
     if (szProxyUrl != NULL
-        && (!WinHttpCrackUrl(szProxyUrl, 0, 0, &urlComponents)
-            || urlComponents.dwUrlPathLength > 1
-            || urlComponents.nScheme != INTERNET_SCHEME_HTTP))
+            && (!WinHttpCrackUrl(szProxyUrl, 0, 0, &urlComponents)
+                || urlComponents.dwUrlPathLength > 1
+                || urlComponents.nScheme != INTERNET_SCHEME_HTTP))
     {
         printf("\nThere was a problem with the Proxy URL %S."
                "  It should be a http:// url, and should have"
@@ -172,7 +175,7 @@ BOOL GetFileHandleAndSize(LPWSTR szFilename, OUT HANDLE* pHandle, OUT DWORD* pdw
     liSize.LowPart = 0;
     liSize.HighPart = 0;
 
-    hFile = CreateFile(szFilename, GENERIC_READ, FILE_SHARE_READ, NULL, 
+    hFile = CreateFile(szFilename, GENERIC_READ, FILE_SHARE_READ, NULL,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -180,9 +183,9 @@ BOOL GetFileHandleAndSize(LPWSTR szFilename, OUT HANDLE* pHandle, OUT DWORD* pdw
 
     if (!GetFileSizeEx(hFile, &liSize))
         goto done;
-    
-    if (liSize.HighPart != 0 
-        || liSize.LowPart > 0x7FFFFFFF)
+
+    if (liSize.HighPart != 0
+            || liSize.LowPart > 0x7FFFFFFF)
     {
         //  Lets not try to send anything larger than 2 gigs
         SetLastError(ERROR_OPEN_FAILED);
@@ -190,7 +193,7 @@ BOOL GetFileHandleAndSize(LPWSTR szFilename, OUT HANDLE* pHandle, OUT DWORD* pdw
 
     returnValue = TRUE;
 done:
-    
+
     if (returnValue)
     {
         *pHandle = hFile;
@@ -231,7 +234,7 @@ DWORD ChooseAuthScheme( HINTERNET hRequest, DWORD dwSupportedSchemes)
         DWORD dwValue;
         DWORD dwSize = sizeof(dwValue);
         if (WinHttpQueryOption(hRequest, WINHTTP_OPTION_SECURITY_FLAGS, &dwValue,&dwSize)
-            && (dwValue & SECURITY_FLAG_SECURE))
+                && (dwValue & SECURITY_FLAG_SECURE))
         {
             return WINHTTP_AUTH_SCHEME_BASIC;
         }
@@ -257,7 +260,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
     CQuickStringWrap strProxyServer;
     CQuickStringWrap strProxyUsername;
     CQuickStringWrap strProxyPassword;
-    
+
     HANDLE hFile = INVALID_HANDLE_VALUE;
     DWORD dwFileSize;
 
@@ -299,7 +302,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
         urlServerComponents.dwPasswordLength = 0;
 
     if (!strTargetServer.Set(urlServerComponents.lpszHostName, urlServerComponents.dwHostNameLength)
-        || !strTargetPath.Set(urlServerComponents.lpszUrlPath, urlServerComponents.dwUrlPathLength))
+            || !strTargetPath.Set(urlServerComponents.lpszUrlPath, urlServerComponents.dwUrlPathLength))
     {
         goto done;
     }
@@ -307,15 +310,15 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
     //  for the username and password, if they are empty, leave the string pointers as NULL.
     //  This allows for the current process's default credentials to be used.
     if (urlServerComponents.dwUserNameLength != 0
-        && !strTargetUsername.Set(urlServerComponents.lpszUserName, 
-                                  urlServerComponents.dwUserNameLength))
+            && !strTargetUsername.Set(urlServerComponents.lpszUserName,
+                                      urlServerComponents.dwUserNameLength))
     {
         goto done;
     }
 
     if (urlServerComponents.dwPasswordLength != 0
-        && !strTargetPassword.Set(urlServerComponents.lpszPassword, 
-                                  urlServerComponents.dwPasswordLength))
+            && !strTargetPassword.Set(urlServerComponents.lpszPassword,
+                                      urlServerComponents.dwPasswordLength))
     {
         goto done;
     }
@@ -343,22 +346,22 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
         if (urlProxyComponents.lpszPassword == NULL)
             urlProxyComponents.dwPasswordLength = 0;
 
-        //  We do something tricky here, taking from the host beginning 
-        //to the beginning of the path as the strProxyServer.  What this 
+        //  We do something tricky here, taking from the host beginning
+        //to the beginning of the path as the strProxyServer.  What this
         //does, is if you have urls like "http://proxy","http://proxy/",
-        //"http://proxy:8080" is copy them as "proxy","proxy","proxy:8080" 
+        //"http://proxy:8080" is copy them as "proxy","proxy","proxy:8080"
         //respectively.  This makes the port available for WinHttpOpen.
         if (urlProxyComponents.lpszUrlPath == NULL)
         {
             urlProxyComponents.lpszUrlPath = wcschr(urlProxyComponents.lpszHostName, L'/');
             if(urlProxyComponents.lpszUrlPath == NULL)
             {
-                urlProxyComponents.lpszUrlPath = urlProxyComponents.lpszHostName 
-                                         + wcslen(urlProxyComponents.lpszHostName);
+                urlProxyComponents.lpszUrlPath = urlProxyComponents.lpszHostName
+                                                 + wcslen(urlProxyComponents.lpszHostName);
             }
         }
-        if (!strProxyServer.Set(urlProxyComponents.lpszHostName, 
-            (DWORD)(urlProxyComponents.lpszUrlPath - urlProxyComponents.lpszHostName)))
+        if (!strProxyServer.Set(urlProxyComponents.lpszHostName,
+                                (DWORD)(urlProxyComponents.lpszUrlPath - urlProxyComponents.lpszHostName)))
         {
             goto done;
         }
@@ -366,15 +369,15 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
         //  for the username and password, if they are empty, leave the string pointers as NULL.
         //  This allows for the current process's default credentials to be used.
         if (urlProxyComponents.dwUserNameLength != 0
-            && !strProxyUsername.Set(urlProxyComponents.lpszUserName, 
-                                     urlProxyComponents.dwUserNameLength))
+                && !strProxyUsername.Set(urlProxyComponents.lpszUserName,
+                                         urlProxyComponents.dwUserNameLength))
         {
             goto done;
         }
 
         if (urlProxyComponents.dwPasswordLength != 0
-            && !strProxyPassword.Set(urlProxyComponents.lpszPassword, 
-                                     urlProxyComponents.dwPasswordLength))
+                && !strProxyPassword.Set(urlProxyComponents.lpszPassword,
+                                         urlProxyComponents.dwPasswordLength))
         {
             goto done;
         }
@@ -390,7 +393,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
     //
     if (szProxyUrl != NULL)
     {
-        hSession = WinHttpOpen(L"WinHttpPostSample",WINHTTP_ACCESS_TYPE_NAMED_PROXY, 
+        hSession = WinHttpOpen(L"WinHttpPostSample",WINHTTP_ACCESS_TYPE_NAMED_PROXY,
                                strProxyServer, L"<local>", 0);
     }
     else
@@ -398,9 +401,9 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
         hSession = WinHttpOpen(L"WinHttpPostSample",WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
                                NULL,NULL,0);
     }
-    
+
     if (hSession == NULL)
-       goto done;
+        goto done;
 
     //
     //  Open a connection to the target server
@@ -414,7 +417,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
     //  Open the request
     //
     hRequest = WinHttpOpenRequest(hConnect, L"POST", strTargetPath, NULL, NULL, NULL,
-                urlServerComponents.nScheme == INTERNET_SCHEME_HTTPS ? WINHTTP_FLAG_SECURE : 0);
+                                  urlServerComponents.nScheme == INTERNET_SCHEME_HTTPS ? WINHTTP_FLAG_SECURE : 0);
 
     if (hRequest == NULL)
         goto done;
@@ -435,7 +438,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
         //could get into a 407,401,407,401,etc loop otherwise.
         if (dwProxyAuthScheme != 0)
         {
-            if( !WinHttpSetCredentials( hRequest, WINHTTP_AUTH_TARGET_PROXY, 
+            if( !WinHttpSetCredentials( hRequest, WINHTTP_AUTH_TARGET_PROXY,
                                         dwProxyAuthScheme, strProxyUsername,
                                         strProxyPassword, NULL))
             {
@@ -443,7 +446,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
             }
         }
         // Send a request.
-        
+
         if (!WinHttpSendRequest( hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0,
                                  NULL, 0, dwFileSize, 0))
         {
@@ -499,9 +502,9 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
 
         // Check the status code.
         dwTemp = sizeof(dwStatusCode);
-        if (!WinHttpQueryHeaders( hRequest, 
-                        WINHTTP_QUERY_STATUS_CODE| WINHTTP_QUERY_FLAG_NUMBER, 
-                        NULL, &dwStatusCode, &dwTemp, NULL))
+        if (!WinHttpQueryHeaders( hRequest,
+                                  WINHTTP_QUERY_STATUS_CODE| WINHTTP_QUERY_FLAG_NUMBER,
+                                  NULL, &dwStatusCode, &dwTemp, NULL))
         {
             goto done;
         }
@@ -509,7 +512,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
         DWORD dwSupportedSchemes, dwFirstScheme, dwTarget, dwSelectedScheme;
         switch (dwStatusCode)
         {
-        case 200: 
+        case 200:
             // The resource was successfully retrieved.
             // You could use WinHttpReadData to read the contents of the server's response.
             printf("\nThe POST was successfully completed.");
@@ -521,7 +524,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
 
             // Obtain the supported and preferred schemes.
             if( !WinHttpQueryAuthSchemes(hRequest, &dwSupportedSchemes, &dwFirstScheme, &dwTarget))
-                goto done;                                          
+                goto done;
 
             // Set the credentials before resending the request.
             dwSelectedScheme = ChooseAuthScheme(hRequest, dwSupportedSchemes);
@@ -532,7 +535,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
             }
             else
             {
-                if (!WinHttpSetCredentials( hRequest, dwTarget, dwSelectedScheme, 
+                if (!WinHttpSetCredentials( hRequest, dwTarget, dwSelectedScheme,
                                             strTargetUsername, strTargetPassword, NULL))
                 {
                     goto done;
@@ -574,7 +577,7 @@ BOOL WinHttpSamplePost( LPCWSTR szServerUrl, LPCWSTR szFile, LPCWSTR szProxyUrl)
             printf("\nStatus code %d returned.\n", dwStatusCode);
             bDone = TRUE;
         }
-   
+
         // Keep track of the last status code.
         dwLastStatusCode = dwStatusCode;
     }
@@ -586,16 +589,16 @@ done:
 
     if (hRequest != NULL)
         WinHttpCloseHandle(hRequest);
-    
+
     if (hConnect != NULL)
         WinHttpCloseHandle(hConnect);
-    
+
     if (hSession != NULL)
         WinHttpCloseHandle(hSession);
 
     if (hFile != INVALID_HANDLE_VALUE)
         CloseHandle(INVALID_HANDLE_VALUE);
-    
+
     SetLastError(dwTemp);
 
     return returnValue;

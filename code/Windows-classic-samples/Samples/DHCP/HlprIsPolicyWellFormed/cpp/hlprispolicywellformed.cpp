@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -39,18 +39,18 @@ int __cdecl main(void)
     DHCP_POL_LOGIC_OPER exprLogicalOperator         = DhcpLogicalAnd;       // Root operator for the conditions and expressions
     DHCP_POL_ATTR_TYPE  policyAttrType              = DhcpAttrOption;       // Policy attribute type
     DHCP_POL_COMPARATOR conditionOper               = DhcpCompEqual;        // Condition operator
-    
+
     //Helper routine is invoked to create/fill the policy structure.
     dwError=DhcpHlprCreateV4Policy(
-        pwszName,        // Policy Name
-        (dwSubnet == 0), // fGloabalPolicy, if scope is zero, this means it is a global policy else it is for a specific scope
-        dwSubnet,        // Scope
-        0,               // Processing order
-        policyOperator,  // Logical operator, possible values are: DhcpLogicalOr, DhcpLogicalAnd
-        pwszDescription, // Policy description
-        TRUE,            // Policy active or not
-        &pPolicy         // This is the actual structure that holds the policy
-    );
+                pwszName,        // Policy Name
+                (dwSubnet == 0), // fGloabalPolicy, if scope is zero, this means it is a global policy else it is for a specific scope
+                dwSubnet,        // Scope
+                0,               // Processing order
+                policyOperator,  // Logical operator, possible values are: DhcpLogicalOr, DhcpLogicalAnd
+                pwszDescription, // Policy description
+                TRUE,            // Policy active or not
+                &pPolicy         // This is the actual structure that holds the policy
+            );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpHlprCreateV4Policy failed with Error = %d\n", dwError);
@@ -66,31 +66,31 @@ int __cdecl main(void)
     }
     memcpy(pUserClassCondValueInBytes1, szUserClassConditionValue1, dwBytesLength1);
     dwError=DhcpHlprAddV4PolicyExpr(
-        pPolicy,             // DHCP Policy
-        dwParentExpr,        // Parent expression Index
-        exprLogicalOperator, // Root operator for the expression
-        &dwExprIdx           // expression index
-    );
+                pPolicy,             // DHCP Policy
+                dwParentExpr,        // Parent expression Index
+                exprLogicalOperator, // Root operator for the expression
+                &dwExprIdx           // expression index
+            );
     if(ERROR != dwError)
     {
         wprintf(L"DhcpHlprAddV4PolicyExpr failed with Error = %d\n", dwError);
         goto cleanup;
     }
 
-    // DhcpHlprAddV4PolicyCondition is invoked to add/fill the conditions for the policy 
+    // DhcpHlprAddV4PolicyCondition is invoked to add/fill the conditions for the policy
     // This adds condition "UserClass equals "Default BOOTP Class"" to the policy.
     dwError = DhcpHlprAddV4PolicyCondition(
-        pPolicy,                     // Policy where conditions need to be added
-        dwExprIdx,                   // Parent expression index
-        policyAttrType,              // Policy attribute type, possible values can be: DhcpAttrHWAddr, DhcpAttrOption and DhcpAttrSubOption
-        dwOptionId,                  // Option ID
-        dwSubOptionId,               // Sub Option ID
-        NULL,                        // Vendor Name
-        conditionOper,               // Policy comparator operator
-        pUserClassCondValueInBytes1, // Condition values in bytes
-        dwBytesLength1,              // Number of bytes in the condition value
-        &dwConditionIdx              // Condition index
-        );
+                  pPolicy,                     // Policy where conditions need to be added
+                  dwExprIdx,                   // Parent expression index
+                  policyAttrType,              // Policy attribute type, possible values can be: DhcpAttrHWAddr, DhcpAttrOption and DhcpAttrSubOption
+                  dwOptionId,                  // Option ID
+                  dwSubOptionId,               // Sub Option ID
+                  NULL,                        // Vendor Name
+                  conditionOper,               // Policy comparator operator
+                  pUserClassCondValueInBytes1, // Condition values in bytes
+                  dwBytesLength1,              // Number of bytes in the condition value
+                  &dwConditionIdx              // Condition index
+              );
     if(ERROR != dwError)
     {
         wprintf(L"DhcpHlprAddV4PolicyCondition failed with Error = %d\n", dwError);
@@ -105,21 +105,21 @@ int __cdecl main(void)
     }
     memcpy(pUserClassCondValueInBytes2, szUserClassConditionValue2, dwBytesLength2);
 
-    // DhcpHlprAddV4PolicyCondition is invoked to add/fill the conditions for the policy 
+    // DhcpHlprAddV4PolicyCondition is invoked to add/fill the conditions for the policy
     // This will add another condition {UserClass equals "Default Network Access Protection Class"} to the expression.
     // The final expression will be  {"UserClass equals "Default BOOTP Class", "Default Network Access Protection Class"}
     dwError = DhcpHlprAddV4PolicyCondition(
-        pPolicy,                     // Policy where conditions need to be added
-        dwExprIdx,                   // Parent expression index
-        policyAttrType,              // Policy attribute type, possible values can be: DhcpAttrHWAddr, DhcpAttrOption and DhcpAttrSubOption
-        dwOptionId,                  // Option ID
-        dwSubOptionId,               // Sub Option ID
-        NULL,                        // Vendor Name
-        conditionOper,               // Policy comparator operator
-        pUserClassCondValueInBytes2, // Condition values in bytes
-        dwBytesLength2,              // Number of bytes in the condition value
-        &dwConditionIdx              // Condition index
-        );
+                  pPolicy,                     // Policy where conditions need to be added
+                  dwExprIdx,                   // Parent expression index
+                  policyAttrType,              // Policy attribute type, possible values can be: DhcpAttrHWAddr, DhcpAttrOption and DhcpAttrSubOption
+                  dwOptionId,                  // Option ID
+                  dwSubOptionId,               // Sub Option ID
+                  NULL,                        // Vendor Name
+                  conditionOper,               // Policy comparator operator
+                  pUserClassCondValueInBytes2, // Condition values in bytes
+                  dwBytesLength2,              // Number of bytes in the condition value
+                  &dwConditionIdx              // Condition index
+              );
     if(ERROR != dwError)
     {
         wprintf(L"DhcpHlprAddV4PolicyCondition failed with Error = %d\n", dwError);
@@ -138,14 +138,14 @@ cleanup:
         HeapFree(GetProcessHeap(), HEAP_ZERO_MEMORY, pUserClassCondValueInBytes1);
         pUserClassCondValueInBytes1 = NULL;
     }
-    
+
     // Frees the variable holding the condition values in bytes
     if(NULL != pUserClassCondValueInBytes2)
     {
         HeapFree(GetProcessHeap(), HEAP_ZERO_MEMORY, pUserClassCondValueInBytes2);
         pUserClassCondValueInBytes2 = NULL;
     }
-    
+
     // Frees the policy structure
     if(NULL != pPolicy)
     {

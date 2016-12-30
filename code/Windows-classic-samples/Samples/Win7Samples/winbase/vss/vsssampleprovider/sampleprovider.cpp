@@ -1,4 +1,4 @@
-/*--
+﻿/*--
 
 Copyright (C) Microsoft Corporation, 2003
 
@@ -27,7 +27,7 @@ extern WCHAR *g_wszProviderName;
 // CSampleProvider ctor and dtor
 
 CSampleProvider::CSampleProvider(
-    )
+)
     : m_state( VSS_SS_UNKNOWN )
 {
     TRACE_FUNCTION();
@@ -37,7 +37,7 @@ CSampleProvider::CSampleProvider(
 }
 
 CSampleProvider::~CSampleProvider(
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -47,7 +47,7 @@ CSampleProvider::~CSampleProvider(
     // before releasing the interface, but this is harmless and
     // provides extra safety.
     //
-    OnUnload(TRUE); 
+    OnUnload(TRUE);
 
     DeleteCriticalSection( &m_cs );
 }
@@ -57,7 +57,7 @@ CSampleProvider::~CSampleProvider(
 void
 CSampleProvider::FreeLunInfo(
     VDS_LUN_INFORMATION& lun
-    )
+)
 {
     SAFE_COFREE( lun.m_szVendorId );
     SAFE_COFREE( lun.m_szProductId );
@@ -65,12 +65,14 @@ CSampleProvider::FreeLunInfo(
     SAFE_COFREE( lun.m_szSerialNumber );
 
     VDS_STORAGE_DEVICE_ID_DESCRIPTOR& desc = lun.m_deviceIdDescriptor;
-    for (ULONG i = 0; i < desc.m_cIdentifiers; ++i) {
+    for (ULONG i = 0; i < desc.m_cIdentifiers; ++i)
+    {
         SAFE_COFREE( desc.m_rgIdentifiers[i].m_rgbIdentifier );
     }
     SAFE_COFREE( desc.m_rgIdentifiers );
 
-    for (ULONG i = 0; i < lun.m_cInterconnects; ++i) {
+    for (ULONG i = 0; i < lun.m_cInterconnects; ++i)
+    {
         VDS_INTERCONNECT& inter = lun.m_rgInterconnects[i];
         SAFE_COFREE( inter.m_pbPort );
         SAFE_COFREE( inter.m_pbAddress );
@@ -82,7 +84,7 @@ void
 CSampleProvider::CopyBasicLunInfo(
     VDS_LUN_INFORMATION& lunDst,
     VDS_LUN_INFORMATION& lunSrc
-    )
+)
 {
     ZeroMemory(&lunDst,sizeof(VDS_LUN_INFORMATION));
 
@@ -107,7 +109,7 @@ CSampleProvider::CopyBasicLunInfo(
 void
 CSampleProvider::DisplayLunInfo(
     VDS_LUN_INFORMATION& lun
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -125,17 +127,19 @@ CSampleProvider::DisplayLunInfo(
 //
 void
 CSampleProvider::DeleteAbortedSnapshots(
-    )
+)
 {
     TRACE_FUNCTION();
 
     HRESULT hr = S_OK;
     SnapshotInfoVector::iterator i;
-    
+
     AutoLock lock(m_cs);
 
-    for (i = m_vSnapshotInfo.begin(); i != m_vSnapshotInfo.end(); ++i) {
-        try {
+    for (i = m_vSnapshotInfo.begin(); i != m_vSnapshotInfo.end(); ++i)
+    {
+        try
+        {
             //
             // We ignore errors here, since the drive may not yet have even
             // been created.
@@ -145,7 +149,7 @@ CSampleProvider::DeleteAbortedSnapshots(
             std::wstring fileName = SnapshotImageFile(i->snapLunId);
             int retry = 0;
             while (DeleteFile(fileName.c_str()) == FALSE &&
-                   GetLastError() == ERROR_SHARING_VIOLATION && ++ retry < 5)
+                    GetLastError() == ERROR_SHARING_VIOLATION && ++ retry < 5)
             {
                 //
                 // Sleep 2 seconds to wait for the virtual storage driver to
@@ -156,7 +160,9 @@ CSampleProvider::DeleteAbortedSnapshots(
                 //
                 Sleep(2000);
             }
-        } catch (std::bad_alloc) {
+        }
+        catch (std::bad_alloc)
+        {
             // Ignore out of memory errors, just do best effort to delete
             // snapshots.
         }
@@ -169,11 +175,13 @@ BOOL
 CSampleProvider::FindSnapId(
     GUID origLunId,
     GUID& snapLunId
-    )
+)
 {
     SnapshotInfoVector::iterator i;
-    for (i = m_vSnapshotInfo.begin(); i != m_vSnapshotInfo.end(); ++i) {
-        if (IsEqualGUID(i->origLunId, origLunId) == TRUE) {
+    for (i = m_vSnapshotInfo.begin(); i != m_vSnapshotInfo.end(); ++i)
+    {
+        if (IsEqualGUID(i->origLunId, origLunId) == TRUE)
+        {
             snapLunId = i->snapLunId;
             return TRUE;
         }
@@ -186,11 +194,13 @@ BOOL
 CSampleProvider::FindOrigId(
     GUID snapLunId,
     GUID& origLunId
-    )
+)
 {
     SnapshotInfoVector::iterator i;
-    for (i = m_vSnapshotInfo.begin(); i != m_vSnapshotInfo.end(); ++i) {
-        if (IsEqualGUID(i->snapLunId, snapLunId) == TRUE) {
+    for (i = m_vSnapshotInfo.begin(); i != m_vSnapshotInfo.end(); ++i)
+    {
+        if (IsEqualGUID(i->snapLunId, snapLunId) == TRUE)
+        {
             origLunId = i->origLunId;
             return TRUE;
         }
@@ -202,16 +212,19 @@ CSampleProvider::FindOrigId(
 std::wstring
 CSampleProvider::SnapshotImageFile(
     GUID snapLunId
-    )
+)
 {
     HRESULT hr = S_OK;
     std::wstring sysDrive;
     std::wstring envName(L"SystemDrive");
 
     hr = GetEnvVar(envName, sysDrive);
-    if (SUCCEEDED( hr )) {
+    if (SUCCEEDED( hr ))
+    {
         return sysDrive + std::wstring(L"\\") + GuidToWString(snapLunId) + L".image";
-    } else {
+    }
+    else
+    {
         return std::wstring(L"C:\\") + GuidToWString(snapLunId) + L".image";
     }
 }
@@ -225,16 +238,16 @@ HRESULT CSampleProvider::CreateVirtualDrive (
     LARGE_INTEGER fileSize,
     VDS_STORAGE_DEVICE_ID_DESCRIPTOR& vdsDesc,
     VDS_STORAGE_IDENTIFIER& vdsStorId
-    )
+)
 {
     TRACE_FUNCTION();
     //
     // Calcualte the size of storageId descriptor,
     // only count the first storage identifier (see IsLunSupported)
     //
-    size_t sizeStorageIdDesc = 
-        sizeof(STORAGE_DEVICE_ID_DESCRIPTOR) + 
-        sizeof(STORAGE_IDENTIFIER) + 
+    size_t sizeStorageIdDesc =
+        sizeof(STORAGE_DEVICE_ID_DESCRIPTOR) +
+        sizeof(STORAGE_IDENTIFIER) +
         vdsStorId.m_cbIdentifier;
 
     //
@@ -244,8 +257,8 @@ HRESULT CSampleProvider::CreateVirtualDrive (
     std::wstring strImagePath(L"\\??\\" + fileName);
 
     size_t sizeImagePath = strImagePath.size() * sizeof(WCHAR);
-    size_t sizeImagePathAligned = (sizeImagePath % sizeof(ULONG) == 0) ? 
-        sizeImagePath : (sizeImagePath + sizeImagePath % sizeof(ULONG));
+    size_t sizeImagePathAligned = (sizeImagePath % sizeof(ULONG) == 0) ?
+                                  sizeImagePath : (sizeImagePath + sizeImagePath % sizeof(ULONG));
 
     sizeStruct += sizeImagePathAligned;
     sizeStruct += sizeStorageIdDesc;
@@ -268,8 +281,8 @@ HRESULT CSampleProvider::CreateVirtualDrive (
 
     //
     // Copy storageId descriptor and storage identifiers
-    // 
-    STORAGE_DEVICE_ID_DESCRIPTOR* pDesc = 
+    //
+    STORAGE_DEVICE_ID_DESCRIPTOR* pDesc =
         reinterpret_cast<STORAGE_DEVICE_ID_DESCRIPTOR*>(pInfoDrive->Buffer + pInfoDrive->StorageDeviceIdDescOffset);
     pDesc->Version = vdsDesc.m_version;
     pDesc->Size = (ULONG)sizeStorageIdDesc;
@@ -301,14 +314,14 @@ HRESULT CSampleProvider::CreateVirtualDrive (
 // The 1st storageId = L"VSS Sample HW Provider" + 16 bytes' GUID
 //
 
-BOOL CSampleProvider::IsLunSupported ( 
+BOOL CSampleProvider::IsLunSupported (
     VDS_LUN_INFORMATION& LunInfo
-    )
+)
 {
     TRACE_FUNCTION();
     if( strcmp(LunInfo.m_szVendorId, "Microsoft Corporation") != 0 ||
-        strcmp(LunInfo.m_szProductId, "VIRTUALSTORAGE") !=0 
-        )
+            strcmp(LunInfo.m_szProductId, "VIRTUALSTORAGE") !=0
+      )
         return FALSE;
 
     VDS_STORAGE_DEVICE_ID_DESCRIPTOR& desc = LunInfo.m_deviceIdDescriptor;
@@ -342,22 +355,25 @@ CSampleProvider::AreLunsSupported(
     IN VSS_PWSZ* /*rgwszDevices*/,
     IN OUT VDS_LUN_INFORMATION* rgLunInformation,
     OUT BOOL* pbIsSupported
-    )
+)
 {
     TRACE_FUNCTION();
 
     HRESULT hr = S_OK;
 
     AutoLock lock( m_cs );
-    
-    try {
+
+    try
+    {
 
         *pbIsSupported = FALSE;
 
-        for (int i = 0; i < lLunCount; i++) {
+        for (int i = 0; i < lLunCount; i++)
+        {
             GUID gId;
             hr = AnsiToGuid(rgLunInformation[i].m_szSerialNumber, gId);
-            switch (hr) {
+            switch (hr)
+            {
             case S_OK:
                 break;
 
@@ -366,7 +382,7 @@ CSampleProvider::AreLunsSupported(
                 // Allow out of memory errors to float up
                 //
                 throw hr;
-                    
+
             default:
                 //
                 // An invalid GUID isn't a failure, it just means that
@@ -386,45 +402,52 @@ CSampleProvider::AreLunsSupported(
             //
             VstorInterface::VirtualBus::STORAGE_INFORMATION storageInfo;
             HRESULT hrv = m_vbus.QueryStorageInformation(gId, storageInfo);
-            if (hrv != S_OK) {
-            //Talked to faisala and dineshh, AreLunsSupported actually means "Are the LUNs taken care of by this provider"
-            //So we will also need to return true if it is one of the snapshot LUNs created by us.
-        
-                std::wstring wstrSnapfileName = SnapshotImageFile(gId);	
+            if (hrv != S_OK)
+            {
+                //Talked to faisala and dineshh, AreLunsSupported actually means "Are the LUNs taken care of by this provider"
+                //So we will also need to return true if it is one of the snapshot LUNs created by us.
+
+                std::wstring wstrSnapfileName = SnapshotImageFile(gId);
                 HANDLE hFile = CreateFile( wstrSnapfileName.c_str(),
-                                GENERIC_READ,
-                                FILE_SHARE_READ,
-                                NULL,
-                                OPEN_EXISTING,
-                                FILE_ATTRIBUTE_NORMAL,
-                                NULL );
-                if (hFile == INVALID_HANDLE_VALUE) {
-                     hr = E_FAIL;               
-                     CloseHandle(hFile);
-                     goto done;
+                                           GENERIC_READ,
+                                           FILE_SHARE_READ,
+                                           NULL,
+                                           OPEN_EXISTING,
+                                           FILE_ATTRIBUTE_NORMAL,
+                                           NULL );
+                if (hFile == INVALID_HANDLE_VALUE)
+                {
+                    hr = E_FAIL;
+                    CloseHandle(hFile);
+                    goto done;
                 }
                 CloseHandle(hFile);
             }
 
-            if ( !IsLunSupported(rgLunInformation[i]) ) {
+            if ( !IsLunSupported(rgLunInformation[i]) )
+            {
                 goto done;
             }
 
             //
-            // Fudge the bus type to VDSBusTypeScsi 
-            // 
+            // Fudge the bus type to VDSBusTypeScsi
+            //
             rgLunInformation[i].m_BusType = VDSBusTypeScsi;
         }
 
         *pbIsSupported = TRUE;
 
-    } catch(HRESULT hre) {
+    }
+    catch(HRESULT hre)
+    {
         hr = hre;
-    } catch(std::bad_alloc) {
+    }
+    catch(std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
- done:
+done:
     TraceMsg(L"returning 0x%08x\n", hr);
     return hr;
 }
@@ -435,16 +458,18 @@ CSampleProvider::GetTargetLuns(
     IN VSS_PWSZ* /*rgwszDevices*/,
     IN VDS_LUN_INFORMATION* rgSourceLuns,
     IN OUT VDS_LUN_INFORMATION* rgDestinationLuns
-    )
+)
 {
     TRACE_FUNCTION();
 
     HRESULT hr = S_OK;
 
     AutoLock lock( m_cs );
-    
-    try {
-        for (LONG i = 0; i < lLunCount; i++) {
+
+    try
+    {
+        for (LONG i = 0; i < lLunCount; i++)
+        {
             VDS_LUN_INFORMATION& lunSource = rgSourceLuns[i];
             VDS_LUN_INFORMATION& lunTarget = rgDestinationLuns[i];
 
@@ -459,8 +484,8 @@ CSampleProvider::GetTargetLuns(
             lunDesc.m_version = 1;
             lunDesc.m_cIdentifiers = 1;
             lunDesc.m_rgIdentifiers = reinterpret_cast<VDS_STORAGE_IDENTIFIER*>
-                        (CoTaskMemAlloc(sizeof(VDS_STORAGE_IDENTIFIER)));
-            
+                                      (CoTaskMemAlloc(sizeof(VDS_STORAGE_IDENTIFIER)));
+
             if( lunDesc.m_rgIdentifiers == NULL )
                 throw E_OUTOFMEMORY;
 
@@ -473,23 +498,24 @@ CSampleProvider::GetTargetLuns(
             ULONG cbIdentifier = (ULONG)(wcslen(g_wszProviderName)*sizeof(WCHAR) + sizeof(GUID));
             storageId.m_cbIdentifier = cbIdentifier;
             storageId.m_rgbIdentifier = reinterpret_cast<BYTE*>(CoTaskMemAlloc(cbIdentifier));
-            
+
             if( storageId.m_rgbIdentifier == NULL )
                 throw E_OUTOFMEMORY;
-            
-            memcpy(storageId.m_rgbIdentifier, g_wszProviderName, 
-                wcslen(g_wszProviderName) * sizeof(WCHAR));
-            
+
+            memcpy(storageId.m_rgbIdentifier, g_wszProviderName,
+                   wcslen(g_wszProviderName) * sizeof(WCHAR));
+
             GUID storageGuid;
             CoCreateGuid(&storageGuid);
             memcpy(storageId.m_rgbIdentifier + wcslen(g_wszProviderName)*sizeof(WCHAR),
-                    &storageGuid, sizeof(GUID));
+                   &storageGuid, sizeof(GUID));
 
 
 
             GUID origId, snapId;
             hr = AnsiToGuid(lunSource.m_szSerialNumber, origId);
-            switch (hr) {
+            switch (hr)
+            {
             case S_OK:
                 break;
 
@@ -505,7 +531,7 @@ CSampleProvider::GetTargetLuns(
                 // so log it and return VSS_E_PROVIDER_VETO
                 //
                 LogEvent(L"GetTargetLuns called with invalid source LUN ('%S')",
-                                 lunSource.m_szSerialNumber);
+                         lunSource.m_szSerialNumber);
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
             }
 
@@ -513,9 +539,10 @@ CSampleProvider::GetTargetLuns(
             // Find the snapshot GUID associated with this LUN
             //
             BOOL b = FindSnapId(origId, snapId);
-            if (b == FALSE) {
+            if (b == FALSE)
+            {
                 LogEvent(L"GetTargetLuns called with unknown LUN ('%S')",
-                                 lunSource.m_szSerialNumber);
+                         lunSource.m_szSerialNumber);
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
             }
 
@@ -523,14 +550,18 @@ CSampleProvider::GetTargetLuns(
             lunTarget.m_szSerialNumber = GuidToAnsi(snapId);
 
             //
-            // Fudge the bus type to VDSBusTypeScsi 
-            // 
+            // Fudge the bus type to VDSBusTypeScsi
+            //
             lunTarget.m_BusType = VDSBusTypeScsi;
 
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
@@ -542,7 +573,7 @@ STDMETHODIMP
 CSampleProvider::LocateLuns(
     IN LONG lLunCount,
     IN VDS_LUN_INFORMATION* rgSourceLuns
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -550,18 +581,21 @@ CSampleProvider::LocateLuns(
 
     AutoLock lock( m_cs );
 
-    try {
+    try
+    {
         // Map for keeping track of loaded virtual storage drives.
         // This is so that we don't load the same drive twice.
         // Using map for faster lookups.
         std::map<std::wstring, bool> loadedDriveMap;
-        
-        for (LONG i = 0; i < lLunCount; i++) {
+
+        for (LONG i = 0; i < lLunCount; i++)
+        {
             VDS_LUN_INFORMATION& lunSource = rgSourceLuns[i];
 
             GUID snapId;
             hr = AnsiToGuid(lunSource.m_szSerialNumber, snapId);
-            switch (hr) {
+            switch (hr)
+            {
             case S_OK:
                 break;
 
@@ -593,13 +627,14 @@ CSampleProvider::LocateLuns(
                 continue;
 
             HANDLE hFile = CreateFile( fileName.c_str(),
-                                GENERIC_READ,
-                                FILE_SHARE_READ,
-                                NULL,
-                                OPEN_EXISTING,
-                                FILE_ATTRIBUTE_NORMAL,
-                                NULL );
-            if (hFile == INVALID_HANDLE_VALUE) {
+                                       GENERIC_READ,
+                                       FILE_SHARE_READ,
+                                       NULL,
+                                       OPEN_EXISTING,
+                                       FILE_ATTRIBUTE_NORMAL,
+                                       NULL );
+            if (hFile == INVALID_HANDLE_VALUE)
+            {
                 DWORD err = GetLastError();
                 LogEvent( L"Error opening image file '%s' (%d)",
                           fileName.c_str(),
@@ -609,7 +644,8 @@ CSampleProvider::LocateLuns(
 
             LARGE_INTEGER fileSize;
             BOOL br = GetFileSizeEx( hFile, &fileSize );
-            if (br == FALSE) {
+            if (br == FALSE)
+            {
                 DWORD err = GetLastError();
                 LogEvent( L"Error getting size of image file '%s' (%d)",
                           fileName.c_str(),
@@ -624,12 +660,14 @@ CSampleProvider::LocateLuns(
             // Validate the input vds_lun_info
             //
             VDS_STORAGE_DEVICE_ID_DESCRIPTOR& vdsDesc = lunSource.m_deviceIdDescriptor;
-            if(vdsDesc.m_cIdentifiers==0 || vdsDesc.m_rgIdentifiers==NULL) {
+            if(vdsDesc.m_cIdentifiers==0 || vdsDesc.m_rgIdentifiers==NULL)
+            {
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
             }
 
             VDS_STORAGE_IDENTIFIER& vdsStorId = vdsDesc.m_rgIdentifiers[0];
-            if( vdsStorId.m_cbIdentifier==0 || vdsStorId.m_rgbIdentifier==NULL ) {
+            if( vdsStorId.m_cbIdentifier==0 || vdsStorId.m_rgbIdentifier==NULL )
+            {
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
             }
 
@@ -638,7 +676,8 @@ CSampleProvider::LocateLuns(
             //
             hr = CreateVirtualDrive(snapId, fileName, fileSize, vdsDesc, vdsStorId);
 
-            switch (hr) {
+            switch (hr)
+            {
             case S_OK:
                 // Record the fact that we loaded this vstor file.
                 loadedDriveMap[fileName] = true;
@@ -651,9 +690,13 @@ CSampleProvider::LocateLuns(
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
             }
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
@@ -666,7 +709,7 @@ CSampleProvider::FillInLunInfo(
     IN VSS_PWSZ /*wszDeviceName*/,
     IN OUT VDS_LUN_INFORMATION* pLunInformation,
     OUT BOOL* pbIsSupported
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -674,7 +717,8 @@ CSampleProvider::FillInLunInfo(
 
     AutoLock lock( m_cs );
 
-    try {
+    try
+    {
         //
         // We see if the new LUN is one of ours, and modify the
         // m_szSerialNumber field to match the GUID format that we set
@@ -688,13 +732,15 @@ CSampleProvider::FillInLunInfo(
         //
         // We only fill LUN's info if it is one of ours.
         //
-        if ( !IsLunSupported(*pLunInformation) ) {
+        if ( !IsLunSupported(*pLunInformation) )
+        {
             goto done;
         }
 
         GUID snapId;
         hr = AnsiToGuid(pLunInformation->m_szSerialNumber, snapId);
-        switch (hr) {
+        switch (hr)
+        {
         case S_OK:
             break;
 
@@ -717,7 +763,8 @@ CSampleProvider::FillInLunInfo(
         //
         VstorInterface::VirtualBus::STORAGE_INFORMATION storageInfo;
         HRESULT hrv = m_vbus.QueryStorageInformation(snapId, storageInfo);
-        if (hrv != S_OK) {
+        if (hrv != S_OK)
+        {
             goto done;
         }
 
@@ -726,17 +773,21 @@ CSampleProvider::FillInLunInfo(
         *pbIsSupported = TRUE;
 
         //
-        // Fudge the bus type to VDSBusTypeScsi 
-        // 
+        // Fudge the bus type to VDSBusTypeScsi
+        //
         pLunInformation->m_BusType = VDSBusTypeScsi;
 
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
- done:
+done:
     TraceMsg(L"returning 0x%08x\n", hr);
     return hr;
 }
@@ -745,7 +796,7 @@ STDMETHODIMP
 CSampleProvider::OnLunEmpty(
     IN VSS_PWSZ /*wszDevice*/,
     IN VDS_LUN_INFORMATION* pInfo
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -753,10 +804,12 @@ CSampleProvider::OnLunEmpty(
 
     AutoLock lock( m_cs );
 
-    try {
+    try
+    {
         GUID snapId;
         hr = AnsiToGuid(pInfo->m_szSerialNumber, snapId);
-        switch (hr) {
+        switch (hr)
+        {
         case S_OK:
             break;
 
@@ -769,25 +822,27 @@ CSampleProvider::OnLunEmpty(
             // so log it and return VSS_E_PROVIDER_VETO
             //
             LogEvent(L"OnLunEmpty called with invalid LUN ('%S')",
-                             pInfo->m_szSerialNumber);
+                     pInfo->m_szSerialNumber);
             throw (HRESULT) VSS_E_PROVIDER_VETO;
         }
 
         hr = m_vbus.RemoveDrive(snapId, false);
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
             //
             // If we can't delete the LUN, log and return VSS_E_PROVIDER_VETO
             //
             LogEvent(L"RemoveDrive for '%S' failed with 0x%08x",
-                             pInfo->m_szSerialNumber,
-                             hr);
+                     pInfo->m_szSerialNumber,
+                     hr);
             throw (HRESULT) VSS_E_PROVIDER_VETO;
         }
 
         std::wstring fileName = SnapshotImageFile(snapId);
 
         int i = 0;
-        while (DeleteFile(fileName.c_str()) == FALSE) {
+        while (DeleteFile(fileName.c_str()) == FALSE)
+        {
             DWORD err = GetLastError();
             if(err == ERROR_SHARING_VIOLATION && ++ i < 5)
             {
@@ -804,13 +859,17 @@ CSampleProvider::OnLunEmpty(
             // If we can't delete the image file, log and return error
             //
             LogEvent(L"DeleteFile for '%S' failed (%d)",
-                             pInfo->m_szSerialNumber,
-                             err);
+                     pInfo->m_szSerialNumber,
+                     err);
             throw (HRESULT) VSS_E_PROVIDER_VETO;
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
@@ -826,7 +885,7 @@ CSampleProvider::BeginPrepareSnapshot(
     IN LONG lLunCount,
     IN OUT VSS_PWSZ* /*rgwszDevices*/,
     IN VDS_LUN_INFORMATION* rgLunInformation
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -834,15 +893,18 @@ CSampleProvider::BeginPrepareSnapshot(
 
     AutoLock lock( m_cs );
 
-    try {
-        switch (m_state) {
+    try
+    {
+        switch (m_state)
+        {
         case VSS_SS_PREPARING:
             //
             // If we get a new snapshot set id, then we are starting a
             // new snapshot and we should delete any uncompleted
             // snapshots.  Otherwise continue to add LUNs to the set.
             //
-            if (!IsEqualGUID(SnapshotSetId, m_setId)) {
+            if (!IsEqualGUID(SnapshotSetId, m_setId))
+            {
                 DeleteAbortedSnapshots();
             }
             break;
@@ -867,12 +929,14 @@ CSampleProvider::BeginPrepareSnapshot(
             break;
         }
 
-        for (LONG i = 0; i < lLunCount; i++) {
+        for (LONG i = 0; i < lLunCount; i++)
+        {
             GUID origId;
             GUID snapId;
 
             hr = AnsiToGuid(rgLunInformation[i].m_szSerialNumber, origId);
-            switch (hr) {
+            switch (hr)
+            {
             case S_OK:
                 break;
 
@@ -885,14 +949,15 @@ CSampleProvider::BeginPrepareSnapshot(
                 // so log it and return VSS_E_PROVIDER_VETO
                 //
                 LogEvent(L"BeginPrepareSnapshot called with invalid LUN ('%S')",
-                                 rgLunInformation[i].m_szSerialNumber);
+                         rgLunInformation[i].m_szSerialNumber);
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
             }
 
             //
             // If we already have this LUN included in this snapshot set, skip it
             //
-            if (FindSnapId(origId, snapId)) {
+            if (FindSnapId(origId, snapId))
+            {
                 continue;
             }
 
@@ -914,13 +979,18 @@ CSampleProvider::BeginPrepareSnapshot(
             m_state = VSS_SS_PREPARING;
             m_setId = SnapshotSetId;
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
-    if (hr != S_OK) {
+    if (hr != S_OK)
+    {
         DeleteAbortedSnapshots();
         m_state = VSS_SS_ABORTED;
     }
@@ -936,7 +1006,7 @@ CSampleProvider::BeginPrepareSnapshot(
 STDMETHODIMP
 CSampleProvider::EndPrepareSnapshots(
     IN VSS_ID SnapshotSetId
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -944,13 +1014,18 @@ CSampleProvider::EndPrepareSnapshots(
 
     AutoLock lock( m_cs );
 
-    try {
-        switch (m_state) {
+    try
+    {
+        switch (m_state)
+        {
         case VSS_SS_PREPARING:
-            if (!IsEqualGUID(SnapshotSetId, m_setId)) {
+            if (!IsEqualGUID(SnapshotSetId, m_setId))
+            {
                 LogEvent(L"Unexpected snapshot set ID during EndPrepareSnapshots");
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
-            } else {
+            }
+            else
+            {
                 m_state = VSS_SS_PREPARED;
             }
             break;
@@ -959,13 +1034,18 @@ CSampleProvider::EndPrepareSnapshots(
             LogEvent(L"EndPrepareSnapshots called out of order");
             throw (HRESULT) VSS_E_PROVIDER_VETO;
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc()) {
+    }
+    catch (std::bad_alloc())
+    {
         hr = E_OUTOFMEMORY;
     }
 
-    if (hr != S_OK) {
+    if (hr != S_OK)
+    {
         DeleteAbortedSnapshots();
         m_state = VSS_SS_ABORTED;
     }
@@ -977,7 +1057,7 @@ CSampleProvider::EndPrepareSnapshots(
 STDMETHODIMP
 CSampleProvider::PreCommitSnapshots(
     IN VSS_ID SnapshotSetId
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -985,13 +1065,18 @@ CSampleProvider::PreCommitSnapshots(
 
     AutoLock lock( m_cs );
 
-    try {
-        switch (m_state) {
+    try
+    {
+        switch (m_state)
+        {
         case VSS_SS_PREPARED:
-            if (!IsEqualGUID(SnapshotSetId, m_setId)) {
+            if (!IsEqualGUID(SnapshotSetId, m_setId))
+            {
                 LogEvent(L"Unexpected snapshot set ID during PreCommitSnapshots");
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
-            } else {
+            }
+            else
+            {
                 m_state = VSS_SS_PRECOMMITTED;
             }
             break;
@@ -1000,13 +1085,18 @@ CSampleProvider::PreCommitSnapshots(
             LogEvent(L"PreCommitSnapshots called out of order");
             throw (HRESULT) VSS_E_PROVIDER_VETO;
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
-    if (hr != S_OK) {
+    if (hr != S_OK)
+    {
         DeleteAbortedSnapshots();
         m_state = VSS_SS_ABORTED;
     }
@@ -1018,7 +1108,7 @@ CSampleProvider::PreCommitSnapshots(
 STDMETHODIMP
 CSampleProvider::CommitSnapshots(
     IN VSS_ID SnapshotSetId
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -1026,18 +1116,24 @@ CSampleProvider::CommitSnapshots(
 
     AutoLock lock( m_cs );
 
-    try {
-        switch (m_state) {
+    try
+    {
+        switch (m_state)
+        {
         case VSS_SS_PRECOMMITTED:
-            if (!IsEqualGUID(SnapshotSetId, m_setId)) {
+            if (!IsEqualGUID(SnapshotSetId, m_setId))
+            {
                 LogEvent(L"Unexpected snapshot set ID during CommitSnapshots");
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
-            } else {
+            }
+            else
+            {
                 //
                 // Actually perform the snapshot for each LUN in the set
                 //
                 SnapshotInfoVector::iterator i;
-                for (i = m_vSnapshotInfo.begin(); i != m_vSnapshotInfo.end(); ++i) {
+                for (i = m_vSnapshotInfo.begin(); i != m_vSnapshotInfo.end(); ++i)
+                {
                     //
                     // Find the image file associated with the
                     // original id and "commit" the snapshot by
@@ -1057,19 +1153,21 @@ CSampleProvider::CommitSnapshots(
                     WCHAR origImage[256];
 
                     hr = m_vbus.QueryMountedImage(i->origLunId, origImage, 256);
-                    if (FAILED(hr)) {
+                    if (FAILED(hr))
+                    {
                         LogEvent(L"Unable to find image for LUN during CommitSnapshots");
                         throw (HRESULT) VSS_E_PROVIDER_VETO;
                     }
-                    
+
                     std::wstring snapImage = SnapshotImageFile(i->snapLunId);
                     BOOL br = CopyFile(origImage, snapImage.c_str(), FALSE);
-                    if (br == FALSE) {
+                    if (br == FALSE)
+                    {
                         DWORD err = GetLastError();
                         LogEvent( L"Error copying image file from '%s' to '%s' (%d)",
-                                          origImage,
-                                          snapImage.c_str(),
-                                          err );
+                                  origImage,
+                                  snapImage.c_str(),
+                                  err );
                         throw (HRESULT) VSS_E_PROVIDER_VETO;
                     }
                 }
@@ -1080,13 +1178,18 @@ CSampleProvider::CommitSnapshots(
             LogEvent(L"CommitSnapshots called out of order");
             throw (HRESULT) VSS_E_PROVIDER_VETO;
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
-    if (hr != S_OK) {
+    if (hr != S_OK)
+    {
         DeleteAbortedSnapshots();
         m_state = VSS_SS_ABORTED;
     }
@@ -1099,7 +1202,7 @@ STDMETHODIMP
 CSampleProvider::PostCommitSnapshots(
     IN VSS_ID SnapshotSetId,
     IN LONG /*lSnapshotsCount*/
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -1107,13 +1210,18 @@ CSampleProvider::PostCommitSnapshots(
 
     AutoLock lock( m_cs );
 
-    try {
-        switch (m_state) {
+    try
+    {
+        switch (m_state)
+        {
         case VSS_SS_COMMITTED:
-            if (!IsEqualGUID(SnapshotSetId, m_setId)) {
+            if (!IsEqualGUID(SnapshotSetId, m_setId))
+            {
                 LogEvent(L"Unexpected snapshot set ID during PostCommitSnapshots");
                 throw (HRESULT) VSS_E_PROVIDER_VETO;
-            } else {
+            }
+            else
+            {
                 m_state = VSS_SS_CREATED;
             }
             break;
@@ -1122,13 +1230,18 @@ CSampleProvider::PostCommitSnapshots(
             LogEvent(L"PostCommitSnapshots called out of order");
             throw (HRESULT) VSS_E_PROVIDER_VETO;
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
-    if (hr != S_OK) {
+    if (hr != S_OK)
+    {
         DeleteAbortedSnapshots();
         m_state = VSS_SS_ABORTED;
     }
@@ -1144,7 +1257,7 @@ CSampleProvider::PostCommitSnapshots(
 STDMETHODIMP
 CSampleProvider::PreFinalCommitSnapshots(
     IN VSS_ID /*SnapshotSetId*/
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -1156,7 +1269,7 @@ CSampleProvider::PreFinalCommitSnapshots(
 STDMETHODIMP
 CSampleProvider::PostFinalCommitSnapshots(
     IN VSS_ID /*SnapshotSetId*/
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -1168,7 +1281,7 @@ CSampleProvider::PostFinalCommitSnapshots(
 STDMETHODIMP
 CSampleProvider::AbortSnapshots(
     IN VSS_ID /*SnapshotSetId*/
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -1176,8 +1289,10 @@ CSampleProvider::AbortSnapshots(
 
     AutoLock lock( m_cs );
 
-    try {
-        switch (m_state) {
+    try
+    {
+        switch (m_state)
+        {
         case VSS_SS_CREATED:
             //
             // Aborts are ignored after create
@@ -1190,13 +1305,18 @@ CSampleProvider::AbortSnapshots(
             m_state = VSS_SS_ABORTED;
             break;
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
-    if (hr != S_OK) {
+    if (hr != S_OK)
+    {
         m_state = VSS_SS_ABORTED;
     }
 
@@ -1211,7 +1331,7 @@ CSampleProvider::AbortSnapshots(
 STDMETHODIMP
 CSampleProvider::OnLoad(
     IN IUnknown *
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -1221,7 +1341,7 @@ CSampleProvider::OnLoad(
 STDMETHODIMP
 CSampleProvider::OnUnload(
     IN BOOL /* bForceUnload */
-    )
+)
 {
     TRACE_FUNCTION();
 
@@ -1229,13 +1349,15 @@ CSampleProvider::OnUnload(
 
     AutoLock lock( m_cs );
 
-    try {
-        switch (m_state) {
+    try
+    {
+        switch (m_state)
+        {
         case VSS_SS_UNKNOWN:
         case VSS_SS_ABORTED:
         case VSS_SS_CREATED:
             break;
-        
+
         default:
             //
             // Treat unloading during snapshot creation as an abort
@@ -1243,9 +1365,13 @@ CSampleProvider::OnUnload(
             DeleteAbortedSnapshots();
             break;
         }
-    } catch (HRESULT hre) {
+    }
+    catch (HRESULT hre)
+    {
         hr = hre;
-    } catch (std::bad_alloc) {
+    }
+    catch (std::bad_alloc)
+    {
         hr = E_OUTOFMEMORY;
     }
 
@@ -1264,7 +1390,7 @@ CSampleProvider::OnUnload(
 STDMETHODIMP
 CSampleProvider::GetProviderCapabilities(
     ULONGLONG    *pllOriginalCapabilityMask
-    )
+)
 {
     TRACE_FUNCTION();
     HRESULT hr = E_NOTIMPL;
@@ -1293,7 +1419,7 @@ CSampleProvider::OnLunStateChange (
     VDS_LUN_INFORMATION *pOriginalLuns,
     DWORD dwCount,
     DWORD dwFlags
-    )
+)
 {
     TRACE_FUNCTION();
     HRESULT hr = S_OK;
@@ -1313,41 +1439,41 @@ CSampleProvider::OnLunStateChange (
                 //
                 GUID snapId;
                 hr = AnsiToGuid(pInfo->m_szSerialNumber, snapId);
-                
-                switch (hr) 
+
+                switch (hr)
                 {
-                    case S_OK:
-                        break;
+                case S_OK:
+                    break;
 
-                    case E_OUTOFMEMORY:
-                        throw hr;
+                case E_OUTOFMEMORY:
+                    throw hr;
 
-                    default:
-                        //
-                        // Any other error indicates we were passed a bad source LUN,
-                        // so log it and return VSS_E_PROVIDER_VETO
-                        //
-                        LogEvent(
-                            L"OnLunStateChange called with invalid LUN SerialNumber = '%S'",
-                            pInfo->m_szSerialNumber
-                            );
-                        
-                        throw (HRESULT) VSS_E_PROVIDER_VETO;
+                default:
+                    //
+                    // Any other error indicates we were passed a bad source LUN,
+                    // so log it and return VSS_E_PROVIDER_VETO
+                    //
+                    LogEvent(
+                        L"OnLunStateChange called with invalid LUN SerialNumber = '%S'",
+                        pInfo->m_szSerialNumber
+                    );
+
+                    throw (HRESULT) VSS_E_PROVIDER_VETO;
                 }
 
                 //
                 // Remove drive given by GUID
                 //
                 hr = m_vbus.RemoveDrive(snapId, false);
-                
-                if (FAILED(hr)) 
+
+                if (FAILED(hr))
                 {
                     LogEvent(
                         L"OnLunStateChange: RemoveDrive for '%S' failed with 0x%08x",
                         pInfo->m_szSerialNumber,
                         hr
-                        );
-                    
+                    );
+
                     throw (HRESULT) VSS_E_PROVIDER_VETO;
                 }
             }
@@ -1362,7 +1488,7 @@ CSampleProvider::OnLunStateChange (
     {
         hr = hre;
     }
-    catch (std::bad_alloc) 
+    catch (std::bad_alloc)
     {
         hr = E_OUTOFMEMORY;
     }
@@ -1377,7 +1503,7 @@ CSampleProvider::ResyncLuns (
     VDS_LUN_INFORMATION *pTargetLuns,
     DWORD dwCount,
     IVssAsync ** ppAsync
-    )
+)
 {
     TRACE_FUNCTION();
     HRESULT hr = S_OK;
@@ -1385,57 +1511,63 @@ CSampleProvider::ResyncLuns (
 
     for(i=0; i < dwCount; i++)
     {
-          
-          GUID snapId = GUID_NULL;   
-          GUID targetDiskId = GUID_NULL;
 
-          try {
-         
-               hr = AnsiToGuid(pSourceLuns[i].m_szSerialNumber, snapId);
-               if(SUCCEEDED(hr))
-               {
-                   hr = AnsiToGuid(pTargetLuns[i].m_szSerialNumber, targetDiskId);
-               }
-               switch (hr) {
-                    case S_OK:
-                        break;
-                
-                    case E_OUTOFMEMORY:
-                        //
-                        // Allow out of memory errors to float up
-                        //
-                        throw hr;
-                
-                    default:
-                        //
-                        // Any other error indicates we were passed a bad source LUN,
-                        // so log it and return VSS_E_PROVIDER_VETO
-                        //
-                        LogEvent(L"ResyncLuns called with invalid source, target LUN m_szSerialNumber ('%S'), ('%S')",
-                                 pSourceLuns[i].m_szSerialNumber, pTargetLuns[i].m_szSerialNumber);
-                        throw (HRESULT) VSS_E_PROVIDER_VETO;
-                    }
-                
-                    std::wstring fileName = SnapshotImageFile(snapId);
-                
-            } catch (HRESULT hre) {
-                hr = hre;
-                break; //TODO: best effort or fail fast ? fail fast for now (2/13/2008)
+        GUID snapId = GUID_NULL;
+        GUID targetDiskId = GUID_NULL;
 
-            } catch (std::bad_alloc) {
-                hr = E_OUTOFMEMORY;
+        try
+        {
+
+            hr = AnsiToGuid(pSourceLuns[i].m_szSerialNumber, snapId);
+            if(SUCCEEDED(hr))
+            {
+                hr = AnsiToGuid(pTargetLuns[i].m_szSerialNumber, targetDiskId);
+            }
+            switch (hr)
+            {
+            case S_OK:
                 break;
-            }   
-         //Translate the snapshot ID GUID to the path fo the image file.
-         std::wstring sourceLunPath = SnapshotImageFile(snapId);
-         //Resync the target virtual disk using the image file we just got
-         hr = m_vbus.ReSync(targetDiskId, sourceLunPath.c_str());
-         //Now, fake an async operation. From the client(VSS)'s side of view, this task just started, the client will wait on the **ppAsync  object and get the 
-         //status of hr from there.
-         *ppAsync = CVssAsync::CreateInstanceAndStartJob(hr);
+
+            case E_OUTOFMEMORY:
+                //
+                // Allow out of memory errors to float up
+                //
+                throw hr;
+
+            default:
+                //
+                // Any other error indicates we were passed a bad source LUN,
+                // so log it and return VSS_E_PROVIDER_VETO
+                //
+                LogEvent(L"ResyncLuns called with invalid source, target LUN m_szSerialNumber ('%S'), ('%S')",
+                         pSourceLuns[i].m_szSerialNumber, pTargetLuns[i].m_szSerialNumber);
+                throw (HRESULT) VSS_E_PROVIDER_VETO;
+            }
+
+            std::wstring fileName = SnapshotImageFile(snapId);
+
+        }
+        catch (HRESULT hre)
+        {
+            hr = hre;
+            break; //TODO: best effort or fail fast ? fail fast for now (2/13/2008)
+
+        }
+        catch (std::bad_alloc)
+        {
+            hr = E_OUTOFMEMORY;
+            break;
+        }
+        //Translate the snapshot ID GUID to the path fo the image file.
+        std::wstring sourceLunPath = SnapshotImageFile(snapId);
+        //Resync the target virtual disk using the image file we just got
+        hr = m_vbus.ReSync(targetDiskId, sourceLunPath.c_str());
+        //Now, fake an async operation. From the client(VSS)'s side of view, this task just started, the client will wait on the **ppAsync  object and get the
+        //status of hr from there.
+        *ppAsync = CVssAsync::CreateInstanceAndStartJob(hr);
     }
-    //Well, we always return S_OK here, because to the client, this operation is barely beginning, the client will wait on the **ppAsync  object and get the 
-    //real hr value there. 
+    //Well, we always return S_OK here, because to the client, this operation is barely beginning, the client will wait on the **ppAsync  object and get the
+    //real hr value there.
     return S_OK;
 }
 
@@ -1445,7 +1577,7 @@ CSampleProvider::OnReuseLuns(
     VDS_LUN_INFORMATION *pSnapshotLuns,
     VDS_LUN_INFORMATION *pOriginalLuns,
     DWORD dwCount
-    )
+)
 {
     TRACE_FUNCTION();
     HRESULT hr = E_NOTIMPL;

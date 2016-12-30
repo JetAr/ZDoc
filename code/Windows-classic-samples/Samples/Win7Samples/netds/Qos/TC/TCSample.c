@@ -1,10 +1,10 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+﻿/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
    PARTICULAR PURPOSE.
-  
+
    Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
@@ -13,9 +13,9 @@ Module Name:
 
 Abstract:
 
-    This program implements a simple tool which plumbs in a TC Flow and Filter 
+    This program implements a simple tool which plumbs in a TC Flow and Filter
     based on the user input
-    
+
 Environment:
 
     User-Mode only
@@ -56,7 +56,7 @@ typedef struct ifc_info
 {
     HANDLE hIfc;
     HANDLE hFlow;
-    HANDLE hFilter;  
+    HANDLE hFilter;
 } IFC_INFO, *PIFC_INFO;
 
 typedef struct ifc_list
@@ -74,15 +74,15 @@ HANDLE hEvent;
 
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      Control_C_Handler
 //
 // Description:
 //      Handles the ctrl-c event and sets the gbRunning flag to false
 //      this indicates the app to exit
-//            
+//
 //******************************************************************************
-BOOL 
+BOOL
 Control_C_Handler(DWORD dwCtrlType)
 {
     UNREFERENCED_PARAMETER(dwCtrlType);
@@ -92,14 +92,14 @@ Control_C_Handler(DWORD dwCtrlType)
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      ClNotifyHandler
 //
 // Description:
 //      Empty notification handler
-//            
+//
 //******************************************************************************
-void 
+void
 ClNotifyHandler(HANDLE ClRegCtx, HANDLE ClIfcCtx, ULONG Event, HANDLE SubCode, ULONG BufSize, PVOID Buffer)
 {
     UNREFERENCED_PARAMETER(ClRegCtx);
@@ -111,12 +111,12 @@ ClNotifyHandler(HANDLE ClRegCtx, HANDLE ClIfcCtx, ULONG Event, HANDLE SubCode, U
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      AddTcFlows
 //
 // Description:
 //      Add Tc Flow in pTcFlow to each interface in IfcList
-//            
+//
 //******************************************************************************
 BOOL
 AddTcFlows(IFC_LIST IfcList, PTC_GEN_FLOW pTcFlow)
@@ -155,12 +155,12 @@ Exit:
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      AddTcFilters
 //
 // Description:
 //      Add Tc Filter in pTcFilter to each interface in IfcList
-//            
+//
 //******************************************************************************
 BOOL
 AddTcFilters(IFC_LIST IfcList, PTC_GEN_FILTER pTcFilter)
@@ -187,7 +187,7 @@ AddTcFilters(IFC_LIST IfcList, PTC_GEN_FILTER pTcFilter)
         }
 
         pCurrentIfcInfo->hFilter = hFilter;
-        pCurrentIfcInfo++;      
+        pCurrentIfcInfo++;
     }
 
     status = TRUE;
@@ -197,14 +197,14 @@ Exit:
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      ClearIfcList
 //
 // Description:
 //      Clears the IfcList and its member variables
-//            
+//
 //******************************************************************************
-BOOL 
+BOOL
 ClearIfcList(PIFC_LIST pIfcList)
 {
     ULONG i;
@@ -248,18 +248,18 @@ ClearIfcList(PIFC_LIST pIfcList)
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      MakeIfcList
 //
 // Arguments:
 //      hClient   - Handle returned by TcRegisterClient
 //      pIfcList  - ptr to IfcList structure which will be populated by the function
-//      
+//
 // Description:
-//      The function enumerates all TC enabled interfaces. 
+//      The function enumerates all TC enabled interfaces.
 //      opens each TC enabled interface and stores each ifc handle in IFC_LIST struct
 //      pointed to by pIfcList
-//            
+//
 //******************************************************************************
 BOOL
 MakeIfcList(HANDLE hClient, PIFC_LIST pIfcList)
@@ -316,7 +316,7 @@ MakeIfcList(HANDLE hClient, PIFC_LIST pIfcList)
         RemainingBufferSize -= pCurrentIfc->Length;
         pCurrentIfc = (PTC_IFC_DESCRIPTOR)(((PBYTE)pCurrentIfc) + pCurrentIfc->Length);
     }
-  
+
     if (nIfcs == 0)
     {
         goto Exit;
@@ -324,19 +324,19 @@ MakeIfcList(HANDLE hClient, PIFC_LIST pIfcList)
 
     //
     // Allocate memory for the size(IFC_INFO) X nIfcs
-    // 
+    //
     pIfcInfo = (PIFC_INFO)malloc(sizeof(IFC_INFO) * nIfcs);
     if (!pIfcInfo)
     {
         goto Exit;
     }
-  
+
     ZeroMemory(pIfcInfo, sizeof(IFC_INFO) * nIfcs);
 
     ClearIfcList(pIfcList);
     pIfcList->IfcCount = nIfcs;
     pIfcList->pIfcInfo = pIfcInfo;
-  
+
     //
     // Open Each interface and store the ifc handle in ifcList
     //
@@ -365,7 +365,7 @@ MakeIfcList(HANDLE hClient, PIFC_LIST pIfcList)
         pCurrentIfc = (PTC_IFC_DESCRIPTOR)(((PBYTE)pCurrentIfc) + pCurrentIfc->Length);
         pCurrentIfcInfo++;
     }
-  
+
     if (err != NO_ERROR)
     {
         goto Exit;
@@ -378,7 +378,7 @@ Exit:
     {
         ClearIfcList(pIfcList);
     }
-   
+
     //
     // Cleanup the IfcBuffer
     //
@@ -391,14 +391,14 @@ Exit:
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      DeleteFlow
 //
 // Description:
 //      Deletes the flow and its member variables
-//            
+//
 //******************************************************************************
-BOOL 
+BOOL
 DeleteFlow(PTC_GEN_FLOW *pFlow)
 {
     if (pFlow == NULL || *pFlow == NULL)
@@ -413,7 +413,7 @@ DeleteFlow(PTC_GEN_FLOW *pFlow)
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      CreateFlow
 //
 // Arguments:
@@ -423,10 +423,10 @@ DeleteFlow(PTC_GEN_FLOW *pFlow)
 //      ThrottleRate - throttle rate for the flow
 //
 // Description:
-//      The function returns a tc flow in ppTcFlowObj on success 
-//            
+//      The function returns a tc flow in ppTcFlowObj on success
+//
 //******************************************************************************
-BOOL 
+BOOL
 CreateFlow(PTC_GEN_FLOW *_ppTcFlowObj, USHORT DSCPValue, USHORT OnePValue, ULONG ThrottleRate)
 {
     BOOL status = FALSE;
@@ -447,11 +447,11 @@ CreateFlow(PTC_GEN_FLOW *_ppTcFlowObj, USHORT DSCPValue, USHORT OnePValue, ULONG
     PTC_GEN_FLOW _pTcFlowObj = NULL;
 
     int Length = 0;
-  
+
     //
     // Calculate the memory size required for the optional TC objects
     //
-    Length += (OnePValue == NOT_SPECIFIED ? 0 : sizeof(QOS_TRAFFIC_CLASS)) + 
+    Length += (OnePValue == NOT_SPECIFIED ? 0 : sizeof(QOS_TRAFFIC_CLASS)) +
               (DSCPValue == NOT_SPECIFIED ? 0 : sizeof(QOS_DS_CLASS));
 
     //
@@ -460,12 +460,12 @@ CreateFlow(PTC_GEN_FLOW *_ppTcFlowObj, USHORT DSCPValue, USHORT OnePValue, ULONG
     printf("Flow Parameters:\n");
     DSCPValue == NOT_SPECIFIED ? printf("\tDSCP: *\n"):printf("\tDSCP: %u\n", DSCPValue);
     OnePValue == NOT_SPECIFIED ? printf("\t802.1p: *\n"):printf("\t802.1p: %u\n", OnePValue);
-    if (ThrottleRate == QOS_NOT_SPECIFIED) 
+    if (ThrottleRate == QOS_NOT_SPECIFIED)
     {
         printf("\tThrottleRate: *\n");
         printf("\tServiceType: Best effort\n");
     }
-    else 
+    else
     {
         printf("\tThrottleRate: %u\n", ThrottleRate);
         printf("\tServiceType: Guaranteed\n");
@@ -478,7 +478,7 @@ CreateFlow(PTC_GEN_FLOW *_ppTcFlowObj, USHORT DSCPValue, USHORT OnePValue, ULONG
     // Allocate the flow descriptor
     //
     _pTcFlowObj = (PTC_GEN_FLOW)malloc(FIELD_OFFSET(TC_GEN_FLOW, TcObjects) + Length);
-    if (!_pTcFlowObj) 
+    if (!_pTcFlowObj)
     {
         printf("Flow Allocation Failed\n");
         goto Exit;
@@ -525,7 +525,7 @@ CreateFlow(PTC_GEN_FLOW *_ppTcFlowObj, USHORT DSCPValue, USHORT OnePValue, ULONG
 
     status = TRUE;
 
- Exit:
+Exit:
     if (!status)
     {
         printf("Flow Creation Failed\n");
@@ -540,14 +540,14 @@ CreateFlow(PTC_GEN_FLOW *_ppTcFlowObj, USHORT DSCPValue, USHORT OnePValue, ULONG
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      DeleteFilter
 //
 // Description:
 //      Deletes the filter and its member variables
-//            
+//
 //******************************************************************************
-BOOL 
+BOOL
 DeleteFilter(PTC_GEN_FILTER *ppFilter)
 {
     PTC_GEN_FILTER pFilter;
@@ -575,16 +575,16 @@ DeleteFilter(PTC_GEN_FILTER *ppFilter)
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      PrintAddress
 //
 // Description:
 //      The function prints out the address contained in the SOCKADDR_STORAGE
-//            
+//
 //******************************************************************************
-VOID 
+VOID
 PrintAddress(PSOCKADDR_STORAGE pSocketAddress)
-{  
+{
     DWORD cbBuffer = 2000;
     WCHAR buffer[2000];
     SOCKADDR_STORAGE socketAddress;
@@ -601,8 +601,8 @@ PrintAddress(PSOCKADDR_STORAGE pSocketAddress)
     //
     // If the address is empty, print *
     //
-    if (!memcmp(((PBYTE)&socketAddress) + sizeof(USHORT),  
-                ((PBYTE)pSocketAddress) + sizeof(USHORT), 
+    if (!memcmp(((PBYTE)&socketAddress) + sizeof(USHORT),
+                ((PBYTE)pSocketAddress) + sizeof(USHORT),
                 sizeof(socketAddress) - sizeof(USHORT)))
     {
         printf("\tAddress: *\n");
@@ -624,7 +624,7 @@ PrintAddress(PSOCKADDR_STORAGE pSocketAddress)
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      CreateFilter
 //
 // Arguments:
@@ -634,12 +634,12 @@ PrintAddress(PSOCKADDR_STORAGE pSocketAddress)
 //      ProtocolId - protocol of the outgoing packets of interest.
 //
 // Description:
-//      The function returns a tc filter in ppFilter on success 
-//            
+//      The function returns a tc filter in ppFilter on success
+//
 //******************************************************************************
-BOOL 
+BOOL
 CreateFilter(PTC_GEN_FILTER *ppFilter, SOCKADDR_STORAGE Address, USHORT Port, UCHAR ProtocolId)
-{  
+{
     BOOL status = FALSE;
     USHORT AddressFamily = Address.ss_family;
     PTC_GEN_FILTER pFilter = NULL;
@@ -655,33 +655,33 @@ CreateFilter(PTC_GEN_FILTER *ppFilter, SOCKADDR_STORAGE Address, USHORT Port, UC
     printf("\tProtocol: ");
     switch (ProtocolId)
     {
-        case IPPROTO_IP:
-        {
-            printf("IP\n");
-            break;
-        }
-        case IPPROTO_TCP:
-        {
-            printf("TCP\n");
-            break;
-        }
-        case IPPROTO_UDP:
-        {
-            printf("UDP\n");
-            break;
-        }
-        default:
-        {
-            printf("Invalid Protocol\n");
-            break;
-        }
+    case IPPROTO_IP:
+    {
+        printf("IP\n");
+        break;
+    }
+    case IPPROTO_TCP:
+    {
+        printf("TCP\n");
+        break;
+    }
+    case IPPROTO_UDP:
+    {
+        printf("UDP\n");
+        break;
+    }
+    default:
+    {
+        printf("Invalid Protocol\n");
+        break;
+    }
     };
-  
+
     if (AddressFamily != AF_INET)
     {
         goto Exit;
     }
-  
+
     //
     // Allocate memory for the filter
     //
@@ -692,7 +692,7 @@ CreateFilter(PTC_GEN_FILTER *ppFilter, SOCKADDR_STORAGE Address, USHORT Port, UC
         goto Exit;
     }
     ZeroMemory(pFilter, sizeof(TC_GEN_FILTER));
-      
+
     //
     // Allocate memory for the pattern and mask
     //
@@ -703,9 +703,9 @@ CreateFilter(PTC_GEN_FILTER *ppFilter, SOCKADDR_STORAGE Address, USHORT Port, UC
     {
         goto Exit;
     }
-  
+
     memset(pPattern, 0, sizeof(IP_PATTERN));
-  
+
     pPattern->DstAddr = ((SOCKADDR_IN *)&Address)->sin_addr.s_addr;
     pPattern->tcDstPort = htons(Port);
     pPattern->ProtocolId = ProtocolId;
@@ -713,15 +713,15 @@ CreateFilter(PTC_GEN_FILTER *ppFilter, SOCKADDR_STORAGE Address, USHORT Port, UC
     memset(pMask, (ULONG)-1, sizeof(IP_PATTERN));
     //
     // Set the source address and port to wildcard
-    // 0 -> wildcard, 0xFF-> exact match 
+    // 0 -> wildcard, 0xFF-> exact match
     //
     pMask->SrcAddr = 0;
     pMask->tcSrcPort = 0;
-  
+
     //
     // If the user specified 0 for dest port, dest address or protocol
     // set the appropriate mask as wildcard
-    // 0 -> wildcard, 0xFF-> exact match 
+    // 0 -> wildcard, 0xFF-> exact match
     //
 
     if (pPattern->tcDstPort == 0)
@@ -743,7 +743,7 @@ CreateFilter(PTC_GEN_FILTER *ppFilter, SOCKADDR_STORAGE Address, USHORT Port, UC
     pFilter->PatternSize = sizeof(IP_PATTERN);
     pFilter->Pattern = pPattern;
     pFilter->Mask = pMask;
-  
+
     //
     // Delete any previous instances of the Filter
     //
@@ -763,27 +763,27 @@ Exit:
         printf("Filter Creation Succeeded\n");
     }
 
-    return status; 
+    return status;
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      GetSockAddrFromString
 //
 // Arguments:
 //      strAddress     - Address in the String format
-//      pSocketAddress - Pointer to SOCKADDR_STORAGE structure where the 
+//      pSocketAddress - Pointer to SOCKADDR_STORAGE structure where the
 //      address is returned
 //
 // Description:
-//      Takes a string format address and returns a pointer to 
+//      Takes a string format address and returns a pointer to
 //      SOCKADDR_STORAGE structure containing the address.
 //      Only resolves numeric addresses
 //******************************************************************************
 BOOL
 GetSockAddrFromString(const WCHAR *strAddress, PSOCKADDR_STORAGE pSocketAddress)
 {
-    BOOL result = FALSE;    
+    BOOL result = FALSE;
     ADDRINFOW *pAddress = NULL;
     int wsaResult = 0;
     ADDRINFOW hints;
@@ -816,7 +816,7 @@ Exit:
     // Cleanup
     if (NULL != pAddress)
     {
-        
+
         FreeAddrInfoW(pAddress);
     }
 
@@ -824,7 +824,7 @@ Exit:
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      ParseCommandline
 //
 // Arguments:
@@ -833,7 +833,7 @@ Exit:
 //      pTcFilter - Pointer to PTC_GEN_FILTER structure.
 //
 // Description:
-//      Parses the commandline and populates creates TC_GEN_FLOW and 
+//      Parses the commandline and populates creates TC_GEN_FLOW and
 //      TC_GEN_FILTER structures with the appropriate values.
 //******************************************************************************
 BOOL
@@ -877,7 +877,7 @@ ParseCommandLine(WCHAR **argv, PTC_GEN_FLOW *pTcFlow, PTC_GEN_FILTER *pTcFilter)
             {
                 ProtocolId = IPPROTO_IP;
             }
-            else 
+            else
             {
                 printf("Invalid Protocol\n");
                 goto Exit;
@@ -931,7 +931,7 @@ ParseCommandLine(WCHAR **argv, PTC_GEN_FLOW *pTcFlow, PTC_GEN_FILTER *pTcFilter)
             {
                 printf("Invalid 802.1p Value\n");
                 goto Exit;
-            }            
+            }
         }
         else if (!_wcsicmp(*argv, L"-throttle"))
         {
@@ -991,7 +991,7 @@ Exit:
 }
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      main
 //
 // Description:
@@ -1002,7 +1002,7 @@ int _cdecl wmain(int argc, WCHAR *argv[])
 {
     BOOL status = FALSE;
     ULONG err;
-    int wsaResult; 
+    int wsaResult;
 
     //
     // TC Structures
@@ -1030,7 +1030,7 @@ int _cdecl wmain(int argc, WCHAR *argv[])
         help();
         return 0;
     }
-  
+
     //
     // Parse the Commandline and populate the TC_GEN_FILTER and TC_GEN_FLOW structures
     //
@@ -1059,9 +1059,9 @@ int _cdecl wmain(int argc, WCHAR *argv[])
 
         goto Exit;
     }
-  
+
     //
-    // Enumerate All TC enabled Interfaces and 
+    // Enumerate All TC enabled Interfaces and
     // store the information in IfcList
     //
     if (!MakeIfcList(hClient, &IfcList))
@@ -1070,7 +1070,7 @@ int _cdecl wmain(int argc, WCHAR *argv[])
         goto Exit;
     }
     printf("Interface list created...\n");
-  
+
     //
     // Add pTcFlow on all the Ifcs in the IfcList
     //
@@ -1080,7 +1080,7 @@ int _cdecl wmain(int argc, WCHAR *argv[])
         goto Exit;
     }
     printf("Flows added...\n");
-  
+
     //
     // Add pTcFilter to all the corresponding TcFlows
     // on all the Ifcs in the IfcList
@@ -1094,14 +1094,14 @@ int _cdecl wmain(int argc, WCHAR *argv[])
 
     //
     // Enable the Ctrl-C handler
-    //  
+    //
     hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (!hEvent)
     {
         printf("Failed to create event\n");
         goto Exit;
     }
-  
+
     printf("**Hit ^C to Exit**\n");
 
     SetConsoleCtrlHandler((PHANDLER_ROUTINE)Control_C_Handler, TRUE);
@@ -1110,12 +1110,12 @@ int _cdecl wmain(int argc, WCHAR *argv[])
 
     status = TRUE;
 
-Exit: 
+Exit:
     if (!status)
     {
         help();
     }
-  
+
     //
     // Cleanup
     //
@@ -1133,10 +1133,10 @@ Exit:
     }
 
     return 0;
-} 
+}
 
 //******************************************************************************
-// Routine: 
+// Routine:
 //      help
 //
 // Description:
@@ -1154,6 +1154,6 @@ help()
     printf("\t-onep    : 802.1p value to tag matching packets (Default: No 802.1p Override)\n");
     printf("\t-throttle: throttle rate(Bps) to throttle matching packets (Default: No Throttling)\n");
     printf("\nExample: tcsample -destip 192.168.1.10 -proto ip -dscp 40\n");
-    printf("will result in all outgoing IP Packets destined to\n"); 
+    printf("will result in all outgoing IP Packets destined to\n");
     printf("192.168.1.10 to be marked with DSCP value 40\n");
-} 
+}

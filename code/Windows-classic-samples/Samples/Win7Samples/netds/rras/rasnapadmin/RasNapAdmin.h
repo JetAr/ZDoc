@@ -1,4 +1,4 @@
-#ifndef _RASNAPADMIN_H_
+﻿#ifndef _RASNAPADMIN_H_
 #define _RASNAPADMIN_H_
 
 #include <ws2tcpip.h>

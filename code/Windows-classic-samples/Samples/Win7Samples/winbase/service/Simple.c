@@ -1,4 +1,4 @@
-/*--------------------------------------------------------------------------
+﻿/*--------------------------------------------------------------------------
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -44,24 +44,24 @@ HANDLE  hServerStopEvent = NULL;
 // Parameter:
 //     SECURITY_ATTRIBUTES * pSA
 // Address to a SECURITY_ATTRIBUTES structure. It is the caller's
-// responsibility to properly initialize the structure, and to free 
+// responsibility to properly initialize the structure, and to free
 // the structure's lpSecurityDescriptor member when done (by calling
 // the LocalFree function).
-// 
+//
 // Return value:
-//    FALSE if the address to the structure is NULL. 
+//    FALSE if the address to the structure is NULL.
 //    Otherwise, this function returns the value from the
 //    ConvertStringSecurityDescriptorToSecurityDescriptor function.
 BOOL CreateMyDACL(SECURITY_ATTRIBUTES * pSA)
 {
-    // Define the SDDL for the DACL. This example sets 
+    // Define the SDDL for the DACL. This example sets
     // the following access:
     //     Built-in guests are denied all access.
     //     Anonymous Logon is denied all access.
     //     Authenticated Users are allowed read/write/execute access.
     //     Administrators are allowed full control.
     // Modify these values as needed to generate the proper
-    // DACL for your application. 
+    // DACL for your application.
     TCHAR * szSD = "D:"                   // Discretionary ACL
                    "(D;OICI;GA;;;BG)"     // Deny access to Built-in Guests
                    "(D;OICI;GA;;;AN)"     // Deny access to Anonymous Logon
@@ -72,10 +72,10 @@ BOOL CreateMyDACL(SECURITY_ATTRIBUTES * pSA)
         return FALSE;
 
     return ConvertStringSecurityDescriptorToSecurityDescriptor(
-                                                              szSD,
-                                                              SDDL_REVISION_1,
-                                                              &(pSA->lpSecurityDescriptor),
-                                                              NULL);
+               szSD,
+               SDDL_REVISION_1,
+               &(pSA->lpSecurityDescriptor),
+               NULL);
 }
 
 
@@ -100,248 +100,248 @@ BOOL CreateMyDACL(SECURITY_ATTRIBUTES * pSA)
 //
 VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 {
-   HANDLE                  hPipe = INVALID_HANDLE_VALUE;
-   HANDLE                  hEvents[2] = {NULL, NULL};
-   OVERLAPPED              os;
-   PSECURITY_DESCRIPTOR    pSD = NULL;
-   SECURITY_ATTRIBUTES     sa;
-   TCHAR                   szIn[80];
-   TCHAR                   szOut[ (sizeof(szIn) / sizeof(TCHAR) )  + 100];
-   LPTSTR                  lpszPipeName = TEXT("\\\\.\\pipe\\simple");
-   BOOL                    bRet;
-   DWORD                   cbRead;
-   DWORD                   cbWritten;
-   DWORD                   dwWait;
-   UINT                    ndx;
+    HANDLE                  hPipe = INVALID_HANDLE_VALUE;
+    HANDLE                  hEvents[2] = {NULL, NULL};
+    OVERLAPPED              os;
+    PSECURITY_DESCRIPTOR    pSD = NULL;
+    SECURITY_ATTRIBUTES     sa;
+    TCHAR                   szIn[80];
+    TCHAR                   szOut[ (sizeof(szIn) / sizeof(TCHAR) )  + 100];
+    LPTSTR                  lpszPipeName = TEXT("\\\\.\\pipe\\simple");
+    BOOL                    bRet;
+    DWORD                   cbRead;
+    DWORD                   cbWritten;
+    DWORD                   dwWait;
+    UINT                    ndx;
 
-   ///////////////////////////////////////////////////
-   //
-   // Service initialization
-   //
+    ///////////////////////////////////////////////////
+    //
+    // Service initialization
+    //
 
-   // report the status to the service control manager.
-   //
-   if (!ReportStatusToSCMgr(
-                           SERVICE_START_PENDING, // service state
-                           NO_ERROR,              // exit code
-                           3000))                 // wait hint
-      goto cleanup;
+    // report the status to the service control manager.
+    //
+    if (!ReportStatusToSCMgr(
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
+        goto cleanup;
 
-   // create the event object. The control handler function signals
-   // this event when it receives the "stop" control code.
-   //
-   hServerStopEvent = CreateEvent(
-                                 NULL,    // no security attributes
-                                 TRUE,    // manual reset event
-                                 FALSE,   // not-signalled
-                                 NULL);   // no name
-
-   if ( hServerStopEvent == NULL)
-      goto cleanup;
-
-   hEvents[0] = hServerStopEvent;
-
-   // report the status to the service control manager.
-   //
-   if (!ReportStatusToSCMgr(
-                           SERVICE_START_PENDING, // service state
-                           NO_ERROR,              // exit code
-                           3000))                 // wait hint
-      goto cleanup;
-
-   // create the event object object use in overlapped i/o
-   //
-   hEvents[1] = CreateEvent(
+    // create the event object. The control handler function signals
+    // this event when it receives the "stop" control code.
+    //
+    hServerStopEvent = CreateEvent(
                            NULL,    // no security attributes
                            TRUE,    // manual reset event
                            FALSE,   // not-signalled
                            NULL);   // no name
 
-   if ( hEvents[1] == NULL)
-      goto cleanup;
+    if ( hServerStopEvent == NULL)
+        goto cleanup;
 
-   // report the status to the service control manager.
-   //
-   if (!ReportStatusToSCMgr(
-                           SERVICE_START_PENDING, // service state
-                           NO_ERROR,              // exit code
-                           3000))                 // wait hint
-      goto cleanup;
+    hEvents[0] = hServerStopEvent;
 
-   // create a security descriptor that allows anyone to write to
-   //  the pipe...
-   //
-   pSD = (PSECURITY_DESCRIPTOR) malloc( SECURITY_DESCRIPTOR_MIN_LENGTH );
+    // report the status to the service control manager.
+    //
+    if (!ReportStatusToSCMgr(
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
+        goto cleanup;
 
-   if (pSD == NULL)
-      goto cleanup;
+    // create the event object object use in overlapped i/o
+    //
+    hEvents[1] = CreateEvent(
+                     NULL,    // no security attributes
+                     TRUE,    // manual reset event
+                     FALSE,   // not-signalled
+                     NULL);   // no name
 
-   if (!InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
-      goto cleanup;
+    if ( hEvents[1] == NULL)
+        goto cleanup;
 
-   sa.nLength = sizeof(sa);
-   sa.bInheritHandle = TRUE;
-   sa.lpSecurityDescriptor = pSD;
+    // report the status to the service control manager.
+    //
+    if (!ReportStatusToSCMgr(
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
+        goto cleanup;
 
-   if(!CreateMyDACL(&sa) )
-   {
-       // DACL creation FAILED!!
-       return;
-   }
+    // create a security descriptor that allows anyone to write to
+    //  the pipe...
+    //
+    pSD = (PSECURITY_DESCRIPTOR) malloc( SECURITY_DESCRIPTOR_MIN_LENGTH );
 
-   // report the status to the service control manager.
-   //
-   if (!ReportStatusToSCMgr(
-                           SERVICE_START_PENDING, // service state
-                           NO_ERROR,              // exit code
-                           3000))                 // wait hint
-      goto cleanup;
+    if (pSD == NULL)
+        goto cleanup;
 
+    if (!InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
+        goto cleanup;
 
-   // allow user tp define pipe name
-   for ( ndx = 1; ndx < dwArgc-1; ndx++ )
-   {
+    sa.nLength = sizeof(sa);
+    sa.bInheritHandle = TRUE;
+    sa.lpSecurityDescriptor = pSD;
 
-      if ( ( (*(lpszArgv[ndx]) == TEXT('-')) ||
-             (*(lpszArgv[ndx]) == TEXT('/')) ) &&
-           (!_tcsicmp( TEXT("pipe"), lpszArgv[ndx]+1 ) && ((ndx + 1) < dwArgc)) )
-      {
-         lpszPipeName = lpszArgv[++ndx];
-      }
+    if(!CreateMyDACL(&sa) )
+    {
+        // DACL creation FAILED!!
+        return;
+    }
 
-   }
-
-   // open our named pipe...
-   //
-   hPipe = CreateNamedPipe(
-                          lpszPipeName         ,  // name of pipe
-                          FILE_FLAG_OVERLAPPED |
-                          PIPE_ACCESS_DUPLEX,     // pipe open mode
-                          PIPE_TYPE_MESSAGE |
-                          PIPE_READMODE_MESSAGE |
-                          PIPE_WAIT,              // pipe IO type
-                          1,                      // number of instances
-                          0,                      // size of outbuf (0 == allocate as necessary)
-                          0,                      // size of inbuf
-                          1000,                   // default time-out value
-                          &sa);                   // security attributes
-
-   if (hPipe == INVALID_HANDLE_VALUE)
-   {
-      AddToMessageLog(TEXT("Unable to create named pipe"));
-      goto cleanup;
-   }
+    // report the status to the service control manager.
+    //
+    if (!ReportStatusToSCMgr(
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
+        goto cleanup;
 
 
-   // report the status to the service control manager.
-   //
-   if (!ReportStatusToSCMgr(
-                           SERVICE_RUNNING,       // service state
-                           NO_ERROR,              // exit code
-                           0))                    // wait hint
-      goto cleanup;
+    // allow user tp define pipe name
+    for ( ndx = 1; ndx < dwArgc-1; ndx++ )
+    {
 
-   //
-   // End of initialization
-   //
-   ////////////////////////////////////////////////////////
+        if ( ( (*(lpszArgv[ndx]) == TEXT('-')) ||
+                (*(lpszArgv[ndx]) == TEXT('/')) ) &&
+                (!_tcsicmp( TEXT("pipe"), lpszArgv[ndx]+1 ) && ((ndx + 1) < dwArgc)) )
+        {
+            lpszPipeName = lpszArgv[++ndx];
+        }
 
-   ////////////////////////////////////////////////////////
-   //
-   // Service is now running, perform work until shutdown
-   //
+    }
 
-   for(;;)
-   {
-      // init the overlapped structure
-      //
-      memset( &os, 0, sizeof(OVERLAPPED) );
-      os.hEvent = hEvents[1];
-      ResetEvent( hEvents[1] );
+    // open our named pipe...
+    //
+    hPipe = CreateNamedPipe(
+                lpszPipeName,           // name of pipe
+                FILE_FLAG_OVERLAPPED |
+                PIPE_ACCESS_DUPLEX,     // pipe open mode
+                PIPE_TYPE_MESSAGE |
+                PIPE_READMODE_MESSAGE |
+                PIPE_WAIT,              // pipe IO type
+                1,                      // number of instances
+                0,                      // size of outbuf (0 == allocate as necessary)
+                0,                      // size of inbuf
+                1000,                   // default time-out value
+                &sa);                   // security attributes
 
-
-      // wait for a connection...
-      //
-      ConnectNamedPipe(hPipe, &os);
-
-      if ( GetLastError() == ERROR_IO_PENDING )
-      {
-         dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
-         if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
-            break;                           // or server stop signaled
-      }
-
-      // init the overlapped structure
-      //
-      memset( &os, 0, sizeof(OVERLAPPED) );
-      os.hEvent = hEvents[1];
-      ResetEvent( hEvents[1] );
+    if (hPipe == INVALID_HANDLE_VALUE)
+    {
+        AddToMessageLog(TEXT("Unable to create named pipe"));
+        goto cleanup;
+    }
 
 
-     // Set the buffer to all NULLs otherwise we get leftover characters
-      memset(szIn, '\0', sizeof(szIn));
+    // report the status to the service control manager.
+    //
+    if (!ReportStatusToSCMgr(
+                SERVICE_RUNNING,       // service state
+                NO_ERROR,              // exit code
+                0))                    // wait hint
+        goto cleanup;
 
-      // grab whatever's coming through the pipe...
-      //
-      bRet = ReadFile(
-                     hPipe,          // file to read from
-                     szIn,           // address of input buffer
-                     sizeof(szIn),   // number of bytes to read
-                     &cbRead,        // number of bytes read
-                     &os);           // overlapped stuff, not needed
+    //
+    // End of initialization
+    //
+    ////////////////////////////////////////////////////////
 
-      if ( !bRet && ( GetLastError() == ERROR_IO_PENDING ) )
-      {
-         dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
-         if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
-            break;                           // or server stop signaled
-      }
+    ////////////////////////////////////////////////////////
+    //
+    // Service is now running, perform work until shutdown
+    //
 
-      // munge the string
-      //
-      StringCchPrintf(szOut, sizeof(szOut),TEXT("Hello! [%s]"), szIn);
-
-      // init the overlapped structure
-      //
-      memset( &os, 0, sizeof(OVERLAPPED) );
-      os.hEvent = hEvents[1];
-      ResetEvent( hEvents[1] );
-
-      // send it back out...
-      //
-      bRet = WriteFile(
-                      hPipe,          // file to write to
-                      szOut,          // address of output buffer
-                      sizeof(szOut),  // number of bytes to write
-                      &cbWritten,     // number of bytes written
-                      &os);           // overlapped stuff, not needed
+    for(;;)
+    {
+        // init the overlapped structure
+        //
+        memset( &os, 0, sizeof(OVERLAPPED) );
+        os.hEvent = hEvents[1];
+        ResetEvent( hEvents[1] );
 
 
-      if ( !bRet && ( GetLastError() == ERROR_IO_PENDING ) )
-      {
-         dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
-         if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
-            break;                           // or server stop signaled
-      }
+        // wait for a connection...
+        //
+        ConnectNamedPipe(hPipe, &os);
 
-      // drop the connection...
-      //
-      DisconnectNamedPipe(hPipe);
-   }
+        if ( GetLastError() == ERROR_IO_PENDING )
+        {
+            dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
+            if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
+                break;                           // or server stop signaled
+        }
 
-   cleanup:
+        // init the overlapped structure
+        //
+        memset( &os, 0, sizeof(OVERLAPPED) );
+        os.hEvent = hEvents[1];
+        ResetEvent( hEvents[1] );
 
-   if (hPipe != INVALID_HANDLE_VALUE )
-      CloseHandle(hPipe);
 
-   if (hServerStopEvent)
-      CloseHandle(hServerStopEvent);
+        // Set the buffer to all NULLs otherwise we get leftover characters
+        memset(szIn, '\0', sizeof(szIn));
 
-   if (hEvents[1]) // overlapped i/o event
-      CloseHandle(hEvents[1]);
+        // grab whatever's coming through the pipe...
+        //
+        bRet = ReadFile(
+                   hPipe,          // file to read from
+                   szIn,           // address of input buffer
+                   sizeof(szIn),   // number of bytes to read
+                   &cbRead,        // number of bytes read
+                   &os);           // overlapped stuff, not needed
 
-   if ( pSD )
-      free( pSD );
+        if ( !bRet && ( GetLastError() == ERROR_IO_PENDING ) )
+        {
+            dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
+            if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
+                break;                           // or server stop signaled
+        }
+
+        // munge the string
+        //
+        StringCchPrintf(szOut, sizeof(szOut),TEXT("Hello! [%s]"), szIn);
+
+        // init the overlapped structure
+        //
+        memset( &os, 0, sizeof(OVERLAPPED) );
+        os.hEvent = hEvents[1];
+        ResetEvent( hEvents[1] );
+
+        // send it back out...
+        //
+        bRet = WriteFile(
+                   hPipe,          // file to write to
+                   szOut,          // address of output buffer
+                   sizeof(szOut),  // number of bytes to write
+                   &cbWritten,     // number of bytes written
+                   &os);           // overlapped stuff, not needed
+
+
+        if ( !bRet && ( GetLastError() == ERROR_IO_PENDING ) )
+        {
+            dwWait = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE );
+            if ( dwWait != WAIT_OBJECT_0+1 )     // not overlapped i/o event - error occurred,
+                break;                           // or server stop signaled
+        }
+
+        // drop the connection...
+        //
+        DisconnectNamedPipe(hPipe);
+    }
+
+cleanup:
+
+    if (hPipe != INVALID_HANDLE_VALUE )
+        CloseHandle(hPipe);
+
+    if (hServerStopEvent)
+        CloseHandle(hServerStopEvent);
+
+    if (hEvents[1]) // overlapped i/o event
+        CloseHandle(hEvents[1]);
+
+    if ( pSD )
+        free( pSD );
 
 }
 
@@ -367,6 +367,6 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 //
 VOID ServiceStop()
 {
-   if ( hServerStopEvent )
-      SetEvent(hServerStopEvent);
+    if ( hServerStopEvent )
+        SetEvent(hServerStopEvent);
 }

@@ -1,4 +1,4 @@
-#ifndef __FAX_PRINTSDI_SAMPLE
+﻿#ifndef __FAX_PRINTSDI_SAMPLE
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF

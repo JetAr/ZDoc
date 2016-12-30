@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved 
+﻿// Copyright (c) Microsoft Corporation. All rights reserved
 
 #pragma once
 #include <windows.h>
@@ -16,8 +16,8 @@
 
 namespace DManipSample
 {
-    class CAppWindow;
-    class CViewportEventHandler;
+class CAppWindow;
+class CViewportEventHandler;
 }
 
 using namespace Microsoft::WRL;

@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -48,18 +48,18 @@ CSimpleThermostatServiceProvider::~CSimpleThermostatServiceProvider()
 //      object depending on what type of device the FD Function Instance
 //      represents.
 //------------------------------------------------------------------------------
-HRESULT CSimpleThermostatServiceProvider::Initialize( 
+HRESULT CSimpleThermostatServiceProvider::Initialize(
     IFunctionInstance* pFunInst,
     REFIID riid,
     void** ppv
-    )
+)
 {
     DEVICE_PROTOCOL_TYPE    deviceType  = DEVICE_PROTOCOL_TYPE_UPNP;
     HRESULT                 hr          = S_OK;
     IPropertyStore*         pPropStore  = NULL;
 
     if( NULL == ppv ||
-        NULL == pFunInst )
+            NULL == pFunInst )
     {
         return E_INVALIDARG;
     }
@@ -68,7 +68,7 @@ HRESULT CSimpleThermostatServiceProvider::Initialize(
     // Open the property store of the function instance
     //
     if( S_OK == hr )
-    {   
+    {
         wprintf( L"OpenPropertyStore on the FI..." );
         hr = pFunInst->OpenPropertyStore( STGM_READ, &pPropStore );
         wprintf( L"0x%x\n", hr );
@@ -92,28 +92,28 @@ HRESULT CSimpleThermostatServiceProvider::Initialize(
     if( S_OK == hr )
     {
         wprintf( L"Device type: %s\n",
-            DEVICE_PROTOCOL_TYPE_UPNP == deviceType ? L"UPNP" : L"WSD" );
+                 DEVICE_PROTOCOL_TYPE_UPNP == deviceType ? L"UPNP" : L"WSD" );
     }
 
     //
     // Create the appropriate proxy
     //
     if( S_OK == hr &&
-        DEVICE_PROTOCOL_TYPE_UPNP == deviceType )
+            DEVICE_PROTOCOL_TYPE_UPNP == deviceType )
     {
         hr = CreateCUPnPSimpleThermostatProxy(
-            pPropStore,
-            reinterpret_cast<ISimpleThermostat**>(ppv)
-            );
+                 pPropStore,
+                 reinterpret_cast<ISimpleThermostat**>(ppv)
+             );
     }
 
     else if( S_OK == hr &&
-        DEVICE_PROTOCOL_TYPE_WSD == deviceType )
+             DEVICE_PROTOCOL_TYPE_WSD == deviceType )
     {
         hr = CreateCWSDSimpleThermostatProxy(
-            pPropStore,
-            reinterpret_cast<ISimpleThermostat**>(ppv)
-            );
+                 pPropStore,
+                 reinterpret_cast<ISimpleThermostat**>(ppv)
+             );
     }
 
     //
@@ -137,9 +137,9 @@ HRESULT CSimpleThermostatServiceProvider::Initialize(
 // CSimpleThermostatServiceProvider::QueryInterface
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatServiceProvider::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

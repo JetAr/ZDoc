@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -31,25 +31,25 @@ public:
     //
     // IFunctionDiscoveryServiceProvider Implementation
     //
-    STDMETHODIMP Initialize( 
+    STDMETHODIMP Initialize(
         __in IFunctionInstance *pIFunctionInstance,
         __in REFIID riid,
         __deref_out_opt void **ppvObject
-        );
+    );
 
     //
     // IUnknown Implementation
     //
     STDMETHODIMP QueryInterface(
-        __in REFIID riid, 
+        __in REFIID riid,
         __deref_out_opt void** ppvObject
-        );
+    );
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 private:
 
     LONG m_cRef;
-        
+
 };// CSimpleThermostatServiceProvider
 

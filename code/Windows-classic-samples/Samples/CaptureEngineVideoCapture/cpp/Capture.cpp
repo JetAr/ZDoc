@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,13 +14,13 @@ UINT                  g_ResetToken = 0;
 
 STDMETHODIMP CaptureManager::CaptureEngineCB::QueryInterface(REFIID riid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(CaptureEngineCB, IMFCaptureEngineOnEventCallback),
         { 0 }
     };
     return QISearch(this, qit, riid, ppv);
-}      
+}
 
 STDMETHODIMP_(ULONG) CaptureManager::CaptureEngineCB::AddRef()
 {
@@ -40,8 +40,8 @@ STDMETHODIMP_(ULONG) CaptureManager::CaptureEngineCB::Release()
 // Callback method to receive events from the capture engine.
 STDMETHODIMP CaptureManager::CaptureEngineCB::OnEvent( _In_ IMFMediaEvent* pEvent)
 {
-    // Post a message to the application window, so the event is handled 
-    // on the application's main thread. 
+    // Post a message to the application window, so the event is handled
+    // on the application's main thread.
 
     if (m_fSleeping && m_pManager != NULL)
     {
@@ -90,9 +90,10 @@ STDMETHODIMP CaptureManager::CaptureEngineCB::OnEvent( _In_ IMFMediaEvent* pEven
 HRESULT CreateDX11Device(_Out_ ID3D11Device** ppDevice, _Out_ ID3D11DeviceContext** ppDeviceContext, _Out_ D3D_FEATURE_LEVEL* pFeatureLevel )
 {
     HRESULT hr = S_OK;
-    static const D3D_FEATURE_LEVEL levels[] = {
+    static const D3D_FEATURE_LEVEL levels[] =
+    {
         D3D_FEATURE_LEVEL_11_1,
-        D3D_FEATURE_LEVEL_11_0,  
+        D3D_FEATURE_LEVEL_11_0,
         D3D_FEATURE_LEVEL_10_1,
         D3D_FEATURE_LEVEL_10_0,
         D3D_FEATURE_LEVEL_9_3,
@@ -100,20 +101,20 @@ HRESULT CreateDX11Device(_Out_ ID3D11Device** ppDevice, _Out_ ID3D11DeviceContex
         D3D_FEATURE_LEVEL_9_1
     };
 
-    
+
     hr = D3D11CreateDevice(
-        nullptr,
-        D3D_DRIVER_TYPE_HARDWARE,
-        nullptr,
-        D3D11_CREATE_DEVICE_VIDEO_SUPPORT,
-        levels,
-        ARRAYSIZE(levels),
-        D3D11_SDK_VERSION,
-        ppDevice,
-        pFeatureLevel,
-        ppDeviceContext
-        );
-    
+             nullptr,
+             D3D_DRIVER_TYPE_HARDWARE,
+             nullptr,
+             D3D11_CREATE_DEVICE_VIDEO_SUPPORT,
+             levels,
+             ARRAYSIZE(levels),
+             D3D11_SDK_VERSION,
+             ppDevice,
+             pFeatureLevel,
+             ppDeviceContext
+         );
+
     if(SUCCEEDED(hr))
     {
         ID3D10Multithread* pMultithread;
@@ -125,7 +126,7 @@ HRESULT CreateDX11Device(_Out_ ID3D11Device** ppDevice, _Out_ ID3D11DeviceContex
         }
 
         SafeRelease(&pMultithread);
-        
+
     }
 
     return hr;
@@ -136,7 +137,7 @@ HRESULT CreateD3DManager()
     HRESULT hr = S_OK;
     D3D_FEATURE_LEVEL FeatureLevel;
     ID3D11DeviceContext* pDX11DeviceContext;
-    
+
     hr = CreateDX11Device(&g_pDX11Device, &pDX11DeviceContext, &FeatureLevel);
 
     if(SUCCEEDED(hr))
@@ -148,9 +149,9 @@ HRESULT CreateD3DManager()
     {
         hr = g_pDXGIMan->ResetDevice(g_pDX11Device, g_ResetToken);
     }
-    
+
     SafeRelease(&pDX11DeviceContext);
-    
+
     return hr;
 }
 
@@ -186,7 +187,7 @@ CaptureManager::InitializeCaptureManager(HWND hwndPreview, IUnknown* pUnk)
     {
         goto Exit;
     }
-    hr = MFCreateAttributes(&pAttributes, 1); 
+    hr = MFCreateAttributes(&pAttributes, 1);
     if (FAILED(hr))
     {
         goto Exit;
@@ -198,8 +199,8 @@ CaptureManager::InitializeCaptureManager(HWND hwndPreview, IUnknown* pUnk)
     }
 
     // Create the factory object for the capture engine.
-    hr = CoCreateInstance(CLSID_MFCaptureEngineClassFactory, NULL, 
-        CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFactory));
+    hr = CoCreateInstance(CLSID_MFCaptureEngineClassFactory, NULL,
+                          CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pFactory));
     if (FAILED(hr))
     {
         goto Exit;
@@ -231,8 +232,8 @@ Exit:
     return hr;
 }
 
-// Handle an event from the capture engine. 
-// NOTE: This method is called from the application's UI thread. 
+// Handle an event from the capture engine.
+// NOTE: This method is called from the application's UI thread.
 HRESULT CaptureManager::OnCaptureEvent(WPARAM wParam, LPARAM lParam)
 {
     GUID guidType;
@@ -353,7 +354,7 @@ HRESULT CaptureManager::StartPreview()
     IMFCaptureSource *pSource = NULL;
 
     HRESULT hr = S_OK;
-    
+
     // Get a pointer to the preview sink.
     if (m_pPreview == NULL)
     {
@@ -382,7 +383,7 @@ HRESULT CaptureManager::StartPreview()
         }
 
         // Configure the video format for the preview sink.
-        hr = pSource->GetCurrentDeviceMediaType((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_VIDEO_PREVIEW , &pMediaType);
+        hr = pSource->GetCurrentDeviceMediaType((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_VIDEO_PREVIEW, &pMediaType);
         if (FAILED(hr))
         {
             goto done;
@@ -402,7 +403,7 @@ HRESULT CaptureManager::StartPreview()
 
         // Connect the video stream to the preview sink.
         DWORD dwSinkStreamIndex;
-        hr = m_pPreview->AddStream((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_VIDEO_PREVIEW,  pMediaType2, NULL, &dwSinkStreamIndex);        
+        hr = m_pPreview->AddStream((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_VIDEO_PREVIEW,  pMediaType2, NULL, &dwSinkStreamIndex);
         if (FAILED(hr))
         {
             goto done;
@@ -462,21 +463,23 @@ done:
 
 // Helper function to get the frame size from a video media type.
 inline HRESULT GetFrameSize(IMFMediaType *pType, UINT32 *pWidth, UINT32 *pHeight)
-{    return MFGetAttributeSize(pType, MF_MT_FRAME_SIZE, pWidth, pHeight);}
+{
+    return MFGetAttributeSize(pType, MF_MT_FRAME_SIZE, pWidth, pHeight);
+}
 
 // Helper function to get the frame rate from a video media type.
 inline HRESULT GetFrameRate(
-    IMFMediaType *pType, 
-    UINT32 *pNumerator, 
+    IMFMediaType *pType,
+    UINT32 *pNumerator,
     UINT32 *pDenominator
-    )
+)
 {
     return MFGetAttributeRatio(
-        pType, 
-        MF_MT_FRAME_RATE, 
-        pNumerator, 
-        pDenominator
-        );
+               pType,
+               MF_MT_FRAME_RATE,
+               pNumerator,
+               pDenominator
+           );
 }
 
 
@@ -501,7 +504,7 @@ HRESULT GetEncodingBitrate(IMFMediaType *pMediaType, UINT32 *uiEncodingBitrate)
     }
 
     uiBitrate = uiWidth / 3.0f * uiHeight * uiFrameRateNum / uiFrameRateDenom;
-    
+
     *uiEncodingBitrate = (UINT32) uiBitrate;
 
 done:
@@ -516,7 +519,7 @@ HRESULT ConfigureVideoEncoding(IMFCaptureSource *pSource, IMFCaptureRecordSink *
     GUID guidSubType = GUID_NULL;
 
     // Configure the video format for the recording sink.
-    HRESULT hr = pSource->GetCurrentDeviceMediaType((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_VIDEO_RECORD , &pMediaType);
+    HRESULT hr = pSource->GetCurrentDeviceMediaType((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_VIDEO_RECORD, &pMediaType);
     if (FAILED(hr))
     {
         goto done;
@@ -541,7 +544,7 @@ HRESULT ConfigureVideoEncoding(IMFCaptureSource *pSource, IMFCaptureRecordSink *
         hr = pMediaType2->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_H264);
     }
     else
-    {    
+    {
         UINT32 uiEncodingBitrate;
         hr = GetEncodingBitrate(pMediaType2, &uiEncodingBitrate);
         if (FAILED(hr))
@@ -591,14 +594,14 @@ HRESULT ConfigureAudioEncoding(IMFCaptureSource *pSource, IMFCaptureRecordSink *
 
     // Get a list of encoded output formats that are supported by the encoder.
     hr = MFTranscodeGetAudioOutputAvailableTypes(guidEncodingType, MFT_ENUM_FLAG_ALL | MFT_ENUM_FLAG_SORTANDFILTER,
-        pAttributes, &pAvailableTypes);
+            pAttributes, &pAvailableTypes);
     if (FAILED(hr))
     {
         goto done;
     }
 
     // Pick the first format from the list.
-    hr = GetCollectionObject(pAvailableTypes, 0, &pMediaType); 
+    hr = GetCollectionObject(pAvailableTypes, 0, &pMediaType);
     if (FAILED(hr))
     {
         goto done;
@@ -717,12 +720,12 @@ HRESULT CaptureManager::StartRecord(PCWSTR pszDestinationFile)
     }
 
     m_bRecording = true;
-    
+
 done:
     SafeRelease(&pSink);
     SafeRelease(&pSource);
     SafeRelease(&pRecord);
-    
+
     return hr;
 }
 
@@ -768,7 +771,7 @@ HRESULT CaptureManager::TakePhoto(PCWSTR pszFileName)
         goto done;
     }
 
-    hr = pSource->GetCurrentDeviceMediaType((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_PHOTO , &pMediaType);     
+    hr = pSource->GetCurrentDeviceMediaType((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_PHOTO, &pMediaType);
     if (FAILED(hr))
     {
         goto done;
@@ -791,8 +794,8 @@ HRESULT CaptureManager::TakePhoto(PCWSTR pszFileName)
     // Try to connect the first still image stream to the photo sink
     if(bHasPhotoStream)
     {
-        hr = pPhoto->AddStream((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_PHOTO,  pMediaType2, NULL, &dwSinkStreamIndex);        
-    }    
+        hr = pPhoto->AddStream((DWORD)MF_CAPTURE_ENGINE_PREFERRED_SOURCE_STREAM_FOR_PHOTO,  pMediaType2, NULL, &dwSinkStreamIndex);
+    }
 
     if(FAILED(hr))
     {

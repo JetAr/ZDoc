@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -227,10 +227,10 @@ HRESULT GetFontFaceInfo(const std::vector<IDWriteFont*>& fonts, const WCHAR* loc
                 break;
 
             info.push_back(FontFaceInfo(
-                                faceName.c_str(),
-                                fonts[i]->GetWeight(),
-                                fonts[i]->GetStyle(),
-                                fonts[i]->GetStretch()));
+                               faceName.c_str(),
+                               fonts[i]->GetWeight(),
+                               fonts[i]->GetStyle(),
+                               fonts[i]->GetStretch()));
         }
     }
     catch (...)
@@ -256,7 +256,7 @@ HRESULT GetFontFamilyNames(IDWriteFontCollection* fontCollection, const WCHAR* l
     HRESULT hr = S_OK;
 
     std::wstring familyName;
-    
+
     UINT32  familyCount = fontCollection->GetFontFamilyCount();
 
     try

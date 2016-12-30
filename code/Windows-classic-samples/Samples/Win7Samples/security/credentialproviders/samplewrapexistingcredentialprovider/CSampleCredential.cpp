@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -50,7 +50,7 @@ CSampleCredential::~CSampleCredential()
     }
 
     _CleanupEvents();
-    
+
     if (_pWrappedCredential)
     {
         _pWrappedCredential->Release();
@@ -66,7 +66,7 @@ HRESULT CSampleCredential::Initialize(
     __in const FIELD_STATE_PAIR* rgfsp,
     __in ICredentialProviderCredential *pWrappedCredential,
     __in DWORD dwWrappedDescriptorCount
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -102,11 +102,11 @@ HRESULT CSampleCredential::Initialize(
     return hr;
 }
 
-// LogonUI calls this in order to give us a callback in case we need to notify it of 
+// LogonUI calls this in order to give us a callback in case we need to notify it of
 // anything. We'll also provide it to the wrapped credential.
 HRESULT CSampleCredential::Advise(
     __in ICredentialProviderCredentialEvents* pcpce
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -118,11 +118,11 @@ HRESULT CSampleCredential::Advise(
     _pCredProvCredentialEvents->AddRef();
 
     _pWrappedCredentialEvents = new CWrappedCredentialEvents();
-    
+
     if (_pWrappedCredentialEvents != NULL)
     {
         _pWrappedCredentialEvents->Initialize(this, pcpce);
-    
+
         if (_pWrappedCredential != NULL)
         {
             hr = _pWrappedCredential->Advise(_pWrappedCredentialEvents);
@@ -136,12 +136,12 @@ HRESULT CSampleCredential::Advise(
     return hr;
 }
 
-// LogonUI calls this to tell us to release the callback. 
+// LogonUI calls this to tell us to release the callback.
 // We'll also provide it to the wrapped credential.
 HRESULT CSampleCredential::UnAdvise()
 {
     HRESULT hr = S_OK;
-    
+
     if (_pWrappedCredential != NULL)
     {
         _pWrappedCredential->UnAdvise();
@@ -154,10 +154,10 @@ HRESULT CSampleCredential::UnAdvise()
 
 // LogonUI calls this function when our tile is selected (zoomed)
 // If you simply want fields to show/hide based on the selected state,
-// there's no need to do anything here - you can set that up in the 
+// there's no need to do anything here - you can set that up in the
 // field definitions. In fact, we're just going to hand it off to the
 // wrapped credential in case it wants to do something.
-HRESULT CSampleCredential::SetSelected(__out BOOL* pbAutoLogon)  
+HRESULT CSampleCredential::SetSelected(__out BOOL* pbAutoLogon)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -183,14 +183,14 @@ HRESULT CSampleCredential::SetDeselected()
     return hr;
 }
 
-// Get info for a particular field of a tile. Called by logonUI to get information to 
+// Get info for a particular field of a tile. Called by logonUI to get information to
 // display the tile. We'll check to see if it's for us or the wrapped credential, and then
 // handle or route it as appropriate.
 HRESULT CSampleCredential::GetFieldState(
     __in DWORD dwFieldID,
     __out CREDENTIAL_PROVIDER_FIELD_STATE* pcpfs,
     __out CREDENTIAL_PROVIDER_FIELD_INTERACTIVE_STATE* pcpfis
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -231,12 +231,12 @@ HRESULT CSampleCredential::GetFieldState(
     return hr;
 }
 
-// Sets ppwsz to the string value of the field at the index dwFieldID. We'll check to see if 
+// Sets ppwsz to the string value of the field at the index dwFieldID. We'll check to see if
 // it's for us or the wrapped credential, and then handle or route it as appropriate.
 HRESULT CSampleCredential::GetStringValue(
-    __in DWORD dwFieldID, 
+    __in DWORD dwFieldID,
     __deref_out PWSTR* ppwsz
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -265,14 +265,14 @@ HRESULT CSampleCredential::GetStringValue(
     return hr;
 }
 
-// Returns the number of items to be included in the combobox (pcItems), as well as the 
-// currently selected item (pdwSelectedItem). We'll check to see if it's for us or the 
+// Returns the number of items to be included in the combobox (pcItems), as well as the
+// currently selected item (pdwSelectedItem). We'll check to see if it's for us or the
 // wrapped credential, and then handle or route it as appropriate.
 HRESULT CSampleCredential::GetComboBoxValueCount(
-    __in DWORD dwFieldID, 
-    __out DWORD* pcItems, 
+    __in DWORD dwFieldID,
+    __out DWORD* pcItems,
     __out_range(<,*pcItems) DWORD* pdwSelectedItem
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -305,13 +305,13 @@ HRESULT CSampleCredential::GetComboBoxValueCount(
 }
 
 // Called iteratively to fill the combobox with the string (ppwszItem) at index dwItem.
-// We'll check to see if it's for us or the wrapped credential, and then handle or route 
+// We'll check to see if it's for us or the wrapped credential, and then handle or route
 // it as appropriate.
 HRESULT CSampleCredential::GetComboBoxValueAt(
-    __in DWORD dwFieldID, 
+    __in DWORD dwFieldID,
     __in DWORD dwItem,
     __deref_out PWSTR* ppwszItem
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -341,12 +341,12 @@ HRESULT CSampleCredential::GetComboBoxValueAt(
     return hr;
 }
 
-// Called when the user changes the selected item in the combobox. We'll check to see if 
+// Called when the user changes the selected item in the combobox. We'll check to see if
 // it's for us or the wrapped credential, and then handle or route it as appropriate.
 HRESULT CSampleCredential::SetComboBoxSelectedValue(
     __in DWORD dwFieldID,
     __in DWORD dwSelectedItem
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -377,16 +377,16 @@ HRESULT CSampleCredential::SetComboBoxSelectedValue(
     return hr;
 }
 
-//------------- 
-// The following methods are for logonUI to get the values of various UI elements and 
+//-------------
+// The following methods are for logonUI to get the values of various UI elements and
 // then communicate to the credential about what the user did in that field. Even though
 // we don't offer these field types ourselves, we need to pass along the request to the
 // wrapped credential.
 
 HRESULT CSampleCredential::GetBitmapValue(
-    __in DWORD dwFieldID, 
+    __in DWORD dwFieldID,
     __out HBITMAP* phbmp
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -401,7 +401,7 @@ HRESULT CSampleCredential::GetBitmapValue(
 HRESULT CSampleCredential::GetSubmitButtonValue(
     __in DWORD dwFieldID,
     __out DWORD* pdwAdjacentTo
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -416,7 +416,7 @@ HRESULT CSampleCredential::GetSubmitButtonValue(
 HRESULT CSampleCredential::SetStringValue(
     __in DWORD dwFieldID,
     __in PCWSTR pwz
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -430,10 +430,10 @@ HRESULT CSampleCredential::SetStringValue(
 }
 
 HRESULT CSampleCredential::GetCheckboxValue(
-    __in DWORD dwFieldID, 
+    __in DWORD dwFieldID,
     __out BOOL* pbChecked,
     __deref_out PWSTR* ppwszLabel
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -449,9 +449,9 @@ HRESULT CSampleCredential::GetCheckboxValue(
 }
 
 HRESULT CSampleCredential::SetCheckboxValue(
-    __in DWORD dwFieldID, 
+    __in DWORD dwFieldID,
     __in BOOL bChecked
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -478,16 +478,16 @@ HRESULT CSampleCredential::CommandLinkClicked(__in DWORD dwFieldID)
 
 
 //
-// Collect the username and password into a serialized credential for the correct usage scenario 
-// (logon/unlock is what's demonstrated in this sample).  LogonUI then passes these credentials 
+// Collect the username and password into a serialized credential for the correct usage scenario
+// (logon/unlock is what's demonstrated in this sample).  LogonUI then passes these credentials
 // back to the system to log on.
 //
 HRESULT CSampleCredential::GetSerialization(
     __out CREDENTIAL_PROVIDER_GET_SERIALIZATION_RESPONSE* pcpgsr,
-    __out CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs, 
-    __deref_out_opt PWSTR* ppwszOptionalStatusText, 
+    __out CREDENTIAL_PROVIDER_CREDENTIAL_SERIALIZATION* pcpcs,
+    __deref_out_opt PWSTR* ppwszOptionalStatusText,
     __out CREDENTIAL_PROVIDER_STATUS_ICON* pcpsiOptionalStatusIcon
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -502,11 +502,11 @@ HRESULT CSampleCredential::GetSerialization(
 // ReportResult is completely optional. However, we will hand it off to the wrapped
 // credential in case they want to handle it.
 HRESULT CSampleCredential::ReportResult(
-    __in NTSTATUS ntsStatus, 
+    __in NTSTATUS ntsStatus,
     __in NTSTATUS ntsSubstatus,
-    __deref_out_opt PWSTR* ppwszOptionalStatusText, 
+    __deref_out_opt PWSTR* ppwszOptionalStatusText,
     __out CREDENTIAL_PROVIDER_STATUS_ICON* pcpsiOptionalStatusIcon
-    )
+)
 {
     HRESULT hr = E_UNEXPECTED;
 
@@ -520,14 +520,14 @@ HRESULT CSampleCredential::ReportResult(
 
 BOOL CSampleCredential::_IsFieldInWrappedCredential(
     __in DWORD dwFieldID
-    )
+)
 {
     return (dwFieldID < _dwWrappedDescriptorCount);
 }
 
 FIELD_STATE_PAIR *CSampleCredential::_LookupLocalFieldStatePair(
     __in DWORD dwFieldID
-    )
+)
 {
     // Offset into the ID to account for the wrapped fields.
     dwFieldID -= _dwWrappedDescriptorCount;
@@ -537,13 +537,13 @@ FIELD_STATE_PAIR *CSampleCredential::_LookupLocalFieldStatePair(
     {
         return &(_rgFieldStatePairs[dwFieldID]);
     }
-    
+
     return NULL;
 }
 
 void CSampleCredential::_CleanupEvents()
 {
-    // Call Uninitialize before releasing our reference on the real 
+    // Call Uninitialize before releasing our reference on the real
     // ICredentialProviderCredentialEvents to avoid having an
     // invalid reference.
     if (_pWrappedCredentialEvents != NULL)

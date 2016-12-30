@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // device.h: Manages the Direct3D device
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -23,7 +23,7 @@ typedef void (*IMAGE_TRANSFORM_FN)(
     LONG        lSrcStride,
     DWORD       dwWidthInPixels,
     DWORD       dwHeightInPixels
-    );
+);
 
 
 // DrawDevice class
@@ -53,12 +53,12 @@ private:
     IMAGE_TRANSFORM_FN      m_convertFn;    // Function to convert the video to RGB32
 
 private:
-    
+
     HRESULT TestCooperativeLevel();
     HRESULT SetConversionFunction(REFGUID subtype);
     HRESULT CreateSwapChains();
     void    UpdateDestinationRect();
-    
+
 public:
 
     DrawDevice();

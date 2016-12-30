@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -60,7 +60,8 @@ wmain (
                                 0,
                                 NULL);
 
-    if (INVALID_HANDLE_VALUE == LogFileHandle) {
+    if (INVALID_HANDLE_VALUE == LogFileHandle)
+    {
         wprintf (L"Failed to create a logfile: %u (Win32 error code)\n", GetLastError ());
         return -1;
     }
@@ -72,7 +73,8 @@ wmain (
 
     rc = WriteFile (LogFileHandle, BytesToPrint, strlen (BytesToPrint), &BytesWritten, NULL);
 
-    if (!rc) {
+    if (!rc)
+    {
         wprintf (L"Error writing to logfile: %u (Win32 error code)\n", GetLastError ());
         return -1;
     }
@@ -82,7 +84,8 @@ wmain (
     //
     rc = FlushFileBuffers (LogFileHandle);
 
-    if (!rc) {
+    if (!rc)
+    {
         wprintf (L"Error flushing the logfile: %u (Win32 error code)\n", GetLastError ());
         return -1;
     }
@@ -101,7 +104,8 @@ wmain (
 
     hr = WerRegisterFile (LogFullPath, WerRegFileTypeOther, WER_FILE_ANONYMOUS_DATA);
 
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"WerRegisterFile has failed: 0x%08X\n", hr);
         return -1;
     }

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: CutScene.cpp
 //
 // Desc: DirectShow sample code - simple interactive movie player.  Plays
@@ -122,10 +122,10 @@ BOOL CreateHiddenWindow( HINSTANCE hInstance, TCHAR *szFile )
     // window.  If the media file has only an audio component, then this will
     // be the only window created.
     g_hwndMain = CreateWindowEx(
-        0, CUTSCENE_NAME, szTitle,
-        0,            // not visible
-        0, 0, 0, 0,
-        NULL, NULL, hInstance, NULL );
+                     0, CUTSCENE_NAME, szTitle,
+                     0,            // not visible
+                     0, 0, 0, 0,
+                     NULL, NULL, hInstance, NULL );
 
     return (g_hwndMain != NULL);
 }
@@ -136,23 +136,23 @@ LONG WINAPI WindowProc( HWND hWnd, UINT message,
 {
     switch( message )
     {
-        // Monitor keystrokes for manipulating video window
-        // and program options
-        case WM_KEYDOWN:
-            switch( wParam )
-            {
-                case VK_ESCAPE:
-                case VK_SPACE:
-                case VK_RETURN:
-                    g_bUserInterruptedPlayback = TRUE;
-                    CloseApp();
-                    break;
-            }
+    // Monitor keystrokes for manipulating video window
+    // and program options
+    case WM_KEYDOWN:
+        switch( wParam )
+        {
+        case VK_ESCAPE:
+        case VK_SPACE:
+        case VK_RETURN:
+            g_bUserInterruptedPlayback = TRUE;
+            CloseApp();
             break;
+        }
+        break;
 
-        case WM_DESTROY:
-            PostQuitMessage(0);
-            return 0;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
     }
 
     // Pass this message to the video window for notification of system changes
@@ -168,7 +168,7 @@ HRESULT GetInterfaces(void)
     HRESULT hr = S_OK;
 
     // Instantiate filter graph interface
-    JIF(CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC, 
+    JIF(CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC,
                          IID_IGraphBuilder, (void **)&pGB));
 
     // Get interfaces to control playback & screensize
@@ -220,7 +220,8 @@ HRESULT PlayMedia(LPTSTR lpszMovie, HINSTANCE hInstance)
 
     // Allow DirectShow to create the FilterGraph for this media file
     hr = pGB->RenderFile(lpszMovie, NULL);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         Msg(TEXT("Failed(0x%08lx) in RenderFile(%s)!\r\n"), hr, lpszMovie);
         return hr;
     }
@@ -242,21 +243,24 @@ HRESULT PlayMedia(LPTSTR lpszMovie, HINSTANCE hInstance)
 
     // Set fullscreen
     hr = SetFullscreen();
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         Msg(TEXT("Failed(%08lx) to set fullscreen!\r\n"), hr);
         return hr;
     }
 
     // Display first frame of the movie
     hr = pMC->Pause();
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         Msg(TEXT("Failed(%08lx) in Pause()!\r\n"), hr);
         return hr;
     }
 
     // Start playback
     hr = pMC->Run();
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         Msg(TEXT("Failed(%08lx) in Run()!\r\n"), hr);
         return hr;
     }
@@ -275,7 +279,7 @@ HRESULT PlayMedia(LPTSTR lpszMovie, HINSTANCE hInstance)
         bSleep = TRUE;
 
         // Has there been a media event?  Look for end of stream condition.
-        if(E_ABORT != pME->GetEvent(&lEventCode, &lpParam1, 
+        if(E_ABORT != pME->GetEvent(&lEventCode, &lpParam1,
                                     &lpParam2, 0))
         {
             // Is this the end of the movie?

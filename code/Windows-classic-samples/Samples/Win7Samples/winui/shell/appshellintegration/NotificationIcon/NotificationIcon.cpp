@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -55,7 +55,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR /*lpCmdLine*/, int n
     WCHAR szTitle[100];
     LoadString(hInstance, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
     HWND hwnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, 0, 250, 200, NULL, NULL, g_hInst, NULL);
+                             CW_USEDEFAULT, 0, 250, 200, NULL, NULL, g_hInst, NULL);
     if (hwnd)
     {
         ShowWindow(hwnd, nCmdShow);
@@ -193,7 +193,7 @@ HWND ShowFlyout(HWND hwndMainWindow)
     AdjustWindowRectEx(&rcWindow, dwStyle, FALSE, WS_EX_TOOLWINDOW);
 
     HWND hwndFlyout = CreateWindowEx(WS_EX_TOOLWINDOW, szFlyoutWindowClass, NULL, dwStyle,
-        CW_USEDEFAULT, 0, rcWindow.right - rcWindow.left, rcWindow.bottom - rcWindow.top, hwndMainWindow, NULL, g_hInst, NULL);
+                                     CW_USEDEFAULT, 0, rcWindow.right - rcWindow.left, rcWindow.bottom - rcWindow.top, hwndMainWindow, NULL, g_hInst, NULL);
     if (hwndFlyout)
     {
         PositionFlyout(hwndFlyout, __uuidof(PrinterIcon));
@@ -254,47 +254,47 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         if (!AddNotificationIcon(hwnd))
         {
             MessageBox(hwnd,
-                L"Please read the ReadMe.txt file for troubleshooting",
-                L"Error adding icon", MB_OK);
+                       L"Please read the ReadMe.txt file for troubleshooting",
+                       L"Error adding icon", MB_OK);
             return -1;
         }
         break;
     case WM_COMMAND:
+    {
+        int const wmId = LOWORD(wParam);
+        // Parse the menu selections:
+        switch (wmId)
         {
-            int const wmId = LOWORD(wParam);
-            // Parse the menu selections:
-            switch (wmId)
-            {
-            case IDM_LOWINK:
-                ShowLowInkBalloon();
-                break;
+        case IDM_LOWINK:
+            ShowLowInkBalloon();
+            break;
 
-            case IDM_NOINK:
-                ShowNoInkBalloon();
-                break;
+        case IDM_NOINK:
+            ShowNoInkBalloon();
+            break;
 
-            case IDM_PRINTJOB:
-                ShowPrintJobBalloon();
-                break;
+        case IDM_PRINTJOB:
+            ShowPrintJobBalloon();
+            break;
 
-            case IDM_OPTIONS:
-                // placeholder for an options dialog
-                MessageBox(hwnd,  L"Display the options dialog here.", L"Options", MB_OK);
-                break;
+        case IDM_OPTIONS:
+            // placeholder for an options dialog
+            MessageBox(hwnd,  L"Display the options dialog here.", L"Options", MB_OK);
+            break;
 
-            case IDM_EXIT:
-                DestroyWindow(hwnd);
-                break;
+        case IDM_EXIT:
+            DestroyWindow(hwnd);
+            break;
 
-            case IDM_FLYOUT:
-                s_hwndFlyout = ShowFlyout(hwnd);
-                break;
+        case IDM_FLYOUT:
+            s_hwndFlyout = ShowFlyout(hwnd);
+            break;
 
-            default:
-                return DefWindowProc(hwnd, message, wParam, lParam);
-            }
+        default:
+            return DefWindowProc(hwnd, message, wParam, lParam);
         }
-        break;
+    }
+    break;
 
     case WMAPP_NOTIFYCALLBACK:
         switch (LOWORD(lParam))
@@ -325,11 +325,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_CONTEXTMENU:
-            {
-                POINT const pt = { LOWORD(wParam), HIWORD(wParam) };
-                ShowContextMenu(hwnd, pt);
-            }
-            break;
+        {
+            POINT const pt = { LOWORD(wParam), HIWORD(wParam) };
+            ShowContextMenu(hwnd, pt);
+        }
+        break;
         }
         break;
 
@@ -387,14 +387,14 @@ LRESULT CALLBACK FlyoutWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lP
     switch (message)
     {
     case WM_PAINT:
-        {
-            // paint a pretty picture
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hwnd, &ps);
-            FlyoutPaint(hwnd, hdc);
-            EndPaint(hwnd, &ps);
-        }
-        break;
+    {
+        // paint a pretty picture
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+        FlyoutPaint(hwnd, hdc);
+        EndPaint(hwnd, &ps);
+    }
+    break;
     case WM_ACTIVATE:
         if (LOWORD(wParam) == WA_INACTIVE)
         {

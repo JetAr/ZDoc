@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -39,17 +39,17 @@ Base64EncodeChunk(
     BYTE *  pData,
     DWORD   cbData,
     CHAR    szOutput[5]
-    );
+);
 
 BOOL
 IsEscapeSequence(
     CHAR *  str
-    );
+);
 
 BOOL
 ShouldEscape(
     BYTE    c
-    );
+);
 
 //
 // Member function implementations
@@ -57,7 +57,7 @@ ShouldEscape(
 
 ISAPI_STRING::ISAPI_STRING(
     DWORD   dwMaxAlloc
-    )
+)
 /*++
 
 Purpose:
@@ -100,7 +100,7 @@ BOOL
 ISAPI_STRING::Copy(
     CHAR *  szString,
     DWORD   cchString
-    )
+)
 /*++
 
 Purpose:
@@ -138,7 +138,7 @@ BOOL
 ISAPI_STRING::CopyW(
     WCHAR * szStringW,
     DWORD   cchStringW
-    )
+)
 /*++
 
 Purpose:
@@ -176,7 +176,7 @@ BOOL
 ISAPI_STRING::Append(
     CHAR *  szString,
     DWORD   cchString
-    )
+)
 /*++
 
 Purpose:
@@ -214,7 +214,7 @@ BOOL
 ISAPI_STRING::AppendW(
     WCHAR * szStringW,
     DWORD   cchStringW
-    )
+)
 /*++
 
 Purpose:
@@ -252,7 +252,7 @@ BOOL
 ISAPI_STRING::Printf(
     CHAR *  szString,
     ...
-    )
+)
 /*++
 
 Purpose:
@@ -283,7 +283,7 @@ Returns:
     va_start( args, szString );
 
     fResult = vsprintf_s( szString,
-                        args );
+                          args );
 
     va_end( args );
 
@@ -294,7 +294,7 @@ BOOL
 ISAPI_STRING::vsprintf_s(
     CHAR *  szFormat,
     va_list args
-    )
+)
 /*++
 
 Purpose:
@@ -326,10 +326,10 @@ Returns:
         cbBuffer = QueryBufferSize();
 
         cchWritten = (DWORD)_vsnprintf_s( QueryStr(),
-										sizeof( QueryStr() ),
-                                        cbBuffer,
-                                        szFormat,
-                                        args );
+                                          sizeof( QueryStr() ),
+                                          cbBuffer,
+                                          szFormat,
+                                          args );
 
         if ( cchWritten == (DWORD)-1 )
         {
@@ -367,7 +367,8 @@ Returns:
             }
         }
 
-    } while ( cchWritten == (DWORD)-1 );
+    }
+    while ( cchWritten == (DWORD)-1 );
 
     SetLen( cchWritten );
 
@@ -385,7 +386,7 @@ Failed:
 VOID
 ISAPI_STRING::CalcLen(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -409,7 +410,7 @@ Returns:
 DWORD
 ISAPI_STRING::QueryCB(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -433,7 +434,7 @@ Returns:
 DWORD
 ISAPI_STRING::QueryCCH(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -459,7 +460,7 @@ Returns:
 BOOL
 ISAPI_STRING::SetLen(
     DWORD   cchNewLength
-    )
+)
 /*++
 
 Purpose:
@@ -502,7 +503,7 @@ Returns:
 DWORD
 ISAPI_STRING::QueryBufferSize(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -525,7 +526,7 @@ Returns:
 BOOL
 ISAPI_STRING::ResizeBuffer(
     DWORD   cbSize
-    )
+)
 /*++
 
 Purpose:
@@ -549,7 +550,7 @@ Returns:
 DWORD
 ISAPI_STRING::QueryMaxAlloc(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -572,7 +573,7 @@ Returns:
 VOID
 ISAPI_STRING::SetMaxAlloc(
     DWORD   dwMaxAlloc
-    )
+)
 /*++
 
 Purpose:
@@ -597,7 +598,7 @@ ISAPI_STRING::FindStr(
     CHAR *  szSubString,
     BOOL    fCaseInsensitive,
     DWORD   dwStartingOffset
-    )
+)
 /*++
 
 Purpose:
@@ -707,7 +708,7 @@ BOOL
 ISAPI_STRING::Base64Encode(
     VOID *  pBuffer,
     DWORD   cbBuffer
-    )
+)
 /*++
 
 Purpose:
@@ -773,7 +774,7 @@ Failed:
 BOOL
 ISAPI_STRING::Escape(
     BOOL    fAllowDoubleEscaping
-    )
+)
 /*++
 
 Purpose:
@@ -809,8 +810,8 @@ Returns:
     while ( *pRead != '\0' )
     {
         if ( ( fAllowDoubleEscaping ||
-               !IsEscapeSequence( (CHAR*)pRead ) ) &&
-             ShouldEscape( *pRead ) )
+                !IsEscapeSequence( (CHAR*)pRead ) ) &&
+                ShouldEscape( *pRead ) )
         {
             dwNumEscapes++;
         }
@@ -839,8 +840,8 @@ Returns:
     while ( *pRead != '\0' )
     {
         if ( ( fAllowDoubleEscaping ||
-               !IsEscapeSequence( (CHAR*)pRead ) ) &&
-             ShouldEscape( *pRead ) )
+                !IsEscapeSequence( (CHAR*)pRead ) ) &&
+                ShouldEscape( *pRead ) )
         {
             itoa( *pRead, szHex, 16 );
 
@@ -877,7 +878,7 @@ Failed:
 VOID
 ISAPI_STRING::Unescape(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -935,7 +936,7 @@ Returns:
 CHAR *
 ISAPI_STRING::QueryStr(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -958,7 +959,7 @@ Returns:
 VOID
 ISAPI_STRING::ZeroBuffer(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -984,7 +985,7 @@ ISAPI_STRING::CopyToOffset(
     CHAR *  szString,
     DWORD   cchString,
     DWORD   dwOffset
-    )
+)
 /*++
 
 Purpose:
@@ -1033,7 +1034,7 @@ ISAPI_STRING::CopyWToOffset(
     WCHAR * szStringW,
     DWORD   cchStringW,
     DWORD   dwOffset
-    )
+)
 /*++
 
 Purpose:
@@ -1067,7 +1068,7 @@ Returns:
     cbData = cchStringW + sizeof(CHAR);
 
     if ( QueryBufferSize() < cbData + dwOffset &&
-         ResizeBuffer( cbData + dwOffset ) == FALSE )
+            ResizeBuffer( cbData + dwOffset ) == FALSE )
     {
         goto Failed;
     }
@@ -1115,7 +1116,7 @@ Base64EncodeChunk(
     BYTE *  pData,
     DWORD   cbData,
     CHAR    szOutput[5]
-    )
+)
 /*++
 
 Purpose:
@@ -1218,7 +1219,8 @@ Returns:
     do
     {
         szOutput[x] = szTable[szOutput[x]];
-    } while ( x-- );
+    }
+    while ( x-- );
 
     //
     // Done
@@ -1230,7 +1232,7 @@ Returns:
 BOOL
 IsEscapeSequence(
     CHAR *  str
-    )
+)
 /*++
 
 Purpose:
@@ -1249,8 +1251,8 @@ Returns:
 --*/
 {
     if ( *str == '%' &&
-         isxdigit( *(str+1) ) &&
-         isxdigit( *(str+2) ) )
+            isxdigit( *(str+1) ) &&
+            isxdigit( *(str+2) ) )
     {
         return TRUE;
     }
@@ -1261,7 +1263,7 @@ Returns:
 BOOL
 ShouldEscape(
     BYTE    c
-    )
+)
 /*++
 
 Purpose:
@@ -1287,7 +1289,7 @@ Returns:
     //
 
     if ( c <= 0x1f ||
-         c == 0x7f )
+            c == 0x7f )
     {
         //
         // Control character

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,13 +21,13 @@ namespace SDK_SAMPLE_COMMON
 //
 // Declarations of private methods (not accessible by external code).
 //
-    // Create a basic SoH Constructor object.
-    HRESULT CreateSoHConstructor(
-        _Outref_ INapSoHConstructor* &pISohConstructor);
+// Create a basic SoH Constructor object.
+HRESULT CreateSoHConstructor(
+    _Outref_ INapSoHConstructor* &pISohConstructor);
 
-    // Create a basic SoH Processor object.
-    HRESULT CreateSoHProcessor(
-        _Outref_ INapSoHProcessor* &pISohProcessor);
+// Create a basic SoH Processor object.
+HRESULT CreateSoHProcessor(
+    _Outref_ INapSoHProcessor* &pISohProcessor);
 
 
 //
@@ -37,7 +37,7 @@ namespace SDK_SAMPLE_COMMON
 // Helper Function for populating already allocated CountedString structures
 // This makes filling the NapRegistrationInfo struct cleaner in the sample code
 HRESULT FillCountedString(
-    _In_ const WCHAR* src, 
+    _In_ const WCHAR* src,
     _Inout_ CountedString* dest)
 {
     HRESULT hr = S_OK;
@@ -70,7 +70,7 @@ HRESULT FillCountedString(
     if ( FAILED(hr) )
     {
         // Failed to allocate memory
-        DebugPrintfW(L" --- SdkCommon - FillCountedString: Failed to allocate buffer memory (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - FillCountedString: Failed to allocate buffer memory (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -121,11 +121,11 @@ HRESULT CreateOutputSoHConstructor(
     // Create an empty SoH Constructor for this client.
     //
 
-	pISohConstructor = NULL;
-	hr = CreateSoHConstructor(pISohConstructor);
+    pISohConstructor = NULL;
+    hr = CreateSoHConstructor(pISohConstructor);
     if ( FAILED(hr) )
     {
-        DebugPrintfW(L" --- SdkCommon - CreateOutputSoHConstructor(): failed on call to CreateSoHConstructor (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateOutputSoHConstructor(): failed on call to CreateSoHConstructor (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -133,11 +133,11 @@ HRESULT CreateOutputSoHConstructor(
     hr = pISohConstructor->Initialize(systemHealthId, sohType);
     if ( FAILED(hr) )
     {
-        DebugPrintfW(L" --- SdkCommon - CreateOutputSoHConstructor(): failed on call to Initialize (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateOutputSoHConstructor(): failed on call to Initialize (error = 0x%08x)",hr);
         ReleaseObject(pISohConstructor);
     }
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
@@ -155,11 +155,11 @@ HRESULT CreateInputSoHProcessor(
     // Create the SoH processor that will be used for this input SoH.
     //
 
-	pISohProcessor = NULL;
+    pISohProcessor = NULL;
     hr = CreateSoHProcessor(pISohProcessor);
     if ( FAILED(hr) )
     {
-        DebugPrintfW(L" --- SdkCommon - CreateInputSoHProcessor(): failed on call to CreateSoHProcessor (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateInputSoHProcessor(): failed on call to CreateSoHProcessor (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -167,11 +167,11 @@ HRESULT CreateInputSoHProcessor(
     hr = pISohProcessor->Initialize(pInputSoh, sohType, &systemHealthId);
     if ( FAILED(hr) )
     {
-        DebugPrintfW(L" --- SdkCommon - CreateInputSoHProcessor(): failed on call to Initialize (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateInputSoHProcessor(): failed on call to Initialize (error = 0x%08x)",hr);
         ReleaseObject(pISohProcessor);
     }
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
@@ -191,12 +191,12 @@ void ReleaseObject(
 // NULL.
 void FreeMemory(
     _Pre_opt_valid_ _Post_ptr_invalid_ WCHAR* &pAllocatedMemory)
-{	
-	if (pAllocatedMemory)
-	{
-		CoTaskMemFree(pAllocatedMemory);
-		pAllocatedMemory = NULL;
-	}
+{
+    if (pAllocatedMemory)
+    {
+        CoTaskMemFree(pAllocatedMemory);
+        pAllocatedMemory = NULL;
+    }
 }
 
 
@@ -205,69 +205,69 @@ void FreeMemory(
 void FreeMemory(
     _Pre_opt_valid_ _Post_ptr_invalid_ CountedString* &pAllocatedMemory)
 {
-	if (pAllocatedMemory)
-	{
-		FreeMemory(pAllocatedMemory->string);
-		CoTaskMemFree(pAllocatedMemory);
-		pAllocatedMemory = NULL;
-	}
+    if (pAllocatedMemory)
+    {
+        FreeMemory(pAllocatedMemory->string);
+        CoTaskMemFree(pAllocatedMemory);
+        pAllocatedMemory = NULL;
+    }
 }
 
 
 // Allocate a buffer to contain a WCHAR string, which is "stringSizeInBytes" wchars long.
 HRESULT AllocateMemory(
-    _Outref_result_bytebuffer_(stringSizeInBytes) WCHAR* &pString, 
+    _Outref_result_bytebuffer_(stringSizeInBytes) WCHAR* &pString,
     _In_ size_t stringSizeInBytes)
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	pString = static_cast<WCHAR*>(CoTaskMemAlloc(stringSizeInBytes));
-	if (!(pString))
-	{
-		// Failed to allocate memory
-		hr = E_OUTOFMEMORY;
-		goto Cleanup;
-	}
+    pString = static_cast<WCHAR*>(CoTaskMemAlloc(stringSizeInBytes));
+    if (!(pString))
+    {
+        // Failed to allocate memory
+        hr = E_OUTOFMEMORY;
+        goto Cleanup;
+    }
 
-	ZeroMemory(pString, stringSizeInBytes);
+    ZeroMemory(pString, stringSizeInBytes);
 
 Cleanup:
-	return hr;
+    return hr;
 }
 
 
 // Allocate a buffer to contain a CountedString struct, whose overall string member's
 // buffer is "stringSizeInBytes" wchars long.
 HRESULT AllocateMemory(
-    _Outref_ CountedString* &pString, 
+    _Outref_ CountedString* &pString,
     _In_ size_t stringSizeInBytes)
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	pString = static_cast<CountedString*>(CoTaskMemAlloc(sizeof(CountedString)));
-	if (!pString)
-	{
-		// Failed to allocate memory
-		hr = E_OUTOFMEMORY;
-		goto Cleanup;
-	}
+    pString = static_cast<CountedString*>(CoTaskMemAlloc(sizeof(CountedString)));
+    if (!pString)
+    {
+        // Failed to allocate memory
+        hr = E_OUTOFMEMORY;
+        goto Cleanup;
+    }
 
-	ZeroMemory(pString, sizeof(CountedString));
+    ZeroMemory(pString, sizeof(CountedString));
 
     WCHAR* pBuffer;
-	hr = AllocateMemory(pBuffer, stringSizeInBytes);
-	if (FAILED(hr))
-	{
-		// delete the allocated memory
-		FreeMemory(pString);
-		goto Cleanup;
-	}
+    hr = AllocateMemory(pBuffer, stringSizeInBytes);
+    if (FAILED(hr))
+    {
+        // delete the allocated memory
+        FreeMemory(pString);
+        goto Cleanup;
+    }
 
-	ZeroMemory(pBuffer, stringSizeInBytes);
+    ZeroMemory(pBuffer, stringSizeInBytes);
     pString->string = pBuffer;
 
 Cleanup:
-	return hr;
+    return hr;
 }
 
 //
@@ -284,15 +284,15 @@ HRESULT CreateSoHConstructor(
     // Construct a basic SoH Constructor object.
     //
 
-	pISohConstructor = NULL;
-	hr = CoCreateInstance(CLSID_NapSoHConstructor,
-                           0,
-                           CLSCTX_INPROC_SERVER,
-                           __uuidof(INapSoHConstructor),
-                           reinterpret_cast<void**>(&pISohConstructor) );
+    pISohConstructor = NULL;
+    hr = CoCreateInstance(CLSID_NapSoHConstructor,
+                          0,
+                          CLSCTX_INPROC_SERVER,
+                          __uuidof(INapSoHConstructor),
+                          reinterpret_cast<void**>(&pISohConstructor) );
     if (FAILED(hr))
     {
-        DebugPrintfW(L" --- SdkCommon - CreateSoHConstructor(): failed on call to CoCreateInstance (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateSoHConstructor(): failed on call to CoCreateInstance (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -303,7 +303,7 @@ HRESULT CreateSoHConstructor(
         goto Cleanup;
     }
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
@@ -318,16 +318,16 @@ HRESULT CreateSoHProcessor(
     // Construct a basic SoH object (QuarSoH interface).
     //
 
-	pISohProcessor = NULL;
-	hr = CoCreateInstance(CLSID_NapSoHProcessor,
-                           0,
-                           CLSCTX_INPROC_SERVER,
-                           __uuidof(INapSoHProcessor),
-                           reinterpret_cast<void**>(&pISohProcessor) );
+    pISohProcessor = NULL;
+    hr = CoCreateInstance(CLSID_NapSoHProcessor,
+                          0,
+                          CLSCTX_INPROC_SERVER,
+                          __uuidof(INapSoHProcessor),
+                          reinterpret_cast<void**>(&pISohProcessor) );
 
     if (FAILED(hr))
     {
-        DebugPrintfW(L" --- SdkCommon - CreateSoHProcessor(): failed on call to CoCreateInstance (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - CreateSoHProcessor(): failed on call to CoCreateInstance (error = 0x%08x)",hr);
         goto Cleanup;
     }
 
@@ -338,7 +338,7 @@ HRESULT CreateSoHProcessor(
         goto Cleanup;
     }
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
@@ -372,7 +372,7 @@ HRESULT InitializeSecurity()
         hr = HRESULT_FROM_WIN32(errorCode);
         goto Cleanup;
     }
-  
+
     // Retrieve the token information in a TOKEN_USER structure.
     DWORD bufferSize = 0;
     if (!GetTokenInformation(hToken, TokenUser, NULL, 0, &bufferSize))
@@ -460,7 +460,7 @@ HRESULT InitializeSecurity()
     }
 
     // Calculate the amount of memory that must be allocated for the DACL.
-    DWORD cbDacl = 
+    DWORD cbDacl =
         sizeof(ACL) +                               // Size of memory required for the ACL structure
         sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD); // Size of ACE structure that the ACL is to contain minus the SidStart member (DWORD) of the ACE
     cbDacl += GetLengthSid(sid);                    // Length of the SID that ACE is to contain
@@ -486,7 +486,7 @@ HRESULT InitializeSecurity()
                             ACL_REVISION2,             // Required constant
                             COM_RIGHTS_EXECUTE,        // Access mask
                             sid                        // Pointer to the network service SID
-                            ) == FALSE)
+                           ) == FALSE)
     {
         errorCode = GetLastError();
         wprintf(L"AddAccessAllowedAce failed for the network service group. GetLastError returned: %lu\n", errorCode);
@@ -507,7 +507,7 @@ HRESULT InitializeSecurity()
                                -1,
                                NULL,
                                NULL,
-                               RPC_C_AUTHN_LEVEL_PKT, 
+                               RPC_C_AUTHN_LEVEL_PKT,
                                RPC_C_IMP_LEVEL_IMPERSONATE,
                                NULL,
                                EOAC_NONE,
@@ -555,7 +555,7 @@ HRESULT CreateKeyPath(
         hr = StringCchCatW(keyPath, cchDest, pSubKey1);
         if (FAILED(hr))
         {
-            DebugPrintfW(L" --- SdkCommon - CreateKeyPath(): StringCchCatW failed with pSubKey1 (error = 0x%08x)" ,hr);
+            DebugPrintfW(L" --- SdkCommon - CreateKeyPath(): StringCchCatW failed with pSubKey1 (error = 0x%08x)",hr);
             goto Cleanup;
         }
     }
@@ -564,7 +564,7 @@ HRESULT CreateKeyPath(
         hr = StringCchCatW(keyPath, cchDest, pSubKey2);
         if (FAILED(hr))
         {
-            DebugPrintfW(L" --- SdkCommon - CreateKeyPath(): StringCchCatW failed with pSubKey2 (error = 0x%08x)" ,hr);
+            DebugPrintfW(L" --- SdkCommon - CreateKeyPath(): StringCchCatW failed with pSubKey2 (error = 0x%08x)",hr);
             goto Cleanup;
         }
     }
@@ -587,17 +587,17 @@ HRESULT SdkSetRegistryValue(
     hr = RegCreateKeyEx(HKEY_LOCAL_MACHINE, pKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &hkey, NULL);
     if (hr != ERROR_SUCCESS)
     {
-        DebugPrintfW(L" --- SdkCommon - SdkSetRegistryValue(): RegCreateKeyEx failed (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - SdkSetRegistryValue(): RegCreateKeyEx failed (error = 0x%08x)",hr);
         return hr;
     }
 
     hr = RegSetValueEx(hkey, pValueName, 0, type, static_cast<CONST BYTE*>(pData), cbData);
     if (hr != ERROR_SUCCESS)
     {
-        DebugPrintfW(L" --- SdkCommon - SdkSetRegistryValue(): RegSetValueEx failed (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - SdkSetRegistryValue(): RegSetValueEx failed (error = 0x%08x)",hr);
         goto Cleanup;
     }
-    
+
 Cleanup:
     RegCloseKey(hkey);
     return hr;
@@ -612,14 +612,14 @@ HRESULT SdkSetRegistryStringValue(
 {
     DWORD cbData = (pData == NULL) ? 0 : static_cast<DWORD>((wcslen(pData)+1) * sizeof(WCHAR));
     HRESULT hr = SdkSetRegistryValue(
-        pKey, 
-        pValueName, 
-        REG_SZ, 
-        static_cast<const void*>(pData), 
-        cbData);
+                     pKey,
+                     pValueName,
+                     REG_SZ,
+                     static_cast<const void*>(pData),
+                     cbData);
     if (hr != ERROR_SUCCESS)
     {
-        DebugPrintfW(L" --- SdkCommon - SdkSetRegistryStringValue(): SdkSetRegistryValue failed (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - SdkSetRegistryStringValue(): SdkSetRegistryValue failed (error = 0x%08x)",hr);
     }
 
     return hr;
@@ -638,14 +638,14 @@ HRESULT DeleteRegistryTree(
         hr = RegDeleteTree(hkey, keyName);
         if (hr != ERROR_SUCCESS)
         {
-            DebugPrintfW(L" --- SdkCommon - DeleteRegistryTree(): RegDeleteTree failed (error = 0x%08x)" ,hr);
+            DebugPrintfW(L" --- SdkCommon - DeleteRegistryTree(): RegDeleteTree failed (error = 0x%08x)",hr);
         }
 
         RegCloseKey(hkey);
     }
     else
     {
-        DebugPrintfW(L" --- SdkCommon - DeleteRegistryTree(): RegOpenKeyEx failed (error = 0x%08x)" ,hr);
+        DebugPrintfW(L" --- SdkCommon - DeleteRegistryTree(): RegOpenKeyEx failed (error = 0x%08x)",hr);
     }
 
     return hr;

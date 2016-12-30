@@ -1,10 +1,10 @@
-/*
+﻿/*
  * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
  * ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
  *
- * Copyright �  Microsoft Corporation.  All Rights Reserved.
+ * Copyright ©  Microsoft Corporation.  All Rights Reserved.
  *
  * Author: Yashlaxmi Gupta
  * Abstract:
@@ -42,12 +42,12 @@ WCHAR *GetDateTimeString(
 DWORD __cdecl main(int argc, char* argv[])
 {
     DHCP_RESUME_HANDLE ResumeHandle = 0;
-	LPDHCPV6_IP_ARRAY EnumScopesV6 = NULL;
-	DWORD nReadV6 = 0, nTotalV6 = 0;
-	DHCP_RESUME_IPV6_HANDLE ResumeHandleV6 = {0,0};
-	LPDHCP_CLIENT_INFO_ARRAY_V6 ClientsV6 = NULL;
+    LPDHCPV6_IP_ARRAY EnumScopesV6 = NULL;
+    DWORD nReadV6 = 0, nTotalV6 = 0;
+    DHCP_RESUME_IPV6_HANDLE ResumeHandleV6 = {0,0};
+    LPDHCP_CLIENT_INFO_ARRAY_V6 ClientsV6 = NULL;
     DWORD  nClientsReadV6 = 0, nClientsTotalV6 = 0;
-	DWORD error1 = ERROR_SUCCESS, error2 = ERROR_SUCCESS;
+    DWORD error1 = ERROR_SUCCESS, error2 = ERROR_SUCCESS;
     WCHAR *szDateTimeStr = NULL, *szDuid = NULL, *szClientIp = NULL, *szScopeIp = NULL;
 
     WCHAR szServer[SERVERNAME_BUF_SIZE] = {0};
@@ -56,8 +56,9 @@ DWORD __cdecl main(int argc, char* argv[])
         wprintf(L"Usage: DhcpServerShowLeasesV6.exe <Server IpAdd/Name>");
         return ERROR_INVALID_PARAMETER;
     }
-    MultiByteToWideChar(0, 0, argv[1], (int)strlen(argv[1]), szServer, SERVERNAME_BUF_SIZE);      
-    do {
+    MultiByteToWideChar(0, 0, argv[1], (int)strlen(argv[1]), szServer, SERVERNAME_BUF_SIZE);
+    do
+    {
         // enumerate all the IpV6 scopes on the server.
         error1 = DhcpEnumSubnetsV6(szServer, &ResumeHandle, (DWORD)~0, &EnumScopesV6, &nReadV6, &nTotalV6);
         if (0 == nTotalV6)
@@ -68,21 +69,22 @@ DWORD __cdecl main(int argc, char* argv[])
         {
             break;
         }
-	    if (ERROR_SUCCESS != error1 && ERROR_MORE_DATA != error1)
-	    {
-            wprintf(L"DhcpServerShowLeasesV6 returned with error: %d\n",error1); 
+        if (ERROR_SUCCESS != error1 && ERROR_MORE_DATA != error1)
+        {
+            wprintf(L"DhcpServerShowLeasesV6 returned with error: %d\n",error1);
             return error1;
-	    }
+        }
         // iterating over all the scopes one by one to get the clients for each scope.
-	    for (unsigned int count=0; count < EnumScopesV6->NumElements; count++)
-	    {
+        for (unsigned int count=0; count < EnumScopesV6->NumElements; count++)
+        {
             // converting scope IP address from DHCP_IPV6_ADDRESS to LPWSTR
             szScopeIp = ConvertIpV6AddtoWstr(EnumScopesV6->Elements[count]);
             wprintf(L"\nScope : %s\n\n", szScopeIp ? szScopeIp : L" ");
- 		    do {
+            do
+            {
                 // enumerating the clients on a specific IpV6 scope
                 //the leases shown include all the leases present and can be filtered out on the basic of Address State attribute of client.
-		        error2 = DhcpEnumSubnetClientsV6(szServer, EnumScopesV6->Elements[count], &ResumeHandleV6, (DWORD)~0, &ClientsV6, &nClientsReadV6, &nClientsTotalV6);
+                error2 = DhcpEnumSubnetClientsV6(szServer, EnumScopesV6->Elements[count], &ResumeHandleV6, (DWORD)~0, &ClientsV6, &nClientsReadV6, &nClientsTotalV6);
                 if (0 == nClientsTotalV6)
                 {
                     wprintf(L"No clients on this scope.\n");
@@ -91,14 +93,14 @@ DWORD __cdecl main(int argc, char* argv[])
                 {
                     break;
                 }
-		        if (ERROR_SUCCESS != error2 && ERROR_MORE_DATA != error2)
-		        {
-                    wprintf(L"DhcpServerShowLeasesV6 returned with error: %d\n",error2); 
+                if (ERROR_SUCCESS != error2 && ERROR_MORE_DATA != error2)
+                {
+                    wprintf(L"DhcpServerShowLeasesV6 returned with error: %d\n",error2);
                     return error2;
-		        }
+                }
                 //iterating over all the clients on a speicified scope.
                 for (unsigned int count = 0; count < ClientsV6->NumElements; count++)
-  	            {
+                {
                     //converting client Ip from DHCP_IPV6_ADDRESS to LPWSTR
                     szClientIp = ConvertIpV6AddtoWstr(ClientsV6->Clients[count]->ClientIpAddress);
                     wprintf(L"ClientAddress   : %s\n",szClientIp ? szClientIp : L" ");
@@ -106,14 +108,14 @@ DWORD __cdecl main(int argc, char* argv[])
                     szDuid = GetHardwareAddress(ClientsV6->Clients[count]->ClientDUID);
                     wprintf(L"DUID            : %s\n",szDuid ? szDuid : L" ");
                     wprintf(L"IAID            : %d\n",ClientsV6->Clients[count]->IAID);
-                    // if lease duration is infinite then lease never expires. 
-                    if (DHCP_DATE_TIME_INFINITE_LOW == ClientsV6->Clients[count]->ClientValidLeaseExpires.dwLowDateTime && 
-                        DHCP_DATE_TIME_INFINITE_HIGH == ClientsV6->Clients[count]->ClientValidLeaseExpires.dwHighDateTime)
+                    // if lease duration is infinite then lease never expires.
+                    if (DHCP_DATE_TIME_INFINITE_LOW == ClientsV6->Clients[count]->ClientValidLeaseExpires.dwLowDateTime &&
+                            DHCP_DATE_TIME_INFINITE_HIGH == ClientsV6->Clients[count]->ClientValidLeaseExpires.dwHighDateTime)
                     {
                         wprintf(L"Lease Expires   : Never\n\n");
                     }
                     // if lease duration is 0 the client is inactive.
-                    else if (DHCP_DATE_TIME_ZERO_LOW == ClientsV6->Clients[count]->ClientValidLeaseExpires.dwLowDateTime && 
+                    else if (DHCP_DATE_TIME_ZERO_LOW == ClientsV6->Clients[count]->ClientValidLeaseExpires.dwLowDateTime &&
                              DHCP_DATE_TIME_ZERO_HIGH == ClientsV6->Clients[count]->ClientValidLeaseExpires.dwHighDateTime)
                     {
                         wprintf(L"Lease Expires   : Inactive\n\n");
@@ -139,30 +141,32 @@ DWORD __cdecl main(int argc, char* argv[])
                         free(szDateTimeStr);
                         szDateTimeStr = NULL;
                     }
-	            }
+                }
                 if (NULL != ClientsV6)
                 {
                     DhcpRpcFreeMemory(ClientsV6);
                     ClientsV6 = NULL;
                 }
                 nClientsReadV6 = 0;
-		        nClientsTotalV6 = 0;
-            } while (ERROR_MORE_DATA == error2);
+                nClientsTotalV6 = 0;
+            }
+            while (ERROR_MORE_DATA == error2);
             if (NULL != szScopeIp)
             {
                 free(szScopeIp);
                 szScopeIp = NULL;
             }
-	    }
+        }
         nReadV6 = 0;
         nTotalV6 = 0;
         if (NULL != EnumScopesV6)
         {
-            DhcpRpcFreeMemory(EnumScopesV6);    
+            DhcpRpcFreeMemory(EnumScopesV6);
             EnumScopesV6 = NULL;
         }
-    } while (ERROR_MORE_DATA == error1);
-	return 0;
+    }
+    while (ERROR_MORE_DATA == error1);
+    return 0;
 }
 
 WCHAR *ConvertIpV6AddtoWstr(
@@ -180,13 +184,13 @@ WCHAR *ConvertIpV6AddtoWstr(
         return NULL;
     }
     // converting high and low order bits into a byte array.
-    for (unsigned int i=0;i<8;i++)
-	{
-		IpByte[i]=(BYTE)(addr.HighOrderBits>>((7-i)*8));
-	}
-	for (unsigned int i=0;i<8;i++)
-	{
-		IpByte[8+i]=(BYTE)(addr.LowOrderBits>>((7-i)*8));
+    for (unsigned int i=0; i<8; i++)
+    {
+        IpByte[i]=(BYTE)(addr.HighOrderBits>>((7-i)*8));
+    }
+    for (unsigned int i=0; i<8; i++)
+    {
+        IpByte[8+i]=(BYTE)(addr.LowOrderBits>>((7-i)*8));
     }
     szIpv6Address = (WCHAR *)malloc(IPADDRV6_BUF_SIZE);
     if (NULL == szIpv6Address)
@@ -194,7 +198,7 @@ WCHAR *ConvertIpV6AddtoWstr(
         return NULL;
     }
     memset(szIpv6Address, 0, IPADDRV6_BUF_SIZE);
-    // converting high order bytes into haxadecimal string form. 
+    // converting high order bytes into haxadecimal string form.
     for (unsigned int i=0; i<8; i=i+2)
     {
         octet[i/2] = htons(*((unsigned short *)IpByte));
@@ -202,7 +206,7 @@ WCHAR *ConvertIpV6AddtoWstr(
     }
     if (0 == octet[1] && 0 == octet[2] && 0 == octet[3])
     {
-        Hres = StringCchPrintfW(szIpv6Address,IPADDRV6_BUF_SIZE,L"%x::",octet[0]);    
+        Hres = StringCchPrintfW(szIpv6Address,IPADDRV6_BUF_SIZE,L"%x::",octet[0]);
         if (FAILED(Hres))
             return NULL;
     }
@@ -232,7 +236,7 @@ WCHAR *ConvertIpV6AddtoWstr(
     }
     if (0 == octet[0] && 0 == octet[1] && 0 == octet[2])
     {
-        Hres = StringCchPrintfW(szIpv6LowOrderBits,IPADDRV6_BUF_SIZE/2-1,L"%x",octet[3]);    
+        Hres = StringCchPrintfW(szIpv6LowOrderBits,IPADDRV6_BUF_SIZE/2-1,L"%x",octet[3]);
         if (FAILED(Hres))
             return NULL;
     }
@@ -243,13 +247,13 @@ WCHAR *ConvertIpV6AddtoWstr(
             return NULL;
     }
     else if (0 == octet[0])
-    {   
+    {
         Hres = StringCchPrintfW(szIpv6LowOrderBits,IPADDRV6_BUF_SIZE/2-1,L"%x:%x:%x",octet[1],octet[2],octet[3]);
         if (FAILED(Hres))
             return NULL;
     }
     else
-    { 
+    {
         Hres = StringCchPrintfW(szIpv6LowOrderBits,IPADDRV6_BUF_SIZE/2-1,L"%x:%x:%x:%x",octet[0],octet[1],octet[2],octet[3]);
         if (FAILED(Hres))
             return NULL;
@@ -275,7 +279,7 @@ WCHAR *GetHardwareAddress(
         // corressponding to each byte in the original string, there would be a hyphen and a '\0' character for the last one.
         HRes = DWordMult(3, phyAdd.DataLength, &Size);
         if (FAILED(HRes))
-        {    
+        {
             return NULL;
         }
         // calculating the bcount of the hardware address string.
@@ -284,7 +288,7 @@ WCHAR *GetHardwareAddress(
         {
             return NULL;
         }
-        // allocating the memory for the hardware address string. 
+        // allocating the memory for the hardware address string.
         szPhysicalAddress = (WCHAR *)malloc(Size);
         if (NULL == szPhysicalAddress)
         {
@@ -301,7 +305,7 @@ WCHAR *GetHardwareAddress(
             num2 = num0 % 16;
             szPhysicalAddress[j++] = "0123456789ABCDEF"[num2];
             if (i < phyAdd.DataLength - 1)
-            { 
+            {
                 // adding the separator hyphen.
                 szPhysicalAddress[j++] = L'-';
             }

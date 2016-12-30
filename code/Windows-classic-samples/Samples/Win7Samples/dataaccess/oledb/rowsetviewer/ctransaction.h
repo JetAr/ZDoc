@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB RowsetViewer
 // Copyright (C) 1994 - 1999 By Microsoft Corporation.
 //
@@ -26,33 +26,45 @@
 class CTransaction : public CContainerBase
 {
 public:
-	//Constructors
-	CTransaction(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CTransaction();
+    //Constructors
+    CTransaction(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CTransaction();
 
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	//Pure Virtual
-	virtual WCHAR*			GetObjectName()			{ return L"Transaction";		} 
-	virtual UINT			GetObjectMenu()			{ return IDM_TRANSACTIONMENU;	}
-	virtual LONG			GetObjectImage()		{ return IMAGE_FORM;			}
-	virtual REFIID			GetDefaultInterface()	{ return IID_ITransaction;		}
+    //Pure Virtual
+    virtual WCHAR*			GetObjectName()
+    {
+        return L"Transaction";
+    }
+    virtual UINT			GetObjectMenu()
+    {
+        return IDM_TRANSACTIONMENU;
+    }
+    virtual LONG			GetObjectImage()
+    {
+        return IMAGE_FORM;
+    }
+    virtual REFIID			GetDefaultInterface()
+    {
+        return IID_ITransaction;
+    }
 
-	//Methods
+    //Methods
 
-	//Helpers
+    //Helpers
 
-	//OLE DB Interfaces
-	//[MANDATORY]
-	ITransaction*					m_pITransaction;				//Transaction interface
+    //OLE DB Interfaces
+    //[MANDATORY]
+    ITransaction*					m_pITransaction;				//Transaction interface
 
-	//[OPTIONAL]
+    //[OPTIONAL]
 
-	//Extra Interfaces
-	DWORD							m_dwCookieTransNotify;
+    //Extra Interfaces
+    DWORD							m_dwCookieTransNotify;
 };
 
 
@@ -64,30 +76,42 @@ public:
 class CTransactionOptions : public CBase
 {
 public:
-	//Constructors
-	CTransactionOptions(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
-	virtual ~CTransactionOptions();
+    //Constructors
+    CTransactionOptions(CMainWindow* pCMainWindow, CMDIChild* pCMDIChild = NULL);
+    virtual ~CTransactionOptions();
 
-	//IUnknown Helpers
-	virtual HRESULT			AutoQI(DWORD dwCreateOpts);
-	virtual HRESULT			AutoRelease();
-	virtual IUnknown**		GetInterfaceAddress(REFIID riid);
+    //IUnknown Helpers
+    virtual HRESULT			AutoQI(DWORD dwCreateOpts);
+    virtual HRESULT			AutoRelease();
+    virtual IUnknown**		GetInterfaceAddress(REFIID riid);
 
-	//Pure Virtual
-	virtual WCHAR*			GetObjectName()			{ return L"TransactionOptions";			} 
-	virtual UINT			GetObjectMenu()			{ return IDM_TRANSACTIONOPTIONSMENU;	}
-	virtual LONG			GetObjectImage()		{ return IMAGE_FORM;					}
-	virtual REFIID			GetDefaultInterface()	{ return IID_ITransactionOptions;		}
+    //Pure Virtual
+    virtual WCHAR*			GetObjectName()
+    {
+        return L"TransactionOptions";
+    }
+    virtual UINT			GetObjectMenu()
+    {
+        return IDM_TRANSACTIONOPTIONSMENU;
+    }
+    virtual LONG			GetObjectImage()
+    {
+        return IMAGE_FORM;
+    }
+    virtual REFIID			GetDefaultInterface()
+    {
+        return IID_ITransactionOptions;
+    }
 
-	//Methods
+    //Methods
 
-	//Helpers
+    //Helpers
 
-	//OLE DB Interfaces
-	//[MANDATORY]
-	ITransactionOptions*			m_pITransactionOptions;			//TransactionOptions interface
+    //OLE DB Interfaces
+    //[MANDATORY]
+    ITransactionOptions*			m_pITransactionOptions;			//TransactionOptions interface
 
-	//[OPTIONAL]
+    //[OPTIONAL]
 };
 
 

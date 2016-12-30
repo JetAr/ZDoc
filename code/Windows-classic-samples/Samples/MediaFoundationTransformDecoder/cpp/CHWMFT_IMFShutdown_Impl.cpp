@@ -1,4 +1,4 @@
-#include "CHWMFT.h"
+﻿#include "CHWMFT.h"
 #include "CAutoLock.h"
 #include <mferror.h>
 #include <mfapi.h>
@@ -27,7 +27,8 @@ HRESULT CHWMFT::GetShutdownStatus(
 
             *pStatus = MFSHUTDOWN_COMPLETED;
         }
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -53,7 +54,8 @@ HRESULT CHWMFT::Shutdown(void)
         }
 
         m_bShutdown = TRUE;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }

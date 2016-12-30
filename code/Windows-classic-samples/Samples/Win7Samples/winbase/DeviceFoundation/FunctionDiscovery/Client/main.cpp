@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -39,8 +39,8 @@ int _cdecl wmain()
     wprintf(L"For example, a USB mouse.\n");
     if( S_OK == hr )
         hr = pFD->WaitForChange( 30000,
-        FCTN_CATEGORY_PNP,
-        QUA_ADD );
+                                 FCTN_CATEGORY_PNP,
+                                 QUA_ADD );
 
     // Wait for device to be removed
     if( S_OK == hr )
@@ -48,8 +48,8 @@ int _cdecl wmain()
         wprintf(L"Waiting 30 seconds for you to remove a device...\n");
 
         hr = pFD->WaitForChange( 30000,
-            FCTN_CATEGORY_PNP,
-            QUA_REMOVE );
+                                 FCTN_CATEGORY_PNP,
+                                 QUA_REMOVE );
     }
 
     else if( RPC_S_CALLPENDING == hr )
@@ -64,4 +64,4 @@ int _cdecl wmain()
     ::CoUninitialize();
 
     return hr;
-}    
+}

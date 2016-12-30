@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,8 +10,8 @@
 #include<stdio.h>
 #include<dhcpsapi.h>
 
-#define DHCP_DATE_TIME_INFINIT_HIGH     0x7FFFFFFF  
-#define DHCP_DATE_TIME_INFINIT_LOW      0xFFFFFFFF 
+#define DHCP_DATE_TIME_INFINIT_HIGH     0x7FFFFFFF
+#define DHCP_DATE_TIME_INFINIT_LOW      0xFFFFFFFF
 #define ADDRESS_STATE_ACTIVE            1
 #define SAMPLE_HOST_NAME                L"TEST-HOSTNAME"
 #define SAMPLE_COMMENT                  L"TEST-COMMENT"
@@ -64,13 +64,14 @@ int __cdecl main(void)
 
     //Creates a DHCPv4 client lease record in the DHCP server database
     dwError = DhcpV4CreateClientInfo(
-                          pwszServer,    //ServerIpAddress, if this is NULL, it means the current server on which the program is run
-                          &clientInfo
-                          );
+                  pwszServer,    //ServerIpAddress, if this is NULL, it means the current server on which the program is run
+                  &clientInfo
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4CreateClientInfo failed with Error = %d\n",dwError);
-    }else
+    }
+    else
     {
         wprintf(L"DhcpV4CreateClientInfo returned success\n");
     }

@@ -1,14 +1,14 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 // Main header
@@ -70,9 +70,9 @@ void VssClient::BreakSnapshotSetEx(VSS_ID snapshotSetID, DWORD dwBreakExFlags)
     ft.WriteLine(L"- Calling BreakSnapshotSetEx on " WSTR_GUID_FMT L" ...", GUID_PRINTF_ARG(snapshotSetID));
 
     if (!(dwBreakExFlags & VSS_BREAKEX_FLAG_MASK_LUNS)                &&
-        !(dwBreakExFlags & VSS_BREAKEX_FLAG_MAKE_READ_WRITE)          &&
-        !(dwBreakExFlags & VSS_BREAKEX_FLAG_REVERT_IDENTITY_ALL)    &&
-        !(dwBreakExFlags & VSS_BREAKEX_FLAG_REVERT_IDENTITY_NONE))
+            !(dwBreakExFlags & VSS_BREAKEX_FLAG_MAKE_READ_WRITE)          &&
+            !(dwBreakExFlags & VSS_BREAKEX_FLAG_REVERT_IDENTITY_ALL)    &&
+            !(dwBreakExFlags & VSS_BREAKEX_FLAG_REVERT_IDENTITY_NONE))
         ft.WriteLine(L"- No BreakSnapshotSetEx flags, can use -mask, -rw, -forcerevert, or -norevert");
 
 
@@ -117,8 +117,8 @@ void VssClient::DoResync(DWORD dwResyncFlags)
 
     // Iterate resync pairs and add them to the recovery set
     for ( map<VSS_ID,wstring,ltguid>::iterator pair = m_resyncPairs.begin();
-          pair != m_resyncPairs.end();
-          ++pair )
+            pair != m_resyncPairs.end();
+            ++pair )
     {
         if ( pair->second.size() )
         {
@@ -152,12 +152,12 @@ vector<wstring> VssClient::GetSnapshotDevices(VSS_ID snapshotSetID)
     FunctionTracer ft(DBG_INFO);
 
     vector<wstring> volumes;
-        
-    // Get list all snapshots. 
+
+    // Get list all snapshots.
     CComPtr<IVssEnumObject> pIEnumSnapshots;
     CHECK_COM( m_pVssObject->Query( GUID_NULL, VSS_OBJECT_NONE, VSS_OBJECT_SNAPSHOT, &pIEnumSnapshots ) );
 
-    // Enumerate all snapshots. 
+    // Enumerate all snapshots.
     VSS_OBJECT_PROP Prop;
     VSS_SNAPSHOT_PROP& Snap = Prop.Obj.Snap;
     while(true)
@@ -196,7 +196,7 @@ vector<wstring> VssClient::GetSnapshotDevices(VSS_ID snapshotSetID)
 
 
 ////////////////////////////////////////////////////////////////////////////
-// VDS API calls 
+// VDS API calls
 //
 
 // Make the volumes in this list read-write using VDS API
@@ -209,10 +209,10 @@ void VssClient::MakeVolumesReadWrite(vector<wstring> snapshotVolumes)
     // Get the VDS loader
     CComPtr<IVdsServiceLoader> pLoader;
     CHECK_COM(CoCreateInstance(CLSID_VdsLoader,
-        NULL,
-        CLSCTX_LOCAL_SERVER,
-        __uuidof(IVdsServiceLoader),
-        (void **)&pLoader));
+                               NULL,
+                               CLSCTX_LOCAL_SERVER,
+                               __uuidof(IVdsServiceLoader),
+                               (void **)&pLoader));
 
     // Get the service interface pointer
     CComPtr<IVdsService> pService;
@@ -222,7 +222,7 @@ void VssClient::MakeVolumesReadWrite(vector<wstring> snapshotVolumes)
 
     vector<wstring> clearedVolumes;
 
-    // Get the unique volume names for the cached snapshot volume names 
+    // Get the unique volume names for the cached snapshot volume names
     // which might change after the break
     vector<wstring> snapshotVolumeUniqueNames;
     for (unsigned i = 0; i < snapshotVolumes.size( ); i++)
@@ -255,10 +255,13 @@ void VssClient::MakeVolumesReadWrite(vector<wstring> snapshotVolumes)
             // Enumerate volumes
             CComPtr<IEnumVdsObject> pEnumVolumes;
             hr = pPack->QueryVolumes(&pEnumVolumes);
-            if (FAILED(hr)) {
-                if (hr == VDS_E_INVALID_PACK) {
+            if (FAILED(hr))
+            {
+                if (hr == VDS_E_INVALID_PACK)
+                {
                     hr = S_OK;
-                } else ft.Trace( DBG_INFO, L"COM Error: GetProperties for VDS pack failed. hr = 0x%08lx", hr);
+                }
+                else ft.Trace( DBG_INFO, L"COM Error: GetProperties for VDS pack failed. hr = 0x%08lx", hr);
                 continue;
             }
 
@@ -293,8 +296,8 @@ void VssClient::MakeVolumesReadWrite(vector<wstring> snapshotVolumes)
                 // Get the unique volume guid name for this device name.
                 wstring uniqueVolumeName = GetUniqueVolumeNameForMountPoint(name);
 
-                ft.Trace(DBG_INFO, L"- Found volume %s [device = %s] in %d/%d", 
-                    uniqueVolumeName.c_str(), name.c_str(), iPack, iProvider);
+                ft.Trace(DBG_INFO, L"- Found volume %s [device = %s] in %d/%d",
+                         uniqueVolumeName.c_str(), name.c_str(), iPack, iProvider);
 
                 // Check to see if this is one of our volumes. If not, continue
                 if (!FindStringInList(uniqueVolumeName, snapshotVolumeUniqueNames))
@@ -305,7 +308,7 @@ void VssClient::MakeVolumesReadWrite(vector<wstring> snapshotVolumes)
 
                 CHECK_COM(pVolume->ClearFlags(VDS_VF_READONLY));
 
-                // Force-dismounts the volume 
+                // Force-dismounts the volume
                 // since we want to re-mount the file system as read-write
                 CComQIPtr<IVdsVolumeMF> pVolumeMF = pVolume;
                 ft.WriteLine(L"- Dismounting volume %s ...", name.c_str());
@@ -324,7 +327,7 @@ void VssClient::MakeVolumesReadWrite(vector<wstring> snapshotVolumes)
         for (unsigned i = 0; i < snapshotVolumeUniqueNames.size(); i++)
             if (!FindStringInList(snapshotVolumeUniqueNames[i], clearedVolumes))
                 ft.WriteLine(L"- Volume %s not found on the system. Clearing the read-only flag failed on it.",
-                    snapshotVolumeUniqueNames[i].c_str());
+                             snapshotVolumeUniqueNames[i].c_str());
     }
 }
 
@@ -335,7 +338,7 @@ vector< CComPtr<IUnknown> > VssClient::EnumerateVdsObjects(IEnumVdsObject * pEnu
     FunctionTracer ft(DBG_INFO);
 
     vector< CComPtr<IUnknown> > objectList;
-    
+
     while(true)
     {
         CComPtr<IUnknown> pUnknown;

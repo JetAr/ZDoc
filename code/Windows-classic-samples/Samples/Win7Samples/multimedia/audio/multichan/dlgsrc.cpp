@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -35,24 +35,24 @@ static char THIS_FILE[] = __FILE__;
 
 CONST_DWORD_REP cdrSpeakers[] =
 {
-    {SPEAKER_FRONT_LEFT,                "SPEAKER_FRONT_LEFT" } ,
-    {SPEAKER_FRONT_RIGHT,               "SPEAKER_FRONT_RIGHT" } ,
-    {SPEAKER_FRONT_CENTER,              "SPEAKER_FRONT_CENTER" } ,
-    {SPEAKER_LOW_FREQUENCY,             "SPEAKER_LOW_FREQUENCY" } ,
-    {SPEAKER_BACK_LEFT,                 "SPEAKER_BACK_LEFT" } ,
-    {SPEAKER_BACK_RIGHT,                "SPEAKER_BACK_RIGHT" } ,
-    {SPEAKER_FRONT_LEFT_OF_CENTER,      "SPEAKER_FRONT_LEFT_OF_CENTER" } ,
-    {SPEAKER_FRONT_RIGHT_OF_CENTER,     "SPEAKER_FRONT_RIGHT_OF_CENTER" } ,
-    {SPEAKER_BACK_CENTER,               "SPEAKER_BACK_CENTER" } ,
-    {SPEAKER_SIDE_LEFT,                 "SPEAKER_SIDE_LEFT" } ,
-    {SPEAKER_SIDE_RIGHT,                "SPEAKER_SIDE_RIGHT" } ,
-    {SPEAKER_TOP_CENTER,                "SPEAKER_TOP_CENTER" } ,
-    {SPEAKER_TOP_FRONT_LEFT,            "SPEAKER_TOP_FRONT_LEFT" } ,
-    {SPEAKER_TOP_FRONT_CENTER,          "SPEAKER_TOP_FRONT_CENTER" } ,
-    {SPEAKER_TOP_FRONT_RIGHT,           "SPEAKER_TOP_FRONT_RIGHT" } ,
-    {SPEAKER_TOP_BACK_LEFT,             "SPEAKER_TOP_BACK_LEFT" } ,
-    {SPEAKER_TOP_BACK_CENTER,           "SPEAKER_TOP_BACK_CENTER" } ,
-    {SPEAKER_TOP_BACK_RIGHT,            "SPEAKER_TOP_BACK_RIGHT" } ,
+    {SPEAKER_FRONT_LEFT,                "SPEAKER_FRONT_LEFT" },
+    {SPEAKER_FRONT_RIGHT,               "SPEAKER_FRONT_RIGHT" },
+    {SPEAKER_FRONT_CENTER,              "SPEAKER_FRONT_CENTER" },
+    {SPEAKER_LOW_FREQUENCY,             "SPEAKER_LOW_FREQUENCY" },
+    {SPEAKER_BACK_LEFT,                 "SPEAKER_BACK_LEFT" },
+    {SPEAKER_BACK_RIGHT,                "SPEAKER_BACK_RIGHT" },
+    {SPEAKER_FRONT_LEFT_OF_CENTER,      "SPEAKER_FRONT_LEFT_OF_CENTER" },
+    {SPEAKER_FRONT_RIGHT_OF_CENTER,     "SPEAKER_FRONT_RIGHT_OF_CENTER" },
+    {SPEAKER_BACK_CENTER,               "SPEAKER_BACK_CENTER" },
+    {SPEAKER_SIDE_LEFT,                 "SPEAKER_SIDE_LEFT" },
+    {SPEAKER_SIDE_RIGHT,                "SPEAKER_SIDE_RIGHT" },
+    {SPEAKER_TOP_CENTER,                "SPEAKER_TOP_CENTER" },
+    {SPEAKER_TOP_FRONT_LEFT,            "SPEAKER_TOP_FRONT_LEFT" },
+    {SPEAKER_TOP_FRONT_CENTER,          "SPEAKER_TOP_FRONT_CENTER" },
+    {SPEAKER_TOP_FRONT_RIGHT,           "SPEAKER_TOP_FRONT_RIGHT" },
+    {SPEAKER_TOP_BACK_LEFT,             "SPEAKER_TOP_BACK_LEFT" },
+    {SPEAKER_TOP_BACK_CENTER,           "SPEAKER_TOP_BACK_CENTER" },
+    {SPEAKER_TOP_BACK_RIGHT,            "SPEAKER_TOP_BACK_RIGHT" },
     {SPEAKER_NOT_SPECIFIED,             "No specified speaker" }
 };
 
@@ -62,36 +62,36 @@ CONST_DWORD_REP cdrSpeakers[] =
 /*
  *  MFC mechanisms
  */
-void 
+void
 CDlgSrc::DoDataExchange
 (
     CDataExchange*  pDX
 )
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgSrc)
-	DDX_Control(pDX, IDOK, m_butClose);
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CDlgSrc)
+    DDX_Control(pDX, IDOK, m_butClose);
     DDX_Control( pDX, IDC_PLAY, m_butPlay );
     DDX_Control( pDX, IDC_STOP, m_butStop );
-	DDX_Control(pDX, IDC_INPUT, m_cInput);
-	DDX_Control(pDX, IDC_COMBO_SPEAKER, m_comboSpeaker);
-	DDX_Check(pDX, IDC_USE, m_fUse);
-	DDX_CBIndex(pDX, IDC_COMBO_SPEAKER, m_nSpeaker);
-	DDX_Text(pDX, IDC_INPUT, m_strName);
-	//}}AFX_DATA_MAP
+    DDX_Control(pDX, IDC_INPUT, m_cInput);
+    DDX_Control(pDX, IDC_COMBO_SPEAKER, m_comboSpeaker);
+    DDX_Check(pDX, IDC_USE, m_fUse);
+    DDX_CBIndex(pDX, IDC_COMBO_SPEAKER, m_nSpeaker);
+    DDX_Text(pDX, IDC_INPUT, m_strName);
+    //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgSrc, CDialog)
-	//{{AFX_MSG_MAP(CDlgSrc)
-	ON_CBN_SELENDOK(IDC_COMBO_SPEAKER, OnComboSpeaker)
-	ON_BN_CLICKED(IDC_PLAY, OnPlay)
+    //{{AFX_MSG_MAP(CDlgSrc)
+    ON_CBN_SELENDOK(IDC_COMBO_SPEAKER, OnComboSpeaker)
+    ON_BN_CLICKED(IDC_PLAY, OnPlay)
     ON_BN_CLICKED(IDC_STOP, OnStop)
-	ON_WM_CTLCOLOR()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_LBUTTONUP()
-	ON_WM_MOUSEMOVE()
-	//}}AFX_MSG_MAP
+    ON_WM_CTLCOLOR()
+    ON_WM_LBUTTONDOWN()
+    ON_WM_LBUTTONUP()
+    ON_WM_MOUSEMOVE()
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -108,22 +108,22 @@ CDlgSrc::CDlgSrc
 (
     CWnd* pParent /*=NULL*/
 )
-  : CDialog(CDlgSrc::IDD, pParent),
-    m_strName(TEXT("")),
-    m_pwndParent(pParent),
-    m_cSamples(0),
-    m_cbData(0),
-    m_nChannel(0),
-    m_dwChannelMask(SPEAKER_FRONT_LEFT),
-    m_fDragging(FALSE),
-    m_fPlayable( FALSE ),
-    m_lpwhdr( 0 )
+    : CDialog(CDlgSrc::IDD, pParent),
+      m_strName(TEXT("")),
+      m_pwndParent(pParent),
+      m_cSamples(0),
+      m_cbData(0),
+      m_nChannel(0),
+      m_dwChannelMask(SPEAKER_FRONT_LEFT),
+      m_fDragging(FALSE),
+      m_fPlayable( FALSE ),
+      m_lpwhdr( 0 )
 {
-	//{{AFX_DATA_INIT(CDlgSrc)
-	m_fUse = TRUE;
-	m_nSpeaker = 0;
-	m_strName = _T("");
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(CDlgSrc)
+    m_fUse = TRUE;
+    m_nSpeaker = 0;
+    m_strName = _T("");
+    //}}AFX_DATA_INIT
 
     ZeroMemory( &m_wfx, sizeof( WAVEFORMATEX ) );
 }
@@ -135,31 +135,31 @@ CDlgSrc::CDlgSrc
 CDlgSrc::~CDlgSrc
 ()
 {
-	//
-	//	update speaker mask
-	//
-	if( g_pdlgDest )
-		g_pdlgDest->m_wfExt.dwChannelMask ^= m_dwChannelMask;
+    //
+    //	update speaker mask
+    //
+    if( g_pdlgDest )
+        g_pdlgDest->m_wfExt.dwChannelMask ^= m_dwChannelMask;
 
-	//
-	//	release memory
-	//
-	SafeLocalFree( m_pvData );
-	SafeLocalFree( m_lpwhdr );
+    //
+    //	release memory
+    //
+    SafeLocalFree( m_pvData );
+    SafeLocalFree( m_lpwhdr );
 }
 
 // ----------------------------------------------------------------------------------
 // CDlgSrc::Create
-//  creates an SRC dialog whose title is strName, position is sizeInitPos, and 
+//  creates an SRC dialog whose title is strName, position is sizeInitPos, and
 //  channel mask is dwChannelMask
 // ----------------------------------------------------------------------------------
-void 
+void
 CDlgSrc::Create
 (
     LPCSTR  strName,
     SIZE    sizeInitPos,
     DWORD   dwChannelMask
-)  
+)
 {
     CDialog::Create( CDlgSrc::IDD, m_pwndParent );
 
@@ -200,8 +200,8 @@ CDlgSrc::Create
     //  make playable
     //
     m_fPlayable = TRUE;
-	m_butPlay.EnableWindow( m_fPlayable );
-	m_butStop.EnableWindow( !m_fPlayable );
+    m_butPlay.EnableWindow( m_fPlayable );
+    m_butStop.EnableWindow( !m_fPlayable );
 
     //
     // update controls
@@ -218,12 +218,12 @@ CDlgSrc::Create
 //  This fn extracts a single channel (nChannelFrom) from the wave data specified by
 //  pwfx, pvData, and cbData
 // ----------------------------------------------------------------------------------
-BOOL 
+BOOL
 CDlgSrc::AquireData
 (
-    WAVEFORMATEX*   pwfx, 
+    WAVEFORMATEX*   pwfx,
     PVOID           pvData,
-    ULONG           cbData, 
+    ULONG           cbData,
     UINT            nChannelFrom
 )
 {
@@ -234,15 +234,15 @@ CDlgSrc::AquireData
 
     CopyMemory(&m_wfx, pwfx, sizeof(m_wfx));
 
-	GUID	guid = (( WAVEFORMATEXTENSIBLE * )pwfx)->SubFormat;
+    GUID	guid = (( WAVEFORMATEXTENSIBLE * )pwfx)->SubFormat;
 
-	if( IS_VALID_WAVEFORMATEX_GUID( &guid ) )
-	{
-		m_wfx.wFormatTag = EXTRACT_WAVEFORMATEX_ID( &guid );
-	}
-	//
-	//	else no op
-	//
+    if( IS_VALID_WAVEFORMATEX_GUID( &guid ) )
+    {
+        m_wfx.wFormatTag = EXTRACT_WAVEFORMATEX_ID( &guid );
+    }
+    //
+    //	else no op
+    //
     m_wfx.nChannels = 1;
     m_wfx.nBlockAlign = m_wfx.wBitsPerSample / 8;
     m_wfx.nAvgBytesPerSec = m_wfx.nBlockAlign * m_wfx.nSamplesPerSec;
@@ -250,10 +250,10 @@ CDlgSrc::AquireData
     // a little more UI
     char sz[100];
 
-	StringCchPrintfA(sz, 100, "%d", pwfx->wBitsPerSample);
+    StringCchPrintfA(sz, 100, "%d", pwfx->wBitsPerSample);
     SetDlgItemText(IDC_BITDEPTH, sz);
 
-	StringCchPrintfA(sz, 100, "%d", pwfx->nSamplesPerSec);
+    StringCchPrintfA(sz, 100, "%d", pwfx->nSamplesPerSec);
     SetDlgItemText(IDC_SAMPLERATE, sz);
 
     //
@@ -261,54 +261,54 @@ CDlgSrc::AquireData
     // should be pretty much a no-op for already-mono formats
     //
     ULONG   nSample;
-	USHORT	nBytes = pwfx->wBitsPerSample / 8;
+    USHORT	nBytes = pwfx->wBitsPerSample / 8;
 
     m_cSamples = cbData / pwfx->nBlockAlign;
     m_cbData = m_wfx.nBlockAlign * m_cSamples;
     m_pvData = LocalAlloc(LPTR, m_cbData);
     if( 0 == m_pvData)
-	{
-		MessageBox( "Insufficient memory to complete the task.", "MultiChan : Error", MB_OK | MB_ICONSTOP );
-		return( FALSE );
-	}
+    {
+        MessageBox( "Insufficient memory to complete the task.", "MultiChan : Error", MB_OK | MB_ICONSTOP );
+        return( FALSE );
+    }
 
-	//
-	//  Adding support for multi-channel input	
-	//
-	if( 1 == pwfx->nChannels )
-	{
-		//
-		//	trivial copy
-		//
+    //
+    //  Adding support for multi-channel input
+    //
+    if( 1 == pwfx->nChannels )
+    {
+        //
+        //	trivial copy
+        //
         ASSERT(m_cbData == cbData);
-		CopyMemory( m_pvData, pvData, m_cbData );
-	}
-	else
-	{
-		//
-		//	m channels, n bit depth
-		//	extract out every other m-th group of n bits
-		//	repeat for m_cSamples
-		//
-		BYTE * pbDest = (BYTE * )m_pvData;
-		BYTE * pbSrc = ( BYTE * )pvData;
+        CopyMemory( m_pvData, pvData, m_cbData );
+    }
+    else
+    {
+        //
+        //	m channels, n bit depth
+        //	extract out every other m-th group of n bits
+        //	repeat for m_cSamples
+        //
+        BYTE * pbDest = (BYTE * )m_pvData;
+        BYTE * pbSrc = ( BYTE * )pvData;
 
-		//	
-		//	start with the appropriate channel; channels are 0-based
-		//
-		pbSrc+= nChannelFrom * ( pwfx->wBitsPerSample / 8 );
+        //
+        //	start with the appropriate channel; channels are 0-based
+        //
+        pbSrc+= nChannelFrom * ( pwfx->wBitsPerSample / 8 );
 
-		for( nSample = 0; nSample < m_cSamples; nSample++ )
-		{
-			USHORT	nCount = nBytes;
-			while( nCount-- )
-				*pbDest++ = *pbSrc++;
+        for( nSample = 0; nSample < m_cSamples; nSample++ )
+        {
+            USHORT	nCount = nBytes;
+            while( nCount-- )
+                *pbDest++ = *pbSrc++;
 
-			pbSrc+= (pwfx->nChannels - 1) * nBytes;
-		}
-	}
+            pbSrc+= (pwfx->nChannels - 1) * nBytes;
+        }
+    }
 
-	return( TRUE );
+    return( TRUE );
 }   //  CDglSrc::AcquireData
 
 /*
@@ -319,7 +319,7 @@ CDlgSrc::AquireData
 // OnComboSpeaker
 //  update speaker mask of dst
 // ----------------------------------------------------------------------------------
-void CDlgSrc::OnComboSpeaker() 
+void CDlgSrc::OnComboSpeaker()
 {
     //
     //  prepare
@@ -348,14 +348,14 @@ void CDlgSrc::OnComboSpeaker()
 // OnPlay
 //  preview button
 // ----------------------------------------------------------------------------------
-void CDlgSrc::OnPlay() 
+void CDlgSrc::OnPlay()
 {
-	MMRESULT	mmRes = MMSYSERR_NOERROR;
+    MMRESULT	mmRes = MMSYSERR_NOERROR;
 
     //
     //  ensure validity
     //
-	ASSERT( 0 == g_hwo );
+    ASSERT( 0 == g_hwo );
     ASSERT( m_fPlayable );
 
     //
@@ -377,29 +377,29 @@ void CDlgSrc::OnPlay()
     //
     //  using a callback mechanism to allow synch playback
     //
-    mmRes = waveOutOpen(    &g_hwo, 
-                            WAVE_MAPPER, 
-                            &m_wfx, 
-                            ( DWORD_PTR )WavePlayFileCB, 
-                            ( DWORD_PTR )this, 
+    mmRes = waveOutOpen(    &g_hwo,
+                            WAVE_MAPPER,
+                            &m_wfx,
+                            ( DWORD_PTR )WavePlayFileCB,
+                            ( DWORD_PTR )this,
                             CALLBACK_FUNCTION
-                        );
-	if( TrapMMError(mmRes, "waveOutOpen") )
-	{
-		mmRes = waveOutPrepareHeader( g_hwo, m_lpwhdr, sizeof(WAVEHDR) );
-		if( TrapMMError(mmRes, "waveOutPrepareHeader") )
-		{
+                       );
+    if( TrapMMError(mmRes, "waveOutOpen") )
+    {
+        mmRes = waveOutPrepareHeader( g_hwo, m_lpwhdr, sizeof(WAVEHDR) );
+        if( TrapMMError(mmRes, "waveOutPrepareHeader") )
+        {
             //
             //  revert playable state
-			//	disable any other dialog
+            //	disable any other dialog
             //
-			WaveTogglePlayback( this, WAVE_TOGGLE_DISABLE );
+            WaveTogglePlayback( this, WAVE_TOGGLE_DISABLE );
 
             //
             //  start singing
             //
-			mmRes = waveOutWrite( g_hwo, m_lpwhdr, sizeof(WAVEHDR));
-			TrapMMError(mmRes, "waveOutWrite");
+            mmRes = waveOutWrite( g_hwo, m_lpwhdr, sizeof(WAVEHDR));
+            TrapMMError(mmRes, "waveOutWrite");
         }   //  prepare header
     }       //  open
 }           //  CDlgSrc::OnPlay
@@ -409,15 +409,15 @@ void CDlgSrc::OnPlay()
 //
 //  -------------------------------------------------------------------------------------
 inline
-void 
+void
 CDlgSrc::OnStop
 ()
 {
     MMRESULT    mmRes = MMSYSERR_NOERROR;
 
-    //  
+    //
     //  ensure validity
-    //  
+    //
     ASSERT( g_hwo );
     ASSERT( !m_fPlayable );
 
@@ -426,16 +426,16 @@ CDlgSrc::OnStop
     //
     mmRes = waveOutReset( g_hwo );
     TrapMMError( mmRes, "waveOutReset" );
-    
+
 }   //  CDglSrc::OnStop
 
 // ----------------------------------------------------------------------------------
 // dummy implementations to prevent dlgs from disappearing when user hits enter or esc
 // ----------------------------------------------------------------------------------
 inline
-void 
+void
 CDlgSrc::OnOK
-() 
+()
 {
     POSITION pos = g_listSources.Find(this, NULL);
     g_listSources.RemoveAt(pos);
@@ -447,9 +447,9 @@ CDlgSrc::OnOK
 //
 //
 inline
-void 
+void
 CDlgSrc::OnCancel
-() 
+()
 {
     POSITION pos = g_listSources.Find(this, NULL);
     g_listSources.RemoveAt(pos);
@@ -460,15 +460,15 @@ CDlgSrc::OnCancel
 //
 //
 //
-HBRUSH 
+HBRUSH
 CDlgSrc::OnCtlColor
 (
-    CDC* pDC, 
-    CWnd* pWnd, 
+    CDC* pDC,
+    CWnd* pWnd,
     UINT nCtlColor
-) 
+)
 {
-	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+    HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
 
     if((nCtlColor == CTLCOLOR_STATIC))
     {
@@ -479,22 +479,22 @@ CDlgSrc::OnCtlColor
             return GetSysColorBrush(COLOR_ACTIVECAPTION);
         }
     }
-    
-	return hbr;
+
+    return hbr;
 }   //  CDglSrc::OnCtlColor
 
 //
 //
 //
-void 
+void
 CDlgSrc::OnLButtonDown
 (
-    UINT nFlags, 
+    UINT nFlags,
     CPoint point
-) 
+)
 {
-	RECT    rcClient;
-    
+    RECT    rcClient;
+
     m_cInput.GetClientRect(&rcClient);
     m_cInput.MapWindowPoints(this, &rcClient);
     m_fDragging = PtInRect(&rcClient, point);
@@ -515,30 +515,30 @@ CDlgSrc::OnLButtonDown
 //
 //
 //
-void 
+void
 CDlgSrc::OnLButtonUp
 (
-    UINT nFlags, 
+    UINT nFlags,
     CPoint point
-) 
+)
 {
-	m_fDragging = FALSE;
+    m_fDragging = FALSE;
     ReleaseCapture();
 
-	CDialog::OnLButtonUp(nFlags, point);
+    CDialog::OnLButtonUp(nFlags, point);
 }   //  CDglSrc::OnLButtonUp
 
 //
 //
 //
-void 
+void
 CDlgSrc::OnMouseMove
 (
-    UINT nFlags, 
+    UINT nFlags,
     CPoint point
-) 
+)
 {
-	RECT    rcClientParent;
+    RECT    rcClientParent;
 
     GetParent()->GetClientRect(&rcClientParent);
     GetParent()->MapWindowPoints(this, &rcClientParent);
@@ -569,23 +569,23 @@ CDlgSrc::OnMouseMove
 //
 //
 //
-BOOL 
+BOOL
 CDlgSrc::OnInitDialog
-() 
+()
 {
-	CDialog::OnInitDialog();
-	
+    CDialog::OnInitDialog();
+
     HICON hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CHECK));
-    m_butClose.SetIcon(hIcon);	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    m_butClose.SetIcon(hIcon);
+    return TRUE;  // return TRUE unless you set the focus to a control
+    // EXCEPTION: OCX Property Pages should return FALSE
 }   //  CDlgSrc::OnInitDialog
 
 
 //
 //
 //
-LRESULT 
+LRESULT
 CDlgSrc::WindowProc
 (
     UINT    nMessage,
@@ -598,29 +598,29 @@ CDlgSrc::WindowProc
     switch( nMessage )
     {
     case    WM_START_PLAYBACK:
-        {
-            break;
-        }
+    {
+        break;
+    }
     case    WM_STOP_PLAYBACK:
+    {
+        //
+        //  revert playable state
+        //
+        WaveTogglePlayback( this, WAVE_TOGGLE_ALLOW );
+
+        //
+        //  unprepare and release
+        //
+        mmRes = waveOutUnprepareHeader( g_hwo, m_lpwhdr, sizeof( WAVEHDR ) );
+        if( TrapMMError( mmRes, "waveOutUnprepareHeader" ) )
         {
-            //
-            //  revert playable state
-            //
-            WaveTogglePlayback( this, WAVE_TOGGLE_ALLOW );
+            mmRes = waveOutClose( g_hwo );
+            TrapMMError( mmRes, "waveOutClose" );
 
-            //
-            //  unprepare and release
-            //
-            mmRes = waveOutUnprepareHeader( g_hwo, m_lpwhdr, sizeof( WAVEHDR ) );
-            if( TrapMMError( mmRes, "waveOutUnprepareHeader" ) )
-            {
-                mmRes = waveOutClose( g_hwo );
-                TrapMMError( mmRes, "waveOutClose" );
-
-                g_hwo = 0;
-            }
-            break;
+            g_hwo = 0;
         }
+        break;
+    }
     }
     return( CDialog::WindowProc( nMessage, wParam, lParam ) );
 }   //  CDlgSrc::WindowProc

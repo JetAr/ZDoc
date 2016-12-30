@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // ContentEnabler.h: Manages content enabler action.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -33,23 +33,23 @@ enum EnablerFlags
     SilentOrNonSilent = 0,  // Use silent if supported, otherwise use non-silent.
     ForceNonSilent = 1      // Use non-silent.
 };
-    
+
 
 //////////////////////////////////////////////////////////////////////////
 //  ContentProtectionManager
 //  Description: Manages content-enabler actions.
-// 
+//
 //  This object implements IMFContentProtectionManager. The PMP media
 //  session uses this interface to pass a content enabler object back
-//  to the application. A content enabler in an object that performs some 
+//  to the application. A content enabler in an object that performs some
 //  action needed to play a protected file, such as license acquistion.
 //
 //  For more information about content enablers, see IMFContentEnabler in
 //  the Media Foundation SDK documentation.
 //////////////////////////////////////////////////////////////////////////
 
-class ContentProtectionManager : 
-    public IMFAsyncCallback, 
+class ContentProtectionManager :
+    public IMFAsyncCallback,
     public IMFContentProtectionManager,
     public DispatchCallback // To get callbacks from the browser control.
 {
@@ -77,7 +77,7 @@ public:
         IMFTopology *pTopo,
         IMFAsyncCallback *pCallback,
         IUnknown *punkState
-        );
+    );
 
     STDMETHODIMP EndEnableContent(IMFAsyncResult *pResult);
 
@@ -90,8 +90,14 @@ public:
     HRESULT         CancelEnable();
     HRESULT         CompleteEnable();
 
-    EnablerState    GetState() const { return m_state; }
-    HRESULT         GetStatus() const { return m_hrStatus; }
+    EnablerState    GetState() const
+    {
+        return m_state;
+    }
+    HRESULT         GetStatus() const
+    {
+        return m_hrStatus;
+    }
 
 private:
 

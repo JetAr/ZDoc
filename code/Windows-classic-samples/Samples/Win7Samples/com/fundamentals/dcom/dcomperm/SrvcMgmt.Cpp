@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -33,7 +33,7 @@
 DWORD GetRunAsPassword (
     LPTSTR tszAppID,
     LPTSTR tszPassword
-    )
+)
 {
     LSA_OBJECT_ATTRIBUTES objectAttributes             = {0};
     HANDLE                hPolicy                      = NULL;
@@ -60,20 +60,20 @@ DWORD GetRunAsPassword (
     objectAttributes.Length = sizeof (LSA_OBJECT_ATTRIBUTES);
 
     dwReturnValue = LsaOpenPolicy (NULL,
-                                 &objectAttributes,
-                                 POLICY_GET_PRIVATE_INFORMATION,
-                                 &hPolicy);
+                                   &objectAttributes,
+                                   POLICY_GET_PRIVATE_INFORMATION,
+                                   &hPolicy);
 
-    dwReturnValue = LsaNtStatusToWinError(dwReturnValue); 
+    dwReturnValue = LsaNtStatusToWinError(dwReturnValue);
 
     if (dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
     // Read the user's password
     dwReturnValue = LsaRetrievePrivateData (hPolicy,
-                                          &lsaKeyString,
-                                          &lsaPasswordString);
-                                          
-    dwReturnValue = LsaNtStatusToWinError(dwReturnValue); 
+                                            &lsaKeyString,
+                                            &lsaPasswordString);
+
+    dwReturnValue = LsaNtStatusToWinError(dwReturnValue);
 
     if (dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
@@ -88,7 +88,7 @@ CLEANUP:
     if(hPolicy) LsaClose (hPolicy);
 
     if (lsaPasswordString)
-		LsaFreeMemory(lsaPasswordString);
+        LsaFreeMemory(lsaPasswordString);
 
     return dwReturnValue;
 }
@@ -117,7 +117,7 @@ DWORD SetRunAsPassword (
     LPTSTR tszAppID,
     LPTSTR tszPrincipal,
     LPTSTR tszPassword
-    )
+)
 {
     LSA_OBJECT_ATTRIBUTES objectAttributes             = {0};
     HANDLE                hPolicy                      = NULL;
@@ -151,20 +151,20 @@ DWORD SetRunAsPassword (
     objectAttributes.Length = sizeof (LSA_OBJECT_ATTRIBUTES);
 
     dwReturnValue = LsaOpenPolicy (NULL,
-                                 &objectAttributes,
-                                 POLICY_CREATE_SECRET,
-                                 &hPolicy);
+                                   &objectAttributes,
+                                   POLICY_CREATE_SECRET,
+                                   &hPolicy);
 
-    dwReturnValue = LsaNtStatusToWinError(dwReturnValue); 
+    dwReturnValue = LsaNtStatusToWinError(dwReturnValue);
 
     if (dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
     // Store the user's password
     dwReturnValue = LsaStorePrivateData (hPolicy,
-                                       &lsaKeyString,
-                                       &lsaPasswordString);
+                                         &lsaKeyString,
+                                         &lsaPasswordString);
 
-    dwReturnValue = LsaNtStatusToWinError(dwReturnValue); 
+    dwReturnValue = LsaNtStatusToWinError(dwReturnValue);
 
     if (dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
@@ -187,7 +187,7 @@ CLEANUP:
 DWORD SetAccountRights (
     LPTSTR tszUser,
     LPTSTR tszPrivilege
-    )
+)
 {
     LSA_HANDLE            hPolicy            = NULL;
     LSA_OBJECT_ATTRIBUTES objectAttributes   = {0};
@@ -206,8 +206,8 @@ DWORD SetAccountRights (
                                    &objectAttributes,
                                    POLICY_CREATE_ACCOUNT | POLICY_LOOKUP_NAMES,
                                    &hPolicy);
-                                   
-    dwReturnValue = LsaNtStatusToWinError(dwReturnValue); 
+
+    dwReturnValue = LsaNtStatusToWinError(dwReturnValue);
 
     if (dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
 
@@ -223,10 +223,10 @@ DWORD SetAccountRights (
                                          &lsaPrivilegeString,
                                          1);
 
-    dwReturnValue = LsaNtStatusToWinError(dwReturnValue); 
+    dwReturnValue = LsaNtStatusToWinError(dwReturnValue);
 
     if (dwReturnValue != ERROR_SUCCESS) goto CLEANUP;
-    
+
 
 CLEANUP:
 

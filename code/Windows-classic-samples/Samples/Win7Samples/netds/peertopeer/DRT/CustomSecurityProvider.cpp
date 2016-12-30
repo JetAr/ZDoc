@@ -1,4 +1,4 @@
-// CustomSecurityProvider.cpp - Implementation of CustomSecurityProvider
+﻿// CustomSecurityProvider.cpp - Implementation of CustomSecurityProvider
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -70,7 +70,7 @@ HRESULT CCustomNullSecurityProvider::Init(__out DRT_SECURITY_PROVIDER** ppDrtSec
 
 HRESULT CCustomNullSecurityProvider::Attach(
     __in        const PVOID pContext
-    )
+)
 {
     UNREFERENCED_PARAMETER(pContext);
     return S_OK;
@@ -78,7 +78,7 @@ HRESULT CCustomNullSecurityProvider::Attach(
 
 VOID CCustomNullSecurityProvider::Detach(
     __in        const PVOID pContext
-    )
+)
 {
     UNREFERENCED_PARAMETER(pContext);
     return;
@@ -124,7 +124,7 @@ HRESULT CCustomNullSecurityProvider::ValidateAndUnpackPayload(
     UNREFERENCED_PARAMETER(pvContext);
     UNREFERENCED_PARAMETER(pCertChain);
     UNREFERENCED_PARAMETER(pClassifier);
-    
+
     CCustomNullSecuredAddressPayload sap;
     HRESULT hr = S_OK;
 
@@ -223,9 +223,9 @@ cleanup:
 HRESULT CCustomNullSecurityProvider::SecureAndPackPayload(
     __in_opt    VOID* pvContext,
     __in_opt    VOID* pvKeyContext,
-                BYTE bProtocolMajor,
-                BYTE bProtocolMinor,
-                DWORD dwFlags,
+    BYTE bProtocolMajor,
+    BYTE bProtocolMinor,
+    DWORD dwFlags,
     __in        const DRT_DATA* pKey,
     __in_opt    const DRT_DATA* pPayload,
     __in_opt    const SOCKET_ADDRESS_LIST* pAddressList,
@@ -311,113 +311,113 @@ cleanup:
     return hr;
 }
 
-    HRESULT CCustomNullSecurityProvider::GetSerializedCredential(
-        __in        const PVOID pvContext,
-        __out DRT_DATA *pSelfCredential)
+HRESULT CCustomNullSecurityProvider::GetSerializedCredential(
+    __in        const PVOID pvContext,
+    __out DRT_DATA *pSelfCredential)
+{
+    UNREFERENCED_PARAMETER(pvContext);
+    UNREFERENCED_PARAMETER(pSelfCredential);
+
+    HRESULT hr = S_OK;
+    pSelfCredential->cb = 0;
+    pSelfCredential->pb = NULL;
+    return hr;
+
+}
+
+HRESULT CCustomNullSecurityProvider::ValidateRemoteCredential(
+    __in        const PVOID pvContext,
+    __in DRT_DATA *pRemoteCredential)
+{
+    UNREFERENCED_PARAMETER(pvContext);
+    UNREFERENCED_PARAMETER(pRemoteCredential);
+    return S_OK;
+}
+
+HRESULT CCustomNullSecurityProvider::EncryptData(
+    __in        const PVOID pvContext,
+    __in        const DRT_DATA* pRemoteCredential,
+    __in        DWORD dwBuffers,
+    __in_ecount(dwBuffers)        DRT_DATA* pDataBuffers,
+    __out_ecount(dwBuffers)        DRT_DATA* pEncryptedBuffers,
+    __out       DRT_DATA *pKeyToken
+)
+{
+    UNREFERENCED_PARAMETER(pvContext);
+    UNREFERENCED_PARAMETER(pRemoteCredential);
+
+    HRESULT hr = S_OK;
+    //copy all input buffers into out buffers unmodified
+    for(DWORD dwIdx=0; dwIdx < dwBuffers; dwIdx++)
     {
-        UNREFERENCED_PARAMETER(pvContext);
-        UNREFERENCED_PARAMETER(pSelfCredential);
-
-        HRESULT hr = S_OK;
-        pSelfCredential->cb = 0;
-        pSelfCredential->pb = NULL;
-        return hr;
-
-    }
-
-    HRESULT CCustomNullSecurityProvider::ValidateRemoteCredential(
-        __in        const PVOID pvContext,
-        __in DRT_DATA *pRemoteCredential)
-    {
-        UNREFERENCED_PARAMETER(pvContext);
-        UNREFERENCED_PARAMETER(pRemoteCredential);
-        return S_OK;
-    }
-
-    HRESULT CCustomNullSecurityProvider::EncryptData(
-        __in        const PVOID pvContext,
-        __in        const DRT_DATA* pRemoteCredential,
-        __in        DWORD dwBuffers,
-        __in_ecount(dwBuffers)        DRT_DATA* pDataBuffers,
-        __out_ecount(dwBuffers)        DRT_DATA* pEncryptedBuffers,
-        __out       DRT_DATA *pKeyToken
-        )
-    {
-        UNREFERENCED_PARAMETER(pvContext);
-        UNREFERENCED_PARAMETER(pRemoteCredential);
-        
-        HRESULT hr = S_OK;
-        //copy all input buffers into out buffers unmodified
-        for(DWORD dwIdx=0;dwIdx < dwBuffers;dwIdx++)
+        if(NULL == (pEncryptedBuffers[dwIdx].pb = (PBYTE)malloc(pEncryptedBuffers[dwIdx].cb = pDataBuffers[dwIdx].cb)))
         {
-            if(NULL == (pEncryptedBuffers[dwIdx].pb = (PBYTE)malloc(pEncryptedBuffers[dwIdx].cb = pDataBuffers[dwIdx].cb)))
+            while(dwIdx-- >= 1)
             {
-                while(dwIdx-- >= 1)
-                {
-                    free(pEncryptedBuffers[dwIdx].pb);
-                }
-                ZeroMemory(pEncryptedBuffers, sizeof(DRT_DATA)*dwBuffers);
-                hr = E_OUTOFMEMORY;
-                goto cleanup;
+                free(pEncryptedBuffers[dwIdx].pb);
             }
-            CopyMemory(pEncryptedBuffers[dwIdx].pb, pDataBuffers[dwIdx].pb, pEncryptedBuffers[dwIdx].cb);
+            ZeroMemory(pEncryptedBuffers, sizeof(DRT_DATA)*dwBuffers);
+            hr = E_OUTOFMEMORY;
+            goto cleanup;
         }
-        pKeyToken->cb = 0;
-        pKeyToken->pb = NULL;
-        
+        CopyMemory(pEncryptedBuffers[dwIdx].pb, pDataBuffers[dwIdx].pb, pEncryptedBuffers[dwIdx].cb);
+    }
+    pKeyToken->cb = 0;
+    pKeyToken->pb = NULL;
+
 cleanup:
     return hr;
-    }
+}
 
-    HRESULT CCustomNullSecurityProvider::DecryptData(
-        __in        const PVOID pvContext,
-        __in        DRT_DATA* pKeyToken,
-        __in        const PVOID pvKeyContext,
-        __in        DWORD dwBuffers,
-        __inout_ecount(dwBuffers)    DRT_DATA* pData
-        )
-    {
-        UNREFERENCED_PARAMETER(pvContext);
-        UNREFERENCED_PARAMETER(pKeyToken);
-        UNREFERENCED_PARAMETER(pvKeyContext);
-        UNREFERENCED_PARAMETER(dwBuffers);
-        UNREFERENCED_PARAMETER(pData);
-        return S_OK;
-    }
+HRESULT CCustomNullSecurityProvider::DecryptData(
+    __in        const PVOID pvContext,
+    __in        DRT_DATA* pKeyToken,
+    __in        const PVOID pvKeyContext,
+    __in        DWORD dwBuffers,
+    __inout_ecount(dwBuffers)    DRT_DATA* pData
+)
+{
+    UNREFERENCED_PARAMETER(pvContext);
+    UNREFERENCED_PARAMETER(pKeyToken);
+    UNREFERENCED_PARAMETER(pvKeyContext);
+    UNREFERENCED_PARAMETER(dwBuffers);
+    UNREFERENCED_PARAMETER(pData);
+    return S_OK;
+}
 
-    HRESULT CCustomNullSecurityProvider::SignData(
-        __in                                const PVOID pvContext,
-        __in                                DWORD dwBuffers,
-        __in_ecount(dwBuffers) DRT_DATA* pDataBuffers,
-        __out                               DRT_DATA *pKeyIdentifier,
-        __out                               DRT_DATA *pSignature)
-    {
-        UNREFERENCED_PARAMETER(pvContext);
-        UNREFERENCED_PARAMETER(dwBuffers);
-        UNREFERENCED_PARAMETER(pDataBuffers);
-        pSignature->cb = 0;
-        pSignature->pb = NULL;
-        pKeyIdentifier->cb = 0;
-        pKeyIdentifier->pb = NULL;
-        return S_OK;
+HRESULT CCustomNullSecurityProvider::SignData(
+    __in                                const PVOID pvContext,
+    __in                                DWORD dwBuffers,
+    __in_ecount(dwBuffers) DRT_DATA* pDataBuffers,
+    __out                               DRT_DATA *pKeyIdentifier,
+    __out                               DRT_DATA *pSignature)
+{
+    UNREFERENCED_PARAMETER(pvContext);
+    UNREFERENCED_PARAMETER(dwBuffers);
+    UNREFERENCED_PARAMETER(pDataBuffers);
+    pSignature->cb = 0;
+    pSignature->pb = NULL;
+    pKeyIdentifier->cb = 0;
+    pKeyIdentifier->pb = NULL;
+    return S_OK;
 
-    }
+}
 
-    HRESULT CCustomNullSecurityProvider::VerifyData(
-        __in                                const PVOID pvContext,
-        __in                                DWORD dwBuffers,
-        __in_ecount(dwBuffers) DRT_DATA* pDataBuffers,
-        __in                                DRT_DATA *pRemoteCredentials,
-        __in                                DRT_DATA *pKeyIdentifier,
-        __in                               DRT_DATA *pSignature)
-    {
-        UNREFERENCED_PARAMETER(pvContext);
-        UNREFERENCED_PARAMETER(dwBuffers);
-        UNREFERENCED_PARAMETER(pDataBuffers);
-        UNREFERENCED_PARAMETER(pRemoteCredentials);
-        UNREFERENCED_PARAMETER(pKeyIdentifier);
-        return (pSignature != NULL && pSignature->cb == 0)?S_OK : DRT_E_INVALID_MESSAGE;
-    }
+HRESULT CCustomNullSecurityProvider::VerifyData(
+    __in                                const PVOID pvContext,
+    __in                                DWORD dwBuffers,
+    __in_ecount(dwBuffers) DRT_DATA* pDataBuffers,
+    __in                                DRT_DATA *pRemoteCredentials,
+    __in                                DRT_DATA *pKeyIdentifier,
+    __in                               DRT_DATA *pSignature)
+{
+    UNREFERENCED_PARAMETER(pvContext);
+    UNREFERENCED_PARAMETER(dwBuffers);
+    UNREFERENCED_PARAMETER(pDataBuffers);
+    UNREFERENCED_PARAMETER(pRemoteCredentials);
+    UNREFERENCED_PARAMETER(pKeyIdentifier);
+    return (pSignature != NULL && pSignature->cb == 0)?S_OK : DRT_E_INVALID_MESSAGE;
+}
 
 
 CCustomNullSecuredAddressPayload::CCustomNullSecuredAddressPayload()
@@ -537,11 +537,11 @@ HRESULT CCustomNullSecuredAddressPayload::SerializeAndSign(__out DRT_DATA* pData
 
     // validate that the lengths are all reasonable (fit in the space provided for their count)
     if ( m_ddNonce.cb > BYTE_MAX ||
-        (m_pAddressList && m_pAddressList->iAddressCount > BYTE_MAX) ||
-        m_ddKey.cb > WORD_MAX || cbAlgorithmId > BYTE_MAX ||
-        pPublicKey->Algorithm.Parameters.cbData > WORD_MAX ||
-        pPublicKey->PublicKey.cbData > WORD_MAX ||
-        pPublicKey->PublicKey.cUnusedBits > BYTE_MAX)
+            (m_pAddressList && m_pAddressList->iAddressCount > BYTE_MAX) ||
+            m_ddKey.cb > WORD_MAX || cbAlgorithmId > BYTE_MAX ||
+            pPublicKey->Algorithm.Parameters.cbData > WORD_MAX ||
+            pPublicKey->PublicKey.cbData > WORD_MAX ||
+            pPublicKey->PublicKey.cUnusedBits > BYTE_MAX)
     {
         hr = E_INVALIDARG;
         goto cleanup;
@@ -1194,7 +1194,7 @@ HRESULT CDrtCustomNullDeserializer::ReadPublicKey(__out CERT_PUBLIC_KEY_INFO** p
     }
 
     cbTotal = sizeof(CERT_PUBLIC_KEY_INFO) + ROUND_UP_COUNT(cbAlgorithmId + 1, ALIGN_LPBYTE) +
-        ROUND_UP_COUNT(cbParameters, ALIGN_LPBYTE) + ROUND_UP_COUNT(cbPublicKey, ALIGN_LPBYTE);
+              ROUND_UP_COUNT(cbParameters, ALIGN_LPBYTE) + ROUND_UP_COUNT(cbPublicKey, ALIGN_LPBYTE);
     pPublicKey = (CERT_PUBLIC_KEY_INFO*)malloc(cbTotal);
     if (!pPublicKey)
     {

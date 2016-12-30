@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -200,15 +200,15 @@ BOOL FNLOCAL InitInstance(
         return FALSE;
 
     hWnd = CreateWindow(
-        gszMWndClass,
-        NULL,
-        WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN,
-        CW_USEDEFAULT,CW_USEDEFAULT,
-        CW_USEDEFAULT,CW_USEDEFAULT,
-        HWND_DESKTOP,
-        NULL,
-        hInst,
-        NULL);
+               gszMWndClass,
+               NULL,
+               WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN,
+               CW_USEDEFAULT,CW_USEDEFAULT,
+               CW_USEDEFAULT,CW_USEDEFAULT,
+               HWND_DESKTOP,
+               NULL,
+               hInst,
+               NULL);
 
     if (hWnd == (HWND)NULL)
         return FALSE;

@@ -1,4 +1,4 @@
-#ifndef REGISTRATION_H
+﻿#ifndef REGISTRATION_H
 #define REGISTRATION_H
 
 #define CLSIDSTR_MS_SHVUI L"{230b2a03-bbb3-4d50-839b-74f095e2b53e}"

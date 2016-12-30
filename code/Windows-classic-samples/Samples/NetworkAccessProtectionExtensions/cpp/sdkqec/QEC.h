@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,11 +21,11 @@
 
 namespace SDK_SAMPLE_QEC
 {
-    enum QecActionCode {NOACTION, DOREGISTER, DOUNREGISTER, DOEXECUTE};
+enum QecActionCode {NOACTION, DOREGISTER, DOUNREGISTER, DOEXECUTE};
 
-    static const wchar_t QecActionCode_Register[] = L"/register";
-    static const wchar_t QecActionCode_Unregister[] = L"/unregister";
-    static const wchar_t QecActionCode_Execute[] = L"/execute";
+static const wchar_t QecActionCode_Register[] = L"/register";
+static const wchar_t QecActionCode_Unregister[] = L"/unregister";
+static const wchar_t QecActionCode_Execute[] = L"/execute";
 }
 
 #endif

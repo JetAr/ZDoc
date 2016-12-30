@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -35,7 +35,7 @@ HRESULT RunCommandLoop(_In_ ISpellChecker* spellChecker)
         wprintf(L"> ");
         wchar_t line[MAX_PATH];
         hr = StringCchGets(line, ARRAYSIZE(line));
-        
+
         if (SUCCEEDED(hr))
         {
             wchar_t command[MAX_PATH];
@@ -175,7 +175,7 @@ int __cdecl wmain(int argc, _In_reads_(argc) PCWSTR argv[])
     {
         hr = CreateSpellCheckerFactory(&spellCheckerFactory);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         if (argc == 1)

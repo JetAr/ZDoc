@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,14 +7,14 @@
 
 
 /*************************************************************************
-                   
+
                         Microsoft RPC strout sample
 
   FILE      :   remote.c
 
   PURPOSE   :   The remote procedures that will be called from the client.
 
-  COMMENTS  :   These procedures will be linked into the server side of 
+  COMMENTS  :   These procedures will be linked into the server side of
                 the application.
 
 *************************************************************************/
@@ -28,57 +28,57 @@
 /*                  pointer to the environment strings                  */
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 void GetRemoteEnv(IN RPC_BINDING_HANDLE hBinding,
-				  unsigned long *nNumLines,
-				  str **psEnvironmentBlock)
+                  unsigned long *nNumLines,
+                  str **psEnvironmentBlock)
 {
-    int nIdx = 0;       // Loop counter                                 
-    TCHAR 
-        *pcTemp,        // Temporary pointer to the environment block   
-        *pcEnv;         // Pointer to the environment block             
+    int nIdx = 0;       // Loop counter
+    TCHAR
+    *pcTemp,        // Temporary pointer to the environment block
+    *pcEnv;         // Pointer to the environment block
 
 
-    // Get pointer to environment block	
+    // Get pointer to environment block
     pcEnv = (TCHAR *) GetEnvironmentStrings();
 
     // First count how many lines, must know how much memory to allocate
-    *nNumLines  = 0;            // Initialize number of lines to 0      
-    pcTemp = pcEnv;             // Set tempptr equal to envptr          
+    *nNumLines  = 0;            // Initialize number of lines to 0
+    pcTemp = pcEnv;             // Set tempptr equal to envptr
     while (*pcTemp != NULL_CHAR)
     {
-        // Don't count the lines that starts with IGNORE_CHAR	        
+        // Don't count the lines that starts with IGNORE_CHAR
         if(*pcTemp != IGNORE_CHAR)
         {
-            (*nNumLines)++;     // Increase the number of lines     
+            (*nNumLines)++;     // Increase the number of lines
         }
 
-        // Increment the string pointer. Each line ends in \0, and  
-        // \0\0 means end of block                                  
+        // Increment the string pointer. Each line ends in \0, and
+        // \0\0 means end of block
         pcTemp += (_tcslen(pcTemp) + 1);
     }
 
-    // Allocate the memory needed for the line pointer 
-    if(NULL == (*psEnvironmentBlock = (str *) 
-        midl_user_allocate((*nNumLines) * sizeof(str))))
+    // Allocate the memory needed for the line pointer
+    if(NULL == (*psEnvironmentBlock = (str *)
+                                      midl_user_allocate((*nNumLines) * sizeof(str))))
     {
         _tprintf_s(TEXT("REMOTE.C : Memory allocation error\n"));
         return;
     }
 
-    // Iterate through all the environment strings, allocate memory,    
-    // and copy them                                                    
+    // Iterate through all the environment strings, allocate memory,
+    // and copy them
     while (*pcEnv != NULL_CHAR)
     {
         // Don't count the lines that starts with IGNORE_CHAR
         if(*pcEnv != IGNORE_CHAR)
         {
-            // Allocate the space needed for the strings 
+            // Allocate the space needed for the strings
             (*psEnvironmentBlock)[nIdx] = (str) midl_user_allocate(
-                sizeof(TCHAR) * (_tcslen(pcEnv) + 1));
-			
+                                              sizeof(TCHAR) * (_tcslen(pcEnv) + 1));
+
             // Copy the environment string to the allocated memory
             _tcscpy_s((*psEnvironmentBlock)[nIdx++],sizeof(TCHAR) * (_tcslen(pcEnv) + 1), pcEnv);
         }
-        
+
         // Increment the string pointer. Each line ends in \0, and
         // \0\0 means end of block
         pcEnv += (_tcslen(pcEnv) + 1);

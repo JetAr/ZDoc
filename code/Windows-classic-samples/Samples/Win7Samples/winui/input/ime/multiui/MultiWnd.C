@@ -1,4 +1,4 @@
-/**********************************************************************/
+﻿/**********************************************************************/
 /*                                                                    */
 /*      MULTIWND.C                                                    */
 /*                                                                    */
@@ -31,7 +31,7 @@ DWORD InitStringBuffer (
     {
         error = GetLastError ();
     }
-    
+
     if (0 == SetWindowLongPtr(hWnd, MYGWL_STR, (LONG_PTR)pStr))
     {
         error = GetLastError ();
@@ -186,7 +186,7 @@ DWORD MySetCompositionForm (
     }
 
 exit_func:
-    return error;        
+    return error;
 }
 
 /**********************************************************************/
@@ -243,7 +243,7 @@ HFONT GetDefaultGUIFont (
     VerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&VerInfo);
 
-    if (VerInfo.dwMajorVersion < 4) 
+    if (VerInfo.dwMajorVersion < 4)
     {
         NONCLIENTMETRICS ncm = {0};
 
@@ -255,8 +255,8 @@ HFONT GetDefaultGUIFont (
         {
             hFont = GetStockObject(SYSTEM_FONT);
         }
-    } 
-    else 
+    }
+    else
     {
         hFont = GetStockObject(DEFAULT_GUI_FONT);
     }
@@ -270,8 +270,8 @@ HFONT GetDefaultGUIFont (
 /*                                                                    */
 /**********************************************************************/
 BOOL OverFlowText (
-    HWND hWnd, 
-    PTSTR pStr, 
+    HWND hWnd,
+    PTSTR pStr,
     PTSTR pResultStr)
 {
     BOOL        bRet     = FALSE;
@@ -384,76 +384,76 @@ void AddResultString(
 /*                                                                    */
 /**********************************************************************/
 LRESULT CALLBACK  NoUINoIMCWndProc (
-    HWND hWnd, 
-    UINT message, 
-    WPARAM wParam, 
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
     LPARAM lParam)
 {
     HFONT hFont = NULL;
     BOOL bRetDWP = FALSE;
 
-    switch (message) 
+    switch (message)
     {
-        case WM_CREATE:
-            hFont = GetDefaultGUIFont();
-            SetWindowLongPtr(hWnd,MYGWL_FONT,(LONG_PTR)hFont);
-            InitStringBuffer(hWnd);
-            break;
+    case WM_CREATE:
+        hFont = GetDefaultGUIFont();
+        SetWindowLongPtr(hWnd,MYGWL_FONT,(LONG_PTR)hFont);
+        InitStringBuffer(hWnd);
+        break;
 
-        case WM_LBUTTONDBLCLK:
-            MyChangeFont(hWnd);
-            break;
+    case WM_LBUTTONDBLCLK:
+        MyChangeFont(hWnd);
+        break;
 
-        case WM_LBUTTONDOWN:
-            SetFocus(hWnd);
-            break;
+    case WM_LBUTTONDOWN:
+        SetFocus(hWnd);
+        break;
 
-        case WM_SETFOCUS:
-            MySetCompositionFont(hWnd);
-            MySetCompositionForm(hWnd);
-            break;
+    case WM_SETFOCUS:
+        MySetCompositionFont(hWnd);
+        MySetCompositionForm(hWnd);
+        break;
 
-        case WM_IME_COMPOSITION:
-            if (lParam & GCS_RESULTSTR)
+    case WM_IME_COMPOSITION:
+        if (lParam & GCS_RESULTSTR)
+        {
+            AddResultString(hWnd);
+        }
+        bRetDWP = TRUE;
+        break;
+
+    case WM_SIZE:
+        switch (wParam)
+        {
+        case SIZENORMAL: /* fall-through */
+        case SIZEFULLSCREEN:
+            if (hWnd == GetFocus())
             {
-                AddResultString(hWnd);
+                MySetCompositionForm(hWnd);
             }
+            InvalidateRect(hWnd,NULL,TRUE);
+            break;
+
+
+        case SIZEICONIC:
             bRetDWP = TRUE;
             break;
-
-        case WM_SIZE:
-            switch (wParam)
-            {
-                case SIZENORMAL: /* fall-through */
-                case SIZEFULLSCREEN:
-                    if (hWnd == GetFocus())
-                    {
-                        MySetCompositionForm(hWnd);
-                    }
-                    InvalidateRect(hWnd,NULL,TRUE);
-                    break;
+        }
+        break;
 
 
-                case SIZEICONIC:
-                    bRetDWP = TRUE;
-                    break;
-            }
-            break;
+    case WM_PAINT:
+        MyDrawString(hWnd,wParam,lParam);
+        break;
 
+    case WM_DESTROY:
+        hFont = (HFONT)GetWindowLongPtr(hWnd,MYGWL_FONT);
+        DeleteObject(hFont);
+        DestroyStringBuffer(hWnd);
+        break;
 
-        case WM_PAINT:
-            MyDrawString(hWnd,wParam,lParam);
-            break;
-
-        case WM_DESTROY:
-            hFont = (HFONT)GetWindowLongPtr(hWnd,MYGWL_FONT);
-            DeleteObject(hFont);
-            DestroyStringBuffer(hWnd);
-            break;
-
-        default:
-            bRetDWP = TRUE;
-            break;
+    default:
+        bRetDWP = TRUE;
+        break;
     }
 
     if (bRetDWP)
@@ -472,81 +472,81 @@ LRESULT CALLBACK  NoUINoIMCWndProc (
 /*                                                                    */
 /**********************************************************************/
 LRESULT CALLBACK NoUIOwnIMCWndProc (
-    HWND hWnd, 
-    UINT message, 
-    WPARAM wParam, 
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
     LPARAM lParam)
 {
     HIMC  hIMC    = NULL;
     HFONT hFont   = NULL;
     BOOL  bRetDWP = FALSE;
 
-    switch (message) 
+    switch (message)
     {
-        case WM_CREATE:
-            hFont = GetDefaultGUIFont();
-            SetWindowLongPtr(hWnd,MYGWL_FONT,(LONG_PTR)hFont);
+    case WM_CREATE:
+        hFont = GetDefaultGUIFont();
+        SetWindowLongPtr(hWnd,MYGWL_FONT,(LONG_PTR)hFont);
 
-            hIMC = ImmCreateContext();
-            ImmAssociateContext(hWnd,hIMC);
+        hIMC = ImmCreateContext();
+        ImmAssociateContext(hWnd,hIMC);
 
-            // Save hIMC into WndExtra.
-            SetWindowLongPtr(hWnd,MYGWL_IMC,(LONG_PTR)hIMC);
+        // Save hIMC into WndExtra.
+        SetWindowLongPtr(hWnd,MYGWL_IMC,(LONG_PTR)hIMC);
 
-            MySetCompositionFont(hWnd);
+        MySetCompositionFont(hWnd);
+        MySetCompositionForm(hWnd);
+
+        InitStringBuffer(hWnd);
+        break;
+
+    case WM_LBUTTONDBLCLK:
+        MyChangeFont(hWnd);
+        break;
+
+    case WM_LBUTTONDOWN:
+        SetFocus(hWnd);
+        break;
+
+    case WM_IME_COMPOSITION:
+        if (lParam & GCS_RESULTSTR)
+        {
+            AddResultString(hWnd);
+        }
+        bRetDWP = TRUE;
+        break;
+
+    case WM_SIZE:
+        switch (wParam)
+        {
+        case SIZENORMAL: /* fall-through */
+        case SIZEFULLSCREEN:
             MySetCompositionForm(hWnd);
-
-            InitStringBuffer(hWnd);
+            InvalidateRect(hWnd,NULL,TRUE);
             break;
 
-        case WM_LBUTTONDBLCLK:
-            MyChangeFont(hWnd);
-            break;
-
-        case WM_LBUTTONDOWN:
-            SetFocus(hWnd);
-            break;
-
-        case WM_IME_COMPOSITION:
-            if (lParam & GCS_RESULTSTR)
-            {
-                AddResultString(hWnd);
-            }
+        case SIZEICONIC:
             bRetDWP = TRUE;
             break;
+        }
+        break;
 
-        case WM_SIZE:
-            switch (wParam)
-            {
-                case SIZENORMAL: /* fall-through */
-                case SIZEFULLSCREEN:
-                    MySetCompositionForm(hWnd);
-                    InvalidateRect(hWnd,NULL,TRUE);
-                    break;
+    case WM_PAINT:
+        MyDrawString(hWnd,wParam,lParam);
+        break;
 
-                case SIZEICONIC:
-                    bRetDWP = TRUE;
-                    break;
-            }
-            break;
+    case WM_DESTROY:
+        hFont = (HFONT)GetWindowLongPtr(hWnd,MYGWL_FONT);
+        DeleteObject(hFont);
 
-        case WM_PAINT:
-            MyDrawString(hWnd,wParam,lParam);
-            break;
+        hIMC = (HIMC)GetWindowLongPtr(hWnd,MYGWL_IMC);
+        ImmDestroyContext(hIMC);
 
-        case WM_DESTROY:
-            hFont = (HFONT)GetWindowLongPtr(hWnd,MYGWL_FONT);
-            DeleteObject(hFont);
+        DestroyStringBuffer(hWnd);
+        break;
 
-            hIMC = (HIMC)GetWindowLongPtr(hWnd,MYGWL_IMC);
-            ImmDestroyContext(hIMC);
-
-            DestroyStringBuffer(hWnd);
-            break;
-
-        default:
-            bRetDWP = TRUE;
-            break;
+    default:
+        bRetDWP = TRUE;
+        break;
     }
 
 
@@ -566,9 +566,9 @@ LRESULT CALLBACK NoUIOwnIMCWndProc (
 /*                                                                    */
 /**********************************************************************/
 LRESULT CALLBACK OwnUIOwnIMCWndProc (
-    HWND hWnd, 
-    UINT message, 
-    WPARAM wParam, 
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
     LPARAM lParam)
 {
     HFONT hFont   = NULL;
@@ -580,92 +580,92 @@ LRESULT CALLBACK OwnUIOwnIMCWndProc (
 
     if (IsWindow(hIMEWnd) && ImmIsUIMessage(hIMEWnd,message,wParam,lParam))
     {
-        switch (message) 
+        switch (message)
         {
-            case WM_IME_COMPOSITION:
-                if (lParam & GCS_RESULTSTR)
-                {
-                    AddResultString(hWnd);
-                }
-                break;
+        case WM_IME_COMPOSITION:
+            if (lParam & GCS_RESULTSTR)
+            {
+                AddResultString(hWnd);
+            }
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
 
         goto exit_func;
     }
 
-    switch (message) 
+    switch (message)
     {
-        case WM_CREATE:
-            hFont = GetDefaultGUIFont();
-            SetWindowLongPtr(hWnd,MYGWL_FONT,(LONG_PTR)hFont);
+    case WM_CREATE:
+        hFont = GetDefaultGUIFont();
+        SetWindowLongPtr(hWnd,MYGWL_FONT,(LONG_PTR)hFont);
 
-            hIMC = ImmCreateContext();
-            ImmAssociateContext(hWnd,hIMC);
+        hIMC = ImmCreateContext();
+        ImmAssociateContext(hWnd,hIMC);
 
-            // Save hIMC into WndExtra.
-            SetWindowLongPtr(hWnd,MYGWL_IMC,(LONG_PTR)hIMC);
+        // Save hIMC into WndExtra.
+        SetWindowLongPtr(hWnd,MYGWL_IMC,(LONG_PTR)hIMC);
 
-            if (!(hIMEWnd = CreateWindow(
+        if (!(hIMEWnd = CreateWindow(
                             TEXT("Ime"), TEXT(""),
                             WS_POPUP | WS_DISABLED,
                             0,0,0,0,
                             hWnd, NULL, hInst, NULL)))
-            {
-	            return -1;
-            }
+        {
+            return -1;
+        }
 
-            // Save hIMEWnd into WndExtra.
-            SetWindowLongPtr(hWnd,MYGWL_IMEWND,(LONG_PTR)hIMEWnd);
+        // Save hIMEWnd into WndExtra.
+        SetWindowLongPtr(hWnd,MYGWL_IMEWND,(LONG_PTR)hIMEWnd);
 
-            MySetCompositionFont(hWnd);
+        MySetCompositionFont(hWnd);
+        MySetCompositionForm(hWnd);
+
+        InitStringBuffer(hWnd);
+        break;
+
+    case WM_LBUTTONDBLCLK:
+        MyChangeFont(hWnd);
+        break;
+
+    case WM_LBUTTONDOWN:
+        SetFocus(hWnd);
+        break;
+
+    case WM_SIZE:
+        switch (wParam)
+        {
+        case SIZENORMAL: /* fall-through */
+        case SIZEFULLSCREEN:
             MySetCompositionForm(hWnd);
-
-            InitStringBuffer(hWnd);
+            InvalidateRect(hWnd,NULL,TRUE);
             break;
 
-        case WM_LBUTTONDBLCLK:
-            MyChangeFont(hWnd);
-            break;
-
-        case WM_LBUTTONDOWN:
-            SetFocus(hWnd);
-            break;
-
-        case WM_SIZE:
-            switch (wParam)
-            {
-                case SIZENORMAL: /* fall-through */
-                case SIZEFULLSCREEN:
-                    MySetCompositionForm(hWnd);
-                    InvalidateRect(hWnd,NULL,TRUE);
-                    break;
-
-                case SIZEICONIC:
-                    bRetDWP = TRUE;
-                    break;
-            }
-            break;
-
-        case WM_PAINT:
-            MyDrawString(hWnd,wParam,lParam);
-            break;
-
-        case WM_DESTROY:
-            hFont = (HFONT)GetWindowLongPtr(hWnd,MYGWL_FONT);
-            DeleteObject(hFont);
-
-            hIMC = (HIMC)GetWindowLongPtr(hWnd,MYGWL_IMC);
-            ImmDestroyContext(hIMC);
-
-            DestroyStringBuffer(hWnd);
-            break;
-
-        default:
+        case SIZEICONIC:
             bRetDWP = TRUE;
             break;
+        }
+        break;
+
+    case WM_PAINT:
+        MyDrawString(hWnd,wParam,lParam);
+        break;
+
+    case WM_DESTROY:
+        hFont = (HFONT)GetWindowLongPtr(hWnd,MYGWL_FONT);
+        DeleteObject(hFont);
+
+        hIMC = (HIMC)GetWindowLongPtr(hWnd,MYGWL_IMC);
+        ImmDestroyContext(hIMC);
+
+        DestroyStringBuffer(hWnd);
+        break;
+
+    default:
+        bRetDWP = TRUE;
+        break;
     }
 
 exit_func:

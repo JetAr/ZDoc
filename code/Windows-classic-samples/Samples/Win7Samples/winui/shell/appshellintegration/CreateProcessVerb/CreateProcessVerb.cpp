@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -106,9 +106,9 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, PWSTR pszCmdLine, int)
                 if (SUCCEEDED(hr))
                 {
                     MessageBox(NULL,
-                        L"Installed Create Process Verb Sample for .txt files\n\n"
-                        L"right click on a .txt file and choose 'Create Process Verb Sample' to see this in action"
-                        , PathFindFileName(szModule), MB_OK);
+                               L"Installed Create Process Verb Sample for .txt files\n\n"
+                               L"right click on a .txt file and choose 'Create Process Verb Sample' to see this in action"
+                               , PathFindFileName(szModule), MB_OK);
                 }
             }
         }

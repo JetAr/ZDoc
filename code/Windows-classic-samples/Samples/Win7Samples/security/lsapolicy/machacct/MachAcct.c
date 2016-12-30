@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -62,20 +62,20 @@ AddMachineAccount(
     LPWSTR wTargetComputer, // specifies where to add account
     LPWSTR MachineAccount,  // name of account
     DWORD AccountType       // account type
-    );
+);
 
 BOOL
 SetCurrentPrivilege(
     LPCTSTR Privilege,      // Privilege to enable/disable
     BOOL bEnablePrivilege,  // to enable or disable privilege
     BOOL * bPreviousPrivilege // returns previous state of the privilege
-    );
+);
 
 void
 DisplayError(
     LPSTR szAPI,    // pointer to failed API name
     DWORD dwLastError
-    );
+);
 
 #define RTN_OK 0
 #define RTN_USAGE 1
@@ -90,7 +90,7 @@ __cdecl
 wmain(
     int argc,
     wchar_t *argv[]
-    )
+)
 {
     LPWSTR wMachineAccount;
     LPWSTR wPrimaryDC;
@@ -99,9 +99,10 @@ wmain(
     NET_API_STATUS nas;
     BOOL bSuccess;
 
-    if(argc < 2) {
+    if(argc < 2)
+    {
         fprintf(stderr, "Usage: %ls <machineaccountname> [domain]\n",
-            argv[0]);
+                argv[0]);
         return RTN_USAGE;
     }
 
@@ -111,15 +112,19 @@ wmain(
     // if a domain name was specified, fetch the computer name of the
     // primary domain controller
     //
-    if(argc == 3) {
+    if(argc == 3)
+    {
 
         nas = NetGetDCName(NULL, argv[2], (LPBYTE *)&wPrimaryDC);
 
-        if(nas != NERR_Success) {
+        if(nas != NERR_Success)
+        {
             DisplayError("NetGetDCName", nas);
             return RTN_ERROR;
         }
-    } else {
+    }
+    else
+    {
         //
         // default will operate on local machine.  Non-NULL wPrimaryDC will
         // cause buffer to be freed
@@ -128,28 +133,30 @@ wmain(
     }
 
     bSuccess = AddMachineAccount(
-        wPrimaryDC,         // primary DC computer name
-        wMachineAccount,    // computer account name
-        dwTrustAccountType  // computer account type
-        );
+                   wPrimaryDC,         // primary DC computer name
+                   wMachineAccount,    // computer account name
+                   dwTrustAccountType  // computer account type
+               );
 
-    if(!bSuccess && GetLastError() == ERROR_ACCESS_DENIED ) {
+    if(!bSuccess && GetLastError() == ERROR_ACCESS_DENIED )
+    {
 
         BOOL Previous;
 
         //
         // try to enable the SeMachineAccountPrivilege
         //
-        if(SetCurrentPrivilege( MachineAccountPrivilege, TRUE, &Previous )) {
+        if(SetCurrentPrivilege( MachineAccountPrivilege, TRUE, &Previous ))
+        {
 
             //
             // enabled the privilege.  retry the add operation
             //
             bSuccess = AddMachineAccount(
-                wPrimaryDC,
-                wMachineAccount,
-                dwTrustAccountType
-                );
+                           wPrimaryDC,
+                           wMachineAccount,
+                           dwTrustAccountType
+                       );
 
             //
             // disable the privilege
@@ -163,7 +170,8 @@ wmain(
     //
     if(wPrimaryDC) NetApiBufferFree(wPrimaryDC);
 
-    if(!bSuccess) {
+    if(!bSuccess)
+    {
         DisplayError("AddMachineAccount", GetLastError());
         return RTN_ERROR;
     }
@@ -176,7 +184,7 @@ AddMachineAccount(
     LPWSTR wTargetComputer,
     LPWSTR MachineAccount,
     DWORD AccountType
-    )
+)
 {
     WCHAR wAccount[MAX_COMPUTERNAME_LENGTH + 2];
     LPWSTR wPassword;
@@ -190,9 +198,10 @@ AddMachineAccount(
     // TODO SetLastError
     //
     if (AccountType != UF_WORKSTATION_TRUST_ACCOUNT &&
-        AccountType != UF_SERVER_TRUST_ACCOUNT &&
-        AccountType != UF_INTERDOMAIN_TRUST_ACCOUNT
-        ) {
+            AccountType != UF_SERVER_TRUST_ACCOUNT &&
+            AccountType != UF_INTERDOMAIN_TRUST_ACCOUNT
+       )
+    {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
@@ -205,7 +214,8 @@ AddMachineAccount(
     //
     // ensure computer name doesn't exceed maximum length
     //
-    if(cchLength > MAX_COMPUTERNAME_LENGTH) {
+    if(cchLength > MAX_COMPUTERNAME_LENGTH)
+    {
         SetLastError(ERROR_INVALID_ACCOUNT_NAME);
         return FALSE;
     }
@@ -221,7 +231,8 @@ AddMachineAccount(
     // converting computer account name to uppercase.
     // convert password (inplace) to lowercase
     //
-    while(cchAccount--) {
+    while(cchAccount--)
+    {
         wAccount[cchAccount] = towupper( MachineAccount[cchAccount] );
         wPassword[cchAccount] = towlower( wPassword[cchAccount] );
     }
@@ -249,19 +260,21 @@ AddMachineAccount(
     ui.usri1_priv = USER_PRIV_USER;
 
     nas = NetUserAdd(
-                wTargetComputer,    // target computer name
-                1,                  // info level
-                (LPBYTE) &ui,       // buffer
-                NULL
-                );
+              wTargetComputer,    // target computer name
+              1,                  // info level
+              (LPBYTE) &ui,       // buffer
+              NULL
+          );
 
     //
     // indicate whether it was successful
     //
-    if(nas == NERR_Success) {
+    if(nas == NERR_Success)
+    {
         return TRUE;
     }
-    else {
+    else
+    {
         SetLastError(nas);
         return FALSE;
     }
@@ -272,7 +285,7 @@ SetCurrentPrivilege(
     LPCTSTR Privilege,      // Privilege to enable/disable
     BOOL bEnablePrivilege,  // to enable or disable privilege
     BOOL * bPreviousPrivilege // returns previous state of the privilege
-    )
+)
 {
     DWORD dwError;
     HANDLE hToken;
@@ -285,9 +298,9 @@ SetCurrentPrivilege(
     if(!LookupPrivilegeValue(NULL, Privilege, &luid)) return ERROR_NO_SUCH_PRIVILEGE;
 
     if(!OpenProcessToken(
-            GetCurrentProcess(),
-            TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES,
-            &hToken
+                GetCurrentProcess(),
+                TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES,
+                &hToken
             )) return GetLastError();
 
     //
@@ -298,41 +311,45 @@ SetCurrentPrivilege(
     tp.Privileges[0].Attributes = 0;
 
     AdjustTokenPrivileges(
-            hToken,
-            FALSE,
-            &tp,
-            sizeof(TOKEN_PRIVILEGES),
-            &tpPrevious,
-            &cbPrevious
-            );
+        hToken,
+        FALSE,
+        &tp,
+        sizeof(TOKEN_PRIVILEGES),
+        &tpPrevious,
+        &cbPrevious
+    );
 
-    if(( dwError = GetLastError()) == ERROR_SUCCESS) {
+    if(( dwError = GetLastError()) == ERROR_SUCCESS)
+    {
         //
         // second pass.  set privilege based on previous setting
         //
         tpPrevious.PrivilegeCount     = 1;
         tpPrevious.Privileges[0].Luid = luid;
 
-        if ( bPreviousPrivilege ) {
+        if ( bPreviousPrivilege )
+        {
 
             *bPreviousPrivilege = (( tpPrevious.Privileges[0].Attributes & SE_PRIVILEGE_ENABLED ) != 0 );
         }
 
-        if(bEnablePrivilege) {
+        if(bEnablePrivilege)
+        {
             tpPrevious.Privileges[0].Attributes |= (SE_PRIVILEGE_ENABLED);
         }
-        else {
+        else
+        {
             tpPrevious.Privileges[0].Attributes &= ~(SE_PRIVILEGE_ENABLED);
         }
 
         AdjustTokenPrivileges(
-                hToken,
-                FALSE,
-                &tpPrevious,
-                cbPrevious,
-                NULL,
-                NULL
-                );
+            hToken,
+            FALSE,
+            &tpPrevious,
+            cbPrevious,
+            NULL,
+            NULL
+        );
 
         dwError = GetLastError();
     }
@@ -346,7 +363,7 @@ void
 DisplayError(
     LPSTR szAPI,    // pointer to failed API name
     DWORD dwLastError
-    )
+)
 {
     HMODULE hModule = NULL;
     LPSTR MessageBuffer;
@@ -354,26 +371,27 @@ DisplayError(
 
     fprintf(stderr,"%s error! (rc=%lu)\n", szAPI, dwLastError);
 
-    if(dwLastError >= NERR_BASE && dwLastError <= MAX_NERR) {
+    if(dwLastError >= NERR_BASE && dwLastError <= MAX_NERR)
+    {
         hModule = LoadLibraryEx(
-            TEXT("netmsg.dll"),
-            NULL,
-            LOAD_LIBRARY_AS_DATAFILE
-            );
+                      TEXT("netmsg.dll"),
+                      NULL,
+                      LOAD_LIBRARY_AS_DATAFILE
+                  );
     }
 
     if(dwBufferLength=FormatMessageA(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_IGNORE_INSERTS |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        ((hModule != NULL) ? FORMAT_MESSAGE_FROM_HMODULE : 0),
-        hModule, // module to get message from
-        dwLastError,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
-        (LPSTR) &MessageBuffer,
-        0,
-        NULL
-        ))
+                          FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                          FORMAT_MESSAGE_IGNORE_INSERTS |
+                          FORMAT_MESSAGE_FROM_SYSTEM |
+                          ((hModule != NULL) ? FORMAT_MESSAGE_FROM_HMODULE : 0),
+                          hModule, // module to get message from
+                          dwLastError,
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
+                          (LPSTR) &MessageBuffer,
+                          0,
+                          NULL
+                      ))
     {
         DWORD dwBytesWritten;
 
@@ -386,7 +404,7 @@ DisplayError(
             dwBufferLength,
             &dwBytesWritten,
             NULL
-            );
+        );
 
         //
         // free the buffer allocated by the system

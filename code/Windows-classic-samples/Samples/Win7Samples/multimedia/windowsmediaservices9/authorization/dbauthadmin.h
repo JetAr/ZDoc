@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -37,15 +37,15 @@ public:
     STDMETHOD( Initialize )( CDBAuthPlugin *pPlugin );
 
 
-DECLARE_REGISTRY_RESOURCEID( IDR_DBAUTHADMIN )
+    DECLARE_REGISTRY_RESOURCEID( IDR_DBAUTHADMIN )
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP( CDBAuthAdmin )
+    BEGIN_COM_MAP( CDBAuthAdmin )
     COM_INTERFACE_ENTRY( IDispatch )
     COM_INTERFACE_ENTRY( ISupportErrorInfo )
     COM_INTERFACE_ENTRY( IDBAuthAdmin )
-END_COM_MAP()
+    END_COM_MAP()
 
 // ISupportsErrorInfo
     STDMETHOD( InterfaceSupportsErrorInfo )( REFIID riid );

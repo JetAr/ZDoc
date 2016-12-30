@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -13,7 +13,7 @@ Module Name:
 
 Abstract:
 
-    Sample application to demonstrate usage of the WDS Transport 
+    Sample application to demonstrate usage of the WDS Transport
     Management API.
 
 Note:
@@ -25,10 +25,10 @@ Note:
     the coding aspects that are omitted from this program are:
     1. Globalization. The code uses hardcoded English strings rather than
        placing strings in a resource file.
-    2. Error Handling: 
+    2. Error Handling:
        a. The sample provided here simply prints some of its own error messages
        and shows raw HRESULTS in case of most failures. A developer working
-       with this sample can manually look up WdsTptMgmt HRESULTs in 
+       with this sample can manually look up WdsTptMgmt HRESULTs in
        WdsTptMgmtMsg.h and WdsMcErr.h.
        b. In general, an application is expected to use functions like
        FormatMessage to get a user-friendly message that corresponds to
@@ -51,7 +51,7 @@ int __cdecl
 wmain(
     __in int argc,
     __in_ecount(argc) wchar_t* argv[ ]
-    )
+)
 /*++
 
 Routine Description:
@@ -99,10 +99,10 @@ Return Value:
     //
     // Instantiate the top-level WdsTransportManager object.
     //
-    hr = CLSIDFromProgID( L"WdsTptMgmt.WdsTransportManager", 
+    hr = CLSIDFromProgID( L"WdsTptMgmt.WdsTransportManager",
                           &clsid );
     CLEANUP_HR( hr, Cleanup );
-    
+
     hr = CoCreateInstance( clsid,
                            NULL,
                            CLSCTX_INPROC_SERVER,
@@ -115,7 +115,7 @@ Return Value:
     // Get an object for the target server
     //
     hr = pWdsTransportManager->GetWdsTransportServer( Arguments.bszServer,
-                                                      &pServer );
+            &pServer );
     CLEANUP_HR( hr, Cleanup );
 
     //
@@ -151,16 +151,16 @@ Return Value:
     //
     switch ( Arguments.Action )
     {
-    case WdsTptEnableServer : 
+    case WdsTptEnableServer :
 
         hr = EnableServer( pServer );
         break;
 
-    case WdsTptDisableServer : 
+    case WdsTptDisableServer :
 
         hr = DisableServer( pServer );
         break;
-    
+
     case WdsTptAddNamespace :
 
         hr = AddNamespace( pServer,
@@ -203,7 +203,7 @@ Cleanup:
     {
         wprintf( WDSTPTMGR_FAILURE, hr );
     }
-    
+
 
     //
     // Release/Free resources
@@ -237,7 +237,7 @@ HRESULT
 AllocBstr(
     __in_opt PWSTR pwszString,
     __deref_out BSTR* pbszString
-    )
+)
 /*++
 
 Routine Description:
@@ -251,7 +251,7 @@ Routine Description:
 Arguments:
 
     pwszString - PWSTR string to be converted to a BSTR
-    pbszString - Recevies a BSTR version of the input string. 
+    pbszString - Recevies a BSTR version of the input string.
                  Use SysFreeString( *pbszString ) when done.
 
 Return Value:
@@ -284,11 +284,11 @@ Return Value:
 
 
 HRESULT
-ParseArguments( 
+ParseArguments(
     __in int argc,
     __in_ecount(argc) wchar_t *argv[ ],
     __out PWDSTPT_ARGS pArguments
-    )
+)
 /*++
 
 Routine Description:
@@ -363,7 +363,7 @@ Note:
     else if ( 0 == _wcsicmp( pArguments->pwszAction, L"AddNamespace" ) )
     {
         pArguments->Action = WdsTptAddNamespace;
-        
+
         //
         // This action requires a total of 6 arguments.
         // Check for and read the remaining 3.
@@ -407,7 +407,7 @@ Note:
     else if ( 0 == _wcsicmp( pArguments->pwszAction, L"RemoveNamespace" ) )
     {
         pArguments->Action = WdsTptRemoveNamespace;
-        
+
         //
         // This action requires a total of 4 arguments.
         // Check for and read the remaining one.
@@ -455,9 +455,9 @@ Cleanup:
 
 
 HRESULT
-EnableServer( 
+EnableServer(
     __in IWdsTransportServer* pServer
-    )
+)
 /*++
 
 Routine Description:
@@ -511,9 +511,9 @@ Cleanup:
 
 
 HRESULT
-DisableServer( 
+DisableServer(
     __in IWdsTransportServer* pServer
-    )
+)
 /*++
 
 Routine Description:
@@ -567,10 +567,10 @@ Cleanup:
 
 
 HRESULT
-AddNamespace( 
+AddNamespace(
     __in IWdsTransportServer* pServer,
     __in PWDSTPT_ARGS pArguments
-    )
+)
 /*++
 
 Routine Description:
@@ -611,9 +611,9 @@ Return Value:
     // Create an auto-start namespace object using specified arguments.
     //
     hr = pNamespaceMgr->CreateNamespace( WdsTptNamespaceTypeScheduledCastAutoStart,
-                                         pArguments->bszNamespace, 
-                                         pArguments->bszWdsContentProvider, 
-                                         pArguments->bszFolderPath, 
+                                         pArguments->bszNamespace,
+                                         pArguments->bszWdsContentProvider,
+                                         pArguments->bszFolderPath,
                                          &pNamespace );
     CLEANUP_HR( hr, Cleanup );
 
@@ -638,7 +638,7 @@ Return Value:
     //       E.g. If the namespace name is already in use by another
     //       regtistered namespace on the server, this method may return a
     //       "duplicate namespace" error code from WdsTptMgmt.h or WdsMcErr.h.
-    //       This sample simply bubbles up the error code, but a real-world 
+    //       This sample simply bubbles up the error code, but a real-world
     //       application may want to handle such an error, e.g. by looking up
     //       and displaying its associated user-friendly message and/or
     //       prompting the user to try a different namespace name.
@@ -661,10 +661,10 @@ Cleanup:
 
 
 HRESULT
-RemoveNamespace( 
+RemoveNamespace(
     __in IWdsTransportServer* pServer,
     __in PWDSTPT_ARGS pArguments
-    )
+)
 /*++
 
 Routine Description:
@@ -700,13 +700,13 @@ Return Value:
     // Retrieve the namespace object corresponding to the specified namespace.
     //
     // NOTE: If this fails indicating no such namespace is registered on
-    //       the server, this sample simply bubbles up the error code. 
+    //       the server, this sample simply bubbles up the error code.
     //       In a real-world scenario, the application may look up the error
     //       message in the WDS transport modules, display its own
     //       user-friendly message, prompt the user to re-enter the name,
     //       and so on.
     //
-    hr = pNamespaceMgr->RetrieveNamespace( pArguments->bszNamespace, 
+    hr = pNamespaceMgr->RetrieveNamespace( pArguments->bszNamespace,
                                            &pNamespace );
     CLEANUP_HR( hr, Cleanup );
 

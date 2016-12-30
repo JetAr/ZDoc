@@ -1,13 +1,13 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
 // File:  OfficeDlg.h
 //
 // Description:
-//	This file declares the COfficeDlg dialog class which 
+//	This file declares the COfficeDlg dialog class which
 //		collects information for the OnAddEquipment() routine.
-// 
+//
 // Part of: WMI Tutorial #1.
 //
 // Used by: OnAddEquipment().
@@ -32,31 +32,31 @@ class COfficeDlg : public CDialog
 {
 // Construction
 public:
-	COfficeDlg(CWnd* pParent = NULL);   // standard constructor
+    COfficeDlg(CWnd* pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(COfficeDlg)
-	enum { IDD = IDD_OFFICEEQUIP };
-	CString	m_item;
-	CString	m_SKU;
-	//}}AFX_DATA
+    //{{AFX_DATA(COfficeDlg)
+    enum { IDD = IDD_OFFICEEQUIP };
+    CString	m_item;
+    CString	m_SKU;
+    //}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(COfficeDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(COfficeDlg)
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    //}}AFX_VIRTUAL
 
 // Implementation
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(COfficeDlg)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    // Generated message map functions
+    //{{AFX_MSG(COfficeDlg)
+    // NOTE: the ClassWizard will add member functions here
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

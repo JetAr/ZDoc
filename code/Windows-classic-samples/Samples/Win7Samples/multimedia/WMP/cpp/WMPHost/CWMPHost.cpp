@@ -1,4 +1,4 @@
-// CWMPHost.cpp : Implementation of the CWMPHost
+﻿// CWMPHost.cpp : Implementation of the CWMPHost
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -34,7 +34,7 @@ LRESULT CWMPHost::OnCreate(UINT /* uMsg */, WPARAM /* wParam */, LPARAM /* lPara
     m_wndView.Create(m_hWnd, rcClient, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
     if (NULL == m_wndView.m_hWnd)
         goto FAILURE;
-    
+
     // load OCX in window
 
     hr = m_wndView.QueryHost(&spHost);
@@ -282,143 +282,143 @@ LRESULT CWMPHost::OnWMPCoreInterface(WORD /* wNotifyCode */, WORD wID, HWND /* h
     switch (wID)
     {
     case ID_WMPCORE_CONTROLS:
-        {
-            CComPtr<IWMPControls> spWMPControls;
+    {
+        CComPtr<IWMPControls> spWMPControls;
 
-            hr = m_spWMPPlayer->get_controls(&spWMPControls);
-            if (spWMPControls)
-            {
-                spWMPControls->QueryInterface(__uuidof(IWMPControls), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->controls");
-            }
+        hr = m_spWMPPlayer->get_controls(&spWMPControls);
+        if (spWMPControls)
+        {
+            spWMPControls->QueryInterface(__uuidof(IWMPControls), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->controls");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_SETTINGS:
-        {
-            CComPtr<IWMPSettings> spWMPSettings;
+    {
+        CComPtr<IWMPSettings> spWMPSettings;
 
-            hr = m_spWMPPlayer->get_settings(&spWMPSettings);
-            if (spWMPSettings)
-            {
-                spWMPSettings->QueryInterface(__uuidof(IWMPSettings), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->settings");
-            }
+        hr = m_spWMPPlayer->get_settings(&spWMPSettings);
+        if (spWMPSettings)
+        {
+            spWMPSettings->QueryInterface(__uuidof(IWMPSettings), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->settings");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_CURRENTMEDIA:
-        {
-            CComPtr<IWMPMedia> spWMPMedia;
+    {
+        CComPtr<IWMPMedia> spWMPMedia;
 
-            hr = m_spWMPPlayer->get_currentMedia(&spWMPMedia);
-            if (spWMPMedia)
-            {
-                spWMPMedia->QueryInterface(__uuidof(IWMPMedia), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->currentMedia");
-            }
+        hr = m_spWMPPlayer->get_currentMedia(&spWMPMedia);
+        if (spWMPMedia)
+        {
+            spWMPMedia->QueryInterface(__uuidof(IWMPMedia), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->currentMedia");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_MEDIACOLLECTION:
-        {
-            CComPtr<IWMPMediaCollection> spWMPMediaCollection;
+    {
+        CComPtr<IWMPMediaCollection> spWMPMediaCollection;
 
-            hr = m_spWMPPlayer->get_mediaCollection(&spWMPMediaCollection);
-            if (spWMPMediaCollection)
-            {
-                spWMPMediaCollection->QueryInterface(__uuidof(IWMPMediaCollection), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->currentMediaCollection");
-            }
+        hr = m_spWMPPlayer->get_mediaCollection(&spWMPMediaCollection);
+        if (spWMPMediaCollection)
+        {
+            spWMPMediaCollection->QueryInterface(__uuidof(IWMPMediaCollection), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->currentMediaCollection");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_PLAYLISTCOLLECTION:
-        {
-            CComPtr<IWMPPlaylistCollection> spWMPPlaylistCollection;
+    {
+        CComPtr<IWMPPlaylistCollection> spWMPPlaylistCollection;
 
-            hr = m_spWMPPlayer->get_playlistCollection(&spWMPPlaylistCollection);
-            if (spWMPPlaylistCollection)
-            {
-                spWMPPlaylistCollection->QueryInterface(__uuidof(IWMPPlaylistCollection), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->playlistCollection");
-            }
+        hr = m_spWMPPlayer->get_playlistCollection(&spWMPPlaylistCollection);
+        if (spWMPPlaylistCollection)
+        {
+            spWMPPlaylistCollection->QueryInterface(__uuidof(IWMPPlaylistCollection), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->playlistCollection");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_NETWORK:
-        {
-            CComPtr<IWMPNetwork> spWMPNetwork;
+    {
+        CComPtr<IWMPNetwork> spWMPNetwork;
 
-            hr = m_spWMPPlayer->get_network(&spWMPNetwork);
-            if (spWMPNetwork)
-            {
-                spWMPNetwork->QueryInterface(__uuidof(IWMPNetwork), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->network");
-            }
+        hr = m_spWMPPlayer->get_network(&spWMPNetwork);
+        if (spWMPNetwork)
+        {
+            spWMPNetwork->QueryInterface(__uuidof(IWMPNetwork), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->network");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_CURRENTPLAYLIST:
-        {
-            CComPtr<IWMPPlaylist> spWMPPlaylist;
+    {
+        CComPtr<IWMPPlaylist> spWMPPlaylist;
 
-            hr = m_spWMPPlayer->get_currentPlaylist(&spWMPPlaylist);
-            if (spWMPPlaylist)
-            {
-                spWMPPlaylist->QueryInterface(__uuidof(IWMPPlaylist), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->currentPlaylist");
-            }
+        hr = m_spWMPPlayer->get_currentPlaylist(&spWMPPlaylist);
+        if (spWMPPlaylist)
+        {
+            spWMPPlaylist->QueryInterface(__uuidof(IWMPPlaylist), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->currentPlaylist");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_CDROMCOLLECTION:
-        {
-            CComPtr<IWMPCdromCollection> spWMPCDRomCollection;
+    {
+        CComPtr<IWMPCdromCollection> spWMPCDRomCollection;
 
-            hr = m_spWMPPlayer->get_cdromCollection(&spWMPCDRomCollection);
-            if (spWMPCDRomCollection)
-            {
-                spWMPCDRomCollection->QueryInterface(__uuidof(IWMPCdromCollection), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->cdromCollection");
-            }
+        hr = m_spWMPPlayer->get_cdromCollection(&spWMPCDRomCollection);
+        if (spWMPCDRomCollection)
+        {
+            spWMPCDRomCollection->QueryInterface(__uuidof(IWMPCdromCollection), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->cdromCollection");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_CLOSEDCAPTION:
-        {
-            CComPtr<IWMPClosedCaption> spWMPClosedCaption;
+    {
+        CComPtr<IWMPClosedCaption> spWMPClosedCaption;
 
-            hr = m_spWMPPlayer->get_closedCaption(&spWMPClosedCaption);
-            if (spWMPClosedCaption)
-            {
-                spWMPClosedCaption->QueryInterface(__uuidof(IWMPClosedCaption), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->closedCaption");
-            }
+        hr = m_spWMPPlayer->get_closedCaption(&spWMPClosedCaption);
+        if (spWMPClosedCaption)
+        {
+            spWMPClosedCaption->QueryInterface(__uuidof(IWMPClosedCaption), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->closedCaption");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE_ERROR:
-        {
-            CComPtr<IWMPError> spWMPError;
+    {
+        CComPtr<IWMPError> spWMPError;
 
-            hr = m_spWMPPlayer->get_error(&spWMPError);
-            if (spWMPError)
-            {
-                spWMPError->QueryInterface(__uuidof(IWMPError), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore->error");
-            }
+        hr = m_spWMPPlayer->get_error(&spWMPError);
+        if (spWMPError)
+        {
+            spWMPError->QueryInterface(__uuidof(IWMPError), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore->error");
         }
-        break;
+    }
+    break;
     case ID_WMPCORE2_DVD:
+    {
+        CComPtr<IWMPPlayer3> spWMPPlayer3;
+
+        hr = m_spWMPPlayer.QueryInterface(&spWMPPlayer3);
+        if (FAILMSG(hr))
+            return 0;
+
+        CComPtr<IWMPDVD> spWMPDVD;
+
+        hr = spWMPPlayer3->get_dvd(&spWMPDVD);
+        if (spWMPDVD)
         {
-            CComPtr<IWMPPlayer3> spWMPPlayer3;
-
-            hr = m_spWMPPlayer.QueryInterface(&spWMPPlayer3);
-            if (FAILMSG(hr))
-                return 0;
-
-            CComPtr<IWMPDVD> spWMPDVD;
-
-            hr = spWMPPlayer3->get_dvd(&spWMPDVD);
-            if (spWMPDVD)
-            {
-                spWMPDVD->QueryInterface(__uuidof(IWMPDVD), &pUnknown);
-                wcscpy_s(wszName, MAX_STRING, L"IWMPCore2->dvd");
-            }
+            spWMPDVD->QueryInterface(__uuidof(IWMPDVD), &pUnknown);
+            wcscpy_s(wszName, MAX_STRING, L"IWMPCore2->dvd");
         }
-        break;
+    }
+    break;
     }
 
     if (FAILMSG(hr))

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: PsiParser.cpp
 //
 // Desc: DirectShow sample code -
@@ -67,14 +67,14 @@ l.  Stop viewing by clicking "Stop Viewing" button.
 
 // {78C4E641-0ED1-11d3-BC6B-00A0C90D63B5}
 DEFINE_GUID(MEDIATYPE_MPEG2PSI,
-0x78c4e641, 0xed1, 0x11d3, 0xbc, 0x6b, 0x0, 0xa0, 0xc9, 0xd, 0x63, 0xb5);
+            0x78c4e641, 0xed1, 0x11d3, 0xbc, 0x6b, 0x0, 0xa0, 0xc9, 0xd, 0x63, 0xb5);
 
 // Prevent "already defined" linker error problem with Visual C++ 6.0.
 // Copy the Microsoft MEDIATYPE_MPEG2_SECTIONS GUID into a renamed GUID
 // that will not clash with strmiids.lib.  This is a workaround for
 // machines with Visual C++ 6.0 without a newer Platform SDK.
 DEFINE_GUID( MY_MEDIATYPE_MPEG2_SECTIONS,
-    0x455f176c, 0x4b06, 0x47ce, 0x9a, 0xef, 0x8c, 0xae, 0xf7, 0x3d, 0xf7, 0xb5);
+             0x455f176c, 0x4b06, 0x47ce, 0x9a, 0xef, 0x8c, 0xae, 0xf7, 0x3d, 0xf7, 0xb5);
 
 
 // Setup data
@@ -89,18 +89,23 @@ const AMOVIESETUP_FILTER sudPsiParser =
 
 
 // List of class IDs and creator functions for class factory
-CFactoryTemplate g_Templates [2]  = {
-    { L"PSI Parser"
-    , &CLSID_PsiParser
-    , CPsiParserFilter::CreateInstance
-    , NULL
-    , &sudPsiParser }
-,
-    { L"Program Property Page"
-    , &CLSID_ProgramPropertyPage
-    , CProgramProperties::CreateInstance
-    , NULL
-    , NULL }
+CFactoryTemplate g_Templates [2]  =
+{
+    {
+        L"PSI Parser"
+        , &CLSID_PsiParser
+        , CPsiParserFilter::CreateInstance
+        , NULL
+        , &sudPsiParser
+    }
+    ,
+    {
+        L"Program Property Page"
+        , &CLSID_ProgramPropertyPage
+        , CProgramProperties::CreateInstance
+        , NULL
+        , NULL
+    }
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
@@ -123,18 +128,18 @@ CUnknown * WINAPI CPsiParserFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 //
 
 CPsiParserFilter::CPsiParserFilter(LPUNKNOWN pUnk,
-                           HRESULT *phr)
-: CBaseFilter(NAME("CPSIParser"), pUnk, &m_Lock, CLSID_PsiParser)
+                                   HRESULT *phr)
+    : CBaseFilter(NAME("CPSIParser"), pUnk, &m_Lock, CLSID_PsiParser)
 
 {
     ASSERT(phr);
 
     // Create the single input pin
     m_pInputPin = new CPsiParserInputPin(   this,
-                                        GetOwner(),
-                                        &m_Lock,
-                                        &m_ReceiveLock,
-                                        phr);
+                                            GetOwner(),
+                                            &m_Lock,
+                                            &m_ReceiveLock,
+                                            phr);
     if(m_pInputPin == NULL)
     {
         if (phr)
@@ -164,15 +169,19 @@ STDMETHODIMP CPsiParserFilter::NonDelegatingQueryInterface(REFIID riid, void **p
 {
     CheckPointer(ppv,E_POINTER);
 
-    if (riid == IID_IMpeg2PsiParser) {
+    if (riid == IID_IMpeg2PsiParser)
+    {
         return GetInterface((IMpeg2PsiParser *) this, ppv);
 
-    } else if (riid == IID_ISpecifyPropertyPages) {
+    }
+    else if (riid == IID_ISpecifyPropertyPages)
+    {
         return GetInterface((ISpecifyPropertyPages *) this, ppv);
 
     }
 
-    else {
+    else
+    {
         return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
     }
 
@@ -327,8 +336,10 @@ STDMETHODIMP CPsiParserFilter::FindRecordProgramMapPid(WORD wProgramNumber, WORD
     int i;
 
 
-    for (i = 0; i<(int) m_pInputPin->m_Programs.m_ProgramCount; i++){
-        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber){
+    for (i = 0; i<(int) m_pInputPin->m_Programs.m_ProgramCount; i++)
+    {
+        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber)
+        {
             *pwVal = (WORD) m_pInputPin->m_Programs.m_programs[i]->network_or_program_map_PID;
             return NOERROR;
         }
@@ -349,8 +360,10 @@ STDMETHODIMP CPsiParserFilter::GetPmtVersionNumber(WORD wProgramNumber, BYTE *pV
 
     CAutoLock cAutoLock(&m_ParserLock);
 
-    for (int i = 0; i<(int) m_pInputPin->m_Programs.m_ProgramCount; i++){
-        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber){
+    for (int i = 0; i<(int) m_pInputPin->m_Programs.m_ProgramCount; i++)
+    {
+        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber)
+        {
             *pVal = (BYTE) m_pInputPin->m_Programs.m_programs[i]->mpeg2_pmt_section.version_number;
             return NOERROR;
 
@@ -371,8 +384,10 @@ STDMETHODIMP CPsiParserFilter::GetCountOfElementaryStreams(WORD wProgramNumber, 
 
     CAutoLock cAutoLock(&m_ParserLock);
 
-    for (int i = 0; i<(int) m_pInputPin->m_Programs.m_ProgramCount; i++){
-        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber){
+    for (int i = 0; i<(int) m_pInputPin->m_Programs.m_ProgramCount; i++)
+    {
+        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber)
+        {
             *pwVal = (BYTE) m_pInputPin->m_Programs.m_programs[i]->mpeg2_pmt_section.number_of_elementary_streams;
             return NOERROR;
 
@@ -394,8 +409,10 @@ STDMETHODIMP CPsiParserFilter::GetRecordStreamType(WORD wProgramNumber,DWORD dwR
     CAutoLock cAutoLock(&m_ParserLock);
     int i;
 
-    for (i = 0; i<m_pInputPin->m_Programs.m_ProgramCount; i++){
-        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber){
+    for (i = 0; i<m_pInputPin->m_Programs.m_ProgramCount; i++)
+    {
+        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber)
+        {
             *pbVal = (BYTE) m_pInputPin->m_Programs.m_programs[i]->mpeg2_pmt_section.elementary_stream_info[dwRecordIndex].stream_type;
             return NOERROR;
         }
@@ -414,8 +431,10 @@ STDMETHODIMP CPsiParserFilter::GetRecordElementaryPid(WORD wProgramNumber,DWORD 
     CAutoLock cAutoLock(&m_ParserLock);
     int i;
 
-    for (i = 0; i<m_pInputPin->m_Programs.m_ProgramCount; i++){
-        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber){
+    for (i = 0; i<m_pInputPin->m_Programs.m_ProgramCount; i++)
+    {
+        if(m_pInputPin->m_Programs.m_programs[i]->program_number == wProgramNumber)
+        {
             *pwVal = (WORD) m_pInputPin->m_Programs.m_programs[i]->mpeg2_pmt_section.elementary_stream_info[dwRecordIndex].elementary_PID;
             return NOERROR;
         }
@@ -434,16 +453,16 @@ CPsiParserInputPin::CPsiParserInputPin( CPsiParserFilter *pFilter,
                                         CCritSec *pLock,
                                         CCritSec *pReceiveLock,
                                         HRESULT *phr)
-: CRenderedInputPin(NAME("CPSIParserInputPin"),
-                    (CBaseFilter *) pFilter,    // Filter
-                    pLock,                      // Locking
-                    phr,                        // Return code
-                    L"Input")                   // Pin name
-, m_pFilter(pFilter)
-, m_pReceiveLock(pReceiveLock)
-, m_pPatProcessor(NULL)
-, m_pPmtProcessor(NULL)
-, m_bCreated(false)
+    : CRenderedInputPin(NAME("CPSIParserInputPin"),
+                        (CBaseFilter *) pFilter,    // Filter
+                        pLock,                      // Locking
+                        phr,                        // Return code
+                        L"Input")                   // Pin name
+    , m_pFilter(pFilter)
+    , m_pReceiveLock(pReceiveLock)
+    , m_pPatProcessor(NULL)
+    , m_pPmtProcessor(NULL)
+    , m_bCreated(false)
 
 {
 
@@ -487,7 +506,8 @@ CPsiParserInputPin::CheckMediaType(const CMediaType *pMediaType)
 {
 
     if( *(pMediaType->Type()) == MY_MEDIATYPE_MPEG2_SECTIONS ||
-        *(pMediaType->Type()) == MEDIATYPE_MPEG2PSI) {
+            *(pMediaType->Type()) == MEDIATYPE_MPEG2PSI)
+    {
         return S_OK;
     }
 
@@ -535,18 +555,19 @@ HRESULT CPsiParserInputPin::Receive(IMediaSample * pSample)
     // because the demux and the psi filter should be connected first before
     // the demux is retrieved from psi filter in the processor's constructor
 
-    if (m_bCreated == false) {
+    if (m_bCreated == false)
+    {
 
         // initialize data shared by two processors:
         m_Programs.init_programs();
 
         // create two processors once
         m_pPatProcessor = new CPATProcessor(m_pFilter,
-                                        &m_Programs,
-                                        &hr);
+                                            &m_Programs,
+                                            &hr);
         if(m_pPatProcessor == NULL)
         {
-              hr = E_OUTOFMEMORY;
+            hr = E_OUTOFMEMORY;
         }
 
         m_pPmtProcessor = new CPMTProcessor(m_pFilter,
@@ -555,17 +576,19 @@ HRESULT CPsiParserInputPin::Receive(IMediaSample * pSample)
 
         if(m_pPmtProcessor == NULL)
         {
-                hr = E_OUTOFMEMORY;
+            hr = E_OUTOFMEMORY;
         }
 
         m_bCreated = true;
     }
     // PAT section
-    if(*pData == PAT_TABLE_ID && VALID_PSI_HEADER(pData) ){
+    if(*pData == PAT_TABLE_ID && VALID_PSI_HEADER(pData) )
+    {
         m_pPatProcessor->process(pData, lDataLen);
     }
     //PMT section
-    else if(*pData == PMT_TABLE_ID && VALID_PSI_HEADER(pData)){
+    else if(*pData == PMT_TABLE_ID && VALID_PSI_HEADER(pData))
+    {
         m_pPmtProcessor->process(pData, lDataLen);
     }
 
@@ -592,12 +615,12 @@ STDMETHODIMP CPsiParserInputPin::EndOfStream(void)
 CPATProcessor::CPATProcessor(CPsiParserFilter *pParser,
                              CPrograms * pPrograms,
                              HRESULT *phr)
-: m_pParser(pParser)
-, m_pPrograms(pPrograms)
-, m_current_transport_stream_id( 0xff)
-, m_pat_section_count(0)
-, m_mapped_pmt_pid_count(0)
-, m_pDemuxPsiOutputPin(NULL)
+    : m_pParser(pParser)
+    , m_pPrograms(pPrograms)
+    , m_current_transport_stream_id( 0xff)
+    , m_pat_section_count(0)
+    , m_mapped_pmt_pid_count(0)
+    , m_pDemuxPsiOutputPin(NULL)
 {
     // follow these steps to get demux PSI output pin:
 
@@ -631,8 +654,10 @@ BOOL CPATProcessor::IsNewPATSection(DWORD dwSectionNumber)
 
     BOOL bIsNewSection = TRUE;
 
-    for(int i = 0; i<(int)m_pat_section_count; i++) {
-        if(m_pat_section_number_array[i] == dwSectionNumber) {
+    for(int i = 0; i<(int)m_pat_section_count; i++)
+    {
+        if(m_pat_section_number_array[i] == dwSectionNumber)
+        {
             return FALSE;
         }
     }
@@ -661,7 +686,8 @@ BOOL CPATProcessor::MapPmtPid(DWORD dwPmtPid)
     ULONG ulPmtPID[1] = {(ULONG) dwPmtPid};
 
     hr = pIPmtPIDMap->MapPID(1, ulPmtPID, MEDIA_MPEG2_PSI);
-    if(FAILED(hr)){
+    if(FAILED(hr))
+    {
         pIPmtPIDMap->Release();
         return FALSE;
     }
@@ -688,12 +714,14 @@ BOOL CPATProcessor::UnmapPmtPid()
     RETURN_FALSE_IF_BADPTR(TEXT("CPATProcessor::SetupMPEGDeMux()::pIPmtPIDMap is null "), pIPmtPIDMap) ;
 
 
-    for(int i = 0; i<(int)m_mapped_pmt_pid_count;i++){
+    for(int i = 0; i<(int)m_mapped_pmt_pid_count; i++)
+    {
 
         ULONG ulPmtPID[1] = {(ULONG) m_mapped_pmt_pid_array[i]};
 
         hr = pIPmtPIDMap->UnmapPID(1, ulPmtPID);
-        if(FAILED(hr)){
+        if(FAILED(hr))
+        {
             pIPmtPIDMap->Release();
             return FALSE;
         }
@@ -714,29 +742,35 @@ BOOL CPATProcessor::process(BYTE * pbBuffer, long lDataLen)
     // "0" indicates that the table sent is not yet applicable
     // and shall be the next table to become valid
     BOOL current_next_indicator = PAT_CURRENT_NEXT_INDICATOR_BIT(pbBuffer);
-    if( current_next_indicator == 0 ){
+    if( current_next_indicator == 0 )
+    {
         return FALSE; // discard and do nothing
     }
 
     // new transport stream
     DWORD transport_stream_id = PAT_TRANSPORT_STREAM_ID_VALUE(pbBuffer);
-    if( transport_stream_id != m_current_transport_stream_id ) {
+    if( transport_stream_id != m_current_transport_stream_id )
+    {
         // flush all programs
         if(!flush())
             return FALSE;
         bResult = store(pbBuffer, lDataLen);
     }
-    else {
+    else
+    {
 
         // new section
         DWORD section_number = PAT_SECTION_NUMBER_VALUE(pbBuffer);
-        if( IsNewPATSection(section_number) ){
+        if( IsNewPATSection(section_number) )
+        {
             bResult = store(pbBuffer, lDataLen);
         }
-        else {
+        else
+        {
             // new PAT version, i.e. transport stream changed (such as adding or deleting programs)
             DWORD version_number = PAT_VERSION_NUMBER_VALUE(pbBuffer);
-            if( m_current_pat_version_number != version_number ){
+            if( m_current_pat_version_number != version_number )
+            {
                 if(!flush())
                     return FALSE;
                 bResult = store(pbBuffer, lDataLen);
@@ -778,7 +812,7 @@ BOOL CPATProcessor::store(BYTE * pbBuffer, long lDataLen)
     m_pat_section_count ++;
 
     // update s_mpeg2_programs, for each program:
-    for( int i=0;i<(int) (mpeg2_pat_section.number_of_programs); i++)// For each program contained in this pat section
+    for( int i=0; i<(int) (mpeg2_pat_section.number_of_programs); i++) // For each program contained in this pat section
     {
 
         //  add new program or update existing program
@@ -786,7 +820,8 @@ BOOL CPATProcessor::store(BYTE * pbBuffer, long lDataLen)
         m_pPrograms->add_program_from_pat(&mpeg2_pat_section, i);
 
         // if the pmt PID has not been mapped to demux output pin, map it
-        if( !HasPmtPidMappedToPin(mpeg2_pat_section.program_descriptor[i].program_number)) {
+        if( !HasPmtPidMappedToPin(mpeg2_pat_section.program_descriptor[i].program_number))
+        {
             Dump1(TEXT("map new pmt pid %d to demux output pin\n"), mpeg2_pat_section.program_descriptor[i].network_or_program_map_PID);
             if(!MapPmtPid(mpeg2_pat_section.program_descriptor[i].network_or_program_map_PID))
                 return FALSE;
@@ -806,7 +841,8 @@ BOOL CPATProcessor::store(BYTE * pbBuffer, long lDataLen)
 BOOL CPATProcessor::HasPmtPidMappedToPin(DWORD dwPid)
 {
     BOOL bMapped = FALSE;
-    for(int i = 0; i<(int)m_mapped_pmt_pid_count;i++){
+    for(int i = 0; i<(int)m_mapped_pmt_pid_count; i++)
+    {
         if(m_mapped_pmt_pid_array[i] == dwPid)
             return TRUE;
     }
@@ -834,9 +870,9 @@ BOOL CPATProcessor::flush()
 //  Constructor
 //
 CPMTProcessor::CPMTProcessor(CPsiParserFilter *pParser,CPrograms * pPrograms, HRESULT *phr)
-: m_pParser(pParser)
-, m_pPrograms(pPrograms)
-, m_pmt_section_count(0)
+    : m_pParser(pParser)
+    , m_pPrograms(pPrograms)
+    , m_pmt_section_count(0)
 {
 } // Constructor
 
@@ -853,12 +889,13 @@ CPMTProcessor::~CPMTProcessor()
 // for a pmt section of a given program_number, if the version is the same as recorded before,
 // return TRUE; otherwise, return false;
 BOOL CPMTProcessor::HasPMTVersionOfThisProgramChanged(DWORD dwProgramNumber,
-                                                      DWORD dwSectionVersion)
+        DWORD dwSectionVersion)
 {
-    if(m_pmt_section_count != 0){
+    if(m_pmt_section_count != 0)
+    {
         for(int i = 0; i<(int)m_pmt_section_count; i++)
             if( dwProgramNumber == m_pmt_program_number_version_array[i].pmt_program_number &&
-                dwSectionVersion == m_pmt_program_number_version_array[i].pmt_section_version )
+                    dwSectionVersion == m_pmt_program_number_version_array[i].pmt_section_version )
                 return FALSE;
     }
     return TRUE;
@@ -871,7 +908,8 @@ BOOL CPMTProcessor::HasPMTVersionOfThisProgramChanged(DWORD dwProgramNumber,
 // if the section number has been received before, return TRUE; else, return FALSE
 BOOL CPMTProcessor::IsNewPMTSection(DWORD dwProgramNumber)
 {
-    if(m_pmt_section_count != 0){
+    if(m_pmt_section_count != 0)
+    {
         // in each pmt section, the section number field shall be set to zero.
         // Sections are identified by the program_number field (ISO/IEC 13818-1:1996(E))
         for(int i = 0; i<(int)m_pmt_section_count; i++)
@@ -894,19 +932,23 @@ BOOL CPMTProcessor::process(BYTE * pbBuffer, long lDataLen)
     // "0" indicates that the table sent is not yet applicable
     // and shall be the next table to become valid
     BOOL current_next_indicator = PMT_CURRENT_NEXT_INDICATOR_BIT(pbBuffer);
-    if( current_next_indicator == 0 ){
+    if( current_next_indicator == 0 )
+    {
         return FALSE; // discard and do nothing
     }
 
     // new section
     DWORD program_number = PMT_PROGRAM_NUMBER_VALUE(pbBuffer);
-    if( IsNewPMTSection(program_number)) {
+    if( IsNewPMTSection(program_number))
+    {
         bResult = store(pbBuffer, lDataLen);
     }
-    else{
+    else
+    {
         // new pmt version, just for this program
         DWORD version_number = PMT_VERSION_NUMBER_VALUE(pbBuffer);
-        if( HasPMTVersionOfThisProgramChanged(program_number, version_number )){
+        if( HasPMTVersionOfThisProgramChanged(program_number, version_number ))
+        {
             bResult = store(pbBuffer, lDataLen);
         }
         //else discard and do nothing
@@ -993,7 +1035,7 @@ HRESULT GetDemuxFilter(IFilterGraph    * pGraph,IBaseFilter ** ppDemux )
 // Given a filter, find the output pin which output pecific media type
 //
 //----------------------------------------------------------------------------
- // GetDemuxPsiOutputPin
+// GetDemuxPsiOutputPin
 HRESULT GetDemuxPsiOutputPin(IBaseFilter * pDemux, IPin ** ppOutPin)
 {
     if (!pDemux) return E_POINTER;
@@ -1026,16 +1068,18 @@ HRESULT GetDemuxPsiOutputPin(IBaseFilter * pDemux, IPin ** ppOutPin)
 
             AM_MEDIA_TYPE* pMediaTypes;
             // Loop thru' preferred media type list for a match
-            do {
+            do
+            {
                 hr = pTypeEnum->Next(1, &pMediaTypes, &ul) ;
-                if (FAILED(hr) || 0 == ul) {
+                if (FAILED(hr) || 0 == ul)
+                {
                     pPin->Release();
                     Dump1(TEXT("IEnumMediaTypes::Next() failed (Error 0x%lx)"),hr) ;  // should be out
                     break ;
                 }
 
                 if (pMediaTypes->majortype == MY_MEDIATYPE_MPEG2_SECTIONS ||
-                    pMediaTypes->majortype == MEDIATYPE_MPEG2PSI)
+                        pMediaTypes->majortype == MEDIATYPE_MPEG2PSI)
                 {
                     *ppOutPin = pPin;
                     bFound = TRUE ;
@@ -1048,7 +1092,8 @@ HRESULT GetDemuxPsiOutputPin(IBaseFilter * pDemux, IPin ** ppOutPin)
                     pEnum->Release();
                     return S_OK;
                 }
-            } while (!bFound) ;  // until the reqd one is found
+            }
+            while (!bFound) ;    // until the reqd one is found
 
             pTypeEnum->Release();
         }
@@ -1067,13 +1112,14 @@ BOOL
 ConfirmMpeg2PSICRC_32 (
     IN  BYTE *  pb,
     IN  ULONG   ulLen
-    )
+)
 {
     ULONG   ulCRCAccum ;
     ULONG   i, j ;
 
     ulCRCAccum = 0xffffffff ;
-    for (j = 0; j < ulLen; j++, pb++) {
+    for (j = 0; j < ulLen; j++, pb++)
+    {
         i = (( ulCRCAccum >> 24) ^ (* pb)) & 0xff ;
         ulCRCAccum = ((ulCRCAccum << 8 ) ^ g_MPEG2_PSI_CRC_32_Lookup [i]) ;
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -132,12 +132,13 @@ HRESULT AllocateMemory(OUT CountedString* &pString, IN size_t stringSizeInBytes)
 }  // End "namespace SDK_SAMPLE_COMMON".
 
 // The CLSID for the Config COM object
-static const GUID CLSID_SDK_SHV_UI = { /* 230b2a03-bbb3-4d50-839b-74f095e2b53e */
+static const GUID CLSID_SDK_SHV_UI =   /* 230b2a03-bbb3-4d50-839b-74f095e2b53e */
+{
     0x230b2a03,
     0xbbb3,
     0x4d50,
     {0x83, 0x9b, 0x74, 0xf0, 0x95, 0xe2, 0xb5, 0x3e}
-  };
+};
 
 
 #endif  // __SDKCOMMON_H__

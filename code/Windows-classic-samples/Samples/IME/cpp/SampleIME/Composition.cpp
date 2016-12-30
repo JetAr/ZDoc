@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -308,7 +308,7 @@ HRESULT CSampleIME::_RemoveDummyCompositionForComposing(TfEditCookie ec, _In_ IT
     HRESULT hr = S_OK;
 
     ITfRange* pRange = nullptr;
-    
+
     if (pComposition)
     {
         hr = pComposition->GetRange(&pRange);
@@ -360,7 +360,7 @@ BOOL CSampleIME::_SetCompositionLanguage(TfEditCookie ec, _In_ ITfContext *pCont
 
     VARIANT var;
     var.vt = VT_I4;   // we're going to set DWORD
-    var.lVal = langidProfile; 
+    var.lVal = langidProfile;
 
     hr = pLanguageProperty->SetValue(ec, pRangeComposition, &var);
     if (FAILED(hr))

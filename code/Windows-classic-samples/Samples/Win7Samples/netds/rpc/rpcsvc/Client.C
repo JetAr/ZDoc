@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,11 +31,11 @@
 void Usage(void)
 {
     printf("Usage:\n"
-        "\t-n <server addr>  - Defaults to local machine\n"
-        "\t-t <protseq>      - Defaults to ncalrpc (fast, local only)\n"
-        "\t-i <iterations>   - Defaults to 100\n"
-        "\t-s <security lvl> - Default none, range none (1) to privacy (6)\n"
-        );
+           "\t-n <server addr>  - Defaults to local machine\n"
+           "\t-t <protseq>      - Defaults to ncalrpc (fast, local only)\n"
+           "\t-i <iterations>   - Defaults to 100\n"
+           "\t-s <security lvl> - Default none, range none (1) to privacy (6)\n"
+          );
     return;
 }
 
@@ -102,11 +102,11 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
 
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
         status = Ping(Binding);
         if (status != RPC_S_OK)
             goto Cleanup;
-        }
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - void calls.\n", iIterations, mseconds);
@@ -118,13 +118,13 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
     lBufferSize   = BUFFER_SIZE;
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
         status = BufferIn1(Binding, bBuffer, lBufferLength, lBufferSize);
         if (status != RPC_S_OK)
-            {
+        {
             goto Cleanup;
-            }
         }
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - 100 byte buffer in (1).\n", iIterations, mseconds);
@@ -133,13 +133,13 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
 
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
         status = BufferIn3(Binding, bBuffer, lBufferLength);
         if (status != RPC_S_OK)
-            {
+        {
             goto Cleanup;
-            }
         }
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - 100 byte buffer in (2).\n", iIterations, mseconds);
@@ -148,13 +148,13 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
 
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
         status = BufferIn3(Binding, bBuffer, lBufferLength);
         if (status != RPC_S_OK)
-            {
+        {
             goto Cleanup;
-            }
         }
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - 100 byte buffer in (3).\n", iIterations, mseconds);
@@ -165,13 +165,13 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
 
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
         status = BufferOut1(Binding, bBuffer, &lBufferLength);
         if (status != RPC_S_OK)
-            {
+        {
             goto Cleanup;
-            }
         }
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - 100 byte buffer out (1).\n", iIterations, mseconds);
@@ -181,31 +181,31 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
 
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
         status = BufferOut2(Binding, bBuffer, lBufferSize, &lBufferLength);
         if (status != RPC_S_OK)
-            {
+        {
             goto Cleanup;
-            }
         }
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - 100 byte buffer out (2).\n", iIterations, mseconds);
 
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
         BUFFER Buffer;
         Buffer.BufferLength = 0;
         Buffer.Buffer = 0;
 
         status = BufferOut3(Binding, &Buffer);
         if (status != RPC_S_OK)
-            {
+        {
             goto Cleanup;
-            }
-        MIDL_user_free(Buffer.Buffer);
         }
+        MIDL_user_free(Buffer.Buffer);
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - 100 byte buffer out (3).\n", iIterations, mseconds);
@@ -214,13 +214,13 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
 
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
         status = BufferOut4(Binding, bBuffer, &lBufferLength);
         if (status != RPC_S_OK)
-            {
+        {
             goto Cleanup;
-            }
         }
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - 100 byte buffer out (4).\n", iIterations, mseconds);
@@ -228,174 +228,174 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
     // Time arrays of structures
 
     {
-    struct BAD1 abad1[50];
-    struct BAD2 abad2[50];
-    struct GOOD agood[50];
+        struct BAD1 abad1[50];
+        struct BAD2 abad2[50];
+        struct GOOD agood[50];
 
-    for (i = 0; i < 50; i++)
+        for (i = 0; i < 50; i++)
         {
-        abad2[i].e = (BAD_ENUM)i % 4 + 1;
-        agood[i].e = (GOOD_ENUM)i % 4 + 5;
+            abad2[i].e = (BAD_ENUM)i % 4 + 1;
+            agood[i].e = (GOOD_ENUM)i % 4 + 5;
         }
 
-    StartTime();
-    for(i = iIterations; i; i--)
+        StartTime();
+        for(i = iIterations; i; i--)
         {
-        status = StructsIn1(Binding, &abad1[0]);
-        if (status != RPC_S_OK)
+            status = StructsIn1(Binding, &abad1[0]);
+            if (status != RPC_S_OK)
             {
-            goto Cleanup;
+                goto Cleanup;
             }
         }
-    mseconds = EndTime();
+        mseconds = EndTime();
 
-    printf("%4d calls in %8d milliseconds - 2 mod 4 aligned structs.\n", iIterations, mseconds);
+        printf("%4d calls in %8d milliseconds - 2 mod 4 aligned structs.\n", iIterations, mseconds);
 
-    StartTime();
-    for(i = iIterations; i; i--)
+        StartTime();
+        for(i = iIterations; i; i--)
         {
-        status = StructsIn2(Binding, &abad2[0]);
-        if (status != RPC_S_OK)
+            status = StructsIn2(Binding, &abad2[0]);
+            if (status != RPC_S_OK)
             {
-            goto Cleanup;
+                goto Cleanup;
             }
         }
-    mseconds = EndTime();
+        mseconds = EndTime();
 
-    printf("%4d calls in %8d milliseconds - structs with an enum.\n", iIterations, mseconds);
+        printf("%4d calls in %8d milliseconds - structs with an enum.\n", iIterations, mseconds);
 
-    StartTime();
-    for(i = iIterations; i; i--)
+        StartTime();
+        for(i = iIterations; i; i--)
         {
-        status = StructsIn3(Binding, &agood[0]);
-        if (status != RPC_S_OK)
+            status = StructsIn3(Binding, &agood[0]);
+            if (status != RPC_S_OK)
             {
-            goto Cleanup;
+                goto Cleanup;
             }
         }
-    mseconds = EndTime();
+        mseconds = EndTime();
 
-    printf("%4d calls in %8d milliseconds - structs with v1_enum.\n", iIterations, mseconds);
+        printf("%4d calls in %8d milliseconds - structs with v1_enum.\n", iIterations, mseconds);
     }
 
     // Linked lists
 
     {
-    LIST list;
-    PLIST plist = &list;
-    for (i = 0; i < LIST_SIZE - 1; i++)
+        LIST list;
+        PLIST plist = &list;
+        for (i = 0; i < LIST_SIZE - 1; i++)
         {
-        plist->pNext = MIDL_user_allocate(sizeof(LIST));
+            plist->pNext = MIDL_user_allocate(sizeof(LIST));
+            plist->data = i;
+            if (plist->pNext == 0)
+            {
+                status = RPC_S_OUT_OF_MEMORY;
+                goto Cleanup;
+            }
+            plist = plist->pNext;
+        }
         plist->data = i;
-        if (plist->pNext == 0)
-            {
-            status = RPC_S_OUT_OF_MEMORY;
-            goto Cleanup;
-            }
-        plist = plist->pNext;
-        }
-    plist->data = i;
-    plist->pNext = 0;
-    
+        plist->pNext = 0;
 
-    StartTime();
-    for(i = iIterations; i; i--)
+
+        StartTime();
+        for(i = iIterations; i; i--)
         {
-        status = ListIn(Binding, &list);
-        if (status != RPC_S_OK)
+            status = ListIn(Binding, &list);
+            if (status != RPC_S_OK)
             {
-            goto Cleanup;
+                goto Cleanup;
             }
         }
-    mseconds = EndTime();
+        mseconds = EndTime();
 
-    printf("%4d calls in %8d milliseconds - [in] linked list.\n", iIterations, mseconds);
+        printf("%4d calls in %8d milliseconds - [in] linked list.\n", iIterations, mseconds);
 
-    StartTime();
-    for(i = iIterations; i; i--)
+        StartTime();
+        for(i = iIterations; i; i--)
         {
-        status = ListOut1(Binding, &list);
-        if (status != RPC_S_OK)
+            status = ListOut1(Binding, &list);
+            if (status != RPC_S_OK)
             {
-            goto Cleanup;
+                goto Cleanup;
             }
-        // Freeing the list here would cause all the elements
-        // to be allocated again on the next call.
+            // Freeing the list here would cause all the elements
+            // to be allocated again on the next call.
         }
-    mseconds = EndTime();
+        mseconds = EndTime();
 
-    printf("%4d calls in %8d milliseconds - [out] linked list (1).\n", iIterations, mseconds);
+        printf("%4d calls in %8d milliseconds - [out] linked list (1).\n", iIterations, mseconds);
 
-    StartTime();
-    for(i = iIterations; i; i--)
+        StartTime();
+        for(i = iIterations; i; i--)
         {
-        status = ListOut2(Binding, &list);
-        if (status != RPC_S_OK)
+            status = ListOut2(Binding, &list);
+            if (status != RPC_S_OK)
             {
-            goto Cleanup;
+                goto Cleanup;
             }
-        // Freeing the list here would cause all the elements
-        // to be allocated again on the next call.
+            // Freeing the list here would cause all the elements
+            // to be allocated again on the next call.
         }
-    mseconds = EndTime();
+        mseconds = EndTime();
 
-    printf("%4d calls in %8d milliseconds - [out] linked list (2).\n", iIterations, mseconds);
+        printf("%4d calls in %8d milliseconds - [out] linked list (2).\n", iIterations, mseconds);
 
-    // Free allocated elements of the list.
-    plist = list.pNext;
-    while(plist)
+        // Free allocated elements of the list.
+        plist = list.pNext;
+        while(plist)
         {
-        PLIST tmp = plist;
-        plist = plist->pNext;
-        MIDL_user_free(tmp);
+            PLIST tmp = plist;
+            plist = plist->pNext;
+            MIDL_user_free(tmp);
         }
     }
 
     // Unions
 
     {
-    BAD_UNION badunionArray[UNION_ARRAY_LEN];
-    GOOD_UNION goodunion;
-    ARM_ONE armone;
-    ULONG ulArray[UNION_ARRAY_LEN];
+        BAD_UNION badunionArray[UNION_ARRAY_LEN];
+        GOOD_UNION goodunion;
+        ARM_ONE armone;
+        ULONG ulArray[UNION_ARRAY_LEN];
 
-    goodunion.Tag = 1;
-    goodunion.u.pOne = &armone;
-    armone.DataLength = UNION_ARRAY_LEN;
-    armone.Data = ulArray;
+        goodunion.Tag = 1;
+        goodunion.u.pOne = &armone;
+        armone.DataLength = UNION_ARRAY_LEN;
+        armone.Data = ulArray;
 
-    for(i = 0; i < UNION_ARRAY_LEN; i++)
+        for(i = 0; i < UNION_ARRAY_LEN; i++)
         {
-        ulArray[i] = i;
-        badunionArray[i].Tag = 1;
-        badunionArray[i].u.ulData = i;
+            ulArray[i] = i;
+            badunionArray[i].Tag = 1;
+            badunionArray[i].u.ulData = i;
         }
 
-    StartTime();
-    for(i = iIterations; i; i--)
+        StartTime();
+        for(i = iIterations; i; i--)
         {
-        status = UnionCall1(Binding, UNION_ARRAY_LEN, badunionArray);
-        if (status != RPC_S_OK)
+            status = UnionCall1(Binding, UNION_ARRAY_LEN, badunionArray);
+            if (status != RPC_S_OK)
             {
-            goto Cleanup;
+                goto Cleanup;
             }
         }
-    mseconds = EndTime();
+        mseconds = EndTime();
 
-    printf("%4d calls in %8d milliseconds - [in] array of unions.\n", iIterations, mseconds);
+        printf("%4d calls in %8d milliseconds - [in] array of unions.\n", iIterations, mseconds);
 
-    StartTime();
-    for(i = iIterations; i; i--)
+        StartTime();
+        for(i = iIterations; i; i--)
         {
-        status = UnionCall2(Binding, &goodunion);
-        if (status != RPC_S_OK)
+            status = UnionCall2(Binding, &goodunion);
+            if (status != RPC_S_OK)
             {
-            goto Cleanup;
+                goto Cleanup;
             }
         }
-    mseconds = EndTime();
+        mseconds = EndTime();
 
-    printf("%4d calls in %8d milliseconds - [in] union of arrays.\n", iIterations, mseconds);
+        printf("%4d calls in %8d milliseconds - [in] union of arrays.\n", iIterations, mseconds);
 
     }
 
@@ -403,21 +403,21 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
 
     StartTime();
     for(i = iIterations; i; i--)
-        {
+    {
 
         status = CheckSecurity(Binding);
 
         if (status != RPC_S_OK)
-            {
+        {
             if (status == RPC_S_ACCESS_DENIED)
-                {
+            {
                 printf("Access denied, try -s 2 or higher.\n");
                 return;
-                }
-            goto Cleanup;
             }
-
+            goto Cleanup;
         }
+
+    }
     mseconds = EndTime();
 
     printf("%4d calls in %8d milliseconds - void call w/ impersonation\n", iIterations, mseconds);
@@ -425,9 +425,9 @@ void DoTimings(RPC_BINDING_HANDLE Binding,
 Cleanup:
 
     if (status != RPC_S_OK)
-        {
+    {
         printf("Call failed - %d\n", status);
-        }
+    }
 
     return;
 }
@@ -458,70 +458,70 @@ int main(int argc, char *argv[])
     argc--;
     argv++;
     while(argc)
-        {
+    {
         if (   argv[0][0] != '-'
-            && argv[0][0] != '/')
-            {
+                && argv[0][0] != '/')
+        {
             Usage();
             return(1);
-            }
+        }
 
         switch(argv[0][1])
+        {
+        case 'n':
+            if (argc < 2)
             {
-            case 'n':
-                if (argc < 2)
-                    {
-                    Usage();
-                    return(1);
-                    }
-                serverAddress = argv[1];
-                argc--;
-                argv++;
-                break;
-            case 't':
-                if (argc < 2)
-                    {
-                    Usage();
-                    return(1);
-                    }
-                protocol = argv[1];
-                argc--;
-                argv++;
-                break;
-            case 'i':
-                if (argc < 2)
-                    {
-                    Usage();
-                    return(1);
-                    }
-                iIterations = atoi(argv[1]);
-                argc--;
-                argv++;
-                break;
-            case 's':
-                if (argc < 2)
-                    {
-                    Usage();
-                    return(1);
-                    }
-                SecurityLevel = atoi(argv[1]);
-                if (SecurityLevel > RPC_C_AUTHN_LEVEL_PKT_PRIVACY)
-                    {
-                    Usage();
-                    return(1);
-                    }
-                argc--;
-                argv++;
-                break;
-            default:
                 Usage();
                 return(1);
-                break;
             }
+            serverAddress = argv[1];
+            argc--;
+            argv++;
+            break;
+        case 't':
+            if (argc < 2)
+            {
+                Usage();
+                return(1);
+            }
+            protocol = argv[1];
+            argc--;
+            argv++;
+            break;
+        case 'i':
+            if (argc < 2)
+            {
+                Usage();
+                return(1);
+            }
+            iIterations = atoi(argv[1]);
+            argc--;
+            argv++;
+            break;
+        case 's':
+            if (argc < 2)
+            {
+                Usage();
+                return(1);
+            }
+            SecurityLevel = atoi(argv[1]);
+            if (SecurityLevel > RPC_C_AUTHN_LEVEL_PKT_PRIVACY)
+            {
+                Usage();
+                return(1);
+            }
+            argc--;
+            argv++;
+            break;
+        default:
+            Usage();
+            return(1);
+            break;
+        }
 
         argc--;
         argv++;
-        }
+    }
 
     status = RpcStringBindingCompose(0,
                                      protocol,
@@ -530,40 +530,40 @@ int main(int argc, char *argv[])
                                      0,
                                      &stringBinding);
     if (status != RPC_S_OK)
-        {
+    {
         printf("RpcStringBindingCompose failed - %d\n", status);
         return(1);
-        }
+    }
 
     status = RpcBindingFromStringBinding(stringBinding, &Binding);
 
     if (status != RPC_S_OK)
-        {
+    {
         printf("RpcBindingFromStringBinding failed - %d\n", status);
         return(1);
-        }
+    }
 
     status =
-    RpcBindingSetAuthInfo(Binding,
-                          0,
-                          SecurityLevel,
-                          RPC_C_AUTHN_WINNT,
-                          0,
-                          0
-                         );
+        RpcBindingSetAuthInfo(Binding,
+                              0,
+                              SecurityLevel,
+                              RPC_C_AUTHN_WINNT,
+                              0,
+                              0
+                             );
 
     if (status != RPC_S_OK)
-        {
+    {
         printf("RpcBindingSetAuthInfo failed - %d\n", status);
         return(1);
-        }
+    }
 
     status = Ping(Binding);
 
     if (status != RPC_S_OK)
-        {
+    {
         printf("Ping failed - %d\n", status);
-        }
+    }
 
     printf("Connected.\n");
 

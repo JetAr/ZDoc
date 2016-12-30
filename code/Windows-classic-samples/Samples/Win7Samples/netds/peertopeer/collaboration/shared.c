@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,12 +32,13 @@ Note:
 #include "Shared.h"
 
 
-GUID MESSAGE_GUID = { /* 191312ce-4466-4dc4-a8d6-cb2e9710157f */
+GUID MESSAGE_GUID =   /* 191312ce-4466-4dc4-a8d6-cb2e9710157f */
+{
     0x191312ce,
     0x4466,
     0x4dc4,
     {0xa8, 0xd6, 0xcb, 0x2e, 0x97, 0x10, 0x15, 0x7f}
-  };
+};
 
 #define ROUND_UP_COUNT(Count,Pow2) \
         ( ((Count)+(Pow2)-1) & (~(((LONG)(Pow2))-1)) )
@@ -53,12 +54,12 @@ GUID MESSAGE_GUID = { /* 191312ce-4466-4dc4-a8d6-cb2e9710157f */
 //-----------------------------------------------------------------------------
 // Function:    ChangeType
 // Purpose:     Convert the enum PEER_CHANGE_TYPE to a string
-// Parameters:  
+// Parameters:
 //   eChangeType   :  [in] enum value to convert to a string
 //
 const WCHAR *ChangeType(__in const PEER_CHANGE_TYPE eChangeType)
 {
-    const static PWSTR rgEventType[] = 
+    const static PWSTR rgEventType[] =
     {
         L"Added",
         L"Deleted",
@@ -76,7 +77,7 @@ const WCHAR *ChangeType(__in const PEER_CHANGE_TYPE eChangeType)
 //-----------------------------------------------------------------------------
 // Function:    ChangeType
 // Purpose:     Convert the enum PEER_PUBLICATION_SCOPE to a string
-// Parameters:  
+// Parameters:
 //   ePublicationScope   :  [in] enum value to convert to a string
 //
 const WCHAR *PublicationScope(__in const PEER_PUBLICATION_SCOPE ePublicationScope)
@@ -100,7 +101,7 @@ const WCHAR *PublicationScope(__in const PEER_PUBLICATION_SCOPE ePublicationScop
 //-----------------------------------------------------------------------------
 // Function:    ChangeType
 // Purpose:     Convert the enum PEER_PRESENCE_STATUS to a string
-// Parameters:  
+// Parameters:
 //   ePresenceStatus   :  [in] enum value to convert to a string
 //
 const WCHAR *PresenceStatus(__in const PEER_PRESENCE_STATUS ePresenceStatus)
@@ -133,7 +134,7 @@ const WCHAR *PresenceStatus(__in const PEER_PRESENCE_STATUS ePresenceStatus)
 void PrintError(HRESULT hrError)
 {
     DWORD dwCch=0;
-    WCHAR wszBuffer[ERRBUFSIZE] = {0};  
+    WCHAR wszBuffer[ERRBUFSIZE] = {0};
 
     if (HRESULT_FACILITY(hrError) == FACILITY_P2P)
     {
@@ -148,7 +149,7 @@ void PrintError(HRESULT hrError)
                                   ERRBUFSIZE,
                                   NULL);
             FreeLibrary(hResDll);
-           
+
             if (dwCch > 0)
             {
                 wprintf(L"Error Description: %s\n", wszBuffer);
@@ -170,7 +171,7 @@ void PrintError(HRESULT hrError)
             wprintf(L"Error Description: %s\n", wszBuffer);
         }
     }
-}  
+}
 
 //-----------------------------------------------------------------------------
 // Function:   PrintInvitation
@@ -229,11 +230,11 @@ void PrintFullEndpoint(PCPEER_ENDPOINT pEndpoint, BOOL fFull)
 
         // Print out address
         if (WSAAddressToString(
-                (LPSOCKADDR) &(pEndpoint->address.sin6),
-                sizeof(SOCKADDR_IN6),
-                NULL,
-                wzAddr,
-                &dwLen) != SOCKET_ERROR)
+                    (LPSOCKADDR) &(pEndpoint->address.sin6),
+                    sizeof(SOCKADDR_IN6),
+                    NULL,
+                    wzAddr,
+                    &dwLen) != SOCKET_ERROR)
         {
             wprintf(L"\t  IPV6 Endpoint Address: %s\n", wzAddr);
         }
@@ -325,7 +326,7 @@ void PrintContacts(__in_ecount(cContacts) PCPEER_CONTACT *ppContacts, __in const
 void PrintObject(__in PCPEER_OBJECT pObject)
 {
     PWSTR   pwzObjectId = NULL;
-    
+
     wprintf(L"\tObject:\n");
 
     if (UuidToString(&pObject->id, &pwzObjectId) == RPC_S_OK)
@@ -338,7 +339,7 @@ void PrintObject(__in PCPEER_OBJECT pObject)
 
     // Displays contents of message object when object's GUID equals MESSAGE_GUID
     if (pObject->data.cbData != 0 &&
-        memcmp(&(pObject->id), &(MESSAGE_GUID), sizeof(pObject->id)) == 0)
+            memcmp(&(pObject->id), &(MESSAGE_GUID), sizeof(pObject->id)) == 0)
     {
         wprintf(L"\t  Data: %s\n", (PWSTR) pObject->data.pbData);
     }
@@ -386,7 +387,7 @@ void PrintPeopleNearMeInfo(__in_ecount(cContacts) PCPEER_PEOPLE_NEAR_ME *ppPeopl
 
     wprintf(L"\nPeople Near Me: \n");
     for (i = 0; i < cPeopleNearMe; i++)
-    {        
+    {
         // Print out nickname
         wprintf(L"%d) %s, ", i+1, ppPeopleNearMe[i]->pwzNickName);
 
@@ -405,11 +406,11 @@ void PrintPresenceInformation(__in PCPEER_PRESENCE_INFO pPresInfo)
 
     // first print the text equivalent of the status
     wprintf(L"%s", PresenceStatus(pPresInfo->status));
-    
-    // now print any descriptive text 
+
+    // now print any descriptive text
     // (for example, the user might set status to "Playing Halo")
     wprintf(L" -  %s\n", pPresInfo->pwzDescriptiveText == NULL ? L"" :
-                       pPresInfo->pwzDescriptiveText);
+            pPresInfo->pwzDescriptiveText);
 }
 
 //-----------------------------------------------------------------------------
@@ -472,14 +473,14 @@ HRESULT DuplicateContact(PEER_CONTACT ** ppContactDestination, const PEER_CONTAC
     {
         cbEmailAddress = ROUND_UP_COUNT((wcslen(pContactSource->pwzEmailAddress) * sizeof(WCHAR)) + sizeof(WCHAR), ALIGN_LPVOID);
     }
-    
+
     //Allocate PEER_CONTACT structure
     //
     pTempDestination = (PEER_CONTACT *) malloc(ROUND_UP_COUNT(sizeof(PEER_CONTACT), ALIGN_LPVOID) + cbPeerName + cbNickName + cbDisplayName + cbEmailAddress + pContactSource->credentials.cbData);
-    
+
     if (NULL == pTempDestination)
         return E_OUTOFMEMORY;
-    
+
     ZeroMemory(pTempDestination, sizeof(PEER_CONTACT));
 
     //Copy the relevant fields into the PEER_PEOPLE_NEAR_ME structure
@@ -492,7 +493,7 @@ HRESULT DuplicateContact(PEER_CONTACT ** ppContactDestination, const PEER_CONTAC
     if (pContactSource->pwzPeerName)
     {
         pTempDestination->pwzPeerName = pPos;
-    
+
         //Copy the relevant fields into the PEER_PEOPLE_NEAR_ME structure
         //
         memcpy(pTempDestination->pwzPeerName, pContactSource->pwzPeerName, cbPeerName);
@@ -503,7 +504,7 @@ HRESULT DuplicateContact(PEER_CONTACT ** ppContactDestination, const PEER_CONTAC
     if (pContactSource->pwzNickName)
     {
         pTempDestination->pwzNickName = pPos;
-    
+
         //Copy the relevant fields into the PEER_PEOPLE_NEAR_ME structure
         //
         memcpy(pTempDestination->pwzNickName, pContactSource->pwzNickName, cbNickName);
@@ -514,7 +515,7 @@ HRESULT DuplicateContact(PEER_CONTACT ** ppContactDestination, const PEER_CONTAC
     if (pContactSource->pwzDisplayName)
     {
         pTempDestination->pwzDisplayName = pPos;
-    
+
         //Copy the relevant fields into the Display_PEOPLE_NEAR_ME structure
         //
         memcpy(pTempDestination->pwzDisplayName, pContactSource->pwzDisplayName, cbDisplayName);
@@ -525,7 +526,7 @@ HRESULT DuplicateContact(PEER_CONTACT ** ppContactDestination, const PEER_CONTAC
     if (pContactSource->pwzEmailAddress)
     {
         pTempDestination->pwzEmailAddress = pPos;
-    
+
         //Copy the relevant fields into the PEER_PEOPLE_NEAR_ME structure
         //
         memcpy(pTempDestination->pwzEmailAddress, pContactSource->pwzEmailAddress, cbEmailAddress);
@@ -536,7 +537,7 @@ HRESULT DuplicateContact(PEER_CONTACT ** ppContactDestination, const PEER_CONTAC
     if (pContactSource->credentials.pbData)
     {
         pTempDestination->credentials.pbData = (PBYTE)pPos;
-    
+
         memcpy(pTempDestination->credentials.pbData, pContactSource->credentials.pbData, pContactSource->credentials.cbData);
     }
 
@@ -563,14 +564,14 @@ HRESULT DuplicateEndpoint(PEER_ENDPOINT ** ppEndpointDestination, const PEER_END
     {
         cbEndpointName = ROUND_UP_COUNT((wcslen(pEndpointSource->pwzEndpointName) * sizeof(WCHAR)) + sizeof(WCHAR), ALIGN_LPVOID);
     }
-    
+
     //Allocate PEER_PEOPLE_NEAR_ME structure
     //
     pTempDestination = (PEER_ENDPOINT *) malloc(ROUND_UP_COUNT(sizeof(PEER_ENDPOINT), ALIGN_LPVOID) + cbEndpointName);
-    
+
     if (NULL == pTempDestination)
         return E_OUTOFMEMORY;
-    
+
     ZeroMemory(pTempDestination, sizeof(PEER_ENDPOINT));
 
     //Copy the relevant fields into the PEER_PEOPLE_NEAR_ME structure
@@ -599,12 +600,12 @@ HRESULT DuplicateEndpoint(PEER_ENDPOINT ** ppEndpointDestination, const PEER_END
 //-----------------------------------------------------------------------------
 // Function:   SelectContact
 // Purpose:    Retrieves and prints to the console all contacts for the currently
-//             logged in user.  Unless fPrompt is FALSE the function also 
+//             logged in user.  Unless fPrompt is FALSE the function also
 //             prompts the user to select a contact from the list.
 // Parameters:
 //   pppContacts :  [out] pointer to the selected contact.
 //   fPrompt     :  [out] If false skips prompting the user to select a contact (only prints the contacts)
-//                        
+//
 HRESULT SelectContact(__out PPEER_CONTACT *pContact, __in BOOL fPrompt)
 {
     HPEERENUM hEnum;
@@ -683,7 +684,7 @@ exit:
 //-----------------------------------------------------------------------------
 // Function:    SelectEndpointFromContact
 // Purpose:     Given a contact allow the user to select an available endpoint of that contact
-// Parameters:  
+// Parameters:
 //   pContact     : [in] contact to select endpoint for
 //   ppEndpoint   : [out] pointer to an endpoint pointer of the endpoint that the user selected
 //
@@ -783,7 +784,7 @@ exit:
 //-----------------------------------------------------------------------------
 // Function:    SelectContactEndpoint
 // Purpose:     Select a contact and an endpoint of that contact
-// Parameters:  
+// Parameters:
 //   pContact     : [out] pointer to a pointer of the selected contact
 //   ppEndpoint   : [out] pointer to a pointer of the selected endpoint
 //
@@ -834,13 +835,13 @@ HRESULT SelectPNMEndpoint(__out PPEER_ENDPOINT *ppEndpoint)
     HRESULT                  hr = S_OK;
     HPEERENUM                hEnum = NULL;
     ULONG                    count = 0;
-    ULONG                    ulEndpoint = 0;   
+    ULONG                    ulEndpoint = 0;
     WCHAR                    wzInputBuffer[5] = {0};
 
     if (ppEndpoint == NULL) return E_INVALIDARG;
 
     *ppEndpoint = NULL;
- 
+
     hr = PeerCollabEnumPeopleNearMe(&hEnum);
 
     IF_FAILED_PRINT_ERROR_AND_EXIT(hr, L"PeerCollabEnumPeopleNearMe failed.");
@@ -906,9 +907,9 @@ exit:
 // Purpose:     Select multiple sets of
 //                    - a PNM endpoint; and
 //                    - a contact and endpoint
-// Parameters:  
+// Parameters:
 //   ulNumEndpoints: [in]  The number of endpoints to allocate and populate.
-//   pppContact    : [out] Pointer to an array of pointers to PPEER_CONTACT structures.  
+//   pppContact    : [out] Pointer to an array of pointers to PPEER_CONTACT structures.
 //                         The function will allocate an array of size ulNumEndpoints.
 //                         In the case where a PNM endpoint was selected that arrary element will be set to NULL.
 //   pppEndpoint   : [out] Pointer to an array or pointers to PPEER_ENDPOINT structures.
@@ -957,7 +958,7 @@ HRESULT SelectMultipleEndpoints(__in unsigned int uNumEndpoints, __out PPEER_CON
 
         if (SUCCEEDED(hr))
         {
-            uCurrentEndpoint++;  
+            uCurrentEndpoint++;
         }
     }
 
@@ -974,7 +975,7 @@ exit:
                 }
             }
 
-            SAFE_FREE(*pppContacts);        
+            SAFE_FREE(*pppContacts);
         }
 
         if (*pppEndpoint)
@@ -988,7 +989,7 @@ exit:
                 }
             }
 
-            SAFE_FREE(*pppEndpoint);        
+            SAFE_FREE(*pppEndpoint);
         }
     }
     return hr;
@@ -1000,7 +1001,7 @@ exit:
 // Purpose:     Select either
 //                    - a PNM endpoint; or
 //                    - a contact and endpoint
-// Parameters:  
+// Parameters:
 //   [pContact    : [out] pointer to a pointer of the selected contact.  *pContact will be
 //                        set to NULL if a PNM endpoint is selected
 //   ppEndpoint   : [out] pointer to a pointer of the selected endpoint
@@ -1010,7 +1011,7 @@ HRESULT SelectEndpoint(__out PPEER_CONTACT *ppContact, __out PPEER_ENDPOINT *ppE
     HRESULT hr = S_OK;
     BOOL fIsContactEndpoint = FALSE;
     WCHAR wzBuff[5] = {0};
-    int nSelection = 0; 
+    int nSelection = 0;
 
     if (ppContact == NULL || ppEndpoint == NULL) return E_INVALIDARG;
 
@@ -1055,7 +1056,7 @@ exit:
 // Purpose:     Requests a refresh of a specific endpoint's data.
 //              Note that if a subscription to the endpoint exists via
 //              PeerCollabSubscribeEndpoint, this is not necessary.
-// Parameters:  
+// Parameters:
 //   pcEndpoint : [in] endpoint to refresh
 //
 HRESULT RefreshEndpoint(__in PCPEER_ENDPOINT pcEndpoint)
@@ -1078,7 +1079,7 @@ HRESULT RefreshEndpoint(__in PCPEER_ENDPOINT pcEndpoint)
     eventReg.eventType = PEER_EVENT_REQUEST_STATUS_CHANGED;
     eventReg.pInstance = NULL;
 
-    // Register to be notified when the request finishes  
+    // Register to be notified when the request finishes
     hr = PeerCollabRegisterEvent(hEvent, 1, &eventReg, &hPeerEvent);
 
     IF_FAILED_PRINT_ERROR_AND_EXIT(hr, L"PeerCollabRegisterEvent failed.");
@@ -1090,35 +1091,35 @@ HRESULT RefreshEndpoint(__in PCPEER_ENDPOINT pcEndpoint)
     // Block until an event is set indicating that endpoint data has
     // successfully been refreshed
     dwWait = WaitForSingleObject(hEvent, SHORT_TIMEOUT);
-    
+
     switch (dwWait)
     {
-        case WAIT_OBJECT_0:
-            // Find out if the refresh request succeeded
-            hr = PeerCollabGetEventData(hPeerEvent, &pEventData);
+    case WAIT_OBJECT_0:
+        // Find out if the refresh request succeeded
+        hr = PeerCollabGetEventData(hPeerEvent, &pEventData);
 
-            IF_FAILED_PRINT_ERROR_AND_EXIT(hr, L"PeerCollabGetEventData failed.");
+        IF_FAILED_PRINT_ERROR_AND_EXIT(hr, L"PeerCollabGetEventData failed.");
 
-            if (FAILED(pEventData->requestStatusChangedData.hrChange))
-            {
-                wprintf(L"The data returned by PeerCollabGetEventData indicates failure. HRESULT=0x%x\n", hr);
-                PrintError(hr);
-                goto exit;
-            }
-
-            break;
-
-        case WAIT_TIMEOUT:
-            wprintf(L"Endpoint was not refreshed after waiting %d seconds.  Giving up.\n", SHORT_TIMEOUT/1000);
-            hr = E_FAIL;
+        if (FAILED(pEventData->requestStatusChangedData.hrChange))
+        {
+            wprintf(L"The data returned by PeerCollabGetEventData indicates failure. HRESULT=0x%x\n", hr);
+            PrintError(hr);
             goto exit;
-            break;
+        }
 
-        default:
-            wprintf(L"WaitForSingleObject returned unexpected valud.  Giving up.\n");
-            hr = E_FAIL;
-            goto exit;
-            break;
+        break;
+
+    case WAIT_TIMEOUT:
+        wprintf(L"Endpoint was not refreshed after waiting %d seconds.  Giving up.\n", SHORT_TIMEOUT/1000);
+        hr = E_FAIL;
+        goto exit;
+        break;
+
+    default:
+        wprintf(L"WaitForSingleObject returned unexpected valud.  Giving up.\n");
+        hr = E_FAIL;
+        goto exit;
+        break;
     }
 
 exit:
@@ -1141,7 +1142,7 @@ exit:
 //-----------------------------------------------------------------------------
 // Function:    DeleteEndpointData
 // Purpose:     Delete cached endpoint data when it is no longer required
-// Parameters:  
+// Parameters:
 //   pcEndpoint : [in] endpoint for which to delete cached data
 //
 HRESULT DeleteEndpointData(__in PCPEER_ENDPOINT pcEndpoint)
@@ -1157,70 +1158,71 @@ HRESULT DeleteEndpointData(__in PCPEER_ENDPOINT pcEndpoint)
 //-----------------------------------------------------------------------------
 // Function:    GetParentProcessHandle
 // Purpose:     Returns a handle to the parent process of the calling process
-// Parameters:  
+// Parameters:
 //   pHandle : [out] Pointer to a handle to the parent process of the calling process
 //
 HRESULT GetParentProcessHandle(HANDLE *pHandle)
 {
-  HANDLE hProcessSnap;
-  HANDLE hProcess;
-  PROCESSENTRY32 pe32;
-  HRESULT hr = S_OK;
-  DWORD dwCurrentProcessId = 0;
+    HANDLE hProcessSnap;
+    HANDLE hProcess;
+    PROCESSENTRY32 pe32;
+    HRESULT hr = S_OK;
+    DWORD dwCurrentProcessId = 0;
 
-  dwCurrentProcessId = GetCurrentProcessId();
+    dwCurrentProcessId = GetCurrentProcessId();
 
 
-  // Take a snapshot of all processes in the system.
-  hProcessSnap = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
-  if( hProcessSnap == INVALID_HANDLE_VALUE )
-  {
-    printf( "CreateToolhelp32Snapshot (of processes) failed" );
-    hr = E_ABORT;
-    goto exit;
-  }
-
-  // Set the size of the structure before using it.
-  pe32.dwSize = sizeof( PROCESSENTRY32 );
-
-  // Retrieve information about the first process.
-  // We can use this to get hte process Id of our parent processs
-  if( !Process32First( hProcessSnap, &pe32 ) )
-  {
-    printf("Process32First failed" );  // Show cause of failure
-    hr = E_ABORT;
-    goto exit;
-  }
-
-  do
-  {
-    // Retrieve a handle to the process
-    hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID );
-    if( hProcess != NULL )
+    // Take a snapshot of all processes in the system.
+    hProcessSnap = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
+    if( hProcessSnap == INVALID_HANDLE_VALUE )
     {
-        if (dwCurrentProcessId == pe32.th32ProcessID)
-        {
-            CloseHandle( hProcess );
-
-            // Retrieve a handle to the process
-            hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, pe32.th32ParentProcessID );
-
-            *pHandle = hProcess;
-            break;
-        }
-
-        CloseHandle( hProcess );
+        printf( "CreateToolhelp32Snapshot (of processes) failed" );
+        hr = E_ABORT;
+        goto exit;
     }
 
-  } while( Process32Next( hProcessSnap, &pe32 ) );
+    // Set the size of the structure before using it.
+    pe32.dwSize = sizeof( PROCESSENTRY32 );
+
+    // Retrieve information about the first process.
+    // We can use this to get hte process Id of our parent processs
+    if( !Process32First( hProcessSnap, &pe32 ) )
+    {
+        printf("Process32First failed" );  // Show cause of failure
+        hr = E_ABORT;
+        goto exit;
+    }
+
+    do
+    {
+        // Retrieve a handle to the process
+        hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID );
+        if( hProcess != NULL )
+        {
+            if (dwCurrentProcessId == pe32.th32ProcessID)
+            {
+                CloseHandle( hProcess );
+
+                // Retrieve a handle to the process
+                hProcess = OpenProcess( PROCESS_ALL_ACCESS, FALSE, pe32.th32ParentProcessID );
+
+                *pHandle = hProcess;
+                break;
+            }
+
+            CloseHandle( hProcess );
+        }
+
+    }
+    while( Process32Next( hProcessSnap, &pe32 ) );
 
     hr = S_OK;
 
 
 
 exit:
-  CloseHandle( hProcessSnap );
-  return( TRUE );
+    CloseHandle( hProcessSnap );
+    return( TRUE );
 }
 
 

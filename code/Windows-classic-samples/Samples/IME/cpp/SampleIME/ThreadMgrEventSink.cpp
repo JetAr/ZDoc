@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -56,7 +56,7 @@ STDAPI CSampleIME::OnSetFocus(_In_ ITfDocumentMgr *pDocMgrFocus, _In_ ITfDocumen
     _UpdateLanguageBarOnSetFocus(pDocMgrFocus);
 
     //
-    // We have to hide/unhide candidate list depending on whether they are 
+    // We have to hide/unhide candidate list depending on whether they are
     // associated with pDocMgrFocus.
     //
     if (_pCandidateListUIPresenter)
@@ -69,7 +69,7 @@ STDAPI CSampleIME::OnSetFocus(_In_ ITfDocumentMgr *pDocMgrFocus, _In_ ITfDocumen
             {
                 _pCandidateListUIPresenter->OnKillThreadFocus();
             }
-            else 
+            else
             {
                 _pCandidateListUIPresenter->OnSetThreadFocus();
             }
@@ -81,7 +81,7 @@ STDAPI CSampleIME::OnSetFocus(_In_ ITfDocumentMgr *pDocMgrFocus, _In_ ITfDocumen
     if (_pDocMgrLastFocused)
     {
         _pDocMgrLastFocused->Release();
-		_pDocMgrLastFocused = nullptr;
+        _pDocMgrLastFocused = nullptr;
     }
 
     _pDocMgrLastFocused = pDocMgrFocus;
@@ -165,7 +165,7 @@ void CSampleIME::_UninitThreadMgrEventSink()
 
     if (_threadMgrEventSinkCookie == TF_INVALID_COOKIE)
     {
-        return; 
+        return;
     }
 
     if (SUCCEEDED(_pThreadMgr->QueryInterface(IID_ITfSource, (void **)&pSource)))

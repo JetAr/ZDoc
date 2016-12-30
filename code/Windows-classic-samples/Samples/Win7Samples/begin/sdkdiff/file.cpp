@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,7 +40,8 @@ extern HANDLE hHeap;
  * we return FILEDATA handles: these are pointers to a
  * filedata struct defined here.
  */
-struct filedata {
+struct filedata
+{
 
     DIRITEM diritem;        /* handle to file name information */
     LIST lines;             /* NULL if lines not read in */
@@ -63,14 +64,16 @@ file_new(DIRITEM fiName, BOOL bRead)
     FILEDATA fd;
 
     fd = (FILEDATA) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct filedata));
-    if (fd == NULL) {
+    if (fd == NULL)
+    {
         return(NULL);
     }
 
     fd->diritem = fiName;
     fd->lines = NULL;
 
-    if (bRead) {
+    if (bRead)
+    {
         file_readlines(fd);
     }
 
@@ -83,7 +86,8 @@ file_new(DIRITEM fiName, BOOL bRead)
 DIRITEM
 file_getdiritem(FILEDATA fd)
 {
-    if (fd == NULL) {
+    if (fd == NULL)
+    {
         return(NULL);
     }
 
@@ -99,7 +103,8 @@ file_getdiritem(FILEDATA fd)
 void
 file_delete(FILEDATA fd)
 {
-    if (fd == NULL) {
+    if (fd == NULL)
+    {
         return;
     }
 
@@ -123,11 +128,13 @@ file_delete(FILEDATA fd)
 LIST
 file_getlinelist(FILEDATA fd)
 {
-    if (fd == NULL) {
+    if (fd == NULL)
+    {
         return NULL;
     }
 
-    if (fd->lines == NULL) {
+    if (fd->lines == NULL)
+    {
         file_readlines(fd);
     }
     return(fd->lines);
@@ -143,16 +150,19 @@ file_discardlines(FILEDATA fd)
 {
     LINE line;
 
-    if (fd == NULL) {
+    if (fd == NULL)
+    {
         return;
     }
 
-    if (fd->lines != NULL) {
+    if (fd->lines != NULL)
+    {
 
         /* clear each line to free any memory associated
          * with them, then discard the entire list
          */
-		for( line=(LINE)List_First(fd->lines);  line!=NULL;  line = (LINE)List_Next((LPVOID)line)) {
+        for( line=(LINE)List_First(fd->lines);  line!=NULL;  line = (LINE)List_Next((LPVOID)line))
+        {
             line_delete(line);
         }
         List_Destroy(&fd->lines);
@@ -173,12 +183,15 @@ file_reset(FILEDATA fd)
 {
     LINE line;
 
-    if (fd == NULL) {
+    if (fd == NULL)
+    {
         return;
     }
 
-    if (fd->lines != NULL) {
-		for( line=(LINE)List_First(fd->lines);  line!=NULL;  line =(LINE) List_Next((LPVOID)line)) {
+    if (fd->lines != NULL)
+    {
+        for( line=(LINE)List_First(fd->lines);  line!=NULL;  line =(LINE) List_Next((LPVOID)line))
+        {
             line_reset(line);
         }
     }
@@ -202,10 +215,13 @@ file_checksum(FILEDATA fd)
  */
 DWORD file_retrievechecksum(FILEDATA fd, BOOL * bValid)
 {
-    if (dir_validchecksum(fd->diritem)) {
+    if (dir_validchecksum(fd->diritem))
+    {
         *bValid = TRUE;
         return dir_getchecksum(fd->diritem);
-    } else {
+    }
+    else
+    {
         *bValid = FALSE;
         return 0;
     }
@@ -214,7 +230,8 @@ DWORD file_retrievechecksum(FILEDATA fd, BOOL * bValid)
 
 /* retrieve the filetime for the file */
 FILETIME file_GetTime(FILEDATA fd)
-{  return dir_GetFileTime(fd->diritem);
+{
+    return dir_GetFileTime(fd->diritem);
 }
 
 /* --- internal functions -------------------------------------------*/
@@ -247,7 +264,8 @@ file_readlines(FILEDATA fd)
     /* open the file */
     fh = dir_openfile(fd->diritem);
 
-    if (fh == INVALID_HANDLE_VALUE) {
+    if (fh == INVALID_HANDLE_VALUE)
+    {
         TRACE_ERROR(LoadRcString(IDS_ERR_OPENING_FILE), FALSE);
         SetCursor(hcurs);
         return;
@@ -260,10 +278,14 @@ file_readlines(FILEDATA fd)
         /* make an empty list for the files */
         fd->lines = List_Create();
 
-        while ( (textp = readfile_next(fbuf, &linelen, &pwzText, &cwch)) != NULL) {
-            if (linelen>0) { /* readfile failure gives linelen==-1 */
+        while ( (textp = readfile_next(fbuf, &linelen, &pwzText, &cwch)) != NULL)
+        {
+            if (linelen>0)   /* readfile failure gives linelen==-1 */
+            {
                 line_new(textp, linelen, pwzText, cwch, linenr++, fd->lines);
-            } else {
+            }
+            else
+            {
                 line_new("!! <unreadable> !!", 20, NULL, 0, linenr++,fd->lines);
                 break;
             }

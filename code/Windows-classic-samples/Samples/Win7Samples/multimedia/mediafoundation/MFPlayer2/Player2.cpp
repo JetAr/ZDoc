@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -46,8 +46,8 @@ HRESULT MFPlayer2::CreateInstance(HWND hwndEvent, HWND hwndVideo, MFPlayer2 **pp
 // Constructor
 //-----------------------------------------------------------------------------
 
-MFPlayer2::MFPlayer2(HWND hwndEvent) : 
-    m_cRef(1), 
+MFPlayer2::MFPlayer2(HWND hwndEvent) :
+    m_cRef(1),
     m_pPlayer(NULL),
     m_hwndEvent(hwndEvent),
     m_bHasVideo(FALSE),
@@ -109,7 +109,7 @@ ULONG MFPlayer2::Release()
 
 STDMETHODIMP MFPlayer2::QueryInterface(REFIID riid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(MFPlayer2, IMFPMediaPlayerCallback),
         { 0 },
@@ -163,7 +163,7 @@ void MFPlayer2::OnMediaPlayerEvent(MFP_EVENT_HEADER * pEventHeader)
 
 //-----------------------------------------------------------------------------
 // OpenURL
-// 
+//
 // Open a media file by URL.
 //-----------------------------------------------------------------------------
 
@@ -300,10 +300,16 @@ HRESULT MFPlayer2::GetMetadata(IPropertyStore **ppProp)
     IPropertyStore *pProp = NULL;
 
     hr = m_pPlayer->GetMediaItem(&pItem);
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     hr = pItem->GetMetadata(&pProp);
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     *ppProp = pProp;
     (*ppProp)->AddRef();
@@ -339,7 +345,7 @@ HRESULT MFPlayer2::HasVideo(BOOL *pfHasVideo)
 //-----------------------------------------------------------------------------
 // SetZoom
 //
-// Sets the video zoom level. 
+// Sets the video zoom level.
 //-----------------------------------------------------------------------------
 
 HRESULT MFPlayer2::SetZoom(float fZoom)
@@ -386,7 +392,8 @@ HRESULT MFPlayer2::SetZoom()
 
             float fMargin = (0.5f - (0.5f / m_fZoom));
 
-            MFVideoNormalizedRect nrcSource = { 
+            MFVideoNormalizedRect nrcSource =
+            {
                 fMargin, fMargin, (1.0f - fMargin), (1.0f - fMargin)
             };
 
@@ -399,7 +406,7 @@ HRESULT MFPlayer2::SetZoom()
 
 //-----------------------------------------------------------------------------
 // UpdateVideo
-// 
+//
 // Call this method to repaint the current video frame or when the video
 // window is resized.
 //-----------------------------------------------------------------------------
@@ -550,9 +557,9 @@ HRESULT MFPlayer2::GetDuration(MFTIME *phnsDuration)
     if (m_pPlayer)
     {
         hr = m_pPlayer->GetDuration(
-            MFP_POSITIONTYPE_100NS,
-            &var
-            );
+                 MFP_POSITIONTYPE_100NS,
+                 &var
+             );
 
         if (SUCCEEDED(hr))
         {
@@ -567,7 +574,7 @@ HRESULT MFPlayer2::GetDuration(MFTIME *phnsDuration)
 
 //-----------------------------------------------------------------------------
 // GetCurrentPosition
-// 
+//
 // Gets the current playback position.
 //-----------------------------------------------------------------------------
 
@@ -581,9 +588,9 @@ HRESULT MFPlayer2::GetCurrentPosition(MFTIME *phnsPosition)
     if (m_pPlayer)
     {
         hr = m_pPlayer->GetPosition(
-            MFP_POSITIONTYPE_100NS,
-            &var
-            );
+                 MFP_POSITIONTYPE_100NS,
+                 &var
+             );
 
         if (SUCCEEDED(hr))
         {
@@ -615,9 +622,9 @@ HRESULT MFPlayer2::SetPosition(MFTIME hnsPosition)
         var.hVal.QuadPart = hnsPosition;
 
         hr = m_pPlayer->SetPosition(
-            MFP_POSITIONTYPE_100NS,
-            &var
-            );
+                 MFP_POSITIONTYPE_100NS,
+                 &var
+             );
     }
 
     PropVariantClear(&var);
@@ -697,7 +704,7 @@ HRESULT MFPlayer2::SetPlaybackRate(float fRate)
     }
 
     HRESULT hr = S_OK;
-    
+
     hr = m_pPlayer->SetRate(fRate);
 
     if (SUCCEEDED(hr))
@@ -750,7 +757,7 @@ HRESULT MFPlayer2::Rewind()
     float   fTarget = GetNominalRate() * 2;
 
     if (fTarget >= 0.0f)
-    {   
+    {
         fTarget = -1.0f;
     }
 
@@ -813,27 +820,27 @@ HRESULT  MFPlayer2::SetEffect(IMFTransform *pMFT)
 //  Initialize
 //  Creates an instance of the MFPlay player object.
 //
-//  hwndVideo: 
+//  hwndVideo:
 //  Handle to the video window.
 //------------------------------------------------------------------------------
 
 HRESULT MFPlayer2::Initialize(HWND hwndVideo)
 {
-   HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
     SafeRelease(&m_pPlayer);
 
     hr = MFPCreateMediaPlayer(
-        NULL,
-        FALSE,          // Start playback automatically?
-        0,              // Flags
-        this,           // Callback pointer   
-        hwndVideo,      // Video window
-        &m_pPlayer
-        );
+             NULL,
+             FALSE,          // Start playback automatically?
+             0,              // Flags
+             this,           // Callback pointer
+             hwndVideo,      // Video window
+             &m_pPlayer
+         );
 
-    if (FAILED(hr)) 
-    { 
+    if (FAILED(hr))
+    {
         return hr;
     }
 
@@ -841,10 +848,10 @@ HRESULT MFPlayer2::Initialize(HWND hwndVideo)
     // This can fail if the machine does not have an audio end-point.
 
     HRESULT hrAudio = CAudioSessionVolume::CreateInstance(
-        WM_AUDIO_EVENT, 
-        m_hwndEvent, 
-        &m_pVolume
-        );
+                          WM_AUDIO_EVENT,
+                          m_hwndEvent,
+                          &m_pVolume
+                      );
 
     if (SUCCEEDED(hrAudio))
     {
@@ -874,7 +881,7 @@ HRESULT MFPlayer2::Initialize(HWND hwndVideo)
 
 void MFPlayer2::OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT *pEvent)
 {
-    HRESULT hr = S_OK; 
+    HRESULT hr = S_OK;
 
     IUnknown *pMFT = NULL;
 
@@ -885,12 +892,18 @@ void MFPlayer2::OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT *pEvent)
         BOOL bHasVideo = FALSE, bIsSelected = FALSE;
 
         hr = pEvent->pMediaItem->HasVideo(&bHasVideo, &bIsSelected);
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         m_bHasVideo = bHasVideo && bIsSelected;
 
         hr = m_pPlayer->SetMediaItem(pEvent->pMediaItem);
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
 done:
@@ -912,12 +925,18 @@ void MFPlayer2::OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT *pEvent)
     HRESULT hr = S_OK;
 
     hr = pEvent->header.hrEvent;
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
     if (pEvent->pMediaItem)
     {
         hr = pEvent->pMediaItem->GetCharacteristics(&m_caps);
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
     hr = m_pPlayer->Play();

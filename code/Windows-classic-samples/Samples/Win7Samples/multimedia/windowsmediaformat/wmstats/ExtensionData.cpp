@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -27,28 +27,28 @@
 //////////////////////////////////////////////////////////////////////
 
 CExtensionData::CExtensionData( GUID guidDUExt, BYTE *pbExtensionSystemInfo,
-                    WORD cbExtensionDataSize, DWORD cbExtensionSystemInfo, WORD wStreamNum )
-                 :  m_guidDUExt( guidDUExt ),
-                    m_cbExtensionDataSize( cbExtensionDataSize ),
-                    m_pbExtensionSystemInfo( pbExtensionSystemInfo ),
-                    m_cbExtensionSystemInfo( cbExtensionSystemInfo ),
-                    m_pNext( NULL ), m_pValue( NULL ), m_wStreamNum( wStreamNum )
+                                WORD cbExtensionDataSize, DWORD cbExtensionSystemInfo, WORD wStreamNum )
+    :  m_guidDUExt( guidDUExt ),
+       m_cbExtensionDataSize( cbExtensionDataSize ),
+       m_pbExtensionSystemInfo( pbExtensionSystemInfo ),
+       m_cbExtensionSystemInfo( cbExtensionSystemInfo ),
+       m_pNext( NULL ), m_pValue( NULL ), m_wStreamNum( wStreamNum )
 {
 };
 
 CExtensionData::~CExtensionData()
+{
+    if (NULL != m_pbExtensionSystemInfo)
     {
-        if (NULL != m_pbExtensionSystemInfo)
-		{
-			delete [] m_pbExtensionSystemInfo;	
-			m_pbExtensionSystemInfo = NULL;
-		}
-        if (NULL != m_pValue)
-		{
-			delete [] m_pValue;
-			m_pValue = NULL;
-		}
-    };
+        delete [] m_pbExtensionSystemInfo;
+        m_pbExtensionSystemInfo = NULL;
+    }
+    if (NULL != m_pValue)
+    {
+        delete [] m_pValue;
+        m_pValue = NULL;
+    }
+};
 
 //////////////////////////////////////////////////////////////////////
 // Display extension data
@@ -60,7 +60,7 @@ HRESULT CExtensionData::DisplayData()
     WCHAR *pwszValue = NULL;
     WCHAR *pwszSystemInfo = NULL;
     WCHAR *pszIter = NULL;
-	WORD i = 0;
+    WORD i = 0;
 
     do
     {
@@ -122,24 +122,24 @@ HRESULT CExtensionData::DisplayData()
         //  Print the data
         //
         wprintf( L" ExtGUID : %ws \tExtDataSize : %u \tExtData[0x] : %ws  \tExtSystInfoSize : %u \tExtSystInfo[0x] : %ws\n",
-                    pwszGuidExtensionType,
-                    m_cbExtensionDataSize,
-                    pwszValue, 
-                    m_cbExtensionSystemInfo,
-                    pwszSystemInfo );
+                 pwszGuidExtensionType,
+                 m_cbExtensionDataSize,
+                 pwszValue,
+                 m_cbExtensionSystemInfo,
+                 pwszSystemInfo );
     }
     while( FALSE );
 
-	if( NULL != pwszValue )
-	{              
-		delete [] pwszValue;
-		pwszValue = NULL;   
-	}
-	if( NULL != pwszSystemInfo )
-	{
-		delete [] pwszSystemInfo;
-		pwszSystemInfo = NULL;
-	}
+    if( NULL != pwszValue )
+    {
+        delete [] pwszValue;
+        pwszValue = NULL;
+    }
+    if( NULL != pwszSystemInfo )
+    {
+        delete [] pwszSystemInfo;
+        pwszSystemInfo = NULL;
+    }
 
     if ( NULL != pwszGuidExtensionType )
     {
@@ -175,7 +175,7 @@ HRESULT CExtDataList::Create( IWMProfile *pProfile )
         SAFE_RELEASE( pIWMStreamConfig2 );
         SAFE_RELEASE( pIWMStreamConfig );
 
-        hr = pProfile->GetStream( cnt , &pIWMStreamConfig );
+        hr = pProfile->GetStream( cnt, &pIWMStreamConfig );
         if( FAILED( hr ) )
         {
             break;
@@ -218,7 +218,7 @@ HRESULT CExtDataList::Create( IWMProfile *pProfile )
             }
 
             hr = pIWMStreamConfig2->GetDataUnitExtension( i, &pExtData->m_guidDUExt,
-                &pExtData->m_cbExtensionDataSize, NULL, &pExtData->m_cbExtensionSystemInfo );
+                    &pExtData->m_cbExtensionDataSize, NULL, &pExtData->m_cbExtensionSystemInfo );
 
             if ( FAILED( hr ) )
             {
@@ -240,9 +240,9 @@ HRESULT CExtDataList::Create( IWMProfile *pProfile )
             }
 
             hr = pIWMStreamConfig2->GetDataUnitExtension( i, &pExtData->m_guidDUExt,
-                            &pExtData->m_cbExtensionDataSize,
-                            pExtData->m_pbExtensionSystemInfo,
-                            &pExtData->m_cbExtensionSystemInfo );
+                    &pExtData->m_cbExtensionDataSize,
+                    pExtData->m_pbExtensionSystemInfo,
+                    &pExtData->m_cbExtensionSystemInfo );
             if ( FAILED( hr ) )
             {
                 break;
@@ -256,10 +256,10 @@ HRESULT CExtDataList::Create( IWMProfile *pProfile )
         if( FAILED( hr ) )
         {
             if (NULL != pExtData)
-			{
+            {
                 delete pExtData;
-				pExtData = NULL;
-			}
+                pExtData = NULL;
+            }
         }
     }
 
@@ -292,7 +292,7 @@ bool CExtDataList::Append( CExtensionData *pCExtensionData )
 // Iterate through extension data for the given stream.
 // Usage :
 //     -first call with wStreamNum containing actual stream number
-//      retrieves first extension data for that stream 
+//      retrieves first extension data for that stream
 //     -next call with wStreamNum = 0 retrieves next extension data for
 //      previously passed stream number
 //     Function returns true if there is extension data, otherwise false
@@ -336,22 +336,22 @@ bool CExtDataList::Find( WORD wStreamNum, CExtensionData **pExtensionData )
 // Helper function - save profile into memory
 ///////////////////////////////////////////////////////////////////////////////
 
-HRESULT SaveProfileToMemory( IWMProfile *pIWMProfile, 
-                                  __deref_out_ecount(*pdwLen) WCHAR **ppwszBuffer, 
-                                  DWORD *pdwLen )
+HRESULT SaveProfileToMemory( IWMProfile *pIWMProfile,
+                             __deref_out_ecount(*pdwLen) WCHAR **ppwszBuffer,
+                             DWORD *pdwLen )
 {
     HRESULT             hr = S_OK;
     IWMProfileManager   *pIWMProfileMgr = NULL;
 
     do
     {
-        hr = WMCreateProfileManager( &pIWMProfileMgr );        
+        hr = WMCreateProfileManager( &pIWMProfileMgr );
         if( FAILED( hr ) )
         {
             _tprintf( _T( "WMCreateProfileManager failed: (hr=0x%08x)\n" ), hr );
             break;
         }
-        
+
         hr = pIWMProfileMgr->SaveProfile( pIWMProfile, NULL, pdwLen );
         if( FAILED( hr ) )
         {
@@ -376,7 +376,7 @@ HRESULT SaveProfileToMemory( IWMProfile *pIWMProfile,
     while( FALSE );
 
     SAFE_RELEASE( pIWMProfileMgr );
-    
+
     return( hr );
 }
 
@@ -386,8 +386,8 @@ HRESULT SaveProfileToMemory( IWMProfile *pIWMProfile,
 
 HRESULT SaveProfileToFile( const TCHAR *pszFileName, IWMProfile *pIWMProfile )
 {
-    if( ( NULL == pszFileName ) || 
-        ( NULL == pIWMProfile ) )
+    if( ( NULL == pszFileName ) ||
+            ( NULL == pIWMProfile ) )
     {
         return( E_INVALIDARG );
     }
@@ -406,11 +406,11 @@ HRESULT SaveProfileToFile( const TCHAR *pszFileName, IWMProfile *pIWMProfile )
             _tprintf( _T( "SaveProfileToMemory failed: (hr=0x%08x)\n" ), hr );
             break;
         }
-        
+
         fd = CreateFile( pszFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
         if( INVALID_HANDLE_VALUE == fd )
         {
-            hr = HRESULT_FROM_WIN32( GetLastError() ); 
+            hr = HRESULT_FROM_WIN32( GetLastError() );
             break;
         }
 
@@ -421,31 +421,31 @@ HRESULT SaveProfileToFile( const TCHAR *pszFileName, IWMProfile *pIWMProfile )
         }
 
         dwBytesToWrite = dwLength * sizeof( WCHAR );
-        
+
         if( !WriteFile( fd, pBuffer, dwBytesToWrite, &dwBytesWritten, NULL ) )
         {
-            hr = HRESULT_FROM_WIN32( GetLastError() ); 
+            hr = HRESULT_FROM_WIN32( GetLastError() );
             break;
         }
-        
+
         if( dwBytesToWrite != dwBytesWritten )
         {
-            hr = E_FAIL; 
+            hr = E_FAIL;
             break;
         }
     }
     while( FALSE );
 
-	if( NULL != pBuffer )
+    if( NULL != pBuffer )
     {
         delete [] pBuffer;
         pBuffer = NULL;
     }
-    
-    if( INVALID_HANDLE_VALUE != fd ) 
-    {                               
-        CloseHandle(fd);            
-        fd = INVALID_HANDLE_VALUE;   
+
+    if( INVALID_HANDLE_VALUE != fd )
+    {
+        CloseHandle(fd);
+        fd = INVALID_HANDLE_VALUE;
     }
 
     return( hr );

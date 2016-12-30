@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -31,7 +31,7 @@ CContextSamplePropPage::CContextSamplePropPage( void )
 
 
 /////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP 
+STDMETHODIMP
 CContextSamplePropPage::Apply( void )
 {
     HRESULT hr = S_OK;
@@ -58,8 +58,8 @@ CContextSamplePropPage::Apply( void )
         {
             // Check the old values and only set if they have changed
             if( ( NULL != m_bstrOrigOutputPath.m_str )
-                && ( NULL != m_bstrOutputPath.m_str )
-                && _wcsicmp( m_bstrOrigOutputPath, m_bstrOutputPath ) )
+                    && ( NULL != m_bstrOutputPath.m_str )
+                    && _wcsicmp( m_bstrOrigOutputPath, m_bstrOutputPath ) )
             {
                 m_pPluginAdmin->put_OutputPath( m_bstrOutputPath );
             }
@@ -81,7 +81,7 @@ CContextSamplePropPage::Apply( void )
 
 
 /////////////////////////////////////////////////////////////////////////////
-void 
+void
 CContextSamplePropPage::MessageBox( UINT id )
 {
     CComBSTR bstrMessage;
@@ -95,7 +95,7 @@ CContextSamplePropPage::MessageBox( UINT id )
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT 
+HRESULT
 CContextSamplePropPage::Connect()
 {
     // Interface pointers are given in the following order:
@@ -122,7 +122,7 @@ CContextSamplePropPage::Connect()
 
 
 /////////////////////////////////////////////////////////////////////////////
-LRESULT 
+LRESULT
 CContextSamplePropPage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
     ATLTRACE( "== CContextSamplePropPage::OnInitDialog\n" );
@@ -198,7 +198,7 @@ HRESULT CContextSamplePropPage::RetrieveDialogInformation()
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT 
+HRESULT
 CContextSamplePropPage::GetPluginSetting()
 {
     HRESULT hr = S_OK;
@@ -239,12 +239,12 @@ CContextSamplePropPage::GetPluginSetting()
 
 
 /////////////////////////////////////////////////////////////////////////////
-HRESULT 
+HRESULT
 CContextSamplePropPage::PopulateControls()
 {
     HRESULT hr = S_OK;
     bool fEnableMaxSize = false;
-    
+
     ATLTRACE( "CContextSamplePropPage::PopulateControls\n" );
 
     //

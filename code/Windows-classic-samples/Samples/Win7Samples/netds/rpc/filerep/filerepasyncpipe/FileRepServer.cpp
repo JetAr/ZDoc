@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,10 +11,10 @@
     Server System Service
 
     FILE: FileRepServer.cpp
-    
+
     PURPOSE: Provides file replication services.
-    
-    USAGE: 
+
+    USAGE:
         FileRepService
 
     FUNCTIONS:
@@ -72,56 +72,66 @@
 
     COMMENTS:
 */
-VOID _cdecl main(int argc, char **argv){
+VOID _cdecl main(int argc, char **argv)
+{
     RPC_STATUS status;
 
     int nNumArgs;
     LPWSTR *szArgList = CommandLineToArgvW(GetCommandLine(), &nNumArgs);
 
-    if (NULL == szArgList) {
+    if (NULL == szArgList)
+    {
         _tprintf(TEXT("FileRep main: CommandLineToArgW failed"));
         exit(EXIT_FAILURE);
     }
 
     // Allow the user to override settings with command line switches.
-    for (int i = 1; i < nNumArgs; i++) {
+    for (int i = 1; i < nNumArgs; i++)
+    {
         // Well-formed argument switches start with '/' or '-' and are
         // two characters long.
-        if (((*szArgList[i] == TEXT('-')) || (*szArgList[i] == TEXT('/'))) && _tcsclen(szArgList[i]) == 2) {
+        if (((*szArgList[i] == TEXT('-')) || (*szArgList[i] == TEXT('/'))) && _tcsclen(szArgList[i]) == 2)
+        {
 
-            switch (_totlower(*(szArgList[i]+1))) {
+            switch (_totlower(*(szArgList[i]+1)))
+            {
 
-                case TEXT('f'):
-		  bNoFileIO = true;
-		  break;
-                    
-                case TEXT('h'):
-                case TEXT('?'):
-                default:
-                    exit(EXIT_SUCCESS);
+            case TEXT('f'):
+                bNoFileIO = true;
+                break;
+
+            case TEXT('h'):
+            case TEXT('?'):
+            default:
+                exit(EXIT_SUCCESS);
             }
         }
-        else {
-	  _tprintf(TEXT("Bad arguments.\n\n"));
-	  exit(EXIT_FAILURE);
+        else
+        {
+            _tprintf(TEXT("Bad arguments.\n\n"));
+            exit(EXIT_FAILURE);
         }
     }
 
     // Service initialization
-    if (!StartFileRepServer()) {
-      return;
-    } else {
-      bServerListening = TRUE;
-
-      // RpcMgmtWaitServerListen() will block until the server has
-      // stopped listening.
-      status = RpcMgmtWaitServerListen();
-      if (status != RPC_S_OK){
-        AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcMgmtWaitServerListen"), status);
+    if (!StartFileRepServer())
+    {
         return;
-      }
     }
-    
+    else
+    {
+        bServerListening = TRUE;
+
+        // RpcMgmtWaitServerListen() will block until the server has
+        // stopped listening.
+        status = RpcMgmtWaitServerListen();
+        if (status != RPC_S_OK)
+        {
+            AddToMessageLogProcFailureEEInfo(TEXT("ServiceStart: RpcMgmtWaitServerListen"), status);
+            return;
+        }
+    }
+
     return;
 }
 

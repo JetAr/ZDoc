@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: PsiObjs.h
 //
 // Desc: DirectShow sample code - PSIParser sample filter
@@ -53,8 +53,8 @@
 // inside PAT section
 typedef struct Program_Descriptor
 {
-        DWORD program_number;
-        DWORD network_or_program_map_PID;
+    DWORD program_number;
+    DWORD network_or_program_map_PID;
 
 } PROGRAM_DESCRIPTOR;
 
@@ -95,7 +95,7 @@ struct MPEG2_PAT_SECTION :
     PROGRAM_DESCRIPTOR program_descriptor[MAX_PROGRAM_NUMBER_IN_PAT_SECTION];
 
     _inline BOOL Parse(IN BYTE * pbBuf // points to first byte of psi section
-                        )
+                      )
     {
         // common psi fields
         table_id                    =   PAT_TABLE_ID_VALUE                  (pbBuf) ;
@@ -110,7 +110,7 @@ struct MPEG2_PAT_SECTION :
         // pat specific fields
         transport_stream_id         =   PAT_TRANSPORT_STREAM_ID_VALUE       (pbBuf) ;
         Dump1(TEXT("transport_stream_id = %d\n"), transport_stream_id);
-        number_of_programs          =   (section_length - PAT_SECTION_LENGTH_EXCLUDE_PROGRAM_DESCRIPTOR)/PAT_PROGRAM_DESCRIPTOR_LENGTH; 
+        number_of_programs          =   (section_length - PAT_SECTION_LENGTH_EXCLUDE_PROGRAM_DESCRIPTOR)/PAT_PROGRAM_DESCRIPTOR_LENGTH;
 
         // parse PAT program descriptor
         for(int i=0; i< number_of_programs ; i++)
@@ -120,13 +120,13 @@ struct MPEG2_PAT_SECTION :
             Dump1(TEXT("    program index               = %d\n"), i);
             Dump1(TEXT("    program_number              = %d\n"), program_descriptor[i].program_number);
             Dump1(TEXT("    network_or_program_map_PID  = %d\n\n"), program_descriptor[i].network_or_program_map_PID);
-        } 
+        }
 
         return TRUE;
     }
 
     _inline BOOL Copy(IN MPEG2_PAT_SECTION* pSource)
-    {       
+    {
         table_id                    = pSource->table_id;
         section_syntax_indicator    = pSource->section_syntax_indicator;
         section_length              = pSource->section_length;
@@ -142,7 +142,7 @@ struct MPEG2_PAT_SECTION :
         {
             program_descriptor[i].program_number             = pSource->program_descriptor[i].program_number;
             program_descriptor[i].network_or_program_map_PID = pSource->program_descriptor[i].network_or_program_map_PID;
-        } 
+        }
 
         return TRUE;
     }
@@ -193,7 +193,7 @@ struct MPEG2_PMT_SECTION :
             Dump1(TEXT("**elementary_PID = %#x\n"), elementary_stream_info[EsNumber].elementary_PID);
 
             elementary_stream_info[EsNumber].ES_info_length = PMT_STREAM_RECORD_ES_INFO_LENGTH      (pTmp);
-        
+
             EsNumber++;
         }
 
@@ -204,7 +204,7 @@ struct MPEG2_PMT_SECTION :
 
     _inline BOOL Copy(IN MPEG2_PMT_SECTION* pSource)
     {
-        
+
         table_id                    = pSource->table_id;
         section_syntax_indicator    = pSource->section_syntax_indicator;
         section_length              = pSource->section_length;
@@ -242,7 +242,7 @@ typedef struct Mpeg2_Program
 
     MPEG2_PAT_SECTION   mpeg2_pat_section;
     MPEG2_PMT_SECTION   mpeg2_pmt_section;
-}MPEG2_PROGRAM;
+} MPEG2_PROGRAM;
 
 
 struct CPrograms
@@ -258,8 +258,10 @@ struct CPrograms
     // is the program existing in the array already?
     _inline BOOL find_program(const DWORD dwProgramNumber, int *pIndex)
     {
-        for (int i = 0; i<m_ProgramCount; i++){
-            if(m_programs[i]->program_number == dwProgramNumber){
+        for (int i = 0; i<m_ProgramCount; i++)
+        {
+            if(m_programs[i]->program_number == dwProgramNumber)
+            {
                 *pIndex = i;
                 return TRUE;
             }
@@ -274,7 +276,8 @@ struct CPrograms
 
         // if already exit, update it:
         int index;
-        if(find_program(pmpeg2_pat_section->program_descriptor[SectionIndex].program_number, &index)){
+        if(find_program(pmpeg2_pat_section->program_descriptor[SectionIndex].program_number, &index))
+        {
             return update_program_from_pat(index, pmpeg2_pat_section, SectionIndex);
         }
 
@@ -286,11 +289,12 @@ struct CPrograms
         tmp = (MPEG2_PROGRAM *)HeapAlloc( GetProcessHeap(),
                                           HEAP_ZERO_MEMORY,
                                           sizeof( MPEG2_PROGRAM )  );
-        if( tmp == NULL) {
+        if( tmp == NULL)
+        {
             return FALSE;
         }
 
-        copy_program_from_pat(pmpeg2_pat_section, SectionIndex, tmp);  
+        copy_program_from_pat(pmpeg2_pat_section, SectionIndex, tmp);
 
         // put new program on array
         m_programs[m_ProgramCount] = tmp;
@@ -300,7 +304,7 @@ struct CPrograms
     }
 
     // Update a program from a PMT section. The program should have been stored in the array
-    // when processing pat. The sequence is: 
+    // when processing pat. The sequence is:
     //     0. we initially receive pat only by mapping pat pid to demux output pin
     //     1. a program's pmt pid was read from pat
     //     2. that program's pmt pid was then mapped to demux output pin
@@ -309,17 +313,18 @@ struct CPrograms
     {
         // if already exit, update it:
         int index;
-        if(find_program(pmpeg2_pmt_section->program_number, &index)){
+        if(find_program(pmpeg2_pmt_section->program_number, &index))
+        {
             m_programs[index]->number_of_ESs = pmpeg2_pmt_section->number_of_elementary_streams;
 
             m_programs[index]->mpeg2_pmt_section.Copy(pmpeg2_pmt_section);
 
             return TRUE;
-        }   
+        }
         return FALSE;
     }
 
-    _inline BOOL copy_program_from_pat(MPEG2_PAT_SECTION * pSection, 
+    _inline BOOL copy_program_from_pat(MPEG2_PAT_SECTION * pSection,
                                        int SectionIndex, MPEG2_PROGRAM *pDest)
     {
         pDest->program_number               = pSection->program_descriptor[SectionIndex].program_number;
@@ -329,8 +334,8 @@ struct CPrograms
         return TRUE;
     }
 
-    _inline BOOL update_program_from_pat(int ProgramIndex, 
-                                         MPEG2_PAT_SECTION* pmpeg2_pat_section, 
+    _inline BOOL update_program_from_pat(int ProgramIndex,
+                                         MPEG2_PAT_SECTION* pmpeg2_pat_section,
                                          int SectionIndex)
     {
         return copy_program_from_pat(pmpeg2_pat_section, SectionIndex, m_programs[ProgramIndex]);
@@ -338,7 +343,8 @@ struct CPrograms
 
     _inline BOOL free_programs()
     {
-        for(int i= 0; i<m_ProgramCount; i++){
+        for(int i= 0; i<m_ProgramCount; i++)
+        {
             if(!HeapFree(GetProcessHeap(),  HEAP_ZERO_MEMORY, (LPVOID) m_programs[i] ))
                 return FALSE;
         }

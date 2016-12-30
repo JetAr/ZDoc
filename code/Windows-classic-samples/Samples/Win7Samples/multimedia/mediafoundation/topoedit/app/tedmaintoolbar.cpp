@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ const int CTedMainToolbar::PAUSE_BUTTON = 2;
 
 #define NANO_TO_SECS(x) x / 10000000LL;
 
-CTedMainToolbar::CTedMainToolbar() 
+CTedMainToolbar::CTedMainToolbar()
     : m_hStaticFont(NULL)
 {
 
@@ -26,16 +26,16 @@ CTedMainToolbar::CTedMainToolbar()
 
 CTedMainToolbar::~CTedMainToolbar()
 {
-    if(m_hStaticFont) 
+    if(m_hStaticFont)
     {
         DeleteObject(m_hStaticFont);
     }
 }
 
-HRESULT CTedMainToolbar::Init(HWND parentWnd, _U_MENUorID id) 
+HRESULT CTedMainToolbar::Init(HWND parentWnd, _U_MENUorID id)
 {
     HRESULT hr = S_OK;
-    if(Create(parentWnd, NULL, LoadAtlString(IDS_TOOLBAR), WS_CHILD | WS_VISIBLE, 0, id, NULL) == NULL) 
+    if(Create(parentWnd, NULL, LoadAtlString(IDS_TOOLBAR), WS_CHILD | WS_VISIBLE, 0, id, NULL) == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
@@ -43,46 +43,46 @@ HRESULT CTedMainToolbar::Init(HWND parentWnd, _U_MENUorID id)
     return hr;
 }
 
-CTrackbarControl* CTedMainToolbar::GetSeekBar() 
+CTrackbarControl* CTedMainToolbar::GetSeekBar()
 {
     return &m_trackBar;
 }
 
-CTrackbarControl* CTedMainToolbar::GetRateBar() 
+CTrackbarControl* CTedMainToolbar::GetRateBar()
 {
     return &m_rateBar;
 }
 
-void CTedMainToolbar::ShowRateBar(int nCmdShow) 
+void CTedMainToolbar::ShowRateBar(int nCmdShow)
 {
     m_rateLabel.ShowWindow(nCmdShow);
     m_rateBar.ShowWindow(nCmdShow);
 }
 
-void CTedMainToolbar::EnableButton(int nID, BOOL fEnable) 
+void CTedMainToolbar::EnableButton(int nID, BOOL fEnable)
 {
     assert(nID < m_iButtonCount);
     if(nID >= m_iButtonCount) return;
-    
+
     SendMessage(TB_ENABLEBUTTON, m_buttons[nID].idCommand, MAKELONG(fEnable, 0));
 }
 
-void CTedMainToolbar::EnableButtonByCommand(UINT nID, BOOL fEnable) 
+void CTedMainToolbar::EnableButtonByCommand(UINT nID, BOOL fEnable)
 {
     SendMessage(TB_ENABLEBUTTON, nID, MAKELONG(fEnable, 0));
 }
 
-void CTedMainToolbar::SetTrackbarScrollCallback(HANDLESCROLLPROC scrollCallback) 
+void CTedMainToolbar::SetTrackbarScrollCallback(HANDLESCROLLPROC scrollCallback)
 {
     m_trackBar.SetScrollCallback(scrollCallback);
 }
 
-void CTedMainToolbar::SetTrackbarRange(int minValue, int maxValue) 
+void CTedMainToolbar::SetTrackbarRange(int minValue, int maxValue)
 {
     m_trackBar.SetRange(minValue, maxValue);
 }
 
-void CTedMainToolbar::SetTimeLabel(const CAtlStringW& strLabel) 
+void CTedMainToolbar::SetTimeLabel(const CAtlStringW& strLabel)
 {
     m_timeLabel.SetWindowText(strLabel);
 }
@@ -90,7 +90,7 @@ void CTedMainToolbar::SetTimeLabel(const CAtlStringW& strLabel)
 void CTedMainToolbar::UpdateTimeDisplay(MFTIME time, MFTIME duration)
 {
     DWORD dwMax = m_trackBar.GetMaxRange();
-    
+
     LONG lPos = 0;
     if ( duration > 0 )
     {
@@ -128,7 +128,7 @@ void CTedMainToolbar::MarkResolved(bool fResolved)
     m_resolvedLabel.SetWindowText(str);
 }
 
-LRESULT CTedMainToolbar::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) 
+LRESULT CTedMainToolbar::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     SendMessage(TB_BUTTONSTRUCTSIZE, (WPARAM) sizeof(TBBUTTON), 0);
 
@@ -159,14 +159,14 @@ LRESULT CTedMainToolbar::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     GetClientRect(&rect);
     rect.left += m_iToolbarButtonWidth;
     rect.right = rect.left + m_iTrackbarWidth;
-        
+
     m_trackBar.Init(m_hWnd, rect, true, true);
 
     rect.left = rect.right + m_iMarginSize;
     rect.right = rect.left + m_iTimeLabelWidth;
 
     rect.top += m_iMarginSize;
-    
+
     CAtlString strFontSize = LoadAtlString(IDS_FONT_SIZE_14);
     CAtlString strFontFace = LoadAtlString(IDS_FONT_FACE_ARIAL);
 
@@ -198,16 +198,16 @@ LRESULT CTedMainToolbar::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
     rect.left = rect.right += m_iMarginSize;
     rect.right = rect.left + m_iRateBarWidth;
     m_rateBar.Init(m_hWnd, rect, true, true);
-    
+
     rect.left = rect.right += m_iMarginSize;
     rect.right = rect.left + m_iResolvedLabelWidth;
     m_resolvedLabel.Create(m_hWnd, &rect, LoadAtlString(IDS_TOPO_STATUS_NOT_RESOLVED), WS_CHILD | WS_VISIBLE);
     m_resolvedLabel.SetFont(m_hStaticFont);
- 
+
     return 0;
 }
 
-LRESULT CTedMainToolbar::OnVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) 
+LRESULT CTedMainToolbar::OnVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HWND hFocused = ::GetFocus();
 
@@ -219,11 +219,11 @@ LRESULT CTedMainToolbar::OnVScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     {
         m_rateBar.HandleScroll(LOWORD(wParam), HIWORD(wParam));
     }
-    
+
     return 0;
 }
 
-LRESULT CTedMainToolbar::OnHScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) 
+LRESULT CTedMainToolbar::OnHScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HWND hFocused = ::GetFocus();
 
@@ -235,6 +235,6 @@ LRESULT CTedMainToolbar::OnHScroll(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     {
         m_rateBar.HandleScroll(LOWORD(wParam), HIWORD(wParam));
     }
-    
+
     return 0;
 }

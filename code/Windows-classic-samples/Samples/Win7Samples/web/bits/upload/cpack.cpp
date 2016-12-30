@@ -1,24 +1,24 @@
-//+---------------------------------------------------------------------------
+﻿//+---------------------------------------------------------------------------
 //
-//  Copyright (c) Microsoft Corporation. All rights reserved. 
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
 //  BITS Upload sample
 //  ==================
 //
-//  Module name: 
+//  Module name:
 //  cpack.cpp
 //
 //  Purpose:
-//  This module implements the CPack class, which is 
-//  the main class in this sample's code. 
+//  This module implements the CPack class, which is
+//  the main class in this sample's code.
 //
-//  CPack receives the text entered in the UI edit box, and packs it as 
-//  a simple XML file. It then creates a BITS upload job, sets all 
+//  CPack receives the text entered in the UI edit box, and packs it as
+//  a simple XML file. It then creates a BITS upload job, sets all
 //  the relevant properties, and kicks off the upload process (Job->Resume()).
-// 
+//
 //  The main method implemented by this class is CPack::Upload(), which
-//  takes care of creating the upload Job and therefore exemplifies how 
+//  takes care of creating the upload Job and therefore exemplifies how
 //  the BITS upload API may be used to upload a file to a web server.
 //
 //----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ HRESULT CPack::Upload(LPCWSTR wszJobName, LPCWSTR wszUploadDir, BOOL fRequestRep
         goto cleanup;
     }
 
-    // 
+    //
     // Set the BITS job type -- we are only interested in upload job types
     //
     if (fRequestReply)
@@ -138,15 +138,15 @@ HRESULT CPack::Upload(LPCWSTR wszJobName, LPCWSTR wszUploadDir, BOOL fRequestRep
     // We want to set this to a small value so that transient errors will fall back to errors quickly.
     //
     // The idea here is that we are using this app to test and experiment with the BITS API in a
-    // controlled environment, so it is reasonable to assume that the server and network are readily 
+    // controlled environment, so it is reasonable to assume that the server and network are readily
     // accessible, and if not, we want to be notified of the problem quickly. We could have also
     // set NoProgressTimeout to zero.
     //
     // In a real app, it is better to leverage BITS' ability to retry jobs that are in transient error,
-    // because sporadic network connectivity problems are indeed common, specially for file transfers 
+    // because sporadic network connectivity problems are indeed common, specially for file transfers
     // across the Internet. For this to happen, the job timeout has to be greater than 2 min, otherwise
     // BITS will not attempt retries.
-    // 
+    //
     hr = Job->SetNoProgressTimeout(60);
     if (FAILED(hr))
     {
@@ -198,12 +198,12 @@ HRESULT CPack::PackText(LPCWSTR wszText)
 {
     HRESULT hr = S_OK;
     WCHAR wszXMLTemplateStart[] = L""
-        L"<?xml version=\"1.0\" encoding=\"utf-8\" ?>\r\n"
-        L"<uploadsample>\r\n"
-        L"  <text>";
+                                  L"<?xml version=\"1.0\" encoding=\"utf-8\" ?>\r\n"
+                                  L"<uploadsample>\r\n"
+                                  L"  <text>";
     WCHAR wszXMLTemplateEnd[] = L""
-        L"</text>\r\n"
-        L"</uploadsample>\r\n";
+                                L"</text>\r\n"
+                                L"</uploadsample>\r\n";
 
     hr = OpenTempFile();
     if (FAILED(hr))
@@ -280,14 +280,14 @@ HRESULT CPack::BuildRemoteUrl(IN LPCWSTR wszUploadDir, IN LPCWSTR wszTempFile, O
     pEnd   = wszRemoteUrl + (cbRemoteUrl/sizeof(WCHAR)) - 1; // place the end at the last possible place for the \0.
 
     // make sure we have space to write our extension
-    if (pStart && (static_cast<size_t>((pEnd - pStart)) >= wcslen(wszXmlExt)))  
+    if (pStart && (static_cast<size_t>((pEnd - pStart)) >= wcslen(wszXmlExt)))
     {
         hr = StringCchCopyW(pStart, (pEnd - pStart), wszXmlExt);
         if (FAILED(hr))
         {
             goto cleanup;
         }
-    }         
+    }
     else
     {
         // should never happen
@@ -319,12 +319,12 @@ HRESULT CPack::OpenTempFile()
         hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
         goto cleanup;
     }
- 
+
     if (!GetTempFileName(
-        wszTempDir,           // dir. for temp. files 
-        L"upl",               // temp. file name prefix 
-        0,                    // create unique name 
-        m_wszTempFile))       // buffer for name 
+                wszTempDir,           // dir. for temp. files
+                L"upl",               // temp. file name prefix
+                0,                    // create unique name
+                m_wszTempFile))       // buffer for name
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto cleanup;
@@ -340,19 +340,19 @@ HRESULT CPack::OpenTempFile()
     m_pwszFilename++;
 
     m_hFile = CreateFile(
-        m_wszTempFile,                // file name 
-        GENERIC_READ | GENERIC_WRITE, // open for read/write 
-        0,                            // do not share 
-        NULL,                         // no security 
-        CREATE_ALWAYS,                // overwrite existing file
-        FILE_ATTRIBUTE_NORMAL,        // normal file 
-        NULL);                        // no attr. template 
+                  m_wszTempFile,                // file name
+                  GENERIC_READ | GENERIC_WRITE, // open for read/write
+                  0,                            // do not share
+                  NULL,                         // no security
+                  CREATE_ALWAYS,                // overwrite existing file
+                  FILE_ATTRIBUTE_NORMAL,        // normal file
+                  NULL);                        // no attr. template
 
-    if (m_hFile == INVALID_HANDLE_VALUE) 
-    { 
+    if (m_hFile == INVALID_HANDLE_VALUE)
+    {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
- 
+
 
 cleanup:
 
@@ -399,14 +399,14 @@ HRESULT CPack::WriteWCharAsUTF8(LPCWSTR wszText, DWORD cCharsToWrite)
     szBuf[cchWritten] = 0;
 
     // write the string
-    if (!WriteFile(m_hFile, szBuf, (cchWritten * sizeof(CHAR)), &cbWrittenToFile, NULL)) 
+    if (!WriteFile(m_hFile, szBuf, (cchWritten * sizeof(CHAR)), &cbWrittenToFile, NULL))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto cleanup;
     }
 
 cleanup:
-    
+
     if (szBuf)
     {
         delete [] szBuf;
@@ -432,12 +432,12 @@ HRESULT CPack::WriteXMLString(LPCWSTR wszText)
     INT   cchText        = static_cast<INT>(wcslen(wszText));
 
     _ASSERT(cchText > 0 && cchText <= MAX_BUFFER_SIZE);
-    
+
     pwszRemainder = const_cast<WCHAR *>(wszText);
     pchSpecial    = const_cast<WCHAR *>(wcsstr(wszText, L"<>&'\""));
     pchEnd        = (const_cast<WCHAR *>(wszText) + cchText);
-    
-    while (pchSpecial) 
+
+    while (pchSpecial)
     {
         if (pchSpecial > pwszRemainder)
         {
@@ -447,18 +447,28 @@ HRESULT CPack::WriteXMLString(LPCWSTR wszText)
                 goto cleanup;
             }
         }
-        
-        switch (*pchSpecial) 
-        {
-            case L'<':   WriteWCharAsUTF8(L"&lt;");      break;
-            case L'>':   WriteWCharAsUTF8(L"&gt;");      break;
-            case L'&':   WriteWCharAsUTF8(L"&amp;");     break;
-            case L'\'':  WriteWCharAsUTF8(L"&apos;");    break;
-            case L'"':   WriteWCharAsUTF8(L"&quot;");    break;
 
-            default:    
-                // should never get here
-                _ASSERT(0);
+        switch (*pchSpecial)
+        {
+        case L'<':
+            WriteWCharAsUTF8(L"&lt;");
+            break;
+        case L'>':
+            WriteWCharAsUTF8(L"&gt;");
+            break;
+        case L'&':
+            WriteWCharAsUTF8(L"&amp;");
+            break;
+        case L'\'':
+            WriteWCharAsUTF8(L"&apos;");
+            break;
+        case L'"':
+            WriteWCharAsUTF8(L"&quot;");
+            break;
+
+        default:
+            // should never get here
+            _ASSERT(0);
         }
 
         pwszRemainder = pchSpecial + 1;
@@ -475,7 +485,7 @@ HRESULT CPack::WriteXMLString(LPCWSTR wszText)
     }
 
 cleanup:
-    
+
     return hr;
 }
 

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -45,13 +45,13 @@ private:
     HWND            m_hWnd;
     CTSFEditWnd     *m_pTSFEditWnd;
     TfClientId      m_tfClientID;
-   
+
 public:
     CTSFMainWnd(HINSTANCE hInstance);
     ~CTSFMainWnd();
-    
+
     BOOL Initialize(int nCmdShow);
-   
+
 private:
     static LRESULT CALLBACK _WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
     void _CleanupEditWnd(BOOL fNuke);

@@ -1,23 +1,23 @@
-/////////////////////////////////////////////////////////////////////////
-// Copyright © Microsoft Corporation. All rights reserved.
-// 
-//  This file may contain preliminary information or inaccuracies, 
-//  and may not correctly represent any associated Microsoft 
-//  Product as commercially released. All Materials are provided entirely 
-//  ìAS IS.î To the extent permitted by law, MICROSOFT MAKES NO 
-//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY 
-//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF 
-//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM. 
-// 
+Ôªø/////////////////////////////////////////////////////////////////////////
+// Copyright ¬© Microsoft Corporation. All rights reserved.
+//
+//  This file may contain preliminary information or inaccuracies,
+//  and may not correctly represent any associated Microsoft
+//  Product as commercially released. All Materials are provided entirely
+//  ‚ÄúAS IS.‚Äù To the extent permitted by law, MICROSOFT MAKES NO
+//  WARRANTY OF ANY KIND, DISCLAIMS ALL EXPRESS, IMPLIED AND STATUTORY
+//  WARRANTIES, AND ASSUMES NO LIABILITY TO YOU FOR ANY DAMAGES OF
+//  ANY TYPE IN CONNECTION WITH THESE MATERIALS OR ANY INTELLECTUAL PROPERTY IN THEM.
+//
 
 
 #pragma once
 
 
 /////////////////////////////////////////////////////////////////////////
-//  Regular VSS client class 
+//  Regular VSS client class
 //
-//  This class implements a high-level VSS API. It is not dependent on 
+//  This class implements a high-level VSS API. It is not dependent on
 //  VSHADOW.EXE command-line interface - It can be called from an UI program as well.
 //
 
@@ -40,18 +40,18 @@ public:
 
     // Method to create a shadow copy set with the given volumes
     void CreateSnapshotSet(
-        vector<wstring> volumeList, 
-        wstring outputXmlFile,     
+        vector<wstring> volumeList,
+        wstring outputXmlFile,
         vector<wstring> excludedWriterList,
         vector<wstring> includedWriterList
-        );
+    );
 
     // Prepare the shadow copy for backup
     void PrepareForBackup();
 
     // Add volumes to the shadow copy set
     void AddToSnapshotSet(vector<wstring> volumeList);
-    
+
     // Effectively creating the shadow copy (calling DoSnapshotSet)
     void DoSnapshotSet();
 
@@ -87,11 +87,11 @@ public:
     //
     //  Shadow copy deletion related methods
     //
-    
+
     // Delete all the shadow copies in the system
     void DeleteAllSnapshots();
 
-    // Delete the given shadow copy set 
+    // Delete the given shadow copy set
     void DeleteSnapshotSet(VSS_ID snapshotSetID);
 
     // Delete the given shadow copy
@@ -104,10 +104,10 @@ public:
     //  Shadow copy break related methods
     //
 
-    // Break the given shadow copy set 
+    // Break the given shadow copy set
     void BreakSnapshotSet(VSS_ID snapshotSetID, bool makeReadWrite, vector<wstring> *pVolumeNames=NULL);
 
-    // Break using BreakEx 
+    // Break using BreakEx
     void BreakSnapshotSetEx(VSS_ID snapshotSetID, DWORD dwBreakExFlags);
 
     void AddResyncSet(VSS_ID snapshotSetID, wstring wsOptDestination);
@@ -116,12 +116,12 @@ public:
 
     // Make the volumes in this list read-write using VDS API
     void MakeVolumesReadWrite(vector<wstring> volumeNames);
-    
+
     void RevertToSnapshot(VSS_ID snapshotID);
 
     // Return the list of shadow copy volume devices in this shadow copy set
     vector<wstring> GetSnapshotDevices(VSS_ID SnapshotSetID);
-    
+
     // Returns an array of enumerated VDS objects
     vector< CComPtr<IUnknown> > EnumerateVdsObjects(IEnumVdsObject * pEnumeration);
 
@@ -173,19 +173,19 @@ public:
     //
 
 
-    // Select the maximum number of components such that their 
+    // Select the maximum number of components such that their
     // file descriptors are pointing only to volumes to be shadow copied
     void SelectComponentsForBackup(
-        vector<wstring> shadowSourceVolumes, 
+        vector<wstring> shadowSourceVolumes,
         vector<wstring> excludedWriterAndComponentList,
         vector<wstring> includedWriterAndComponentList
-        );
+    );
 
     // Select the maximum number of components for restore
     void SelectComponentsForRestore(
         vector<wstring> excludedWriterAndComponentList,
         vector<wstring> includedWriterAndComponentList
-        );
+    );
 
     // Discover directly excluded components (that were excluded through the command-line)
     void DiscoverDirectlyExcludedComponents(
@@ -207,8 +207,8 @@ public:
     // - or do not have any included components (all its components are excluded)
     void DiscoverExcludedWriters();
 
-    // Discover the components that should be explicitly included 
-    // These are any included top components 
+    // Discover the components that should be explicitly included
+    // These are any included top components
     void DiscoverExplicitelyIncludedComponents();
 
     // Exclude writers that do not support restore events
@@ -227,13 +227,13 @@ public:
     void VerifyExplicitelyIncludedComponent(
         wstring includedComponent,
         vector<VssWriter> & writerList
-        );
+    );
 
     // Verify that all the components of this writer are selected
     void VerifyExplicitelyIncludedWriter(
         wstring writerName,
         vector<VssWriter> & writerList
-        );
+    );
 
     // Is this writer part of the backup?
     // (i.e. if it was not previously excluded)
@@ -251,12 +251,12 @@ private:
 
 
 private:
-    
+
     //
     //  Data members
     //
 
-    // TRUE if CoInitialize() was already called 
+    // TRUE if CoInitialize() was already called
     // Needed to pair each succesfull call to CoInitialize with a corresponding CoUninitialize
     bool                            m_bCoInitializeCalled;
 
@@ -264,7 +264,7 @@ private:
     DWORD                           m_dwContext;
 
     // The IVssBackupComponents interface is automatically released when this object is destructed.
-    // Needed to issue VSS calls 
+    // Needed to issue VSS calls
     CComPtr<IVssBackupComponents>   m_pVssObject;
 
     // List of selected writers during the shadow copy creation process

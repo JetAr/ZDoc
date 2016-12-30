@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // SimplePlay sample
 //
@@ -13,7 +13,7 @@
 // This sample demonstrates how to use the MFPlay API for simple video
 // playback.
 //
-////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////
 
 #define WINVER _WIN32_WINNT_WIN7
 
@@ -57,14 +57,14 @@ void    OnFileOpen(HWND hwnd);
 void OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT *pEvent);
 void OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT *pEvent);
 
-// Constants 
+// Constants
 const WCHAR CLASS_NAME[]  = L"MFPlay Window Class";
 const WCHAR WINDOW_NAME[] = L"MFPlay Sample Application";
 
 //-------------------------------------------------------------------
 //
 // MediaPlayerCallback class
-// 
+//
 // Implements the callback interface for MFPlay events.
 //
 //-------------------------------------------------------------------
@@ -83,16 +83,16 @@ public:
 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppv)
     {
-        static const QITAB qit[] = 
+        static const QITAB qit[] =
         {
             QITABENT(MediaPlayerCallback, IMFPMediaPlayerCallback),
             { 0 },
         };
         return QISearch(this, qit, riid, ppv);
     }
-    STDMETHODIMP_(ULONG) AddRef() 
+    STDMETHODIMP_(ULONG) AddRef()
     {
-            return InterlockedIncrement(&m_cRef); 
+        return InterlockedIncrement(&m_cRef);
     }
     STDMETHODIMP_(ULONG) Release()
     {
@@ -197,18 +197,18 @@ BOOL InitializeWindow(HWND *pHwnd)
     }
 
     HWND hwnd = CreateWindow(
-        CLASS_NAME,
-        WINDOW_NAME,
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        NULL,
-        NULL,
-        GetModuleHandle(NULL),
-        NULL
-        );
+                    CLASS_NAME,
+                    WINDOW_NAME,
+                    WS_OVERLAPPEDWINDOW,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    CW_USEDEFAULT,
+                    NULL,
+                    NULL,
+                    GetModuleHandle(NULL),
+                    NULL
+                );
 
     if (!hwnd)
     {
@@ -260,12 +260,12 @@ void OnPaint(HWND hwnd)
     HDC hdc = 0;
 
     hdc = BeginPaint(hwnd, &ps);
-    
+
     if (g_pPlayer && g_bHasVideo)
     {
-        // Playback has started and there is video. 
+        // Playback has started and there is video.
 
-        // Do not draw the window background, because the video 
+        // Do not draw the window background, because the video
         // frame fills the entire client area.
 
         g_pPlayer->UpdateVideo();
@@ -319,7 +319,7 @@ void OnKeyDown(HWND /*hwnd*/, UINT vk, BOOL /*fDown*/, int /*cRepeat*/, UINT /*f
         if (g_pPlayer)
         {
             MFP_MEDIAPLAYER_STATE state = MFP_MEDIAPLAYER_STATE_EMPTY;
-            
+
             hr = g_pPlayer->GetState(&state);
 
             if (SUCCEEDED(hr))
@@ -346,7 +346,7 @@ void OnKeyDown(HWND /*hwnd*/, UINT vk, BOOL /*fDown*/, int /*cRepeat*/, UINT /*f
 
 //-------------------------------------------------------------------
 // OnCommand
-// 
+//
 // Handles the WM_COMMAND message.
 //-------------------------------------------------------------------
 
@@ -354,13 +354,13 @@ void OnCommand(HWND hwnd, int id, HWND /*hwndCtl*/, UINT /*codeNotify*/)
 {
     switch (id)
     {
-        case ID_FILE_OPEN:
-            OnFileOpen(hwnd);
-            break;
+    case ID_FILE_OPEN:
+        OnFileOpen(hwnd);
+        break;
 
-        case ID_FILE_EXIT:
-            OnClose(hwnd);
-            break;
+    case ID_FILE_EXIT:
+        OnClose(hwnd);
+        break;
     }
 }
 
@@ -372,7 +372,7 @@ void OnCommand(HWND hwnd, int id, HWND /*hwndCtl*/, UINT /*codeNotify*/)
 //-------------------------------------------------------------------
 
 void OnFileOpen(HWND hwnd)
-{    
+{
     HRESULT hr = S_OK;
 
     IFileOpenDialog *pFileOpen = NULL;
@@ -382,18 +382,24 @@ void OnFileOpen(HWND hwnd)
 
     // Create the FileOpenDialog object.
     hr = CoCreateInstance(
-        __uuidof(FileOpenDialog), 
-        NULL, 
-        CLSCTX_INPROC_SERVER, 
-        IID_PPV_ARGS(&pFileOpen)
-        );
+             __uuidof(FileOpenDialog),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_PPV_ARGS(&pFileOpen)
+         );
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     hr = pFileOpen->SetTitle(L"Select a File to Play");
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Show the file-open dialog.
@@ -405,24 +411,36 @@ void OnFileOpen(HWND hwnd)
         hr = S_OK;
         goto done;
     }
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Get the file name from the dialog.
     hr = pFileOpen->GetResult(&pItem);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     hr = pItem->GetDisplayName(SIGDN_URL, &pwszFilePath);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 
     // Open the media file.
     hr = PlayMediaFile(hwnd, pwszFilePath);
 
-    if (FAILED(hr)) { goto done; }
+    if (FAILED(hr))
+    {
+        goto done;
+    }
 
 done:
     if (FAILED(hr))
@@ -465,22 +483,25 @@ HRESULT PlayMediaFile(HWND hwnd, const WCHAR *sURL)
         }
 
         hr = MFPCreateMediaPlayer(
-            NULL,
-            FALSE,          // Start playback automatically?
-            0,              // Flags
-            g_pPlayerCB,    // Callback pointer
-            hwnd,           // Video window
-            &g_pPlayer
-            );
+                 NULL,
+                 FALSE,          // Start playback automatically?
+                 0,              // Flags
+                 g_pPlayerCB,    // Callback pointer
+                 hwnd,           // Video window
+                 &g_pPlayer
+             );
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
     }
 
     // Create a new media item for this URL.
     hr = g_pPlayer->CreateMediaItemFromURL(sURL, FALSE, 0, NULL);
 
-    // The CreateMediaItemFromURL method completes asynchronously. 
-    // The application will receive an MFP_EVENT_TYPE_MEDIAITEM_CREATED 
+    // The CreateMediaItemFromURL method completes asynchronously.
+    // The application will receive an MFP_EVENT_TYPE_MEDIAITEM_CREATED
     // event. See MediaPlayerCallback::OnMediaPlayerEvent().
 
 
@@ -491,7 +512,7 @@ done:
 
 //-------------------------------------------------------------------
 // OnMediaPlayerEvent
-// 
+//
 // Implements IMFPMediaPlayerCallback::OnMediaPlayerEvent.
 // This callback method handles events from the MFPlay object.
 //-------------------------------------------------------------------
@@ -537,7 +558,10 @@ void OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT *pEvent)
         // Check if the media item contains video.
         hr = pEvent->pMediaItem->HasVideo(&bHasVideo, &bIsSelected);
 
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         g_bHasVideo = bHasVideo && bIsSelected;
 
@@ -559,7 +583,7 @@ done:
 // Called when the IMFPMediaPlayer::SetMediaItem method completes.
 //-------------------------------------------------------------------
 
-void OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT * /*pEvent*/) 
+void OnMediaItemSet(MFP_MEDIAITEM_SET_EVENT * /*pEvent*/)
 {
     HRESULT hr = S_OK;
 

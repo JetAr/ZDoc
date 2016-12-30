@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -38,11 +38,11 @@ public :
     static DebugHresult WINAPI UpdateRegistryAppId ( BOOL bRegister ) throw()
     {
         _ATL_REGMAP_ENTRY aMapEntries [] =
-            {
-                { OLESTR ( "APPID" ), GetAppId() },
-                { OLESTR ( "EMPTYSTRING" ), L"EMPTYSTRING" },
-                { NULL, NULL }
-            };
+        {
+            { OLESTR ( "APPID" ), GetAppId() },
+            { OLESTR ( "EMPTYSTRING" ), L"EMPTYSTRING" },
+            { NULL, NULL }
+        };
         return ATL::_pAtlModule->UpdateRegistryFromResource ( IDR_RDCSDKTESTSERVER, bRegister, aMapEntries );
     }
 };

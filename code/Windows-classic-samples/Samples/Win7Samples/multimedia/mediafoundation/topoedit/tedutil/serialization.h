@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,28 +22,28 @@ public:
     virtual ~CXMLDataSaver();
 
     BEGIN_COM_MAP(CXMLDataSaver)
-        COM_INTERFACE_ENTRY(ITedDataSaver)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(ITedDataSaver)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-    
+
     DECLARE_REGISTRY_RESOURCEID(IDR_XMLDATASAVER);
     DECLARE_CLASSFACTORY();
-    
+
     HRESULT STDMETHODCALLTYPE Init(LPCWSTR docName);
     HRESULT STDMETHODCALLTYPE BeginSaveObject(LPCWSTR strName);
     HRESULT STDMETHODCALLTYPE BeginSaveChildObjects();
     HRESULT STDMETHODCALLTYPE EndSaveChildObjects();
     HRESULT STDMETHODCALLTYPE SaveData(LPCWSTR strName, LPCWSTR strValue);
     HRESULT STDMETHODCALLTYPE SaveToFile(LPCWSTR fileName);
-    
+
 protected:
     typedef struct _SaveContext
     {
         CComPtr<IXMLDOMNode> m_spRootNode;
         CComPtr<IXMLDOMNode> m_spCurrObjNode;
     } SaveContext;
-    
+
 private:
     CComPtr<IXMLDOMDocument2> m_spXMLDoc;
     CComPtr<IXMLDOMNode> m_spRootNode;
@@ -52,7 +52,7 @@ private:
     CAtlArray<SaveContext> m_arrSaveContexts;
 };
 
-class CXMLDataLoader 
+class CXMLDataLoader
     : public IDispatchImpl<ITedDataLoader, &IID_ITedDataLoader, &LIBID_TedUtil>
     , public CComObjectRoot
     , public CComCoClass<CXMLDataLoader, &CLSID_CXMLDataLoader>
@@ -62,13 +62,13 @@ public:
     ~CXMLDataLoader();
 
     BEGIN_COM_MAP(CXMLDataLoader)
-        COM_INTERFACE_ENTRY(ITedDataLoader)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(ITedDataLoader)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
     DECLARE_REGISTRY_RESOURCEID(IDR_XMLDATALOADER);
     DECLARE_CLASSFACTORY();
-    
+
     HRESULT STDMETHODCALLTYPE HasNextObject(BOOL* pfHasNextObject);
     HRESULT STDMETHODCALLTYPE GetNextObject(__out LPWSTR* strName);
     HRESULT STDMETHODCALLTYPE HasChildObjects(BOOL* pfHasChildObjects);
@@ -76,7 +76,7 @@ public:
     HRESULT STDMETHODCALLTYPE EndLoadChildObjects();
     HRESULT STDMETHODCALLTYPE LoadData(LPCWSTR strName, __out LPWSTR* strValue, long nIndex = 0);
     HRESULT STDMETHODCALLTYPE LoadFromFile(LPCWSTR fileName, LPCWSTR docName);
-    
+
     const static HRESULT E_NODE_NOT_FOUND;
     const static HRESULT E_STRING_TOO_LONG;
 
@@ -89,7 +89,7 @@ protected:
         CComPtr<IXMLDOMNode> m_spCurrObjNode;
         CComPtr<IXMLDOMNode> m_spNextObjNode;
     } LoadContext;
-    
+
 private:
     CComPtr<IXMLDOMDocument2> m_spXMLDoc;
     CComPtr<IXMLDOMNode> m_spRootNode;

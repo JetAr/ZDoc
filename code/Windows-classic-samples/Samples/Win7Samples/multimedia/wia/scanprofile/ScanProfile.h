@@ -1,4 +1,4 @@
-#ifndef __WIA_SCANPROFILE_SAMPLE
+﻿#ifndef __WIA_SCANPROFILE_SAMPLE
 //==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -26,9 +26,9 @@ HRESULT CreateScanProfilesWithoutUI();
 
 HRESULT CreateScanProfileUI(HWND hwndParent);
 
-HRESULT CreateScanProfiles(BSTR bstrDeviceID , BSTR bstrDeviceName);
+HRESULT CreateScanProfiles(BSTR bstrDeviceID, BSTR bstrDeviceName);
 
-HRESULT ReadDevIDandDevName( IWiaPropertyStorage *pWiaPropertyStorage , BSTR* pbstrDevID , BSTR* pbstrDevName);
+HRESULT ReadDevIDandDevName( IWiaPropertyStorage *pWiaPropertyStorage, BSTR* pbstrDevID, BSTR* pbstrDevName);
 
 HRESULT EnumWiaDevicesandCreateScanProfiles( IWiaDevMgr2 *pWiaDevMgr2 );
 
@@ -38,7 +38,7 @@ HRESULT ProfileSetAndDisplayName(IScanProfile* pScanProfile);
 
 HRESULT GetNumProfiles(IScanProfileMgr* pScanProfileMgr, BSTR bstrDevID, ULONG* lNumProfiles);
 
-HRESULT DisplayAllProfilesForDevice(IScanProfileMgr* pScanProfileMgr,BSTR bstrDevID, ULONG lNumProfiles);    
+HRESULT DisplayAllProfilesForDevice(IScanProfileMgr* pScanProfileMgr,BSTR bstrDevID, ULONG lNumProfiles);
 
 
 

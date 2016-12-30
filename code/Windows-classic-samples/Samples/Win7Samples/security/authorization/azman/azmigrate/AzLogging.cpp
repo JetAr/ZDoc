@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -39,44 +39,46 @@ Return Value:
 
 --*/
 
-_TCHAR *CAzLogging::getTimeBuf() {
+_TCHAR *CAzLogging::getTimeBuf()
+{
 
-        static _TCHAR buf[300];         
+    static _TCHAR buf[300];
 
-        static SYSTEMTIME SystemTime;
+    static SYSTEMTIME SystemTime;
 
-        GetLocalTime( &SystemTime );
+    GetLocalTime( &SystemTime );
 
-        buf[0] = _TEXT('\0');
+    buf[0] = _TEXT('\0');
 
-        StringCchPrintf( buf, sizeof(buf)/sizeof(&buf[0]),
-                                timestamp_formatstring,
-                                SystemTime.wMonth,
-                                SystemTime.wDay,
-                                SystemTime.wHour,
-                                SystemTime.wMinute,
-                                SystemTime.wSecond );
+    StringCchPrintf( buf, sizeof(buf)/sizeof(&buf[0]),
+                     timestamp_formatstring,
+                     SystemTime.wMonth,
+                     SystemTime.wDay,
+                     SystemTime.wHour,
+                     SystemTime.wMinute,
+                     SystemTime.wSecond );
 
     return buf;
 }
 
-_TCHAR *CAzLogging::getMsgBuf(HRESULT hr) {
+_TCHAR *CAzLogging::getMsgBuf(HRESULT hr)
+{
 
-        static _TCHAR ErrorMsgBuffer[1024] ;
+    static _TCHAR ErrorMsgBuffer[1024] ;
 
-        ErrorMsgBuffer[0] = _TEXT('\0');
+    ErrorMsgBuffer[0] = _TEXT('\0');
 
-        FormatMessage( 
-                FORMAT_MESSAGE_FROM_SYSTEM | 
-                FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL,
-                hr,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-                ErrorMsgBuffer,
-                1024,
-                NULL );
+    FormatMessage(
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        hr,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        ErrorMsgBuffer,
+        1024,
+        NULL );
 
-        return ErrorMsgBuffer;
+    return ErrorMsgBuffer;
 
 }
 /*++
@@ -93,7 +95,8 @@ Return Value:
 
 --*/
 
-void CAzLogging::Initialize(loglevel pcurrentLogLevel) {
+void CAzLogging::Initialize(loglevel pcurrentLogLevel)
+{
 
     currentLogLevel=pcurrentLogLevel;
 
@@ -114,9 +117,11 @@ Return Value:
 
 --*/
 
-void CAzLogging::Entering(__in _TCHAR *strMsg) {
+void CAzLogging::Entering(__in _TCHAR *strMsg)
+{
 
- if (currentLogLevel==LOG_DEBUG) {
+    if (currentLogLevel==LOG_DEBUG)
+    {
 
         wcout << getTimeBuf() << _TEXT(": ") << _TEXT("Entering ") << strMsg << endl;
 
@@ -137,11 +142,12 @@ Return Value:
 
 --*/
 
-void CAzLogging::Exiting(__in _TCHAR *strMsg) {
+void CAzLogging::Exiting(__in _TCHAR *strMsg)
+{
 
     if (currentLogLevel==LOG_DEBUG)
-        wcout << getTimeBuf() << _TEXT(": ") << _TEXT("Exiting ") << 
-        strMsg << endl;
+        wcout << getTimeBuf() << _TEXT(": ") << _TEXT("Exiting ") <<
+              strMsg << endl;
 }
 
 /*++
@@ -160,11 +166,13 @@ Return Value:
 --*/
 
 void CAzLogging::Initialize(loglevel pcurrentLogLevel,
-                            __in _TCHAR *plogfile) {
+                            __in _TCHAR *plogfile)
+{
 
     MIGRATE_SUCCESS=true;
 
-    if (pcurrentLogLevel!=LOG_LOGFILE) {
+    if (pcurrentLogLevel!=LOG_LOGFILE)
+    {
 
         Initialize(pcurrentLogLevel);
 
@@ -194,7 +202,8 @@ Return Value:
 --*/
 
 void CAzLogging::Log(loglevel LogLevel,
-                     __in _TCHAR *strMsg) {
+                     __in _TCHAR *strMsg)
+{
 
     if (currentLogLevel <= LogLevel)
         wcout << getTimeBuf() << _TEXT(": ") << strMsg << endl;
@@ -224,47 +233,53 @@ Return Value:
 void CAzLogging::Log(HRESULT hr,
                      __in _TCHAR *strMsg,
                      __in  _TCHAR *strEntityName,
-                     unsigned int pPropID) {
+                     unsigned int pPropID)
+{
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
-        if (currentLogLevel == LOG_TRACE ) 
-                wcout << getTimeBuf() << _TEXT(": ") << strMsg << pPropID << 
-                    _TEXT(" for entity:")<< strEntityName << _TEXT(" SUCCESS.") << 
-                    endl;
+        if (currentLogLevel == LOG_TRACE )
+            wcout << getTimeBuf() << _TEXT(": ") << strMsg << pPropID <<
+                  _TEXT(" for entity:")<< strEntityName << _TEXT(" SUCCESS.") <<
+                  endl;
 
-        if (currentLogLevel == LOG_LOGFILE ) 
-                logfile << getTimeBuf() << _TEXT(": ") <<  strMsg << 
-                    pPropID << _TEXT(" for entity:") << 
+        if (currentLogLevel == LOG_LOGFILE )
+            logfile << getTimeBuf() << _TEXT(": ") <<  strMsg <<
+                    pPropID << _TEXT(" for entity:") <<
                     strEntityName << _TEXT(" SUCCESS.") << endl;
 
-    } else {
+    }
+    else
+    {
 
-        if (HRESULT_CODE(hr)==ERROR_NOT_SUPPORTED) {
+        if (HRESULT_CODE(hr)==ERROR_NOT_SUPPORTED)
+        {
 
-                wcout <<getTimeBuf() << _TEXT(": ") << strMsg << pPropID << 
-                    _TEXT(" for entity:")<< strEntityName << 
-                    _TEXT(" WARNING.NOT SUPPORTED.") << endl;
+            wcout <<getTimeBuf() << _TEXT(": ") << strMsg << pPropID <<
+                  _TEXT(" for entity:")<< strEntityName <<
+                  _TEXT(" WARNING.NOT SUPPORTED.") << endl;
 
-                if (currentLogLevel==LOG_LOGFILE) {
-                    logfile << getTimeBuf() << _TEXT(": ")<<  strMsg << 
-                        pPropID <<_TEXT(" for entity:") << strEntityName << 
+            if (currentLogLevel==LOG_LOGFILE)
+            {
+                logfile << getTimeBuf() << _TEXT(": ")<<  strMsg <<
+                        pPropID <<_TEXT(" for entity:") << strEntityName <<
                         _TEXT(" WARNING.NOT SUPPORTED.") << endl;
-                }
-                
+            }
+
             goto lDone;
         }
 
         MIGRATE_SUCCESS = false;
 
-        wcout << getTimeBuf() << _TEXT(": ") << strMsg << pPropID << 
-            _TEXT(" for entity:") << strEntityName << 
-            _TEXT(" FAILED.ERROR MSG:") << getMsgBuf(hr) << endl;
+        wcout << getTimeBuf() << _TEXT(": ") << strMsg << pPropID <<
+              _TEXT(" for entity:") << strEntityName <<
+              _TEXT(" FAILED.ERROR MSG:") << getMsgBuf(hr) << endl;
 
         if (currentLogLevel==LOG_LOGFILE)
-            logfile << getTimeBuf() << _TEXT(": ") << strMsg << 
-            pPropID << _TEXT(" for entity:") << strEntityName << 
-            _TEXT(" FAILED.ERROR MSG: ") << getMsgBuf(hr) << endl;
+            logfile << getTimeBuf() << _TEXT(": ") << strMsg <<
+                    pPropID << _TEXT(" for entity:") << strEntityName <<
+                    _TEXT(" FAILED.ERROR MSG: ") << getMsgBuf(hr) << endl;
 lDone:
         return;
     }
@@ -288,43 +303,49 @@ Return Value:
 
 void CAzLogging::Log(HRESULT hr,
                      __in _TCHAR *strMsg,
-                     __in _TCHAR *strEntityName) {
-    if (SUCCEEDED(hr)) {
+                     __in _TCHAR *strEntityName)
+{
+    if (SUCCEEDED(hr))
+    {
 
-            if (currentLogLevel == LOG_TRACE )
-                wcout << getTimeBuf() << _TEXT(": ")<< strMsg << 
-                _TEXT(" for entity:")<< strEntityName << 
-                _TEXT(" SUCCESS.") << endl;
+        if (currentLogLevel == LOG_TRACE )
+            wcout << getTimeBuf() << _TEXT(": ")<< strMsg <<
+                  _TEXT(" for entity:")<< strEntityName <<
+                  _TEXT(" SUCCESS.") << endl;
+
+        if (currentLogLevel==LOG_LOGFILE)
+            logfile << getTimeBuf() << _TEXT(": ") <<  strMsg <<
+                    _TEXT(" for entity:")<< strEntityName << _TEXT(" SUCCESS.") << endl;
+
+    }
+    else
+    {
+
+        if (HRESULT_CODE(hr)==ERROR_NOT_SUPPORTED)
+        {
+
+            wcout << getTimeBuf() << _TEXT(": ") << strMsg <<
+                  _TEXT(" for entity:") << strEntityName <<
+                  _TEXT(" WARNING.NOT SUPPORTED.") << endl;
 
             if (currentLogLevel==LOG_LOGFILE)
-                logfile << getTimeBuf() << _TEXT(": ") <<  strMsg << 
-                _TEXT(" for entity:")<< strEntityName << _TEXT(" SUCCESS.") << endl;
-
-    } else {
-
-        if (HRESULT_CODE(hr)==ERROR_NOT_SUPPORTED) {
-
-                wcout << getTimeBuf() << _TEXT(": ") << strMsg << 
-                    _TEXT(" for entity:") << strEntityName << 
-                    _TEXT(" WARNING.NOT SUPPORTED.") << endl;
-
-                if (currentLogLevel==LOG_LOGFILE)
-                    logfile << getTimeBuf() << _TEXT(": ") << strMsg << 
-                        _TEXT(" for entity:")<< strEntityName << 
+                logfile << getTimeBuf() << _TEXT(": ") << strMsg <<
+                        _TEXT(" for entity:")<< strEntityName <<
                         _TEXT(" WARNING.NOT SUPPORTED. ") << endl;
-                            
+
             goto lDone;
         }
 
         MIGRATE_SUCCESS = false;
 
-        wcout << getTimeBuf() << _TEXT(": ") << strMsg << _TEXT(" for entity:")<< 
-            strEntityName << _TEXT(" FAILED.ERROR MSG:") << getMsgBuf(hr) << endl;
+        wcout << getTimeBuf() << _TEXT(": ") << strMsg << _TEXT(" for entity:")<<
+              strEntityName << _TEXT(" FAILED.ERROR MSG:") << getMsgBuf(hr) << endl;
 
-        if (currentLogLevel==LOG_LOGFILE) {
-            logfile << getTimeBuf() << _TEXT(": ") << strMsg << 
-                _TEXT(" for entity:")<< strEntityName << _TEXT(" FAILED.ERROR MSG: ") << 
-                getMsgBuf(hr) << endl;
+        if (currentLogLevel==LOG_LOGFILE)
+        {
+            logfile << getTimeBuf() << _TEXT(": ") << strMsg <<
+                    _TEXT(" for entity:")<< strEntityName << _TEXT(" FAILED.ERROR MSG: ") <<
+                    getMsgBuf(hr) << endl;
         }
     }
 
@@ -348,40 +369,46 @@ Return Value:
 --*/
 
 void CAzLogging::Log(HRESULT hr,
-                     __in  _TCHAR *strMsg) {
+                     __in  _TCHAR *strMsg)
+{
 
-    if (SUCCEEDED(hr)) {
+    if (SUCCEEDED(hr))
+    {
 
-            if (currentLogLevel == LOG_TRACE )
-                wcout <<getTimeBuf() << _TEXT(": ") << strMsg << 
-                _TEXT(" SUCCESS.") << endl;
+        if (currentLogLevel == LOG_TRACE )
+            wcout <<getTimeBuf() << _TEXT(": ") << strMsg <<
+                  _TEXT(" SUCCESS.") << endl;
 
-            if (currentLogLevel==LOG_LOGFILE) {
-                logfile << getTimeBuf() << _TEXT(": ") <<  strMsg << 
-                _TEXT(" SUCCESS.") << endl;
-            }
-    } else {
+        if (currentLogLevel==LOG_LOGFILE)
+        {
+            logfile << getTimeBuf() << _TEXT(": ") <<  strMsg <<
+                    _TEXT(" SUCCESS.") << endl;
+        }
+    }
+    else
+    {
 
-        if (HRESULT_CODE(hr)==ERROR_NOT_SUPPORTED) {
+        if (HRESULT_CODE(hr)==ERROR_NOT_SUPPORTED)
+        {
 
-                wcout << getTimeBuf() << _TEXT(": ") << strMsg << 
-                    _TEXT(" WARNING.NOT SUPPORTED.") << endl;
+            wcout << getTimeBuf() << _TEXT(": ") << strMsg <<
+                  _TEXT(" WARNING.NOT SUPPORTED.") << endl;
 
-            if (currentLogLevel==LOG_LOGFILE) 
-                logfile << getTimeBuf() << _TEXT(": ") << strMsg << 
-                    _TEXT(" WARNING.NOT SUPPORTED. ") << endl;
-                            
+            if (currentLogLevel==LOG_LOGFILE)
+                logfile << getTimeBuf() << _TEXT(": ") << strMsg <<
+                        _TEXT(" WARNING.NOT SUPPORTED. ") << endl;
+
             goto lDone;
         }
 
         MIGRATE_SUCCESS = false;
 
-        wcout << getTimeBuf() << _TEXT(": ") << strMsg << 
-            _TEXT(" FAILED.ERROR MSG: ") << getMsgBuf(hr) << endl;
+        wcout << getTimeBuf() << _TEXT(": ") << strMsg <<
+              _TEXT(" FAILED.ERROR MSG: ") << getMsgBuf(hr) << endl;
 
         if (currentLogLevel==LOG_LOGFILE)
-            logfile << getTimeBuf() << _TEXT(": ") << strMsg << 
-            _TEXT(" FAILED.ERROR MSG: ") << getMsgBuf(hr) << endl;
+            logfile << getTimeBuf() << _TEXT(": ") << strMsg <<
+                    _TEXT(" FAILED.ERROR MSG: ") << getMsgBuf(hr) << endl;
     }
 lDone:
     return;
@@ -391,7 +418,7 @@ lDone:
 
 Routine description:
 
-    This method closes the log file 
+    This method closes the log file
 
 Arguments: NONE
 
@@ -401,8 +428,10 @@ Return Value:
 
 --*/
 
-void CAzLogging::Close() {
-    if (currentLogLevel==LOG_LOGFILE) {
+void CAzLogging::Close()
+{
+    if (currentLogLevel==LOG_LOGFILE)
+    {
 
         logfile.close();
 

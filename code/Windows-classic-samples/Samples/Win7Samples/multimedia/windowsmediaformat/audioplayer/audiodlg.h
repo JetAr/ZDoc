@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -18,24 +18,24 @@
 
 #include "AudioPlay.h"
 
-#define OEMRESOURCE 
+#define OEMRESOURCE
 #define SMALLDLGSIZE 0.5
 #define ERROR_DIALOG_TITLE  _T( "WM Audio Player Sample" )
 
 typedef enum AUDIOSTATUS
 {
-	CLOSED = 0,
-	STOP,
-	PAUSE,
-	PLAY,
-	OPENING,
-	ACQUIRINGLICENSE,
-	INDIVIDUALIZING,
-	STOPPING,
-	READY,
-	BUFFERING,
-	LICENSEACQUIRED,
-	INDIVIDUALIZED
+    CLOSED = 0,
+    STOP,
+    PAUSE,
+    PLAY,
+    OPENING,
+    ACQUIRINGLICENSE,
+    INDIVIDUALIZING,
+    STOPPING,
+    READY,
+    BUFFERING,
+    LICENSEACQUIRED,
+    INDIVIDUALIZED
 } AUDIOSTATUS;
 
 INT_PTR		CALLBACK DlgProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );

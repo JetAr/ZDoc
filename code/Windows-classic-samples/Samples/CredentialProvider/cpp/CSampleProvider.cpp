@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -209,10 +209,10 @@ void CSampleProvider::_CreateEnumeratedCredentials()
     {
     case CPUS_LOGON:
     case CPUS_UNLOCK_WORKSTATION:
-        {
-            _EnumerateCredentials();
-            break;
-        }
+    {
+        _EnumerateCredentials();
+        break;
+    }
     default:
         break;
     }

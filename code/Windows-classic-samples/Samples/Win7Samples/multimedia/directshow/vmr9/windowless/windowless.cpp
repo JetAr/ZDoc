@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Windowless.cpp
 //
 // Desc: DirectShow sample code - a simple Windowless VMR media file player
@@ -37,13 +37,13 @@
 HWND      ghApp=0;
 HMENU     ghMenu=0;
 HINSTANCE ghInst=0;
-TCHAR     g_szFileName[MAX_PATH]={0};
+TCHAR     g_szFileName[MAX_PATH]= {0};
 BOOL      g_bAudioOnly=FALSE;
 LONG      g_lVolume=VOLUME_FULL;
 DWORD     g_dwGraphRegister=0;
 PLAYSTATE g_psCurrent=Stopped;
 double    g_PlaybackRate=1.0;
-RECT      g_rcDest={0};
+RECT      g_rcDest= {0};
 
 // DirectShow interfaces
 IGraphBuilder *pGB = NULL;
@@ -282,7 +282,7 @@ void StopClip(void)
         g_psCurrent = Stopped;
 
         // Seek to the beginning
-        hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning ,
+        hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning,
                                NULL, AM_SEEKING_NoPositioning);
 
         // Display the first frame to indicate the reset condition
@@ -346,7 +346,7 @@ void OpenClip()
 
 BOOL GetClipFileName(LPTSTR szName)
 {
-    static OPENFILENAME ofn={0};
+    static OPENFILENAME ofn= {0};
     static BOOL bSetInitialDir = FALSE;
 
     // Reset filename
@@ -498,7 +498,7 @@ HRESULT ToggleMute(void)
 
 void UpdateMainTitle(void)
 {
-    TCHAR szTitle[MAX_PATH]={0}, szFile[MAX_PATH]={0};
+    TCHAR szTitle[MAX_PATH]= {0}, szFile[MAX_PATH]= {0};
     HRESULT hr;
 
     // If no file is loaded, just show the application title
@@ -525,11 +525,11 @@ void UpdateMainTitle(void)
 
         // Update the window title to show filename and play state
         hr = StringCchPrintf(szTitle, NUMELMS(szTitle), TEXT("%s [%s] %s%s%s\0\0"),
-                szFile,
-                g_bAudioOnly ? TEXT("Audio\0") : TEXT("Video\0"),
-                (g_lVolume == VOLUME_SILENCE) ? TEXT("(Muted)\0") : TEXT("\0"),
-                (g_psCurrent == Paused) ? TEXT("(Paused)\0") : TEXT("\0"),
-                szRate);
+                             szFile,
+                             g_bAudioOnly ? TEXT("Audio\0") : TEXT("Video\0"),
+                             (g_lVolume == VOLUME_SILENCE) ? TEXT("(Muted)\0") : TEXT("\0"),
+                             (g_psCurrent == Paused) ? TEXT("(Paused)\0") : TEXT("\0"),
+                             szRate);
     }
 
     SetWindowText(ghApp, szTitle);
@@ -539,7 +539,7 @@ void UpdateMainTitle(void)
 void GetFilename(TCHAR *pszFull, TCHAR *pszFile)
 {
     int nLength;
-    TCHAR szPath[MAX_PATH]={0};
+    TCHAR szPath[MAX_PATH]= {0};
     BOOL bSetFilename=FALSE;
 
     // Strip path and return just the file's name
@@ -694,7 +694,7 @@ HRESULT SetRate(double dRate)
 HRESULT HandleGraphEvent(void)
 {
     LONG evCode;
-	LONG_PTR evParam1, evParam2;
+    LONG_PTR evParam1, evParam2;
     HRESULT hr=S_OK;
 
     // Make sure that we don't access the media event interface
@@ -714,7 +714,7 @@ HRESULT HandleGraphEvent(void)
             LONGLONG pos=0;
 
             // Reset to first frame of movie
-            hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning ,
+            hr = pMS->SetPositions(&pos, AM_SEEKING_AbsolutePositioning,
                                    NULL, AM_SEEKING_NoPositioning);
             if (FAILED(hr))
             {
@@ -732,14 +732,15 @@ HRESULT HandleGraphEvent(void)
 void CheckSizeMenu(WPARAM wParam)
 {
     WPARAM nItems[4] = {ID_FILE_SIZE_HALF,    ID_FILE_SIZE_DOUBLE,
-                        ID_FILE_SIZE_NORMAL,  ID_FILE_SIZE_THREEQUARTER};
+                        ID_FILE_SIZE_NORMAL,  ID_FILE_SIZE_THREEQUARTER
+                       };
 
     // Set/clear checkboxes that indicate the size of the video clip
     for (int i=0; i<4; i++)
     {
         // Check the selected item
         CheckMenuItem(ghMenu, (UINT) nItems[i],
-                     (UINT) (wParam == nItems[i]) ? MF_CHECKED : MF_UNCHECKED);
+                      (UINT) (wParam == nItems[i]) ? MF_CHECKED : MF_UNCHECKED);
     }
 }
 
@@ -754,20 +755,21 @@ void EnablePlaybackMenu(BOOL bEnable, int nMediaType)
                          ID_SINGLE_STEP,
                          ID_FILE_SIZE_HALF,   ID_FILE_SIZE_DOUBLE,
                          ID_FILE_SIZE_NORMAL, ID_FILE_SIZE_THREEQUARTER,
-                         ID_CAPTURE_IMAGE,    ID_DISPLAY_IMAGE};
+                         ID_CAPTURE_IMAGE,    ID_DISPLAY_IMAGE
+                        };
 
     // Enable/disable menu items related to playback (pause, stop, mute)
     for (i=0; i<8; i++)
     {
         EnableMenuItem(ghMenu, (UINT) nItems[i],
-                      (UINT) (bEnable) ? MF_ENABLED : MF_GRAYED);
+                       (UINT) (bEnable) ? MF_ENABLED : MF_GRAYED);
     }
 
     // Enable/disable menu items related to video size
     for (i=8; i<15; i++)
     {
         EnableMenuItem(ghMenu, (UINT) nItems[i],
-                     (UINT) (nMediaType == VIDEO) ? MF_ENABLED : MF_GRAYED);
+                       (UINT) (nMediaType == VIDEO) ? MF_ENABLED : MF_GRAYED);
     }
 }
 
@@ -776,16 +778,16 @@ LRESULT CALLBACK AboutDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 {
     switch (message)
     {
-        case WM_INITDIALOG:
-            return TRUE;
+    case WM_INITDIALOG:
+        return TRUE;
 
-        case WM_COMMAND:
-            if (wParam == IDOK)
-            {
-                EndDialog(hWnd, TRUE);
-                return TRUE;
-            }
-            break;
+    case WM_COMMAND:
+        if (wParam == IDOK)
+        {
+            EndDialog(hWnd, TRUE);
+            return TRUE;
+        }
+        break;
     }
 
     return FALSE;
@@ -796,216 +798,217 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 {
     switch(message)
     {
-        case WM_PAINT:
-            OnPaint(hWnd);
+    case WM_PAINT:
+        OnPaint(hWnd);
+        break;
+
+    case WM_DISPLAYCHANGE:
+        if (pWC)
+            pWC->DisplayModeChanged();
+        break;
+
+    // Resize the video when the window changes
+    case WM_MOVE:
+    case WM_SIZE:
+        if ((hWnd == ghApp) && (!g_bAudioOnly))
+            MoveVideoWindow();
+        break;
+
+    // Enforce a minimum size
+    case WM_GETMINMAXINFO:
+    {
+        LPMINMAXINFO lpmm = (LPMINMAXINFO) lParam;
+        if (lpmm)
+        {
+            lpmm->ptMinTrackSize.x = MINIMUM_VIDEO_WIDTH;
+            lpmm->ptMinTrackSize.y = MINIMUM_VIDEO_HEIGHT;
+        }
+    }
+    break;
+
+    case WM_RBUTTONDOWN:
+        CaptureImage(CAPTURED_IMAGE_NAME);
+        break;
+
+    case WM_KEYDOWN:
+
+        switch(toupper((int) wParam))
+        {
+        // Frame stepping
+        case VK_SPACE:
+        case '1':
+            StepOneFrame();
             break;
 
-        case WM_DISPLAYCHANGE:
-            if (pWC)
-                pWC->DisplayModeChanged();
+        // Frame stepping (multiple frames)
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            StepFrames((int) wParam - '0');
             break;
 
-        // Resize the video when the window changes
-        case WM_MOVE:
-        case WM_SIZE:
-            if ((hWnd == ghApp) && (!g_bAudioOnly))
-                MoveVideoWindow();
+        case VK_LEFT:       // Reduce playback speed by 25%
+            ModifyRate(-0.5);
             break;
 
-        // Enforce a minimum size
-        case WM_GETMINMAXINFO:
-            {
-                LPMINMAXINFO lpmm = (LPMINMAXINFO) lParam;
-                if (lpmm)
-                {
-                    lpmm->ptMinTrackSize.x = MINIMUM_VIDEO_WIDTH;
-                    lpmm->ptMinTrackSize.y = MINIMUM_VIDEO_HEIGHT;
-                }
-            }
+        case VK_RIGHT:      // Increase playback speed by 25%
+            ModifyRate(0.5);
             break;
 
-        case WM_RBUTTONDOWN:
-            CaptureImage(CAPTURED_IMAGE_NAME);
+        case VK_DOWN:       // Set playback speed to normal
+            SetRate(1.0);
             break;
 
-        case WM_KEYDOWN:
-
-            switch(toupper((int) wParam))
-            {
-                // Frame stepping
-                case VK_SPACE:
-                case '1':
-                    StepOneFrame();
-                    break;
-
-                // Frame stepping (multiple frames)
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    StepFrames((int) wParam - '0');
-                    break;
-
-                case VK_LEFT:       // Reduce playback speed by 25%
-                    ModifyRate(-0.5);
-                    break;
-
-                case VK_RIGHT:      // Increase playback speed by 25%
-                    ModifyRate(0.5);
-                    break;
-
-                case VK_DOWN:       // Set playback speed to normal
-                    SetRate(1.0);
-                    break;
-
-                case 'P':
-                    PauseClip();
-                    break;
-
-                case 'S':
-                    StopClip();
-                    break;
-
-                case 'M':
-                    ToggleMute();
-                    break;
-
-               case 'H':
-                    InitVideoWindow(1,2);
-                    CheckSizeMenu(wParam);
-                    break;
-                case 'N':
-                    InitVideoWindow(1,1);
-                    CheckSizeMenu(wParam);
-                    break;
-                case 'D':
-                    InitVideoWindow(2,1);
-                    CheckSizeMenu(wParam);
-                    break;
-                case 'T':
-                    InitVideoWindow(3,4);
-                    CheckSizeMenu(wParam);
-                    break;
-
-                case VK_ESCAPE:
-                    CloseClip();
-                    break;
-
-                case VK_F12:
-                case 'Q':
-                case 'X':
-                    CloseClip();
-                    break;
-            }
+        case 'P':
+            PauseClip();
             break;
 
-        case WM_COMMAND:
-
-            switch(wParam)
-            { // Menus
-
-                case ID_FILE_OPENCLIP:
-                    // If we have ANY file open, close it and shut down DirectShow
-                    if (g_psCurrent != Init)
-                        CloseClip();
-
-                    // Open the new clip
-                    OpenClip();
-                    break;
-
-                case ID_FILE_EXIT:
-                    CloseClip();
-                    PostQuitMessage(0);
-                    break;
-
-                case ID_FILE_PAUSE:
-                    PauseClip();
-                    break;
-
-                case ID_FILE_STOP:
-                    StopClip();
-                    break;
-
-                case ID_FILE_CLOSE:
-                    CloseClip();
-                    break;
-
-                case ID_FILE_MUTE:
-                    ToggleMute();
-                    break;
-
-                case ID_CAPTURE_IMAGE:
-                    CaptureImage(CAPTURED_IMAGE_NAME);
-                    break;
-
-                case ID_DISPLAY_IMAGE:
-                    DisplayCapturedImage(CAPTURED_IMAGE_NAME);
-                    break;
-
-                case ID_HELP_ABOUT:
-                    DialogBox(ghInst, MAKEINTRESOURCE(IDD_ABOUTBOX),
-                              ghApp,  (DLGPROC) AboutDlgProc);
-                    break;
-
-                case ID_FILE_SIZE_HALF:
-                    InitVideoWindow(1,2);
-                    CheckSizeMenu(wParam);
-                    break;
-                case ID_FILE_SIZE_NORMAL:
-                    InitVideoWindow(1,1);
-                    CheckSizeMenu(wParam);
-                    break;
-                case ID_FILE_SIZE_DOUBLE:
-                    InitVideoWindow(2,1);
-                    CheckSizeMenu(wParam);
-                    break;
-                case ID_FILE_SIZE_THREEQUARTER:
-                    InitVideoWindow(3,4);
-                    CheckSizeMenu(wParam);
-                    break;
-
-                case ID_SINGLE_STEP:
-                    StepOneFrame();
-                    break;
-
-                case ID_RATE_DECREASE:     // Reduce playback speed by 25%
-                    ModifyRate(-0.5);
-                    break;
-                case ID_RATE_INCREASE:     // Increase playback speed by 25%
-                    ModifyRate(0.5);
-                    break;
-                case ID_RATE_NORMAL:       // Set playback speed to normal
-                    SetRate(1.0);
-                    break;
-                case ID_RATE_HALF:         // Set playback speed to 1/2 normal
-                    SetRate(0.5);
-                    break;
-                case ID_RATE_DOUBLE:       // Set playback speed to 2x normal
-                    SetRate(2.0);
-                    break;
-
-            } // Menus
+        case 'S':
+            StopClip();
             break;
 
-
-        case WM_GRAPHNOTIFY:
-            HandleGraphEvent();
+        case 'M':
+            ToggleMute();
             break;
 
-        case WM_CLOSE:
-            SendMessage(ghApp, WM_COMMAND, ID_FILE_EXIT, 0);
+        case 'H':
+            InitVideoWindow(1,2);
+            CheckSizeMenu(wParam);
+            break;
+        case 'N':
+            InitVideoWindow(1,1);
+            CheckSizeMenu(wParam);
+            break;
+        case 'D':
+            InitVideoWindow(2,1);
+            CheckSizeMenu(wParam);
+            break;
+        case 'T':
+            InitVideoWindow(3,4);
+            CheckSizeMenu(wParam);
             break;
 
-        case WM_DESTROY:
+        case VK_ESCAPE:
+            CloseClip();
+            break;
+
+        case VK_F12:
+        case 'Q':
+        case 'X':
+            CloseClip();
+            break;
+        }
+        break;
+
+    case WM_COMMAND:
+
+        switch(wParam)
+        {
+        // Menus
+
+        case ID_FILE_OPENCLIP:
+            // If we have ANY file open, close it and shut down DirectShow
+            if (g_psCurrent != Init)
+                CloseClip();
+
+            // Open the new clip
+            OpenClip();
+            break;
+
+        case ID_FILE_EXIT:
+            CloseClip();
             PostQuitMessage(0);
             break;
 
-        default:
-            return DefWindowProc(hWnd, message, wParam, lParam);
+        case ID_FILE_PAUSE:
+            PauseClip();
+            break;
+
+        case ID_FILE_STOP:
+            StopClip();
+            break;
+
+        case ID_FILE_CLOSE:
+            CloseClip();
+            break;
+
+        case ID_FILE_MUTE:
+            ToggleMute();
+            break;
+
+        case ID_CAPTURE_IMAGE:
+            CaptureImage(CAPTURED_IMAGE_NAME);
+            break;
+
+        case ID_DISPLAY_IMAGE:
+            DisplayCapturedImage(CAPTURED_IMAGE_NAME);
+            break;
+
+        case ID_HELP_ABOUT:
+            DialogBox(ghInst, MAKEINTRESOURCE(IDD_ABOUTBOX),
+                      ghApp,  (DLGPROC) AboutDlgProc);
+            break;
+
+        case ID_FILE_SIZE_HALF:
+            InitVideoWindow(1,2);
+            CheckSizeMenu(wParam);
+            break;
+        case ID_FILE_SIZE_NORMAL:
+            InitVideoWindow(1,1);
+            CheckSizeMenu(wParam);
+            break;
+        case ID_FILE_SIZE_DOUBLE:
+            InitVideoWindow(2,1);
+            CheckSizeMenu(wParam);
+            break;
+        case ID_FILE_SIZE_THREEQUARTER:
+            InitVideoWindow(3,4);
+            CheckSizeMenu(wParam);
+            break;
+
+        case ID_SINGLE_STEP:
+            StepOneFrame();
+            break;
+
+        case ID_RATE_DECREASE:     // Reduce playback speed by 25%
+            ModifyRate(-0.5);
+            break;
+        case ID_RATE_INCREASE:     // Increase playback speed by 25%
+            ModifyRate(0.5);
+            break;
+        case ID_RATE_NORMAL:       // Set playback speed to normal
+            SetRate(1.0);
+            break;
+        case ID_RATE_HALF:         // Set playback speed to 1/2 normal
+            SetRate(0.5);
+            break;
+        case ID_RATE_DOUBLE:       // Set playback speed to 2x normal
+            SetRate(2.0);
+            break;
+
+        } // Menus
+        break;
+
+
+    case WM_GRAPHNOTIFY:
+        HandleGraphEvent();
+        break;
+
+    case WM_CLOSE:
+        SendMessage(ghApp, WM_COMMAND, ID_FILE_EXIT, 0);
+        break;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
 
     } // Window msgs handling
 
@@ -1015,7 +1018,7 @@ LRESULT CALLBACK WndMainProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 int PASCAL wWinMain(HINSTANCE hInstC, HINSTANCE hInstP, LPWSTR lpCmdLine, int nCmdShow)
 {
-    MSG msg={0};
+    MSG msg= {0};
     WNDCLASS wc;
 
     // Initialize COM
@@ -1101,7 +1104,7 @@ HRESULT InitializeWindowlessVMR(IBaseFilter **ppVmr9)
 
     // Create the VMR and add it to the filter graph.
     HRESULT hr = CoCreateInstance(CLSID_VideoMixingRenderer9, NULL,
-                     CLSCTX_INPROC, IID_IBaseFilter, (void**)&pVmr);
+                                  CLSCTX_INPROC, IID_IBaseFilter, (void**)&pVmr);
     if (SUCCEEDED(hr))
     {
         hr = pGB->AddFilter(pVmr, L"Video Mixing Renderer 9");
@@ -1189,7 +1192,7 @@ BOOL CaptureImage(LPCTSTR szFile)
             hdr.bfReserved1     = 0;
             hdr.bfReserved2     = 0;
             hdr.bfOffBits       = (DWORD)sizeof(BITMAPFILEHEADER) + pdib->biSize +
-                DibPaletteSize(pdib);
+                                  DibPaletteSize(pdib);
 
             // Write the bitmap header and bitmap bits to the file
             WriteFile(hFile, (LPCVOID) &hdr, sizeof(BITMAPFILEHEADER), &dwWritten, 0);
@@ -1260,15 +1263,15 @@ BOOL VerifyVMR9(void)
     else
     {
         MessageBox(NULL,
-            TEXT("This application requires the VMR-9.\r\n\r\n")
+                   TEXT("This application requires the VMR-9.\r\n\r\n")
 
-            TEXT("The VMR-9 is not enabled when viewing through a Remote\r\n")
-            TEXT(" Desktop session. You can run VMR-enabled applications only\r\n") 
-            TEXT("on your local computer.\r\n\r\n")
+                   TEXT("The VMR-9 is not enabled when viewing through a Remote\r\n")
+                   TEXT(" Desktop session. You can run VMR-enabled applications only\r\n")
+                   TEXT("on your local computer.\r\n\r\n")
 
-            TEXT("\r\nThis sample will now exit."),
+                   TEXT("\r\nThis sample will now exit."),
 
-            TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
+                   TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
 
         return FALSE;
     }

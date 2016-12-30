@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -13,8 +13,8 @@ Module Name:
 
 Abstract:
 
-   Definitions of the functions for rerouting the binary event data to proper 
-   formatting routines based on operating system version.  Also defines the 
+   Definitions of the functions for rerouting the binary event data to proper
+   formatting routines based on operating system version.  Also defines the
    decoding context structures, and some utility methods to maintain the data
    in these structures.
 
@@ -48,24 +48,25 @@ ULONG
     __inout PULONG BufferSize,
     __out_bcount_opt(*BufferSize) PWCHAR Buffer,
     __out PUSHORT UserDataConsumed
-    );
+);
 
 VOID
 GetFormatPropertyHandle(
     __out HMODULE* TdhHandle,
     __out FPTR_TDH_FORMATPROPERTY* FormatPropertyPtr
-    );
+);
 
 
 //
 // The following is a user-defined structure that can be passed to functions
-// that decode event data. It isolates the parameters related to 
-// the event payload data, the rendering strings needed for formatting 
+// that decode event data. It isolates the parameters related to
+// the event payload data, the rendering strings needed for formatting
 // the event message, and one temporary buffer for storing the formatted
 // property data.
 //
 
-typedef struct _PROCESSING_DATA_CONTEXT {
+typedef struct _PROCESSING_DATA_CONTEXT
+{
     PBYTE Buffer;
     ULONG BufferSize;
     PBYTE MapInfoBuffer;
@@ -81,7 +82,7 @@ typedef struct _PROCESSING_DATA_CONTEXT {
     USHORT BinDataConsumed;
     USHORT BinDataLeft;
     USHORT UserDataOffset;
-    
+
     _PROCESSING_DATA_CONTEXT():
         BufferSize(MIN_PROP_BUFFERSIZE)
         ,MapInfoBufferSize(MIN_EMI_BUFFERSIZE)
@@ -102,13 +103,14 @@ typedef struct _PROCESSING_DATA_CONTEXT {
 // ProcessTrace API. EventCallback() and BufferCallback() functions can
 // retrieve a pointer to this structure from EVENT_RECORD::UserContext
 // and EVENT_TRACE_LOGFILE::Context respectively. This is used to pass
-// logfile-specific information between Callbacks, which is a better 
-// approach than using globals. This structure also isolates the 
-// DataContext for each event, and the handle to tdh.dll if the 
+// logfile-specific information between Callbacks, which is a better
+// approach than using globals. This structure also isolates the
+// DataContext for each event, and the handle to tdh.dll if the
 // operatiog system is above Vista, in order to use the new Windows 7 API.
 //
 
-typedef struct _PROCESSING_CONTEXT {
+typedef struct _PROCESSING_CONTEXT
+{
     PROCESSING_DATA_CONTEXT DataContext;
     ULONG BufferCount;
     ULONGLONG EventCount;
@@ -134,20 +136,25 @@ typedef struct _PROCESSING_CONTEXT {
 
     ~_PROCESSING_CONTEXT()
     {
-        if (DataContext.Buffer != NULL) {
+        if (DataContext.Buffer != NULL)
+        {
             free(DataContext.Buffer);
         }
-        if (DataContext.EventInfoBuffer!= NULL) {
+        if (DataContext.EventInfoBuffer!= NULL)
+        {
             free(DataContext.EventInfoBuffer);
         }
-        if (DataContext.MapInfoBuffer!= NULL) {
+        if (DataContext.MapInfoBuffer!= NULL)
+        {
             free(DataContext.MapInfoBuffer);
         }
-        if (PrintBuffer != NULL) {
+        if (PrintBuffer != NULL)
+        {
             free(PrintBuffer);
         }
 
-        if (TdhDllHandle != NULL) {
+        if (TdhDllHandle != NULL)
+        {
             FreeLibrary(TdhDllHandle);
         }
     }
@@ -157,29 +164,29 @@ typedef struct _PROCESSING_CONTEXT {
 ULONG
 InitializeProcessingContext(
     __inout PPROCESSING_CONTEXT LogContext
-    );
+);
 
 ULONG
 InitializeDataContext(
     __inout PPROCESSING_DATA_CONTEXT DataContext
-    );
+);
 
 VOID
 ResetDataContext(
     __inout PPROCESSING_DATA_CONTEXT DataContext
-    );
+);
 
 ULONG
 ResizeBuffer(
     __inout PBYTE* DataContext,
     __in PULONG BufferSize,
     __in ULONG NewBufferSize
-    );
+);
 
 ULONG
 UpdateRenderItem(
     __inout PPROCESSING_DATA_CONTEXT DataContext
-    );
+);
 
 ULONG
 GetFormattedBuffer(
@@ -192,7 +199,7 @@ GetFormattedBuffer(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 BitMapToString(
@@ -201,7 +208,7 @@ BitMapToString(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 ValueMapToString(
@@ -210,7 +217,7 @@ ValueMapToString(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 MapToString(
@@ -219,7 +226,7 @@ MapToString(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 template <typename T>
 ULONG
@@ -230,7 +237,7 @@ FormatMap(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 ULONG
 GetFormattedMapValue(
@@ -241,13 +248,13 @@ GetFormattedMapValue(
     __out_bcount(BufferSize) PBYTE Buffer,
     __in ULONG BufferSize,
     __out PUSHORT BinDataConsumed
-    );
+);
 
 FORCEINLINE
 BOOLEAN
 PROPERTY_IS_STRUCTURE(
     __in PEVENT_PROPERTY_INFO Property
-    )
+)
 {
     return (BOOLEAN)(Property->Flags & PropertyStruct);
 }
@@ -256,7 +263,7 @@ FORCEINLINE
 BOOLEAN
 IS_WBEM_EVENT(
     __in PTRACE_EVENT_INFO EventInfo
-    )
+)
 {
     return (EventInfo->DecodingSource == DecodingSourceWbem);
 }

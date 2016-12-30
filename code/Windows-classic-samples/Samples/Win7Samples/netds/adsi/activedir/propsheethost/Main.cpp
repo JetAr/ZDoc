@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 //    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
 //    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -11,7 +11,7 @@
 //
 //    File:          Main.cpp
 //
-//    Description:   
+//    Description:
 //
 //***************************************************************************
 
@@ -86,8 +86,8 @@ int _tmain(int argc, _TCHAR* argv[])
         pHost->Run();
 
         /*
-        Release the CPropSheetHost object. Other components may still hold a 
-        reference to the object, so this cannot just be deleted here. Let 
+        Release the CPropSheetHost object. Other components may still hold a
+        reference to the object, so this cannot just be deleted here. Let
         the object delete itself when all references are released.
         */
         pHost->Release();
@@ -107,23 +107,23 @@ ExitMain:
 /**************************************************************************
 
    LocalToWideChar()
-   
+
 **************************************************************************/
 
 int LocalToWideChar(LPWSTR pWide, size_t buffSize, LPCTSTR pLocal, DWORD dwChars)
 {
     *pWide = 0;
 
-    #ifdef UNICODE
+#ifdef UNICODE
     wcsncpy_s(pWide, buffSize, pLocal, dwChars);
-    #else
-    MultiByteToWideChar( CP_ACP, 
-                        0, 
-                        pLocal, 
-                        -1,
-                        pWide, 
-                        dwChars); 
-    #endif
+#else
+    MultiByteToWideChar( CP_ACP,
+                         0,
+                         pLocal,
+                         -1,
+                         pWide,
+                         dwChars);
+#endif
 
     return lstrlenW(pWide);
 }

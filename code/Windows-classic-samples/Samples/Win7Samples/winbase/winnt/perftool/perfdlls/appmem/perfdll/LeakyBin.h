@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------------
+﻿/*---------------------------------------------------------------------------
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -25,7 +25,7 @@ LEAKYBIN.H
 
 typedef struct _MEMORY_ALLOC_BLOCK
 {
-   struct _MEMORY_ALLOC_BLOCK      *pNext;
+    struct _MEMORY_ALLOC_BLOCK      *pNext;
 } MEMORY_ALLOC_BLOCK, *PMEMORY_ALLOC_BLOCK;
 
 #define ALLOCATION_SIZE         (4096*10)

@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -41,7 +41,7 @@
 //WSDiscoveryClient.exe /sc http://www.contoso.com/wsd/special/123
 int _cdecl wmain
 (   int argc
-,   _In_reads_( argc ) LPWSTR *argv
+    ,   _In_reads_( argc ) LPWSTR *argv
 )
 {
     IWSDiscoveryProvider *provider = NULL;
@@ -60,14 +60,14 @@ int _cdecl wmain
     wprintf( L"Copyright (c) Microsoft Corporation.  All rights reserved.\r\n" );
     wprintf( L"----------------------------------------\r\n" );
 
-    hr = ParseArguments( 
-        argc, argv, &epr, &scopesList, &matchByRule );
+    hr = ParseArguments(
+             argc, argv, &epr, &scopesList, &matchByRule );
 
     if ( S_OK != hr )
     {
         PrintErrorMessage( L"Failed to parse arguments", hr );
     }
-    
+
     if ( S_OK == hr && NULL != epr )
     {
         // If an EndpointReference is specified, make sure that the
@@ -112,8 +112,8 @@ int _cdecl wmain
         wprintf( L"Obtaining the IWSDiscoveryProviderNotify interface " );
         wprintf( L"from the notification sink...\r\n" );
 
-        hr = sink->QueryInterface( 
-            __uuidof( IWSDiscoveryProviderNotify ), (void**)&tempNotify );
+        hr = sink->QueryInterface(
+                 __uuidof( IWSDiscoveryProviderNotify ), (void**)&tempNotify );
 
         if ( S_OK != hr )
         {
@@ -247,7 +247,7 @@ int _cdecl wmain
             // Please see MSDN documentation for details.
             //
             // SearchByType is also an async call.  See above for comments.
-            hr = provider->SearchByType( NULL, scopesList , matchByRule, tag );
+            hr = provider->SearchByType( NULL, scopesList, matchByRule, tag );
 
             if ( S_OK != hr )
             {
@@ -266,7 +266,7 @@ int _cdecl wmain
         // S_OK == hr or not, and it is important to do this upon exit if a
         // notification sink has previously been attached to the provider.  Not
         // doing so may result in an access violation when the provider is being
-        // destroyed.  When this method returns, all callback methods would have 
+        // destroyed.  When this method returns, all callback methods would have
         // been completed, and will cease to listen to any more messages.
         //
         // Use hr2 so that the original value of hr is not lost.
@@ -390,7 +390,7 @@ HRESULT GenerateTag
         // 12345678
         // Tag0000
         tempTag = new WCHAR[8];
-        
+
         if ( NULL == tempTag )
         {
             hr = E_OUTOFMEMORY;
@@ -434,10 +434,10 @@ HRESULT GenerateTag
 _Success_( return == S_OK )
 HRESULT ParseArguments
 (   _In_ int argc
-,   _In_reads_( argc ) LPWSTR* argv
-,   _Outptr_result_maybenull_ LPCWSTR *epr
-,   _Outptr_result_maybenull_ WSD_URI_LIST **scopesList
-,   _Outptr_result_maybenull_ LPCWSTR *matchByRule
+    ,   _In_reads_( argc ) LPWSTR* argv
+    ,   _Outptr_result_maybenull_ LPCWSTR *epr
+    ,   _Outptr_result_maybenull_ WSD_URI_LIST **scopesList
+    ,   _Outptr_result_maybenull_ LPCWSTR *matchByRule
 )
 {
     HRESULT hr = S_OK;
@@ -451,7 +451,7 @@ HRESULT ParseArguments
         hr = E_INVALIDARG;
     }
     else if ( NULL == epr ||
-              NULL == scopesList || 
+              NULL == scopesList ||
               NULL == matchByRule )
     {
         hr = E_POINTER;
@@ -487,7 +487,7 @@ HRESULT ParseArguments
     {
         // search using endpoint reference address
         // Resolve
-        
+
         // argc must be = 3
         if ( 3 != argc )
         {
@@ -582,40 +582,40 @@ HRESULT ValidateEndpointReference
 {
     HRESULT hr = S_OK;
     LPCWSTR tempEpr = NULL; // (soft copy) used to determine if this is a logical or physical address
-    
+
     if ( NULL == epr )
     {
         hr = E_INVALIDARG;
     }
-    
+
     if ( S_OK == hr )
     {
         // Determine whether this EndpointReference begins with one of
         // http://, https:// or uri:
         if ( NULL != wcsstr( epr, L"http://" ) ||
-             NULL != wcsstr( epr, L"https://" ) ||
-             NULL != wcsstr( epr, L"uri:" ) )
+                NULL != wcsstr( epr, L"https://" ) ||
+                NULL != wcsstr( epr, L"uri:" ) )
         {
             // this is a valid EndpointReference beginning with
             // http://, https:// or uri:
-            
+
             tempEpr = epr;
         }
     }
-    
+
     if ( S_OK == hr && NULL == tempEpr )
     {
         // Determine whether this EndpointReference begins with urn:uuid:
         tempEpr = wcsstr( epr, L"urn:uuid:" );
-        
+
         if ( NULL != tempEpr )
         {
             // The EndpointReference begins with urn:uuid:.
-            
+
             //          1         2        3          4
             // 123456789012345678901234567890123456789012345
             // urn:uuid:f452f1ae-fbb4-11de-a6bb-00cc30bfc300
-            
+
             // It must therefore be exactly 45 characters long
             if ( wcslen( tempEpr ) != 45 )
             {
@@ -623,20 +623,20 @@ HRESULT ValidateEndpointReference
             }
         }
     }
-    
+
     if ( S_OK == hr && NULL == tempEpr )
     {
         // Determine whether this EndpointReference begins with urn:uuid:
         tempEpr = wcsstr( epr, L"uuid:" );
-        
+
         if ( NULL != tempEpr )
         {
             // The EndpointReference begins with uuid:.
-            
+
             //          1         2        3          4
             // 12345678901234567890123456789012345678901
             // uuid:f452f1ae-fbb4-11de-a6bb-00cc30bfc300
-            
+
             // It must therefore be exactly 41 characters long
             if ( wcslen( tempEpr ) != 41 )
             {
@@ -644,15 +644,15 @@ HRESULT ValidateEndpointReference
             }
         }
     }
-    
+
     if ( S_OK == hr && NULL == tempEpr )
     {
         // The EndpointReference does not begin with one of the
         // appropriate schemes.
-        
+
         hr = E_INVALIDARG;
     }
-    
+
     tempEpr = NULL;
     return hr;
 }

@@ -1,4 +1,4 @@
-#include "RssReader.hpp"
+﻿#include "RssReader.hpp"
 
 const LPWSTR defaultRssSite = L"http://social.msdn.microsoft.com/Forums/en-US/xmlandnetfx/threads?outputAs=rss";
 
@@ -36,12 +36,12 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
         }
         else if (0 == wcscmp(option, L"-sync"))
         {
-             if (FALSE == isAsync)
-             {
-                 PrintUsage();
-                 return -1;
-             }
-             isAsync = FALSE;
+            if (FALSE == isAsync)
+            {
+                PrintUsage();
+                return -1;
+            }
+            isAsync = FALSE;
         }
         else
         {

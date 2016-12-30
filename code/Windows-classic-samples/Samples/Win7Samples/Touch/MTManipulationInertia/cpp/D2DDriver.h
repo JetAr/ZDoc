@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,7 +10,7 @@
 
 // D2D
 #include <d2d1.h>
-#include <d2d1helper.h>	
+#include <d2d1helper.h>
 #include <comdef.h>
 
 // D2D Smart Pointers
@@ -21,7 +21,8 @@ _COM_SMARTPTR_TYPEDEF(ID2D1SolidColorBrush, __uuidof(ID2D1SolidColorBrush));
 _COM_SMARTPTR_TYPEDEF(ID2D1RectangleGeometry, __uuidof(ID2D1RectangleGeometry));
 _COM_SMARTPTR_TYPEDEF(ID2D1RoundedRectangleGeometry, __uuidof(ID2D1RoundedRectangleGeometry));
 
-class CD2DDriver {
+class CD2DDriver
+{
 public:
     CD2DDriver(HWND hwnd);
     ~CD2DDriver();
@@ -33,7 +34,7 @@ public:
     HRESULT CreateDeviceIndependentResources();
     HRESULT CreateDeviceResources();
     VOID DiscardDeviceResources();
-    
+
     HRESULT CreateGeometryRoundedRect(D2D1_ROUNDED_RECT rect, ID2D1RoundedRectangleGeometry** spRoundedRectGeometry);
     HRESULT RenderBackground(FLOAT clientWidth, FLOAT clientHeight);
     ID2D1HwndRenderTargetPtr GetRenderTarget();
@@ -46,14 +47,14 @@ public:
 
 private:
     // Helper to create gradient resource
-    HRESULT CreateGradient(ID2D1GradientStopCollection* pStops, 
-        ID2D1LinearGradientBrush** pplgBrush, 
-        D2D1::ColorF::Enum startColor, 
-        FLOAT startOpacity, 
-        FLOAT startPos, 
-        D2D1::ColorF::Enum endColor, 
-        FLOAT endOpacity, 
-        FLOAT endPos);
+    HRESULT CreateGradient(ID2D1GradientStopCollection* pStops,
+                           ID2D1LinearGradientBrush** pplgBrush,
+                           D2D1::ColorF::Enum startColor,
+                           FLOAT startOpacity,
+                           FLOAT startPos,
+                           D2D1::ColorF::Enum endColor,
+                           FLOAT endOpacity,
+                           FLOAT endPos);
 
     // Handle to the main window
     HWND m_hWnd;

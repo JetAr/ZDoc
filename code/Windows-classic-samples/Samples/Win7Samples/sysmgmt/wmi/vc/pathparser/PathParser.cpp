@@ -1,8 +1,8 @@
-// **************************************************************************
+﻿// **************************************************************************
 //
 // Copyright (c) Microsoft Corporation, All Rights Reserved
 //
-// File:  PathParser.cpp 
+// File:  PathParser.cpp
 //
 // Description:
 //      WMI Path Parser Sample.
@@ -15,9 +15,9 @@
 // **************************************************************************
 
 #include <objbase.h>
-#include <windows.h>                                     
+#include <windows.h>
 #include <stdio.h>
-#include <wbemidl.h> 
+#include <wbemidl.h>
 #include <wmiutils.h>
 
 //***************************************************************************
@@ -35,7 +35,7 @@ void DumpServerName(IWbemPath * pParser)
     // One could safely assume a maximum server name, but for the sake of example,
     // the code will call GetServer in order to determine how long of name is needed, then
     // do the allocation, then get the name and finally dump it.
-    
+
     DWORD dwSize = 0;
     hr = pParser->GetServer(&dwSize, NULL);
     if(FAILED(hr) || dwSize == 0)
@@ -74,7 +74,7 @@ void DumpNamespaces(IWbemPath * pParser)
         printf("\nGetNamespaceCount failed, hr = 0x%x", hr);
         return;
     }
-    
+
     for(ULONG dwCnt = 0; dwCnt < lCnt; dwCnt++)
     {
         if(dwCnt == 0)
@@ -83,7 +83,7 @@ void DumpNamespaces(IWbemPath * pParser)
             printf(",");
 
         // first determine the necessary buffer size
-        
+
         DWORD dwSize = 0;
         hr = pParser->GetNamespaceAt(dwCnt, &dwSize, NULL);
         if(FAILED(hr) || dwSize == 0)
@@ -120,7 +120,7 @@ void DumpClassName(IWbemPath * pParser)
     // One could safely assume a maximum class name, but for the sake of example,
     // the code will call GetClassName in order to determine how long of name is needed, then
     // do the allocation, then get the name and finally dump it.
-    
+
     DWORD dwSize = 0;
     hr = pParser->GetClassName(&dwSize, NULL);
     if(FAILED(hr) || dwSize == 0)
@@ -182,15 +182,15 @@ void DumpKeyList(IWbemPath * pParser)
     }
 
     // for the sake of clarity, this example assumes a maximum name size of 256.  Normally, an application would
-    // take one of two approaches;  First, it could just allocate a buffer the size of the text used in the SetText 
+    // take one of two approaches;  First, it could just allocate a buffer the size of the text used in the SetText
     // call and assume that is sufficient for the largest piece.  Second, it can call GetKey2 will a NULL pointer
-    // to the name buffer and find out how large it needs to be, as is done in the DumpClassName and 
+    // to the name buffer and find out how large it needs to be, as is done in the DumpClassName and
     // DumpServer routines.
-    
-     WCHAR wName[256];
-     for(DWORD uKeyIx = 0; uKeyIx < uNumKey ; uKeyIx++)
-     {
-        ULONG uKeyType; 
+
+    WCHAR wName[256];
+    for(DWORD uKeyIx = 0; uKeyIx < uNumKey ; uKeyIx++)
+    {
+        ULONG uKeyType;
         DWORD dwSize = 256;
 
         VARIANT var, var2;
@@ -204,7 +204,7 @@ void DumpKeyList(IWbemPath * pParser)
         else
         {
             // here we use Variant change type as a convenient string conversion routine.
-            
+
             hr = VariantChangeType(&var2, &var, 0, VT_BSTR);
             if(SUCCEEDED(hr))
             {
@@ -213,9 +213,9 @@ void DumpKeyList(IWbemPath * pParser)
             }
             else
                 printf("\nVariantChangeType failed, hr = 0x%x", hr);
-        VariantClear(&var);
+            VariantClear(&var);
         }
-     }
+    }
 }
 
 //***************************************************************************
@@ -259,10 +259,10 @@ int main(int iArgCnt, char ** argv)
     if(iArgCnt < 2)
     {
         printf("\nUsage:  PathParser <PathToBeParsed>"
-                 "\nExample:  PathParser \\\\MyServer\\root\\default:stdregprov=@"
-                 "\nor        PathParser \\\\MyServer\\root\\default:stdregprov.key=\\\"hello\\\""
-                 "\nor        PathParser \\\\MyServer\\root\\default:stdregprov.key=23"
-                 );
+               "\nExample:  PathParser \\\\MyServer\\root\\default:stdregprov=@"
+               "\nor        PathParser \\\\MyServer\\root\\default:stdregprov.key=\\\"hello\\\""
+               "\nor        PathParser \\\\MyServer\\root\\default:stdregprov.key=23"
+              );
         return 1;
     }
 
@@ -275,12 +275,12 @@ int main(int iArgCnt, char ** argv)
         printf("\nFailed due to lack of memory");
         return 1;
     }
-	//mbstowcs(wchar_t *, const char *, size_t);
-	//mbstowcs(pwcPath, argv[1], iLen + 1);	
-	//errno_t mbstowcs_s(size_t *pReturnValue, wchar_t *wcstr, size_t sizeInWords, const char *mbstr, size_t count);
-	size_t * intReturnValue = 0;
-	mbstowcs_s(intReturnValue, pwcPath, iLen+1, argv[1], iLen + 1);
- 
+    //mbstowcs(wchar_t *, const char *, size_t);
+    //mbstowcs(pwcPath, argv[1], iLen + 1);
+    //errno_t mbstowcs_s(size_t *pReturnValue, wchar_t *wcstr, size_t sizeInWords, const char *mbstr, size_t count);
+    size_t * intReturnValue = 0;
+    mbstowcs_s(intReturnValue, pwcPath, iLen+1, argv[1], iLen + 1);
+
     // Initialize COM and create the path parser object
 
     HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
@@ -288,7 +288,7 @@ int main(int iArgCnt, char ** argv)
     {
         IWbemPath *pParser = NULL;
         hr = CoCreateInstance(CLSID_WbemDefPath, 0, CLSCTX_INPROC_SERVER,
-                                                                     IID_IWbemPath, (LPVOID *) &pParser);
+                              IID_IWbemPath, (LPVOID *) &pParser);
         if(SUCCEEDED(hr))
         {
             ParseAndDump(pParser, pwcPath);

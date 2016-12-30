@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+﻿/*----------------------------------------------------------------------------
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -21,13 +21,15 @@ Copyright (C) 1992 - 2000.  Microsoft Corporation.  All rights reserved.
 
 extern CRITICAL_SECTION DllCritSect;
 
-typedef struct _SEC_CONTEXT {
+typedef struct _SEC_CONTEXT
+{
     struct _SEC_CONTEXT * Next;
     ULONG ContextId;
     ULONG CredentialId;
     ULONG Nonce;
     ULONG ContextFlags;
-    enum {
+    enum
+    {
         Idle,
         FirstInit,
         FirstAccept,
@@ -36,14 +38,16 @@ typedef struct _SEC_CONTEXT {
     } State;
 } SEC_CONTEXT, *PSEC_CONTEXT;
 
-typedef struct _CREDENTIAL {
+typedef struct _CREDENTIAL
+{
     struct _CREDENTIAL *Next;
     ULONG CredentialId;
     ULONG Use;
     ULONG * AuthData;
 } CREDENTIAL, *PCREDENTIAL;
 
-typedef enum {
+typedef enum
+{
     Negotiate,
     Challenge,
     ChallengeResponse,
@@ -52,12 +56,14 @@ typedef enum {
 
 #define MESSAGE_SIZE 10
 
-typedef struct _MESSAGE {
+typedef struct _MESSAGE
+{
     MESSAGE_TYPE MessageType;
     UCHAR Buffer[MESSAGE_SIZE];
 } MESSAGE, *PMESSAGE;
 
-typedef struct _SIGNATURE {
+typedef struct _SIGNATURE
+{
     ULONG MessageId;
     ULONG Tag;
 } SIGNATURE, *PSIGNATURE;

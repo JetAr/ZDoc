@@ -1,4 +1,4 @@
-#include "ClassFactory.h"
+﻿#include "ClassFactory.h"
 
 BOOL DX11VideoRenderer::CClassFactory::IsLocked(void)
 {

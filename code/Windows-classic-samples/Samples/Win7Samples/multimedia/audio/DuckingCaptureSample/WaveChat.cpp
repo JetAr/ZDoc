@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -103,8 +103,8 @@ bool CWaveChat::StartChat(bool HideFromVolumeMixer)
     waveFormat.wFormatTag = WAVE_FORMAT_PCM;
 
     MMRESULT mmr = waveInOpen(&_waveHandle, WAVE_MAPPER, &waveFormat,
-                      reinterpret_cast<DWORD_PTR>(_AppWindow), NULL,
-                      CALLBACK_WINDOW | WAVE_MAPPED_DEFAULT_COMMUNICATION_DEVICE);
+                              reinterpret_cast<DWORD_PTR>(_AppWindow), NULL,
+                              CALLBACK_WINDOW | WAVE_MAPPED_DEFAULT_COMMUNICATION_DEVICE);
     if (mmr != MMSYSERR_NOERROR)
     {
         MessageBox(_AppWindow, L"Failed to open wave in", L"Error", MB_OK);
@@ -227,7 +227,7 @@ bool CWaveChat::HandlesMessage(HWND /*hWnd*/, UINT message)
 
 
 //
-//  Process Wave messages.  
+//  Process Wave messages.
 //
 //  We ignore all the wave messages except the "Data" message.
 //
@@ -240,26 +240,26 @@ INT_PTR CWaveChat::MessageHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM
     case MM_WIM_CLOSE:
         return TRUE;
     case MM_WIM_DATA:
+    {
+        //
+        //  Process the capture data since we've received a buffers worth of data.
+        //
+        //  In real life, we'd copy the capture data out of the waveHeader that just completed and process it, but since
+        //  this is a sample, we discard the data and simply re-submit the buffer.
+        //
+        MMRESULT mmr;
+        HWAVEIN waveHandle = reinterpret_cast<HWAVEIN>(wParam);
+        LPWAVEHDR waveHeader = reinterpret_cast<LPWAVEHDR>(lParam);
+        if (_waveHandle)
         {
-            //
-            //  Process the capture data since we've received a buffers worth of data.
-            //
-            //  In real life, we'd copy the capture data out of the waveHeader that just completed and process it, but since
-            //  this is a sample, we discard the data and simply re-submit the buffer.
-            //
-            MMRESULT mmr;
-            HWAVEIN waveHandle = reinterpret_cast<HWAVEIN>(wParam);
-            LPWAVEHDR waveHeader = reinterpret_cast<LPWAVEHDR>(lParam);
-            if (_waveHandle)
+            mmr = waveInAddBuffer(waveHandle, waveHeader, sizeof(WAVEHDR));
+            if (mmr != MMSYSERR_NOERROR)
             {
-                mmr = waveInAddBuffer(waveHandle, waveHeader, sizeof(WAVEHDR));
-                if (mmr != MMSYSERR_NOERROR)
-                {
-                    MessageBox(hWnd, L"Failed to add buffer", L"Error", MB_OK);
-                }
+                MessageBox(hWnd, L"Failed to add buffer", L"Error", MB_OK);
             }
-            return TRUE;
         }
+        return TRUE;
+    }
     }
     return FALSE;
 }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,13 +9,13 @@
 
 Title: Verifying Publisher Name of a Signed Binary
 
-This sample demonstrates how Win32 applications can verify that a 
-file with an Authenticode signature originates from a specific  
-software publisher using WinVerifyTrust and associated helper APIs.  
+This sample demonstrates how Win32 applications can verify that a
+file with an Authenticode signature originates from a specific
+software publisher using WinVerifyTrust and associated helper APIs.
 
-The example demonstrates verifying a files signature, verifying the 
-SHA1 hash of root certificate's public key, and verifying known 
-fields in the publisher certificates subject name. 
+The example demonstrates verifying a files signature, verifying the
+SHA1 hash of root certificate's public key, and verifying known
+fields in the publisher certificates subject name.
 
 ****************************************************************/
 
@@ -45,17 +45,18 @@ fields in the publisher certificates subject name.
 //  DON'T USE: Key Id Hash(rfc-sha1):
 //
 //--------------------------------------------------------------------------
-static const BYTE RootKeyList[][SHA1_HASH_LEN] = {
+static const BYTE RootKeyList[][SHA1_HASH_LEN] =
+{
     //
     // The following is the sha1 key identifier for the Contoso Root Authority
     // CN=Contoso Root Authority
-	// 
+    //
     {
 
-		0x25, 0xf9, 0x24, 0x45, 0x74, 0xbc, 0x03, 0x89, 0x4b, 0x2c, 
-		0x5f, 0xee, 0x92, 0x1b, 0x95, 0x5a, 0xe7, 0xa4, 0x9e, 0x76
+        0x25, 0xf9, 0x24, 0x45, 0x74, 0xbc, 0x03, 0x89, 0x4b, 0x2c,
+        0x5f, 0xee, 0x92, 0x1b, 0x95, 0x5a, 0xe7, 0xa4, 0x9e, 0x76
 
-	},
+    },
 };
 
 #define ROOT_KEY_LIST_CNT  (sizeof(RootKeyList) / sizeof(RootKeyList[0]))
@@ -64,7 +65,8 @@ static const BYTE RootKeyList[][SHA1_HASH_LEN] = {
 //+-------------------------------------------------------------------------
 //  Subject Name Attributes Used to Identify My Publisher Certificates
 //--------------------------------------------------------------------------
-static const LPCSTR PublisherAttributeObjId[] = {
+static const LPCSTR PublisherAttributeObjId[] =
+{
     // 0 - O=
     szOID_ORGANIZATION_NAME,
 
@@ -101,7 +103,8 @@ static const LPCSTR PublisherAttributeObjId[] = {
 //    C=US
 //
 //--------------------------------------------------------------------------
-static const LPCWSTR PublisherNameList[][PUBLISHER_ATTR_CNT] = {
+static const LPCWSTR PublisherNameList[][PUBLISHER_ATTR_CNT] =
+{
     {
         // 0 - O=
         L"Contoso",
@@ -130,20 +133,20 @@ IsTrustedKey(
     PCCERT_CONTEXT pCertContext,
     const BYTE KeyList[][SHA1_HASH_LEN],
     DWORD KeyCount
-    )
+)
 {
     BYTE rgbKeyId[SHA1_HASH_LEN];
     DWORD cbKeyId;
 
     cbKeyId = SHA1_HASH_LEN;
     if (!CryptHashPublicKeyInfo(
-            NULL,               // hCryptProv
-            CALG_SHA1,
-            0,                  // dwFlags
-            X509_ASN_ENCODING,
-            &pCertContext->pCertInfo->SubjectPublicKeyInfo,
-            rgbKeyId,
-            &cbKeyId) || SHA1_HASH_LEN != cbKeyId)
+                NULL,               // hCryptProv
+                CALG_SHA1,
+                0,                  // dwFlags
+                X509_ASN_ENCODING,
+                &pCertContext->pCertInfo->SubjectPublicKeyInfo,
+                rgbKeyId,
+                &cbKeyId) || SHA1_HASH_LEN != cbKeyId)
     {
         return FALSE;
     }
@@ -163,7 +166,7 @@ IsTrustedKey(
 //
 // Checks if the root certificate in the chain context matches
 // one of the publisher root's SHA1 key identifiers. This ensures
-// that the publishers certificate is issued from a trusted 
+// that the publishers certificate is issued from a trusted
 // certification authority
 //
 
@@ -171,7 +174,7 @@ static
 BOOL
 IsTrustedRootKey(
     PCCERT_CHAIN_CONTEXT pChainContext
-    )
+)
 {
     PCERT_SIMPLE_CHAIN pChain;
     DWORD cChainElement;
@@ -203,7 +206,7 @@ static
 BOOL
 IsTrustedPublisherName(
     PCCERT_CHAIN_CONTEXT pChainContext
-    )
+)
 {
     PCERT_SIMPLE_CHAIN pChain;
     PCCERT_CONTEXT pCertContext;
@@ -240,12 +243,12 @@ IsTrustedPublisherName(
             //
 
             AttrStringLength = CertGetNameStringW(
-                pCertContext,
-                CERT_NAME_ATTR_TYPE,
-                0,                      // dwFlags
-                (void *) PublisherAttributeObjId[j],
-                NULL,                   // AttrString
-                0);                     // AttrStringLength
+                                   pCertContext,
+                                   CERT_NAME_ATTR_TYPE,
+                                   0,                      // dwFlags
+                                   (void *) PublisherAttributeObjId[j],
+                                   NULL,                   // AttrString
+                                   0);                     // AttrStringLength
 
             if (AttrStringLength <= 1)
             {
@@ -258,8 +261,8 @@ IsTrustedPublisherName(
 
 
             AttrString = (LPWSTR) LocalAlloc(
-                LPTR,
-                AttrStringLength * sizeof(WCHAR));
+                             LPTR,
+                             AttrStringLength * sizeof(WCHAR));
             if (AttrString == NULL)
             {
                 return FALSE;
@@ -270,15 +273,15 @@ IsTrustedPublisherName(
             //
 
             AttrStringLength = CertGetNameStringW(
-                pCertContext,
-                CERT_NAME_ATTR_TYPE,
-                0,                      // dwFlags
-                (void *) PublisherAttributeObjId[j],
-                AttrString,
-                AttrStringLength);
+                                   pCertContext,
+                                   CERT_NAME_ATTR_TYPE,
+                                   0,                      // dwFlags
+                                   (void *) PublisherAttributeObjId[j],
+                                   AttrString,
+                                   AttrStringLength);
 
             if (AttrStringLength <= 1 ||
-                0 != wcscmp(AttrString, PublisherNameList[i][j]))
+                    0 != wcscmp(AttrString, PublisherNameList[i][j]))
             {
                 // The subject name attribute doesn't match
                 trusted = FALSE;
@@ -304,7 +307,7 @@ IsTrustedPublisherName(
 BOOL
 IsFilePublisherTrusted(
     LPCWSTR pwszFileName
-    )
+)
 {
     BOOL trusted = FALSE;
     DWORD lastError;
@@ -314,8 +317,8 @@ IsFilePublisherTrusted(
     // Initialize structure for WinVerifyTrust call
     //
 
-	WINTRUST_DATA wtd = { 0 };
-	WINTRUST_FILE_INFO wtfi = { 0 };
+    WINTRUST_DATA wtd = { 0 };
+    WINTRUST_FILE_INFO wtfi = { 0 };
 
     wtd.cbStruct = sizeof(WINTRUST_DATA);
     wtd.pPolicyCallbackData = NULL;
@@ -414,7 +417,7 @@ static void Usage(void)
     printf("\n");
 }
 
-int _cdecl wmain(int argc, __in_ecount(argc) wchar_t * argv[]) 
+int _cdecl wmain(int argc, __in_ecount(argc) wchar_t * argv[])
 {
     int status;
     BOOL trusted;
@@ -426,21 +429,25 @@ int _cdecl wmain(int argc, __in_ecount(argc) wchar_t * argv[])
         {
             switch(argv[0][1])
             {
-                case 'h':
-                default:
-                    goto BadUsage;
+            case 'h':
+            default:
+                goto BadUsage;
             }
-        } else {
+        }
+        else
+        {
             if (pwszFileName == NULL)
                 pwszFileName = argv[0];
-            else {
+            else
+            {
                 printf("Too many arguments\n");
                 goto BadUsage;
             }
         }
     }
 
-    if (pwszFileName == NULL) {
+    if (pwszFileName == NULL)
+    {
         printf("missing FileName \n");
         goto BadUsage;
     }
@@ -471,7 +478,7 @@ ErrorReturn:
 BadUsage:
     Usage();
     goto ErrorReturn;
-    
+
 }
 
 

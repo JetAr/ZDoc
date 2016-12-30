@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -28,7 +28,7 @@ Base64DecodeChunk(
     CHAR *  szChunk,
     BYTE *  pData,
     DWORD * pcbData
-    );
+);
 
 //
 // Method implementations
@@ -36,25 +36,25 @@ Base64DecodeChunk(
 
 ISAPI_BUFFER::ISAPI_BUFFER(
     DWORD dwMaxAlloc
-    ) : _pData( _InlineData ),
-        _cbData( 0 ),
-        _cbBuffer( INLINE_BUFFER_SIZE ),
-        _dwMaxAlloc( dwMaxAlloc ? dwMaxAlloc : DEFAULT_MAX_ALLOC_SIZE )
-/*++
+) : _pData( _InlineData ),
+    _cbData( 0 ),
+    _cbBuffer( INLINE_BUFFER_SIZE ),
+    _dwMaxAlloc( dwMaxAlloc ? dwMaxAlloc : DEFAULT_MAX_ALLOC_SIZE )
+    /*++
 
-Purpose:
+    Purpose:
 
-    Constructor for the ISAPI_BUFFER object
+        Constructor for the ISAPI_BUFFER object
 
-Arguments:
+    Arguments:
 
-    dwMaxAlloc - Initial value of max allocation size
+        dwMaxAlloc - Initial value of max allocation size
 
-Returns:
+    Returns:
 
-    None
+        None
 
---*/
+    --*/
 {
     return;
 }
@@ -88,7 +88,7 @@ BOOL
 ISAPI_BUFFER::SetData(
     VOID *  pData,
     DWORD   cbData
-    )
+)
 /*++
 
 Purpose:
@@ -112,7 +112,7 @@ Returns:
     //
 
     if ( cbData > _cbBuffer &&
-         !Resize( cbData ) )
+            !Resize( cbData ) )
     {
         return FALSE;
     }
@@ -133,7 +133,7 @@ BOOL
 ISAPI_BUFFER::AppendData(
     VOID *  pData,
     DWORD   cbData
-    )
+)
 /*++
 
 Purpose:
@@ -161,7 +161,7 @@ Returns:
     cbNewSize = _cbData + cbData;
 
     if ( cbNewSize > _cbBuffer &&
-         !Resize( cbNewSize ) )
+            !Resize( cbNewSize ) )
     {
         return FALSE;
     }
@@ -181,7 +181,7 @@ Returns:
 BOOL
 ISAPI_BUFFER::Resize(
     DWORD   cbNewSize
-    )
+)
 /*++
 
 Purpose:
@@ -220,7 +220,7 @@ Returns:
     if ( cbNewSize > _dwMaxAlloc )
     {
         SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-        
+
         goto Failed;
     }
 
@@ -308,7 +308,7 @@ Failed:
 VOID
 ISAPI_BUFFER::Reset(
     BOOL    fDealloc
-    )
+)
 /*++
 
 Purpose:
@@ -332,7 +332,7 @@ Returns:
     //
 
     if ( fDealloc &&
-         _pData != _InlineData )
+            _pData != _InlineData )
     {
         LocalFree( _pData );
         _pData = _InlineData;
@@ -349,7 +349,7 @@ Returns:
 BOOL
 ISAPI_BUFFER::SetDataSize(
     DWORD   cbNewSize
-    )
+)
 /*++
 
 Purpose:
@@ -384,7 +384,7 @@ Returns:
 VOID
 ISAPI_BUFFER::SetMaxAlloc(
     DWORD   dwMaxAlloc
-    )
+)
 /*++
 
 Purpose:
@@ -407,7 +407,7 @@ Returns:
 DWORD
 ISAPI_BUFFER::QueryMaxAlloc(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -430,7 +430,7 @@ Returns:
 VOID *
 ISAPI_BUFFER::QueryPtr(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -453,7 +453,7 @@ Returns:
 DWORD
 ISAPI_BUFFER::QueryDataSize(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -476,7 +476,7 @@ Returns:
 DWORD
 ISAPI_BUFFER::QueryBufferSize(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -499,7 +499,7 @@ Returns:
 BOOL
 ISAPI_BUFFER::Base64Decode(
     CHAR *  szString
-    )
+)
 /*++
 
 Purpose:
@@ -579,7 +579,7 @@ Failed:
 VOID
 ISAPI_BUFFER::ZeroBuffer(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -604,7 +604,7 @@ Base64DecodeChunk(
     CHAR *  szChunk,
     BYTE *  pData,
     DWORD * pcbData
-    )
+)
 /*++
 
 Purpose:
@@ -657,7 +657,8 @@ Returns:
                               0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
                               0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
                               0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                              0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+                              0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+                            };
 
     //
     // Clear only the necessary output bytes.

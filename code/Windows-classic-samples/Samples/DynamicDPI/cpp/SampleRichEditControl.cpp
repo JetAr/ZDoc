@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -44,7 +44,7 @@ CSampleRichEditWindow::~CSampleRichEditWindow()
 HRESULT
 CSampleRichEditWindow::Initialize(
     _In_    HWND parentHWD
-    )
+)
 {
     HRESULT hr = S_OK;
     BOOL fResult = FALSE;
@@ -54,9 +54,9 @@ CSampleRichEditWindow::Initialize(
     if (!m_hmodRichEdit)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
-    }   
+    }
 
-    // Create the rich edit window. 
+    // Create the rich edit window.
     if (SUCCEEDED(hr))
     {
         m_hWnd = CreateWindowEx(WS_EX_LAYERED,          // Make this a layered window.
@@ -72,14 +72,14 @@ CSampleRichEditWindow::Initialize(
                                 WS_VSCROLL | ES_WANTRETURN | ES_MULTILINE,
 
                                 // Use default x, y, width and height as these will be set later.
-                                CW_USEDEFAULT, CW_USEDEFAULT, 
+                                CW_USEDEFAULT, CW_USEDEFAULT,
                                 CW_USEDEFAULT, CW_USEDEFAULT,
 
                                 parentHWD,              // Set parent as requested.
                                 NULL,                   // Do not attach to a menu.
                                 GetModuleHandleW(NULL), // Associate to the calling application.
                                 NULL                    // No additional structure needed to create this window.
-                                ); 
+                               );
     }
     if (!m_hWnd)
     {
@@ -103,7 +103,7 @@ CSampleRichEditWindow::Initialize(
                                HWND_TOP,
                                CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE
-                               );
+                              );
         if (!fResult)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -143,7 +143,7 @@ CSampleRichEditWindow::Position(
     _In_    UINT y,
     _In_    UINT Width,
     _In_    UINT Height
-    )
+)
 {
     HRESULT hr = S_OK;
     BOOL fResult;
@@ -169,9 +169,9 @@ CSampleRichEditWindow::Position(
 HRESULT
 CSampleRichEditWindow::PositionRelativeToRect(
     _In_    RECT relativeRect
-    )
+)
 {
-    // Store target dimenions. 
+    // Store target dimenions.
     UINT childX;    // Position of the left side of the window.
     UINT childY;    // Position of the top side of the window.
     UINT childcX;   // Width of the window.
@@ -203,7 +203,7 @@ CSampleRichEditWindow::PositionRelativeToRect(
 HRESULT
 CSampleRichEditWindow::OnDPIChanged(
     _In_    float dpi
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -287,7 +287,7 @@ CSampleRichEditWindow::SetFormatItalic()
     HRESULT hr = S_OK;
     LRESULT lr;
     CHARFORMAT2 charFormat;
-    
+
     ZeroMemory(&charFormat, sizeof(charFormat));
     charFormat.cbSize = sizeof(charFormat);
     lr = SendMessage(m_hWnd, EM_GETCHARFORMAT, SCF_SELECTION, (LPARAM) &charFormat);
@@ -421,7 +421,7 @@ CSampleRichEditWindow::SetFormatBackgroundColor()
 HRESULT
 CSampleRichEditWindow::SetAlignment(
     _In_ WORD wAlignment
-    )
+)
 {
     HRESULT hr = S_OK;
     LRESULT lr;
@@ -499,7 +499,7 @@ CSampleRichEditWindow::SetNumbered()
 HRESULT
 CSampleRichEditWindow::IncrementIndent(
     _In_ INT lIncrement
-    )
+)
 {
     HRESULT hr = S_OK;
     LRESULT lr;
@@ -556,9 +556,9 @@ CSampleRichEditWindow::ResetDefaultContent()
 // </summary>
 HRESULT
 CSampleRichEditWindow::GetResourceString(
-    _In_        UINT stringID, 
+    _In_        UINT stringID,
     _Outptr_    PCWSTR * stringText
-    )
+)
 {
     HRESULT hr = S_OK;
     BOOL fResult = FALSE;
@@ -596,10 +596,10 @@ CSampleRichEditWindow::GetResourceString(
 HRESULT
 CSampleRichEditWindow::SetText(
     _In_    PCWSTR stringText
-    )
+)
 {
     HRESULT hr = S_OK;
-    LRESULT lr; 
+    LRESULT lr;
 
     ASSERT(m_hWnd);
     ASSERT(stringText);
@@ -626,15 +626,15 @@ CSampleRichEditWindow::SetDefaultFormat()
     CHARFORMAT2 charFormat;
     ZeroMemory(&charFormat, sizeof(charFormat));
 
-    // Gather the default settings that exist on the rich edit control. 
+    // Gather the default settings that exist on the rich edit control.
     charFormat.cbSize = sizeof(CHARFORMAT2) ;
     lr = SendMessage(m_hWnd, EM_GETCHARFORMAT, SCF_DEFAULT, (LPARAM) &charFormat);
 
     if (lr)
     {
-        // Set text to be bold. 
+        // Set text to be bold.
         charFormat.dwMask = CFM_BOLD;
-        
+
         // Set text color to be black.
         charFormat.dwMask |= CFM_COLOR;
         charFormat.crTextColor = RGB(0, 0, 0);
@@ -661,7 +661,7 @@ CSampleRichEditWindow::SetDefaultFormat()
 HRESULT
 CSampleRichEditWindow::UpdateFontSize(
     _In_ CHANGE_DIRECTION direction
-    )
+)
 {
     HRESULT hr = S_OK;
     LRESULT lr;
@@ -705,7 +705,7 @@ CSampleRichEditWindow::ApplyZoomFactor()
 {
     HRESULT hr = S_OK;
     LRESULT lr;
-    
+
     lr = SendMessage(m_hWnd, EM_SETZOOM, (WPARAM) m_numerator, (LPARAM) m_denominator);
     if (!lr)
     {

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,7 +14,7 @@ public:
     virtual ~CFile();
 
     BOOL CreateFile(_In_ PCWSTR pFileName, DWORD desiredAccess, DWORD creationDisposition,
-        DWORD sharedMode = 0, _Inout_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes = nullptr, DWORD flagsAndAttributes = 0, _Inout_opt_ HANDLE templateFileHandle = nullptr);
+                    DWORD sharedMode = 0, _Inout_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes = nullptr, DWORD flagsAndAttributes = 0, _Inout_opt_ HANDLE templateFileHandle = nullptr);
 
     BOOL IsEndOfFile();
     VOID NextLine();
@@ -32,9 +32,15 @@ public:
         return _pReadBuffer;
     }
 
-    DWORD_PTR GetFileSize() { return _fileSize;}
+    DWORD_PTR GetFileSize()
+    {
+        return _fileSize;
+    }
 
-    LPCWSTR GetFileName() { return _pFileName;}
+    LPCWSTR GetFileName()
+    {
+        return _pFileName;
+    }
 
 protected:
     virtual BOOL SetupReadBuffer();

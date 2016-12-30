@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
@@ -9,7 +9,7 @@ Module Name:
 Abstract:
 
     Implementation of CAVIFileWriter class
- 
+
 */
 
 
@@ -25,8 +25,8 @@ Abstract:
 
 CAVIFileWriter::CAVIFileWriter()
     :m_pAVIFile(NULL),
-    m_pAudioStream(NULL),
-    m_nSampleSize(0)
+     m_pAudioStream(NULL),
+     m_nSampleSize(0)
 {
 
     LogMessage("CAVIFileWriter::CAVIFileWriter");
@@ -38,22 +38,22 @@ CAVIFileWriter::CAVIFileWriter()
 //
 // CAVIFileWriter::Initialize
 //
-// initialize avi library. attempt to create a file with the given name and 
+// initialize avi library. attempt to create a file with the given name and
 // format.
 //
 // if file creation fails, subsequent calls to write will fail.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-HRESULT CAVIFileWriter::Initialize(IN const CHAR *pszFileName, 
+HRESULT CAVIFileWriter::Initialize(IN const CHAR *pszFileName,
                                    IN const WAVEFORMATEX &WaveFormat)
 {
 
     HRESULT hr = S_OK;
 
-    
+
     //
-    // if initialization fails, the object's stream and file will be NULL, so 
+    // if initialization fails, the object's stream and file will be NULL, so
     // subsequent Write() calls will fail
     //
 
@@ -73,18 +73,18 @@ HRESULT CAVIFileWriter::Initialize(IN const CHAR *pszFileName,
     LogMessage("CAVIFileWriter::Initialize started.");
 
     LogMessage("    file [%s] ", pszFileName);
-    
+
     LogFormat(&WaveFormat);
- 
+
 
     //
     // initialize avi file library.
     // when done with it, call AVIFileExit should be called on the same thread
     //
-    
+
     AVIFileInit();
 
-        
+
     //
     // create file
     //
@@ -117,7 +117,7 @@ HRESULT CAVIFileWriter::Initialize(IN const CHAR *pszFileName,
     StreamInfo.dwQuality = (DWORD)-1;
     m_nSampleSize = StreamInfo.dwSampleSize = WaveFormat.nBlockAlign;
 
-    // ignore the return code -- we will have a null-terminated string no 
+    // ignore the return code -- we will have a null-terminated string no
     // matter what.
     StringCbCopy(&StreamInfo.szName[0], 64, "test audio stream");
 
@@ -198,7 +198,7 @@ CAVIFileWriter::~CAVIFileWriter()
         m_pAVIFile = NULL;
     }
 
-    
+
     //
     // uninitialize avi file libraries
     //
@@ -213,7 +213,7 @@ CAVIFileWriter::~CAVIFileWriter()
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CAVIFileWriter::Write
-// 
+//
 // write the buffer into the open stream. return the number of bytes recorded.
 //
 // return S_OK on success, error code on failure
@@ -228,7 +228,7 @@ HRESULT CAVIFileWriter::Write(IN BYTE *pBuffer,
     if ( (NULL == m_pAudioStream) || (NULL == m_pAVIFile))
     {
         LogError("CAVIFileWriter::Write file or stream is not open");
-       
+
         return E_UNEXPECTED;
     }
 
@@ -243,7 +243,7 @@ HRESULT CAVIFileWriter::Write(IN BYTE *pBuffer,
     //
     // write to file until dumped the whole buffer of until failure
     //
-    
+
     HRESULT hr = S_OK;
 
     ULONG nTotalBytesWritten = 0;
@@ -265,7 +265,7 @@ HRESULT CAVIFileWriter::Write(IN BYTE *pBuffer,
                             nSamples2Write,  // how many samples to write
                             pBuffer,         // where the data is
                             nBytesToWrite,   // how much data do we have
-                            AVIIF_KEYFRAME,  // self-sufficient data 
+                            AVIIF_KEYFRAME,  // self-sufficient data
                             &nSamplesWritten,// how many samples were written
                             &nBytesWritten); // how many bytes were written
 
@@ -275,7 +275,7 @@ HRESULT CAVIFileWriter::Write(IN BYTE *pBuffer,
         //
 
         nTotalBytesWritten += nBytesWritten;
-        
+
     }
 
 
@@ -283,7 +283,7 @@ HRESULT CAVIFileWriter::Write(IN BYTE *pBuffer,
     // will return the number of bytes written
     //
 
-    if (NULL != pnBytesWritten) 
+    if (NULL != pnBytesWritten)
     {
         *pnBytesWritten = nTotalBytesWritten;
     }
@@ -303,9 +303,9 @@ HRESULT CAVIFileWriter::Write(IN BYTE *pBuffer,
     {
 
         LogMessage("CAVIFileWriter::Write Succeeded. Wrote %ld bytes",
-                    nTotalBytesWritten);
+                   nTotalBytesWritten);
     }
 
     return hr;
-    
+
 }

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+ï»¿//------------------------------------------------------------------------------
 // File: app.cpp
 //
 // Desc: DirectShow sample code
@@ -43,11 +43,13 @@ typedef struct
     FLOAT               Alpha;
 } STRM_PARAM;
 
-const STRM_PARAM strParamInit[1] = {
+const STRM_PARAM strParamInit[1] =
+{
     {0.0F, 0.0F, 1.0F, 1.0F, 1.0F}
 };
 
-STRM_PARAM strParam[2] = {
+STRM_PARAM strParam[2] =
+{
     {0.0F, 0.0F, 1.0F, 1.0F, 1.0F},
     {0.0F, 0.0F, 1.0F, 1.0F, 0.0F}
 };
@@ -89,7 +91,8 @@ const TCHAR g_chNULL        = TEXT('\0');
 #define RESERVED    0,0          /* BYTE bReserved[2]  // padding for alignment */
 #endif
 
-const TBBUTTON tbButtons[DEFAULT_TBAR_SIZE] = {
+const TBBUTTON tbButtons[DEFAULT_TBAR_SIZE] =
+{
     { IDX_SEPARATOR,    1,                    0,               TBSTYLE_SEP           },
     { IDX_1,            IDM_MOVIE_PLAY,       TBSTATE_ENABLED, TBSTYLE_BUTTON, RESERVED, 0, -1 },
     { IDX_2,            IDM_MOVIE_PAUSE,      TBSTATE_ENABLED, TBSTYLE_BUTTON, RESERVED, 0, -1 },
@@ -130,7 +133,7 @@ wWinMain(
     HINSTANCE hPrevInstance,
     LPWSTR lpCmdLineOld,
     int nCmdShow
-    )
+)
 {
     LPTSTR lpCmdLine = lpCmdLineOld;
 
@@ -202,7 +205,7 @@ wWinMain(
 int
 DoMainLoop(
     void
-    )
+)
 {
     MSG       msg;
     HANDLE    ahObjects[1];   // handles that need to be waited on
@@ -291,7 +294,7 @@ DoMainLoop(
 BOOL
 InitApplication(
     HINSTANCE hInstance
-    )
+)
 {
     WNDCLASS  wc;
 
@@ -339,7 +342,7 @@ BOOL
 InitInstance(
     HINSTANCE hInstance,
     int nCmdShow
-    )
+)
 {
     HWND    hwnd;
     RECT    rc;
@@ -419,7 +422,7 @@ GetMoviePosition(
     long* yPos,
     long* pcx,
     long* pcy
-    )
+)
 {
     RECT rc;
     GetClientRect(hwnd, &rc);
@@ -462,7 +465,7 @@ VideoCd_OnMove(
     HWND hwnd,
     int x,
     int y
-    )
+)
 {
     if(pMovie)
     {
@@ -493,7 +496,7 @@ VideoCdWndProc(
     UINT message,
     WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     switch(message)
     {
@@ -512,27 +515,27 @@ VideoCdWndProc(
         HANDLE_MSG(hwnd, WM_NOTIFY,            VideoCd_OnNotify);
         HANDLE_MSG(hwnd, WM_MOVE,              VideoCd_OnMove);
 
-        case WM_RBUTTONDBLCLK:
-        case WM_RBUTTONDOWN:
-            VcdPlyerCaptureImage(CAPTURED_IMAGE_NAME);
-            break;
+    case WM_RBUTTONDBLCLK:
+    case WM_RBUTTONDOWN:
+        VcdPlyerCaptureImage(CAPTURED_IMAGE_NAME);
+        break;
 
-        case WM_DISPLAYCHANGE:
-            if(pMovie)
-                pMovie->DisplayModeChanged();
-            break;
+    case WM_DISPLAYCHANGE:
+        if(pMovie)
+            pMovie->DisplayModeChanged();
+        break;
 
-        // Note: we do not use HANDLE_MSG here as we want to call
-        // DefWindowProc after we have notifed the FilterGraph Resource Manager,
-        // otherwise our window will not finish its activation process.
+    // Note: we do not use HANDLE_MSG here as we want to call
+    // DefWindowProc after we have notifed the FilterGraph Resource Manager,
+    // otherwise our window will not finish its activation process.
 
-        case WM_ACTIVATE: 
-            VideoCd_OnActivate(hwnd, wParam, lParam);
+    case WM_ACTIVATE:
+        VideoCd_OnActivate(hwnd, wParam, lParam);
 
-            // IMPORTANT - let this drop through to DefWindowProc
+    // IMPORTANT - let this drop through to DefWindowProc
 
-        default:
-            return DefWindowProc(hwnd, message, wParam, lParam);
+    default:
+        return DefWindowProc(hwnd, message, wParam, lParam);
     }
 
     return 0L;
@@ -547,7 +550,7 @@ BOOL
 VideoCd_OnCreate(
     HWND hwnd,
     LPCREATESTRUCT lpCreateStruct
-    )
+)
 {
     RECT rc;
     int Pane[2];
@@ -568,7 +571,7 @@ VideoCd_OnCreate(
         return FALSE;
 
     g_hwndStatusbar = CreateStatusWindow(WS_VISIBLE | WS_CHILD | CCS_BOTTOM,
-        TEXT("Example Text"), hwnd, ID_STATUSBAR);
+                                         TEXT("Example Text"), hwnd, ID_STATUSBAR);
 
     GetWindowRect(g_hwndToolbar, &rc);
     dyToolbar = rc.bottom - rc.top;
@@ -618,7 +621,7 @@ VideoCd_OnActivate(
     HWND hwnd,
     WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     if((UINT)LOWORD(wParam))
     {
@@ -641,7 +644,7 @@ VideoCd_OnHScroll(
     HWND hwndCtl,
     UINT code,
     int pos
-    )
+)
 {
     static BOOL fWasPlaying = FALSE;
     static BOOL fBeginScroll = FALSE;
@@ -662,56 +665,56 @@ VideoCd_OnHScroll(
 
         switch(code)
         {
-            case TB_BOTTOM:
-                rtDuration = pMovie->GetDuration();
-                rtCurrPos = pMovie->GetCurrentPosition();
-                VcdPlayerSeekCmd(rtDuration - rtCurrPos);
-                SetCurrentPosition(pMovie->GetCurrentPosition());
-                break;
+        case TB_BOTTOM:
+            rtDuration = pMovie->GetDuration();
+            rtCurrPos = pMovie->GetCurrentPosition();
+            VcdPlayerSeekCmd(rtDuration - rtCurrPos);
+            SetCurrentPosition(pMovie->GetCurrentPosition());
+            break;
 
-            case TB_TOP:
-                rtCurrPos = pMovie->GetCurrentPosition();
-                VcdPlayerSeekCmd(-rtCurrPos);
-                SetCurrentPosition(pMovie->GetCurrentPosition());
-                break;
+        case TB_TOP:
+            rtCurrPos = pMovie->GetCurrentPosition();
+            VcdPlayerSeekCmd(-rtCurrPos);
+            SetCurrentPosition(pMovie->GetCurrentPosition());
+            break;
 
-            case TB_LINEDOWN:
-                VcdPlayerSeekCmd(10.0);
-                SetCurrentPosition(pMovie->GetCurrentPosition());
-                break;
+        case TB_LINEDOWN:
+            VcdPlayerSeekCmd(10.0);
+            SetCurrentPosition(pMovie->GetCurrentPosition());
+            break;
 
-            case TB_LINEUP:
-                VcdPlayerSeekCmd(-10.0);
-                SetCurrentPosition(pMovie->GetCurrentPosition());
-                break;
+        case TB_LINEUP:
+            VcdPlayerSeekCmd(-10.0);
+            SetCurrentPosition(pMovie->GetCurrentPosition());
+            break;
 
-            case TB_ENDTRACK:
-                fBeginScroll = FALSE;
+        case TB_ENDTRACK:
+            fBeginScroll = FALSE;
+            if(fWasPlaying)
+            {
+                VcdPlayerPauseCmd();
+                fWasPlaying = FALSE;
+            }
+            break;
+
+        case TB_THUMBTRACK:
+            if(!fBeginScroll)
+            {
+                fBeginScroll = TRUE;
+                fWasPlaying = (g_State & VCD_PLAYING);
                 if(fWasPlaying)
                 {
                     VcdPlayerPauseCmd();
-                    fWasPlaying = FALSE;
                 }
-                break;
+            }
+        // Fall through to PAGEUP/PAGEDOWN processing
 
-            case TB_THUMBTRACK:
-                if(!fBeginScroll)
-                {
-                    fBeginScroll = TRUE;
-                    fWasPlaying = (g_State & VCD_PLAYING);
-                    if(fWasPlaying)
-                    {
-                        VcdPlayerPauseCmd();
-                    }
-                }
-                // Fall through to PAGEUP/PAGEDOWN processing
-
-            case TB_PAGEUP:
-            case TB_PAGEDOWN:
-                rtCurrPos = pMovie->GetCurrentPosition();
-                VcdPlayerSeekCmd(rtTrackPos - rtCurrPos);
-                SetCurrentPosition(pMovie->GetCurrentPosition());
-                break;
+        case TB_PAGEUP:
+        case TB_PAGEDOWN:
+            rtCurrPos = pMovie->GetCurrentPosition();
+            VcdPlayerSeekCmd(rtTrackPos - rtCurrPos);
+            SetCurrentPosition(pMovie->GetCurrentPosition());
+            break;
         }
     }
 }
@@ -725,76 +728,76 @@ void
 VideoCd_OnTimer(
     HWND hwnd,
     UINT id
-    )
+)
 {
     HRESULT hr;
     if(pMovie && pMovie->StatusMovie() == MOVIE_PLAYING)
     {
         switch(id)
         {
-            case StatusTimer:
+        case StatusTimer:
+        {
+            REFTIME rt = pMovie->GetCurrentPosition();
+            SetCurrentPosition(rt);
+
+            if(1)
             {
-                REFTIME rt = pMovie->GetCurrentPosition();
-                SetCurrentPosition(rt);
+                TCHAR   szFmt[64];
+                TCHAR   sz[64];
+                long cx, cy;
 
-                if(1)
+                pMovie->GetNativeMovieSize(&cx, &cy);
+                hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%s"), FormatRefTime(szFmt, NUMELMS(sz),rt));
+
+                HDC hdc = GetDC(hwndApp);
+                HBITMAP hbmp = CreateCompatibleBitmap(hdc, 128, 128);
+                HBITMAP hbmpVmr = LoadBitmap(hInst, MAKEINTRESOURCE(IDR_VMR));
+                HDC hdcBmp = CreateCompatibleDC(hdc);
+                HDC hdcVMR = CreateCompatibleDC(hdc);
+                ReleaseDC(hwndApp, hdc);
+
+                HBITMAP hbmpold = (HBITMAP)SelectObject(hdcBmp, hbmp);
+                hbmpVmr = (HBITMAP)SelectObject(hdcVMR, hbmpVmr);
+                BitBlt(hdcBmp, 0, 0, 128, 128, hdcVMR, 0, 0, SRCCOPY);
+                DeleteObject(SelectObject(hdcVMR, hbmpVmr));
+                DeleteDC(hdcVMR);
+
+                RECT rc;
+                SetRect(&rc, 0, 0, 128, 32);
+                SetBkColor(hdcBmp, RGB(0, 0, 128));
+                SetTextColor(hdcBmp, RGB(255, 255, 255));
+
+                DrawText(hdcBmp, sz, lstrlen(sz), &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+                VMR9AlphaBitmap bmpInfo;
+                ZeroMemory(&bmpInfo, sizeof(bmpInfo));
+                bmpInfo.dwFlags = VMRBITMAP_HDC | VMRBITMAP_SRCCOLORKEY;
+                bmpInfo.hdc = hdcBmp;
+                SetRect(&rc, 0, 0, 128, 128);
+                bmpInfo.rSrc = rc;
+
+                bmpInfo.rDest.left = g_xPos;
+                bmpInfo.rDest.top = g_yPos;
+                bmpInfo.rDest.right = g_xPos + g_xSize;
+                bmpInfo.rDest.bottom = g_yPos + g_ySize;
+
+                if(g_fEnableAppImage)
                 {
-                    TCHAR   szFmt[64];
-                    TCHAR   sz[64];
-                    long cx, cy;
-
-                    pMovie->GetNativeMovieSize(&cx, &cy);
-                    hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%s"), FormatRefTime(szFmt, NUMELMS(sz),rt));
-
-                    HDC hdc = GetDC(hwndApp);
-                    HBITMAP hbmp = CreateCompatibleBitmap(hdc, 128, 128);
-                    HBITMAP hbmpVmr = LoadBitmap(hInst, MAKEINTRESOURCE(IDR_VMR));
-                    HDC hdcBmp = CreateCompatibleDC(hdc);
-                    HDC hdcVMR = CreateCompatibleDC(hdc);
-                    ReleaseDC(hwndApp, hdc);
-
-                    HBITMAP hbmpold = (HBITMAP)SelectObject(hdcBmp, hbmp);
-                    hbmpVmr = (HBITMAP)SelectObject(hdcVMR, hbmpVmr);
-                    BitBlt(hdcBmp, 0, 0, 128, 128, hdcVMR, 0, 0, SRCCOPY);
-                    DeleteObject(SelectObject(hdcVMR, hbmpVmr));
-                    DeleteDC(hdcVMR);
-
-                    RECT rc;
-                    SetRect(&rc, 0, 0, 128, 32);
-                    SetBkColor(hdcBmp, RGB(0, 0, 128));
-                    SetTextColor(hdcBmp, RGB(255, 255, 255));
-
-                    DrawText(hdcBmp, sz, lstrlen(sz), &rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-
-                    VMR9AlphaBitmap bmpInfo;
-                    ZeroMemory(&bmpInfo, sizeof(bmpInfo));
-                    bmpInfo.dwFlags = VMRBITMAP_HDC | VMRBITMAP_SRCCOLORKEY;
-                    bmpInfo.hdc = hdcBmp;
-                    SetRect(&rc, 0, 0, 128, 128);
-                    bmpInfo.rSrc = rc;
-
-                    bmpInfo.rDest.left = g_xPos;
-                    bmpInfo.rDest.top = g_yPos;
-                    bmpInfo.rDest.right = g_xPos + g_xSize;
-                    bmpInfo.rDest.bottom = g_yPos + g_ySize;
-
-                    if(g_fEnableAppImage)
-                    {
-                        bmpInfo.fAlpha = g_Alpha;
-                    }
-                    else
-                    {
-                        bmpInfo.fAlpha = 0.0F;
-                    }
-                    bmpInfo.clrSrcKey = 0;
-
-                    pMovie->SetAppImage(&bmpInfo);
-
-                    DeleteObject(SelectObject(hdcBmp, hbmpold));
-                    DeleteDC(hdcBmp);
+                    bmpInfo.fAlpha = g_Alpha;
                 }
+                else
+                {
+                    bmpInfo.fAlpha = 0.0F;
+                }
+                bmpInfo.clrSrcKey = 0;
+
+                pMovie->SetAppImage(&bmpInfo);
+
+                DeleteObject(SelectObject(hdcBmp, hbmpold));
+                DeleteDC(hdcBmp);
             }
-            break;
+        }
+        break;
         }
     }
 }
@@ -807,7 +810,7 @@ VideoCd_OnTimer(
 void
 VideoCd_OnPaint(
     HWND hwnd
-    )
+)
 {
     PAINTSTRUCT ps;
     HDC         hdc;
@@ -858,90 +861,90 @@ VideoCd_OnCommand(
     int id,
     HWND hwndCtl,
     UINT codeNotify
-    )
+)
 {
     switch(id)
     {
-        case IDM_FILE_OPEN:
-            VcdPlayerCloseCmd();
-            VcdPlayerOpenCmd(STRM_A);
-            break;
+    case IDM_FILE_OPEN:
+        VcdPlayerCloseCmd();
+        VcdPlayerOpenCmd(STRM_A);
+        break;
 
-        case IDM_FILE_OPEN2:
-            VcdPlayerOpenCmd(STRM_B);
-            break;
+    case IDM_FILE_OPEN2:
+        VcdPlayerOpenCmd(STRM_B);
+        break;
 
-        case IDM_FILE_CLOSE:
-            VcdPlayerCloseCmd();
-            break;
+    case IDM_FILE_CLOSE:
+        VcdPlayerCloseCmd();
+        break;
 
-        case IDM_FILE_EXIT:
-            PostMessage(hwnd, WM_CLOSE, 0, 0L);
-            break;
+    case IDM_FILE_EXIT:
+        PostMessage(hwnd, WM_CLOSE, 0, 0L);
+        break;
 
-        case IDM_MOVIE_PLAY:
-            VcdPlayerPlayCmd();
-            break;
+    case IDM_MOVIE_PLAY:
+        VcdPlayerPlayCmd();
+        break;
 
-        case IDM_MOVIE_STOP:
-            VcdPlayerStopCmd();
-            break;
+    case IDM_MOVIE_STOP:
+        VcdPlayerStopCmd();
+        break;
 
-        case IDM_MOVIE_PAUSE:
-            VcdPlayerPauseCmd();
-            break;
+    case IDM_MOVIE_PAUSE:
+        VcdPlayerPauseCmd();
+        break;
 
-        case IDM_MOVIE_SKIP_FORE:
-            VcdPlayerSeekCmd(1.0);
-            break;
+    case IDM_MOVIE_SKIP_FORE:
+        VcdPlayerSeekCmd(1.0);
+        break;
 
-        case IDM_MOVIE_SKIP_BACK:
-            VcdPlayerSeekCmd(-1.0);
-            break;
+    case IDM_MOVIE_SKIP_BACK:
+        VcdPlayerSeekCmd(-1.0);
+        break;
 
-        case IDM_MOVIE_PREVTRACK:
-            if(pMovie)
-                VcdPlayerSeekCmd(-pMovie->GetCurrentPosition());
-            break;
+    case IDM_MOVIE_PREVTRACK:
+        if(pMovie)
+            VcdPlayerSeekCmd(-pMovie->GetCurrentPosition());
+        break;
 
-        case IDM_MOVIE_STEP:
-            VcdPlayerStepCmd();
-            break;
+    case IDM_MOVIE_STEP:
+        VcdPlayerStepCmd();
+        break;
 
-        case IDM_APP_IMAGE:
-            DialogBox(hInst, MAKEINTRESOURCE(IDD_IMAGECTRL), hwnd, (DLGPROC)AppImgDlgProc);
-            break;
+    case IDM_APP_IMAGE:
+        DialogBox(hInst, MAKEINTRESOURCE(IDD_IMAGECTRL), hwnd, (DLGPROC)AppImgDlgProc);
+        break;
 
-        case IDM_STREAM_A:
-            DialogBoxParam(hInst, MAKEINTRESOURCE(IDD_IMAGECTRL), hwnd,
-                          (DLGPROC)TransDlgProc, (LPARAM)STRM_A);
-            break;
+    case IDM_STREAM_A:
+        DialogBoxParam(hInst, MAKEINTRESOURCE(IDD_IMAGECTRL), hwnd,
+                       (DLGPROC)TransDlgProc, (LPARAM)STRM_A);
+        break;
 
-        case IDM_STREAM_B:
-            DialogBoxParam(hInst, MAKEINTRESOURCE(IDD_IMAGECTRL), hwnd,
-                          (DLGPROC)TransDlgProc, (LPARAM)STRM_B);
-            break;
+    case IDM_STREAM_B:
+        DialogBoxParam(hInst, MAKEINTRESOURCE(IDD_IMAGECTRL), hwnd,
+                       (DLGPROC)TransDlgProc, (LPARAM)STRM_B);
+        break;
 
-        case IDM_CAPTURE_IMAGE:
-            VcdPlyerCaptureImage(CAPTURED_IMAGE_NAME);
-            break;
+    case IDM_CAPTURE_IMAGE:
+        VcdPlyerCaptureImage(CAPTURED_IMAGE_NAME);
+        break;
 
-        case IDM_DISPLAY_CAPTURED_IMAGE:
-            VcdPlyerDisplayCapturedImage(CAPTURED_IMAGE_NAME);
-            break;
+    case IDM_DISPLAY_CAPTURED_IMAGE:
+        VcdPlyerDisplayCapturedImage(CAPTURED_IMAGE_NAME);
+        break;
 
-        case IDM_HELP_ABOUT:
-            DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX),
-                hwnd,  (DLGPROC) AboutDlgProc);
-            break;
+    case IDM_HELP_ABOUT:
+        DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX),
+                  hwnd,  (DLGPROC) AboutDlgProc);
+        break;
 
-        default:
-            if(id > ID_RECENT_FILE_BASE
+    default:
+        if(id > ID_RECENT_FILE_BASE
                 && id <= (ID_RECENT_FILE_BASE + MAX_RECENT_FILES + 1))
-            {
-                ProcessOpen(aRecentFiles[id - ID_RECENT_FILE_BASE - 1]);
-            }
-            break;
+        {
+            ProcessOpen(aRecentFiles[id - ID_RECENT_FILE_BASE - 1]);
+        }
+        break;
     }
 
     SetPlayButtonsEnableState();
@@ -955,7 +958,7 @@ VideoCd_OnCommand(
 void
 VideoCd_OnDestroy(
     HWND hwnd
-    )
+)
 {
     PostQuitMessage(0);
 }
@@ -968,7 +971,7 @@ VideoCd_OnDestroy(
 void
 VideoCd_OnClose(
     HWND hwnd
-    )
+)
 {
     // stop accepting dropped filenames
     DragAcceptFiles(hwnd, FALSE);
@@ -986,7 +989,7 @@ VideoCd_OnClose(
 BOOL
 VideoCd_OnQueryEndSession(
     HWND hwnd
-    )
+)
 {
     SaveWindowPos(hwnd);
     return TRUE;
@@ -1003,7 +1006,7 @@ VideoCd_OnSize(
     UINT state,
     int dx,
     int dy
-    )
+)
 {
     if(IsWindow(g_hwndStatusbar))
     {
@@ -1035,7 +1038,7 @@ VideoCd_OnSize(
 void
 VideoCd_OnSysColorChange(
     HWND hwnd
-    )
+)
 {
     FORWARD_WM_SYSCOLORCHANGE(g_hwndToolbar, SendMessage);
     FORWARD_WM_SYSCOLORCHANGE(g_hwndStatusbar, SendMessage);
@@ -1052,48 +1055,48 @@ VideoCd_OnInitMenuPopup(
     HMENU hMenu,
     UINT item,
     BOOL fSystemMenu
-    )
+)
 {
     UINT uFlags;
 
     switch(item)
     {
-        case 0: // File menu
-            if(g_State & (VCD_IN_USE | VCD_NO_CD | VCD_DATA_CD_LOADED))
-                uFlags = (MF_BYCOMMAND | MF_GRAYED);
-            else
-                uFlags = (MF_BYCOMMAND | MF_ENABLED);
+    case 0: // File menu
+        if(g_State & (VCD_IN_USE | VCD_NO_CD | VCD_DATA_CD_LOADED))
+            uFlags = (MF_BYCOMMAND | MF_GRAYED);
+        else
+            uFlags = (MF_BYCOMMAND | MF_ENABLED);
 
-            EnableMenuItem(hMenu, IDM_FILE_CLOSE, uFlags);
+        EnableMenuItem(hMenu, IDM_FILE_CLOSE, uFlags);
 
-            // Disable the "Open Second Stream" item if already opened
-            if (g_bSecondFileLoaded)
-                EnableMenuItem(hMenu, IDM_FILE_OPEN2, MF_BYCOMMAND | MF_GRAYED);
-            else
-                EnableMenuItem(hMenu, IDM_FILE_OPEN2, uFlags);
-            break;
+        // Disable the "Open Second Stream" item if already opened
+        if (g_bSecondFileLoaded)
+            EnableMenuItem(hMenu, IDM_FILE_OPEN2, MF_BYCOMMAND | MF_GRAYED);
+        else
+            EnableMenuItem(hMenu, IDM_FILE_OPEN2, uFlags);
+        break;
 
-        case 1: // Properties menu
-            if(g_State & (VCD_IN_USE | VCD_NO_CD | VCD_DATA_CD_LOADED))
-                uFlags = (MF_BYCOMMAND | MF_GRAYED);
-            else
-                uFlags = (MF_BYCOMMAND | MF_ENABLED);
+    case 1: // Properties menu
+        if(g_State & (VCD_IN_USE | VCD_NO_CD | VCD_DATA_CD_LOADED))
+            uFlags = (MF_BYCOMMAND | MF_GRAYED);
+        else
+            uFlags = (MF_BYCOMMAND | MF_ENABLED);
 
-            EnableMenuItem(hMenu, IDM_APP_IMAGE, uFlags);
-            EnableMenuItem(hMenu, IDM_STREAM_A, uFlags);
-            EnableMenuItem(hMenu, IDM_CAPTURE_IMAGE, uFlags);
-            EnableMenuItem(hMenu, IDM_DISPLAY_CAPTURED_IMAGE, uFlags);
+        EnableMenuItem(hMenu, IDM_APP_IMAGE, uFlags);
+        EnableMenuItem(hMenu, IDM_STREAM_A, uFlags);
+        EnableMenuItem(hMenu, IDM_CAPTURE_IMAGE, uFlags);
+        EnableMenuItem(hMenu, IDM_DISPLAY_CAPTURED_IMAGE, uFlags);
 
-            if (!g_bSecondFileLoaded)
-                uFlags = (MF_BYCOMMAND | MF_GRAYED);
-            else
-                uFlags = (MF_BYCOMMAND | MF_ENABLED);
+        if (!g_bSecondFileLoaded)
+            uFlags = (MF_BYCOMMAND | MF_GRAYED);
+        else
+            uFlags = (MF_BYCOMMAND | MF_ENABLED);
 
-            EnableMenuItem(hMenu, IDM_STREAM_B, uFlags);
-            break;
+        EnableMenuItem(hMenu, IDM_STREAM_B, uFlags);
+        break;
 
-        case 2: // Help menu
-            break;
+    case 2: // Help menu
+        break;
     }
 }
 
@@ -1107,26 +1110,26 @@ VideoCd_OnInitMenuPopup(
 void
 VideoCd_OnGraphNotify(
     void
-    )
+)
 {
     long lEventCode = pMovie->GetMovieEventCode();
 
     switch(lEventCode)
     {
-        case EC_STEP_COMPLETE:
-            g_State &= ~VCD_STEPPING;
-            SetPlayButtonsEnableState();
-            break;
+    case EC_STEP_COMPLETE:
+        g_State &= ~VCD_STEPPING;
+        SetPlayButtonsEnableState();
+        break;
 
-        case EC_COMPLETE:
-        case EC_USERABORT:
-        case EC_ERRORABORT:
-            VcdPlayerStopCmd();
-            SetPlayButtonsEnableState();
-            break;
+    case EC_COMPLETE:
+    case EC_USERABORT:
+    case EC_ERRORABORT:
+        VcdPlayerStopCmd();
+        SetPlayButtonsEnableState();
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 
@@ -1142,19 +1145,19 @@ VideoCd_OnNotify(
     HWND hwnd,
     int idFrom,
     NMHDR FAR* pnmhdr
-    )
+)
 {
     switch(pnmhdr->code)
     {
-        case TTN_NEEDTEXT:
-        {
-            LPTOOLTIPTEXT   lpTt;
+    case TTN_NEEDTEXT:
+    {
+        LPTOOLTIPTEXT   lpTt;
 
-            lpTt = (LPTOOLTIPTEXT)pnmhdr;
-            LoadString(hInst, (UINT) lpTt->hdr.idFrom, lpTt->szText,
-                       NUMELMS(lpTt->szText));
-        }
-        break;
+        lpTt = (LPTOOLTIPTEXT)pnmhdr;
+        LoadString(hInst, (UINT) lpTt->hdr.idFrom, lpTt->szText,
+                   NUMELMS(lpTt->szText));
+    }
+    break;
     }
 
     return 0;
@@ -1172,7 +1175,7 @@ VideoCd_OnMenuSelect(
     int item,
     HMENU hmenuPopup,
     UINT flags
-    )
+)
 {
     TCHAR szString[STR_MAX_STRING_LEN + 1];
     HRESULT hr;
@@ -1196,33 +1199,33 @@ VideoCd_OnMenuSelect(
     {
         switch(item)
         {
-            case SC_RESTORE:
-                hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_RESTORE));
-                break;
+        case SC_RESTORE:
+            hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_RESTORE));
+            break;
 
-            case SC_MOVE:
-                hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_MOVE));
-                break;
+        case SC_MOVE:
+            hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_MOVE));
+            break;
 
-            case SC_MINIMIZE:
-                hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_MINIMIZE));
-                break;
+        case SC_MINIMIZE:
+            hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_MINIMIZE));
+            break;
 
-            case SC_MAXIMIZE:
-                hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_MAXIMIZE));
-                break;
+        case SC_MAXIMIZE:
+            hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_MAXIMIZE));
+            break;
 
-            case SC_TASKLIST:
-                hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_TASK_LIST));
-                break;
+        case SC_TASKLIST:
+            hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_TASK_LIST));
+            break;
 
-            case SC_CLOSE:
-                hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_CLOSE));
-                break;
+        case SC_CLOSE:
+            hr = StringCchCopy(szString, NUMELMS(szString), IdStr(STR_SYSMENU_CLOSE));
+            break;
         }
 
         SendMessage(g_hwndStatusbar, SB_SETTEXT, SBT_NOBORDERS|255,
-                   (LPARAM)(LPTSTR)szString);
+                    (LPARAM)(LPTSTR)szString);
         SendMessage(g_hwndStatusbar, SB_SIMPLE, 1, 0L);
         UpdateWindow(g_hwndStatusbar);
     }
@@ -1242,7 +1245,7 @@ VideoCd_OnMenuSelect(
         }
 
         SendMessage(g_hwndStatusbar, SB_SETTEXT, SBT_NOBORDERS|255,
-                   (LPARAM)(LPTSTR)szString);
+                    (LPARAM)(LPTSTR)szString);
         SendMessage(g_hwndStatusbar, SB_SIMPLE, 1, 0L);
         UpdateWindow(g_hwndStatusbar);
     }
@@ -1258,17 +1261,17 @@ VideoCd_OnMenuSelect(
 *
 *                 VCD Player buttons enable state table
 * -------------------------------------------------------------------
-* ³E=Enabled D=Disabled      ³ Play ³ Pause ³ Eject ³ Stop  ³ Other ³
+* Â³E=Enabled D=Disabled      Â³ Play Â³ Pause Â³ Eject Â³ Stop  Â³ Other Â³
 * -------------------------------------------------------------------
-* ³Disk in use               ³  D   ³  D    ³  D    ³   D   ³   D   ³
+* Â³Disk in use               Â³  D   Â³  D    Â³  D    Â³   D   Â³   D   Â³
 * -------------------------------------------------------------------
-* ³No video cd or data cdrom ³  D   ³  D    ³  E    ³   D   ³   D   ³
+* Â³No video cd or data cdrom Â³  D   Â³  D    Â³  E    Â³   D   Â³   D   Â³
 * -------------------------------------------------------------------
-* ³Video cd (playing)        ³  D   ³  E    ³  E    ³   E   ³   E   ³
+* Â³Video cd (playing)        Â³  D   Â³  E    Â³  E    Â³   E   Â³   E   Â³
 * -------------------------------------------------------------------
-* ³Video cd (paused)         ³  E   ³  D    ³  E    ³   E   ³   E   ³
+* Â³Video cd (paused)         Â³  E   Â³  D    Â³  E    Â³   E   Â³   E   Â³
 * -------------------------------------------------------------------
-* ³Video cd (stopped)        ³  E   ³  D    ³  E    ³   D   ³   E   ³
+* Â³Video cd (stopped)        Â³  E   Â³  D    Â³  E    Â³   D   Â³   E   Â³
 * -------------------------------------------------------------------
 *
 *
@@ -1276,7 +1279,7 @@ VideoCd_OnMenuSelect(
 void
 SetPlayButtonsEnableState(
     void
-    )
+)
 {
     BOOL    fEnable;
     BOOL    fVideoLoaded;
@@ -1297,7 +1300,7 @@ SetPlayButtonsEnableState(
     ** Do the play button
     */
     if(fVideoLoaded
-        && ((g_State & VCD_STOPPED) || (g_State & VCD_PAUSED)))
+            && ((g_State & VCD_STOPPED) || (g_State & VCD_PAUSED)))
     {
         fEnable = TRUE;
     }
@@ -1311,7 +1314,7 @@ SetPlayButtonsEnableState(
     ** Do the stop button
     */
     if(fVideoLoaded
-        && ((g_State & VCD_PLAYING) || (g_State & VCD_PAUSED)))
+            && ((g_State & VCD_PLAYING) || (g_State & VCD_PAUSED)))
     {
         fEnable = TRUE;
     }
@@ -1354,13 +1357,13 @@ SetPlayButtonsEnableState(
         fEnable = TRUE;
 
     SendMessage(g_hwndToolbar, TB_ENABLEBUTTON,
-        IDM_MOVIE_SKIP_FORE, fEnable);
+                IDM_MOVIE_SKIP_FORE, fEnable);
 
     SendMessage(g_hwndToolbar, TB_ENABLEBUTTON,
-        IDM_MOVIE_SKIP_BACK, fEnable);
+                IDM_MOVIE_SKIP_BACK, fEnable);
 
     SendMessage(g_hwndToolbar, TB_ENABLEBUTTON,
-        IDM_MOVIE_PREVTRACK, fEnable);
+                IDM_MOVIE_PREVTRACK, fEnable);
 }
 
 
@@ -1374,7 +1377,7 @@ SetPlayButtonsEnableState(
 void
 GetAdjustedClientRect(
     RECT *prc
-    )
+)
 {
     RECT rcTool;
 
@@ -1400,7 +1403,7 @@ GetAdjustedClientRect(
 LPCTSTR
 IdStr(
     int idResource
-    )
+)
 {
     static TCHAR chBuffer[ STR_MAX_STRING_LEN ];
 
@@ -1420,7 +1423,7 @@ IdStr(
 void
 SetDurationLength(
     REFTIME rt
-    )
+)
 {
     TCHAR   szFmt[64];
     TCHAR   sz[64];
@@ -1432,7 +1435,7 @@ SetDurationLength(
     }
 
     SendMessage(g_hwndTrackbar, TBM_SETRANGE, TRUE,
-        MAKELONG(0, (WORD)(rt / g_TrackBarScale)));
+                MAKELONG(0, (WORD)(rt / g_TrackBarScale)));
 
     SendMessage(g_hwndTrackbar, TBM_SETTICFREQ, (WPARAM)((int)(rt / g_TrackBarScale) / 9), 0);
     SendMessage(g_hwndTrackbar, TBM_SETPAGESIZE, 0, (LPARAM)((int)(rt / g_TrackBarScale) / 9));
@@ -1451,7 +1454,7 @@ SetDurationLength(
 void
 SetCurrentPosition(
     REFTIME rt
-    )
+)
 {
     TCHAR   szFmt[64];
     TCHAR   sz[64];
@@ -1475,7 +1478,7 @@ FormatRefTime(
     TCHAR *sz,
     size_t len,
     REFTIME rt
-    )
+)
 {
     // If we are not seeking in time then format differently
 
@@ -1554,7 +1557,7 @@ AppImgDlgProc(
     UINT uMsg,
     WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     HWND hwndT;
     int pos;
@@ -1563,113 +1566,113 @@ AppImgDlgProc(
 
     switch(uMsg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
 
-            hwndT = GetDlgItem(hwnd, IDC_XPOS_TRK);
-            pos = int(1000 * g_xPos);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
-            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_xPos);
-            SetWindowText(hwndT, sz);
-            SetDlgItemText(hwnd, IDC_XPOS, sz);
+        hwndT = GetDlgItem(hwnd, IDC_XPOS_TRK);
+        pos = int(1000 * g_xPos);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_xPos);
+        SetWindowText(hwndT, sz);
+        SetDlgItemText(hwnd, IDC_XPOS, sz);
 
-            pos = int(1000 * g_yPos);
-            hwndT = GetDlgItem(hwnd, IDC_YPOS_TRK);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
-            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_yPos);
-            SetWindowText(hwndT, sz);
-            SetDlgItemText(hwnd, IDC_YPOS, sz);
+        pos = int(1000 * g_yPos);
+        hwndT = GetDlgItem(hwnd, IDC_YPOS_TRK);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_yPos);
+        SetWindowText(hwndT, sz);
+        SetDlgItemText(hwnd, IDC_YPOS, sz);
 
-            pos = int(1000 * g_xSize);
-            hwndT = GetDlgItem(hwnd, IDC_XSIZE_TRK);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
-            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_xSize);
-            SetWindowText(hwndT, sz);
-            SetDlgItemText(hwnd, IDC_XSIZE, sz);
+        pos = int(1000 * g_xSize);
+        hwndT = GetDlgItem(hwnd, IDC_XSIZE_TRK);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_xSize);
+        SetWindowText(hwndT, sz);
+        SetDlgItemText(hwnd, IDC_XSIZE, sz);
 
-            pos = int(1000 * g_ySize);
-            hwndT = GetDlgItem(hwnd, IDC_YSIZE_TRK);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
-            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_ySize);
-            SetDlgItemText(hwnd, IDC_YSIZE, sz);
+        pos = int(1000 * g_ySize);
+        hwndT = GetDlgItem(hwnd, IDC_YSIZE_TRK);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_ySize);
+        SetDlgItemText(hwnd, IDC_YSIZE, sz);
 
-            pos = int(1000 * g_Alpha);
-            hwndT = GetDlgItem(hwnd, IDC_ALPHA_TRK2);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        pos = int(1000 * g_Alpha);
+        hwndT = GetDlgItem(hwnd, IDC_ALPHA_TRK2);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(1000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_Alpha);
+        SetDlgItemText(hwnd, IDC_ALPHA, sz);
+
+        Button_SetCheck(GetDlgItem(hwnd, IDC_IMAGE_ENABLE), g_fEnableAppImage);
+        return TRUE;
+
+    case WM_COMMAND:
+        switch(LOWORD(wParam))
+        {
+        case IDOK:
+            EndDialog(hwnd, 1);
+            break;
+
+        case IDC_IMAGE_ENABLE:
+            g_fEnableAppImage =
+                Button_GetCheck(GetDlgItem(hwnd, IDC_IMAGE_ENABLE));
+            UpdateAppImage();
+            break;
+        }
+        return TRUE;
+
+    case WM_HSCROLL:
+    {
+        HWND hwndCtrl = (HWND)lParam;
+
+        if(GetDlgItem(hwnd, IDC_ALPHA_TRK2) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            g_Alpha = (FLOAT)pos / 1000.0F;
+            UpdateAppImage();
             hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_Alpha);
             SetDlgItemText(hwnd, IDC_ALPHA, sz);
+        }
+        else if(GetDlgItem(hwnd, IDC_XPOS_TRK) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            g_xPos = (FLOAT)pos / 1000.0F;
+            UpdateAppImage();
+            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_xPos);
+            SetDlgItemText(hwnd, IDC_XPOS, sz);
+        }
+        else if(GetDlgItem(hwnd, IDC_YPOS_TRK) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            g_yPos = (FLOAT)pos / 1000.0F;
+            UpdateAppImage();
+            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_yPos);
+            SetDlgItemText(hwnd, IDC_YPOS, sz);
+        }
+        else if(GetDlgItem(hwnd, IDC_XSIZE_TRK) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            g_xSize = (FLOAT)pos / 1000.0F;
+            UpdateAppImage();
+            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_xSize);
+            SetDlgItemText(hwnd, IDC_XSIZE, sz);
+        }
+        else if(GetDlgItem(hwnd, IDC_YSIZE_TRK) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            g_ySize = (FLOAT)pos / 1000.0F;
+            UpdateAppImage();
+            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_ySize);
+            SetDlgItemText(hwnd, IDC_YSIZE, sz);
+        }
+    }
+    return TRUE;
 
-            Button_SetCheck(GetDlgItem(hwnd, IDC_IMAGE_ENABLE), g_fEnableAppImage);
-            return TRUE;
-
-        case WM_COMMAND:
-            switch(LOWORD(wParam))
-            {
-                case IDOK:
-                    EndDialog(hwnd, 1);
-                    break;
-
-                case IDC_IMAGE_ENABLE:
-                    g_fEnableAppImage =
-                    Button_GetCheck(GetDlgItem(hwnd, IDC_IMAGE_ENABLE));
-                    UpdateAppImage();
-                    break;
-            }
-            return TRUE;
-
-        case WM_HSCROLL:
-            {
-                HWND hwndCtrl = (HWND)lParam;
-
-                if(GetDlgItem(hwnd, IDC_ALPHA_TRK2) == hwndCtrl)
-                {
-                    pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                    g_Alpha = (FLOAT)pos / 1000.0F;
-                    UpdateAppImage();
-                    hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_Alpha);
-                    SetDlgItemText(hwnd, IDC_ALPHA, sz);
-                }
-                else if(GetDlgItem(hwnd, IDC_XPOS_TRK) == hwndCtrl)
-                {
-                        pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                        g_xPos = (FLOAT)pos / 1000.0F;
-                        UpdateAppImage();
-                        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_xPos);
-                        SetDlgItemText(hwnd, IDC_XPOS, sz);
-                }
-                else if(GetDlgItem(hwnd, IDC_YPOS_TRK) == hwndCtrl)
-                {
-                        pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                        g_yPos = (FLOAT)pos / 1000.0F;
-                        UpdateAppImage();
-                        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_yPos);
-                        SetDlgItemText(hwnd, IDC_YPOS, sz);
-                }
-                else if(GetDlgItem(hwnd, IDC_XSIZE_TRK) == hwndCtrl)
-                {
-                        pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                        g_xSize = (FLOAT)pos / 1000.0F;
-                        UpdateAppImage();
-                        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_xSize);
-                        SetDlgItemText(hwnd, IDC_XSIZE, sz);
-                }
-                else if(GetDlgItem(hwnd, IDC_YSIZE_TRK) == hwndCtrl)
-                {
-                        pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                        g_ySize = (FLOAT)pos / 1000.0F;
-                        UpdateAppImage();
-                        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), g_ySize);
-                        SetDlgItemText(hwnd, IDC_YSIZE, sz);
-                }
-            }
-            return TRUE;
-
-        default:
-            return FALSE;
+    default:
+        return FALSE;
     }
 }
 
@@ -1713,7 +1716,7 @@ TransDlgProc(
     UINT uMsg,
     WPARAM wParam,
     LPARAM lParam
-    )
+)
 {
     TCHAR sz[32];
     HWND hwndT;
@@ -1725,113 +1728,113 @@ TransDlgProc(
 
     switch(uMsg)
     {
-        case WM_INITDIALOG:
+    case WM_INITDIALOG:
 
-            strmID = (int)lParam;
-            p = &strParam[strmID];
+        strmID = (int)lParam;
+        p = &strParam[strmID];
 
-            SetWindowText(hwnd, TEXT("Video Transition Properties"));
-            ShowWindow(GetDlgItem(hwnd, IDC_IMAGE_ENABLE), SW_HIDE);
+        SetWindowText(hwnd, TEXT("Video Transition Properties"));
+        ShowWindow(GetDlgItem(hwnd, IDC_IMAGE_ENABLE), SW_HIDE);
 
-            hwndT = GetDlgItem(hwnd, IDC_XPOS_TRK);
-            pos = int(10000 * p->xPos) + 10000;
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(20000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
-            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->xPos);
-            SetWindowText(hwndT, sz);
-            SetDlgItemText(hwnd, IDC_XPOS, sz);
+        hwndT = GetDlgItem(hwnd, IDC_XPOS_TRK);
+        pos = int(10000 * p->xPos) + 10000;
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(20000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->xPos);
+        SetWindowText(hwndT, sz);
+        SetDlgItemText(hwnd, IDC_XPOS, sz);
 
-            pos = int(10000 * p->yPos) + 10000;
-            hwndT = GetDlgItem(hwnd, IDC_YPOS_TRK);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(20000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
-            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->yPos);
-            SetWindowText(hwndT, sz);
-            SetDlgItemText(hwnd, IDC_YPOS, sz);
+        pos = int(10000 * p->yPos) + 10000;
+        hwndT = GetDlgItem(hwnd, IDC_YPOS_TRK);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(20000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->yPos);
+        SetWindowText(hwndT, sz);
+        SetDlgItemText(hwnd, IDC_YPOS, sz);
 
-            pos = int(10000 * p->xSize) + 10000;
-            hwndT = GetDlgItem(hwnd, IDC_XSIZE_TRK);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(20000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
-            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->xSize);
-            SetWindowText(hwndT, sz);
-            SetDlgItemText(hwnd, IDC_XSIZE, sz);
+        pos = int(10000 * p->xSize) + 10000;
+        hwndT = GetDlgItem(hwnd, IDC_XSIZE_TRK);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(20000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->xSize);
+        SetWindowText(hwndT, sz);
+        SetDlgItemText(hwnd, IDC_XSIZE, sz);
 
-            pos = int(10000 * p->ySize) + 10000;
-            hwndT = GetDlgItem(hwnd, IDC_YSIZE_TRK);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(20000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
-            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->ySize);
-            SetWindowText(hwndT, sz);
-            SetDlgItemText(hwnd, IDC_YSIZE, sz);
+        pos = int(10000 * p->ySize) + 10000;
+        hwndT = GetDlgItem(hwnd, IDC_YSIZE_TRK);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(20000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->ySize);
+        SetWindowText(hwndT, sz);
+        SetDlgItemText(hwnd, IDC_YSIZE, sz);
 
-            pos = int(10000 * p->Alpha);
-            hwndT = GetDlgItem(hwnd, IDC_ALPHA_TRK2);
-            SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(10000)));
-            SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        pos = int(10000 * p->Alpha);
+        hwndT = GetDlgItem(hwnd, IDC_ALPHA_TRK2);
+        SendMessage(hwndT, TBM_SETRANGE, TRUE, MAKELONG(0, (WORD)(10000)));
+        SendMessage(hwndT, TBM_SETPOS, TRUE, (LPARAM)(pos));
+        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->Alpha);
+        SetWindowText(hwndT, sz);
+        SetDlgItemText(hwnd, IDC_ALPHA, sz);
+        return TRUE;
+
+    case WM_COMMAND:
+        switch(LOWORD(wParam))
+        {
+        case IDOK:
+            EndDialog(hwnd, 1);
+            break;
+        }
+        return TRUE;
+
+    case WM_HSCROLL:
+    {
+        HWND hwndCtrl = (HWND)lParam;
+
+        if(GetDlgItem(hwnd, IDC_ALPHA_TRK2) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            p->Alpha = (FLOAT)pos / 10000.0F;
+            UpdatePinAlpha(strmID);
             hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->Alpha);
-            SetWindowText(hwndT, sz);
             SetDlgItemText(hwnd, IDC_ALPHA, sz);
-            return TRUE;
+        }
+        else if(GetDlgItem(hwnd, IDC_XPOS_TRK) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            p->xPos = ((FLOAT)pos - 10000.F) / 10000.0F;
+            UpdatePinPos(strmID);
+            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->xPos);
+            SetDlgItemText(hwnd, IDC_XPOS, sz);
+        }
+        else if(GetDlgItem(hwnd, IDC_YPOS_TRK) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            p->yPos = ((FLOAT)pos - 10000.F) / 10000.0F;
+            UpdatePinPos(strmID);
+            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->yPos);
+            SetDlgItemText(hwnd, IDC_YPOS, sz);
+        }
+        else if(GetDlgItem(hwnd, IDC_XSIZE_TRK) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            p->xSize = ((FLOAT)pos - 10000.F) / 10000.0F;
+            UpdatePinPos(strmID);
+            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->xSize);
+            SetDlgItemText(hwnd, IDC_XSIZE, sz);
+        }
+        else if(GetDlgItem(hwnd, IDC_YSIZE_TRK) == hwndCtrl)
+        {
+            pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
+            p->ySize = ((FLOAT)pos - 10000.F) / 10000.0F;
+            UpdatePinPos(strmID);
+            hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->ySize);
+            SetDlgItemText(hwnd, IDC_YSIZE, sz);
+        }
+    }
+    return TRUE;
 
-        case WM_COMMAND:
-            switch(LOWORD(wParam))
-            {
-                case IDOK:
-                    EndDialog(hwnd, 1);
-                    break;
-            }
-            return TRUE;
-
-        case WM_HSCROLL:
-            {
-                HWND hwndCtrl = (HWND)lParam;
-
-                if(GetDlgItem(hwnd, IDC_ALPHA_TRK2) == hwndCtrl)
-                {
-                    pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                    p->Alpha = (FLOAT)pos / 10000.0F;
-                    UpdatePinAlpha(strmID);
-                    hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->Alpha);
-                    SetDlgItemText(hwnd, IDC_ALPHA, sz);
-                }
-                else if(GetDlgItem(hwnd, IDC_XPOS_TRK) == hwndCtrl)
-                {
-                        pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                        p->xPos = ((FLOAT)pos - 10000.F) / 10000.0F;
-                        UpdatePinPos(strmID);
-                        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->xPos);
-                        SetDlgItemText(hwnd, IDC_XPOS, sz);
-                }
-                else if(GetDlgItem(hwnd, IDC_YPOS_TRK) == hwndCtrl)
-                {
-                        pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                        p->yPos = ((FLOAT)pos - 10000.F) / 10000.0F;
-                        UpdatePinPos(strmID);
-                        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->yPos);
-                        SetDlgItemText(hwnd, IDC_YPOS, sz);
-                }
-                else if(GetDlgItem(hwnd, IDC_XSIZE_TRK) == hwndCtrl)
-                {
-                        pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                        p->xSize = ((FLOAT)pos - 10000.F) / 10000.0F;
-                        UpdatePinPos(strmID);
-                        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->xSize);
-                        SetDlgItemText(hwnd, IDC_XSIZE, sz);
-                }
-                else if(GetDlgItem(hwnd, IDC_YSIZE_TRK) == hwndCtrl)
-                {
-                        pos = (int)SendMessage(hwndCtrl, TBM_GETPOS, 0, 0);
-                        p->ySize = ((FLOAT)pos - 10000.F) / 10000.0F;
-                        UpdatePinPos(strmID);
-                        hr = StringCchPrintf(sz, NUMELMS(sz), TEXT("%.3f"), p->ySize);
-                        SetDlgItemText(hwnd, IDC_YSIZE, sz);
-                }
-            }
-            return TRUE;
-
-        default:
-            return FALSE;
+    default:
+        return FALSE;
     }
 }
 
@@ -1840,16 +1843,16 @@ LRESULT CALLBACK AboutDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 {
     switch(message)
     {
-        case WM_INITDIALOG:
-            return TRUE;
+    case WM_INITDIALOG:
+        return TRUE;
 
-        case WM_COMMAND:
-            if(wParam == IDOK)
-            {
-                EndDialog(hWnd, TRUE);
-                return TRUE;
-            }
-            break;
+    case WM_COMMAND:
+        if(wParam == IDOK)
+        {
+            EndDialog(hWnd, TRUE);
+            return TRUE;
+        }
+        break;
     }
     return FALSE;
 }
@@ -1883,15 +1886,15 @@ BOOL VerifyVMR9(void)
     else
     {
         MessageBox(NULL,
-            TEXT("This application requires the VMR-9.\r\n\r\n")
+                   TEXT("This application requires the VMR-9.\r\n\r\n")
 
-            TEXT("The VMR-9 is not enabled when viewing through a Remote\r\n")
-            TEXT(" Desktop session. You can run VMR-enabled applications only\r\n") 
-            TEXT("on your local computer.\r\n\r\n")
+                   TEXT("The VMR-9 is not enabled when viewing through a Remote\r\n")
+                   TEXT(" Desktop session. You can run VMR-enabled applications only\r\n")
+                   TEXT("on your local computer.\r\n\r\n")
 
-            TEXT("\r\nThis sample will now exit."),
+                   TEXT("\r\nThis sample will now exit."),
 
-            TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
+                   TEXT("Video Mixing Renderer (VMR9) capabilities are required"), MB_OK);
 
         return FALSE;
     }

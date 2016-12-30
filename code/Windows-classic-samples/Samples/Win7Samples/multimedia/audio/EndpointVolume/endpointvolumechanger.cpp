@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,7 +28,7 @@ int VolumeValue = -1;
 
 wchar_t *OutputEndpoint;
 
-CommandLineSwitch CmdLineArgs[] = 
+CommandLineSwitch CmdLineArgs[] =
 {
     { L"?", L"Print this help", CommandLineSwitch::SwitchTypeNone, reinterpret_cast<void **>(&ShowHelp)},
     { L"h", L"Print this help", CommandLineSwitch::SwitchTypeNone, reinterpret_cast<void **>(&ShowHelp)},
@@ -60,7 +60,7 @@ void Help(LPCWSTR ProgramName)
 }
 
 //
-//  Retrieves the device friendly name for a particular device in a device collection.  
+//  Retrieves the device friendly name for a particular device in a device collection.
 //
 //  The returned string was allocated using malloc() so it should be freed using free();
 //
@@ -219,7 +219,7 @@ bool PickDevice(IMMDevice **DeviceToUse, bool *IsDefaultDevice, ERole *DefaultDe
             }
             break;
         }
-    } 
+    }
     else if (OutputEndpoint != NULL)
     {
         hr = deviceEnumerator->GetDevice(OutputEndpoint, &device);

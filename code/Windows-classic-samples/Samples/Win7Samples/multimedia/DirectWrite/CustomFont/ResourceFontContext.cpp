@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -37,15 +37,15 @@ HRESULT ResourceFontContext::InitializeInternal()
     HRESULT hr = S_OK;
 
     if (!ResourceFontFileLoader::IsLoaderInitialized()
-    ||  !ResourceFontCollectionLoader::IsLoaderInitialized())
+            ||  !ResourceFontCollectionLoader::IsLoaderInitialized())
     {
         return E_FAIL;
     }
 
     // Register our custom loaders with the factory object.
     //
-    // Note: For this application we just use the shared DWrite factory object which is accessed via 
-    //       a global variable. If we were using fonts embedded in *documents* then it might make sense 
+    // Note: For this application we just use the shared DWrite factory object which is accessed via
+    //       a global variable. If we were using fonts embedded in *documents* then it might make sense
     //       to create an isolated factory for each document. When unloading the document, one would
     //       also release the isolated factory, thus ensuring that all cached font data specific to
     //       that document would be promptly disposed of.
@@ -62,7 +62,7 @@ HRESULT ResourceFontContext::CreateFontCollection(
     UINT const* fontCollectionKey,  // [keySize] in bytes
     UINT32 keySize,
     OUT IDWriteFontCollection** result
-    )
+)
 {
     *result = NULL;
 
@@ -73,11 +73,11 @@ HRESULT ResourceFontContext::CreateFontCollection(
         return hr;
 
     hr = g_dwriteFactory->CreateCustomFontCollection(
-            ResourceFontCollectionLoader::GetLoader(),
-            fontCollectionKey,
-            keySize,
-            result
-            );
+             ResourceFontCollectionLoader::GetLoader(),
+             fontCollectionKey,
+             keySize,
+             result
+         );
 
     return hr;
 }

@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // RiffParser.cpp : RIFF file parsing.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -42,10 +42,10 @@ CRiffChunk::CRiffChunk(const RIFFCHUNK& c)
 //-------------------------------------------------------------------
 
 CRiffParser::CRiffParser(IMFByteStream *pStream, FOURCC id, LONGLONG cbStartOfContainer, HRESULT& hr) :
-    m_fccID(id), 
+    m_fccID(id),
     m_fccType(0),
-    m_llContainerOffset(cbStartOfContainer), 
-    m_dwContainerSize(0), 
+    m_llContainerOffset(cbStartOfContainer),
+    m_dwContainerSize(0),
     m_llCurrentChunkOffset(0),
     m_dwBytesRemaining(0)
 {
@@ -70,7 +70,7 @@ CRiffParser::~CRiffParser()
 
 //-------------------------------------------------------------------
 // Name: ReadRiffHeader
-// Description: 
+// Description:
 // Read the container header section. (The 'RIFF' or 'LIST' header.)
 //
 // This method verifies the header is well-formed and caches the
@@ -103,16 +103,16 @@ HRESULT CRiffParser::ReadRiffHeader()
 
     // Seek to the start of the container.
     hr = m_pStream->SetCurrentPosition(m_llContainerOffset);
-    
-    // Read the header. 
+
+    // Read the header.
     if (SUCCEEDED(hr))
-    {   
+    {
         hr = m_pStream->Read((BYTE*)&header, sizeof(header), &cbRead);
     }
 
     // Make sure we read the number of bytes we expected.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (cbRead != sizeof(header))
         {
             hr = E_INVALIDARG;
@@ -121,7 +121,7 @@ HRESULT CRiffParser::ReadRiffHeader()
 
     // Make sure the header ID matches what the caller expected.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (header.fcc != m_fccID)
         {
             hr = E_INVALIDARG;
@@ -129,12 +129,12 @@ HRESULT CRiffParser::ReadRiffHeader()
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         // The size given in the RIFF header does not include the 8-byte header.
         // However, our m_llContainerOffset is the offset from the start of the
         // header. Therefore our container size = listed size + size of header.
 
-        m_dwContainerSize = header.cb + sizeof(RIFFCHUNK); 
+        m_dwContainerSize = header.cb + sizeof(RIFFCHUNK);
         m_fccType = header.fccListType;
 
         // Start of the first chunk = start of container + size of container header
@@ -148,8 +148,8 @@ HRESULT CRiffParser::ReadRiffHeader()
 
 //-------------------------------------------------------------------
 // Name: ReadChunkHeader
-// Description: 
-// Reads the chunk header. Caller must ensure that the current file 
+// Description:
+// Reads the chunk header. Caller must ensure that the current file
 // pointer is located at the start of the chunk header.
 //-------------------------------------------------------------------
 
@@ -163,9 +163,9 @@ HRESULT CRiffParser::ReadChunkHeader()
 
     ULONG cbRead;
     HRESULT hr = S_OK;
-    
-    hr = m_pStream->Read((BYTE*)&m_chunk, sizeof(RIFFCHUNK), &cbRead); 
-    
+
+    hr = m_pStream->Read((BYTE*)&m_chunk, sizeof(RIFFCHUNK), &cbRead);
+
     // Make sure we got the number of bytes we expected.
 
     if (SUCCEEDED(hr))
@@ -186,8 +186,8 @@ HRESULT CRiffParser::ReadChunkHeader()
 
 //-------------------------------------------------------------------
 // Name: MoveToNextChunk
-// Description: 
-// Advance to the start of the next chunk and read the chunk header. 
+// Description:
+// Advance to the start of the next chunk and read the chunk header.
 //-------------------------------------------------------------------
 
 HRESULT CRiffParser::MoveToNextChunk()
@@ -215,16 +215,16 @@ HRESULT CRiffParser::MoveToNextChunk()
     {
         return E_INVALIDARG;
     }
-    
+
     // Seek to the start of the chunk.
     hr = m_pStream->SetCurrentPosition(m_llCurrentChunkOffset);
 
-    // Read the header. 
+    // Read the header.
     if (SUCCEEDED(hr))
     {
         hr = ReadChunkHeader();
     }
- 
+
     // This chunk cannot be any larger than (container size - (chunk offset - container offset) )
     if (SUCCEEDED(hr))
     {
@@ -246,9 +246,9 @@ HRESULT CRiffParser::MoveToNextChunk()
 
 //-------------------------------------------------------------------
 // Name: MoveToChunkOffset
-// Description: 
-// Move the file pointer to a byte offset from the start of the 
-// current chunk. 
+// Description:
+// Move the file pointer to a byte offset from the start of the
+// current chunk.
 //-------------------------------------------------------------------
 
 HRESULT CRiffParser::MoveToChunkOffset(DWORD dwOffset)
@@ -259,7 +259,7 @@ HRESULT CRiffParser::MoveToChunkOffset(DWORD dwOffset)
     }
 
     HRESULT hr = S_OK;
-    
+
     hr = m_pStream->SetCurrentPosition(m_llCurrentChunkOffset + dwOffset + sizeof(RIFFCHUNK));
 
     if (SUCCEEDED(hr))
@@ -273,8 +273,8 @@ HRESULT CRiffParser::MoveToChunkOffset(DWORD dwOffset)
 
 //-------------------------------------------------------------------
 // Name: MoveToChunkOffset
-// Description: 
-// Move the file pointer to the start of the current chunk. 
+// Description:
+// Move the file pointer to the start of the current chunk.
 //-------------------------------------------------------------------
 
 HRESULT CRiffParser::MoveToStartOfChunk()
@@ -285,8 +285,8 @@ HRESULT CRiffParser::MoveToStartOfChunk()
 
 //-------------------------------------------------------------------
 // Name: ReadDataFromChunk
-// Description: 
-// Read data from the current chunk. (Starts at the current file ptr.) 
+// Description:
+// Read data from the current chunk. (Starts at the current file ptr.)
 //-------------------------------------------------------------------
 
 HRESULT CRiffParser::ReadDataFromChunk( BYTE* pData, DWORD dwLengthInBytes )
@@ -359,7 +359,7 @@ HRESULT CWavRiffParser::Create(IMFByteStream *pStream, CWavRiffParser **ppParser
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         *ppParser = pParser;
     }
     else
@@ -374,7 +374,7 @@ HRESULT CWavRiffParser::Create(IMFByteStream *pStream, CWavRiffParser **ppParser
 //-------------------------------------------------------------------
 // Name: ParseWAVEHeader
 // Description: Parsers the RIFF WAVE header.
-// 
+//
 // Note:
 // .wav files should look like this:
 //
@@ -401,7 +401,7 @@ HRESULT CWavRiffParser::ParseWAVEHeader()
         else if (Chunk().FourCC() == ckid_WAVE_DATA)
         {
             // Found the start of the audio data. The format chunk should precede the
-            // data chunk. If we did not find the formt chunk yet, that is a failure 
+            // data chunk. If we did not find the formt chunk yet, that is a failure
             // case (see below)
             bFoundData = TRUE;
             break;
@@ -416,7 +416,7 @@ HRESULT CWavRiffParser::ParseWAVEHeader()
     // To be valid, the file must have a format chunk and a data chunk.
     // Fail if either of these conditions is not met.
     if (SUCCEEDED(hr))
-    {   
+    {
         if (m_pWaveFormat == NULL || !bFoundData)
         {
             hr = MF_E_INVALID_FILE_FORMAT;
@@ -424,10 +424,10 @@ HRESULT CWavRiffParser::ParseWAVEHeader()
     }
 
     if (SUCCEEDED(hr))
-    {   
+    {
         m_rtDuration = AudioDurationFromBufferSize(m_pWaveFormat, Chunk().DataSize());
     }
-    
+
     return hr;
 }
 
@@ -443,8 +443,8 @@ HRESULT CWavRiffParser::ReadFormatBlock()
 
     HRESULT hr = S_OK;
 
-    // Some .wav files do not include the cbSize field of the WAVEFORMATEX 
-    // structure. For uncompressed PCM audio, field is always zero. 
+    // Some .wav files do not include the cbSize field of the WAVEFORMATEX
+    // structure. For uncompressed PCM audio, field is always zero.
     const DWORD cbMinFormatSize = sizeof(WAVEFORMATEX) - sizeof(WORD);
 
     DWORD cbFormatSize = 0;     // Size of the actual format block in the file.
@@ -457,8 +457,8 @@ HRESULT CWavRiffParser::ReadFormatBlock()
 
     // Allocate a buffer for the WAVEFORMAT structure.
     cbFormatSize = Chunk().DataSize();
-    
-    // We store a WAVEFORMATEX structure, so our format block must be at 
+
+    // We store a WAVEFORMATEX structure, so our format block must be at
     // least sizeof(WAVEFORMATEX) even if the format block in the file
     // is smaller. See note above about cbMinFormatSize.
     m_cbWaveFormat = max(cbFormatSize, sizeof(WAVEFORMATEX));

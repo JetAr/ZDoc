@@ -1,4 +1,4 @@
-//==========================================================================
+﻿//==========================================================================
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -19,7 +19,7 @@
 // This function downloads item after setting the format for the item and initializing callback (depending on category,itemtype)
 // with the directory to download images to as well as the filename for the downloaded image.
 // The function downloads both file items as well as folder items depending on "bTransferFlag".
-HRESULT DownloadItem(IWiaItem2* pWiaItem2 , BOOL bTransferFlag)
+HRESULT DownloadItem(IWiaItem2* pWiaItem2, BOOL bTransferFlag)
 {
     if( (!pWiaItem2) )
     {
@@ -27,7 +27,7 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2 , BOOL bTransferFlag)
         ReportError(TEXT("Invalid argument passed to DownloadItem()"),hr);
         return hr;
     }
-     // Get the IWiaTransfer interface
+    // Get the IWiaTransfer interface
     IWiaTransfer *pWiaTransfer = NULL;
     HRESULT hr = pWiaItem2->QueryInterface( IID_IWiaTransfer, (void**)&pWiaTransfer );
     if (SUCCEEDED(hr))
@@ -49,42 +49,42 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2 , BOOL bTransferFlag)
                     //Find out item category
                     GUID itemCategory = GUID_NULL;
                     ReadPropertyGuid(pWiaItem2,WIA_IPA_ITEM_CATEGORY,&itemCategory );
-                    
+
                     if( (!IsEqualIID(itemCategory,WIA_CATEGORY_FINISHED_FILE)) || (!IsEqualIID(itemCategory,WIA_CATEGORY_FOLDER)) )
                     {
                         hr = WritePropertyGuid(pWiaPropertyStorage,WIA_IPA_FORMAT,WiaImgFmt_BMP);
                     }
-                    
+
                     if(FAILED(hr))
                     {
                         ReportError(TEXT("WritePropertyGuid() failed in DownloadItem().Format couldn't be set to BMP"),hr);
                     }
-           
-                    //Get the file extension 
+
+                    //Get the file extension
                     BSTR bstrFileExtension = NULL;
                     if(!IsEqualIID(itemCategory,WIA_CATEGORY_FOLDER))
                     {
                         ReadPropertyBSTR(pWiaPropertyStorage,WIA_IPA_FILENAME_EXTENSION, &bstrFileExtension);
                     }
-            
+
                     //Get the temporary folder path which is the directory where we will download the images
                     TCHAR bufferTempPath[MAX_TEMP_PATH];
-                    GetTempPath(MAX_TEMP_PATH , bufferTempPath);
-            
-                    
-                    //Find the item type 
+                    GetTempPath(MAX_TEMP_PATH, bufferTempPath);
+
+
+                    //Find the item type
                     LONG lItemType = 0;
                     hr = pWiaItem2->GetItemType( &lItemType );
-                    
-                    BOOL bFeederTransfer = FALSE; 
+
+                    BOOL bFeederTransfer = FALSE;
                     if(IsEqualGUID(itemCategory,WIA_CATEGORY_FEEDER))
                     {
                         //Set WIA_IPS_PAGES to ALL_PAGES will enable transfer of all pages in the document feeder (multi-page transfer).
-                        //If somebody wants to scan a specific number of pages say N, he should set WIA_IPS_PAGES to N. 
+                        //If somebody wants to scan a specific number of pages say N, he should set WIA_IPS_PAGES to N.
                         WritePropertyLong(pWiaPropertyStorage,WIA_IPS_PAGES,ALL_PAGES);
-                         
+
                         bFeederTransfer = TRUE;
-            
+
                     }
                     else if(lItemType & WiaItemTypeStorage)
                     {
@@ -93,9 +93,9 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2 , BOOL bTransferFlag)
                         //embedded in their names
                         bstrFileExtension = NULL;
                     }
-                    
+
                     pWiaClassCallback->InitializeCallback(bufferTempPath,bstrFileExtension,bFeederTransfer);
-                    
+
                     //Now download based on whether its a folder item or a file item
                     if(bTransferFlag == FOLDER_TRANSFER)
                     {
@@ -113,8 +113,8 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2 , BOOL bTransferFlag)
                             ReportError(TEXT("pWiaTransfer->Download() on folder item failed"),hr);
                         }
                     }
-                    else  
-                    //FILE_TRANSFER
+                    else
+                        //FILE_TRANSFER
                     {
                         hr = pWiaTransfer->Download(0,pWiaTransferCallback);
                         if(S_OK == hr)
@@ -129,7 +129,7 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2 , BOOL bTransferFlag)
                         {
                             ReportError(TEXT("pWiaTransfer->Download() on file item failed"),hr);
                         }
-                
+
                     }
                     //Release pWiaPropertyStorage interface
                     pWiaPropertyStorage->Release();
@@ -156,7 +156,7 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2 , BOOL bTransferFlag)
         {
             ReportError( TEXT("Unable to create CWiaTransferCallback class instance") );
         }
-            
+
         // Release the IWiaTransfer
         pWiaTransfer->Release();
         pWiaTransfer = NULL;
@@ -169,7 +169,7 @@ HRESULT DownloadItem(IWiaItem2* pWiaItem2 , BOOL bTransferFlag)
 }
 
 // Function to upload file/image to device storage. This function first creates a child item inside the root storage folder.
-// Then uploads a file UPLOAD_FILENAME present in the current directory by getting its stream and giving the stream to 
+// Then uploads a file UPLOAD_FILENAME present in the current directory by getting its stream and giving the stream to
 // IWiaTransfer::upload() function.
 HRESULT UploadToDeviceStorage(IWiaItem2* pWiaParentItem2 )
 {
@@ -179,25 +179,25 @@ HRESULT UploadToDeviceStorage(IWiaItem2* pWiaParentItem2 )
         ReportError(TEXT("Invalid argument passed to UploadToDeviceStorage()"),hr);
         return hr;
     }
-    
+
     // CHILDITEM_NAME is the file name for the child item
     // See DataTransfer.h file for its value
     BSTR bzChildItem_Name = SysAllocString(CHILDITEM_NAME);
-    
+
     if(!bzChildItem_Name)
     {
         HRESULT hr = E_OUTOFMEMORY;
         ReportError(TEXT("Failed to allocate memory for bzChildItem_Name"),hr);
         return hr;
     }
-    
-    //Create child item which eventually will be the uploaded image 
+
+    //Create child item which eventually will be the uploaded image
     IWiaItem2* pWiaItemChild = NULL;
     HRESULT hr = pWiaParentItem2->CreateChildItem(WiaItemTypeImage|WiaItemTypeFile,0,bzChildItem_Name,&pWiaItemChild);
-    
+
     if(SUCCEEDED(hr))
     {
-                
+
         //Set the format for the child item as BMP so that any application downloading the uploaded item can check its format.
         IWiaPropertyStorage* pWiaChildPropertyStorage = NULL;
         hr = pWiaItemChild->QueryInterface( IID_IWiaPropertyStorage, (void**)&pWiaChildPropertyStorage );
@@ -215,7 +215,7 @@ HRESULT UploadToDeviceStorage(IWiaItem2* pWiaParentItem2 )
         }
 
         IStream* pUploadStream = NULL;
-                                        
+
         //Create stream on UPLOAD_FILENAME which is present in current directory
         //See DataTransfer.h file for its value
         hr = SHCreateStreamOnFile(UPLOAD_FILENAME,STGM_READ, &pUploadStream);
@@ -235,9 +235,9 @@ HRESULT UploadToDeviceStorage(IWiaItem2* pWiaParentItem2 )
                     hr = pWiaClassCallback->QueryInterface( IID_IWiaTransferCallback, (void**)&pWiaTransferCallback );
                     if (SUCCEEDED(hr))
                     {
-            
+
                         pWiaTransferChild->Upload(0,pUploadStream,pWiaTransferCallback);
-            
+
                         // Release the callback interface
                         pWiaTransferCallback->Release();
                         pWiaTransferCallback = NULL;
@@ -254,8 +254,8 @@ HRESULT UploadToDeviceStorage(IWiaItem2* pWiaParentItem2 )
                 {
                     ReportError( TEXT("Unable to create CWiaTransferCallback class instance") );
                 }
-            
-                //Release pWiaTransferChild 
+
+                //Release pWiaTransferChild
                 pWiaTransferChild->Release();
                 pWiaTransferChild = NULL;
 
@@ -268,14 +268,14 @@ HRESULT UploadToDeviceStorage(IWiaItem2* pWiaParentItem2 )
         else
         {
             ReportError(TEXT
-            ("Failed to create Stream on FILE for upload. Make sure that UPLOAD_FILENAME is present in the current directory"),hr);
+                        ("Failed to create Stream on FILE for upload. Make sure that UPLOAD_FILENAME is present in the current directory"),hr);
         }
 
         // Release pWiaItemChild
         pWiaItemChild->Release();
         pWiaItemChild = NULL;
 
-    }  
+    }
     else
     {
         ReportError(TEXT("pWiaParentItem2->CreateChildItem failed"),hr);
@@ -283,114 +283,114 @@ HRESULT UploadToDeviceStorage(IWiaItem2* pWiaParentItem2 )
 
     return hr;
 }
-    //
-    // Constructor and destructor for the class CWiaTransferCallback
-    //
-    CWiaTransferCallback::CWiaTransferCallback()
+//
+// Constructor and destructor for the class CWiaTransferCallback
+//
+CWiaTransferCallback::CWiaTransferCallback()
+{
+    m_cRef             = 1;  // initializing it to 1 so that when object is created, we can call Release() on it.
+    m_lPageCount       = 0;
+    m_bFeederTransfer  = FALSE;
+    m_bstrFileExtension = NULL;
+    m_bstrDirectoryName = NULL;
+    memset(m_szFileName,0,sizeof(m_szFileName));
+}
+
+CWiaTransferCallback::~CWiaTransferCallback()
+{
+    if(m_bstrDirectoryName)
     {
-        m_cRef             = 1;  // initializing it to 1 so that when object is created, we can call Release() on it. 
-        m_lPageCount       = 0;
-        m_bFeederTransfer  = FALSE;
-        m_bstrFileExtension = NULL;
+        SysFreeString(m_bstrDirectoryName);
         m_bstrDirectoryName = NULL;
-        memset(m_szFileName,0,sizeof(m_szFileName));
-    }
-    
-    CWiaTransferCallback::~CWiaTransferCallback()
-    {
-        if(m_bstrDirectoryName)
-        {
-            SysFreeString(m_bstrDirectoryName);
-            m_bstrDirectoryName = NULL;
-        }
-        
-        if(m_bstrFileExtension)
-        {
-            SysFreeString(m_bstrFileExtension);
-            m_bstrFileExtension = NULL;
-        }
-
     }
 
-    // This function initializes various members of class CWiaTransferCallback like directory where images will be downloaded, 
-    // filename extension and feeder transfer flag
-    HRESULT CWiaTransferCallback::InitializeCallback(TCHAR* bstrDirectoryName, BSTR bstrExt, BOOL bFeederTransfer)
+    if(m_bstrFileExtension)
     {
-        HRESULT hr = S_OK;
-        m_bFeederTransfer = bFeederTransfer;
+        SysFreeString(m_bstrFileExtension);
+        m_bstrFileExtension = NULL;
+    }
 
-        if(bstrDirectoryName)
-        {
-            m_bstrDirectoryName = SysAllocString(bstrDirectoryName);
-            if(!m_bstrDirectoryName)
-            {
-                hr = E_OUTOFMEMORY;
-                ReportError(TEXT("Failed to allocate memory for BSTR directory name"),hr);
-                return hr;
-            }
-        }
-        else
-        {
-            _tprintf(TEXT("\nNo directory name was given"));
-            return E_INVALIDARG;
-        }
+}
 
-        if (bstrExt)
+// This function initializes various members of class CWiaTransferCallback like directory where images will be downloaded,
+// filename extension and feeder transfer flag
+HRESULT CWiaTransferCallback::InitializeCallback(TCHAR* bstrDirectoryName, BSTR bstrExt, BOOL bFeederTransfer)
+{
+    HRESULT hr = S_OK;
+    m_bFeederTransfer = bFeederTransfer;
+
+    if(bstrDirectoryName)
+    {
+        m_bstrDirectoryName = SysAllocString(bstrDirectoryName);
+        if(!m_bstrDirectoryName)
         {
-            m_bstrFileExtension = bstrExt;
+            hr = E_OUTOFMEMORY;
+            ReportError(TEXT("Failed to allocate memory for BSTR directory name"),hr);
+            return hr;
         }
-        
+    }
+    else
+    {
+        _tprintf(TEXT("\nNo directory name was given"));
+        return E_INVALIDARG;
+    }
+
+    if (bstrExt)
+    {
+        m_bstrFileExtension = bstrExt;
+    }
+
+    return hr;
+}
+
+
+//
+// IUnknown functions
+//
+HRESULT CALLBACK CWiaTransferCallback::QueryInterface( REFIID riid, void **ppvObject )
+{
+    // Validate arguments
+    if (NULL == ppvObject)
+    {
+        HRESULT hr = E_INVALIDARG;
+        ReportError(TEXT("Invalid argument passed to QueryInterface()"),hr);
         return hr;
     }
 
-    
-    //
-    // IUnknown functions
-    //
-    HRESULT CALLBACK CWiaTransferCallback::QueryInterface( REFIID riid, void **ppvObject )
+    // Return the appropropriate interface
+    if (IsEqualIID( riid, IID_IUnknown ))
     {
-        // Validate arguments
-        if (NULL == ppvObject)
-        {
-            HRESULT hr = E_INVALIDARG;
-            ReportError(TEXT("Invalid argument passed to QueryInterface()"),hr);
-            return hr;
-        }
-
-        // Return the appropropriate interface
-        if (IsEqualIID( riid, IID_IUnknown ))
-        {
-            *ppvObject = static_cast<IUnknown*>(this);
-        }
-        else if (IsEqualIID( riid, IID_IWiaTransferCallback ))
-        {
-            *ppvObject = static_cast<IWiaTransferCallback*>(this);
-        }
-        else
-        {
-            *ppvObject = NULL;
-            return (E_NOINTERFACE);
-        }
-
-        // Increment the reference count before we return the interface
-        reinterpret_cast<IUnknown*>(*ppvObject)->AddRef();
-        return S_OK;
+        *ppvObject = static_cast<IUnknown*>(this);
     }
-    
-    ULONG CALLBACK CWiaTransferCallback::AddRef()
+    else if (IsEqualIID( riid, IID_IWiaTransferCallback ))
     {
-        return InterlockedIncrement((long*)&m_cRef);
-    }    
-    ULONG CALLBACK CWiaTransferCallback::Release()
-    {
-        LONG cRef = InterlockedDecrement((long*)&m_cRef);
-        if (0 == cRef)
-        {
-            delete this;
-        }
-        return cRef;
+        *ppvObject = static_cast<IWiaTransferCallback*>(this);
     }
-    
+    else
+    {
+        *ppvObject = NULL;
+        return (E_NOINTERFACE);
+    }
+
+    // Increment the reference count before we return the interface
+    reinterpret_cast<IUnknown*>(*ppvObject)->AddRef();
+    return S_OK;
+}
+
+ULONG CALLBACK CWiaTransferCallback::AddRef()
+{
+    return InterlockedIncrement((long*)&m_cRef);
+}
+ULONG CALLBACK CWiaTransferCallback::Release()
+{
+    LONG cRef = InterlockedDecrement((long*)&m_cRef);
+    if (0 == cRef)
+    {
+        delete this;
+    }
+    return cRef;
+}
+
 //
 // IWiaTransferCallback functions
 //
@@ -399,7 +399,7 @@ HRESULT UploadToDeviceStorage(IWiaItem2* pWiaParentItem2 )
 HRESULT STDMETHODCALLTYPE CWiaTransferCallback::TransferCallback(LONG lFlags, WiaTransferParams* pWiaTransferParams)
 {
     HRESULT hr = S_OK;
-    
+
     if(pWiaTransferParams == NULL)
     {
         hr = E_INVALIDARG;
@@ -409,24 +409,24 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::TransferCallback(LONG lFlags, Wi
 
     switch (pWiaTransferParams->lMessage)
     {
-        case WIA_TRANSFER_MSG_STATUS:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_STATUS - %ld%% complete"),pWiaTransferParams->lPercentComplete);
-            }
-            break;
-        case WIA_TRANSFER_MSG_END_OF_STREAM:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_STREAM"));
-            }
-            break;
-        case WIA_TRANSFER_MSG_END_OF_TRANSFER:
-            {
-                _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_TRANSFER"));
-                _tprintf(TEXT("\nImage Transferred to file %ws"), m_szFileName);
-            }
-            break;
-        default:
-            break;
+    case WIA_TRANSFER_MSG_STATUS:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_STATUS - %ld%% complete"),pWiaTransferParams->lPercentComplete);
+    }
+    break;
+    case WIA_TRANSFER_MSG_END_OF_STREAM:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_STREAM"));
+    }
+    break;
+    case WIA_TRANSFER_MSG_END_OF_TRANSFER:
+    {
+        _tprintf(TEXT("\nWIA_TRANSFER_MSG_END_OF_TRANSFER"));
+        _tprintf(TEXT("\nImage Transferred to file %ws"), m_szFileName);
+    }
+    break;
+    default:
+        break;
     }
     return hr;
 }
@@ -436,7 +436,7 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::GetNextStream(LONG lFlags, BSTR 
 {
     _tprintf(TEXT("\nGetNextStream"));
     HRESULT hr = S_OK;
-    
+
     if ( (!ppDestination) || (!bstrItemName) || (!m_bstrDirectoryName) )
     {
         hr = E_INVALIDARG;
@@ -445,7 +445,7 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::GetNextStream(LONG lFlags, BSTR 
     }
     //Initialize out variables
     *ppDestination = NULL;
-    
+
     if(m_bstrFileExtension)
     {
         //For feeder transfer, append the page count to the filename
@@ -458,13 +458,13 @@ HRESULT STDMETHODCALLTYPE CWiaTransferCallback::GetNextStream(LONG lFlags, BSTR 
             StringCchPrintf(m_szFileName, ARRAYSIZE(m_szFileName), TEXT("%ws\\%ws.%ws"), m_bstrDirectoryName, bstrItemName, m_bstrFileExtension);
         }
     }
-    
+
     else
     {
         // Dont append extension if m_bstrFileExtension = NULL.
         StringCchPrintf(m_szFileName, ARRAYSIZE(m_szFileName), TEXT("%ws\\%ws"), m_bstrDirectoryName, bstrItemName);
     }
-    
+
     hr = SHCreateStreamOnFile(m_szFileName,STGM_CREATE | STGM_READWRITE,ppDestination);
     if (SUCCEEDED(hr))
     {
@@ -491,20 +491,20 @@ HRESULT TransferWiaItem( IWiaItem2 *pIWiaItem2)
         _tprintf(TEXT("\nInvalid parameters passed"),hr);
         return hr;
     }
-    
+
     LONG lItemType = 0;
     HRESULT hr = pIWiaItem2->GetItemType( &lItemType );
     //download all items which have WiaItemTypeTransfer flag set
     if(lItemType & WiaItemTypeTransfer)
     {
-        // If it is a folder, do folder download . Hence with one API call, all the leaf nodes of this folder 
+        // If it is a folder, do folder download . Hence with one API call, all the leaf nodes of this folder
         // will be transferred
         if ((lItemType & WiaItemTypeFolder))
         {
             _tprintf(TEXT("\nThis is a folder item"));
             hr = DownloadItem(pIWiaItem2,FOLDER_TRANSFER);
         }
-        
+
         // If this is an file type, do file download
         if (lItemType & WiaItemTypeFile )
         {
@@ -512,7 +512,7 @@ HRESULT TransferWiaItem( IWiaItem2 *pIWiaItem2)
             hr = DownloadItem(pIWiaItem2,FILE_TRANSFER);
         }
     }
-        
+
     //If it is storage type , then upload image to it. We are uploading to the root storage item.
     //For an item with WiaItemTypeStorage flag set, its WIA_IPA_ITEM_CATEGORY will be WIA_CATEGORY_FOLDER
     else if( (lItemType & WiaItemTypeStorage))
@@ -532,8 +532,8 @@ HRESULT TransferWiaItem( IWiaItem2 *pIWiaItem2)
 }
 
 
-// This function enumerates the root item and performs transfer(download/upload) of items got by enumeration. 
-// While enumerating the root item, we can get both folder and file items. 
+// This function enumerates the root item and performs transfer(download/upload) of items got by enumeration.
+// While enumerating the root item, we can get both folder and file items.
 HRESULT EnumerateAndTransferItems( IWiaItem2 *pIWiaItem2Root )
 {
     if (NULL == pIWiaItem2Root)
@@ -542,25 +542,25 @@ HRESULT EnumerateAndTransferItems( IWiaItem2 *pIWiaItem2Root )
         ReportError(TEXT("Invalid argument passed to EnumerateAndTransferItems()"),hr);
         return hr;
     }
-    
+
     PrintItemName(pIWiaItem2Root);
-    
+
     IEnumWiaItem2 *pEnumWiaItem2 = NULL;
     HRESULT hr = pIWiaItem2Root->EnumChildItems( 0, &pEnumWiaItem2 );
     if (SUCCEEDED(hr))
     {
-    // We will loop until we get an error or pEnumWiaItem2->Next returns
-    // S_FALSE to signal the end of the list.
+        // We will loop until we get an error or pEnumWiaItem2->Next returns
+        // S_FALSE to signal the end of the list.
         while (S_OK == hr)
         {
-        // Get the next child item
+            // Get the next child item
             IWiaItem2 *pChildWiaItem2 = NULL;
             hr = pEnumWiaItem2->Next( 1, &pChildWiaItem2, NULL );
             if(S_OK == hr)
             {
                 PrintItemName(pChildWiaItem2);
                 TransferWiaItem(pChildWiaItem2);
-                
+
                 //Release pChildWiaItem2
                 pChildWiaItem2->Release();
                 pChildWiaItem2 = NULL;
@@ -578,7 +578,7 @@ HRESULT EnumerateAndTransferItems( IWiaItem2 *pIWiaItem2Root )
         {
             hr = S_OK;
         }
-            
+
         // Release the enumerator
         pEnumWiaItem2->Release();
         pEnumWiaItem2 = NULL;
@@ -626,10 +626,10 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                 {
                     // Read some device properties - Device ID,name and descripion and return Device ID needed for creating Device
                     BSTR bstrDeviceID = NULL;
-                    HRESULT hr1 = ReadWiaPropsAndGetDeviceID( pWiaPropertyStorage ,&bstrDeviceID);
+                    HRESULT hr1 = ReadWiaPropsAndGetDeviceID( pWiaPropertyStorage,&bstrDeviceID);
                     if(SUCCEEDED(hr1))
                     {
-                        // Call a function to create the device using device ID 
+                        // Call a function to create the device using device ID
                         IWiaItem2 *pWiaRootItem2 = NULL;
                         hr1 = pWiaDevMgr2->CreateDevice( 0, bstrDeviceID, &pWiaRootItem2 );
                         if(SUCCEEDED(hr1))
@@ -653,7 +653,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                     {
                         ReportError(TEXT("ReadWiaPropsAndGetDeviceID() failed in EnumerateWiaDevices()"),hr1);
                     }
-                        
+
                     // Release the device's IWiaPropertyStorage*
                     pWiaPropertyStorage->Release();
                     pWiaPropertyStorage = NULL;
@@ -664,7 +664,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
                     ReportError( TEXT("Error calling IEnumWIA_DEV_INFO::Next()"), hr );
                 }
             }
-            
+
             //
             // If the result of the enumeration is S_FALSE, since this
             // is normal, we will change it to S_OK.
@@ -694,7 +694,7 @@ HRESULT EnumerateWiaDevices( IWiaDevMgr2 *pWiaDevMgr2 )
 }
 
 // The entry function of the application
-extern "C" 
+extern "C"
 int __cdecl _tmain( int, TCHAR *[] )
 {
     // Initialize COM

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Setup.cpp
 //
 // Desc: DirectShow sample code - implementation of PushSource sample filters
@@ -12,13 +12,13 @@
 #include "PushGuids.h"
 #include "PushSource.h"
 
-// Note: It is better to register no media types than to register a partial 
-// media type (subtype == GUID_NULL) because that can slow down intelligent connect 
+// Note: It is better to register no media types than to register a partial
+// media type (subtype == GUID_NULL) because that can slow down intelligent connect
 // for everyone else.
 
-// For a specialized source filter like this, it is best to leave out the 
-// AMOVIESETUP_FILTER altogether, so that the filter is not available for 
-// intelligent connect. Instead, use the CLSID to create the filter or just 
+// For a specialized source filter like this, it is best to leave out the
+// AMOVIESETUP_FILTER altogether, so that the filter is not available for
+// intelligent connect. Instead, use the CLSID to create the filter or just
 // use 'new' in your application.
 
 
@@ -30,7 +30,7 @@ const AMOVIESETUP_MEDIATYPE sudOpPinTypes =
 };
 
 
-const AMOVIESETUP_PIN sudOutputPinBitmap = 
+const AMOVIESETUP_PIN sudOutputPinBitmap =
 {
     L"Output",      // Obsolete, not used.
     FALSE,          // Is this pin rendered?
@@ -53,7 +53,7 @@ const AMOVIESETUP_FILTER sudPushSourceBitmap =
 };
 
 
-const AMOVIESETUP_PIN sudOutputPinBitmapSet = 
+const AMOVIESETUP_PIN sudOutputPinBitmapSet =
 {
     L"Output",      // Obsolete, not used.
     FALSE,          // Is this pin rendered?
@@ -76,7 +76,7 @@ const AMOVIESETUP_FILTER sudPushSourceBitmapSet =
 };
 
 
-const AMOVIESETUP_PIN sudOutputPinDesktop = 
+const AMOVIESETUP_PIN sudOutputPinDesktop =
 {
     L"Output",      // Obsolete, not used.
     FALSE,          // Is this pin rendered?
@@ -104,40 +104,40 @@ const AMOVIESETUP_FILTER sudPushSourceDesktop =
 // being created. The class factory will call the static CreateInstance.
 // We provide a set of filters in this one DLL.
 
-CFactoryTemplate g_Templates[3] = 
+CFactoryTemplate g_Templates[3] =
 {
-    { 
-      g_wszPushBitmap,                // Name
-      &CLSID_PushSourceBitmap,        // CLSID
-      CPushSourceBitmap::CreateInstance,  // Method to create an instance of MyComponent
-      NULL,                           // Initialization function
-      &sudPushSourceBitmap            // Set-up information (for filters)
+    {
+        g_wszPushBitmap,                // Name
+        &CLSID_PushSourceBitmap,        // CLSID
+        CPushSourceBitmap::CreateInstance,  // Method to create an instance of MyComponent
+        NULL,                           // Initialization function
+        &sudPushSourceBitmap            // Set-up information (for filters)
     },
 
-    { 
-      g_wszPushBitmapSet,             // Name
-      &CLSID_PushSourceBitmapSet,     // CLSID
-      CPushSourceBitmapSet::CreateInstance,  // Method to create an instance of MyComponent
-      NULL,                           // Initialization function
-      &sudPushSourceBitmapSet         // Set-up information (for filters)
+    {
+        g_wszPushBitmapSet,             // Name
+        &CLSID_PushSourceBitmapSet,     // CLSID
+        CPushSourceBitmapSet::CreateInstance,  // Method to create an instance of MyComponent
+        NULL,                           // Initialization function
+        &sudPushSourceBitmapSet         // Set-up information (for filters)
     },
 
-    { 
-      g_wszPushDesktop,               // Name
-      &CLSID_PushSourceDesktop,       // CLSID
-      CPushSourceDesktop::CreateInstance, // Method to create an instance of MyComponent
-      NULL,                           // Initialization function
-      &sudPushSourceDesktop           // Set-up information (for filters)
+    {
+        g_wszPushDesktop,               // Name
+        &CLSID_PushSourceDesktop,       // CLSID
+        CPushSourceDesktop::CreateInstance, // Method to create an instance of MyComponent
+        NULL,                           // Initialization function
+        &sudPushSourceDesktop           // Set-up information (for filters)
     },
 };
 
-int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);    
+int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
@@ -157,10 +157,10 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,7 +28,7 @@ class CChildView : public CWnd
 {
 // Construction
 public:
-	CChildView();
+    CChildView();
 
 //  Attributes
 public:
@@ -37,37 +37,37 @@ public:
 
 // Operations
 public:
-    //  
+    //
     BOOL    UpdateDialogs(void);
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CChildView)
-	protected:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+    // ClassWizard generated virtual function overrides
+    //{{AFX_VIRTUAL(CChildView)
+protected:
+    virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+    virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+    //}}AFX_VIRTUAL
 
 // Implementation
 public:
-	virtual ~CChildView();
+    virtual ~CChildView();
 
-	// Generated message map functions
+    // Generated message map functions
 protected:
-	//{{AFX_MSG(CChildView)
-	afx_msg void OnPaint( );
-	afx_msg void OnMixerMerge( );
-	afx_msg void OnUpdateMixerMerge( CCmdUI* pCmdUI );
-	afx_msg void OnMixerPlay( );
-	afx_msg void OnUpdateMixerPlay( CCmdUI* pCmdUI );
+    //{{AFX_MSG(CChildView)
+    afx_msg void OnPaint( );
+    afx_msg void OnMixerMerge( );
+    afx_msg void OnUpdateMixerMerge( CCmdUI* pCmdUI );
+    afx_msg void OnMixerPlay( );
+    afx_msg void OnUpdateMixerPlay( CCmdUI* pCmdUI );
     afx_msg void OnMixerStop( );
     afx_msg void OnUpdateMixerStop( CCmdUI* pCmdUI );
-	afx_msg void OnFileSave( );
-	afx_msg void OnUpdateFileSave(CCmdUI* pCmdUI);
+    afx_msg void OnFileSave( );
+    afx_msg void OnUpdateFileSave(CCmdUI* pCmdUI);
     afx_msg void OnSetfocusEditValidbits( );
-	afx_msg void OnFileOpen( );
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+    afx_msg void OnFileOpen( );
+    //}}AFX_MSG
+    DECLARE_MESSAGE_MAP()
 };
 
 extern CChildView* g_pChildView;

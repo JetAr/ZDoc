@@ -1,12 +1,12 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 // Application.h
-// 
-// Contains most of the application logic. 
-// 
+//
+// Contains most of the application logic.
+//
 // WinMain creates an instance of this class. This class runs the
 // message loop for the application window.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -55,14 +55,14 @@ class Application
     RECT    m_rcMainVideoSourceRect;    // Source rectangle for the main video image.
     RECT    m_rcMainVideoDestRect;      // Destination rectangle for the main video image.
     RECT    m_rcVideoSubRect;           // Source rectangle for the substream image.
-    
+
     // Note: The Substream destination rectangle is calculated per frame, so we do not
     // store it in a member variable.
 
-    // Values for calculating the target rectangle, as a percentage of the 
+    // Values for calculating the target rectangle, as a percentage of the
     // destination surface.
-    INT     m_TargetWidthPercent;       
-    INT     m_TargetHeightPercent;      
+    INT     m_TargetWidthPercent;
+    INT     m_TargetHeightPercent;
 
     // Color information.
     INT     m_iExtendedColor;       // Index into the EX_COLOR_INFO array.
@@ -127,6 +127,6 @@ private:
     HRESULT AdjustBackgroundColor(int dx);
     HRESULT AdjustFilter(DXVAHD_FILTER filter, int dy);
     HRESULT AdjustTargetRect(int dx, int dy);
-        
+
     void    CalculateSubstreamRect(INT frame, RECT *prect);
 };

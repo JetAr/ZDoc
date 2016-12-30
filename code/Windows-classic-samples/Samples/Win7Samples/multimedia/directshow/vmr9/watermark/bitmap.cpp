@@ -1,7 +1,7 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Bitmap.cpp
 //
-// Desc: DirectShow sample code - Bitmap manipulation routines for 
+// Desc: DirectShow sample code - Bitmap manipulation routines for
 //       VMR alpha-blended bitmap
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -21,7 +21,7 @@
 // Constants
 //
 const float EDGE_BUFFER  = 0.04f;  // Pixel buffer between bitmap and window edge
-                                   // (represented in composition space [0 - 1.0f])
+// (represented in composition space [0 - 1.0f])
 
 const float SLIDE_VALUE  = 0.05f;  // Amount to slide image in composition space
 const float STROBE_VALUE = 0.125f; // Amount to add to bitmap alpha value
@@ -53,8 +53,8 @@ HBITMAP g_hbmAnimate=0;
 BOOL g_bWatermarkDisabled=FALSE;
 
 // Rectangles used for alpha-blended watermark
-RECT g_rSrc={0}, g_rSrcSingle={0};
-VMR9NormalizedRect  g_rDest={0};
+RECT g_rSrc= {0}, g_rSrcSingle= {0};
+VMR9NormalizedRect  g_rDest= {0};
 
 
 
@@ -62,12 +62,12 @@ HRESULT BlendApplicationImage(HWND hwndApp)
 {
     LONG cx, cy;
     HRESULT hr;
-    RECT rc={0};
+    RECT rc= {0};
 
     // Read the default video size
     hr = pWC->GetNativeVideoSize(&cx, &cy, NULL, NULL);
     if (FAILED(hr))
-      return hr;
+        return hr;
 
     // Load the multi-image bitmap to alpha blend from the resource file
     HBITMAP hbm = LoadBitmap(ghInst, MAKEINTRESOURCE(IDR_VMR_WIDE));
@@ -94,7 +94,7 @@ HRESULT BlendApplicationImage(HWND hwndApp)
 
     // Display the bitmap in the bottom right corner.
     // rSrc specifies the source rectangle in the GDI device context.
-    // To enable animating between multiple single images within a wide 
+    // To enable animating between multiple single images within a wide
     // bitmap, we must specify the entire rectangle of the wide image.
     // The VMR will convert this rectangle into a DirectDraw surface,
     // within which we can select a smaller source rectangle to display.
@@ -205,7 +205,7 @@ void EnableWatermarkMenu(BOOL bEnable)
 HRESULT MirrorWatermark(DWORD dwFlags)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     hr = pBMP->GetAlphaBitmapParameters(&bmpInfo);
 
@@ -223,7 +223,7 @@ HRESULT MirrorWatermark(DWORD dwFlags)
     {
         // If we're removing the mirror effect while sliding, then
         // it's not correct to reset the left/right coordinates to
-        // the default saved global values.  Instead, just switch 
+        // the default saved global values.  Instead, just switch
         // the left/right values.
         if (dwFlags & MARK_SLIDE)
         {
@@ -257,7 +257,7 @@ HRESULT MirrorWatermark(DWORD dwFlags)
 HRESULT FlipWatermark(DWORD dwFlags)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     hr = pBMP->GetAlphaBitmapParameters(&bmpInfo);
 
@@ -293,7 +293,7 @@ HRESULT FlipWatermark(DWORD dwFlags)
 HRESULT DisableWatermark(DWORD dwFlags)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     // Since the enable/disable menu will always be enabled,
     // verify that the VMR Alpha bitmap interface is set.
@@ -316,16 +316,16 @@ HRESULT DisableWatermark(DWORD dwFlags)
         if (g_dwWatermarkFlags & MARK_MIRROR)
             g_bRestoreMirror = TRUE;
 
-	// If animation is active, reset
-	if (dwFlags & MARK_ANIMATE)
-	{
-		ResetAnimation();
+        // If animation is active, reset
+        if (dwFlags & MARK_ANIMATE)
+        {
+            ResetAnimation();
 
-		// Read the current bitmap settings again post-reset
-		pBMP->GetAlphaBitmapParameters(&bmpInfo);
-	}
-        
-	// Temporarily disable bitmap display
+            // Read the current bitmap settings again post-reset
+            pBMP->GetAlphaBitmapParameters(&bmpInfo);
+        }
+
+        // Temporarily disable bitmap display
         bmpInfo.dwFlags = VMRBITMAP_DISABLE;
 
         // Update the bitmap settings
@@ -433,10 +433,10 @@ void KillTimer(void)
 
 
 VOID CALLBACK TimerProc(
-  HWND hwnd,         // handle to window
-  UINT uMsg,         // WM_TIMER message
-  UINT_PTR idEvent,  // timer identifier
-  DWORD dwTime       // current system time
+    HWND hwnd,         // handle to window
+    UINT uMsg,         // WM_TIMER message
+    UINT_PTR idEvent,  // timer identifier
+    DWORD dwTime       // current system time
 )
 {
     static int nToggle=0;
@@ -466,7 +466,7 @@ VOID CALLBACK TimerProc(
 void HandleStrobe(void)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     hr = pBMP->GetAlphaBitmapParameters(&bmpInfo);
 
@@ -488,7 +488,7 @@ void HandleStrobe(void)
 void ResetBitmapAlpha(void)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     if (!pBMP)
         return;
@@ -510,12 +510,12 @@ void ResetBitmapAlpha(void)
 void HandleSlide(void)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     hr = pBMP->GetAlphaBitmapParameters(&bmpInfo);
 
     // Slowly decrease the X coordinate
-    bmpInfo.rDest.left  -= SLIDE_VALUE;   
+    bmpInfo.rDest.left  -= SLIDE_VALUE;
     bmpInfo.rDest.right -= SLIDE_VALUE;
 
     // Once the bitmap disappears off the left side of the screen,
@@ -553,7 +553,7 @@ void HandleSlide(void)
 void ResetBitmapPosition(void)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     if (!pBMP)
         return;
@@ -588,7 +588,7 @@ void ResetBitmapPosition(void)
 void HandleAnimation(void)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
     static int nCycle=0;
 
     // Fill the rDest and fAlpha values in bmpInfo
@@ -624,7 +624,7 @@ void HandleAnimation(void)
 void ResetAnimation(void)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     if (!pBMP)
         return;

@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexMisc.cpp
-//  
+//
 // DirectX Texture Library - Misc image operations
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -150,14 +150,14 @@ static HRESULT _ComputeMSE( _In_ const Image& image1, _In_ const Image& image2,
         mse = _mseV.x + _mseV.y + _mseV.z + _mseV.w;
     }
 
-    return S_OK; 
+    return S_OK;
 }
 
 
 //=====================================================================================
 // Entry points
 //=====================================================================================
-        
+
 //-------------------------------------------------------------------------------------
 // Copies a rectangle from one image into another
 //-------------------------------------------------------------------------------------
@@ -262,7 +262,7 @@ HRESULT CopyRectangle( const Image& srcImage, const Rect& srcRect, const Image& 
     return S_OK;
 }
 
-    
+
 //-------------------------------------------------------------------------------------
 // Computes the Mean-Squared-Error (MSE) between two images
 //-------------------------------------------------------------------------------------

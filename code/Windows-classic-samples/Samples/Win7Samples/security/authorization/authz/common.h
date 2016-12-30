@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -77,8 +77,8 @@ Module Name:
 ///////////////////////////////////////////////////////////////////////////////
 typedef struct _ExpenseBuf
 {
-   DWORD dwAmmount;
-   DWORD dwType;
+    DWORD dwAmmount;
+    DWORD dwType;
 } EX_BUF,*PEX_BUF;
 
 LPTSTR ExNames[5] = { "\0", TEXT("PERSONAL"),TEXT("CORPORATE"),"\0",TEXT("TRANSFER") };
@@ -92,7 +92,7 @@ LPTSTR ExNames[5] = { "\0", TEXT("PERSONAL"),TEXT("CORPORATE"),"\0",TEXT("TRANSF
 
 void HandleError(DWORD dwErr, TCHAR *pszAPI, BOOL fAPI, BOOL fExit);
 
-DWORD DisplayAPIError(TCHAR *pszAPI,BOOL bConsole, 
+DWORD DisplayAPIError(TCHAR *pszAPI,BOOL bConsole,
                       BOOL bMsgBox, BOOL bExit);
 
 BOOL SetupNamedPipe (PHANDLE phPipe, LPTSTR szPipeName);

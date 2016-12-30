@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 //
 // Description:
 //    This file contains the routines necessary to implement the WSPAsyncSelect
-//    API. In order for our LSP to count the bytes sent and received by an 
+//    API. In order for our LSP to count the bytes sent and received by an
 //    application when the app uses WSAAsyncSelect we need to intercept all
 //    of the app's send and receive calls. To do this we implement a hidden
 //    window. When the app makes a send/recv call we intercept this and post
@@ -22,7 +22,7 @@
 //    to the upper layer must intercept all WSAAsyncSelect calls to use this
 //    hidden window method. This is required since the wParam parameter passed
 //    into the window's async handler is the socket handle on which the event
-//    occured. If the LSP doesn't capture this then the wrong socket handle 
+//    occured. If the LSP doesn't capture this then the wrong socket handle
 //    will be passed directly to the upper layer's window handler.
 //
 //    This file contains the I/O manager for all WSAAsyncselect I/O operations
@@ -36,7 +36,7 @@
 //
 // We must register a window class with a unique name. To do so we'll
 // use PROVIDER_CLASS string to format one which includes the current
-// process ID. This string will be formatted into a buffer of 
+// process ID. This string will be formatted into a buffer of
 // PROVIDER_CLASS_CHAR_LEN length.
 //
 #define PROVIDER_CLASS          TEXT("Layered WS2 Provider 0x%08x")
@@ -61,19 +61,19 @@
 //
 
 // Creates the hidden window and is the message pump for it
-static DWORD WINAPI 
+static DWORD WINAPI
 AsyncMsgHandler(
     LPVOID  lpParameter
-    );
+);
 
 // Handler function for our Winsock FD_* events which posts completions to upper layer
-static LRESULT CALLBACK 
+static LRESULT CALLBACK
 AsyncWndProc(
-    HWND hwnd, 
-    UINT uMsg, 
-    WPARAM wParam, 
+    HWND hwnd,
+    UINT uMsg,
+    WPARAM wParam,
     LPARAM lParam
-    );
+);
 
 //
 // Globals to this file
@@ -92,9 +92,9 @@ static TCHAR  AsyncProviderClassName[ PROVIDER_CLASS_CHAR_LEN ];
 //    only called from WSPCleanup when the DLL is about to be unloaded,
 //    and we've already entered the critical section (gCriticalSection).
 //
-int 
+int
 StopAsyncWindowManager(
-    )
+)
 {
     int     rc,
             code;
@@ -116,7 +116,7 @@ StopAsyncWindowManager(
         rc = GetExitCodeThread( WorkerThreadHandle, (LPDWORD) &code );
         if ( 0 == rc )
             dbgprint("StopAsyncWindowManager: Unable to retrieve thread exit code: %d",
-                    GetLastError() );
+                     GetLastError() );
         else if ( 0 != code )
             dbgprint("StopAsyncWindowManager: Async window thread exited abnormally!");
 
@@ -134,19 +134,19 @@ cleanup:
 // Function: GetWorkerWindow
 //
 // Description:
-//    This returns a handle to our hidden window that acts as an 
+//    This returns a handle to our hidden window that acts as an
 //    intermediary between the apps window and winsock. If the window
 //    hasn't already been created, then create it.
 //
-HWND 
+HWND
 GetWorkerWindow(
-    )
+)
 {
     HANDLE  ReadyEvent = NULL;
     int     rc;
 
     EnterCriticalSection( &gCriticalSection );
-	if ( NULL == WorkerThreadHandle ) 
+    if ( NULL == WorkerThreadHandle )
     {
         // Create an event which the worker thread will signal when its ready
         ReadyEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
@@ -158,13 +158,13 @@ GetWorkerWindow(
 
         // Create the asyn window message thread
         WorkerThreadHandle = CreateThread(
-                NULL, 
-                0, 
-                AsyncMsgHandler, 
-                (LPVOID)ReadyEvent, 
-                0, 
-                NULL
-                ); 
+                                 NULL,
+                                 0,
+                                 AsyncMsgHandler,
+                                 (LPVOID)ReadyEvent,
+                                 0,
+                                 NULL
+                             );
         if ( NULL == WorkerThreadHandle )
         {
             dbgprint( "GetWorkerWindow: CreateThread failed: %d", GetLastError() );
@@ -174,8 +174,8 @@ GetWorkerWindow(
         // Wait for the window to become initialized
         rc = WaitForSingleObject( ReadyEvent, INFINITE );
         if ( ( WAIT_FAILED == rc ) || ( WAIT_TIMEOUT == rc ) )
-            dbgprint( "GetWorkerWindow: WaitForSingleObject failed: %d! (error = %d)", 
-                    rc, GetLastError() );
+            dbgprint( "GetWorkerWindow: WaitForSingleObject failed: %d! (error = %d)",
+                      rc, GetLastError() );
     }
 
 cleanup:
@@ -192,7 +192,7 @@ cleanup:
 
     LeaveCriticalSection( &gCriticalSection );
 
-	return AsyncWindow;
+    return AsyncWindow;
 }
 
 //
@@ -201,13 +201,13 @@ cleanup:
 // Description:
 //    This is the message pump for our hidden window.
 //
-static DWORD WINAPI 
+static DWORD WINAPI
 AsyncMsgHandler(
     LPVOID lpParameter
-    )
+)
 {
-	MSG      msg;
-	DWORD    Ret;
+    MSG      msg;
+    DWORD    Ret;
     HANDLE   readyEvent;
     HRESULT  hr;
     WNDCLASS wndclass;
@@ -217,11 +217,11 @@ AsyncMsgHandler(
     readyEvent = (HANDLE) lpParameter;
 
     hr = StringCchPrintf(
-            AsyncProviderClassName,
-            PROVIDER_CLASS_CHAR_LEN,
-            PROVIDER_CLASS,
-            GetCurrentProcessId()
-            );
+             AsyncProviderClassName,
+             PROVIDER_CLASS_CHAR_LEN,
+             PROVIDER_CLASS,
+             GetCurrentProcessId()
+         );
     if ( FAILED( hr ) )
     {
         dbgprint("AsyncMsgHandler: StringCchPrintf failed: %d", GetLastError());
@@ -243,18 +243,18 @@ AsyncMsgHandler(
 
     // Create a window.
     AsyncWindow = CreateWindow(
-        AsyncProviderClassName,
-        TEXT("Layered Hidden Window"),
-        WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        CW_USEDEFAULT,
-        NULL,
-        NULL,
-        gDllInstance,
-        NULL
-        );
+                      AsyncProviderClassName,
+                      TEXT("Layered Hidden Window"),
+                      WS_OVERLAPPEDWINDOW,
+                      CW_USEDEFAULT,
+                      CW_USEDEFAULT,
+                      CW_USEDEFAULT,
+                      CW_USEDEFAULT,
+                      NULL,
+                      NULL,
+                      gDllInstance,
+                      NULL
+                  );
 
     if ( NULL == AsyncWindow )
     {
@@ -266,16 +266,16 @@ AsyncMsgHandler(
     SetEvent( readyEvent );
 
     // Message pump
-	while ( ( Ret = GetMessage( &msg, NULL, 0, 0 ) ) )
-	{
-		if ( -1 == Ret )
-		{
+    while ( ( Ret = GetMessage( &msg, NULL, 0, 0 ) ) )
+    {
+        if ( -1 == Ret )
+        {
             dbgprint("AsyncMessageHandler: GetMessage returned -1, exiting loop");
             break;
-		}
-		TranslateMessage( &msg );
-		DispatchMessage( &msg );
-	}
+        }
+        TranslateMessage( &msg );
+        DispatchMessage( &msg );
+    }
 
     // Clean up the window and window class which were created in this thread
     if ( NULL != AsyncWindow )
@@ -303,20 +303,20 @@ cleanup:
 //    on our hidden window we must translate our lower provider's socket handle
 //    to the app's socket handle and then complete the notification to the user.
 //
-static LRESULT CALLBACK 
+static LRESULT CALLBACK
 AsyncWndProc(
-	HWND    hWnd,
-	UINT    uMsg,
-	WPARAM  wParam,
-	LPARAM  lParam
-    )
+    HWND    hWnd,
+    UINT    uMsg,
+    WPARAM  wParam,
+    LPARAM  lParam
+)
 {
-	SOCK_INFO *si = NULL;
+    SOCK_INFO *si = NULL;
     int        retries,
                rc;
 
-	if ( WM_SOCKET == uMsg )
-	{
+    if ( WM_SOCKET == uMsg )
+    {
         retries = 0;
 
         //
@@ -325,14 +325,14 @@ AsyncWndProc(
         // for a socket not in our list of sockets. This usually occurs after WSPAccept
         // completes and we immediately get a message for the accepted socket but the
         // LSP code to insert the new context object hasn't executed yet. If this is
-        // the case wait on an event until a new context object is added (which 
+        // the case wait on an event until a new context object is added (which
         // signals the event). Note we'll wait only MAX_ASYNC_RETRIES times before
         // bailing.
         //
         while ( retries < MAX_ASYNC_RETRIES )
         {
             dbgprint("hWnd 0x%p, uMsg 0x%x, WPARAM 0x%p, LPARAM 0x%p (retries %d)",
-                    hWnd, uMsg, wParam, lParam, retries);
+                     hWnd, uMsg, wParam, lParam, retries);
 
             // Find the context for this lower provider socket handle
             si = GetCallerSocket( NULL, wParam );
@@ -345,7 +345,7 @@ AsyncWndProc(
                 if ( WAIT_FAILED == rc )
                 {
                     dbgprint("AsyncWndProc: WaitForSingleObject failed: %d",
-                    GetLastError());
+                             GetLastError());
                     break;
                 }
                 else // timeout or success
@@ -361,15 +361,15 @@ AsyncWndProc(
             }
 
             gMainUpCallTable.lpWPUPostMessage(
-                    si->hWnd, 
-                    si->uMsg, 
-                    si->LayeredSocket, 
-                    lParam
-                    );
+                si->hWnd,
+                si->uMsg,
+                si->LayeredSocket,
+                lParam
+            );
 
             return 0;
         }
-	}
+    }
     else if ( WM_DESTROY == uMsg )
     {
         // Post a quit message to exit our async message pump thread
@@ -377,5 +377,5 @@ AsyncWndProc(
         return 0;
     }
 
-	return DefWindowProc( hWnd, uMsg, wParam, lParam );
+    return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }

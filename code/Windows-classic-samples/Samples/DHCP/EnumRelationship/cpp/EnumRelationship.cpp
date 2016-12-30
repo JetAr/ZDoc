@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,7 +11,7 @@
 #include<intsafe.h>
 #include<dhcpsapi.h>
 
-void FreeIPArray(LPDHCP_IP_ARRAY Array) 
+void FreeIPArray(LPDHCP_IP_ARRAY Array)
 {
     if(Array)
     {
@@ -78,23 +78,23 @@ int __cdecl main(void)
     for(;;)
     {
         dwError = DhcpV4FailoverEnumRelationship(
-                    pwszServer,
-                    &resumeHandle,
-                    preferredMax,
-                    &enumRelationInfo,
-                    &dwElementsRead,
-                    &dwElementsTotal);
+                      pwszServer,
+                      &resumeHandle,
+                      preferredMax,
+                      &enumRelationInfo,
+                      &dwElementsRead,
+                      &dwElementsTotal);
 
         if ((NO_ERROR != dwError) &&
-            (ERROR_MORE_DATA != dwError) &&
-            (ERROR_NO_MORE_ITEMS != dwError ))
+                (ERROR_MORE_DATA != dwError) &&
+                (ERROR_NO_MORE_ITEMS != dwError ))
         {
             wprintf(L"Error in enumerating relationships. Error = %d\n",dwError);
             break;
         }
         if (dwElementsRead && enumRelationInfo)
         {
-            //operate on enumPoliciesInfo, for example in the below snippet, we are printing the names of the 
+            //operate on enumPoliciesInfo, for example in the below snippet, we are printing the names of the
             // enumerated relationships.
             for ( dwIdx = 0; dwIdx < enumRelationInfo->NumElements; dwIdx++ )
             {

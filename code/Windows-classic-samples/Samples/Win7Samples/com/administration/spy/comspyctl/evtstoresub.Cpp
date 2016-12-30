@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,8 +20,8 @@ CComBSTR g_bstrPROGID_EventClass(PROGID_EventClass);
 
 
 STDMETHODIMP CEvtStoreSub::ChangedSubscription
-   (/* [in] */ EOC_ChangeType changeType,
-    /* [in] */ BSTR bstrSubscriptionID)
+(/* [in] */ EOC_ChangeType changeType,
+            /* [in] */ BSTR bstrSubscriptionID)
 {
 
     LONGLONG perfCount = 0;
@@ -29,15 +29,15 @@ STDMETHODIMP CEvtStoreSub::ChangedSubscription
     LPWSTR lpOperation = NULL;
     switch (changeType)
     {
-        case EOC_NewObject:
-            lpOperation = L"New Subscription";
-            break;
-        case EOC_ModifiedObject:
-            lpOperation = L"Modified Subscription";
-            break;
-        case EOC_DeletedObject:
-            lpOperation = L"Deleted Subscription";
-            break;
+    case EOC_NewObject:
+        lpOperation = L"New Subscription";
+        break;
+    case EOC_ModifiedObject:
+        lpOperation = L"Modified Subscription";
+        break;
+    case EOC_DeletedObject:
+        lpOperation = L"Deleted Subscription";
+        break;
     }
     m_pSpy->AddEventToList(perfCount, lpOperation, L"COM+ Event Store");
     m_pSpy->AddParamValueToList(L"Subscription ID", bstrSubscriptionID);
@@ -47,35 +47,35 @@ STDMETHODIMP CEvtStoreSub::ChangedSubscription
 }
 
 STDMETHODIMP CEvtStoreSub::ChangedEventClass
-   (/* [in] */ EOC_ChangeType changeType,
-    /* [in] */ BSTR bstrEventClassID)
+(/* [in] */ EOC_ChangeType changeType,
+            /* [in] */ BSTR bstrEventClassID)
 {
     LONGLONG perfCount = 0;
     ::QueryPerformanceCounter( (LARGE_INTEGER *)&perfCount );
     LPWSTR lpOperation = NULL;
     switch (changeType)
     {
-        case EOC_NewObject:
-            lpOperation = L"New Event Class";
-            break;
-        case EOC_ModifiedObject:
-            lpOperation = L"Modified Event Class";
-            break;
-        case EOC_DeletedObject:
-            lpOperation = L"Deleted Event Class";
-            break;
+    case EOC_NewObject:
+        lpOperation = L"New Event Class";
+        break;
+    case EOC_ModifiedObject:
+        lpOperation = L"Modified Event Class";
+        break;
+    case EOC_DeletedObject:
+        lpOperation = L"Deleted Event Class";
+        break;
     }
     m_pSpy->AddEventToList(perfCount, lpOperation, L"COM+ Event Store");
     m_pSpy->AddParamValueToList(L"Event Class ID", bstrEventClassID);
-    
+
     //TODO: Add Auditing code for event class change
     AddEventClassInfo( m_pSpy, bstrEventClassID );
     return S_OK;
 }
 
 STDMETHODIMP CEvtStoreSub::ChangedPublisher
-   (/* [in] */ EOC_ChangeType changeType,
-    /* [in] */ BSTR bstrPublisherID)
+(/* [in] */ EOC_ChangeType changeType,
+            /* [in] */ BSTR bstrPublisherID)
 {
     return S_OK;
 }
@@ -92,9 +92,9 @@ STDMETHODIMP CEvtStoreSub::AddSubscriptionInfo
 // Return Value:
 //
 //  Arguments:
-   (/* [in] */ CComSpy* pSpy,
-    /* [in] */ BSTR bstrSubscriptionID)
-//    
+(/* [in] */ CComSpy* pSpy,
+            /* [in] */ BSTR bstrSubscriptionID)
+//
 //-----------------------------------------------------------------
 {
     HRESULT hr = S_OK;
@@ -116,14 +116,14 @@ STDMETHODIMP CEvtStoreSub::AddSubscriptionInfo
     // ----------------------------------------------
 
     int errorIndex;
-    
+
     CComBSTR bstrCriteria;
     bstrCriteria = "SubscriptionID=";
     bstrCriteria += bstrSubscriptionID;
 
     CComPtr<IUnknown> pUnk = NULL;
     hr = spIEventSystem->Query(g_bstrPROGID_EventSubscription, bstrCriteria, &errorIndex, &pUnk);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         ATLTRACE(L"Query for SubcriptionID failed");
         return hr;
@@ -133,7 +133,7 @@ STDMETHODIMP CEvtStoreSub::AddSubscriptionInfo
     CComPtr<IEventSubscription> spEventSubscription;
     hr = pUnk->QueryInterface(IID_PPV_ARGS(&spEventSubscription));
     _ASSERTE(SUCCEEDED(hr) && spEventSubscription);
-    if (!spEventSubscription) 
+    if (!spEventSubscription)
     {
         ATLTRACE(L"QI for IEventSubscription failed");
         return hr;
@@ -153,7 +153,7 @@ STDMETHODIMP CEvtStoreSub::AddSubscriptionInfo
     //TODO: Add Auditing code for subscription change
 
     return hr;
-    
+
 }
 
 STDMETHODIMP CEvtStoreSub::AddEventClassInfo
@@ -165,9 +165,9 @@ STDMETHODIMP CEvtStoreSub::AddEventClassInfo
 // Return Value:
 //
 //  Arguments:
-   (/* [in] */ CComSpy* pSpy,
-    /* [in] */ BSTR bstrEventClassID)
-//    
+(/* [in] */ CComSpy* pSpy,
+            /* [in] */ BSTR bstrEventClassID)
+//
 //-----------------------------------------------------------------
 {
     HRESULT hr = S_OK;
@@ -196,7 +196,7 @@ STDMETHODIMP CEvtStoreSub::AddEventClassInfo
 
     CComPtr<IUnknown> pUnk = NULL;
     hr = spIEventSystem->Query(g_bstrPROGID_EventClass, bstrCriteria, &errorIndex, &pUnk);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         ATLTRACE(L"Query for SubcriptionID failed");
         return hr;
@@ -206,7 +206,7 @@ STDMETHODIMP CEvtStoreSub::AddEventClassInfo
     CComPtr<IEventClass> spEventClass;
     hr = pUnk->QueryInterface(IID_PPV_ARGS(&spEventClass));
     _ASSERTE(SUCCEEDED(hr) && pUnk);
-    if (!spEventClass) 
+    if (!spEventClass)
     {
         ATLTRACE(L"QI for IEventClass failed");
         return hr;

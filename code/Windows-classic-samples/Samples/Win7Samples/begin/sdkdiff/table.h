@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -124,24 +124,25 @@
  * each column, or for each cell. When looking for
  * a property, we search cell->column->table
  */
-typedef struct {
-	UINT valid;		/* flags (below) for what props we set */
+typedef struct
+{
+    UINT valid;		/* flags (below) for what props we set */
 
-/* remaining fields only valid when corresponding flag set in valid */
+    /* remaining fields only valid when corresponding flag set in valid */
 
-	DWORD forecolour;	/* RGB colour value */
-	DWORD forecolourws;	/* ditto */
-	DWORD backcolour;	/* ditto */
-	/* font to use - also set through WM_SETFONT. owner application
-	 * is responsible for DeleteObject call when no longer used
-	 */
-	HFONT hFont;		/* handle to font  - caller should delete*/
-	UINT alignment;		/* flags below */
-	UINT box;		/* whether cell boxed (see below) */
+    DWORD forecolour;	/* RGB colour value */
+    DWORD forecolourws;	/* ditto */
+    DWORD backcolour;	/* ditto */
+    /* font to use - also set through WM_SETFONT. owner application
+     * is responsible for DeleteObject call when no longer used
+     */
+    HFONT hFont;		/* handle to font  - caller should delete*/
+    UINT alignment;		/* flags below */
+    UINT box;		/* whether cell boxed (see below) */
 
-	/* width/height settings not valid at cell level - only table or col.*/
-	int width;		/* pixel width of this cell/column */
-	int height;		/* pixel cell height */
+    /* width/height settings not valid at cell level - only table or col.*/
+    int width;		/* pixel width of this cell/column */
+    int height;		/* pixel cell height */
 } Props, FAR * lpProps;
 
 /* valid flags for fields that are changed in this Props struct */
@@ -175,23 +176,24 @@ typedef struct {
  * passed to the owner window with the id field filled in; fill in
  * all remaining fields and return.
  */
-typedef struct {
+typedef struct
+{
     DWORD_PTR id;           /* owner's data id */
 
-	/* please fill in rest: */
-	long nrows;		/* how many rows ? TM_REFRESH to change */
-	int ncols;		/* how many columns ? TM_NEWLAYOUT to chg */
+    /* please fill in rest: */
+    long nrows;		/* how many rows ? TM_REFRESH to change */
+    int ncols;		/* how many columns ? TM_NEWLAYOUT to chg */
 
-	int fixedrows;		/* for headers - usually 0 or 1 */
-	int fixedcols;		/* for hdrs - 0 or 1 normally */
-	BOOL fixedselectable;	/* is fixed area selectable ? */
-	BOOL hseparator;	/* is there a horz. line after fixed rows */
-	BOOL vseparator;	/* is there a vert. line after fixed rows */
+    int fixedrows;		/* for headers - usually 0 or 1 */
+    int fixedcols;		/* for hdrs - 0 or 1 normally */
+    BOOL fixedselectable;	/* is fixed area selectable ? */
+    BOOL hseparator;	/* is there a horz. line after fixed rows */
+    BOOL vseparator;	/* is there a vert. line after fixed rows */
 
-	UINT selectmode;	/* multiple/single selection - flags below*/
-	BOOL sendscroll;	/* TRUE if TQ_SCROLL to be sent on scrolling*/
+    UINT selectmode;	/* multiple/single selection - flags below*/
+    BOOL sendscroll;	/* TRUE if TQ_SCROLL to be sent on scrolling*/
 
-	Props props;
+    Props props;
 } TableHdr, FAR * lpTableHdr;
 
 /*
@@ -217,18 +219,20 @@ typedef struct {
  * this struct is sent to request column width and properties -
  * owner window must fill nchars and props.valid, at minimum.
  */
-typedef struct {
-	int nchars;	/* expected text width in chars */
-	Props props;
+typedef struct
+{
+    int nchars;	/* expected text width in chars */
+    Props props;
 } ColProps, FAR * lpColProps;
 
 
 /* this is a set of column requests - owner should fill each one*/
-typedef struct {
+typedef struct
+{
     DWORD_PTR id;           /* caller's id for data */
-	int startcol;		/* zero-based column nr of first request */
-	int ncols;		/* nr of columns in this set */
-	lpColProps plist;	/* ptr to _array_ of ColProps */
+    int startcol;		/* zero-based column nr of first request */
+    int ncols;		/* nr of columns in this set */
+    lpColProps plist;	/* ptr to _array_ of ColProps */
 } ColPropsList, FAR * lpColPropsList;
 
 
@@ -242,21 +246,23 @@ typedef struct {
  *
  * don't re-alloc ptext, or change flags.
  */
-typedef struct {
-	int nchars;		/* space in buffer */
-	LPSTR ptext;		/* ptr to nchars of text space */
-	Props props;		/* per-cell props */
-	DWORD flags;		/* private table class flags */
-	LPWSTR pwzText;		/* ptr to nchars of WCHAR space */
+typedef struct
+{
+    int nchars;		/* space in buffer */
+    LPSTR ptext;		/* ptr to nchars of text space */
+    Props props;		/* per-cell props */
+    DWORD flags;		/* private table class flags */
+    LPWSTR pwzText;		/* ptr to nchars of WCHAR space */
 } CellData, FAR * lpCellData;
 
 /* list of cell data structures - please fill out all of these*/
-typedef struct {
-        DWORD_PTR id;           /* caller's id for data */
-	long row;		/* zero-based row nr to fetch */
-	int startcell;		/* zero-based cell nr on this row */
-	int ncells;		/* count of cells to fetch */
-	lpCellData plist;	/* ptr to array CellData[ncells] */
+typedef struct
+{
+    DWORD_PTR id;           /* caller's id for data */
+    long row;		/* zero-based row nr to fetch */
+    int startcell;		/* zero-based cell nr on this row */
+    int ncells;		/* count of cells to fetch */
+    lpCellData plist;	/* ptr to array CellData[ncells] */
 } CellDataList, FAR * lpCellDataList;
 
 
@@ -271,13 +277,14 @@ typedef struct {
  * 1 row startrow, -2 means startrow and the one before, etc. 0 nrows means
  * no valid selection.
  */
-typedef struct {
+typedef struct
+{
     DWORD_PTR id;           /* caller's id for data */
-	long startrow;		/* zero-based row nr of start of sel. */
-	long startcell;		/* zero-based col nr of  start of sel */
-	long nrows;		/* vertical depth of selection */
-	long ncells;		/* horz width of selection */
-	long dyRowsFromTop;		/* -1 means used auto-center logic, otherwise put selection this many rows from top */
+    long startrow;		/* zero-based row nr of start of sel. */
+    long startcell;		/* zero-based col nr of  start of sel */
+    long nrows;		/* vertical depth of selection */
+    long ncells;		/* horz width of selection */
+    long dyRowsFromTop;		/* -1 means used auto-center logic, otherwise put selection this many rows from top */
 } TableSelection, FAR * lpTableSelection;
 
 
@@ -285,39 +292,43 @@ typedef struct {
 /*----- print context -----------------------------------------------*/
 
 /* describes the margin settings for the print job - these are in CMs*/
-typedef struct {
-	int left;		/* edge of paper to start of print area */
-	int right;		/* edge of paper to start of print area */
-	int top;		/* edge of paper to start of hdr */
-	int bottom;		/* end of hdr to end of paper */
-	int topinner;		/* start of hdr to start of data */
-	int bottominner;	/* end of data to start of hdr */
+typedef struct
+{
+    int left;		/* edge of paper to start of print area */
+    int right;		/* edge of paper to start of print area */
+    int top;		/* edge of paper to start of hdr */
+    int bottom;		/* end of hdr to end of paper */
+    int topinner;		/* start of hdr to start of data */
+    int bottominner;	/* end of data to start of hdr */
 } Margin, FAR * lpMargin;
 
 /* position and clipping info - only used by table class
  */
-typedef struct {
-	int start;		/* co-ord of cell start (left or top) */
-	int clipstart;		/* start of clipping (vis area) */
-	int clipend;		/* end of clipping (vis area) */
-	int size;		/* pixel size of cell (width or height) */
+typedef struct
+{
+    int start;		/* co-ord of cell start (left or top) */
+    int clipstart;		/* start of clipping (vis area) */
+    int clipend;		/* end of clipping (vis area) */
+    int size;		/* pixel size of cell (width or height) */
 } CellPos, FAR * lpCellPos;
 
 
 /* one of these for each header lines (top and bottom) */
-typedef struct {
-	CellPos xpos, ypos;	/* private: for table-class use only */
-	Props props;
-	LPSTR ptext;
+typedef struct
+{
+    CellPos xpos, ypos;	/* private: for table-class use only */
+    Props props;
+    LPSTR ptext;
 } Title, FAR * lpTitle;
 
 /* Print context data structure - any or all 4 pointers may be null */
-typedef struct {
-        DWORD_PTR id;           /* id of table to print */
-	lpTitle head;
-	lpTitle foot;
-	lpMargin margin;
-	PRINTDLG FAR * pd;
+typedef struct
+{
+    DWORD_PTR id;           /* id of table to print */
+    lpTitle head;
+    lpTitle foot;
+    lpMargin margin;
+    PRINTDLG FAR * pd;
 } PrintContext, FAR * lpPrintContext;
 
 #endif

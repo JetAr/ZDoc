@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: FBall.cpp
 //
 // Desc: DirectShow sample code - implementation of filter behaviors
@@ -34,7 +34,8 @@ const AMOVIESETUP_PIN sudOpPin =
     &CLSID_NULL,            // Connects to filter
     NULL,                   // Connects to pin
     1,                      // Number of types
-    &sudOpPinTypes };       // Pin details
+    &sudOpPinTypes
+};       // Pin details
 
 const AMOVIESETUP_FILTER sudBallax =
 {
@@ -48,19 +49,22 @@ const AMOVIESETUP_FILTER sudBallax =
 
 // COM global table of objects in this dll
 
-CFactoryTemplate g_Templates[] = {
-  { L"Bouncing Ball"
-  , &CLSID_BouncingBall
-  , CBouncingBall::CreateInstance
-  , NULL
-  , &sudBallax }
+CFactoryTemplate g_Templates[] =
+{
+    {
+        L"Bouncing Ball"
+        , &CLSID_BouncingBall
+        , CBouncingBall::CreateInstance
+        , NULL
+        , &sudBallax
+    }
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Exported entry points for registration and unregistration 
+// Exported entry points for registration and unregistration
 // (in this case they only call through to default implementations).
 //
 ////////////////////////////////////////////////////////////////////////
@@ -92,11 +96,11 @@ STDAPI DllUnregisterServer()
 //
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                      DWORD  dwReason, 
+BOOL APIENTRY DllMain(HANDLE hModule,
+                      DWORD  dwReason,
                       LPVOID lpReserved)
 {
-	return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
+    return DllEntryPoint((HINSTANCE)(hModule), dwReason, lpReserved);
 }
 
 //
@@ -311,65 +315,68 @@ HRESULT CBallStream::GetMediaType(int iPosition, CMediaType *pmt)
 
     switch(iPosition)
     {
-        case 0:
-        {    
-            // Return our highest quality 32bit format
+    case 0:
+    {
+        // Return our highest quality 32bit format
 
-            // since we use RGB888 (the default for 32 bit), there is
-            // no reason to use BI_BITFIELDS to specify the RGB
-            // masks. Also, not everything supports BI_BITFIELDS
+        // since we use RGB888 (the default for 32 bit), there is
+        // no reason to use BI_BITFIELDS to specify the RGB
+        // masks. Also, not everything supports BI_BITFIELDS
 
-            SetPaletteEntries(Yellow);
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 32;
-            break;
-        }
+        SetPaletteEntries(Yellow);
+        pvi->bmiHeader.biCompression = BI_RGB;
+        pvi->bmiHeader.biBitCount    = 32;
+        break;
+    }
 
-        case 1:
-        {   // Return our 24bit format
+    case 1:
+    {
+        // Return our 24bit format
 
-            SetPaletteEntries(Green);
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 24;
-            break;
-        }
+        SetPaletteEntries(Green);
+        pvi->bmiHeader.biCompression = BI_RGB;
+        pvi->bmiHeader.biBitCount    = 24;
+        break;
+    }
 
-        case 2:
-        {       
-            // 16 bit per pixel RGB565
+    case 2:
+    {
+        // 16 bit per pixel RGB565
 
-            // Place the RGB masks as the first 3 doublewords in the palette area
-            for(int i = 0; i < 3; i++)
-                pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
+        // Place the RGB masks as the first 3 doublewords in the palette area
+        for(int i = 0; i < 3; i++)
+            pvi->TrueColorInfo.dwBitMasks[i] = bits565[i];
 
-            SetPaletteEntries(Blue);
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
-            pvi->bmiHeader.biBitCount    = 16;
-            break;
-        }
+        SetPaletteEntries(Blue);
+        pvi->bmiHeader.biCompression = BI_BITFIELDS;
+        pvi->bmiHeader.biBitCount    = 16;
+        break;
+    }
 
-        case 3:
-        {   // 16 bits per pixel RGB555
+    case 3:
+    {
+        // 16 bits per pixel RGB555
 
-            // Place the RGB masks as the first 3 doublewords in the palette area
-            for(int i = 0; i < 3; i++)
-                pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
+        // Place the RGB masks as the first 3 doublewords in the palette area
+        for(int i = 0; i < 3; i++)
+            pvi->TrueColorInfo.dwBitMasks[i] = bits555[i];
 
-            SetPaletteEntries(Blue);
-            pvi->bmiHeader.biCompression = BI_BITFIELDS;
-            pvi->bmiHeader.biBitCount    = 16;
-            break;
-        }
+        SetPaletteEntries(Blue);
+        pvi->bmiHeader.biCompression = BI_BITFIELDS;
+        pvi->bmiHeader.biBitCount    = 16;
+        break;
+    }
 
-        case 4:
-        {   // 8 bit palettised
+    case 4:
+    {
+        // 8 bit palettised
 
-            SetPaletteEntries(Red);
-            pvi->bmiHeader.biCompression = BI_RGB;
-            pvi->bmiHeader.biBitCount    = 8;
-            pvi->bmiHeader.biClrUsed        = iPALETTE_COLORS;
-            break;
-        }
+        SetPaletteEntries(Red);
+        pvi->bmiHeader.biCompression = BI_RGB;
+        pvi->bmiHeader.biBitCount    = 8;
+        pvi->bmiHeader.biClrUsed        = iPALETTE_COLORS;
+        break;
+    }
     }
 
     // (Adjust the parameters common to all formats...)
@@ -419,8 +426,8 @@ HRESULT CBallStream::CheckMediaType(const CMediaType *pMediaType)
     CheckPointer(pMediaType,E_POINTER);
 
     if((*(pMediaType->Type()) != MEDIATYPE_Video) ||   // we only output video
-       !(pMediaType->IsFixedSize()))                   // in fixed size samples
-    {                                                  
+            !(pMediaType->IsFixedSize()))                   // in fixed size samples
+    {
         return E_INVALIDARG;
     }
 
@@ -430,10 +437,10 @@ HRESULT CBallStream::CheckMediaType(const CMediaType *pMediaType)
         return E_INVALIDARG;
 
     if((*SubType != MEDIASUBTYPE_RGB8)
-        && (*SubType != MEDIASUBTYPE_RGB565)
-        && (*SubType != MEDIASUBTYPE_RGB555)
-        && (*SubType != MEDIASUBTYPE_RGB24)
-        && (*SubType != MEDIASUBTYPE_RGB32))
+            && (*SubType != MEDIASUBTYPE_RGB565)
+            && (*SubType != MEDIASUBTYPE_RGB555)
+            && (*SubType != MEDIASUBTYPE_RGB24)
+            && (*SubType != MEDIASUBTYPE_RGB32))
     {
         return E_INVALIDARG;
     }
@@ -454,8 +461,8 @@ HRESULT CBallStream::CheckMediaType(const CMediaType *pMediaType)
     }
 
     // Check if the image width & height have changed
-    if(pvi->bmiHeader.biWidth != m_Ball->GetImageWidth() || 
-       abs(pvi->bmiHeader.biHeight) != m_Ball->GetImageHeight())
+    if(pvi->bmiHeader.biWidth != m_Ball->GetImageWidth() ||
+            abs(pvi->bmiHeader.biHeight) != m_Ball->GetImageHeight())
     {
         // If the image width/height is changed, fail CheckMediaType() to force
         // the renderer to resize the image.
@@ -539,44 +546,44 @@ HRESULT CBallStream::SetMediaType(const CMediaType *pMediaType)
 
         switch(pvi->bmiHeader.biBitCount)
         {
-            case 8:     // Make a red pixel
+        case 8:     // Make a red pixel
 
-                m_BallPixel[0] = 10;    // 0 is palette index of red
-                m_iPixelSize   = 1;
-                SetPaletteEntries(Red);
-                break;
+            m_BallPixel[0] = 10;    // 0 is palette index of red
+            m_iPixelSize   = 1;
+            SetPaletteEntries(Red);
+            break;
 
-            case 16:    // Make a blue pixel
+        case 16:    // Make a blue pixel
 
-                m_BallPixel[0] = 0xf8;  // 00000000 00011111 is blue in rgb555 or rgb565
-                m_BallPixel[1] = 0x0;   // don't forget the byte ordering within the mask word.
-                m_iPixelSize   = 2;
-                SetPaletteEntries(Blue);
-                break;
+            m_BallPixel[0] = 0xf8;  // 00000000 00011111 is blue in rgb555 or rgb565
+            m_BallPixel[1] = 0x0;   // don't forget the byte ordering within the mask word.
+            m_iPixelSize   = 2;
+            SetPaletteEntries(Blue);
+            break;
 
-            case 24:    // Make a green pixel
+        case 24:    // Make a green pixel
 
-                m_BallPixel[0] = 0x0;
-                m_BallPixel[1] = 0xff;
-                m_BallPixel[2] = 0x0;
-                m_iPixelSize   = 3;
-                SetPaletteEntries(Green);
-                break;
+            m_BallPixel[0] = 0x0;
+            m_BallPixel[1] = 0xff;
+            m_BallPixel[2] = 0x0;
+            m_iPixelSize   = 3;
+            SetPaletteEntries(Green);
+            break;
 
-            case 32:    // Make a yellow pixel
+        case 32:    // Make a yellow pixel
 
-                m_BallPixel[0] = 0x0;
-                m_BallPixel[1] = 0xff;
-                m_BallPixel[2] = 0xff;
-                m_BallPixel[3] = 0x00;
-                m_iPixelSize   = 4;
-                SetPaletteEntries(Yellow);
-                break;
+            m_BallPixel[0] = 0x0;
+            m_BallPixel[1] = 0xff;
+            m_BallPixel[2] = 0xff;
+            m_BallPixel[3] = 0x00;
+            m_iPixelSize   = 4;
+            SetPaletteEntries(Yellow);
+            break;
 
-            default:
-                // We should never agree any other pixel sizes
-                ASSERT(FALSE);
-                break;
+        default:
+            // We should never agree any other pixel sizes
+            ASSERT(FALSE);
+            break;
         }
 
         CBall *pNewBall = new CBall(pvi->bmiHeader.biWidth, abs(pvi->bmiHeader.biHeight));
@@ -590,7 +597,7 @@ HRESULT CBallStream::SetMediaType(const CMediaType *pMediaType)
             hr = E_OUTOFMEMORY;
 
         return NOERROR;
-    } 
+    }
 
     return hr;
 
@@ -638,29 +645,29 @@ HRESULT CBallStream::SetPaletteEntries(Colour color)
 
     switch(color)
     {
-        case Red:
-            m_Palette[10].peBlue  = 0;
-            m_Palette[10].peGreen = 0;
-            m_Palette[10].peRed   = 0xff;
-            break;
+    case Red:
+        m_Palette[10].peBlue  = 0;
+        m_Palette[10].peGreen = 0;
+        m_Palette[10].peRed   = 0xff;
+        break;
 
-        case Yellow:
-            m_Palette[10].peBlue  = 0;
-            m_Palette[10].peGreen = 0xff;
-            m_Palette[10].peRed   = 0xff;
-            break;
+    case Yellow:
+        m_Palette[10].peBlue  = 0;
+        m_Palette[10].peGreen = 0xff;
+        m_Palette[10].peRed   = 0xff;
+        break;
 
-        case Blue:
-            m_Palette[10].peBlue  = 0xff;
-            m_Palette[10].peGreen = 0;
-            m_Palette[10].peRed   = 0;
-            break;
+    case Blue:
+        m_Palette[10].peBlue  = 0xff;
+        m_Palette[10].peGreen = 0;
+        m_Palette[10].peRed   = 0;
+        break;
 
-        case Green:
-            m_Palette[10].peBlue  = 0;
-            m_Palette[10].peGreen = 0xff;
-            m_Palette[10].peRed   = 0;
-            break;
+    case Green:
+        m_Palette[10].peBlue  = 0;
+        m_Palette[10].peGreen = 0xff;
+        m_Palette[10].peRed   = 0;
+        break;
     }
 
     m_Palette[10].peFlags = 0;

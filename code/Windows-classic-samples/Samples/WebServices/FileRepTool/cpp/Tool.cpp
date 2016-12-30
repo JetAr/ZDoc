@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@ void CleanupChannel(WS_CHANNEL* channel)
     if (NULL == channel)
     {
         return;
-    }        
+    }
 #ifdef DBG
     HRESULT hr = WsGetChannelProperty(channel, WS_CHANNEL_PROPERTY_STATE, &state, sizeof(state), NULL);
     assert(SUCCEEDED(hr));
@@ -27,7 +27,7 @@ void CleanupChannel(WS_CHANNEL* channel)
     (void)WsGetChannelProperty(channel, WS_CHANNEL_PROPERTY_STATE, &state, sizeof(state), NULL);
 #endif
 
-        
+
     if (WS_CHANNEL_STATE_OPEN == state || WS_CHANNEL_STATE_FAULTED == state)
     {
         // CloseChannel will close the channel even if it encouters an error. So ignore the error here
@@ -44,13 +44,13 @@ void CleanupChannel(WS_CHANNEL* channel)
 // to be changed in that case. This is only used for the command line.
 // For more advanced parsing, WsDecodeUrl should be used.
 HRESULT ParseTransport(
-    _In_ const LPWSTR url, 
-    _Out_ TRANSPORT_MODE* transport, 
+    _In_ const LPWSTR url,
+    _Out_ TRANSPORT_MODE* transport,
     _Out_ SECURITY_MODE* securityMode)
 {
     if (wcsstr(url, L"http:") == url)
     {
-        *transport = HTTP_TRANSPORT;    
+        *transport = HTTP_TRANSPORT;
         *securityMode = NO_SECURITY;
         return S_OK;
     }
@@ -72,7 +72,7 @@ HRESULT ParseTransport(
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -111,9 +111,9 @@ Exit:
 }
 
 HRESULT ParseCommandLine(
-    _In_ int argc, 
-    _In_reads_(argc) wchar_t** argv, 
-    _Out_ bool* synchronous, 
+    _In_ int argc,
+    _In_reads_(argc) wchar_t** argv,
+    _Out_ bool* synchronous,
     _Out_ MESSAGE_ENCODING* messageEncoding)
 {
     *synchronous = false;
@@ -172,7 +172,7 @@ HRESULT ParseCommandLine(
 }
 
 int __cdecl wmain(
-    _In_ int argc, 
+    _In_ int argc,
     _In_reads_(argc) wchar_t** argv)
 {
     HRESULT hr = S_OK;
@@ -184,7 +184,7 @@ int __cdecl wmain(
 
     WS_ENDPOINT_ADDRESS address = {};
     UserRequest userRequest;
-    UserResponse* userResponse = NULL;  
+    UserResponse* userResponse = NULL;
 
     if (argc < 5)
     {
@@ -209,14 +209,14 @@ int __cdecl wmain(
     SECURITY_MODE serverSecurityMode = NO_SECURITY;
 
     if (argc > 5)
-    {        
+    {
         hr = ParseCommandLine(argc - 5, &argv[5], &synchronous, &messageEncoding);
         if (FAILED(hr))
         {
             return -1;
         }
-    }  
-        
+    }
+
     if (synchronous)
     {
         wprintf(L"Performing synchronous request.\n");
@@ -275,7 +275,7 @@ int __cdecl wmain(
     {
         wprintf(L"Using unsecured protocol for communication between client and server service.\n");
     }
-    
+
     // Create an error object for storing rich error information.
     IfFailedExit(WsCreateError(NULL, 0, &error));
 
@@ -291,17 +291,17 @@ int __cdecl wmain(
     channelProperty[1].value = &timeout;
     channelProperty[1].valueSize = sizeof(timeout);
 
-    IfFailedExit(WsCreateChannel(WS_CHANNEL_TYPE_REQUEST, 
-        WS_HTTP_CHANNEL_BINDING, channelProperty, 2, NULL, &channel, error));
-    
-    IfFailedExit(WsCreateMessageForChannel(channel, NULL, 0, &requestMessage, error));   
+    IfFailedExit(WsCreateChannel(WS_CHANNEL_TYPE_REQUEST,
+                                 WS_HTTP_CHANNEL_BINDING, channelProperty, 2, NULL, &channel, error));
+
+    IfFailedExit(WsCreateMessageForChannel(channel, NULL, 0, &requestMessage, error));
     IfFailedExit(WsCreateMessageForChannel(channel, NULL, 0, &replyMessage, error));
-   
+
     // Initialize address of service
     address.url.chars = clientURL;
     IfFailedExit(SizeTToULong(wcslen(address.url.chars), &address.url.length));
-    
-    IfFailedExit(WsOpenChannel(channel, &address, NULL, error));    
+
+    IfFailedExit(WsOpenChannel(channel, &address, NULL, error));
 
     if (synchronous)
     {
@@ -328,22 +328,22 @@ int __cdecl wmain(
     WS_MESSAGE_DESCRIPTION userResponseMessageDescription;
     userResponseMessageDescription.action = &userResponseAction;
     userResponseMessageDescription.bodyElementDescription = &userResponseElement;
-      
+
     hr = WsRequestReply(
-        channel, 
-        requestMessage, 
-        &userRequestMessageDescription,
-        WS_WRITE_REQUIRED_VALUE,
-        &userRequest, 
-        sizeof(userRequest), 
-        replyMessage, 
-        &userResponseMessageDescription, 
-        WS_READ_REQUIRED_POINTER, 
-        heap, 
-        &userResponse, 
-        sizeof(userResponse), 
-        NULL, 
-        error);
+             channel,
+             requestMessage,
+             &userRequestMessageDescription,
+             WS_WRITE_REQUIRED_VALUE,
+             &userRequest,
+             sizeof(userRequest),
+             replyMessage,
+             &userResponseMessageDescription,
+             WS_READ_REQUIRED_POINTER,
+             heap,
+             &userResponse,
+             sizeof(userResponse),
+             NULL,
+             error);
 
     if (WS_E_ENDPOINT_FAULT_RECEIVED == hr)
     {
@@ -362,8 +362,8 @@ int __cdecl wmain(
             {
                 wprintf(L"Fault reason too long to display.\n");
             }
-        }           
-    } 
+        }
+    }
     else if (SUCCEEDED(hr))
     {
         if (TRANSFER_ASYNC == userResponse->returnValue)
@@ -379,15 +379,15 @@ int __cdecl wmain(
             wprintf(L"Unexpected return value from server.\n");
         }
     }
-        
+
     EXIT
-   
+
     if (FAILED(hr) && WS_E_ENDPOINT_FAULT_RECEIVED != hr)
     {
         wprintf(L"Unexpected failure:\n");
         PrintError(hr, error);
     }
-    
+
     if (requestMessage != NULL)
     {
         WsFreeMessage(requestMessage);

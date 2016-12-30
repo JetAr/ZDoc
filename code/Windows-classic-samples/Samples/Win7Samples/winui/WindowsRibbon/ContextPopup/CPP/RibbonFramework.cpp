@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@ CApplication *g_pApplication = NULL;  // Reference to the Application object.
 //
 //  COMMENTS:
 //
-//    To get a Ribbon to display, the Ribbon framework must be initialized. 
+//    To get a Ribbon to display, the Ribbon framework must be initialized.
 //    This involves three important steps:
 //      1) Instantiating the Ribbon framework object (CLSID_UIRibbonFramework).
 //      2) Passing the host HWND and IUIApplication object to the framework.
@@ -56,7 +56,7 @@ __checkReturn bool InitializeFramework(HWND hWnd)
         return false;
     }
 
-    // Finally, we load the binary markup.  This will initiate callbacks to the IUIApplication object 
+    // Finally, we load the binary markup.  This will initiate callbacks to the IUIApplication object
     // that was provided to the framework earlier, allowing command handlers to be bound to individual
     // commands.
     hr = g_pFramework->LoadUI(GetModuleHandle(NULL), L"CONTEXTPOPUP_RIBBON");

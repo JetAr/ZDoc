@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,7 +26,7 @@ public:
 
     BOOL operator==(const CWlanStation&);
     BOOL operator==(const DOT11_MAC_ADDRESS);
-    
+
     VOID GetMacAddress(DOT11_MAC_ADDRESS&) const;
 };
 
@@ -87,8 +87,14 @@ private:
 
     static VOID WINAPI WlanNotificationCallback(PWLAN_NOTIFICATION_DATA, PVOID);
 
-    VOID Lock() {EnterCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));};
-    VOID Unlock() {LeaveCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));};
+    VOID Lock()
+    {
+        EnterCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));
+    };
+    VOID Unlock()
+    {
+        LeaveCriticalSection(const_cast<LPCRITICAL_SECTION>(&m_CriticalSection));
+    };
 
     //
     // Send notification to client?

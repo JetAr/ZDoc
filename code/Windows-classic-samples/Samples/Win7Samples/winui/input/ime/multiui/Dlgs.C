@@ -1,4 +1,4 @@
-/**********************************************************************/
+﻿/**********************************************************************/
 /*                                                                    */
 /*      DLGS.C                                                        */
 /*                                                                    */
@@ -17,27 +17,27 @@
 /*                                                                    */
 /**********************************************************************/
 BOOL AboutDlg (
-    HWND hDlg, 
-    UINT message, 
-    WPARAM wParam, 
+    HWND hDlg,
+    UINT message,
+    WPARAM wParam,
     LPARAM lParam)
 {
     BOOL bRet = FALSE;
-    
-    switch (message) 
-    {
-        case WM_INITDIALOG:
-            bRet = TRUE;
-            break;
 
-        case WM_COMMAND:
-            if (wParam == IDOK ||
-                wParam == IDCANCEL) 
-            {
-                EndDialog(hDlg, TRUE);
-                bRet = TRUE;
-            }
-            break;
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        bRet = TRUE;
+        break;
+
+    case WM_COMMAND:
+        if (wParam == IDOK ||
+                wParam == IDCANCEL)
+        {
+            EndDialog(hDlg, TRUE);
+            bRet = TRUE;
+        }
+        break;
     }
 
     return bRet;

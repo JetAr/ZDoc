@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -109,8 +109,8 @@ public:
 
     DWORD
     ResolveProxy(
-            __in HINTERNET hSession,
-            __in_z PCWSTR pwszUrl);
+        __in HINTERNET hSession,
+        __in_z PCWSTR pwszUrl);
 
     VOID
     ResetProxyCursor();

@@ -1,4 +1,4 @@
-
+﻿
 //
 // ------------------------------------------
 //
@@ -19,64 +19,68 @@ class CWirelessHelperExtension :
     public CComCoClass<CWirelessHelperExtension, &CLSID_WirelessHelperExtension>
 {
 public:
-    CWirelessHelperExtension(){
-        m_IfType=0; m_initialized=0; m_LowHealthAttributeType=0; m_ReturnRepair=0;
+    CWirelessHelperExtension()
+    {
+        m_IfType=0;
+        m_initialized=0;
+        m_LowHealthAttributeType=0;
+        m_ReturnRepair=0;
     }
 
     BEGIN_COM_MAP(CWirelessHelperExtension)
-        COM_INTERFACE_ENTRY(INetDiagHelperInfo)
-        COM_INTERFACE_ENTRY(INetDiagHelper)
+    COM_INTERFACE_ENTRY(INetDiagHelperInfo)
+    COM_INTERFACE_ENTRY(INetDiagHelper)
     END_COM_MAP()
 
     DECLARE_NOT_AGGREGATABLE(CWirelessHelperExtension)
     DECLARE_REGISTRY_RESOURCEID(IDR_HELPER_EXTENSION)
 
     // INetDiagHelperInfo
-    HRESULT STDMETHODCALLTYPE GetAttributeInfo( 
+    HRESULT STDMETHODCALLTYPE GetAttributeInfo(
         __RPC__out ULONG *pcelt,
         __RPC__deref_out_ecount_full_opt(*pcelt) HelperAttributeInfo **pprgAttributeInfos);
 
     // INetDiagHelper
-    HRESULT STDMETHODCALLTYPE Initialize( 
+    HRESULT STDMETHODCALLTYPE Initialize(
         ULONG celt,
         __RPC__in_ecount_full(celt) HELPER_ATTRIBUTE rgAttributes[  ]);
-   
-    HRESULT STDMETHODCALLTYPE GetDiagnosticsInfo( 
+
+    HRESULT STDMETHODCALLTYPE GetDiagnosticsInfo(
         __RPC__deref_out_opt DiagnosticsInfo **ppInfo);
 
-    HRESULT STDMETHODCALLTYPE GetKeyAttributes( 
+    HRESULT STDMETHODCALLTYPE GetKeyAttributes(
         __RPC__out ULONG *pcelt,
         __RPC__deref_out_ecount_full_opt(*pcelt) HELPER_ATTRIBUTE **pprgAttributes);
 
-    HRESULT STDMETHODCALLTYPE LowHealth( 
-        __RPC__in_opt LPCWSTR pwszInstanceDescription,        
+    HRESULT STDMETHODCALLTYPE LowHealth(
+        __RPC__in_opt LPCWSTR pwszInstanceDescription,
         __RPC__deref_out_opt_string LPWSTR *ppwszDescription,
         __RPC__out long *pDeferredTime,
         __RPC__out DIAGNOSIS_STATUS *pStatus);
 
-    HRESULT STDMETHODCALLTYPE HighUtilization( 
-        __RPC__in_opt LPCWSTR pwszInstanceDescription,        
+    HRESULT STDMETHODCALLTYPE HighUtilization(
+        __RPC__in_opt LPCWSTR pwszInstanceDescription,
         __RPC__deref_out_opt_string LPWSTR *ppwszDescription,
         __RPC__out long *pDeferredTime,
         __RPC__out DIAGNOSIS_STATUS *pStatus);
 
-    HRESULT STDMETHODCALLTYPE GetLowerHypotheses( 
+    HRESULT STDMETHODCALLTYPE GetLowerHypotheses(
         __RPC__out ULONG *pcelt,
         __RPC__deref_out_ecount_full_opt(*pcelt) HYPOTHESIS **pprgHypotheses);
 
-    HRESULT STDMETHODCALLTYPE GetDownStreamHypotheses( 
+    HRESULT STDMETHODCALLTYPE GetDownStreamHypotheses(
         __RPC__out ULONG *pcelt,
         __RPC__deref_out_ecount_full_opt(*pcelt) HYPOTHESIS **pprgHypotheses) ;
 
-    HRESULT STDMETHODCALLTYPE GetHigherHypotheses( 
+    HRESULT STDMETHODCALLTYPE GetHigherHypotheses(
         __RPC__out ULONG *pcelt,
         __RPC__deref_out_ecount_full_opt(*pcelt) HYPOTHESIS **pprgHypotheses);
 
-    HRESULT STDMETHODCALLTYPE GetUpStreamHypotheses( 
+    HRESULT STDMETHODCALLTYPE GetUpStreamHypotheses(
         __RPC__out ULONG *pcelt,
         __RPC__deref_out_ecount_full_opt(*pcelt) HYPOTHESIS **pprgHypotheses);
 
-    HRESULT STDMETHODCALLTYPE Repair( 
+    HRESULT STDMETHODCALLTYPE Repair(
         __RPC__in RepairInfo *pInfo,
         __RPC__out long *pDeferredTime,
         __RPC__out REPAIR_STATUS *pStatus);
@@ -87,21 +91,21 @@ public:
         __RPC__out long *pDeferredTime,
         __RPC__out REPAIR_STATUS *pStatus);
 
-    HRESULT STDMETHODCALLTYPE GetRepairInfo( 
+    HRESULT STDMETHODCALLTYPE GetRepairInfo(
         PROBLEM_TYPE problem,
         __RPC__out ULONG *pcelt,
         __RPC__deref_out_ecount_full_opt(*pcelt) RepairInfo **ppInfo);
 
-    HRESULT STDMETHODCALLTYPE GetLifeTime( 
+    HRESULT STDMETHODCALLTYPE GetLifeTime(
         __RPC__out LIFE_TIME *pLifeTime);
 
-    HRESULT STDMETHODCALLTYPE SetLifeTime( 
+    HRESULT STDMETHODCALLTYPE SetLifeTime(
         LIFE_TIME lifeTime);
 
-    HRESULT STDMETHODCALLTYPE GetCacheTime( 
+    HRESULT STDMETHODCALLTYPE GetCacheTime(
         __RPC__out FILETIME *pCacheTime);
 
-    HRESULT STDMETHODCALLTYPE GetAttributes( 
+    HRESULT STDMETHODCALLTYPE GetAttributes(
         __RPC__out ULONG *pcelt,
         __RPC__deref_out_ecount_full_opt(*pcelt) HELPER_ATTRIBUTE **pprgAttributes);
 

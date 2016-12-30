@@ -1,27 +1,27 @@
-/*************************************************************************************************
+﻿/*************************************************************************************************
  * Description: Entry point for a sample application that displays a dialog box containing
  * a custom contol that supports UI Automation.
  *
- * The control is a simple button-like control that supports InvokePattern. Clicking the 
+ * The control is a simple button-like control that supports InvokePattern. Clicking the
  * button causes it to change color. You can also tab to the button and click it by pressing
  * the spacebar.
- * 
+ *
  * To test the functionality of InvokePattern, you can use the UISpy tool. Click on the control
  * in the UI Automation raw view or control view and then select Control Patterns from the
  * View menu. In the Control Patterns dialog box, you can call the InvokePattern::Invoke method.
- * 
- * 
+ *
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  *************************************************************************************************/
 
 #pragma once
@@ -47,7 +47,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR /*lpCmdLine*/, int /
     DialogBox(hInstance, MAKEINTRESOURCE(IDD_MAIN), NULL, DlgProc);
 
     CoUninitialize();
-    
+
     return 0;
 }
 

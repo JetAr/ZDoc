@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -50,13 +50,13 @@ BOOL RegisterProfiles()
 
     cchIconFile = GetModuleFileName(g_hInst, achIconFile, ARRAYSIZE(achIconFile));
     hr = pInputProcessProfiles->AddLanguageProfile(c_clsidTextService,
-                                  TEXTSERVICE_LANGID, 
-                                  c_guidProfile, 
-                                  TEXTSERVICE_DESC, 
-                                  (ULONG)wcslen(TEXTSERVICE_DESC),
-                                  achIconFile,
-                                  cchIconFile,
-                                  TEXTSERVICE_ICON_INDEX);
+            TEXTSERVICE_LANGID,
+            c_guidProfile,
+            TEXTSERVICE_DESC,
+            (ULONG)wcslen(TEXTSERVICE_DESC),
+            achIconFile,
+            cchIconFile,
+            TEXTSERVICE_ICON_INDEX);
 
 Exit:
     pInputProcessProfiles->Release();
@@ -93,7 +93,8 @@ void UnregisterProfiles()
 BOOL CLSIDToString(REFGUID refGUID, TCHAR *pchA)
 {
     static const BYTE GuidMap[] = {3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
-                                   8, 9, '-', 10, 11, 12, 13, 14, 15};
+                                   8, 9, '-', 10, 11, 12, 13, 14, 15
+                                  };
 
     static const TCHAR szDigits[] = TEXT("0123456789ABCDEF");
 
@@ -174,13 +175,13 @@ BOOL RegisterServer()
     memcpy(achIMEKey, c_szInfoKeyPrefix, sizeof(c_szInfoKeyPrefix)-sizeof(TCHAR));
 
     if (fRet = RegCreateKeyEx(HKEY_CLASSES_ROOT, achIMEKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dw)
-            == ERROR_SUCCESS)
+               == ERROR_SUCCESS)
     {
         fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)TEXTSERVICE_DESC, (lstrlen(TEXTSERVICE_DESC)+1)*sizeof(TCHAR))
-            == ERROR_SUCCESS;
+                == ERROR_SUCCESS;
 
         if (fRet &= RegCreateKeyEx(hKey, c_szInProcSvr32, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hSubKey, &dw)
-            == ERROR_SUCCESS)
+                    == ERROR_SUCCESS)
         {
             dw = GetModuleFileName(g_hInst, achFileName, ARRAYSIZE(achFileName));
 

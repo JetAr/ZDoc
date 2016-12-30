@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -54,9 +54,9 @@ void CPacketModifier::PixelToHiMetric(HDC hdc, LONG* pfX, LONG* pfY)
 // Helper method to modify a single packet
 // Called from StylusDown() and StylusUp()
 HRESULT CPacketModifier::ModifyPacket(
-            /* [in] */ ULONG cPropCountPerPkt,
-            /* [size_is][in] */ LONG *pPacket,
-            /* [out][in] */ LONG **ppInOutPkt)
+    /* [in] */ ULONG cPropCountPerPkt,
+    /* [size_is][in] */ LONG *pPacket,
+    /* [out][in] */ LONG **ppInOutPkt)
 {
     // Pointer to a buffer to hold changed packet values
     LONG* pTempOutPkt = NULL;
@@ -112,31 +112,31 @@ HRESULT CPacketModifier::ModifyPacket(
 // Interface implementation
 
 STDMETHODIMP CPacketModifier::DataInterest(
-        /* [retval][out] */ RealTimeStylusDataInterest *pDataInterest)
+    /* [retval][out] */ RealTimeStylusDataInterest *pDataInterest)
 {
     *pDataInterest = (RealTimeStylusDataInterest)(RTSDI_StylusDown | RTSDI_Packets |
-                                                  RTSDI_StylusUp | RTSDI_Error);
+                     RTSDI_StylusUp | RTSDI_Error);
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::StylusDown(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const StylusInfo *pStylusInfo,
-            /* [in] */ ULONG cPropCountPerPkt,
-            /* [size_is][in] */ LONG *pPacket,
-            /* [out][in] */ LONG **ppInOutPkt)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const StylusInfo *pStylusInfo,
+    /* [in] */ ULONG cPropCountPerPkt,
+    /* [size_is][in] */ LONG *pPacket,
+    /* [out][in] */ LONG **ppInOutPkt)
 {
     return ModifyPacket(cPropCountPerPkt, pPacket, ppInOutPkt);
 }
 
 STDMETHODIMP CPacketModifier::Packets(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const StylusInfo *pStylusInfo,
-            /* [in] */ ULONG cPktCount,
-            /* [in] */ ULONG cPktBuffLength,
-            /* [size_is][in] */ LONG *pPackets,
-            /* [out][in] */ ULONG *pcInOutPkts,
-            /* [out][in] */ LONG **ppInOutPkts)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const StylusInfo *pStylusInfo,
+    /* [in] */ ULONG cPktCount,
+    /* [in] */ ULONG cPktBuffLength,
+    /* [size_is][in] */ LONG *pPackets,
+    /* [out][in] */ ULONG *pcInOutPkts,
+    /* [out][in] */ LONG **ppInOutPkts)
 {
     BOOL fModified = FALSE;                             // Did we change the packet data?
     ULONG cPropertyCount = cPktBuffLength/cPktCount;    // # of properties in a packet
@@ -196,21 +196,21 @@ STDMETHODIMP CPacketModifier::Packets(
 }
 
 STDMETHODIMP CPacketModifier::StylusUp(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const StylusInfo *pStylusInfo,
-            /* [in] */ ULONG cPropCountPerPkt,
-            /* [size_is][in] */ LONG *pPacket,
-            /* [out][in] */ LONG **ppInOutPkt)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const StylusInfo *pStylusInfo,
+    /* [in] */ ULONG cPropCountPerPkt,
+    /* [size_is][in] */ LONG *pPacket,
+    /* [out][in] */ LONG **ppInOutPkt)
 {
     return ModifyPacket(cPropCountPerPkt, pPacket, ppInOutPkt);
 }
 
 STDMETHODIMP CPacketModifier::Error(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ IStylusPlugin *piPlugin,
-            /* [in] */ RealTimeStylusDataInterest dataInterest,
-            /* [in] */ HRESULT hrErrorCode,
-            /* [out][in] */ LONG_PTR *lptrKey)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ IStylusPlugin *piPlugin,
+    /* [in] */ RealTimeStylusDataInterest dataInterest,
+    /* [in] */ HRESULT hrErrorCode,
+    /* [out][in] */ LONG_PTR *lptrKey)
 {
     CString strError;
     strError.Format(L"An error occured. Error code: %d", hrErrorCode);
@@ -221,100 +221,100 @@ STDMETHODIMP CPacketModifier::Error(
 
 /// The remaining interface methods are not used in this sample application
 STDMETHODIMP CPacketModifier::RealTimeStylusEnabled(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ ULONG cTcidCount,
-            /* [size_is][in] */ const TABLET_CONTEXT_ID *pTcids)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ ULONG cTcidCount,
+    /* [size_is][in] */ const TABLET_CONTEXT_ID *pTcids)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::RealTimeStylusDisabled(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ ULONG cTcidCount,
-            /* [size_is][in] */ const TABLET_CONTEXT_ID *pTcids)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ ULONG cTcidCount,
+    /* [size_is][in] */ const TABLET_CONTEXT_ID *pTcids)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::StylusInRange(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ TABLET_CONTEXT_ID tcid,
-            /* [in] */ STYLUS_ID sid)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ TABLET_CONTEXT_ID tcid,
+    /* [in] */ STYLUS_ID sid)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::StylusOutOfRange(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ TABLET_CONTEXT_ID tcid,
-            /* [in] */ STYLUS_ID sid)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ TABLET_CONTEXT_ID tcid,
+    /* [in] */ STYLUS_ID sid)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::StylusButtonDown(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ STYLUS_ID sid,
-            /* [in] */ const GUID *pGuidStylusButton,
-            /* [out][in] */ POINT *pStylusPos)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ STYLUS_ID sid,
+    /* [in] */ const GUID *pGuidStylusButton,
+    /* [out][in] */ POINT *pStylusPos)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::StylusButtonUp(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ STYLUS_ID sid,
-            /* [in] */ const GUID *pGuidStylusButton,
-            /* [out][in] */ POINT *pStylusPos)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ STYLUS_ID sid,
+    /* [in] */ const GUID *pGuidStylusButton,
+    /* [out][in] */ POINT *pStylusPos)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::InAirPackets(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const StylusInfo *pStylusInfo,
-            /* [in] */ ULONG cPktCount,
-            /* [in] */ ULONG cPktBuffLength,
-            /* [size_is][in] */ LONG *pPackets,
-            /* [out][in] */ ULONG *pcInOutPkts,
-            /* [out][in] */ LONG **ppInOutPkts)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const StylusInfo *pStylusInfo,
+    /* [in] */ ULONG cPktCount,
+    /* [in] */ ULONG cPktBuffLength,
+    /* [size_is][in] */ LONG *pPackets,
+    /* [out][in] */ ULONG *pcInOutPkts,
+    /* [out][in] */ LONG **ppInOutPkts)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::CustomStylusDataAdded(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const GUID *pGuidId,
-            /* [in] */ ULONG cbData,
-            /* [in] */ const BYTE *pbData)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const GUID *pGuidId,
+    /* [in] */ ULONG cbData,
+    /* [in] */ const BYTE *pbData)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::SystemEvent(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ TABLET_CONTEXT_ID tcid,
-            /* [in] */ STYLUS_ID sid,
-            /* [in] */ SYSTEM_EVENT event,
-            /* [in] */ SYSTEM_EVENT_DATA eventdata)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ TABLET_CONTEXT_ID tcid,
+    /* [in] */ STYLUS_ID sid,
+    /* [in] */ SYSTEM_EVENT event,
+    /* [in] */ SYSTEM_EVENT_DATA eventdata)
 {
     return S_OK;
 }
 STDMETHODIMP CPacketModifier::TabletAdded(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ IInkTablet *piTablet)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ IInkTablet *piTablet)
 {
     return S_OK;
 }
 STDMETHODIMP CPacketModifier::TabletRemoved(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ LONG iTabletIndex)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ LONG iTabletIndex)
 {
     return S_OK;
 }
 
 STDMETHODIMP CPacketModifier::UpdateMapping(
-            /* [in] */ IRealTimeStylus *piRtsSrc)
+    /* [in] */ IRealTimeStylus *piRtsSrc)
 {
     return S_OK;
 }

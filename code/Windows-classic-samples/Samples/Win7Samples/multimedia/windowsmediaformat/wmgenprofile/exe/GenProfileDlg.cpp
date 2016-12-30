@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -39,7 +39,7 @@ CGenProfileDlg::CGenProfileDlg( CWnd* pParent )
     : CDialog(CGenProfileDlg::IDD, pParent)
 {
     //{{AFX_DATA_INIT(CGenProfileDlg)
-        // NOTE: the ClassWizard will add member initialization here
+    // NOTE: the ClassWizard will add member initialization here
     //}}AFX_DATA_INIT
     // Note that LoadIcon does not require a subsequent DestroyIcon in Win32
     m_hIcon = AfxGetApp()->LoadIcon( IDR_MAINFRAME );
@@ -91,7 +91,7 @@ void CGenProfileDlg::DoDataExchange( CDataExchange* pDX )
     DDX_Control(pDX, IDC_RBBandwidthTypePartial, m_rbBandwidthSharingTypePartial);
     DDX_Control(pDX, IDC_LSTMutexStreams, m_lstMutexStreams);
     DDX_Control(pDX, IDC_LSTObjects, m_lstProfileObjects);
-  //}}AFX_DATA_MAP
+    //}}AFX_DATA_MAP
 }
 
 BEGIN_MESSAGE_MAP(CGenProfileDlg, CDialog)
@@ -133,12 +133,12 @@ BEGIN_MESSAGE_MAP(CGenProfileDlg, CDialog)
     ON_BN_CLICKED(IDC_CHKSMPTE, OnChkSMPTE)
     ON_BN_CLICKED(IDC_RBBandwidthTypeExclusive, OnRBBandwidthTypeExclusive)
     ON_BN_CLICKED(IDC_RBBandwidthTypePartial, OnRBBandwidthTypePartial)
-  ON_EN_KILLFOCUS(IDC_TXTStreamVideoVBRQuality, OnKillfocusTXTStreamVideoVBRQuality)
-  ON_EN_KILLFOCUS(IDC_TXTBandwidthBufferWindow, OnKillfocusTXTBandwidthBufferWindow)
-  ON_BN_CLICKED(IDC_CHKUncompressed, OnCHKStreamUncompressed)
-  ON_CBN_SELCHANGE(IDC_CBPixelFormat, OnSelchangeCBPixelFormat)
-  ON_CBN_SELCHANGE(IDC_CBLanguage, OnSelchangeCBLanguage)
-  //}}AFX_MSG_MAP
+    ON_EN_KILLFOCUS(IDC_TXTStreamVideoVBRQuality, OnKillfocusTXTStreamVideoVBRQuality)
+    ON_EN_KILLFOCUS(IDC_TXTBandwidthBufferWindow, OnKillfocusTXTBandwidthBufferWindow)
+    ON_BN_CLICKED(IDC_CHKUncompressed, OnCHKStreamUncompressed)
+    ON_CBN_SELCHANGE(IDC_CBPixelFormat, OnSelchangeCBPixelFormat)
+    ON_CBN_SELCHANGE(IDC_CBLanguage, OnSelchangeCBLanguage)
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
@@ -2115,11 +2115,11 @@ void CGenProfileDlg::ShowWindowConfiguration( DWORD dwConfigurationIndex )
             if ( hwndControl )
             {
                 ::MoveWindow(    hwndControl,
-                                WINDOW_POSITION[dwConfigurationIndex][nControlIndex].nX,
-                                WINDOW_POSITION[dwConfigurationIndex][nControlIndex].nY,
-                                WINDOW_POSITION[dwConfigurationIndex][nControlIndex].nWidth,
-                                WINDOW_POSITION[dwConfigurationIndex][nControlIndex].nHeight,
-                                TRUE );
+                                 WINDOW_POSITION[dwConfigurationIndex][nControlIndex].nX,
+                                 WINDOW_POSITION[dwConfigurationIndex][nControlIndex].nY,
+                                 WINDOW_POSITION[dwConfigurationIndex][nControlIndex].nWidth,
+                                 WINDOW_POSITION[dwConfigurationIndex][nControlIndex].nHeight,
+                                 TRUE );
                 ::ShowWindow( hwndControl, WINDOW_POSITION[dwConfigurationIndex][nControlIndex].fVisible ? SW_SHOW : SW_HIDE );
             }
         }
@@ -2479,11 +2479,11 @@ HRESULT CGenProfileDlg::ShowStreamWindowPlacement( DWORD dwStreamType )
             if ( hwndControl )
             {
                 ::MoveWindow(    hwndControl,
-                                STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].nX,
-                                STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].nY,
-                                STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].nWidth,
-                                STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].nHeight,
-                                TRUE );
+                                 STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].nX,
+                                 STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].nY,
+                                 STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].nWidth,
+                                 STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].nHeight,
+                                 TRUE );
                 ::ShowWindow( hwndControl, STREAM_WINDOW_POSITION[dwStreamType][nControlIndex].fVisible ? SW_SHOW : SW_HIDE );
             }
         }
@@ -2713,10 +2713,10 @@ HRESULT CGenProfileDlg::PopulatePixleFormatCB()
             else
             {
                 (void)StringCchPrintf( tszName, ARRAYSIZE(tszName), _T("%c%c%c%c"),
-                    (char)(dwFourCC & 0xFF),
-                    (char)( (dwFourCC>>8) & 0xFF),
-                    (char)( (dwFourCC>>16) & 0xFF),
-                    (char)( (dwFourCC>>24) & 0xFF) );
+                                       (char)(dwFourCC & 0xFF),
+                                       (char)( (dwFourCC>>8) & 0xFF),
+                                       (char)( (dwFourCC>>16) & 0xFF),
+                                       (char)( (dwFourCC>>24) & 0xFF) );
             }
 
             int nIndex = m_cbPixelFormat.AddString( tszName );
@@ -2798,17 +2798,17 @@ HRESULT CGenProfileDlg::PopulateWaveFormatCB()
         if ( wNumChannels == 1 )
         {
             csFormat.Format( _T("%d Hz, %d Bits, Mono"),
-                dwSamplesPerSecond, (DWORD)wBitsPerSample );
+                             dwSamplesPerSecond, (DWORD)wBitsPerSample );
         }
         else if ( wNumChannels == 2 )
         {
             csFormat.Format( _T("%d Hz, %d Bits, Stereo"),
-                dwSamplesPerSecond, (DWORD)wBitsPerSample );
+                             dwSamplesPerSecond, (DWORD)wBitsPerSample );
         }
         else
         {
             csFormat.Format( _T("%d Hz, %d Bits, %d Channels"),
-                dwSamplesPerSecond, (DWORD)wBitsPerSample, (DWORD)wNumChannels );
+                             dwSamplesPerSecond, (DWORD)wBitsPerSample, (DWORD)wNumChannels );
         }
 
         int nIndex = m_cbStreamFormat.AddString( csFormat );
@@ -3965,7 +3965,7 @@ HRESULT CGenProfileDlg::CreateProfile( IWMProfile **ppProfile )
         wcscpy_s(wszProfileName, dwProfileNameLength + 1, strProfileName);
 #else // UNICODE
         size_t szCount;
-        mbstowcs_s(&szCount, wszProfileName, dwProfileNameLength + 1, strProfileName, dwProfileNameLength); 
+        mbstowcs_s(&szCount, wszProfileName, dwProfileNameLength + 1, strProfileName, dwProfileNameLength);
 #endif // UNICODE
 
         hr = pProfile->SetName( wszProfileName );
@@ -4146,7 +4146,7 @@ HRESULT CGenProfileDlg::SetProfileDescription( IWMProfile *pProfile )
         wcscpy_s( wszProfileDescription, dwProfileDescriptionLength + 1, (LPCTSTR) strProfileDescription );
 #else // UNICODE
         size_t szCount;
-        mbstowcs_s(&szCount, wszProfileDescription, dwProfileDescriptionLength + 1, strProfileDescription, dwProfileDescriptionLength); 
+        mbstowcs_s(&szCount, wszProfileDescription, dwProfileDescriptionLength + 1, strProfileDescription, dwProfileDescriptionLength);
 #endif // UNICODE
 
         hr = pProfile->SetDescription( wszProfileDescription );
@@ -4202,14 +4202,14 @@ HRESULT CGenProfileDlg::AddStreamsToProfile( IWMProfile* pProfile )
                     if ( !pStream->GetIsUncompressed() )
                     {
                         hr = CreateAudioStream( &pNewStreamConfig,
-                                    m_pCodecInfo,
-                                    pProfile,
-                                    pStream->GetStreamBufferWindow(),
-                                    pStream->GetStreamCodecIndex(),
-                                    pStream->GetStreamFormatIndex() % VBR_OFFSET,
-                                    pStream->GetStreamFormatIndex() / VBR_OFFSET > 0,
-                                    pStream->GetStreamFormatIndex() / VBR_OFFSET,
-                                    pStream->GetLanguageLCID() );
+                                                m_pCodecInfo,
+                                                pProfile,
+                                                pStream->GetStreamBufferWindow(),
+                                                pStream->GetStreamCodecIndex(),
+                                                pStream->GetStreamFormatIndex() % VBR_OFFSET,
+                                                pStream->GetStreamFormatIndex() / VBR_OFFSET > 0,
+                                                pStream->GetStreamFormatIndex() / VBR_OFFSET,
+                                                pStream->GetLanguageLCID() );
                     }
                     else
                     {
@@ -4241,22 +4241,22 @@ HRESULT CGenProfileDlg::AddStreamsToProfile( IWMProfile* pProfile )
                     if ( !pStream->GetIsUncompressed() )
                     {
                         hr = CreateVideoStream( &pNewStreamConfig,
-                                    m_pCodecInfo,
-                                    pProfile,
-                                    pStream->GetStreamCodecIndex(),
-                                    pStream->GetStreamBitrate(),
-                                    pStream->GetStreamBufferWindow(),
-                                    pStream->GetVideoWidth(),
-                                    pStream->GetVideoHeight(),
-                                    pStream->GetVideoFPS(),
-                                    pStream->GetVideoQuality(),
-                                    pStream->GetVideoSecondsPerKeyframe(),
-                                    pStream->GetVideoIsVBR(),
-                                    pStream->GetVideoVBRMode(),
-                                    pStream->GetVideoVBRQuality(),
-                                    pStream->GetVideoMaxBitrate(),
-                                    pStream->GetVideoMaxBufferWindow(),
-                                    pStream->GetLanguageLCID() );
+                                                m_pCodecInfo,
+                                                pProfile,
+                                                pStream->GetStreamCodecIndex(),
+                                                pStream->GetStreamBitrate(),
+                                                pStream->GetStreamBufferWindow(),
+                                                pStream->GetVideoWidth(),
+                                                pStream->GetVideoHeight(),
+                                                pStream->GetVideoFPS(),
+                                                pStream->GetVideoQuality(),
+                                                pStream->GetVideoSecondsPerKeyframe(),
+                                                pStream->GetVideoIsVBR(),
+                                                pStream->GetVideoVBRMode(),
+                                                pStream->GetVideoVBRQuality(),
+                                                pStream->GetVideoMaxBitrate(),
+                                                pStream->GetVideoMaxBufferWindow(),
+                                                pStream->GetLanguageLCID() );
                     }
                     else
                     {
@@ -4271,16 +4271,16 @@ HRESULT CGenProfileDlg::AddStreamsToProfile( IWMProfile* pProfile )
                         if ( SUCCEEDED( hr ) )
                         {
                             hr = CreateUncompressedVideoStream( &pNewStreamConfig,
-                                        pProfile,
-                                        guidFormat,
-                                        dwFourCC,
-                                        wBitsPerPixel,
-                                        NULL,
-                                        0,
-                                        pStream->GetVideoWidth(),
-                                        pStream->GetVideoHeight(),
-                                        pStream->GetVideoFPS(),
-                                        pStream->GetLanguageLCID() );
+                                                                pProfile,
+                                                                guidFormat,
+                                                                dwFourCC,
+                                                                wBitsPerPixel,
+                                                                NULL,
+                                                                0,
+                                                                pStream->GetVideoWidth(),
+                                                                pStream->GetVideoHeight(),
+                                                                pStream->GetVideoFPS(),
+                                                                pStream->GetLanguageLCID() );
                         }
                     }
                     break;
@@ -4288,40 +4288,40 @@ HRESULT CGenProfileDlg::AddStreamsToProfile( IWMProfile* pProfile )
                 case ST_Script:      // Script stream
                     strStreamType = _T("Script");
                     hr = CreateScriptStream( &pNewStreamConfig,
-                                pProfile,
-                                pStream->GetStreamBitrate(),
-                                pStream->GetStreamBufferWindow(),
-                                pStream->GetLanguageLCID() );
+                                             pProfile,
+                                             pStream->GetStreamBitrate(),
+                                             pStream->GetStreamBufferWindow(),
+                                             pStream->GetLanguageLCID() );
                     break;
 
                 case ST_Image:       // Image stream
                     strStreamType = _T("Image");
                     hr = CreateImageStream( &pNewStreamConfig,
-                                pProfile,
-                                pStream->GetStreamBitrate(),
-                                pStream->GetStreamBufferWindow(),
-                                pStream->GetVideoWidth(),
-                                pStream->GetVideoHeight(),
-                                pStream->GetLanguageLCID() );
+                                            pProfile,
+                                            pStream->GetStreamBitrate(),
+                                            pStream->GetStreamBufferWindow(),
+                                            pStream->GetVideoWidth(),
+                                            pStream->GetVideoHeight(),
+                                            pStream->GetLanguageLCID() );
                     break;
 
                 case ST_Web:         // Web stream
                     strStreamType = _T("Web");
                     hr = CreateWebStream( &pNewStreamConfig,
-                                pProfile,
-                                pStream->GetStreamBitrate(),
-                                pStream->GetStreamBufferWindow(),
-                                pStream->GetLanguageLCID() );
+                                          pProfile,
+                                          pStream->GetStreamBitrate(),
+                                          pStream->GetStreamBufferWindow(),
+                                          pStream->GetLanguageLCID() );
                     break;
 
                 case ST_File:        // File stream
                     strStreamType = _T("File");
                     hr = CreateFileStream( &pNewStreamConfig,
-                                pProfile,
-                                pStream->GetStreamBitrate(),
-                                pStream->GetStreamBufferWindow(),
-                                MAX_FILENAME_LENGTH,
-                                pStream->GetLanguageLCID() );
+                                           pProfile,
+                                           pStream->GetStreamBitrate(),
+                                           pStream->GetStreamBufferWindow(),
+                                           MAX_FILENAME_LENGTH,
+                                           pStream->GetLanguageLCID() );
                     break;
 
                 default:
@@ -4360,7 +4360,7 @@ HRESULT CGenProfileDlg::AddStreamsToProfile( IWMProfile* pProfile )
                     break;
                 }
                 size_t szCount;
-                mbstowcs_s(&szCount, wszStreamName, nStreamNameLength + 1, strStreamName, nStreamNameLength); 
+                mbstowcs_s(&szCount, wszStreamName, nStreamNameLength + 1, strStreamName, nStreamNameLength);
                 hr = pNewStreamConfig->SetStreamName( wszStreamName );
 #endif
                 if ( FAILED( hr ) )
@@ -5025,9 +5025,9 @@ void CGenProfileDlg::ValidateMutexStreamsAgainstControl( CMutex *pMutex )
 
 ///////////////////////////////////////////////////////////////////////////////
 DWORD CGenProfileDlg::GetNumberOfFormatsSupported( GUID guidStreamType,
-                                                   DWORD dwCodecIndex,
-                                                   BOOL fIsVBR,
-                                                   DWORD dwNumPasses )
+        DWORD dwCodecIndex,
+        BOOL fIsVBR,
+        DWORD dwNumPasses )
 {
     HRESULT hr;
     DWORD dwCodecFormatCount;
@@ -5231,7 +5231,7 @@ HRESULT CGenProfileDlg::PopulateLanguageCB()
             CHAR szRfc1766[128];
 
             if( 0 == WideCharToMultiByte( CP_ACP, 0, rfcinfo.wszLocaleName, -1, szLocaleName, 128, NULL, NULL )
-                || 0 == WideCharToMultiByte( CP_ACP, 0, rfcinfo.wszRfc1766, -1, szRfc1766, 128, NULL, NULL ) )
+                    || 0 == WideCharToMultiByte( CP_ACP, 0, rfcinfo.wszRfc1766, -1, szRfc1766, 128, NULL, NULL ) )
             {
                 hr = HRESULT_FROM_WIN32( GetLastError() );
                 break;

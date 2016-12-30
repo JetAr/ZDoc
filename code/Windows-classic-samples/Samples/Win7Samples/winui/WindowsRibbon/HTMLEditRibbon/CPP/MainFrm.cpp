@@ -1,4 +1,4 @@
-// MainFrm.cpp : implementation of the CMainFrame class
+﻿// MainFrm.cpp : implementation of the CMainFrame class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -86,7 +86,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
         return -1;
-    
+
     if (!m_RibbonBar.Create(this, WS_CHILD|WS_DISABLED|WS_VISIBLE|CBRS_TOP|CBRS_HIDE_INPLACE,0))
     {
         TRACE0("Failed to create toolbar\n");
@@ -94,8 +94,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     }
 
     if (!m_wndStatusBar.Create(this) ||
-        !m_wndStatusBar.SetIndicators(indicators,
-          sizeof(indicators)/sizeof(UINT)))
+            !m_wndStatusBar.SetIndicators(indicators,
+                                          sizeof(indicators)/sizeof(UINT)))
     {
         TRACE0("Failed to create status bar\n");
         return -1;      // fail to create
@@ -160,12 +160,12 @@ BOOL CMainFrame::CreateEditBar()
     CRect rect;
     const int nDropHeight = 200;
 
-static int nFontSizes[] = 
+    static int nFontSizes[] =
     {1, 2, 3, 4, 5, 6, 7};
 
 
     if (!m_wndEditBar.Create(this) ||
-        !m_wndEditBar.LoadToolBar(ID_TOOLBAR_EDITING))
+            !m_wndEditBar.LoadToolBar(ID_TOOLBAR_EDITING))
     {
         TRACE0("Failed to create stylebar\n");
         return FALSE;       // fail to create
@@ -175,7 +175,7 @@ static int nFontSizes[] =
     tbCtrl.ModifyStyle(0, TBSTYLE_FLAT);
 
     m_wndEditBar.SetBarStyle(m_wndEditBar.GetBarStyle() |
-        CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
+                             CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
 
     // Create the font name combo box
     m_wndEditBar.SetButtonInfo(0, ID_FMTBAR_FONTNAME, TBBS_SEPARATOR, 150);
@@ -185,8 +185,8 @@ static int nFontSizes[] =
     rect.top = 3;
     rect.bottom = rect.top + nDropHeight;
     if (!m_wndEditBar.m_fontNameCombo.Create(
-            CBS_DROPDOWN|WS_VSCROLL|CBS_SORT |WS_VISIBLE|WS_TABSTOP,
-            rect, &m_wndEditBar, ID_FMTBAR_FONTNAME))
+                CBS_DROPDOWN|WS_VSCROLL|CBS_SORT |WS_VISIBLE|WS_TABSTOP,
+                rect, &m_wndEditBar, ID_FMTBAR_FONTNAME))
     {
         TRACE0("Failed to create combo-box\n");
         return FALSE;
@@ -203,8 +203,8 @@ static int nFontSizes[] =
     rect.bottom = rect.top + nDropHeight;
     rect.left += 5;
     if (!m_wndEditBar.m_fontSizeCombo.Create(
-            CBS_DROPDOWNLIST|WS_VISIBLE|WS_TABSTOP,
-            rect, &m_wndEditBar, ID_FMTBAR_FONTSIZE))
+                CBS_DROPDOWNLIST|WS_VISIBLE|WS_TABSTOP,
+                rect, &m_wndEditBar, ID_FMTBAR_FONTSIZE))
     {
         TRACE0("Failed to create combo-box\n");
         return FALSE;
@@ -231,15 +231,15 @@ static int nFontSizes[] =
     return TRUE;
 
 }
-CComboBox* CMainFrame::GetFontNameCombo() 
+CComboBox* CMainFrame::GetFontNameCombo()
 {
     return &m_wndEditBar.m_fontNameCombo;
 }
-CComboBox* CMainFrame::GetFontSizeCombo() 
+CComboBox* CMainFrame::GetFontSizeCombo()
 {
     return &m_wndEditBar.m_fontSizeCombo;
 }
-void CMainFrame::OnFontNameChange() 
+void CMainFrame::OnFontNameChange()
 {
     CString szText;
     m_wndEditBar.m_fontNameCombo.GetLBText(
@@ -251,7 +251,7 @@ void CMainFrame::OnFontNameChange()
 
 }
 
-void CMainFrame::OnFontSizeChange() 
+void CMainFrame::OnFontSizeChange()
 {
     CString szText;
     m_wndEditBar.m_fontSizeCombo.GetLBText(
@@ -263,7 +263,7 @@ void CMainFrame::OnFontSizeChange()
     pView->SetFontSize((short)_ttoi(szText));
 }
 
-void CMainFrame::OnViewEditingtoolbar() 
+void CMainFrame::OnViewEditingtoolbar()
 {
     CControlBar *pBar = DYNAMIC_DOWNCAST(CControlBar,&m_wndEditBar);
     if(pBar)
@@ -273,7 +273,7 @@ void CMainFrame::OnViewEditingtoolbar()
 
 }
 
-void CMainFrame::OnUpdateViewEditingtoolbar(CCmdUI* pCmdUI) 
+void CMainFrame::OnUpdateViewEditingtoolbar(CCmdUI* pCmdUI)
 {
     CControlBar *pBar = DYNAMIC_DOWNCAST(CControlBar,&m_wndEditBar);
     if (pBar != NULL)
@@ -281,11 +281,11 @@ void CMainFrame::OnUpdateViewEditingtoolbar(CCmdUI* pCmdUI)
         pCmdUI->SetCheck((pBar->GetStyle() & WS_VISIBLE) != 0);
         return;
     }
-    
+
 }
 
-BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext) 
-{	
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
     CDocument *pDoc=NULL;
     POSITION pos;
     BOOL bRet = FALSE;
@@ -295,7 +295,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
     m_pSrcView = (CSourceView*)prc->CreateObject();
     if(m_pSrcView)
         VERIFY(m_pSrcView->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
-        CRect(0,0,0,0), this, AFX_IDW_PANE_LAST, NULL));
+                                  CRect(0,0,0,0), this, AFX_IDW_PANE_LAST, NULL));
 
 
     //create the doc-template view and save off a pointer to it
@@ -344,7 +344,7 @@ HRESULT CMainFrame::SwapView(int nCmdID)
 
         m_wndStatusBar.SetPaneText(1, _T("SRC VIEW"), TRUE);
 
-        return SetModes(m_pUIFramework, UI_MAKEAPPMODE(0));        
+        return SetModes(m_pUIFramework, UI_MAKEAPPMODE(0));
     }
     else if(nCmdID == ID_VIEW_WEB)
     {
@@ -363,9 +363,9 @@ HRESULT CMainFrame::SwapView(int nCmdID)
         m_dwCurrentView = ID_VIEW_WEB;
         m_wndStatusBar.SetPaneText(1, _T("WEB VIEW"), TRUE);
 
-        return SetModes(m_pUIFramework, UI_MAKEAPPMODE(0)|UI_MAKEAPPMODE(1));        
+        return SetModes(m_pUIFramework, UI_MAKEAPPMODE(0)|UI_MAKEAPPMODE(1));
     }
-	return S_OK;
+    return S_OK;
 
 }
 void CMainFrame::SwapView()
@@ -374,26 +374,26 @@ void CMainFrame::SwapView()
 }
 
 
-void CMainFrame::OnViewSource() 
-{
-    SwapView();	
-}
-
-void CMainFrame::OnViewWeb() 
+void CMainFrame::OnViewSource()
 {
     SwapView();
 }
 
-void CMainFrame::OnUpdateViewWeb(CCmdUI* pCmdUI) 
+void CMainFrame::OnViewWeb()
 {
-    pCmdUI->SetRadio(m_dwCurrentView==ID_VIEW_WEB);
-    
+    SwapView();
 }
 
-void CMainFrame::OnUpdateViewSource(CCmdUI* pCmdUI) 
+void CMainFrame::OnUpdateViewWeb(CCmdUI* pCmdUI)
+{
+    pCmdUI->SetRadio(m_dwCurrentView==ID_VIEW_WEB);
+
+}
+
+void CMainFrame::OnUpdateViewSource(CCmdUI* pCmdUI)
 {
     pCmdUI->SetRadio(m_dwCurrentView==ID_VIEW_SOURCE);
-    
+
 }
 
 CView* CMainFrame::GetWebView()
@@ -465,6 +465,6 @@ void CMainFrame::OnDestroy()
         m_pUIFramework->Release();
         m_pUIFramework = NULL;
 
-	    CFrameWnd::OnDestroy();
+        CFrameWnd::OnDestroy();
     }
 }

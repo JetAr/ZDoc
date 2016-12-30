@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,24 +15,24 @@
 //  Initialize a bunch of stuff.
 //
 CMediaPlayer::CMediaPlayer(HWND AppWindow) :
-        _refCount(1),
-        _FileName(NULL),
-        _GraphBuilder(NULL),
-        _MediaSeeking(NULL),
-        _MediaPlayerTime(0),
-        _MediaEvent(NULL),
-        _AppWindow(AppWindow),
-        _DuckingRegistered(FALSE),
-        _SimpleVolume(NULL),
-        _SessionNotificationRegistered(FALSE),
-        _SessionControl2(NULL),
-        _SessionManager2(NULL)
+    _refCount(1),
+    _FileName(NULL),
+    _GraphBuilder(NULL),
+    _MediaSeeking(NULL),
+    _MediaPlayerTime(0),
+    _MediaEvent(NULL),
+    _AppWindow(AppWindow),
+    _DuckingRegistered(FALSE),
+    _SimpleVolume(NULL),
+    _SessionNotificationRegistered(FALSE),
+    _SessionControl2(NULL),
+    _SessionManager2(NULL)
 {
     UuidCreate(&_MediaPlayerEventContext);
 }
 
 //
-//  Initialize the media player.  Instantiates DShow, retrieves the session control for 
+//  Initialize the media player.  Instantiates DShow, retrieves the session control for
 //  the current audio session and registers for notifications on that session control.
 //
 HRESULT CMediaPlayer::Initialize()
@@ -82,7 +82,7 @@ void CMediaPlayer::Shutdown()
             HRESULT hr = _SessionManager2->UnregisterDuckNotification(this);
             if (FAILED(hr))
             {
-				// Failures here are highly unlikely and could indicate an application defect
+                // Failures here are highly unlikely and could indicate an application defect
                 MessageBox(_AppWindow, L"Unable to unregister for ducking notifications", L"Stop Player Error", MB_OK);
             }
             _DuckingRegistered = FALSE;
@@ -100,7 +100,7 @@ void CMediaPlayer::Shutdown()
             HRESULT hr = _SessionControl2->UnregisterAudioSessionNotification(this);
             if (FAILED(hr))
             {
-				// Failures here are highly unlikely and could indicate an application defect
+                // Failures here are highly unlikely and could indicate an application defect
                 MessageBox(_AppWindow, L"Unable to unregister for session notifications", L"Stop PlayerError", MB_OK);
             }
             _SessionNotificationRegistered = FALSE;
@@ -114,7 +114,7 @@ void CMediaPlayer::Shutdown()
 }
 
 //
-//  Destructor for the "Media Player". 
+//  Destructor for the "Media Player".
 //
 //  Does nothing because all the cleanup happened in the Shutdown() method.
 //
@@ -538,7 +538,7 @@ float CMediaPlayer::GetVolume()
 //  Set the volume on the current audio session.
 //
 //  We set a specific event context on the SetMasterVolume call - when we receive the simple volume changed
-//  notification we can use this event context to determine if the volume change call came from our application or another 
+//  notification we can use this event context to determine if the volume change call came from our application or another
 //  application.
 //
 void CMediaPlayer::SetVolume(float Volume)
@@ -546,7 +546,7 @@ void CMediaPlayer::SetVolume(float Volume)
     HRESULT hr = GetSimpleVolume();
     if (SUCCEEDED(hr))
     {
-        hr = _SimpleVolume->SetMasterVolume(Volume, &_MediaPlayerEventContext); 
+        hr = _SimpleVolume->SetMasterVolume(Volume, &_MediaPlayerEventContext);
         if (FAILED(hr))
         {
             MessageBox(_AppWindow, L"Unable to retrieve volume for current session", L"Set Volume Error", MB_OK);
@@ -587,7 +587,7 @@ bool CMediaPlayer::GetMute()
 //  Set the mute state on the current audio session.
 //
 //  We set a specific event context on the SetMasterVolume call - when we receive the simple volume changed
-//  notification we can use this event context to determine if the volume change call came from our application or another 
+//  notification we can use this event context to determine if the volume change call came from our application or another
 //  application.
 //
 void CMediaPlayer::SetMute(bool Mute)
@@ -595,7 +595,7 @@ void CMediaPlayer::SetMute(bool Mute)
     HRESULT hr = GetSimpleVolume();
     if (SUCCEEDED(hr))
     {
-        hr = _SimpleVolume->SetMute(Mute, &_MediaPlayerEventContext); 
+        hr = _SimpleVolume->SetMute(Mute, &_MediaPlayerEventContext);
         if (FAILED(hr))
         {
             MessageBox(_AppWindow, L"Unable to set mute for current session", L"Set Mute Error", MB_OK);
@@ -608,7 +608,7 @@ void CMediaPlayer::SetMute(bool Mute)
 }
 
 //
-//  Someone changed the volume on the media player session. 
+//  Someone changed the volume on the media player session.
 //
 //  If the person making the change wasn't the current player, let our UI know that the volume changed (and what the new volume is)
 //  so it can update the UI to reflect the new state.
@@ -652,7 +652,7 @@ HRESULT CMediaPlayer::GetSessionManager2()
         if (SUCCEEDED(hr))
         {
             hr = endpoint->Activate(__uuidof(IAudioSessionManager2), CLSCTX_INPROC_SERVER,
-                    NULL, reinterpret_cast<void **>(&_SessionManager2));
+                                    NULL, reinterpret_cast<void **>(&_SessionManager2));
             endpoint->Release();
             if (FAILED(hr))
             {
@@ -725,7 +725,7 @@ HRESULT CMediaPlayer::GetSimpleVolume()
 }
 
 //
-//  Utility function to retrieve the Session ID for the current audio session.  
+//  Utility function to retrieve the Session ID for the current audio session.
 //
 HRESULT CMediaPlayer::GetCurrentSessionId(LPWSTR *SessionId)
 {

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,20 +32,38 @@ class CMediaPlayer : public IAudioVolumeDuckNotification, public IAudioSessionEv
 
     ~CMediaPlayer();
 
-	// IAudioVolumeDuckNotification
+    // IAudioVolumeDuckNotification
     STDMETHOD(OnVolumeDuckNotification) (LPCWSTR sessionID, UINT32 countCommunicationSessions);
     STDMETHOD(OnVolumeUnduckNotification) (LPCWSTR sessionID);
 
-	// IAudioSessionEvents
-    STDMETHOD(OnDisplayNameChanged) (LPCWSTR NewDisplayName, LPCGUID EventContext) { return S_OK; };
-    STDMETHOD(OnIconPathChanged) (LPCWSTR NewIconPath, LPCGUID EventContext) { return S_OK; };
+    // IAudioSessionEvents
+    STDMETHOD(OnDisplayNameChanged) (LPCWSTR NewDisplayName, LPCGUID EventContext)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnIconPathChanged) (LPCWSTR NewIconPath, LPCGUID EventContext)
+    {
+        return S_OK;
+    };
     STDMETHOD(OnSimpleVolumeChanged) (float NewSimpleVolume, BOOL NewMute, LPCGUID EventContext);
-    STDMETHOD(OnChannelVolumeChanged) (DWORD ChannelCount, float NewChannelVolumesVolume[], DWORD ChangedChannel, LPCGUID EventContext) { return S_OK; };
-    STDMETHOD(OnGroupingParamChanged) (LPCGUID NewGroupingParam, LPCGUID EventContext) { return S_OK; };
-    STDMETHOD(OnStateChanged) (AudioSessionState NewState) { return S_OK; };
-    STDMETHOD(OnSessionDisconnected) (AudioSessionDisconnectReason DisconnectReason) { return S_OK; };
+    STDMETHOD(OnChannelVolumeChanged) (DWORD ChannelCount, float NewChannelVolumesVolume[], DWORD ChangedChannel, LPCGUID EventContext)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnGroupingParamChanged) (LPCGUID NewGroupingParam, LPCGUID EventContext)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnStateChanged) (AudioSessionState NewState)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnSessionDisconnected) (AudioSessionDisconnectReason DisconnectReason)
+    {
+        return S_OK;
+    };
 
-	// Other
+    // Other
     HRESULT GetSessionManager2();
     HRESULT GetSessionControl2();
     HRESULT GetSimpleVolume();

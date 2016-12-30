@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -38,7 +38,8 @@ struct WindowPlacement
 
 const WindowPlacement WINDOW_POSITION[NUM_CONFIGS][NUM_MOVABLE_CONTROLS] =
 {
-    { // Hide all
+    {
+        // Hide all
         { IDC_FRAMutexStreams,          FALSE,  130,    7,  115,    135  },
         { IDC_LSTMutexStreams,          FALSE,  133,   20,  109,    117  },
         { IDC_FRAMutexType,             FALSE,  249,    7,  116,     55  },
@@ -69,7 +70,8 @@ const WindowPlacement WINDOW_POSITION[NUM_CONFIGS][NUM_MOVABLE_CONTROLS] =
         { IDC_CBStreamType,             FALSE,  250,   50,   50,     20  },
         { IDC_CHKSMPTE,                 FALSE,  460,    7,  100,     20  },
     },
-    { // Mutex
+    {
+        // Mutex
         { IDC_FRAMutexStreams,           TRUE,  180,   11,  115,    219  },
         { IDC_LSTMutexStreams,           TRUE,  183,   26,  109,    200  },
         { IDC_FRAMutexType,              TRUE,  300,   11,  116,    219  },
@@ -100,7 +102,8 @@ const WindowPlacement WINDOW_POSITION[NUM_CONFIGS][NUM_MOVABLE_CONTROLS] =
         { IDC_CBStreamType,             FALSE,  250,   50,   50,     20  },
         { IDC_CHKSMPTE,                 FALSE,  460,    7,  100,     20  },
     },
-    { // Bandwidth sharing
+    {
+        // Bandwidth sharing
         { IDC_FRAMutexStreams,          FALSE,  130,    7,  115,    135  },
         { IDC_LSTMutexStreams,          FALSE,  133,   17,  109,    117  },
         { IDC_FRAMutexType,             FALSE,  249,    7,  116,     55  },
@@ -131,7 +134,8 @@ const WindowPlacement WINDOW_POSITION[NUM_CONFIGS][NUM_MOVABLE_CONTROLS] =
         { IDC_CBStreamType,             FALSE,  250,   50,   50,     20  },
         { IDC_CHKSMPTE,                 FALSE,  460,    7,  100,     20  },
     },
-    { // Stream prioritization
+    {
+        // Stream prioritization
         { IDC_FRAMutexStreams,          FALSE,  130,    7,  115,    135  },
         { IDC_LSTMutexStreams,          FALSE,  133,   17,  109,    117  },
         { IDC_FRAMutexType,             FALSE,  249,    7,  116,     55  },
@@ -162,7 +166,8 @@ const WindowPlacement WINDOW_POSITION[NUM_CONFIGS][NUM_MOVABLE_CONTROLS] =
         { IDC_CBStreamType,             FALSE,  250,   50,   50,     20  },
         { IDC_CHKSMPTE,                 FALSE,  460,    7,  100,     20  },
     },
-    { // Stream
+    {
+        // Stream
         { IDC_FRAMutexStreams,          FALSE,  130,    7,  115,    135  },
         { IDC_LSTMutexStreams,          FALSE,  133,   17,  109,    117  },
         { IDC_FRAMutexType,             FALSE,  249,    7,  116,     55  },
@@ -209,7 +214,8 @@ const WindowPlacement WINDOW_POSITION[NUM_CONFIGS][NUM_MOVABLE_CONTROLS] =
 
 const WindowPlacement STREAM_WINDOW_POSITION[NUM_STREAMTYPES][NUM_STREAM_CONTROLS] =
 {
-    { // None
+    {
+        // None
         { IDC_LBLStreamCodec,                   FALSE,  190,     74,    80,      20 },
         { IDC_CBStreamCodec,                    FALSE,  270,     72,   250,      20 },
         { IDC_LBLStreamFormat,                  FALSE,  190,     99,    80,      20 },
@@ -239,7 +245,8 @@ const WindowPlacement STREAM_WINDOW_POSITION[NUM_STREAMTYPES][NUM_STREAM_CONTROL
         { IDC_LBLLanguage,                      FALSE,  190,    232,     80,     20 },
         { IDC_CBLanguage,                       FALSE,  270,    230,    250,    120 },
     },
-    { // Audio
+    {
+        // Audio
         { IDC_LBLStreamCodec,                    TRUE,  190,     74,    80,      20 },
         { IDC_CBStreamCodec,                     TRUE,  270,     72,   250,      20 },
         { IDC_LBLStreamFormat,                   TRUE,  190,     99,    80,      20 },
@@ -269,7 +276,8 @@ const WindowPlacement STREAM_WINDOW_POSITION[NUM_STREAMTYPES][NUM_STREAM_CONTROL
         { IDC_LBLLanguage,                       TRUE,  190,    124,    80,      20 },
         { IDC_CBLanguage,                        TRUE,  270,    122,   250,     120 },
     },
-    { // Video
+    {
+        // Video
         { IDC_LBLStreamFormat,                  FALSE,  190,     74,    80,      20 },
         { IDC_CBStreamFormat,                   FALSE,  270,     72,   250,      20 },
         { IDC_LBLStreamCodec,                    TRUE,  190,     74,    80,      20 },
@@ -299,7 +307,8 @@ const WindowPlacement STREAM_WINDOW_POSITION[NUM_STREAMTYPES][NUM_STREAM_CONTROL
         { IDC_LBLLanguage,                       TRUE,  190,    224,    80,      20 },
         { IDC_CBLanguage,                        TRUE,  270,    222,   250,     120 },
     },
-    { // Script
+    {
+        // Script
         { IDC_LBLStreamFormat,                  FALSE,  190,     74,    80,      20 },
         { IDC_CBStreamFormat,                   FALSE,  270,     72,   250,      20 },
         { IDC_LBLStreamCodec,                   FALSE,  190,     99,    80,      20 },
@@ -329,7 +338,8 @@ const WindowPlacement STREAM_WINDOW_POSITION[NUM_STREAMTYPES][NUM_STREAM_CONTROL
         { IDC_LBLLanguage,                       TRUE,  190,     99,    80,      20 },
         { IDC_CBLanguage,                        TRUE,  270,     97,   250,     120 },
     },
-    { // Image
+    {
+        // Image
         { IDC_LBLStreamFormat,                  FALSE,  190,     74,    80,      20 },
         { IDC_CBStreamFormat,                   FALSE,  270,     72,   250,      20 },
         { IDC_LBLStreamCodec,                   FALSE,  190,     99,    80,      20 },
@@ -359,7 +369,8 @@ const WindowPlacement STREAM_WINDOW_POSITION[NUM_STREAMTYPES][NUM_STREAM_CONTROL
         { IDC_LBLLanguage,                       TRUE,  190,    149,    80,      20 },
         { IDC_CBLanguage,                        TRUE,  270,    147,   250,     120 },
     },
-    { // Web
+    {
+        // Web
         { IDC_LBLStreamFormat,                  FALSE,  190,     74,    80,      20 },
         { IDC_CBStreamFormat,                   FALSE,  270,     72,   250,      20 },
         { IDC_LBLStreamCodec,                   FALSE,  190,     99,    80,      20 },
@@ -389,7 +400,8 @@ const WindowPlacement STREAM_WINDOW_POSITION[NUM_STREAMTYPES][NUM_STREAM_CONTROL
         { IDC_LBLLanguage,                       TRUE,  190,     99,    80,      20 },
         { IDC_CBLanguage,                        TRUE,  270,     97,   250,     120 },
     },
-    { // File
+    {
+        // File
         { IDC_LBLStreamFormat,                  FALSE,  190,     74,    80,      20 },
         { IDC_CBStreamFormat,                   FALSE,  270,     72,   250,      20 },
         { IDC_LBLStreamCodec,                   FALSE,  190,     99,    80,      20 },

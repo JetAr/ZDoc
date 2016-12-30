@@ -1,5 +1,5 @@
-//////////////////////////////////////////////////////////////////////
-// 
+﻿//////////////////////////////////////////////////////////////////////
+//
 // dxvahd_utils.h
 //
 // Helper functions for DXVA-HD
@@ -16,22 +16,22 @@
 #pragma once
 
 /*-------------------------------------------------------------------
- 
-  The functions declared in this header are simple wrappers around 
+
+  The functions declared in this header are simple wrappers around
   two DXVA-HD methods:
 
   * IDXVAHD_VideoProcessor::SetVideoProcessStreamState
-  * IDXVAHD_VideoProcessor::SetVideoProcessBltState 
+  * IDXVAHD_VideoProcessor::SetVideoProcessBltState
 
-  The SetVideoProcessStreamState method applies per-stream settings 
+  The SetVideoProcessStreamState method applies per-stream settings
   for the video processing
 
-  The SetVideoProcessBltState method applies settings for the 
+  The SetVideoProcessBltState method applies settings for the
   entire blit operation.
 
   Each method takes a state parameter (a enumeration value that
-  specifies which state to set) and a data structure for that 
-  state. 
+  specifies which state to set) and a data structure for that
+  state.
 
 -------------------------------------------------------------------*/
 

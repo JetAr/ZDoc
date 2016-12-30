@@ -1,4 +1,4 @@
-//	Copyright (c) 1997-2002  Microsoft Corporation
+﻿//	Copyright (c) 1997-2002  Microsoft Corporation
 //
 //	Module Name:
 //
@@ -21,7 +21,7 @@
 //
 //	Arguments:
 //
-//		pECB - pointer to the extenstion control block 
+//		pECB - pointer to the extenstion control block
 //
 //	Returns:
 //
@@ -29,127 +29,132 @@
 
 DWORD WINAPI HttpExtensionProc(IN EXTENSION_CONTROL_BLOCK *pECB)
 {
-	char *aszServerVariables[] = {
-		"APPL_MD_PATH", "APPL_PHYSICAL_PATH", "AUTH_PASSWORD",
-		"AUTH_TYPE", "AUTH_USER", "CERT_COOKIE", "CERT_FLAGS",
-		"CERT_ISSUER", "CERT_KEYSIZE", "CERT_SECRETKEYSIZE",
-		"CERT_SERIALNUMBER", "CERT_SERVER_ISSUER",
-		"CERT_SERVER_SUBJECT", "CERT_SUBJECT", "CONTENT_LENGTH",
-		"CONTENT_TYPE", "HTTP_ACCEPT", "HTTPS", "HTTPS_KEYSIZE",
-		"HTTPS_SECRETKEYSIZE", "HTTPS_SERVER_ISSUER",
-		"HTTPS_SERVER_SUBJECT", "INSTANCE_ID", "INSTANCE_META_PATH",
-		"PATH_INFO", "PATH_TRANSLATED", "QUERY_STRING",
-		"REMOTE_ADDR", "REMOTE_HOST", "REMOTE_USER",
-		"REQUEST_METHOD", "SCRIPT_NAME", "SERVER_NAME",
-		"SERVER_PORT", "SERVER_PORT_SECURE", "SERVER_PROTOCOL",
-		"SERVER_SOFTWARE", "URL"};
+    char *aszServerVariables[] =
+    {
+        "APPL_MD_PATH", "APPL_PHYSICAL_PATH", "AUTH_PASSWORD",
+        "AUTH_TYPE", "AUTH_USER", "CERT_COOKIE", "CERT_FLAGS",
+        "CERT_ISSUER", "CERT_KEYSIZE", "CERT_SECRETKEYSIZE",
+        "CERT_SERIALNUMBER", "CERT_SERVER_ISSUER",
+        "CERT_SERVER_SUBJECT", "CERT_SUBJECT", "CONTENT_LENGTH",
+        "CONTENT_TYPE", "HTTP_ACCEPT", "HTTPS", "HTTPS_KEYSIZE",
+        "HTTPS_SECRETKEYSIZE", "HTTPS_SERVER_ISSUER",
+        "HTTPS_SERVER_SUBJECT", "INSTANCE_ID", "INSTANCE_META_PATH",
+        "PATH_INFO", "PATH_TRANSLATED", "QUERY_STRING",
+        "REMOTE_ADDR", "REMOTE_HOST", "REMOTE_USER",
+        "REQUEST_METHOD", "SCRIPT_NAME", "SERVER_NAME",
+        "SERVER_PORT", "SERVER_PORT_SECURE", "SERVER_PROTOCOL",
+        "SERVER_SOFTWARE", "URL"
+    };
 
-	DWORD dwBuffSize;
-	DWORD dwError;
+    DWORD dwBuffSize;
+    DWORD dwError;
 
-	HSE_SEND_HEADER_EX_INFO HeaderExInfo;
+    HSE_SEND_HEADER_EX_INFO HeaderExInfo;
 
-	// Send headers to the client
+    // Send headers to the client
 
-	HeaderExInfo.pszStatus = "200 OK";
-	HeaderExInfo.pszHeader = "Content-type: text/html\r\n\r\n";
-	HeaderExInfo.cchStatus = strlen(HeaderExInfo.pszStatus);
-	HeaderExInfo.cchHeader = strlen(HeaderExInfo.pszHeader);
-	HeaderExInfo.fKeepConn = FALSE;
-	  
-	pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &HeaderExInfo, NULL, NULL);
+    HeaderExInfo.pszStatus = "200 OK";
+    HeaderExInfo.pszHeader = "Content-type: text/html\r\n\r\n";
+    HeaderExInfo.cchStatus = strlen(HeaderExInfo.pszStatus);
+    HeaderExInfo.cchHeader = strlen(HeaderExInfo.pszHeader);
+    HeaderExInfo.fKeepConn = FALSE;
 
-	// Begin sending back HTML to the client
+    pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &HeaderExInfo, NULL, NULL);
 
-	char szHeader[] = "<HTML>\r\n<BODY><h1>Server Variable Dump</h1>\r\n<hr>\r\n";
+    // Begin sending back HTML to the client
 
-	dwBuffSize = strlen(szHeader);
+    char szHeader[] = "<HTML>\r\n<BODY><h1>Server Variable Dump</h1>\r\n<hr>\r\n";
 
-	pECB->WriteClient(pECB->ConnID, szHeader, &dwBuffSize, 0);
+    dwBuffSize = strlen(szHeader);
 
-	DWORD dwNumVars = (sizeof aszServerVariables ) / (sizeof aszServerVariables[0]);
+    pECB->WriteClient(pECB->ConnID, szHeader, &dwBuffSize, 0);
 
-	// Get the server variables and send them
+    DWORD dwNumVars = (sizeof aszServerVariables ) / (sizeof aszServerVariables[0]);
 
-	char *szEIP = "ERROR_INVALID_PARAMETER";
-	char *szEII = "ERROR_INVALID_INDEX";
-	char *szEMD = "ERROR_MORE_DATA";
-	char *szEND = "ERROR_NO_DATA";
+    // Get the server variables and send them
 
-	for (DWORD x = 0; x < dwNumVars; x++) {
+    char *szEIP = "ERROR_INVALID_PARAMETER";
+    char *szEII = "ERROR_INVALID_INDEX";
+    char *szEMD = "ERROR_MORE_DATA";
+    char *szEND = "ERROR_NO_DATA";
 
-		dwBuffSize = VAR_BUFFER_SIZE;
+    for (DWORD x = 0; x < dwNumVars; x++)
+    {
 
-		char szValue[VAR_BUFFER_SIZE] = "";
+        dwBuffSize = VAR_BUFFER_SIZE;
 
-		if (!pECB->GetServerVariable(pECB->ConnID, aszServerVariables[x], szValue, &dwBuffSize)) {
+        char szValue[VAR_BUFFER_SIZE] = "";
 
-			// Analyze the problem and report result to user
-			
-			switch (dwError = GetLastError( )) {
+        if (!pECB->GetServerVariable(pECB->ConnID, aszServerVariables[x], szValue, &dwBuffSize))
+        {
 
-				case ERROR_INVALID_PARAMETER :
+            // Analyze the problem and report result to user
 
-					strcpy_s(szValue, sizeof(szEIP),  szEIP);
+            switch (dwError = GetLastError( ))
+            {
 
-					break;
+            case ERROR_INVALID_PARAMETER :
 
-				case ERROR_INVALID_INDEX :
+                strcpy_s(szValue, sizeof(szEIP),  szEIP);
 
-					strcpy_s(szValue, sizeof(szEII),  szEII );
+                break;
 
-					break;
+            case ERROR_INVALID_INDEX :
 
-				case ERROR_INSUFFICIENT_BUFFER :
+                strcpy_s(szValue, sizeof(szEII),  szEII );
 
-					sprintf_s(szValue, VAR_BUFFER_SIZE, "ERROR_INSUFFICIENT_BUFFER - %d bytes required.", dwBuffSize);
+                break;
 
-					break;
+            case ERROR_INSUFFICIENT_BUFFER :
 
-				case ERROR_MORE_DATA :
+                sprintf_s(szValue, VAR_BUFFER_SIZE, "ERROR_INSUFFICIENT_BUFFER - %d bytes required.", dwBuffSize);
 
-					strcpy_s(szValue, sizeof(szEMD),  szEMD );
+                break;
 
-					break;
+            case ERROR_MORE_DATA :
 
-				case ERROR_NO_DATA :
+                strcpy_s(szValue, sizeof(szEMD),  szEMD );
 
-					strcpy_s(szValue, sizeof(szEND),  szEND );
+                break;
 
-					break;
+            case ERROR_NO_DATA :
 
-				default :
+                strcpy_s(szValue, sizeof(szEND),  szEND );
 
-					sprintf_s(szValue, VAR_BUFFER_SIZE, "*** Error %d occured retrieving server variable ***", dwError);
+                break;
 
-					break;
-			}
-		}
+            default :
 
-		// Dump server variable name and value. Note that the buffer size for this output
-		// is much more than is needed. In a production environment, a dynamically-allocated
-		// buffer, properly sized, would make more sense.
+                sprintf_s(szValue, VAR_BUFFER_SIZE, "*** Error %d occured retrieving server variable ***", dwError);
 
-		char szOutput[VAR_BUFFER_SIZE * 2];
+                break;
+            }
+        }
 
-		sprintf_s(szOutput, VAR_BUFFER_SIZE * 2,"%s: %s<br>\r\n", aszServerVariables[x], szValue);
+        // Dump server variable name and value. Note that the buffer size for this output
+        // is much more than is needed. In a production environment, a dynamically-allocated
+        // buffer, properly sized, would make more sense.
 
-		dwBuffSize = strlen(szOutput);
+        char szOutput[VAR_BUFFER_SIZE * 2];
 
-		// Send the line to client
+        sprintf_s(szOutput, VAR_BUFFER_SIZE * 2,"%s: %s<br>\r\n", aszServerVariables[x], szValue);
 
-		pECB->WriteClient(pECB->ConnID, szOutput, &dwBuffSize, 0);
-	}
+        dwBuffSize = strlen(szOutput);
 
-	// End HTML page
+        // Send the line to client
 
-	char szFooter[] = "</BODY>\r\n</HTML>\r\n\r\n";
+        pECB->WriteClient(pECB->ConnID, szOutput, &dwBuffSize, 0);
+    }
 
-	dwBuffSize = strlen(szFooter);
+    // End HTML page
 
-	pECB->WriteClient(pECB->ConnID, szFooter, &dwBuffSize, 0);
+    char szFooter[] = "</BODY>\r\n</HTML>\r\n\r\n";
 
-	return HSE_STATUS_SUCCESS;
+    dwBuffSize = strlen(szFooter);
+
+    pECB->WriteClient(pECB->ConnID, szFooter, &dwBuffSize, 0);
+
+    return HSE_STATUS_SUCCESS;
 }
 
 //	Description:
@@ -158,7 +163,7 @@ DWORD WINAPI HttpExtensionProc(IN EXTENSION_CONTROL_BLOCK *pECB)
 //
 //	Arguments:
 //
-//		pVer - poins to extension version info structure 
+//		pVer - poins to extension version info structure
 //
 //	Returns:
 //
@@ -166,11 +171,11 @@ DWORD WINAPI HttpExtensionProc(IN EXTENSION_CONTROL_BLOCK *pECB)
 
 BOOL WINAPI GetExtensionVersion(OUT HSE_VERSION_INFO *pVer)
 {
-	pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
+    pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
 
-	strncpy_s(pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "DumpVars ISAPI Sample", HSE_MAX_EXT_DLL_NAME_LEN);
+    strncpy_s(pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "DumpVars ISAPI Sample", HSE_MAX_EXT_DLL_NAME_LEN);
 
-	return TRUE;
+    return TRUE;
 }
 
 //	Description:
@@ -187,6 +192,6 @@ BOOL WINAPI GetExtensionVersion(OUT HSE_VERSION_INFO *pVer)
 
 BOOL WINAPI TerminateExtension(IN DWORD dwFlags)
 {
-	return TRUE;
+    return TRUE;
 }
 

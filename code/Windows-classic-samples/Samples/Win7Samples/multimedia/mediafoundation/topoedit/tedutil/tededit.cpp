@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,14 +22,16 @@
 
 #include "Logger.h"
 
-CLSID CLSID_AudioRenderActivate = { /* d23e6476-b104-4707-81cb-e1ca19a07016 */
+CLSID CLSID_AudioRenderActivate =   /* d23e6476-b104-4707-81cb-e1ca19a07016 */
+{
     0xd23e6476,
     0xb104,
     0x4707,
     { 0x81, 0xcb, 0xe1, 0xca, 0x19, 0xa0, 0x70, 0x16 }
 };
 
-CLSID CLSID_VideoRenderActivate = { /* d23e6477-b104-4707-81cb-e1ca19a07016 */
+CLSID CLSID_VideoRenderActivate =   /* d23e6477-b104-4707-81cb-e1ca19a07016 */
+{
     0xd23e6477,
     0xb104,
     0x4707,
@@ -37,12 +39,12 @@ CLSID CLSID_VideoRenderActivate = { /* d23e6477-b104-4707-81cb-e1ca19a07016 */
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 class CMoveComponentHandler : public CCommandHandler
 {
 public:
     CMoveComponentHandler(CVisualTree* pTree, ITedPropertyController* pController);
-    
+
     BOOL OnLButtonDown(CVisualObject* pObj, CVisualPoint& pt);
     BOOL OnLButtonUp(CVisualObject* pObj, CVisualPoint& pt);
     BOOL OnMouseMove(CVisualObject* pObj, CVisualPoint& pt);
@@ -53,24 +55,24 @@ public:
 
 private:
     HRESULT ShowOTA(IMFTopologyNode* pNode);
-    
+
     BOOL m_fCapture;
     BOOL m_fEditable;
 
     // offset from the left/top of component to mouse
     CVisualPoint m_Offset;
-    
+
     CVisualTree * m_pTree;
     CComPtr<ITedPropertyController> m_spController;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 class CConnectPinHandler : public CCommandHandler
 {
 public:
     CConnectPinHandler(CVisualTree* pTree, CTedTopologyEditor* pEditor, ITedPropertyController* pController);
-    
+
     BOOL OnLButtonDown(CVisualObject* pObj, CVisualPoint& pt);
     BOOL OnLButtonUp(CVisualObject* pObj, CVisualPoint& pt);
     BOOL OnMouseMove(CVisualObject* pObj, CVisualPoint& pt);
@@ -84,7 +86,7 @@ protected:
     void ShowMediaTypeProperties(IMFTopologyNode* pOutputNode, DWORD dwOutputPinIndex, IMFTopologyNode* pInputNode, DWORD dwInputPinIndex);
     CComPtr<IMFMediaType> GetNodeMFMediaType(IMFTopologyNode* pNode, DWORD dwPinIndex, bool fOutput);
     bool IsValidConnection(CVisualObject* pSourcePin, CVisualObject* pTargetPin);
-    
+
 private:
     BOOL m_fCapture;
     BOOL m_fEditable;
@@ -92,7 +94,7 @@ private:
     CTedTopologyEditor * m_pEditor;
     CVisualTree * m_pTree;
     CComPtr<ITedPropertyController> m_spController;
-    
+
     CVisualConnector * m_pNew;
     CVisualPin* m_pLastOverPin;
 };
@@ -119,9 +121,9 @@ BOOL CMoveComponentHandler::OnLButtonDown(CVisualObject* pObj, CVisualPoint& pt)
     {
         m_Offset.Add(-pObj->Rect().x(), -pObj->Rect().y());
     }
-    
+
     m_fCapture = TRUE;
-    
+
     return TRUE;
 }
 
@@ -138,7 +140,7 @@ BOOL CMoveComponentHandler::OnMouseMove(CVisualObject* pObj, CVisualPoint& pt)
     {
         return FALSE;
     }
-    
+
     if(m_fEditable)
     {
         if(pObj->GetContainer())
@@ -167,14 +169,14 @@ BOOL CMoveComponentHandler::OnFocus(CVisualObject* pObj)
     CTedTopologyNode* pNode = (CTedTopologyNode*) pObj->GetData();
 
     if(pNode->GetMFNodeCount() <= pObj->GetIndex()) return FALSE;
-    
+
     if(m_spController.p) m_spController->ClearProperties();
-        
+
     IMFTopologyNode* pMFNode = pNode->GetMFNode(pObj->GetIndex());
 
     MF_TOPOLOGY_TYPE nodeType;
     pMFNode->GetNodeType(&nodeType);
-    
+
     if(m_spController.p)
     {
         CNodePropertyInfo* pNodePropertyInfo = new CNodePropertyInfo(pMFNode);
@@ -198,7 +200,7 @@ BOOL CMoveComponentHandler::OnFocus(CVisualObject* pObj)
     if(nodeType == MF_TOPOLOGY_TRANSFORM_NODE || nodeType == MF_TOPOLOGY_OUTPUT_NODE)
     {
         IFC( ShowOTA(pMFNode) );
-    } 
+    }
 Cleanup:
     return TRUE;
 }
@@ -211,29 +213,29 @@ void CMoveComponentHandler::SetEditable(BOOL fEditable)
 HRESULT CMoveComponentHandler::ShowOTA(IMFTopologyNode* pNode)
 {
     HRESULT hr = S_OK;
-    
+
     CComPtr<IUnknown> spUnkObj;
     CComPtr<IMFTrustedOutput> spTrustedOutput;
     DWORD dwOTACount;
-    
+
     IFC( pNode->GetObject(&spUnkObj) );
     IFC( spUnkObj->QueryInterface(IID_IMFTrustedOutput, (void**) &spTrustedOutput) );
     IFC( spTrustedOutput->GetOutputTrustAuthorityCount(&dwOTACount) );
 
     CComPtr<IMFOutputTrustAuthority>* arrOTA = new CComPtr<IMFOutputTrustAuthority>[dwOTACount];
     CHECK_ALLOC(arrOTA);
-    
+
     for(DWORD i =0; i < dwOTACount; i++)
     {
         CComPtr<IMFOutputTrustAuthority> spOTA;
-        
+
         spTrustedOutput->GetOutputTrustAuthorityByIndex(i, &arrOTA[i]);
     }
 
     if(m_spController.p)
     {
         COTAPropertyInfo* pOTAPropertyInfo = new COTAPropertyInfo(arrOTA, dwOTACount);
-        if(NULL == pOTAPropertyInfo) 
+        if(NULL == pOTAPropertyInfo)
         {
             delete[] arrOTA;
             goto Cleanup;
@@ -272,18 +274,18 @@ BOOL CConnectPinHandler::OnLButtonDown(CVisualObject * pObj, CVisualPoint & pt)
         m_pNew = new CVisualConnector;
 
         m_pTree->AddVisual(m_pNew);
-    
+
         m_pNew->Left() = pPin->GetConnectorPoint();
         m_pNew->Right() = pPin->GetConnectorPoint();
     }
-    
+
     return TRUE;
 }
 
 BOOL CConnectPinHandler::OnLButtonUp(CVisualObject* pObj, CVisualPoint& pt)
 {
     CVisualObject * pHitObj;
-    
+
     assert(pObj != NULL);
 
     if(!m_fCapture || !m_fEditable)
@@ -319,14 +321,14 @@ BOOL CConnectPinHandler::OnLButtonUp(CVisualObject* pObj, CVisualPoint& pt)
         pPin = pOtherPin;
         pOtherPin = temp;
     }
-	
+
     assert(pPin != pOtherPin);
-	
+
     CTedTopologyNode* outputterNode = (CTedTopologyNode*) (pPin->GetData());
     CTedTopologyNode* acceptorNode = (CTedTopologyNode*) (pOtherPin->GetData());
 
     m_pEditor->FullConnectNodes(outputterNode, pPin->GetPinId(), acceptorNode, pOtherPin->GetPinId());
-    
+
 Cleanup:
 
     if(NULL != m_pNew)
@@ -352,7 +354,7 @@ BOOL CConnectPinHandler::OnMouseMove(CVisualObject * pObj, CVisualPoint & pt)
     }
 
     assert(m_pNew);
-    
+
     CVisualPin * pPin = (CVisualPin*)pObj;
 
     if(pPin->GetConnectionType() == CVisualObject::INPUT)
@@ -371,7 +373,7 @@ BOOL CConnectPinHandler::OnMouseMove(CVisualObject * pObj, CVisualPoint & pt)
         m_pLastOverPin->Highlight(false);
         m_pLastOverPin = NULL;
     }
-    
+
     if(m_pTree->HitTest(pt, &pOverObject))
     {
         if(pOverObject->GetConnectionType() != CVisualObject::NONE && IsValidConnection(pPin, (CVisualPin*) pOverObject))
@@ -383,7 +385,7 @@ BOOL CConnectPinHandler::OnMouseMove(CVisualObject * pObj, CVisualPoint & pt)
             m_pLastOverPin = pOverPin;
         }
     }
-    
+
     return TRUE;
 }
 
@@ -398,7 +400,7 @@ BOOL CConnectPinHandler::OnFocus(CVisualObject* pObj)
     connType = pObj->GetConnectionType();
 
     if(m_spController.p) m_spController->ClearProperties();
-    
+
     // If we have a connection, we want to display the media types for it
     if(connType != CVisualObject::NONE)
     {
@@ -415,16 +417,16 @@ BOOL CConnectPinHandler::OnFocus(CVisualObject* pObj)
             pMFNode->GetUnknown(MF_TOPONODE_STREAM_DESCRIPTOR, IID_IMFStreamDescriptor, (void**) &spSD);
 
             CComPtr<IMFAttributes> spAttr = spSD.p;
-            
+
             CAttributesPropertyInfo* pAttrInfo = new CAttributesPropertyInfo(spAttr, LoadAtlString(IDS_SD_ATTRIBS), TED_ATTRIBUTE_CATEGORY_STREAMDESCRIPTOR);
             if(m_spController.p) m_spController->AddPropertyInfo(pAttrInfo);
         }
-        
+
         if(pPin->GetConnector() == NULL)
         {
             return true;
         }
-        
+
         CTedTopologyConnection* pConn = NULL;
         CTedTopologyNode* pOtherNode = NULL;
 
@@ -476,7 +478,7 @@ void CConnectPinHandler::ShowMediaTypeProperties(IMFTopologyNode* pOutputNode, D
         HRESULT hr;
         CComPtr<IMFMediaType> spOutputType = GetNodeMFMediaType(pOutputNode, dwOutputPinIndex, true);
         CComPtr<IMFMediaType> spInputType = GetNodeMFMediaType(pInputNode, dwInputPinIndex, false);
-    
+
         if(spOutputType.p)
         {
             CComPtr<IMFAttributes> spOutAttr;
@@ -487,7 +489,7 @@ void CConnectPinHandler::ShowMediaTypeProperties(IMFTopologyNode* pOutputNode, D
                 if(pOutInfo) m_spController->AddPropertyInfo(pOutInfo);
             }
         }
-        
+
         if(spInputType.p)
         {
             CComPtr<IMFAttributes> spInAttr;
@@ -505,14 +507,14 @@ CComPtr<IMFMediaType> CConnectPinHandler::GetNodeMFMediaType(IMFTopologyNode* pN
 {
     MF_TOPOLOGY_TYPE nodeType;
     CComPtr<IMFMediaType> spType;
-        
+
     pNode->GetNodeType(&nodeType);
 
     if(nodeType == MF_TOPOLOGY_SOURCESTREAM_NODE)
     {
         CComPtr<IMFStreamDescriptor> spSD;
         CComPtr<IMFMediaTypeHandler> spMTH;
-        
+
         pNode->GetUnknown(MF_TOPONODE_STREAM_DESCRIPTOR, IID_IMFStreamDescriptor, (void**) &spSD);
         spSD->GetMediaTypeHandler(&spMTH);
 
@@ -553,7 +555,7 @@ CComPtr<IMFMediaType> CConnectPinHandler::GetNodeMFMediaType(IMFTopologyNode* pN
 
             spMTH->GetCurrentMediaType(&spType);
         }
-        
+
         if(NULL == spType.p)
         {
             pNode->GetInputPrefType(0, &spType);
@@ -562,18 +564,18 @@ CComPtr<IMFMediaType> CConnectPinHandler::GetNodeMFMediaType(IMFTopologyNode* pN
 
     return spType;
 }
- 
+
 bool CConnectPinHandler::IsValidConnection(CVisualObject* pSource, CVisualObject* pTarget)
 {
     CVisualObject::CONNECTION_TYPE connType = pSource->GetConnectionType();
     CVisualObject::CONNECTION_TYPE targetConnType = pTarget->GetConnectionType();
-    
+
     if( CVisualObject::NONE == connType /* don't process objects that cannot be connected */
-        || CVisualObject::NONE == targetConnType /* ditto */
-        ||targetConnType == connType /* Don't connect two inputs or two outputs together */
-        || pSource == pTarget /* Don't connect an object to itself */
-        )
-        
+            || CVisualObject::NONE == targetConnType /* ditto */
+            ||targetConnType == connType /* Don't connect two inputs or two outputs together */
+            || pSource == pTarget /* Don't connect an object to itself */
+      )
+
     {
         return false;
     }
@@ -665,15 +667,15 @@ CTedTopologyNode::~CTedTopologyNode()
 HRESULT CTedTopologyNode::Init(const CAtlStringW& label, bool fAutoInserted)
 {
     HRESULT hr = S_OK;
-    
-    m_pVisual = new CVisualNode(label, fAutoInserted); 
+
+    m_pVisual = new CVisualNode(label, fAutoInserted);
     CHECK_ALLOC( m_pVisual );
-    
+
     m_pVisual->Move(20, 20);
     m_pVisual->SetData((LONG_PTR) this);
 
     m_strLabel = label;
-    
+
 Cleanup:
     return hr;
 }
@@ -681,15 +683,15 @@ Cleanup:
 HRESULT CTedTopologyNode::InitContainer(const CAtlStringW& label, bool fAutoinserted)
 {
     HRESULT hr = S_OK;
-    
+
     m_pVisual = new CVisualContainer(label);
     CHECK_ALLOC( m_pVisual );
-    
+
     m_pVisual->Move(20, 20);
     m_pVisual->SetData((LONG_PTR) this);
 
     m_strLabel = label;
-    
+
 Cleanup:
     return hr;
 }
@@ -700,7 +702,7 @@ void CTedTopologyNode::Init(CTedNodeMemo* pMemo)
 
     m_nID = pMemo->m_nID;
 
-    if(ms_nNextID <= m_nID) 
+    if(ms_nNextID <= m_nID)
     {
         ms_nNextID = m_nID + 1;
     }
@@ -714,14 +716,14 @@ void CTedTopologyNode::InitContainer(CTedNodeMemo* pMemo)
 
     m_nID = pMemo->m_nID;
 
-    if(ms_nNextID <= m_nID) 
+    if(ms_nNextID <= m_nID)
     {
         ms_nNextID = m_nID + 1;
     }
 
     m_pVisual->Move(pMemo->m_x, pMemo->m_y);
 }
-    
+
 // Accessors //
 
 HWND CTedTopologyNode::GetVideoWindow() const
@@ -754,7 +756,7 @@ HRESULT CTedTopologyNode::GetNodeID(DWORD dwIndex, TOPOID& NodeID)
     HRESULT hr = S_OK;
 
     CComPtr<IMFTopologyNode> spNode = GetMFNode(dwIndex);
-    
+
     IFC( spNode->GetTopoNodeID(&NodeID) );
 
 Cleanup:
@@ -770,11 +772,11 @@ bool CTedTopologyNode::IsOrphaned()
 {
     bool fHasInputConnections = false;
     bool fHasOutputConnections = false;
-    
+
     for(DWORD i = 0; i < GetMFNodeCount(); i++)
     {
         IMFTopologyNode* pNode = GetMFNode(i);
-        
+
         DWORD cInputs = 0;
         pNode->GetInputCount(&cInputs);
         for(DWORD j = 0; j < cInputs; j++)
@@ -787,9 +789,9 @@ bool CTedTopologyNode::IsOrphaned()
                 break;
             }
         }
-        
+
         if(!fHasInputConnections) break;
-        
+
         DWORD cOutputs = 0;
         pNode->GetOutputCount(&cOutputs);
         for(DWORD j = 0; j < cOutputs; j++)
@@ -803,7 +805,7 @@ bool CTedTopologyNode::IsOrphaned()
             }
         }
     }
-    
+
     return (!fHasInputConnections || !fHasOutputConnections);
 }
 
@@ -828,7 +830,7 @@ HRESULT CTedTopologyNode::CopyAttributes(IMFTopologyNode* pNode, DWORD dwIndex)
         for(DWORD j = 0; j < GetMFNodeCount(); ++j)
         {
             IMFTopologyNode* pTedNode = GetMFNode(j);
-                 
+
             TOPOID tidTedNode;
             IFC( pTedNode->GetTopoNodeID(&tidTedNode) );
 
@@ -837,7 +839,7 @@ HRESULT CTedTopologyNode::CopyAttributes(IMFTopologyNode* pNode, DWORD dwIndex)
                 m_pVisual->FlagTopoLoadError(j, true);
                 break;
             }
-        } 
+        }
     }
 
     if(!m_fErrorNode)
@@ -847,7 +849,7 @@ HRESULT CTedTopologyNode::CopyAttributes(IMFTopologyNode* pNode, DWORD dwIndex)
             m_pVisual->FlagTopoLoadError(i, false);
         }
     }
-    
+
     DWORD cInputs;
     IFC( pNode->GetInputCount(&cInputs) );
     for(DWORD i = 0; i < cInputs; i++)
@@ -858,7 +860,7 @@ HRESULT CTedTopologyNode::CopyAttributes(IMFTopologyNode* pNode, DWORD dwIndex)
             pTargetNode->SetInputPrefType(i, spPrefType);
         }
     }
-    
+
     DWORD cOutputs;
     IFC( pNode->GetOutputCount(&cOutputs) );
     for(DWORD i = 0; i < cOutputs; i++)
@@ -869,7 +871,7 @@ HRESULT CTedTopologyNode::CopyAttributes(IMFTopologyNode* pNode, DWORD dwIndex)
             pTargetNode->SetOutputPrefType(i, spPrefType);
         }
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -887,7 +889,7 @@ HRESULT CTedTopologyNode::PostInitFromMemoCopyAttributes(CTedNodeMemo* pMemo)
     for(DWORD i = 0; i < pMemo->GetNodeAttributeCount() && i < GetMFNodeCount(); i++)
     {
         IMFAttributes* pAttributes = pMemo->GetNodeAttributes(i);
-        
+
         UINT32 cItems;
         IFC( pAttributes->GetCount(&cItems) );
 
@@ -982,7 +984,7 @@ HRESULT CTedSourceNode::Init(CTedSourceNode* pNode)
     HRESULT hr = S_OK;
 
     CTedTopologyNode::InitContainer(pNode->GetLabel());
-    
+
     m_spSource = pNode->m_spSource;
     m_spPD = pNode->m_spPD;
     m_strSourceURL = pNode->m_strSourceURL;
@@ -991,12 +993,12 @@ HRESULT CTedSourceNode::Init(CTedSourceNode* pNode)
     for(DWORD i = 0; i < pNode->GetMFNodeCount(); i++)
     {
         CComPtr<IMFTopologyNode> spNode;
-        
+
         IFC( MFCreateTopologyNode(MF_TOPOLOGY_SOURCESTREAM_NODE, &spNode) );
         IFC( spNode->CloneFrom(pNode->GetMFNode(i)) );
         IFC( InitMFSourceNode(spNode, i) );
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -1010,7 +1012,7 @@ HRESULT CTedSourceNode::Init(const CAtlStringW& strSourceURL, const CAtlStringW&
     m_strSourceURL = strSourceURL;
     m_spSource = pSource;
     IFC( m_spSource->CreatePresentationDescriptor(&m_spPD) );
-    
+
     IFC( CreateSourceNodes() );
 
 Cleanup:
@@ -1020,7 +1022,7 @@ Cleanup:
 HRESULT CTedSourceNode::InitIndirect(const CAtlStringW& strSourceURL, CAtlArray<IMFTopologyNode*>& sourceNodes)
 {
     HRESULT hr = S_OK;
-    
+
     m_strSourceURL = strSourceURL;
 
     CTedTopologyNode::InitContainer(m_strSourceURL);
@@ -1029,8 +1031,8 @@ HRESULT CTedSourceNode::InitIndirect(const CAtlStringW& strSourceURL, CAtlArray<
     {
         CComPtr<IMFTopologyNode> spNode;
         IFC( MFCreateTopologyNode( MF_TOPOLOGY_SOURCESTREAM_NODE,
-                                            &spNode ));
-        
+                                   &spNode ));
+
         spNode->CloneFrom(sourceNodes.GetAt(i));
 
         IFC(InitMFSourceNode(spNode, i));
@@ -1052,11 +1054,11 @@ HRESULT CTedSourceNode::GetPin(DWORD nInput, CTedTopologyPin & Pin, bool inputPi
     assert(m_Nodes.GetAt(nInput));
     Pin.SetPNode(m_Nodes.GetAt(nInput));
     Pin.SetIndex(0);
-    
+
     return hr;
 }
 
-bool CTedSourceNode::IsProtected() const 
+bool CTedSourceNode::IsProtected() const
 {
     return m_fIsProtected;
 }
@@ -1132,17 +1134,17 @@ HRESULT CTedSourceNode::CopyAttributes(IMFTopologyNode* pNode, DWORD dwIndex)
     HRESULT hr;
     BOOL fSelected;
     CComPtr<IMFStreamDescriptor> spSD;
-    
+
     IFC( CTedTopologyNode::CopyAttributes(pNode, dwIndex) );
-    
+
     IMFTopologyNode* pOurNode = GetMFNode(dwIndex);
-    
+
     // Do not replace source, presentation descriptor, or stream descriptor
     IFC( pOurNode->SetUnknown(MF_TOPONODE_SOURCE, m_spSource) );
     IFC( pOurNode->SetUnknown(MF_TOPONODE_PRESENTATION_DESCRIPTOR, m_spPD) );
     IFC( m_spPD->GetStreamDescriptorByIndex(dwIndex, &fSelected, &spSD) );
     IFC( pOurNode->SetUnknown(MF_TOPONODE_STREAM_DESCRIPTOR, spSD) );
-    
+
 Cleanup:
     return hr;
 }
@@ -1155,13 +1157,13 @@ void CTedSourceNode::FlagExternalShutdownRequired()
 HRESULT CTedSourceNode::SelectValidStreams()
 {
     HRESULT hr = S_OK;
-    
+
     for(size_t i = 0; i < m_Nodes.GetCount(); i++)
     {
         IMFTopologyNode* pNode = m_Nodes.GetAt(i);
         CComPtr<IMFTopologyNode> spDownNode;
         DWORD dwDownIndex;
-        
+
         HRESULT hrOutput = pNode->GetOutput(0, &spDownNode, &dwDownIndex);
         if(SUCCEEDED(hrOutput))
         {
@@ -1172,7 +1174,7 @@ HRESULT CTedSourceNode::SelectValidStreams()
             IFC( m_spPD->DeselectStream((DWORD) i) );
         }
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -1182,7 +1184,7 @@ Cleanup:
 HRESULT CTedSourceNode::CreateMFSource()
 {
     HRESULT hr = S_OK;
-    
+
     MF_OBJECT_TYPE ObjectType;
 
     if(!m_bIsResolverCreated)
@@ -1190,12 +1192,12 @@ HRESULT CTedSourceNode::CreateMFSource()
         IFC( MFCreateSourceResolver( &ms_spResolver ) );
         m_bIsResolverCreated = true;
     }
-    
-    IFC( ms_spResolver->CreateObjectFromURL(m_strSourceURL, 
-                                           MF_RESOLUTION_MEDIASOURCE,
-                                           NULL,
-                                           &ObjectType,
-                                           (IUnknown**)&m_spSource) );
+
+    IFC( ms_spResolver->CreateObjectFromURL(m_strSourceURL,
+                                            MF_RESOLUTION_MEDIASOURCE,
+                                            NULL,
+                                            &ObjectType,
+                                            (IUnknown**)&m_spSource) );
 
     IFC( m_spSource->CreatePresentationDescriptor(&m_spPD) );
 
@@ -1229,20 +1231,20 @@ HRESULT CTedSourceNode::InitMFSourceNode(CComPtr<IMFTopologyNode> spNode, int nP
     IFC( spSD->GetMediaTypeHandler( &spMediaTypeHandler ) );
     IFC( spMediaTypeHandler->GetMajorType( &guidMajorType ) );
 
-    if(MFMediaType_Audio == guidMajorType) 
+    if(MFMediaType_Audio == guidMajorType)
     {
-        strPinLabel = LoadAtlString(IDS_AUDIO); 
+        strPinLabel = LoadAtlString(IDS_AUDIO);
     }
     else if(MFMediaType_Video == guidMajorType)
     {
-        strPinLabel = LoadAtlString(IDS_VIDEO); 
+        strPinLabel = LoadAtlString(IDS_VIDEO);
     }
 
     InitIsProtected();
 
     CVisualNode* pVisualNode = new CVisualNode(strPinLabel, false);
     CHECK_ALLOC( pVisualNode );
-    
+
     pVisualNode->SetData((LONG_PTR) this);
     pVisualNode->SetIndex(nPinIndex);
 
@@ -1250,21 +1252,21 @@ HRESULT CTedSourceNode::InitMFSourceNode(CComPtr<IMFTopologyNode> spNode, int nP
 
     ((CVisualContainer*) GetVisual())->AddComponent(pVisualNode);
 
-    
+
     assert(spNode != NULL);
-    
+
     m_Nodes.Add(spNode);
-        
+
 Cleanup:
     return hr;
 }
 
-HRESULT CTedSourceNode::CreateSourceNodes() 
+HRESULT CTedSourceNode::CreateSourceNodes()
 {
     HRESULT hr = S_OK;
 
     //
-    // For each stream, create a source topology node 
+    // For each stream, create a source topology node
     //
     DWORD cSourceStreams = 0;
     IFC( m_spPD->GetStreamDescriptorCount( &cSourceStreams ));
@@ -1277,17 +1279,17 @@ HRESULT CTedSourceNode::CreateSourceNodes()
         BOOL fSelected = FALSE;
 
         IFC(m_spPD->GetStreamDescriptorByIndex(
-                                    i,
-                                    &fSelected,
-                                    &spSD  ));
+                i,
+                &fSelected,
+                &spSD  ));
 
         IFC( MFCreateTopologyNode( MF_TOPOLOGY_SOURCESTREAM_NODE,
-                                            &spNode ));
+                                   &spNode ));
 
         IFC( spNode->SetUnknown(MF_TOPONODE_SOURCE, m_spSource) );
         IFC( spNode->SetUnknown(MF_TOPONODE_PRESENTATION_DESCRIPTOR, m_spPD) );
         IFC( spNode->SetUnknown(MF_TOPONODE_STREAM_DESCRIPTOR, spSD) );
-    
+
         IFC( InitMFSourceNode(spNode, i) );
     }
 
@@ -1298,18 +1300,18 @@ Cleanup:
 HRESULT CTedSourceNode::InitIsProtected()
 {
     HRESULT hr = S_OK;
-    
+
     hr = MFRequireProtectedEnvironment(m_spPD);
 
     if(S_FALSE == hr)
     {
-         m_fIsProtected = false;
+        m_fIsProtected = false;
     }
     else
     {
         m_fIsProtected = true;
     }
-    
+
     return S_OK;
 }
 
@@ -1334,10 +1336,10 @@ HRESULT CTedOutputNode::Init(IMFActivate* pActivate, const CAtlStringW& label)
     CComPtr<IMFTopologyNode> spNode;
 
     assert(pActivate != NULL);
-    
+
     IFC( MFCreateTopologyNode( MF_TOPOLOGY_OUTPUT_NODE, &spNode ));
     IFC(spNode->SetObject(pActivate));
-        
+
     m_arrStreamSinkNodes.Add(spNode);
 
     CTedTopologyNode::Init(label);
@@ -1361,7 +1363,7 @@ HRESULT CTedOutputNode::Init(IMFActivate* pActivate, CTedOutputMemo* pMemo)
     HRESULT hr = S_OK;
 
     assert(pActivate != NULL);
-    
+
     CTedTopologyNode::Init(pMemo);
 
     CComPtr<IMFTopologyNode> spNode;
@@ -1402,7 +1404,7 @@ HRESULT CTedOutputNode::Init(IMFStreamSink* pStreamSink, const CAtlStringW& labe
     CComPtr<IMFTopologyNode> spNode;
 
     assert(pStreamSink != NULL);
-    
+
     IFC( MFCreateTopologyNode( MF_TOPOLOGY_OUTPUT_NODE, &spNode ) );
     IFC( spNode->SetObject(pStreamSink) );
 
@@ -1423,7 +1425,7 @@ HRESULT CTedOutputNode::GetPin(DWORD nInput, CTedTopologyPin & Pin, bool inputPi
 
     assert(inputPin);
     assert(nInput < m_arrStreamSinkNodes.GetCount());
-    
+
     Pin.SetPNode(m_arrStreamSinkNodes.GetAt(nInput));
     Pin.SetIndex(0);
 
@@ -1481,7 +1483,7 @@ HRESULT CTedOutputNode::WrapStreamSink(CLogger* pLogger)
     {
         IFC( spActivateUnk->QueryInterface(IID_IMFStreamSink, (void**) &spStreamSink) );
     }
-    
+
     pWrapper = new CMFStreamSinkWrapper(spStreamSink, pLogger);
     CHECK_ALLOC( pWrapper );
     pWrapper->AddRef();
@@ -1502,9 +1504,9 @@ void CTedOutputNode::ShutdownMFSink()
             IMFTopologyNode* pNode = m_arrStreamSinkNodes.GetAt(0);
             CComPtr<IUnknown> spStreamSinkUnk;
             CComPtr<IMFStreamSink> spStreamSink;
-            
+
             HRESULT hr = pNode->GetObject(&spStreamSinkUnk);
-            
+
             if(SUCCEEDED(hr))
             {
                 HRESULT hr = spStreamSinkUnk->QueryInterface(IID_IMFStreamSink, (void**) &spStreamSink);
@@ -1542,16 +1544,16 @@ HRESULT CTedOutputNode::InitFromSink(IMFMediaSink* pSink)
     {
         CComPtr<IMFStreamSink> spStreamSink;
         CComPtr<IMFTopologyNode> spStreamSinkNode;
-        
+
         IFC( pSink->GetStreamSinkByIndex(i, &spStreamSink) );
 
         IFC( MFCreateTopologyNode(MF_TOPOLOGY_OUTPUT_NODE, &spStreamSinkNode) );
         IFC( spStreamSinkNode->SetObject(spStreamSink) );
         m_arrStreamSinkNodes.Add(spStreamSinkNode);
-        
+
         CVisualNode* pVisualNode = new CVisualNode(L"", false);
         CHECK_ALLOC( pVisualNode );
-        
+
         pVisualNode->SetData((LONG_PTR) this);
         pVisualNode->SetIndex(i);
 
@@ -1559,7 +1561,7 @@ HRESULT CTedOutputNode::InitFromSink(IMFMediaSink* pSink)
 
         pContainer->AddComponent(pVisualNode);
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -1599,9 +1601,9 @@ HRESULT CTedAudioOutputNode::Init(const CAtlStringW& label, IMFStreamSink* pStre
     HRESULT hr = S_OK;
 
     assert(pStreamSink != NULL);
-    
+
     IFC( CTedOutputNode::Init(pStreamSink, label) );
-    
+
 Cleanup:
     return hr;
 }
@@ -1622,7 +1624,7 @@ CTedNodeMemo* CTedAudioOutputNode::CreateMemo() const
 
 // Initialization //
 
-HRESULT CTedVideoOutputNode::Init(const CAtlStringW& label, HWND hVideoOutWindow) 
+HRESULT CTedVideoOutputNode::Init(const CAtlStringW& label, HWND hVideoOutWindow)
 {
     HRESULT hr = S_OK;
 
@@ -1641,7 +1643,7 @@ HRESULT CTedVideoOutputNode::Init(HWND hVideoOutWindow, CTedVideoOutputMemo* pMe
     HRESULT hr = S_OK;
 
     assert(pMemo != NULL);
-    
+
     CComPtr<IMFActivate> spEVRAct;
     IFC(MFCreateVideoRendererActivate(hVideoOutWindow, &spEVRAct));
 
@@ -1652,12 +1654,12 @@ Cleanup:
     return hr;
 }
 
-HRESULT CTedVideoOutputNode::Init(const CAtlStringW& label, HWND hVideoOutWindow, IMFStreamSink* pStreamSink) 
+HRESULT CTedVideoOutputNode::Init(const CAtlStringW& label, HWND hVideoOutWindow, IMFStreamSink* pStreamSink)
 {
     HRESULT hr = S_OK;
 
     assert(pStreamSink != NULL);
-    
+
     IFC( CTedOutputNode::Init(pStreamSink, label) );
 
     m_hWnd = hVideoOutWindow;
@@ -1690,10 +1692,10 @@ HRESULT CTedCustomOutputNode::Init(GUID gidCustomSinkID, const CAtlStringW& labe
     HRESULT hr = S_OK;
 
     m_gidCustomSinkID = gidCustomSinkID;
-    
+
     CComPtr<IMFMediaSink> spSink;
     IFC( CoCreateInstance(m_gidCustomSinkID, NULL, CLSCTX_INPROC_SERVER, IID_IMFMediaSink, (void**) &spSink) );
-    
+
     IFC( CTedOutputNode::Init(spSink, label) );
 
 Cleanup:
@@ -1722,7 +1724,7 @@ HRESULT CTedCustomOutputNode::Init(CTedCustomOutputMemo* pMemo)
 
     CComPtr<IMFMediaSink> spSink;
     IFC( CoCreateInstance(m_gidCustomSinkID, NULL, CLSCTX_INPROC_SERVER, IID_IMFMediaSink, (void**) &spSink) );
-        
+
     IFC( CTedOutputNode::Init(spSink, pMemo) );
 
 Cleanup:
@@ -1749,7 +1751,7 @@ CTedNodeMemo* CTedCustomOutputNode::CreateMemo() const
 HRESULT CTedTransformNode::Init(CLSID dmoCLSID, const CAtlStringW& label, bool fAutoInserted)
 {
     HRESULT hr = S_OK;
-    
+
     CTedTopologyNode::Init(label, fAutoInserted);
 
     IFC( InitTransform(dmoCLSID) );
@@ -1775,11 +1777,11 @@ Cleanup:
 HRESULT CTedTransformNode::Init(IMFActivate* pTransformActivate, const CAtlStringW& label, bool fAutoInserted)
 {
     HRESULT hr = S_OK;
-    
+
     CTedTopologyNode::Init(label, fAutoInserted);
-    
+
     IFC( InitTransform(pTransformActivate) );
-    
+
 Cleanup:
     return hr;
 }
@@ -1787,13 +1789,13 @@ Cleanup:
 HRESULT CTedTransformNode::Init(CTedTransformMemo* pMemo)
 {
     assert(pMemo != NULL);
-    
+
     HRESULT hr = S_OK;
-    
+
     CTedTopologyNode::Init(pMemo);
 
     IFC( InitTransform(pMemo->m_clsid) );
-    
+
     IFC( PostInitFromMemoCopyAttributes(pMemo) );
 
 Cleanup:
@@ -1808,7 +1810,7 @@ HRESULT CTedTransformNode::GetPin(DWORD nInput, CTedTopologyPin & Pin, bool inpu
 
     Pin.SetPNode(m_spTransformNode);
     Pin.SetIndex(nInput);
-    
+
 //Cleanup:
 
     return hr;
@@ -1830,7 +1832,7 @@ DWORD CTedTransformNode::GetMFNodeCount() const
 IMFTopologyNode* CTedTransformNode::GetMFNode(DWORD nIndex) const
 {
     assert(nIndex == 0);
-        
+
     return m_spTransformNode;
 }
 
@@ -1861,7 +1863,7 @@ HRESULT CTedTransformNode::CopyMediaTypes(IMFTopologyNode* pOldNode)
     DWORD* pOutputStreamIDs = NULL;
 
     CComPtr<IMFTopologyNode> spNewNode = m_spTransformNode;
-    
+
     IFC( spNewNode->GetObject(&spNewTransformUnk) );
     IFC( spNewTransformUnk->QueryInterface(IID_IMFTransform, (void**) &spNewTransform) );
 
@@ -1892,13 +1894,13 @@ HRESULT CTedTransformNode::CopyMediaTypes(IMFTopologyNode* pOldNode)
             IFC(hr);
         }
     }
-        
+
     if ( spOldTransform != spNewTransform )
     {
         for(DWORD i = 0; i < dwNumInputs; ++i)
         {
             CComPtr<IMFMediaType> spType;
-            
+
             IFC( spOldTransform->GetInputCurrentType(pInputStreamIDs[i], &spType) );
             IFC( spNewTransform->SetInputType(pInputStreamIDs[i], spType, 0) );
         }
@@ -1915,7 +1917,7 @@ HRESULT CTedTransformNode::CopyMediaTypes(IMFTopologyNode* pOldNode)
 Cleanup:
     delete[] pInputStreamIDs;
     delete[] pOutputStreamIDs;
-    
+
     return hr;
 }
 
@@ -1925,10 +1927,10 @@ HRESULT CTedTransformNode::WrapTransform(CLogger* pLogger)
     CMFTransformWrapper* pTransformWrapper = NULL;
     CComPtr<IUnknown> spTransformUnk;
     CComPtr<IMFTransform> spTransform;
-    
+
     IFC( m_spTransformNode->GetObject(&spTransformUnk) );
     IFC( spTransformUnk->QueryInterface(IID_IMFTransform, (void**) &spTransform) );
-    
+
     pTransformWrapper = new CMFTransformWrapper(spTransform, pLogger);
     CHECK_ALLOC( pTransformWrapper );
     pTransformWrapper->AddRef();
@@ -1959,9 +1961,9 @@ HRESULT CTedTransformNode::InitTransform(CLSID dmoCLSID)
     CComPtr<IUnknown> spMFTUnk;
     CComPtr<IMFTransform> spTransform;
     DWORD dwNumInputs = 0, dwNumOutputs = 0;
-    
+
     m_clsid = dmoCLSID;
-    
+
     CComPtr<IMFTopologyNode> spNode;
 
     IFC( MFCreateTopologyNode( MF_TOPOLOGY_TRANSFORM_NODE, &spNode ));
@@ -1969,14 +1971,14 @@ HRESULT CTedTransformNode::InitTransform(CLSID dmoCLSID)
     IFC( CoCreateInstance(m_clsid, NULL, CLSCTX_INPROC_SERVER, IID_IUnknown, (void **) &spMFTUnk) );
 
     IFC( spNode->SetObject(spMFTUnk) );
-        
+
     IFC( spNode->SetGUID(MF_TOPONODE_TRANSFORM_OBJECTID, m_clsid) );
 
     IFC( spMFTUnk->QueryInterface(IID_IMFTransform, (void**) &m_spTransform) );
     IFC( m_spTransform->GetStreamCount(&dwNumInputs, &dwNumOutputs) );
-    
+
     m_spTransformNode = spNode;
-        
+
     for(size_t i = 0; i < dwNumInputs; i++)
     {
         AddPin(true, L"", (DWORD) i);
@@ -1997,13 +1999,13 @@ HRESULT CTedTransformNode::InitTransform(IMFTransform* pTransform)
     DWORD dwNumInputs = 0, dwNumOutputs = 0;
 
     m_spTransform = pTransform;
-    
+
     CComPtr<IMFTopologyNode> spNode;
     IFC( MFCreateTopologyNode( MF_TOPOLOGY_TRANSFORM_NODE, &spNode ));
     IFC(spNode->SetObject(pTransform));
- 
+
     m_spTransformNode = spNode;
-       
+
     IFC(pTransform->GetStreamCount(&dwNumInputs, &dwNumOutputs));
     for(size_t i = 0; i < dwNumInputs; i++)
     {
@@ -2023,12 +2025,12 @@ HRESULT CTedTransformNode::InitTransform(IMFActivate* pTransformActivate)
 {
     HRESULT hr;
     CComPtr<IMFTransform> spTransform;
-    
+
     pTransformActivate->GetGUID(MFT_TRANSFORM_CLSID_Attribute, &m_clsid);
-    
+
     IFC( pTransformActivate->ActivateObject(IID_IMFTransform, (void**) &spTransform) );
     IFC( InitTransform(spTransform) );
-    
+
 Cleanup:
     return hr;
 }
@@ -2041,7 +2043,7 @@ Cleanup:
 HRESULT CTedTeeNode::Init()
 {
     HRESULT hr = S_OK;
-    
+
     CTedTopologyNode::Init(LoadAtlString(IDS_TEE));
 
     IFC( MFCreateTopologyNode(MF_TOPOLOGY_TEE_NODE, &m_spTeeNode ));
@@ -2057,7 +2059,7 @@ Cleanup:
 HRESULT CTedTeeNode::Init(CTedTeeMemo* pMemo)
 {
     assert(pMemo != NULL);
-    
+
     HRESULT hr = S_OK;
 
     CTedTopologyNode::Init(pMemo);
@@ -2067,7 +2069,7 @@ HRESULT CTedTeeNode::Init(CTedTeeMemo* pMemo)
     AddPin(true, L"", 0);
 
     m_nNextOutputIndex = pMemo->m_nNextOutputIndex;
-    
+
     for(DWORD i = 0; i < m_nNextOutputIndex; i++)
     {
         AddPin(false, L"", i);
@@ -2123,7 +2125,7 @@ void CTedTeeNode::NotifyConnection()
     DWORD outputCount;
 
     m_spTeeNode->GetOutputCount(&outputCount);
-    
+
     if(outputCount >= m_nNextOutputIndex)
     {
         AddPin(false, L"", m_nNextOutputIndex++);
@@ -2144,11 +2146,11 @@ void CTedEditorVisualObjectEventHandler::NotifyObjectDeleted(CVisualObject* pVis
     {
         CTedTopologyConnection* pConn = (CTedTopologyConnection*) pVisualObj->GetData();
         if(pConn == NULL) return;
-        
+
         CTedTopologyNode* pNode = m_pEditor->FindNode(pConn->GetOutputNodeID());
 
         HRESULT hr = m_pEditor->FullDisconnectNodes(pNode, pConn->GetOutputPinID());
-        
+
         if(FAILED(hr))
         {
             CAtlString strErr;
@@ -2159,7 +2161,7 @@ void CTedEditorVisualObjectEventHandler::NotifyObjectDeleted(CVisualObject* pVis
     else if(pVisualObj->Type() == CVisualObject::NODE || pVisualObj->Type() == CVisualObject::CONTAINER)
     {
         HRESULT hr = m_pEditor->RemoveNodeWithVisual(pVisualObj);
-        
+
         if(FAILED(hr))
         {
             CAtlString strErr;
@@ -2193,7 +2195,7 @@ HRESULT CTedNodeCreator::CreateSource(const CAtlStringW& strSourceURL, IMFMediaS
     {
         return E_POINTER;
     }
-    
+
     HRESULT hr = S_OK;
 
     CAtlStringW strLabel;
@@ -2243,7 +2245,7 @@ HRESULT CTedNodeCreator::CreateCaptureSource(IMFMediaSource* pSource, CTedSource
     {
         return E_INVALIDARG;
     }
-    
+
     HRESULT hr = S_OK;
 
     CTedSourceNode* pSourceNode = new CTedSourceNode;
@@ -2260,8 +2262,8 @@ HRESULT CTedNodeCreator::CreateCaptureSource(IMFMediaSource* pSource, CTedSource
 
         hr = pSource->QueryInterface( __uuidof(IMFAttributes), (LPVOID*)&spAttributes );
 
-        hrName = spAttributes->GetStringLength( MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME, 
-                                           &nLen );
+        hrName = spAttributes->GetStringLength( MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME,
+                                                &nLen );
 
         if ( SUCCEEDED( hrName ) )
         {
@@ -2275,9 +2277,9 @@ HRESULT CTedNodeCreator::CreateCaptureSource(IMFMediaSource* pSource, CTedSource
         if ( SUCCEEDED( hrName ) )
         {
             hrName = spAttributes->GetString( MF_DEVSOURCE_ATTRIBUTE_FRIENDLY_NAME,
-                                         pwsz,
-                                         nLen + 1,
-                                         &nLen );
+                                              pwsz,
+                                              nLen + 1,
+                                              &nLen );
         }
 
         if ( SUCCEEDED( hrName ) )
@@ -2311,7 +2313,7 @@ HRESULT CTedNodeCreator::CreateSAR(CTedAudioOutputNode** ppSAR)
     {
         return E_POINTER;
     }
-    
+
     HRESULT hr = S_OK;
     CTedAudioOutputNode * pNode = NULL;
 
@@ -2328,7 +2330,7 @@ HRESULT CTedNodeCreator::CreateSAR(CTedAudioOutputNode** ppSAR)
         *ppSAR = pNode;
     }
 
-Cleanup:    
+Cleanup:
     return hr;
 }
 
@@ -2338,11 +2340,11 @@ HRESULT CTedNodeCreator::CreateEVR(ITedVideoWindowHandler* pVideoHandler, CTedVi
     {
         return E_POINTER;
     }
-    
+
     HRESULT hr = S_OK;
     CTedVideoOutputNode * pNode = NULL;
     HWND hWnd = NULL;
-    
+
     if(pVideoHandler)
     {
         IFC( pVideoHandler->GetVideoWindow((LONG_PTR*) &hWnd) );
@@ -2372,7 +2374,7 @@ HRESULT CTedNodeCreator::CreateCustomSink(IMFMediaSink* pSink, CTedCustomOutputN
     {
         return E_POINTER;
     }
-    
+
     HRESULT hr = S_OK;
     CTedCustomOutputNode* pNode = NULL;
     HWND hWnd = NULL;
@@ -2400,9 +2402,9 @@ HRESULT CTedNodeCreator::CreateCustomSink(GUID gidCustomSinkID, CTedCustomOutput
     {
         return E_POINTER;
     }
-    
+
     HRESULT hr = S_OK;
-    
+
     CTedCustomOutputNode* pNode = new CTedCustomOutputNode();
     CHECK_ALLOC( pNode );
     hr = pNode->Init(gidCustomSinkID, LoadAtlString(IDS_CUSTOM_SINK));
@@ -2426,14 +2428,14 @@ HRESULT CTedNodeCreator::CreateTransform(CLSID clsidDMO, const CAtlStringW& strN
     {
         return E_POINTER;
     }
-    
+
     HRESULT hr = S_OK;
     CTedTransformNode * pNode = NULL;
-    
+
     pNode = new CTedTransformNode();
     CHECK_ALLOC( pNode );
     hr = pNode->Init(clsidDMO, strName);
-    
+
     if(FAILED(hr))
     {
         delete pNode;
@@ -2443,7 +2445,7 @@ HRESULT CTedNodeCreator::CreateTransform(CLSID clsidDMO, const CAtlStringW& strN
         *ppTransformNode = pNode;
     }
 
-Cleanup:        
+Cleanup:
     return hr;
 }
 
@@ -2453,16 +2455,16 @@ HRESULT CTedNodeCreator::CreateTransform(IMFActivate* pTransformActivate, CTedTr
     {
         return E_POINTER;
     }
-    
+
     HRESULT hr = S_OK;
     CTedTransformNode * pNode = NULL;
     LPWSTR szName = NULL;
-    
+
     pNode = new CTedTransformNode();
     CHECK_ALLOC( pNode );
     IFC( pTransformActivate->GetAllocatedString(MFT_FRIENDLY_NAME_Attribute, &szName, NULL) );
     hr = pNode->Init(pTransformActivate, szName);
-    
+
     if(FAILED(hr))
     {
         delete pNode;
@@ -2474,7 +2476,7 @@ HRESULT CTedNodeCreator::CreateTransform(IMFActivate* pTransformActivate, CTedTr
 
 Cleanup:
     CoTaskMemFree(szName);
-    
+
     return hr;
 }
 
@@ -2483,7 +2485,7 @@ HRESULT CTedNodeCreator::CreateTee(CTedTeeNode** ppTeeNode)
     HRESULT hr = S_OK;
 
     CTedTeeNode * pNode = NULL;
-    
+
     pNode = new CTedTeeNode;
     CHECK_ALLOC( pNode );
     hr = pNode->Init();
@@ -2536,7 +2538,7 @@ CTedTopologyEditor::~CTedTopologyEditor()
                 pOutput->ShutdownMFSink();
             }
         }
-        
+
         delete m_Nodes.GetAt(i);
     }
 
@@ -2562,23 +2564,23 @@ CTedTopologyEditor::~CTedTopologyEditor()
             spSource->Shutdown();
         }
     }
-    
+
     CTedSourceNode::ReleaseResolver();
 }
 
 HRESULT CTedTopologyEditor::Init(ITedVideoWindowHandler* pVideoCallback, ITedPropertyController* pPropertyCallback, ITedTopoEventHandler* pEventCallback, CTopoViewerWindow* pView)
 {
     assert(pView != NULL);
-    
+
     HRESULT hr = S_OK;
 
     m_spVideoCallback = pVideoCallback;
     m_spPropertyCallback = pPropertyCallback;
     m_spEventCallback = pEventCallback;
     m_pView = pView;
-    
+
     IFC( NewTopology() );
-    
+
 Cleanup:
     return hr;
 }
@@ -2608,13 +2610,13 @@ HRESULT CTedTopologyEditor::NewTopology()
         {
             CTedOutputNode* pOutput = (CTedOutputNode*) pNode;
             pOutput->ShutdownMFSink();
-            
+
             if(pNode->GetVideoWindow() != NULL)
             {
                 m_spVideoCallback->ReleaseVideoWindow((LONG_PTR) pNode->GetVideoWindow());
             }
         }
-        
+
         delete pNode;
     }
 
@@ -2631,7 +2633,7 @@ HRESULT CTedTopologyEditor::NewTopology()
     CHECK_ALLOC( m_pConnectHandler );
 
     CVisualNode::SetPinHandler(m_pConnectHandler);
-    
+
     m_nProtectedSourceCount = 0;
 
     for(size_t i = 0; i < m_arrLoggers.GetCount(); ++i)
@@ -2646,7 +2648,7 @@ HRESULT CTedTopologyEditor::NewTopology()
 
     if(m_spPropertyCallback.p) m_spPropertyCallback->ClearProperties();
 
-	m_pView->PTree()->SetEventHandler(&m_VisualEventHandler);
+    m_pView->PTree()->SetEventHandler(&m_VisualEventHandler);
 
 Cleanup:
     return hr;
@@ -2658,14 +2660,14 @@ HRESULT CTedTopologyEditor::GetTopology(IMFTopology** ppTopo, BOOL* pfIsProtecte
 {
     HRESULT hr = S_OK;
     CComPtr<IMFTopology> spNewTopo;
-    
+
     if(NULL == ppTopo || NULL == pfIsProtected)
     {
         return E_POINTER;
     }
 
     bool fMultipleSrc = HasMultipleSources();
-    
+
     IFC( MFCreateTopology(&spNewTopo) );
     IFC( spNewTopo->CloneFrom(m_spTopology) );
 
@@ -2681,9 +2683,9 @@ HRESULT CTedTopologyEditor::GetTopology(IMFTopology** ppTopo, BOOL* pfIsProtecte
             {
                 *pfIsProtected = true;
             }
-            
+
             IFC( pSourceNode->SelectValidStreams() );
-            
+
             // Source nodes that get passed out cannot be shut down here as we are unsure
             // if the external app has finished using them
             pSourceNode->FlagExternalShutdownRequired();
@@ -2691,24 +2693,24 @@ HRESULT CTedTopologyEditor::GetTopology(IMFTopology** ppTopo, BOOL* pfIsProtecte
         else if(NodeType == CTedTopologyNode::TED_OUTPUT_NODE)
         {
             CTedOutputNode* pOutputNode = (CTedOutputNode*) m_Nodes.GetAt(i);
-            
+
             pOutputNode->FlagExternalShutdownRequired();
         }
     }
-    
+
     WORD cNodes;
     IFC( spNewTopo->GetNodeCount(&cNodes) );
     for(WORD i = 0; i < cNodes; i++)
     {
         CComPtr<IMFTopologyNode> spNode;
         IFC( spNewTopo->GetNode(i, &spNode) );
-        
+
         spNode->DeleteItem(MF_TOPONODE_ERRORCODE);
         spNode->DeleteItem(MF_TOPONODE_ERROR_MAJORTYPE);
         spNode->DeleteItem(MF_TOPONODE_ERROR_SUBTYPE);
 
         BOOL fConnected = FALSE;
-        
+
         DWORD cInputs;
         IFC( spNode->GetInputCount(&cInputs) )
         for(DWORD j = 0; j < cInputs; j++)
@@ -2722,7 +2724,7 @@ HRESULT CTedTopologyEditor::GetTopology(IMFTopology** ppTopo, BOOL* pfIsProtecte
                 break;
             }
         }
-        
+
         if(!fConnected)
         {
             DWORD cOutputs;
@@ -2739,7 +2741,7 @@ HRESULT CTedTopologyEditor::GetTopology(IMFTopology** ppTopo, BOOL* pfIsProtecte
                 }
             }
         }
-        
+
         if(!fConnected)
         {
             IFC( spNewTopo->RemoveNode(spNode) );
@@ -2747,32 +2749,32 @@ HRESULT CTedTopologyEditor::GetTopology(IMFTopology** ppTopo, BOOL* pfIsProtecte
             i--;
         }
     }
-    
+
     if(fMultipleSrc)
     {
         MFSequencerElementId NewID;
         IFC( m_spSequencer->AppendTopology(spNewTopo, SequencerTopologyFlags_Last, &NewID) );
-        
+
         if(m_LastSeqID != 0)
         {
             IFC( m_spSequencer->DeleteTopology(m_LastSeqID) );
         }
-        
+
         m_LastSeqID = NewID;
 
         CComPtr<IMFMediaSource> spSrc;
         IFC( m_spSequencer->QueryInterface(IID_IMFMediaSource, (void**) &spSrc) );
-        
+
         CComPtr<IMFPresentationDescriptor> spPD;
         IFC( spSrc->CreatePresentationDescriptor(&spPD) );
-        
+
         CComPtr<IMFMediaSourceTopologyProvider> spSrcTopoProvider;
         IFC( m_spSequencer->QueryInterface(IID_IMFMediaSourceTopologyProvider, (void**) &spSrcTopoProvider) );
 
-		spNewTopo.Release();
+        spNewTopo.Release();
         IFC( spSrcTopoProvider->GetMediaSourceTopology(spPD, &spNewTopo) );
     }
-    
+
     *ppTopo = spNewTopo;
     (*ppTopo)->AddRef();
 
@@ -2792,7 +2794,7 @@ bool CTedTopologyEditor::HasSource()
     {
         CComPtr<IMFTopologyNode> spNode;
         MF_TOPOLOGY_TYPE Type;
-        
+
         IFC( m_spTopology->GetNode(n, &spNode) );
         IFC( spNode->GetNodeType(&Type) );
 
@@ -2866,7 +2868,7 @@ CTedTopologyNode* CTedTopologyEditor::FindNode(int nodeID)
 HRESULT CTedTopologyEditor::MergeTopology(IMFTopology* pTopo)
 {
     assert(pTopo != NULL);
-        
+
     HRESULT hr = S_OK;
 
     typedef struct _SourcePair
@@ -2874,13 +2876,13 @@ HRESULT CTedTopologyEditor::MergeTopology(IMFTopology* pTopo)
         CTedSourceNode* m_pOldSource;
         CTedSourceNode* m_pNewSource;
     } SourcePair;
-    
+
     // All connectors are invalidated by the new topology
     RemoveAllConnectors();
-    
+
     int xPos, yPos;
     CAtlArray<SourcePair> arrSourcePairs;
-    
+
     CComPtr<IMFCollection> spSourceNodeCollection;
     IFC(pTopo->GetSourceNodeCollection(&spSourceNodeCollection) );
 
@@ -2938,12 +2940,12 @@ HRESULT CTedTopologyEditor::MergeTopology(IMFTopology* pTopo)
         }
 
         DWORD realIndex = pCurrentSource->GetIndexOf(idSourceNode);
-        
+
         xPos = int(pCurrentSource->GetVisual()->Rect().x() + pCurrentSource->GetVisual()->Rect().w() + MARGIN_SIZE);
         yPos = int(pCurrentSource->GetVisual()->Rect().y() + CVisualContainer::TOP_MARGIN * (realIndex + 1) + CVisualContainer::COMP_DEF_HEIGHT * realIndex);
 
         IFC( pNewSource->CopyAttributes(spSourceNode, realIndex) );
-        
+
         hr = spSourceNode->GetOutput(0, &spDownstreamNode, &nNextIndex);
         if(FAILED(hr) || spDownstreamNode.p == NULL) continue;
 
@@ -2961,18 +2963,18 @@ HRESULT CTedTopologyEditor::MergeTopology(IMFTopology* pTopo)
     m_pView->InvalidateRect(NULL);
 
     RemoveOrphanTransforms();
-    
+
     m_fShutdownSources = true;
-    
+
 Cleanup:
     return hr;
 }
 
 
 HRESULT CTedTopologyEditor::SpyNodeWithVisual(CVisualObject* pVisual)
- {
+{
     assert(pVisual != NULL);
-    
+
     CTedTopologyNode* pFoundNode = NULL;
     HRESULT hr = S_OK;
 
@@ -2989,55 +2991,55 @@ HRESULT CTedTopologyEditor::SpyNodeWithVisual(CVisualObject* pVisual)
     {
         switch(pFoundNode->GetType())
         {
-            case CTedTopologyNode::TED_TRANSFORM_NODE:
-            {
-                CTedTransformNode* pTedTransform = (CTedTransformNode*) pFoundNode;
+        case CTedTopologyNode::TED_TRANSFORM_NODE:
+        {
+            CTedTransformNode* pTedTransform = (CTedTransformNode*) pFoundNode;
 
-                TOPOID nodeID;
-                IFC( pTedTransform->GetNodeID(0, nodeID) );
-                
-                CAtlStringW fileName;
-                fileName.Format(L"%s-%d.txt", pTedTransform->GetLabel(), nodeID);
+            TOPOID nodeID;
+            IFC( pTedTransform->GetNodeID(0, nodeID) );
 
-                CLogger* pLogger = new CLogger(fileName);
-                CHECK_ALLOC( pLogger );
-                
-                IFC( pTedTransform->WrapTransform(pLogger) );
+            CAtlStringW fileName;
+            fileName.Format(L"%s-%d.txt", pTedTransform->GetLabel(), nodeID);
 
-                m_arrLoggers.Add(pLogger);
-                pLogger->AddRef();
+            CLogger* pLogger = new CLogger(fileName);
+            CHECK_ALLOC( pLogger );
 
-                break;
-            }
-            case CTedTopologyNode::TED_OUTPUT_NODE:
-            {
-                CTedOutputNode* pTedOutput = (CTedOutputNode*) pFoundNode;
+            IFC( pTedTransform->WrapTransform(pLogger) );
 
-                TOPOID nodeID;
-                IFC( pTedOutput->GetNodeID(0, nodeID) );
+            m_arrLoggers.Add(pLogger);
+            pLogger->AddRef();
 
-                CAtlStringW fileName;
-                fileName.Format(L"%s-%d.txt", pTedOutput->GetLabel(), nodeID);
+            break;
+        }
+        case CTedTopologyNode::TED_OUTPUT_NODE:
+        {
+            CTedOutputNode* pTedOutput = (CTedOutputNode*) pFoundNode;
 
-                CLogger* pLogger = new CLogger(fileName);
-                CHECK_ALLOC( pLogger );
+            TOPOID nodeID;
+            IFC( pTedOutput->GetNodeID(0, nodeID) );
 
-                IFC( pTedOutput->WrapStreamSink(pLogger) );
+            CAtlStringW fileName;
+            fileName.Format(L"%s-%d.txt", pTedOutput->GetLabel(), nodeID);
 
-                m_arrLoggers.Add(pLogger);
-                pLogger->AddRef();
+            CLogger* pLogger = new CLogger(fileName);
+            CHECK_ALLOC( pLogger );
 
-                break;
-            }
-            default:
-            {
-                break;  
-            }
+            IFC( pTedOutput->WrapStreamSink(pLogger) );
+
+            m_arrLoggers.Add(pLogger);
+            pLogger->AddRef();
+
+            break;
+        }
+        default:
+        {
+            break;
+        }
         }
     }
-    
+
 Cleanup:
-    return hr;    
+    return hr;
 }
 
 HRESULT CTedTopologyEditor::ShowTopology(IMFTopology* pTopology, LPCWSTR szSourceURL)
@@ -3048,7 +3050,7 @@ HRESULT CTedTopologyEditor::ShowTopology(IMFTopology* pTopology, LPCWSTR szSourc
     CComPtr<IMFTopologyNode> spSourceNode;
     CComPtr<IMFMediaSource> spSource;
     CTedNodeCreator* pNodeCreator = CTedNodeCreator::GetSingleton();
-    
+
     NewTopology();
 
     CComPtr<IMFCollection> spSourceNodeCollection;
@@ -3060,7 +3062,7 @@ HRESULT CTedTopologyEditor::ShowTopology(IMFTopology* pTopology, LPCWSTR szSourc
     IFC( spSourceNodeCollection->GetElement(0, &spSourceNodeUnk) );
     IFC( spSourceNodeUnk->QueryInterface(IID_IMFTopologyNode, (void**) &spSourceNode) );
     IFC( spSourceNode->GetUnknown(MF_TOPONODE_SOURCE, IID_IMFMediaSource, (void**) &spSource) );
-    
+
     CTedSourceNode* pNewSource;
     IFC( pNodeCreator->CreateSource(szSourceURL, spSource, &pNewSource) );
 
@@ -3068,9 +3070,9 @@ HRESULT CTedTopologyEditor::ShowTopology(IMFTopology* pTopology, LPCWSTR szSourc
 
     int xPos = 10;
     int yPos = 10;
-    
+
     xPos += int(pNewSource->GetVisual()->Rect().w() + MARGIN_SIZE);
-    
+
     for(DWORD i = 0; i < dwSourceNodeCount; i++)
     {
         CComPtr<IUnknown> spSourceNodeUnk;
@@ -3079,7 +3081,7 @@ HRESULT CTedTopologyEditor::ShowTopology(IMFTopology* pTopology, LPCWSTR szSourc
         DWORD nNextIndex;
 
         yPos = int(pNewSource->GetVisual()->Rect().y() + CVisualContainer::TOP_MARGIN * (i + 1) + CVisualContainer::COMP_DEF_HEIGHT * i);
-        
+
         IFC( spSourceNodeCollection->GetElement(i, (IUnknown**) &spSourceNodeUnk) );
         IFC( spSourceNodeUnk->QueryInterface(IID_IMFTopologyNode, (void**) &spSourceNode) );
         IFC( spSourceNode->GetOutput(0, &spDownstreamNode, &nNextIndex) );
@@ -3088,7 +3090,7 @@ HRESULT CTedTopologyEditor::ShowTopology(IMFTopology* pTopology, LPCWSTR szSourc
 
         CComPtr<IMFPresentationDescriptor> spPD;
         IFC( spSourceNode->GetUnknown(MF_TOPONODE_PRESENTATION_DESCRIPTOR, IID_IMFPresentationDescriptor, (LPVOID*) &spPD) );
-        
+
         DWORD dwSDCount;
         IFC( spPD->GetStreamDescriptorCount(&dwSDCount) );
 
@@ -3115,13 +3117,13 @@ HRESULT CTedTopologyEditor::ShowTopology(IMFTopology* pTopology, LPCWSTR szSourc
     }
 
     IFC( AddComponent(pNewSource) );
-    
+
     m_pView->PTree()->RouteAllConnectors();
     m_pView->NotifyNewVisuals();
     m_pView->InvalidateRect(NULL);
 
     m_fShutdownSources = true;
-    
+
 Cleanup:
     return hr;
 }
@@ -3139,11 +3141,11 @@ void CTedTopologyEditor::SetEditable(BOOL fEditable)
 HRESULT CTedTopologyEditor::AddNode(CTedTopologyNode* pNode)
 {
     HRESULT hr;
-    
+
     IFC( AddComponent(pNode) );
     m_pView->InvalidateRect(NULL);
     m_fSaved = false;
-    
+
     if(m_spEventCallback.p)
     {
         m_spEventCallback->NotifyAddedNode(pNode->GetID());
@@ -3157,13 +3159,13 @@ Cleanup:
 
 // Connect the two nodes both in the topology and the visual representation
 HRESULT CTedTopologyEditor::FullConnectNodes(CTedTopologyNode* pOutputNode, long nOutputPin,
-                                                CTedTopologyNode* pInputNode, long nInputPin)
+        CTedTopologyNode* pInputNode, long nInputPin)
 {
     assert(pOutputNode != NULL);
     assert(pInputNode != NULL);
-    
+
     HRESULT hr = S_OK;
-    
+
     CVisualPin* pPin = pOutputNode->GetVisualOutputPin(nOutputPin);
     CVisualPin* pOtherPin = pInputNode->GetVisualInputPin(nInputPin);
 
@@ -3171,26 +3173,26 @@ HRESULT CTedTopologyEditor::FullConnectNodes(CTedTopologyNode* pOutputNode, long
     assert(pOtherPin != NULL);
 
     IFC( ConnectMFNodes(pOutputNode, nOutputPin, pInputNode, nInputPin) );
-    
+
     RemoveOldConnectors(pPin, pOtherPin);
 
     CVisualConnector* pConn = new CVisualConnector();
     CHECK_ALLOC( pConn );
     m_pView->PTree()->AddVisual(pConn);
-    
+
     pConn->Left() = pPin->GetConnectorPoint();
     pConn->Right() = pOtherPin->GetConnectorPoint();
 
     pPin->SetConnector(pConn);
     pOtherPin->SetConnector(pConn);
 
-    CTedTopologyConnection* pTedConn = new CTedTopologyConnection(pOutputNode->GetID(), pPin->GetPinId(), 
-                            pInputNode->GetID(), pOtherPin->GetPinId());
+    CTedTopologyConnection* pTedConn = new CTedTopologyConnection(pOutputNode->GetID(), pPin->GetPinId(),
+            pInputNode->GetID(), pOtherPin->GetPinId());
     CHECK_ALLOC( pTedConn );
     m_Connections.Add(pTedConn);
 
     pConn->SetData((LONG_PTR) pTedConn);
-    
+
     CTedTopologyNode::TED_NODE_TYPE nodeType = pOutputNode->GetType();
     if(nodeType == CTedTopologyNode::TED_TEE_NODE)
     {
@@ -3200,7 +3202,7 @@ HRESULT CTedTopologyEditor::FullConnectNodes(CTedTopologyNode* pOutputNode, long
     }
 
     m_fSaved = false;
-    
+
     if(m_spEventCallback.p)
     {
         m_spEventCallback->NotifyConnection(pOutputNode->GetID(), pInputNode->GetID());
@@ -3216,11 +3218,11 @@ HRESULT CTedTopologyEditor::FullDisconnectNodes(CTedTopologyNode* pOutputNode, l
 
     HRESULT hr = S_OK;
     IMFTopologyNode* pNode;
-    
+
     if(pOutputNode->GetType() == CTedTopologyNode::TED_SOURCE_NODE || pOutputNode->GetType() == CTedTopologyNode::TED_OUTPUT_NODE)
     {
         pNode = pOutputNode->GetMFNode(nOutputPin);
-        
+
         (void)pNode->DisconnectOutput(0);
     }
     else
@@ -3231,14 +3233,14 @@ HRESULT CTedTopologyEditor::FullDisconnectNodes(CTedTopologyNode* pOutputNode, l
 
     int nEndNodeID;
     RemoveConnectionWithBegin(pOutputNode->GetID(), nOutputPin, &nEndNodeID);
-    
+
     m_fSaved = false;
-    
+
     if(m_spEventCallback.p)
     {
         m_spEventCallback->NotifyDisconnection(pOutputNode->GetID(), nEndNodeID);
     }
-    
+
     return hr;
 }
 
@@ -3247,7 +3249,7 @@ HRESULT CTedTopologyEditor::FullDisconnectNodes(CTedTopologyNode* pOutputNode, l
 HRESULT CTedTopologyEditor::RemoveNode(CTedTopologyNode* pNode, bool fRemoveVisual)
 {
     assert(pNode != NULL);
-    
+
     HRESULT hr = S_OK;
 
     for(size_t i = 0; i < m_Nodes.GetCount(); ++i)
@@ -3275,7 +3277,7 @@ HRESULT CTedTopologyEditor::RemoveNode(CTedTopologyNode* pNode, bool fRemoveVisu
         CTedOutputNode* pOutputNode = (CTedOutputNode*) pNode;
         pOutputNode->ShutdownMFSink();
     }
-        
+
     HWND hWnd = pNode->GetVideoWindow();
     if(hWnd != NULL)
     {
@@ -3291,7 +3293,7 @@ HRESULT CTedTopologyEditor::RemoveNode(CTedTopologyNode* pNode, bool fRemoveVisu
     {
         m_spEventCallback->NotifyRemovedNode(pNode->GetID());
     }
-    
+
 Cleanup:
     m_pView->Unselect();
     if(fRemoveVisual) m_pView->PTree()->RemoveVisual(pNode->GetVisual());
@@ -3324,7 +3326,8 @@ HRESULT CTedTopologyEditor::RemoveNodeWithVisual(CVisualObject* pVisual)
     return hr;
 }
 
-void CTedTopologyEditor::RemoveConnectionWithBegin(int nBeginNodeID, int nBeginPinID, int* pEndNodeID) {
+void CTedTopologyEditor::RemoveConnectionWithBegin(int nBeginNodeID, int nBeginPinID, int* pEndNodeID)
+{
     for(size_t i = 0; i < m_Connections.GetCount(); ++i)
     {
         CTedTopologyConnection* pConn = m_Connections.GetAt(i);
@@ -3358,14 +3361,14 @@ void CTedTopologyEditor::RemoveOldConnectors(CVisualPin* pPin, CVisualPin* pOthe
 {
     assert(pPin != NULL);
     assert(pOtherPin != NULL);
-    
+
     CVisualConnector* pOriginConnector = pPin->GetConnector();
     CVisualConnector* pDestConnector = pOtherPin->GetConnector();
 
     CTedTopologyNode* pOutputterNode = (CTedTopologyNode*) (pPin->GetData());
     CTedTopologyNode* pAcceptorNode = (CTedTopologyNode*) (pOtherPin->GetData());
-    
-    if(pOriginConnector && pOriginConnector == pDestConnector) 
+
+    if(pOriginConnector && pOriginConnector == pDestConnector)
     {
         m_pView->PTree()->RemoveVisual(pOriginConnector);
         RemoveConnectionWithBegin(pOutputterNode->GetID(), pPin->GetPinId(), NULL);
@@ -3392,7 +3395,7 @@ void CTedTopologyEditor::RemoveAllConnectors()
     {
         RemoveAllConnectorsForComponent(m_Nodes.GetAt(i)->GetVisual());
     }
-    
+
     for(size_t i = 0; i < m_Connections.GetCount(); i++)
     {
         delete m_Connections.GetAt(i);
@@ -3405,22 +3408,22 @@ void CTedTopologyEditor::RemoveAllConnectorsForComponent(CVisualComponent* pComp
     for(size_t i = 0; i < pComponent->GetInputPinCount(); i++)
     {
         CVisualPin* pPin = pComponent->GetInputPinByIndex((DWORD) i);
-        
+
         if(pPin->GetConnector())
         {
             m_pView->PTree()->RemoveVisual(pPin->GetConnector());
         }
     }
-    
+
     for(size_t i = 0; i < pComponent->GetOutputPinCount(); i++)
     {
         CVisualPin* pPin = pComponent->GetOutputPinByIndex((DWORD) i);
-        
+
         if(pPin->GetConnector())
         {
             m_pView->PTree()->RemoveVisual(pPin->GetConnector());
         }
-    }    
+    }
 }
 
 // Mutators - Serialization //
@@ -3428,13 +3431,13 @@ void CTedTopologyEditor::RemoveAllConnectorsForComponent(CVisualComponent* pComp
 HRESULT CTedTopologyEditor::SaveTopology(const CAtlStringW& fileName)
 {
     HRESULT hr = S_OK;
-        
+
     CComPtr<ITedDataSaver> spSaver;
     IFC( CoCreateInstance(CLSID_CXMLDataSaver, NULL, CLSCTX_INPROC_SERVER, IID_ITedDataSaver, (void**) &spSaver) );
 
     IFC(spSaver->Init(L"TedDocument"));
 
-    for(size_t i = 0; i < m_Nodes.GetCount(); ++i) 
+    for(size_t i = 0; i < m_Nodes.GetCount(); ++i)
     {
         CAutoPtr<CTedNodeMemo> memo(m_Nodes.GetAt(i)->CreateMemo());
         IFC(memo->Serialize(spSaver));
@@ -3449,7 +3452,7 @@ HRESULT CTedTopologyEditor::SaveTopology(const CAtlStringW& fileName)
     IFC(spSaver->SaveToFile(fileName));
 
     m_fSaved = true;
-    
+
 Cleanup:
     return hr;
 }
@@ -3487,7 +3490,7 @@ HRESULT CTedTopologyEditor::LoadTopology(const CAtlStringW& fileName)
 
         CoTaskMemFree(strNextObject);
         strNextObject = NULL;
-        
+
         IFC( spLoader->HasNextObject(&fHasNextObject) );
     }
 
@@ -3497,13 +3500,13 @@ HRESULT CTedTopologyEditor::LoadTopology(const CAtlStringW& fileName)
     m_pView->InvalidateRect(NULL);
 
     m_fSaved = true;
-    
+
 Cleanup:
     if(strNextObject)
     {
         CoTaskMemFree(strNextObject);
     }
-    
+
     return hr;
 }
 
@@ -3513,7 +3516,7 @@ HRESULT CTedTopologyEditor::AddComponent(CTedTopologyNode* pNode)
 {
     assert(pNode != NULL);
     HRESULT hr = S_OK;
-        
+
     m_Nodes.Add(pNode);
 
     CVisualObject* pVisual = pNode->GetVisual();
@@ -3527,7 +3530,7 @@ HRESULT CTedTopologyEditor::AddComponent(CTedTopologyNode* pNode)
     {
         IFC( m_spTopology->AddNode(pNode->GetMFNode(i)) );
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -3565,9 +3568,9 @@ HRESULT CTedTopologyEditor::LoadTopologyObject(ITedDataLoader* pLoader, const CA
         HWND hVideoWindow = NULL;
 
         IFC( memo->Deserialize(pLoader) );
-        
+
         if(m_spVideoCallback.p) IFC( m_spVideoCallback->GetVideoWindow((LONG_PTR*) &hVideoWindow) );
-        
+
         CTedVideoOutputNode* node = new CTedVideoOutputNode;
         CHECK_ALLOC( node );
         IFC( node->Init(hVideoWindow, memo) );
@@ -3595,21 +3598,21 @@ HRESULT CTedTopologyEditor::LoadTopologyObject(ITedDataLoader* pLoader, const CA
         CTedTeeNode* node = new CTedTeeNode;
         CHECK_ALLOC( node );
         IFC( node->Init(memo) );
-        
+
         IFC( AddComponent(node) );
     }
-    else if(strObjName == L"CTedConnectionMemo") 
+    else if(strObjName == L"CTedConnectionMemo")
     {
         CAutoPtr<CTedConnectionMemo> memo(new CTedConnectionMemo());
 
         IFC( memo->Deserialize(pLoader) );
-        
+
         CTedTopologyConnection* pConnection = new CTedTopologyConnection(memo);
         CHECK_ALLOC( pConnection );
-        
+
         m_Connections.Add(pConnection);
     }
-    else 
+    else
     {
         hr = E_INVALIDARG;
         goto Cleanup;
@@ -3620,7 +3623,7 @@ Cleanup:
 }
 
 
-HRESULT CTedTopologyEditor::ApplyLoadedConnections() 
+HRESULT CTedTopologyEditor::ApplyLoadedConnections()
 {
     HRESULT hr = S_OK;
 
@@ -3641,7 +3644,7 @@ HRESULT CTedTopologyEditor::ApplyLoadedConnections()
 
         CVisualPin* outputterPin = outputterNode->GetVisualOutputPin(conn->GetOutputPinID());
         CVisualPin* acceptorPin = acceptorNode->GetVisualInputPin(conn->GetInputPinID());
-        
+
         if(outputterPin == NULL || acceptorPin == NULL)
         {
             assert(false);
@@ -3649,29 +3652,29 @@ HRESULT CTedTopologyEditor::ApplyLoadedConnections()
         }
 
         m_pView->PTree()->MakeConnector(outputterPin, acceptorPin);
-    }    
+    }
 
 Cleanup:
     return hr;
 }
 
-HRESULT CTedTopologyEditor::ConnectMFNodes(CTedTopologyNode * pUpNode, long nUpPin, 
-                            CTedTopologyNode * pDownNode, long nDownPin)
+HRESULT CTedTopologyEditor::ConnectMFNodes(CTedTopologyNode * pUpNode, long nUpPin,
+        CTedTopologyNode * pDownNode, long nDownPin)
 {
     assert(pUpNode != NULL);
     assert(pDownNode != NULL);
-    
+
     HRESULT hr = S_OK;
     CTedTopologyPin UpPin;
     CTedTopologyPin DownPin;
-    
+
     IFC(pUpNode->GetPin(nUpPin, UpPin, false));
     IFC(pDownNode->GetPin(nDownPin, DownPin, true));
 
     assert(UpPin.PNode() != NULL);
     assert(DownPin.PNode() != NULL);
 
-     IFC(UpPin.PNode()->ConnectOutput(UpPin.Index(), DownPin.PNode(), DownPin.Index()));
+    IFC(UpPin.PNode()->ConnectOutput(UpPin.Index(), DownPin.PNode(), DownPin.Index()));
 
 Cleanup:
     return hr;
@@ -3681,13 +3684,13 @@ bool CTedTopologyEditor::HasMultipleSources()
 {
     HRESULT hr = S_OK;
     bool fMultipleSrc = false;
-    
+
     CComPtr<IMFCollection> spSrcNodeCollection;
     IFC( m_spTopology->GetSourceNodeCollection(&spSrcNodeCollection) );
 
     DWORD cElementCount;
     IFC( spSrcNodeCollection->GetElementCount(&cElementCount) );
-    
+
 
     IMFMediaSource* pSrc = NULL;
     for(DWORD i = 0; i < cElementCount; i++)
@@ -3729,12 +3732,12 @@ HRESULT CTedTopologyEditor::ResetD3DManagers()
 Cleanup:
     return hr;
 }
-    
+
 // Non-public Helpers - Merge //
 
 HRESULT CTedTopologyEditor::MergeBranch(CTedTopologyNode* pBeginTedNode, long nOutputPin,
-                                            IMFTopologyNode* pNextNode, long nInputPin,
-                                            int xPos, int yPos, bool fMarkNew)
+                                        IMFTopologyNode* pNextNode, long nInputPin,
+                                        int xPos, int yPos, bool fMarkNew)
 {
     assert(pBeginTedNode != NULL);
     assert(pNextNode != NULL);
@@ -3745,17 +3748,17 @@ HRESULT CTedTopologyEditor::MergeBranch(CTedTopologyNode* pBeginTedNode, long nO
     CComPtr<IMFTopologyNode> spNode;
     DWORD nNewIndex;
     DWORD outputCount;
-    
+
     IFC( pNextNode->GetNodeType(&nodeType) );
     IFC( pNextNode->GetOutputCount(&outputCount) );
-    
+
     TOPOID idNode;
     IFC( pNextNode->GetTopoNodeID(&idNode) );
-    
+
     CTedTopologyNode* pTedNode = FindNodeByTopoID(idNode);
     if(NULL == pTedNode)
-    {    
-   
+    {
+
         if(MF_TOPOLOGY_TRANSFORM_NODE == nodeType)
         {
             IFC( MergeTransformNode(pBeginTedNode, nOutputPin, pNextNode, nInputPin, xPos, yPos, fMarkNew, &pTedNode) );
@@ -3768,15 +3771,15 @@ HRESULT CTedTopologyEditor::MergeBranch(CTedTopologyNode* pBeginTedNode, long nO
         {
             TOPOID nodeID;
             IFC( pNextNode->GetTopoNodeID(&nodeID) );
-        
+
             CTedTeeNode* pTeeNode = (CTedTeeNode*) FindNodeByTopoID(nodeID);
             if(pTeeNode) RemoveNode(pTeeNode);
-    
+
             pTeeNode = new CTedTeeNode();
             CHECK_ALLOC( pTeeNode );
             pTeeNode->Init();
             pTedNode = pTeeNode;
- 
+
         }
     }
 
@@ -3789,7 +3792,7 @@ HRESULT CTedTopologyEditor::MergeBranch(CTedTopologyNode* pBeginTedNode, long nO
     {
         pTedNode->CopyAttributes(pNextNode);
     }
-    
+
     pTedNode->GetVisual()->Move(xPos, yPos);
 
     xPos += int(pTedNode->GetVisual()->Rect().w() + MARGIN_SIZE);
@@ -3835,7 +3838,7 @@ HRESULT CTedTopologyEditor::MergeBranch(CTedTopologyNode* pBeginTedNode, long nO
                 }
             }
         }
-        
+
         hr = FullConnectNodes(pBeginTedNode, nOutputPin, pTedNode, nInputPin);
     }
 
@@ -3844,27 +3847,27 @@ Cleanup:
 }
 
 HRESULT CTedTopologyEditor::MergeTransformNode(CTedTopologyNode* pBeginTedNode, long nOutputPin,
-                                                    IMFTopologyNode* pNextNode, long nInputPin,
-                                                    int xPos, int yPos, bool fMarkNew, CTedTopologyNode** ppNewNode)
+        IMFTopologyNode* pNextNode, long nInputPin,
+        int xPos, int yPos, bool fMarkNew, CTedTopologyNode** ppNewNode)
 {
     assert(pBeginTedNode != NULL);
     assert(pNextNode != NULL);
     assert(ppNewNode != NULL);
-    
+
     HRESULT hr = S_OK;
     HRESULT hrTransform, hrActivate;
     CTedTransformNode* pTedNode = NULL;
     CComPtr<IUnknown> spTransformUnk;
     CComPtr<IMFTransform> spTransform;
     CComPtr<IMFActivate> spActivate;
-  
+
     GUID gidTransform = GUID_NULL;
     pNextNode->GetGUID(MF_TOPONODE_TRANSFORM_OBJECTID, &gidTransform);
 
     DMOInfo* pDMOInfo = DMOInfo::GetSingleton();
     CAtlStringW strLabel = pDMOInfo->GetCLSIDName(gidTransform);
 
-    if(strLabel.IsEmpty()) 
+    if(strLabel.IsEmpty())
     {
         // Cannot find a registered DMO with this CLSID, so just convert the CLSID
         // directly to a string and display it to the user
@@ -3876,7 +3879,7 @@ HRESULT CTedTopologyEditor::MergeTransformNode(CTedTopologyNode* pBeginTedNode, 
         CoTaskMemFree(strClsid);
     }
 
-    
+
     hr = pNextNode->GetObject(&spTransformUnk);
     if(FAILED(hr))
     {
@@ -3916,11 +3919,11 @@ HRESULT CTedTopologyEditor::MergeTransformNode(CTedTopologyNode* pBeginTedNode, 
         {
             CTedTransformNode* pTransformNode = new CTedTransformNode();
             CHECK_ALLOC( pTransformNode );
-        pTransformNode->Init(spTransform, GUID_NULL, LoadAtlString(IDS_MFT_UNKNOWN), true);
+            pTransformNode->Init(spTransform, GUID_NULL, LoadAtlString(IDS_MFT_UNKNOWN), true);
             pTedNode = pTransformNode;
             IFC( AddComponent(pTedNode) );
 
-	        pTedNode->CopyMediaTypes(pNextNode);
+            pTedNode->CopyMediaTypes(pNextNode);
             *ppNewNode = pTedNode;
             return hr;
         }
@@ -3953,7 +3956,7 @@ HRESULT CTedTopologyEditor::MergeTransformNode(CTedTopologyNode* pBeginTedNode, 
         pTedNode = pTransformNode;
         IFC( AddComponent(pTedNode) );
     }
-    
+
     *ppNewNode = pTedNode;
 
 Cleanup:
@@ -3961,33 +3964,33 @@ Cleanup:
 }
 
 HRESULT CTedTopologyEditor::MergeOutputNode(CTedTopologyNode* pBeginTedNode, long nOutputPin,
-                                                IMFTopologyNode* pNextNode, long nInputPin,
-                                                int xPos, int yPos, CTedTopologyNode** ppNewNode)
+        IMFTopologyNode* pNextNode, long nInputPin,
+        int xPos, int yPos, CTedTopologyNode** ppNewNode)
 {
     assert(pBeginTedNode != NULL);
     assert(pNextNode != NULL);
     assert(ppNewNode != NULL);
-    
+
     HRESULT hr = S_OK;
     CTedTopologyNode* pTedNode = NULL;
     HWND hWndOld = NULL;
 
-    TOPOID tidNodeID;    
-    IFC( pNextNode->GetTopoNodeID(&tidNodeID) );        
+    TOPOID tidNodeID;
+    IFC( pNextNode->GetTopoNodeID(&tidNodeID) );
 
     pTedNode = FindNodeByTopoID(tidNodeID);
     if(pTedNode)
     {
         RemoveNode(pTedNode);
     }
-    
+
     {
         CComPtr<IUnknown> spStreamSinkUnk;
         CComPtr<IMFStreamSink> spStreamSink;
         CComPtr<IMFActivate> spActivate;
         CComPtr<IMFMediaType> spPrefType;
         bool fIsEVR, fIsSAR;
-        
+
         IFC( IsEVR(pNextNode, &fIsEVR) );
         IFC( IsSAR(pNextNode, &fIsSAR) );
 
@@ -4006,18 +4009,18 @@ HRESULT CTedTopologyEditor::MergeOutputNode(CTedTopologyNode* pBeginTedNode, lon
                 CComPtr<IMFGetService> spGetService;
                 CComPtr<IMFVideoDisplayControl> spDisplayControl;
                 HWND hCurrentWnd = NULL;
-                
+
                 IFC( spStreamSink->QueryInterface(IID_IMFGetService, (void**) &spGetService) );
                 IFC( spGetService->GetService(MR_VIDEO_RENDER_SERVICE, IID_IMFVideoDisplayControl, (void**) &spDisplayControl) );
                 IFC( spDisplayControl->GetVideoWindow(&hCurrentWnd) );
-                
+
                 HWND hVideoWnd = hCurrentWnd;
                 if(hCurrentWnd == NULL && m_spVideoCallback.p != NULL)
                 {
                     IFC( m_spVideoCallback->GetVideoWindow((LONG_PTR*) &hVideoWnd) );
                     IFC( spDisplayControl->SetVideoWindow(hVideoWnd) );
                 }
-                
+
                 pVideoNode->Init(str, hVideoWnd, spStreamSink);
             }
             else
@@ -4027,12 +4030,12 @@ HRESULT CTedTopologyEditor::MergeOutputNode(CTedTopologyNode* pBeginTedNode, lon
                 {
                     IFC( m_spVideoCallback->GetVideoWindow((LONG_PTR*) &hVideoWnd) );
                 }
-                
+
                 pVideoNode->Init(str, hVideoWnd);
             }
-            
+
             IFC( pVideoNode->CopyAttributes(pNextNode) );
-            
+
             pTedNode = pVideoNode;
             IFC( AddComponent(pTedNode) );
         }
@@ -4050,9 +4053,9 @@ HRESULT CTedTopologyEditor::MergeOutputNode(CTedTopologyNode* pBeginTedNode, lon
             {
                 pAudioNode->Init(str);
             }
-            
+
             IFC( pAudioNode->CopyAttributes(pNextNode) );
-            
+
             pTedNode = pAudioNode;
             IFC( AddComponent(pTedNode) );
         }
@@ -4063,16 +4066,16 @@ HRESULT CTedTopologyEditor::MergeOutputNode(CTedTopologyNode* pBeginTedNode, lon
             IFC( spStreamSink->GetMediaSink(&spSink) );
 
             CAtlString str = LoadAtlString(IDS_CUSTOM_SINK);
-    
+
             CTedCustomOutputNode* pCustomNode = new CTedCustomOutputNode();
             CHECK_ALLOC( pCustomNode );
             pCustomNode->Init(spSink, str);
-            
+
             IFC( pCustomNode->CopyAttributes(pNextNode) );
-            
+
             pTedNode = pCustomNode;
             IFC( AddComponent(pTedNode) );
-            
+
         }
         else if(hrHasActivate == S_OK)
         {
@@ -4122,14 +4125,14 @@ HRESULT CTedTopologyEditor::IsEVR(IMFTopologyNode* pNode, bool* fIsEVR)
         *fIsEVR = true;
         return S_OK;
     }
-    
+
     IFC( pNode->GetObject(&spStreamSinkUnk) );
     IFC( spStreamSinkUnk->QueryInterface(IID_IMFStreamSink, (void**) &spStreamSink) );
     IFC( spStreamSink->GetMediaSink(&spSink) );
     hr = spSink->QueryInterface(IID_IMFVideoRenderer, (void**) &spVR);
 
     *fIsEVR = SUCCEEDED(hr);
-  
+
 Cleanup:
     return S_OK;
 }
@@ -4143,7 +4146,7 @@ HRESULT CTedTopologyEditor::IsSAR(IMFTopologyNode* pNode, bool* fIsSAR)
     }
 
     *fIsSAR = false;
-    
+
     HRESULT hr = S_OK;
     CComPtr<IUnknown> spStreamSinkUnk;
     CComPtr<IMFStreamSink> spStreamSink;
@@ -4157,7 +4160,7 @@ HRESULT CTedTopologyEditor::IsSAR(IMFTopologyNode* pNode, bool* fIsSAR)
         *fIsSAR = true;
         return S_OK;
     }
-    
+
     IFC( pNode->GetObject(&spStreamSinkUnk) );
     IFC( spStreamSinkUnk->QueryInterface(IID_IMFStreamSink, (void**) &spStreamSink) );
     hr = spStreamSink->QueryInterface(IID_IMFAudioStreamVolume, (void**) &spASV);
@@ -4171,18 +4174,18 @@ Cleanup:
 HRESULT CTedTopologyEditor::RemoveOrphanTransforms()
 {
     HRESULT hr = S_OK;
-    
+
     for(size_t i = 0; i < m_Nodes.GetCount(); i++)
     {
         CTedTopologyNode* pNode = m_Nodes.GetAt(i);
-        
+
         if(pNode->GetType() == CTedTopologyNode::TED_TRANSFORM_NODE && pNode->IsOrphaned())
         {
             IFC( RemoveNode(pNode) );
             --i;
         }
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -4190,13 +4193,13 @@ Cleanup:
 HRESULT CTedTopologyEditor::RemoveNodesNotInTopology(IMFTopology* pTopology)
 {
     HRESULT hr = S_OK;
-    
+
     for(size_t i = 0; i < m_Nodes.GetCount(); i++)
     {
         CTedTopologyNode* pTedNode = m_Nodes.GetAt(i);
         CComPtr<IMFTopologyNode> spNode;
         TOPOID tidTedNode;
-        
+
         IFC( pTedNode->GetMFNode(0)->GetTopoNodeID(&tidTedNode) );
         if( FAILED( pTopology->GetNodeByID(tidTedNode, &spNode) ) )
         {
@@ -4204,7 +4207,7 @@ HRESULT CTedTopologyEditor::RemoveNodesNotInTopology(IMFTopology* pTopology)
             i--;
         }
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -4213,7 +4216,7 @@ Cleanup:
 
 CTedTopologyNode* CTedTopologyEditor::FindNodeWithID(int id)
 {
-    for(size_t i = 0; i < m_Nodes.GetCount(); i++) 
+    for(size_t i = 0; i < m_Nodes.GetCount(); i++)
     {
         if(m_Nodes.GetAt(i)->GetID() == id) return m_Nodes.GetAt(i);
     }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -77,7 +77,7 @@ LPVOID APIENTRY tree_find(TREE tree, TREEKEY key);
 LPVOID APIENTRY tree_search(TREE tree, TREEKEY key, PTREEITEM place);
 
 LPVOID APIENTRY tree_addafter(TREE tree, PTREEITEM place, TREEKEY key, LPVOID value,
-			UINT length);
+                              UINT length);
 
 
 /* -- ctree ---------------
@@ -93,7 +93,7 @@ LPVOID APIENTRY tree_addafter(TREE tree, PTREEITEM place, TREEKEY key, LPVOID va
  */
 
 /*
- * create an empty counting-tree and return handle. 
+ * create an empty counting-tree and return handle.
  */
 TREE APIENTRY ctree_create();
 

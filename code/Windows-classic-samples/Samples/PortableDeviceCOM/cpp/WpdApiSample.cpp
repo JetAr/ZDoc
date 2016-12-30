@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -41,7 +41,7 @@ void UpdateContentOnDevice(
     _In_ REFGUID          contentType,
     _In_ PCWSTR           fileTypeFilter,
     _In_ PCWSTR           defaultFileExtension);
-    
+
 // Content properties
 void ReadContentProperties(_In_ IPortableDevice* device);
 void WriteContentProperties(_In_ IPortableDevice* device);
@@ -123,124 +123,124 @@ void DoMenu()
             selectionIndex = static_cast<UINT>(_wtoi(selectionString));
             switch (selectionIndex)
             {
-                case 0:
-                    EnumerateAllDevices();
-                    break;
-                case 1:
-                    // Unregister any device event registrations before
-                    // creating a new IPortableDevice
-                    UnregisterForEventNotifications(device.Get(), eventCookie);
-                    CoTaskMemFree(eventCookie);
-                    eventCookie = nullptr;
+            case 0:
+                EnumerateAllDevices();
+                break;
+            case 1:
+                // Unregister any device event registrations before
+                // creating a new IPortableDevice
+                UnregisterForEventNotifications(device.Get(), eventCookie);
+                CoTaskMemFree(eventCookie);
+                eventCookie = nullptr;
 
-                    // Release the old IPortableDevice interface before
-                    // obtaining a new one.
-                    device = nullptr;
-                    ChooseDevice(&device);
-                    break;
-                case 2:
-                    EnumerateAllContent(device.Get());
-                    break;
-                case 3:
-                    TransferContentFromDevice(device.Get());
-                    break;
-                case 4:
-                    DeleteContentFromDevice(device.Get());
-                    break;
-                case 5:
-                    MoveContentAlreadyOnDevice(device.Get());
-                    break;
-                case 6:
-                    TransferContentToDevice(device.Get(),
-                                            WPD_CONTENT_TYPE_IMAGE,
-                                            L"JPEG (*.JPG)\0*.JPG\0JPEG (*.JPEG)\0*.JPEG\0JPG (*.JPE)\0*.JPE\0JPG (*.JFIF)\0*.JFIF\0\0",
-                                            L"JPG");
-                    break;
-                case 7:
-                    TransferContentToDevice(device.Get(),
-                                            WPD_CONTENT_TYPE_AUDIO,
-                                            L"MP3 (*.MP3)\0*.MP3\0\0",
-                                            L"MP3");
-                    break;
-                case 8:
-                    TransferContentToDevice(device.Get(),
-                                            WPD_CONTENT_TYPE_CONTACT,
-                                            L"VCARD (*.VCF)\0*.VCF\0\0",
-                                            L"VCF");
-                    break;
-                case 9:
-                    TransferContactToDevice(device.Get());
-                    break;
-                case 10:
-                    CreateFolderOnDevice(device.Get());
-                    break;
-                case 11:
-                    CreateContactPhotoResourceOnDevice(device.Get());
-                    break;
-                case 12:
-                    ReadContentProperties(device.Get());
-                    break;
-                case 13:
-                    WriteContentProperties(device.Get());
-                    break;
-                case 14:
-                    GetObjectIdentifierFromPersistentUniqueIdentifier(device.Get());
-                    break;
-                case 15:
-                    ListFunctionalCategories(device.Get());
-                    break;
-                case 16:
-                    ListFunctionalObjects(device.Get());
-                    break;
-                case 17:
-                    ListSupportedContentTypes(device.Get());
-                    break;
-                case 18:
-                    ListRenderingCapabilityInformation(device.Get());
-                    break;
-                case 19:
-                    RegisterForEventNotifications(device.Get(), &eventCookie);
-                    break;
-                case 20:
-                    UnregisterForEventNotifications(device.Get(), eventCookie);
-                    CoTaskMemFree(eventCookie);
-                    eventCookie = nullptr;
-                    break;
-                case 21:
-                    ListSupportedEvents(device.Get());
-                    break;
-                case 22:
-                    ReadHintLocations(device.Get());
-                    break;
-                case 23:
-                    ReadContentPropertiesBulk(device.Get());
-                    break;
-                case 24:
-                    WriteContentPropertiesBulk(device.Get());
-                    break;
-                case 25:
-                    ReadContentPropertiesBulkFilteringByFormat(device.Get());
-                    break;
-                case 26:
-                    UpdateContentOnDevice(device.Get(),
-                                          WPD_CONTENT_TYPE_IMAGE,
-                                          L"JPEG (*.JPG)\0*.JPG\0JPEG (*.JPEG)\0*.JPEG\0JPG (*.JPE)\0*.JPE\0JPG (*.JFIF)\0*.JFIF\0\0",
-                                          L"JPG");
-                    break;
-                case 27:
-                    UpdateContentOnDevice(device.Get(),
-                                          WPD_CONTENT_TYPE_AUDIO,
-                                          L"MP3 (*.MP3)\0*.MP3\0\0",
-                                          L"MP3");
-                    break;
-                case 28:
-                    UpdateContentOnDevice(device.Get(),
-                                          WPD_CONTENT_TYPE_CONTACT,
-                                          L"VCARD (*.VCF)\0*.VCF\0\0",
-                                          L"VCF");
-                    break;
-                default:
-                    break;
+                // Release the old IPortableDevice interface before
+                // obtaining a new one.
+                device = nullptr;
+                ChooseDevice(&device);
+                break;
+            case 2:
+                EnumerateAllContent(device.Get());
+                break;
+            case 3:
+                TransferContentFromDevice(device.Get());
+                break;
+            case 4:
+                DeleteContentFromDevice(device.Get());
+                break;
+            case 5:
+                MoveContentAlreadyOnDevice(device.Get());
+                break;
+            case 6:
+                TransferContentToDevice(device.Get(),
+                                        WPD_CONTENT_TYPE_IMAGE,
+                                        L"JPEG (*.JPG)\0*.JPG\0JPEG (*.JPEG)\0*.JPEG\0JPG (*.JPE)\0*.JPE\0JPG (*.JFIF)\0*.JFIF\0\0",
+                                        L"JPG");
+                break;
+            case 7:
+                TransferContentToDevice(device.Get(),
+                                        WPD_CONTENT_TYPE_AUDIO,
+                                        L"MP3 (*.MP3)\0*.MP3\0\0",
+                                        L"MP3");
+                break;
+            case 8:
+                TransferContentToDevice(device.Get(),
+                                        WPD_CONTENT_TYPE_CONTACT,
+                                        L"VCARD (*.VCF)\0*.VCF\0\0",
+                                        L"VCF");
+                break;
+            case 9:
+                TransferContactToDevice(device.Get());
+                break;
+            case 10:
+                CreateFolderOnDevice(device.Get());
+                break;
+            case 11:
+                CreateContactPhotoResourceOnDevice(device.Get());
+                break;
+            case 12:
+                ReadContentProperties(device.Get());
+                break;
+            case 13:
+                WriteContentProperties(device.Get());
+                break;
+            case 14:
+                GetObjectIdentifierFromPersistentUniqueIdentifier(device.Get());
+                break;
+            case 15:
+                ListFunctionalCategories(device.Get());
+                break;
+            case 16:
+                ListFunctionalObjects(device.Get());
+                break;
+            case 17:
+                ListSupportedContentTypes(device.Get());
+                break;
+            case 18:
+                ListRenderingCapabilityInformation(device.Get());
+                break;
+            case 19:
+                RegisterForEventNotifications(device.Get(), &eventCookie);
+                break;
+            case 20:
+                UnregisterForEventNotifications(device.Get(), eventCookie);
+                CoTaskMemFree(eventCookie);
+                eventCookie = nullptr;
+                break;
+            case 21:
+                ListSupportedEvents(device.Get());
+                break;
+            case 22:
+                ReadHintLocations(device.Get());
+                break;
+            case 23:
+                ReadContentPropertiesBulk(device.Get());
+                break;
+            case 24:
+                WriteContentPropertiesBulk(device.Get());
+                break;
+            case 25:
+                ReadContentPropertiesBulkFilteringByFormat(device.Get());
+                break;
+            case 26:
+                UpdateContentOnDevice(device.Get(),
+                                      WPD_CONTENT_TYPE_IMAGE,
+                                      L"JPEG (*.JPG)\0*.JPG\0JPEG (*.JPEG)\0*.JPEG\0JPG (*.JPE)\0*.JPE\0JPG (*.JFIF)\0*.JFIF\0\0",
+                                      L"JPG");
+                break;
+            case 27:
+                UpdateContentOnDevice(device.Get(),
+                                      WPD_CONTENT_TYPE_AUDIO,
+                                      L"MP3 (*.MP3)\0*.MP3\0\0",
+                                      L"MP3");
+                break;
+            case 28:
+                UpdateContentOnDevice(device.Get(),
+                                      WPD_CONTENT_TYPE_CONTACT,
+                                      L"VCARD (*.VCF)\0*.VCF\0\0",
+                                      L"VCF");
+                break;
+            default:
+                break;
             }
         }
         else

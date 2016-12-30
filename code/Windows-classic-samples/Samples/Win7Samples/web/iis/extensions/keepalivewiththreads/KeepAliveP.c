@@ -1,7 +1,7 @@
-/* Copyright (c) 1997-2002 Microsoft Corporation
+﻿/* Copyright (c) 1997-2002 Microsoft Corporation
 
-	Module Name: 
-	
+	Module Name:
+
 		KeepAliveP.c
 
 	Abstract:
@@ -32,20 +32,21 @@
 		FALSE to indicate a failure
 */
 
-BOOL WINAPI DllMain(IN HINSTANCE hinstDll, IN DWORD fdwReason, IN LPVOID lpvContext) 
+BOOL WINAPI DllMain(IN HINSTANCE hinstDll, IN DWORD fdwReason, IN LPVOID lpvContext)
 {
-	BOOL fReturn = TRUE;
+    BOOL fReturn = TRUE;
 
-	switch (fdwReason) {
+    switch (fdwReason)
+    {
 
-		case DLL_PROCESS_ATTACH :
+    case DLL_PROCESS_ATTACH :
 
-			fReturn = InitThreadPool();
+        fReturn = InitThreadPool();
 
-			break;
-	}
+        break;
+    }
 
-	return fReturn;
+    return fReturn;
 }
 
 /*
@@ -55,7 +56,7 @@ BOOL WINAPI DllMain(IN HINSTANCE hinstDll, IN DWORD fdwReason, IN LPVOID lpvCont
 
 	Arguments:
 
-		pVer - poins to extension version info structure 
+		pVer - poins to extension version info structure
 
 	Returns:
 
@@ -64,11 +65,11 @@ BOOL WINAPI DllMain(IN HINSTANCE hinstDll, IN DWORD fdwReason, IN LPVOID lpvCont
 
 BOOL WINAPI GetExtensionVersion(OUT HSE_VERSION_INFO *pVer)
 {
-	pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
+    pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
 
-	strncpy_s(pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "ISAPI Keep-Alive with Thread Pool Extension Sample", HSE_MAX_EXT_DLL_NAME_LEN);
+    strncpy_s(pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "ISAPI Keep-Alive with Thread Pool Extension Sample", HSE_MAX_EXT_DLL_NAME_LEN);
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -82,67 +83,70 @@ BOOL WINAPI GetExtensionVersion(OUT HSE_VERSION_INFO *pVer)
 
 	Returns:
 
-		HSE_STATUS_PENDING if request was successfully queued 
+		HSE_STATUS_PENDING if request was successfully queued
 		HSE_SUCCESS_AND_KEEP_CONN if request was served immediately
 			(presumably because the queue was full)
 */
 
 DWORD WINAPI HttpExtensionProc(IN EXTENSION_CONTROL_BLOCK *pECB)
 {
-	DWORD dwSize;
-	HSE_SEND_HEADER_EX_INFO HeaderExInfo;
+    DWORD dwSize;
+    HSE_SEND_HEADER_EX_INFO HeaderExInfo;
 
-	char szHeader[] = 
-		"Connection: Keep-Alive\r\n"
-		"Content-Length: %lu\r\n"
-		"Content-type: text/html\r\n\r\n";
+    char szHeader[] =
+        "Connection: Keep-Alive\r\n"
+        "Content-Length: %lu\r\n"
+        "Content-type: text/html\r\n\r\n";
 
-	char szBusyMessage[] = 
-		"<html> <form method=get action=KeepAliveP.dll> <input type=submit> "
-		"<br>pECB->ConnID=%lu  <br>Server was too busy. </form></html>";
+    char szBusyMessage[] =
+        "<html> <form method=get action=KeepAliveP.dll> <input type=submit> "
+        "<br>pECB->ConnID=%lu  <br>Server was too busy. </form></html>";
 
-	char szBuffer[4096];
-	char szBuffer2[4096];
+    char szBuffer[4096];
+    char szBuffer2[4096];
 
-	EnterCriticalSection(&csQueueLock);
+    EnterCriticalSection(&csQueueLock);
 
-	if (!AddWorkQueueEntry(pECB)) {
+    if (!AddWorkQueueEntry(pECB))
+    {
 
-		/* if ECB could not be assigned */
-		
-		LeaveCriticalSection(&csQueueLock);
+        /* if ECB could not be assigned */
 
-		sprintf_s(szBuffer2, sizeof(szBuffer2), szBusyMessage, pECB->ConnID);
+        LeaveCriticalSection(&csQueueLock);
 
-		/* Send outgoing header */
+        sprintf_s(szBuffer2, sizeof(szBuffer2), szBusyMessage, pECB->ConnID);
 
-		sprintf_s(szBuffer, sizeof(szBuffer), szHeader, strlen(szBuffer2));
-		HeaderExInfo.pszHeader = szBuffer;
-		HeaderExInfo.cchHeader = strlen( szBuffer );
-		HeaderExInfo.pszStatus = "200 OK";
-		HeaderExInfo.cchStatus = strlen( HeaderExInfo.pszStatus );
-		HeaderExInfo.fKeepConn = TRUE;
+        /* Send outgoing header */
 
-		pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &HeaderExInfo, NULL, NULL);
+        sprintf_s(szBuffer, sizeof(szBuffer), szHeader, strlen(szBuffer2));
+        HeaderExInfo.pszHeader = szBuffer;
+        HeaderExInfo.cchHeader = strlen( szBuffer );
+        HeaderExInfo.pszStatus = "200 OK";
+        HeaderExInfo.cchStatus = strlen( HeaderExInfo.pszStatus );
+        HeaderExInfo.fKeepConn = TRUE;
 
-		/* Send content */
+        pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &HeaderExInfo, NULL, NULL);
 
-		dwSize = strlen(szBuffer2);
+        /* Send content */
 
-		pECB->WriteClient(pECB->ConnID, szBuffer2, &dwSize, 0);
+        dwSize = strlen(szBuffer2);
 
-		return HSE_STATUS_SUCCESS_AND_KEEP_CONN;
+        pECB->WriteClient(pECB->ConnID, szBuffer2, &dwSize, 0);
 
-	} else {
+        return HSE_STATUS_SUCCESS_AND_KEEP_CONN;
 
-		/* release 1 thread from the pool */
+    }
+    else
+    {
 
-		ReleaseSemaphore(hWorkSem, 1, NULL);
+        /* release 1 thread from the pool */
 
-		LeaveCriticalSection(&csQueueLock);
-	}
+        ReleaseSemaphore(hWorkSem, 1, NULL);
 
-	return HSE_STATUS_PENDING;
+        LeaveCriticalSection(&csQueueLock);
+    }
+
+    return HSE_STATUS_PENDING;
 }
 
 /*
@@ -162,7 +166,7 @@ DWORD WINAPI HttpExtensionProc(IN EXTENSION_CONTROL_BLOCK *pECB)
 
 BOOL WINAPI TerminateExtension(IN DWORD dwFlags)
 {
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -181,84 +185,91 @@ BOOL WINAPI TerminateExtension(IN DWORD dwFlags)
 
 DWORD WINAPI WorkerFunction(IN LPVOID pvThreadNum)
 {
-	EXTENSION_CONTROL_BLOCK *pECB;
-	DWORD dwRet, dwState, dwSize;
-	HSE_SEND_HEADER_EX_INFO HeaderExInfo;
+    EXTENSION_CONTROL_BLOCK *pECB;
+    DWORD dwRet, dwState, dwSize;
+    HSE_SEND_HEADER_EX_INFO HeaderExInfo;
 
-	DWORD dwThreadNum = (DWORD)pvThreadNum;
+    DWORD dwThreadNum = (DWORD)pvThreadNum;
 
-	/* This header will be filled in with the content length */
+    /* This header will be filled in with the content length */
 
-	char szHeader[] = 
-		"Connection: Keep-Alive\r\nContent-Length: %lu\r\n"
-		"Content-type: text/html\r\n\r\n";
+    char szHeader[] =
+        "Connection: Keep-Alive\r\nContent-Length: %lu\r\n"
+        "Content-type: text/html\r\n\r\n";
 
-	char szContent[] = 
-		"<html> <form method=get action=KeepAliveP.dll><input type=submit> " 
-		"<br>pECB->ConnID=%lu  <br>dwThreadNum=%lu</form></html>";
+    char szContent[] =
+        "<html> <form method=get action=KeepAliveP.dll><input type=submit> "
+        "<br>pECB->ConnID=%lu  <br>dwThreadNum=%lu</form></html>";
 
-	char szBuffer[4096];
-	char szBuffer2[4096];
+    char szBuffer[4096];
+    char szBuffer2[4096];
 
-	for (;;) {
+    for (;;)
+    {
 
-		dwRet = WaitForSingleObject(hWorkSem, INFINITE);
+        dwRet = WaitForSingleObject(hWorkSem, INFINITE);
 
-		if (dwRet == WAIT_OBJECT_0) {
+        if (dwRet == WAIT_OBJECT_0)
+        {
 
-			EnterCriticalSection(&csQueueLock);
+            EnterCriticalSection(&csQueueLock);
 
-			if (GetWorkQueueEntry(&pECB)) {	
-	              
-				/* Found work to do */
+            if (GetWorkQueueEntry(&pECB))
+            {
 
-				LeaveCriticalSection(&csQueueLock);
-				sprintf_s(szBuffer2, sizeof(szBuffer2), szContent, pECB->ConnID, dwThreadNum);
+                /* Found work to do */
 
-				/* Send outgoing header */
+                LeaveCriticalSection(&csQueueLock);
+                sprintf_s(szBuffer2, sizeof(szBuffer2), szContent, pECB->ConnID, dwThreadNum);
 
-				sprintf_s(szBuffer, sizeof(szBuffer), szHeader, strlen(szBuffer2));
+                /* Send outgoing header */
 
-				HeaderExInfo.pszHeader = szBuffer;
-				HeaderExInfo.cchHeader = strlen( szBuffer );
-				HeaderExInfo.pszStatus = "200 OK";
-				HeaderExInfo.cchStatus = strlen( HeaderExInfo.pszStatus );
-				HeaderExInfo.fKeepConn = TRUE;
+                sprintf_s(szBuffer, sizeof(szBuffer), szHeader, strlen(szBuffer2));
 
-				pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &HeaderExInfo, NULL, NULL);
+                HeaderExInfo.pszHeader = szBuffer;
+                HeaderExInfo.cchHeader = strlen( szBuffer );
+                HeaderExInfo.pszStatus = "200 OK";
+                HeaderExInfo.cchStatus = strlen( HeaderExInfo.pszStatus );
+                HeaderExInfo.fKeepConn = TRUE;
 
-				/* Simulate extended processing */
-				
-				Sleep(3000);
+                pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &HeaderExInfo, NULL, NULL);
 
-				/* Send content */
+                /* Simulate extended processing */
 
-				dwSize = strlen(szBuffer2);
+                Sleep(3000);
 
-				pECB->WriteClient(pECB->ConnID, szBuffer2, &dwSize, 0);
+                /* Send content */
 
-				/* Tell IIS to keep the connection open */
+                dwSize = strlen(szBuffer2);
 
-				dwState = HSE_STATUS_SUCCESS_AND_KEEP_CONN;
+                pECB->WriteClient(pECB->ConnID, szBuffer2, &dwSize, 0);
 
-				pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_DONE_WITH_SESSION, &dwState, NULL, 0);
+                /* Tell IIS to keep the connection open */
 
-			} else {			
+                dwState = HSE_STATUS_SUCCESS_AND_KEEP_CONN;
 
-				/* No item found is unexpected condition - exit thread */
+                pECB->ServerSupportFunction(pECB->ConnID, HSE_REQ_DONE_WITH_SESSION, &dwState, NULL, 0);
 
-				LeaveCriticalSection(&csQueueLock);
+            }
+            else
+            {
 
-				ExitThread(0);
-			}
+                /* No item found is unexpected condition - exit thread */
 
-		} else {
+                LeaveCriticalSection(&csQueueLock);
 
-			/* Leave the infinite loop */
-		
-			break;
-		}
-	}
+                ExitThread(0);
+            }
 
-	return 0;
+        }
+        else
+        {
+
+            /* Leave the infinite loop */
+
+            break;
+        }
+    }
+
+    return 0;
 }

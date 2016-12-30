@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 //  Contents:         This sample shows how to set the UX properties for a strong key in CNG.
 //                    The key is used to sign a hash value.
 //
-//    
+//
 //
 
 #include <windows.h>
@@ -23,8 +23,8 @@
 #include <wincrypt.h>
 #include <sal.h>
 
-static const 
-BYTE Hash[20] = 
+static const
+BYTE Hash[20] =
 {
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
@@ -35,7 +35,7 @@ BYTE Hash[20] =
 // Instead of entering the pin again while using the key, the pin value will be set as a property on the key handle
 //
 
-static 
+static
 LPCWSTR Pin = L"Password123";
 
 //
@@ -48,10 +48,10 @@ LPCWSTR Pin = L"Password123";
 //  Prints error information to the console
 //
 //----------------------------------------------------------------------------
-void 
-ReportError( 
-    _In_    DWORD       dwErrCode 
-    )
+void
+ReportError(
+    _In_    DWORD       dwErrCode
+)
 {
     wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
 }
@@ -66,31 +66,31 @@ __cdecl
 wmain(
     _In_               int     argc,
     _In_reads_(argc)   LPWSTR  argv[]
-    )
+)
 {
     SECURITY_STATUS         secStatus;
-    
+
     NCRYPT_PROV_HANDLE      ProviderHandle = 0;
     NCRYPT_KEY_HANDLE       KeyHandle = 0;
     NCRYPT_UI_POLICY        UIPolicy = {0};
-    
+
     LPCWSTR                 KeyName = L"SampleStrongKey";
     PBYTE                   Signature = NULL;
     DWORD                   SignatureLength = 0;
     DWORD                   ResultLength = 0;
-    
+
     BCRYPT_PKCS1_PADDING_INFO PKCS1PaddingInfo;
     VOID                    *pPaddingInfo;
     HWND                    hwndConsole = NULL;
 
     //
-    // Open Microsoft KSP (Key Storage Provider) 
+    // Open Microsoft KSP (Key Storage Provider)
     //
 
     secStatus = NCryptOpenStorageProvider(
-                                        &ProviderHandle,            // Pointer to a variable that recieves the provider handle
-                                        MS_KEY_STORAGE_PROVIDER,    // Storage provider identifier(null terminated unicode string); If NULL, default provider is loaded
-                                        0);                         // Flags
+                    &ProviderHandle,            // Pointer to a variable that recieves the provider handle
+                    MS_KEY_STORAGE_PROVIDER,    // Storage provider identifier(null terminated unicode string); If NULL, default provider is loaded
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -103,12 +103,12 @@ wmain(
     //
 
     secStatus = NCryptCreatePersistedKey(
-                                        ProviderHandle,             // Handle of the key storage provider
-                                        &KeyHandle,                 // Address of the variable that recieves the key handle
-                                        NCRYPT_RSA_ALGORITHM,       // Algorithm name (null terminated unicode string)
-                                        KeyName,                    // Key name (null terminated unicode string)
-                                        AT_SIGNATURE,               // Legacy identifer (AT_KEYEXCHANGE, AT_SIGNATURE or 0 )
-                                        NCRYPT_OVERWRITE_KEY_FLAG); // Flags; If a key already exists in the container with the specified name, the existing key will be overwritten.
+                    ProviderHandle,             // Handle of the key storage provider
+                    &KeyHandle,                 // Address of the variable that recieves the key handle
+                    NCRYPT_RSA_ALGORITHM,       // Algorithm name (null terminated unicode string)
+                    KeyName,                    // Key name (null terminated unicode string)
+                    AT_SIGNATURE,               // Legacy identifer (AT_KEYEXCHANGE, AT_SIGNATURE or 0 )
+                    NCRYPT_OVERWRITE_KEY_FLAG); // Flags; If a key already exists in the container with the specified name, the existing key will be overwritten.
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -122,22 +122,22 @@ wmain(
     //
 
     ZeroMemory(
-        &UIPolicy, 
+        &UIPolicy,
         sizeof(UIPolicy));
 
     UIPolicy.dwVersion = 1;
     UIPolicy.dwFlags = NCRYPT_UI_FORCE_HIGH_PROTECTION_FLAG;
-    
+
     UIPolicy.pszCreationTitle   = L"Strong Key UX Sample";
     UIPolicy.pszFriendlyName    = L"Sample Friendly Name";
     UIPolicy.pszDescription = L"This is a sample strong key";
 
     secStatus = NCryptSetProperty(
-                                        KeyHandle,                  // Handle of the key storage object 
-                                        NCRYPT_UI_POLICY_PROPERTY,  // Property name (null terminated unicode string)
-                                        (PBYTE)&UIPolicy,           // Address of the buffer that contains the property value
-                                        sizeof(UIPolicy),           // Size of the buffer in bytes
-                                        0);                         // Flags
+                    KeyHandle,                  // Handle of the key storage object
+                    NCRYPT_UI_POLICY_PROPERTY,  // Property name (null terminated unicode string)
+                    (PBYTE)&UIPolicy,           // Address of the buffer that contains the property value
+                    sizeof(UIPolicy),           // Size of the buffer in bytes
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -156,32 +156,32 @@ wmain(
         goto cleanup;
     }
 
-    
+
     //
     // Attach the window handle to the key
-    // 
+    //
 
     secStatus = NCryptSetProperty(
-                                        KeyHandle,                  // Handle of the key storage object 
-                                        NCRYPT_WINDOW_HANDLE_PROPERTY,  // Property name (null terminated unicode string)
-                                        (PBYTE)&hwndConsole,        // Address of the buffer that contains the property value
-                                        sizeof(hwndConsole),        // Size of the buffer in bytes
-                                        0);                         // Flags
+                    KeyHandle,                  // Handle of the key storage object
+                    NCRYPT_WINDOW_HANDLE_PROPERTY,  // Property name (null terminated unicode string)
+                    (PBYTE)&hwndConsole,        // Address of the buffer that contains the property value
+                    sizeof(hwndConsole),        // Size of the buffer in bytes
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
     }
 
-    
+
     //
     // Finalize the key generation process
     // The key is usable here onwards
     //
 
     secStatus = NCryptFinalizeKey(
-                                        KeyHandle,                  // Handle of the key - that has to be finalized
-                                        0);                         // Flags
+                    KeyHandle,                  // Handle of the key - that has to be finalized
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -193,7 +193,7 @@ wmain(
     //
 
     secStatus = NCryptFreeObject(KeyHandle);                           // The handle of the object to free
-	if( FAILED(secStatus) )
+    if( FAILED(secStatus) )
     {
         ReportError(secStatus);
         goto cleanup;
@@ -209,11 +209,11 @@ wmain(
     //
 
     secStatus = NCryptOpenKey(
-                                        ProviderHandle,             // Handle of the key storage provider
-                                        &KeyHandle,                 // Key handle
-                                        KeyName,                    // Key name (null terminated unicode string)
-                                        AT_SIGNATURE,               // Legacy identifier
-                                        0);                         // Flags
+                    ProviderHandle,             // Handle of the key storage provider
+                    &KeyHandle,                 // Key handle
+                    KeyName,                    // Key name (null terminated unicode string)
+                    AT_SIGNATURE,               // Legacy identifier
+                    0);                         // Flags
 
     if( FAILED(secStatus) )
     {
@@ -226,11 +226,11 @@ wmain(
     //
 
     secStatus = NCryptSetProperty(
-                                        KeyHandle,                  // Handle of the key storage object 
-                                        NCRYPT_PIN_PROPERTY,        // Property name (null terminated unicode string)
-                                        (PBYTE)Pin,                 // Address of the buffer that contains the property value
-                                        (ULONG)wcslen(Pin)*sizeof(WCHAR),   // Size of the buffer in bytes
-                                        0);                         // Flags
+                    KeyHandle,                  // Handle of the key storage object
+                    NCRYPT_PIN_PROPERTY,        // Property name (null terminated unicode string)
+                    (PBYTE)Pin,                 // Address of the buffer that contains the property value
+                    (ULONG)wcslen(Pin)*sizeof(WCHAR),   // Size of the buffer in bytes
+                    0);                         // Flags
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -245,14 +245,14 @@ wmain(
     //
 
     secStatus = NCryptSignHash(
-                                        KeyHandle,                  // Handle of the key
-                                        pPaddingInfo,               // Padding information
-                                        (PBYTE)Hash,                // Buffer that contains the hash value to be signed
-                                        sizeof(Hash),               // Size of the buffer in bytes
-                                        NULL,                       // Buffer that recieves the signature 
-                                        0,                          // Size of the buffer in bytes
-                                        &SignatureLength,           // Number of bytes copied into the Signatue buffer
-                                        NCRYPT_PAD_PKCS1_FLAG);     // Flags;Use the PKCS1 padding scheme
+                    KeyHandle,                  // Handle of the key
+                    pPaddingInfo,               // Padding information
+                    (PBYTE)Hash,                // Buffer that contains the hash value to be signed
+                    sizeof(Hash),               // Size of the buffer in bytes
+                    NULL,                       // Buffer that recieves the signature
+                    0,                          // Size of the buffer in bytes
+                    &SignatureLength,           // Number of bytes copied into the Signatue buffer
+                    NCRYPT_PAD_PKCS1_FLAG);     // Flags;Use the PKCS1 padding scheme
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -277,14 +277,14 @@ wmain(
     //
 
     secStatus = NCryptSignHash(
-                                        KeyHandle,                  // Handle of the key
-                                        pPaddingInfo,               // Padding information
-                                        (PBYTE)Hash,                // Buffer that contains the hash value to be signed
-                                        sizeof(Hash),               // Size of the buffer in bytes
-                                        Signature,                  // Buffer that recieves the signature 
-                                        SignatureLength,            // Size of the buffer in bytes
-                                        &ResultLength,              // Number of bytes copied into the Signatue buffer
-                                        NCRYPT_PAD_PKCS1_FLAG);     // Flags;Use the PKCS1 padding scheme
+                    KeyHandle,                  // Handle of the key
+                    pPaddingInfo,               // Padding information
+                    (PBYTE)Hash,                // Buffer that contains the hash value to be signed
+                    sizeof(Hash),               // Size of the buffer in bytes
+                    Signature,                  // Buffer that recieves the signature
+                    SignatureLength,            // Size of the buffer in bytes
+                    &ResultLength,              // Number of bytes copied into the Signatue buffer
+                    NCRYPT_PAD_PKCS1_FLAG);     // Flags;Use the PKCS1 padding scheme
     if( FAILED(secStatus) )
     {
         ReportError(secStatus);
@@ -307,12 +307,12 @@ cleanup:
         KeyHandle = 0;
     }
 
-     if( NULL != ProviderHandle )
+    if( NULL != ProviderHandle )
     {
         NCryptFreeObject(ProviderHandle);
         ProviderHandle = 0;
-    } 
-       
+    }
+
     return (DWORD)secStatus;
 
     UNREFERENCED_PARAMETER( argc );

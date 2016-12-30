@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -38,7 +38,7 @@ const LPWSTR wszDefaultConnectionName = L"UncompAVIToWMV";
 HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * pwszOutput )
 {
     int cchOutput = 0;
-    
+
     if( NULL == ptszInput || NULL == pwszOutput )
     {
         return( E_INVALIDARG );
@@ -70,7 +70,7 @@ HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * pwszOutput )
     {
         SAFE_ARRAYDELETE( *pwszOutput );
         return( HRESULT_FROM_WIN32( GetLastError() ) );
-    }        
+    }
 #endif // UNICODE
 
     return( S_OK );
@@ -83,7 +83,7 @@ HRESULT ConvertTCharToWChar( LPCTSTR ptszInput, __out LPWSTR * pwszOutput )
 HRESULT ConvertCharToTChar( LPCSTR pszInput, __out LPTSTR * ptszOutput )
 {
     int cchOutput = 0;
-    
+
     if( NULL == pszInput || NULL == ptszOutput )
     {
         return( E_INVALIDARG );
@@ -113,7 +113,7 @@ HRESULT ConvertCharToTChar( LPCSTR pszInput, __out LPTSTR * ptszOutput )
     {
         SAFE_ARRAYDELETE( *ptszOutput );
         return( HRESULT_FROM_WIN32( GetLastError() ) );
-    }        
+    }
 #else //UNICODE
     (void)StringCchCopy( *ptszOutput, cchOutput, pszInput );
 #endif // UNICODE
@@ -128,7 +128,7 @@ HRESULT ConvertCharToTChar( LPCSTR pszInput, __out LPTSTR * ptszOutput )
 HRESULT ConvertTCharToChar( LPCTSTR ptszInput, __out LPSTR * pszOutput )
 {
     int cchOutput = 0;
-    
+
     if( NULL == ptszInput || NULL == pszOutput )
     {
         return( E_INVALIDARG );
@@ -158,7 +158,7 @@ HRESULT ConvertTCharToChar( LPCTSTR ptszInput, __out LPSTR * pszOutput )
     {
         SAFE_ARRAYDELETE( *pszOutput );
         return( HRESULT_FROM_WIN32( GetLastError() ) );
-    }        
+    }
 #else //UNICODE
     (void)StringCchCopy( *pszOutput, cchOutput, ptszInput );
 #endif // UNICODE
@@ -171,13 +171,13 @@ HRESULT ConvertTCharToChar( LPCTSTR ptszInput, __out LPSTR * pszOutput )
 // Desc: Constructor.
 //------------------------------------------------------------------------------
 CWMInput::CWMInput()  : m_qwPresentTime( 0 ),
-                        m_dwInput( 0 ),
-                        m_dwSamples( 0 ),
-                        m_dwCurrentSample( 0 ),
-                        m_pAVIFile( NULL ),
-                        m_pwszConnectionName( NULL ),
-                        m_pAVIStream( NULL ),
-                        m_fAddSMPTE( FALSE )
+    m_dwInput( 0 ),
+    m_dwSamples( 0 ),
+    m_dwCurrentSample( 0 ),
+    m_pAVIFile( NULL ),
+    m_pwszConnectionName( NULL ),
+    m_pAVIStream( NULL ),
+    m_fAddSMPTE( FALSE )
 {
     ZeroMemory( &m_Mt, sizeof( m_Mt ) );
     ZeroMemory( &m_StreamInfo, sizeof( m_StreamInfo ) );
@@ -244,7 +244,7 @@ HRESULT CUncompAVIToWMV::Initial( __in LPTSTR    ptszInFile,
     HRESULT     hr = S_OK;
     LPTSTR      tszFileList[ MAX_INPUT_FILE ];
     int         nFileListSize = 0;
-    
+
     if( NULL == ptszInFile || NULL == ptszOutFile || NULL == pProfile )
     {
         return( E_INVALIDARG );
@@ -329,7 +329,7 @@ HRESULT CUncompAVIToWMV::Initial( __in LPTSTR    ptszInFile,
         //
         // Get a pointer to the preprocessing interface for multipass encoding
         //
-        hr = m_pWMWriter->QueryInterface( IID_IWMWriterPreprocess, 
+        hr = m_pWMWriter->QueryInterface( IID_IWMWriterPreprocess,
                                           (void **)&m_pIWMWriterPreprocess );
         if( FAILED( hr ) )
         {
@@ -398,8 +398,8 @@ HRESULT CUncompAVIToWMV::Initial( __in LPTSTR    ptszInFile,
     WCHAR * pwszOutFile = NULL;
 
     //
-    // Convert the output filename to a wide character string and give it 
-    // to the writer. 
+    // Convert the output filename to a wide character string and give it
+    // to the writer.
     //
     hr = ConvertTCharToWChar( ptszOutFile, &pwszOutFile );
     if( FAILED( hr ) )
@@ -409,9 +409,9 @@ HRESULT CUncompAVIToWMV::Initial( __in LPTSTR    ptszInFile,
     }
 
     //
-    // Note: Indexing is automatically enabled when writing the uncompressed 
-    // samples. We don't need to set up indexing manually. You can call 
-    // IWMWriterFileSink3::SetAutoIndexing( FALSE ) to disable indexing. 
+    // Note: Indexing is automatically enabled when writing the uncompressed
+    // samples. We don't need to set up indexing manually. You can call
+    // IWMWriterFileSink3::SetAutoIndexing( FALSE ) to disable indexing.
     //
     hr = m_pWMWriter->SetOutputFilename( pwszOutFile );
     SAFE_ARRAYDELETE( pwszOutFile );
@@ -442,9 +442,9 @@ HRESULT CUncompAVIToWMV::InitAVISource( __in LPTSTR ptszInputFile )
     //
     // Open the AVI file
     //
-    hr = AVIFileOpen( &input.m_pAVIFile, 
-                      ptszInputFile, 
-                      OF_SHARE_DENY_NONE, 
+    hr = AVIFileOpen( &input.m_pAVIFile,
+                      ptszInputFile,
+                      OF_SHARE_DENY_NONE,
                       NULL );
     if( FAILED( hr ) )
     {
@@ -454,9 +454,9 @@ HRESULT CUncompAVIToWMV::InitAVISource( __in LPTSTR ptszInputFile )
     //
     // First, get the audio stream information from the AVI file
     //
-    hr = AVIFileGetStream( input.m_pAVIFile, 
-                           &input.m_pAVIStream, 
-                           streamtypeAUDIO, 
+    hr = AVIFileGetStream( input.m_pAVIFile,
+                           &input.m_pAVIStream,
+                           streamtypeAUDIO,
                            0 );
     if( SUCCEEDED( hr ) )
     {
@@ -487,9 +487,9 @@ HRESULT CUncompAVIToWMV::InitAVISource( __in LPTSTR ptszInputFile )
                 return( E_OUTOFMEMORY );
             }
 
-            hr = AVIStreamReadFormat( input.m_pAVIStream, 
-                                      0, 
-                                      input.m_pWFX, 
+            hr = AVIStreamReadFormat( input.m_pAVIStream,
+                                      0,
+                                      input.m_pWFX,
                                       &cbWFX );
             if( FAILED( hr ) )
             {
@@ -502,8 +502,8 @@ HRESULT CUncompAVIToWMV::InitAVISource( __in LPTSTR ptszInputFile )
                 ( input.m_pWFX )->cbSize = 0;
             }
 
-            hr = AVIStreamInfo( input.m_pAVIStream, 
-                                &input.m_StreamInfo, 
+            hr = AVIStreamInfo( input.m_pAVIStream,
+                                &input.m_StreamInfo,
                                 sizeof( AVISTREAMINFO ) );
             if( FAILED( hr ) )
             {
@@ -583,7 +583,7 @@ HRESULT CUncompAVIToWMV::InitAVISource( __in LPTSTR ptszInputFile )
             // Set up the WM_MEDIA_TYPE structure and give it to the IWMInputMediaProps interface
             //
             DWORD cbVideoInfo = sizeof( WMVIDEOINFOHEADER ) - sizeof( BITMAPINFOHEADER ) + cbBMI;
-            
+
             WMVIDEOINFOHEADER*  pVideoInfo = (WMVIDEOINFOHEADER *)new BYTE[ cbVideoInfo ];
             if( NULL == pVideoInfo )
             {
@@ -596,8 +596,8 @@ HRESULT CUncompAVIToWMV::InitAVISource( __in LPTSTR ptszInputFile )
             pVideoInfo->rcSource.bottom = pBMI->bmiHeader.biHeight;
             pVideoInfo->rcSource.right  = pBMI->bmiHeader.biWidth;
             pVideoInfo->rcTarget        = pVideoInfo->rcSource;
-            pVideoInfo->dwBitRate       = MulDiv( input.m_StreamInfo.dwSuggestedBufferSize * 8, 
-                                                  input.m_StreamInfo.dwRate, 
+            pVideoInfo->dwBitRate       = MulDiv( input.m_StreamInfo.dwSuggestedBufferSize * 8,
+                                                  input.m_StreamInfo.dwRate,
                                                   input.m_StreamInfo.dwScale );
             pVideoInfo->dwBitErrorRate  = 0;
             pVideoInfo->AvgTimePerFrame = 10000000 * (QWORD)input.m_StreamInfo.dwScale
@@ -643,38 +643,38 @@ HRESULT CUncompAVIToWMV::InitAVISource( __in LPTSTR ptszInputFile )
                     input.m_Mt.subtype = GUID_NULL;
                 }
             }
-            else if( pBMI->bmiHeader.biCompression == 
-                        MAKEFOURCC( _T('I'), _T('4'), _T('2'), _T('0') ) )
+            else if( pBMI->bmiHeader.biCompression ==
+                     MAKEFOURCC( _T('I'), _T('4'), _T('2'), _T('0') ) )
             {
                 input.m_Mt.subtype = WMMEDIASUBTYPE_I420;
             }
-            else if( pBMI->bmiHeader.biCompression == 
-                        MAKEFOURCC( _T('I'), _T('Y'), _T('U'), _T('V') ) )
+            else if( pBMI->bmiHeader.biCompression ==
+                     MAKEFOURCC( _T('I'), _T('Y'), _T('U'), _T('V') ) )
             {
                 input.m_Mt.subtype = WMMEDIASUBTYPE_IYUV;
             }
-            else if( pBMI->bmiHeader.biCompression == 
-                        MAKEFOURCC( _T('Y'), _T('V'), _T('1'), _T('2') ) )
+            else if( pBMI->bmiHeader.biCompression ==
+                     MAKEFOURCC( _T('Y'), _T('V'), _T('1'), _T('2') ) )
             {
                 input.m_Mt.subtype = WMMEDIASUBTYPE_YV12;
             }
-            else if( pBMI->bmiHeader.biCompression == 
-                        MAKEFOURCC( _T('Y'), _T('U'), _T('Y'), _T('2') ) )
+            else if( pBMI->bmiHeader.biCompression ==
+                     MAKEFOURCC( _T('Y'), _T('U'), _T('Y'), _T('2') ) )
             {
                 input.m_Mt.subtype = WMMEDIASUBTYPE_YUY2;
             }
-            else if( pBMI->bmiHeader.biCompression == 
-                        MAKEFOURCC( _T('U'), _T('Y'), _T('V'), _T('Y') ) )
+            else if( pBMI->bmiHeader.biCompression ==
+                     MAKEFOURCC( _T('U'), _T('Y'), _T('V'), _T('Y') ) )
             {
                 input.m_Mt.subtype = WMMEDIASUBTYPE_UYVY;
             }
-            else if( pBMI->bmiHeader.biCompression == 
-                        MAKEFOURCC( _T('Y'), _T('V'), _T('Y'), _T('U') ) )
+            else if( pBMI->bmiHeader.biCompression ==
+                     MAKEFOURCC( _T('Y'), _T('V'), _T('Y'), _T('U') ) )
             {
                 input.m_Mt.subtype = WMMEDIASUBTYPE_YVYU;
             }
-            else if( pBMI->bmiHeader.biCompression == 
-                        MAKEFOURCC( _T('Y'), _T('V'), _T('U'), _T('9') ) )
+            else if( pBMI->bmiHeader.biCompression ==
+                     MAKEFOURCC( _T('Y'), _T('V'), _T('U'), _T('9') ) )
             {
                 input.m_Mt.subtype = WMMEDIASUBTYPE_YVU9;
             }
@@ -797,7 +797,7 @@ HRESULT CUncompAVIToWMV::Start()
     _tprintf( _T( "convert:    " ) );
 
     //
-    // Get an AVI input with the lowest presentation time value and write it 
+    // Get an AVI input with the lowest presentation time value and write it
     // to the output
     //
     pInput = NULL;
@@ -838,7 +838,7 @@ HRESULT CUncompAVIToWMV::Start()
                 {
                     _tprintf( _T( "WriteSample failed: Invalid preprocessing passes. Use -m option\n" ) );
                 }
-                else 
+                else
                 {
                     _tprintf( _T( "WriteSample failed: Error (hr=0x%08x)\n" ), hr );
                 }
@@ -871,7 +871,7 @@ HRESULT CUncompAVIToWMV::Start()
     _tprintf( _T( "\n" ) );
 
     //
-    // Tell the writer we're done. 
+    // Tell the writer we're done.
     //
     hr = m_pWMWriter->EndWriting();
     if( FAILED( hr ) )
@@ -920,9 +920,9 @@ HRESULT CUncompAVIToWMV::UpdateProfile( IWMProfile * pProfile )
     El< CWMInput >          * pInputElemRemove = NULL;
 
     //
-    // Iterate through the list of AVI inputs and compare their types with inputs 
-    // already defined in the current profile. If there is a match, corresponding 
-    // connection names are stored in the AVI input, creating a link which is then 
+    // Iterate through the list of AVI inputs and compare their types with inputs
+    // already defined in the current profile. If there is a match, corresponding
+    // connection names are stored in the AVI input, creating a link which is then
     // used to initialize writer inputs and deliver samples to the writer.
     //
 
@@ -935,7 +935,7 @@ HRESULT CUncompAVIToWMV::UpdateProfile( IWMProfile * pProfile )
         //
         pProfStream = Find( &ProfStreamList, pInput, &pProfStreamElem );
         if( NULL != pProfStream &&
-            NULL != pProfStream->m_pwszConnectionName )
+                NULL != pProfStream->m_pwszConnectionName )
         {
             //
             // There is a matching input in the current profile. Save its number and connection
@@ -1000,12 +1000,13 @@ HRESULT CUncompAVIToWMV::UpdateProfile( IWMProfile * pProfile )
                         pInputElemRemove = pInputElem;
                     }
 
-                } while( FALSE );
+                }
+                while( FALSE );
             }
             else
             {
                 //
-                //  There is no matching input in the profile. 
+                //  There is no matching input in the profile.
                 //  Since the profile cannot be extended, mark current AVI input
                 //  to remove from the list.
                 //
@@ -1043,8 +1044,8 @@ HRESULT CUncompAVIToWMV::UpdateProfile( IWMProfile * pProfile )
 // Name: CUncompAVIToWMV::CreateProfileStreamList()
 // Desc: Creates a list of inputs for a given profile.
 //------------------------------------------------------------------------------
-HRESULT CUncompAVIToWMV::CreateProfileStreamList( IWMProfile* pProfile, 
-                                                  CTSimpleList< CProfileStreams >* pProfStreamList )
+HRESULT CUncompAVIToWMV::CreateProfileStreamList( IWMProfile* pProfile,
+        CTSimpleList< CProfileStreams >* pProfStreamList )
 {
     HRESULT                 hr = S_OK;
     IWMStreamConfig         * pIWMStreamConfig = NULL;
@@ -1087,7 +1088,7 @@ HRESULT CUncompAVIToWMV::CreateProfileStreamList( IWMProfile* pProfile,
             break;
         }
 
-        hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps, 
+        hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps,
                                                (void **)&pMediaProps );
         if( FAILED( hr ) )
         {
@@ -1126,8 +1127,8 @@ HRESULT CUncompAVIToWMV::CreateProfileStreamList( IWMProfile* pProfile,
             break;
         }
 
-        hr = pIWMStreamConfig->GetConnectionName( pwszConnectionName, 
-                                                  &cchConnectionName );
+        hr = pIWMStreamConfig->GetConnectionName( pwszConnectionName,
+                &cchConnectionName );
         if( FAILED( hr ) )
         {
             break;
@@ -1150,7 +1151,7 @@ HRESULT CUncompAVIToWMV::CreateProfileStreamList( IWMProfile* pProfile,
             {
                 //
                 // There is already a stream for this connection on the list; do not append
-                // this one. This could happen if the profile is MBR. 
+                // this one. This could happen if the profile is MBR.
                 //
                 break;
             }
@@ -1162,19 +1163,19 @@ HRESULT CUncompAVIToWMV::CreateProfileStreamList( IWMProfile* pProfile,
         {
             //
             // There is no stream for this connection on the list; append this one.
-            // pProfStreamList will not allocate memory to save pwszConnectionName 
+            // pProfStreamList will not allocate memory to save pwszConnectionName
             // and pMediaType, so the memory of pwszConnectionName and pMediaType
             // should not be released now.
             //
-            CProfileStreams ProfileStream( guidInputType, 
-                                           wStreamNum, 
-                                           pMediaType, 
+            CProfileStreams ProfileStream( guidInputType,
+                                           wStreamNum,
+                                           pMediaType,
                                            pwszConnectionName );
 
             if ( pProfStreamList->Append( &ProfileStream ) )
             {
                 //
-                // Set the pointers to NULL, so their memory will not be released 
+                // Set the pointers to NULL, so their memory will not be released
                 // by this function.
                 //
                 pMediaType = NULL;
@@ -1198,7 +1199,7 @@ HRESULT CUncompAVIToWMV::CreateProfileStreamList( IWMProfile* pProfile,
 
 //------------------------------------------------------------------------------
 // Name: CUncompAVIToWMV::UpdateWriterInputs()
-// Desc: Sets up properties of writer inputs using information 
+// Desc: Sets up properties of writer inputs using information
 //       stored in AVI inputs.
 //------------------------------------------------------------------------------
 HRESULT CUncompAVIToWMV::UpdateWriterInputs()
@@ -1234,7 +1235,7 @@ HRESULT CUncompAVIToWMV::UpdateWriterInputs()
             break;
         }
 
-        hr = pInputProps->QueryInterface( IID_IWMStreamConfig, 
+        hr = pInputProps->QueryInterface( IID_IWMStreamConfig,
                                           (void **) &pIWMStreamConfig );
         if( FAILED( hr ) )
         {
@@ -1269,15 +1270,15 @@ HRESULT CUncompAVIToWMV::UpdateWriterInputs()
                 break;
             }
 
-            hr = pIWMStreamConfig->GetConnectionName( pwszConnectionName, 
-                                                      &cchConnectionName );
+            hr = pIWMStreamConfig->GetConnectionName( pwszConnectionName,
+                    &cchConnectionName );
             if( FAILED( hr ) )
             {
                 break;
             }
 
             //
-            // Look for AVI input with the matching connection name and 
+            // Look for AVI input with the matching connection name and
             // set writer input properties according to it
             //
             CWMInput * pInput = m_Inputs.Iterate( ITER_FIRST );
@@ -1378,7 +1379,7 @@ HRESULT CUncompAVIToWMV::AddArbitraryStream( IWMProfile * pProfile )
             break;
         }
 
-        hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps, 
+        hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps,
                                                (void **)&pIWMMediaProps );
         if( FAILED( hr ) )
         {
@@ -1397,7 +1398,8 @@ HRESULT CUncompAVIToWMV::AddArbitraryStream( IWMProfile * pProfile )
             break;
         }
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     SAFE_RELEASE( pIWMMediaProps );
     SAFE_RELEASE( pIWMStreamConfig );
@@ -1431,8 +1433,8 @@ HRESULT CUncompAVIToWMV::ListSystemProfile()
             break;
         }
 
-        hr = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2, 
-                                                 ( void ** )&pIWMProfileManager2 );
+        hr = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2,
+                ( void ** )&pIWMProfileManager2 );
         if( FAILED( hr ) )
         {
             break;
@@ -1452,7 +1454,7 @@ HRESULT CUncompAVIToWMV::ListSystemProfile()
         {
             break;
         }
-    
+
         _tprintf( _T( "Profile Indexes are as follows:\n" ) );
 
         //
@@ -1484,7 +1486,7 @@ HRESULT CUncompAVIToWMV::ListSystemProfile()
             {
                 break;
             }
-    
+
             //
             // Display the system profile index and name
             //
@@ -1516,8 +1518,8 @@ HRESULT CUncompAVIToWMV::ListSystemProfile()
 // Name: CUncompAVIToWMV::LoadSystemProfile()
 // Desc: Loads a system profile (version 8.0) by the index.
 //------------------------------------------------------------------------------
-HRESULT CUncompAVIToWMV::LoadSystemProfile( DWORD dwProfileIndex, 
-                                            IWMProfile ** ppIWMProfile )
+HRESULT CUncompAVIToWMV::LoadSystemProfile( DWORD dwProfileIndex,
+        IWMProfile ** ppIWMProfile )
 {
     HRESULT             hr = S_OK;
     IWMProfileManager   * pIWMProfileManager = NULL;
@@ -1544,8 +1546,8 @@ HRESULT CUncompAVIToWMV::LoadSystemProfile( DWORD dwProfileIndex,
             break;
         }
 
-        hr = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2, 
-                                                 ( void ** )&pIWMProfileManager2 );
+        hr = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2,
+                ( void ** )&pIWMProfileManager2 );
         if( FAILED( hr ) )
         {
             break;
@@ -1563,8 +1565,8 @@ HRESULT CUncompAVIToWMV::LoadSystemProfile( DWORD dwProfileIndex,
         //
         // Load the system profile by index
         //
-        hr = pIWMProfileManager->LoadSystemProfile( dwProfileIndex, 
-                                                    ppIWMProfile );
+        hr = pIWMProfileManager->LoadSystemProfile( dwProfileIndex,
+                ppIWMProfile );
         if( FAILED( hr ) )
         {
             break;
@@ -1585,8 +1587,8 @@ HRESULT CUncompAVIToWMV::LoadSystemProfile( DWORD dwProfileIndex,
 // Name: CUncompAVIToWMV::LoadCustomProfile()
 // Desc: Loads a custom profile from file.
 //------------------------------------------------------------------------------
-HRESULT CUncompAVIToWMV::LoadCustomProfile( LPCTSTR ptszProfileFile, 
-                                            IWMProfile ** ppIWMProfile )
+HRESULT CUncompAVIToWMV::LoadCustomProfile( LPCTSTR ptszProfileFile,
+        IWMProfile ** ppIWMProfile )
 {
     HRESULT             hr = S_OK;
     DWORD               dwLength = 0;
@@ -1614,12 +1616,12 @@ HRESULT CUncompAVIToWMV::LoadCustomProfile( LPCTSTR ptszProfileFile,
         //
         // Open the profile file
         //
-        hFile = CreateFile( ptszProfileFile, 
-                            GENERIC_READ, 
-                            FILE_SHARE_READ, 
-                            NULL, 
-                            OPEN_EXISTING, 
-                            FILE_ATTRIBUTE_NORMAL, 
+        hFile = CreateFile( ptszProfileFile,
+                            GENERIC_READ,
+                            FILE_SHARE_READ,
+                            NULL,
+                            OPEN_EXISTING,
+                            FILE_ATTRIBUTE_NORMAL,
                             NULL );
         if( INVALID_HANDLE_VALUE == hFile )
         {
@@ -1665,8 +1667,8 @@ HRESULT CUncompAVIToWMV::LoadCustomProfile( LPCTSTR ptszProfileFile,
         //
         // Load the profile from the buffer
         //
-        hr = pProfileManager->LoadProfileByData( pProfile, 
-                                                 ppIWMProfile );
+        hr = pProfileManager->LoadProfileByData( pProfile,
+                ppIWMProfile );
         if( FAILED(hr) )
         {
             break;
@@ -1729,7 +1731,7 @@ HRESULT CUncompAVIToWMV::CreateEmptyProfile( IWMProfile ** ppIWMProfile )
 // Name: CUncompAVIToWMV::SaveProfile()
 // Desc: Save the profile to a file.
 //------------------------------------------------------------------------------
-HRESULT CUncompAVIToWMV::SaveProfile( LPCTSTR ptszFileName, 
+HRESULT CUncompAVIToWMV::SaveProfile( LPCTSTR ptszFileName,
                                       IWMProfile * pIWMProfile )
 {
     HRESULT             hr = S_OK;
@@ -1778,12 +1780,12 @@ HRESULT CUncompAVIToWMV::SaveProfile( LPCTSTR ptszFileName,
             break;
         }
 
-        hFile = CreateFile( ptszFileName, 
-                            GENERIC_WRITE, 
-                            0, 
-                            NULL, 
-                            CREATE_ALWAYS, 
-                            FILE_ATTRIBUTE_NORMAL, 
+        hFile = CreateFile( ptszFileName,
+                            GENERIC_WRITE,
+                            0,
+                            NULL,
+                            CREATE_ALWAYS,
+                            FILE_ATTRIBUTE_NORMAL,
                             NULL );
         if( INVALID_HANDLE_VALUE == hFile )
         {
@@ -1801,13 +1803,14 @@ HRESULT CUncompAVIToWMV::SaveProfile( LPCTSTR ptszFileName,
         // Write profile buffer to file
         //
         if( !WriteFile( hFile, pBuffer, dwLength * sizeof(WCHAR), &dwBytesWritten, NULL) ||
-             dwLength*sizeof(WCHAR) != dwBytesWritten )
+                dwLength*sizeof(WCHAR) != dwBytesWritten )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             break;
         }
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     SAFE_CLOSEFILEHANDLE( hFile );
     SAFE_ARRAYDELETE( pBuffer );
@@ -1853,17 +1856,17 @@ HRESULT CUncompAVIToWMV::DoPreprocessing()
 
     while( SUCCEEDED( hr ) && NULL != pStream )
     {
-        if( WMMEDIATYPE_Video == pStream->m_Type || 
-            WMMEDIATYPE_Audio == pStream->m_Type )
+        if( WMMEDIATYPE_Video == pStream->m_Type ||
+                WMMEDIATYPE_Audio == pStream->m_Type )
         {
             dwCurrentInput = pStream->m_dwInput;
             pCurrentStream = pStream->m_pAVIStream;
             CurrentStreamInfo = pStream->m_StreamInfo;
             cCurrentSamples = pStream->m_dwSamples;
 
-            hr = m_pIWMWriterPreprocess->GetMaxPreprocessingPasses( dwCurrentInput, 
-                                                                    0, 
-                                                                    &dwNumPasses );
+            hr = m_pIWMWriterPreprocess->GetMaxPreprocessingPasses( dwCurrentInput,
+                    0,
+                    &dwNumPasses );
             if( FAILED( hr ) )
             {
                 return( hr );
@@ -1874,9 +1877,9 @@ HRESULT CUncompAVIToWMV::DoPreprocessing()
                 //
                 // Use the recommended number of passes
                 //
-                hr = m_pIWMWriterPreprocess->SetNumPreprocessingPasses( dwCurrentInput, 
-                                                                        0, 
-                                                                        dwNumPasses );
+                hr = m_pIWMWriterPreprocess->SetNumPreprocessingPasses( dwCurrentInput,
+                        0,
+                        dwNumPasses );
                 if( FAILED( hr ) )
                 {
                     return( hr );
@@ -1892,8 +1895,8 @@ HRESULT CUncompAVIToWMV::DoPreprocessing()
                         //
                         // We want to read half second of audio at a time
                         //
-                        cSamplesToRead = ( pStream->m_pWFX->nAvgBytesPerSec * 4 ) 
-                            / ( pStream->m_pWFX->nChannels * pStream->m_pWFX->wBitsPerSample );
+                        cSamplesToRead = ( pStream->m_pWFX->nAvgBytesPerSec * 4 )
+                                         / ( pStream->m_pWFX->nChannels * pStream->m_pWFX->wBitsPerSample );
                     }
                     else if( WMMEDIATYPE_Video == pStream->m_Type )
                     {
@@ -1914,12 +1917,12 @@ HRESULT CUncompAVIToWMV::DoPreprocessing()
                         LONG    cbSample = 0;
                         LONG    cSamples = 0;
 
-                        hr = AVIStreamRead( pCurrentStream, 
-                                            dwCurrentSample, 
-                                            cSamplesToRead, 
-                                            0, 
-                                            0, 
-                                            &cbSample, 
+                        hr = AVIStreamRead( pCurrentStream,
+                                            dwCurrentSample,
+                                            cSamplesToRead,
+                                            0,
+                                            0,
+                                            &cbSample,
                                             &cSamples );
                         assert( SUCCEEDED( hr ) );
                         if( FAILED( hr ) )
@@ -1940,12 +1943,12 @@ HRESULT CUncompAVIToWMV::DoPreprocessing()
 
                             if( SUCCEEDED( hr ) )
                             {
-                                hr = AVIStreamRead( pCurrentStream, 
-                                                    dwCurrentSample, 
-                                                    cSamples, 
-                                                    pbBuffer, 
-                                                    cbBuffer, 
-                                                    &cbSample, 
+                                hr = AVIStreamRead( pCurrentStream,
+                                                    dwCurrentSample,
+                                                    cSamples,
+                                                    pbBuffer,
+                                                    cbBuffer,
+                                                    &cbSample,
                                                     &cSamples );
                                 assert( SUCCEEDED( hr ) );
                             }
@@ -1959,9 +1962,9 @@ HRESULT CUncompAVIToWMV::DoPreprocessing()
                             if( SUCCEEDED( hr ) )
                             {
                                 hr = m_pIWMWriterPreprocess->PreprocessSample( dwCurrentInput, // input number
-                                                                               qwPresentTime,  // presentation time
-                                                                               0,              // flags
-                                                                               pSample );      // the data
+                                        qwPresentTime,  // presentation time
+                                        0,              // flags
+                                        pSample );      // the data
                                 assert( SUCCEEDED( hr ) );
                             }
 
@@ -1989,12 +1992,12 @@ HRESULT CUncompAVIToWMV::DoPreprocessing()
                         //
                         if( WMMEDIATYPE_Audio == pStream->m_Type )
                         {
-                            qwPresentTime += 10000000 * (QWORD)cbBuffer 
+                            qwPresentTime += 10000000 * (QWORD)cbBuffer
                                              / pStream->m_pWFX->nAvgBytesPerSec;
                         }
                         else if( WMMEDIATYPE_Video == pStream->m_Type )
                         {
-                            qwPresentTime = 10000000 * (QWORD)dwCurrentSample 
+                            qwPresentTime = 10000000 * (QWORD)dwCurrentSample
                                             * CurrentStreamInfo.dwScale
                                             / CurrentStreamInfo.dwRate;
                         }
@@ -2037,7 +2040,7 @@ HRESULT CUncompAVIToWMV::DoPreprocessing()
 
 //------------------------------------------------------------------------------
 // Name: CUncompAVIToWMV::WriteSample()
-// Desc: Writes next sample from AVI input to WMWriter. Updates presentation 
+// Desc: Writes next sample from AVI input to WMWriter. Updates presentation
 //       time for AVI input
 //------------------------------------------------------------------------------
 HRESULT CUncompAVIToWMV::WriteSample( CWMInput * pInput )
@@ -2060,20 +2063,20 @@ HRESULT CUncompAVIToWMV::WriteSample( CWMInput * pInput )
         //
         // We want to read one half-second of audio at a time
         //
-        cSamplesToRead = ( pInput->m_pWFX->nAvgBytesPerSec * 4 ) 
-            / ( pInput->m_pWFX->nChannels * pInput->m_pWFX->wBitsPerSample );
+        cSamplesToRead = ( pInput->m_pWFX->nAvgBytesPerSec * 4 )
+                         / ( pInput->m_pWFX->nChannels * pInput->m_pWFX->wBitsPerSample );
     }
     else if( WMMEDIATYPE_Video == pInput->m_Type )
     {
         cSamplesToRead = AVISTREAMREAD_CONVENIENT;
     }
 
-    hr = AVIStreamRead( pInput->m_pAVIStream, 
-                        pInput->m_dwCurrentSample, 
-                        cSamplesToRead, 
-                        0, 
-                        0, 
-                        &cbSample, 
+    hr = AVIStreamRead( pInput->m_pAVIStream,
+                        pInput->m_dwCurrentSample,
+                        cSamplesToRead,
+                        0,
+                        0,
+                        &cbSample,
                         &cSamples );
     if( FAILED( hr ) )
     {
@@ -2093,12 +2096,12 @@ HRESULT CUncompAVIToWMV::WriteSample( CWMInput * pInput )
 
         if( SUCCEEDED( hr ) )
         {
-            hr = AVIStreamRead( pInput->m_pAVIStream, 
-                                pInput->m_dwCurrentSample, 
-                                cSamples, 
-                                pbBuffer, 
-                                cbBuffer, 
-                                &cbSample, 
+            hr = AVIStreamRead( pInput->m_pAVIStream,
+                                pInput->m_dwCurrentSample,
+                                cSamples,
+                                pbBuffer,
+                                cbBuffer,
+                                &cbSample,
                                 &cSamples );
             assert( SUCCEEDED( hr ) );
         }
@@ -2154,7 +2157,7 @@ HRESULT CUncompAVIToWMV::WriteSample( CWMInput * pInput )
     if( m_fArbitrary && WMMEDIATYPE_Audio == pInput->m_Type )
     {
         //
-        // Arbitrary stream. This is for example purposes; there is no need 
+        // Arbitrary stream. This is for example purposes; there is no need
         // to send an arbitrary stream for an audio stream.
         //
         hr = m_pWMWriter->AllocateSample( sizeof(DWORD), &pSample );
@@ -2187,7 +2190,7 @@ HRESULT CUncompAVIToWMV::WriteSample( CWMInput * pInput )
     //
     if( WMMEDIATYPE_Audio == pInput->m_Type )
     {
-        pInput->m_qwPresentTime += 10000000 * (QWORD)cbBuffer 
+        pInput->m_qwPresentTime += 10000000 * (QWORD)cbBuffer
                                    / pInput->m_pWFX->nAvgBytesPerSec;
     }
     else if( WMMEDIATYPE_Video == pInput->m_Type )
@@ -2270,20 +2273,20 @@ HRESULT CUncompAVIToWMV::SetupSMPTE( IWMProfile * pProfile )
     do
     {
         //
-        // We need to call IWMStreamConfig2::AddDataUnitExtension to add 
-        // a data unit extension to store SMPTE code. 
-        // 
-        hr = pIWMStreamConfig->QueryInterface( IID_IWMStreamConfig2, 
+        // We need to call IWMStreamConfig2::AddDataUnitExtension to add
+        // a data unit extension to store SMPTE code.
+        //
+        hr = pIWMStreamConfig->QueryInterface( IID_IWMStreamConfig2,
                                                (void **)&pIWMStreamConfig2 );
         if( FAILED( hr ) )
         {
             break;
         }
 
-        hr = pIWMStreamConfig2->AddDataUnitExtension( WM_SampleExtensionGUID_Timecode, 
-                                                      sizeof(WMT_TIMECODE_EXTENSION_DATA), 
-                                                      NULL, 
-                                                      0 );
+        hr = pIWMStreamConfig2->AddDataUnitExtension( WM_SampleExtensionGUID_Timecode,
+                sizeof(WMT_TIMECODE_EXTENSION_DATA),
+                NULL,
+                0 );
         if( FAILED( hr ) )
         {
             break;
@@ -2302,7 +2305,7 @@ HRESULT CUncompAVIToWMV::SetupSMPTE( IWMProfile * pProfile )
         // Get the frame rate and input number of this video stream
         //
 
-        hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps, 
+        hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps,
                                                (void **)&pMediaProps );
         if( FAILED( hr ) )
         {
@@ -2347,15 +2350,15 @@ HRESULT CUncompAVIToWMV::SetupSMPTE( IWMProfile * pProfile )
             break;
         }
 
-        hr = pIWMStreamConfig->GetConnectionName( pwszConnectionName, 
-                                                  &cchConnectionName );
+        hr = pIWMStreamConfig->GetConnectionName( pwszConnectionName,
+                &cchConnectionName );
         if( FAILED( hr ) )
         {
             break;
         }
 
         //
-        // Look for an AVI input with the matching connection name and 
+        // Look for an AVI input with the matching connection name and
         // set the m_fAddSMPTE flag
         //
         CWMInput * pInput = m_Inputs.Iterate( ITER_FIRST );
@@ -2379,7 +2382,8 @@ HRESULT CUncompAVIToWMV::SetupSMPTE( IWMProfile * pProfile )
             pInput->m_fAddSMPTE = TRUE;
         }
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     SAFE_ARRAYDELETE( pMediaType );
     SAFE_ARRAYDELETE( pwszConnectionName );
@@ -2394,8 +2398,8 @@ HRESULT CUncompAVIToWMV::SetupSMPTE( IWMProfile * pProfile )
 // Name: CUncompAVIToWMV::AddSMPTETimeCode()
 // Desc: Adds SMPTE time code.
 //------------------------------------------------------------------------------
-HRESULT CUncompAVIToWMV::AddSMPTETimeCode( INSSBuffer * pSample, 
-                                           QWORD qwPresTime )
+HRESULT CUncompAVIToWMV::AddSMPTETimeCode( INSSBuffer * pSample,
+        QWORD qwPresTime )
 {
     HRESULT         hr = S_OK;
     INSSBuffer3     * pNSSBuffer3 = NULL;
@@ -2419,13 +2423,13 @@ HRESULT CUncompAVIToWMV::AddSMPTETimeCode( INSSBuffer * pSample,
         // You can change 86400 to other small values if you like.
         //
         SMPTEExtData.wRange = (WORD)( qwPresTime / 10000000 / 86400 );
-        
+
         dwTimeCode = (DWORD)( ( qwPresTime / 10000000 ) % 86400 );  // time in seconds
         dwFrameNumber = (DWORD)( ( qwPresTime % 10000000 )  / m_qwSMPTEAvgTimePerFrame );
 
-        // 
-        // Time code is stored so that the hexadecimal value is read as if 
-        // it were a decimal value. That is, the time code value 0x01133512 
+        //
+        // Time code is stored so that the hexadecimal value is read as if
+        // it were a decimal value. That is, the time code value 0x01133512
         // does not represent decimal 18035986, rather it specifies 1 hour,
         // 13 minutes, 35 seconds, and 12 frames.
         //
@@ -2435,7 +2439,7 @@ HRESULT CUncompAVIToWMV::AddSMPTETimeCode( INSSBuffer * pSample,
                                   dwFrameNumber;                            // Frames
 
         hr = pNSSBuffer3->SetProperty( WM_SampleExtensionGUID_Timecode,
-                                       (BYTE *) &SMPTEExtData, 
+                                       (BYTE *) &SMPTEExtData,
                                        sizeof( SMPTEExtData ) );
     }
 
@@ -2526,9 +2530,9 @@ HRESULT CUncompAVIToWMV::SetAttribute( CONTENT_DESC* pCntDesc )
         else if( 0 == _tcsicmp( _T( "binary" ), pCntDesc->ptszType ) )
         {
             //
-            // If thehe binary data is read as Unicode, the string will have unwanted 
-            // characters in it. For example, the binary data "abcd" will be read 
-            // as "a\0b\0c\0d\0". Its essential to convert the data back to 
+            // If thehe binary data is read as Unicode, the string will have unwanted
+            // characters in it. For example, the binary data "abcd" will be read
+            // as "a\0b\0c\0d\0". Its essential to convert the data back to
             // binary by removing all the unwanted characters.
             //
 
@@ -2598,10 +2602,10 @@ HRESULT CUncompAVIToWMV::SetAttribute( CONTENT_DESC* pCntDesc )
             break;
         }
 
-        hr = pHeaderInfo->SetAttribute( pCntDesc->wStreamNum, 
-                                        pwszName, 
-                                        enumDataType, 
-                                        pbValue, 
+        hr = pHeaderInfo->SetAttribute( pCntDesc->wStreamNum,
+                                        pwszName,
+                                        enumDataType,
+                                        pbValue,
                                         (WORD)dwValueLength );
         if( FAILED( hr ) )
         {
@@ -2622,9 +2626,9 @@ HRESULT CUncompAVIToWMV::SetAttribute( CONTENT_DESC* pCntDesc )
 // Name: CUncompAVIToWMV::SetDRM()
 // Desc: Adds DRM attributes.
 //       When SUPPORT_DRM is not defined, link to wmvcore.lib.
-//       When SUPPORT_DRM is defined, link to wmstubdrm.lib, which 
-//       contains the certificate that you must first acquire from 
-//       Microsoft before working with DRM. 
+//       When SUPPORT_DRM is defined, link to wmstubdrm.lib, which
+//       contains the certificate that you must first acquire from
+//       Microsoft before working with DRM.
 //------------------------------------------------------------------------------
 
 HRESULT CUncompAVIToWMV::SetDRM()
@@ -2647,10 +2651,10 @@ HRESULT CUncompAVIToWMV::SetDRM()
         }
 
         BOOL fUseDRM = TRUE;
-        hr = pHeaderInfo->SetAttribute( 0, 
-                                        g_wszWMUse_DRM, 
-                                        WMT_TYPE_BOOL, 
-                                        (BYTE *) &fUseDRM, 
+        hr = pHeaderInfo->SetAttribute( 0,
+                                        g_wszWMUse_DRM,
+                                        WMT_TYPE_BOOL,
+                                        (BYTE *) &fUseDRM,
                                         sizeof( BOOL ) );
         if( FAILED( hr ) )
         {
@@ -2659,10 +2663,10 @@ HRESULT CUncompAVIToWMV::SetDRM()
         }
 
         DWORD dwDRMFlags = WMT_RIGHT_PLAYBACK | WMT_RIGHT_COPY_TO_NON_SDMI_DEVICE |  WMT_RIGHT_COPY_TO_CD;
-        hr = pHeaderInfo->SetAttribute( 0, 
-                                        g_wszWMDRM_Flags, 
-                                        WMT_TYPE_DWORD, 
-                                        (BYTE *) &dwDRMFlags, 
+        hr = pHeaderInfo->SetAttribute( 0,
+                                        g_wszWMDRM_Flags,
+                                        WMT_TYPE_DWORD,
+                                        (BYTE *) &dwDRMFlags,
                                         sizeof(DWORD) );
         if( FAILED( hr ) )
         {
@@ -2671,10 +2675,10 @@ HRESULT CUncompAVIToWMV::SetDRM()
         }
 
         DWORD dwDRMLevel = 150;
-        hr = pHeaderInfo->SetAttribute( 0, 
-                                        g_wszWMDRM_Level, 
-                                        WMT_TYPE_DWORD, 
-                                        (BYTE *) &dwDRMLevel, 
+        hr = pHeaderInfo->SetAttribute( 0,
+                                        g_wszWMDRM_Level,
+                                        WMT_TYPE_DWORD,
+                                        (BYTE *) &dwDRMLevel,
                                         sizeof(DWORD) );
         if( FAILED( hr ) )
         {
@@ -2698,12 +2702,12 @@ HRESULT CUncompAVIToWMV::SetDRM()
 
 //------------------------------------------------------------------------------
 // Name: CUncompAVIToWMV::GetTokensFromFile()
-// Desc: Creates a list of tokens from an ASCII input file. 
+// Desc: Creates a list of tokens from an ASCII input file.
 //       Tokens should be separated by CR/LF..
 //------------------------------------------------------------------------------
-HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName, 
-                                            __out_ecount(*TokenNum) LPTSTR pptszTokens[], 
-                                            int * TokenNum )
+HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName,
+        __out_ecount(*TokenNum) LPTSTR pptszTokens[],
+        int * TokenNum )
 {
     HRESULT hr = S_OK;
     HANDLE hFile = NULL;
@@ -2718,12 +2722,12 @@ HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName,
         return( E_INVALIDARG );
     }
 
-    hFile = CreateFile( ptszFileName, 
-                        GENERIC_READ, 
+    hFile = CreateFile( ptszFileName,
+                        GENERIC_READ,
                         FILE_SHARE_READ,
-                        NULL, 
-                        OPEN_EXISTING, 
-                        FILE_ATTRIBUTE_NORMAL, 
+                        NULL,
+                        OPEN_EXISTING,
+                        FILE_ATTRIBUTE_NORMAL,
                         NULL );
     if( INVALID_HANDLE_VALUE == hFile )
     {
@@ -2745,9 +2749,9 @@ HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName,
             break;
         }
 
-        pszBuffer = ( LPSTR ) VirtualAlloc( 0, 
-                                            dwFileSize + 1, 
-                                            MEM_COMMIT, 
+        pszBuffer = ( LPSTR ) VirtualAlloc( 0,
+                                            dwFileSize + 1,
+                                            MEM_COMMIT,
                                             PAGE_READWRITE);
         if( NULL == pszBuffer )
         {
@@ -2756,7 +2760,7 @@ HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName,
         }
 
         if( !ReadFile( hFile, pszBuffer, dwFileSize, &dwRead, NULL ) ||
-            dwFileSize != dwRead )
+                dwFileSize != dwRead )
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             break;
@@ -2764,8 +2768,8 @@ HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName,
 
         pszBuffer[ dwFileSize ] = 0x0d;
         nTokenCount = 0;
-		
-		char* context = NULL;
+
+        char* context = NULL;
         LPSTR pToken = strtok_s( pszBuffer, "\r\n", &context);
 
         while( NULL != pToken )
@@ -2783,13 +2787,14 @@ HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName,
                 break;
             }
 
-			char* context = NULL;
+            char* context = NULL;
             pToken = strtok_s( NULL, "\r\n", &context);
         }
 
         *TokenNum = nTokenCount;
 
-    } while( FALSE );
+    }
+    while( FALSE );
 
     if( NULL != hFile )
     {
@@ -2805,8 +2810,8 @@ HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// The following functions work in a very similar manner to their counterparts 
-// in the WmGenProfile sample. They are used to add a video or audio stream 
+// The following functions work in a very similar manner to their counterparts
+// in the WmGenProfile sample. They are used to add a video or audio stream
 // to a profile.
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -2815,11 +2820,11 @@ HRESULT CUncompAVIToWMV::GetTokensFromFile( LPCTSTR ptszFileName,
 // Desc: Creates and configures a stream.
 //------------------------------------------------------------------------------
 HRESULT CUncompAVIToWMV::SetStreamBasics( IWMStreamConfig * pIWMStreamConfig,
-                                          IWMProfile * pIWMProfile,
-                                          __in LPWSTR pwszStreamName,
-                                          __in LPWSTR pwszConnectionName,
-                                          DWORD dwBitrate,
-                                          WM_MEDIA_TYPE * pmt )
+        IWMProfile * pIWMProfile,
+        __in LPWSTR pwszStreamName,
+        __in LPWSTR pwszConnectionName,
+        DWORD dwBitrate,
+        WM_MEDIA_TYPE * pmt )
 {
     HRESULT hr = S_OK;
     IWMMediaProps * pIWMMediaProps = NULL;
@@ -2870,7 +2875,7 @@ HRESULT CUncompAVIToWMV::SetStreamBasics( IWMStreamConfig * pIWMStreamConfig,
             break;
         }
 
-        hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps, 
+        hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps,
                                                (void **) &pIWMMediaProps );
         if( FAILED( hr ) )
         {
@@ -2895,11 +2900,11 @@ HRESULT CUncompAVIToWMV::SetStreamBasics( IWMStreamConfig * pIWMStreamConfig,
 // Desc: Configures and adds a video stream.
 //------------------------------------------------------------------------------
 HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
-                                         WMVIDEOINFOHEADER * pInputVIH,
-                                         WORD  * pwStreamNum,
-                                         DWORD dwQuality,
-                                         DWORD dwSecPerKey,
-                                         __out LPWSTR * pwszConnectionName )
+        WMVIDEOINFOHEADER * pInputVIH,
+        WORD  * pwStreamNum,
+        DWORD dwQuality,
+        DWORD dwSecPerKey,
+        __out LPWSTR * pwszConnectionName )
 {
     HRESULT hr = S_OK;
 
@@ -2909,10 +2914,10 @@ HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
     IWMVideoMediaProps  * pMediaProps = NULL;
     WM_MEDIA_TYPE       * pMediaType = NULL;
 
-    if( NULL == pIWMProfile || 
-        NULL == pInputVIH || 
-        NULL == pwStreamNum || 
-        NULL == pwszConnectionName )
+    if( NULL == pIWMProfile ||
+            NULL == pInputVIH ||
+            NULL == pwStreamNum ||
+            NULL == pwszConnectionName )
     {
         return( E_INVALIDARG );
     }
@@ -2925,7 +2930,7 @@ HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
             break;
         }
 
-        hr = pManager->QueryInterface( IID_IWMCodecInfo, 
+        hr = pManager->QueryInterface( IID_IWMCodecInfo,
                                        (void **) &pCodecInfo );
         if( FAILED( hr ) )
         {
@@ -2941,14 +2946,14 @@ HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
         }
 
         //
-        // Search from the last codec because the last codec usually 
-        // is the newest codec. 
+        // Search from the last codec because the last codec usually
+        // is the newest codec.
         //
         for( int i = cCodecs-1; i >= 0; i-- )
         {
             DWORD cFormats;
-            hr = pCodecInfo->GetCodecFormatCount( WMMEDIATYPE_Video, 
-                                                  i, 
+            hr = pCodecInfo->GetCodecFormatCount( WMMEDIATYPE_Video,
+                                                  i,
                                                   &cFormats );
             if( FAILED( hr ) )
             {
@@ -2960,9 +2965,9 @@ HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
             {
                 SAFE_RELEASE( pStreamConfig );
 
-                hr = pCodecInfo->GetCodecFormat( WMMEDIATYPE_Video, 
-                                                 i, 
-                                                 j, 
+                hr = pCodecInfo->GetCodecFormat( WMMEDIATYPE_Video,
+                                                 i,
+                                                 j,
                                                  &pStreamConfig );
                 if( FAILED( hr ) )
                 {
@@ -2971,7 +2976,7 @@ HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
 
                 SAFE_RELEASE( pMediaProps );
 
-                hr = pStreamConfig->QueryInterface( IID_IWMVideoMediaProps, 
+                hr = pStreamConfig->QueryInterface( IID_IWMVideoMediaProps,
                                                     (void **) &pMediaProps );
                 if( FAILED( hr ) )
                 {
@@ -3038,8 +3043,8 @@ HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
         WMVIDEOINFOHEADER * pVIH = (WMVIDEOINFOHEADER *) pMediaType->pbFormat;
 
         //
-        // Set the target bitrate to 1/30 of the source bitrate 
-        // since it's compressing. 
+        // Set the target bitrate to 1/30 of the source bitrate
+        // since it's compressing.
         //
         pVIH->dwBitRate = pInputVIH->dwBitRate / 30;
 
@@ -3064,10 +3069,10 @@ HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
             break;
         }
 
-        hr = SetStreamBasics( pStreamConfig, 
-                              pIWMProfile, 
-                              L"Video Stream", 
-                              L"Video", 
+        hr = SetStreamBasics( pStreamConfig,
+                              pIWMProfile,
+                              L"Video Stream",
+                              L"Video",
                               pVIH->dwBitRate, pMediaType );
         if( FAILED( hr ) )
         {
@@ -3137,11 +3142,11 @@ HRESULT CUncompAVIToWMV::AddVideoStream( IWMProfile * pIWMProfile,
 // Desc: Configures and adds an audio stream.
 //------------------------------------------------------------------------------
 HRESULT CUncompAVIToWMV::AddAudioStream( IWMProfile * pIWMProfile,
-                                         DWORD dwSampleRate,
-                                         DWORD dwChannels,
-                                         WORD wBitsPerSample,
-                                         WORD  * pwStreamNum,
-                                         __out LPWSTR * pwszConnectionName )
+        DWORD dwSampleRate,
+        DWORD dwChannels,
+        WORD wBitsPerSample,
+        WORD  * pwStreamNum,
+        __out LPWSTR * pwszConnectionName )
 {
     HRESULT             hr = S_OK;
     IWMProfileManager   * pIWMProfileManager = NULL;
@@ -3182,8 +3187,8 @@ HRESULT CUncompAVIToWMV::AddAudioStream( IWMProfile * pIWMProfile,
         for( i = 0; i < cCodecs; i++ )
         {
             DWORD cFormats;
-            hr = pIWMInfo->GetCodecFormatCount( WMMEDIATYPE_Audio, 
-                                                i, 
+            hr = pIWMInfo->GetCodecFormatCount( WMMEDIATYPE_Audio,
+                                                i,
                                                 &cFormats );
             if( FAILED( hr ) )
             {
@@ -3191,7 +3196,7 @@ HRESULT CUncompAVIToWMV::AddAudioStream( IWMProfile * pIWMProfile,
             }
 
             //
-            // Find a proper format in this codec 
+            // Find a proper format in this codec
             //
             for( j = 0; j < cFormats; j++ )
             {
@@ -3201,9 +3206,9 @@ HRESULT CUncompAVIToWMV::AddAudioStream( IWMProfile * pIWMProfile,
                 }
 
                 DWORD cbType = 0;
-                hr = pIWMInfo->GetCodecFormat( WMMEDIATYPE_Audio, 
-                                               i, 
-                                               j, 
+                hr = pIWMInfo->GetCodecFormat( WMMEDIATYPE_Audio,
+                                               i,
+                                               j,
                                                &pIWMStreamConfig );
                 if( FAILED( hr ) )
                 {
@@ -3212,7 +3217,7 @@ HRESULT CUncompAVIToWMV::AddAudioStream( IWMProfile * pIWMProfile,
 
                 SAFE_RELEASE( pIMP );
 
-                hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps, 
+                hr = pIWMStreamConfig->QueryInterface( IID_IWMMediaProps,
                                                        (void **)&pIMP );
                 if( FAILED( hr ) )
                 {
@@ -3247,14 +3252,14 @@ HRESULT CUncompAVIToWMV::AddAudioStream( IWMProfile * pIWMProfile,
                 pWfx = (WAVEFORMATEX *) pType->pbFormat;
 
                 //
-                // This sample will use this format only if it has the same 
-                // sample rate, channels and more bits per sample. 
-                // This is not necessary, because normally the codec can convert 
-                // the sample rate and bits per sample for you. 
-                // 
+                // This sample will use this format only if it has the same
+                // sample rate, channels and more bits per sample.
+                // This is not necessary, because normally the codec can convert
+                // the sample rate and bits per sample for you.
+                //
                 if( pWfx->nSamplesPerSec == dwSampleRate &&
-                    pWfx->nChannels == dwChannels &&
-                    pWfx->wBitsPerSample >= wBitsPerSample )
+                        pWfx->nChannels == dwChannels &&
+                        pWfx->wBitsPerSample >= wBitsPerSample )
                 {
                     break;
                 }
@@ -3282,11 +3287,11 @@ HRESULT CUncompAVIToWMV::AddAudioStream( IWMProfile * pIWMProfile,
         //
         // We found a valid WAVEFORMATEX; go ahead and set up the stream.
         //
-        hr = SetStreamBasics( pIWMStreamConfig, 
-                              pIWMProfile, 
-                              L"Audio Stream", 
-                              L"Audio", 
-                              pWfx->nAvgBytesPerSec * 8, 
+        hr = SetStreamBasics( pIWMStreamConfig,
+                              pIWMProfile,
+                              L"Audio Stream",
+                              L"Audio",
+                              pWfx->nAvgBytesPerSec * 8,
                               pType );
         if( FAILED( hr ) )
         {

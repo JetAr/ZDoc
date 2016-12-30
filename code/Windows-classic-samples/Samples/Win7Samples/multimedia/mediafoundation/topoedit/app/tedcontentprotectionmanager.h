@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,12 +16,12 @@
 // {E2102B14-0B1B-413b-94FB-47C73E2EFC18}
 DEFINE_GUID(&CLSID_CTedContentProtectionManager, 0xe2102b14, 0xb1b, 0x413b, 0x94, 0xfb, 0x47, 0xc7, 0x3e, 0x2e, 0xfc, 0x18);
 
-class CTedContentProtectionManager 
+class CTedContentProtectionManager
     : public IMFContentProtectionManager
     , public IWMReaderCallback
 {
 public:
-    CTedContentProtectionManager::CTedContentProtectionManager(CTedApp* pApp) 
+    CTedContentProtectionManager::CTedContentProtectionManager(CTedApp* pApp)
         : m_pApp(pApp)
         , m_cRef(0)
     {
@@ -33,9 +33,9 @@ public:
     {
         HRESULT hr = S_OK;
         CComPtr<IMFMediaEventGenerator> spMEG;
-        
+
         IFC( MFCreateAsyncResult(NULL, pCallback, punkState, &m_spResult) );
-        
+
         IFC( pEnablerActivate->ActivateObject(IID_IMFContentEnabler, (void**) &m_spContentEnabler) );
 
         GUID gidEnableType;
@@ -52,7 +52,7 @@ public:
             }
             else
             {
-        	    IFC( m_spContentEnabler->AutomaticEnable() );
+                IFC( m_spContentEnabler->AutomaticEnable() );
             }
         }
         else if(MFENABLETYPE_WMDRMV7_Individualization == gidEnableType)
@@ -66,8 +66,8 @@ public:
 
         IFC( m_spContentEnabler->QueryInterface(IID_IMFMediaEventGenerator, (void**) &spMEG) );
         IFC( spMEG->BeginGetEvent( &m_xOnEnableEvent, NULL) );
-        
-    Cleanup:
+
+Cleanup:
         return hr;
     }
 
@@ -88,7 +88,7 @@ public:
         int iResult = IDYES;
         if(MF_LICENSE_URL_UNTRUSTED == TrustStatus)
         {
-            iResult = m_pApp->MessageBox(LoadAtlString(IDS_LICENSE_URL_UNTRUSTED), NULL, MB_YESNO);    
+            iResult = m_pApp->MessageBox(LoadAtlString(IDS_LICENSE_URL_UNTRUSTED), NULL, MB_YESNO);
         }
         else if(MF_LICENSE_URL_TAMPERED == TrustStatus)
         {
@@ -98,16 +98,16 @@ public:
         if(iResult == IDYES)
         {
             HINSTANCE hResult = ShellExecute(NULL, L"open", wszURL, NULL, NULL, SW_NORMAL);
-            
+
             if(hResult < (HINSTANCE) 32)
             {
                 m_pApp->MessageBox(LoadAtlString(IDS_E_LICENSE_URL_BROWSER), NULL, MB_OK);
             }
         }
 
-    
-        Cleanup:
-            return hr;
+
+Cleanup:
+        return hr;
     }
 
     HRESULT STDMETHODCALLTYPE Individualize()
@@ -116,14 +116,14 @@ public:
 
         CComPtr<IWMReader> spReader;
         CComPtr<IWMDRMReader> spDRMReader;
-            
+
         IFC( WMCreateReader(NULL, 0, &spReader) );
 
         IFC( spReader->Open(L"C:\\non_existent_file.just_for_indiv", (IWMReaderCallback *)this, NULL) );
         IFC( spReader->QueryInterface(&spDRMReader) );
         IFC( spDRMReader->Individualize(0) );
 
-    Cleanup:
+Cleanup:
         return hr;
     }
 
@@ -136,14 +136,14 @@ public:
     {
         return S_OK;
     }
-    
+
     virtual STDMETHODIMP_(ULONG) AddRef()
     {
         LONG cRef = InterlockedIncrement(&m_cRef);
 
         return cRef;
     }
-    
+
     virtual STDMETHODIMP_(ULONG) Release()
     {
         LONG cRef = InterlockedDecrement(&m_cRef);
@@ -155,20 +155,20 @@ public:
 
         return cRef;
     }
-    
+
     virtual STDMETHODIMP QueryInterface(REFIID riid, void** ppvObject)
     {
         if(!ppvObject)
         {
-        	return E_POINTER;
+            return E_POINTER;
         }
 
         if(IID_IMFContentProtectionManager == riid || IID_IUnknown == riid)
         {
-        	*ppvObject = this;
-        	AddRef();
+            *ppvObject = this;
+            AddRef();
 
-        	return S_OK;
+            return S_OK;
         }
 
         *ppvObject = NULL;
@@ -178,10 +178,10 @@ public:
     void OnEnableEvent(IMFAsyncResult* pResult)
     {
         HRESULT hr = S_OK;
-        
+
         CComPtr<IMFMediaEventGenerator> spMEG;
         CComPtr<IMFMediaEvent> spEvent;
-                
+
         IFC( m_spContentEnabler->QueryInterface(IID_IMFMediaEventGenerator, (void**) &spMEG) );
         IFC( spMEG->EndGetEvent(pResult, &spEvent) );
 
@@ -202,17 +202,17 @@ public:
                 m_pApp->HandleMMError(LoadAtlString(IDS_LICENSE_ACQUIRED_FAILED), hr);
             }
 
-           IFC( MFInvokeCallback(m_spResult) );
+            IFC( MFInvokeCallback(m_spResult) );
         }
         else
         {
             IFC( spMEG->BeginGetEvent(&m_xOnEnableEvent, NULL) );
         }
 
-    Cleanup:
+Cleanup:
         ;
     }
-    
+
 private:
     CTedApp* m_pApp;
     LONG m_cRef;

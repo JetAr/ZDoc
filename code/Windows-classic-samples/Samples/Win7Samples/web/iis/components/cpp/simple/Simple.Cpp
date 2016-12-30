@@ -1,4 +1,4 @@
-// Simple.cpp : Implementation of CSimple
+﻿// Simple.cpp : Implementation of CSimple
 
 #include "stdafx.h"
 #include "CATLSmpl.h"
@@ -6,7 +6,7 @@
 
 STDMETHODIMP CSimple::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] = 
+    static const IID* arr[] =
     {
         &IID_ISimple,
     };
@@ -45,13 +45,13 @@ STDMETHODIMP CSimple::get_myProperty(BSTR *pbstrOutValue)
     // Get Value from Property
 
     *pbstrOutValue = m_bstrMyProperty.Copy();
-    
+
     return S_OK;
 }
 
 //Basic Method to convert a string to uppercase
 
-STDMETHODIMP CSimple::myMethod(BSTR bstrIn, BSTR *pbstrOut)  
+STDMETHODIMP CSimple::myMethod(BSTR bstrIn, BSTR *pbstrOut)
 {
     if (bstrIn == NULL || pbstrOut == NULL)
         return E_POINTER;
@@ -63,10 +63,10 @@ STDMETHODIMP CSimple::myMethod(BSTR bstrIn, BSTR *pbstrOut)
     if (!bstrTemp)
         return E_OUTOFMEMORY;
 
-    // Make string uppercase   
+    // Make string uppercase
 
-    wcsupr(bstrTemp);  
-    
+    wcsupr(bstrTemp);
+
     // Return m_str member of bstrTemp
 
     *pbstrOut = bstrTemp.Detach();

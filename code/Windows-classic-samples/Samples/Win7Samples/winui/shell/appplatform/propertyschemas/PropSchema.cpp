@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -106,7 +106,7 @@ void DumpProperties(PROPDESC_ENUMFILTER pdefFilter)
         {
             switch (pdefFilter)
             {
-                //These enums are part of the PROPDESC_ENUMFILTER enum type
+            //These enums are part of the PROPDESC_ENUMFILTER enum type
             case PDEF_ALL:
                 wprintf(L"\nThere are %d properties in the system.\n", cuProps);
                 break;

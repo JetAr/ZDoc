@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -61,7 +61,7 @@ VOID PrintStartInfo(
     printf("  FirmwareVersion: %S\n", DeviceInfo.szFirmwareVersion);
     printf("  SerialNumber:    %S\n\n", DeviceInfo.szSerialNumber);
     printf("  PresentationUrl: %S\n\n", DeviceInfo.szPresentationUrl);
-    
+
     // Print key map
     printf("Press\n");
     printf("  q : Quit\n");
@@ -71,7 +71,7 @@ VOID PrintStartInfo(
 
 int ParseCMDLine(
     int argc,
-    __in_ecount(argc) PWSTR argv[], 
+    __in_ecount(argc) PWSTR argv[],
     __out PWSTR& pszDeviceId,
     __out GUID& DeviceId,
     __out TDeviceInfo& DeviceInfo)
@@ -155,9 +155,9 @@ int ParseCMDLine(
 
     // Check that the required parameters were supplied
     if (   !pszDeviceId
-        || !*DeviceInfo.szDeviceCategory
-        || !*DeviceInfo.szFriendlyName
-        || !*DeviceInfo.szPnPHardwareId)
+            || !*DeviceInfo.szDeviceCategory
+            || !*DeviceInfo.szFriendlyName
+            || !*DeviceInfo.szPnPHardwareId)
     {
         printf("All required switches were not supplied\n\n");
 
@@ -170,7 +170,7 @@ int ParseCMDLine(
 }  // ParseCMDLine
 
 ULONG GetDefaultMulticastInterfaceIndex(
-    ULONG AddressFamily, 
+    ULONG AddressFamily,
     __out ULONG& InterfaceIndex)
 {
     ULONG RetVal = 0;
@@ -180,18 +180,18 @@ ULONG GetDefaultMulticastInterfaceIndex(
     ULONG i = 0;
 
     assert((   (AF_INET == AddressFamily)
-            || (AF_INET6 == AddressFamily)));
-    
+               || (AF_INET6 == AddressFamily)));
+
     for (i = 0; i < 5; ++i)
     {
         RetVal =  GetAdaptersAddresses(
-            AddressFamily, 
-            GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_UNICAST,
-            NULL, 
-            pAdapterAddresses, 
-            &BufSize);
-        
-        if (RetVal != ERROR_BUFFER_OVERFLOW) 
+                      AddressFamily,
+                      GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_UNICAST,
+                      NULL,
+                      pAdapterAddresses,
+                      &BufSize);
+
+        if (RetVal != ERROR_BUFFER_OVERFLOW)
         {
             break;
         }
@@ -200,9 +200,9 @@ ULONG GetDefaultMulticastInterfaceIndex(
         {
             free(pAdapterAddresses);
         }
-        
+
         pAdapterAddresses = (PIP_ADAPTER_ADDRESSES) malloc(BufSize);
-        if (!pAdapterAddresses) 
+        if (!pAdapterAddresses)
         {
             RetVal = ERROR_OUTOFMEMORY;
         }
@@ -216,7 +216,7 @@ ULONG GetDefaultMulticastInterfaceIndex(
         while (pCurrentAdapter)
         {
             if (   (IfOperStatusUp == pCurrentAdapter->OperStatus)  // Adapter is operational
-                && ((IP_ADAPTER_NO_MULTICAST & pCurrentAdapter->Flags) == 0))  // Adapter is multicast capable
+                    && ((IP_ADAPTER_NO_MULTICAST & pCurrentAdapter->Flags) == 0))  // Adapter is multicast capable
             {
                 break;
             }
@@ -252,7 +252,7 @@ ULONG GetDefaultMulticastInterfaceIndex(
 
 
 int JoinMulticastGroupAndSetSocketOptions(
-    SOCKET hDiscoverySocket, 
+    SOCKET hDiscoverySocket,
     __in PADDRINFOW pMulticastAddrInfo,
     __in PADDRINFOW pLocalAddrInfo)
 {
@@ -263,14 +263,14 @@ int JoinMulticastGroupAndSetSocketOptions(
     ULONG cByteCount = 0;
     ULONG InterfaceIndex = 0;
 
-    // Set SO_EXCLUSIVEADDRUSE and SO_REUSEADDR for the socket 
+    // Set SO_EXCLUSIVEADDRUSE and SO_REUSEADDR for the socket
     // so that there can be multiple listeners on the same machine
     err = setsockopt(
-        hDiscoverySocket, 
-        SOL_SOCKET, 
-        SO_EXCLUSIVEADDRUSE,
-        (char*) &fDisabled,
-        sizeof(fDisabled));
+              hDiscoverySocket,
+              SOL_SOCKET,
+              SO_EXCLUSIVEADDRUSE,
+              (char*) &fDisabled,
+              sizeof(fDisabled));
     if (0 != err)
     {
         err = WSAGetLastError();
@@ -278,11 +278,11 @@ int JoinMulticastGroupAndSetSocketOptions(
         goto Cleanup;
     }
     err = setsockopt(
-        hDiscoverySocket, 
-        SOL_SOCKET, 
-        SO_REUSEADDR,
-        (char*) &fEnabled,
-        sizeof(fEnabled));
+              hDiscoverySocket,
+              SOL_SOCKET,
+              SO_REUSEADDR,
+              (char*) &fEnabled,
+              sizeof(fEnabled));
     if (0 != err)
     {
         err = WSAGetLastError();
@@ -292,15 +292,15 @@ int JoinMulticastGroupAndSetSocketOptions(
 
     // Disable connection reset for UDP
     err = WSAIoctl(
-        hDiscoverySocket,
-        SIO_UDP_CONNRESET,
-        &fDisabled,
-        sizeof(fDisabled),
-        NULL,
-        0,
-        &cByteCount,
-        NULL,
-        NULL);
+              hDiscoverySocket,
+              SIO_UDP_CONNRESET,
+              &fDisabled,
+              sizeof(fDisabled),
+              NULL,
+              0,
+              &cByteCount,
+              NULL,
+              NULL);
     if (0 != err)
     {
         err = WSAGetLastError();
@@ -310,11 +310,11 @@ int JoinMulticastGroupAndSetSocketOptions(
 
     // Adjust the send and receive buffer size
     err = setsockopt(
-        hDiscoverySocket,
-        SOL_SOCKET,
-        SO_RCVBUF,
-        (char*) &sendRecvBufSize,
-        sizeof(sendRecvBufSize));
+              hDiscoverySocket,
+              SOL_SOCKET,
+              SO_RCVBUF,
+              (char*) &sendRecvBufSize,
+              sizeof(sendRecvBufSize));
     if (0 != err)
     {
         err = WSAGetLastError();
@@ -322,11 +322,11 @@ int JoinMulticastGroupAndSetSocketOptions(
         goto Cleanup;
     }
     err = setsockopt(
-        hDiscoverySocket,
-        SOL_SOCKET,
-        SO_SNDBUF,
-        (char*) &sendRecvBufSize,
-        sizeof(sendRecvBufSize));
+              hDiscoverySocket,
+              SOL_SOCKET,
+              SO_SNDBUF,
+              (char*) &sendRecvBufSize,
+              sizeof(sendRecvBufSize));
     if (0 != err)
     {
         err = WSAGetLastError();
@@ -335,8 +335,8 @@ int JoinMulticastGroupAndSetSocketOptions(
     }
 
     err = GetDefaultMulticastInterfaceIndex(
-        pMulticastAddrInfo->ai_family,
-        InterfaceIndex);
+              pMulticastAddrInfo->ai_family,
+              InterfaceIndex);
     if (0 != err)
     {
         printf("GetDefaultMulticastInterfaceIndex failed.  Error %u\n", err);
@@ -352,12 +352,12 @@ int JoinMulticastGroupAndSetSocketOptions(
         memcpy(&mreq.imr_interface, &InterfaceIndex, sizeof(mreq.imr_interface));   // Set the interface index
 
         err = setsockopt(
-            hDiscoverySocket,
-            IPPROTO_IP,
-            IP_ADD_MEMBERSHIP,
-            (char*) &mreq,
-            sizeof(mreq));
-        
+                  hDiscoverySocket,
+                  IPPROTO_IP,
+                  IP_ADD_MEMBERSHIP,
+                  (char*) &mreq,
+                  sizeof(mreq));
+
         if (0 != err)
         {
             err = WSAGetLastError();
@@ -367,11 +367,11 @@ int JoinMulticastGroupAndSetSocketOptions(
 
         // Set the outgoing multicast interface
         err = setsockopt(
-            hDiscoverySocket,
-            IPPROTO_IP,
-            IP_MULTICAST_IF,
-            (char*) &InterfaceIndex,
-            sizeof(InterfaceIndex));
+                  hDiscoverySocket,
+                  IPPROTO_IP,
+                  IP_MULTICAST_IF,
+                  (char*) &InterfaceIndex,
+                  sizeof(InterfaceIndex));
         if (0 != err)
         {
             err = WSAGetLastError();
@@ -385,15 +385,15 @@ int JoinMulticastGroupAndSetSocketOptions(
 
         // Join the multicast group
         mreq6.ipv6mr_multiaddr = ((PSOCKADDR_IN6) pMulticastAddrInfo->ai_addr)->sin6_addr;  // Set the multicast address
-        mreq6.ipv6mr_interface = InterfaceIndex;  
+        mreq6.ipv6mr_interface = InterfaceIndex;
 
         err = setsockopt(
-            hDiscoverySocket,
-            IPPROTO_IPV6,
-            IPV6_ADD_MEMBERSHIP,
-            (char*) &mreq6,
-            sizeof(mreq6));
-        
+                  hDiscoverySocket,
+                  IPPROTO_IPV6,
+                  IPV6_ADD_MEMBERSHIP,
+                  (char*) &mreq6,
+                  sizeof(mreq6));
+
         if (0 != err)
         {
             err = WSAGetLastError();
@@ -403,11 +403,11 @@ int JoinMulticastGroupAndSetSocketOptions(
 
         // Set the outgoing multicast interface
         err = setsockopt(
-            hDiscoverySocket,
-            IPPROTO_IPV6,
-            IPV6_MULTICAST_IF,
-            (char*) &InterfaceIndex,
-            sizeof(InterfaceIndex));
+                  hDiscoverySocket,
+                  IPPROTO_IPV6,
+                  IPV6_MULTICAST_IF,
+                  (char*) &InterfaceIndex,
+                  sizeof(InterfaceIndex));
         if (0 != err)
         {
             err = WSAGetLastError();
@@ -463,9 +463,9 @@ DWORD __stdcall RecvThread(
 
     // Register socket for select events
     RetVal = WSAEventSelect(
-        pRecvThreadInfo->hDiscoverySocket,
-        hSelectEvent,
-        FD_READ);
+                 pRecvThreadInfo->hDiscoverySocket,
+                 hSelectEvent,
+                 FD_READ);
 
     if (0 != RetVal)
     {
@@ -483,15 +483,15 @@ DWORD __stdcall RecvThread(
 
         // Wait for a message to arrive or shutdown to be signaled
         WaitSignal = WaitForMultipleObjects(
-            ARRAYSIZE(hWaitHandles),
-            hWaitHandles,
-            FALSE,
-            INFINITE);
+                         ARRAYSIZE(hWaitHandles),
+                         hWaitHandles,
+                         FALSE,
+                         INFINITE);
 
         // These values should never occur
         if (   (WaitSignal == WAIT_TIMEOUT )
-            || (WaitSignal == WAIT_ABANDONED_0)
-            || (WaitSignal == WAIT_ABANDONED_0 + 1))
+                || (WaitSignal == WAIT_ABANDONED_0)
+                || (WaitSignal == WAIT_ABANDONED_0 + 1))
         {
             printf("Unexpected wait result.  Continue.\n");
 
@@ -508,39 +508,39 @@ DWORD __stdcall RecvThread(
 
         //
         // A message has been received, process it
-        // 
+        //
         ZeroMemory(&FromAddr, sizeof(FromAddr));
         FromAddrLen = sizeof(FromAddr);
         cByteCount = recvfrom(
-            pRecvThreadInfo->hDiscoverySocket,
-            (char *) pQueryMessage,
-            MaxMessageSize,
-            0,
-            (sockaddr*) &FromAddr,
-            &FromAddrLen);
+                         pRecvThreadInfo->hDiscoverySocket,
+                         (char *) pQueryMessage,
+                         MaxMessageSize,
+                         0,
+                         (sockaddr*) &FromAddr,
+                         &FromAddrLen);
 
         if (SOCKET_ERROR != cByteCount)
         {
             // Process message if it is a Query message
             if (   (sizeof(TQueryMessage) == cByteCount)
-                && (pQueryMessage->MessageType == Query))
+                    && (pQueryMessage->MessageType == Query))
             {
-                // Respond if 
-                // the device category is not specified 
+                // Respond if
+                // the device category is not specified
                 // or the same as our device criteria
-                if (   (L'\0' == pQueryMessage->szDeviceCategory[0]) 
-                    || (wcscmp(pQueryMessage->szDeviceCategory, pRecvThreadInfo->pDeviceInfo->szDeviceCategory) == 0))
+                if (   (L'\0' == pQueryMessage->szDeviceCategory[0])
+                        || (wcscmp(pQueryMessage->szDeviceCategory, pRecvThreadInfo->pDeviceInfo->szDeviceCategory) == 0))
                 {
                     // back off a bit so we don't overwelm the client if there are many devices.
                     Sleep(rand() % 100);
 
                     cByteCount = sendto(
-                        pRecvThreadInfo->hDiscoverySocket,
-                        (char*) &ReplyMessage,
-                        sizeof(ReplyMessage),
-                        0,
-                        (sockaddr*) &FromAddr,
-                        FromAddrLen);
+                                     pRecvThreadInfo->hDiscoverySocket,
+                                     (char*) &ReplyMessage,
+                                     sizeof(ReplyMessage),
+                                     0,
+                                     (sockaddr*) &FromAddr,
+                                     FromAddrLen);
 
                     if (0 != cByteCount)
                     {
@@ -578,7 +578,7 @@ Cleanup:
 }  // RecvThread
 
 VOID StopRecv(
-    HANDLE hStopEvent, 
+    HANDLE hStopEvent,
     HANDLE hRecvThread)
 {
     // Signal the Recv thread to stop.
@@ -595,7 +595,7 @@ VOID StopRecv(
 }  // StopRecv
 
 VOID SendHello(
-    SOCKET hDiscoverySocket, 
+    SOCKET hDiscoverySocket,
     __in GUID& DeviceId,
     __in TDeviceInfo& DeviceInfo,
     __in PADDRINFOW pMulticastAddrInfo)
@@ -608,12 +608,12 @@ VOID SendHello(
     HelloMessage.DeviceInfo = DeviceInfo;
 
     cByteCount = sendto(
-        hDiscoverySocket,
-        (char*) &HelloMessage,
-        sizeof(HelloMessage),
-        0,
-        pMulticastAddrInfo->ai_addr,
-        (int) pMulticastAddrInfo->ai_addrlen);
+                     hDiscoverySocket,
+                     (char*) &HelloMessage,
+                     sizeof(HelloMessage),
+                     0,
+                     pMulticastAddrInfo->ai_addr,
+                     (int) pMulticastAddrInfo->ai_addrlen);
 
     if (0 != cByteCount)
     {
@@ -637,12 +637,12 @@ VOID SendBye(
     ByeMessage.DeviceId = DeviceId;
 
     cByteCount = sendto(
-        hDiscoverySocket,
-        (char*) &ByeMessage,
-        sizeof(ByeMessage),
-        0,
-        pMulticastAddrInfo->ai_addr,
-        (int) pMulticastAddrInfo->ai_addrlen);
+                     hDiscoverySocket,
+                     (char*) &ByeMessage,
+                     sizeof(ByeMessage),
+                     0,
+                     pMulticastAddrInfo->ai_addr,
+                     (int) pMulticastAddrInfo->ai_addrlen);
 
     if (0 != cByteCount)
     {
@@ -655,7 +655,7 @@ VOID SendBye(
 }  // SendBye
 
 int __cdecl wmain(
-    int argc, 
+    int argc,
     __in_ecount(argc) PWSTR argv[])
 {
     int err = 0;
@@ -671,14 +671,14 @@ int __cdecl wmain(
     ADDRINFOW addrHints = {0};
     PADDRINFOW pMulticastAddrInfo = NULL;
     PADDRINFOW pLocalAddrInfo = NULL;
-    
+
     // Parse command line parameters;
     err = ParseCMDLine(
-        argc,
-        argv,
-        pszDeviceId,
-        sDeviceId,
-        DeviceInfo);
+              argc,
+              argv,
+              pszDeviceId,
+              sDeviceId,
+              DeviceInfo);
     if (0 != err)
     {
         goto Cleanup;
@@ -691,7 +691,7 @@ int __cdecl wmain(
     if (0 == err)
     {
         if (   (2 != LOBYTE(wsaData.wVersion))
-            || (2 != HIBYTE(wsaData.wVersion)))
+                || (2 != HIBYTE(wsaData.wVersion)))
         {
             printf("Winsock 2.2 is not supported\n");
             err = 1;
@@ -711,10 +711,10 @@ int __cdecl wmain(
     addrHints.ai_protocol = IPPROTO_UDP;
 
     err = GetAddrInfo(
-        szMulticastAddress,
-        szMulticastPort,
-        &addrHints,
-        &pMulticastAddrInfo);
+              szMulticastAddress,
+              szMulticastPort,
+              &addrHints,
+              &pMulticastAddrInfo);
 
     if (0 != err)
     {
@@ -729,10 +729,10 @@ int __cdecl wmain(
     addrHints.ai_protocol = pMulticastAddrInfo->ai_protocol;
 
     err = GetAddrInfo(
-        NULL,  // local socket
-        szMulticastPort,  
-        &addrHints,
-        &pLocalAddrInfo);
+              NULL,  // local socket
+              szMulticastPort,
+              &addrHints,
+              &pLocalAddrInfo);
 
     if (0 != err)
     {
@@ -742,9 +742,9 @@ int __cdecl wmain(
 
     // Create a socket to listen on
     hDiscoverySocket = socket(
-        pLocalAddrInfo->ai_family,
-        pLocalAddrInfo->ai_socktype,
-        pLocalAddrInfo->ai_protocol);
+                           pLocalAddrInfo->ai_family,
+                           pLocalAddrInfo->ai_socktype,
+                           pLocalAddrInfo->ai_protocol);
     if (hDiscoverySocket == INVALID_SOCKET)
     {
         err = WSAGetLastError();
@@ -753,9 +753,9 @@ int __cdecl wmain(
     }
 
     err = JoinMulticastGroupAndSetSocketOptions(
-        hDiscoverySocket, 
-        pMulticastAddrInfo,
-        pLocalAddrInfo);
+              hDiscoverySocket,
+              pMulticastAddrInfo,
+              pLocalAddrInfo);
 
     if (0 != err)
     {
@@ -764,9 +764,9 @@ int __cdecl wmain(
 
     // Bind the socket to the local address
     err = bind(
-        hDiscoverySocket,
-        pLocalAddrInfo->ai_addr,
-        (int) pLocalAddrInfo->ai_addrlen);
+              hDiscoverySocket,
+              pLocalAddrInfo->ai_addr,
+              (int) pLocalAddrInfo->ai_addrlen);
 
     if (0 != err)
     {
@@ -777,10 +777,10 @@ int __cdecl wmain(
 
     // Create hStopEvent
     hStopEvent = CreateEvent(
-        NULL, 
-        TRUE,
-        FALSE,
-        NULL);
+                     NULL,
+                     TRUE,
+                     FALSE,
+                     NULL);
 
     if (!hStopEvent)
     {
@@ -796,12 +796,12 @@ int __cdecl wmain(
     RecvThreadInfo.pDeviceInfo = &DeviceInfo;
 
     hRecvThread = CreateThread(
-        NULL,
-        0,
-        RecvThread,
-        &RecvThreadInfo,
-        0,
-        NULL);
+                      NULL,
+                      0,
+                      RecvThread,
+                      &RecvThreadInfo,
+                      0,
+                      NULL);
 
     if (!hRecvThread)
     {
@@ -819,7 +819,7 @@ int __cdecl wmain(
         case L'q':
         case L'Q':
             StopRecv(
-                hStopEvent, 
+                hStopEvent,
                 hRecvThread);
             goto Cleanup;
         case L'h':

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 //////////////////////////////////////////////////////////////////////////
 //  VideoBufferLock
 //
-//  Description: 
+//  Description:
 //  Locks a video buffer that might or might not support IMF2DBuffer.
 //
 //////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ public:
 
     // LockBuffer:
     // Locks the buffer. Returns a pointer to scan line 0 and returns the stride.
-    
+
     // The caller must provide the default stride as an input parameter, in case
     // the buffer does not expose IMF2DBuffer. You can calculate the default stride
     // from the media type.
@@ -48,7 +48,7 @@ public:
         DWORD dwHeightInPixels,  // Height of the image, in pixels.
         BYTE  **ppbScanLine0,    // Receives a pointer to the start of scan line 0.
         LONG  *plStride          // Receives the actual stride.
-        )
+    )
     {
         HRESULT hr = S_OK;
 
@@ -82,7 +82,7 @@ public:
         }
         return hr;
     }
-    
+
     HRESULT UnlockBuffer()
     {
         if (m_p2DBuffer)

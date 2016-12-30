@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -16,15 +16,15 @@ Abstract:
     using PNRP functionality.
 
 Feedback:
-    If you have any questions or feedback, please contact us using 
+    If you have any questions or feedback, please contact us using
     any of the mechanisms below:
 
-    Email: peerfb@microsoft.com 
-    Newsgroup: Microsoft.public.win32.programmer.networks 
-    Website: http://www.microsoft.com/p2p 
+    Email: peerfb@microsoft.com
+    Newsgroup: Microsoft.public.win32.programmer.networks
+    Website: http://www.microsoft.com/p2p
 
 --********************************************************************/
-   
+
 #pragma warning(disable:4201)   // nameless struct/union
 
 #include "graphchat.h"
@@ -79,7 +79,7 @@ HRESULT PnrpShutdown()
 //
 // Returns:  HRESULT
 //
-HRESULT PnrpRegister(PCWSTR pwzIdentity, PCWSTR pwzName, 
+HRESULT PnrpRegister(PCWSTR pwzIdentity, PCWSTR pwzName,
                      PCWSTR pwzCloud, __in PEER_NODE_INFO* pNodeInfo)
 {
     HRESULT hr = S_OK;
@@ -88,7 +88,7 @@ HRESULT PnrpRegister(PCWSTR pwzIdentity, PCWSTR pwzName,
     ULONG           i = 0;
 
     if (pwzIdentity == NULL || pwzName == NULL || pNodeInfo == NULL ||
-        (pNodeInfo->cAddresses!=PEER_PNRP_AUTO_ADDRESSES && pwzCloud == NULL))
+            (pNodeInfo->cAddresses!=PEER_PNRP_AUTO_ADDRESSES && pwzCloud == NULL))
     {
         hr = E_INVALIDARG;
         goto exit;
@@ -176,9 +176,9 @@ HRESULT PnrpResolve(PCWSTR pwzName, PCWSTR pwzCloud, __out ULONG *pcEndpoints, _
     //get up to five arbitary endpoints to connect to, just in case some fail to respond
     //(once we make contact with one graph member the infrastructure handles discovering other nodes)
     *pcEndpoints = 5;
-                       
+
     hr = PeerPnrpResolve(pwzName, pwzCloud, pcEndpoints, pEndpoints);
-   
+
     return hr;
 }
 
@@ -207,15 +207,15 @@ HRESULT PnrpUnregister()
 //
 // Arguments:
 //   pdwLocalScopeID[out]: Identifier of local connection
-//   pwzCloudName[out]   : Name of local connection 
+//   pwzCloudName[out]   : Name of local connection
 //                         (NULL results in no value returned)
-//   cchCloudNameSize[in]: number of characters in pwzCloudName 
+//   cchCloudNameSize[in]: number of characters in pwzCloudName
 //                         (usually MAX_CLOUD_NAME)
 //
 // Returns:  HRESULT
 //
-HRESULT GetLocalCloudInfo(DWORD cchCloudName, 
-                          __out_ecount_opt(cchCloudName) PWSTR pwzCloudName, 
+HRESULT GetLocalCloudInfo(DWORD cchCloudName,
+                          __out_ecount_opt(cchCloudName) PWSTR pwzCloudName,
                           __out_opt DWORD* pdwLocalScopeID)
 {
     HRESULT         hr = S_OK;
@@ -232,7 +232,7 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
     // Fill out information for WSA query
     CloudInfo.dwSize = sizeof(CloudInfo);
     CloudInfo.Cloud.Scope = PNRP_LINK_LOCAL_SCOPE;
-    
+
     blPnrpData.cbSize = sizeof(CloudInfo);
     blPnrpData.pBlobData = (LPBYTE)&CloudInfo;
 
@@ -242,9 +242,9 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
     querySet.lpBlob = &blPnrpData;
 
     iErr = WSALookupServiceBegin(
-            &querySet, 
-            LUP_RETURN_NAME|LUP_RETURN_BLOB, 
-            &hLookup);
+               &querySet,
+               LUP_RETURN_NAME|LUP_RETURN_BLOB,
+               &hLookup);
 
     if (iErr != 0)
     {
@@ -300,7 +300,7 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
     {
         if (pwzCloudName)
         {
-            hr = StringCchCopy(pwzCloudName, cchCloudName, pResults->lpszServiceInstanceName);                
+            hr = StringCchCopy(pwzCloudName, cchCloudName, pResults->lpszServiceInstanceName);
             if (FAILED(hr))
             {
                 DisplayHrError(L"Failed to copy cloud name", hr);
@@ -308,7 +308,7 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
         }
         if (pdwLocalScopeID)
         {
-            *pdwLocalScopeID = ((PNRPCLOUDINFO*)pResults->lpBlob->pBlobData)->Cloud.ScopeId;  
+            *pdwLocalScopeID = ((PNRPCLOUDINFO*)pResults->lpBlob->pBlobData)->Cloud.ScopeId;
         }
     }
 

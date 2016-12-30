@@ -1,4 +1,4 @@
-// Client_PvtNameSpace.cxx : Sample client to illustrate usage of private namespaces.
+﻿// Client_PvtNameSpace.cxx : Sample client to illustrate usage of private namespaces.
 // Client opens a private namespace created by MonSvc and wait for the service stop event to be triggered.
 
 #include <windows.h>

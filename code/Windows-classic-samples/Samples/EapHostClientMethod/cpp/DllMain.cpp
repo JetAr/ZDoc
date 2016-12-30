@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -36,10 +36,10 @@ HINSTANCE   g_hInstance;
 BOOL
 WINAPI
 DllMain(
-   HINSTANCE hInstance,
-   DWORD dwReason,
-   LPVOID lpReserved
-   )
+    HINSTANCE hInstance,
+    DWORD dwReason,
+    LPVOID lpReserved
+)
 {
     DWORD retCode = ERROR_SUCCESS;
 
@@ -100,8 +100,8 @@ DllRegisterServer( VOID )
     // Check if the key -- "HKLM\System\CurrentControlSet\Services\EapHost\Methods"
     // exist. The absence of key implies EapHost is not properly installed.
     retCode = RegCreateKeyExW(HKEY_LOCAL_MACHINE, eapHostKeyName,
-                            0, NULL, REG_OPTION_NON_VOLATILE,
-                            KEY_ALL_ACCESS, NULL, &hkeapHost, &dwDisp);
+                              0, NULL, REG_OPTION_NON_VOLATILE,
+                              KEY_ALL_ACCESS, NULL, &hkeapHost, &dwDisp);
     if(retCode != ERROR_SUCCESS)
     {
         // Trace Error --- EapHost not properly installed.
@@ -110,8 +110,8 @@ DllRegisterServer( VOID )
 
     // Create the subkey -- "311\40" which is the MethodId of the Sample.
     retCode = RegCreateKeyExW(hkeapHost, eapMethodName,
-                            0, NULL, REG_OPTION_NON_VOLATILE,
-                            KEY_ALL_ACCESS, NULL, &hkeapMethod, &dwDisp);
+                              0, NULL, REG_OPTION_NON_VOLATILE,
+                              KEY_ALL_ACCESS, NULL, &hkeapMethod, &dwDisp);
     if(retCode != ERROR_SUCCESS)
     {
         // Trace Error --- EapMethod Key could not be created properly.
@@ -120,11 +120,11 @@ DllRegisterServer( VOID )
 
     // Set the Value --- "PeerFriendlyName" = "SdkPeerEapMethod"
     retCode = RegSetValueExW(hkeapMethod,
-                    peerFriendlyName,
-                    0,
-                    REG_SZ,
-                    (LPBYTE)peerFriendlyNameValue,
-                    (DWORD)sizeof(peerFriendlyNameValue));
+                             peerFriendlyName,
+                             0,
+                             REG_SZ,
+                             (LPBYTE)peerFriendlyNameValue,
+                             (DWORD)sizeof(peerFriendlyNameValue));
     if(retCode != ERROR_SUCCESS)
     {
         // Trace Error --- Could not set Peer Friendly Name
@@ -139,11 +139,11 @@ DllRegisterServer( VOID )
 
     // Set the Value --- "PeerDllPath" = "CurrentDirectory + DllName"
     retCode = RegSetValueExW(hkeapMethod,
-                peerDllPath,
-                0,
-                REG_EXPAND_SZ,
-                (LPBYTE)dllpathValue,
-                dllPathValueLength);
+                             peerDllPath,
+                             0,
+                             REG_EXPAND_SZ,
+                             (LPBYTE)dllpathValue,
+                             dllPathValueLength);
     if(retCode != ERROR_SUCCESS)
     {
         // Trace Error --- Could not set Peer Dll Path
@@ -152,11 +152,11 @@ DllRegisterServer( VOID )
 
     // Set the Value --- "Properties"
     retCode = RegSetValueExW(hkeapMethod,
-                    properties,
-                    0,
-                    REG_DWORD,
-                    (LPBYTE) &propertiesValue,
-                    sizeof(DWORD));
+                             properties,
+                             0,
+                             REG_DWORD,
+                             (LPBYTE) &propertiesValue,
+                             sizeof(DWORD));
     if(retCode != ERROR_SUCCESS)
     {
         // Trace Error --- Could not set Properties
@@ -165,11 +165,11 @@ DllRegisterServer( VOID )
 
     // Set the Value --- "PeerInvokeUsernameDialog" = 0
     retCode = RegSetValueExW(hkeapMethod,
-                    peerInvokeUserNameDialog,
-                    0,
-                    REG_DWORD,
-                    (LPBYTE) &peerDialogValue,
-                    sizeof(DWORD));
+                             peerInvokeUserNameDialog,
+                             0,
+                             REG_DWORD,
+                             (LPBYTE) &peerDialogValue,
+                             sizeof(DWORD));
     if(retCode != ERROR_SUCCESS)
     {
         // Trace Error --- Could not set peerInvokeUserNameDialog
@@ -178,11 +178,11 @@ DllRegisterServer( VOID )
 
     // Set the Value --- "PeerInvokePasswordDialog" = 0
     retCode = RegSetValueExW(hkeapMethod,
-                    peerInvokePasswordDialog,
-                    0,
-                    REG_DWORD,
-                    (LPBYTE) &peerDialogValue,
-                    sizeof(DWORD));
+                             peerInvokePasswordDialog,
+                             0,
+                             REG_DWORD,
+                             (LPBYTE) &peerDialogValue,
+                             sizeof(DWORD));
     if(retCode != ERROR_SUCCESS)
     {
         // Trace Error --- Could not set peerInvokePasswordDialog
@@ -219,7 +219,7 @@ DllUnregisterServer( VOID )
     // Check if the key -- "HKLM\System\CurrentControlSet\Services\EapHost\Methods\311"
     // exist. The absence of key implies EapHost or SdkEapMethod is not properly installed.
     retCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE, eapHostMethodKeyName,
-                    0, KEY_ALL_ACCESS, &hkeapHostMethod);
+                           0, KEY_ALL_ACCESS, &hkeapHostMethod);
     if(retCode != ERROR_SUCCESS)
     {
         //  Trace Error --- EapHost or EapMethod not properly installed.

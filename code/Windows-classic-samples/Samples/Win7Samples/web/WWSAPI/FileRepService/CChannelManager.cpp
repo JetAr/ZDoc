@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -6,11 +6,11 @@
 #include "assert.h"
 
 CChannelManager::CChannelManager(
-    __in CFileRep* server, 
+    __in CFileRep* server,
     __in long minIdleChannels,
-    __in long maxIdleChannels, 
+    __in long maxIdleChannels,
     __in long maxTotalChannels)
-{    
+{
     this->minIdleChannels = minIdleChannels;
     this->maxIdleChannels = maxIdleChannels;
     this->maxTotalChannels = maxTotalChannels;
@@ -18,7 +18,7 @@ CChannelManager::CChannelManager(
     assert(this->maxIdleChannels >= minIdleChannels);
     assert(this->minIdleChannels <= maxTotalChannels);
     assert(NULL != server);
-        
+
     idleChannels = 0;
     activeChannels = 0;
     totalChannels = 0;
@@ -35,7 +35,7 @@ HRESULT CChannelManager::Initialize()
 {
     HRESULT hr = S_OK;
 
-    stopEvent = CreateEvent(NULL, true, false, NULL); 
+    stopEvent = CreateEvent(NULL, true, false, NULL);
 
     if (NULL == stopEvent)
     {
@@ -65,22 +65,22 @@ CChannelManager::~CChannelManager()
     {
         CloseHandle(stopEvent);
         stopEvent = NULL;
-    }   
+    }
 }
 
-void CChannelManager::ChannelCreated() 
+void CChannelManager::ChannelCreated()
 {
     InterlockedIncrement(&idleChannels);
     InterlockedIncrement(&totalChannels);
 }
 
 // Channel is processing a request.
-void CChannelManager::ChannelInUse() 
+void CChannelManager::ChannelInUse()
 {
-    InterlockedIncrement(&activeChannels); 
+    InterlockedIncrement(&activeChannels);
 
     assert(idleChannels > 0);
-    InterlockedDecrement(&idleChannels);    
+    InterlockedDecrement(&idleChannels);
 
     // See if we fell below the threshold for available channels.
     // Ignore return value as the failure to create a new channel should not impact the existing channel.
@@ -88,34 +88,34 @@ void CChannelManager::ChannelInUse()
 }
 
 // Channel and associated data structures are freed.
-void CChannelManager::ChannelFreed() 
+void CChannelManager::ChannelFreed()
 {
     assert(idleChannels > 0);
-    InterlockedDecrement(&idleChannels);    
+    InterlockedDecrement(&idleChannels);
 
     assert(totalChannels > 0);
     long totalChannelsChannelFreed = InterlockedDecrement(&totalChannels);
-    
+
     if (0 == totalChannelsChannelFreed)
     {
         // We only destroy superfluous channels so it should never hit 0
         // unless we are shutting down.
         assert(!IsRunning());
 #if (DBG || _DEBUG)
-        BOOL eventReturn = 
+        BOOL eventReturn =
 #endif
-        SetEvent(stopEvent);
+            SetEvent(stopEvent);
         assert(eventReturn);
     }
 }
 
 // Channel is done processing a request and is ready to accept more work.
-void CChannelManager::ChannelIdle() 
+void CChannelManager::ChannelIdle()
 {
     assert(activeChannels > 0);
-    InterlockedDecrement(&activeChannels);     
+    InterlockedDecrement(&activeChannels);
 
-    InterlockedIncrement(&idleChannels);    
+    InterlockedIncrement(&idleChannels);
 }
 
 // Creates new channels if we are below the threshold for minumum available channels and if we are not at the channel cap.
@@ -124,7 +124,7 @@ HRESULT CChannelManager::CreateChannels()
     CRequest* request = NULL;
     HRESULT hr = S_OK;
     server->PrintVerbose(L"Entering CChannelManager::CreateChannels");
-  
+
     if (idleChannels >= minIdleChannels || idleChannels + activeChannels >= maxTotalChannels)
     {
         server->PrintVerbose(L"Leaving CChannelManager::CreateChannels");
@@ -140,14 +140,14 @@ HRESULT CChannelManager::CreateChannels()
     for (long i = 0; i < newChannels; i++)
     {
         // Even though our main request processing loop is asynchronous, there is enough
-        // synchronous work done (eg state creartion) to warrant farming this out to work items. Also, 
+        // synchronous work done (eg state creartion) to warrant farming this out to work items. Also,
         // WsAsyncExecute can return synchronously if the request ends before the first asynchronous
         // function is called and in that case we dont want to get stuck here by doing this synchronously.
 
         // This is done here to prevent a race condition. If QueueUserWorkItem fails during startup the
         // service will get torn down. But there could be other work items out there waiting to be executed.
         // So to make sure the shutdown waits until those have been scheduled we increment the channel count here.
-        
+
         if (!IsRunning())
         {
             break;
@@ -165,15 +165,15 @@ HRESULT CChannelManager::CreateChannels()
             EXIT_FUNCTION
         }
 
-        ChannelCreated();        
+        ChannelCreated();
         if (!::QueueUserWorkItem(CChannelManager::CreateChannelWorkItem, request, WT_EXECUTELONGFUNCTION))
         {
             // If this fails we are in bad shape, so don't try again.
             hr = HRESULT_FROM_WIN32(GetLastError());
             server->PrintError(L"CChannelManager::CreateChannels", true);
-            server->PrintError(hr, NULL, true); 
+            server->PrintError(hr, NULL, true);
             delete request;
-            
+
             break;
         }
     }
@@ -189,7 +189,7 @@ ULONG WINAPI CChannelManager::CreateChannelWorkItem(
 {
     assert(NULL != state);
 
-    CRequest* request = (CRequest*) state;  
+    CRequest* request = (CRequest*) state;
 
     request->GetServer()->GetChannelManager()->CreateChannel(request);
 
@@ -200,9 +200,9 @@ ULONG WINAPI CChannelManager::CreateChannelWorkItem(
 // It starts its life here. We call into CFileRep::CreateOrResetChannel to create the actual channel state.
 // After creation, the channel waits for an incoming request and once it gets one processes it.
 // Once it is done, we call back into the channel manager which checks if the service is still running
-// and if the channel is still needed. That happens in CChannelManager::RequestComplete 
+// and if the channel is still needed. That happens in CChannelManager::RequestComplete
 // If it is not needed, the channel and related data structures are freed.
-// If it is still needed, the loop repeats as we call into CFileRep::CreateOrResetChannel again. 
+// If it is still needed, the loop repeats as we call into CFileRep::CreateOrResetChannel again.
 // Only this time it reuses the channel data structures instead of creating them.
 void CChannelManager::CreateChannel(
     __in CRequest* request)
@@ -219,35 +219,35 @@ void CChannelManager::CreateChannel(
         PrintVerbose(L"Leaving CChannelManager::CreateChannel");
         return;
     }
-           
+
     // We do nothing in the callback
-    asyncContext.callback = CleanupCallback;  
+    asyncContext.callback = CleanupCallback;
     asyncContext.callbackState = request;
 
-    // Start the message processing loop asynchronously. 
+    // Start the message processing loop asynchronously.
     // Use long callbacks since we are going to do significant work in there.
     IfFailedExit(WsAsyncExecute(&request->asyncState, CRequest::AcceptChannelCallback, WS_LONG_CALLBACK,
-        request, &asyncContext, error));   
-    
+                                request, &asyncContext, error));
+
     // In the sync case, the cleanup callback is never called so we have to do it here.
     // We only get here after we are done with the channel for good so it is safe to do this.
     if (WS_S_ASYNC != hr)
     {
         delete request;
     }
-    
+
     PrintVerbose(L"Leaving CChannelManager::CreateChannel");
     return;
 
     ERROR_EXIT
 
     server->PrintError(L"CChannelManager::CreateChannel", true);
-    server->PrintError(hr, error, true); 
+    server->PrintError(hr, error, true);
     if (NULL != request)
     {
         // Cleans up all the state associated with a request.
         delete request;
-    }  
+    }
 
     PrintVerbose(L"Leaving CChannelManager::CreateChannel");
 }
@@ -256,13 +256,13 @@ void CChannelManager::CreateChannel(
 
 // This is called at the end of an async execution chain. Here we can clean up.
 void CALLBACK CChannelManager::CleanupCallback(
-    __in HRESULT hr, 
-    __in WS_CALLBACK_MODEL callbackModel, 
+    __in HRESULT hr,
+    __in WS_CALLBACK_MODEL callbackModel,
     __in void* state)
 {
     assert(NULL != state);
 
-    CRequest* request = (CRequest*) state;  
+    CRequest* request = (CRequest*) state;
     delete request;
 }
 
@@ -272,7 +272,7 @@ void CALLBACK CChannelManager::CleanupCallback(
 void CChannelManager::Stop()
 {
     server->PrintVerbose(L"Entering CChannelManager::Stop");
-    
+
     assert(initialized);
 
     // This is a special case. As we never destroy all channels, there should
@@ -281,10 +281,10 @@ void CChannelManager::Stop()
     if (0 == totalChannels)
     {
 #if (DBG || _DEBUG)
-        BOOL eventReturn = 
+        BOOL eventReturn =
 #endif
-        SetEvent(stopEvent);
-        assert(eventReturn);                
+            SetEvent(stopEvent);
+        assert(eventReturn);
     }
 
     running = false;
@@ -296,11 +296,11 @@ void CChannelManager::Stop()
 void CChannelManager::WaitForCleanup()
 {
     server->PrintVerbose(L"Entering CChannelManager::WaitForCleanup");
-    
+
     assert(!IsRunning());
     assert(initialized);
 
     WaitForSingleObject(stopEvent, INFINITE);
 
-    server->PrintVerbose(L"Leaving CChannelManager::WaitForCleanup");    
+    server->PrintVerbose(L"Leaving CChannelManager::WaitForCleanup");
 }

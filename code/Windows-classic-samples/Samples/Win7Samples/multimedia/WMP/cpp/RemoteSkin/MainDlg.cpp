@@ -1,4 +1,4 @@
-// MainDlg.cpp : Implementation of CMainDlg
+﻿// MainDlg.cpp : Implementation of CMainDlg
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -46,12 +46,12 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 
     // Create an ActiveX control container
     AtlAxWinInit();
-    m_pView = new CAxWindow();  
+    m_pView = new CAxWindow();
     if(!m_pView)
     {
         hr = E_OUTOFMEMORY;
     }
-    
+
     if(SUCCEEDED(hr))
     {
         ::GetWindowRect(GetDlgItem(IDC_RANGE), &rcClient);
@@ -195,7 +195,7 @@ LRESULT CMainDlg::OnGoToML(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/,
 {
     HRESULT                         hr = E_FAIL;
     CComPtr<IWMPPlayerApplication>  spPlayerApp;
-    CComPtr<IWMPPlayerServices>     spPlayerServices;  
+    CComPtr<IWMPPlayerServices>     spPlayerServices;
 
     if(m_spPlayer.p)
     {

@@ -1,4 +1,4 @@
-/******************************Module*Header*******************************\
+﻿/******************************Module*Header*******************************\
 * Module Name: display.cpp
 *
 * Support for DDraw device on Multiple Monitors.
@@ -53,7 +53,7 @@ struct DDRAWINFO
 \**************************************************************************/
 void CMonitorArray::TermDDrawMonitorInfo(
     _Inout_ CAMDDrawMonitorInfo* pmi
-    )
+)
 {
 
 
@@ -73,7 +73,7 @@ BOOL CMonitorArray::GetAMDDrawMonitorInfo(
     UINT uDevID,
     _Out_ CAMDDrawMonitorInfo* lpmi,
     _In_ HMONITOR hm
-    )
+)
 {
     MONITORINFOEX miInfoEx;
     miInfoEx.cbSize = sizeof(miInfoEx);
@@ -135,7 +135,7 @@ BOOL CMonitorArray::GetAMDDrawMonitorInfo(
 BOOL CMonitorArray::InitMonitor(
     _In_ HMONITOR hMon,
     BOOL fXclMode
-    )
+)
 {
 
 
@@ -160,7 +160,7 @@ BOOL CALLBACK CMonitorArray::MonitorEnumProc(
     _In_opt_ HDC hDC,
     _In_ LPRECT pRect,
     LPARAM dwData
-    )
+)
 {
     MonitorEnumProcInfo* info = (MonitorEnumProcInfo*)dwData;
 
@@ -183,7 +183,7 @@ BOOL CALLBACK CMonitorArray::MonitorEnumProc(
 \**************************************************************************/
 HRESULT CMonitorArray::InitializeDisplaySystem(
     _In_ HWND hwnd
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -214,7 +214,7 @@ HRESULT CMonitorArray::InitializeDisplaySystem(
 \**************************************************************************/
 CAMDDrawMonitorInfo* CMonitorArray::FindMonitor(
     _In_ HMONITOR hMon
-    )
+)
 {
 
 
@@ -241,7 +241,7 @@ CAMDDrawMonitorInfo* CMonitorArray::FindMonitor(
 HRESULT CMonitorArray::MatchGUID(
     UINT uDevID,
     _Out_ DWORD* pdwMatchID
-    )
+)
 {
     HRESULT hr = S_OK;
 

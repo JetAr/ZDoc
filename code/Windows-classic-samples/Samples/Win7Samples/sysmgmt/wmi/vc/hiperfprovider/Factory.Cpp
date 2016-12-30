@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////
 
 //
 
@@ -12,7 +12,7 @@
 
 //	This is a standard class factory implementation for the CHiPerfProvider
 
-//	object.  
+//	object.
 
 //
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
@@ -53,10 +53,10 @@ STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void** ppv)
         *ppv = (LPVOID)(IUnknown*)this;
     else if(riid == IID_IClassFactory)
         *ppv = (LPVOID)(IClassFactory*)this;
-	else return E_NOINTERFACE;
+    else return E_NOINTERFACE;
 
-	((IUnknown*)*ppv)->AddRef();
-	return S_OK;
+    ((IUnknown*)*ppv)->AddRef();
+    return S_OK;
 }
 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef()
@@ -84,59 +84,59 @@ STDMETHODIMP_(ULONG) CClassFactory::Release()
 }
 
 STDMETHODIMP CClassFactory::CreateInstance(
-		/* [in] */ IUnknown* pUnknownOuter, 
-		/* [in] */ REFIID iid, 
-		/* [out] */ LPVOID *ppv)
+    /* [in] */ IUnknown* pUnknownOuter,
+    /* [in] */ REFIID iid,
+    /* [out] */ LPVOID *ppv)
 //////////////////////////////////////////////////////////////
 //
 //	Standard COM CreateInstance
 //
 //////////////////////////////////////////////////////////////
 {
-	HRESULT hRes;
-	CHiPerfProvider *pProvider = NULL;
+    HRESULT hRes;
+    CHiPerfProvider *pProvider = NULL;
 
-	*ppv = NULL;
+    *ppv = NULL;
 
-	// We do not support aggregation
-	// =============================
+    // We do not support aggregation
+    // =============================
 
-	if (pUnknownOuter)
-		return CLASS_E_NOAGGREGATION;
+    if (pUnknownOuter)
+        return CLASS_E_NOAGGREGATION;
 
-	// Create the provider object
-	// ==========================
+    // Create the provider object
+    // ==========================
 
-	pProvider = new CHiPerfProvider;
+    pProvider = new CHiPerfProvider;
 
-	if (!pProvider)
-		return E_OUTOFMEMORY;
+    if (!pProvider)
+        return E_OUTOFMEMORY;
 
-	// Retrieve the requested interface
-	// ================================
+    // Retrieve the requested interface
+    // ================================
 
-	hRes = pProvider->QueryInterface(iid, ppv);
-	if (FAILED(hRes))
-	{
-		delete pProvider;
-		return hRes;
-	}
+    hRes = pProvider->QueryInterface(iid, ppv);
+    if (FAILED(hRes))
+    {
+        delete pProvider;
+        return hRes;
+    }
 
-	return S_OK;
+    return S_OK;
 }
 
 STDMETHODIMP CClassFactory::LockServer(
-		/* [in] */ BOOL bLock)
+    /* [in] */ BOOL bLock)
 //////////////////////////////////////////////////////////////
 //
 //	Standard COM LockServer
 //
 //////////////////////////////////////////////////////////////
 {
-	if (bLock)
-		InterlockedIncrement(&g_lLocks);
-	else
-		InterlockedDecrement(&g_lLocks);
+    if (bLock)
+        InterlockedIncrement(&g_lLocks);
+    else
+        InterlockedDecrement(&g_lLocks);
 
-	return S_OK;
+    return S_OK;
 }

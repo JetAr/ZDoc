@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -50,12 +50,12 @@ SampleGetUserMetaData(
         status = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
-    
+
     //
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -68,24 +68,24 @@ SampleGetUserMetaData(
     // VIRTUAL_DISK_ACCESS_NONE is the only acceptable access mask for V2 handle opens.
     // OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS indicates the parent chain should not be opened.
     //
-    
+
     memset(&openParameters, 0, sizeof(openParameters));
     openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
     openParameters.Version2.GetInfoOnly = TRUE;
-    
+
     status = OpenVirtualDisk(
-        &storageType,
-        VHDPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
-        &openParameters,
-        &vhdHandle);
-    
+                 &storageType,
+                 VHDPath,
+                 VIRTUAL_DISK_ACCESS_NONE,
+                 OPEN_VIRTUAL_DISK_FLAG_NO_PARENTS,
+                 &openParameters,
+                 &vhdHandle);
+
     if (status != ERROR_SUCCESS)
     {
         goto Cleanup;
-    }    
-    
+    }
+
     metaDataSize = sizeof(userMeta);
 
     //
@@ -104,13 +104,13 @@ SampleGetUserMetaData(
     uniqueId.Data4[5] = 0xfe;
     uniqueId.Data4[6] = 0x4f;
     uniqueId.Data4[7] = 0x3d;
-    
+
     status = GetVirtualDiskMetadata(
-        vhdHandle,
-        &uniqueId,
-        &metaDataSize,
-        (PVOID)&userMeta);
-    
+                 vhdHandle,
+                 &uniqueId,
+                 &metaDataSize,
+                 (PVOID)&userMeta);
+
     if (status != ERROR_SUCCESS)
     {
         if (status == ERROR_MORE_DATA)
@@ -125,7 +125,7 @@ SampleGetUserMetaData(
     else
     {
         wprintf(L"Get metadata: %d\n", userMeta.ID);
-    }   
+    }
 
 Cleanup:
 
@@ -137,11 +137,11 @@ Cleanup:
     {
         wprintf(L"error = %u\n", status);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);
     }
 
     return status;
- }
+}

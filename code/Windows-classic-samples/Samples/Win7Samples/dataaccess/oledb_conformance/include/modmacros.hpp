@@ -1,4 +1,4 @@
-#ifndef __MODMACROS_HPP_
+﻿#ifndef __MODMACROS_HPP_
 #define __MODMACROS_HPP_
 
 /////////////////////////////////////////////////////////////////
@@ -19,13 +19,13 @@
 	extern CThisTestModule* g_pThisTestModule;
 
 #define DECLARE_MODULE_CLSID \
-	const GUID CLSID_TESTMODULE 
+	const GUID CLSID_TESTMODULE
 
 #define DECLARE_MODULE_OWNER(theowner) \
-	const wchar_t g_wszModuleOwner[] = L##theowner 
+	const wchar_t g_wszModuleOwner[] = L##theowner
 
 #define DECLARE_MODULE_DESCRIP(thedescrip) \
-	const wchar_t g_wszModuleDescrip[] = L##thedescrip 
+	const wchar_t g_wszModuleDescrip[] = L##thedescrip
 
 #define DECLARE_MODULE_VERSION(theversion) \
 	const long g_lModuleVersion = theversion
@@ -77,33 +77,33 @@
 #define DECLARE_TEST_CASE(theClass) \
 	TEST_CASE_##theClass()
 
-    //Allow user to skip over Test Case macros.  This allows
-    //  user to have TestWizard maintain cases in a central file,
-    //  but for the user to then copy out to separate source files.
-    //  This is an interim hack until TestWizard can support 
-    //  multiple source files.
-    //To use this
-    //  1. Split out the test case to different source file
-    //  2, In primary source file define NULLTESTCASE prior to 
-    //      the MODStandard.hpp reference
-    //  3. Do NOT use pre-compiled header for the main source file
-#ifdef NULLTESTCASE   
-    #define BEG_TEST_CASE(theClass, baseClass, tcName);
-    #define TEST_VARIATION(tvNum, tvName);
-    #define END_TEST_CASE();
+//Allow user to skip over Test Case macros.  This allows
+//  user to have TestWizard maintain cases in a central file,
+//  but for the user to then copy out to separate source files.
+//  This is an interim hack until TestWizard can support
+//  multiple source files.
+//To use this
+//  1. Split out the test case to different source file
+//  2, In primary source file define NULLTESTCASE prior to
+//      the MODStandard.hpp reference
+//  3. Do NOT use pre-compiled header for the main source file
+#ifdef NULLTESTCASE
+#define BEG_TEST_CASE(theClass, baseClass, tcName);
+#define TEST_VARIATION(tvNum, tvName);
+#define END_TEST_CASE();
 #else
-    #define BEG_TEST_CASE(theClass, baseClass, tcName)					\
+#define BEG_TEST_CASE(theClass, baseClass, tcName)					\
         const WCHAR		theClass::m_wszTestCaseDesc[] = { tcName };		\
 		const WCHAR		theClass::m_wszTestCaseName[] = { L#theClass };	\
 			  ULONG		theClass::m_cVarInfo = 0;						\
 	    const VARINFO	theClass::m_rgVarInfo [] = {
 
-	#define TEST_VARIATION(tvNum, tvName) \
+#define TEST_VARIATION(tvNum, tvName) \
 	    {(PFNVARIATION)&THE_CLASS::Variation_##tvNum, tvName, tvNum},
 
-    #define END_TEST_CASE() \
+#define END_TEST_CASE() \
 		{ NULL, NULL, 0 } \
-		}; 
+		};
 #endif
 
 

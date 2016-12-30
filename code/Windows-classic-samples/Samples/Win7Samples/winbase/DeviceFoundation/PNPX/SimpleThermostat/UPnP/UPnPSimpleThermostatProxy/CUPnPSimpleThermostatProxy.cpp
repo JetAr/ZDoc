@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -33,7 +33,7 @@ const WCHAR DEVICE_SERVICE[]      = L"urn:upnp-org:serviceId:ISimpleThermostatUP
 HRESULT CreateCUPnPSimpleThermostatProxy(
     IPropertyStore* pPropertyStore,
     ISimpleThermostat** ppSimpleThermostat
-    )
+)
 {
     BSTR                        bstrDeviceID                = NULL;
     BSTR                        bstrXMLDocURL               = NULL;
@@ -45,7 +45,7 @@ HRESULT CreateCUPnPSimpleThermostatProxy(
     CUPnPSimpleThermostatProxy* pCUPnPSimpleThermostatProxy = NULL;
 
     if( NULL == pPropertyStore ||
-        NULL == ppSimpleThermostat )
+            NULL == ppSimpleThermostat )
     {
         return E_INVALIDARG;
     }
@@ -79,12 +79,12 @@ HRESULT CreateCUPnPSimpleThermostatProxy(
     {
         wprintf( L"CoCreate the UPnPDescriptionDocument object..." );
         hr = CoCreateInstance(
-            CLSID_UPnPDescriptionDocument,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_IUPnPDescriptionDocument,
-            reinterpret_cast<void**>(&pUPnPDescription)
-            );
+                 CLSID_UPnPDescriptionDocument,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_IUPnPDescriptionDocument,
+                 reinterpret_cast<void**>(&pUPnPDescription)
+             );
         wprintf( L"0x%x\n", hr );
     }
 
@@ -99,7 +99,7 @@ HRESULT CreateCUPnPSimpleThermostatProxy(
 
     //
     // Load the description document
-    // 
+    //
     if( S_OK == hr )
     {
         wprintf( L"Load the device's description document..." );
@@ -213,7 +213,7 @@ CUPnPSimpleThermostatProxy::~CUPnPSimpleThermostatProxy()
 //------------------------------------------------------------------------------
 HRESULT CUPnPSimpleThermostatProxy::GetCurrentTemp(
     LONG* plTemp
-    )
+)
 {
     BSTR            bstrFunc        = NULL;
     BSTR            bstrServiceID   = NULL;
@@ -229,7 +229,7 @@ HRESULT CUPnPSimpleThermostatProxy::GetCurrentTemp(
     VARIANT         varRet          = {0};
     VARIANT         varTemp         = {0};
 
-    
+
     if( NULL == plTemp )
     {
         return E_INVALIDARG;
@@ -238,7 +238,7 @@ HRESULT CUPnPSimpleThermostatProxy::GetCurrentTemp(
     bstrFunc = SysAllocString( GETCURRENTTEMP_FUNC );
     bstrServiceID = SysAllocString( DEVICE_SERVICE );
     if( NULL == bstrFunc ||
-        NULL == bstrServiceID )
+            NULL == bstrServiceID )
     {
         hr = E_OUTOFMEMORY;
     }
@@ -304,10 +304,10 @@ HRESULT CUPnPSimpleThermostatProxy::GetCurrentTemp(
         rgIndices[0] = 0;
 
         hr = SafeArrayGetElement(
-            psaOutArgs,
-            rgIndices,
-            (void*)&varTemp
-            );
+                 psaOutArgs,
+                 rgIndices,
+                 (void*)&varTemp
+             );
     }
 
     if( S_OK == hr )
@@ -366,7 +366,7 @@ HRESULT CUPnPSimpleThermostatProxy::GetCurrentTemp(
 //------------------------------------------------------------------------------
 HRESULT CUPnPSimpleThermostatProxy::GetDesiredTemp(
     LONG* plTemp
-    )
+)
 {
     BSTR            bstrFunc        = NULL;
     BSTR            bstrServiceID   = NULL;
@@ -387,11 +387,11 @@ HRESULT CUPnPSimpleThermostatProxy::GetDesiredTemp(
     {
         return E_INVALIDARG;
     }
-    
+
     bstrFunc = SysAllocString( GETDESIREDTEMP_FUNC );
     bstrServiceID = SysAllocString( DEVICE_SERVICE );
     if( NULL == bstrFunc ||
-        NULL == bstrServiceID )
+            NULL == bstrServiceID )
     {
         hr = E_OUTOFMEMORY;
     }
@@ -451,10 +451,10 @@ HRESULT CUPnPSimpleThermostatProxy::GetDesiredTemp(
         rgIndices[0] = 0;
 
         hr = SafeArrayGetElement(
-            psaOutArgs,
-            rgIndices,
-            (void*)&varTemp
-            );
+                 psaOutArgs,
+                 rgIndices,
+                 (void*)&varTemp
+             );
     }
 
     if( S_OK == hr )
@@ -513,7 +513,7 @@ HRESULT CUPnPSimpleThermostatProxy::GetDesiredTemp(
 //------------------------------------------------------------------------------
 HRESULT CUPnPSimpleThermostatProxy::SetDesiredTemp(
     LONG lTemp
-    )
+)
 {
     BSTR            bstrFunc        = NULL;
     BSTR            bstrServiceID   = NULL;
@@ -528,11 +528,11 @@ HRESULT CUPnPSimpleThermostatProxy::SetDesiredTemp(
     VARIANT         varRet          = {0};
     VARIANT         varTemp         = {0};
 
-    
+
     bstrFunc = SysAllocString( SETDESIREDTEMP_FUNC );
     bstrServiceID = SysAllocString( DEVICE_SERVICE );
     if( NULL == bstrFunc ||
-        NULL == bstrServiceID )
+            NULL == bstrServiceID )
     {
         hr = E_OUTOFMEMORY;
     }
@@ -643,9 +643,9 @@ HRESULT CUPnPSimpleThermostatProxy::SetDesiredTemp(
 // CUPnPSimpleThermostatProxy::QueryInterface
 //------------------------------------------------------------------------------
 HRESULT CUPnPSimpleThermostatProxy::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

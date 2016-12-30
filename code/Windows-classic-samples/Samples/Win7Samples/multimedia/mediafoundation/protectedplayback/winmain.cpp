@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // winmain.cpp : Defines the entry point for the application.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -25,7 +25,7 @@ TCHAR       szWindowClass[MAX_LOADSTRING];      // the main window class name
 
 BOOL        g_bRepaintClient = TRUE;            // Repaint the application client area?
 
-CPlayer     *g_pPlayer = NULL;                  // Global player object. 
+CPlayer     *g_pPlayer = NULL;                  // Global player object.
 
 // Note: After WM_CREATE is processed, g_pPlayer remains valid until the
 // window is destroyed.
@@ -65,9 +65,9 @@ struct OpenUrlDialogInfo
 /////////////////////////////////////////////////////////////////////////
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
-                     HINSTANCE /* hPrevInstance */,
-                     LPTSTR    /* lpCmdLine */,
-                     int       nCmdShow)
+                       HINSTANCE /* hPrevInstance */,
+                       LPTSTR    /* lpCmdLine */,
+                       int       nCmdShow)
 {
     MSG msg;
     HACCEL hAccelTable;
@@ -113,7 +113,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     }
 
     // Clean up.
-    
+
     if (g_pPlayer)
     {
         g_pPlayer->Shutdown();
@@ -122,7 +122,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
     // Uninitialize COM.
     CoUninitialize();
- 
+
     TRACE_CLOSE();
 
     return (int) msg.wParam;
@@ -165,27 +165,27 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
 HRESULT InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   HWND hwnd;
+    HWND hwnd;
 
-   hInst = hInstance; // Store instance handle in our global variable
+    hInst = hInstance; // Store instance handle in our global variable
 
-   // Create the window.
+    // Create the window.
 
 
-   hwnd = CreateWindow(
-      szWindowClass, szTitle, 
-      WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+    hwnd = CreateWindow(
+               szWindowClass, szTitle,
+               WS_OVERLAPPEDWINDOW,
+               CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
-   if (!hwnd)
-   {
-      return __HRESULT_FROM_WIN32(GetLastError());
-   }
+    if (!hwnd)
+    {
+        return __HRESULT_FROM_WIN32(GetLastError());
+    }
 
-   ShowWindow(hwnd, nCmdShow);
-   UpdateWindow(hwnd);
+    ShowWindow(hwnd, nCmdShow);
+    UpdateWindow(hwnd);
 
-   return S_OK;
+    return S_OK;
 }
 
 
@@ -273,7 +273,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 LRESULT OnCreateWindow(HWND hwnd)
 {
     // Initialize the player object.
-    HRESULT hr = CPlayer::CreateInstance(hwnd, hwnd, &g_pPlayer); 
+    HRESULT hr = CPlayer::CreateInstance(hwnd, hwnd, &g_pPlayer);
 
     if (SUCCEEDED(hr))
     {
@@ -338,9 +338,9 @@ void OnOpenURL(HWND hwnd)
 {
     HRESULT hr = S_OK;
 
-    // Pass in an OpenUrlDialogInfo structure to the dialog. The dialog 
+    // Pass in an OpenUrlDialogInfo structure to the dialog. The dialog
     // fills in this structure with the URL. The dialog proc allocates
-    // the memory for the string. 
+    // the memory for the string.
 
     OpenUrlDialogInfo url;
     ZeroMemory(&url, sizeof(&url));
@@ -430,7 +430,7 @@ void OnContentEnablerMessage()
 
 
         // EnablerState is defined for this application; it is not a standard
-        // Media Foundation enum. It specifies what action the 
+        // Media Foundation enum. It specifies what action the
         // ContentProtectionManager helper object is requesting.
 
         switch (state)
@@ -457,9 +457,9 @@ void OnContentEnablerMessage()
                 pManager->CompleteEnable();
             }
             break;
-        
+
         case Enabler_NonSilentInProgress:
-            // We are currently in the middle of non-silent enable. 
+            // We are currently in the middle of non-silent enable.
             // Either we succeeded or an error occurred. Either way, complete
             // the operation.
             pManager->CompleteEnable();
@@ -610,7 +610,7 @@ INT_PTR CALLBACK OpenUrlDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
     switch (message)
     {
     case WM_INITDIALOG:
-        // The app sends a pointer to an OpenUrlDialogInfo structure as the lParam. 
+        // The app sends a pointer to an OpenUrlDialogInfo structure as the lParam.
         // We use this structure to store the URL.
         pUrl = (OpenUrlDialogInfo*)lParam;
         return (INT_PTR)TRUE;

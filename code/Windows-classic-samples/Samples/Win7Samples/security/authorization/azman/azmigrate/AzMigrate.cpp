@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -42,7 +42,8 @@ Return Value:NONE
 
 --*/
 
-void run() {
+void run()
+{
 
     HRESULT hr;
 
@@ -55,18 +56,22 @@ void run() {
 
     hr=destStore.InitializeStore(true);
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
 
-        if (CAzGlobalOptions::m_bOverWrite==true) {
+        if (CAzGlobalOptions::m_bOverWrite==true)
+        {
 
             hr=destStore.OverWriteStore();
-    
+
             CAzLogging::Log(hr,_TEXT("Overwriting AzMan Authornization Store"),COLE2T(CAzGlobalOptions::m_bstrDestStoreName));
 
             if (FAILED(hr))
                 goto lError1;
 
-        } else {
+        }
+        else
+        {
 
             goto lError1;
         }
@@ -74,10 +79,11 @@ void run() {
 
     if (CAzGlobalOptions::m_bSpecificApp==false)
         hr=sourceStore.OpenAllApps();
-    else {
+    else
+    {
         for (vector<CComBSTR>::iterator iter=CAzGlobalOptions::m_bstrAppNames.begin() ; iter !=CAzGlobalOptions::m_bstrAppNames.end() ; iter++)
 
-        hr=sourceStore.OpenApp(*iter);
+            hr=sourceStore.OpenApp(*iter);
 
         if (FAILED(hr))
             goto lError1;
@@ -110,30 +116,34 @@ Return Value:
 --*/
 
 
-int parseCommandLine() {
+int parseCommandLine()
+{
 
     int iRet    =   0;
     int iNumArgs, iNumToBeProcessed;
 
     LPTSTR lpstrCommandArgs=GetCommandLine();
-    
+
     LPTSTR *rgCmdArgs=CommandLineToArgvW(lpstrCommandArgs,&iNumArgs);
 
     // To take care of no command line arguments
-    if (iNumArgs <= 1 ) {
+    if (iNumArgs <= 1 )
+    {
         iRet = -1;
         goto Cleanup;
     }
 
     // Check if one argument only and that is the /? argument
-    if (0==_tcsncicmp(rgCmdArgs[1],CAzGlobalOptions::HELPTAG , CAzGlobalOptions::HELPTAG_LEN)) {
-          DisplayUsage();
-          iRet = 1;
-          goto Cleanup;
+    if (0==_tcsncicmp(rgCmdArgs[1],CAzGlobalOptions::HELPTAG, CAzGlobalOptions::HELPTAG_LEN))
+    {
+        DisplayUsage();
+        iRet = 1;
+        goto Cleanup;
     }
 
     // if more than one argument but not the required 2 arguments
-    if (iNumArgs < 3 ) {
+    if (iNumArgs < 3 )
+    {
         iRet = -1;
         goto Cleanup;
     }
@@ -146,14 +156,17 @@ int parseCommandLine() {
 
     iNumToBeProcessed = iNumArgs-3;
 
-    for (int i = 3 ; i < iNumArgs ; i++) {
-        
+    for (int i = 3 ; i < iNumArgs ; i++)
+    {
+
         // Checking for /logfile
-        if (0==_tcsncicmp(rgCmdArgs[i],CAzGlobalOptions::LOGFILETAG,CAzGlobalOptions::LOGFILETAG_LEN)) {
+        if (0==_tcsncicmp(rgCmdArgs[i],CAzGlobalOptions::LOGFILETAG,CAzGlobalOptions::LOGFILETAG_LEN))
+        {
 
             _TCHAR *strRightPart=_tcschr(rgCmdArgs[i],_TCHAR('='));
 
-            if (NULL==strRightPart) {
+            if (NULL==strRightPart)
+            {
                 iRet = -1;
                 goto Cleanup;
             }
@@ -162,7 +175,9 @@ int parseCommandLine() {
 
             iNumToBeProcessed--;
 
-        } else if (0==_tcsncicmp(rgCmdArgs[i],CAzGlobalOptions::APPNAMETAG,CAzGlobalOptions::APPNAMETAG_LEN)) {
+        }
+        else if (0==_tcsncicmp(rgCmdArgs[i],CAzGlobalOptions::APPNAMETAG,CAzGlobalOptions::APPNAMETAG_LEN))
+        {
 
             //Checking for /application flag
 
@@ -170,7 +185,8 @@ int parseCommandLine() {
 
             _TCHAR *strRightPart=_tcschr(rgCmdArgs[i],_TCHAR('='));
 
-            if (NULL==strRightPart) {
+            if (NULL==strRightPart)
+            {
                 iRet = -1;
                 goto Cleanup;
             }
@@ -178,7 +194,8 @@ int parseCommandLine() {
 
             _TCHAR *strAppNames =_tcstok_s(&strRightPart[1],_TEXT(","),&strTmp);
 
-            while (strAppNames!=NULL) {
+            while (strAppNames!=NULL)
+            {
 
                 CAzGlobalOptions::m_bstrAppNames.push_back(CComBSTR(strAppNames).Copy());
 
@@ -187,11 +204,13 @@ int parseCommandLine() {
 
                 strAppNames =_tcstok_s(NULL,_TEXT(","),&strTmp);
 
-                }
+            }
 
             iNumToBeProcessed--;
 
-        } else if (0==_tcsncicmp(rgCmdArgs[i] , CAzGlobalOptions::OVERWRITETAG , CAzGlobalOptions::OVERWRITETAG_LEN)) {
+        }
+        else if (0==_tcsncicmp(rgCmdArgs[i], CAzGlobalOptions::OVERWRITETAG, CAzGlobalOptions::OVERWRITETAG_LEN))
+        {
 
             //Checking for /overwrite flag
 
@@ -199,7 +218,9 @@ int parseCommandLine() {
 
             iNumToBeProcessed--;
 
-        } else if (0==_tcsncicmp(rgCmdArgs[i] , CAzGlobalOptions::IGNOREMEMBERSTAG,CAzGlobalOptions::IGNOREMEMBERSTAG_LEN)) {
+        }
+        else if (0==_tcsncicmp(rgCmdArgs[i], CAzGlobalOptions::IGNOREMEMBERSTAG,CAzGlobalOptions::IGNOREMEMBERSTAG_LEN))
+        {
 
             //Checking for /IGNOREMEMBERS flag
 
@@ -207,7 +228,9 @@ int parseCommandLine() {
 
             iNumToBeProcessed--;
 
-        } else if (0==_tcsncicmp(rgCmdArgs[i] , CAzGlobalOptions::IGNOREPOLICYADMINSTAG , CAzGlobalOptions::IGNOREPOLICYADMINSTAG_LEN)) {
+        }
+        else if (0==_tcsncicmp(rgCmdArgs[i], CAzGlobalOptions::IGNOREPOLICYADMINSTAG, CAzGlobalOptions::IGNOREPOLICYADMINSTAG_LEN))
+        {
 
             //Checking for /IGNOREPOLICYADMIN flag
 
@@ -215,7 +238,9 @@ int parseCommandLine() {
 
             iNumToBeProcessed--;
 
-        } else if (0==_tcsncicmp(rgCmdArgs[i] , CAzGlobalOptions::VERBOSETAG , CAzGlobalOptions::VERBOSETAG_LEN)) {
+        }
+        else if (0==_tcsncicmp(rgCmdArgs[i], CAzGlobalOptions::VERBOSETAG, CAzGlobalOptions::VERBOSETAG_LEN))
+        {
 
             CAzGlobalOptions::m_bVerbose=true;
 
@@ -223,7 +248,9 @@ int parseCommandLine() {
 
             iNumToBeProcessed--;
 
-        } else if (0==_tcsncicmp(rgCmdArgs[i] , CAzGlobalOptions::HELPTAG , CAzGlobalOptions::HELPTAG_LEN)) {
+        }
+        else if (0==_tcsncicmp(rgCmdArgs[i], CAzGlobalOptions::HELPTAG, CAzGlobalOptions::HELPTAG_LEN))
+        {
 
             DisplayUsage();
 
@@ -243,7 +270,7 @@ int parseCommandLine() {
     iRet = 0;
 
 Cleanup:
-    
+
     if (rgCmdArgs)
     {
         LocalFree(rgCmdArgs);
@@ -265,7 +292,8 @@ Return Value: NONE
 
 --*/
 
-void DisplayUsage() {
+void DisplayUsage()
+{
 
     wcout << _TEXT("\tAzMigrate <destination store> <source store> [flags]\n") << endl ;
 
@@ -294,7 +322,7 @@ int __cdecl main(int argc, __in_ecount(argc) _TCHAR* argv[])
     UNREFERENCED_PARAMETER(argc);
     UNREFERENCED_PARAMETER(argv);
 
-    hr = CoInitializeEx(NULL,COINIT_APARTMENTTHREADED); 
+    hr = CoInitializeEx(NULL,COINIT_APARTMENTTHREADED);
 
     if (FAILED(hr))
     {
@@ -302,10 +330,11 @@ int __cdecl main(int argc, __in_ecount(argc) _TCHAR* argv[])
         wcout << _TEXT("Failed to initialize COM. CoInitializeEx return ") << CAzLogging::getMsgBuf(hr)  << endl;
         goto Done;
     }
-        
+
     int iStatus = parseCommandLine();
 
-    if (iStatus < 0) {
+    if (iStatus < 0)
+    {
 
         wcout << _TEXT("Invalid command line arguments") << endl;
 
@@ -315,8 +344,9 @@ int __cdecl main(int argc, __in_ecount(argc) _TCHAR* argv[])
 
         goto Done;
     }
-    
-    if (iStatus==0) {
+
+    if (iStatus==0)
+    {
 
         run();
 

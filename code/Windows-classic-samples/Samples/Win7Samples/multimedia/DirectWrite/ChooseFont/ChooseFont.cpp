@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -41,7 +41,7 @@ private:
     WCHAR                   m_localeName[LOCALE_NAME_MAX_LENGTH];
     IDWriteFontCollection*  m_fontCollection;
     IDWriteTextFormat*      m_currentTextFormat;
-    
+
     HRESULT OnFontFamilySelect();
     HRESULT OnFontFaceSelect();
     HRESULT OnFontSizeSelect();
@@ -120,14 +120,14 @@ HRESULT ChooseFontDialog::GetTextFormat(IDWriteTextFormat** textFormat)
     {
         SafeRelease(&m_currentTextFormat);
         hr = g_dwrite->CreateTextFormat(
-                L"Segoe UI",
-                m_fontCollection,
-                DWRITE_FONT_WEIGHT_REGULAR,
-                DWRITE_FONT_STYLE_NORMAL,
-                DWRITE_FONT_STRETCH_NORMAL,
-                10.0f,
-                m_localeName,
-                &m_currentTextFormat);
+                 L"Segoe UI",
+                 m_fontCollection,
+                 DWRITE_FONT_WEIGHT_REGULAR,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 10.0f,
+                 m_localeName,
+                 &m_currentTextFormat);
     }
 
     // Open the dialog
@@ -168,7 +168,7 @@ HRESULT ChooseFontDialog::GetTextFormat(IDWriteTextFormat* textFormatIn, IDWrite
     {
         hr = m_currentTextFormat->GetLocaleName(&m_localeName[0], ARRAYSIZE(m_localeName));
     }
-    
+
     // Open the dialog
     if (SUCCEEDED(hr))
     {
@@ -240,10 +240,10 @@ HRESULT ChooseFontDialog::OnFontFamilySelect()
     if (SUCCEEDED(hr))
     {
         FontFaceInfo desiredAttributes(
-                            L"", 
-                            m_currentTextFormat->GetFontWeight(), 
-                            m_currentTextFormat->GetFontStyle(), 
-                            m_currentTextFormat->GetFontStretch());
+            L"",
+            m_currentTextFormat->GetFontWeight(),
+            m_currentTextFormat->GetFontStyle(),
+            m_currentTextFormat->GetFontStretch());
 
         int selectedFontFaceName = 0;
         ULONG bestFitAttributes = GetBestFontAttributes(m_fontCollection, fontFamilyName, desiredAttributes);
@@ -377,7 +377,7 @@ HRESULT ChooseFontDialog::OnFontFamilyNameEdit(HWND hwndFontFamilies)
     {
         ComboBox_SetCurSel(hwndFontFamilies, matchingFontFamily);
 
-        // SetCurSel will update the edit text to match the text of the 
+        // SetCurSel will update the edit text to match the text of the
         // selected item.  If we matched against an alternate name put that
         // name back.
         if (usedAltMatch)
@@ -513,14 +513,14 @@ HRESULT ChooseFontDialog::DrawSampleText(HDC sampleDC)
         // Recreate the text format object
         SafeRelease(&m_currentTextFormat);
         hr = g_dwrite->CreateTextFormat(
-                            fontFamilyName,
-                            m_fontCollection,
-                            fontFaceInfo.fontWeight,
-                            fontFaceInfo.fontStyle,
-                            fontFaceInfo.fontStretch,
-                            dipSize,
-                            m_localeName,
-                            &m_currentTextFormat);
+                 fontFamilyName,
+                 m_fontCollection,
+                 fontFaceInfo.fontWeight,
+                 fontFaceInfo.fontStyle,
+                 fontFaceInfo.fontStretch,
+                 dipSize,
+                 m_localeName,
+                 &m_currentTextFormat);
     }
 
     // Get the size of the sample box
@@ -535,12 +535,12 @@ HRESULT ChooseFontDialog::DrawSampleText(HDC sampleDC)
     if (SUCCEEDED(hr))
     {
         hr = g_dwrite->CreateTextLayout(
-                sampleText, 
-                ARRAYSIZE(sampleText) - 1, 
-                m_currentTextFormat, 
-                (float) width  * 96.0f / GetDeviceCaps(sampleDC, LOGPIXELSY), 
-                (float) height * 96.0f / GetDeviceCaps(sampleDC, LOGPIXELSY), 
-                &textLayout);
+                 sampleText,
+                 ARRAYSIZE(sampleText) - 1,
+                 m_currentTextFormat,
+                 (float) width  * 96.0f / GetDeviceCaps(sampleDC, LOGPIXELSY),
+                 (float) height * 96.0f / GetDeviceCaps(sampleDC, LOGPIXELSY),
+                 &textLayout);
     }
 
     // Create a DWrite surface to render to
@@ -566,7 +566,7 @@ HRESULT ChooseFontDialog::DrawSampleText(HDC sampleDC)
 
         // Copy the DWrite surface to the sample on screen
         BitBlt(
-            sampleDC, 
+            sampleDC,
             0,
             0,
             width,
@@ -637,10 +637,11 @@ BOOL ChooseFontDialog::OnInitDialog(HWND dialog, HWND hwndFocus, LPARAM lParam)
 
     for (size_t i = 0; i != fontFamilyNames.size(); ++i)
         ComboBox_AddString(hwndFamilyNames, fontFamilyNames[i].c_str());
-    
+
     // Fill in the hardcoded font sizes
 
-    static const float FontSizes[] = {
+    static const float FontSizes[] =
+    {
         1.5, 3.5, 4.5, 6,
         8, 9, 10, 11, 12, 14, 16, 18,
         20, 22, 24, 26, 28, 36, 48, 72
@@ -667,7 +668,7 @@ BOOL ChooseFontDialog::OnInitDialog(HWND dialog, HWND hwndFocus, LPARAM lParam)
 
     int selectedFontFamily = CB_ERR;
     std::wstring fontFamilyName;
-        
+
     if (SUCCEEDED(GetFontFamilyNameFromFormat(m_currentTextFormat, fontFamilyName)))
     {
         selectedFontFamily = ComboBox_SelectString(hwndFamilyNames, -1, fontFamilyName.c_str());
@@ -743,9 +744,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR, int)
     g_hInstance = hInstance;
 
     DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED, 
-            __uuidof(IDWriteFactory), 
-            (IUnknown **) &g_dwrite);
+        DWRITE_FACTORY_TYPE_SHARED,
+        __uuidof(IDWriteFactory),
+        (IUnknown **) &g_dwrite);
 
     {
         ChooseFontDialog chooseFont;

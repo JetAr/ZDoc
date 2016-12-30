@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
@@ -16,7 +16,7 @@
 #include "rostream.h"
 
 
-class CReader 
+class CReader
 {
 public:
     CReader();

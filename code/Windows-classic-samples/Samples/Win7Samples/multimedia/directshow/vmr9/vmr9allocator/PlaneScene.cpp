@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: PlaneScene.cpp
 //
 // Desc: DirectShow sample code - implementation of the CPlaneScene class
@@ -24,15 +24,15 @@ D3DMATRIX* MatrixPerspectiveFovLH(
     FLOAT Aspect,
     FLOAT zn,
     FLOAT zf
-    );
+);
 
 
-D3DMATRIX* MatrixLookAtLH( 
-    D3DMATRIX *pOut, 
-    const D3DVECTOR *pEye, 
+D3DMATRIX* MatrixLookAtLH(
+    D3DMATRIX *pOut,
+    const D3DVECTOR *pEye,
     const D3DVECTOR *pAt,
-    const D3DVECTOR *pUp 
-    );
+    const D3DVECTOR *pUp
+);
 
 
 //////////////////////////////////////////////////////////////////////
@@ -53,10 +53,14 @@ CPlaneScene::CPlaneScene()
     m_vertices[3].color = 0xff0000ff;
 
     // set up texture coordinates
-    m_vertices[0].tu = 0.0f; m_vertices[0].tv = 0.0f; // low left
-    m_vertices[1].tu = 0.0f; m_vertices[1].tv = 1.0f; // high left
-    m_vertices[2].tu = 1.0f; m_vertices[2].tv = 0.0f; // low right
-    m_vertices[3].tu = 1.0f; m_vertices[3].tv = 1.0f; // high right
+    m_vertices[0].tu = 0.0f;
+    m_vertices[0].tv = 0.0f; // low left
+    m_vertices[1].tu = 0.0f;
+    m_vertices[1].tv = 1.0f; // high left
+    m_vertices[2].tu = 1.0f;
+    m_vertices[2].tv = 0.0f; // low right
+    m_vertices[3].tu = 1.0f;
+    m_vertices[3].tv = 1.0f; // high right
 }
 
 CPlaneScene::~CPlaneScene()
@@ -64,7 +68,7 @@ CPlaneScene::~CPlaneScene()
 
 }
 
-HRESULT 
+HRESULT
 CPlaneScene::Init(IDirect3DDevice9* d3ddev)
 {
     HRESULT hr;
@@ -93,18 +97,18 @@ CPlaneScene::Init(IDirect3DDevice9* d3ddev)
 
     SmartPtr<IDirect3DSurface9> backBuffer;
     FAIL_RET( d3ddev->GetBackBuffer( 0, 0,
-                                    D3DBACKBUFFER_TYPE_MONO,
-                                    & backBuffer ) );
+                                     D3DBACKBUFFER_TYPE_MONO,
+                                     & backBuffer ) );
 
     D3DSURFACE_DESC backBufferDesc;
     backBuffer->GetDesc( & backBufferDesc );
 
     // Set the projection matrix
     D3DMATRIX matProj;
-    FLOAT fAspect = backBufferDesc.Width / 
+    FLOAT fAspect = backBufferDesc.Width /
                     (float)backBufferDesc.Height;
-    MatrixPerspectiveFovLH( &matProj, (float)M_PI_4, fAspect, 
-                                1.0f, 100.0f );
+    MatrixPerspectiveFovLH( &matProj, (float)M_PI_4, fAspect,
+                            1.0f, 100.0f );
     FAIL_RET( d3ddev->SetTransform( D3DTS_PROJECTION, &matProj ) );
 
 
@@ -122,9 +126,9 @@ CPlaneScene::Init(IDirect3DDevice9* d3ddev)
 }
 
 
-HRESULT 
+HRESULT
 CPlaneScene::DrawScene( IDirect3DDevice9* d3ddev,
-                        IDirect3DTexture9* texture ) 
+                        IDirect3DTexture9* texture )
 {
     HRESULT hr;
 
@@ -142,7 +146,7 @@ CPlaneScene::DrawScene( IDirect3DDevice9* d3ddev,
     DWORD dwCurrentTime;
     dwCurrentTime = GetTickCount();
     double difference = m_time - dwCurrentTime ;
-    
+
     // figure out the rotation of the plane
     float x = (float) ( -cos(difference / 2000.0 ) ) ;
     float y = (float) ( cos(difference / 2000.0 ) ) ;
@@ -163,11 +167,11 @@ CPlaneScene::DrawScene( IDirect3DDevice9* d3ddev,
     // write the new vertex information into the buffer
     void* pData;
     FAIL_RET( m_vertexBuffer->Lock(0,sizeof(pData), &pData,0) );
-    memcpy(pData,m_vertices,sizeof(m_vertices));                            
-    FAIL_RET( m_vertexBuffer->Unlock() );  
+    memcpy(pData,m_vertices,sizeof(m_vertices));
+    FAIL_RET( m_vertexBuffer->Unlock() );
 
     // clear the scene so we don't have any articats left
-    d3ddev->Clear( 0L, NULL, D3DCLEAR_TARGET, 
+    d3ddev->Clear( 0L, NULL, D3DCLEAR_TARGET,
                    D3DCOLOR_XRGB(255,255,255), 1.0f, 0L );
 
     FAIL_RET( d3ddev->BeginScene() );
@@ -180,7 +184,7 @@ CPlaneScene::DrawScene( IDirect3DDevice9* d3ddev,
 
     FAIL_RET( d3ddev->SetStreamSource(0, m_vertexBuffer, 0, sizeof(CPlaneScene::CUSTOMVERTEX)  ) );            //set next source ( NEW )
     FAIL_RET( d3ddev->SetFVF( D3DFVF_CUSTOMVERTEX ) );
-    FAIL_RET( d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2) );  //draw quad 
+    FAIL_RET( d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2) );  //draw quad
     FAIL_RET( d3ddev->SetTexture( 0, NULL));
     FAIL_RET( d3ddev->EndScene());
 
@@ -190,10 +194,14 @@ CPlaneScene::DrawScene( IDirect3DDevice9* d3ddev,
 void
 CPlaneScene::SetSrcRect( float fTU, float fTV )
 {
-    m_vertices[0].tu = 0.0f; m_vertices[0].tv = 0.0f; // low left
-    m_vertices[1].tu = 0.0f; m_vertices[1].tv = fTV;  // high left
-    m_vertices[2].tu = fTU;  m_vertices[2].tv = 0.0f; // low right
-    m_vertices[3].tu = fTU;  m_vertices[3].tv = fTV;  // high right
+    m_vertices[0].tu = 0.0f;
+    m_vertices[0].tv = 0.0f; // low left
+    m_vertices[1].tu = 0.0f;
+    m_vertices[1].tv = fTV;  // high left
+    m_vertices[2].tu = fTU;
+    m_vertices[2].tv = 0.0f; // low right
+    m_vertices[3].tu = fTU;
+    m_vertices[3].tv = fTV;  // high right
 }
 
 
@@ -263,12 +271,12 @@ FLOAT VecDot(const D3DVECTOR *pV1, const D3DVECTOR *pV2)
 
 // MatrixLookAtLH: Approximately equivalent to D3DXMatrixLookAtLH.
 
-D3DMATRIX* MatrixLookAtLH( 
-    D3DMATRIX *pOut, 
-    const D3DVECTOR *pEye, 
+D3DMATRIX* MatrixLookAtLH(
+    D3DMATRIX *pOut,
+    const D3DVECTOR *pEye,
     const D3DVECTOR *pAt,
-    const D3DVECTOR *pUp 
-    )
+    const D3DVECTOR *pUp
+)
 {
 
     D3DVECTOR vecX, vecY, vecZ;
@@ -316,8 +324,8 @@ D3DMATRIX* MatrixPerspectiveFovLH(
     FLOAT Aspect,
     FLOAT zn,
     FLOAT zf
-    )
-{   
+)
+{
     // yScale = cot(fovy/2)
 
     FLOAT yScale = cosf(fovy * 0.5f) / sinf(fovy * 0.5f);

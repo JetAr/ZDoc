@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: FBall.h
 //
 // Desc: DirectShow sample code - main header file for the bouncing ball
@@ -91,4 +91,4 @@ private:
     HRESULT SetPaletteEntries(Colour colour);
 
 }; // CBallStream
-    
+

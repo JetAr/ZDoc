@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,155 +18,155 @@
 // CResourceSub
 
 STDMETHODIMP CResourceSub::OnResourceCreate(
-    COMSVCSEVENTINFO * pInfo, 
-	ULONG64 ObjectID,
+    COMSVCSEVENTINFO * pInfo,
+    ULONG64 ObjectID,
     LPCWSTR pwszType,
     ULONG64 resId,
-	BOOL enlisted)
+    BOOL enlisted)
 {
-	m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceCreate", GuidToBstr(pInfo->guidApp));
-	m_pSpy->AddParamValueToList(L"Type", pwszType);
+    m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceCreate", GuidToBstr(pInfo->guidApp));
+    m_pSpy->AddParamValueToList(L"Type", pwszType);
 
-	WCHAR szObjectID[32];
-	StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
-	m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
+    WCHAR szObjectID[32];
+    StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
+    m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
 
-	WCHAR szResID[32];
-	StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
-	m_pSpy->AddParamValueToList(L"ResourceID", szResID);
+    WCHAR szResID[32];
+    StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
+    m_pSpy->AddParamValueToList(L"ResourceID", szResID);
 
-	WCHAR szEnlisted[10];
-	if (enlisted)
-		StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"TRUE");
-	else
-		StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted),L"FALSE");
-	m_pSpy->AddParamValueToList(L"Enlisted", szEnlisted);
-		
-	IF_AUDIT_DO(OnResourceCreate)(pInfo->perfCount,GuidToBstr(pInfo->guidApp), szObjectID, pwszType, szResID,enlisted);
+    WCHAR szEnlisted[10];
+    if (enlisted)
+        StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"TRUE");
+    else
+        StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted),L"FALSE");
+    m_pSpy->AddParamValueToList(L"Enlisted", szEnlisted);
 
-	return S_OK;
+    IF_AUDIT_DO(OnResourceCreate)(pInfo->perfCount,GuidToBstr(pInfo->guidApp), szObjectID, pwszType, szResID,enlisted);
+
+    return S_OK;
 }
 
 
 STDMETHODIMP CResourceSub::OnResourceAllocate(
-	COMSVCSEVENTINFO * pInfo, 
-	ULONG64 ObjectID,
+    COMSVCSEVENTINFO * pInfo,
+    ULONG64 ObjectID,
     LPCWSTR pwszType,
     ULONG64 resId,
-	BOOL enlisted,
-	DWORD NumRated,
-	DWORD Rating)
+    BOOL enlisted,
+    DWORD NumRated,
+    DWORD Rating)
 {
-	
-	m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceAllocate",GuidToBstr(pInfo->guidApp));
-	m_pSpy->AddParamValueToList(L"Type", pwszType);
 
-	WCHAR szObjectID[32];
-	StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
-	m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
+    m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceAllocate",GuidToBstr(pInfo->guidApp));
+    m_pSpy->AddParamValueToList(L"Type", pwszType);
 
-	WCHAR szResID[32];
-	StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
-	m_pSpy->AddParamValueToList(L"ResourceID", szResID);
+    WCHAR szObjectID[32];
+    StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
+    m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
 
-	WCHAR szEnlisted[10];
-	if (enlisted)
-		StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"TRUE");
-	else
-		StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"FALSE");
-	m_pSpy->AddParamValueToList(L"Enlisted", szEnlisted);
+    WCHAR szResID[32];
+    StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
+    m_pSpy->AddParamValueToList(L"ResourceID", szResID);
 
-	WCHAR szNumRated[16];
+    WCHAR szEnlisted[10];
+    if (enlisted)
+        StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"TRUE");
+    else
+        StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"FALSE");
+    m_pSpy->AddParamValueToList(L"Enlisted", szEnlisted);
+
+    WCHAR szNumRated[16];
     StringCchPrintfW(szNumRated, ARRAYSIZE(szNumRated), L"%#08X", NumRated);
-	m_pSpy->AddParamValueToList(L"NumRated", szNumRated);
+    m_pSpy->AddParamValueToList(L"NumRated", szNumRated);
 
-	WCHAR szRating[16];
+    WCHAR szRating[16];
     StringCchPrintfW(szRating, ARRAYSIZE(szRating), L"%#08X", Rating);
-	m_pSpy->AddParamValueToList(L"Rating", szRating);
+    m_pSpy->AddParamValueToList(L"Rating", szRating);
 
-	IF_AUDIT_DO(OnResourceAllocate)(pInfo->perfCount,GuidToBstr(pInfo->guidApp), szObjectID, pwszType, szResID,enlisted,szNumRated,szRating);
-	return S_OK;
+    IF_AUDIT_DO(OnResourceAllocate)(pInfo->perfCount,GuidToBstr(pInfo->guidApp), szObjectID, pwszType, szResID,enlisted,szNumRated,szRating);
+    return S_OK;
 }
 
 
 STDMETHODIMP CResourceSub::OnResourceRecycle(
-	COMSVCSEVENTINFO * pInfo, 
-	ULONG64 ObjectID,
+    COMSVCSEVENTINFO * pInfo,
+    ULONG64 ObjectID,
     LPCWSTR pwszType,
     ULONG64 resId)
 {
-	m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceRecycle",GuidToBstr(pInfo->guidApp));
-	m_pSpy->AddParamValueToList(L"Type", pwszType);
+    m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceRecycle",GuidToBstr(pInfo->guidApp));
+    m_pSpy->AddParamValueToList(L"Type", pwszType);
 
-	WCHAR szObjectID[32];
+    WCHAR szObjectID[32];
     StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
-	m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
+    m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
 
-	WCHAR szResID[32];
+    WCHAR szResID[32];
     StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
-	m_pSpy->AddParamValueToList(L"ResourceID", szResID);
+    m_pSpy->AddParamValueToList(L"ResourceID", szResID);
 
-	IF_AUDIT_DO(OnResourceRecycle)(pInfo->perfCount,GuidToBstr(pInfo->guidApp), szObjectID, pwszType, szResID);
-	return S_OK;
+    IF_AUDIT_DO(OnResourceRecycle)(pInfo->perfCount,GuidToBstr(pInfo->guidApp), szObjectID, pwszType, szResID);
+    return S_OK;
 }
 
 
 STDMETHODIMP CResourceSub::OnResourceDestroy(
-    COMSVCSEVENTINFO * pInfo, 
-	ULONG64 ObjectID,
-	HRESULT hr,
+    COMSVCSEVENTINFO * pInfo,
+    ULONG64 ObjectID,
+    HRESULT hr,
     LPCWSTR pwszType,
     ULONG64 resId)
 {
-	m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceDestroy",GuidToBstr(pInfo->guidApp));
-	
-	m_pSpy->AddParamValueToList(L"Type", pwszType);
+    m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceDestroy",GuidToBstr(pInfo->guidApp));
 
-	WCHAR szObjectID[32];
-	StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
-	m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
+    m_pSpy->AddParamValueToList(L"Type", pwszType);
 
-	WCHAR szResID[32];
-	StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
-	m_pSpy->AddParamValueToList(L"ResourceID", szResID);
+    WCHAR szObjectID[32];
+    StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
+    m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
 
-	WCHAR szHResult[16];
-	StringCchPrintfW(szHResult, ARRAYSIZE(szHResult), L"%#016I64X", hr);
-	m_pSpy->AddParamValueToList(L"Destroy HR", szHResult);
+    WCHAR szResID[32];
+    StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
+    m_pSpy->AddParamValueToList(L"ResourceID", szResID);
 
-	IF_AUDIT_DO(OnResourceDestroy)(pInfo->perfCount, GuidToBstr(pInfo->guidApp), szObjectID, hr,pwszType, szResID);
-	return S_OK;
+    WCHAR szHResult[16];
+    StringCchPrintfW(szHResult, ARRAYSIZE(szHResult), L"%#016I64X", hr);
+    m_pSpy->AddParamValueToList(L"Destroy HR", szHResult);
+
+    IF_AUDIT_DO(OnResourceDestroy)(pInfo->perfCount, GuidToBstr(pInfo->guidApp), szObjectID, hr,pwszType, szResID);
+    return S_OK;
 }
 
 STDMETHODIMP CResourceSub::OnResourceTrack(
-											COMSVCSEVENTINFO * pInfo, 
-											ULONG64 ObjectID,
-											LPCWSTR pwszType,
-											ULONG64 resId,
-											BOOL enlisted)
+    COMSVCSEVENTINFO * pInfo,
+    ULONG64 ObjectID,
+    LPCWSTR pwszType,
+    ULONG64 resId,
+    BOOL enlisted)
 {
-	m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceTrack", GuidToBstr(pInfo->guidApp));
+    m_pSpy->AddEventToList(pInfo->perfCount, L"OnResourceTrack", GuidToBstr(pInfo->guidApp));
 
-	m_pSpy->AddParamValueToList(L"Type", pwszType);
+    m_pSpy->AddParamValueToList(L"Type", pwszType);
 
-	WCHAR szObjectID[32];
-	StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
-	m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
+    WCHAR szObjectID[32];
+    StringCchPrintfW(szObjectID, ARRAYSIZE(szObjectID), L"%#016I64X", ObjectID);
+    m_pSpy->AddParamValueToList(L"ObjectID", szObjectID);
 
-	WCHAR szResID[32];
-	StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
-	m_pSpy->AddParamValueToList(L"ResourceID", szResID);
+    WCHAR szResID[32];
+    StringCchPrintfW(szResID, ARRAYSIZE(szResID), L"%#016I64X", resId);
+    m_pSpy->AddParamValueToList(L"ResourceID", szResID);
 
-	WCHAR szEnlisted[10];
-	if (enlisted)
-		StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"TRUE");
-	else
-		StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"FALSE");
-	m_pSpy->AddParamValueToList(L"Enlisted", szEnlisted);
-		
-	IF_AUDIT_DO(OnResourceTrack)(pInfo->perfCount,GuidToBstr(pInfo->guidApp), szObjectID, pwszType, szResID,enlisted);
+    WCHAR szEnlisted[10];
+    if (enlisted)
+        StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"TRUE");
+    else
+        StringCchPrintfW(szEnlisted, ARRAYSIZE(szEnlisted), L"FALSE");
+    m_pSpy->AddParamValueToList(L"Enlisted", szEnlisted);
+
+    IF_AUDIT_DO(OnResourceTrack)(pInfo->perfCount,GuidToBstr(pInfo->guidApp), szObjectID, pwszType, szResID,enlisted);
 
 
-	return S_OK;
+    return S_OK;
 }
 

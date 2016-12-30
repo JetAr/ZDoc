@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,30 +8,30 @@
 // MTGestures application
 // Description:
 //  This application demonstrate how to handle multi-touch gesture commands. This
-//  application will initially draw rectangle in the middle of client area. By 
-//  using gestures a user can manipulate the rectangle. The available 
+//  application will initially draw rectangle in the middle of client area. By
+//  using gestures a user can manipulate the rectangle. The available
 //  commands are:
-//      - rectangle stretch 
-//          By putting two fingers on the screen and modifying distance between 
+//      - rectangle stretch
+//          By putting two fingers on the screen and modifying distance between
 //          them by moving fingers in the opposite directions or towards each
 //          other the user can zoom in/out this rectangle.
 //      - panning
-//          By touching the screen with two fingers and moving them in the same 
-//          direction the user can move the rectangle. 
+//          By touching the screen with two fingers and moving them in the same
+//          direction the user can move the rectangle.
 //      - rotate
-//          By putting one finger in the center of the rotation and then rotating 
+//          By putting one finger in the center of the rotation and then rotating
 //          the other finger around it the user can rotate the rectangle
 //      - two finger tap
-//          By tapping the screen with two fingers the user can toggle drawing of 
+//          By tapping the screen with two fingers the user can toggle drawing of
 //          the diagonals
 //      - finger press and tap
 //          This gesture involves movements of two fingers. It consists first of
 //          putting one finger down. Then putting the second finger down and then
-//          lifting it up. Finally the first finger is lifted up. This gesture 
+//          lifting it up. Finally the first finger is lifted up. This gesture
 //          will change the color of the rectangle.
 //
 // Purpose:
-//  This sample demonstrates handling of the multi-touch gestures. 
+//  This sample demonstrates handling of the multi-touch gestures.
 //
 // MTGestures.cpp : Defines the entry point for the application.
 
@@ -53,7 +53,7 @@
 CDrawingObject g_cRect; // a class that manipulate the rectangle
 
 // class that reads and processes multi-touch gesture commands
-CMyGestureEngine g_cGestureEngine(&g_cRect); 
+CMyGestureEngine g_cGestureEngine(&g_cRect);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Application framework (wizard code)
@@ -75,9 +75,9 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 //      lpCmdLine       command line for the application, null-terminated string
 //      nCmdShow        how to show the window
 int APIENTRY wWinMain(HINSTANCE hInstance,
-                     HINSTANCE /* hPrevInstance */,
-                     LPWSTR    /* lpCmdLine */,
-                     int       nCmdShow)
+                      HINSTANCE /* hPrevInstance */,
+                      LPWSTR    /* lpCmdLine */,
+                      int       nCmdShow)
 {
     MSG msg;
 
@@ -148,28 +148,28 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //      flag, succeeded or failed to create the window
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   HWND hWnd;
+    HWND hWnd;
 
-   g_hInst = hInstance; // Store instance handle in our global variable
+    g_hInst = hInstance; // Store instance handle in our global variable
 
-   hWnd = CreateWindow(g_wszWindowClass, g_wszTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+    hWnd = CreateWindow(g_wszWindowClass, g_wszTitle, WS_OVERLAPPEDWINDOW,
+                        CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 
-   if (!hWnd)
-   {
-      return FALSE;
-   }
+    if (!hWnd)
+    {
+        return FALSE;
+    }
 
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
 
-   return TRUE;
+    return TRUE;
 }
 
-// End of the wizard code. 
+// End of the wizard code.
 
 
-// The code below is from the wizard but it has been customized for this 
+// The code below is from the wizard but it has been customized for this
 // application. There is a custom code to handle WM_SIZE, WM_GESTURENOTIFY
 // and WM_GESTURE messages.
 //
@@ -178,7 +178,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //      WM_SIZE           - process resizing of client window
 //      WM_PAINT          - paint the main window
 //      WM_DESTROY        - post a quit message and return
-//      WM_GESTURENOTIFY  - process a gesture notification message 
+//      WM_GESTURENOTIFY  - process a gesture notification message
 //      WM_GESTURE        - process the gesture command
 // in:
 //      hWnd        window handle
@@ -196,38 +196,39 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_GESTURENOTIFY:
+    {
+        // This is the right place to define the list of gestures that this
+        // application will support. By populating GESTURECONFIG structure
+        // and calling SetGestureConfig function. We can choose gestures
+        // that we want to handle in our application. In this app we
+        // decide to handle all gestures.
+        GESTURECONFIG gc =
         {
-            // This is the right place to define the list of gestures that this
-            // application will support. By populating GESTURECONFIG structure 
-            // and calling SetGestureConfig function. We can choose gestures 
-            // that we want to handle in our application. In this app we
-            // decide to handle all gestures.
-            GESTURECONFIG gc = {
-                0,              // gesture ID
-                GC_ALLGESTURES, // settings related to gesture ID that are to be 
-                                // turned on
-                0               // settings related to gesture ID that are to be 
-                                // turned off
-            };
+            0,              // gesture ID
+            GC_ALLGESTURES, // settings related to gesture ID that are to be
+            // turned on
+            0               // settings related to gesture ID that are to be
+            // turned off
+        };
 
-            BOOL bResult = SetGestureConfig(
-                hWnd,                 // window for which configuration is specified  
-                0,                    // reserved, must be 0
-                1,                    // count of GESTURECONFIG structures
-                &gc,                  // array of GESTURECONFIG structures, dwIDs will be processed in the
-                                      // order specified and repeated occurances will overwrite previous ones
-                sizeof(GESTURECONFIG) // sizeof(GESTURECONFIG)
-            );                        
-            
-            if (!bResult)
-            {
-                ASSERT(L"Error in execution of SetGestureConfig" && 0);
-            }
+        BOOL bResult = SetGestureConfig(
+                           hWnd,                 // window for which configuration is specified
+                           0,                    // reserved, must be 0
+                           1,                    // count of GESTURECONFIG structures
+                           &gc,                  // array of GESTURECONFIG structures, dwIDs will be processed in the
+                           // order specified and repeated occurances will overwrite previous ones
+                           sizeof(GESTURECONFIG) // sizeof(GESTURECONFIG)
+                       );
+
+        if (!bResult)
+        {
+            ASSERT(L"Error in execution of SetGestureConfig" && 0);
         }
-        break;
+    }
+    break;
 
     case WM_GESTURE:
-        // The gesture processing code is implemented in the CGestureEngine 
+        // The gesture processing code is implemented in the CGestureEngine
         // class.
         return g_cGestureEngine.WndProc(hWnd,wParam,lParam);
         break;
@@ -251,7 +252,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_PAINT:
-        hdc = BeginPaint(hWnd, &ps);       
+        hdc = BeginPaint(hWnd, &ps);
 
         // Full redraw: background + rectangle
         g_cRect.Paint(hdc);

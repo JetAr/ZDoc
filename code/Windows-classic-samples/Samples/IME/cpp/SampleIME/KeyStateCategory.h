@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -43,7 +43,7 @@ typedef struct KeyHandlerEditSessionDTO
     UINT code;
     WCHAR wch;
     KEYSTROKE_FUNCTION arrowKey;
-}KeyHandlerEditSessionDTO;
+} KeyHandlerEditSessionDTO;
 
 class CKeyStateCategory
 {
@@ -196,41 +196,80 @@ public:
 
 protected:
     // _HandleNullInput
-    HRESULT HandleKeyInput(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyInput(dto); };
+    HRESULT HandleKeyInput(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyInput(dto);
+    };
 
     // HandleKeyNullFinalizeTextStoreAndInput
-    HRESULT HandleKeyFinalizeTextStoreAndInput(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyFinalizeTextStoreAndInput(dto); };
+    HRESULT HandleKeyFinalizeTextStoreAndInput(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyFinalizeTextStoreAndInput(dto);
+    };
 
     // HandleKeyFinalizeTextStore
-    HRESULT HandleKeyFinalizeTextStore(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyFinalizeTextStore(dto); };
+    HRESULT HandleKeyFinalizeTextStore(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyFinalizeTextStore(dto);
+    };
 
     // HandleKeyNullFinalizeCandidatelistAndInput
-    HRESULT HandleKeyFinalizeCandidatelistAndInput(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyFinalizeCandidatelistAndInput(dto); };
+    HRESULT HandleKeyFinalizeCandidatelistAndInput(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyFinalizeCandidatelistAndInput(dto);
+    };
 
     // HandleKeyNullFinalizeCandidatelist
-    HRESULT HandleKeyFinalizeCandidatelist(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyFinalizeCandidatelist(dto); };
+    HRESULT HandleKeyFinalizeCandidatelist(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyFinalizeCandidatelist(dto);
+    };
 
     //_HandleNullConvert
-    HRESULT HandleKeyConvert(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyConvert(dto); };
+    HRESULT HandleKeyConvert(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyConvert(dto);
+    };
 
     //_HandleNullCancel
-    HRESULT HandleKeyCancel(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyCancel(dto); };
+    HRESULT HandleKeyCancel(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyCancel(dto);
+    };
 
     // HandleKeyNullConvertWild
-    HRESULT HandleKeyConvertWildCard(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyConvertWildCard(dto); };
+    HRESULT HandleKeyConvertWildCard(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyConvertWildCard(dto);
+    };
 
     //_HandleNullBackspace
-    HRESULT HandleKeyBackspace(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyBackspace(dto); };
+    HRESULT HandleKeyBackspace(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyBackspace(dto);
+    };
 
     //_HandleNullArrowKey
-    HRESULT HandleKeyArrow(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyArrow(dto); };
+    HRESULT HandleKeyArrow(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyArrow(dto);
+    };
 
     // HandleKeyDoubleSingleByte
-    HRESULT HandleKeyDoubleSingleByte(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyDoubleSingleByte(dto); };
+    HRESULT HandleKeyDoubleSingleByte(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyDoubleSingleByte(dto);
+    };
 
     // HandleKeyPunctuation
-    HRESULT HandleKeyPunctuation(KeyHandlerEditSessionDTO dto) { return __super::HandleKeyPunctuation(dto); };
+    HRESULT HandleKeyPunctuation(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeyPunctuation(dto);
+    };
 
     //_HandleNullCandidateSelectByNumber
-    HRESULT HandleKeySelectByNumber(KeyHandlerEditSessionDTO dto) { return __super::HandleKeySelectByNumber(dto); };
+    HRESULT HandleKeySelectByNumber(KeyHandlerEditSessionDTO dto)
+    {
+        return __super::HandleKeySelectByNumber(dto);
+    };
 };

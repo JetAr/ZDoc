@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // MultiFileSelect.h: Defines the MultiSelectFileList class.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -15,11 +15,11 @@
 
 //-----------------------------------------------------------------------------
 // MultiSelectFileList class
-// 
-// Helper class to parse the buffer that is returned by GetOpenFileName 
+//
+// Helper class to parse the buffer that is returned by GetOpenFileName
 // when the OFN_ALLOWMULTISELECT and OFN_EXPLORER flags are used.
 //
-// The template parameter is the size of the buffer. 
+// The template parameter is the size of the buffer.
 //-----------------------------------------------------------------------------
 
 // NOTE: In Windows Vista and later, applications are encouraged to use
@@ -39,9 +39,9 @@ class MultiSelectFileList
 
     //-------------------------------------------------------------------------
     // _Next()
-    // 
+    //
     // Advances to the next file name.
-    // 
+    //
     // If there are no more file names, pName is set to NULL and the method
     // returns FALSE.
     //-------------------------------------------------------------------------
@@ -56,10 +56,10 @@ class MultiSelectFileList
         {
             pName = NULL;
             cchName = 0;
-        
+
             // The buffer is not NULL-terminated, or
             // there are no file names left in the buffer.
-            return FALSE;  
+            return FALSE;
         }
 
         pName = pNext;
@@ -87,25 +87,31 @@ public:
 
     //-------------------------------------------------------------------------
     // BufferSizeCch
-    // 
+    //
     // Returns the maximum number of characters in the buffer, including the
     // terminating NULL.
     //-------------------------------------------------------------------------
-    const DWORD BufferSizeCch() const { return CCH_BUFFER; }
+    const DWORD BufferSizeCch() const
+    {
+        return CCH_BUFFER;
+    }
 
     //-------------------------------------------------------------------------
     // BufferPtr()
-    // 
+    //
     // Returns a pointer to the buffer that contains the file name(s). This
     // is the raw buffer used by GetOpenFileName. To parse the buffer, call
     // Next().
     //-------------------------------------------------------------------------
-    TCHAR* BufferPtr() { return pBuffer; }
+    TCHAR* BufferPtr()
+    {
+        return pBuffer;
+    }
 
 
     //-------------------------------------------------------------------------
     // ParseBuffer
-    // 
+    //
     // Parses the file-name buffer. Call this method after GetOpenFileName
     // returns successfully.
     //-------------------------------------------------------------------------
@@ -121,7 +127,7 @@ public:
         else if (cchFileName >= CCH_BUFFER - 1)
         {
             // The buffer is not double-NULL-terminated.
-            return E_FAIL; 
+            return E_FAIL;
         }
 
         cchRemaining = CCH_BUFFER - (cchFileName + 1);
@@ -129,7 +135,7 @@ public:
         if (pBuffer[cchFileName + 1] == TEXT('\0'))
         {
             // Case 1: Single file selection.
-            // If the user selects a single file, the buffer contains the full 
+            // If the user selects a single file, the buffer contains the full
             // path name with two trailing NULLs.
 
             // We handle this case by setting pPath to NULL and pName to
@@ -160,9 +166,9 @@ public:
 
     //-------------------------------------------------------------------------
     // Next
-    // 
+    //
     // Gets the next file name in the buffer. The method allocates memory for
-    // the file name, and returns a pointer to the allocated string in 
+    // the file name, and returns a pointer to the allocated string in
     // ppFileName. The caller must free the memory by calling CoTaskMemFree.
     // The file name includes the full path.
     //
@@ -179,7 +185,7 @@ public:
 
         // Calculate the length of the returned string.
 
-        // If the files are in the root directory, the path name includes the 
+        // If the files are in the root directory, the path name includes the
         // trailing backward slash. Otherwise, we need to add it to the path name.
         if ( (pPath != NULL) && (cchPath > 0) && (pPath[cchPath - 1] != TEXT('\\')) )
         {

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,18 +12,18 @@
 #include "stdafx.h"
 
 // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
-// 
+//
 // Generate a new UUID to use here.
 //
 // Every provider must have its own CLSID with a unique UUID
-// The provider's installer must register this UUID as the COM class 
-// for the provider and reference the UUID as the class for the 
+// The provider's installer must register this UUID as the COM class
+// for the provider and reference the UUID as the class for the
 // provider when registering the provider in the registry.
 //
 // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
 const GUID CLSID_FDProvider = { 0x8c19066a, 0x643a, 0x4586, { 0x92, 0xb2, 0xa7, 0x85, 0xb9, 0xd, 0x76, 0x6f }};
 
-class TClassFactory: 
+class TClassFactory:
     public IClassFactory,
     public IEXEHostControl
 {
@@ -32,13 +32,13 @@ public:
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP QueryInterface(
-        REFIID riid, 
+        REFIID riid,
         __deref_out_opt void** ppv);
 
     // IClassFactory
     STDMETHODIMP CreateInstance(
-        __in_opt IUnknown* punkOuter, 
-        REFIID iid, 
+        __in_opt IUnknown* punkOuter,
+        REFIID iid,
         __deref_out_opt void** ppv);
 
     STDMETHODIMP LockServer(
@@ -71,13 +71,13 @@ LONG g_cLockCount = 0;
 TClassFactory::TClassFactory():
     m_cRef(1),
     m_pfnProviderLifetimeNotificationCallback(NULL)
-{ 
-    IncModuleCount(); 
+{
+    IncModuleCount();
 }  // TClassFactory::TClassFactory
 
-TClassFactory::~TClassFactory() 
-{ 
-    DecModuleCount(); 
+TClassFactory::~TClassFactory()
+{
+    DecModuleCount();
 }  // TClassFactory::~TClassFactory
 
 STDMETHODIMP_(ULONG) TClassFactory::AddRef()
@@ -97,14 +97,14 @@ STDMETHODIMP_(ULONG) TClassFactory::Release()
 }  // TClassFactory::Release
 
 STDMETHODIMP TClassFactory::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     __deref_out_opt void** ppv)
 {
     HRESULT hr = S_OK;
 
     if (ppv)
     {
-        *ppv = NULL;        
+        *ppv = NULL;
     }
     else
     {
@@ -138,8 +138,8 @@ STDMETHODIMP TClassFactory::QueryInterface(
 }  // TClassFactory::QueryInterface
 
 STDMETHODIMP TClassFactory::CreateInstance(
-    __in_opt IUnknown* pUnkownOuter, 
-    REFIID riid, 
+    __in_opt IUnknown* pUnkownOuter,
+    REFIID riid,
     __deref_out_opt void** ppv)
 {
     HRESULT    hr = S_OK;
@@ -174,8 +174,8 @@ STDMETHODIMP TClassFactory::CreateInstance(
     if (S_OK == hr)
     {
         hr = pUnknown->QueryInterface(
-            riid, 
-            ppv);
+                 riid,
+                 ppv);
     }
 
     if (pUnknown)
@@ -203,7 +203,7 @@ STDMETHODIMP TClassFactory::LockServer(
 
 // IEXEHostControl
 STDMETHODIMP TClassFactory::RegisterProviderLifetimeNotificationCallback(
-        PFNProviderLifetimeNotificationCallback pfnProviderLifetimeNotificationCallback)
+    PFNProviderLifetimeNotificationCallback pfnProviderLifetimeNotificationCallback)
 {
     m_pfnProviderLifetimeNotificationCallback = pfnProviderLifetimeNotificationCallback;
 
@@ -239,74 +239,74 @@ inline VOID DecModuleCount()
 extern "C"
 {
 
-BOOL APIENTRY DllMain(
-    HMODULE hModule,
-    ULONG ulReason,
-    __in_opt PVOID pReserved)
-{
-    BOOL fRetVal = TRUE;
-
-    if (DLL_PROCESS_ATTACH == ulReason)
+    BOOL APIENTRY DllMain(
+        HMODULE hModule,
+        ULONG ulReason,
+        __in_opt PVOID pReserved)
     {
-        // Disable thread attach notifications
-        fRetVal = DisableThreadLibraryCalls(hModule);
-    }
+        BOOL fRetVal = TRUE;
 
-    return fRetVal;
-} // DllMain
-
-HRESULT APIENTRY DllGetClassObject(
-    __in REFCLSID clsid, 
-    __in REFIID riid, 
-    void** ppv)
-{
-    HRESULT hr = S_OK;
-    TClassFactory* pClassFactory = NULL;
-
-    if (ppv)
-    {
-        *ppv = NULL;
-    }
-    else
-    {
-        hr = E_INVALIDARG;
-    }
-
-    if (S_OK == hr)
-    {
-        if (CLSID_FDProvider != clsid)
+        if (DLL_PROCESS_ATTACH == ulReason)
         {
-            hr = CLASS_E_CLASSNOTAVAILABLE;
+            // Disable thread attach notifications
+            fRetVal = DisableThreadLibraryCalls(hModule);
         }
-    }
 
-    if (S_OK == hr)
+        return fRetVal;
+    } // DllMain
+
+    HRESULT APIENTRY DllGetClassObject(
+        __in REFCLSID clsid,
+        __in REFIID riid,
+        void** ppv)
     {
-        pClassFactory = new(std::nothrow) TClassFactory;
+        HRESULT hr = S_OK;
+        TClassFactory* pClassFactory = NULL;
 
-        if (!pClassFactory)
+        if (ppv)
         {
-            hr =  E_OUTOFMEMORY;
+            *ppv = NULL;
         }
-    }
+        else
+        {
+            hr = E_INVALIDARG;
+        }
 
-    if (S_OK == hr)
+        if (S_OK == hr)
+        {
+            if (CLSID_FDProvider != clsid)
+            {
+                hr = CLASS_E_CLASSNOTAVAILABLE;
+            }
+        }
+
+        if (S_OK == hr)
+        {
+            pClassFactory = new(std::nothrow) TClassFactory;
+
+            if (!pClassFactory)
+            {
+                hr =  E_OUTOFMEMORY;
+            }
+        }
+
+        if (S_OK == hr)
+        {
+            hr = pClassFactory->QueryInterface(riid, ppv);
+        }
+
+        if (pClassFactory)
+        {
+            pClassFactory->Release();
+        }
+
+        return hr;
+    }  // DLLGetClassObject
+
+    HRESULT APIENTRY DllCanUnloadNow()
     {
-        hr = pClassFactory->QueryInterface(riid, ppv);
-    }
-
-    if (pClassFactory)
-    {
-        pClassFactory->Release();
-    }
-
-    return hr;
-}  // DLLGetClassObject
-
-HRESULT APIENTRY DllCanUnloadNow()
-{
-    return (g_cLockCount == 0) ? S_OK : S_FALSE;
-}  // DllCanUnloadNow
+        return (g_cLockCount == 0) ? S_OK : S_FALSE;
+    }  // DllCanUnloadNow
 
 } // extern "C"
 

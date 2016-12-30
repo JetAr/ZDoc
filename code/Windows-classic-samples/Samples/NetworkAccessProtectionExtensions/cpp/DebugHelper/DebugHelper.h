@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,7 +21,7 @@ static const size_t DEBUGHELPER_OUTPUT_BUFFER_LENGTH = 512 * sizeof(WCHAR);
 // printf-like format strings.
 class DebugHelper
 {
- public:
+public:
     // Constructor.
     DebugHelper();
 
@@ -36,7 +36,7 @@ class DebugHelper
     // Print a debug string: helper method, called by wrapper methods.
     void DebugVPrintfW(_In_z_ LPCWSTR pFormat, _In_opt_ va_list vl);
 
- private:
+private:
 
     // The code behind the constructor.
     void Initialize();
@@ -47,7 +47,7 @@ class DebugHelper
     // Cleans up allocated resources
     void CleanupMem();
 
- private:
+private:
 
     // Heap handle used for the buffers below.
     HANDLE heapHandle;
@@ -67,7 +67,7 @@ class DebugHelper
     // the assignment operator, which isn't guaranteed to handle member
     // variables correctly.
     DebugHelper& operator=(const DebugHelper &rhs);
-    
+
     // Copy constructor not implemented. This explicitly prevents the
     // compiler from automatically providing a default implementation
     // of the copy constructor, which isn't guaranteed to handle member

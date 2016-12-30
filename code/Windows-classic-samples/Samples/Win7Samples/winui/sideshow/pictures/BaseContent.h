@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -36,8 +36,8 @@ public:
     // IUnknown methods
     //
     STDMETHOD(QueryInterface)(
-            REFIID riid,
-            LPVOID* ppvObject);            
+        REFIID riid,
+        LPVOID* ppvObject);
 
     STDMETHOD_(ULONG, AddRef)();
 
@@ -47,13 +47,13 @@ public:
     // ISideShowContent methods
     //
     STDMETHOD(GetContent)(
-            ISideShowCapabilities *pICapabilities,
-            DWORD *pdwSize,
-            BYTE **ppbData);
-        
+        ISideShowCapabilities *pICapabilities,
+        DWORD *pdwSize,
+        BYTE **ppbData);
+
     STDMETHOD(get_ContentId)(
-            PCONTENT_ID pcontentId);
-        
+        PCONTENT_ID pcontentId);
+
     STDMETHOD(get_DifferentiateContent)(
-            BOOL *pfDifferentiateContent);
+        BOOL *pfDifferentiateContent);
 };

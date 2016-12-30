@@ -1,4 +1,4 @@
-// MonSvc_PvtNameSpace.cxx : Sample service to illustrate usage of private namespaces and service SIDs
+﻿// MonSvc_PvtNameSpace.cxx : Sample service to illustrate usage of private namespaces and service SIDs
 // MonSvc creates a private namespace and sets an event there when the service is stopped. 
 // Clients that rendezvous with this event will be guaranteed that it was created by MonSvc service.
 

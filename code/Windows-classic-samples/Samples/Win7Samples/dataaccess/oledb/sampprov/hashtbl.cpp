@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -12,20 +12,20 @@
 
 //--------------------------------------------------------------------
 // GetNextSlots
-// 
+//
 // @func Allocates a contiguous block of the required number of slots.
 //
 // @rdesc Returns one of the following values:
 //      @flag S_OK          | slot allocate succeeded
 // 		@flag E_OUTOFMEMORY | slot allocation failed because of memory allocation
-//							  problem 
+//							  problem
 ///
 HRESULT GetNextSlots
-    (
+(
     PLSTSLOT plstslot,  //@parm IN | slot list
     ULONG cslot,        //@parm IN | needed block size (in slots)
     ULONG* pislot       //@parm IN | handle of the first slot in the returned block
-    )
+)
 {
     ULONG   islot, dslot;
     PSLOT   pslot, pslotTmp;
@@ -39,39 +39,39 @@ HRESULT GetNextSlots
 
     islot = plstslot->islotRov;
     while (islot)
-        {
+    {
         if (((PSLOT) & plstslot->rgslot[(islot *plstslot->cbSlot)-sizeof(SLOT)])->cslot >= cslot)
             break;
         islot = ((PSLOT) & plstslot->rgslot[(islot *plstslot->cbSlot)-sizeof(SLOT)])->islotNext;
-        }
+    }
     if (islot == 0)
-        {
+    {
         islot = plstslot->islotFirst;
         while (islot != plstslot->islotRov)
-            {
+        {
             if (((PSLOT) & plstslot->rgslot[(islot *plstslot->cbSlot)-sizeof(SLOT)])->cslot >= cslot)
                 break;
             islot = ((PSLOT) & plstslot->rgslot[(islot *plstslot->cbSlot)-sizeof(SLOT)])->islotNext;
-            }
+        }
         if (islot == plstslot->islotRov)
             islot = 0;
-        }
+    }
 
 
     if (islot == 0)
-        {
+    {
         cbCommit = ((cslot *plstslot->cbSlot) / plstslot->cbPage + 1) *plstslot->cbPage;
         if ((plstslot->cbCommitCurrent + cbCommit) > plstslot->cbCommitMax
-            || VirtualAlloc((VOID *) ((BYTE *) plstslot + plstslot->cbCommitCurrent),
-                                    cbCommit,
-                                    MEM_COMMIT,
-                                    PAGE_READWRITE ) == NULL)
+                || VirtualAlloc((VOID *) ((BYTE *) plstslot + plstslot->cbCommitCurrent),
+                                cbCommit,
+                                MEM_COMMIT,
+                                PAGE_READWRITE ) == NULL)
             return ResultFromScode( E_OUTOFMEMORY );
 
         islot = (ULONG) ((plstslot->cbCommitCurrent + plstslot->cbExtra) / plstslot->cbSlot);
         dslot = ((cbCommit + plstslot->cbslotLeftOver) / plstslot->cbSlot);
         if ((plstslot->pbitsSlot)->IsSlotSet( islot - 1 ) != NOERROR)
-            {
+        {
             if ((plstslot->pbitsSlot)->FindSet( islot - 1, plstslot->islotMin, &islot ) == NOERROR)
                 islot++;
             else
@@ -79,12 +79,12 @@ HRESULT GetNextSlots
             pslot = (PSLOT) & plstslot->rgslot[(islot *plstslot->cbSlot)-sizeof(SLOT)];
             pslot->cslot += dslot;
             DecoupleSlot( plstslot, islot, pslot );
-            }
+        }
         else
-            {
+        {
             pslot = (PSLOT) ((BYTE *) plstslot + plstslot->cbCommitCurrent - plstslot->cbslotLeftOver);
             pslot->cslot = dslot;
-            }
+        }
 
         pslot->islotNext = plstslot->islotFirst;
         pslot->islotPrev = 0;
@@ -97,16 +97,16 @@ HRESULT GetNextSlots
         if (pslot->islotNext)
             ((PSLOT) & plstslot->rgslot[(pslot->islotNext *plstslot->cbSlot)-sizeof(SLOT)])->islotPrev = islot;
         islot = plstslot->islotFirst;
-        }
+    }
 
     pslot = (PSLOT) & plstslot->rgslot[(islot *plstslot->cbSlot)-sizeof(SLOT)];
     DecoupleSlot( plstslot, islot, pslot );
     if (pslot->cslot > cslot)
-        {
+    {
         pslotTmp = (PSLOT) & plstslot->rgslot[ ((islot + cslot) *plstslot->cbSlot)-sizeof(SLOT)];
         pslotTmp->cslot = pslot->cslot - cslot;
         AddSlotToList( plstslot, islot + cslot, pslotTmp );
-        }
+    }
 
     if (FAILED( hr = (plstslot->pbitsSlot)->SetSlots( islot, islot + cslot - 1 )))
         return hr;
@@ -126,11 +126,11 @@ HRESULT GetNextSlots
 // @rdesc NONE
 //
 VOID DecoupleSlot
-    (
+(
     PLSTSLOT plstslot,  //@parm IN | slot list
     ULONG islot,        //@parm IN | slot handle to decouple
     PSLOT pslot         //@parm IN | pointer to the slot header
-    )
+)
 {
     if (pslot->islotNext)
         ((PSLOT) & plstslot->rgslot[(pslot->islotNext *plstslot->cbSlot)-sizeof(SLOT)])->islotPrev = pslot->islotPrev;
@@ -151,11 +151,11 @@ VOID DecoupleSlot
 // @rdesc NONE
 //
 VOID AddSlotToList
-    (
+(
     PLSTSLOT plstslot,  //@parm IN | slot list
     ULONG islot,        //@parm IN | slot handle
     PSLOT pslot         //@parm IN | pointer to the slot header
-    )
+)
 {
     pslot->islotPrev = 0;
     pslot->islotNext = plstslot->islotFirst;
@@ -176,11 +176,11 @@ VOID AddSlotToList
 //      @flag   S_OK | method succeeded
 //
 HRESULT ReleaseSlots
-    (
+(
     PLSTSLOT plstslot,  //@parm IN | slot list
-    ULONG    islot,     //@parm IN | handle of first slot to release 
+    ULONG    islot,     //@parm IN | handle of first slot to release
     ULONG    cslot      //@parm IN | count of slots to release
-    )
+)
 {
     PSLOT pslot, pslotTmp;
 
@@ -189,7 +189,7 @@ HRESULT ReleaseSlots
     pslot->cslot = cslot;
 
     if (islot > plstslot->islotMin && (plstslot->pbitsSlot)->IsSlotSet( islot - 1 ) != NOERROR)
-        {
+    {
         if ((plstslot->pbitsSlot)->FindSet( islot - 1, plstslot->islotMin, &islot ) == NOERROR)
             islot++;
         else
@@ -197,14 +197,14 @@ HRESULT ReleaseSlots
         pslot = (PSLOT) & plstslot->rgslot[(islot * plstslot->cbSlot)-sizeof(SLOT)];
         pslot->cslot += cslot;
         DecoupleSlot( plstslot, islot, pslot );
-        }
+    }
 
     if ((islot + cslot) <= plstslot->islotMax && (plstslot->pbitsSlot)->IsSlotSet( islot + cslot ) != NOERROR)
-        {
+    {
         pslotTmp = (PSLOT) & plstslot->rgslot[ ((islot + cslot) *plstslot->cbSlot)-sizeof(SLOT)];
         pslot->cslot += pslotTmp->cslot;
         DecoupleSlot( plstslot, (islot + cslot), pslotTmp );
-        }
+    }
 
     AddSlotToList( plstslot, islot, pslot );
     return ResultFromScode( S_OK );
@@ -219,17 +219,17 @@ HRESULT ReleaseSlots
 // @rdesc Did the initialization succeed
 //      @flag S_OK          | method succeeded
 //      @flag E_OUTOFMEMORY | failed, out of memory
-//           
+//
 //
 HRESULT InitializeSlotList
-    (
+(
     ULONG cslotMax,         //@parm IN | max number of slots
     ULONG cbSlot,           //@parm IN | slot size (row buffer size)
     ULONG cbPage,           //@parm IN | page size
-    LPBITARRAY pbits,       //@parm IN | 
+    LPBITARRAY pbits,       //@parm IN |
     PLSTSLOT* pplstslot,    //@parm OUT | pointer to slot list
-    BYTE** prgslot          //@parm OUT | 
-    )
+    BYTE** prgslot          //@parm OUT |
+)
 {
     ULONG    cbReserve;
     BYTE     *pbAlloc;
@@ -240,17 +240,17 @@ HRESULT InitializeSlotList
 
 
     if (cbPage == 0)
-        {
+    {
         SYSTEM_INFO sysinfo;
 
         GetSystemInfo( &sysinfo );
         cbPage = sysinfo.dwPageSize;
-        }
+    }
 
     // Add in the LSTSLOT and SLOT
-	cbSlot = cbSlot + (sizeof( LSTSLOT ) + sizeof( SLOT ));
-	
-	cbReserve = ((cslotMax *(cbSlot + (sizeof( LSTSLOT ) + sizeof( SLOT )))) / cbPage + 1) *cbPage;
+    cbSlot = cbSlot + (sizeof( LSTSLOT ) + sizeof( SLOT ));
+
+    cbReserve = ((cslotMax *(cbSlot + (sizeof( LSTSLOT ) + sizeof( SLOT )))) / cbPage + 1) *cbPage;
 
     pbAlloc = (BYTE *) VirtualAlloc( NULL, cbReserve, MEM_RESERVE, PAGE_READWRITE );
     if (pbAlloc == NULL)
@@ -259,10 +259,10 @@ HRESULT InitializeSlotList
     cbCommitFirst = ((sizeof( LSTSLOT ) + sizeof( SLOT )) / cbPage + 1) * cbPage;
     plstslot = (PLSTSLOT) VirtualAlloc( pbAlloc, cbCommitFirst, MEM_COMMIT, PAGE_READWRITE );
     if (plstslot == NULL)
-        {
+    {
         VirtualFree((VOID *) pbAlloc, 0, MEM_RELEASE );
         return ResultFromScode( E_OUTOFMEMORY );
-        }
+    }
 
     plstslot->cbSlot          = cbSlot;
     plstslot->cbPage          = cbPage;
@@ -272,28 +272,28 @@ HRESULT InitializeSlotList
 
 
     if (cbSlot <= 2*(sizeof( LSTSLOT ) + sizeof( SLOT )))
-        {
+    {
         islotFirst        = (sizeof( LSTSLOT ) + sizeof( SLOT )) / cbSlot + (((sizeof( LSTSLOT ) + sizeof( SLOT )) % cbSlot) ? 1 : 0);
         plstslot->cbExtra = 0;
         cslot = (ULONG) ((cbCommitFirst / cbSlot) - islotFirst);
         plstslot->cbslotLeftOver = cbCommitFirst - cbSlot * (cslot + islotFirst);
-        }
+    }
     else
-        {
+    {
         islotFirst        = 1;
         plstslot->cbExtra = cbSlot - (sizeof( LSTSLOT ) + sizeof( SLOT ));
         cslot = (cbCommitFirst - (sizeof( LSTSLOT ) + sizeof( SLOT ))) / cbSlot;
         plstslot->cbslotLeftOver = cbCommitFirst - (sizeof( LSTSLOT ) + sizeof( SLOT )) - cslot*cbSlot;
-        }
+    }
     plstslot->rgslot = ((BYTE *) plstslot - plstslot->cbExtra);
     if (cslot)
-        {
+    {
         plstslot->islotFirst = islotFirst;
         pslot = (PSLOT) & plstslot->rgslot[(islotFirst *plstslot->cbSlot)-sizeof(SLOT)];
         pslot->cslot     = cslot;
         pslot->islotNext = 0;
         pslot->islotPrev = 0;
-        }
+    }
     else
         plstslot->islotFirst = 0;
     plstslot->islotMin   = islotFirst;
@@ -311,26 +311,26 @@ HRESULT InitializeSlotList
 //
 // @func Restore slot list to newly-initiated state
 //
-// @rdesc 
+// @rdesc
 //  @flag S_OK  | method succeeded
 //
 HRESULT ResetSlotList
-    (
+(
     PLSTSLOT plstslot           //@parm IN | slot list
-    )
+)
 {
     ULONG   cslot;
     PSLOT   pslot;
 
     cslot = (plstslot->islotMax >= plstslot->islotMin) ? (plstslot->islotMax - plstslot->islotMin + 1) : 0;
     if (cslot)
-        {
+    {
         plstslot->islotFirst = plstslot->islotMin;
         pslot = (PSLOT) & plstslot->rgslot[(plstslot->islotFirst *plstslot->cbSlot)-sizeof(SLOT)];
         pslot->cslot     = cslot;
         pslot->islotNext = 0;
         pslot->islotPrev = 0;
-        }
+    }
     else
         plstslot->islotFirst = 0;
 
@@ -344,13 +344,13 @@ HRESULT ResetSlotList
 //
 // @func Free slot list's memory
 //
-// @rdesc 
+// @rdesc
 //  @flag S_OK  | method succeeded
 //
 HRESULT ReleaseSlotList
-    (
-    PLSTSLOT plstslot           //@parm IN | slot list 
-    )
+(
+    PLSTSLOT plstslot           //@parm IN | slot list
+)
 {
     if (plstslot == NULL)
         return NOERROR;

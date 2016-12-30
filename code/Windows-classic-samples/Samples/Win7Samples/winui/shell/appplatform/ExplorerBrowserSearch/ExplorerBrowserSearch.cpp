@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -110,7 +110,7 @@ public:
     }
 
     // ICommDlgBrowser2
-    IFACEMETHODIMP Notify(IShellView * /* ppshv */ , DWORD /* dwNotifyType */)
+    IFACEMETHODIMP Notify(IShellView * /* ppshv */, DWORD /* dwNotifyType */)
     {
         return S_OK;
     }
@@ -209,13 +209,13 @@ private:
 
 const ANCHOR CExplorerBrowserSearchApp::c_rgAnchors[] =
 {
-  { IDC_OPEN_ITEM,          AF_LEFT | AF_BOTTOM },
-  { IDC_NAME,               AF_LEFT | AF_RIGHT | AF_BOTTOM },
-  { IDC_EXPLORER_BROWSER,   AF_LEFT | AF_RIGHT | AF_TOP | AF_BOTTOM },
-  { IDC_GRIPPER,            AF_RIGHT | AF_BOTTOM },
-  { IDC_SEARCHBOXBGND,      AF_RIGHT | AF_TOP },
-  { IDC_SEARCHIMG,          AF_RIGHT | AF_TOP },
-  { IDC_SEARCHBOX,          AF_RIGHT | AF_TOP },
+    { IDC_OPEN_ITEM,          AF_LEFT | AF_BOTTOM },
+    { IDC_NAME,               AF_LEFT | AF_RIGHT | AF_BOTTOM },
+    { IDC_EXPLORER_BROWSER,   AF_LEFT | AF_RIGHT | AF_TOP | AF_BOTTOM },
+    { IDC_GRIPPER,            AF_RIGHT | AF_BOTTOM },
+    { IDC_SEARCHBOXBGND,      AF_RIGHT | AF_TOP },
+    { IDC_SEARCHIMG,          AF_RIGHT | AF_TOP },
+    { IDC_SEARCHBOX,          AF_RIGHT | AF_TOP },
 };
 
 HRESULT CreateQueryParser(IQueryParser **ppqp)
@@ -603,40 +603,40 @@ LRESULT CExplorerBrowserSearchApp::_SearchIconProc(HWND hwnd, UINT uMsg, WPARAM 
 
     switch (uMsg)
     {
-        case WM_LBUTTONDOWN:
-            if (!_fSearchStringEmpty)
-            {
-                // If the clear icon is pressed, clear the search box
-                SetWindowText(GetDlgItem(_hdlg, IDC_SEARCHBOX), L"");
-            }
-            break;
+    case WM_LBUTTONDOWN:
+        if (!_fSearchStringEmpty)
+        {
+            // If the clear icon is pressed, clear the search box
+            SetWindowText(GetDlgItem(_hdlg, IDC_SEARCHBOX), L"");
+        }
+        break;
 
-        case WM_MOUSELEAVE:
-            if (!_fSearchStringEmpty)
-            {
-                // If the mouse has left the clear icon, show it as white
-                SendMessage(GetDlgItem(_hdlg, IDC_SEARCHIMG), STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)_hbmpClear);
-            }
-            break;
+    case WM_MOUSELEAVE:
+        if (!_fSearchStringEmpty)
+        {
+            // If the mouse has left the clear icon, show it as white
+            SendMessage(GetDlgItem(_hdlg, IDC_SEARCHIMG), STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)_hbmpClear);
+        }
+        break;
 
-        case WM_MOUSEMOVE:
-            if (!_fSearchStringEmpty)
-            {
-                // Request that we be notified when the mouse leaves the icon
-                TRACKMOUSEEVENT tme = {};
-                tme.cbSize      = sizeof(tme);
-                tme.dwFlags     = TME_LEAVE;
-                tme.hwndTrack   = GetDlgItem(_hdlg, IDC_SEARCHIMG);
-                TrackMouseEvent(&tme);
+    case WM_MOUSEMOVE:
+        if (!_fSearchStringEmpty)
+        {
+            // Request that we be notified when the mouse leaves the icon
+            TRACKMOUSEEVENT tme = {};
+            tme.cbSize      = sizeof(tme);
+            tme.dwFlags     = TME_LEAVE;
+            tme.hwndTrack   = GetDlgItem(_hdlg, IDC_SEARCHIMG);
+            TrackMouseEvent(&tme);
 
-                // If the mouse is hovering over the clear icon, show it as blue
-                SendMessage(GetDlgItem(_hdlg, IDC_SEARCHIMG), STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)_hbmpClearHot);
-            }
-            break;
+            // If the mouse is hovering over the clear icon, show it as blue
+            SendMessage(GetDlgItem(_hdlg, IDC_SEARCHIMG), STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)_hbmpClearHot);
+        }
+        break;
 
-        case WM_DESTROY:
-            RemoveWindowSubclass(GetDlgItem(_hdlg, IDC_SEARCHIMG), s_SearchIconProc, (UINT_PTR)this);
-            break;
+    case WM_DESTROY:
+        RemoveWindowSubclass(GetDlgItem(_hdlg, IDC_SEARCHIMG), s_SearchIconProc, (UINT_PTR)this);
+        break;
 
     }
     return DefSubclassProc(hwnd, uMsg, wParam, lParam);
@@ -648,68 +648,68 @@ INT_PTR CExplorerBrowserSearchApp::_DlgProc(UINT uMsg, WPARAM wParam, LPARAM /* 
 
     switch (uMsg)
     {
-        case WM_INITDIALOG:
-            _OnInitializeDialog();
+    case WM_INITDIALOG:
+        _OnInitializeDialog();
+        break;
+
+    case WM_DESTROY:
+        // Clean up the search timer
+        KillTimer(_hdlg, IDT_SEARCHSTART);
+        _OnDestroyDialog();
+        break;
+
+    case WM_SIZE:
+        OnSize(_hdlg, c_rgAnchors, ARRAYSIZE(c_rgAnchors), _rgAnchorOffsets);
+        if (_peb)
+        {
+            RECT rc;
+            GetWindowRectInClient(GetDlgItem(_hdlg, IDC_EXPLORER_BROWSER), &rc);
+            _peb->SetRect(NULL, rc);
+        }
+
+        RedrawWindow(_hdlg, NULL, NULL, RDW_INVALIDATE);
+        break;
+
+    case WM_COMMAND:
+    {
+        const UINT idCmd = LOWORD(wParam);
+        switch (idCmd)
+        {
+        case IDOK:
+        case IDCANCEL:
+        case IDCLOSE:
+            return EndDialog(_hdlg, idCmd);
+
+        case IDC_OPEN_ITEM:
+            _OnOpenItem();
             break;
 
-        case WM_DESTROY:
-            // Clean up the search timer
-            KillTimer(_hdlg, IDT_SEARCHSTART);
-            _OnDestroyDialog();
-            break;
-
-        case WM_SIZE:
-            OnSize(_hdlg, c_rgAnchors, ARRAYSIZE(c_rgAnchors), _rgAnchorOffsets);
-            if (_peb)
+        case IDC_SEARCHBOX:
+            switch (HIWORD(wParam))
             {
-                RECT rc;
-                GetWindowRectInClient(GetDlgItem(_hdlg, IDC_EXPLORER_BROWSER), &rc);
-                _peb->SetRect(NULL, rc);
-            }
-
-            RedrawWindow(_hdlg, NULL, NULL, RDW_INVALIDATE);
-            break;
-
-        case WM_COMMAND:
-            {
-                const UINT idCmd = LOWORD(wParam);
-                switch (idCmd)
-                {
-                    case IDOK:
-                    case IDCANCEL:
-                    case IDCLOSE:
-                        return EndDialog(_hdlg, idCmd);
-
-                    case IDC_OPEN_ITEM:
-                        _OnOpenItem();
-                        break;
-
-                    case IDC_SEARCHBOX:
-                        switch (HIWORD(wParam))
-                        {
-                            case EN_CHANGE:
-                                // Update search box icon if necessary
-                                _UpdateSearchIcon();
-                                // Delay search processing to aggregate keystrokes
-                                SetTimer(_hdlg, IDT_SEARCHSTART, SEARCH_TIMER_DELAY, NULL);
-                                break;
-                        }
-                        break;
-                }
+            case EN_CHANGE:
+                // Update search box icon if necessary
+                _UpdateSearchIcon();
+                // Delay search processing to aggregate keystrokes
+                SetTimer(_hdlg, IDT_SEARCHSTART, SEARCH_TIMER_DELAY, NULL);
+                break;
             }
             break;
+        }
+    }
+    break;
 
-        case WM_TIMER:
-            {
-                // Search timer delay expired, process search
-                KillTimer(_hdlg, IDT_SEARCHSTART);
-                _OnSearch();
-            }
-            break;
+    case WM_TIMER:
+    {
+        // Search timer delay expired, process search
+        KillTimer(_hdlg, IDT_SEARCHSTART);
+        _OnSearch();
+    }
+    break;
 
-        default:
-            iRet = 0;
-            break;
+    default:
+        iRet = 0;
+        break;
     }
     return iRet;
 }

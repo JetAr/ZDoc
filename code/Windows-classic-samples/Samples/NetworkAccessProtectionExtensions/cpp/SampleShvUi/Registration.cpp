@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,13 +27,13 @@ STDMETHODIMP ShvUIRegisterServer()
 {
     HRESULT hr = S_OK;
     WCHAR  module[MAX_PATH];                     // path name of server
-    WCHAR clsidKey[MAX_LENGTH];                  
+    WCHAR clsidKey[MAX_LENGTH];
     DWORD result = ERROR_SUCCESS;
 
     result = GetModuleFileName(
-                    ShvUIClassFactory::s_hModule, 
-                    module, 
-                    ARRAYSIZE(module));
+                 ShvUIClassFactory::s_hModule,
+                 module,
+                 ARRAYSIZE(module));
 
     if (result == 0)
     {
@@ -42,36 +42,36 @@ STDMETHODIMP ShvUIRegisterServer()
         DebugPrintfW(L" --- ShvUIRegisterServer - GetModuleFileName failed %#x!",hr);
         goto cleanup;
     }
-  
+
     // create entries under CLSID.
     // Description
     hr = ShvuiSetRegistryValue(
-                    HKEY_CLASSES_ROOT,
-                    REGCLSID,
-                    CLSIDSTR_MS_SHVUI,
-                    NULL,
-                    REG_SZ,
-                    reinterpret_cast<const BYTE*>(CLSID_MS_SHVUI_FRIENDLY_NAME),
-                    static_cast<DWORD>((wcslen(CLSID_MS_SHVUI_FRIENDLY_NAME)+1) * sizeof(wchar_t)));
-	if (FAILED(hr))
-    {
-        DebugPrintfW(L" --- ShvUIRegisterServer - ShvuiSetRegistryValue failed %#x!",hr);
-		goto cleanup;
-    }
-
-    // Add AppID value under CLSIDSTR_MS_SHVUI. 
-    hr = ShvuiSetRegistryValue(
-                    HKEY_CLASSES_ROOT,
-                    REGCLSID,
-                    CLSIDSTR_MS_SHVUI,
-                    REGAPPID,
-                    REG_SZ,
-                    reinterpret_cast<const BYTE*>(STR_APPID_SDK_SHV_CONFIG),
-                    static_cast<DWORD>((wcslen(STR_APPID_SDK_SHV_CONFIG)+1) * sizeof(wchar_t)));
+             HKEY_CLASSES_ROOT,
+             REGCLSID,
+             CLSIDSTR_MS_SHVUI,
+             NULL,
+             REG_SZ,
+             reinterpret_cast<const BYTE*>(CLSID_MS_SHVUI_FRIENDLY_NAME),
+             static_cast<DWORD>((wcslen(CLSID_MS_SHVUI_FRIENDLY_NAME)+1) * sizeof(wchar_t)));
     if (FAILED(hr))
     {
         DebugPrintfW(L" --- ShvUIRegisterServer - ShvuiSetRegistryValue failed %#x!",hr);
-		goto cleanup;
+        goto cleanup;
+    }
+
+    // Add AppID value under CLSIDSTR_MS_SHVUI.
+    hr = ShvuiSetRegistryValue(
+             HKEY_CLASSES_ROOT,
+             REGCLSID,
+             CLSIDSTR_MS_SHVUI,
+             REGAPPID,
+             REG_SZ,
+             reinterpret_cast<const BYTE*>(STR_APPID_SDK_SHV_CONFIG),
+             static_cast<DWORD>((wcslen(STR_APPID_SDK_SHV_CONFIG)+1) * sizeof(wchar_t)));
+    if (FAILED(hr))
+    {
+        DebugPrintfW(L" --- ShvUIRegisterServer - ShvuiSetRegistryValue failed %#x!",hr);
+        goto cleanup;
     }
 
     // get the class ID strings.
@@ -79,26 +79,26 @@ STDMETHODIMP ShvUIRegisterServer()
     if (FAILED(hr))
     {
         DebugPrintfW(L" --- ShvUIRegisterServer - StringCchPrintf failed %#x!",hr);
-	    goto cleanup;
+        goto cleanup;
     }
-   
+
 
     // set the server path.
     hr = ShvuiSetRegistryValue(
-                    HKEY_CLASSES_ROOT,
-                    clsidKey, 
-                    LOCALSERVER32,
-                    NULL,
-                    REG_SZ,
-                    reinterpret_cast<const BYTE*>(module),
-                    static_cast<DWORD>((wcslen(module)+1) * sizeof(wchar_t)));
+             HKEY_CLASSES_ROOT,
+             clsidKey,
+             LOCALSERVER32,
+             NULL,
+             REG_SZ,
+             reinterpret_cast<const BYTE*>(module),
+             static_cast<DWORD>((wcslen(module)+1) * sizeof(wchar_t)));
     if (FAILED(hr))
     {
         DebugPrintfW(L" --- ShvUIRegisterServer - ShvuiSetRegistryValue failed %#x!",hr);
     }
 
 cleanup:
-    return hr;    
+    return hr;
 }
 
 STDMETHODIMP ShvUIUnRegisterServer()
@@ -106,28 +106,28 @@ STDMETHODIMP ShvUIUnRegisterServer()
     HRESULT hr = S_OK;
 
     wchar_t clsidKey[MAX_LENGTH];
-    
+
     // get the class ID strings.
 
     hr = StringCchPrintf(clsidKey, MAX_LENGTH, L"%ws\\%ws", REGCLSID, CLSIDSTR_MS_SHVUI);
-	if (FAILED(hr))
+    if (FAILED(hr))
     {
         DebugPrintfW(L" --- ShvUIUnRegisterServer - StringCchPrintf failed %#x!",hr);
-		goto cleanup;
+        goto cleanup;
     }
 
 
     // delete Class ID key
     hr = ShvuiDeleteRegistryKey(
-                    HKEY_CLASSES_ROOT,
-                    clsidKey);
-	if (FAILED(hr))
+             HKEY_CLASSES_ROOT,
+             clsidKey);
+    if (FAILED(hr))
     {
         DebugPrintfW(L" --- ShvUIUnRegisterServer - ShvuiDeleteRegistryKey failed %#x!",hr);
-		goto cleanup;
+        goto cleanup;
     }
 
 cleanup:
-    return hr;       
+    return hr;
 }
 

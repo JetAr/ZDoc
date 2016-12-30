@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -60,7 +60,10 @@ public:
         return QISearch(this, qit, riid, ppv);
     }
 
-    IFACEMETHODIMP_(ULONG) AddRef() { return InterlockedIncrement(&_cRef); }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return InterlockedIncrement(&_cRef);
+    }
     IFACEMETHODIMP_(ULONG) Release()
     {
         long cRef = InterlockedDecrement(&_cRef);
@@ -74,7 +77,10 @@ public:
     // IExplorerCommandProvider
     IFACEMETHODIMP GetCommands(IUnknown *punkSite, REFIID riid, void **ppv);
     IFACEMETHODIMP GetCommand(REFGUID /* rguidCommandId */, REFIID /* riid */, void **ppv)
-        { *ppv = NULL; return E_NOTIMPL; }
+    {
+        *ppv = NULL;
+        return E_NOTIMPL;
+    }
 
     CFolderViewCommandProvider() : _cRef(1)
     {
@@ -106,7 +112,10 @@ public:
         return QISearch(this, qit, riid, ppv);
     }
 
-    IFACEMETHODIMP_(ULONG) AddRef() { return InterlockedIncrement(&_cRef); }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return InterlockedIncrement(&_cRef);
+    }
     IFACEMETHODIMP_(ULONG) Release()
     {
         long cRef = InterlockedDecrement(&_cRef);
@@ -122,7 +131,10 @@ public:
     IFACEMETHODIMP Skip(ULONG celt);
     IFACEMETHODIMP Reset();
     IFACEMETHODIMP Clone(IEnumExplorerCommand **ppenum)
-        { *ppenum = NULL; return E_NOTIMPL; }
+    {
+        *ppenum = NULL;
+        return E_NOTIMPL;
+    }
 
     CFolderViewCommandEnumerator(const FVCOMMANDITEM *apfvc, UINT uCommands) : _cRef(1), _uCurrent(0), _uCommands(uCommands), _apfvci(apfvc)
     {
@@ -131,7 +143,7 @@ public:
 private:
     HRESULT _CreateCommandFromCommandItem(FVCOMMANDITEM *pfvci, IExplorerCommand **ppExplorerCommand);
 
-    ~CFolderViewCommandEnumerator(){}
+    ~CFolderViewCommandEnumerator() {}
 
 private:
     long _cRef;
@@ -155,7 +167,10 @@ public:
         return QISearch(this, qit, riid, ppv);
     }
 
-    IFACEMETHODIMP_(ULONG) AddRef() { return InterlockedIncrement(&_cRef); }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return InterlockedIncrement(&_cRef);
+    }
     IFACEMETHODIMP_(ULONG) Release()
     {
         long cRef = InterlockedDecrement(&_cRef);

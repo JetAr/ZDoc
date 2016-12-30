@@ -1,4 +1,4 @@
-//+----------------------------------------------------------------------------
+﻿//+----------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -27,7 +27,7 @@ struct part_uri_less
     bool operator()(
         IOpcPartUri* uri1,
         IOpcPartUri* uri2
-        ) const
+    ) const
     {
         HRESULT hr;
         int result;
@@ -51,7 +51,7 @@ struct part_less
     bool operator()(
         IXpsOMResource* part1,
         IXpsOMResource* part2
-        ) const
+    ) const
     {
         return part1 < static_cast<IXpsOMResource*>(part2);
     }
@@ -106,7 +106,7 @@ public:
     HRESULT
     AddPageReference(
         IXpsOMPageReference* pageReference
-        )
+    )
     {
         HRESULT hr = S_OK;
         IXpsOMPartResources* partResources = NULL;
@@ -148,8 +148,8 @@ public:
             {
                 // We can't use the FAILED macro inline here due to the template parameter list.
                 hr = AddResourceCollection<
-                        IXpsOMFontResource*,
-                        IXpsOMFontResourceCollection*>(fonts, L"Resources/Fonts/");
+                     IXpsOMFontResource*,
+                     IXpsOMFontResourceCollection*>(fonts, L"Resources/Fonts/");
                 if (FAILED(hr))
                 {
                     // Error already reported.
@@ -177,9 +177,9 @@ public:
             {
                 // We can't use the FAILED macro inline here due to the template parameter list.
                 hr = AddResourceCollection<
-                        IXpsOMImageResource*,
-                        IXpsOMImageResourceCollection*
-                        >(images, L"Resources/Images/");
+                     IXpsOMImageResource*,
+                     IXpsOMImageResourceCollection*
+                     >(images, L"Resources/Images/");
                 if (FAILED(hr))
                 {
                     // Error already reported.
@@ -207,9 +207,9 @@ public:
             {
                 // We can't use the FAILED macro inline here due to the template parameter list.
                 hr = AddResourceCollection<
-                        IXpsOMColorProfileResource*,
-                        IXpsOMColorProfileResourceCollection*
-                        >(colorProfiles, L"Metadata/");
+                     IXpsOMColorProfileResource*,
+                     IXpsOMColorProfileResourceCollection*
+                     >(colorProfiles, L"Metadata/");
                 if (FAILED(hr))
                 {
                     // Error already reported.
@@ -237,9 +237,9 @@ public:
             {
                 // We can't use the FAILED macro inline here due to the template parameter list.
                 hr = AddResourceCollection<
-                        IXpsOMRemoteDictionaryResource*,
-                        IXpsOMRemoteDictionaryResourceCollection*
-                        >(remoteDictionaries, L"Resources/Dictionaries/");
+                     IXpsOMRemoteDictionaryResource*,
+                     IXpsOMRemoteDictionaryResourceCollection*
+                     >(remoteDictionaries, L"Resources/Dictionaries/");
                 if (FAILED(hr))
                 {
                     // Error already reported.
@@ -523,7 +523,7 @@ private:
                         if (counter == std::numeric_limits<int>::max())
                         {
                             fwprintf(stderr, L"ERROR: Too many conflicts on part name %s - giving up\n",
-                                absolute.substr(slash).c_str());
+                                     absolute.substr(slash).c_str());
                             hr = E_FAIL;
                         }
 
@@ -552,7 +552,8 @@ private:
                                 fwprintf(stderr, L"ERROR: CreatePartUri failed: 0x%X\n", hr);
                             }
                         }
-                    } while (SUCCEEDED(hr) && (m_partNames->find(partName) != m_partNames->end()));
+                    }
+                    while (SUCCEEDED(hr) && (m_partNames->find(partName) != m_partNames->end()));
                 }
 
                 if (SUCCEEDED(hr))
@@ -637,13 +638,13 @@ wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = CoCreateInstance(
-                    __uuidof(XpsOMObjectFactory),
-                    NULL,
-                    CLSCTX_INPROC_SERVER,
-                    __uuidof(IXpsOMObjectFactory),
-                    reinterpret_cast<void**>(&xpsFactory)
-                    )
-                )
+                            __uuidof(XpsOMObjectFactory),
+                            NULL,
+                            CLSCTX_INPROC_SERVER,
+                            __uuidof(IXpsOMObjectFactory),
+                            reinterpret_cast<void**>(&xpsFactory)
+                        )
+                  )
            )
         {
             fwprintf(stderr, L"ERROR: Could not create XPS OM Object Factory: %08X\n", hr);
@@ -661,19 +662,19 @@ wmain(int argc, wchar_t* argv[])
     if (SUCCEEDED(hr))
     {
         if (FAILED(hr = xpsFactory->CreatePackageWriterOnFile(
-                    argv[1],
-                    NULL,
-                    0,
-                    TRUE,
-                    XPS_INTERLEAVING_OFF,
-                    partUri,
-                    NULL,
-                    NULL,
-                    NULL,
-                    NULL,
-                    &packageWriter
-                    )
-                )
+                            argv[1],
+                            NULL,
+                            0,
+                            TRUE,
+                            XPS_INTERLEAVING_OFF,
+                            partUri,
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL,
+                            &packageWriter
+                        )
+                  )
            )
         {
             fwprintf(stderr, L"ERROR: Could not create package writer: 0x%X\n", hr);
@@ -723,11 +724,11 @@ wmain(int argc, wchar_t* argv[])
             if (SUCCEEDED(hr))
             {
                 if (FAILED(hr = xpsFactory->CreatePackageFromFile(
-                            argv[file],
-                            TRUE,
-                            &inputPackage
-                            )
-                        )
+                                    argv[file],
+                                    TRUE,
+                                    &inputPackage
+                                )
+                          )
                    )
                 {
                     fwprintf(stderr, L"ERROR: Could not open %s: %x\n", argv[file], hr);
@@ -739,7 +740,7 @@ wmain(int argc, wchar_t* argv[])
                 if (FAILED(hr = inputPackage->GetDocumentSequence(&inputDocSeq)))
                 {
                     fwprintf(stderr, L"ERROR: Could not get document sequence for %s: %x\n", argv[file],
-                        hr);
+                             hr);
                 }
             }
 
@@ -754,7 +755,7 @@ wmain(int argc, wchar_t* argv[])
                 if (FAILED(hr = inputDocSeq->GetDocuments(&documents)))
                 {
                     fwprintf(stderr, L"ERROR: Could not get documents for %s: %x\n", argv[file],
-                        hr);
+                             hr);
                 }
             }
 
@@ -769,7 +770,7 @@ wmain(int argc, wchar_t* argv[])
                 if (FAILED(hr = documents->GetCount(&docCount)))
                 {
                     fwprintf(stderr, L"ERROR: Could not get document count for %s: %x\n", argv[file],
-                        hr);
+                             hr);
                 }
             }
 
@@ -786,7 +787,7 @@ wmain(int argc, wchar_t* argv[])
                         if (FAILED(hr = documents->GetAt(doc, &document)))
                         {
                             fwprintf(stderr, L"ERROR: Could not get document %d for %s: %x\n", doc, argv[file],
-                                hr);
+                                     hr);
                         }
                     }
 
@@ -795,7 +796,7 @@ wmain(int argc, wchar_t* argv[])
                         if (FAILED(hr = document->GetPageReferences(&pageReferences)))
                         {
                             fwprintf(stderr, L"ERROR: Could not get page references for %s: %x\n", argv[file],
-                                hr);
+                                     hr);
                         }
                     }
 
@@ -810,7 +811,7 @@ wmain(int argc, wchar_t* argv[])
                         if (FAILED(hr = pageReferences->GetCount(&pageCount)))
                         {
                             fwprintf(stderr, L"ERROR: Could not get page count for document %d of %s: %x\n",
-                                doc, argv[file], hr);
+                                     doc, argv[file], hr);
                         }
                     }
 
@@ -824,7 +825,7 @@ wmain(int argc, wchar_t* argv[])
                                 if (FAILED(hr = pageReferences->GetAt(page, &pageReference)))
                                 {
                                     fwprintf(stderr, L"ERROR: Could not get page reference %d of document %d of %s: %x\n",
-                                        page, doc, argv[file], hr);
+                                             page, doc, argv[file], hr);
                                 }
                             }
 

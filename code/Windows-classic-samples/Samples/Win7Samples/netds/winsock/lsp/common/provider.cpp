@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@
 //    Note all allocations made in this routine use the process heap and
 //    not the LSP heap since these routines are also used by the LSP
 //    installer (which doesn't create its own heap).
-//    
+//
 
 #ifndef _PSDK_BLD
 #include <nt.h>
@@ -49,11 +49,11 @@ HANDLE gLspHeap = NULL;
 //
 
 #ifdef DBG
-void 
+void
 dbgprint(
     char *format,
     ...
-    )
+)
 {
     static  DWORD pid=0;
     va_list vl;
@@ -83,24 +83,24 @@ dbgprint(
 // Description:
 //    This enumerates the Winsock catalog via the global variable ProtocolInfo.
 //
-LPWSAPROTOCOL_INFOW 
+LPWSAPROTOCOL_INFOW
 EnumerateProviders(
-    WINSOCK_CATALOG Catalog, 
+    WINSOCK_CATALOG Catalog,
     LPINT           TotalProtocols
-    )
+)
 {
-	LPWSAPROTOCOL_INFOW ProtocolInfo = NULL;
-	DWORD               ProtocolInfoSize = 0;
-	INT                 ErrorCode = NO_ERROR,
+    LPWSAPROTOCOL_INFOW ProtocolInfo = NULL;
+    DWORD               ProtocolInfoSize = 0;
+    INT                 ErrorCode = NO_ERROR,
                         rc;
-    
+
     if ( NULL == TotalProtocols )
         goto cleanup;
 
-	*TotalProtocols = 0;
+    *TotalProtocols = 0;
 
 #ifdef _WIN64
-	// Find out how many entries we need to enumerate
+    // Find out how many entries we need to enumerate
     if ( LspCatalog64Only == Catalog )
     {
         // Find the size of the buffer
@@ -114,9 +114,9 @@ EnumerateProviders(
 
         // Allocate the buffer
         ProtocolInfo = (LPWSAPROTOCOL_INFOW) LspAlloc(
-                ProtocolInfoSize,
-               &ErrorCode
-                );
+                           ProtocolInfoSize,
+                           &ErrorCode
+                       );
         if (ProtocolInfo == NULL)
             goto cleanup;
 
@@ -140,12 +140,12 @@ EnumerateProviders(
 
         // Find the 32-bit catalog enumerator
         fnWscEnumProtocols32 = (LPWSCENUMPROTOCOLS) GetProcAddress(
-                hModule, 
-                TEXT( "WSCEnumProtocols32" )
-                );
+                                   hModule,
+                                   TEXT( "WSCEnumProtocols32" )
+                               );
         if ( NULL == fnWscEnumProtocols32 )
             goto cleanup;
-        
+
         // Find the required buffer size
         rc = fnWscEnumProtocols32(NULL, ProtocolInfo, &ProtocolInfoSize, &ErrorCode);
         if ( SOCKET_ERROR == rc )
@@ -157,9 +157,9 @@ EnumerateProviders(
 
         // Allocate the buffer
         ProtocolInfo = (LPWSAPROTOCOL_INFOW) LspAlloc(
-                ProtocolInfoSize,
-               &ErrorCode
-                );
+                           ProtocolInfoSize,
+                           &ErrorCode
+                       );
         if ( NULL == ProtocolInfo )
             goto cleanup;
 
@@ -168,7 +168,7 @@ EnumerateProviders(
         if ( SOCKET_ERROR == rc )
             goto cleanup;
 
-        // Update the count 
+        // Update the count
         *TotalProtocols = rc;
 
         FreeLibrary( hModule );
@@ -187,9 +187,9 @@ EnumerateProviders(
 
         // Allocate the buffer
         ProtocolInfo = (LPWSAPROTOCOL_INFOW) LspAlloc(
-                ProtocolInfoSize,
-               &ErrorCode
-                );
+                           ProtocolInfoSize,
+                           &ErrorCode
+                       );
         if ( NULL == ProtocolInfo )
             goto cleanup;
 
@@ -219,9 +219,9 @@ EnumerateProviders(
 
         // Allocate the buffer
         ProtocolInfo = (LPWSAPROTOCOL_INFOW) LspAlloc(
-                ProtocolInfoSize,
-               &ErrorCode
-                );
+                           ProtocolInfoSize,
+                           &ErrorCode
+                       );
         if ( NULL == ProtocolInfo )
             goto cleanup;
 
@@ -242,7 +242,7 @@ cleanup:
         ProtocolInfo = NULL;
     }
 
-	return ProtocolInfo;
+    return ProtocolInfo;
 }
 
 //
@@ -253,14 +253,14 @@ cleanup:
 //
 int
 EnumerateProvidersExisting(
-    WINSOCK_CATALOG     Catalog, 
+    WINSOCK_CATALOG     Catalog,
     WSAPROTOCOL_INFOW  *ProtocolInfo,
     LPDWORD             ProtocolInfoSize
-    )
+)
 {
-	INT                 ErrorCode = NO_ERROR,
+    INT                 ErrorCode = NO_ERROR,
                         rc = NO_ERROR;
-    
+
 #ifdef _WIN64
     if ( LspCatalog64Only == Catalog )
     {
@@ -283,10 +283,10 @@ EnumerateProvidersExisting(
     if ( SOCKET_ERROR == rc )
     {
         dbgprint( "EnumerateProvidersExisting: WSCEnumProviders failed: %d",
-                GetLastError() );
+                  GetLastError() );
     }
 
-	return rc;
+    return rc;
 }
 
 //
@@ -295,12 +295,12 @@ EnumerateProvidersExisting(
 // Description:
 //    This function frees the global catalog.
 //
-void 
+void
 FreeProviders(
     LPWSAPROTOCOL_INFOW ProtocolInfo
-    )
+)
 {
-	LspFree( ProtocolInfo );
+    LspFree( ProtocolInfo );
 }
 
 //
@@ -314,14 +314,14 @@ void *
 LspAlloc(
     SIZE_T  size,
     int    *lpErrno
-    )
+)
 {
     void *mem = NULL;
-    mem = HeapAlloc( 
-            gLspHeap, 
-            HEAP_ZERO_MEMORY, 
-            size
-            );
+    mem = HeapAlloc(
+              gLspHeap,
+              HEAP_ZERO_MEMORY,
+              size
+          );
     if ( NULL == mem )
     {
         *lpErrno = WSAENOBUFS;
@@ -339,7 +339,7 @@ LspAlloc(
 void
 LspFree(
     LPVOID  buf
-    )
+)
 {
     HeapFree( gLspHeap, 0, buf );
 }
@@ -353,7 +353,7 @@ LspFree(
 int
 LspCreateHeap(
     int *lpErrno
-    )
+)
 {
     gLspHeap = HeapCreate( 0, 128000, 0 );
     if ( NULL == gLspHeap )
@@ -372,7 +372,7 @@ LspCreateHeap(
 //
 void
 LspDestroyHeap(
-    )
+)
 {
     if ( NULL != gLspHeap )
     {
@@ -395,10 +395,10 @@ LspDestroyHeap(
 //
 BOOL
 FindLspEntries(
-        PROVIDER  **lspProviders,
-        int        *lspProviderCount,
-        int        *lpErrno
-        )
+    PROVIDER  **lspProviders,
+    int        *lspProviderCount,
+    int        *lpErrno
+)
 {
     PROVIDER           *Providers = NULL;
     LPWSAPROTOCOL_INFOW ProtocolInfo = NULL;
@@ -421,7 +421,7 @@ FindLspEntries(
 
     // Find our dummy LSP entry ID
     DummyLspId = 0;
-    for(i=0; i < ProtocolCount ;i++)
+    for(i=0; i < ProtocolCount ; i++)
     {
         if ( 0 == memcmp( &ProtocolInfo[ i ].ProviderId, &gProviderGuid, sizeof( gProviderGuid ) ) )
         {
@@ -434,10 +434,10 @@ FindLspEntries(
 
     // Count how many LSP layered entries are present
     LayerCount = 0;
-    for(i=0; i < ProtocolCount ;i++)
+    for(i=0; i < ProtocolCount ; i++)
     {
         if ( ( ProtocolInfo[ i ].ProtocolChain.ChainLen > 1 ) &&
-             ( DummyLspId == ProtocolInfo[ i ].ProtocolChain.ChainEntries[ 0 ] )
+                ( DummyLspId == ProtocolInfo[ i ].ProtocolChain.ChainEntries[ 0 ] )
            )
         {
             LayerCount++;
@@ -457,14 +457,14 @@ FindLspEntries(
     idx = 0;
 
     // Save the LSP layered entries
-    for(i=0; i < ProtocolCount ;i++)
+    for(i=0; i < ProtocolCount ; i++)
     {
         // The layered protocol entries for this LSP will always reference the
         //    dummy entry ID as its first entry in the chain array. Also make
         //    sure to check only LSP entries (since a base provider's chain length
         //    is 1 but the chain array entries can be garbage)
         if ( ( ProtocolInfo[ i ].ProtocolChain.ChainLen > 1 ) &&
-             ( DummyLspId == ProtocolInfo[ i ].ProtocolChain.ChainEntries[ 0 ] )
+                ( DummyLspId == ProtocolInfo[ i ].ProtocolChain.ChainEntries[ 0 ] )
            )
         {
             // Copy the new entry to the head
@@ -472,13 +472,13 @@ FindLspEntries(
             Providers[ idx ].LayerProvider.szProtocol[ WSAPROTOCOL_LEN ] = '\0';
 
             // Copy the provider underneath this entry
-            for(j=0; j < ProtocolCount ;j++)
+            for(j=0; j < ProtocolCount ; j++)
             {
                 // The next provider can either be a base, a dummy, or another layered
                 //    protocol chain. If a dummy or layer then both providers will have
                 //    the same DLL to load.
                 if ( ProtocolInfo[ i ].ProtocolChain.ChainEntries[ 1 ] ==
-                     ProtocolInfo[ j ].dwCatalogEntryId )
+                        ProtocolInfo[ j ].dwCatalogEntryId )
                 {
                     memcpy( &Providers[ idx ].NextProvider, &ProtocolInfo[ j ],
                             sizeof( WSAPROTOCOL_INFOW ) );
@@ -527,16 +527,16 @@ cleanup:
 // Function: FindMatchingLspEntryForProtocolInfo
 //
 // Description:
-//      This function searches for the appropriate LSP protocol chain entry which 
+//      This function searches for the appropriate LSP protocol chain entry which
 //      would handle a given WSAPROTOCOL_INFOW.
 //
 PROVIDER *
 FindMatchingLspEntryForProtocolInfo(
-        WSAPROTOCOL_INFOW *inInfo,
-        PROVIDER          *lspProviders,
-        int                lspCount,
-        BOOL               fromStartup
-        )
+    WSAPROTOCOL_INFOW *inInfo,
+    PROVIDER          *lspProviders,
+    int                lspCount,
+    BOOL               fromStartup
+)
 {
     WSAPROTOCOL_INFOW  *ProtocolInfo = NULL;
     DWORD               hiddenEntryId;
@@ -546,7 +546,7 @@ FindMatchingLspEntryForProtocolInfo(
     // Two possibilites - this inInfo belongs to our LSP or its a layer over our LSP
 
     // First see if the inInfo is one of the LSPs entry
-    for(i=0; i < lspCount ;i++)
+    for(i=0; i < lspCount ; i++)
     {
         if ( inInfo->dwCatalogEntryId == lspProviders[ i ].LayerProvider.dwCatalogEntryId )
         {
@@ -557,9 +557,9 @@ FindMatchingLspEntryForProtocolInfo(
     ASSERT( inInfo->ProtocolChain.ChainLen > 1 );
 
     // Next check the inInfo's protocol chains for a reference to our LSP
-    for(i=0; i < lspCount ;i++)
+    for(i=0; i < lspCount ; i++)
     {
-        for(j=1; j < inInfo->ProtocolChain.ChainLen ;j++)
+        for(j=1; j < inInfo->ProtocolChain.ChainLen ; j++)
         {
             if ( inInfo->ProtocolChain.ChainEntries[ j ] == lspProviders[ i ].LspDummyId )
             {
@@ -579,15 +579,15 @@ next_match:
 
     // If we didn't find an explicit match we'll have to guess - first try to
     //    match address family, socket type, protocol and provider flags
-    for(i=0; i < lspCount ;i++)
+    for(i=0; i < lspCount ; i++)
     {
         if ( ( inInfo->iAddressFamily == lspProviders[ i ].LayerProvider.iAddressFamily ) &&
-             ( inInfo->iSocketType == lspProviders[ i ].LayerProvider.iSocketType ) &&
-             ( inInfo->iProtocol == lspProviders[ i ].LayerProvider.iProtocol ) &&
-             ( ( ( inInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES ) ==
-                 ( lspProviders[ i ].LayerProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES ) 
-               )
-             )
+                ( inInfo->iSocketType == lspProviders[ i ].LayerProvider.iSocketType ) &&
+                ( inInfo->iProtocol == lspProviders[ i ].LayerProvider.iProtocol ) &&
+                ( ( ( inInfo->dwServiceFlags1 & ~XP1_IFS_HANDLES ) ==
+                    ( lspProviders[ i ].LayerProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES )
+                  )
+                )
            )
         {
             return &lspProviders[ i ];
@@ -595,7 +595,7 @@ next_match:
     }
 
     // If this routine was called from WSPSocket and we can't find a match yet, we're
-    //    in bad shape since the protocol info passed in matches no entries of this 
+    //    in bad shape since the protocol info passed in matches no entries of this
     //    LSPs ...
 
     ASSERT( fromStartup );
@@ -615,7 +615,7 @@ next_match:
     //
     //  _____________ _____________
     //  | LSP 2 TCP | | LSP 2 UDP |
-    //  _____________              
+    //  _____________
     //  | LSP 1 TCP |
     //  _____________ _____________
     //  | BASE TCP  | | BASE UDP  |
@@ -635,7 +635,7 @@ next_match:
     // The heuristic is:
     // 1. Find all layered protocol entries belonging to the WSAPROTOCOL_INFOW passed.
     //    In the above example it would find LSP2 TCP and LSP2 UDP.
-    // 2. Iterate through each provider found and walk the protocol chain in each 
+    // 2. Iterate through each provider found and walk the protocol chain in each
     //    provider, looking for a reference to LSP1's entry.
     // 3. If found check LSP1 entry to see if it has already been loaded. If not
     //    then this is the match, if so then LSP2 could be layered over another TCP
@@ -653,7 +653,7 @@ next_match:
     }
 
     hiddenEntryId = 0;
-    for(i=0; i < ProtocolCount ;i++)
+    for(i=0; i < ProtocolCount ; i++)
     {
         if ( inInfo->ProtocolChain.ChainEntries[ 0 ] == ProtocolInfo[ i ].dwCatalogEntryId )
         {
@@ -664,32 +664,32 @@ next_match:
 
     ASSERT( hiddenEntryId );
 
-    for(i=0; i < ProtocolCount ;i++)
+    for(i=0; i < ProtocolCount ; i++)
     {
         if ( ProtocolInfo[ i ].ProtocolChain.ChainEntries[ 0 ] == hiddenEntryId )
         {
             // This entry belongs to the LSP layered over us - walk its chains to
             //    see if it references our LSP
-            for(j=1; j < ProtocolInfo[ i ].ProtocolChain.ChainLen ;j++)
+            for(j=1; j < ProtocolInfo[ i ].ProtocolChain.ChainLen ; j++)
             {
-                for(k=0; k < lspCount ;k++)
+                for(k=0; k < lspCount ; k++)
                 {
                     if ( ProtocolInfo[ i ].ProtocolChain.ChainEntries[ j ] ==
-                         lspProviders[ k ].LayerProvider.ProtocolChain.ChainEntries[ 0 ]
+                            lspProviders[ k ].LayerProvider.ProtocolChain.ChainEntries[ 0 ]
                        )
                     {
                         // Bad news again, the protocol chain of the LSP above us
                         //   references our dummy LSP entry so we'll have to try
                         //   to match according to the protocol triplet and provider
                         //   flags
-                        if ( ( ProtocolInfo[ i ].iAddressFamily == 
-                               lspProviders[ k ].LayerProvider.iAddressFamily ) &&
-                             ( ProtocolInfo[ i ].iSocketType ==
-                               lspProviders[ k ].LayerProvider.iSocketType ) &&
-                             ( ProtocolInfo[ i ].iProtocol ==
-                               lspProviders[ k ].LayerProvider.iProtocol ) &&
-                             ( ( ProtocolInfo[ i ].dwServiceFlags1 & ~XP1_IFS_HANDLES ) ==
-                               ( lspProviders[ k ].LayerProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES ) )
+                        if ( ( ProtocolInfo[ i ].iAddressFamily ==
+                                lspProviders[ k ].LayerProvider.iAddressFamily ) &&
+                                ( ProtocolInfo[ i ].iSocketType ==
+                                  lspProviders[ k ].LayerProvider.iSocketType ) &&
+                                ( ProtocolInfo[ i ].iProtocol ==
+                                  lspProviders[ k ].LayerProvider.iProtocol ) &&
+                                ( ( ProtocolInfo[ i ].dwServiceFlags1 & ~XP1_IFS_HANDLES ) ==
+                                  ( lspProviders[ k ].LayerProvider.dwServiceFlags1 & ~XP1_IFS_HANDLES ) )
                            )
                         {
                             return &lspProviders[ i ];
@@ -698,7 +698,7 @@ next_match:
 
                     if ( ( ProtocolInfo[ i ].ProtocolChain.ChainEntries[ j ] ==
                             lspProviders[ k ].LayerProvider.dwCatalogEntryId ) &&
-                         ( lspProviders[ k ].StartupCount == 0 ) 
+                            ( lspProviders[ k ].StartupCount == 0 )
                        )
                     {
                         return &lspProviders[ i ];
@@ -707,10 +707,10 @@ next_match:
             }
         }
     }
-    
+
 cleanup:
 
-    ASSERT( FALSE ); 
+    ASSERT( FALSE );
 
     return NULL;
 }
@@ -728,7 +728,7 @@ BOOL
 LoadProviderPath(
     PROVIDER    *loadProvider,
     int         *lpErrno
-    )
+)
 {
     int     rc;
 
@@ -737,11 +737,11 @@ LoadProviderPath(
     // Retrieve the provider path of the lower layer
     loadProvider->ProviderPathLen = MAX_PATH - 1;
     rc = WSCGetProviderPath(
-           &loadProvider->NextProvider.ProviderId,
-            loadProvider->ProviderPathW,
-           &loadProvider->ProviderPathLen,
-            lpErrno
-            );
+             &loadProvider->NextProvider.ProviderId,
+             loadProvider->ProviderPathW,
+             &loadProvider->ProviderPathLen,
+             lpErrno
+         );
     if ( SOCKET_ERROR == rc )
     {
         dbgprint("LoadProviderPath: WSCGetProviderPath failed: %d", *lpErrno );
@@ -749,10 +749,10 @@ LoadProviderPath(
     }
 
     rc = ExpandEnvironmentStringsW(
-            loadProvider->ProviderPathW,
-            loadProvider->LibraryPathW,
-            MAX_PATH - 1
-            );
+             loadProvider->ProviderPathW,
+             loadProvider->LibraryPathW,
+             MAX_PATH - 1
+         );
     if ( ( 0 != rc ) && ( MAX_PATH-1 >= rc ) )
     {
         loadProvider->Module = LoadLibraryW( loadProvider->LibraryPathW );
@@ -769,13 +769,13 @@ LoadProviderPath(
 
         // No UNICODE so we must be on Win9x
         rc = WideCharToMultiByte( CP_ACP, 0,
-                loadProvider->ProviderPathW,
-                loadProvider->ProviderPathLen,
-                ProviderPathA,
-                MAX_PATH,
-                NULL,
-                NULL
-                );
+                                  loadProvider->ProviderPathW,
+                                  loadProvider->ProviderPathLen,
+                                  ProviderPathA,
+                                  MAX_PATH,
+                                  NULL,
+                                  NULL
+                                );
         if ( 0 == rc )
         {
             dbgprint("LoadProviderPath: WideCharToMultiByte failed: %d", GetLastError() );
@@ -783,10 +783,10 @@ LoadProviderPath(
         }
 
         rc = ExpandEnvironmentStringsA(
-                ProviderPathA,
-                LibraryPathA,
-                MAX_PATH - 1
-                );
+                 ProviderPathA,
+                 LibraryPathA,
+                 MAX_PATH - 1
+             );
         if ( ( 0 == rc ) || ( MAX_PATH - 1 < rc ) )
         {
             dbgprint("LoadProviderPath: ExpandEnvironmentStringsA failed: %d", GetLastError() );
@@ -803,9 +803,9 @@ LoadProviderPath(
 
     // Retrieve the next provider's WSPSTartup function
     loadProvider->fnWSPStartup = (LPWSPSTARTUP) GetProcAddress(
-            loadProvider->Module,
-            "WSPStartup"
-            );
+                                     loadProvider->Module,
+                                     "WSPStartup"
+                                 );
     if ( NULL == loadProvider->fnWSPStartup )
     {
         dbgprint("LoadProviderPath: GetProcAddress failed: %d", GetLastError() );
@@ -823,12 +823,12 @@ cleanup:
 
 int
 InitializeProvider(
-        PROVIDER *provider,
-        WORD wVersion,
-        WSAPROTOCOL_INFOW *lpProtocolInfo,
-        WSPUPCALLTABLE UpCallTable,
-        int *Error
-        )
+    PROVIDER *provider,
+    WORD wVersion,
+    WSAPROTOCOL_INFOW *lpProtocolInfo,
+    WSPUPCALLTABLE UpCallTable,
+    int *Error
+)
 {
     WSAPROTOCOL_INFOW  *ProviderInfo = NULL;
     int                 rc;
@@ -849,16 +849,16 @@ InitializeProvider(
         ProviderInfo = lpProtocolInfo;
 
     rc = provider->fnWSPStartup(
-            wVersion,
-            &provider->WinsockVersion,
-            ProviderInfo,
-            UpCallTable,
-            &provider->NextProcTable
-            );
+             wVersion,
+             &provider->WinsockVersion,
+             ProviderInfo,
+             UpCallTable,
+             &provider->NextProcTable
+         );
     if ( 0 != rc )
     {
         dbgprint("%ws::WSPStartup failed: %d", provider->NextProvider.szProtocol,
-                rc );
+                 rc );
         *Error = rc;
         goto cleanup;
     }
@@ -891,41 +891,41 @@ cleanup:
 //    Checks to make sure all function pointers are non-NULL. Returns SOCKET_ERROR
 //    if successful, NO_ERROR otherwise.
 //
-int 
+int
 VerifyProcTable(
     LPWSPPROC_TABLE lpProcTable
-    )
+)
 {
-   if ( lpProcTable->lpWSPAccept &&
-        lpProcTable->lpWSPAddressToString &&
-        lpProcTable->lpWSPAsyncSelect &&
-        lpProcTable->lpWSPBind &&
-        lpProcTable->lpWSPCancelBlockingCall &&
-        lpProcTable->lpWSPCleanup &&
-        lpProcTable->lpWSPCloseSocket &&
-        lpProcTable->lpWSPConnect &&
-        lpProcTable->lpWSPDuplicateSocket &&
-        lpProcTable->lpWSPEnumNetworkEvents &&
-        lpProcTable->lpWSPEventSelect &&
-        lpProcTable->lpWSPGetOverlappedResult &&
-        lpProcTable->lpWSPGetPeerName &&
-        lpProcTable->lpWSPGetSockOpt &&
-        lpProcTable->lpWSPGetSockName &&
-        lpProcTable->lpWSPGetQOSByName &&
-        lpProcTable->lpWSPIoctl &&
-        lpProcTable->lpWSPJoinLeaf &&
-        lpProcTable->lpWSPListen &&
-        lpProcTable->lpWSPRecv &&
-        lpProcTable->lpWSPRecvDisconnect &&
-        lpProcTable->lpWSPRecvFrom &&
-        lpProcTable->lpWSPSelect &&
-        lpProcTable->lpWSPSend &&
-        lpProcTable->lpWSPSendDisconnect &&
-        lpProcTable->lpWSPSendTo &&
-        lpProcTable->lpWSPSetSockOpt &&
-        lpProcTable->lpWSPShutdown &&
-        lpProcTable->lpWSPSocket &&
-        lpProcTable->lpWSPStringToAddress )
+    if ( lpProcTable->lpWSPAccept &&
+            lpProcTable->lpWSPAddressToString &&
+            lpProcTable->lpWSPAsyncSelect &&
+            lpProcTable->lpWSPBind &&
+            lpProcTable->lpWSPCancelBlockingCall &&
+            lpProcTable->lpWSPCleanup &&
+            lpProcTable->lpWSPCloseSocket &&
+            lpProcTable->lpWSPConnect &&
+            lpProcTable->lpWSPDuplicateSocket &&
+            lpProcTable->lpWSPEnumNetworkEvents &&
+            lpProcTable->lpWSPEventSelect &&
+            lpProcTable->lpWSPGetOverlappedResult &&
+            lpProcTable->lpWSPGetPeerName &&
+            lpProcTable->lpWSPGetSockOpt &&
+            lpProcTable->lpWSPGetSockName &&
+            lpProcTable->lpWSPGetQOSByName &&
+            lpProcTable->lpWSPIoctl &&
+            lpProcTable->lpWSPJoinLeaf &&
+            lpProcTable->lpWSPListen &&
+            lpProcTable->lpWSPRecv &&
+            lpProcTable->lpWSPRecvDisconnect &&
+            lpProcTable->lpWSPRecvFrom &&
+            lpProcTable->lpWSPSelect &&
+            lpProcTable->lpWSPSend &&
+            lpProcTable->lpWSPSendDisconnect &&
+            lpProcTable->lpWSPSendTo &&
+            lpProcTable->lpWSPSetSockOpt &&
+            lpProcTable->lpWSPShutdown &&
+            lpProcTable->lpWSPSocket &&
+            lpProcTable->lpWSPStringToAddress )
     {
         return NO_ERROR;
     }

@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -157,11 +157,11 @@ STDMETHODIMP CClassFactory::LockServer(__in BOOL fLock)
 {
     if (fLock == TRUE)
     {
-       DllAddRef();
+        DllAddRef();
     }
     else
     {
-       DllRelease();
+        DllRelease();
     }
     return S_OK;
 

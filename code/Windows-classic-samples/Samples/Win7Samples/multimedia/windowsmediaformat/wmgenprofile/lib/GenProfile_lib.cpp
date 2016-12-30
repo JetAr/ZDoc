@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -20,7 +20,7 @@ struct PIXEL_FORMAT
     WORD wBitsPerPixel;
 };
 
-PIXEL_FORMAT PixelFormats[] = 
+PIXEL_FORMAT PixelFormats[] =
 {
     { &WMMEDIASUBTYPE_RGB555,   BI_RGB,         16 },
     { &WMMEDIASUBTYPE_RGB24,    BI_RGB,         24 },
@@ -42,10 +42,10 @@ DWORD WaveFrequency[] =
 
 //------------------------------------------------------------------------------
 // Name: CopyMediaType()
-// Desc: Allocates memory for a WM_MEDIA_TYPE and its format data and 
+// Desc: Allocates memory for a WM_MEDIA_TYPE and its format data and
 //       copies an existing media type into it.
 //------------------------------------------------------------------------------
-STDMETHODIMP CopyMediaType( WM_MEDIA_TYPE** ppmtDestination, 
+STDMETHODIMP CopyMediaType( WM_MEDIA_TYPE** ppmtDestination,
                             WM_MEDIA_TYPE* pmtSource )
 {
     if ( !ppmtDestination )
@@ -144,10 +144,10 @@ STDMETHODIMP EnsureIWMCodecInfo3( IWMCodecInfo3** ppCodecInfo3 )
 // Name: SetCodecVBRSettings()
 // Desc: Enables VBR with the specified number of passes, or disables it.
 //------------------------------------------------------------------------------
-STDMETHODIMP SetCodecVBRSettings( IWMCodecInfo3* pCodecInfo3, 
-                                  GUID guidCodecType, 
-                                  DWORD dwCodecIndex, 
-                                  BOOL fIsVBR, 
+STDMETHODIMP SetCodecVBRSettings( IWMCodecInfo3* pCodecInfo3,
+                                  GUID guidCodecType,
+                                  DWORD dwCodecIndex,
+                                  BOOL fIsVBR,
                                   DWORD dwVBRPasses )
 {
     HRESULT hr;
@@ -225,16 +225,16 @@ STDMETHODIMP SetStreamLanguage( IWMStreamConfig * pStreamConfig, LCID dwLanguage
         }
 
         hr = pStreamConfig->QueryInterface(	IID_IWMStreamConfig3, (void**)&pStreamConfig3 );
-    	if(	FAILED(	hr ) )
-    	{
-    		break;
-    	}
-    
-    	hr = pStreamConfig3->SetLanguage( bstrLanguage );
-    	if(	FAILED(	hr ) )
-    	{
-    		break;
-    	}
+        if(	FAILED(	hr ) )
+        {
+            break;
+        }
+
+        hr = pStreamConfig3->SetLanguage( bstrLanguage );
+        if(	FAILED(	hr ) )
+        {
+            break;
+        }
     }
     while (FALSE);
 
@@ -259,9 +259,9 @@ STDMETHODIMP SetStreamLanguage( IWMStreamConfig * pStreamConfig, LCID dwLanguage
 // Desc: Initializes a WM_MEDIA_TYPE for uncompressed audio.
 //------------------------------------------------------------------------------
 STDMETHODIMP CreateUncompressedAudioMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
-                                    DWORD dwSamplesPerSecond, 
-                                    WORD wNumChannels, 
-                                    WORD wBitsPerSample )
+        DWORD dwSamplesPerSecond,
+        WORD wNumChannels,
+        WORD wBitsPerSample )
 {
     HRESULT hr = S_OK;
 
@@ -275,14 +275,14 @@ STDMETHODIMP CreateUncompressedAudioMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
     //
     // pCodecInfo3 is allowed to be NULL, since CreateMediatypeForFormat calls EnsureIWMCodecInfo3
     //
-    
+
     do
     {
         //
         // Setup the local copy of the uncompressed media type
         //
         ZeroMemory( &mtUncompressedAudio, sizeof( mtUncompressedAudio ) );
-        
+
         mtUncompressedAudio.majortype = WMMEDIATYPE_Audio;
         mtUncompressedAudio.subtype = WMMEDIASUBTYPE_PCM;
         mtUncompressedAudio.bFixedSizeSamples = TRUE;
@@ -292,7 +292,7 @@ STDMETHODIMP CreateUncompressedAudioMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
         mtUncompressedAudio.pUnk = NULL;
         mtUncompressedAudio.cbFormat = sizeof( WAVEFORMATEX );
         mtUncompressedAudio.pbFormat = (BYTE*) &wfxUncompressedAudio;
-        
+
         //
         // Configure the WAVEFORMATEX structure for the uncompressed audio
         //
@@ -305,7 +305,7 @@ STDMETHODIMP CreateUncompressedAudioMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
         wfxUncompressedAudio.nBlockAlign = wNumChannels * wBitsPerSample / 8;
         wfxUncompressedAudio.wBitsPerSample = wBitsPerSample;
         wfxUncompressedAudio.cbSize = sizeof( WAVEFORMATEX );
-        
+
         //
         // Return a copy of the media type to the caller, since the mediatype is on the stack
         //
@@ -326,11 +326,11 @@ STDMETHODIMP CreateUncompressedAudioMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
 // Desc: Initializes a WM_MEDIA_TYPE for video.
 //------------------------------------------------------------------------------
 STDMETHODIMP CreateVideoMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
-                                    IWMCodecInfo3* pCodecInfo3, 
+                                    IWMCodecInfo3* pCodecInfo3,
                                     DWORD dwCodecIndex,
-                                    DWORD dwFPS, 
-                                    DWORD dwWidth, 
-                                    DWORD dwHeight, 
+                                    DWORD dwFPS,
+                                    DWORD dwWidth,
+                                    DWORD dwHeight,
                                     DWORD dwBitrate,
                                     BOOL fIsVBR,
                                     DWORD dwNumberOfPasses )
@@ -354,13 +354,13 @@ STDMETHODIMP CreateVideoMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
         // Get the mediatype for the codec
         //
         hr = CreateMediatypeForFormat( &pMediaType,
-                               pCodecInfo3,
-                               NULL,
-                               WMMEDIATYPE_Video, 
-                               dwCodecIndex, 
-                               0,
-                               fIsVBR,
-                               dwNumberOfPasses );
+                                       pCodecInfo3,
+                                       NULL,
+                                       WMMEDIATYPE_Video,
+                                       dwCodecIndex,
+                                       0,
+                                       fIsVBR,
+                                       dwNumberOfPasses );
         if( FAILED( hr ) )
         {
             break;
@@ -404,14 +404,14 @@ STDMETHODIMP CreateVideoMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
 // Desc: Initializes a WM_MEDIA_TYPE for uncompressed video.
 //------------------------------------------------------------------------------
 STDMETHODIMP CreateUncompressedVideoMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
-                                                GUID guidFormat,
-                                                DWORD dwFourCC,
-                                                WORD wBitsPerPixel,
-                                                BYTE* pbPaletteData,
-                                                DWORD cbPaletteDataSize,
-                                                DWORD dwFPS, 
-                                                DWORD dwWidth, 
-                                                DWORD dwHeight )
+        GUID guidFormat,
+        DWORD dwFourCC,
+        WORD wBitsPerPixel,
+        BYTE* pbPaletteData,
+        DWORD cbPaletteDataSize,
+        DWORD dwFPS,
+        DWORD dwWidth,
+        DWORD dwHeight )
 {
     const DWORD BITFIELD_DATA_SIZE = sizeof( RGBQUAD ) * 3;
 
@@ -433,15 +433,15 @@ STDMETHODIMP CreateUncompressedVideoMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
     //
     // pCodecInfo3 is allowed to be NULL, since CreateMediatypeForFormat calls EnsureIWMCodecInfo3
     //
-    
+
     //
     // The width must be on a byte boundry
     //
-    if ( dwWidth * wBitsPerPixel % 8 != 0 ) 
+    if ( dwWidth * wBitsPerPixel % 8 != 0 )
     {
         return E_INVALIDARG;
     }
-    
+
     //
     // The width, height, and frames per second must all be non-zero
     //
@@ -462,7 +462,7 @@ STDMETHODIMP CreateUncompressedVideoMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
         // If there are <= 8 bits / pixel, then there needs to be palette data following the WMVIDEOINFOHEADER
         //
         fPalettePresent = ( wBitsPerPixel <= 8 );
-        if ( fPalettePresent ) 
+        if ( fPalettePresent )
         {
             dwMaxColors = 1 << wBitsPerPixel;
             cbExpectedPostVIHDataSize = sizeof( RGBQUAD ) * dwMaxColors;
@@ -495,14 +495,14 @@ STDMETHODIMP CreateUncompressedVideoMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
         }
         ZeroMemory( pbFormatData, dwFormatDataSize );
 
-        pbPostVIHData = pbFormatData + sizeof( WMVIDEOINFOHEADER ); 
+        pbPostVIHData = pbFormatData + sizeof( WMVIDEOINFOHEADER );
         pvihUncompressedVideo = (WMVIDEOINFOHEADER*) pbFormatData;
 
         //
         // Set up the local copy of the uncompressed media type
         //
         ZeroMemory( &mtUncompressedVideo, sizeof( mtUncompressedVideo ) );
-        
+
         mtUncompressedVideo.majortype = WMMEDIATYPE_Video;
         mtUncompressedVideo.subtype = guidFormat;
         mtUncompressedVideo.bFixedSizeSamples = TRUE;
@@ -512,7 +512,7 @@ STDMETHODIMP CreateUncompressedVideoMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
         mtUncompressedVideo.pUnk = NULL;
         mtUncompressedVideo.cbFormat = dwFormatDataSize;
         mtUncompressedVideo.pbFormat = (BYTE*) pbFormatData;
-        
+
         //
         // Configure the WMVIDEOINFOHEADER structure for uncompressed video
         //
@@ -578,14 +578,14 @@ STDMETHODIMP CreateScriptMediaType(  WM_MEDIA_TYPE** ppmtMediaType )
         //
         // Configure media type
         //
-		wmtMediaType.majortype              = WMMEDIATYPE_Script;
-		wmtMediaType.subtype                = GUID_NULL;
-		wmtMediaType.bFixedSizeSamples      = FALSE;
-		wmtMediaType.bTemporalCompression   = TRUE;
-		wmtMediaType.lSampleSize            = 0;
+        wmtMediaType.majortype              = WMMEDIATYPE_Script;
+        wmtMediaType.subtype                = GUID_NULL;
+        wmtMediaType.bFixedSizeSamples      = FALSE;
+        wmtMediaType.bTemporalCompression   = TRUE;
+        wmtMediaType.lSampleSize            = 0;
         wmtMediaType.formattype             = WMFORMAT_Script;
-		wmtMediaType.cbFormat               = sizeof( WMSCRIPTFORMAT );
-		wmtMediaType.pbFormat               = (BYTE*) &wsfScriptFormat;
+        wmtMediaType.cbFormat               = sizeof( WMSCRIPTFORMAT );
+        wmtMediaType.pbFormat               = (BYTE*) &wsfScriptFormat;
 
         wsfScriptFormat.scriptType          = WMSCRIPTTYPE_TwoStrings;
 
@@ -609,8 +609,8 @@ STDMETHODIMP CreateScriptMediaType(  WM_MEDIA_TYPE** ppmtMediaType )
 // Desc: Initializes a WM_MEDIA_TYPE for image.
 //------------------------------------------------------------------------------
 STDMETHODIMP CreateImageMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
-                                    DWORD dwWidth, 
-                                    DWORD dwHeight, 
+                                    DWORD dwWidth,
+                                    DWORD dwHeight,
                                     DWORD dwBitrate )
 {
     static const WORD BIT_COUNT = 24;
@@ -626,46 +626,46 @@ STDMETHODIMP CreateImageMediaType(  WM_MEDIA_TYPE** ppmtMediaType,
         //
         // Set up the WM_MEDIA_TYPE structure
         //
-		wmtMediaType.majortype              = WMMEDIATYPE_Image;
-		wmtMediaType.subtype                = WMMEDIASUBTYPE_RGB24;
-		wmtMediaType.bFixedSizeSamples      = FALSE;
-		wmtMediaType.bTemporalCompression   = FALSE;
-		wmtMediaType.lSampleSize			= 0;
-		wmtMediaType.bFixedSizeSamples      = FALSE;
-		wmtMediaType.bTemporalCompression   = FALSE;
-		wmtMediaType.lSampleSize            = 0;
+        wmtMediaType.majortype              = WMMEDIATYPE_Image;
+        wmtMediaType.subtype                = WMMEDIASUBTYPE_RGB24;
+        wmtMediaType.bFixedSizeSamples      = FALSE;
+        wmtMediaType.bTemporalCompression   = FALSE;
+        wmtMediaType.lSampleSize			= 0;
+        wmtMediaType.bFixedSizeSamples      = FALSE;
+        wmtMediaType.bTemporalCompression   = FALSE;
+        wmtMediaType.lSampleSize            = 0;
 
-		wmtMediaType.formattype             = WMFORMAT_VideoInfo;
-		wmtMediaType.pUnk                   = NULL;
-		wmtMediaType.cbFormat               = sizeof( WMVIDEOINFOHEADER );
-		wmtMediaType.pbFormat               = (BYTE*) &vihVideoInfo;
+        wmtMediaType.formattype             = WMFORMAT_VideoInfo;
+        wmtMediaType.pUnk                   = NULL;
+        wmtMediaType.cbFormat               = sizeof( WMVIDEOINFOHEADER );
+        wmtMediaType.pbFormat               = (BYTE*) &vihVideoInfo;
 
         //
         // Set up the WMVIDEOINFOHEADER structure
         //
-		ZeroMemory( &vihVideoInfo, sizeof( vihVideoInfo ) );
+        ZeroMemory( &vihVideoInfo, sizeof( vihVideoInfo ) );
 
-		vihVideoInfo.rcSource.left = 0;
-		vihVideoInfo.rcSource.top = 0;
-		vihVideoInfo.rcSource.bottom = dwHeight;
-		vihVideoInfo.rcSource.right = dwWidth;
-		vihVideoInfo.rcTarget = vihVideoInfo.rcSource;
+        vihVideoInfo.rcSource.left = 0;
+        vihVideoInfo.rcSource.top = 0;
+        vihVideoInfo.rcSource.bottom = dwHeight;
+        vihVideoInfo.rcSource.right = dwWidth;
+        vihVideoInfo.rcTarget = vihVideoInfo.rcSource;
 
         vihVideoInfo.dwBitRate = dwBitrate;
-		vihVideoInfo.dwBitErrorRate = 0;
-		vihVideoInfo.AvgTimePerFrame = 0;
+        vihVideoInfo.dwBitErrorRate = 0;
+        vihVideoInfo.AvgTimePerFrame = 0;
 
-		vihVideoInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
-		vihVideoInfo.bmiHeader.biWidth = dwWidth;
-		vihVideoInfo.bmiHeader.biHeight = dwHeight;
-		vihVideoInfo.bmiHeader.biPlanes = 1;
-		vihVideoInfo.bmiHeader.biBitCount = BIT_COUNT;
-		vihVideoInfo.bmiHeader.biCompression = BI_RGB;
-		vihVideoInfo.bmiHeader.biSizeImage = ( dwHeight * dwWidth * vihVideoInfo.bmiHeader.biBitCount ) / 8;
-		vihVideoInfo.bmiHeader.biXPelsPerMeter = 0;
-		vihVideoInfo.bmiHeader.biYPelsPerMeter = 0;
-		vihVideoInfo.bmiHeader.biClrUsed = 0;
-		vihVideoInfo.bmiHeader.biClrImportant = 0;
+        vihVideoInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
+        vihVideoInfo.bmiHeader.biWidth = dwWidth;
+        vihVideoInfo.bmiHeader.biHeight = dwHeight;
+        vihVideoInfo.bmiHeader.biPlanes = 1;
+        vihVideoInfo.bmiHeader.biBitCount = BIT_COUNT;
+        vihVideoInfo.bmiHeader.biCompression = BI_RGB;
+        vihVideoInfo.bmiHeader.biSizeImage = ( dwHeight * dwWidth * vihVideoInfo.bmiHeader.biBitCount ) / 8;
+        vihVideoInfo.bmiHeader.biXPelsPerMeter = 0;
+        vihVideoInfo.bmiHeader.biYPelsPerMeter = 0;
+        vihVideoInfo.bmiHeader.biClrUsed = 0;
+        vihVideoInfo.bmiHeader.biClrImportant = 0;
 
         //
         // Return a copy of the media type to the caller
@@ -699,17 +699,17 @@ STDMETHODIMP CreateWebMediaType(  WM_MEDIA_TYPE** ppmtMediaType )
         //
         // Configure media type
         //
-		wmtMediaType.majortype              = WMMEDIATYPE_FileTransfer;
-		wmtMediaType.subtype                = WMMEDIASUBTYPE_WebStream;
-		wmtMediaType.bFixedSizeSamples      = FALSE;
-		wmtMediaType.bTemporalCompression   = TRUE;
-		wmtMediaType.lSampleSize            = 0;
-		wmtMediaType.formattype             = WMFORMAT_WebStream;
-		wmtMediaType.pUnk                   = NULL;
-		wmtMediaType.cbFormat               = sizeof( WMT_WEBSTREAM_FORMAT );
-		wmtMediaType.pbFormat               = (BYTE*) &wwfWebFormat;
+        wmtMediaType.majortype              = WMMEDIATYPE_FileTransfer;
+        wmtMediaType.subtype                = WMMEDIASUBTYPE_WebStream;
+        wmtMediaType.bFixedSizeSamples      = FALSE;
+        wmtMediaType.bTemporalCompression   = TRUE;
+        wmtMediaType.lSampleSize            = 0;
+        wmtMediaType.formattype             = WMFORMAT_WebStream;
+        wmtMediaType.pUnk                   = NULL;
+        wmtMediaType.cbFormat               = sizeof( WMT_WEBSTREAM_FORMAT );
+        wmtMediaType.pbFormat               = (BYTE*) &wwfWebFormat;
 
-		ZeroMemory( &wwfWebFormat, sizeof( wwfWebFormat ) );
+        ZeroMemory( &wwfWebFormat, sizeof( wwfWebFormat ) );
         wwfWebFormat.cbSize = sizeof( WMT_WEBSTREAM_FORMAT );
         wwfWebFormat.cbSampleHeaderFixedData = sizeof( WMT_WEBSTREAM_SAMPLE_HEADER );
         wwfWebFormat.wVersion = 1;
@@ -746,11 +746,11 @@ STDMETHODIMP CreateFileMediaType(  WM_MEDIA_TYPE** ppmtMediaType )
         //
         // Configure media type
         //
-		wmtMediaType.majortype              = WMMEDIATYPE_FileTransfer;
-		wmtMediaType.subtype                = GUID_NULL;
-		wmtMediaType.bFixedSizeSamples      = FALSE;
-		wmtMediaType.bTemporalCompression   = FALSE;
-		wmtMediaType.lSampleSize            = 0;
+        wmtMediaType.majortype              = WMMEDIATYPE_FileTransfer;
+        wmtMediaType.subtype                = GUID_NULL;
+        wmtMediaType.bFixedSizeSamples      = FALSE;
+        wmtMediaType.bTemporalCompression   = FALSE;
+        wmtMediaType.lSampleSize            = 0;
 
         //
         // Return a copy of the media type to the caller
@@ -775,8 +775,8 @@ STDMETHODIMP CreateFileMediaType(  WM_MEDIA_TYPE** ppmtMediaType )
 // Name: CreateAudioStream()
 // Desc: Creates an audio stream and returns its configuration object.
 //------------------------------------------------------------------------------
-STDMETHODIMP CreateAudioStream( IWMStreamConfig** ppStreamConfig, 
-                                IWMCodecInfo3* pCodecInfo3, 
+STDMETHODIMP CreateAudioStream( IWMStreamConfig** ppStreamConfig,
+                                IWMCodecInfo3* pCodecInfo3,
                                 IWMProfile *pProfile,
                                 DWORD dwBufferWindow,
                                 DWORD dwCodecIndex,
@@ -801,7 +801,7 @@ STDMETHODIMP CreateAudioStream( IWMStreamConfig** ppStreamConfig,
     {
         return E_INVALIDARG;
     }
-    
+
     //
     // pCodecInfo3 is allowed to be NULL, since CreateMediatypeForFormat calls EnsureIWMCodecInfo3
     //
@@ -822,12 +822,12 @@ STDMETHODIMP CreateAudioStream( IWMStreamConfig** ppStreamConfig,
         // Create the media type and get the format's stream configuration
         //
         hr = CreateMediatypeForFormat( &pMediaType,
-                                       pCodecInfo3, 
+                                       pCodecInfo3,
                                        &pFormatConfig,
-                                       WMMEDIATYPE_Audio, 
-                                       dwCodecIndex, 
-                                       dwFormatIndex, 
-                                       fIsVBR, 
+                                       WMMEDIATYPE_Audio,
+                                       dwCodecIndex,
+                                       dwFormatIndex,
+                                       fIsVBR,
                                        dwNumberOfPasses );
         if ( FAILED( hr ) )
         {
@@ -912,12 +912,12 @@ STDMETHODIMP CreateAudioStream( IWMStreamConfig** ppStreamConfig,
 // Name: CreateAudioStream()
 // Desc: Creates an audio stream and returns its configuration object.
 //------------------------------------------------------------------------------
-STDMETHODIMP CreateUncompressedAudioStream( IWMStreamConfig** ppStreamConfig, 
-                                IWMProfile *pProfile,
-                                DWORD dwSamplesPerSecond, 
-                                WORD wNumChannels, 
-                                WORD wBitsPerSample,
-                                LCID dwLanguage  )
+STDMETHODIMP CreateUncompressedAudioStream( IWMStreamConfig** ppStreamConfig,
+        IWMProfile *pProfile,
+        DWORD dwSamplesPerSecond,
+        WORD wNumChannels,
+        WORD wBitsPerSample,
+        LCID dwLanguage  )
 {
     HRESULT hr = S_OK;
     IWMStreamConfig* pStreamConfig = NULL;
@@ -934,7 +934,7 @@ STDMETHODIMP CreateUncompressedAudioStream( IWMStreamConfig** ppStreamConfig,
     {
         return E_INVALIDARG;
     }
-    
+
     //
     // pCodecInfo3 is allowed to be NULL, since CreateMediatypeForFormat calls EnsureIWMCodecInfo3
     //
@@ -955,9 +955,9 @@ STDMETHODIMP CreateUncompressedAudioStream( IWMStreamConfig** ppStreamConfig,
         // Create the media type for the uncompressed audio
         //
         hr = CreateUncompressedAudioMediaType( &pMediaType,
-                                                dwSamplesPerSecond, 
-                                                wNumChannels, 
-                                                wBitsPerSample );
+                                               dwSamplesPerSecond,
+                                               wNumChannels,
+                                               wBitsPerSample );
         if ( FAILED( hr ) )
         {
             break;
@@ -1075,18 +1075,18 @@ STDMETHODIMP CreateVideoStream( IWMStreamConfig** ppStreamConfig,
     {
         switch( vbrMode )
         {
-		case VBR_OFF:
+        case VBR_OFF:
             dwNumberOfPasses = 0;
-			break;
+            break;
 
         case VBR_QUALITYBASED:
             dwNumberOfPasses = 1;
             break;
-   
+
         case VBR_CONSTRAINED:
             dwNumberOfPasses = 2;
             break;
-    
+
         case VBR_UNCONSTRAINED:
             dwNumberOfPasses = 2;
             break;
@@ -1129,12 +1129,12 @@ STDMETHODIMP CreateVideoStream( IWMStreamConfig** ppStreamConfig,
         // Set the media type for the stream
         //
         hr = CreateVideoMediaType(  &pMediaType,
-                                    pCodecInfo3, 
-                                    dwCodecIndex, 
-                                    dwFPS, 
-                                    dwWidth, 
-                                    dwHeight, 
-									dwBitrate,
+                                    pCodecInfo3,
+                                    dwCodecIndex,
+                                    dwFPS,
+                                    dwWidth,
+                                    dwHeight,
+                                    dwBitrate,
                                     fIsVBR,
                                     dwNumberOfPasses );
         if ( FAILED( hr ) )
@@ -1183,7 +1183,7 @@ STDMETHODIMP CreateVideoStream( IWMStreamConfig** ppStreamConfig,
             {
                 break;
             }
-            
+
             switch( vbrMode )
             {
             case VBR_QUALITYBASED:
@@ -1192,28 +1192,28 @@ STDMETHODIMP CreateVideoStream( IWMStreamConfig** ppStreamConfig,
                 //
                 hr = pPropertyVault->SetProperty( g_wszVBRQuality, WMT_TYPE_DWORD, (BYTE*) &dwVBRQuality, sizeof( DWORD ) );
                 break;
-       
+
             case VBR_CONSTRAINED:
                 //
                 // The peak bitrate and, optionally, max buffer window need to be set
-                // 
+                //
                 hr = pPropertyVault->SetProperty( g_wszVBRBitrateMax, WMT_TYPE_DWORD, (BYTE*) &dwMaxBitrate, sizeof( DWORD ) );
                 if ( FAILED( hr ) )
                 {
                     break;
                 }
-                
+
                 if( dwMaxBufferWindow != 0 )
-	            {
+                {
                     hr = pPropertyVault->SetProperty( g_wszVBRBufferWindowMax, WMT_TYPE_DWORD, (BYTE*) &dwMaxBufferWindow, sizeof( DWORD ) );
                 }
                 break;
-        
+
             case VBR_UNCONSTRAINED:
                 break;
 
-			case VBR_OFF:
-				break;
+            case VBR_OFF:
+                break;
 
             default:
                 hr = E_FAIL;
@@ -1255,16 +1255,16 @@ STDMETHODIMP CreateVideoStream( IWMStreamConfig** ppStreamConfig,
 // Desc: Creates an uncompressed video stream and returns its configuration object.
 //------------------------------------------------------------------------------
 STDMETHODIMP CreateUncompressedVideoStream( IWMStreamConfig** ppStreamConfig,
-                                IWMProfile *pProfile,
-                                GUID guidFormat,
-                                DWORD dwFourCC,
-                                WORD wBitsPerPixel,
-                                BYTE* pbPaletteData,
-                                DWORD cbPaletteDataSize,
-                                DWORD dwWidth,
-                                DWORD dwHeight,
-                                DWORD dwFPS,
-                                LCID dwLanguage )
+        IWMProfile *pProfile,
+        GUID guidFormat,
+        DWORD dwFourCC,
+        WORD wBitsPerPixel,
+        BYTE* pbPaletteData,
+        DWORD cbPaletteDataSize,
+        DWORD dwWidth,
+        DWORD dwHeight,
+        DWORD dwFPS,
+        LCID dwLanguage )
 {
     HRESULT hr = S_OK;
     IWMStreamConfig* pStreamConfig = NULL;
@@ -1316,14 +1316,14 @@ STDMETHODIMP CreateUncompressedVideoStream( IWMStreamConfig** ppStreamConfig,
         // Set the media type for the stream
         //
         hr = CreateUncompressedVideoMediaType( &pMediaType,
-                                    guidFormat,
-                                    dwFourCC,
-                                    wBitsPerPixel,
-                                    pbPaletteData,
-                                    cbPaletteDataSize,
-                                    dwFPS, 
-                                    dwWidth, 
-                                    dwHeight );
+                                               guidFormat,
+                                               dwFourCC,
+                                               wBitsPerPixel,
+                                               pbPaletteData,
+                                               cbPaletteDataSize,
+                                               dwFPS,
+                                               dwWidth,
+                                               dwHeight );
         if ( FAILED( hr ) )
         {
             break;
@@ -1355,7 +1355,7 @@ STDMETHODIMP CreateUncompressedVideoStream( IWMStreamConfig** ppStreamConfig,
             {
                 break;
             }
-            
+
             SAFE_RELEASE( pPropertyVault );
         }
 
@@ -1386,9 +1386,9 @@ STDMETHODIMP CreateUncompressedVideoStream( IWMStreamConfig** ppStreamConfig,
 // Name: CreateScriptStream()
 // Desc: Creates a scripat stream and returns its configuration object.
 //------------------------------------------------------------------------------
-STDMETHODIMP CreateScriptStream( IWMStreamConfig** ppStreamConfig, 
-                                 IWMProfile *pProfile, 
-                                 DWORD dwBitrate, 
+STDMETHODIMP CreateScriptStream( IWMStreamConfig** ppStreamConfig,
+                                 IWMProfile *pProfile,
+                                 DWORD dwBitrate,
                                  DWORD dwBufferWindow,
                                  LCID dwLanguage  )
 {
@@ -1405,7 +1405,7 @@ STDMETHODIMP CreateScriptStream( IWMStreamConfig** ppStreamConfig,
     {
         return E_INVALIDARG;
     }
-    
+
 
     do
     {
@@ -1484,8 +1484,8 @@ STDMETHODIMP CreateScriptStream( IWMStreamConfig** ppStreamConfig,
 //------------------------------------------------------------------------------
 STDMETHODIMP CreateImageStream( IWMStreamConfig** ppStreamConfig,
                                 IWMProfile *pProfile,
-                                DWORD dwBitrate, 
-                                DWORD dwBufferWindow, 
+                                DWORD dwBitrate,
+                                DWORD dwBufferWindow,
                                 DWORD dwWidth,
                                 DWORD dwHeight,
                                 LCID dwLanguage  )
@@ -1503,7 +1503,7 @@ STDMETHODIMP CreateImageStream( IWMStreamConfig** ppStreamConfig,
     {
         return E_INVALIDARG;
     }
-    
+
     do
     {
         //
@@ -1535,8 +1535,8 @@ STDMETHODIMP CreateImageStream( IWMStreamConfig** ppStreamConfig,
         // Set the media type for the image stream
         //
         hr = CreateImageMediaType(  &pMediaType,
-                                    dwBitrate, 
-                                    dwWidth, 
+                                    dwBitrate,
+                                    dwWidth,
                                     dwHeight );
         if ( FAILED( hr ) )
         {
@@ -1582,9 +1582,9 @@ STDMETHODIMP CreateImageStream( IWMStreamConfig** ppStreamConfig,
 // Name: CreateWebStream()
 // Desc: Creates a Web stream and returns its configuration object.
 //------------------------------------------------------------------------------
-STDMETHODIMP CreateWebStream( IWMStreamConfig** ppStreamConfig, 
-                              IWMProfile *pProfile, 
-                              DWORD dwBitrate, 
+STDMETHODIMP CreateWebStream( IWMStreamConfig** ppStreamConfig,
+                              IWMProfile *pProfile,
+                              DWORD dwBitrate,
                               DWORD dwBufferWindow,
                               LCID dwLanguage  )
 {
@@ -1601,7 +1601,7 @@ STDMETHODIMP CreateWebStream( IWMStreamConfig** ppStreamConfig,
     {
         return E_INVALIDARG;
     }
-    
+
     do
     {
         //
@@ -1677,10 +1677,10 @@ STDMETHODIMP CreateWebStream( IWMStreamConfig** ppStreamConfig,
 // Name: CreateFileStream()
 // Desc: Creates a file stream and returns its configuration object.
 //------------------------------------------------------------------------------
-STDMETHODIMP CreateFileStream( IWMStreamConfig** ppStreamConfig, 
-                               IWMProfile *pProfile, 
-                               DWORD dwBufferWindow, 
-                               DWORD dwBitrate, 
+STDMETHODIMP CreateFileStream( IWMStreamConfig** ppStreamConfig,
+                               IWMProfile *pProfile,
+                               DWORD dwBufferWindow,
+                               DWORD dwBitrate,
                                WORD wMaxFilenameLength,
                                LCID dwLanguage  )
 {
@@ -1698,7 +1698,7 @@ STDMETHODIMP CreateFileStream( IWMStreamConfig** ppStreamConfig,
     {
         return E_INVALIDARG;
     }
-    
+
 
     do
     {
@@ -1760,9 +1760,9 @@ STDMETHODIMP CreateFileStream( IWMStreamConfig** ppStreamConfig,
         assert( pStreamConfig2 );
 
         hr = pStreamConfig2->AddDataUnitExtension( WM_SampleExtensionGUID_FileName,
-                                                   wMaxFilenameLength, 
-                                                   NULL,
-                                                   0 );
+                wMaxFilenameLength,
+                NULL,
+                0 );
         if ( FAILED( hr ) )
         {
             break;
@@ -1796,12 +1796,12 @@ STDMETHODIMP CreateFileStream( IWMStreamConfig** ppStreamConfig,
 // Desc: Initializes a WM_MEDIA_TYPE for a codec format, setting VBR attributes.
 //------------------------------------------------------------------------------
 STDMETHODIMP CreateMediatypeForFormat( WM_MEDIA_TYPE** ppmtDestination,
-                                       IWMCodecInfo3* pCodecInfo3, 
+                                       IWMCodecInfo3* pCodecInfo3,
                                        IWMStreamConfig** ppFormatConfig,
-                                       GUID guidCodecType, 
-                                       DWORD dwCodecIndex, 
-                                       DWORD dwFormatIndex, 
-                                       BOOL fIsVBR, 
+                                       GUID guidCodecType,
+                                       DWORD dwCodecIndex,
+                                       DWORD dwFormatIndex,
+                                       BOOL fIsVBR,
                                        DWORD dwVBRPasses )
 {
     HRESULT hr = S_OK;
@@ -1831,11 +1831,11 @@ STDMETHODIMP CreateMediatypeForFormat( WM_MEDIA_TYPE** ppmtDestination,
         //
         // Set the VBR settings appropriately
         //
-        hr = SetCodecVBRSettings( pCodecInfo3, 
-                            guidCodecType, 
-                            dwCodecIndex, 
-                            fIsVBR, 
-                            dwVBRPasses );
+        hr = SetCodecVBRSettings( pCodecInfo3,
+                                  guidCodecType,
+                                  dwCodecIndex,
+                                  fIsVBR,
+                                  dwVBRPasses );
         if ( FAILED( hr ) )
         {
             break;
@@ -1874,14 +1874,14 @@ STDMETHODIMP CreateMediatypeForFormat( WM_MEDIA_TYPE** ppmtDestination,
 
 //------------------------------------------------------------------------------
 // Name: CreateMediatypeForFormat() (Overloaded)
-// Desc: Initializes a WM_MEDIA_TYPE for a codec format, without setting 
+// Desc: Initializes a WM_MEDIA_TYPE for a codec format, without setting
 //       VBR attributes.
 //------------------------------------------------------------------------------
 STDMETHODIMP CreateMediatypeForFormat( WM_MEDIA_TYPE** ppmtDestination,
                                        IWMCodecInfo3* pCodecInfo3,
                                        IWMStreamConfig** ppFormatConfig,
-                                       GUID guidCodecType, 
-                                       DWORD dwCodecIndex, 
+                                       GUID guidCodecType,
+                                       DWORD dwCodecIndex,
                                        DWORD dwFormatIndex )
 {
     HRESULT hr = S_OK;
@@ -2050,9 +2050,9 @@ STDMETHODIMP AddSMPTEExtensionToStream( IWMStreamConfig* pStream )
         // Add SMPTE extension
         //
         hr = pStreamConfig2->AddDataUnitExtension( WM_SampleExtensionGUID_Timecode,
-                                                   sizeof( WMT_TIMECODE_EXTENSION_DATA ),
-                                                   NULL,
-                                                   0 );
+                sizeof( WMT_TIMECODE_EXTENSION_DATA ),
+                NULL,
+                0 );
         if ( FAILED( hr ) )
         {
             break;
@@ -2084,21 +2084,21 @@ STDMETHODIMP GetUncompressedWaveFormatCount( DWORD * pdwCount )
 // Name: GetUncompressedWaveFormat()
 // Desc: Retrieves wave format parameters by index.
 //------------------------------------------------------------------------------
-STDMETHODIMP GetUncompressedWaveFormat( DWORD dwIndex,                                 
-                                         DWORD * pdwSamplesPerSecond, 
-                                         WORD * pwNumChannels, 
-                                         WORD * pwBitsPerSample )
+STDMETHODIMP GetUncompressedWaveFormat( DWORD dwIndex,
+                                        DWORD * pdwSamplesPerSecond,
+                                        WORD * pwNumChannels,
+                                        WORD * pwBitsPerSample )
 {
-    if ( NULL == pdwSamplesPerSecond 
-        || NULL == pwNumChannels
-        || NULL == pwBitsPerSample )
+    if ( NULL == pdwSamplesPerSecond
+            || NULL == pwNumChannels
+            || NULL == pwBitsPerSample )
     {
         return E_POINTER;
     }
 
     DWORD dwCount;
     HRESULT hr;
-    
+
     hr = GetUncompressedWaveFormatCount( &dwCount );
     if ( FAILED( hr ) )
     {
@@ -2153,13 +2153,13 @@ STDMETHODIMP GetUncompressedPixelFormatCount( DWORD * pdwCount )
 // Desc: Retrieves pixel format parameters by index.
 //------------------------------------------------------------------------------
 STDMETHODIMP GetUncompressedPixelFormat( DWORD dwIndex,
-                                         GUID * pguidFormat,
-                                         DWORD * pdwFourCC,
-                                         WORD * pwBitsPerPixel )
+        GUID * pguidFormat,
+        DWORD * pdwFourCC,
+        WORD * pwBitsPerPixel )
 {
-    if ( NULL == pguidFormat 
-        || NULL == pdwFourCC
-        || NULL == pwBitsPerPixel )
+    if ( NULL == pguidFormat
+            || NULL == pdwFourCC
+            || NULL == pwBitsPerPixel )
     {
         return E_POINTER;
     }

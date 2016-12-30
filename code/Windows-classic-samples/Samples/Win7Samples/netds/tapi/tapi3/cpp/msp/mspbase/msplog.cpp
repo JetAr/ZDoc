@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1997-1999  Microsoft Corporation
 
@@ -8,7 +8,7 @@ Module Name:
 
 Abstract:
 
-    This module contains the debugging support for the MSPs. 
+    This module contains the debugging support for the MSPs.
 
 --*/
 
@@ -56,7 +56,7 @@ BOOL NTAPI MSPLogRegister(LPCTSTR szName)
 
     sg_dwTracingToDebugger = 0;
     sg_dwTracingToConsole = 0;
-    sg_dwTracingToFile = 0; 
+    sg_dwTracingToFile = 0;
 
 #ifdef UNICODE
     sprintf_s(szTracingKey,sizeof(szTracingKey), "Software\\Microsoft\\Tracing\\%ls", szName);
@@ -109,7 +109,7 @@ BOOL NTAPI MSPLogRegister(LPCTSTR szName)
     {
 
         //
-        // the key could not be opened. in case the key does not exist, 
+        // the key could not be opened. in case the key does not exist,
         // register with rtutils so that the reg keys get created
         //
 
@@ -122,7 +122,7 @@ BOOL NTAPI MSPLogRegister(LPCTSTR szName)
         //
         // tracing should not have been initialized
         //
-        
+
         sg_dwTraceID = TraceRegister(szName);
 
         if (sg_dwTraceID != INVALID_TRACEID)
@@ -137,10 +137,10 @@ BOOL NTAPI MSPLogRegister(LPCTSTR szName)
     //
     // are we asked to do any tracing at all?
     //
-    
+
     if ( (0 != sg_dwTracingToDebugger) ||
-         (0 != sg_dwTracingToConsole ) ||
-         (0 != sg_dwTracingToFile    )    )
+            (0 != sg_dwTracingToConsole ) ||
+            (0 != sg_dwTracingToFile    )    )
     {
 
         //
@@ -196,14 +196,14 @@ BOOL NTAPI MSPLogRegister(LPCTSTR szName)
 
 
             //
-            // registration did not go through and debugger logging is off 
+            // registration did not go through and debugger logging is off
             //
 
             return FALSE;
         }
     }
 
-    
+
     //
     // logging is not enabled. nothing to do
     //
@@ -217,7 +217,7 @@ void NTAPI MSPLogDeRegister()
     {
         sg_dwTracingToDebugger = 0;
         sg_dwTracingToConsole = 0;
-        sg_dwTracingToFile = 0; 
+        sg_dwTracingToFile = 0;
 
 
         //
@@ -251,31 +251,43 @@ Return Value:
 
 --*/
 {
-    static char * message[] = 
+    static char * message[] =
     {
-        "ERROR", 
-        "WARNING", 
-        "INFO", 
-        "TRACE", 
+        "ERROR",
+        "WARNING",
+        "INFO",
+        "TRACE",
         "EVENT",
         "INVALID TRACE LEVEL"
     };
 
     char  szTraceBuf[MAXDEBUGSTRINGLENGTH + 1];
-    
+
     DWORD dwIndex;
 
     if ( ( sg_dwTracingToDebugger > 0 ) &&
-         ( 0 != ( dwDbgLevel & sg_dwDebuggerMask ) ) )
+            ( 0 != ( dwDbgLevel & sg_dwDebuggerMask ) ) )
     {
         switch(dwDbgLevel)
         {
-        case MSP_ERROR: dwIndex = 0; break;
-        case MSP_WARN:  dwIndex = 1; break;
-        case MSP_INFO:  dwIndex = 2; break;
-        case MSP_TRACE: dwIndex = 3; break;
-        case MSP_EVENT: dwIndex = 4; break;
-        default:        dwIndex = 5; break;
+        case MSP_ERROR:
+            dwIndex = 0;
+            break;
+        case MSP_WARN:
+            dwIndex = 1;
+            break;
+        case MSP_INFO:
+            dwIndex = 2;
+            break;
+        case MSP_TRACE:
+            dwIndex = 3;
+            break;
+        case MSP_EVENT:
+            dwIndex = 4;
+            break;
+        default:
+            dwIndex = 5;
+            break;
         }
 
         // retrieve local time
@@ -283,25 +295,25 @@ Return Value:
         GetLocalTime(&SystemTime);
 
         sprintf_s(szTraceBuf,
-		  sizeof(szTraceBuf),
+                  sizeof(szTraceBuf),
                   "%s:[%02u:%02u:%02u.%03u,tid=%x:]%s: ",
                   sg_szTraceName,
                   SystemTime.wHour,
                   SystemTime.wMinute,
                   SystemTime.wSecond,
                   SystemTime.wMilliseconds,
-                  GetCurrentThreadId(), 
+                  GetCurrentThreadId(),
                   message[dwIndex]);
 
         va_list ap;
         va_start(ap, lpszFormat);
 
-        _vsnprintf_s(&szTraceBuf[lstrlenA(szTraceBuf)], 
-            sizeof(&szTraceBuf[lstrlenA(szTraceBuf)]),
-            MAXDEBUGSTRINGLENGTH - lstrlenA(szTraceBuf), 
-            lpszFormat, 
-            ap
-            );
+        _vsnprintf_s(&szTraceBuf[lstrlenA(szTraceBuf)],
+                     sizeof(&szTraceBuf[lstrlenA(szTraceBuf)]),
+                     MAXDEBUGSTRINGLENGTH - lstrlenA(szTraceBuf),
+                     lpszFormat,
+                     ap
+                    );
 
         strcat_s (szTraceBuf,sizeof(szTraceBuf), "\n");
 
@@ -316,12 +328,24 @@ Return Value:
         {
             switch(dwDbgLevel)
             {
-            case MSP_ERROR: dwIndex = 0; break;
-            case MSP_WARN:  dwIndex = 1; break; 
-            case MSP_INFO:  dwIndex = 2; break;
-            case MSP_TRACE: dwIndex = 3; break;
-            case MSP_EVENT: dwIndex = 4; break;
-            default:        dwIndex = 5; break;
+            case MSP_ERROR:
+                dwIndex = 0;
+                break;
+            case MSP_WARN:
+                dwIndex = 1;
+                break;
+            case MSP_INFO:
+                dwIndex = 2;
+                break;
+            case MSP_TRACE:
+                dwIndex = 3;
+                break;
+            case MSP_EVENT:
+                dwIndex = 4;
+                break;
+            default:
+                dwIndex = 5;
+                break;
             }
 
             sprintf_s(szTraceBuf,sizeof(szTraceBuf), "[%s] %s", message[dwIndex], lpszFormat);

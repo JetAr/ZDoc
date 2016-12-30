@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ __checkReturn HRESULT CApplication::CreateInstance(__deref_out_opt IUIApplicatio
     if (!hwnd)
     {
         return E_POINTER;
-    }    
+    }
 
     *ppApplication = NULL;
 
@@ -27,7 +27,7 @@ __checkReturn HRESULT CApplication::CreateInstance(__deref_out_opt IUIApplicatio
     if (pApplication != NULL)
     {
         pApplication->m_hWnd = hwnd;
-        *ppApplication = pApplication;        
+        *ppApplication = pApplication;
     }
 
     else
@@ -88,7 +88,7 @@ STDMETHODIMP CApplication::QueryInterface(REFIID iid, void** ppv)
 //  PURPOSE: Called when the state of a View (Ribbon is a view) changes, for example, created, destroyed, or resized.
 //
 //
-STDMETHODIMP CApplication::OnViewChanged(UINT32 nViewID, __in UI_VIEWTYPE typeID, __in IUnknown* pView, UI_VIEWVERB verb, INT32 uReasonCode)  
+STDMETHODIMP CApplication::OnViewChanged(UINT32 nViewID, __in UI_VIEWTYPE typeID, __in IUnknown* pView, UI_VIEWVERB verb, INT32 uReasonCode)
 {
     UNREFERENCED_PARAMETER(nViewID);
     UNREFERENCED_PARAMETER(typeID);
@@ -112,42 +112,42 @@ STDMETHODIMP CApplication::OnViewChanged(UINT32 nViewID, __in UI_VIEWTYPE typeID
 //    specified in the ribbonmarkup.xml file.
 //
 //
-STDMETHODIMP CApplication::OnCreateUICommand(UINT32 nCmdID, __in UI_COMMANDTYPE typeID, __deref_out IUICommandHandler** ppCommandHandler) 
-{ 
+STDMETHODIMP CApplication::OnCreateUICommand(UINT32 nCmdID, __in UI_COMMANDTYPE typeID, __deref_out IUICommandHandler** ppCommandHandler)
+{
     UNREFERENCED_PARAMETER(typeID);
 
     HRESULT hr = S_OK;
 
     switch(nCmdID)
     {
-        case IDR_CMD_UPDATE:
-        case IDR_CMD_CLEAR:
-            // Create CommandHandler object.
-            if (NULL == m_pButtonHandler)
+    case IDR_CMD_UPDATE:
+    case IDR_CMD_CLEAR:
+        // Create CommandHandler object.
+        if (NULL == m_pButtonHandler)
+        {
+            hr = CButtonHandler::CreateInstance(&m_pButtonHandler);
+            if (FAILED(hr))
             {
-                hr = CButtonHandler::CreateInstance(&m_pButtonHandler);
-                if (FAILED(hr))
-                {
-                    return hr;
-                }
+                return hr;
             }
-            return m_pButtonHandler->QueryInterface(IID_PPV_ARGS(ppCommandHandler));
-        case IDR_CMD_THEMEDDCP:
-        case IDR_CMD_STANDARDDDCP:
-        case IDR_CMD_HIGHLIGHTDDCP:
-            // Create CommandHandler object.
-            if (NULL == m_pColorPickerHandler)
+        }
+        return m_pButtonHandler->QueryInterface(IID_PPV_ARGS(ppCommandHandler));
+    case IDR_CMD_THEMEDDCP:
+    case IDR_CMD_STANDARDDDCP:
+    case IDR_CMD_HIGHLIGHTDDCP:
+        // Create CommandHandler object.
+        if (NULL == m_pColorPickerHandler)
+        {
+            hr = CColorPickerHandler::CreateInstance(&m_pColorPickerHandler);
+            if (FAILED(hr))
             {
-                hr = CColorPickerHandler::CreateInstance(&m_pColorPickerHandler);
-                if (FAILED(hr))
-                {
-                    return hr;
-                }
+                return hr;
             }
-            return m_pColorPickerHandler->QueryInterface(IID_PPV_ARGS(ppCommandHandler));
+        }
+        return m_pColorPickerHandler->QueryInterface(IID_PPV_ARGS(ppCommandHandler));
     }
 
-    return hr;  
+    return hr;
 }
 
 //
@@ -156,11 +156,11 @@ STDMETHODIMP CApplication::OnCreateUICommand(UINT32 nCmdID, __in UI_COMMANDTYPE 
 //  PURPOSE: Called by the Ribbon framework for each command at the time of ribbon destruction.
 //
 //
-STDMETHODIMP CApplication::OnDestroyUICommand(UINT32 commandId, __in UI_COMMANDTYPE typeID, __in_opt IUICommandHandler* pCommandHandler) 
+STDMETHODIMP CApplication::OnDestroyUICommand(UINT32 commandId, __in UI_COMMANDTYPE typeID, __in_opt IUICommandHandler* pCommandHandler)
 {
     UNREFERENCED_PARAMETER(commandId);
     UNREFERENCED_PARAMETER(typeID);
     UNREFERENCED_PARAMETER(pCommandHandler);
 
-    return E_NOTIMPL; 
+    return E_NOTIMPL;
 }

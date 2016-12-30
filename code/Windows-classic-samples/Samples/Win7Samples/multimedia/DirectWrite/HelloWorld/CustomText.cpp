@@ -1,24 +1,24 @@
-
+﻿
 /************************************************************************
  *
  * File: CustomText.cpp
  *
- * Description: 
- * 
- * 
+ * Description:
+ *
+ *
  *  This file is part of the Microsoft Windows SDK Code Samples.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  ************************************************************************/
 
 #include "DWriteHelloWorld.h"
@@ -86,7 +86,7 @@ HRESULT CustomText::Initialize(HWND hwndParent)
     dpiScaleX_ = GetDeviceCaps(screen, LOGPIXELSX) / 96.0f;
     dpiScaleY_ = GetDeviceCaps(screen, LOGPIXELSY) / 96.0f;
     ReleaseDC(0, screen);
-    
+
     HRESULT hr = S_OK;
     ATOM atom;
 
@@ -100,20 +100,20 @@ HRESULT CustomText::Initialize(HWND hwndParent)
     wcex.hbrBackground = NULL;
     wcex.lpszMenuName  = NULL;
     wcex.hIcon         = LoadIcon(
-                            NULL,
-                            IDI_APPLICATION);
+                             NULL,
+                             IDI_APPLICATION);
     wcex.hCursor       = LoadCursor(
-                            NULL,
-                            IDC_ARROW);
+                             NULL,
+                             IDC_ARROW);
     wcex.lpszClassName = TEXT("D2DCustomText");
     wcex.hIconSm       = LoadIcon(
-                            NULL,
-                            IDI_APPLICATION
-                            );
+                             NULL,
+                             IDI_APPLICATION
+                         );
 
     atom = RegisterClassEx(
-        &wcex
-        );
+               &wcex
+           );
 
     hr = atom ? S_OK : E_FAIL;
 
@@ -121,18 +121,18 @@ HRESULT CustomText::Initialize(HWND hwndParent)
     {
         // Create window.
         hwnd_ = CreateWindow(
-            TEXT("D2DCustomText"),
-            TEXT(""),
-            WS_CHILD,
-            0,
-            0,
-            static_cast<int>(640.0f / dpiScaleX_),
-            static_cast<int>(480.0f / dpiScaleY_),
-            hwndParent,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                    TEXT("D2DCustomText"),
+                    TEXT(""),
+                    WS_CHILD,
+                    0,
+                    0,
+                    static_cast<int>(640.0f / dpiScaleX_),
+                    static_cast<int>(480.0f / dpiScaleY_),
+                    hwndParent,
+                    NULL,
+                    HINST_THISCOMPONENT,
+                    this
+                );
     }
 
     if (SUCCEEDED(hr))
@@ -143,7 +143,7 @@ HRESULT CustomText::Initialize(HWND hwndParent)
     if (SUCCEEDED(hr))
     {
         hr = CreateDeviceIndependentResources(
-            );
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -173,30 +173,30 @@ HRESULT CustomText::CreateDeviceIndependentResources()
 
     // Create WIC factory
     hr = CoCreateInstance(
-            CLSID_WICImagingFactory,
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            IID_IWICImagingFactory,
-            reinterpret_cast<void **>(&pWICFactory_)
-            );
+             CLSID_WICImagingFactory,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_IWICImagingFactory,
+             reinterpret_cast<void **>(&pWICFactory_)
+         );
 
     // Create Direct2D factory.
     if (SUCCEEDED(hr))
     {
         hr = D2D1CreateFactory(
-            D2D1_FACTORY_TYPE_SINGLE_THREADED,
-            &pD2DFactory_
-            );
+                 D2D1_FACTORY_TYPE_SINGLE_THREADED,
+                 &pD2DFactory_
+             );
     }
 
     // Create a shared DirectWrite factory.
     if (SUCCEEDED(hr))
     {
         hr = DWriteCreateFactory(
-            DWRITE_FACTORY_TYPE_SHARED,
-            __uuidof(IDWriteFactory),
-            reinterpret_cast<IUnknown**>(&pDWriteFactory_)
-            );
+                 DWRITE_FACTORY_TYPE_SHARED,
+                 __uuidof(IDWriteFactory),
+                 reinterpret_cast<IUnknown**>(&pDWriteFactory_)
+             );
     }
 
     // The string to display.
@@ -209,15 +209,15 @@ HRESULT CustomText::CreateDeviceIndependentResources()
     if (SUCCEEDED(hr))
     {
         hr = pDWriteFactory_->CreateTextFormat(
-            L"Gabriola",
-            NULL,
-            DWRITE_FONT_WEIGHT_REGULAR,
-            DWRITE_FONT_STYLE_NORMAL,
-            DWRITE_FONT_STRETCH_NORMAL,
-            72.0f,
-            L"en-us",
-            &pTextFormat_
-            );
+                 L"Gabriola",
+                 NULL,
+                 DWRITE_FONT_WEIGHT_REGULAR,
+                 DWRITE_FONT_STYLE_NORMAL,
+                 DWRITE_FONT_STRETCH_NORMAL,
+                 72.0f,
+                 L"en-us",
+                 &pTextFormat_
+             );
     }
 
 
@@ -237,37 +237,40 @@ HRESULT CustomText::CreateDeviceIndependentResources()
     if (SUCCEEDED(hr))
     {
         hr = pDWriteFactory_->CreateTextLayout(
-            wszText_,
-            cTextLength_,
-            pTextFormat_,
-            640.0f,
-            480.0f,
-            &pTextLayout_
-            );
+                 wszText_,
+                 cTextLength_,
+                 pTextFormat_,
+                 640.0f,
+                 480.0f,
+                 &pTextLayout_
+             );
     }
 
     // Format the "DirectWrite" substring to be of font size 100.
     if (SUCCEEDED(hr))
     {
         DWRITE_TEXT_RANGE textRange = {20,        // Start index where "DirectWrite" appears.
-            6 };      // Length of the substring "Direct" in "DirectWrite".
+                                       6
+                                      };      // Length of the substring "Direct" in "DirectWrite".
         hr = pTextLayout_->SetFontSize(100.0f, textRange);
     }
 
     // Format the word "DWrite" to be underlined.
     if (SUCCEEDED(hr))
     {
-        
+
         DWRITE_TEXT_RANGE textRange = {20,      // Start index where "DirectWrite" appears.
-            11 };    // Length of the substring "DirectWrite".
+                                       11
+                                      };    // Length of the substring "DirectWrite".
         hr = pTextLayout_->SetUnderline(TRUE, textRange);
     }
- 
+
     if (SUCCEEDED(hr))
     {
         // Format the word "DWrite" to be bold.
         DWRITE_TEXT_RANGE textRange = {20,
-            11 };
+                                       11
+                                      };
         hr = pTextLayout_->SetFontWeight(DWRITE_FONT_WEIGHT_BOLD, textRange);
     }
 
@@ -282,7 +285,8 @@ HRESULT CustomText::CreateDeviceIndependentResources()
 
     // Set the stylistic set.
     DWRITE_FONT_FEATURE fontFeature = {DWRITE_FONT_FEATURE_TAG_STYLISTIC_SET_7,
-                                       1};
+                                       1
+                                      };
     if (SUCCEEDED(hr))
     {
         hr = pTypography->AddFontFeature(fontFeature);
@@ -292,7 +296,8 @@ HRESULT CustomText::CreateDeviceIndependentResources()
     {
         // Set the typography for the entire string.
         DWRITE_TEXT_RANGE textRange = {0,
-                                       cTextLength_};
+                                       cTextLength_
+                                      };
         hr = pTextLayout_->SetTypography(pTypography, textRange);
     }
 
@@ -320,47 +325,47 @@ HRESULT CustomText::CreateDeviceResources()
     GetClientRect(
         hwnd_,
         &rc
-        );
+    );
 
     D2D1_SIZE_U size = D2D1::SizeU(
-        rc.right - rc.left,
-        rc.bottom - rc.top
-    );
+                           rc.right - rc.left,
+                           rc.bottom - rc.top
+                       );
 
     if (!pRT_)
     {
         // Create a Direct2D render target.
         hr = pD2DFactory_->CreateHwndRenderTarget(
-            D2D1::RenderTargetProperties(),
-            D2D1::HwndRenderTargetProperties(
-                hwnd_,
-                size
-                ),
-            &pRT_
-            );
+                 D2D1::RenderTargetProperties(),
+                 D2D1::HwndRenderTargetProperties(
+                     hwnd_,
+                     size
+                 ),
+                 &pRT_
+             );
 
         // Create a black brush.
         if (SUCCEEDED(hr))
         {
             hr = pRT_->CreateSolidColorBrush(
-                D2D1::ColorF(
-                D2D1::ColorF::Black
-                ),
-                &pBlackBrush_);
+                     D2D1::ColorF(
+                         D2D1::ColorF::Black
+                     ),
+                     &pBlackBrush_);
         }
 
         ID2D1Bitmap* pBitmap = NULL;
-        
+
         // Create the bitmap to be used by the bitmap brush
         if (SUCCEEDED(hr))
         {
             hr = LoadResourceBitmap(
-                pRT_,
-                pWICFactory_,
-                L"Tulip",
-                L"Image",
-                &pBitmap
-                );
+                     pRT_,
+                     pWICFactory_,
+                     L"Tulip",
+                     L"Image",
+                     &pBitmap
+                 );
         }
 
         // Create the bitmap brush
@@ -368,9 +373,9 @@ HRESULT CustomText::CreateDeviceResources()
         if (SUCCEEDED(hr))
         {
             hr = pRT_->CreateBitmapBrush(
-                pBitmap,
-                properties,
-                &pBitmapBrush_);
+                     pBitmap,
+                     properties,
+                     &pBitmapBrush_);
         }
 
         if (SUCCEEDED(hr))
@@ -381,7 +386,7 @@ HRESULT CustomText::CreateDeviceResources()
                 pRT_,
                 pBlackBrush_,
                 pBitmapBrush_
-                );
+            );
         }
 
         SafeRelease(&pBitmap);
@@ -428,19 +433,19 @@ HRESULT CustomText::DrawText()
         &rc);
 
     D2D1_POINT_2F origin = D2D1::Point2F(
-        static_cast<FLOAT>(rc.top / dpiScaleY_),
-        static_cast<FLOAT>(rc.left / dpiScaleX_)
-        );
+                               static_cast<FLOAT>(rc.top / dpiScaleY_),
+                               static_cast<FLOAT>(rc.left / dpiScaleX_)
+                           );
 
 
 
     // Draw the text layout using DirectWrite and the CustomTextRenderer class.
     hr = pTextLayout_->Draw(
-            NULL,
-            pTextRenderer_,  // Custom text renderer.
-            origin.x,
-            origin.y
-            );
+             NULL,
+             pTextRenderer_,  // Custom text renderer.
+             origin.x,
+             origin.y
+         );
 
 
     return hr;
@@ -534,7 +539,7 @@ HRESULT CustomText::LoadResourceBitmap(
     PCWSTR resourceName,
     PCWSTR resourceType,
     __deref_out ID2D1Bitmap **ppBitmap
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -550,18 +555,18 @@ HRESULT CustomText::LoadResourceBitmap(
 
     // Locate the resource handle in our dll
     imageResHandle = FindResourceW(
-        HINST_THISCOMPONENT,
-        resourceName,
-        resourceType
-        );
+                         HINST_THISCOMPONENT,
+                         resourceName,
+                         resourceType
+                     );
 
     hr = imageResHandle ? S_OK : E_FAIL;
 
     // Load the resource
     imageResDataHandle = LoadResource(
-        HINST_THISCOMPONENT,
-        imageResHandle
-        );
+                             HINST_THISCOMPONENT,
+                             imageResHandle
+                         );
 
     if (SUCCEEDED(hr))
     {
@@ -570,8 +575,8 @@ HRESULT CustomText::LoadResourceBitmap(
 
     // Lock it to get a system memory pointer
     pImageFile = LockResource(
-        imageResDataHandle
-        );
+                     imageResDataHandle
+                 );
 
     if (SUCCEEDED(hr))
     {
@@ -580,48 +585,48 @@ HRESULT CustomText::LoadResourceBitmap(
 
     // Calculate the size
     imageFileSize = SizeofResource(
-        HINST_THISCOMPONENT,
-        imageResHandle
-        );
+                        HINST_THISCOMPONENT,
+                        imageResHandle
+                    );
 
     if (SUCCEEDED(hr))
     {
         hr = imageFileSize ? S_OK : E_FAIL;
     }
-   
+
     // Create a WIC stream to map onto the memory
     if (SUCCEEDED(hr))
     {
         hr = pIWICFactory->CreateStream(&pStream);
     }
 
-   // Initialize the stream with the memory pointer and size
+    // Initialize the stream with the memory pointer and size
     if (SUCCEEDED(hr))
     {
         hr = pStream->InitializeFromMemory(
-            reinterpret_cast<BYTE*>(pImageFile),
-            imageFileSize
-            );
+                 reinterpret_cast<BYTE*>(pImageFile),
+                 imageFileSize
+             );
     }
 
     // Create a decoder for the stream
     if (SUCCEEDED(hr))
     {
         hr = pIWICFactory->CreateDecoderFromStream(
-            pStream,
-            NULL,
-            WICDecodeMetadataCacheOnLoad,
-            &pDecoder
-            );
+                 pStream,
+                 NULL,
+                 WICDecodeMetadataCacheOnLoad,
+                 &pDecoder
+             );
     }
 
     // Create the initial frame
     if (SUCCEEDED(hr))
     {
         hr = pDecoder->GetFrame(
-            0,
-            &pSource
-            );
+                 0,
+                 &pSource
+             );
     }
 
     // Format convert to 32bppPBGRA -- which Direct2D expects
@@ -633,23 +638,23 @@ HRESULT CustomText::LoadResourceBitmap(
     if (SUCCEEDED(hr))
     {
         hr = pConverter->Initialize(
-            pSource,
-            GUID_WICPixelFormat32bppPBGRA,
-            WICBitmapDitherTypeNone,
-            NULL,
-            0.f,
-            WICBitmapPaletteTypeMedianCut
-            );
+                 pSource,
+                 GUID_WICPixelFormat32bppPBGRA,
+                 WICBitmapDitherTypeNone,
+                 NULL,
+                 0.f,
+                 WICBitmapPaletteTypeMedianCut
+             );
     }
 
     // Create a Direct2D bitmap from the WIC bitmap.
     if (SUCCEEDED(hr))
     {
         hr = pRT->CreateBitmapFromWicBitmap(
-            pConverter,
-            NULL,
-            ppBitmap
-            );
+                 pConverter,
+                 NULL,
+                 ppBitmap
+             );
     }
 
     SafeRelease(&pDecoder);
@@ -684,46 +689,46 @@ LRESULT CALLBACK CustomText::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPA
     }
 
     CustomText *pCustomText = reinterpret_cast<CustomText *>(
-                ::GetWindowLongPtr(hwnd, GWLP_USERDATA));
+                                  ::GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
     if (pCustomText)
     {
         switch(message)
         {
         case WM_SIZE:
-            {
-                UINT width = LOWORD(lParam);
-                UINT height = HIWORD(lParam);
-                pCustomText->OnResize(width, height);
-            }
-            return 0;
+        {
+            UINT width = LOWORD(lParam);
+            UINT height = HIWORD(lParam);
+            pCustomText->OnResize(width, height);
+        }
+        return 0;
 
         case WM_PAINT:
         case WM_DISPLAYCHANGE:
-            {
-                PAINTSTRUCT ps;
-                BeginPaint(hwnd, &ps);
-                pCustomText->DrawD2DContent(
-                    );
-                EndPaint(
-                    hwnd,
-                    &ps
-                    );
-            }
-            return 0;
+        {
+            PAINTSTRUCT ps;
+            BeginPaint(hwnd, &ps);
+            pCustomText->DrawD2DContent(
+            );
+            EndPaint(
+                hwnd,
+                &ps
+            );
+        }
+        return 0;
 
         case WM_DESTROY:
-            {
-                PostQuitMessage(0);
-            }
-            return 1;
+        {
+            PostQuitMessage(0);
+        }
+        return 1;
         }
     }
     return DefWindowProc(
-        hwnd,
-        message,
-        wParam,
-        lParam
-        );
+               hwnd,
+               message,
+               wParam,
+               lParam
+           );
 }
 

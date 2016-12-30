@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -25,10 +25,10 @@
 
 STDMETHODIMP
 CCertManageExitModuleSample::GetProperty(
-    /* [in] */ const BSTR /* strConfig */ ,
-    /* [in] */ BSTR /* strStorageLocation */ ,
+    /* [in] */ const BSTR /* strConfig */,
+    /* [in] */ BSTR /* strStorageLocation */,
     /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG /* Flags */ ,
+    /* [in] */ LONG /* Flags */,
     /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty)
 {
     LPWSTR szStr = NULL;
@@ -52,7 +52,7 @@ CCertManageExitModuleSample::GetProperty(
     else if (0 == _wcsicmp(strPropertyName, wszCMM_PROP_PRODUCTVER))
         szStr = wsz_SAMPLE_PRODUCTVER;
     else
-        return S_FALSE;  
+        return S_FALSE;
 
     pvarProperty->bstrVal = SysAllocString(szStr);
     if (NULL == pvarProperty->bstrVal)
@@ -62,23 +62,23 @@ CCertManageExitModuleSample::GetProperty(
 
     return S_OK;
 }
-        
-STDMETHODIMP 
+
+STDMETHODIMP
 CCertManageExitModuleSample::SetProperty(
-    /* [in] */ const BSTR /* strConfig */ ,
-    /* [in] */ BSTR /* strStorageLocation */ ,
-    /* [in] */ BSTR /* strPropertyName */ ,
-    /* [in] */ LONG /* Flags */ ,
+    /* [in] */ const BSTR /* strConfig */,
+    /* [in] */ BSTR /* strStorageLocation */,
+    /* [in] */ BSTR /* strPropertyName */,
+    /* [in] */ LONG /* Flags */,
     /* [in] */ VARIANT const __RPC_FAR * /* pvarProperty */ )
 {
-     // no settable properties supported
-     return S_FALSE;
+    // no settable properties supported
+    return S_FALSE;
 }
-        
+
 STDMETHODIMP
-CCertManageExitModuleSample::Configure( 
-    /* [in] */ const BSTR /* strConfig */ ,
-    /* [in] */ BSTR /* strStorageLocation */ ,
+CCertManageExitModuleSample::Configure(
+    /* [in] */ const BSTR /* strConfig */,
+    /* [in] */ BSTR /* strStorageLocation */,
     /* [in] */ LONG /* Flags */ )
 {
     MessageBox(NULL, L"No Configurable Options", NULL, MB_OK|MB_ICONINFORMATION);

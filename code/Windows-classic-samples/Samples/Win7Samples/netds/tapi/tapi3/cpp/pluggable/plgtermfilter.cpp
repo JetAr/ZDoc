@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2000 Microsoft Corporation
 
@@ -17,7 +17,7 @@ Abstract:
 
 #include "PlgTermPin.h" //includes PlgTermFilter.h
 
-#include "GUIDs.h"       
+#include "GUIDs.h"
 
 
 /*++
@@ -25,9 +25,9 @@ Constructor CPlgFilter
 --*/
 CPlgFilter::CPlgFilter(  )
     : CBaseFilter(_T("PlgFilter"), NULL, (CCritSec *) this, CLSID_PlgSampleFilter),
-    m_pInputPin(NULL),
-    m_lpWaveFormatEx(NULL),
-    m_pPlgEventSink(NULL)
+      m_pInputPin(NULL),
+      m_lpWaveFormatEx(NULL),
+      m_pPlgEventSink(NULL)
 {
     LOG((MSP_TRACE, "CPlgFilter::CPlgFilter - enter"));
 }
@@ -90,7 +90,7 @@ CBasePin* CPlgFilter::GetPin(int nPinIndex)
     HRESULT hr = (0 == nPinIndex)?S_OK:E_FAIL;
 
     LOG((MSP_TRACE, "CPlgFilter::GetPin - exit 0x%08x", hr));
-	
+
     return (hr == S_OK)? m_pInputPin : NULL;
 
 }
@@ -134,7 +134,7 @@ HRESULT CPlgFilter::CreatePin( )
     }
 
     //
-    //create pin 
+    //create pin
     //
     m_pInputPin = new CPlgPin( this, &hr, OLE2W(lpolestrPinName));
 
@@ -142,7 +142,7 @@ HRESULT CPlgFilter::CreatePin( )
     //clean up
     //
     ::CoTaskMemFree(lpolestrPinName);
-    
+
     //
     // Cannot allocate?
     //
@@ -175,7 +175,7 @@ Description;
 --*/
 HRESULT CPlgFilter::Run(
     IN  REFERENCE_TIME      tStart
-    )
+)
 {
     LOG((MSP_TRACE, "CPlgFilter::Run - enter"));
 
@@ -215,7 +215,7 @@ HRESULT CPlgFilter::Pause(void)
     {
     }
 
-    //    
+    //
     // tell the pin to go active or inactive and change state
     //
     HRESULT hr = CBaseFilter::Pause();
@@ -245,7 +245,7 @@ HRESULT CPlgFilter::Stop(void)
         // Pause the device if we were running
         if (m_State == State_Running)
         {
-            hr = Pause(); 
+            hr = Pause();
             if (FAILED(hr))
             {
                 LOG((MSP_TRACE, "CPlgFilter::Stop - exit 0x%08x\n", hr));
@@ -281,6 +281,6 @@ HRESULT CPlgFilter::Initialize()
 
 HRESULT CPlgFilter::InitializePrivate(ITPlgPrivEventSink* pSink )
 {
-	m_pPlgEventSink = pSink;
-	return S_OK;
+    m_pPlgEventSink = pSink;
+    return S_OK;
 }

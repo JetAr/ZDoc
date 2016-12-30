@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -74,7 +74,7 @@ CInkInputWnd::CInkInputWnd()
 /////////////////////////////////////////////////////////
 void CInkInputWnd::SetGuide(
     const _InkRecoGuide& irg
-    )
+)
 {
     // Initialize the data members with values from the recognition guide structure
     m_ptGridLT.x = irg.rectWritingBox.left;
@@ -111,7 +111,7 @@ void CInkInputWnd::SetGuide(
 void CInkInputWnd::SetRowsCols(
     int iRows,
     int iColumns
-    )
+)
 {
     m_cRows = iRows;
     m_cColumns = iColumns;
@@ -142,11 +142,11 @@ void CInkInputWnd::SetRowsCols(
 //
 /////////////////////////////////////////////////////////
 LRESULT CInkInputWnd::OnPaint(
-        UINT /*uMsg*/,
-        WPARAM /*wParam*/,
-        LPARAM /*lParam*/,
-        BOOL& /*bHandled*/
-        )
+    UINT /*uMsg*/,
+    WPARAM /*wParam*/,
+    LPARAM /*lParam*/,
+    BOOL& /*bHandled*/
+)
 {
     RECT rcClip;
     if (FALSE == GetUpdateRect(&rcClip))
@@ -166,7 +166,8 @@ LRESULT CInkInputWnd::OnPaint(
     // Calculate the grid rectangle. Assume that if there are any guides,
     // they are either boxes or horizontal lines.
     RECT rcGrid = {m_ptGridLT.x, m_ptGridLT.y, 0,
-                   m_ptGridLT.y + m_szWritingBox.cy * m_cRows};
+                   m_ptGridLT.y + m_szWritingBox.cy * m_cRows
+                  };
     if (0 == m_cColumns && 0 != m_cRows)
     {
         rcGrid.right = rcClip.right;
@@ -179,7 +180,7 @@ LRESULT CInkInputWnd::OnPaint(
     // Draw the guide grid, if it's visible and not empty.
     RECT rcVisible;
     if (FALSE == ::IsRectEmpty(&rcGrid)
-         && TRUE == ::IntersectRect(&rcVisible, &rcGrid, &rcClip))
+            && TRUE == ::IntersectRect(&rcVisible, &rcGrid, &rcClip))
     {
 
         // Create a thin lightgray pen to draw the guides.
@@ -188,11 +189,11 @@ LRESULT CInkInputWnd::OnPaint(
 
         if (0 == m_cColumns)
         {
-             // Draw horizontal lines at the bottom side of the guide's DrawnBox
+            // Draw horizontal lines at the bottom side of the guide's DrawnBox
             int iY = rcClip.top - ((rcClip.top - m_ptGridLT.y) % m_szWritingBox.cy) + m_rcDrawnBox.bottom;
             for (int iRow = (rcClip.top - m_ptGridLT.y) / m_szWritingBox.cy;
-                 (iRow < m_cRows) && (iY < rcClip.bottom);
-                 iRow++, iY += m_szWritingBox.cy)
+                    (iRow < m_cRows) && (iY < rcClip.bottom);
+                    iRow++, iY += m_szWritingBox.cy)
             {
                 ::MoveToEx(hdc, rcClip.left, iY, NULL);
                 ::LineTo(hdc, rcClip.right, iY);
@@ -203,15 +204,15 @@ LRESULT CInkInputWnd::OnPaint(
             // Draw boxes
             int iY = rcClip.top - ((rcClip.top - m_ptGridLT.y) % m_szWritingBox.cy);
             for (int iRow = (rcClip.top - m_ptGridLT.y) / m_szWritingBox.cy;
-                 (iRow < m_cRows) && (iY < rcClip.bottom);
-                 iRow++, iY += m_szWritingBox.cy)
+                    (iRow < m_cRows) && (iY < rcClip.bottom);
+                    iRow++, iY += m_szWritingBox.cy)
             {
                 int iX = rcClip.left - ((rcClip.left - m_ptGridLT.x) % m_szWritingBox.cx);
                 RECT rcBox = m_rcDrawnBox;
                 ::OffsetRect(&rcBox, iX, iY);
                 for (int iCol = (rcClip.left - m_ptGridLT.x) / m_szWritingBox.cx;
-                     (iCol < m_cColumns) && (rcBox.left < rcClip.right);
-                     iCol++)
+                        (iCol < m_cColumns) && (rcBox.left < rcClip.right);
+                        iCol++)
                 {
                     ::Rectangle(hdc, rcBox.left, rcBox.top, rcBox.right, rcBox.bottom);
                     ::OffsetRect(&rcBox, m_szWritingBox.cx, 0);
@@ -244,7 +245,7 @@ LRESULT CInkInputWnd::OnPaint(
 //
 /////////////////////////////////////////////////////////
 CRecoOutputWnd::CRecoOutputWnd()
-        : m_hRichEdit(NULL), m_iSelStart(0)
+    : m_hRichEdit(NULL), m_iSelStart(0)
 {
 }
 
@@ -273,9 +274,9 @@ CRecoOutputWnd::~CRecoOutputWnd()
 //
 /////////////////////////////////////////////////////////
 HWND CRecoOutputWnd::Create(
-        HWND hwndParent,
-        UINT nID
-        )
+    HWND hwndParent,
+    UINT nID
+)
 {
     if (NULL == m_hWnd)
     {
@@ -292,7 +293,7 @@ HWND CRecoOutputWnd::Create(
                                              (HMENU)nID,
                                              _Module.GetModuleInstance(),
                                              NULL
-                                             );
+                                            );
             // Subclass it and attach to this CRecoOutputWnd object
             if (NULL != hwndREdit)
             {
@@ -339,9 +340,9 @@ void CRecoOutputWnd::ResetResults()
 //
 /////////////////////////////////////////////////////////
 void CRecoOutputWnd::AddString(
-        COLORREF clr,
-        BSTR bstr
-        )
+    COLORREF clr,
+    BSTR bstr
+)
 {
     // Set the string start position to the end of the text
     m_iSelStart = ::SendMessage(m_hWnd, WM_GETTEXTLENGTH, 0, 0);
@@ -383,8 +384,8 @@ void CRecoOutputWnd::AddString(
 //
 /////////////////////////////////////////////////////////
 void CRecoOutputWnd::UpdateString(
-        BSTR bstr
-        )
+    BSTR bstr
+)
 {
     // To update the string, select it in the RichEdit control ...
     ::SendMessageW(m_hWnd, EM_SETSEL, m_iSelStart, -1);

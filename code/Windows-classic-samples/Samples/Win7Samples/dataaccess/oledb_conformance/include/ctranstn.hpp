@@ -1,9 +1,9 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
-// @doc 
+// @doc
 //
 // @module CTransaction Header Module | This module contains header information for CTransaction.
 //
@@ -12,11 +12,11 @@
 //
 // <nl><nl>
 // Revision History:<nl>
-//	
+//
 //	[00] MM-DD-YY	EMAIL_NAME	ACTION PERFORMED... <nl>
 //	[01] 10-05-95	Microsoft	Created <nl>
 //	[02] 12-01-96	Microsoft	Updated for release <nl>
-//	
+//
 // @head3 CTransaction Elements|
 //
 // @subindex CTransaction|
@@ -45,136 +45,136 @@
 //--------------------------------------------------------------------
 class CTransaction : public CTestCases
 {
-	private:
+private:
 
-	BOOL	m_fInTestCase;
+    BOOL	m_fInTestCase;
 
-	// @access Protected
-	protected:
-	
-	// @cmember IDBCreateSession pointer. <nl>
-	IDBCreateSession *	m_pIDBCreateSession; 
+    // @access Protected
+protected:
 
-	// @cmember ITransactionDispenser pointer. <nl>
-	ITransactionLocal * m_pITransactionLocal;
+    // @cmember IDBCreateSession pointer. <nl>
+    IDBCreateSession *	m_pIDBCreateSession;
 
-	// @cmember IDBCreateCommand pointer. <nl>
-	IDBCreateCommand *	m_pIDBCreateCommand;
+    // @cmember ITransactionDispenser pointer. <nl>
+    ITransactionLocal * m_pITransactionLocal;
 
-	// @cmember IOpenRowset pointer. <nl>
-	IOpenRowset*	m_pIOpenRowset;
+    // @cmember IDBCreateCommand pointer. <nl>
+    IDBCreateCommand *	m_pIDBCreateCommand;
 
-	// @cmember ICommand pointer. <nl>
-	ICommand *			m_pICommand;
+    // @cmember IOpenRowset pointer. <nl>
+    IOpenRowset*	m_pIOpenRowset;
 
-	// @cmember ICommand pointer. <nl>
-	ICommandPrepare *	m_pICommandPrepare;
+    // @cmember ICommand pointer. <nl>
+    ICommand *			m_pICommand;
 
-	// @cmember IRowsetInfo pointer. <nl>
-	IRowsetInfo *		m_pIRowsetInfo;
+    // @cmember ICommand pointer. <nl>
+    ICommandPrepare *	m_pICommandPrepare;
 
-	// @cmember IRowset pointer. <nl>
-	IRowset	*			m_pIRowset;
+    // @cmember IRowsetInfo pointer. <nl>
+    IRowsetInfo *		m_pIRowsetInfo;
 
-	// @cmember IAccessor pointer. <nl>
-	IAccessor *			m_pIAccessor;
+    // @cmember IRowset pointer. <nl>
+    IRowset	*			m_pIRowset;
 
-	// @cmember IColumnsInfo. <nl>
-	IColumnsInfo *		m_pIColumnsInfo;
+    // @cmember IAccessor pointer. <nl>
+    IAccessor *			m_pIAccessor;
 
-	// @cmember Table pointer. <nl>
-	CTable *			m_pCTable;
+    // @cmember IColumnsInfo. <nl>
+    IColumnsInfo *		m_pIColumnsInfo;
 
-	// @cmember Type of Object. <nl>
-	EINTERFACE			m_eInterface;
+    // @cmember Table pointer. <nl>
+    CTable *			m_pCTable;
 
-	// @cmember Interface ID. <nl>
-	IID					m_iid;
+    // @cmember Type of Object. <nl>
+    EINTERFACE			m_eInterface;
 
-	// @cmember HResult. <nl>
-	HRESULT				m_hr;
+    // @cmember Interface ID. <nl>
+    IID					m_iid;
 
-	// @cmember fAbortPreserve. <nl>
-	BOOL				m_fAbortPreserve;
+    // @cmember HResult. <nl>
+    HRESULT				m_hr;
 
-	// @cmember fCommitPreserve. <nl>
-	BOOL				m_fCommitPreserve;
+    // @cmember fAbortPreserve. <nl>
+    BOOL				m_fAbortPreserve;
 
-	// @cmember m_fPrepareAbortPreserve. <nl>
-	BOOL				m_fPrepareAbortPreserve;
+    // @cmember fCommitPreserve. <nl>
+    BOOL				m_fCommitPreserve;
 
-	// @cmember m_fPrepareCommitPreserve. <nl>
-	BOOL				m_fPrepareCommitPreserve;
+    // @cmember m_fPrepareAbortPreserve. <nl>
+    BOOL				m_fPrepareAbortPreserve;
 
-	// @cmember m_cRowsetCols. <nl>
-	DBORDINAL			m_cRowsetCols;
+    // @cmember m_fPrepareCommitPreserve. <nl>
+    BOOL				m_fPrepareCommitPreserve;
 
-	// @cmember m_rgTableColOrds. <nl>
-	DB_LORDINAL	*		m_rgTableColOrds;
+    // @cmember m_cRowsetCols. <nl>
+    DBORDINAL			m_cRowsetCols;
 
-	// @cmember m_pwszTestCaseName. <nl>
-	WCHAR	*			m_pwszTestCaseName;
-	
-	// @access Public
-	public:
+    // @cmember m_rgTableColOrds. <nl>
+    DB_LORDINAL	*		m_rgTableColOrds;
 
-	// @cmember Constructor. <nl>
-	CTransaction(WCHAR * 
-		pwszTestCaseName // [IN] TestCase name
-	);
+    // @cmember m_pwszTestCaseName. <nl>
+    WCHAR	*			m_pwszTestCaseName;
 
-	// @cmember Destructor. <nl>
-	virtual ~CTransaction();
+    // @access Public
+public:
 
-	// @cmember Initialization Routine. <nl>
-	virtual BOOL Init(CTestCases * pTestCase = NULL, CTable * pCTable = NULL);
+    // @cmember Constructor. <nl>
+    CTransaction(WCHAR *
+                 pwszTestCaseName // [IN] TestCase name
+                );
 
-	// @cmember Termination Routine. <nl>
-	virtual BOOL Terminate();
+    // @cmember Destructor. <nl>
+    virtual ~CTransaction();
 
-	// @cmember Register the interface to test. <nl>
-	BOOL RegisterInterface(
-		EINTERFACE eInterface,			//[in] the ole db object to be tested
-		IID iid,						//[in] the interface to be tested
-		ULONG cProperties=0,			//[in] the count DBProperties to be set. Default=0.
-		DBPROPSET *pDBProperty=NULL		//[in] the array of DBProperties to be set. Defualt=NULL.
-	);
+    // @cmember Initialization Routine. <nl>
+    virtual BOOL Init(CTestCases * pTestCase = NULL, CTable * pCTable = NULL);
 
-	// @cmember Get A new Transaction from ITransactionLocal from DB Session object, <nl>
-	// creata a DB Session object and a command object.  Set the properties requested on <nl>
-	// the command object.  Execute the SQL Statement and retrieve the rowset.  The routine <nl>
-	// also returns a pointer to the requested interface. <nl>
-	BOOL StartTransaction(
-		EQUERY				eSQLStmt,						//[in] the sql statement of the transaction
-		IUnknown			**ppIUnknown=NULL,				//[out] the pointer to the interface being tested (default = NULL)
-		ULONG				cProperties=0,					//[in] the count DBProperties to be set (default = 0)
-		DBPROPSET			*pDBProperty=NULL,				//[in] the array of DBProperties to be set	(default = NULL)
-		WCHAR				*pwszTableName=NULL,			//[in] the second table name (default = NULL)
-		ISOLEVEL			isoLevel=ISOLATIONLEVEL_READUNCOMMITTED, //[in] the isolation level of the transation(default = ReadUncommitted)
-		BOOL				fPrepare=FALSE					//[in] Prepare the Command (default = FALSE)
-	);
+    // @cmember Termination Routine. <nl>
+    virtual BOOL Terminate();
 
-	// @cmember CleanUp the transaction. <nl>
-	void CleanUpTransaction(HRESULT	hr);	//[in]  hr is the hresult expected from pITransactionLocal->Abort.
-											//		If there is no outstanding transactions(fRtaining==FALSE), 
-											//      hr should be XACT_E_NOTRANSACTION.  Otherwise, 
-											//		S_OK should be returned.
+    // @cmember Register the interface to test. <nl>
+    BOOL RegisterInterface(
+        EINTERFACE eInterface,			//[in] the ole db object to be tested
+        IID iid,						//[in] the interface to be tested
+        ULONG cProperties=0,			//[in] the count DBProperties to be set. Default=0.
+        DBPROPSET *pDBProperty=NULL		//[in] the array of DBProperties to be set. Defualt=NULL.
+    );
 
-	// @cmember Abort transaction. <nl>
-	BOOL GetAbort(BOOL	fRetaining);
+    // @cmember Get A new Transaction from ITransactionLocal from DB Session object, <nl>
+    // creata a DB Session object and a command object.  Set the properties requested on <nl>
+    // the command object.  Execute the SQL Statement and retrieve the rowset.  The routine <nl>
+    // also returns a pointer to the requested interface. <nl>
+    BOOL StartTransaction(
+        EQUERY				eSQLStmt,						//[in] the sql statement of the transaction
+        IUnknown			**ppIUnknown=NULL,				//[out] the pointer to the interface being tested (default = NULL)
+        ULONG				cProperties=0,					//[in] the count DBProperties to be set (default = 0)
+        DBPROPSET			*pDBProperty=NULL,				//[in] the array of DBProperties to be set	(default = NULL)
+        WCHAR				*pwszTableName=NULL,			//[in] the second table name (default = NULL)
+        ISOLEVEL			isoLevel=ISOLATIONLEVEL_READUNCOMMITTED, //[in] the isolation level of the transation(default = ReadUncommitted)
+        BOOL				fPrepare=FALSE					//[in] Prepare the Command (default = FALSE)
+    );
 
-	// @cmember Commit transation. <nl>
-	BOOL GetCommit(BOOL	fRetaining);
+    // @cmember CleanUp the transaction. <nl>
+    void CleanUpTransaction(HRESULT	hr);	//[in]  hr is the hresult expected from pITransactionLocal->Abort.
+    //		If there is no outstanding transactions(fRtaining==FALSE),
+    //      hr should be XACT_E_NOTRANSACTION.  Otherwise,
+    //		S_OK should be returned.
 
-BOOL	CTransaction::CompareHandlesByLiteral
-(
-			HROW	hThisRow,
-			HROW	hThatRow,
-			BOOL	fNewlyInserted,
-			BOOL	fExpected,
-			BOOL	fLITERALIDENITIY,
-			BOOL	fSTRONGIDENTITY
-);
+    // @cmember Abort transaction. <nl>
+    BOOL GetAbort(BOOL	fRetaining);
+
+    // @cmember Commit transation. <nl>
+    BOOL GetCommit(BOOL	fRetaining);
+
+    BOOL	CTransaction::CompareHandlesByLiteral
+    (
+        HROW	hThisRow,
+        HROW	hThatRow,
+        BOOL	fNewlyInserted,
+        BOOL	fExpected,
+        BOOL	fLITERALIDENITIY,
+        BOOL	fSTRONGIDENTITY
+    );
 
 };
 #endif //_CTransaction_HPP_

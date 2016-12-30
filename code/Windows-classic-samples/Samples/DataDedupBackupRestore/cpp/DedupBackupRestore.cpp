@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -40,15 +40,15 @@ const PCWSTR DEDUP_FOLDER = L"\\Dedup";
 const PCWSTR BACKUP_METADATA_FILE_NAME = L"dedupBackupMetadata.{741309a8-a42a-4830-b530-fad823933e6d}";
 const PCWSTR BACKUP_METADATA_FORMAT = L"%s\r\n%s\r\n";
 const PCWSTR LONG_PATH_PREFIX =  L"\\\\?\\";
-const PCWSTR DIRECTORY_BACKUP_FILE = 
+const PCWSTR DIRECTORY_BACKUP_FILE =
     L"directoryBackup.{741309a8-a42a-4830-b530-fad823933e6d}";
 const ULONG DEDUP_STORE_FOLDERS_COUNT = 3;
 const PCWSTR DEDUP_STORE_FOLDERS[DEDUP_STORE_FOLDERS_COUNT] =
-    {
-        L"\\ChunkStore",
-        L"\\Settings",
-        L"\\State"
-    };
+{
+    L"\\ChunkStore",
+    L"\\Settings",
+    L"\\State"
+};
 
 // WMI constants from Data Deduplication MOF schema
 const PCWSTR CIM_V2_NAMESPACE = L"root\\cimv2";
@@ -76,7 +76,7 @@ const PCWSTR CIM_DEDUP_PROP_PATH = L"__PATH";
 const ULONG CIM_DEDUP_JOB_TYPE_UNOPT = 4;
 const ULONG CIM_DEDUP_JOB_TYPE_GC = 2;
 
-const PCWSTR DEDUP_OPERATIONAL_EVENT_CHANNEL_NAME = 
+const PCWSTR DEDUP_OPERATIONAL_EVENT_CHANNEL_NAME =
     L"Microsoft-Windows-Deduplication/Operational";
 
 #define DDP_E_NOT_FOUND                  ((HRESULT)0x80565301L)
@@ -136,8 +136,8 @@ HRESULT WmiGetMethodInputParams(_In_ IWbemServices* pWmi, _In_ PCWSTR className,
 HRESULT WmiAddVolumeInputParameter(_Inout_ IWbemClassObject* pParams, _In_ PCWSTR className, _In_ PCWSTR methodName, _In_ const wstring& volume);
 HRESULT WmiAddInputParameter(_Inout_ IWbemClassObject* pParams, _In_ PCWSTR className, _In_ PCWSTR methodName, _In_ PCWSTR propertyName, _In_ variant_t& var);
 HRESULT WmiGetErrorInfo(_Out_ HRESULT& hrOperation, _Out_ wstring& errorMessageOperation);
-HRESULT WmiExecuteMethod(_In_ IWbemServices* pWmi, _In_ PCWSTR className, _In_ PCWSTR methodName, _In_opt_ IWbemClassObject* pInParams, 
-    _Out_ CComPtr<IWbemClassObject>& spOutParams, _In_opt_ PCWSTR context = L"");
+HRESULT WmiExecuteMethod(_In_ IWbemServices* pWmi, _In_ PCWSTR className, _In_ PCWSTR methodName, _In_opt_ IWbemClassObject* pInParams,
+                         _Out_ CComPtr<IWbemClassObject>& spOutParams, _In_opt_ PCWSTR context = L"");
 HRESULT WmiGetDedupInstanceByVolumeId(PCWSTR className, _In_ const wstring& volumeGuidName, _Out_ CComPtr<IWbemClassObject>& instance);
 HRESULT WmiQueryDedupInstancesByVolumeId(_In_ IWbemServices* pWmi, _In_ const wstring& className, _In_ const wstring& volumeGuidName, _Out_ CComPtr<IEnumWbemClassObject>& instances);
 
@@ -172,12 +172,12 @@ public:
         m_backupLocation = backupLocation;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
         /* [in] */ __RPC__in REFIID riid,
         /* [iid_is][out] */ __RPC__deref_out void __RPC_FAR *__RPC_FAR *ppvObject)
     {
         if (IsEqualIID(riid, IID_IUnknown) ||
-            IsEqualIID(riid, __uuidof(IDedupReadFileCallback)))
+                IsEqualIID(riid, __uuidof(IDedupReadFileCallback)))
         {
             *ppvObject = this;
             AddRef();
@@ -199,7 +199,7 @@ public:
         return (ULONG) ref;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE ReadBackupFile( 
+    virtual HRESULT STDMETHODCALLTYPE ReadBackupFile(
         /* [in] */ __RPC__in BSTR FileFullPath,
         /* [in] */ hyper FileOffset,
         /* [in] */ ULONG SizeToRead,
@@ -218,25 +218,25 @@ public:
         // FileBuffer contents can be uninitialized after byte *ReturnedSize
 
         HANDLE hFile = ::CreateFile(
-            filePath.c_str(), 
-            GENERIC_READ, 
-            FILE_SHARE_READ, 
-            NULL, 
-            OPEN_EXISTING, 
-            FILE_FLAG_BACKUP_SEMANTICS, 
-            NULL);
+                           filePath.c_str(),
+                           GENERIC_READ,
+                           FILE_SHARE_READ,
+                           NULL,
+                           OPEN_EXISTING,
+                           FILE_FLAG_BACKUP_SEMANTICS,
+                           NULL);
 
         if (hFile == INVALID_HANDLE_VALUE)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
-            wcout << L"Cannot open file " << filePath << 
-                L". Did we back it up? Error: " << GetLastError() << endl;
+            wcout << L"Cannot open file " << filePath <<
+                  L". Did we back it up? Error: " << GetLastError() << endl;
         }
-        else 
+        else
         {
-            // This file was saved with BackupRead, so its contents are actually a series of 
+            // This file was saved with BackupRead, so its contents are actually a series of
             // WIN32_STREAM_ID structures that describe the original file
-            // To read data as we would read from the original file, we first need to find 
+            // To read data as we would read from the original file, we first need to find
             // the DATA stream.
             // If the file was not backed up with BackupRead you would not need this
 
@@ -252,8 +252,8 @@ public:
 
                 if (!ReadFile(hFile, FileBuffer, SizeToRead, ReturnedSize, &overlapped))
                 {
-                    wcout << L"Cannot read from file " << filePath << 
-                        L". Did we back it up? gle= " << GetLastError() << endl;
+                    wcout << L"Cannot read from file " << filePath <<
+                          L". Did we back it up? gle= " << GetLastError() << endl;
                     hr = HRESULT_FROM_WIN32(GetLastError());
                 }
             }
@@ -263,8 +263,8 @@ public:
 
         return hr;
     }
-        
-    virtual HRESULT STDMETHODCALLTYPE OrderContainersRestore( 
+
+    virtual HRESULT STDMETHODCALLTYPE OrderContainersRestore(
         /* [in] */ ULONG NumberOfContainers,
         /* [size_is][in] */ __RPC__in_ecount_full(NumberOfContainers) BSTR *ContainerPaths,
         /* [out] */ __RPC__out ULONG *ReadPlanEntries,
@@ -276,10 +276,10 @@ public:
         // you want avoid switching tapes back and forth as the restore engine the backup database files
         // To implement this, you need to return the order in which the restore engine should read the files
         // In this example, we tell the restore engine to read first 64k of every file first, then
-        // the remainder of the file. In a real tape backup application you would need to read the backup 
-        // catalog, then return an array containing the file ranges on the first tape, 
+        // the remainder of the file. In a real tape backup application you would need to read the backup
+        // catalog, then return an array containing the file ranges on the first tape,
         // then the files on the second tape, and so on
-        // If you are backing up on fixed disk you don't need to implement this, just uncomment the following 2 
+        // If you are backing up on fixed disk you don't need to implement this, just uncomment the following 2
         // lines and delete the rest:
         //*ReadPlanEntries = 0;
         //*ReadPlan = NULL;
@@ -292,24 +292,24 @@ public:
 
         ULONG fileFragments = 2 * NumberOfContainers;
         *ReadPlan = (DEDUP_CONTAINER_EXTENT*)MIDL_user_allocate(fileFragments * sizeof(DEDUP_CONTAINER_EXTENT));
-        if (*ReadPlan != NULL) 
+        if (*ReadPlan != NULL)
         {
             *ReadPlanEntries = fileFragments;
 
-            for (ULONG i = 0; i < 2 * NumberOfContainers; i++) 
+            for (ULONG i = 0; i < 2 * NumberOfContainers; i++)
             {
                 (*ReadPlan)[i].ContainerIndex = i % NumberOfContainers;
 
                 wstring filePath = m_backupLocation;
                 wstring relativePath = ContainerPaths[i % NumberOfContainers];
                 filePath += relativePath;
-                
+
                 // Chop the file at % of file size, to demonstrate extents
                 LARGE_INTEGER fileSize = {};
                 GetFileSize(filePath, fileSize);
 
                 ULONG extentBoundary = (fileSize.LowPart * 10) / 100;
-                
+
                 if (i < NumberOfContainers)
                 {
                     (*ReadPlan)[i].StartOffset = 0;
@@ -329,8 +329,8 @@ public:
         }
         return S_OK;
     }
-        
-    virtual HRESULT STDMETHODCALLTYPE PreviewContainerRead( 
+
+    virtual HRESULT STDMETHODCALLTYPE PreviewContainerRead(
         /* [in] */ __RPC__in BSTR FileFullPath,
         /* [in] */ ULONG NumberOfReads,
         /* [size_is][in] */ __RPC__in_ecount_full(NumberOfReads) DDP_FILE_EXTENT *ReadOffsets)
@@ -340,7 +340,7 @@ public:
         UNREFERENCED_PARAMETER(ReadOffsets);
 
         // This will be called before the actual read, so you can optimize and do bigger reads instead
-        // of smaller ones. If you decide you want to do this, examine the ReadOffsets and do a bigger read 
+        // of smaller ones. If you decide you want to do this, examine the ReadOffsets and do a bigger read
         // into a big buffer, then satisfy the next reads from the buffer you allocated.
 
         return S_OK;
@@ -359,10 +359,10 @@ private:
                 ::SetFilePointerEx(hFile, streamId.Size, NULL, FILE_CURRENT);
                 // The Size field is the actual size starting from the cStreamName field, so we only want to read the header
                 if (!ReadFile(hFile, &streamId, FIELD_OFFSET(WIN32_STREAM_ID, cStreamName), &bytesRead, NULL) ||
-                    bytesRead != FIELD_OFFSET(WIN32_STREAM_ID, cStreamName))
+                        bytesRead != FIELD_OFFSET(WIN32_STREAM_ID, cStreamName))
                 {
-                    wcout << "Cannot find the data stream in file. Did you use something other than BackupRead? Error: " << 
-                        GetLastError() << endl;
+                    wcout << "Cannot find the data stream in file. Did you use something other than BackupRead? Error: " <<
+                          GetLastError() << endl;
                     return E_UNEXPECTED;
                 }
             }
@@ -395,7 +395,7 @@ HRESULT RestoreData(_In_ const wstring& source, _In_ const wstring& destination)
     // Source is a file name, but we need the directory name so we can read
     // the backup database inside the backup store
     size_t lastSeparator = source.rfind('\\');
-    if (lastSeparator == wstring::npos) 
+    if (lastSeparator == wstring::npos)
     {
         wcout << L"source is not a file path" << endl;
         return E_UNEXPECTED;
@@ -411,14 +411,14 @@ HRESULT RestoreData(_In_ const wstring& source, _In_ const wstring& destination)
 
     CComPtr<IDedupBackupSupport> backupSupport;
     HRESULT hr = backupSupport.CoCreateInstance(__uuidof(DedupBackupSupport), NULL);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         wcout << L"Cannot instantiate the restore engine, hr = 0x" << hex << hr << endl;
     }
     else
     {
         // NOTE: destination was already created by RestoreStub
-        BSTR bstrFile = SysAllocString(destination.c_str()); 
+        BSTR bstrFile = SysAllocString(destination.c_str());
         if (bstrFile == NULL)
         {
             wcout << L"Not enough resources" << endl;
@@ -429,7 +429,7 @@ HRESULT RestoreData(_In_ const wstring& source, _In_ const wstring& destination)
         SysFreeString(bstrFile);
     }
 
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         wcout << L"Restore failed, hr = 0x" << hex << hr << endl;
         // We need to clean up on failure
@@ -460,7 +460,7 @@ HRESULT RestoreFilesData(_In_ const wstring& source, _In_ vector<wstring>& resto
     CBackupStore* pStore = NULL;
     HRESULT* hrRestoreResults = NULL;
     CComPtr<IDedupBackupSupport> backupSupport;
-    
+
     bstrFiles = new BSTR[fileCount];
     if (bstrFiles == NULL)
     {
@@ -479,7 +479,7 @@ HRESULT RestoreFilesData(_In_ const wstring& source, _In_ vector<wstring>& resto
             goto Cleanup;
         }
     }
-    
+
     hrRestoreResults = new HRESULT[fileCount];
     if (hrRestoreResults == NULL)
     {
@@ -495,7 +495,7 @@ HRESULT RestoreFilesData(_In_ const wstring& source, _In_ vector<wstring>& resto
     }
 
     hr = backupSupport.CoCreateInstance(__uuidof(DedupBackupSupport), NULL);
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         wcout << L"Cannot instantiate the restore engine, hr = 0x" << hex << hr << endl;
         goto Cleanup;
@@ -504,7 +504,7 @@ HRESULT RestoreFilesData(_In_ const wstring& source, _In_ vector<wstring>& resto
     // NOTE: destination stubs were already created by RestoreFiles
     hr = backupSupport->RestoreFiles((ULONG)fileCount, bstrFiles, pStore, DEDUP_RECONSTRUCT_UNOPTIMIZED, hrRestoreResults);
 
-    if (FAILED(hr)) 
+    if (FAILED(hr))
     {
         wcout << L"Restore failed, hr = 0x" << hex << hr << endl;
 
@@ -538,7 +538,7 @@ Cleanup:
     {
         delete [] hrRestoreResults;
     }
-    
+
     if (bstrFiles != NULL)
     {
         for (index = 0; index < fileCount; ++index)
@@ -584,7 +584,7 @@ void DoBackup(_In_ const wstring& source, _In_ const wstring& destination)
 
         // Backup SVI folder
         BackupDirectory(dedupDatabase, databaseDestination);
-        
+
         databaseDestination += DEDUP_FOLDER;
         dedupDatabase += DEDUP_FOLDER;
 
@@ -613,7 +613,7 @@ HRESULT RestoreVolume(_In_ const wstring& source, _In_ const wstring& destinatio
     bool destinationHasDedupMetadata = false;
 
     wcout << L"Restoring files from '" << source << L"' to volume '" << destination << L"'" << endl;
-    
+
     hr = GetVolumeGuidNameForPath(destination, destinationVolumeGuidName);
 
     // Get the chunk store ID and backup timestamp from the backup metadata
@@ -632,23 +632,23 @@ HRESULT RestoreVolume(_In_ const wstring& source, _In_ const wstring& destinatio
     {
         if (_wcsicmp(sourceDedupStoreId.c_str(), destinationDedupStoreId.c_str()) != 0)
         {
-            wcout << L"Restore is unsupported. Source deduplication store ID '" << sourceDedupStoreId << 
-                L"' does not match destination ID '" << destinationDedupStoreId << L"'." << endl;
+            wcout << L"Restore is unsupported. Source deduplication store ID '" << sourceDedupStoreId <<
+                  L"' does not match destination ID '" << destinationDedupStoreId << L"'." << endl;
             hr = HRESULT_FROM_WIN32(ERROR_NOT_SUPPORTED);
         }
-        
+
         if (SUCCEEDED(hr))
         {
             // Disable deduplication jobs on the volume to avoid disruption during restore
             hr = ToggleDedupJobs(destinationVolumeGuidName, false);
         }
-        
+
         // Cancel deduplication jobs running/queued on the volume
         if (SUCCEEDED(hr))
         {
             hr = CancelDedupJobs(destinationVolumeGuidName);
         }
-        
+
         // Unoptimize files that changed since backup timestamp
         if (SUCCEEDED(hr))
         {
@@ -668,7 +668,7 @@ HRESULT RestoreVolume(_In_ const wstring& source, _In_ const wstring& destinatio
             hr = DeleteDedupStore(destinationVolumeGuidName);
         }
     }
-    
+
     // Restore deduplication store
     if (SUCCEEDED(hr))
     {
@@ -693,7 +693,7 @@ HRESULT RestoreVolume(_In_ const wstring& source, _In_ const wstring& destinatio
         // Set state such that deduplication is reenabled after restore
         destinationHasDedupMetadata = true;
     }
-    
+
     // Restore files on the volume
     if (SUCCEEDED(hr))
     {
@@ -709,14 +709,14 @@ HRESULT RestoreVolume(_In_ const wstring& source, _In_ const wstring& destinatio
         // Enable deduplication data access on the volume
         // NOTE: this operation causes the destination volume to dismount/remount
         hr = ToggleDedupDataAccess(destinationVolumeGuidName, true);
-        
+
         if (SUCCEEDED(hr))
         {
             // Enable deduplication jobs on the volume
             hr = ToggleDedupJobs(destinationVolumeGuidName, true);
         }
     }
-    
+
     // Run GC job
     if (SUCCEEDED(hr))
     {
@@ -731,7 +731,7 @@ HRESULT RestoreVolume(_In_ const wstring& source, _In_ const wstring& destinatio
     {
         wcout << L"Restore completed with error 0x" << hex << hr << endl;
     }
-    
+
     return hr;
 }
 
@@ -744,14 +744,14 @@ HRESULT GetDedupChunkStoreId(_In_ const wstring& volumeGuidName, _Out_ wstring& 
     CComPtr<IWbemClassObject> spInstance;
 
     chunkStoreId.clear();
-    
+
     // Returns S_FALSE if not found
     hr = WmiGetDedupInstanceByVolumeId(CIM_DEDUP_CLASS_VOLUME_METADATA, volumeGuidName, spInstance);
 
     if (hr == S_OK)
     {
         _variant_t var;
-        
+
         // Get the value of the StoreId property
         hr = spInstance->Get(CIM_DEDUP_PROP_STOREID, 0, &var, 0, 0);
         if (FAILED(hr))
@@ -773,7 +773,7 @@ HRESULT ToggleDedupJobs(_In_ const wstring& volumeGuidName, _In_ bool enableJobs
     wstring methodName = enableJobs ? CIM_DEDUP_METHOD_ENABLE : CIM_DEDUP_METHOD_DISABLE;
 
     // Setup for WMI method call - get WBEM services, input parameter object
-    
+
     CComPtr<IWbemServices> spWmi;
     HRESULT hr = WmiGetWbemServices(CIM_DEDUP_NAMESPACE, spWmi);
 
@@ -793,7 +793,7 @@ HRESULT ToggleDedupJobs(_In_ const wstring& volumeGuidName, _In_ bool enableJobs
         CComPtr<IWbemClassObject> spOutParams;
         hr = WmiExecuteMethod(spWmi, CIM_DEDUP_CLASS_VOLUME, methodName.c_str(), spInParams, spOutParams, L"Jobs");
     }
-    
+
     return hr;
 }
 
@@ -821,7 +821,7 @@ HRESULT ToggleDedupDataAccess(_In_ const wstring& volumeGuidName, _In_ bool enab
     if (SUCCEEDED(hr))
     {
         variant_t dataAccessTrigger = true;;
-        
+
         hr = WmiAddInputParameter(spInParams, CIM_DEDUP_CLASS_VOLUME, methodName.c_str(), CIM_DEDUP_PROP_DATAACCESS, dataAccessTrigger);
     }
 
@@ -831,7 +831,7 @@ HRESULT ToggleDedupDataAccess(_In_ const wstring& volumeGuidName, _In_ bool enab
         CComPtr<IWbemClassObject> spOutParams;
         hr = WmiExecuteMethod(spWmi, CIM_DEDUP_CLASS_VOLUME, methodName.c_str(), spInParams, spOutParams, L"DataAccess");
     }
-    
+
     return hr;
 }
 
@@ -858,8 +858,8 @@ HRESULT CancelDedupJobs(_In_ const wstring& volumeGuidName)
         hr = spInstances->Next(WBEM_INFINITE, 1, &spInstance, &uReturn);
         if (FAILED(hr))
         {
-           wcout << L"IEnumWbemClassObject::Next failed with error 0x" << hex << hr << endl;
-           break;
+            wcout << L"IEnumWbemClassObject::Next failed with error 0x" << hex << hr << endl;
+            break;
         }
 
         if (uReturn == 0)
@@ -889,7 +889,7 @@ HRESULT CancelDedupJobs(_In_ const wstring& volumeGuidName)
             }
         }
     }
-    
+
     return hr;
 }
 
@@ -900,14 +900,14 @@ HRESULT RestoreDedupStoreDirectories(_In_ const wstring& source, _In_ const wstr
 
     sourcePath += SYSTEM_VOLUME_INFORMATION;
     destinationPath += SYSTEM_VOLUME_INFORMATION;
-    
+
     HRESULT hr = RestoreDirectory(sourcePath, destinationPath);
 
     if (SUCCEEDED(hr) || hr == HRESULT_FROM_WIN32(ERROR_FILE_EXISTS))
     {
         sourcePath += DEDUP_FOLDER;
         destinationPath += DEDUP_FOLDER;
-        
+
         hr = RestoreDirectory(sourcePath, destinationPath);
     }
 
@@ -915,7 +915,7 @@ HRESULT RestoreDedupStoreDirectories(_In_ const wstring& source, _In_ const wstr
     {
         hr = S_OK;
     }
-    
+
     return hr;
 }
 
@@ -949,7 +949,7 @@ HRESULT RestoreFiles(_In_ const wstring& source, _In_ const wstring& destination
     HRESULT hr = S_OK;
 
     // Restore files (exclude deduplication store)
-    
+
     vector<wstring> excludePaths;
     excludePaths.push_back(BuildDedupStorePath(source));
 
@@ -979,14 +979,14 @@ HRESULT GetJobInstanceId(_In_ IWbemClassObject* startJobOutParams, _Out_ wstring
     _variant_t varArray;
 
     jobId.clear();
-    
+
     // Get the value of the StoreId property
     HRESULT hr = startJobOutParams->Get(CIM_DEDUP_PROP_JOB, 0, &varArray, 0, 0);
     if (FAILED(hr))
     {
         wcout << L"IWbemClassObject::Get for property " << CIM_DEDUP_PROP_JOB << L" failed with error 0x" << hex << hr << endl;
     }
-    
+
     if (varArray.vt != (VT_ARRAY | VT_UNKNOWN))
     {
         wcout << L"VT Type is unexpected for property " << CIM_DEDUP_PROP_JOB << endl;
@@ -1021,9 +1021,9 @@ HRESULT GetJobInstanceId(_In_ IWbemClassObject* startJobOutParams, _Out_ wstring
     if (SUCCEEDED(hr))
     {
         CComPtr<IWbemClassObject> spJob;
-        
+
         CComPtr<IUnknown> spUnknown = unknown;
-        
+
         hr = spUnknown->QueryInterface(&spJob);
         if (FAILED(hr))
         {
@@ -1033,7 +1033,7 @@ HRESULT GetJobInstanceId(_In_ IWbemClassObject* startJobOutParams, _Out_ wstring
         if (SUCCEEDED(hr))
         {
             variant_t varJobId;
-            
+
             HRESULT hr = spJob->Get(CIM_DEDUP_PROP_ID, 0, &varJobId, 0, 0);
             if (FAILED(hr))
             {
@@ -1051,9 +1051,9 @@ HRESULT GetJobInstanceId(_In_ IWbemClassObject* startJobOutParams, _Out_ wstring
                 jobId = varJobId.bstrVal;
             }
         }
-        
+
     }
-    
+
     return hr;
 }
 
@@ -1068,16 +1068,16 @@ HRESULT GetEventData(_In_ EVT_HANDLE event, _In_ PCWSTR dataName, _Out_ variant_
     PCWSTR values[] = { eventDataXPath.c_str() };
 
     EVT_HANDLE renderContext = EvtCreateRenderContext(
-        ARRAYSIZE(values), 
-        values, 
-        EvtRenderContextValues);
+                                   ARRAYSIZE(values),
+                                   values,
+                                   EvtRenderContextValues);
 
     if (renderContext == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         wcout << L"EvtCreateRenderContext failed with error " << GetLastError() << endl;
     }
-    
+
     if (SUCCEEDED(hr))
     {
         PEVT_VARIANT properties = NULL;
@@ -1085,13 +1085,13 @@ HRESULT GetEventData(_In_ EVT_HANDLE event, _In_ PCWSTR dataName, _Out_ variant_
         ULONG propertyCount = 0;
 
         BOOL result = EvtRender(
-            renderContext,
-            event,
-            EvtRenderEventValues,
-            0,
-            NULL,
-            &bufferUsed,
-            &propertyCount);
+                          renderContext,
+                          event,
+                          EvtRenderEventValues,
+                          0,
+                          NULL,
+                          &bufferUsed,
+                          &propertyCount);
 
         if (!result)
         {
@@ -1104,13 +1104,13 @@ HRESULT GetEventData(_In_ EVT_HANDLE event, _In_ PCWSTR dataName, _Out_ variant_
                 properties = (PEVT_VARIANT)eventDataBuffer;
 
                 result = ::EvtRender(
-                    renderContext,
-                    event,
-                    EvtRenderEventValues,
-                    sizeof(eventDataBuffer),
-                    properties,
-                    &bufferUsed,
-                    &propertyCount);
+                             renderContext,
+                             event,
+                             EvtRenderEventValues,
+                             sizeof(eventDataBuffer),
+                             properties,
+                             &bufferUsed,
+                             &propertyCount);
             }
         }
 
@@ -1142,7 +1142,7 @@ HRESULT GetEventData(_In_ EVT_HANDLE event, _In_ PCWSTR dataName, _Out_ variant_
         {
             EvtClose(renderContext);
         }
-    
+
     }
 
     return hr;
@@ -1154,7 +1154,7 @@ HRESULT DisplayUnoptimizationFileError(_In_ EVT_HANDLE event)
     wstring fileName = L"";
     wstring errorMessage = L"";
     ULONG errorCode = 0;
-    
+
     variant_t var;
     HRESULT hr = GetEventData(event, L"ParentDirectoryPath", var);
 
@@ -1162,7 +1162,7 @@ HRESULT DisplayUnoptimizationFileError(_In_ EVT_HANDLE event)
     {
         parentPath = var.bstrVal;
     }
-    
+
     var.Clear();
     hr = GetEventData(event, L"FileName", var);
 
@@ -1188,12 +1188,12 @@ HRESULT DisplayUnoptimizationFileError(_In_ EVT_HANDLE event)
     }
 
     wstring filePath = parentPath + fileName;
-    
+
     wcout << L"Unoptimization file error" << endl
-        << L"    File path: " << filePath << endl
-        << L"    Error code: 0x"  << hex << errorCode << endl
-        << L"    Error message: " << errorMessage << endl;
-    
+          << L"    File path: " << filePath << endl
+          << L"    Error code: 0x"  << hex << errorCode << endl
+          << L"    Error message: " << errorMessage << endl;
+
     return hr;
 }
 
@@ -1205,12 +1205,12 @@ HRESULT CheckForUnoptimizationFileErrors(_In_ const wstring& jobId, _Out_ bool& 
     // Query for errors from the specified job ID
 
     // Build the query string
-    const PCWSTR eventQueryPrefix = 
+    const PCWSTR eventQueryPrefix =
         L"<QueryList> <Query Id=\"0\" Path=\"Microsoft-Windows-Deduplication/Operational\"> "
         L"<Select Path=\"Microsoft-Windows-Deduplication/Operational\">*[System[(EventID=6144)] "
         L"and EventData[Data[(@Name=\"JobInstanceId\")]=\"";
-    
-    const PCWSTR eventQuerySuffix = 
+
+    const PCWSTR eventQuerySuffix =
         L"\"]] </Select> </Query> </QueryList>";
 
     wstring queryXml = eventQueryPrefix;
@@ -1219,11 +1219,11 @@ HRESULT CheckForUnoptimizationFileErrors(_In_ const wstring& jobId, _Out_ bool& 
 
     // Execute the query
     EVT_HANDLE queryResult = EvtQuery(
-        NULL,
-        DEDUP_OPERATIONAL_EVENT_CHANNEL_NAME,
-        queryXml.c_str(),
-        //L"Event/System[EventID=6144]",
-        EvtQueryChannelPath | EvtQueryReverseDirection);
+                                 NULL,
+                                 DEDUP_OPERATIONAL_EVENT_CHANNEL_NAME,
+                                 queryXml.c_str(),
+                                 //L"Event/System[EventID=6144]",
+                                 EvtQueryChannelPath | EvtQueryReverseDirection);
 
     if (queryResult == NULL)
     {
@@ -1234,17 +1234,17 @@ HRESULT CheckForUnoptimizationFileErrors(_In_ const wstring& jobId, _Out_ bool& 
 
     // Process the returned events, if any
     while (SUCCEEDED(hr))
-    {    
+    {
         DWORD eventsReturned = 0;
         EVT_HANDLE eventHandle = NULL;
-        
+
         BOOL bStatus = EvtNext(
-            queryResult,
-            1,
-            &eventHandle,
-            INFINITE,
-            0,
-            &eventsReturned);
+                           queryResult,
+                           1,
+                           &eventHandle,
+                           INFINITE,
+                           0,
+                           &eventsReturned);
 
         if (!bStatus)
         {
@@ -1272,7 +1272,7 @@ HRESULT CheckForUnoptimizationFileErrors(_In_ const wstring& jobId, _Out_ bool& 
     {
         EvtClose(queryResult);
     }
-    
+
     return hr;
 }
 
@@ -1345,7 +1345,7 @@ HRESULT UnoptimizeSinceTimestamp(_In_ const wstring& volumeGuidName, _In_ wstrin
             hr = E_FAIL;
         }
     }
-    
+
     return hr;
 }
 
@@ -1402,9 +1402,9 @@ HRESULT DeleteDedupStore(_In_ const wstring& volume)
     HRESULT hr = S_OK;
 
     wstring dedupStorePath = BuildDedupStorePath(volume);
-    
+
     hr = DeleteDirectoryTree(dedupStorePath);
-    
+
     return hr;
 }
 
@@ -1429,22 +1429,22 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
     if (SUCCEEDED(hr))
     {
         hr =  CoInitializeSecurity(
-            NULL, 
-            -1,                          // COM authentication
-            NULL,                        // Authentication services
-            NULL,                        // Reserved
-            RPC_C_AUTHN_LEVEL_DEFAULT,   // Default authentication 
-            RPC_C_IMP_LEVEL_IMPERSONATE, // Default Impersonation  
-            NULL,                        // Authentication info
-            EOAC_NONE,                   // Additional capabilities 
-            NULL                         // Reserved
-            );
+                  NULL,
+                  -1,                          // COM authentication
+                  NULL,                        // Authentication services
+                  NULL,                        // Reserved
+                  RPC_C_AUTHN_LEVEL_DEFAULT,   // Default authentication
+                  RPC_C_IMP_LEVEL_IMPERSONATE, // Default Impersonation
+                  NULL,                        // Authentication info
+                  EOAC_NONE,                   // Additional capabilities
+                  NULL                         // Reserved
+              );
 
         if (SUCCEEDED(hr))
         {
             hr = ModifyPrivilege(SE_BACKUP_NAME, TRUE);
         }
-        
+
         if (SUCCEEDED(hr))
         {
             hr = ModifyPrivilege(SE_RESTORE_NAME, TRUE);
@@ -1453,7 +1453,7 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
         // Permit paths longer than MAX_PATH
         source = wstring(LONG_PATH_PREFIX) + source;
         destination = wstring(LONG_PATH_PREFIX) + destination;
-        
+
         if (SUCCEEDED(hr))
         {
             switch (action)
@@ -1505,7 +1505,7 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
 wstring BuildDedupStorePath(_In_ const wstring& volume)
 {
     wstring dedupStorePath = TrimTrailingSeparator(volume, L'\\');
-        
+
     dedupStorePath.append(SYSTEM_VOLUME_INFORMATION);
     dedupStorePath.append(DEDUP_FOLDER);
 
@@ -1522,14 +1522,14 @@ HRESULT BackupFile(_In_ const wstring& source, _In_ const wstring& destination)
 {
     // Open the source file
     HANDLE hSourceFile = ::CreateFile(
-                        source.c_str(),
-                        GENERIC_READ,
-                        FILE_SHARE_READ,
-                        NULL,
-                        OPEN_EXISTING,
-                        FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
-                        NULL);
-    if (hSourceFile == INVALID_HANDLE_VALUE) 
+                             source.c_str(),
+                             GENERIC_READ,
+                             FILE_SHARE_READ,
+                             NULL,
+                             OPEN_EXISTING,
+                             FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
+                             NULL);
+    if (hSourceFile == INVALID_HANDLE_VALUE)
     {
         wcout << L"CreateFile(" << source << L" failed with error " << GetLastError() << endl;
         return HRESULT_FROM_WIN32(GetLastError());
@@ -1538,14 +1538,14 @@ HRESULT BackupFile(_In_ const wstring& source, _In_ const wstring& destination)
     // Open the backup medium
     // in this example the medium is another file, but it could be tape, network server, etc...
     HANDLE hDestinationFile = ::CreateFile(
-                        destination.c_str(),
-                        GENERIC_WRITE,
-                        FILE_SHARE_READ,
-                        NULL,
-                        CREATE_ALWAYS,
-                        FILE_FLAG_BACKUP_SEMANTICS,
-                        NULL);
-    if (hDestinationFile == INVALID_HANDLE_VALUE) 
+                                  destination.c_str(),
+                                  GENERIC_WRITE,
+                                  FILE_SHARE_READ,
+                                  NULL,
+                                  CREATE_ALWAYS,
+                                  FILE_FLAG_BACKUP_SEMANTICS,
+                                  NULL);
+    if (hDestinationFile == INVALID_HANDLE_VALUE)
     {
         wcout << L"CreateFile(" << destination << L") failed with error " << GetLastError() << endl;
         return HRESULT_FROM_WIN32(GetLastError());
@@ -1554,7 +1554,7 @@ HRESULT BackupFile(_In_ const wstring& source, _In_ const wstring& destination)
     // 4k is the default NTFS cluster size, and small enough to fit into the stack
     // we could also readk 8k if we can afford the extra stack cost or allocate a heap buffer
     // and read 64k or more
-    const DWORD DEFAULT_BUFFER_SIZE = 4086;  
+    const DWORD DEFAULT_BUFFER_SIZE = 4086;
     DWORD bytesRead = 0, bytesWritten = 0;
     BYTE buffer[DEFAULT_BUFFER_SIZE];
     LPVOID context = NULL;
@@ -1572,7 +1572,7 @@ HRESULT BackupFile(_In_ const wstring& source, _In_ const wstring& destination)
             break;
         }
 
-        if (bytesRead != bytesWritten) 
+        if (bytesRead != bytesWritten)
         {
             wcout << L"WriteFile(" << destination << L") unexpectedly wrote less bytes than expected (expected:" << bytesRead << L" written:" << bytesWritten << L")" << endl;
             hr = E_UNEXPECTED;
@@ -1628,7 +1628,7 @@ void BackupDirectoryTree(_In_ const wstring& source, _In_ const wstring& destina
     {
         return;
     }
-    
+
     // Walk through all the files and subdirectories
     WIN32_FIND_DATA findData;
     wstring pattern = source;
@@ -1636,7 +1636,7 @@ void BackupDirectoryTree(_In_ const wstring& source, _In_ const wstring& destina
     HANDLE hFind = FindFirstFile(pattern.c_str(), &findData);
     if (hFind != INVALID_HANDLE_VALUE)
     {
-        do 
+        do
         {
             // If not . or ..
             if (findData.cFileName[0] != '.')
@@ -1648,13 +1648,13 @@ void BackupDirectoryTree(_In_ const wstring& source, _In_ const wstring& destina
                 newDestination += '\\';
                 newDestination += findData.cFileName;
                 // Backup the source file or directory
-                if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+                if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
                     // NOTE: This code is using recursion for simplicity, however a real backup application
                     // should avoid recursion since it will overflow the stack for a deep directory tree
                     BackupDirectoryTree(newSource, newDestination);
                 }
-                else 
+                else
                 {
                     // Do BackupRead and backup the file
                     hr = BackupFile(newSource, newDestination);
@@ -1666,7 +1666,8 @@ void BackupDirectoryTree(_In_ const wstring& source, _In_ const wstring& destina
                     }
                 }
             }
-        } while (FindNextFile(hFind, &findData));
+        }
+        while (FindNextFile(hFind, &findData));
 
         FindClose(hFind);
     }
@@ -1676,7 +1677,7 @@ HRESULT VolumeHasDedupMetadata(_In_ const wstring& volumeGuidName, _Out_ bool& h
 {
     chunkStoreId.clear();
     hasDedupMetadata = false;
-    
+
     HRESULT hr = GetDedupChunkStoreId(volumeGuidName, chunkStoreId);
 
     if (SUCCEEDED(hr) && !chunkStoreId.empty())
@@ -1691,7 +1692,7 @@ void WriteBackupMetadata(_In_ const wstring& source, _In_ const wstring& destina
 {
     wstring volumeGuidName;
     wstring chunkStoreId;
-    
+
     HRESULT hr = GetVolumeGuidNameForPath(source, volumeGuidName);
 
     // Get the deduplication chunk store ID
@@ -1706,7 +1707,7 @@ void WriteBackupMetadata(_In_ const wstring& source, _In_ const wstring& destina
         wstring filePath = destination;
         filePath.append(L"\\");
         filePath.append(BACKUP_METADATA_FILE_NAME);
-        
+
         FILE* metadataFile = NULL;
         errno_t err = _wfopen_s(&metadataFile, filePath.c_str(), L"w");
         if (err != 0)
@@ -1720,9 +1721,9 @@ void WriteBackupMetadata(_In_ const wstring& source, _In_ const wstring& destina
             GetSystemTimeAsFileTime(&ftNow);
 
             // Convert time to wbem time string
-            WBEMTime backupTime(ftNow);            
+            WBEMTime backupTime(ftNow);
             bstr_t bstrTime = backupTime.GetDMTF();
-            
+
             _ftprintf(metadataFile, BACKUP_METADATA_FORMAT, chunkStoreId.c_str(), (WCHAR*)bstrTime);
             fclose(metadataFile);
         }
@@ -1736,10 +1737,10 @@ HRESULT ReadBackupMetadata(_In_ const wstring& source, _Out_ wstring& chunkStore
 
     backupTime.clear();
     chunkStoreId.clear();
-    
+
     filePath.append(L"\\");
     filePath.append(BACKUP_METADATA_FILE_NAME);
-    
+
     FILE* metadataFile = NULL;
     errno_t err = _wfopen_s(&metadataFile, filePath.c_str(), L"r");
     if (err != 0)
@@ -1755,7 +1756,7 @@ HRESULT ReadBackupMetadata(_In_ const wstring& source, _Out_ wstring& chunkStore
         int converted = fwscanf_s(metadataFile, BACKUP_METADATA_FORMAT, storeId, ARRAY_LEN(storeId), timestamp, ARRAY_LEN(timestamp));
         if (converted != 2)
         {
-            wcout << L"Unable to read chunk store ID and backup time from backup metadata file: " << filePath << endl;            
+            wcout << L"Unable to read chunk store ID and backup time from backup metadata file: " << filePath << endl;
         }
         else
         {
@@ -1778,7 +1779,7 @@ HRESULT RestoreFile(_In_ const wstring& source, _In_ const wstring& destination,
 {
     // Create destination dir if it doesn't exist
     size_t lastSeparator = destination.rfind('\\');
-    if (lastSeparator == wstring::npos) 
+    if (lastSeparator == wstring::npos)
     {
         wcout << L"destination is not a file path" << endl;
         return E_UNEXPECTED;
@@ -1789,14 +1790,14 @@ HRESULT RestoreFile(_In_ const wstring& source, _In_ const wstring& destination,
     // Open the backup medium
     // In this example the medium is another file, but it could be tape, network server, etc...
     HANDLE hSourceFile = ::CreateFile(
-                        source.c_str(),
-                        GENERIC_READ,
-                        FILE_SHARE_READ,
-                        NULL,
-                        OPEN_EXISTING,
-                        FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
-                        NULL);
-    if (hSourceFile == INVALID_HANDLE_VALUE) 
+                             source.c_str(),
+                             GENERIC_READ,
+                             FILE_SHARE_READ,
+                             NULL,
+                             OPEN_EXISTING,
+                             FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
+                             NULL);
+    if (hSourceFile == INVALID_HANDLE_VALUE)
     {
         wcout << L"CreateFile(" << source << L") failed with error " << GetLastError() << endl;
         return HRESULT_FROM_WIN32(GetLastError());
@@ -1804,14 +1805,14 @@ HRESULT RestoreFile(_In_ const wstring& source, _In_ const wstring& destination,
 
     // Open the file to be restored
     HANDLE hDestinationFile = ::CreateFile(
-                        destination.c_str(),
-                        GENERIC_WRITE | WRITE_OWNER | WRITE_DAC,
-                        FILE_SHARE_READ,
-                        NULL,
-                        overWriteExisting ? OPEN_EXISTING : CREATE_ALWAYS,
-                        FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
-                        NULL);
-    if (hDestinationFile == INVALID_HANDLE_VALUE) 
+                                  destination.c_str(),
+                                  GENERIC_WRITE | WRITE_OWNER | WRITE_DAC,
+                                  FILE_SHARE_READ,
+                                  NULL,
+                                  overWriteExisting ? OPEN_EXISTING : CREATE_ALWAYS,
+                                  FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS,
+                                  NULL);
+    if (hDestinationFile == INVALID_HANDLE_VALUE)
     {
         wcout << L"CreateFile(" << destination << L") failed with error " << GetLastError() << endl;
         return HRESULT_FROM_WIN32(GetLastError());
@@ -1834,7 +1835,7 @@ HRESULT RestoreFile(_In_ const wstring& source, _In_ const wstring& destination,
             break;
         }
 
-        if (bytesRead != bytesWritten) 
+        if (bytesRead != bytesWritten)
         {
             wcout << L"BackupWrite(" << destination << L") unexpectedly wrote less bytes than expected (expected:" << bytesRead << L" written:" << bytesWritten << L")" << endl;
             hr = E_UNEXPECTED;
@@ -1857,7 +1858,7 @@ HRESULT RestoreFile(_In_ const wstring& source, _In_ const wstring& destination,
 HRESULT RestoreDirectory(_In_ const wstring& source, _In_ const wstring& destination)
 {
     HRESULT hr = S_OK;
-    
+
     wstring directorySourcePath = source;
     directorySourcePath.append(L"\\");
     directorySourcePath.append(DIRECTORY_BACKUP_FILE);
@@ -1875,13 +1876,13 @@ HRESULT RestoreDirectory(_In_ const wstring& source, _In_ const wstring& destina
             hr =  HRESULT_FROM_WIN32(error);
         }
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Restore the directory
         RestoreFile(directorySourcePath, destination, true);
     }
-    
+
     return hr;
 }
 
@@ -1889,7 +1890,7 @@ HRESULT RestoreDirectory(_In_ const wstring& source, _In_ const wstring& destina
 HRESULT DeleteDirectoryTree(_In_ const wstring& directory)
 {
     HRESULT hr = S_OK;
-    
+
     // Walk through all the files and subdirectories
     WIN32_FIND_DATA findData;
     wstring pattern = directory;
@@ -1897,7 +1898,7 @@ HRESULT DeleteDirectoryTree(_In_ const wstring& directory)
     HANDLE hFind = FindFirstFile(pattern.c_str(), &findData);
     if (hFind != INVALID_HANDLE_VALUE)
     {
-        do 
+        do
         {
             // If not . or ..
             if (findData.cFileName[0] != '.')
@@ -1905,9 +1906,9 @@ HRESULT DeleteDirectoryTree(_In_ const wstring& directory)
                 wstring newPath = directory;
                 newPath += '\\';
                 newPath += findData.cFileName;
-                
+
                 // Backup the source file or directory
-                if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+                if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
                     // NOTE: This code is using recursion for simplicity, however a real backup application
                     // should avoid recursion since it will overflow the stack for a deep directory tree
@@ -1921,7 +1922,7 @@ HRESULT DeleteDirectoryTree(_In_ const wstring& directory)
                     // real backup applications migh choose to handle this differently.
                     RemoveDirectory(newPath.c_str());
                 }
-                else 
+                else
                 {
                     // Do BackupRead and backup the file
                     BOOL result = DeleteFile(newPath.c_str());
@@ -1933,7 +1934,8 @@ HRESULT DeleteDirectoryTree(_In_ const wstring& directory)
                     }
                 }
             }
-        } while (FindNextFile(hFind, &findData));
+        }
+        while (FindNextFile(hFind, &findData));
 
         FindClose(hFind);
     }
@@ -1949,7 +1951,7 @@ HRESULT RestoreDirectoryTree(_In_ const wstring& source, _In_ const wstring& des
     {
         pRestoredFiles->clear();
     }
-    
+
     // Check for exclusion
     for (size_t index = 0; index < sourceExcludePaths.size(); index++)
     {
@@ -1967,9 +1969,9 @@ HRESULT RestoreDirectoryTree(_In_ const wstring& source, _In_ const wstring& des
         return hr;
     }
     hr = S_OK;
-    
+
     wstring trimmedSource = TrimTrailingSeparator(source, L'\\');
-    
+
     // Walk through all the files and subdirectories
     WIN32_FIND_DATA findData;
     wstring pattern = trimmedSource;
@@ -1977,7 +1979,7 @@ HRESULT RestoreDirectoryTree(_In_ const wstring& source, _In_ const wstring& des
     HANDLE hFind = FindFirstFile(pattern.c_str(), &findData);
     if (hFind != INVALID_HANDLE_VALUE)
     {
-        do 
+        do
         {
             // If not . or ..
             if (findData.cFileName[0] != '.')
@@ -1989,7 +1991,7 @@ HRESULT RestoreDirectoryTree(_In_ const wstring& source, _In_ const wstring& des
                 newDestination += '\\';
                 newDestination += findData.cFileName;
                 // Restore the file or directory
-                if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+                if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
 
                     // NOTE: This code is using recursion for simplicity, however a real backup application
@@ -2006,7 +2008,7 @@ HRESULT RestoreDirectoryTree(_In_ const wstring& source, _In_ const wstring& des
                     // This file is backup metadata, not original volume data
                     continue;
                 }
-                else 
+                else
                 {
                     // Restore the file
                     hr = RestoreFile(newSource, newDestination);
@@ -2031,7 +2033,8 @@ HRESULT RestoreDirectoryTree(_In_ const wstring& source, _In_ const wstring& des
                     }
                 }
             }
-        } while (FindNextFile(hFind, &findData));
+        }
+        while (FindNextFile(hFind, &findData));
 
         FindClose(hFind);
     }
@@ -2052,12 +2055,12 @@ HRESULT WmiGetWbemServices(_In_ PCWSTR wmiNamespace, _Out_ CComPtr<IWbemServices
     bstr_t bstrNamespace = wmiNamespace;
 
     HRESULT hr = CoCreateInstance(
-        CLSID_WbemLocator, 
-        0, 
-        CLSCTX_INPROC_SERVER,
-        IID_IWbemLocator, 
-        (void**) &spLocator
-        );
+                     CLSID_WbemLocator,
+                     0,
+                     CLSCTX_INPROC_SERVER,
+                     IID_IWbemLocator,
+                     (void**) &spLocator
+                 );
     if (FAILED(hr))
     {
         wcout << L"CoCreateInstance(IWbemLocator) failed, hr = 0x" << hex << hr << endl;
@@ -2066,40 +2069,40 @@ HRESULT WmiGetWbemServices(_In_ PCWSTR wmiNamespace, _Out_ CComPtr<IWbemServices
     if (SUCCEEDED(hr))
     {
         hr = spLocator->ConnectServer(
-            bstrNamespace,
-            NULL, 
-            NULL, 
-            NULL, 
-            0L,
-            NULL,
-            NULL,
-            &spWmi
-            );
+                 bstrNamespace,
+                 NULL,
+                 NULL,
+                 NULL,
+                 0L,
+                 NULL,
+                 NULL,
+                 &spWmi
+             );
         if (FAILED(hr))
         {
             wcout << L"unable to connect to WMI; namespace " << CIM_DEDUP_NAMESPACE << L", hr = 0x" << hex << hr << endl;
         }
     }
-    
+
     if (SUCCEEDED(hr))
     {
         hr = CoSetProxyBlanket(
-            spWmi,
-            RPC_C_AUTHN_WINNT,
-            RPC_C_AUTHZ_NONE,
-            NULL,
-            RPC_C_AUTHN_LEVEL_PKT,
-            RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL, 
-            EOAC_NONE
-            );
+                 spWmi,
+                 RPC_C_AUTHN_WINNT,
+                 RPC_C_AUTHZ_NONE,
+                 NULL,
+                 RPC_C_AUTHN_LEVEL_PKT,
+                 RPC_C_IMP_LEVEL_IMPERSONATE,
+                 NULL,
+                 EOAC_NONE
+             );
 
         if (FAILED(hr))
         {
             wcout << L"CoSetProxyBlanket failed, hr = 0x" << hex << hr << endl;
         }
     }
-    
+
     return hr;
 }
 
@@ -2108,7 +2111,7 @@ HRESULT WmiGetMethodInputParams(_In_ IWbemServices* pWmi, _In_ PCWSTR className,
     CComPtr<IWbemClassObject> spClass;
 
     spInParams = NULL;
-    
+
     HRESULT hr = pWmi->GetObject(bstr_t(className), 0, NULL, &spClass, NULL);
     if (FAILED(hr))
     {
@@ -2139,7 +2142,7 @@ HRESULT WmiGetMethodInputParams(_In_ IWbemServices* pWmi, _In_ PCWSTR className,
     {
         hr = S_FALSE;
     }
-    
+
     return hr;
 }
 
@@ -2150,17 +2153,17 @@ HRESULT WmiAddVolumeInputParameter(_Inout_ IWbemClassObject* pParams, _In_ PCWST
     SAFEARRAYBOUND saBound = {};
     saBound.lLbound = 0;
     saBound.cElements = 1;
-    
+
     psa = SafeArrayCreate(VT_BSTR, 1, &saBound);
     if (psa == NULL)
     {
         wcout << L"Out of memory creating safe-array" << endl;
         hr = E_OUTOFMEMORY;
     }
-    
+
     if (SUCCEEDED(hr))
     {
-        
+
         long index = 0;
         hr = SafeArrayPutElement(psa, &index, (BSTR)bstr_t(volume.c_str()));
         if (FAILED(hr))
@@ -2168,12 +2171,12 @@ HRESULT WmiAddVolumeInputParameter(_Inout_ IWbemClassObject* pParams, _In_ PCWST
             wcout << L"SafeArrayPutElement(0, " << volume << L") failed with error 0x" << hex << hr << endl;
         }
     }
-    
+
     VARIANT volumeArray;
     VariantInit(&volumeArray);
     volumeArray.vt = VT_ARRAY | VT_BSTR;
     volumeArray.parray = psa;
-    
+
     if (SUCCEEDED(hr))
     {
         hr = pParams->Put(bstr_t(CIM_DEDUP_PROP_VOLUME), 0, &volumeArray, 0);
@@ -2194,7 +2197,7 @@ HRESULT WmiAddVolumeInputParameter(_Inout_ IWbemClassObject* pParams, _In_ PCWST
 HRESULT WmiAddInputParameter(_Inout_ IWbemClassObject* pParams, _In_ PCWSTR className, _In_ PCWSTR methodName, _In_ PCWSTR propertyName, _In_ variant_t& var)
 {
     HRESULT hr = S_OK;
-    
+
     if (SUCCEEDED(hr))
     {
         hr = pParams->Put(bstr_t(propertyName), 0, &var, 0);
@@ -2212,10 +2215,10 @@ HRESULT WmiGetErrorInfo(_Out_ HRESULT& hrOperation, _Out_ wstring& errorMessageO
     CComPtr<IErrorInfo> spErrorInfo;
     CComPtr<IWbemClassObject> spWmiError;
 
-    HRESULT hr = GetErrorInfo(0, &spErrorInfo);  
+    HRESULT hr = GetErrorInfo(0, &spErrorInfo);
     if (FAILED(hr))
     {
-        wcout << L"GetErrorInfo failed with error 0x" << hex << hr << endl;                
+        wcout << L"GetErrorInfo failed with error 0x" << hex << hr << endl;
     }
 
     if (SUCCEEDED(hr))
@@ -2223,14 +2226,14 @@ HRESULT WmiGetErrorInfo(_Out_ HRESULT& hrOperation, _Out_ wstring& errorMessageO
         hr = spErrorInfo->QueryInterface(&spWmiError);
         if (FAILED(hr))
         {
-            wcout << L"IErrorInfo::QueryInterface failed with error 0x" << hex << hr << endl;                
+            wcout << L"IErrorInfo::QueryInterface failed with error 0x" << hex << hr << endl;
         }
     }
 
     if (SUCCEEDED(hr))
     {
         variant_t var;
-        
+
         // Get the value of the ErrorCode property
         hr = spWmiError->Get(CIM_DEDUP_PROP_ERRORCODE, 0, &var, 0, 0);
         if (FAILED(hr))
@@ -2258,12 +2261,12 @@ HRESULT WmiGetErrorInfo(_Out_ HRESULT& hrOperation, _Out_ wstring& errorMessageO
     return hr;
 }
 
-HRESULT WmiExecuteMethod(_In_ IWbemServices* pWmi, _In_ PCWSTR className, _In_ PCWSTR methodName, _In_opt_ IWbemClassObject* pInParams, 
-    _Out_ CComPtr<IWbemClassObject>& spOutParams, _In_opt_ PCWSTR context)
+HRESULT WmiExecuteMethod(_In_ IWbemServices* pWmi, _In_ PCWSTR className, _In_ PCWSTR methodName, _In_opt_ IWbemClassObject* pInParams,
+                         _Out_ CComPtr<IWbemClassObject>& spOutParams, _In_opt_ PCWSTR context)
 {
     // Make the method call
     HRESULT hr = pWmi->ExecMethod(bstr_t(className), bstr_t(methodName), 0, NULL, pInParams, &spOutParams, NULL);
-    
+
     // Evaluate the output parameter object
     if (SUCCEEDED(hr))
     {
@@ -2273,7 +2276,7 @@ HRESULT WmiExecuteMethod(_In_ IWbemServices* pWmi, _In_ PCWSTR className, _In_ P
         {
             wcout << L"Get method return value for " << className << L"." << methodName << L"(" << context << L")" << L" failed with error 0x" << hex << hr << endl;
         }
-    
+
         if (SUCCEEDED(hr) && FAILED(var.ulVal))
         {
             hr = var.ulVal;
@@ -2286,7 +2289,7 @@ HRESULT WmiExecuteMethod(_In_ IWbemServices* pWmi, _In_ PCWSTR className, _In_ P
         HRESULT hrLocal = S_OK;
         HRESULT hrOperation = S_OK;
         wstring errorMessage;
-        
+
         hrLocal = WmiGetErrorInfo(hrOperation, errorMessage);
 
         if (SUCCEEDED(hrLocal) && FAILED(hrOperation))
@@ -2316,12 +2319,12 @@ HRESULT WmiGetDedupInstanceByVolumeId(PCWSTR className, _In_ const wstring& volu
 
         // Get the specified object
         hr = spWmi->GetObject(
-            bstr_t(objectPath.c_str()),
-            WBEM_FLAG_RETURN_WBEM_COMPLETE, 
-            NULL, // context
-            &spInstance,
-            NULL // synchronous call; not needed
-            );
+                 bstr_t(objectPath.c_str()),
+                 WBEM_FLAG_RETURN_WBEM_COMPLETE,
+                 NULL, // context
+                 &spInstance,
+                 NULL // synchronous call; not needed
+             );
 
         if (FAILED(hr))
         {
@@ -2329,7 +2332,7 @@ HRESULT WmiGetDedupInstanceByVolumeId(PCWSTR className, _In_ const wstring& volu
             HRESULT hrLocal = S_OK;
             HRESULT hrOperation = S_OK;
             wstring errorMessage;
-            
+
             hrLocal = WmiGetErrorInfo(hrOperation, errorMessage);
 
             if (SUCCEEDED(hrLocal) && FAILED(hrOperation))
@@ -2353,7 +2356,7 @@ HRESULT WmiGetDedupInstanceByVolumeId(PCWSTR className, _In_ const wstring& volu
     {
         instance = spInstance;
     }
-    
+
     return hr;
 }
 
@@ -2366,20 +2369,20 @@ HRESULT WmiQueryDedupInstancesByVolumeId(_In_ IWbemServices* pWmi, _In_ const ws
     // Backslash chars need to be escaped in WMI queries
     wstring quotedVolumeGuidName = volumeGuidName;
     StringReplace(quotedVolumeGuidName, L"\\", L"\\\\");
-    
+
     wstring query = L"select * from ";
     query.append(className);
     query.append(L" where VolumeId='");
     query.append(quotedVolumeGuidName);
     query.append(L"'");
-    
+
     hr = pWmi->ExecQuery(
-        bstr_t("WQL"), 
-        bstr_t(query.c_str()),
-        WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, 
-        NULL,
-        &instances
-        );
+             bstr_t("WQL"),
+             bstr_t(query.c_str()),
+             WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
+             NULL,
+             &instances
+         );
 
     if (FAILED(hr))
     {
@@ -2399,24 +2402,24 @@ HRESULT WmiQueryDedupInstancesByVolumeId(_In_ IWbemServices* pWmi, _In_ const ws
 
 void StringReplace(_Inout_ wstring& stringValue, _In_ const wstring& matchValue, _In_ const wstring& replaceValue)
 {
-    if (!stringValue.empty()) 
+    if (!stringValue.empty())
     {
-        if (matchValue.compare(replaceValue) != 0) 
+        if (matchValue.compare(replaceValue) != 0)
         {
             wstring::size_type pos = stringValue.find(matchValue, 0);
-            
+
             while (pos != wstring::npos)
             {
 
                 stringValue.replace(
-                    pos, 
-                    matchValue.length(), 
+                    pos,
+                    matchValue.length(),
                     replaceValue);
 
                 pos = stringValue.find(
-                    matchValue, 
-                    pos + replaceValue.length()
-                    );
+                          matchValue,
+                          pos + replaceValue.length()
+                      );
             }
         }
         else
@@ -2429,7 +2432,7 @@ void StringReplace(_Inout_ wstring& stringValue, _In_ const wstring& matchValue,
 wstring TrimTrailingSeparator(_In_ const wstring& str, _In_ WCHAR separator)
 {
     wstring returnString = str;
-    
+
     std::wstring::size_type pos = returnString.find_last_not_of(separator);
 
     if (pos != std::wstring::npos)
@@ -2446,7 +2449,7 @@ wstring TrimTrailingSeparator(_In_ const wstring& str, _In_ WCHAR separator)
         returnString.erase(pos);
     }
 
-    return returnString;    
+    return returnString;
 }
 
 bool IsRootPath(_In_ const wstring& path)
@@ -2454,15 +2457,15 @@ bool IsRootPath(_In_ const wstring& path)
 
     WCHAR volumePath[MAX_PATH];
     bool isRootPath = false;
-    
+
     if (GetVolumePathName(path.c_str(), volumePath, MAX_PATH))
     {
-        // For volume root, input length will equal output length (ignoring 
+        // For volume root, input length will equal output length (ignoring
         // trailing backslash if any)
 
         size_t cchPath = wcslen(path.c_str());
         size_t cchRoot = wcslen(volumePath);
-        
+
         if (volumePath[cchRoot - 1] == L'\\')
             cchRoot--;
         if (path.c_str()[cchPath - 1] == L'\\')
@@ -2470,7 +2473,7 @@ bool IsRootPath(_In_ const wstring& path)
 
         if (cchPath == cchRoot)
         {
-           isRootPath = true;
+            isRootPath = true;
         }
     }
 
@@ -2481,27 +2484,27 @@ void PrintUsage(_In_ LPCWSTR programName)
 {
     wcout << L"BACKUP" << endl;
     wcout << L"Backup a directory to a destination directory:" << endl <<
-             L"\t" << programName << L" -backup <directory-or-volume-path> -destination <directory-path>" << endl << endl;
+          L"\t" << programName << L" -backup <directory-or-volume-path> -destination <directory-path>" << endl << endl;
     wcout << L"EXAMPLE: " << programName << L" -backup d:\\mydirectory -destination f:\\mydirectorybackup" << endl;
     wcout << L"EXAMPLE: " << programName << L" -backup d:\\ -destination f:\\mydirectorybackup" << endl;
 
     wcout << endl << L"RESTORE" << endl;
     wcout << L"Restore a backed up directory to a destination directory:" << endl <<
-             L"\t" << programName << L" -restore <backup-directory-path> -destination <directory-path>" << endl << endl;
+          L"\t" << programName << L" -restore <backup-directory-path> -destination <directory-path>" << endl << endl;
     wcout << L"EXAMPLE: " << programName << L" -restore f:\\mydirectorybackup -destination d:\\mydirectory" << endl;
 
     wcout << endl << L"SINGLE FILE RESTORE" << endl;
     wcout << L"Restore the reparse point to the destination:" << endl <<
-             L"\t" << programName << L" -restorestub  <backup-file-path> -destination <file-path>" << endl << endl;
+          L"\t" << programName << L" -restorestub  <backup-file-path> -destination <file-path>" << endl << endl;
     wcout << L"Restore the data for the reparse point restored with the -restorestub option above:" << endl <<
-             L"\t" << programName << L" -restoredata  <backup-file-path> -destination <stub-path>" << endl << endl;
+          L"\t" << programName << L" -restoredata  <backup-file-path> -destination <stub-path>" << endl << endl;
     wcout << L"Restore the reparse point and data in one operation (-restorestub + -restoredata):" << endl <<
-             L"\t" << programName << L" -restorefile <backup-file-path> -destination <file-path>" << endl << endl;
+          L"\t" << programName << L" -restorefile <backup-file-path> -destination <file-path>" << endl << endl;
     wcout << L"EXAMPLE: " << programName << L" -restorefile f:\\mydirectorybackup\\myfile -destination d:\\temp\\myfile" << endl;
 
     wcout << endl << L"VOLUME RESTORE" << endl;
     wcout << L"Restore the entire volume to the destination:" << endl <<
-             L"\t" << programName << L" -restorevolume <backup-directory-path> -destination <volume-path>" << endl << endl;
+          L"\t" << programName << L" -restorevolume <backup-directory-path> -destination <volume-path>" << endl << endl;
     wcout << L"EXAMPLE: " << programName << L" -restorevolume f:\\mydirectorybackup -destination d:\\" << endl;
 }
 
@@ -2522,27 +2525,27 @@ bool ParseCommandLine(_In_ int argc,  _In_reads_(argc) _TCHAR* argv[], _Out_ Act
 
     // argv[1] is the command, must be one of the following
     wstring actionString = argv[1];
-    if (actionString == L"-backup") 
+    if (actionString == L"-backup")
     {
         *action = BackupAction;
     }
-    else if (actionString == L"-restorestub") 
+    else if (actionString == L"-restorestub")
     {
         *action = RestoreStubAction;
     }
-    else if (actionString == L"-restoredata") 
+    else if (actionString == L"-restoredata")
     {
         *action = RestoreDataAction;
     }
-    else if (actionString == L"-restorefile") 
+    else if (actionString == L"-restorefile")
     {
         *action = RestoreFileAction;
     }
-    else if (actionString == L"-restorevolume") 
+    else if (actionString == L"-restorevolume")
     {
         *action = RestoreVolumeAction;
     }
-    else if (actionString == L"-restore") 
+    else if (actionString == L"-restore")
     {
         *action = RestoreFilesAction;
     }
@@ -2559,7 +2562,7 @@ bool ParseCommandLine(_In_ int argc,  _In_reads_(argc) _TCHAR* argv[], _Out_ Act
     // argv[3] is always "-destination", check it for completeness
     wstring arg3 = argv[3];
     if (arg3 != L"-destination") return false;
-    
+
     return true;
 }
 
@@ -2592,8 +2595,8 @@ HRESULT ModifyPrivilege(_In_ LPCTSTR szPrivilege, _In_ BOOL fEnable)
     // Assign values to the TOKEN_PRIVILEGE structure.
     NewState.PrivilegeCount = 1;
     NewState.Privileges[0].Luid = luid;
-    NewState.Privileges[0].Attributes = 
-              (fEnable ? SE_PRIVILEGE_ENABLED : 0);
+    NewState.Privileges[0].Attributes =
+        (fEnable ? SE_PRIVILEGE_ENABLED : 0);
 
     // Adjust the token privilege.
     if (!AdjustTokenPrivileges(hToken,
@@ -2616,7 +2619,7 @@ HRESULT ModifyPrivilege(_In_ LPCTSTR szPrivilege, _In_ BOOL fEnable)
 HRESULT GetVolumeGuidNameForPath(_In_ const wstring& path, _Out_ wstring& volumeGuidName)
 {
     HRESULT hr = S_OK;
-    
+
     WCHAR volumePathName[MAX_PATH];
     BOOL result = GetVolumePathName(path.c_str(), volumePathName, MAX_PATH);
     if (!result)
@@ -2637,7 +2640,7 @@ HRESULT GetVolumeGuidNameForPath(_In_ const wstring& path, _Out_ wstring& volume
 
         volumeGuidName = tempVolumeGuidName;
     }
-    
+
     return hr;
 }
 
@@ -2645,7 +2648,7 @@ HRESULT GetVolumeGuidNameForPath(_In_ const wstring& path, _Out_ wstring& volume
 _Must_inspect_result_
 _Ret_maybenull_ _Post_writable_byte_size_(size)
 void  * __RPC_USER MIDL_user_allocate(size_t size)
-{    
+{
     return LocalAlloc(0, size);
 }
 
@@ -2653,10 +2656,10 @@ HRESULT
 GetFileSize(
     __in const std::wstring& FilePath,
     __out LARGE_INTEGER& FileSize
-    )
+)
 {
     HRESULT hr = S_OK;
-    
+
     HANDLE fileHandle =
         ::CreateFile(
             FilePath.c_str(),
@@ -2670,7 +2673,7 @@ GetFileSize(
     if (fileHandle == INVALID_HANDLE_VALUE)
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
-        
+
         wcout << L"CreateFile(%s" << FilePath << L") failed with error " << GetLastError() << endl;
     }
     else

@@ -1,4 +1,4 @@
-//
+﻿//
 // Common routines for resolving addresses and hostnames
 //
 // Files:
@@ -8,11 +8,11 @@
 // Description:
 //      This file contains common name resolution and name printing
 //      functions.
-// 
+//
 // NOTE:
-//    From Network Programming for Microsoft Windows, Second Edition 
-//    by Anthony Jones and James Ohlund.  Copyright 2002.  
-//    Reproduced by permission of Microsoft Press.  All rights reserved. 
+//    From Network Programming for Microsoft Windows, Second Edition
+//    by Anthony Jones and James Ohlund.  Copyright 2002.
+//    Reproduced by permission of Microsoft Press.  All rights reserved.
 //
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -48,14 +48,14 @@ int PrintAddress(SOCKADDR *sa, int salen)
         return WSAEFAULT;
 
     rc = getnameinfo(
-            sa,
-            salen,
-            host,
-            hostlen,
-            serv,
-            servlen,
-            NI_NUMERICHOST | NI_NUMERICSERV
-            );
+             sa,
+             salen,
+             host,
+             hostlen,
+             serv,
+             servlen,
+             NI_NUMERICHOST | NI_NUMERICSERV
+         );
     if (rc != 0)
     {
         fprintf(stderr, "%s: getnameinfo failed: %d\n", __FILE__, rc);
@@ -98,14 +98,14 @@ int FormatAddress(SOCKADDR *sa, int salen, char *addrbuf, int addrbuflen)
 
     // Format the name
     rc = getnameinfo(
-            sa,
-            salen,
-            host,
-            hostlen,
-            serv,
-            servlen,
-            NI_NUMERICHOST | NI_NUMERICSERV     // Convert to numeric representation
-            );
+             sa,
+             salen,
+             host,
+             hostlen,
+             serv,
+             servlen,
+             NI_NUMERICHOST | NI_NUMERICSERV     // Convert to numeric representation
+         );
     if (rc != 0)
     {
         fprintf(stderr, "%s: getnameinfo failed: %d\n", __FILE__, rc);
@@ -142,7 +142,7 @@ int FormatAddress(SOCKADDR *sa, int salen, char *addrbuf, int addrbuflen)
 struct addrinfo *ResolveAddress(char *addr, char *port, int af, int type, int proto)
 {
     struct addrinfo hints,
-    *res = NULL;
+               *res = NULL;
     int             rc;
 
     memset(&hints, 0, sizeof(hints));
@@ -152,11 +152,11 @@ struct addrinfo *ResolveAddress(char *addr, char *port, int af, int type, int pr
     hints.ai_protocol = proto;
 
     rc = getaddrinfo(
-            addr,
-            port,
-           &hints,
-           &res
-            );
+             addr,
+             port,
+             &hints,
+             &res
+         );
     if (rc != 0)
     {
         printf("Invalid address %s, getaddrinfo failed: %d\n", addr, rc);
@@ -177,20 +177,20 @@ int ReverseLookup(SOCKADDR *sa, int salen, char *buf, int buflen)
     char    host[NI_MAXHOST];
     int     hostlen=NI_MAXHOST,
             rc;
-    
+
     // Validate parameters
     if ((sa == NULL) || (buf == NULL))
         return WSAEFAULT;
 
     rc = getnameinfo(
-            sa,
-            salen,
-            host,
-            hostlen,
-            NULL,
-            0,
-            0
-            );
+             sa,
+             salen,
+             host,
+             hostlen,
+             NULL,
+             0,
+             0
+         );
     if (rc != 0)
     {
         fprintf(stderr, "getnameinfo failed: %d\n", rc);

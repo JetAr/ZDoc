@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -28,12 +28,13 @@ ATOM CCandidateWindow::_atomWndClass = 0;
 const TCHAR c_szCandidateDescription[] = TEXT("Dummy Candidate Window");
 
 /* 3e5fdd2d-bbf6-46a9-aded-b480fe18f8d0 */
-const GUID c_guidCandUIElement = {
+const GUID c_guidCandUIElement =
+{
     0x3e5fdd2d,
     0xbbf6,
     0x46a9,
     {0xad, 0xed, 0xb4, 0x80, 0xfe, 0x18, 0xf8, 0xd0}
-  };
+};
 
 //+---------------------------------------------------------------------------
 //
@@ -145,9 +146,9 @@ STDAPI CCandidateWindow::QueryInterface(REFIID riid, void **ppvObj)
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfUIElement) ||
-        IsEqualIID(riid, IID_ITfCandidateListUIElement) ||
-        IsEqualIID(riid, IID_ITfCandidateListUIElementBehavior))
+            IsEqualIID(riid, IID_ITfUIElement) ||
+            IsEqualIID(riid, IID_ITfCandidateListUIElement) ||
+            IsEqualIID(riid, IID_ITfCandidateListUIElementBehavior))
     {
         *ppvObj = (ITfCandidateListUIElementBehavior *)this;
     }
@@ -201,8 +202,8 @@ STDAPI_(ULONG) CCandidateWindow::Release()
 
 STDAPI CCandidateWindow::GetDescription(BSTR *bstr)
 {
-   *bstr = SysAllocString(L"Sample Candidate Window");
-   return S_OK;
+    *bstr = SysAllocString(L"Sample Candidate Window");
+    return S_OK;
 }
 
 //+---------------------------------------------------------------------------
@@ -213,8 +214,8 @@ STDAPI CCandidateWindow::GetDescription(BSTR *bstr)
 
 STDAPI CCandidateWindow::GetGUID(GUID *pguid)
 {
-   *pguid = c_guidCandUIElement;
-   return S_OK;
+    *pguid = c_guidCandUIElement;
+    return S_OK;
 }
 
 //+---------------------------------------------------------------------------
@@ -225,17 +226,17 @@ STDAPI CCandidateWindow::GetGUID(GUID *pguid)
 
 STDAPI CCandidateWindow::Show(BOOL bShow)
 {
-   if (!_bInShowMode)
-       return E_UNEXPECTED;
+    if (!_bInShowMode)
+        return E_UNEXPECTED;
 
-   if (bShow)
-       ShowWindow(_hwnd, SW_SHOWNA);
-   else
-   {
-       ShowWindow(_hwnd, SW_HIDE);
-       _CallUpdateUIElement();
-   }
-   return S_OK;
+    if (bShow)
+        ShowWindow(_hwnd, SW_SHOWNA);
+    else
+    {
+        ShowWindow(_hwnd, SW_HIDE);
+        _CallUpdateUIElement();
+    }
+    return S_OK;
 }
 
 //+---------------------------------------------------------------------------
@@ -246,8 +247,8 @@ STDAPI CCandidateWindow::Show(BOOL bShow)
 
 STDAPI CCandidateWindow::IsShown(BOOL *pbShow)
 {
-   *pbShow = IsWindowVisible(_hwnd);
-   return S_OK;
+    *pbShow = IsWindowVisible(_hwnd);
+    return S_OK;
 }
 
 //+---------------------------------------------------------------------------
@@ -383,7 +384,7 @@ STDAPI CCandidateWindow::GetCurrentPage(UINT *puPage)
         if (_arPageIndex[i] > _uSelection)
             break;
     }
-  
+
     *puPage = i - 1;
     return S_OK;
 }
@@ -551,22 +552,26 @@ void CCandidateWindow::_GetCompositionText()
     CGetCompositionEditSession *pGetCompositionEditSession;
     HRESULT hr;
 
-    if (_pTextService->_GetComposition() == NULL) {
+    if (_pTextService->_GetComposition() == NULL)
+    {
         return;
     }
 
-    if (_pTextService->_GetComposition()->GetRange(&pRange) != S_OK) {
+    if (_pTextService->_GetComposition()->GetRange(&pRange) != S_OK)
+    {
         goto Exit;
     }
 
-    if (pRange->GetContext(&pContext) != S_OK) {
+    if (pRange->GetContext(&pContext) != S_OK)
+    {
         goto Exit;
     }
 
-    if (pGetCompositionEditSession = new CGetCompositionEditSession(_pTextService, _pTextService->_GetComposition(), pContext)) {
-        pContext->RequestEditSession(_pTextService->_GetClientId(), 
-                                     pGetCompositionEditSession, 
-                                     TF_ES_READ | TF_ES_SYNC, 
+    if (pGetCompositionEditSession = new CGetCompositionEditSession(_pTextService, _pTextService->_GetComposition(), pContext))
+    {
+        pContext->RequestEditSession(_pTextService->_GetClientId(),
+                                     pGetCompositionEditSession,
+                                     TF_ES_READ | TF_ES_SYNC,
                                      &hr);
 
         StringCchCopy(_szText, ARRAYSIZE(_szText), pGetCompositionEditSession->GetText());
@@ -617,7 +622,7 @@ void CCandidateWindow::_InitList()
     uListNum = _wtoi(psz);
 
     UINT i;
-    
+
     for (i = 0; i < _uCandList; i++)
     {
         if (_arCandStr[i])
@@ -651,7 +656,7 @@ void CCandidateWindow::_InitList()
                 int nLen = rand() % 15 + 1;
                 int nCur = 0;
                 while(nCur < nLen)
-                   _arCandStr[i][nCur++] = rand() % 26 + L'A';
+                    _arCandStr[i][nCur++] = rand() % 26 + L'A';
                 _arCandStr[i][nCur++] = L'\0';
             }
             else
@@ -690,7 +695,7 @@ void CCandidateWindow::_Begin()
     if (!_bInShowMode)
     {
         if (SUCCEEDED(_pTextService->_GetThreadMgr()->QueryInterface(IID_ITfUIElementMgr,
-                                                         (void **)&pUIElementMgr)))
+                      (void **)&pUIElementMgr)))
         {
             pUIElementMgr->BeginUIElement(this, &bShow, &_dwUIElementId);
             if (!bShow)
@@ -717,8 +722,8 @@ void CCandidateWindow::_End()
     if (_bInShowMode)
     {
         ITfUIElementMgr *pUIElementMgr;
-        if (SUCCEEDED(_pTextService->_GetThreadMgr()->QueryInterface(IID_ITfUIElementMgr, 
-                                                         (void **)&pUIElementMgr)))
+        if (SUCCEEDED(_pTextService->_GetThreadMgr()->QueryInterface(IID_ITfUIElementMgr,
+                      (void **)&pUIElementMgr)))
         {
             pUIElementMgr->EndUIElement(_dwUIElementId);
             pUIElementMgr->Release();
@@ -742,8 +747,8 @@ void CCandidateWindow::_CallUpdateUIElement()
     if (_bInShowMode && !IsWindowVisible(_hwnd))
     {
         ITfUIElementMgr *pUIElementMgr;
-        if (SUCCEEDED(_pTextService->_GetThreadMgr()->QueryInterface(IID_ITfUIElementMgr, 
-                                                         (void **)&pUIElementMgr)))
+        if (SUCCEEDED(_pTextService->_GetThreadMgr()->QueryInterface(IID_ITfUIElementMgr,
+                      (void **)&pUIElementMgr)))
         {
             pUIElementMgr->UpdateUIElement(_dwUIElementId);
             pUIElementMgr->Release();
@@ -861,18 +866,18 @@ HRESULT CCandidateWindow::_OnKeyDown(UINT uVKey)
 {
     switch (uVKey)
     {
-        case VK_UP:
-            _Prev();
-            break;
-        case VK_DOWN:
-            _Next();
-            break;
-        case VK_NEXT:
-            _NextPage();
-            break;
-        case VK_PRIOR:
-            _PrevPage();
-            break;
+    case VK_UP:
+        _Prev();
+        break;
+    case VK_DOWN:
+        _Next();
+        break;
+    case VK_NEXT:
+        _NextPage();
+        break;
+    case VK_PRIOR:
+        _PrevPage();
+        break;
     }
     return S_OK;
 }
@@ -903,16 +908,16 @@ LRESULT CALLBACK CCandidateWindow::_WindowProc(HWND hwnd, UINT uMsg, WPARAM wPar
 
     switch (uMsg)
     {
-        case WM_CREATE:
-            _SetThis(hwnd, lParam);
-            return 0;
+    case WM_CREATE:
+        _SetThis(hwnd, lParam);
+        return 0;
 
-        case WM_PAINT:
-            hdc = BeginPaint(hwnd, &ps);
-            SetBkMode(hdc, TRANSPARENT);
-            TextOut(hdc, 0, 0, c_szCandidateDescription, lstrlen(c_szCandidateDescription));
-            EndPaint(hwnd, &ps);
-            return 0;
+    case WM_PAINT:
+        hdc = BeginPaint(hwnd, &ps);
+        SetBkMode(hdc, TRANSPARENT);
+        TextOut(hdc, 0, 0, c_szCandidateDescription, lstrlen(c_szCandidateDescription));
+        EndPaint(hwnd, &ps);
+        return 0;
     }
 
     return DefWindowProc(hwnd, uMsg, wParam, lParam);

@@ -1,11 +1,11 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            WMVCopy.cpp
 //
-// Abstract:            Implementation of CWMVCopy class. 
+// Abstract:            Implementation of CWMVCopy class.
 //
 //*****************************************************************************
 
@@ -98,11 +98,11 @@ HRESULT CWMVCopy::CreateReader( const WCHAR * pwszInputFile )
     WMT_ATTR_DATATYPE enumType;
     WORD cbLength = sizeof( m_qwDuration );
 
-    hr = m_pReaderHeaderInfo->GetAttributeByName( &wStreamNumber, 
-                                                  g_wszWMDuration, 
-                                                  &enumType, 
-                                                  (BYTE *)&m_qwDuration, 
-                                                  &cbLength );
+    hr = m_pReaderHeaderInfo->GetAttributeByName( &wStreamNumber,
+            g_wszWMDuration,
+            &enumType,
+            (BYTE *)&m_qwDuration,
+            &cbLength );
     if( FAILED( hr ) )
     {
         return( hr );
@@ -133,7 +133,7 @@ HRESULT CWMVCopy::CreateReader( const WCHAR * pwszInputFile )
     }
 
     return( hr );
-} 
+}
 
 //------------------------------------------------------------------------------
 // Name: CWMVCopy::GetProfileInfo()
@@ -279,7 +279,7 @@ HRESULT CWMVCopy::CreateWriter( const WCHAR * pwszOutputFile )
     }
 
     //
-    // Set the input property to NULL so the SDK knows we're going to 
+    // Set the input property to NULL so the SDK knows we're going to
     // send compressed samples to the inputs of the writer.
     //
     for ( DWORD i = 0; i < dwInputCount; i ++ )
@@ -301,7 +301,7 @@ HRESULT CWMVCopy::CreateWriter( const WCHAR * pwszOutputFile )
     }
 
     return( hr );
-} 
+}
 
 
 //------------------------------------------------------------------------------
@@ -334,10 +334,10 @@ HRESULT CWMVCopy::CopyAttribute()
         }
 
         //
-        // Get the attribute count 
+        // Get the attribute count
         //
         hr = m_pReaderHeaderInfo->GetAttributeCount( wStreamNumber,
-                                                     &wAttributeCount );
+                &wAttributeCount );
         if( FAILED( hr ) )
         {
             break;
@@ -352,12 +352,12 @@ HRESULT CWMVCopy::CopyAttribute()
             // Get the attribute name and value length
             //
             hr = m_pReaderHeaderInfo->GetAttributeByIndex( j,
-                                                           &wStreamNumber,
-                                                           NULL,
-                                                           &cbNameLength,
-                                                           &enumType,
-                                                           NULL,
-                                                           &cbValueLength );
+                    &wStreamNumber,
+                    NULL,
+                    &cbNameLength,
+                    &enumType,
+                    NULL,
+                    &cbValueLength );
             if( FAILED( hr ) )
             {
                 break;
@@ -375,12 +375,12 @@ HRESULT CWMVCopy::CopyAttribute()
             // Get the attribute name and value
             //
             hr = m_pReaderHeaderInfo->GetAttributeByIndex( j,
-                                                           &wStreamNumber,
-                                                           pwszName,
-                                                           &cbNameLength,
-                                                           &enumType,
-                                                           pbValue,
-                                                           &cbValueLength );
+                    &wStreamNumber,
+                    pwszName,
+                    &cbNameLength,
+                    &enumType,
+                    pbValue,
+                    &cbValueLength );
             if( FAILED( hr ) )
             {
                 break;
@@ -394,7 +394,7 @@ HRESULT CWMVCopy::CopyAttribute()
                                                     enumType,
                                                     pbValue,
                                                     cbValueLength );
-            if( E_INVALIDARG == hr )            
+            if( E_INVALIDARG == hr )
             {
                 //
                 // Some attributes are read-only; we cannot set them.
@@ -404,7 +404,7 @@ HRESULT CWMVCopy::CopyAttribute()
             }
 
             if( FAILED( hr ) )
-            {                
+            {
                 break;
             }
 
@@ -444,19 +444,19 @@ HRESULT CWMVCopy::CopyCodecInfo()
     do
     {
         hr = m_pReaderHeaderInfo->QueryInterface( IID_IWMHeaderInfo3,
-                                                  (void **)&pReaderHeaderInfo3 );
+                (void **)&pReaderHeaderInfo3 );
         if ( FAILED( hr ) )
         {
             break;
         }
 
         hr = m_pWriterHeaderInfo->QueryInterface( IID_IWMHeaderInfo3,
-                                                  (void **)&pWriterHeaderInfo3 );
+                (void **)&pWriterHeaderInfo3 );
         if ( FAILED( hr ) )
         {
             break;
         }
-    
+
         hr = pReaderHeaderInfo3->GetCodecInfoCount( &cCodecInfo );
         if ( FAILED( hr ) )
         {
@@ -474,8 +474,8 @@ HRESULT CWMVCopy::CopyCodecInfo()
             // Get codec info from the source
             //
             hr = pReaderHeaderInfo3->GetCodecInfo( i, &cchName, NULL,
-                           &cchDescription, NULL, &enumCodecType, 
-                           &cbCodecInfo, NULL );
+                                                   &cchDescription, NULL, &enumCodecType,
+                                                   &cbCodecInfo, NULL );
             if( FAILED( hr ) )
             {
                 break;
@@ -487,13 +487,13 @@ HRESULT CWMVCopy::CopyCodecInfo()
 
             if( NULL == pwszName || NULL == pwszDescription || NULL == pbCodecInfo )
             {
-    	        hr = E_OUTOFMEMORY;
+                hr = E_OUTOFMEMORY;
                 break;
             }
 
-            hr = pReaderHeaderInfo3->GetCodecInfo( i, &cchName, pwszName, 
-                            &cchDescription, pwszDescription, &enumCodecType, 
-                            &cbCodecInfo, pbCodecInfo );
+            hr = pReaderHeaderInfo3->GetCodecInfo( i, &cchName, pwszName,
+                                                   &cchDescription, pwszDescription, &enumCodecType,
+                                                   &cbCodecInfo, pbCodecInfo );
             if( FAILED( hr ) )
             {
                 break;
@@ -527,7 +527,7 @@ HRESULT CWMVCopy::CopyCodecInfo()
 
 //------------------------------------------------------------------------------
 // Name: CWMVCopy::CopyScriptInHeader()
-// Desc: Copies the script in the header of the source file to the header 
+// Desc: Copies the script in the header of the source file to the header
 //       of the destination file .
 //------------------------------------------------------------------------------
 HRESULT CWMVCopy::CopyScriptInHeader()
@@ -894,10 +894,10 @@ HRESULT CWMVCopy::WaitForCompletion()
 
 //------------------------------------------------------------------------------
 // Name: CWMVCopy::Copy()
-// Desc: Copies the input file to the output file. The script stream is moved 
+// Desc: Copies the input file to the output file. The script stream is moved
 //       to the header if fMoveScriptStream is TRUE.
 //------------------------------------------------------------------------------
-HRESULT CWMVCopy::Copy( const WCHAR * pwszInputFile, 
+HRESULT CWMVCopy::Copy( const WCHAR * pwszInputFile,
                         const WCHAR * pwszOutputFile,
                         QWORD qwMaxDuration,
                         BOOL fMoveScriptStream )
@@ -1066,8 +1066,8 @@ HRESULT CWMVCopy::Copy( const WCHAR * pwszInputFile,
 
         //
         // Note: The output file is indexed automatically.
-        // You can use IWMWriterFileSink3::SetAutoIndexing(FALSE) to disable 
-        // auto indexing. 
+        // You can use IWMWriterFileSink3::SetAutoIndexing(FALSE) to disable
+        // auto indexing.
         //
     }
     while( FALSE );
@@ -1075,10 +1075,10 @@ HRESULT CWMVCopy::Copy( const WCHAR * pwszInputFile,
     SAFE_RELEASE( m_pReaderProfile );
     SAFE_RELEASE( m_pReaderHeaderInfo );
     SAFE_RELEASE( m_pReaderAdvanced );
-    SAFE_RELEASE( m_pReader );    
+    SAFE_RELEASE( m_pReader );
     SAFE_RELEASE( m_pWriterHeaderInfo );
     SAFE_RELEASE( m_pWriterAdvanced );
-    SAFE_RELEASE( m_pWriter );    
+    SAFE_RELEASE( m_pWriter );
     SAFE_ARRAYDELETE( m_pguidStreamType );
     SAFE_ARRAYDELETE( m_pwStreamNumber );
     SAFE_CLOSEHANDLE( m_hEvent );
@@ -1091,11 +1091,11 @@ HRESULT CWMVCopy::Copy( const WCHAR * pwszInputFile,
 // Desc: Implementation of IWMReaderCallback::OnSample.
 //------------------------------------------------------------------------------
 HRESULT CWMVCopy::OnSample( /* [in] */ DWORD dwOutputNum,
-                            /* [in] */ QWORD qwSampleTime,
-                            /* [in] */ QWORD qwSampleDuration,
-                            /* [in] */ DWORD dwFlags,
-                            /* [in] */ INSSBuffer __RPC_FAR * pSample,
-                            /* [in] */ void __RPC_FAR * pvContext )
+                                       /* [in] */ QWORD qwSampleTime,
+                                       /* [in] */ QWORD qwSampleDuration,
+                                       /* [in] */ DWORD dwFlags,
+                                       /* [in] */ INSSBuffer __RPC_FAR * pSample,
+                                       /* [in] */ void __RPC_FAR * pvContext )
 {
     //
     // The samples are expected in OnStreamSample
@@ -1112,10 +1112,10 @@ HRESULT CWMVCopy::OnSample( /* [in] */ DWORD dwOutputNum,
 // Desc: Implementation of IWMStatusCallback::OnStatus.
 //------------------------------------------------------------------------------
 HRESULT CWMVCopy::OnStatus( /* [in] */ WMT_STATUS Status,
-                            /* [in] */ HRESULT hr,
-                            /* [in] */ WMT_ATTR_DATATYPE dwType,
-                            /* [in] */ BYTE __RPC_FAR * pValue,
-                            /* [in] */ void __RPC_FAR * pvContext)
+                                       /* [in] */ HRESULT hr,
+                                       /* [in] */ WMT_ATTR_DATATYPE dwType,
+                                       /* [in] */ BYTE __RPC_FAR * pValue,
+                                       /* [in] */ void __RPC_FAR * pvContext)
 {
     //
     // If an error code already exists, just set the event and return.
@@ -1163,7 +1163,7 @@ HRESULT CWMVCopy::OnStatus( /* [in] */ WMT_STATUS Status,
         m_hr = S_OK;
         m_fEOF = TRUE;
         SetEvent( m_hEvent );
-    
+
         break;
     }
 
@@ -1176,7 +1176,7 @@ HRESULT CWMVCopy::OnStatus( /* [in] */ WMT_STATUS Status,
 // Desc: Implementation of IWMReaderCallbackAdvanced::OnTime.
 //------------------------------------------------------------------------------
 HRESULT CWMVCopy::OnTime( /* [in] */ QWORD qwCurrentTime,
-                          /* [in] */ void __RPC_FAR * pvContext)
+                                     /* [in] */ void __RPC_FAR * pvContext)
 {
     //
     // Keep asking for 1 second of the stream till EOF
@@ -1200,11 +1200,11 @@ HRESULT CWMVCopy::OnTime( /* [in] */ QWORD qwCurrentTime,
 }
 
 HRESULT CWMVCopy::OnStreamSample( /* [in] */ WORD wStreamNum,
-                                  /* [in] */ QWORD cnsSampleTime,
-                                  /* [in] */ QWORD cnsSampleDuration,
-                                  /* [in] */ DWORD dwFlags,
-                                  /* [in] */ INSSBuffer __RPC_FAR * pSample,
-                                  /* [in] */ void __RPC_FAR * pvContext)
+        /* [in] */ QWORD cnsSampleTime,
+        /* [in] */ QWORD cnsSampleDuration,
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ INSSBuffer __RPC_FAR * pSample,
+        /* [in] */ void __RPC_FAR * pvContext)
 {
     HRESULT     hr = S_OK;
     BOOL        fMoveScript = FALSE;
@@ -1224,7 +1224,7 @@ HRESULT CWMVCopy::OnStreamSample( /* [in] */ WORD wStreamNum,
     if( m_fMoveScriptStream )
     {
         //
-        // We may have multiple script streams in this file. 
+        // We may have multiple script streams in this file.
         //
         for( DWORD i = 0; i < m_dwStreamCount; i ++ )
         {
@@ -1262,7 +1262,7 @@ HRESULT CWMVCopy::OnStreamSample( /* [in] */ WORD wStreamNum,
             if( nStringLength > 0 )
             {
                 //
-                // Set the NULL terminator of this sample in case this sample 
+                // Set the NULL terminator of this sample in case this sample
                 // doesn't have NULL terminator.
                 //
                 pwszType[ nStringLength - 1 ] = 0;
@@ -1281,7 +1281,7 @@ HRESULT CWMVCopy::OnStreamSample( /* [in] */ WORD wStreamNum,
                 }
 
                 //
-                // Add the script to the script list. We cannot write scripts 
+                // Add the script to the script list. We cannot write scripts
                 // directly to the writer after writing has begun.
                 //
                 hr = m_ScriptList.AddScript( pwszType, pwszCommand, cnsSampleTime );
@@ -1290,17 +1290,17 @@ HRESULT CWMVCopy::OnStreamSample( /* [in] */ WORD wStreamNum,
                     break;
                 }
             }
-        } 
+        }
         while( FALSE );
     }
     else
     {
         hr = m_pWriterAdvanced->WriteStreamSample( wStreamNum,
-                                                   cnsSampleTime,
-                                                   0,
-                                                   cnsSampleDuration,
-                                                   dwFlags,
-                                                   pSample );
+                cnsSampleTime,
+                0,
+                cnsSampleDuration,
+                dwFlags,
+                pSample );
     }
 
     //
@@ -1319,32 +1319,32 @@ HRESULT CWMVCopy::OnStreamSample( /* [in] */ WORD wStreamNum,
 // Implementation of other IWMReaderCallbackAdvanced methods.
 //------------------------------------------------------------------------------
 HRESULT CWMVCopy::OnStreamSelection( /* [in] */ WORD wStreamCount,
-                                     /* [in] */ WORD __RPC_FAR * pStreamNumbers,
-                                     /* [in] */ WMT_STREAM_SELECTION __RPC_FAR * pSelections,
-                                     /* [in] */ void __RPC_FAR * pvContext)
+        /* [in] */ WORD __RPC_FAR * pStreamNumbers,
+        /* [in] */ WMT_STREAM_SELECTION __RPC_FAR * pSelections,
+        /* [in] */ void __RPC_FAR * pvContext)
 {
     return( S_OK );
 }
 
 HRESULT CWMVCopy::OnOutputPropsChanged( /* [in] */ DWORD dwOutputNum,
-                                        /* [in] */ WM_MEDIA_TYPE __RPC_FAR * pMediaType,
-                                        /* [in] */ void __RPC_FAR * pvContext )
+        /* [in] */ WM_MEDIA_TYPE __RPC_FAR * pMediaType,
+        /* [in] */ void __RPC_FAR * pvContext )
 {
     return( S_OK );
 }
 
 HRESULT CWMVCopy::AllocateForOutput( /* [in] */ DWORD dwOutputNum,
-                                     /* [in] */ DWORD cbBuffer,
-                                     /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
-                                     /* [in] */ void __RPC_FAR * pvContext)
+        /* [in] */ DWORD cbBuffer,
+        /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
+        /* [in] */ void __RPC_FAR * pvContext)
 {
     return( E_NOTIMPL );
 }
 
 HRESULT CWMVCopy::AllocateForStream( /* [in] */ WORD wStreamNum,
-                                     /* [in] */ DWORD cbBuffer,
-                                     /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
-                                     /* [in] */ void __RPC_FAR * pvContext)
+        /* [in] */ DWORD cbBuffer,
+        /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
+        /* [in] */ void __RPC_FAR * pvContext)
 {
     return( E_NOTIMPL );
 }
@@ -1353,7 +1353,7 @@ HRESULT CWMVCopy::AllocateForStream( /* [in] */ WORD wStreamNum,
 // Implementation of IUnknown methods.
 //------------------------------------------------------------------------------
 HRESULT CWMVCopy::QueryInterface( /* [in] */ REFIID riid,
-                                  /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR * ppvObject)
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR * ppvObject)
 {
     if( NULL == ppvObject )
     {

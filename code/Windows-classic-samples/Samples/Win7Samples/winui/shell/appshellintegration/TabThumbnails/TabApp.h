@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -26,7 +26,10 @@ public:
     HRESULT Initialize();
     INT_PTR DoModal();
 
-    HWND GetHwnd() { return _hwnd; }
+    HWND GetHwnd()
+    {
+        return _hwnd;
+    }
 
     void RegisterTab(CTabWnd *pTabWnd);
     void UnregisterTab(CTabWnd *pTabWnd);
@@ -53,8 +56,14 @@ protected:
     void _LBSelectTab(int iTab);
 
     // Tab maintenance functions
-    void _RemoveSelectedTab() { _RemoveTab(_GetSelectedTab()); }
-    void _InvalidateSelectedTab() { _InvalidateTab(_GetSelectedTab()); }
+    void _RemoveSelectedTab()
+    {
+        _RemoveTab(_GetSelectedTab());
+    }
+    void _InvalidateSelectedTab()
+    {
+        _InvalidateTab(_GetSelectedTab());
+    }
     void _ActivateSelectedTab();
 
     void _AddTab();

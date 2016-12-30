@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2000 Microsoft Corporation
 
@@ -26,7 +26,7 @@ Abstract:
 
 class CPlgPin;
 
-class CPlgFilter : 
+class CPlgFilter :
     public CBaseFilter,
     public CCritSec
 {
@@ -69,7 +69,7 @@ private:
     // The waveformat supported
     LPWAVEFORMATEX m_lpWaveFormatEx;
 
-	ITPlgPrivEventSink*		m_pPlgEventSink;
+    ITPlgPrivEventSink*		m_pPlgEventSink;
 
     friend class CPlgPin;
 };

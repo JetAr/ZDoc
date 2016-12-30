@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -29,7 +29,7 @@ LONG CExeModule::Unlock()
 CExeModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
-    OBJECT_ENTRY(CLSID_SpyCon, CSpyCon)
+OBJECT_ENTRY(CLSID_SpyCon, CSpyCon)
 END_OBJECT_MAP()
 
 
@@ -50,8 +50,8 @@ LPCWSTR FindOneOf(__in LPCWSTR pwszStringToSearch, __in LPCWSTR pwszCharactersTo
 
 /////////////////////////////////////////////////////////////////////////////
 //
-extern "C" int WINAPI wWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPWSTR lpCmdLine, int /*nShowCmd*/)
+extern "C" int WINAPI wWinMain(HINSTANCE hInstance,
+                               HINSTANCE /*hPrevInstance*/, LPWSTR lpCmdLine, int /*nShowCmd*/)
 {
     lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
     HRESULT hr = CoInitialize(NULL);

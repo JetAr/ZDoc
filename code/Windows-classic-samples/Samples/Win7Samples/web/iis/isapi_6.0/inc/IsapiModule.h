@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -20,6 +20,6 @@ Author:
 VOID
 InitializeIsapiTools(
     CHAR *  szModuleName
-    );
+);
 
 #endif _isapimodule_h

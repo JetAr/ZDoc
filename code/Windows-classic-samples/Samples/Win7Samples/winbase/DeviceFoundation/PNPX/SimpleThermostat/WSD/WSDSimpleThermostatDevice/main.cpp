@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -29,7 +29,8 @@ ULONG g_ulInstanceID = 0;
 WSD_LOCALIZED_STRING thisDeviceName = {NULL, L"WSD Simple Thermostat"};
 WSD_LOCALIZED_STRING_LIST thisDeviceNameList = {NULL, &thisDeviceName};
 
-const WSD_THIS_DEVICE_METADATA thisDeviceMetadata = {
+const WSD_THIS_DEVICE_METADATA thisDeviceMetadata =
+{
     &thisDeviceNameList,    // FriendlyName
     L"0.145",               // FirmwareVersion
     L"5123456789",          // SerialNumber
@@ -62,11 +63,11 @@ int __cdecl wmain( int argc, __in_ecount(argc) wchar_t* argv[] )
     if( S_OK == hr )
     {
         hr = StringCbPrintfW(
-            szDeviceAddress, sizeof(szDeviceAddress),
-            L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-            uuid.Data1, uuid.Data2, uuid.Data3,
-            uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
-            uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
+                 szDeviceAddress, sizeof(szDeviceAddress),
+                 L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+                 uuid.Data1, uuid.Data2, uuid.Data3,
+                 uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
+                 uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
     }
     wprintf( L"0x%x\n", hr );
 
@@ -93,12 +94,12 @@ int __cdecl wmain( int argc, __in_ecount(argc) wchar_t* argv[] )
     {
         wprintf( L"Create WSD device host..." );
         hr = CreateSimpleThermostat_WSDHost(
-            szDeviceAddress,
-            &thisDeviceMetadata,
-            pCSimpleThermostatService,
-            &pDeviceHost,
-            &pContext
-            );
+                 szDeviceAddress,
+                 &thisDeviceMetadata,
+                 pCSimpleThermostatService,
+                 &pDeviceHost,
+                 &pContext
+             );
         wprintf( L"0x%x\n", hr );
     }
 

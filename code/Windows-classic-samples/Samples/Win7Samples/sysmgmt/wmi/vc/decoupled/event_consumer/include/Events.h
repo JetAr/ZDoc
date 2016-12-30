@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (C)  Microsoft Corporation
 
@@ -20,7 +20,7 @@ History:
  *
  *	Name:	CProvider_IWbemEventConsumerProvider
  *
- *	
+ *
  *  Description:
  *
  *			Event Consumer implementation of WMI provider interfaces.
@@ -29,9 +29,9 @@ History:
  *
  *****************************************************************************/
 
-class CProvider_IWbemEventConsumerProvider :	public IWbemEventConsumerProvider ,
-												public IWbemProviderInit , 
-												public IWbemShutdown
+class CProvider_IWbemEventConsumerProvider :	public IWbemEventConsumerProvider,
+    public IWbemProviderInit,
+    public IWbemShutdown
 {
 private:
 
@@ -39,69 +39,69 @@ private:
 
 // Reference count for com object garbage collection.
 
-	LONG m_ReferenceCount ;
+    LONG m_ReferenceCount ;
 
 // Pointer passed during provider initialization allowing call to WMI.
 
-	IWbemServices *m_CoreService ;
+    IWbemServices *m_CoreService ;
 
 // User/Local/Namespace information passed during initialization.
 
-	BSTR m_Namespace ;
-	BSTR m_Locale ;
-	BSTR m_User ;
+    BSTR m_Namespace ;
+    BSTR m_Locale ;
+    BSTR m_User ;
 
 public:
 
 // Constructor/Destructor
 
-	CProvider_IWbemEventConsumerProvider () ;
+    CProvider_IWbemEventConsumerProvider () ;
     ~CProvider_IWbemEventConsumerProvider () ;
 
 public:
 
-	//Non-delegating object IUnknown
+    //Non-delegating object IUnknown
 
-    STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
+    STDMETHODIMP QueryInterface ( REFIID, LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	/* IWbemEventConsumerProvider methods */
+    /* IWbemEventConsumerProvider methods */
 
-	HRESULT STDMETHODCALLTYPE FindConsumer (
+    HRESULT STDMETHODCALLTYPE FindConsumer (
 
-		IWbemClassObject *a_LogicalConsumer ,
-		IWbemUnboundObjectSink **a_Consumer
-	) ;
+        IWbemClassObject *a_LogicalConsumer,
+        IWbemUnboundObjectSink **a_Consumer
+    ) ;
 
-	/* IWbemProviderInit methods */
+    /* IWbemProviderInit methods */
 
-	HRESULT STDMETHODCALLTYPE Initialize (
+    HRESULT STDMETHODCALLTYPE Initialize (
 
-		LPWSTR a_User ,
-		LONG a_Flags ,
-		LPWSTR a_Namespace ,
-		LPWSTR a_Locale ,
-		IWbemServices *a_Core ,
-		IWbemContext *a_Context ,
-		IWbemProviderInitSink *a_Sink
-	) ;
+        LPWSTR a_User,
+        LONG a_Flags,
+        LPWSTR a_Namespace,
+        LPWSTR a_Locale,
+        IWbemServices *a_Core,
+        IWbemContext *a_Context,
+        IWbemProviderInitSink *a_Sink
+    ) ;
 
-	/* IWbemShutdown methods */
+    /* IWbemShutdown methods */
 
-	HRESULT STDMETHODCALLTYPE Shutdown (
+    HRESULT STDMETHODCALLTYPE Shutdown (
 
-		LONG a_Flags ,
-		ULONG a_MaxMilliSeconds ,
-		IWbemContext *a_Context
-	) ; 
+        LONG a_Flags,
+        ULONG a_MaxMilliSeconds,
+        IWbemContext *a_Context
+    ) ;
 } ;
 
 /******************************************************************************
  *
  *	Name:	CProvider_IWbemUnboundObjectSink
  *
- *	
+ *
  *  Description:
  *
  *			Event Consumer implementation of WMI provider interfaces.
@@ -119,31 +119,31 @@ private:
 
 // Reference count for com object garbage collection.
 
-	LONG m_ReferenceCount ;
+    LONG m_ReferenceCount ;
 
 public:
 
 // Constructor/Destructor
 
-	CProvider_IWbemUnboundObjectSink () ;
+    CProvider_IWbemUnboundObjectSink () ;
     ~CProvider_IWbemUnboundObjectSink () ;
 
 public:
 
-	//Non-delegating object IUnknown
+    //Non-delegating object IUnknown
 
-    STDMETHODIMP QueryInterface ( REFIID , LPVOID FAR * ) ;
+    STDMETHODIMP QueryInterface ( REFIID, LPVOID FAR * ) ;
     STDMETHODIMP_( ULONG ) AddRef () ;
     STDMETHODIMP_( ULONG ) Release () ;
 
-	/* IWbemUnboundObjectSink methods */
+    /* IWbemUnboundObjectSink methods */
 
-	HRESULT STDMETHODCALLTYPE IndicateToConsumer (
+    HRESULT STDMETHODCALLTYPE IndicateToConsumer (
 
-		IWbemClassObject *a_LogicalConsumer ,
-		long a_ObjectCount ,
-		IWbemClassObject **a_Objects
-	) ;
+        IWbemClassObject *a_LogicalConsumer,
+        long a_ObjectCount,
+        IWbemClassObject **a_Objects
+    ) ;
 
 } ;
 

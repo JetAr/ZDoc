@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,10 +20,10 @@ class CManipulationEventSink : _IManipulationEvents
 {
 public:
     CManipulationEventSink(HWND hWnd, CCoreObject* coRef, int iTimerId, BOOL inertia);
-   
+
     // Handles event when the manipulation begins
     virtual HRESULT STDMETHODCALLTYPE ManipulationStarted(
-        FLOAT x, 
+        FLOAT x,
         FLOAT y);
 
     // Handles event when the manipulation is progress
@@ -50,7 +50,7 @@ public:
         FLOAT cumulativeScale,
         FLOAT cumulativeExpansion,
         FLOAT cumulativeRotation);
-    
+
     // Helper for creating a connection point
     BOOL SetupConnPt(IUnknown* manipulationProc);
     VOID RemoveConnPt();
@@ -61,11 +61,11 @@ public:
 
 private:
     HRESULT SetupInertia(IInertiaProcessor* ip, IManipulationProcessor* mp);
-    
+
     IConnectionPoint* m_pConnPoint;
     volatile unsigned int m_cRefCount;
     DWORD m_uID;
-    
+
     // Reference to the object to manipulate
     CCoreObject* m_coRef;
 

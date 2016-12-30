@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // This code is licensed under the MIT License (MIT).
@@ -22,7 +22,7 @@ public:
 
     WlanHostedNetworkException(const char* message, HRESULT hr)
         : std::exception(message),
-        _hr(hr)
+          _hr(hr)
     {}
 
     HRESULT GetErrorCode() const

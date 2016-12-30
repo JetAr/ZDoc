@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -31,10 +31,10 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CTestDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CTestDoc, CDocument)
-	//{{AFX_MSG_MAP(CTestDoc)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CTestDoc)
+    // NOTE - the ClassWizard will add and remove mapping macros here.
+    //    DO NOT EDIT what you see in these blocks of generated code!
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ END_MESSAGE_MAP()
 
 CTestDoc::CTestDoc()
 {
-	// TODO: add one-time construction code here
+    // TODO: add one-time construction code here
 
 }
 
@@ -52,15 +52,15 @@ CTestDoc::~CTestDoc()
 
 BOOL CTestDoc::OnNewDocument()
 {
-	if (!CDocument::OnNewDocument())
-		return FALSE;
+    if (!CDocument::OnNewDocument())
+        return FALSE;
 
-	((CEditView*)m_viewList.GetHead())->SetWindowText(NULL);
+    ((CEditView*)m_viewList.GetHead())->SetWindowText(NULL);
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
+    // TODO: add reinitialization code here
+    // (SDI documents will reuse this document)
 
-	return TRUE;
+    return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -68,8 +68,8 @@ BOOL CTestDoc::OnNewDocument()
 
 void CTestDoc::Serialize(CArchive& ar)
 {
-	// CEditView contains an edit control which handles all serialization
-	((CEditView*)m_viewList.GetHead())->SerializeRaw(ar);
+    // CEditView contains an edit control which handles all serialization
+    ((CEditView*)m_viewList.GetHead())->SerializeRaw(ar);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -78,12 +78,12 @@ void CTestDoc::Serialize(CArchive& ar)
 #ifdef _DEBUG
 void CTestDoc::AssertValid() const
 {
-	CDocument::AssertValid();
+    CDocument::AssertValid();
 }
 
 void CTestDoc::Dump(CDumpContext& dc) const
 {
-	CDocument::Dump(dc);
+    CDocument::Dump(dc);
 }
 #endif //_DEBUG
 

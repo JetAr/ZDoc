@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -41,19 +41,19 @@ SC_HANDLE g_schSCMHandle = NULL;
 //
 
 BOOL WINAPI DllMain(
-      HINSTANCE hInstanceIn
+    HINSTANCE hInstanceIn
     , DWORD     nReasonIn
     , LPVOID    ReservedIn
-    );
+);
 
 DWORD WINAPI Startup(
-      LPCWSTR                       pwszResourceTypeIn
+    LPCWSTR                       pwszResourceTypeIn
     , DWORD                         nMinVersionSupportedIn
     , DWORD                         nMaxVersionSupportedIn
     , PSET_RESOURCE_STATUS_ROUTINE  pfnSetResourceStatusIn
     , PLOG_EVENT_ROUTINE            pfnLogEventIn
     , PCLRES_FUNCTION_TABLE *       pFunctionTableOut
-    );
+);
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -85,10 +85,10 @@ DWORD WINAPI Startup(
 /////////////////////////////////////////////////////////////////////////////
 BOOL WINAPI
 DllMain(
-      HINSTANCE   hInstanceIn
+    HINSTANCE   hInstanceIn
     , DWORD       nReasonIn
     , LPVOID      ReservedIn
-    )
+)
 {
     BOOL    fSuccess = TRUE;
 
@@ -98,12 +98,12 @@ DllMain(
 
     switch ( nReasonIn )
     {
-        case DLL_PROCESS_ATTACH:
-            DisableThreadLibraryCalls( hInstanceIn );
-            break;
+    case DLL_PROCESS_ATTACH:
+        DisableThreadLibraryCalls( hInstanceIn );
+        break;
 
-        case DLL_PROCESS_DETACH:
-            break;
+    case DLL_PROCESS_DETACH:
+        break;
 
     } // switch: nReason
 
@@ -182,13 +182,13 @@ DllMain(
 /////////////////////////////////////////////////////////////////////////////
 DWORD WINAPI
 Startup(
-      LPCWSTR                         pwszResourceTypeIn
+    LPCWSTR                         pwszResourceTypeIn
     , DWORD                           nMinVersionSupportedIn
     , DWORD                           nMaxVersionSupportedIn
     , PSET_RESOURCE_STATUS_ROUTINE    pfnSetResourceStatusIn
     , PLOG_EVENT_ROUTINE              pfnLogEventIn
     , PCLRES_FUNCTION_TABLE *         pFunctionTableOut
-    )
+)
 {
     DWORD   sc = ERROR_CLUSTER_RESNAME_NOT_FOUND;
 
@@ -207,23 +207,23 @@ Startup(
     //
 
     if ( 0 == CompareStringW(
-                        LOCALE_SYSTEM_DEFAULT,
-                        NORM_IGNORECASE,
-                        pwszResourceTypeIn,
-                        -1,
-                        RESTYPE_NAME,
-                        -1
-                        )
+                LOCALE_SYSTEM_DEFAULT,
+                NORM_IGNORECASE,
+                pwszResourceTypeIn,
+                -1,
+                RESTYPE_NAME,
+                -1
+            )
        )
     {
         sc = ClipBookServerStartup(
-                  pwszResourceTypeIn
-                , nMinVersionSupportedIn
-                , nMaxVersionSupportedIn
-                , pfnSetResourceStatusIn
-                , pfnLogEventIn
-                , pFunctionTableOut
-                );
+                 pwszResourceTypeIn
+                 , nMinVersionSupportedIn
+                 , nMaxVersionSupportedIn
+                 , pfnSetResourceStatusIn
+                 , pfnLogEventIn
+                 , pFunctionTableOut
+             );
     } // if: ClipBook Server resource type
 
     return sc;

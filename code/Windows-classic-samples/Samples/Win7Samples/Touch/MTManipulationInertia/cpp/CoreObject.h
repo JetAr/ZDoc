@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -11,7 +11,8 @@
 #include "ManipulationEventsink.h"
 #include "DrawingObject.h"
 
-class CCoreObject {
+class CCoreObject
+{
 public:
     CCoreObject(HWND hwnd, int iTimerId, CD2DDriver* d2dDriver);
     ~CCoreObject();
@@ -19,11 +20,11 @@ public:
 
     // Rendered object
     CDrawingObject* doDrawing;
-    
+
     // Manipulation and Inertia event sinks
     CManipulationEventSink* manipulationEventSink;
     CManipulationEventSink* inertiaEventSink;
-   
+
     // Manipulation and Inertia processors
     IManipulationProcessor* manipulationProc;
     IInertiaProcessor* inertiaProc;
@@ -36,7 +37,7 @@ private:
     HWND m_hWnd;
 
     // Direct2D driver to pass to drawing object
-    CD2DDriver* m_d2dDriver; 
+    CD2DDriver* m_d2dDriver;
 
     // Unique timer ID to pass to event sink
     int m_iTimerId;

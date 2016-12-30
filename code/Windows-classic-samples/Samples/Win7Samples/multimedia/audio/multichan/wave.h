@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,17 +25,17 @@
  *	functions
  */
 
-// 
+//
 //	open a wave file, validate format and extract parameters
 //
 HANDLE  WaveOpenFile( LPCSTR, WAVEFORMATEX**, PULONG );
 
-// 
+//
 //	write the mixed wave file
 //
 BOOL    WaveSaveFile( LPCSTR, WAVEFORMATEX*, PVOID, ULONG );
 
-// 
+//
 //	callback function for waveOut calls
 //
 void CALLBACK   WavePlayFileCB( HWAVEOUT, UINT, DWORD_PTR, DWORD_PTR, DWORD_PTR );

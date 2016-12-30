@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
   Copyright (c) 1995 Intel Corp
 
@@ -24,9 +24,9 @@ typedef enum {  ENONE     = ERRORSTART,
                 ALLOCERROR,
                 INVALIDARG,
                 OBJNOTINIT,
-		OBJEFFERROR,  // Object effeciency error.
-		ALREADYCONN,
-		ALREADYLIST
+                OBJEFFERROR,  // Object effeciency error.
+                ALREADYCONN,
+                ALREADYLIST
              } ErrorCode_e;
 
 void        HUSetLastError(ErrorCode_e ErrorCode);

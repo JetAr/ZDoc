@@ -1,11 +1,11 @@
-///////////////////////////////////////////////////////////////////////////
-// 
+﻿///////////////////////////////////////////////////////////////////////////
+//
 // MODULE:      MOUSINFO.H
 //
 // DESCRIPTION: Include file for the MousInfo.Exe Tool
 //
 //
-//              Copyright 1995 - 2000 Microsoft Corporation. 
+//              Copyright 1995 - 2000 Microsoft Corporation.
 //                       All rights reserved
 //
 //
@@ -15,7 +15,7 @@ TCHAR szAppName[] = TEXT("MousInfo");
 TCHAR szClassName[] = TEXT("MousInfoClass");
 
 // Maximum # of chars in title bar
-#define MAX_TITLE_LEN 44           
+#define MAX_TITLE_LEN 44
 
 // Index into Button Message Array
 #define NO_MESSAGE  0
@@ -47,13 +47,13 @@ TCHAR szClassName[] = TEXT("MousInfoClass");
 
 // Function Prototypes
 int WINAPI WinMain(
-    __in HINSTANCE, 
-    __in_opt HINSTANCE, 
-    __in_opt LPSTR, 
+    __in HINSTANCE,
+    __in_opt HINSTANCE,
+    __in_opt LPSTR,
     __in int);
 
 LRESULT CALLBACK MainWindowProc(
-    HWND, 
-    UINT, 
-    WPARAM, 
+    HWND,
+    UINT,
+    WPARAM,
     LPARAM);

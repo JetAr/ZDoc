@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -30,7 +30,7 @@ HRESULT _RegisterProgid(BOOL fRegister)
     {
         HKEY hkeyProgid;
         hr = HRESULT_FROM_WIN32(RegCreateKeyEx(HKEY_CLASSES_ROOT, c_szProgID, 0, NULL, REG_OPTION_NON_VOLATILE,
-            KEY_SET_VALUE | KEY_CREATE_SUB_KEY , NULL, &hkeyProgid, NULL));
+                                               KEY_SET_VALUE | KEY_CREATE_SUB_KEY, NULL, &hkeyProgid, NULL));
         if (SUCCEEDED(hr))
         {
             hr = _RegSetString(hkeyProgid, NULL, L"FriendlyTypeName", L"Custom Jump List Document");
@@ -52,7 +52,7 @@ HRESULT _RegisterProgid(BOOL fRegister)
                             {
                                 HKEY hkeyShell;
                                 hr = HRESULT_FROM_WIN32(RegCreateKeyEx(hkeyProgid, L"shell", 0, NULL, REG_OPTION_NON_VOLATILE,
-                                    KEY_SET_VALUE | KEY_CREATE_SUB_KEY, NULL, &hkeyShell, NULL));
+                                                                       KEY_SET_VALUE | KEY_CREATE_SUB_KEY, NULL, &hkeyShell, NULL));
                                 if (SUCCEEDED(hr))
                                 {
                                     // The list of verbs provided by the ProgID is located uner the "shell" key.  Here, only
@@ -101,7 +101,7 @@ HRESULT _RegisterToHandleExt(PCWSTR pszExt, BOOL fRegister)
         {
             HKEY hkeyProgidList;
             hr = HRESULT_FROM_WIN32(RegCreateKeyEx(HKEY_CLASSES_ROOT, szKey, 0, NULL, REG_OPTION_NON_VOLATILE,
-                KEY_SET_VALUE, NULL, &hkeyProgidList, NULL));
+                                                   KEY_SET_VALUE, NULL, &hkeyProgidList, NULL));
             if (SUCCEEDED(hr))
             {
                 if (fRegister)

@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -75,30 +75,30 @@ HRESULT CSimpleThermostatService::InitStdDispatch()
     ITypeLib*   pTypeLib    = NULL;
 
     hr = LoadRegTypeLib(
-        LIBID_SimpleThermostatDeviceLib,
-        1,
-        0,
-        LANG_NEUTRAL,
-        &pTypeLib
-        );
+             LIBID_SimpleThermostatDeviceLib,
+             1,
+             0,
+             LANG_NEUTRAL,
+             &pTypeLib
+         );
 
     if( S_OK == hr )
     {
         hr = pTypeLib->GetTypeInfoOfGuid(
-            __uuidof(ISimpleThermostat_UPnPService),
-            &m_pTypeInfo
-            );
+                 __uuidof(ISimpleThermostat_UPnPService),
+                 &m_pTypeInfo
+             );
         pTypeLib->Release();
     }
 
     if( S_OK == hr )
     {
         hr = CreateStdDispatch(
-            reinterpret_cast<IUnknown*>(this),
-            this,
-            m_pTypeInfo,
-            &m_pUnkStdDispatch
-            );
+                 reinterpret_cast<IUnknown*>(this),
+                 this,
+                 m_pTypeInfo,
+                 &m_pUnkStdDispatch
+             );
     }
 
     return hr;
@@ -114,7 +114,7 @@ HRESULT CSimpleThermostatService::InitStdDispatch()
 //------------------------------------------------------------------------------
 STDMETHODIMP CSimpleThermostatService::get_currentTemp(
     LONG* plTemp
-    )
+)
 {
     if( NULL == plTemp )
     {
@@ -132,7 +132,7 @@ STDMETHODIMP CSimpleThermostatService::get_currentTemp(
 //------------------------------------------------------------------------------
 STDMETHODIMP CSimpleThermostatService::get_desiredTemp(
     LONG* plTemp
-    )
+)
 {
     if( NULL == plTemp )
     {
@@ -150,7 +150,7 @@ STDMETHODIMP CSimpleThermostatService::get_desiredTemp(
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::GetCurrentTemp(
     LONG* plTempOut
-    )
+)
 {
     //
     // Since this function does the same thing as get_currentTemp, just call
@@ -165,7 +165,7 @@ HRESULT CSimpleThermostatService::GetCurrentTemp(
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::GetDesiredTemp(
     LONG* plTempOut
-    )
+)
 {
     //
     // Since this function does the same thing as get_desiredTemp, just call
@@ -180,7 +180,7 @@ HRESULT CSimpleThermostatService::GetDesiredTemp(
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::SetDesiredTemp(
     LONG lTemp
-    )
+)
 {
     m_lDesiredTemp = lTemp;
 
@@ -197,7 +197,7 @@ HRESULT CSimpleThermostatService::SetDesiredTemp(
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::Advise(
     IUPnPEventSink *pesSubscriber
-    )
+)
 {
     return S_OK;
 }// CSimpleThermostatService::Advise
@@ -208,7 +208,7 @@ HRESULT CSimpleThermostatService::Advise(
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::Unadvise(
     IUPnPEventSink *pesSubscriber
-    )
+)
 {
     return S_OK;
 }// CSimpleThermostatService::Unadvise
@@ -222,9 +222,9 @@ HRESULT CSimpleThermostatService::Unadvise(
 // CSimpleThermostatService::QueryInterface
 //------------------------------------------------------------------------------
 HRESULT CSimpleThermostatService::QueryInterface(
-    REFIID riid, 
+    REFIID riid,
     void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -54,24 +54,24 @@
  *	     for reading and then closed again.
  */
 
-BOOL 
-FAR 
+BOOL
+FAR
 PASCAL
 gfile_open(
-    HWND hwnd, 
-    LPSTR prompt, 
-    LPSTR ext, 
-    LPSTR spec, 
-    LPSTR pszFull, 
-    int cchMax, 
+    HWND hwnd,
+    LPSTR prompt,
+    LPSTR ext,
+    LPSTR spec,
+    LPSTR pszFull,
+    int cchMax,
     LPSTR fn
-    )
+)
 {
     OPENFILENAME ofn;
     char achFilters[MAX_PATH];
     char szTmp[MAX_PATH * 2] = {0};
     HANDLE fh;
-	HRESULT hr;
+    HRESULT hr;
 
     if (!pszFull)
     {
@@ -88,8 +88,8 @@ gfile_open(
      * filter both times.
      */
     hr = StringCchPrintf(achFilters, (sizeof(achFilters)/sizeof(achFilters[0])) - 1, "%s%c%s", spec, 0, spec);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_PRINTF);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_PRINTF);
     /*
      * initialise arguments to dialog proc
      */
@@ -98,7 +98,7 @@ gfile_open(
     // validate the size of the structue.  So we need to lie to
     // the function if we were built for >=Win2000 and
     // running on an earlier OS
-#if (_WIN32_WINNT >= 0x0500) 
+#if (_WIN32_WINNT >= 0x0500)
     ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
 #else
     ofn.lStructSize = sizeof(OPENFILENAME);
@@ -124,20 +124,25 @@ gfile_open(
     /*
      * loop until the user cancels, or selects a file that we can open
      */
-    do {
-        if (!GetOpenFileName(&ofn)) {
+    do
+    {
+        if (!GetOpenFileName(&ofn))
+        {
             return(FALSE);
         }
 
         fh = CreateFile(pszFull, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 
-        if (fh == INVALID_HANDLE_VALUE) {
+        if (fh == INVALID_HANDLE_VALUE)
+        {
             if (MessageBox(NULL, "File Could Not Be Opened", "File Open",
-                           MB_OKCANCEL|MB_ICONSTOP) == IDCANCEL) {
+                           MB_OKCANCEL|MB_ICONSTOP) == IDCANCEL)
+            {
                 return(FALSE);
             }
         }
-    } while (fh == INVALID_HANDLE_VALUE);
+    }
+    while (fh == INVALID_HANDLE_VALUE);
 
     CloseHandle(fh);
 
@@ -176,23 +181,23 @@ gfile_open(
  *	     created and opened for writing and then closed again.
  */
 
-BOOL 
-FAR 
+BOOL
+FAR
 PASCAL
 gfile_new(
-    LPSTR prompt, 
-    LPSTR ext, 
-    LPSTR spec, 
-    LPSTR pszFull, 
-    int cchMax, 
+    LPSTR prompt,
+    LPSTR ext,
+    LPSTR spec,
+    LPSTR pszFull,
+    int cchMax,
     LPSTR fn
-    )
+)
 {
     OPENFILENAME ofn;
     char achFilters[MAX_PATH] = {0};
     char szTmp[MAX_PATH * 2];
     HANDLE fh;
-	HRESULT hr;
+    HRESULT hr;
 
     if (!pszFull)
     {
@@ -209,8 +214,8 @@ gfile_new(
      * filter both times. remember double null at end of list of strings.
      */
     hr = StringCchPrintf(achFilters,(sizeof(achFilters)/sizeof(achFilters[0])) - 1, "%s%c%s", spec, 0, spec);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_PRINTF);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_PRINTF);
 
     /*
      * initialise arguments to dialog proc
@@ -220,7 +225,7 @@ gfile_new(
     // validate the size of the structue.  So we need to lie to
     // the function if we were built for >=Win2000 and
     // running on an earlier OS
-#if (_WIN32_WINNT >= 0x0500) 
+#if (_WIN32_WINNT >= 0x0500)
     ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
 #else
     ofn.lStructSize = sizeof(OPENFILENAME);
@@ -244,20 +249,25 @@ gfile_new(
     /*
      * loop until the user cancels, or selects a file that we can create/write
      */
-    do {
-        if (!GetSaveFileName(&ofn)) {
+    do
+    {
+        if (!GetSaveFileName(&ofn))
+        {
             return(FALSE);
         }
 
         fh = CreateFile(pszFull, GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
 
-        if (fh == INVALID_HANDLE_VALUE) {
+        if (fh == INVALID_HANDLE_VALUE)
+        {
             if (MessageBox(NULL, "File Could Not Be Created", "File Open",
-                           MB_OKCANCEL|MB_ICONSTOP) == IDCANCEL) {
+                           MB_OKCANCEL|MB_ICONSTOP) == IDCANCEL)
+            {
                 return(FALSE);
             }
         }
-    } while (fh == INVALID_HANDLE_VALUE);
+    }
+    while (fh == INVALID_HANDLE_VALUE);
 
     CloseHandle(fh);
 

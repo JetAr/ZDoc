@@ -1,38 +1,38 @@
-//***************************************************************************
+﻿//***************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            Streamdata.h
 //
-// Abstract:            Definition of CStreamData class 
+// Abstract:            Definition of CStreamData class
 //
 //*****************************************************************************
 
 #if !defined(AFX_STREAMDATA_H__7F619823_DAD9_47A2_A1F3_CBDDF90E215C__INCLUDED_)
 #define AFX_STREAMDATA_H__7F619823_DAD9_47A2_A1F3_CBDDF90E215C__INCLUDED_
 
-class CStreamData  
+class CStreamData
 {
-public:	
-    
+public:
+
     CStreamData( DWORD dwStreamCount ) ;
-	~CStreamData();
-    
+    ~CStreamData();
+
     BOOL    MapStreamNums( CStreamData& data2, WORD** ptrNumMap ) ;
-	HRESULT SetAllStreamData( IWMProfile* pProfile ) ;
+    HRESULT SetAllStreamData( IWMProfile* pProfile ) ;
     HRESULT SetAllStreamsBufferWindow( IWMProfile* pProfile );
 
 private:
 
-    BOOL    CompareMediaTypes( WM_MEDIA_TYPE* pMedia1, 
-                               WM_MEDIA_TYPE* pMedia2, 
+    BOOL    CompareMediaTypes( WM_MEDIA_TYPE* pMedia1,
+                               WM_MEDIA_TYPE* pMedia2,
                                BOOL fVBR );
 
-	WORD   GetSameMediaType( WORD* ptrNumMap, 
-                             WM_MEDIA_TYPE* pMediaToFind, 
+    WORD   GetSameMediaType( WORD* ptrNumMap,
+                             WM_MEDIA_TYPE* pMediaToFind,
                              BOOL fVBR,
-                             CStreamData& data2, 
+                             CStreamData& data2,
                              DWORD* pdwBufferWindow );
 
 private:

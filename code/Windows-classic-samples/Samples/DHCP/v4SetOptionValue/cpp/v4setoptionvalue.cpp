@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -34,13 +34,13 @@ int __cdecl main(void)
     optionData.Elements->OptionType=DhcpDWordOption;
     optionData.Elements->Element.DWordOption = 0x5;
     dwError = DhcpV4SetOptionValue(
-                        pwszServer,
-                        0,
-                        dwOptionId,
-                        pwszName,
-                        pwszVendorName,
-                        &scopeInfo,
-                        &optionData);
+                  pwszServer,
+                  0,
+                  dwOptionId,
+                  pwszName,
+                  pwszVendorName,
+                  &scopeInfo,
+                  &optionData);
     if(ERROR_SUCCESS != dwError)
     {
         //DhcpV4SetOptionValue returned error.

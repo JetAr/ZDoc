@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,14 +16,14 @@ public:
     HKEY GetHKEY();
 
     LONG Create(_In_ HKEY hKeyPresent, _In_ LPCWSTR pwszKeyName,
-        _In_reads_opt_(255) LPWSTR pwszClass = REG_NONE,
-        DWORD dwOptions = REG_OPTION_NON_VOLATILE,
-        REGSAM samDesired = KEY_READ | KEY_WRITE,
-        _Inout_ LPSECURITY_ATTRIBUTES lpSecAttr = nullptr,
-        _Out_opt_ LPDWORD lpdwDisposition = nullptr);
+                _In_reads_opt_(255) LPWSTR pwszClass = REG_NONE,
+                DWORD dwOptions = REG_OPTION_NON_VOLATILE,
+                REGSAM samDesired = KEY_READ | KEY_WRITE,
+                _Inout_ LPSECURITY_ATTRIBUTES lpSecAttr = nullptr,
+                _Out_opt_ LPDWORD lpdwDisposition = nullptr);
 
     LONG Open(_In_ HKEY hKeyParent, _In_ LPCWSTR pwszKeyName,
-        REGSAM samDesired = KEY_READ | KEY_WRITE);
+              REGSAM samDesired = KEY_READ | KEY_WRITE);
 
     LONG Close();
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -23,8 +23,8 @@ void CTedVideoWindow::Init(CTedApp * pApp)
 {
 
 }
-    
-     
+
+
 LRESULT CTedVideoWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     return 0;
@@ -37,9 +37,9 @@ LRESULT CTedVideoWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 LRESULT CTedVideoWindow::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    return 0;   
+    return 0;
 }
-    
+
 LRESULT CTedVideoWindow::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     if(SC_CLOSE == wParam)
@@ -52,6 +52,6 @@ LRESULT CTedVideoWindow::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     {
         bHandled = FALSE;
     }
-    
-    return 0;   
+
+    return 0;
 }

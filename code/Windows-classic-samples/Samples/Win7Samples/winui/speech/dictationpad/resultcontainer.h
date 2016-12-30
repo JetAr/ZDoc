@@ -1,13 +1,13 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   resultcontainer.h 
-*       This module contains the definition of CResultContainer.  
+*   resultcontainer.h
+*       This module contains the definition of CResultContainer.
 *       CResultContainer makes all of the recognition-object-
 *       specific SAPI5 calls
 ******************************************************************************/
@@ -26,7 +26,7 @@ typedef struct OWNERNODE
 }   OWNERNODE;
 
 // Constant for alternate retrieval
-#define ALT_REQUEST_COUNT 15   
+#define ALT_REQUEST_COUNT 15
 
 /******************************************************************************
 * CResultContainer *
@@ -42,30 +42,34 @@ class CResultContainer
 {
 public:
 
-    CResultContainer( ISpRecoResult &rResult, 
-        CDictationRun &rFirstOwner, 
-        CPhraseReplacement &rPhraseReplacement );
+    CResultContainer( ISpRecoResult &rResult,
+                      CDictationRun &rFirstOwner,
+                      CPhraseReplacement &rPhraseReplacement );
     ~CResultContainer();
 
     HRESULT AddOwner( CDictationRun &rNewOwner );
     void DeleteOwner( CDictationRun &rOldOwner );
 
-    CPhraseReplacement *GetPhraseReplacement() 
-    { return m_pPhraseReplacement; }
+    CPhraseReplacement *GetPhraseReplacement()
+    {
+        return m_pPhraseReplacement;
+    }
 
-    // These methods that behave exactly like the methods of 
+    // These methods that behave exactly like the methods of
     // the same name in ISpRecoResult, except the arguments
     // to these take into account possible ITN replacement
-    HRESULT SpeakAudio( 
+    HRESULT SpeakAudio(
         ULONG ulStartElement,
         ULONG cElements );
-    HRESULT Serialize( 
+    HRESULT Serialize(
         SPSERIALIZEDRESULT **ppResultBlock)
-    { return m_cpRecoResult->Serialize( ppResultBlock );}
+    {
+        return m_cpRecoResult->Serialize( ppResultBlock );
+    }
 
-    // These methods are closely related to ISpRecoResult 
+    // These methods are closely related to ISpRecoResult
     // methods, altered slightly for the purposes of this app
-    HRESULT GetAlternatesText( 
+    HRESULT GetAlternatesText(
         ULONG ulStartElement,
         ULONG cElements,
         ULONG ulRequestCount,
@@ -85,7 +89,7 @@ public:
         ULONG ulAlternateIndex,
         __deref_out WCHAR **ppwszCoMemText,
         __out_opt BYTE *pbDisplayAttributes );
-    HRESULT ChooseAlternate( 
+    HRESULT ChooseAlternate(
         ULONG ulStartElement,
         ULONG cElements,
         ULONG ulAlternateIndex,
@@ -93,7 +97,7 @@ public:
 
 private:
 
-    HRESULT GetAlternates( 
+    HRESULT GetAlternates(
         ULONG ulStartElement,
         ULONG cElements,
         ULONG ulRequestCount,
@@ -101,9 +105,9 @@ private:
 
     // Called whenever the RecoResult has changed as a result of some
     // owner committing an alternate
-    HRESULT NotifyOwnersOfCommit( 
-        ULONG ulStartElement, 
-        ULONG cElements, 
+    HRESULT NotifyOwnersOfCommit(
+        ULONG ulStartElement,
+        ULONG cElements,
         ULONG ulAlternateIndex );
 
 private:

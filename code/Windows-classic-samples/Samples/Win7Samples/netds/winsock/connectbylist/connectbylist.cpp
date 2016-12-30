@@ -1,17 +1,17 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * connectbylist.cpp
 *
-* This IPv6 sample demonstrates the use of WSAConnectByList and dual IPv4/IPv6 
+* This IPv6 sample demonstrates the use of WSAConnectByList and dual IPv4/IPv6
 * sockets.
 *
-* WSAConnectByList is new to Windows Sockets in Windows Vista.  
+* WSAConnectByList is new to Windows Sockets in Windows Vista.
 *
-* 
+*
 * This sample requires that TCP/IP version 6 be installed on the system (default
 * configuration for Windows Vista).
 *
 * The client builds a socket address list and connects to the server. This is done
-* for IPv4 (IPv6 v4-mapped address) and IPv6. 
+* for IPv4 (IPv6 v4-mapped address) and IPv6.
 *
 *
 * This is a part of the Microsoft Source Code Samples.
@@ -24,8 +24,8 @@
 \******************************************************************************/
 
 #ifdef _IA64_
-    #pragma warning (disable: 4311)
-    #pragma warning (disable: 4312)
+#pragma warning (disable: 4311)
+#pragma warning (disable: 4312)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -52,7 +52,7 @@
 
 #define CLOSESOCK(s) \
         if(INVALID_SOCKET != s) {closesocket(s); s = INVALID_SOCKET;}
-        
+
 #define FREEADDRINFO(p) \
         if(NULL != p) {freeaddrinfo(p); p = NULL;}
 
@@ -67,14 +67,14 @@ USHORT g_listenPort = 0;
 
 //helper functions
 typedef BOOL (WSAAPI * LPFN_WSACONNECTBYLIST) (SOCKET s,
-                                               PSOCKET_ADDRESS_LIST SocketAddress,
-                                               LPDWORD LocalAddressLength,
-                                               LPSOCKADDR LocalAddress,
-                                               LPDWORD RemoteAddressLength,
-                                               LPSOCKADDR RemoteAddress,
-                                               TIMEVAL * timeout,
-                                               LPWSAOVERLAPPED Reserved
-                                               );
+        PSOCKET_ADDRESS_LIST SocketAddress,
+        LPDWORD LocalAddressLength,
+        LPSOCKADDR LocalAddress,
+        LPDWORD RemoteAddressLength,
+        LPSOCKADDR RemoteAddress,
+        TIMEVAL * timeout,
+        LPWSAOVERLAPPED Reserved
+                                              );
 
 LPFN_WSACONNECTBYLIST GetWSAConnectByListFunctionPointer()
 {
@@ -109,7 +109,7 @@ SOCKET DualStackSocket(VOID)
                                        IPV6_V6ONLY,
                                        (char*)&off,
                                        sizeof off
-                                       ))
+                                      ))
         {
             ERR(TEXT("setsockopt"));
             CLOSESOCK(sock);
@@ -136,10 +136,10 @@ SOCKET DualStackListenSocket(VOID)
         INETADDR_SETANY((SOCKADDR*)&addrAny);
 
         //dual stack listening socket
-        
+
         if (INVALID_SOCKET == (lsock = DualStackSocket()))
         {
-            
+
             ERR(TEXT("DualStackSocket"));
             __leave;
         }
@@ -184,14 +184,14 @@ PSOCKET_ADDRESS_LIST InitSocketAddressList(ADDRESS_FAMILY Af)
 {
     BOOL                    bRet = FALSE;
     CHAR                    szComputerName[MAX_COMPUTERNAME_LENGTH+1] = {0},
-                            szPort[6] = {0};
+            szPort[6] = {0};
     DWORD                   dwSize = sizeof szComputerName,
-                            i = 0, 
+                            i = 0,
                             dwAddrCount = 0,
                             dwBytes = 0;
     ADDRINFO                hints = {0},
                             *res = NULL,
-                            *ptr = NULL;
+                             *ptr = NULL;
     SOCKET                  sock = INVALID_SOCKET;
     SOCKADDR_IN6            *pAddr6 = NULL;
     PSOCKET_ADDRESS_LIST    SocketAddressList = NULL;
@@ -259,7 +259,8 @@ PSOCKET_ADDRESS_LIST InitSocketAddressList(ADDRESS_FAMILY Af)
                 SocketAddressList->Address[i].iSockaddrLength = sizeof SOCKADDR_IN6;
 
             }
-        } else
+        }
+        else
         {
             for (ptr = res, i = 0; ptr, i < dwAddrCount; ptr = ptr->ai_next, i++)
             {
@@ -310,7 +311,7 @@ PSOCKET_ADDRESS_LIST InitSocketAddressList(ADDRESS_FAMILY Af)
     {
         CLOSESOCK(sock);
         FREEADDRINFO(res);
-        
+
     }
 
     if (!bRet)
@@ -335,11 +336,11 @@ VOID PrintSocketAddressList(PSOCKET_ADDRESS_LIST List)
         dwLen = sizeof szString;
 
         if(SOCKET_ERROR == WSAAddressToStringA(List->Address[i].lpSockaddr,
-                           (DWORD)List->Address[i].iSockaddrLength,
-                           NULL,
-                           szString,
-                           &dwLen
-                           ))
+                                               (DWORD)List->Address[i].iSockaddrLength,
+                                               NULL,
+                                               szString,
+                                               &dwLen
+                                              ))
         {
             printf("WSAAddressToString: %d\n",WSAGetLastError());
         }
@@ -414,7 +415,7 @@ DWORD WSAConnectByList_Loopback(ADDRESS_FAMILY AddressFamily)
             ERR("InitSocketAddressList");
             __leave;
         }
-        
+
         if (INVALID_SOCKET == (csock = DualStackSocket()))
         {
             ERR("DualStackSocket");
@@ -492,5 +493,5 @@ int __cdecl main()
     WSAConnectByList_Loopback(Af);
 
     return 0;
-    
+
 }

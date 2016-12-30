@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
                    Microsoft RPC Version 2.0
            Copyright Microsoft Corp. 1992 - 2000
                        xmit Example
@@ -89,9 +89,12 @@ void __cdecl main(int argc, char **argv)
     DOUBLE_LINK_TYPE *pFirst, *pCurrent;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
@@ -130,7 +133,8 @@ void __cdecl main(int argc, char **argv)
     pCurrent = pFirst;   // assign some values to the list nodes
     sValue += sDelta;    // make them different values
 
-    for (i = 1; i < cElements; i++) {
+    for (i = 1; i < cElements; i++)
+    {
         pCurrent = InsertNewNode(sValue, pCurrent);
         sValue += sDelta;
     }
@@ -146,7 +150,8 @@ void __cdecl main(int argc, char **argv)
                                      &pszStringBinding);
     printf("RpcStringBindingCompose returned 0x%x\n", status);
     printf("pszStringBinding = %s\n", pszStringBinding);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -154,18 +159,21 @@ void __cdecl main(int argc, char **argv)
     status = RpcBindingFromStringBinding(pszStringBinding,
                                          &hXmit);
     printf("RpcBindingFromStringBinding returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
-    RpcTryExcept {
+    RpcTryExcept
+    {
         printf("Calling the remote procedure 'ModifyListProc'\n");
         ModifyListProc(pFirst);  // call the remote procedure
 
         printf("Calling the remote procedure 'Shutdown'\n");
         Shutdown();  // shut down the server side
     }
-    RpcExcept(1) {
+    RpcExcept(1)
+    {
         printf("Runtime reported exception %ld\n", RpcExceptionCode() );
     }
     RpcEndExcept
@@ -177,13 +185,15 @@ void __cdecl main(int argc, char **argv)
     /* Free the string and the binding handle using RPC API calls. */
     status = RpcStringFree(&pszStringBinding);
     printf("RpcStringFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     status = RpcBindingFree(&hXmit);
     printf("RpcBindingFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 

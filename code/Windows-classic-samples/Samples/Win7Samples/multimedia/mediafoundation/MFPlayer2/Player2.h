@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -54,7 +54,10 @@ public:
     HRESULT UpdateVideo();
 
     // Audio
-    BOOL    IsAudioEnabled() const { return (m_pVolume != NULL); }
+    BOOL    IsAudioEnabled() const
+    {
+        return (m_pVolume != NULL);
+    }
     HRESULT SetVolume(float fLevel);
     HRESULT GetVolume(float *pfLevel);
     HRESULT SetMute(BOOL bMute);
@@ -99,7 +102,10 @@ protected:
     HRESULT Initialize(HWND hwndVideo);
     HRESULT SetZoom();
 
-    float   GetNominalRate() { return m_fRate; }
+    float   GetNominalRate()
+    {
+        return m_fRate;
+    }
 
     // MFPlay event handler functions.
     void OnMediaItemCreated(MFP_MEDIAITEM_CREATED_EVENT *pEvent);
@@ -110,7 +116,7 @@ protected:
     long                m_cRef;        // Reference count.
     IMFPMediaPlayer     *m_pPlayer;
 
-    HWND                m_hwndEvent;        // App window to receive events.    
+    HWND                m_hwndEvent;        // App window to receive events.
 
     // Video
     BOOL                m_bHasVideo;

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
 
  THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  PARTICULAR PURPOSE.
 
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
+ THIS CODE IS NOT SUPPORTED BY MICROSOFT.
 
 --*/
 
@@ -53,7 +53,7 @@ Return Value:
 void
 PrintSslRecord(
     __in PHTTP_SERVICE_CONFIG_SSL_SET pSsl
-    )
+)
 {
     DWORD                        i;
     WCHAR                        IpAddr[INET6_ADDRSTRLEN];
@@ -82,11 +82,11 @@ PrintSslRecord(
     }
 
     Status = WSAAddressToString(pSsl->KeyDesc.pIpPort,
-                       dwSockAddrLength,
-                       NULL,
-                       IpAddr,
-                       &dwIpAddrLen
-                       );
+                                dwSockAddrLength,
+                                NULL,
+                                IpAddr,
+                                &dwIpAddrLen
+                               );
 
     if(NO_ERROR != Status)
     {
@@ -96,7 +96,7 @@ PrintSslRecord(
     // Print the Key.
     wprintf(L"IP Address is %s \n", IpAddr);
 
-    wprintf(L"SSL Hash is: \n");    
+    wprintf(L"SSL Hash is: \n");
     pStr = (PUCHAR) pSsl->ParamDesc.pSslHash;
     for(i=0; i<pSsl->ParamDesc.SslHashLength; i++)
     {
@@ -108,14 +108,14 @@ PrintSslRecord(
     wprintf(L"SSL CertStore Name is %s\n", pSsl->ParamDesc.pSslCertStoreName);
 
     wprintf(L"SSL CertCheck Mode is %d\n", pSsl->ParamDesc.DefaultCertCheckMode);
-	
+
     wprintf(L"SSL Revocation Freshness Time is %d\n", pSsl->ParamDesc.DefaultRevocationFreshnessTime);
 
     wprintf(L"SSL Revocation Retrieval Timeout is %d\n", pSsl->ParamDesc.DefaultRevocationUrlRetrievalTimeout);
-	
-    wprintf(L"SSLCTL Identifier is %s\n", pSsl->ParamDesc.pDefaultSslCtlIdentifier);	
-	
-    wprintf(L"SSLCTL storename is %s\n", pSsl->ParamDesc.pDefaultSslCtlStoreName);	
+
+    wprintf(L"SSLCTL Identifier is %s\n", pSsl->ParamDesc.pDefaultSslCtlIdentifier);
+
+    wprintf(L"SSLCTL storename is %s\n", pSsl->ParamDesc.pDefaultSslCtlStoreName);
 
     wprintf(L"SSL Flags is %d\n", pSsl->ParamDesc.DefaultFlags);
 
@@ -131,7 +131,7 @@ Arguments:
     pGuid          - The GUID
     pHash          - Hash of the certificate.
     CertCheckMode  - CertCheckMode (Bit Field).
-    Freshness      - DefaultRevocationFreshnessTime (seconds) 
+    Freshness      - DefaultRevocationFreshnessTime (seconds)
     Timeout        - DefaultRevocationUrlRetrievalTimeout
     Flags          - DefaultFlags.
     pCtlIdentifier - List of issuers that we want to trust.
@@ -145,9 +145,9 @@ Return Value:
 --***************************************************************************/
 int
 DoSslSet(
-    __in_opt  PWSTR pIp, 
-    __in_opt  GUID AppGuid, 
-    __in_opt  PWSTR pHash, 
+    __in_opt  PWSTR pIp,
+    __in_opt  GUID AppGuid,
+    __in_opt  PWSTR pHash,
     __in_opt  DWORD  CertCheckMode,
     __in_opt  DWORD  Freshness,
     __in_opt  DWORD  Timeout,
@@ -155,7 +155,7 @@ DoSslSet(
     __in_opt  PWSTR pCtlIdentifier,
     __in_opt  PWSTR pCtlStoreName,
     __in_opt  PWSTR pCertStoreName
-    )
+)
 {
     HTTP_SERVICE_CONFIG_SSL_SET SetParam;
     DWORD                       Status;
@@ -172,13 +172,13 @@ DoSslSet(
     //
     // Convert the string based IP into a SOCKADDR
     //
-    if((Status = GetAddress(pIp, 
+    if((Status = GetAddress(pIp,
                             SetParam.KeyDesc.pIpPort,
                             sizeof(TempSockAddr)
-                            )) != NO_ERROR)
+                           )) != NO_ERROR)
     {
         wprintf(L"%s is not a valid Ip Address\n", pIp);
-	 return Status;
+        return Status;
     }
 
     //
@@ -205,12 +205,12 @@ DoSslSet(
             j += 2;
 
             // and used up one byte in BinaryHash
-            i ++; 
+            i ++;
         }
 
         if(HashLength != 0 || i != MAX_HASH)
         {
- 	     wprintf(L"Invalid Hash %s\n", pHash);
+            wprintf(L"Invalid Hash %s\n", pHash);
             return ERROR_INVALID_PARAMETER;
         }
 
@@ -227,12 +227,12 @@ DoSslSet(
     SetParam.ParamDesc.DefaultFlags                         = Flags;
 
     Status = HttpSetServiceConfiguration(
-                NULL,
-                HttpServiceConfigSSLCertInfo,
-                &SetParam,
-                sizeof(SetParam),
-                NULL
-                );
+                 NULL,
+                 HttpServiceConfigSSLCertInfo,
+                 &SetParam,
+                 sizeof(SetParam),
+                 NULL
+             );
 
     wprintf(L"SetServiceConfiguration completed with Status %d\n", Status);
 
@@ -253,7 +253,7 @@ Return Value:
 --***************************************************************************/
 int DoSslQuery(
     __in_opt PWSTR pIp
-    )
+)
 {
     DWORD                          Status;
     PUCHAR                         pOutput = NULL;
@@ -268,17 +268,17 @@ int DoSslQuery(
     {
         // if an IP address is specified, we'll covert it to a SOCKADDR
         // and do an exact query.
-        
+
         QueryParam.QueryDesc = HttpServiceConfigQueryExact;
         QueryParam.KeyDesc.pIpPort = (LPSOCKADDR)&TempSockAddr;
 
-        if((Status = GetAddress(pIp, 
+        if((Status = GetAddress(pIp,
                                 QueryParam.KeyDesc.pIpPort,
                                 sizeof(TempSockAddr)
-                                )) != NO_ERROR)
+                               )) != NO_ERROR)
         {
-		wprintf(L"%s is not a valid Ip Address\n", pIp);
-		return Status;
+            wprintf(L"%s is not a valid Ip Address\n", pIp);
+            return Status;
         }
     }
     else
@@ -289,26 +289,26 @@ int DoSslQuery(
 
     for(;;)
     {
-        // 
+        //
         // First, compute the bytes required to enumerate an entry.
         //
         Status = HttpQueryServiceConfiguration(
-                    NULL,
-                    HttpServiceConfigSSLCertInfo,
-                    &QueryParam,
-                    sizeof(QueryParam),
-                    pOutput,
-                    OutputLength,
-                    &ReturnLength,
-                    NULL
-                    );
+                     NULL,
+                     HttpServiceConfigSSLCertInfo,
+                     &QueryParam,
+                     sizeof(QueryParam),
+                     pOutput,
+                     OutputLength,
+                     &ReturnLength,
+                     NULL
+                 );
 
         if(Status == ERROR_INSUFFICIENT_BUFFER)
         {
             // If the API completes with ERROR_INSUFFICIENT_BUFFER, we'll
             // allocate memory for it & continue with the loop where we'll
             // call it again.
-            
+
             if(pOutput)
             {
                 // If there was an existing buffer, free it.
@@ -316,7 +316,7 @@ int DoSslQuery(
             }
 
             // Allocate a new buffer
-            
+
             pOutput = LocalAlloc(LMEM_FIXED, ReturnLength);
             if(!pOutput)
             {
@@ -339,11 +339,11 @@ int DoSslQuery(
                 //
                 break;
             }
-            else    
+            else
             {
                 //
                 // Since we are enumerating, we'll move on to the next
-                // record. This is done by incrementing the cursor, till 
+                // record. This is done by incrementing the cursor, till
                 // we get ERROR_NO_MORE_ITEMS.
                 //
                 QueryParam.dwToken ++;
@@ -351,12 +351,12 @@ int DoSslQuery(
         }
         else if(ERROR_NO_MORE_ITEMS == Status && !pIp)
         {
-            // We are enumerating and we have reached the end. This is 
-            // indicated by a ERROR_NO_MORE_ITEMS error code. 
-            
+            // We are enumerating and we have reached the end. This is
+            // indicated by a ERROR_NO_MORE_ITEMS error code.
+
             // This is not a real error, since it is used to indicate that
             // we've finished enumeration.
-            
+
             Status = NO_ERROR;
             break;
         }
@@ -368,13 +368,13 @@ int DoSslQuery(
             wprintf(L"HttpQueryServiceConfiguration completed with %d\n", Status);
             break;
         }
-    } 
+    }
 
     if(pOutput)
     {
         LocalFree(pOutput);
     }
-    
+
     return Status;
 }
 
@@ -393,7 +393,7 @@ Return Value:
 --***************************************************************************/
 int DoSslDelete(
     __in_opt PWSTR pIp
-    )
+)
 {
     HTTP_SERVICE_CONFIG_SSL_SET SetParam;
     DWORD                       Status;
@@ -402,10 +402,10 @@ int DoSslDelete(
     SetParam.KeyDesc.pIpPort = (LPSOCKADDR)&TempSockAddr;
 
     // Convert string IP address to a SOCKADDR structure
-    Status = GetAddress(pIp, 
+    Status = GetAddress(pIp,
                         SetParam.KeyDesc.pIpPort,
                         sizeof(TempSockAddr)
-                        );
+                       );
 
     if(Status != NO_ERROR)
     {
@@ -415,13 +415,13 @@ int DoSslDelete(
 
     // Call the API.
     Status = HttpDeleteServiceConfiguration(
-                NULL,
-                HttpServiceConfigSSLCertInfo,
-                &SetParam,
-                sizeof(SetParam),
-                NULL
-                );
-                
+                 NULL,
+                 HttpServiceConfigSSLCertInfo,
+                 &SetParam,
+                 sizeof(SetParam),
+                 NULL
+             );
+
     wprintf(L"HttpDeleteServiceConfiguration completed with %d\n", Status);
     return Status;
 }
@@ -446,10 +446,10 @@ Return Value:
 
 --***************************************************************************/
 int DoSsl(
-    int argc, 
-    __in_ecount(argc) WCHAR **argv, 
+    int argc,
+    __in_ecount(argc) WCHAR **argv,
     HTTPCFG_TYPE type
-    )
+)
 {
     GUID   AppGuid;
     PWSTR   pHash             = NULL;
@@ -467,45 +467,45 @@ int DoSsl(
     {
         switch(toupper(argv[0][1]))
         {
-            case 'I':
-                pIp = argv[1];
-                break;
-    
-            case 'C':
-                pCertStoreName = argv[1];
-                break;
-        
-            case 'N':
-                pCtlStoreName = argv[1];
-                break;
+        case 'I':
+            pIp = argv[1];
+            break;
 
-            case 'T':
-                pCtlIdentifier = argv[1];
-                break;
+        case 'C':
+            pCertStoreName = argv[1];
+            break;
 
-            case 'M':
-                CertCheckMode = _wtoi(argv[1]);   
-                break;
+        case 'N':
+            pCtlStoreName = argv[1];
+            break;
 
-            case 'R':
-                Freshness = _wtoi(argv[1]);   
-                break;
+        case 'T':
+            pCtlIdentifier = argv[1];
+            break;
 
-            case 'X':
-                Timeout = _wtoi(argv[1]);   
-                break;
+        case 'M':
+            CertCheckMode = _wtoi(argv[1]);
+            break;
 
-            case 'F':
-                Flags = _wtoi(argv[1]);   
-                break;
+        case 'R':
+            Freshness = _wtoi(argv[1]);
+            break;
 
-            case 'H':
-                pHash = argv[1];
-                break;
+        case 'X':
+            Timeout = _wtoi(argv[1]);
+            break;
 
-            default:
-	 	  wprintf(L"%s is an invalid command", argv[0]);
-                return ERROR_INVALID_PARAMETER;
+        case 'F':
+            Flags = _wtoi(argv[1]);
+            break;
+
+        case 'H':
+            pHash = argv[1];
+            break;
+
+        default:
+            wprintf(L"%s is an invalid command", argv[0]);
+            return ERROR_INVALID_PARAMETER;
         }
 
         argc -=2;
@@ -519,29 +519,29 @@ int DoSsl(
 
     switch(type)
     {
-        case HttpCfgTypeSet:
-            return DoSslSet(
-                        pIp, 
-                        AppGuid, 
-                        pHash, 
-                        CertCheckMode,
-                        Freshness,
-                        Timeout,
-                        Flags,
-                        pCtlIdentifier,
-                        pCtlStoreName,
-                        pCertStoreName
-                        );
+    case HttpCfgTypeSet:
+        return DoSslSet(
+                   pIp,
+                   AppGuid,
+                   pHash,
+                   CertCheckMode,
+                   Freshness,
+                   Timeout,
+                   Flags,
+                   pCtlIdentifier,
+                   pCtlStoreName,
+                   pCertStoreName
+               );
 
-        case HttpCfgTypeQuery:
-            return DoSslQuery(pIp);
+    case HttpCfgTypeQuery:
+        return DoSslQuery(pIp);
 
-        case HttpCfgTypeDelete:
-            return DoSslDelete(pIp);
+    case HttpCfgTypeDelete:
+        return DoSslDelete(pIp);
 
-        default: 
-            wprintf(L"%s is not a valid command \n", argvSaved[0]);
-            return ERROR_INVALID_PARAMETER;
-            break;
+    default:
+        wprintf(L"%s is not a valid command \n", argvSaved[0]);
+        return ERROR_INVALID_PARAMETER;
+        break;
     }
 }

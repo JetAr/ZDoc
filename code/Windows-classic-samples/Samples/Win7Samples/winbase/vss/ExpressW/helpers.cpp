@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2008  Microsoft Corporation
 
@@ -44,13 +44,13 @@ bool LoadMetadata(
     // Load from file
     //
     hFile = CreateFile(
-        wszParameter,                       // file to open
-        GENERIC_READ,                       // open for writing
-        0,                                  // don't share
-        NULL,                               // default security
-        OPEN_EXISTING,                      // existing file only
-        FILE_ATTRIBUTE_NORMAL,              // normal file
-        NULL);                              // no attr. template
+                wszParameter,                       // file to open
+                GENERIC_READ,                       // open for writing
+                0,                                  // don't share
+                NULL,                               // default security
+                OPEN_EXISTING,                      // existing file only
+                FILE_ATTRIBUTE_NORMAL,              // normal file
+                NULL);                              // no attr. template
 
     CHECK_CONDITION(
         hFile != INVALID_HANDLE_VALUE,
@@ -106,12 +106,12 @@ bool SetRestoreMethod(
     wprintf(L"INFO: SetRestoreMethod called\n");
 
     CHECK_HR(pMetadata->SetRestoreMethod(
-        Method,
-        wszService,
-        NULL,                               // Reserved, must be NULL
-        VSS_WRE_NEVER,                      // Must be VSS_WRE_NEVER
-        bRebootRequired),
-        L"SetRestoreMethod failed");
+                 Method,
+                 wszService,
+                 NULL,                               // Reserved, must be NULL
+                 VSS_WRE_NEVER,                      // Must be VSS_WRE_NEVER
+                 bRebootRequired),
+             L"SetRestoreMethod failed");
 
     bResult = true;
 
@@ -137,16 +137,16 @@ bool AddComponent(
     wprintf(L"INFO: AddComponent called\n");
 
     CHECK_HR(pMetadata->AddComponent(
-        componentType,
-        NULL,
-        wszName,
-        wszName,
-        NULL,
-        0,
-        false,
-        false,
-        false),
-        L"AddComponent failed");
+                 componentType,
+                 NULL,
+                 wszName,
+                 wszName,
+                 NULL,
+                 0,
+                 false,
+                 false,
+                 false),
+             L"AddComponent failed");
 
     bResult = true;
 
@@ -175,14 +175,14 @@ bool AddFilesToFileGroup(
     wprintf(L"INFO: AddFilesToFileGroup called\n");
 
     CHECK_HR(pMetadata->AddFilesToFileGroup(
-        NULL,
-        wszGroupName,
-        wszPath,
-        wszFilespec,
-        bRecursive,
-        NULL,
-        dwBackupTypeMask),
-        L"AddFilesToFileGroup failed");
+                 NULL,
+                 wszGroupName,
+                 wszPath,
+                 wszFilespec,
+                 bRecursive,
+                 NULL,
+                 dwBackupTypeMask),
+             L"AddFilesToFileGroup failed");
 
     bResult = true;
 
@@ -208,13 +208,13 @@ bool SaveToFile(
     wprintf(L"INFO: SaveToFile called\n");
 
     hFile = CreateFile(
-        wszFileName,                        // file to open
-        GENERIC_WRITE,                      // open for writing
-        0,                                  // share for reading
-        NULL,                               // default security
-        CREATE_ALWAYS,                      // always create
-        FILE_ATTRIBUTE_NORMAL,              // normal file
-        NULL);                              // no attr. template
+                wszFileName,                        // file to open
+                GENERIC_WRITE,                      // open for writing
+                0,                                  // share for reading
+                NULL,                               // default security
+                CREATE_ALWAYS,                      // always create
+                FILE_ATTRIBUTE_NORMAL,              // normal file
+                NULL);                              // no attr. template
 
     CHECK_CONDITION(
         hFile != INVALID_HANDLE_VALUE,

@@ -1,4 +1,4 @@
-//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //// PARTICULAR PURPOSE.
@@ -33,7 +33,7 @@ void CSampleElementBase::DoDraw()
     m_deviceResources->GetD2DDeviceContext()->FillRectangle(
         D2D1::RectF(m_left, m_top, m_left + m_width, m_top + m_height),
         m_defaultBrush.Get()
-        );
+    );
 }
 
 void CSampleElementBase::CreateDeviceIndependentResources(const std::shared_ptr<DeviceResources>& deviceResources)

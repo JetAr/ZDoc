@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,45 +28,45 @@ The sample also shows how to retrieve the OCSP response from the revocation info
 
 	Prints error information to the console
 *****************************************************************************/
-void 
-ReportError( 
-    LPCWSTR     wszMessage, 
-    DWORD       dwErrCode 
-    )
+void
+ReportError(
+    LPCWSTR     wszMessage,
+    DWORD       dwErrCode
+)
 {
-	LPWSTR pwszMsgBuf = NULL;
+    LPWSTR pwszMsgBuf = NULL;
 
-	if( NULL!=wszMessage && 0!=*wszMessage )
+    if( NULL!=wszMessage && 0!=*wszMessage )
     {
         wprintf( L"%s\n", wszMessage );
     }
 
-	FormatMessageW(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+    FormatMessageW(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM,
         NULL,                                       // Location of message
-                                                    //  definition ignored
+        //  definition ignored
         dwErrCode,                                  // Message identifier for
-                                                    //  the requested message    
+        //  the requested message
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  // Language identifier for
-                                                    //  the requested message
+        //  the requested message
         (LPWSTR) &pwszMsgBuf,                       // Buffer that receives
-                                                    //  the formatted message
+        //  the formatted message
         0,                                          // Size of output buffer
-                                                    //  not needed as allocate
-                                                    //  buffer flag is set
+        //  not needed as allocate
+        //  buffer flag is set
         NULL                                        // Array of insert values
-		);
-	
-	if( NULL != pwszMsgBuf )
-	{
-	    wprintf( L"Error: 0x%08x (%d) %s\n", dwErrCode, dwErrCode, pwszMsgBuf );
-		LocalFree(pwszMsgBuf);
-	}
-	else
-	{
-	    wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
-	}
+    );
+
+    if( NULL != pwszMsgBuf )
+    {
+        wprintf( L"Error: 0x%08x (%d) %s\n", dwErrCode, dwErrCode, pwszMsgBuf );
+        LocalFree(pwszMsgBuf);
+    }
+    else
+    {
+        wprintf( L"Error: 0x%08x (%d)\n", dwErrCode, dwErrCode );
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -78,7 +78,7 @@ HrFindCertificateBySubjectName(
     LPCWSTR			wszStore,
     LPCWSTR			wszSubject,
     PCCERT_CONTEXT	*ppcCert
-    )
+)
 {
     HRESULT hr = S_OK;
     HCERTSTORE  hStoreHandle = NULL;  // The system store handle.
@@ -89,18 +89,18 @@ HrFindCertificateBySubjectName(
     // Open the certificate store to be searched.
 
     hStoreHandle = CertOpenStore(
-                           CERT_STORE_PROV_SYSTEM,          // the store provider type
-                           0,                               // the encoding type is not needed
-                           NULL,                            // use the default HCRYPTPROV
-                           CERT_SYSTEM_STORE_CURRENT_USER,  // set the store location in a 
-                                                            //  registry location
-                           wszStore
-                           );                               // the store name 
+                       CERT_STORE_PROV_SYSTEM,          // the store provider type
+                       0,                               // the encoding type is not needed
+                       NULL,                            // use the default HCRYPTPROV
+                       CERT_SYSTEM_STORE_CURRENT_USER,  // set the store location in a
+                       //  registry location
+                       wszStore
+                   );                               // the store name
 
     if( NULL == hStoreHandle )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -108,22 +108,22 @@ HrFindCertificateBySubjectName(
     // Get a certificate that has the specified Subject Name
 
     *ppcCert = CertFindCertificateInStore(
-                           hStoreHandle,
-                           X509_ASN_ENCODING ,        // Use X509_ASN_ENCODING
-                           0,                         // No dwFlags needed
-                           CERT_FIND_SUBJECT_STR,     // Find a certificate with a
-                                                      //  subject that matches the 
-                                                      //  string in the next parameter
-                           wszSubject,                // The Unicode string to be found
-                                                      //  in a certificate's subject
-                           NULL);                     // NULL for the first call to the
-                                                      //  function; In all subsequent
-                                                      //  calls, it is the last pointer
-                                                      //  returned by the function
+                   hStoreHandle,
+                   X509_ASN_ENCODING,         // Use X509_ASN_ENCODING
+                   0,                         // No dwFlags needed
+                   CERT_FIND_SUBJECT_STR,     // Find a certificate with a
+                   //  subject that matches the
+                   //  string in the next parameter
+                   wszSubject,                // The Unicode string to be found
+                   //  in a certificate's subject
+                   NULL);                     // NULL for the first call to the
+    //  function; In all subsequent
+    //  calls, it is the last pointer
+    //  returned by the function
     if( NULL == *ppcCert )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -132,7 +132,7 @@ CleanUp:
     if(NULL != hStoreHandle)
     {
         CertCloseStore( hStoreHandle, 0);
-    }   
+    }
 
     return hr;
 }
@@ -140,15 +140,15 @@ CleanUp:
 /*****************************************************************************
   HrLoadFile
 
-    Load file into allocated (*ppbData). 
+    Load file into allocated (*ppbData).
     The caller must free the memory by LocalFree().
 *****************************************************************************/
 HRESULT
 HrLoadFile(
-	LPCWSTR  wszFileName,
+    LPCWSTR  wszFileName,
     PBYTE   *ppbData,
     DWORD   *pcbData
-    )
+)
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE;
     DWORD       cbRead = 0;
@@ -157,23 +157,23 @@ HrLoadFile(
     *ppbData = NULL;
     *pcbData = 0;
 
-    hFile = CreateFileW( wszFileName, 
-                        GENERIC_READ,
-                        0,
-                        NULL, 
-                        OPEN_EXISTING, 
-                        0, 
-                        NULL );
+    hFile = CreateFileW( wszFileName,
+                         GENERIC_READ,
+                         0,
+                         NULL,
+                         OPEN_EXISTING,
+                         0,
+                         NULL );
 
     if( INVALID_HANDLE_VALUE == hFile )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
     *pcbData = GetFileSize( hFile, NULL );
-    if( *pcbData == 0 ) 
+    if( *pcbData == 0 )
     {
         hr = S_FALSE;
         goto CleanUp;
@@ -183,14 +183,14 @@ HrLoadFile(
     if( NULL == *ppbData )
     {
         hr = HRESULT_FROM_WIN32( ERROR_OUTOFMEMORY );
-        
+
         goto CleanUp;
     }
 
     if( !ReadFile( hFile, *ppbData, *pcbData, &cbRead, NULL ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -222,33 +222,33 @@ CleanUp:
 HRESULT
 HrSaveFile(
     LPCWSTR             wszFileName,
-	PBYTE               pbData,
+    PBYTE               pbData,
     DWORD               cbData
-    )
+)
 {
     HANDLE      hFile = INVALID_HANDLE_VALUE;
     HRESULT     hr = S_OK;
     DWORD       cbWritten = 0;
 
-    hFile = CreateFileW( wszFileName, 
-                        GENERIC_WRITE,
-                        0,
-                        NULL, 
-                        CREATE_ALWAYS, 
-                        0, 
-                        NULL );
+    hFile = CreateFileW( wszFileName,
+                         GENERIC_WRITE,
+                         0,
+                         NULL,
+                         CREATE_ALWAYS,
+                         0,
+                         NULL );
 
     if( INVALID_HANDLE_VALUE == hFile )
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
     if( !WriteFile( hFile, pbData, cbData, &cbWritten, NULL ))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
@@ -266,10 +266,10 @@ CleanUp:
  Usage
 
 *****************************************************************************/
-void 
-Usage( 
-    LPCWSTR wsName 
-    )
+void
+Usage(
+    LPCWSTR wsName
+)
 {
     wprintf( L"%s [Options] {SubjectName} {OcspRespFile}\n", wsName );
     wprintf( L"  Options:\n" );
@@ -288,7 +288,7 @@ __cdecl
 wmain(
     int     argc,
     LPWSTR  argv[]
-    )
+)
 {
     HRESULT                     hr = S_OK;
 
@@ -297,7 +297,7 @@ wmain(
     LPCWSTR                     pwszStoreName = L"MY"; // by default, MY
     LPCWSTR                     pwszCName = NULL;
 
-    PCCERT_CONTEXT              pCertContext = NULL; 
+    PCCERT_CONTEXT              pCertContext = NULL;
 
     LPCWSTR                     pwsOcspFilePath = NULL;
     BOOL                        fStaple = FALSE;
@@ -333,7 +333,7 @@ wmain(
     for( i=1; i<argc; i++ )
     {
         if ( lstrcmpW (argv[i], L"/?") == 0 ||
-             lstrcmpW (argv[i], L"-?") == 0 ) 
+                lstrcmpW (argv[i], L"-?") == 0 )
         {
             Usage( L"OCSP_Response.exe" );
             goto CleanUp;
@@ -347,14 +347,13 @@ wmain(
             if( i+1 >= argc )
             {
                 hr = E_INVALIDARG;
-                
+
                 goto CleanUp;
             }
 
             pwszStoreName = argv[++i];
         }
-        else
-        if ( lstrcmpW (argv[i], L"-staple") == 0 )
+        else if ( lstrcmpW (argv[i], L"-staple") == 0 )
         {
             fStaple = TRUE;
         }
@@ -363,7 +362,7 @@ wmain(
     if( i+1 >= argc )
     {
         hr = S_FALSE;
-        
+
         Usage( L"OCSP_Response.exe" );
         goto CleanUp;
     }
@@ -373,10 +372,10 @@ wmain(
 
     //find certificate in user store to be use to sign data
     hr = HrFindCertificateBySubjectName(
-                                        pwszStoreName,
-                                        pwszCName,
-                                        &pCertContext
-                                        );
+             pwszStoreName,
+             pwszCName,
+             &pCertContext
+         );
     if( FAILED(hr) )
     {
         goto CleanUp;
@@ -387,16 +386,16 @@ wmain(
         //
         // Load OCSP Response and staple it to the certificate context.
         //
-        
+
         hr = HrLoadFile(
-                                        pwsOcspFilePath,
-                                        &pbOcspResponse,
-                                        &cbOcspResponse
-                                        );
+                 pwsOcspFilePath,
+                 &pbOcspResponse,
+                 &cbOcspResponse
+             );
         if( FAILED(hr) )
         {
             wprintf( L"Unable to read file: '%s'\n", pwsOcspFilePath );
-            
+
             goto CleanUp;
         }
 
@@ -408,7 +407,7 @@ wmain(
 
         //
         // staple OCSP response extension to certificate
-        // 
+        //
 
         CRYPT_DATA_BLOB blob = {cbOcspResponse, pbOcspResponse};
 
@@ -416,13 +415,13 @@ wmain(
                     pCertContext,                           // Cert
                     CERT_OCSP_RESPONSE_PROP_ID,             //The property to be set
                     0,                                      //dwFlags
-                    &blob 
-                    ))                                      //OCSP Response extension blob
+                    &blob
+                ))                                      //OCSP Response extension blob
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             goto CleanUp;
         }
-        
+
         wprintf( L"The certificate stapled with OCSP response from the file.\n" );
     }
 
@@ -457,17 +456,17 @@ wmain(
 
     ChainPolicy.pvExtraPolicyPara = NULL;
     if( !CertVerifyCertificateChainPolicy(
-                                    CERT_CHAIN_POLICY_BASE,
-                                    pChain,
-                                    &ChainPolicy,
-                                    &PolicyStatus))
+                CERT_CHAIN_POLICY_BASE,
+                pChain,
+                &ChainPolicy,
+                &PolicyStatus))
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-        
+
         goto CleanUp;
     }
 
-    if( PolicyStatus.dwError != S_OK ) 
+    if( PolicyStatus.dwError != S_OK )
     {
         ReportError( L"Base Policy Chain Status Failure:", PolicyStatus.dwError  );
         hr = PolicyStatus.dwError;
@@ -481,13 +480,13 @@ wmain(
         //
 
         if( NULL == pChain->rgpChain[0]->rgpElement[0]->pRevocationInfo ||
-            NULL == pChain->rgpChain[0]->rgpElement[0]->pRevocationInfo->pCrlInfo ||
-            NULL == pChain->rgpChain[0]->rgpElement[0]->pRevocationInfo->pCrlInfo->pBaseCrlContext ||
-            NULL == pChain->rgpChain[0]->rgpElement[0]->pRevocationInfo->pCrlInfo->pBaseCrlContext->pCrlInfo
-            )
+                NULL == pChain->rgpChain[0]->rgpElement[0]->pRevocationInfo->pCrlInfo ||
+                NULL == pChain->rgpChain[0]->rgpElement[0]->pRevocationInfo->pCrlInfo->pBaseCrlContext ||
+                NULL == pChain->rgpChain[0]->rgpElement[0]->pRevocationInfo->pCrlInfo->pBaseCrlContext->pCrlInfo
+          )
         {
             hr = CRYPT_E_NOT_FOUND;
-            
+
             goto CleanUp;
         }
 
@@ -509,10 +508,10 @@ wmain(
         wprintf( L"The certificate chain contains OCSP response for the certificate.\n" );
 
         hr = HrSaveFile(
-                                    pwsOcspFilePath,
-                                    pOSCPExts->Value.pbData,
-                                    pOSCPExts->Value.cbData
-                                    );
+                 pwsOcspFilePath,
+                 pOSCPExts->Value.pbData,
+                 pOSCPExts->Value.cbData
+             );
         if( FAILED(hr) )
         {
             wprintf( L"Unable to save file: %s\n", pwsOcspFilePath );

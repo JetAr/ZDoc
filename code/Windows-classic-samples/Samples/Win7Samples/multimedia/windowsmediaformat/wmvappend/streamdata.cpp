@@ -1,11 +1,11 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            Streamdata.cpp
 //
-// Abstract:            Implementation of CStreamData class 
+// Abstract:            Implementation of CStreamData class
 //
 //*****************************************************************************
 #include "stdafx.h"
@@ -35,22 +35,22 @@ CStreamData::~CStreamData()
     {
         for( DWORD i = 0; i < m_dwStreamCount; i++ )
         {
-			if( m_ptrMediaArray[i] )
-			{
-				delete[] (BYTE*)m_ptrMediaArray[i];
-			}
+            if( m_ptrMediaArray[i] )
+            {
+                delete[] (BYTE*)m_ptrMediaArray[i];
+            }
         }
     }
 
     SAFE_ARRAYDELETE( m_ptrMediaArray );
-	SAFE_ARRAYDELETE( m_ptrStreamNumArray );
-	SAFE_ARRAYDELETE( m_ptrStreamBufferWindow );
-	SAFE_ARRAYDELETE( m_pfVBRStream );
+    SAFE_ARRAYDELETE( m_ptrStreamNumArray );
+    SAFE_ARRAYDELETE( m_ptrStreamBufferWindow );
+    SAFE_ARRAYDELETE( m_pfVBRStream );
 }
 
 //------------------------------------------------------------------------------
 // Name: CStreamData::SetAllStreamData()
-// Desc: Sets the stream numbers and media types in the member variables 
+// Desc: Sets the stream numbers and media types in the member variables
 //       for the specified profile.
 //------------------------------------------------------------------------------
 HRESULT CStreamData::SetAllStreamData( IWMProfile * pProfile )
@@ -69,13 +69,13 @@ HRESULT CStreamData::SetAllStreamData( IWMProfile * pProfile )
     m_ptrStreamBufferWindow = new DWORD [m_dwStreamCount];
 
     m_pfVBRStream = new BOOL[m_dwStreamCount];
-    
-	if( NULL == m_ptrMediaArray || NULL == m_ptrStreamNumArray || NULL == m_ptrStreamBufferWindow )
+
+    if( NULL == m_ptrMediaArray || NULL == m_ptrStreamNumArray || NULL == m_ptrStreamBufferWindow )
     {
         _tprintf( _T( "Internal Error: Out of memory\n" ) );
         return(  E_OUTOFMEMORY );
     }
-    
+
     ZeroMemory( m_ptrMediaArray, m_dwStreamCount * sizeof( WM_MEDIA_TYPE * ) );
 
     ZeroMemory( m_ptrStreamNumArray, m_dwStreamCount * sizeof( WORD ) );
@@ -96,28 +96,28 @@ HRESULT CStreamData::SetAllStreamData( IWMProfile * pProfile )
     //
     for( DWORD i = 0; i < m_dwStreamCount; i++ )
     {
-        
-	    hr = pProfile->GetStream( i, &pStream );
+
+        hr = pProfile->GetStream( i, &pStream );
         if( FAILED( hr ) )
         {
-		    _tprintf( _T( "Could not get Stream %d from IWMProfile (hr=0x%08x).\n" ), i, hr );
+            _tprintf( _T( "Could not get Stream %d from IWMProfile (hr=0x%08x).\n" ), i, hr );
             break;
         }
-        
+
         pStream->GetStreamNumber( &m_ptrStreamNumArray[i] );
         if ( FAILED( hr ) )
         {
             _tprintf( _T( "Could not GetStreamNumber from IWMStreamConfig %d (hr=0x%08x).\n" ), i, hr );
             break;
         }
-        
+
         hr = pStream->QueryInterface( IID_IWMMediaProps, ( VOID ** )&pProps );
         if( FAILED( hr ) )
         {
             _tprintf( _T( "Could not QI for IWMMediaProps (hr=0x%08x).\n" ), hr );
             break;
         }
-        
+
         hr = pStream->GetBufferWindow( &m_ptrStreamBufferWindow[ i ] );
         if( FAILED( hr ) )
         {
@@ -142,43 +142,43 @@ HRESULT CStreamData::SetAllStreamData( IWMProfile * pProfile )
             m_pfVBRStream[ i ] = FALSE;
             hr = S_OK;
         }
-        
+
         //
         // Get the memory required for WM_MEDIA_TYPE of this stream
         //
         hr = pProps->GetMediaType( NULL, &cbType );
-		if ( FAILED( hr ) )
-		{
+        if ( FAILED( hr ) )
+        {
             _tprintf( _T( "Could not Get Media Type (hr=0x%08x).\n" ), hr );
-			break;
-		}
+            break;
+        }
 
-		m_ptrMediaArray[i] = (WM_MEDIA_TYPE*) new BYTE[ cbType ];
-		
-		if( m_ptrMediaArray[i] == NULL )
-		{
-			hr = E_OUTOFMEMORY;			
+        m_ptrMediaArray[i] = (WM_MEDIA_TYPE*) new BYTE[ cbType ];
+
+        if( m_ptrMediaArray[i] == NULL )
+        {
+            hr = E_OUTOFMEMORY;
             _tprintf( _T( "Internal Error: Out of memory\n" ) );
-			break;
-		}
+            break;
+        }
 
         hr = pProps->GetMediaType( m_ptrMediaArray[i], &cbType );
-		if ( FAILED( hr ) )
-		{
-			_tprintf( _T( "Could not Get Media Type (hr=0x%08x).\n" ), hr );
-			break;
-		}
+        if ( FAILED( hr ) )
+        {
+            _tprintf( _T( "Could not Get Media Type (hr=0x%08x).\n" ), hr );
+            break;
+        }
 
         SAFE_RELEASE( pStream );
         SAFE_RELEASE( pPropertyVault );
-		SAFE_RELEASE( pProps );
+        SAFE_RELEASE( pProps );
         cbType = 0;
     }
 
     SAFE_RELEASE( pProps );
     SAFE_RELEASE( pStream );
     SAFE_RELEASE( pPropertyVault );
-    
+
     return(  hr );
 }
 
@@ -193,34 +193,34 @@ HRESULT CStreamData::SetAllStreamsBufferWindow( IWMProfile * pProfile )
     HRESULT             hr = S_OK;
     IWMStreamConfig *   pStream = NULL;
 
-	if( NULL == pProfile )
+    if( NULL == pProfile )
     {
         return( E_INVALIDARG );
     }
 
     for( DWORD i = 0; i < m_dwStreamCount; i++ )
     {
-        
+
         if( 0 != m_ptrStreamNumArray[i] )
         {
-	        hr = pProfile->GetStreamByNumber( m_ptrStreamNumArray[i], &pStream );
+            hr = pProfile->GetStreamByNumber( m_ptrStreamNumArray[i], &pStream );
             if( FAILED( hr ) )
             {
-		        _tprintf( _T( "Could not get Stream %d from IWMProfile (hr=0x%08x).\n" ), m_ptrStreamNumArray[i], hr );
+                _tprintf( _T( "Could not get Stream %d from IWMProfile (hr=0x%08x).\n" ), m_ptrStreamNumArray[i], hr );
                 break;
             }
 
             hr = pStream->SetBufferWindow( m_ptrStreamBufferWindow[ i ] );
             if( FAILED( hr ) )
             {
-		        _tprintf( _T( "Could not set Buffer Window for Stream %d (hr=0x%08x).\n" ), m_ptrStreamNumArray[i], hr );
+                _tprintf( _T( "Could not set Buffer Window for Stream %d (hr=0x%08x).\n" ), m_ptrStreamNumArray[i], hr );
                 break;
             }
 
             hr = pProfile->ReconfigStream( pStream );
             if( FAILED( hr ) )
             {
-		        _tprintf( _T( "Could not reconfig stream %d (hr=0x%08x).\n" ), m_ptrStreamNumArray[i], hr );
+                _tprintf( _T( "Could not reconfig stream %d (hr=0x%08x).\n" ), m_ptrStreamNumArray[i], hr );
                 break;
             }
 
@@ -228,7 +228,7 @@ HRESULT CStreamData::SetAllStreamsBufferWindow( IWMProfile * pProfile )
         }
     }
 
-	SAFE_RELEASE( pStream );
+    SAFE_RELEASE( pStream );
 
     return( hr );
 }
@@ -240,7 +240,7 @@ HRESULT CStreamData::SetAllStreamsBufferWindow( IWMProfile * pProfile )
 //
 //------------------------------------------------------------------------------
 // Name: CStreamData::MapStreamNums()
-// Desc: Maps the stream numbers of this instance of the class with those of 
+// Desc: Maps the stream numbers of this instance of the class with those of
 //       another instance given by the calling function.
 //------------------------------------------------------------------------------
 BOOL CStreamData::MapStreamNums( CStreamData& data2, WORD ** ptrNumMap )
@@ -258,7 +258,7 @@ BOOL CStreamData::MapStreamNums( CStreamData& data2, WORD ** ptrNumMap )
     // from the second profile. Corresponding streams of both the halves
     // will be of the same type.
     //
-    (*ptrNumMap) = new WORD[2 * m_dwStreamCount];    
+    (*ptrNumMap) = new WORD[2 * m_dwStreamCount];
     if( NULL == (*ptrNumMap) )
     {
         _tprintf( _T( "Internal Error: Out of memory\n" ) );
@@ -270,14 +270,14 @@ BOOL CStreamData::MapStreamNums( CStreamData& data2, WORD ** ptrNumMap )
     for( WORD i = 0; i < m_dwStreamCount; i++ )
     {
         (*ptrNumMap)[i] = m_ptrStreamNumArray[i];
-		//
-		// Get the same media in the second profile
-		//
+        //
+        // Get the same media in the second profile
+        //
 
         DWORD dwBufferWindow = 0;
 
-        wNum = GetSameMediaType( *ptrNumMap, m_ptrMediaArray[i], m_pfVBRStream[i], 
-                                 data2, &dwBufferWindow );        
+        wNum = GetSameMediaType( *ptrNumMap, m_ptrMediaArray[i], m_pfVBRStream[i],
+                                 data2, &dwBufferWindow );
         if( wNum == (WORD) -1 )
         {
             _tprintf( _T( "Mismatch in Media types of both the Streams.\n" ) );
@@ -303,7 +303,7 @@ BOOL CStreamData::MapStreamNums( CStreamData& data2, WORD ** ptrNumMap )
         m_ptrStreamBufferWindow[ i ] += dwBufferWindow;
         (*ptrNumMap)[i + m_dwStreamCount] = wNum;
     }
-    
+
     return( TRUE );
 }
 
@@ -311,10 +311,10 @@ BOOL CStreamData::MapStreamNums( CStreamData& data2, WORD ** ptrNumMap )
 // Name: CStreamData::GetSameMediaType()
 // Desc: Finds the buffer window for a stream of the specified media type.
 //------------------------------------------------------------------------------
-WORD CStreamData::GetSameMediaType( WORD * ptrNumMap, 
-                                    WM_MEDIA_TYPE * pMediaToFind, 
-                                    BOOL fVBR, 
-                                    CStreamData& data2, 
+WORD CStreamData::GetSameMediaType( WORD * ptrNumMap,
+                                    WM_MEDIA_TYPE * pMediaToFind,
+                                    BOOL fVBR,
+                                    CStreamData& data2,
                                     DWORD * pdwBufferWindow )
 {
     if( NULL == ptrNumMap || NULL == pMediaToFind || NULL == pdwBufferWindow )
@@ -326,7 +326,7 @@ WORD CStreamData::GetSameMediaType( WORD * ptrNumMap,
     for( DWORD i =0; i < m_dwStreamCount; i++ )
     {
         if( fVBR == m_pfVBRStream[i]
-            && CompareMediaTypes( pMediaToFind, data2.m_ptrMediaArray[i], fVBR ) )
+                && CompareMediaTypes( pMediaToFind, data2.m_ptrMediaArray[i], fVBR ) )
         {
             //
             //  Skip stream if already chosen
@@ -351,8 +351,8 @@ WORD CStreamData::GetSameMediaType( WORD * ptrNumMap,
 // Name: CStreamData::CompareMediaTypes()
 // Desc: Returns TRUE if two media types are identical.
 //------------------------------------------------------------------------------
-BOOL CStreamData::CompareMediaTypes(WM_MEDIA_TYPE * pMedia1, 
-                                    WM_MEDIA_TYPE * pMedia2, 
+BOOL CStreamData::CompareMediaTypes(WM_MEDIA_TYPE * pMedia1,
+                                    WM_MEDIA_TYPE * pMedia2,
                                     BOOL fVBR )
 {
     if( pMedia1->majortype != pMedia2->majortype )
@@ -363,7 +363,7 @@ BOOL CStreamData::CompareMediaTypes(WM_MEDIA_TYPE * pMedia1,
 
     if( pMedia1->bFixedSizeSamples != pMedia2->bFixedSizeSamples )
         return( FALSE );
-    
+
     if( pMedia1->bTemporalCompression != pMedia2->bTemporalCompression )
         return( FALSE );
 
@@ -379,15 +379,15 @@ BOOL CStreamData::CompareMediaTypes(WM_MEDIA_TYPE * pMedia1,
     if ( fVBR )
     {
         //
-        // VBR streams may have different average bitrate even if they're created 
-	// using the same profile. We should ignore this difference.
+        // VBR streams may have different average bitrate even if they're created
+        // using the same profile. We should ignore this difference.
         //
         if ( pMedia1->formattype == WMFORMAT_VideoInfo )
         {
             WMVIDEOINFOHEADER * pVideoFormat1 = (WMVIDEOINFOHEADER *)pMedia1->pbFormat;
             WMVIDEOINFOHEADER * pVideoFormat2 = (WMVIDEOINFOHEADER *)pMedia2->pbFormat;
 
-            pVideoFormat1->dwBitRate = 0; 
+            pVideoFormat1->dwBitRate = 0;
             pVideoFormat2->dwBitRate = 0;
         }
         else if ( pMedia1->formattype == WMFORMAT_WaveFormatEx )
@@ -395,7 +395,7 @@ BOOL CStreamData::CompareMediaTypes(WM_MEDIA_TYPE * pMedia1,
             WAVEFORMATEX * pWaveFormat1 = (WAVEFORMATEX *)pMedia1->pbFormat;
             WAVEFORMATEX * pWaveFormat2 = (WAVEFORMATEX *)pMedia2->pbFormat;
 
-            pWaveFormat1->nAvgBytesPerSec = 0; 
+            pWaveFormat1->nAvgBytesPerSec = 0;
             pWaveFormat2->nAvgBytesPerSec = 0;
         }
     }

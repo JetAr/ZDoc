@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -30,14 +30,16 @@
 /* on creating a tree, we return a TREE handle. This is in fact a pointer
  * to a struct tree, defined here.
  */
-struct tree {
+struct tree
+{
     TREEITEM first;
 };
 
 /* each element in the tree is stored in a TREEITEM. a TREEITEM handle
  * is a pointer to a struct treeitem, defined here
  */
-struct treeitem {
+struct treeitem
+{
     TREE root;
     TREEKEY key;
     TREEITEM left, right;
@@ -53,16 +55,20 @@ struct treeitem {
 void
 tree_delitem(TREEITEM item)
 {
-    if (item == NULL) {
+    if (item == NULL)
+    {
         return;
     }
-    if (item->left != NULL) {
+    if (item->left != NULL)
+    {
         tree_delitem(item->left);
     }
-    if (item->right != NULL) {
+    if (item->right != NULL)
+    {
         tree_delitem(item->right);
     }
-    if (item->data != NULL) {
+    if (item->data != NULL)
+    {
         HeapFree(GetProcessHeap(), NULL, item->data);
     }
 
@@ -79,9 +85,9 @@ tree_newitem(TREE root, TREEKEY key, LPVOID value, UINT length)
     TREEITEM item;
 
     item = (TREEITEM) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct treeitem));
-	if (item == NULL)
+    if (item == NULL)
     {
-		return NULL;
+        return NULL;
     }
 
     item->root = root;
@@ -92,10 +98,10 @@ tree_newitem(TREE root, TREEKEY key, LPVOID value, UINT length)
     item->data = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, length);
     if (item->data == NULL)
     {
-		return NULL;
+        return NULL;
     }
 
-	if ( (value != NULL)  && (length <= (sizeof(LINE) + sizeof(LONG_PTR)) ))
+    if ( (value != NULL)  && (length <= (sizeof(LINE) + sizeof(LONG_PTR)) ))
     {
         memcpy(item->data, value, length);
     }
@@ -115,9 +121,11 @@ tree_getitem(TREE tree, TREEKEY key)
 
 
     prev = NULL;
-    for (item = tree->first; item != NULL; ) {
+    for (item = tree->first; item != NULL; )
+    {
 
-        if (item->key == key) {
+        if (item->key == key)
+        {
             return(item);
         }
 
@@ -127,9 +135,12 @@ tree_getitem(TREE tree, TREEKEY key)
          */
         prev = item;
 
-        if (key < item->key) {
+        if (key < item->key)
+        {
             item = item->left;
-        } else {
+        }
+        else
+        {
             item = item->right;
         }
     }
@@ -140,7 +151,7 @@ tree_getitem(TREE tree, TREEKEY key)
 /* --- external functions ------------------------------------------ */
 
 /*
- * create an empty tree. 
+ * create an empty tree.
  */
 TREE APIENTRY
 tree_create()
@@ -149,9 +160,9 @@ tree_create()
 
     tree = (TREE) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct tree));
     if (tree == NULL)
-		return NULL;
+        return NULL;
 
-	tree->first = NULL;
+    tree->first = NULL;
     return(tree);
 }
 
@@ -180,12 +191,14 @@ tree_find(TREE tree, TREEKEY key)
     /* find the correct place in the tree */
     item = tree_getitem(tree, key);
 
-    if (item == NULL) {
+    if (item == NULL)
+    {
         /* nothing in the tree */
         return(NULL);
     }
 
-    if (item->key != key) {
+    if (item->key != key)
+    {
         /* this key not in. getitem has returned parent */
         return(NULL);
     }
@@ -217,7 +230,8 @@ tree_search(TREE tree, TREEKEY key, PTREEITEM pplace)
 
     item = tree_getitem(tree, key);
 
-    if (item == NULL) {
+    if (item == NULL)
+    {
         /* no items in tree. set placeholder to NULL to
          * indicate insert at top of tree
          */
@@ -227,7 +241,8 @@ tree_search(TREE tree, TREEKEY key, PTREEITEM pplace)
         return(NULL);
     }
 
-    if (item->key == key) {
+    if (item->key == key)
+    {
         /* found the key already there -
          * set pplace to null just for safety
          */
@@ -260,21 +275,27 @@ tree_addafter(TREE tree, PTREEITEM place, TREEKEY key, LPVOID value, UINT length
     TREEITEM item, child;
 
     item = *place;
-    if (item == NULL) {
+    if (item == NULL)
+    {
         tree->first = tree_newitem(tree, key, value, length);
         return (tree->first->data);
     }
 
     child = tree_newitem(tree, key, value, length);
-    if (child->key < item->key ) {
+    if (child->key < item->key )
+    {
         /* should go on left leg */
-        if (item->left != NULL) {
+        if (item->left != NULL)
+        {
             Trace_Error(NULL, "TREE: left leaf leg not free", FALSE);
 
         }
         item->left = child;
-    } else {
-        if (item->right != NULL) {
+    }
+    else
+    {
+        if (item->right != NULL)
+        {
             Trace_Error(NULL, "TREE: right leaf leg not free", FALSE);
         }
         item->right = child;
@@ -334,14 +355,15 @@ ctree_update(TREE tree, TREEKEY key, LPVOID value, UINT length)
 
     pcounter = (LONG_PTR *)tree_search(tree, key, &item);
 
-    if (pcounter == NULL) {
+    if (pcounter == NULL)
+    {
         /* element not found - insert a new one
          * the data block for this element should be
          * the user's block with our reference count at
          * the beginning
          */
         pcounter = (LONG_PTR *)tree_addafter(tree, &item, key, NULL,
-                                 length + sizeof(LONG_PTR));
+                                             length + sizeof(LONG_PTR));
         *pcounter = 1;
         /* add on size of one long to get the start of the user
          * data
@@ -374,7 +396,8 @@ ctree_getcount(TREE tree, TREEKEY key)
     LONG_PTR FAR * pcounter;
 
     pcounter = (LONG_PTR *)tree_find(tree, key);
-    if (pcounter == NULL) {
+    if (pcounter == NULL)
+    {
         return(0);
     }
     return((long)*pcounter);
@@ -390,7 +413,8 @@ ctree_find(TREE tree, TREEKEY key)
 
 
     pcounter = (LONG_PTR *)tree_find(tree, key);
-    if (pcounter == NULL) {
+    if (pcounter == NULL)
+    {
         return(0);
     }
 

@@ -1,8 +1,8 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB Sample Provider 
+﻿//--------------------------------------------------------------------
+// Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
-// @module hashtbl.h | Class Definitions for CHashTbl Class and 
+// @module hashtbl.h | Class Definitions for CHashTbl Class and
 // miscellaneous bookmark functions
 //
 //
@@ -19,14 +19,15 @@
 // Note that it is important to align these.
 // Suggest ensuring quadword alignment for double and __int64.
 
-typedef struct _COLUMNDATA {
-	DBLENGTH	uLength;	// length of data (not space allocated)
-	DWORD		dwStatus;	// status of column
-	BYTE		bData[1];	// data here and beyond
+typedef struct _COLUMNDATA
+{
+    DBLENGTH	uLength;	// length of data (not space allocated)
+    DWORD		dwStatus;	// status of column
+    BYTE		bData[1];	// data here and beyond
 } COLUMNDATA, *PCOLUMNDATA;
 
 // This is the layout of a row.
-// Note the unique arrangement of the hash chain pointers 
+// Note the unique arrangement of the hash chain pointers
 // inside the row itself.
 // Note also that the structure for columns is defined, and
 // each row contains an array of columns.
@@ -35,37 +36,37 @@ typedef struct _COLUMNDATA {
 // There are asserts which enforce this.
 typedef struct tagRowBuff
 {
-	DBREFCOUNT  ulRefCount;		// reference count of outstanding handles
-	ULONG       irowbuffNext;	// next row in bookmark hash chain
-	USHORT      wBmkHash;		// hash value (redundant)
-	DBCOUNTITEM	pbBmk;			// ptr  to bookmark
-	DBBKMARK    cbBmk;			// (dwLength) bookmark size, in bytes
-	ULONG       dwBmkStatus;	// (dwStatus) bookmark status
-	DBBKMARK    dwBmk;			// (bData)    bookmark value, , maybe row count
-	COLUMNDATA  cdData[1];		// Column data here and beyond (Bookmark should be here)
+    DBREFCOUNT  ulRefCount;		// reference count of outstanding handles
+    ULONG       irowbuffNext;	// next row in bookmark hash chain
+    USHORT      wBmkHash;		// hash value (redundant)
+    DBCOUNTITEM	pbBmk;			// ptr  to bookmark
+    DBBKMARK    cbBmk;			// (dwLength) bookmark size, in bytes
+    ULONG       dwBmkStatus;	// (dwStatus) bookmark status
+    DBBKMARK    dwBmk;			// (bData)    bookmark value, , maybe row count
+    COLUMNDATA  cdData[1];		// Column data here and beyond (Bookmark should be here)
 } ROWBUFF, *PROWBUFF;
 
 typedef struct tagSLOT
 {
-	ULONG islotNext;
-	ULONG islotPrev;
-	ULONG cslot;
+    ULONG islotNext;
+    ULONG islotPrev;
+    ULONG cslot;
 } SLOT, *PSLOT;
 
 typedef struct tagLSTSLOT
 {
-	ULONG       islotFirst;
-	ULONG       islotRov;
-	ULONG       islotMin;
-	ULONG       islotMax;
-	BYTE        *rgslot;
-	LPBITARRAY	pbitsSlot;	// bit array to mark active rows
-	ULONG       cbExtra;
-	ULONG       cbslotLeftOver;
-	ULONG       cbSlot;
-	ULONG       cbPage;
-	ULONG       cbCommitCurrent;
-	ULONG       cbCommitMax;
+    ULONG       islotFirst;
+    ULONG       islotRov;
+    ULONG       islotMin;
+    ULONG       islotMax;
+    BYTE        *rgslot;
+    LPBITARRAY	pbitsSlot;	// bit array to mark active rows
+    ULONG       cbExtra;
+    ULONG       cbslotLeftOver;
+    ULONG       cbSlot;
+    ULONG       cbPage;
+    ULONG       cbCommitCurrent;
+    ULONG       cbCommitMax;
 } LSTSLOT, *PLSTSLOT;
 
 

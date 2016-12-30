@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@ Assumptions:
 // This routine frees  LPDHCP_FAILOVER_RELATIONSHIP and its internal elements.
 VOID FreeRelationshipMemory(LPDHCP_FAILOVER_RELATIONSHIP pFailRel)
 {
-    if (NULL != pFailRel) 
+    if (NULL != pFailRel)
     {
         // Frees relationship name
         if (NULL != pFailRel->RelationshipName)
@@ -43,7 +43,7 @@ VOID FreeRelationshipMemory(LPDHCP_FAILOVER_RELATIONSHIP pFailRel)
             {
                 DhcpRpcFreeMemory(pFailRel->pScopes->Elements);
             }
-             DhcpRpcFreeMemory(pFailRel->pScopes);
+            DhcpRpcFreeMemory(pFailRel->pScopes);
         }
         //Frees the relationship
         DhcpRpcFreeMemory(pFailRel);
@@ -60,10 +60,10 @@ int __cdecl main(void)
     DWORD                         dwFlags              = 0;            // Flags to reflect which all fields are getting modified
 
     dwError = DhcpV4FailoverGetRelationship(
-        pwszServer,           // Server IP Address
-        pwszRelationshipName, // Relationship name
-        &pRelationship        // Relationship structure (LPDHCP_FAILOVER_RELATIONSHIP)
-        );
+                  pwszServer,           // Server IP Address
+                  pwszRelationshipName, // Relationship name
+                  &pRelationship        // Relationship structure (LPDHCP_FAILOVER_RELATIONSHIP)
+              );
     if( ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverGetRelationship failed with Error = %d\n",dwError);
@@ -74,13 +74,13 @@ int __cdecl main(void)
     pRelationship->Mclt=0xe20;       // 3616 seconds
     pRelationship->SafePeriod=0x300; // 768 seconds
     pRelationship->Percentage=0x46;  //70 %
-    
+
     dwFlags |= MODE | SAFEPERIOD | MCLT | PERCENTAGE; // mode, safeperiod, mclt and percentage field needs to be modified
     dwError = DhcpV4FailoverSetRelationship(
-                        pwszServer,    // Server IP Address
-                        dwFlags,       // Flags to reflect which all fields are getting modified
-                        pRelationship  // Relationship structure from which values to be modified will be picked
-                        );
+                  pwszServer,    // Server IP Address
+                  dwFlags,       // Flags to reflect which all fields are getting modified
+                  pRelationship  // Relationship structure from which values to be modified will be picked
+              );
     if( ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverSetRelationship failed with Error = %d\n",dwError);

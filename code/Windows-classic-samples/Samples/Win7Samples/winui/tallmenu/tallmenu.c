@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
  *
  *  TallMenu.c
  *
@@ -6,9 +6,9 @@
  *
  *  All rights reserved.
  *
- *       This source code is only intended as a supplement to 
+ *       This source code is only intended as a supplement to
  *       Development Tools and/or SDK documentation.
- *       See these sources for detailed information regarding the 
+ *       See these sources for detailed information regarding the
  *       Microsoft samples programs.
  *
  *   THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
@@ -131,7 +131,8 @@ AdjustTallMenu(HWND hwnd, HMENU hmenuPopup)
      *  case we cheat and use the menu bar height, which is a reasonable
      *  approximation to the menu item height.
      */
-    if (cyItem == 0) {
+    if (cyItem == 0)
+    {
         cyItem = GetSystemMetrics(SM_CYMENU);
     }
 
@@ -146,7 +147,8 @@ AdjustTallMenu(HWND hwnd, HMENU hmenuPopup)
      */
 
     cy = 0;
-    for (iItem = 0; iItem < cItem; iItem++) {
+    for (iItem = 0; iItem < cItem; iItem++)
+    {
         MENUITEMINFO mii;
         TCHAR buf[80];
 
@@ -155,11 +157,15 @@ AdjustTallMenu(HWND hwnd, HMENU hmenuPopup)
         mii.dwTypeData = buf;
         mii.cch = 80;
 
-        if (GetMenuItemInfo(hmenuPopup, iItem, MF_BYPOSITION, &mii)) {
-            if (cy > cyScreen) {
+        if (GetMenuItemInfo(hmenuPopup, iItem, MF_BYPOSITION, &mii))
+        {
+            if (cy > cyScreen)
+            {
                 cy = 0;
                 mii.fType |= MFT_MENUBARBREAK;
-            } else {
+            }
+            else
+            {
                 mii.fType &= ~MFT_MENUBARBREAK;
             }
 
@@ -181,7 +187,8 @@ AdjustTallMenu(HWND hwnd, HMENU hmenuPopup)
 LRESULT CALLBACK
 TallMenu_WndProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
-    switch (uiMsg) {
+    switch (uiMsg)
+    {
 
     /*
      *  If a popup menu is about to be displayed, first make sure
@@ -234,19 +241,20 @@ WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR pszCmdLine, int nCmdShow)
     RegisterClass(&wc);
 
     hwnd = CreateWindow(
-        TEXT("TallMenu"),               /* Class Name */
-        TEXT("Tall Menu Sample"),       /* Title */
-        WS_OVERLAPPEDWINDOW,            /* Style */
-        CW_USEDEFAULT, CW_USEDEFAULT,   /* Position */
-        CW_USEDEFAULT, CW_USEDEFAULT,   /* Size */
-        NULL,                           /* Parent */
-        NULL,                           /* Use class menu */
-        hinst,                          /* Instance */
-        0);                             /* No special parameters */
+               TEXT("TallMenu"),               /* Class Name */
+               TEXT("Tall Menu Sample"),       /* Title */
+               WS_OVERLAPPEDWINDOW,            /* Style */
+               CW_USEDEFAULT, CW_USEDEFAULT,   /* Position */
+               CW_USEDEFAULT, CW_USEDEFAULT,   /* Size */
+               NULL,                           /* Parent */
+               NULL,                           /* Use class menu */
+               hinst,                          /* Instance */
+               0);                             /* No special parameters */
 
     ShowWindow(hwnd, nCmdShow);
 
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    while (GetMessage(&msg, NULL, 0, 0))
+    {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }

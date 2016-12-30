@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,8 @@
 
 #define SF_MAXLABEL     80   /* no more than 80 in an item within the bar */
 
-typedef struct statel {
+typedef struct statel
+{
     int type;                       /* SF_BUTTON or SF_STATIC */
     int flags;                      /* SF_VAR => variable width
                                        SF_LEFT=> left aligned (else right)
@@ -35,7 +36,8 @@ typedef struct statel {
     RECT rc;                        /* used by status.c */
 } STATEL, * PSTATEL;
 
-typedef struct itemlist {
+typedef struct itemlist
+{
     int nitems;
     PSTATEL statels;
 
@@ -83,8 +85,8 @@ int status_charheight, status_charwidth;
  */
 BOOL
 StatusInit(
-          HANDLE hInstance
-          )
+    HANDLE hInstance
+)
 {
     WNDCLASS    wc;
     BOOL resp;
@@ -108,13 +110,13 @@ StatusInit(
     resp = RegisterClass(&wc);
 
     hDC = GetDC(NULL);
-    if (hDC) 
+    if (hDC)
     {
         InitDC(hDC);
         GetTextMetrics(hDC, &tm);
         ReleaseDC(NULL, hDC);
-    } 
-    else 
+    }
+    else
     {
         // arbitrary, whatever...
         tm.tmHeight = 14;
@@ -131,12 +133,12 @@ StatusInit(
  */
 HWND APIENTRY
 StatusCreate(
-            HANDLE hInst,
-            HWND hParent,
-            INT_PTR id,
-            LPRECT rcp,
-            HANDLE hmem
-            )
+    HANDLE hInst,
+    HWND hParent,
+    INT_PTR id,
+    LPRECT rcp,
+    HANDLE hmem
+)
 {
 
     HWND hWnd;
@@ -162,8 +164,8 @@ StatusCreate(
 /* return default height of this window */
 int APIENTRY
 StatusHeight(
-            HANDLE hmem
-            )
+    HANDLE hmem
+)
 /* The window has a number of items which are arranged horizontally,
    so the window height is the maximum of the individual heights
 */
@@ -174,15 +176,20 @@ StatusHeight(
     int maxsize = 0;
 
     plist = (PILIST) hmem;
-    if (plist != NULL) {
-        for (i = 0; i<plist->nitems; i++) {
+    if (plist != NULL)
+    {
+        for (i = 0; i<plist->nitems; i++)
+        {
             sz = StatusCalcHeight(NULL, &plist->statels[i]);
             maxsize = max(sz, maxsize);
         }
     }
-    if (maxsize > 0) {
+    if (maxsize > 0)
+    {
         return(maxsize + 4);
-    } else {
+    }
+    else
+    {
         return(status_charheight + 4);
     }
 }
@@ -190,15 +197,16 @@ StatusHeight(
 /* alloc the plist struct and return handle to caller */
 HANDLE APIENTRY
 StatusAlloc(
-           int nitems
-           )
+    int nitems
+)
 {
     PILIST pilist;
     LPSTR chp;
 
-    chp = (LPSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, 
+    chp = (LPSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,
                            sizeof(ILIST) + (sizeof(STATEL) * nitems));
-    if (chp == NULL) {
+    if (chp == NULL)
+    {
         return(NULL);
     }
 
@@ -213,21 +221,22 @@ StatusAlloc(
 /* insert an item into the plist */
 BOOL APIENTRY
 StatusAddItem(
-             HANDLE hmem,
-             int itemnr,
-             int type,
-             int flags,
-             int id,
-             int width,
-             LPSTR text
-             )
+    HANDLE hmem,
+    int itemnr,
+    int type,
+    int flags,
+    int id,
+    int width,
+    LPSTR text
+)
 {
     PILIST pilist;
     PSTATEL pel;
     HRESULT hr;
 
     pilist = (PILIST) hmem;
-    if ((pilist == NULL) || (itemnr >= pilist->nitems) || (itemnr < 0) ) {
+    if ((pilist == NULL) || (itemnr >= pilist->nitems) || (itemnr < 0) )
+    {
         return(FALSE);
     }
     pel = &pilist->statels[itemnr];
@@ -235,11 +244,14 @@ StatusAddItem(
     pel->flags = flags;
     pel->id = id;
     pel->width = width;
-    if (text == NULL) {
+    if (text == NULL)
+    {
         pel->text[0] = '\0';
-    } else {
+    }
+    else
+    {
         hr = StringCchCopy(pel->text,(SF_MAXLABEL+1), text);
-        if (FAILED(hr)) 
+        if (FAILED(hr))
         {
             OutputError(hr, IDS_SAFE_COPY);
         }
@@ -273,12 +285,12 @@ StatusCreateTools()
     hpenBlack = CreatePen(0, 1, RGB(0, 0, 0));
 
     hdc = GetDC(NULL);
-    if (hdc) 
+    if (hdc)
     {
         scale = GetDeviceCaps(hdc, LOGPIXELSY);
         ReleaseDC(NULL, hdc);
-    } 
-    else 
+    }
+    else
     {
         // arbitrary, whatever...
         scale = 72;
@@ -329,11 +341,11 @@ StatusDeleteTools()
 
 INT_PTR APIENTRY
 StatusWndProc(
-             HWND hWnd,
-             UINT message,
-             WPARAM wParam,
-             LPARAM lParam
-             )
+    HWND hWnd,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam
+)
 {
     HANDLE hitems;
     PSTATEL ip;
@@ -344,14 +356,16 @@ StatusWndProc(
     RECT rc;
     POINT pt;
 
-    switch (message) {
-    
+    switch (message)
+    {
+
     case WM_CREATE:
         cp = (CREATESTRUCT *) lParam;
         hitems = (HANDLE) cp->lpCreateParams;
         SetWindowLongPtr(hWnd, 0,  (LONG_PTR)hitems);
         plist = (PILIST) hitems;
-        if (plist != NULL) {
+        if (plist != NULL)
+        {
             plist->selitem = -1;
         }
         break;
@@ -359,7 +373,8 @@ StatusWndProc(
     case WM_SIZE:
         hitems = (HANDLE) GetWindowLongPtr(hWnd, 0);
         plist = (PILIST) hitems;
-        if (plist != NULL) {
+        if (plist != NULL)
+        {
             StatusResize(hWnd, plist);
         }
         break;
@@ -377,14 +392,17 @@ StatusWndProc(
         pt.x = LOWORD(lParam);
         pt.y = HIWORD(lParam);
 
-        if (plist == NULL) {
+        if (plist == NULL)
+        {
             break;
         }
-        if (plist->selitem != -1) {
+        if (plist->selitem != -1)
+        {
             ip = &plist->statels[plist->selitem];
-            if (plist->isselected) {
+            if (plist->isselected)
+            {
                 hDC = GetDC(hWnd);
-                if (hDC) 
+                if (hDC)
                 {
                     InitDC(hDC);
                     StatusButtonUp(hDC, ip);
@@ -393,7 +411,8 @@ StatusWndProc(
             }
             plist->selitem = -1;
             ReleaseCapture();
-            if (PtInRect(&ip->rc, pt)) {
+            if (PtInRect(&ip->rc, pt))
+            {
                 SendMessage(GetParent(hWnd), WM_COMMAND, MAKELONG(ip->id, WM_LBUTTONUP), (LPARAM)hWnd);
             }
         }
@@ -402,16 +421,21 @@ StatusWndProc(
     case WM_LBUTTONDOWN:
         hitems = (HANDLE) GetWindowLongPtr(hWnd, 0);
         plist = (PILIST)hitems;
-        if (plist == NULL) {
+        if (plist == NULL)
+        {
             break;
         }
         pt.x = LOWORD(lParam);
         pt.y = HIWORD(lParam);
-        if (plist->selitem == -1) {
-            for (i = 0; i< plist->nitems; i++) {
+        if (plist->selitem == -1)
+        {
+            for (i = 0; i< plist->nitems; i++)
+            {
                 ip = &plist->statels[i];
-                if (PtInRect(&ip->rc, pt)) {
-                    if (ip->type != SF_BUTTON) {
+                if (PtInRect(&ip->rc, pt))
+                {
+                    if (ip->type != SF_BUTTON)
+                    {
                         break;
                     }
                     plist->selitem = i;
@@ -419,7 +443,7 @@ StatusWndProc(
 
                     plist->isselected = TRUE;
                     hDC = GetDC(hWnd);
-                    if (hDC) 
+                    if (hDC)
                     {
                         InitDC(hDC);
                         StatusButtonDown(hDC, ip);
@@ -434,17 +458,21 @@ StatusWndProc(
     case WM_MOUSEMOVE:
         hitems = (HANDLE) GetWindowLongPtr(hWnd, 0);
         plist = (PILIST) hitems;
-        if (plist == NULL) {
+        if (plist == NULL)
+        {
             break;
         }
         pt.x = LOWORD(lParam);
         pt.y = HIWORD(lParam);
-        if (plist->selitem != -1) {
+        if (plist->selitem != -1)
+        {
             ip = &plist->statels[plist->selitem];
-            if (PtInRect(&ip->rc, pt)) {
-                if (!plist->isselected) {
+            if (PtInRect(&ip->rc, pt))
+            {
+                if (!plist->isselected)
+                {
                     hDC = GetDC(hWnd);
-                    if (hDC) 
+                    if (hDC)
                     {
                         InitDC(hDC);
                         StatusButtonDown(hDC, ip);
@@ -452,10 +480,13 @@ StatusWndProc(
                     }
                     plist->isselected = TRUE;
                 }
-            } else {
-                if (plist->isselected) {
+            }
+            else
+            {
+                if (plist->isselected)
+                {
                     hDC = GetDC(hWnd);
-                    if (hDC) 
+                    if (hDC)
                     {
                         InitDC(hDC);
                         StatusButtonUp(hDC, ip);
@@ -477,17 +508,20 @@ StatusWndProc(
 
     case SM_NEW:
         hitems = (HANDLE) GetWindowLongPtr(hWnd, 0);
-        if (hitems != NULL) {
+        if (hitems != NULL)
+        {
             HeapFree(GetProcessHeap(), NULL, hitems);
         }
         hitems = (HANDLE) wParam;
-        if (hitems == NULL) {
+        if (hitems == NULL)
+        {
             SetWindowLongPtr(hWnd, 0, 0);
             InvalidateRect(hWnd, NULL, TRUE);
             break;
         }
         plist = (PILIST) hitems;
-        if (plist == NULL) {
+        if (plist == NULL)
+        {
             SetWindowLongPtr(hWnd, 0, 0);
             InvalidateRect(hWnd, NULL, TRUE);
             break;
@@ -500,15 +534,20 @@ StatusWndProc(
 
     case SM_SETTEXT:
         hitems = (HANDLE) GetWindowLongPtr(hWnd, 0);
-        if (hitems == NULL) {
+        if (hitems == NULL)
+        {
             break;
         }
         plist = (PILIST) hitems;
         ip = StatusGetItem(plist, (int)wParam);
-        if (ip != NULL) {
-            if (lParam == 0) {
+        if (ip != NULL)
+        {
+            if (lParam == 0)
+            {
                 ip->text[0] = '\0';
-            } else {
+            }
+            else
+            {
                 My_mbsncpy(ip->text, (LPSTR) lParam, SF_MAXLABEL);
                 ip->text[SF_MAXLABEL] = '\0';
             }
@@ -519,12 +558,15 @@ StatusWndProc(
              * and not just this field - so set rc to indicate the
              * area to be redrawn.
              */
-            if (ip->flags & SF_VAR) {
+            if (ip->flags & SF_VAR)
+            {
                 StatusResize(hWnd, plist);
                 GetClientRect(hWnd, &rc);
                 RedrawWindow(hWnd, &rc, NULL,
                              RDW_INVALIDATE|RDW_ERASE|RDW_UPDATENOW);
-            } else {
+            }
+            else
+            {
                 /* instead of just invalidating the window, we can
                  * force the window to be repainted now. This is
                  * essential for status updates during a busy
@@ -557,7 +599,8 @@ StatusResize(HWND hWnd, PILIST iplistp)
     PSTATEL ip;
 
 
-    if (iplistp == NULL) {
+    if (iplistp == NULL)
+    {
         return;
     }
     GetClientRect(hWnd, &rc);
@@ -569,7 +612,8 @@ StatusResize(HWND hWnd, PILIST iplistp)
      * in order starting at the left and the right, with a single
      * char's width between each item
      */
-    for (i = 0; i < iplistp->nitems; i++) {
+    for (i = 0; i < iplistp->nitems; i++)
+    {
         ip = &iplistp->statels[i];
 
         width = StatusCalcWidth(hWnd, ip);
@@ -580,41 +624,56 @@ StatusResize(HWND hWnd, PILIST iplistp)
         /* see if  this item fits. Items that partially fit
          * are placed reduced in size.
          */
-        if (ip->flags & SF_LEFT) {
+        if (ip->flags & SF_LEFT)
+        {
 
-            if (curpos_left+width >= curpos_right) {
+            if (curpos_left+width >= curpos_right)
+            {
                 /* doesn't completely fit-does it partly? */
-                if ((curpos_left + 1) >= curpos_right) {
+                if ((curpos_left + 1) >= curpos_right)
+                {
 
                     /* no - this item does not fit */
                     ip->rc.left = 0;
                     ip->rc.right = 0;
-                } else {
+                }
+                else
+                {
                     /* partial fit */
                     ip->rc.left = curpos_left;
                     ip->rc.right = curpos_right - 1;
                     curpos_left = curpos_right;
                 }
-            } else {
+            }
+            else
+            {
                 /* complete fit */
                 ip->rc.left = curpos_left;
                 ip->rc.right = curpos_left + width;
                 curpos_left += width + 1;
             }
-        } else {
+        }
+        else
+        {
 
             /* same size check for right-aligned items */
-            if (curpos_right-width <= curpos_left) {
+            if (curpos_right-width <= curpos_left)
+            {
 
-                if (curpos_right <= curpos_left+1) {
+                if (curpos_right <= curpos_left+1)
+                {
                     ip->rc.left = 0;
                     ip->rc.right = 0;
-                } else {
+                }
+                else
+                {
                     ip->rc.left = curpos_left + 1;
                     ip->rc.right = curpos_right;
                     curpos_right = curpos_left;
                 }
-            } else {
+            }
+            else
+            {
                 ip->rc.right = curpos_right;
                 ip->rc.left = curpos_right - width;
                 curpos_right -= (width + 1);
@@ -639,20 +698,27 @@ StatusPaint(HWND hWnd, PILIST iplistp)
     InitDC(hDC);
 
     RaiseRect(hDC, &rc);
-    if (iplistp == NULL) {
+    if (iplistp == NULL)
+    {
         EndPaint(hWnd, &ps);
         return;
     }
-    for (i =0; i < iplistp->nitems; i++) {
+    for (i =0; i < iplistp->nitems; i++)
+    {
         ip = &iplistp->statels[i];
 
-        if (ip->rc.left == ip->rc.right) {
+        if (ip->rc.left == ip->rc.right)
+        {
             continue;
         }
-        if (ip->type == SF_STATIC) {
-            if (ip->flags & SF_RAISE) {
+        if (ip->type == SF_STATIC)
+        {
+            if (ip->flags & SF_RAISE)
+            {
                 RaiseRect(hDC, &ip->rc);
-            } else if (ip->flags & SF_LOWER) {
+            }
+            else if (ip->flags & SF_LOWER)
+            {
                 LowerRect(hDC, &ip->rc);
             }
             rc = ip->rc;
@@ -665,7 +731,9 @@ StatusPaint(HWND hWnd, PILIST iplistp)
             SelectObject(hDC, hpenOld);
             DrawText(hDC, ip->text, lstrlen(ip->text), &rc,
                      DT_LEFT | DT_VCENTER);
-        } else {
+        }
+        else
+        {
             StatusButtonUp(hDC, ip);
         }
     }
@@ -761,7 +829,8 @@ TopLeft(HDC hDC, LPRECT rcp, HPEN hpen, BOOL bCorners)
     hpenOld = (HPEN)SelectObject(hDC, hpen);
     x = rcp->right - 1;
     y = rcp->bottom;
-    if (!bCorners) {
+    if (!bCorners)
+    {
         x--;
         y--;
     }
@@ -780,7 +849,8 @@ BottomRight(HDC hDC, LPRECT rcp, HPEN hpen, BOOL bCorners)
     hpenOld = (HPEN)SelectObject(hDC, hpen);
     x = rcp->left - 1;
     y = rcp->top;
-    if (!bCorners) {
+    if (!bCorners)
+    {
         x++;
         y++;
     }
@@ -796,11 +866,14 @@ StatusGetItem(PILIST plist, int id)
 {
     int i;
 
-    if (plist == NULL) {
+    if (plist == NULL)
+    {
         return(NULL);
     }
-    for (i = 0; i < plist->nitems; i++) {
-        if (plist->statels[i].id == id) {
+    for (i = 0; i < plist->nitems; i++)
+    {
+        if (plist->statels[i].id == id)
+        {
             return(&plist->statels[i]);
         }
     }
@@ -825,9 +898,10 @@ StatusCalcWidth(HWND hWnd, PSTATEL ip)
     HDC hDC;
 
     ch_size = ip->width * status_charwidth;
-    if (ip->flags & SF_VAR) {
+    if (ip->flags & SF_VAR)
+    {
         hDC = GetDC(hWnd);
-        if (hDC) 
+        if (hDC)
         {
             InitDC(hDC);
             GetTextExtentPoint(hDC, ip->text, lstrlen(ip->text), &sz);
@@ -840,26 +914,36 @@ StatusCalcWidth(HWND hWnd, PSTATEL ip)
          * requested
          */
 
-        if (ip->flags & SF_SZMIN) {
-            if (ch_size > t_size) {
+        if (ip->flags & SF_SZMIN)
+        {
+            if (ch_size > t_size)
+            {
                 t_size = ch_size;
             }
         }
-        if (ip->flags & SF_SZMAX) {
-            if (ch_size < t_size) {
+        if (ip->flags & SF_SZMAX)
+        {
+            if (ch_size < t_size)
+            {
                 t_size = ch_size;
             }
         }
         ch_size = t_size;
     }
 
-    if (ch_size != 0) {
-        if (ip->type == SF_BUTTON) {
+    if (ch_size != 0)
+    {
+        if (ip->type == SF_BUTTON)
+        {
             return(ch_size+6);
-        } else {
+        }
+        else
+        {
             return(ch_size+4);
         }
-    } else {
+    }
+    else
+    {
         return(0);
     }
 }
@@ -870,9 +954,12 @@ StatusCalcHeight(HWND hWnd, PSTATEL ip)
     int size;
 
     size = status_charheight;
-    if (ip->type == SF_BUTTON) {
+    if (ip->type == SF_BUTTON)
+    {
         return(size + 6);
-    } else {
+    }
+    else
+    {
         return(size + 2);
     }
 }

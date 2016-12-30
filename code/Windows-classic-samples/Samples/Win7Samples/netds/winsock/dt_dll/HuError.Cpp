@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
   Copyright (c) 1995 Intel Corp
 
@@ -20,42 +20,46 @@ static ErrorCode_e HULastError	= ENONE;
 
 void HUSetLastError(ErrorCode_e ErrorCode)
 {
-  HULastError = ErrorCode;
+    HULastError = ErrorCode;
 }
 
 ErrorCode_e HUGetLastError()
 {
-  return HULastError;
+    return HULastError;
 }
 
 void HUPrintError(char *func,ErrorCode_e ErrorCode)
 {
-  if(func == NULL){
-    printf("Error: - - ");
-  }else{
-    printf("Error: %s - - ",func);
-  }
-  switch(ErrorCode){
+    if(func == NULL)
+    {
+        printf("Error: - - ");
+    }
+    else
+    {
+        printf("Error: %s - - ",func);
+    }
+    switch(ErrorCode)
+    {
     case ENONE:
-	printf("No error\n");
-	break;
+        printf("No error\n");
+        break;
     case ALLOCERROR:
-	printf("Allocation error\n");
-	break;
+        printf("Allocation error\n");
+        break;
     case INVALIDARG:
-	printf("Invalid arguement passed in\n");
-	break;
+        printf("Invalid arguement passed in\n");
+        break;
     case OBJNOTINIT:
-	printf("Object not initialized\n");
-	break;
+        printf("Object not initialized\n");
+        break;
     case OBJEFFERROR:
-	printf("Object becoming ineffecient. Trying making it large\n");
-	break;
+        printf("Object becoming ineffecient. Trying making it large\n");
+        break;
     case ALREADYCONN:
-	printf("Already connected\n");
-	break;
+        printf("Already connected\n");
+        break;
     default:
-      printf("ErrorCode not defined\n");
-  }
+        printf("ErrorCode not defined\n");
+    }
 }
 

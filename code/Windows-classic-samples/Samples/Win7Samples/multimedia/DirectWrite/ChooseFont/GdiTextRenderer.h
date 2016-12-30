@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -32,7 +32,7 @@ private:
     IDWriteBitmapRenderTarget*   m_renderTarget;
     IDWriteRenderingParams*      m_renderingParams;
     volatile LONG                m_refs;
-    
+
     HRESULT STDMETHODCALLTYPE DrawGlyphRun(
         void* clientDrawingContext,
         FLOAT baselineOriginX,
@@ -76,10 +76,10 @@ private:
     HRESULT STDMETHODCALLTYPE GetPixelsPerDip(
         void* clientDrawingContext,
         OUT FLOAT* pixelsPerDip);
-    
+
 public:
 
-    HRESULT STDMETHODCALLTYPE QueryInterface( 
+    HRESULT STDMETHODCALLTYPE QueryInterface(
         REFIID riid,
         void **ppvObject);
 

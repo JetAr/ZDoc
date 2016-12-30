@@ -1,4 +1,4 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * Sample demonstrating use of Events in Overlapped (Asynchronous) I/O
 *
 * This code uses AcceptEx()
@@ -13,7 +13,7 @@
 *       Microsoft samples programs.
 \******************************************************************************/
 #ifdef _IA64_
-    #pragma warning (disable: 4267)
+#pragma warning (disable: 4267)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -54,12 +54,12 @@ typedef struct _socklist
     DWORD Op;
     char Buffer[128];
     WSABUF DataBuf;
-}Socklist;
+} Socklist;
 
 int curr_size = 0; // current number of handles we are intersted in
 
 int DoWait(WSAEVENT *, Socklist *) ;
-void HandleEvent(int , WSAEVENT *, Socklist *) ;
+void HandleEvent(int, WSAEVENT *, Socklist *) ;
 
 void Usage(char *progname)
 {
@@ -129,13 +129,13 @@ int __cdecl main(int argc, char **argv)
         //
         if ( argc > 1 )
         {
-            for ( i = 1;i < argc; i++ )
+            for ( i = 1; i < argc; i++ )
             {
                 if ( (argv[i][0] == '-') || (argv[i][0] == '/') )
                 {
                     switch ( tolower(argv[i][1]) )
                     {
-                    
+
                     case 'i':
                         if ( i+1 < argc )
                             interface = argv[++i];
@@ -145,11 +145,11 @@ int __cdecl main(int argc, char **argv)
                             port = argv[++i];
                         break;
                     default:
-                        {
-                            Usage(argv[0]);
-                            __leave;
-                        }
-                        break;
+                    {
+                        Usage(argv[0]);
+                        __leave;
+                    }
+                    break;
                     }
                 }
                 else
@@ -161,7 +161,7 @@ int __cdecl main(int argc, char **argv)
         }
 
         //
-        // Since port 0 would be any available port. 
+        // Since port 0 would be any available port.
         // Resetting port back to DEFAULT_PORT to avoid confusion.
         //
         if ( 0 == strncmp(port, "0", 1) )
@@ -202,12 +202,12 @@ int __cdecl main(int argc, char **argv)
             __leave;
         }
 
-        if (INVALID_SOCKET == (listen_socket = WSASocket(local->ai_family, 
-                                                         local->ai_socktype, 
-                                                         local->ai_protocol, 
-                                                         NULL, 
-                                                         0,
-                                                         WSA_FLAG_OVERLAPPED
+        if (INVALID_SOCKET == (listen_socket = WSASocket(local->ai_family,
+                                               local->ai_socktype,
+                                               local->ai_protocol,
+                                               NULL,
+                                               0,
+                                               WSA_FLAG_OVERLAPPED
                                                         )))
         {
             ERR("WSASocket()");
@@ -215,8 +215,8 @@ int __cdecl main(int argc, char **argv)
         }
 
 
-        if ( SOCKET_ERROR == bind(listen_socket, 
-                                  local->ai_addr, 
+        if ( SOCKET_ERROR == bind(listen_socket,
+                                  local->ai_addr,
                                   (int)local->ai_addrlen
                                  ))
         {
@@ -234,11 +234,11 @@ int __cdecl main(int argc, char **argv)
         //
         // Resolve numeric host name
         //
-        if ( 0 != getnameinfo(local->ai_addr, 
-                              (int)local->ai_addrlen, 
-                              host, 
-                              hostlen, 
-                              serv, 
+        if ( 0 != getnameinfo(local->ai_addr,
+                              (int)local->ai_addrlen,
+                              host,
+                              hostlen,
+                              serv,
                               servlen,
                               NI_NUMERICHOST | NI_NUMERICSERV
                              ))
@@ -260,21 +260,21 @@ int __cdecl main(int argc, char **argv)
 
         curr_size =1;
 
-        for ( i = 0;i < MAX_IO_PEND;i++ )
+        for ( i = 0; i < MAX_IO_PEND; i++ )
             Handles[i] = WSA_INVALID_EVENT;
 
         //
         // Load the extension functions
         //
 
-        if ( SOCKET_ERROR == WSAIoctl(listen_socket, 
+        if ( SOCKET_ERROR == WSAIoctl(listen_socket,
                                       SIO_GET_EXTENSION_FUNCTION_POINTER,
                                       &acceptex_guid,
                                       sizeof(acceptex_guid),
                                       &pfnAcceptEx,
-                                      sizeof(pfnAcceptEx), 
-                                      &bytes, 
-                                      NULL, 
+                                      sizeof(pfnAcceptEx),
+                                      &bytes,
+                                      NULL,
                                       NULL
                                      ))
         {
@@ -285,11 +285,11 @@ int __cdecl main(int argc, char **argv)
 
         //
         // The structure of the following loop is very similar to a situation
-        // where select() might be used. 
+        // where select() might be used.
         // We use WSAGetOverlappedResult() to multiplex between incoming/outgoing
         // data on existing connections.
         //
-        // We don't queue an AcceptEx() until someone actually connects to 
+        // We don't queue an AcceptEx() until someone actually connects to
         // the previous socket. This is to keep the code simple, not a limitation
         // of the API itself.
         //
@@ -298,12 +298,12 @@ int __cdecl main(int argc, char **argv)
 
             // create a socket for AcceptEx()
 
-            if (INVALID_SOCKET == (accept_socket = WSASocket(ai_family, 
-                                                             SOCK_STREAM, 
-                                                             0, 
-                                                             NULL, 
-                                                             0,
-                                                             WSA_FLAG_OVERLAPPED
+            if (INVALID_SOCKET == (accept_socket = WSASocket(ai_family,
+                                                   SOCK_STREAM,
+                                                   0,
+                                                   NULL,
+                                                   0,
+                                                   WSA_FLAG_OVERLAPPED
                                                             )))
             {
                 ERR("WSASocket()");
@@ -345,13 +345,13 @@ int __cdecl main(int argc, char **argv)
             //
             // AcceptEx()
             //
-            if ( !pfnAcceptEx(listen_socket, 
-                              accept_socket, 
+            if ( !pfnAcceptEx(listen_socket,
+                              accept_socket,
                               Buffer,
                               0, // read nothing from the socket
-                              sizeof(SOCKADDR_STORAGE)+16, 
                               sizeof(SOCKADDR_STORAGE)+16,
-                              &bytes_read, 
+                              sizeof(SOCKADDR_STORAGE)+16,
+                              &bytes_read,
                               Overlap
                              ))
             {
@@ -372,9 +372,9 @@ int __cdecl main(int argc, char **argv)
             }
 
             //
-            // This loop simple checks the handles to see which one is 
-            // signalled. 
-            // If error, exit. 
+            // This loop simple checks the handles to see which one is
+            // signalled.
+            // If error, exit.
             // If there is a new incoming connection, we break to the outer loop
             // queue another AcceptEx()
             //
@@ -404,7 +404,7 @@ int __cdecl main(int argc, char **argv)
     {
         XFREE(Buffer);
         if (NULL != local) freeaddrinfo(local);
-        CLOSESOCK(listen_socket); 
+        CLOSESOCK(listen_socket);
         CLOSESOCK(accept_socket);
         CLOSEEVENT(Overlap->hEvent);
         XFREE(Overlap);
@@ -448,10 +448,10 @@ void HandleEvent(int index, WSAEVENT *Handles, Socklist *socklist)
     // If a socket is closed by the other side, the error returned is
     // WSAECONNRESET
     //
-    if ( !WSAGetOverlappedResult(socklist[index].sock, 
-                                 Overlap, 
-                                 &bytes, 
-                                 FALSE, 
+    if ( !WSAGetOverlappedResult(socklist[index].sock,
+                                 Overlap,
+                                 &bytes,
+                                 FALSE,
                                  &flags))
     {
         ERR("WSAGetOverlappedResult()");
@@ -460,8 +460,8 @@ void HandleEvent(int index, WSAEVENT *Handles, Socklist *socklist)
     newsock = socklist[index].SockAccepted;
 
     //
-    // If the other side closed the connection, close our socket and 
-    // move the next element of the Handles[] array into our 
+    // If the other side closed the connection, close our socket and
+    // move the next element of the Handles[] array into our
     // index.
     //
     // The array compaction is done so that we only pass valid handles
@@ -487,7 +487,8 @@ void HandleEvent(int index, WSAEVENT *Handles, Socklist *socklist)
     }
 
     if ( (index == 0) )
-    {    // listening socket
+    {
+        // listening socket
         if ( curr_size >= MAX_IO_PEND )
         {
             shutdown(newsock, SD_BOTH);
@@ -506,9 +507,9 @@ void HandleEvent(int index, WSAEVENT *Handles, Socklist *socklist)
         // Fill in the details of our accepted socket
         //
         socklist[curr_size].sock = newsock;
-        SecureZeroMemory(socklist[curr_size].Buffer, 
+        SecureZeroMemory(socklist[curr_size].Buffer,
                          sizeof(socklist[curr_size].Buffer)/sizeof(socklist[curr_size].Buffer[0]
-                         ));
+                                                                  ));
 
         socklist[curr_size].overlap = Overlap;
         socklist[curr_size].DataBuf.len = sizeof(socklist[curr_size].Buffer);
@@ -516,20 +517,20 @@ void HandleEvent(int index, WSAEVENT *Handles, Socklist *socklist)
 
         //
         // The OffsetHigh field is used to keep track of what we are doing.
-        // This enables us to alternate WSARecv() and WSASend() on a 
+        // This enables us to alternate WSARecv() and WSASend() on a
         // connection
         //
         socklist[curr_size].Op = OP_READ;
 
         flags = 0;
-        if ( SOCKET_ERROR == WSARecv(socklist[curr_size].sock, 
-                                     &(socklist[curr_size].DataBuf), 
-                                     1, 
-                                     &bytes, 
+        if ( SOCKET_ERROR == WSARecv(socklist[curr_size].sock,
+                                     &(socklist[curr_size].DataBuf),
+                                     1,
+                                     &bytes,
                                      &flags,
-                                     socklist[curr_size].overlap, 
+                                     socklist[curr_size].overlap,
                                      NULL
-                                     ))
+                                    ))
         {
 
             lasterr = WSAGetLastError();
@@ -572,17 +573,18 @@ void HandleEvent(int index, WSAEVENT *Handles, Socklist *socklist)
     //  socket
     //
     if ( socklist[index].Op == OP_READ )
-    { // WSARecv() was queued
+    {
+        // WSARecv() was queued
 
         printf("Read buffer [%s]\n", socklist[index].Buffer);
         printf("Echoing back to client\n");
 
-        if ( SOCKET_ERROR == WSASend(socklist[index].sock, 
-                                     &(socklist[index].DataBuf), 
-                                     1, 
-                                     &bytes, 
+        if ( SOCKET_ERROR == WSASend(socklist[index].sock,
+                                     &(socklist[index].DataBuf),
+                                     1,
+                                     &bytes,
                                      0,
-                                     socklist[index].overlap, 
+                                     socklist[index].overlap,
                                      NULL))
         {
 
@@ -615,20 +617,21 @@ void HandleEvent(int index, WSAEVENT *Handles, Socklist *socklist)
     // If we had a WSASend() queued, now do a WSARecv()
     //
     else if ( socklist[index].Op == OP_WRITE )
-    { // WSASend() was queued
+    {
+        // WSASend() was queued
 
         printf("Wrote %d bytes\n",bytes);
         printf("Queueing read\n");
 
         flags = 0;
-        if ( SOCKET_ERROR == WSARecv(socklist[index].sock, 
-                                     &(socklist[index].DataBuf), 
-                                     1, 
-                                     &bytes, 
+        if ( SOCKET_ERROR == WSARecv(socklist[index].sock,
+                                     &(socklist[index].DataBuf),
+                                     1,
+                                     &bytes,
                                      &flags,
-                                     socklist[index].overlap, 
+                                     socklist[index].overlap,
                                      NULL
-                                     ))
+                                    ))
         {
 
             lasterr = WSAGetLastError();
@@ -637,7 +640,7 @@ void HandleEvent(int index, WSAEVENT *Handles, Socklist *socklist)
                 ERR("WSARecv()");
                 if ( WSAECONNRESET == lasterr)
                 {
-                    shutdown(newsock, SD_BOTH);          
+                    shutdown(newsock, SD_BOTH);
                     CLOSESOCK(newsock);
                     XFREE(Overlap);
                     CLOSEEVENT(Handles[index]);
@@ -681,12 +684,12 @@ int DoWait(WSAEVENT *Handles, Socklist *socklist)
     // This ensures that all handles get a fair chance to be serviced.
     //
     // There is no way to detect how many handles were signalled when
-    // WSAWaitForMultipleObjects() returns. We simply pick the first one and 
+    // WSAWaitForMultipleObjects() returns. We simply pick the first one and
     // come back to this function later
     // Without the rotation below, this has the potential for starving
     // connections accepted later.
     //
-    // Index 0 is avoided, since it is our listening socket. 
+    // Index 0 is avoided, since it is our listening socket.
     //
     for ( i = 1; i < curr_size-1; i++ )
     {
@@ -700,11 +703,11 @@ int DoWait(WSAEVENT *Handles, Socklist *socklist)
     }
 
     if(WSA_WAIT_FAILED == (wait_rc = WSAWaitForMultipleEvents(curr_size,
-                                                              Handles,
-                                                              FALSE,
-                                                              WSA_INFINITE, 
-                                                              FALSE
-                                                              )))
+                                     Handles,
+                                     FALSE,
+                                     WSA_INFINITE,
+                                     FALSE
+                                                             )))
     {
         ERR("WSAWaitForMultipleEvents()");
         return -1;

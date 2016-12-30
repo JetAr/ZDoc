@@ -1,18 +1,18 @@
-/******************************************************************************\
+﻿/******************************************************************************\
 * sendmsg.cpp
 *
 * This IPv6 sample demonstrates the use of WSASendMsg() and the IPV6_PKTINFO option
 * and WSARecvMsg to retrieve the source address of a datagram.
 *
 * WSASendMsg is new to Windows Sockets in Windows Vista.
-* 
+*
 * This sample requires that TCP/IP version 6 be installed on the system (default
 * configuration for Windows Vista).
 *
-* A IPv6 datagram socket is created and bound and the IPV6_PKTINFO option is set. 
-* Overlapped WSARecvMsg is posted, and data is sent on the socket via sendto. 
+* A IPv6 datagram socket is created and bound and the IPV6_PKTINFO option is set.
+* Overlapped WSARecvMsg is posted, and data is sent on the socket via sendto.
 * Upon completion, the received message is sent again via WSASendMsg.
-* The data is received again via WSARecvMsg. 
+* The data is received again via WSARecvMsg.
 *
 *
 * This is a part of the Microsoft Source Code Samples.
@@ -25,8 +25,8 @@
 \******************************************************************************/
 
 #ifdef _IA64_
-    #pragma warning (disable: 4311)
-    #pragma warning (disable: 4312)
+#pragma warning (disable: 4311)
+#pragma warning (disable: 4312)
 #endif
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -59,7 +59,7 @@
 
 #define CLOSESOCKEVENT(h) \
         if(WSA_INVALID_EVENT != h) {WSACloseEvent(h); h = WSA_INVALID_EVENT;}
-        
+
 #define ERR(e) \
         { \
         printf("%s:%s failed: %d [%s@%ld]\n",__FUNCTION__,e,WSAGetLastError(),__FILE__,__LINE__); \
@@ -115,9 +115,9 @@ BOOL SetIpv6PktInfoOption(SOCKET sock)
                                    IPV6_PKTINFO,
                                    (CHAR*)&dwEnableOption,
                                    sizeof dwEnableOption
-                                   ))
+                                  ))
     {
-        ERR("setsockopt IPV6_PKTINFO"); 
+        ERR("setsockopt IPV6_PKTINFO");
         return FALSE;
     }
 
@@ -134,7 +134,7 @@ BOOL AllocAndInitIpv6PktInfo(LPWSAMSG pWSAMsg)
         ERR("HeapAlloc");
         return FALSE;
     }
-    
+
     pWSAMsg->Control.buf = (CHAR*)CtrlBuf;
     pWSAMsg->Control.len = (ULONG)MSIZE(CtrlBuf);
 
@@ -165,7 +165,7 @@ INT ProcessIpv6Msg(LPWSAMSG pWSAMsg)
     pCtrlInfo = WSA_CMSG_FIRSTHDR(pWSAMsg);
 
     if ((IPPROTO_IPV6 == pCtrlInfo->cmsg_level) &&
-        (IPV6_PKTINFO == pCtrlInfo->cmsg_type))
+            (IPV6_PKTINFO == pCtrlInfo->cmsg_type))
     {
         pPktInfo = (PIN6_PKTINFO)WSA_CMSG_DATA(pCtrlInfo);
 
@@ -174,10 +174,10 @@ INT ProcessIpv6Msg(LPWSAMSG pWSAMsg)
 
         dwAddrStrSize = sizeof szAddr;
         if(SOCKET_ERROR == (rc = WSAAddressToStringA((SOCKADDR*)&addr,
-                                                    sizeof addr,
-                                                    NULL,
-                                                    szAddr,
-                                                    &dwAddrStrSize
+                                 sizeof addr,
+                                 NULL,
+                                 szAddr,
+                                 &dwAddrStrSize
                                                     )))
         {
             ERR("WSAAddressToString");
@@ -202,16 +202,16 @@ LPFN_WSARECVMSG GetWSARecvMsgFunctionPointer()
 
     sock = socket(AF_INET,SOCK_DGRAM,0);
 
-    if(SOCKET_ERROR == WSAIoctl(sock, 
-                                SIO_GET_EXTENSION_FUNCTION_POINTER, 
-                                &guidWSARecvMsg, 
-                                sizeof(guidWSARecvMsg), 
-                                &lpfnWSARecvMsg, 
-                                sizeof(lpfnWSARecvMsg), 
-                                &dwBytes, 
-                                NULL, 
+    if(SOCKET_ERROR == WSAIoctl(sock,
+                                SIO_GET_EXTENSION_FUNCTION_POINTER,
+                                &guidWSARecvMsg,
+                                sizeof(guidWSARecvMsg),
+                                &lpfnWSARecvMsg,
+                                sizeof(lpfnWSARecvMsg),
+                                &dwBytes,
+                                NULL,
                                 NULL
-                                ))
+                               ))
     {
         ERR("WSAIoctl SIO_GET_EXTENSION_FUNCTION_POINTER");
         return NULL;
@@ -231,16 +231,16 @@ LPFN_WSASENDMSG GetWSASendMsgFunctionPointer()
 
     sock = socket(AF_INET,SOCK_DGRAM,0);
 
-    if(SOCKET_ERROR == WSAIoctl(sock, 
-                                SIO_GET_EXTENSION_FUNCTION_POINTER, 
-                                &guidWSASendMsg, 
-                                sizeof(guidWSASendMsg), 
-                                &lpfnWSASendMsg, 
-                                sizeof(lpfnWSASendMsg), 
-                                &dwBytes, 
-                                NULL, 
+    if(SOCKET_ERROR == WSAIoctl(sock,
+                                SIO_GET_EXTENSION_FUNCTION_POINTER,
+                                &guidWSASendMsg,
+                                sizeof(guidWSASendMsg),
+                                &lpfnWSASendMsg,
+                                sizeof(lpfnWSASendMsg),
+                                &dwBytes,
+                                NULL,
                                 NULL
-                                ))
+                               ))
     {
         ERR("WSAIoctl SIO_GET_EXTENSION_FUNCTION_POINTER");
         CLOSESOCK(sock);
@@ -371,7 +371,7 @@ int __cdecl main()
                                            0,
                                            (SOCKADDR*)&destaddr,
                                            sizeof destaddr
-                                           )))
+                                          )))
         {
             ERR("sendto");
             __leave;
@@ -387,22 +387,22 @@ int __cdecl main()
 
         printf("WSARecvMsg %d bytes\n",dwBytes);
 
-        //Display address 
+        //Display address
 
         if(SOCKET_ERROR == ProcessIpv6Msg(&wsamsg))
         {
             printf("Coult not process IPv6 message.\n");
         }
-        
+
         //SendMsg with WSAMSG returned from RecvMsg
 
-        
+
         if (NULL == (WSASendMsg = GetWSASendMsgFunctionPointer()))
         {
             ERR("GetWSARecvMsgFunctionPointer");
             __leave;
         }
-        
+
         if (SOCKET_ERROR == (nRet = WSASendMsg(sock,
                                                &wsamsg,
                                                0,
@@ -431,7 +431,7 @@ int __cdecl main()
             __leave;
         }
 
-        printf("WSARecvMsg %d bytes\n",dwBytes);   
+        printf("WSARecvMsg %d bytes\n",dwBytes);
 
     }
     __finally

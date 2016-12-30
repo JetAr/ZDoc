@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 1997-1999 Microsoft Corporation
 
@@ -7,7 +7,7 @@ Module Name:
     MSPutils.cpp
 
 Abstract:
-    
+
     data for msputils.h
 
 --*/

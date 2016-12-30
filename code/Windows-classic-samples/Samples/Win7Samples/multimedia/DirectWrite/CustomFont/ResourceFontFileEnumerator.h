@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,12 +20,12 @@ class ResourceFontFileEnumerator : public IDWriteFontFileEnumerator
 public:
     ResourceFontFileEnumerator(
         IDWriteFactory* factory
-        );
+    );
 
     HRESULT Initialize(
         UINT const* resourceIDs,    // [resourceCount]
         UINT32 resourceCount
-        );
+    );
 
     ~ResourceFontFileEnumerator()
     {

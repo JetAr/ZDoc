@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -94,7 +94,7 @@ BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
         wprintf(L"Locale %s (%s)\n", pStr, wcBuffer);
     else
         wprintf(L"Locale %s had error %d\n", pStr, GetLastError());
- 
+
     // If this is the system locale, let us know.  CompareStringEx
     // is probably overkill, but we want to demonstrate that named API.
     iResult = GetSystemDefaultLocaleName(wcBuffer, BUFFER_SIZE);
@@ -117,7 +117,7 @@ BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
     {
         wprintf(L"Error %d getting system locale\n", GetLastError());
     }
-    
+
     // Get its LCID
     LCID lcid = LocaleNameToLCID(pStr, NULL);
     if (lcid != 0)
@@ -148,7 +148,7 @@ BOOL CALLBACK MyFuncLocaleEx(LPWSTR pStr, DWORD dwFlags, LPARAM lparam)
         {
             wprintf(L"  %s had error %d\n", NewTypeNames[i], GetLastError());
         }
-    } 
+    }
 
     return (TRUE);
 }
@@ -170,5 +170,5 @@ int __cdecl wmain(int argc, wchar_t* argv[])
                 wprintf(L"%s is not a valid locale name\n", argv[i]);
             }
         }
-    }    
+    }
 }

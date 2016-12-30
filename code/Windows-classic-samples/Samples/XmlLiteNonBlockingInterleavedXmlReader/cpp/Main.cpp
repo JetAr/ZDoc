@@ -1,4 +1,4 @@
-#include <ole2.h>
+﻿#include <ole2.h>
 #include <xmllite.h>
 #include <stdio.h>
 #include "FileStreamWithEPending.hpp"
@@ -16,7 +16,7 @@ HRESULT SaveFile(LPCWSTR pcwsFilename, IStream *pStream, ULONG uLength)
         HR(E_POINTER);
 
     hFile = ::CreateFile(pcwsFilename, GENERIC_WRITE, FILE_SHARE_READ,
-        NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+                         NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (INVALID_HANDLE_VALUE == hFile)
         HR(HRESULT_FROM_WIN32(GetLastError()));
@@ -67,25 +67,26 @@ int __cdecl wmain(int argc, _In_reads_(argc) WCHAR* argv[])
     {
         while(S_OK == (hr = pReader->Read(&nodeType)))
         {
-            switch (nodeType) {
+            switch (nodeType)
+            {
             case XmlNodeType_Element:
-               CHKHR(pReader->MoveToAttributeByName(L"file_name", NULL));
-               CHKHR(pReader->GetValue((LPCWSTR *)&szFileName, &uFileNameLength));
-               if (!szFileName || 0 == uFileNameLength)
-                   HR(E_UNEXPECTED);
-               
-               CHKHR(pReader->MoveToElement());
-               CHKHR(pReader->MoveToAttributeByName(L"file_length", NULL));
+                CHKHR(pReader->MoveToAttributeByName(L"file_name", NULL));
+                CHKHR(pReader->GetValue((LPCWSTR *)&szFileName, &uFileNameLength));
+                if (!szFileName || 0 == uFileNameLength)
+                    HR(E_UNEXPECTED);
 
-               CHKHR(pReader->GetValue((LPCWSTR *)&szFileLength, &uFileLength));
-               if (szFileLength && uFileLength > 0)
-                   uFileLength = _wtoi(szFileLength);
-               else
-                   uFileLength = 0;
+                CHKHR(pReader->MoveToElement());
+                CHKHR(pReader->MoveToAttributeByName(L"file_length", NULL));
 
-               CHKHR(pReader->MoveToElement());
-               break;
-           }
+                CHKHR(pReader->GetValue((LPCWSTR *)&szFileLength, &uFileLength));
+                if (szFileLength && uFileLength > 0)
+                    uFileLength = _wtoi(szFileLength);
+                else
+                    uFileLength = 0;
+
+                CHKHR(pReader->MoveToElement());
+                break;
+            }
         }
 
         if (E_PENDING == hr)

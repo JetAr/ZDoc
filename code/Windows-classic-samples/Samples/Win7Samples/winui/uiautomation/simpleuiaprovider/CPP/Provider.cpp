@@ -1,18 +1,18 @@
-/*************************************************************************************************
- * Description: Implementation of the Provider class, which implements IRawElementProviderSimple 
+﻿/*************************************************************************************************
+ * Description: Implementation of the Provider class, which implements IRawElementProviderSimple
  * and IInvokeProvider for a simple custom control.
- * 
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  *************************************************************************************************/
 
 #define INITGUID
@@ -123,7 +123,7 @@ IFACEMETHODIMP Provider::GetPatternProvider(PATTERNID patternId, IUnknown** pRet
     }
     else
     {
-        *pRetVal = NULL;   
+        *pRetVal = NULL;
     }
     return S_OK;
 }
@@ -139,7 +139,7 @@ IFACEMETHODIMP Provider::GetPropertyValue(PROPERTYID propertyId, VARIANT* pRetVa
     }
 
     // The Name property comes from the Caption property of the control window, if it has one.
-    // The Name is overridden here for the sake of illustration. 
+    // The Name is overridden here for the sake of illustration.
     else if (propertyId == UiaIds.NameProperty)
     {
         pRetVal->vt = VT_BSTR;
@@ -148,7 +148,7 @@ IFACEMETHODIMP Provider::GetPropertyValue(PROPERTYID propertyId, VARIANT* pRetVa
     else
     {
         pRetVal->vt = VT_EMPTY;
-       // UI Automation will attempt to get the property from the host window provider.
+        // UI Automation will attempt to get the property from the host window provider.
     }
     return S_OK;
 }
@@ -157,7 +157,7 @@ IFACEMETHODIMP Provider::GetPropertyValue(PROPERTYID propertyId, VARIANT* pRetVa
 
 IFACEMETHODIMP Provider::get_HostRawElementProvider(IRawElementProviderSimple** pRetVal)
 {
-    return UiaHostProviderFromHwnd(m_controlHWnd, pRetVal); 
+    return UiaHostProviderFromHwnd(m_controlHWnd, pRetVal);
 }
 
 

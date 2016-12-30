@@ -1,14 +1,14 @@
-// **************************************************************************
+﻿// **************************************************************************
 
 // Copyright (c)  Microsoft Corporation, All Rights Reserved
 //
 // File:  OnAddUser.cpp
 //
 // Description:
-//	This file implements the OnAddUser() routine which 
+//	This file implements the OnAddUser() routine which
 //		demonstrates how to add WMI user accounts, user
 //		groups and NTLM authenticator instances.
-// 
+//
 // History:
 //
 // **************************************************************************
@@ -39,24 +39,24 @@
 //
 //===========================================================================
 
-void CAdvClientDlg::OnRegPerm() 
+void CAdvClientDlg::OnRegPerm()
 {
-	// if registered.
-	if(m_regPerm)
-	{
-		if(OnPermRegister())
-		{
-			m_regPerm = FALSE;
-			m_perm.SetWindowText(_T("Unregister &Perm"));
-		}
-	}
-	else
-	{
-		m_regPerm = TRUE;
-		OnPermUnregister();
-		m_perm.SetWindowText(_T("Register &Perm"));
-	}
-	
+    // if registered.
+    if(m_regPerm)
+    {
+        if(OnPermRegister())
+        {
+            m_regPerm = FALSE;
+            m_perm.SetWindowText(_T("Unregister &Perm"));
+        }
+    }
+    else
+    {
+        m_regPerm = TRUE;
+        OnPermUnregister();
+        m_perm.SetWindowText(_T("Register &Perm"));
+    }
+
 }
 
 // **************************************************************************
@@ -80,21 +80,21 @@ void CAdvClientDlg::OnRegPerm()
 //		None.
 //
 //===========================================================================
-void CAdvClientDlg::OnRegTemp() 
+void CAdvClientDlg::OnRegTemp()
 {
-	if(m_regTemp)
-	{
-		if(OnTempRegister())
-		{
-			m_regTemp = FALSE;
-			m_temp.SetWindowText(_T("Unregister &Temp"));
-		}
-	}
-	else
-	{
-		m_regTemp = TRUE;
-		OnTempUnregister();
-		m_temp.SetWindowText(_T("Register &Temp"));
-	}
-	
+    if(m_regTemp)
+    {
+        if(OnTempRegister())
+        {
+            m_regTemp = FALSE;
+            m_temp.SetWindowText(_T("Unregister &Temp"));
+        }
+    }
+    else
+    {
+        m_regTemp = TRUE;
+        OnTempUnregister();
+        m_temp.SetWindowText(_T("Register &Temp"));
+    }
+
 }

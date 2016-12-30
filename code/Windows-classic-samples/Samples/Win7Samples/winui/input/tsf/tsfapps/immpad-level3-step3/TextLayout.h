@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 //----------------------------------------------------------------
 //
@@ -6,10 +6,13 @@
 //
 //----------------------------------------------------------------
 
-typedef struct 
+typedef struct
 {
     RECT rc;
-    int GetWidth() {return rc.right - rc.left;}
+    int GetWidth()
+    {
+        return rc.right - rc.left;
+    }
 } CHARINFO;
 
 //----------------------------------------------------------------
@@ -18,7 +21,7 @@ typedef struct
 //
 //----------------------------------------------------------------
 
-typedef struct 
+typedef struct
 {
     UINT nPos;
     UINT nCnt;
@@ -55,7 +58,10 @@ public:
     UINT ExactCharPosFromPoint(POINT pt);
     UINT FineFirstEndCharPosInLine(UINT uCurPos, BOOL bFirst);
     void BlinkCaret(HDC hdc);
-    int  GetLineHeight() {return _nLineHeight;}
+    int  GetLineHeight()
+    {
+        return _nLineHeight;
+    }
 
 private:
     void Clear();

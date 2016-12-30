@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -287,7 +287,7 @@ void SetWatchPermissions()
     wprintf(L"Select watch permissions (1) Allowed, (2) Blocked [1-2]: ");
     GET_PROMPT_RESPONSE(hr, wzBuff);
 
-    // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0    
+    // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0
     nWatchPermissions = _wtoi(wzBuff);
     if (nWatchPermissions < 1  || nWatchPermissions > 2)
     {
@@ -353,7 +353,7 @@ void SetWatching()
     wprintf(L"Select watch state (1) Watch, (2) Do not watch [1-2]: ");
     GET_PROMPT_RESPONSE(hr, wzBuff);
 
-    // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0    
+    // since wtoi can't distinguish between 0 and an error, note that valid values start at 1, not 0
     nWatchState = _wtoi(wzBuff);
     if (nWatchState < 1  || nWatchState > 2)
     {

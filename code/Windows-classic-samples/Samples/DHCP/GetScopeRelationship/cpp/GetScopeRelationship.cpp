@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ Assumptions:
 // This routine frees  LPDHCP_FAILOVER_RELATIONSHIP and its internal elements.
 VOID FreeRelationshipMemory(LPDHCP_FAILOVER_RELATIONSHIP pFailRel)
 {
-    if (NULL != pFailRel) 
+    if (NULL != pFailRel)
     {
         // Frees relationship name
         if (NULL != pFailRel->RelationshipName)
@@ -44,7 +44,7 @@ VOID FreeRelationshipMemory(LPDHCP_FAILOVER_RELATIONSHIP pFailRel)
             {
                 DhcpRpcFreeMemory(pFailRel->pScopes->Elements);
             }
-             DhcpRpcFreeMemory(pFailRel->pScopes);
+            DhcpRpcFreeMemory(pFailRel->pScopes);
         }
         //Frees the relationship
         DhcpRpcFreeMemory(pFailRel);
@@ -61,10 +61,10 @@ int __cdecl main(void)
 
     // This API fetches the information about the relationship of a specific scope
     dwError = DhcpV4FailoverGetScopeRelationship(
-                        pwszServer,    // Server IP Address, a value of NULL reflects current server (where program is executed)
-                        dwScope,       // Subnet Address
-                        &pRelationShip // Failover relationship
-                        );
+                  pwszServer,    // Server IP Address, a value of NULL reflects current server (where program is executed)
+                  dwScope,       // Subnet Address
+                  &pRelationShip // Failover relationship
+              );
     if( ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4FailoverGetRelationship failed with Error = %d\n",dwError);

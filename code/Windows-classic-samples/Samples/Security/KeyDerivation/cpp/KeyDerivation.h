@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -10,15 +10,15 @@
 //  File:             KeyDerivation.h
 //
 //  Contents:         This file defines the parameters required for key derivation.
-//    
+//
 //
 
 #include <ncrypt.h>
 
-#define DERIVED_KEY_LEN 60 
+#define DERIVED_KEY_LEN 60
 
-static const 
-BYTE Secret[20] = 
+static const
+BYTE Secret[20] =
 {
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
@@ -29,7 +29,8 @@ BYTE Secret[20] =
 //
 
 static
-LPCWSTR KdfAlgorithmNameArray[] = {
+LPCWSTR KdfAlgorithmNameArray[] =
+{
     BCRYPT_SP800108_CTR_HMAC_ALGORITHM,
     BCRYPT_SP80056A_CONCAT_ALGORITHM,
     BCRYPT_PBKDF2_ALGORITHM,
@@ -38,7 +39,7 @@ LPCWSTR KdfAlgorithmNameArray[] = {
 
 //
 // Sample Parameters for SP800-108 KDF
-// 
+//
 
 static
 BYTE Label[] =
@@ -50,7 +51,8 @@ static
 WCHAR Context[] = L"Context";
 
 static
-BCryptBuffer SP800108ParamBuffer[]= {
+BCryptBuffer SP800108ParamBuffer[]=
+{
     {
         sizeof(Label),
         KDF_LABEL,
@@ -70,7 +72,7 @@ BCryptBuffer SP800108ParamBuffer[]= {
 
 //
 // Sample Parameters for SP800-56A KDF
-// 
+//
 
 static
 BYTE AlgorithmID[]    =
@@ -90,10 +92,10 @@ BYTE PartyVInfo[] =
     0x42,0x4F,0x42,0x42,0x59,0x34,0x35,0x36
 };
 
-static 
+static
 BCryptBuffer SP80056AParamBuffer[] =
 {
-     {
+    {
         sizeof(AlgorithmID),
         KDF_ALGORITHMID,
         (PBYTE)AlgorithmID,
@@ -117,7 +119,7 @@ BCryptBuffer SP80056AParamBuffer[] =
 
 //
 // Sample Parameters for PBKDF2
-// 
+//
 
 static
 BYTE Salt[] =
@@ -128,10 +130,10 @@ BYTE Salt[] =
 static
 ULONGLONG IterationCount = 12000;
 
-static 
+static
 BCryptBuffer PBKDF2ParamBuffer[] =
 {
-     {
+    {
         sizeof(Salt),
         KDF_SALT,
         (PBYTE)Salt,
@@ -150,9 +152,9 @@ BCryptBuffer PBKDF2ParamBuffer[] =
 
 //
 // Sample Parameters for CAPI_KDF
-// 
+//
 
-static 
+static
 BCryptBuffer CAPIParamBuffer[] =
 {
     {
@@ -163,7 +165,7 @@ BCryptBuffer CAPIParamBuffer[] =
 };
 
 static
-BCryptBufferDesc ParamList[] = 
+BCryptBufferDesc ParamList[] =
 {
     {
         BCRYPTBUFFER_VERSION,

@@ -1,4 +1,4 @@
-#include "CHWMFT.h"
+﻿#include "CHWMFT.h"
 #include <Mfapi.h>
 
 // Helper Macros

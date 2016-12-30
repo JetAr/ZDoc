@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,10 +19,10 @@
 
 BOOL CVisualRect::IsIn(CVisualRect& rect)
 {
-        return !(   x() > rect.right()
-                    || right() < rect.x()
-                    || y() > rect.bottom()
-                    || bottom() < rect.y() );
+    return !(   x() > rect.right()
+                || right() < rect.x()
+                || y() > rect.bottom()
+                || bottom() < rect.y() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ CVisualCoordinateTransform::CVisualCoordinateTransform()
 POINT CVisualCoordinateTransform::VisualToScreen(CVisualPoint & vis)
 {
     POINT pt;
-    
+
     pt.x = LONG((vis.x() + m_xOffset) * m_xScale);
     pt.y = LONG((vis.y() + m_yOffset) * m_yScale);
 
@@ -48,7 +48,7 @@ POINT CVisualCoordinateTransform::VisualToScreen(CVisualPoint & vis)
 RECT CVisualCoordinateTransform::VisualToScreen(CVisualRect & vis)
 {
     RECT rc;
-    
+
     rc.left = LONG((vis.x() + m_xOffset) * m_xScale);
     rc.top = LONG((vis.y() + m_yOffset) * m_yScale);
     rc.right = LONG((vis.right() + m_xOffset) * m_xScale);
@@ -94,7 +94,7 @@ BOOL CVisualDrawContext::BeginPaint(HWND hWnd)
     {
         return FALSE;
     }
-    
+
     HBITMAP hBitmap = ::CreateCompatibleBitmap(m_hdc, rect.right - rect.left, rect.bottom - rect.top);
     if(NULL == hBitmap)
     {
@@ -118,10 +118,10 @@ BOOL CVisualDrawContext::BeginPaint(HWND hWnd)
         DeleteObject(m_hBgBuffer);
         return FALSE;
     }
-    
+
     ::FillRect(m_hBgBuffer, &rect, hWhiteBrush);
     DeleteObject(hWhiteBrush);
-    
+
     return TRUE;
 }
 
@@ -136,14 +136,14 @@ void CVisualDrawContext::EndPaint()
     HBITMAP hBitmap = (HBITMAP) SelectObject(m_hBgBuffer, m_hOldBitmap);
     DeleteObject(hBitmap);
     DeleteDC(m_hBgBuffer);
-    
+
 }
 
 void CVisualDrawContext::PushState()
 {
     m_StateStack.AddHead(m_State);
 
-    // cleanup brush. hdc should have selected brush. 
+    // cleanup brush. hdc should have selected brush.
     // when we pop state and m_hOldBrush is not NULL - select old brush
     m_State.m_hNewBrush = NULL;
     m_State.m_hOldBrush = NULL;
@@ -162,21 +162,21 @@ void CVisualDrawContext::PopState()
     {
         DeleteObject(m_State.m_hNewBrush);
     }
-    
+
     if(m_State.m_hOldPen)
     {
         SelectObject(m_hBgBuffer, m_State.m_hOldPen);
     }
-    
+
     if(m_State.m_hNewPen)
     {
         DeleteObject(m_State.m_hNewPen);
     }
-    
+
     m_State = m_StateStack.RemoveHead();
 }
 
-BOOL CVisualDrawContext::SelectSmallFont() 
+BOOL CVisualDrawContext::SelectSmallFont()
 {
     CAtlString strFontSize = LoadAtlString(IDS_FONT_SIZE_12);
     CAtlString strFontFace = LoadAtlString(IDS_FONT_FACE_ARIAL);
@@ -196,24 +196,24 @@ BOOL CVisualDrawContext::SelectSmallFont()
     lfLabelFont.lfQuality = DEFAULT_QUALITY;
     lfLabelFont.lfPitchAndFamily = FF_DONTCARE | DEFAULT_PITCH;
     wcscpy_s(lfLabelFont.lfFaceName, 32, strFontFace);
-    
+
     HFONT hSmallFont = CreateFontIndirect(&lfLabelFont);
     if(NULL == hSmallFont)
     {
         return FALSE;
     }
-    
+
     m_State.m_hOldFont = SelectObject(m_hBgBuffer, hSmallFont);
     if(NULL == m_State.m_hOldFont)
     {
         DeleteObject(hSmallFont);
         return FALSE;
     }
-    
+
     return true;
 }
 
-void CVisualDrawContext::DeselectSmallFont() 
+void CVisualDrawContext::DeselectSmallFont()
 {
     HGDIOBJ hFont = SelectObject(m_hBgBuffer, m_State.m_hOldFont);
     DeleteObject(hFont);
@@ -222,7 +222,7 @@ void CVisualDrawContext::DeselectSmallFont()
 BOOL CVisualDrawContext::SelectPen(COLORREF color, int width)
 {
     HPEN hOldPen;
-    
+
     HPEN hNewPen = CreatePen(PS_SOLID, width, color);
     if(NULL == hNewPen)
     {
@@ -241,27 +241,27 @@ BOOL CVisualDrawContext::SelectPen(COLORREF color, int width)
     {
         m_State.m_hOldPen = hOldPen;
     }
-    
+
     if(m_State.m_hNewPen)
     {
         DeleteObject(m_State.m_hNewPen);
     }
 
     m_State.m_hNewPen = hNewPen;
-    
+
     return TRUE;
 }
 
 BOOL CVisualDrawContext::SelectSolidBrush(COLORREF color)
 {
     HBRUSH hOldBrush;
-    
+
     HBRUSH hNewBrush = CreateSolidBrush(color);
     if(NULL == hNewBrush)
     {
         return FALSE;
     }
-    
+
     hOldBrush  = (HBRUSH)SelectObject(m_hBgBuffer, hNewBrush);
     if(NULL == hOldBrush)
     {
@@ -274,14 +274,14 @@ BOOL CVisualDrawContext::SelectSolidBrush(COLORREF color)
     {
         m_State.m_hOldBrush = hOldBrush;
     }
-    
+
     if(m_State.m_hNewBrush)
     {
         DeleteObject(m_State.m_hNewBrush);
     }
 
     m_State.m_hNewBrush = hNewBrush;
-    
+
     return TRUE;
 }
 
@@ -296,10 +296,10 @@ void CVisualDrawContext::MapPoint(CVisualPoint & vis, POINT & disp)
 void CVisualDrawContext::MapRect(CVisualRect & vis, RECT & disp)
 {
     CVisualRect v(vis);
-    
+
     v.Add(m_State.m_xCoord, m_State.m_yCoord);
     disp = m_pTransform->VisualToScreen(v);
-   
+
 }
 
 void CVisualDrawContext::ShiftCoordinates(double xOffset, double yOffset)
@@ -311,7 +311,7 @@ void CVisualDrawContext::ShiftCoordinates(double xOffset, double yOffset)
 ///////////////////////////////////////////////////////////////////////////////
 //
 
-void CVisualObject::Select(bool bIsSelected) 
+void CVisualObject::Select(bool bIsSelected)
 {
     m_bIsSelected = bIsSelected;
 }
@@ -345,22 +345,22 @@ void CVisualConnector::Draw(CVisualDrawContext & Ctx)
     POINT left, right;
     Ctx.MapPoint(m_Left, left);
     Ctx.MapPoint(m_Right, right);
-    
+
     MoveToEx(Ctx.DC(), left.x, left.y, NULL);
     LineTo(Ctx.DC(), right.x, right.y);
 }
 
-CVisualObject::CONNECTION_TYPE CVisualConnector::GetConnectionType() const 
+CVisualObject::CONNECTION_TYPE CVisualConnector::GetConnectionType() const
 {
     return CVisualObject::NONE;
 }
 
-void CVisualConnector::NotifyRemoved(CVisualObject* removed) 
+void CVisualConnector::NotifyRemoved(CVisualObject* removed)
 {
 
 }
 
-bool CVisualConnector::IsDependent(CVisualObject* pOtherObj) const 
+bool CVisualConnector::IsDependent(CVisualObject* pOtherObj) const
 {
     return false;
 }
@@ -391,7 +391,7 @@ const int CVisualPin::LABEL_OFFSET_Y = 2;
 CVisualPin::CVisualPin(CVisualComponent * pOwner, CVisualRect & Rect, CVisualObject::CONNECTION_TYPE connType, const CAtlStringW& strLabel, int nPinId)
     : CVisualObject(Rect)
     , m_ConnType(connType)
-    , m_pOwner(pOwner) 
+    , m_pOwner(pOwner)
     , m_pConnector(NULL)
     , m_strLabel(strLabel)
     , m_nPinId(nPinId)
@@ -429,7 +429,7 @@ void CVisualPin::Draw(CVisualDrawContext & Ctx)
         Ctx.SelectPen(RGB(0, 0, 0), 1);
     }
     Ctx.SelectSolidBrush(RGB(0, 0, 0));
-        
+
     // draw rect
     Ctx.MapRect(m_Rect, rect);
     Rectangle(Ctx.DC(), rect.left, rect.top, rect.right, rect.bottom);
@@ -441,37 +441,37 @@ void CVisualPin::Draw(CVisualDrawContext & Ctx)
     DrawText(Ctx.DC(), m_strLabel, -1, &rect, 0);
 }
 
-CVisualObject::CONNECTION_TYPE CVisualPin::GetConnectionType() const 
+CVisualObject::CONNECTION_TYPE CVisualPin::GetConnectionType() const
 {
     return m_ConnType;
 }
 
-int CVisualPin::GetPinId() const 
+int CVisualPin::GetPinId() const
 {
     return m_nPinId;
 }
 
-void CVisualPin::NotifyRemoved(CVisualObject* removed) 
+void CVisualPin::NotifyRemoved(CVisualObject* removed)
 {
-    if(removed == m_pConnector) 
+    if(removed == m_pConnector)
     {
         m_pConnector = NULL;
     }
 }
 
-void CVisualPin::Select(bool selected) 
+void CVisualPin::Select(bool selected)
 {
     CVisualObject::Select(selected);
 
-    if(m_pConnector) 
+    if(m_pConnector)
     {
         m_pConnector->Select(selected);
     }
 }
 
-bool CVisualPin::IsDependent(CVisualObject* pOtherObj) const 
+bool CVisualPin::IsDependent(CVisualObject* pOtherObj) const
 {
-    if(pOtherObj == m_pConnector) 
+    if(pOtherObj == m_pConnector)
     {
         return true;
     }
@@ -487,13 +487,13 @@ CVisualComponent::CVisualComponent(CVisualRect& Rect)
 {
 }
 
-CVisualComponent::~CVisualComponent() 
+CVisualComponent::~CVisualComponent()
 {
 }
 
-CVisualObject::CONNECTION_TYPE CVisualComponent::GetConnectionType() const 
+CVisualObject::CONNECTION_TYPE CVisualComponent::GetConnectionType() const
 {
-	return CVisualObject::NONE;
+    return CVisualObject::NONE;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -501,30 +501,30 @@ CVisualObject::CONNECTION_TYPE CVisualComponent::GetConnectionType() const
 
 CCommandHandler* CVisualNode::ms_pPinHandler = NULL;
 
-CVisualNode::CVisualNode(const CAtlStringW& strLabel, bool fAutoInserted) 
+CVisualNode::CVisualNode(const CAtlStringW& strLabel, bool fAutoInserted)
     : CVisualComponent(CVisualRect(0, 0, COMP_DEF_WIDTH, COMP_DEF_HEIGHT))
-	, m_strLabel(strLabel)
-	, m_fTopoError(false)
+    , m_strLabel(strLabel)
+    , m_fTopoError(false)
 {
     if(fAutoInserted)
     {
         m_clrFill = RGB(153, 153, 243);
     }
-    else 
+    else
     {
         m_clrFill = RGB(153, 243, 153);
     }
-    
+
     m_clrLine = RGB(0, 0, 0);
     m_clrSelectedBorder = RGB(0, 0, 200);
     m_clrErrorText = RGB(200, 0, 0);
-        
+
     m_Type = CVisualObject::NODE;
 }
 
 CVisualNode::~CVisualNode()
 {
-   for(size_t i = 0; i < m_InputPins.GetCount(); i++)
+    for(size_t i = 0; i < m_InputPins.GetCount(); i++)
     {
         delete m_InputPins.GetAt(i);
     }
@@ -558,7 +558,7 @@ void CVisualNode::Draw(CVisualDrawContext & Ctx)
     Ctx.MapRect(m_Rect, rect);
     Rectangle(Ctx.DC(), rect.left, rect.top, rect.right, rect.bottom);
 
-    if(!m_strLabel.IsEmpty()) 
+    if(!m_strLabel.IsEmpty())
     {
         COLORREF oldColor = SetTextColor(Ctx.DC(), m_clrLine);
         Ctx.SelectSolidBrush(RGB(0, 0, 0));
@@ -567,7 +567,7 @@ void CVisualNode::Draw(CVisualDrawContext & Ctx)
         rect.left += 5;
         rect.right -= 5;
         rect.top +=5;
-        
+
         DrawText(Ctx.DC(), m_strLabel, m_strLabel.GetLength(), &rect, DT_WORDBREAK);
 
         SetTextColor(Ctx.DC(), oldColor);
@@ -587,7 +587,7 @@ void CVisualNode::Draw(CVisualDrawContext & Ctx)
     Ctx.PushState();
 
     Ctx.ShiftCoordinates(m_Rect.x(), m_Rect.y());
-    
+
     // draw pins
     for(n = 0; n < m_InputPins.GetCount(); n++)
     {
@@ -598,13 +598,13 @@ void CVisualNode::Draw(CVisualDrawContext & Ctx)
     {
         m_OutputPins.GetAt(n)->Draw(Ctx);
     }
-    
+
     Ctx.PopState();
 
     Ctx.DeselectSmallFont();
 }
 
-bool CVisualNode::IsDependent(CVisualObject* pOtherObj) const 
+bool CVisualNode::IsDependent(CVisualObject* pOtherObj) const
 {
     for(size_t i = 0; i < m_InputPins.GetCount(); i++)
     {
@@ -618,14 +618,14 @@ bool CVisualNode::IsDependent(CVisualObject* pOtherObj) const
     return false;
 }
 
-void CVisualNode::NotifyRemoved(CVisualObject* removed) 
+void CVisualNode::NotifyRemoved(CVisualObject* removed)
 {
-    for(size_t i = 0; i < m_InputPins.GetCount(); i++) 
+    for(size_t i = 0; i < m_InputPins.GetCount(); i++)
     {
         m_InputPins.GetAt(i)->NotifyRemoved(removed);
     }
 
-    for(size_t i = 0; i < m_OutputPins.GetCount(); i++) 
+    for(size_t i = 0; i < m_OutputPins.GetCount(); i++)
     {
         m_OutputPins.GetAt(i)->NotifyRemoved(removed);
     }
@@ -656,9 +656,9 @@ BOOL CVisualNode::HitTest(CVisualPoint & pt, CVisualObject ** ppObj)
             return TRUE;
         }
     }
-    
+
     if(m_Rect.IsIn(pt))
-    {   
+    {
         (*ppObj) = this;
         return TRUE;
     }
@@ -676,20 +676,20 @@ void CVisualNode::Move(double x, double y)
     for(n = 0; n < m_InputPins.GetCount(); n++)
     {
         pPin = m_InputPins.GetAt(n);
-        
+
         if(pPin->GetConnector())
         {
             pPin->GetConnector()->Right() = pPin->GetConnectorPoint();
         }
     }
 
-     for(n = 0; n < m_OutputPins.GetCount(); n++)
+    for(n = 0; n < m_OutputPins.GetCount(); n++)
     {
         pPin = m_OutputPins.GetAt(n);
-        
+
         if(pPin->GetConnector())
         {
-           pPin->GetConnector()->Left() = pPin->GetConnectorPoint();
+            pPin->GetConnector()->Left() = pPin->GetConnectorPoint();
         }
     }
 }
@@ -716,11 +716,11 @@ void CVisualNode::SetPinHandler(CCommandHandler* pHandler)
 CVisualPin* CVisualNode::AddPin(bool fInput, LONG_PTR pData, const CAtlStringW& strLabel, int nPinId)
 {
     HRESULT hr;
-    CVisualPin* pPin = new CVisualPin(this, 
-                            CVisualRect(0, 0, PIN_WIDTH, PIN_HEIGHT), 
-                            (fInput) ? CVisualObject::INPUT : CVisualObject::OUTPUT, strLabel, nPinId);
+    CVisualPin* pPin = new CVisualPin(this,
+                                      CVisualRect(0, 0, PIN_WIDTH, PIN_HEIGHT),
+                                      (fInput) ? CVisualObject::INPUT : CVisualObject::OUTPUT, strLabel, nPinId);
     CHECK_ALLOC( pPin );
-    
+
     pPin->SetData(pData);
 
     if(fInput)
@@ -733,7 +733,7 @@ CVisualPin* CVisualNode::AddPin(bool fInput, LONG_PTR pData, const CAtlStringW& 
     }
 
     pPin->SetHandler(ms_pPinHandler);
-   
+
     RecalcPins();
 
 Cleanup:
@@ -833,9 +833,9 @@ void CVisualNode::PositionPins(size_t nPins, CVisualObject::CONNECTION_TYPE Dir)
 //
 
 CVisualContainer::CVisualContainer(const CAtlStringW& label)
-   : CVisualComponent(CVisualRect(0, 0, COMP_DEF_WIDTH, BOTTOM_MARGIN))
-   , m_strLabel(label)
-   , m_clrFill(RGB(192, 192, 192))
+    : CVisualComponent(CVisualRect(0, 0, COMP_DEF_WIDTH, BOTTOM_MARGIN))
+    , m_strLabel(label)
+    , m_clrFill(RGB(192, 192, 192))
 {
     m_Type = CVisualObject::CONTAINER;
 }
@@ -861,7 +861,7 @@ void CVisualContainer::Draw(CVisualDrawContext& Ctx)
     Ctx.MapRect(m_Rect, rect);
     Rectangle(Ctx.DC(), rect.left, rect.top, rect.right, rect.bottom);
 
-    if(!m_strLabel.IsEmpty()) 
+    if(!m_strLabel.IsEmpty())
     {
         Ctx.SelectSolidBrush(RGB(0, 0, 0));
         SetBkColor(Ctx.DC(), m_clrFill);
@@ -869,12 +869,12 @@ void CVisualContainer::Draw(CVisualDrawContext& Ctx)
         rect.left += 5;
         rect.right -= 5;
         rect.top +=5;
-        
+
         DrawText(Ctx.DC(), m_strLabel, m_strLabel.GetLength(), &rect, DT_WORDBREAK);
     }
 
     Ctx.DeselectSmallFont();
-    
+
     for(size_t i = 0; i < m_arrComponents.GetCount(); i++)
     {
         Ctx.PushState();
@@ -978,7 +978,7 @@ void CVisualContainer::RecalcPositions()
 CVisualPin* CVisualContainer::GetInputPinByIndex(size_t nIndex)
 {
     size_t cPinsSoFar = 0;
-    
+
     for(size_t i = 0; i < m_arrComponents.GetCount(); i++)
     {
         size_t cPins = m_arrComponents.GetAt(i)->GetInputPinCount();
@@ -997,7 +997,7 @@ CVisualPin* CVisualContainer::GetInputPinByIndex(size_t nIndex)
 CVisualPin* CVisualContainer::GetOutputPinByIndex(size_t nIndex)
 {
     size_t cPinsSoFar = 0;
-    
+
     for(size_t i = 0; i < m_arrComponents.GetCount(); i++)
     {
         size_t cPins = m_arrComponents.GetAt(i)->GetOutputPinCount();
@@ -1097,9 +1097,10 @@ CVisualTree::CVisualTree()
     : m_pEventHandler(NULL)
 {
 }
-CVisualTree::~CVisualTree() 
+CVisualTree::~CVisualTree()
 {
-    for(size_t i = 0; i < m_Objects.GetCount(); i++) {
+    for(size_t i = 0; i < m_Objects.GetCount(); i++)
+    {
         delete m_Objects.GetAt(i);
     }
 }
@@ -1122,7 +1123,7 @@ HRESULT CVisualTree::AddVisual(CVisualObject * pVisual, bool fEnsureOpenSpace)
             }
         }
     }
-    
+
     return S_OK;
 }
 
@@ -1135,7 +1136,7 @@ void CVisualTree::RemoveVisual(CVisualObject * pVisual)
     {
         pIter = m_Objects.GetAt(n);
 
-        if(pVisual->IsDependent(pIter)) 
+        if(pVisual->IsDependent(pIter))
         {
             RemoveVisual(pIter);
             n--;
@@ -1147,11 +1148,11 @@ void CVisualTree::RemoveVisual(CVisualObject * pVisual)
         }
         else
         {
-            pIter->NotifyRemoved(pVisual);  
+            pIter->NotifyRemoved(pVisual);
         }
     }
 
-    if(m_pEventHandler) 
+    if(m_pEventHandler)
     {
         m_pEventHandler->NotifyObjectDeleted(pVisual);
     }
@@ -1165,7 +1166,7 @@ void CVisualTree::Draw(CVisualDrawContext & Ctx)
     CVisualObject * pObject;
 
     if(m_Objects.IsEmpty()) return;
-    
+
     for(n = m_Objects.GetCount() - 1; n > 0; n--)
     {
         Ctx.PushState();
@@ -1231,23 +1232,23 @@ void CVisualTree::RouteAllConnectors()
 BOOL CVisualTree::MakeConnector(CVisualPin* pSourcePin, CVisualPin* pSinkPin)
 {
     HRESULT hr = S_OK;
-    
+
     CVisualConnector* pVisualConnector = new CVisualConnector;
     CHECK_ALLOC( pVisualConnector );
-    
+
     AddVisual(pVisualConnector);
-        
+
     pVisualConnector->Left() = pSourcePin->GetConnectorPoint();
     pVisualConnector->Right() = pSinkPin->GetConnectorPoint();
     pSourcePin->SetConnector(pVisualConnector);
     pSinkPin->SetConnector(pVisualConnector);
-    
+
 Cleanup:
     if(FAILED(hr))
     {
         return FALSE;
     }
-    
+
     return TRUE;
 }
 

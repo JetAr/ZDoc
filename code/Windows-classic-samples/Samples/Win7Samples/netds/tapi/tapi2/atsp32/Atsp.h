@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright 1995 - 2000 Microsoft Corporation
 
@@ -19,17 +19,17 @@ Notes:
 #include <malloc.h>
 #include <string.h>
 #include "resource.h"
-#include <initguid.h> 
+#include <initguid.h>
 
 
-//                                                                      
-// Line device GUID of MSP                                                    
-//                                                  
+//
+// Line device GUID of MSP
+//
 // CLSID = s '// 23F7C678- 24E1 -48db- AE AC- 54 A6 F2 A0 10 A0
 
 
-DEFINE_GUID(CLSID_SAMPMSP, 
-0x23F7C678, 0x24E1, 0x48db, 0xAE, 0xAC, 0x54, 0xA6, 0xF2, 0xA0, 0x10, 0xA0);
+DEFINE_GUID(CLSID_SAMPMSP,
+            0x23F7C678, 0x24E1, 0x48db, 0xAE, 0xAC, 0x54, 0xA6, 0xF2, 0xA0, 0x10, 0xA0);
 
 
 
@@ -43,14 +43,14 @@ typedef struct _DRVLINE
 
     LINEEVENT               pfnEventProc;
 
-	// 
-	// MSP Variables
+    //
+    // MSP Variables
 
-	DWORD				    dwMSPHandle;
-	
+    DWORD				    dwMSPHandle;
+
     HTAPIMSPLINE			htMSPLineHandle;
 
-	//
+    //
 
     DWORD                   dwDeviceID;
 
@@ -154,7 +154,7 @@ DebugOutput(
     DWORD   dwLevel,
     LPCSTR  lpszFormat,
     ...
-    );
+);
 
 #define DBGOUT(arg) DebugOutput arg
 
@@ -163,13 +163,13 @@ PASCAL
 Epilog(
     PFUNC_INFO  pInfo,
     LONG        lResult
-    );
+);
 
 void
 PASCAL
 Prolog(
     PFUNC_INFO  pInfo
-    );
+);
 
 #else
 
@@ -187,13 +187,13 @@ LPVOID
 PASCAL
 DrvAlloc(
     DWORD dwSize
-    );
+);
 
 VOID
 PASCAL
 DrvFree(
     LPVOID lp
-    );
+);
 
 void
 PASCAL
@@ -201,7 +201,7 @@ SetCallState(
     PDRVLINE    pLine,
     DWORD       dwCallState,
     DWORD       dwCallStateMode
-    );
+);
 
 BOOL
 CALLBACK
@@ -210,17 +210,17 @@ ConfigDlgProc(
     UINT    msg,
     WPARAM  wParam,
     LPARAM  lParam
-    );
+);
 
 LONG
 PASCAL
 ProviderInstall(
     char   *pszProviderName,
     BOOL    bNoMultipleInstance
-    );
+);
 
 void
 PASCAL
 DropActiveCall(
     PDRVLINE    pLine
-    );
+);

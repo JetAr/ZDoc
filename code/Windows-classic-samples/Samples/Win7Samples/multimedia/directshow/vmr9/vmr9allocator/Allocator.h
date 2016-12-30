@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Allocator.h
 //
 // Desc: DirectShow sample code - interface for the CAllocator class
@@ -20,9 +20,9 @@
 
 // C4995'function': name was marked as #pragma deprecated
 //
-// The version of vector which shipped with Visual Studio .NET 2003 
-// indirectly uses some deprecated functions.  Warning C4995 is disabled 
-// because the file cannot be changed and we do not want to 
+// The version of vector which shipped with Visual Studio .NET 2003
+// indirectly uses some deprecated functions.  Warning C4995 is disabled
+// because the file cannot be changed and we do not want to
 // display warnings which the user cannot fix.
 #pragma warning(disable : 4995)
 
@@ -33,44 +33,44 @@ using namespace std;
 #include "PlaneScene.h"
 
 
-class CAllocator  : public  IVMRSurfaceAllocator9, 
-                            IVMRImagePresenter9
+class CAllocator  : public  IVMRSurfaceAllocator9,
+    IVMRImagePresenter9
 {
 public:
     CAllocator(HRESULT& hr, HWND wnd, IDirect3D9* d3d = NULL, IDirect3DDevice9* d3dd = NULL);
     virtual ~CAllocator();
 
     // IVMRSurfaceAllocator9
-    virtual HRESULT STDMETHODCALLTYPE InitializeDevice( 
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ VMR9AllocationInfo *lpAllocInfo,
-            /* [out][in] */ DWORD *lpNumBuffers);
-            
-    virtual HRESULT STDMETHODCALLTYPE TerminateDevice( 
+    virtual HRESULT STDMETHODCALLTYPE InitializeDevice(
+        /* [in] */ DWORD_PTR dwUserID,
+        /* [in] */ VMR9AllocationInfo *lpAllocInfo,
+        /* [out][in] */ DWORD *lpNumBuffers);
+
+    virtual HRESULT STDMETHODCALLTYPE TerminateDevice(
         /* [in] */ DWORD_PTR dwID);
-    
-    virtual HRESULT STDMETHODCALLTYPE GetSurface( 
+
+    virtual HRESULT STDMETHODCALLTYPE GetSurface(
         /* [in] */ DWORD_PTR dwUserID,
         /* [in] */ DWORD SurfaceIndex,
         /* [in] */ DWORD SurfaceFlags,
         /* [out] */ IDirect3DSurface9 **lplpSurface);
-    
-    virtual HRESULT STDMETHODCALLTYPE AdviseNotify( 
+
+    virtual HRESULT STDMETHODCALLTYPE AdviseNotify(
         /* [in] */ IVMRSurfaceAllocatorNotify9 *lpIVMRSurfAllocNotify);
 
     // IVMRImagePresenter9
-    virtual HRESULT STDMETHODCALLTYPE StartPresenting( 
+    virtual HRESULT STDMETHODCALLTYPE StartPresenting(
         /* [in] */ DWORD_PTR dwUserID);
-    
-    virtual HRESULT STDMETHODCALLTYPE StopPresenting( 
+
+    virtual HRESULT STDMETHODCALLTYPE StopPresenting(
         /* [in] */ DWORD_PTR dwUserID);
-    
-    virtual HRESULT STDMETHODCALLTYPE PresentImage( 
+
+    virtual HRESULT STDMETHODCALLTYPE PresentImage(
         /* [in] */ DWORD_PTR dwUserID,
         /* [in] */ VMR9PresentationInfo *lpPresInfo);
-    
+
     // IUnknown
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface(
         REFIID riid,
         void** ppvObject);
 

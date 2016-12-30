@@ -1,9 +1,9 @@
-//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 //PARTICULAR PURPOSE.
 //
-//Copyright (C) Microsoft Corporation. All rights reserved 
+//Copyright (C) Microsoft Corporation. All rights reserved
 
 #pragma once
 #include "StorageManagementApplication.h"
@@ -13,9 +13,9 @@
  *
  *****************************************************************************/
 MI_Result GetStorageSubsystem(
-                MI_Session * session,
-                MI_Value * storageSubsystemName,
-                MI_Instance ** outInstance )
+    MI_Session * session,
+    MI_Value * storageSubsystemName,
+    MI_Instance ** outInstance )
 {
     MI_Result result = MI_RESULT_FAILED;
 
@@ -23,12 +23,12 @@ MI_Result GetStorageSubsystem(
     //Get the first Instance of StorageSubystem
     //
     result =  FindTheInstanceOfClassWithProperty(
-            STORAGESUBSYSTEM_CLASSNAME,
-            session,
-            MI_T("FriendlyName"),
-            storageSubsystemName,
-            outInstance
-            );
+                  STORAGESUBSYSTEM_CLASSNAME,
+                  session,
+                  MI_T("FriendlyName"),
+                  storageSubsystemName,
+                  outInstance
+              );
     if (result != MI_RESULT_OK)
     {
         PrintFailMessage(L"Get an Instance of StorageSubSystem", result);
@@ -44,11 +44,11 @@ MI_Result GetStorageSubsystem(
  *      PhysicalDisks are obtained through Associator instances
  *****************************************************************************/
 MI_Result CreateStoragePool(
-                MI_Application * application,
-                MI_Session * session,
-                MI_Instance * inboundInstance,
-                MI_Value * poolFriendlyName,
-                MI_Instance ** outInstance)
+    MI_Application * application,
+    MI_Session * session,
+    MI_Instance * inboundInstance,
+    MI_Value * poolFriendlyName,
+    MI_Instance ** outInstance)
 {
     OperationPtr operation;
     MI_Instance * primordialPoolInstance = NULL;
@@ -58,9 +58,9 @@ MI_Result CreateStoragePool(
     const MI_Char * errorString;
     MI_Result result = MI_RESULT_FAILED;
     int i = 0;
-    MI_Boolean moreResults = MI_TRUE;  
-    const MI_Char *errorMessage;  
-    const MI_Instance *completionDetails;  
+    MI_Boolean moreResults = MI_TRUE;
+    const MI_Char *errorMessage;
+    const MI_Instance *completionDetails;
 
     MI_Instance *AssociatedPhysicalDisk[MAX_DRIVES];
 
@@ -76,29 +76,29 @@ MI_Result CreateStoragePool(
     MI_Value miValueTrue;
     miValueTrue.boolean = MI_TRUE;
 
-    MI_Session_AssociatorInstances(session, 
-                                   0, 
-                                   NULL, 
-                                   NAMESPACE, 
-                                   inboundInstance, 
-                                   MI_T("MSFT_StorageSubsystemToPhysicalDisk"), 
-                                   PHYSICALDISK_CLASSNAME, 
-                                   MI_T("StorageSubsystem"), 
-                                   MI_T("PhysicalDisk"), 
-                                   MI_FALSE, 
-                                   NULL, 
-                                   &operation.operation);  
+    MI_Session_AssociatorInstances(session,
+                                   0,
+                                   NULL,
+                                   NAMESPACE,
+                                   inboundInstance,
+                                   MI_T("MSFT_StorageSubsystemToPhysicalDisk"),
+                                   PHYSICALDISK_CLASSNAME,
+                                   MI_T("StorageSubsystem"),
+                                   MI_T("PhysicalDisk"),
+                                   MI_FALSE,
+                                   NULL,
+                                   &operation.operation);
 
     i = 0;
 
     while (moreResults)
     {
-        MI_Operation_GetInstance(&operation.operation, 
-                                    &resultInstance, 
-                                    &moreResults, 
-                                    &result, 
-                                    &errorMessage, 
-                                    &completionDetails);  
+        MI_Operation_GetInstance(&operation.operation,
+                                 &resultInstance,
+                                 &moreResults,
+                                 &result,
+                                 &errorMessage,
+                                 &completionDetails);
         if (result != MI_RESULT_OK)
         {
             PrintFailMessage(L"Get Associated PhysicalDisks", result);
@@ -111,7 +111,7 @@ MI_Result CreateStoragePool(
             PrintFailMessage(L"No PhysicalDisks found", result);
             return result;
         }
-  
+
         if (IsTheRightInstance(resultInstance, MI_T("CanPool"), &miValueTrue) && i < MAX_DRIVES)
         {
             result = MI_Instance_Clone(resultInstance, &primordialPoolInstance);
@@ -131,31 +131,31 @@ MI_Result CreateStoragePool(
     // Build the parameters used in Invoking CreateStoragePool:
     //
     MI_Result instanceCreationResult = MI_Application_NewInstance(
-                                                        application,
-                                                        MI_T("__PARAMETERS"), //className
-                                                        NULL,                 //classRTTI,
-                                                        &inboundProperties);
+                                           application,
+                                           MI_T("__PARAMETERS"), //className
+                                           NULL,                 //classRTTI,
+                                           &inboundProperties);
     if (instanceCreationResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"create Instance", instanceCreationResult);
         return instanceCreationResult;
     }
-      
+
     //
     //StoragePool FriendlyName:
     //
     MI_Result addElementResult = MI_Instance_AddElement(
-                                                    inboundProperties,
-                                                    MI_T("FriendlyName"),
-                                                    poolFriendlyName,
-                                                    MI_STRING,
-                                                    0);
+                                     inboundProperties,
+                                     MI_T("FriendlyName"),
+                                     poolFriendlyName,
+                                     MI_STRING,
+                                     0);
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add StoragePool FriendlyName parameter", addElementResult);
         return addElementResult;
     }
-                     
+
     //
     // Add PhysicalDisk instance to the parameter list
     //
@@ -165,11 +165,11 @@ MI_Result CreateStoragePool(
     physicalDiskInstances.instancea.size = i;
 
     addElementResult = MI_Instance_AddElement(
-                                            inboundProperties,
-                                            MI_T("PhysicalDisks"),
-                                            &physicalDiskInstances,
-                                            MI_INSTANCEA,
-                                            0);
+                           inboundProperties,
+                           MI_T("PhysicalDisks"),
+                           &physicalDiskInstances,
+                           MI_INSTANCEA,
+                           0);
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add PhysicalDisks parameter", addElementResult);
@@ -177,28 +177,28 @@ MI_Result CreateStoragePool(
     }
 
     MI_Value  resiliencySettingName;
-    
+
     //
     // In this example,  we use the ResiliencySetting  "Simple"
     //	you can use other names/types in your own code
-    //  
+    //
     //  When managing your own proprietary storage, you can use your own name too.
     //
     resiliencySettingName.string = MI_T("Simple");
 
     addElementResult = MI_Instance_AddElement(
-        inboundProperties,
-        MI_T("ResiliencySettingNameDefault"),
-        &resiliencySettingName,
-        MI_STRING,
-        0);
+                           inboundProperties,
+                           MI_T("ResiliencySettingNameDefault"),
+                           &resiliencySettingName,
+                           MI_STRING,
+                           0);
 
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add ResiliencySettingNameDefault parameter", addElementResult);
         return addElementResult;
     }
-       
+
     wprintf(L"Invoking CreateStoragePool");
 
 
@@ -247,32 +247,32 @@ MI_Result CreateStoragePool(
         MI_Instance * createdInstance = NULL;
 
         result = GetCreatedInstance(
-                        resultInstance,
-                        MI_T("CreatedStoragePool"),
-                        &createdInstance);
-        
+                     resultInstance,
+                     MI_T("CreatedStoragePool"),
+                     &createdInstance);
+
         if(result != MI_RESULT_OK )
         {
-                PrintFailMessage(L" Get the created StoragePool instance! ", result);
-                   
-                return result;
+            PrintFailMessage(L" Get the created StoragePool instance! ", result);
+
+            return result;
         }
 
         //
         // Get the newly created instance by Enumeration:
         //
         result =  FindTheInstanceOfClassWithProperty(
-                            STORAGEPOOL_CLASSNAME,
-                            session,
-                            MI_T("FriendlyName"),
-                            poolFriendlyName,
-                            outInstance
-                            );
+                      STORAGEPOOL_CLASSNAME,
+                      session,
+                      MI_T("FriendlyName"),
+                      poolFriendlyName,
+                      outInstance
+                  );
 
         if(result != MI_RESULT_OK )
         {
             PrintFailMessage(L" find the newly created StoragePool instance! ", result);
-            
+
             return result;
         }
         else
@@ -302,12 +302,12 @@ MI_Result CreateStoragePool(
  * CreateVirtualDisk   returns an instance of Disk
  *****************************************************************************/
 MI_Result CreateVirtualDisk(
-                    MI_Application * application,
-                    MI_Session * session,
-                    MI_Instance * inboundInstance,
-                    MI_Value * virtualDiskFriendlyName,
-                    MI_Value * virtualDiskSize, 
-                    MI_Instance ** outInstance)
+    MI_Application * application,
+    MI_Session * session,
+    MI_Instance * inboundInstance,
+    MI_Value * virtualDiskFriendlyName,
+    MI_Value * virtualDiskSize,
+    MI_Instance ** outInstance)
 
 {
     OperationPtr operation;
@@ -324,39 +324,39 @@ MI_Result CreateVirtualDisk(
     // Build the parameters used in Invoking CreateVirtualDisk:
     //
     MI_Result instanceCreationResult = MI_Application_NewInstance(
-                                                        application,
-                                                        MI_T("__PARAMETERS"), //className
-                                                        NULL,                 //classRTTI,
-                                                        &inboundProperties);
+                                           application,
+                                           MI_T("__PARAMETERS"), //className
+                                           NULL,                 //classRTTI,
+                                           &inboundProperties);
     if (instanceCreationResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"create Instance", instanceCreationResult);
         return instanceCreationResult;
     }
-          
-    // 1. VirtualDisk(lun) Friendly name    
+
+    // 1. VirtualDisk(lun) Friendly name
     MI_Result addElementResult = MI_Instance_AddElement(
-                                                    inboundProperties,
-                                                    MI_T("FriendlyName"),
-                                                    virtualDiskFriendlyName,
-                                                    MI_STRING,
-                                                    0);
-    
+                                     inboundProperties,
+                                     MI_T("FriendlyName"),
+                                     virtualDiskFriendlyName,
+                                     MI_STRING,
+                                     0);
+
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add VirtualDisk Friendlyname parameter ", addElementResult);
         return addElementResult;
     }
 
-    
-    // 2. VirtualDisk(lun) Size	 
+
+    // 2. VirtualDisk(lun) Size
     addElementResult = MI_Instance_AddElement(
-                                            inboundProperties,
-                                            MI_T("Size"),
-                                            virtualDiskSize,
-                                            MI_UINT64,
-                                            0);
-    
+                           inboundProperties,
+                           MI_T("Size"),
+                           virtualDiskSize,
+                           MI_UINT64,
+                           0);
+
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add Size parameter", addElementResult);
@@ -365,15 +365,15 @@ MI_Result CreateVirtualDisk(
 
     // 3. VirtualDisk(lun) Size
     MI_Value  storageAttributesName;
-    storageAttributesName.string = MI_T("Simple");   
-    
+    storageAttributesName.string = MI_T("Simple");
+
     addElementResult = MI_Instance_AddElement(
-                                            inboundProperties,
-                                            MI_T("ResiliencySettingName"),
-                                            &storageAttributesName,
-                                            MI_STRING,
-                                            0);
-    
+                           inboundProperties,
+                           MI_T("ResiliencySettingName"),
+                           &storageAttributesName,
+                           MI_STRING,
+                           0);
+
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add ResiliencySettingName parameter ", addElementResult);
@@ -386,27 +386,27 @@ MI_Result CreateVirtualDisk(
     wprintf(L"Invoking  CreateVirtualDisk \n");
 
     MI_Session_Invoke(
-                    session,
-                    0,          //flags
-                    NULL,       //options
-                    NAMESPACE,
-                    STORAGEPOOL_CLASSNAME,
-                    MI_T("CreateVirtualDisk"),
-                    inboundInstance,
-                    inboundProperties,
-                    NULL,
-                    &operation.operation);
+        session,
+        0,          //flags
+        NULL,       //options
+        NAMESPACE,
+        STORAGEPOOL_CLASSNAME,
+        MI_T("CreateVirtualDisk"),
+        inboundInstance,
+        inboundProperties,
+        NULL,
+        &operation.operation);
 
     //
     // Get Results
     //
     MI_Operation_GetInstance(
-                    &operation.operation,
-                    &resultInstance,
-                    NULL,
-                    &result,
-                    &errorString,
-                    &errorDetails);
+        &operation.operation,
+        &resultInstance,
+        NULL,
+        &result,
+        &errorString,
+        &errorDetails);
 
     if(result != MI_RESULT_OK )
     {
@@ -422,27 +422,27 @@ MI_Result CreateVirtualDisk(
         // Get the Created instance --> VirtualDisk
         //
         result = GetCreatedInstance(
-                        resultInstance,
-                        MI_T("CreatedVirtualDisk"),
-                        &createdInstance);
-        
+                     resultInstance,
+                     MI_T("CreatedVirtualDisk"),
+                     &createdInstance);
+
         if(result != MI_RESULT_OK )
         {
-                PrintFailMessage(L" get the created VirtualDisk instance!\n", result);
-                   
-                return result;
+            PrintFailMessage(L" get the created VirtualDisk instance!\n", result);
+
+            return result;
         }
 
         //
         // Get the VirtualDisk Instance:
         //
         result =  FindTheInstanceOfClassWithProperty(
-                                VIRTUALDISK_CLASSNAME,
-                                session,
-                                MI_T("FriendlyName"),
-                                virtualDiskFriendlyName,
-                                outInstance
-                                );
+                      VIRTUALDISK_CLASSNAME,
+                      session,
+                      MI_T("FriendlyName"),
+                      virtualDiskFriendlyName,
+                      outInstance
+                  );
 
         if(result != MI_RESULT_OK )
         {
@@ -474,45 +474,45 @@ MI_Result CreateVirtualDisk(
  * GetAssociatorInstances   returns associated instances of the inboundInstance
  *****************************************************************************/
 MI_Result GetAssociatorInstances(
-                    MI_Session * session,
-                    MI_Instance * inboundInstance,
-                    MI_Instance ** associatedInstances,
-                    _In_z_ MI_Char * associatedClassName,
-                    _In_z_ MI_Char* associationClass,
-                    _In_z_ MI_Char* role,
-                    _In_z_ MI_Char* resultRole)
+    MI_Session * session,
+    MI_Instance * inboundInstance,
+    MI_Instance ** associatedInstances,
+    _In_z_ MI_Char * associatedClassName,
+    _In_z_ MI_Char* associationClass,
+    _In_z_ MI_Char* role,
+    _In_z_ MI_Char* resultRole)
 
 {
     OperationPtr operation;
     const MI_Instance * resultInstance;
     MI_Result result = MI_RESULT_FAILED;
-    MI_Boolean moreResults = MI_TRUE;  
+    MI_Boolean moreResults = MI_TRUE;
     bool firstInstance = true;
 
     //
-    //Get the Associator instances of PhysicalDisks  
+    //Get the Associator instances of PhysicalDisks
     //
-    MI_Session_AssociatorInstances(session, 
-                                0, 
-                                NULL, 
-                                NAMESPACE, 
-                                inboundInstance, 
-                                associationClass,
-                                associatedClassName, 
-                                role, 
-                                resultRole, 
-                                MI_TRUE,
-                                NULL, 
-                                &operation.operation);  
-      
-    while (moreResults)  
-    {  
-        MI_Operation_GetInstance(&operation.operation, 
-                                    &resultInstance, 
-                                    &moreResults, 
-                                    &result, 
-                                    NULL, 
-                                    NULL);
+    MI_Session_AssociatorInstances(session,
+                                   0,
+                                   NULL,
+                                   NAMESPACE,
+                                   inboundInstance,
+                                   associationClass,
+                                   associatedClassName,
+                                   role,
+                                   resultRole,
+                                   MI_TRUE,
+                                   NULL,
+                                   &operation.operation);
+
+    while (moreResults)
+    {
+        MI_Operation_GetInstance(&operation.operation,
+                                 &resultInstance,
+                                 &moreResults,
+                                 &result,
+                                 NULL,
+                                 NULL);
         if (result != MI_RESULT_OK )
         {
             PrintFailMessage(L" MI_Operation_GetInstance() ", result);
@@ -553,10 +553,10 @@ MI_Result GetAssociatorInstances(
  * InitializeDisk() - Initializes the given disk
  *****************************************************************************/
 MI_Result InitializeDisk(
-        MI_Application * application,
-        MI_Session * session,
-        MI_Value * partitionType,
-        MI_Instance * inboundInstance)
+    MI_Application * application,
+    MI_Session * session,
+    MI_Value * partitionType,
+    MI_Instance * inboundInstance)
 {
     OperationPtr operation;
     MI_Instance * inboundProperties = NULL;
@@ -569,25 +569,25 @@ MI_Result InitializeDisk(
     // Build the parameters used in Invoking Initialize():
     //
     MI_Result instanceCreationResult = MI_Application_NewInstance(
-                                                        application,
-                                                        MI_T("__PARAMETERS"), //className
-                                                        NULL,                 //classRTTI,
-                                                        &inboundProperties);
+                                           application,
+                                           MI_T("__PARAMETERS"), //className
+                                           NULL,                 //classRTTI,
+                                           &inboundProperties);
     if (instanceCreationResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"create Instance", instanceCreationResult);
         return instanceCreationResult;
     }
-            
-    // Partition type 
+
+    // Partition type
     //
     MI_Result addElementResult = MI_Instance_AddElement(
-                                                    inboundProperties,
-                                                    MI_T("PartitionStyle"),
-                                                    partitionType,
-                                                    MI_UINT16,
-                                                    0);
-    
+                                     inboundProperties,
+                                     MI_T("PartitionStyle"),
+                                     partitionType,
+                                     MI_UINT16,
+                                     0);
+
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add Element", addElementResult);
@@ -601,27 +601,27 @@ MI_Result InitializeDisk(
     // Invoke "Initialize" Method
     //
     MI_Session_Invoke(
-                    session,
-                    0,          
-                    NULL,       
-                    NAMESPACE,
-                    DISK_CLASSNAME,
-                    MI_T("Initialize"),
-                    inboundInstance,
-                    inboundProperties,
-                    NULL,
-                    &operation.operation);
+        session,
+        0,
+        NULL,
+        NAMESPACE,
+        DISK_CLASSNAME,
+        MI_T("Initialize"),
+        inboundInstance,
+        inboundProperties,
+        NULL,
+        &operation.operation);
 
     //
     // Get Results
     //
     MI_Operation_GetInstance(
-                    &operation.operation,
-                    &resultInstance,
-                    NULL,
-                    &result,
-                    &errorString,
-                    &errorDetails);
+        &operation.operation,
+        &resultInstance,
+        NULL,
+        &result,
+        &errorString,
+        &errorDetails);
 
     if(result != MI_RESULT_OK )
     {
@@ -634,7 +634,7 @@ MI_Result InitializeDisk(
         printf("Invoke InitializeDisk Successful\n");
     }
 
-    
+
     //
     //Clean Instances:
     //
@@ -650,10 +650,10 @@ MI_Result InitializeDisk(
  * FormatVolume() - formats the given volume
  *****************************************************************************/
 MI_Result FormatVolume(
-        MI_Application * application,
-        MI_Session * session,
-        MI_Value  * filesystemType,
-        MI_Instance * inboundInstance)
+    MI_Application * application,
+    MI_Session * session,
+    MI_Value  * filesystemType,
+    MI_Instance * inboundInstance)
 {
     OperationPtr operation;
     MI_Instance * inboundProperties = NULL;
@@ -668,26 +668,26 @@ MI_Result FormatVolume(
     // Build the parameters used in Invoking Format():
     //
     MI_Result instanceCreationResult = MI_Application_NewInstance(
-                                                        application,
-                                                        MI_T("__PARAMETERS"), //className
-                                                        NULL,            //classRTTI,
-                                                        &inboundProperties);
+                                           application,
+                                           MI_T("__PARAMETERS"), //className
+                                           NULL,            //classRTTI,
+                                           &inboundProperties);
     if (instanceCreationResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"create Instance", instanceCreationResult);
         return instanceCreationResult;
     }
 
-    //      
+    //
     // filesystem type
     //
     MI_Result addElementResult = MI_Instance_AddElement(
-                                                    inboundProperties,
-                                                    volume_FileSystem,
-                                                    filesystemType,
-                                                    MI_STRING,
-                                                    0);
-    
+                                     inboundProperties,
+                                     volume_FileSystem,
+                                     filesystemType,
+                                     MI_STRING,
+                                     0);
+
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add Element", addElementResult);
@@ -701,8 +701,8 @@ MI_Result FormatVolume(
     //
     MI_Session_Invoke(
         session,
-        0,           
-        NULL,        
+        0,
+        NULL,
         NAMESPACE,
         VOLUME_CLASSNAME,
         MI_T("Format"),
@@ -746,10 +746,10 @@ MI_Result FormatVolume(
 
 
 MI_Result CreatePartitionOnDisk(
-                MI_Application * application,
-                MI_Session * session,
-                MI_Instance * inboundInstance,
-                MI_Instance ** outInstance)
+    MI_Application * application,
+    MI_Session * session,
+    MI_Instance * inboundInstance,
+    MI_Instance ** outInstance)
 {
     OperationPtr operation;
     MI_Instance * inboundProperties = NULL;
@@ -766,10 +766,10 @@ MI_Result CreatePartitionOnDisk(
     // Build the parameters used in Invoke:
     //
     MI_Result instanceCreationResult = MI_Application_NewInstance(
-                                                        application,
-                                                        MI_T("__PARAMETERS"), //className
-                                                        NULL,            //classRTTI,
-                                                        &inboundProperties);
+                                           application,
+                                           MI_T("__PARAMETERS"), //className
+                                           NULL,            //classRTTI,
+                                           &inboundProperties);
     if (instanceCreationResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"create Instance", instanceCreationResult);
@@ -779,12 +779,12 @@ MI_Result CreatePartitionOnDisk(
     MI_Value useMaxSize;
     useMaxSize.boolean = MI_TRUE;
     MI_Result addElementResult = MI_Instance_AddElement(
-                                                    inboundProperties,
-                                                    MI_T("UseMaximumSize"),
-                                                    &useMaxSize,
-                                                    MI_BOOLEAN,
-                                                    0);
-    
+                                     inboundProperties,
+                                     MI_T("UseMaximumSize"),
+                                     &useMaxSize,
+                                     MI_BOOLEAN,
+                                     0);
+
     if(addElementResult != MI_RESULT_OK)
     {
         PrintFailMessage(L"Add CreatedPartition parameter", addElementResult);
@@ -797,27 +797,27 @@ MI_Result CreatePartitionOnDisk(
     // Invoke "CreatePartition" method
     //
     MI_Session_Invoke(
-                    session,
-                    0,         
-                    NULL,       
-                    NAMESPACE,
-                    DISK_CLASSNAME,
-                    MI_T("CreatePartition"),
-                    inboundInstance,
-                    inboundProperties,
-                    NULL,
-                    &operation.operation);
+        session,
+        0,
+        NULL,
+        NAMESPACE,
+        DISK_CLASSNAME,
+        MI_T("CreatePartition"),
+        inboundInstance,
+        inboundProperties,
+        NULL,
+        &operation.operation);
 
     //
     // Get Results
     //
     MI_Operation_GetInstance(
-                    &operation.operation,
-                    &resultInstance,
-                    NULL,
-                    &result,
-                    &errorString,
-                    &errorDetails);
+        &operation.operation,
+        &resultInstance,
+        NULL,
+        &result,
+        &errorString,
+        &errorDetails);
 
     if(result != MI_RESULT_OK )
     {
@@ -835,15 +835,15 @@ MI_Result CreatePartitionOnDisk(
         MI_Instance * createdInstance = NULL;
 
         result = GetCreatedInstance(
-                        resultInstance,
-                        MI_T("CreatedPartition"),
-                        &createdInstance);
-        
+                     resultInstance,
+                     MI_T("CreatedPartition"),
+                     &createdInstance);
+
         if(result != MI_RESULT_OK )
         {
-                PrintFailMessage(L" get the created Partition instance!\n", result);
-               
-                return result;
+            PrintFailMessage(L" get the created Partition instance!\n", result);
+
+            return result;
         }
         else
         {
@@ -855,12 +855,12 @@ MI_Result CreatePartitionOnDisk(
             miValue.string  = GetStringPropValue(createdInstance, L"DiskId");
 
             result =  FindTheInstanceOfClassWithProperty(
-                                    PARTITION_CLASSNAME,
-                                    session,
-                                    MI_T("DiskId"),
-                                    &miValue,
-                                    outInstance
-                                    );
+                          PARTITION_CLASSNAME,
+                          session,
+                          MI_T("DiskId"),
+                          &miValue,
+                          outInstance
+                      );
 
             if(result != MI_RESULT_OK )
             {
@@ -889,7 +889,7 @@ MI_Result CreatePartitionOnDisk(
 
 
 /******************************************************************************
- * Enumerate "className" Instances Synchronously 
+ * Enumerate "className" Instances Synchronously
  * In this example, the found instance's property with be compare with
  * the property provided, the matched property will be returned
  *****************************************************************************/
@@ -899,7 +899,7 @@ MI_Result FindTheInstanceOfClassWithProperty(
     const MI_Char * propName,
     const MI_Value * PropValue,
     MI_Instance ** pInstance
-    )
+)
 {
     OperationPtr operation;
     MI_OperationOptions *options = NULL;
@@ -982,10 +982,10 @@ MI_Result ConstructNewInstance(
     MI_Instance ** instance )
 {
     MI_Result instanceCreationResult = MI_Application_NewInstance(
-                                                            application,
-                                                            className,
-                                                            classRTTI,
-                                                            instance);
+                                           application,
+                                           className,
+                                           classRTTI,
+                                           instance);
 
     if (instanceCreationResult != MI_RESULT_OK)
     {
@@ -1003,11 +1003,11 @@ MI_Result ConstructNewInstance(
                 flags = MI_FLAG_KEY;
             }
             MI_Result addElementResult = MI_Instance_AddElement(
-                *instance,
-                properties[i].name,
-                properties[i].value,
-                properties[i].type,
-                flags);
+                                             *instance,
+                                             properties[i].name,
+                                             properties[i].value,
+                                             properties[i].type,
+                                             flags);
             if(addElementResult != MI_RESULT_OK)
             {
                 PrintFailMessage(L"Add Element", addElementResult);
@@ -1027,11 +1027,11 @@ MI_Result ConstructNewInstance(
 MI_Result InitializeMI(ApplicationPtr *pApplication, SessionPtr *pSession)
 {
     MI_Result result = MI_RESULT_FAILED;
-    
+
     result = MI_Application_Initialize(0,
-        NULL,
-        NULL,
-        &pApplication->application);
+                                       NULL,
+                                       NULL,
+                                       &pApplication->application);
 
     if (result != MI_RESULT_OK)
     {
@@ -1041,13 +1041,13 @@ MI_Result InitializeMI(ApplicationPtr *pApplication, SessionPtr *pSession)
     }
 
     result = MI_Application_NewSession(
-        &pApplication->application,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        &pSession->session);
+                 &pApplication->application,
+                 NULL,
+                 NULL,
+                 NULL,
+                 NULL,
+                 NULL,
+                 &pSession->session);
 
     if (result != MI_RESULT_OK)
     {
@@ -1123,42 +1123,42 @@ void PrintValue(
     if (type == MI_STRING)
     {
         wprintf(L"\t%s = '%s'; flag =%u; index= %u.\r\n",
-            propName,
-            value->string,
-            flags,
-            index);
+                propName,
+                value->string,
+                flags,
+                index);
     }
     else if (type == MI_UINT8)
     {
         wprintf(L"\t%s = '%u'; flag =%u; index= %u.\r\n",
-            propName,
-            value->uint8,
-            flags,
-            index);
+                propName,
+                value->uint8,
+                flags,
+                index);
     }
     else if (type == MI_UINT16)
     {
         wprintf(L"\t%s = '%u'; flag =%u; index= %u.\r\n",
-            propName,
-            value->uint16,
-            flags,
-            index);
+                propName,
+                value->uint16,
+                flags,
+                index);
     }
     else if (type == MI_CHAR16)
     {
         wprintf(L"\t%s = '%c'; flag =%u; index= %u.\r\n",
-            propName,
-            value->char16,
-            flags,
-            index);
+                propName,
+                value->char16,
+                flags,
+                index);
     }
     else if (type == MI_BOOLEAN)
     {
         wprintf(L"\t%s = '%u'; flag =%u; index= %u.\r\n",
-            propName,
-            value->boolean,
-            flags,
-            index);
+                propName,
+                value->boolean,
+                flags,
+                index);
     }
     else if (type == MI_REFERENCE)
     {
@@ -1166,10 +1166,10 @@ void PrintValue(
         wprintf(L"\t");
 
         wprintf(L"\t%s = Instance of Class:'%s'; flag =%u; index= %u.\r\n",
-            propName,
-            pInstance->classDecl->name,
-            flags,
-            index);
+                propName,
+                pInstance->classDecl->name,
+                flags,
+                index);
     }
     else if (type == MI_REFERENCEA)
     {
@@ -1178,10 +1178,10 @@ void PrintValue(
         for (MI_Uint32 i = 0; i < refA.size; i++)
         {
             wprintf(L"\t%s = Instance of Class:'%s'; flag =%u; index= %u.\r\n",
-                propName,
-                refA.data[i]->classDecl->name,
-                flags,
-                index);
+                    propName,
+                    refA.data[i]->classDecl->name,
+                    flags,
+                    index);
         }
     }
     else if (type == MI_INSTANCE)
@@ -1189,18 +1189,18 @@ void PrintValue(
         MI_Instance * pInstance = value->instance;
         wprintf(L"\t");
         wprintf(L"\t%s = Instance of Class:'%s'; flag =%u; index= %u.\r\n",
-            propName,
-            pInstance->classDecl->name,
-            flags,
-            index);
+                propName,
+                pInstance->classDecl->name,
+                flags,
+                index);
     }
     else
     {
         wprintf(L"\t%s = '%u'; flag =%u; index= %u.\r\n",
-            propName,
-            value->uint32,
-            flags,
-            index);
+                propName,
+                value->uint32,
+                flags,
+                index);
     }
     wprintf(L"\t--End Property {%s}--\n", propName);
 }
@@ -1215,14 +1215,14 @@ void PrintPropValue(
     MI_Uint32 flags;
     MI_Uint32 index;
     MI_Result result = MI_RESULT_FAILED;
-    
+
     result = instance->ft->GetElement(
-                                instance,
-                                propName, 
-                                &value,
-                                &type,
-                                &flags,
-                                &index);
+                 instance,
+                 propName,
+                 &value,
+                 &type,
+                 &flags,
+                 &index);
 
     if (result == MI_RESULT_OK)
     {
@@ -1230,7 +1230,7 @@ void PrintPropValue(
     }
     else
     {
- 
+
         wprintf(L"Property {%s} can not be obtained!.\n", propName);;
     }
     wprintf(L"\n");
@@ -1246,14 +1246,14 @@ MI_Result GetCreatedInstanceOrig(
     MI_Uint32 flags;
     MI_Uint32 index;
     MI_Result result = MI_RESULT_FAILED;
-    
+
     result = instance->ft->GetElement(
-                                instance,
-                                propName, 
-                                &value,
-                                &type,
-                                &flags,
-                                &index);
+                 instance,
+                 propName,
+                 &value,
+                 &type,
+                 &flags,
+                 &index);
 
     if (result == MI_RESULT_OK)
     {
@@ -1274,16 +1274,16 @@ MI_Result GetCreatedInstanceOrig(
             {
                 wprintf(L"\t");
                 wprintf(L"\t%s = Created Instance of Class:'%s'; flag =%u; index= %u.\r\n",
-                    propName,
-                    (*createdInstance)->classDecl->name,
-                    flags,
-                    index);
+                        propName,
+                        (*createdInstance)->classDecl->name,
+                        flags,
+                        index);
             }
         }
     }
     else
     {
- 
+
         wprintf(L"Instance {%s} can not be obtained!.\n", propName);;
     }
     wprintf(L"\n");
@@ -1302,14 +1302,14 @@ MI_Result GetCreatedInstance(
     MI_Uint32 flags;
     MI_Uint32 index;
     MI_Result result = MI_RESULT_FAILED;
-    
+
     result = instance->ft->GetElement(
-                                instance,
-                                propName, 
-                                &value,
-                                &type,
-                                &flags,
-                                &index);
+                 instance,
+                 propName,
+                 &value,
+                 &type,
+                 &flags,
+                 &index);
 
     if (result == MI_RESULT_OK)
     {
@@ -1321,15 +1321,15 @@ MI_Result GetCreatedInstance(
 
             wprintf(L"\t");
             wprintf(L"\t%s = Created Instance of Class:'%s'; flag =%u; index= %u.\r\n",
-                propName,
-                (*createdInstance)->classDecl->name,
-                flags,
-                index);
+                    propName,
+                    (*createdInstance)->classDecl->name,
+                    flags,
+                    index);
         }
     }
     else
     {
- 
+
         wprintf(L"Instance {%s} can not be obtained!.\n", propName);;
     }
     wprintf(L"\n");
@@ -1343,7 +1343,7 @@ bool IsTheRightInstance(
     const MI_Instance * instance,
     const MI_Char * propName,
     const MI_Value * PropValue
-    )
+)
 {
     MI_Value value;
     MI_Type type;
@@ -1352,24 +1352,24 @@ bool IsTheRightInstance(
     MI_Result result = MI_RESULT_FAILED;
     bool returnValue = false;
 
-    
+
     result = instance->ft->GetElement(
-                                instance,
-                                propName, 
-                                &value,
-                                &type,
-                                &flags,
-                                &index);
+                 instance,
+                 propName,
+                 &value,
+                 &type,
+                 &flags,
+                 &index);
 
     if (result == MI_RESULT_OK)
     {
         if (type == MI_STRING)
         {
             wprintf(L"\t The value of property %s = %s\r\n",
-                propName,
-                value.string
-                );
-            
+                    propName,
+                    value.string
+                   );
+
             if( value.string == NULL)
             {
                 wprintf(L"\t Property <%s> is NULL \n", propName);
@@ -1380,14 +1380,14 @@ bool IsTheRightInstance(
             {
                 returnValue = true;
             }
-        } 
+        }
         else if (type == MI_UINT32)
         {
             wprintf(L"\t The value of property %s = %u\r\n",
-                propName,
-                value.uint32
-                );
-            
+                    propName,
+                    value.uint32
+                   );
+
             if(PropValue->uint32 == value.uint32)
             {
                 returnValue = true;
@@ -1396,10 +1396,10 @@ bool IsTheRightInstance(
         else if (type == MI_CHAR16)
         {
             wprintf(L"\t The value of property %s = %c\r\n",
-                propName,
-                value.char16
-                );
-            
+                    propName,
+                    value.char16
+                   );
+
             if(PropValue->char16 == value.char16)
             {
                 returnValue = true;
@@ -1408,9 +1408,9 @@ bool IsTheRightInstance(
         else if (type == MI_BOOLEAN)
         {
             wprintf(L"\t The value of property %s = %s\r\n",
-                propName,
-                value.boolean ? L"TRUE" : L"FALSE"
-                );
+                    propName,
+                    value.boolean ? L"TRUE" : L"FALSE"
+                   );
 
             if (PropValue->boolean == value.boolean)
             {
@@ -1435,14 +1435,14 @@ MI_Char * GetStringPropValue(
     MI_Uint32 flags;
     MI_Uint32 index;
     MI_Result result = MI_RESULT_FAILED;
-    
+
     result = instance->ft->GetElement(
-                                instance,
-                                propName, 
-                                &value,
-                                &type,
-                                &flags,
-                                &index);
+                 instance,
+                 propName,
+                 &value,
+                 &type,
+                 &flags,
+                 &index);
 
     if (result == MI_RESULT_OK)
     {
@@ -1467,14 +1467,14 @@ MI_Uint32  GetIntPropValue(
     MI_Uint32 flags;
     MI_Uint32 index;
     MI_Result result = MI_RESULT_FAILED;
-    
+
     result = instance->ft->GetElement(
-                                instance,
-                                propName, 
-                                &value,
-                                &type,
-                                &flags,
-                                &index);
+                 instance,
+                 propName,
+                 &value,
+                 &type,
+                 &flags,
+                 &index);
 
     if (result == MI_RESULT_OK)
     {
@@ -1484,7 +1484,7 @@ MI_Uint32  GetIntPropValue(
     }
     else
     {
- 
+
         wprintf(L"Property {%s} can not be obtained!.\n", propName);
 
         return NULL;
@@ -1500,14 +1500,14 @@ MI_Result  GetPropValue(
     MI_Uint32 flags;
     MI_Uint32 index;
     MI_Result result = MI_RESULT_FAILED;
-    
+
     result = instance->ft->GetElement(
-                                instance,
-                                propName, 
-                                value,
-                                &type,
-                                &flags,
-                                &index);
+                 instance,
+                 propName,
+                 value,
+                 &type,
+                 &flags,
+                 &index);
 
     if (result == MI_RESULT_OK)
     {
@@ -1532,7 +1532,7 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
 
     ApplicationPtr application;
     OperationPtr operation;
-    SessionPtr session;    
+    SessionPtr session;
     MI_Result result = MI_RESULT_FAILED;
     MI_Value  storageSubsystemName;
 
@@ -1573,10 +1573,10 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
         PrintFailMessage(L"MI initialization", result);
         return result;
     }
-    
+
 
     /******************************************************************************
-    * End-to-End operations:   Start from StorageSubsystem  to a Formatted volume 
+    * End-to-End operations:   Start from StorageSubsystem  to a Formatted volume
     *
     *****************************************************************************/
 
@@ -1584,10 +1584,10 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
     // Get the StorageSubsystem specified:
     //
     result = GetStorageSubsystem(
-                        &session.session,
-                        &storageSubsystemName,
-                        &instanceOfStorageSubsystem);
-    
+                 &session.session,
+                 &storageSubsystemName,
+                 &instanceOfStorageSubsystem);
+
     if (result != MI_RESULT_OK)
     {
         PrintFailMessage(L"GetStorageSubsystem()", result);
@@ -1599,13 +1599,13 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
     //
     MI_Value storagePoolFriendlyName;
     storagePoolFriendlyName.string = MI_T("TestStoragePool01");
-    
+
     result = CreateStoragePool(
-                        &application.application,
-                        &session.session,
-                        instanceOfStorageSubsystem,
-                        &storagePoolFriendlyName,
-                        &instanceOfStoragePool);
+                 &application.application,
+                 &session.session,
+                 instanceOfStorageSubsystem,
+                 &storagePoolFriendlyName,
+                 &instanceOfStoragePool);
 
     if (result != MI_RESULT_OK)
     {
@@ -1621,17 +1621,17 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
 
     virtualDiskFriendlyName.string = MI_T("TestVirtualDisk01");
 
-    virtualDiskSize.uint64 = 1024*1024*1024; //1GB 
+    virtualDiskSize.uint64 = 1024*1024*1024; //1GB
 
 
     result =  CreateVirtualDisk(
-                        &application.application,
-                        &session.session,
-                        instanceOfStoragePool,
-                        &virtualDiskFriendlyName,
-                        &virtualDiskSize,
-                        &instanceOfVirtualDisk);
-    
+                  &application.application,
+                  &session.session,
+                  instanceOfStoragePool,
+                  &virtualDiskFriendlyName,
+                  &virtualDiskSize,
+                  &instanceOfVirtualDisk);
+
     if (result != MI_RESULT_OK)
     {
         PrintFailMessage(L"CreateVirtualDisk()", result);
@@ -1640,22 +1640,22 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
 
 
     //
-    // Get the Instance of Disk through VirtualDisk/Disk association 
+    // Get the Instance of Disk through VirtualDisk/Disk association
     //
     result = GetAssociatorInstances(
-                        &session.session,
-                        instanceOfVirtualDisk,
-                        &instanceOfDisk,
-                        DISK_CLASSNAME,
-                        MI_T("MSFT_VirtualDiskToDisk"),
-                        MI_T("VirtualDisk"),
-                        MI_T("Disk")
-                        );
-    
+                 &session.session,
+                 instanceOfVirtualDisk,
+                 &instanceOfDisk,
+                 DISK_CLASSNAME,
+                 MI_T("MSFT_VirtualDiskToDisk"),
+                 MI_T("VirtualDisk"),
+                 MI_T("Disk")
+             );
+
     if (result != MI_RESULT_OK)
     {
         PrintFailMessage(L"GetAssociatorInstances()", result);
-        
+
         goto EXIT;
 
     }
@@ -1668,10 +1668,10 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
     partitionType.uint16 = 1;   //MBR
 
     result =  InitializeDisk(
-                        &application.application,
-                        &session.session,
-                        &partitionType,
-                        instanceOfDisk);
+                  &application.application,
+                  &session.session,
+                  &partitionType,
+                  instanceOfDisk);
 
     if (result != MI_RESULT_OK)
     {
@@ -1683,10 +1683,10 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
     // Create Partition
     //
     result = CreatePartitionOnDisk(
-                        &application.application,
-                        &session.session,
-                        instanceOfDisk,
-                        &instanceOfPartition);
+                 &application.application,
+                 &session.session,
+                 instanceOfDisk,
+                 &instanceOfPartition);
 
     if (result != MI_RESULT_OK)
     {
@@ -1698,18 +1698,18 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
     // Get the Instance of Volume through Partition association
     //
     result = GetAssociatorInstances(
-                        &session.session,
-                        instanceOfPartition,
-                        &instanceOfVolume,
-                        VOLUME_CLASSNAME,
-                        MI_T("MSFT_PartitionToVolume"),
-                        MI_T("Partition"),
-                        MI_T("Volume"));
-    
+                 &session.session,
+                 instanceOfPartition,
+                 &instanceOfVolume,
+                 VOLUME_CLASSNAME,
+                 MI_T("MSFT_PartitionToVolume"),
+                 MI_T("Partition"),
+                 MI_T("Volume"));
+
     if (result != MI_RESULT_OK)
     {
         PrintFailMessage(L"GetAssociatorInstances() -- Volume", result);
-        
+
         goto EXIT;
     }
 
@@ -1718,14 +1718,14 @@ int __cdecl _tmain(_In_ int argc, _In_reads_(argc) _TCHAR* argv[])
     //
     MI_Value  filesystemType;
 
-    filesystemType.string = MI_T("NTFS"); 
+    filesystemType.string = MI_T("NTFS");
 
     result = FormatVolume(
-                    &application.application,
-                    &session.session,
-                    &filesystemType,
-                    instanceOfVolume);
-    
+                 &application.application,
+                 &session.session,
+                 &filesystemType,
+                 instanceOfVolume);
+
     if (result != MI_RESULT_OK)
     {
         PrintFailMessage(L"Format the volume", result);

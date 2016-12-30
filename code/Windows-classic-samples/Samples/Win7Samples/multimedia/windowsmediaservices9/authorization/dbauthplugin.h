@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -25,7 +25,10 @@ class CSids
 {
 public:
     CSids() : m_cItems( 0 ), m_pSidList( NULL ) {};
-    ~CSids() { CleanUp(); };
+    ~CSids()
+    {
+        CleanUp();
+    };
     void CleanUp( BOOL fFreeSid = TRUE );
     BOOL MatchSid( PSID pSid, DWORD *pdwIndex );
     HRESULT CopyAndAddSid( PSID pSid, CSids **ppSids );
@@ -52,15 +55,15 @@ public:
     CDBAuthPlugin();
     ~CDBAuthPlugin();
 
-DECLARE_REGISTRY_RESOURCEID(IDR_DBAUTHPLUGIN)
+    DECLARE_REGISTRY_RESOURCEID(IDR_DBAUTHPLUGIN)
 
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CDBAuthPlugin)
-        COM_INTERFACE_ENTRY(IWMSEventAuthorizationPlugin)
-        COM_INTERFACE_ENTRY(IWMSBasicPlugin)
-        COM_INTERFACE_ENTRY(IDBAuthPlugin)
-END_COM_MAP()
+    BEGIN_COM_MAP(CDBAuthPlugin)
+    COM_INTERFACE_ENTRY(IWMSEventAuthorizationPlugin)
+    COM_INTERFACE_ENTRY(IWMSBasicPlugin)
+    COM_INTERFACE_ENTRY(IDBAuthPlugin)
+    END_COM_MAP()
 
 public:
     // IWMSBasicPlugin

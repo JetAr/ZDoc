@@ -1,8 +1,8 @@
-// **************************************************************************
+﻿// **************************************************************************
 //
 // Copyright (c) Microsoft Corporation, All Rights Reserved
 //
-// File:  QueryParser.cpp 
+// File:  QueryParser.cpp
 //
 // Description:
 //      WMI Query Parser Sample.
@@ -151,20 +151,40 @@ void DumpSubexpression(SWbemRpnQueryToken *pTemp)
 
     switch (pTemp->m_uOperator)
     {
-        case WMIQ_RPN_OP_UNDEFINED: printf("  Operator (Invalid) WMIQ_RPN_OP_UNDEFINED\n"); break;
-        case WMIQ_RPN_OP_EQ : printf("  Operator =  (WMIQ_RPN_OP_EQ)\n"); break;
-        case WMIQ_RPN_OP_NE : printf("  Operator != (WMIQ_RPN_OP_NE)\n"); break;
-        case WMIQ_RPN_OP_GE : printf("  Operator >= (WMIQ_RPN_OP_GE)\n"); break;
-        case WMIQ_RPN_OP_LE : printf("  Operator <= (WMIQ_RPN_OP_LE)\n"); break;
-        case WMIQ_RPN_OP_LT : printf("  Operator <  (WMIQ_RPN_OP_LT)\n"); break;
-        case WMIQ_RPN_OP_GT : printf("  Operator >  (WMIQ_RPN_OP_GT)\n"); break;
-        case WMIQ_RPN_OP_LIKE : printf("  Operator LIKE (WMIQ_RPN_OP_LIKE)\n"); break;
-        case WMIQ_RPN_OP_ISA  : printf("  Operator ISA  (WMIQ_RPN_OP_ISA)\n"); break;
-        case WMIQ_RPN_OP_ISNOTA  : printf("  Operator ISNOTA (WMIQ_RPN_OP_ISNOTA)\n"); break;
+    case WMIQ_RPN_OP_UNDEFINED:
+        printf("  Operator (Invalid) WMIQ_RPN_OP_UNDEFINED\n");
+        break;
+    case WMIQ_RPN_OP_EQ :
+        printf("  Operator =  (WMIQ_RPN_OP_EQ)\n");
+        break;
+    case WMIQ_RPN_OP_NE :
+        printf("  Operator != (WMIQ_RPN_OP_NE)\n");
+        break;
+    case WMIQ_RPN_OP_GE :
+        printf("  Operator >= (WMIQ_RPN_OP_GE)\n");
+        break;
+    case WMIQ_RPN_OP_LE :
+        printf("  Operator <= (WMIQ_RPN_OP_LE)\n");
+        break;
+    case WMIQ_RPN_OP_LT :
+        printf("  Operator <  (WMIQ_RPN_OP_LT)\n");
+        break;
+    case WMIQ_RPN_OP_GT :
+        printf("  Operator >  (WMIQ_RPN_OP_GT)\n");
+        break;
+    case WMIQ_RPN_OP_LIKE :
+        printf("  Operator LIKE (WMIQ_RPN_OP_LIKE)\n");
+        break;
+    case WMIQ_RPN_OP_ISA  :
+        printf("  Operator ISA  (WMIQ_RPN_OP_ISA)\n");
+        break;
+    case WMIQ_RPN_OP_ISNOTA  :
+        printf("  Operator ISNOTA (WMIQ_RPN_OP_ISNOTA)\n");
+        break;
 
-        default:
-            printf("  Operator <INVALID -- Internal Error>\n");
-            break;
+    default:
+        printf("  Operator <INVALID -- Internal Error>\n");
+        break;
     }
 
     // Dump identifiers (propety names)
@@ -200,24 +220,24 @@ void DumpSubexpression(SWbemRpnQueryToken *pTemp)
 
     switch(pTemp->m_uConstApparentType)
     {
-        case VT_NULL:
-            printf("VT_NULL");
-            break;
-        case VT_I4:
-            printf("VT_I4,  Value = %d\n", pTemp->m_Const.m_lLongVal);
-            break;
-        case VT_UI4:
-            printf("VT_UI4, Value = %u\n", pTemp->m_Const.m_uLongVal);
-            break;
-        case VT_BOOL:
-            printf("VT_BOOL, Value = %d\n", pTemp->m_Const.m_bBoolVal);
-            break;
-        case VT_R8:
-            printf("VT_R8, Value = %f\n", pTemp->m_Const.m_dblVal);
-            break;
-        case VT_LPWSTR:
-            printf("VT_LPWSTR, Value = %S\n", pTemp->m_Const.m_pszStrVal);
-            break;
+    case VT_NULL:
+        printf("VT_NULL");
+        break;
+    case VT_I4:
+        printf("VT_I4,  Value = %d\n", pTemp->m_Const.m_lLongVal);
+        break;
+    case VT_UI4:
+        printf("VT_UI4, Value = %u\n", pTemp->m_Const.m_uLongVal);
+        break;
+    case VT_BOOL:
+        printf("VT_BOOL, Value = %d\n", pTemp->m_Const.m_bBoolVal);
+        break;
+    case VT_R8:
+        printf("VT_R8, Value = %f\n", pTemp->m_Const.m_dblVal);
+        break;
+    case VT_LPWSTR:
+        printf("VT_LPWSTR, Value = %S\n", pTemp->m_Const.m_pszStrVal);
+        break;
     }
 
     printf("  Function name applied to Left Side = %S\n", pTemp->m_pszLeftFunc);
@@ -246,23 +266,23 @@ void DumpWhereClause(ULONG uCount, SWbemRpnQueryToken **pWhere)
 
         switch(pTemp->m_uTokenType)
         {
-            case WMIQ_RPN_TOKEN_EXPRESSION:
-                DumpSubexpression(pTemp);
-                break;
+        case WMIQ_RPN_TOKEN_EXPRESSION:
+            DumpSubexpression(pTemp);
+            break;
 
-            case WMIQ_RPN_TOKEN_AND:
-                printf(" Operator: AND\n");
-                break;
+        case WMIQ_RPN_TOKEN_AND:
+            printf(" Operator: AND\n");
+            break;
 
-            case WMIQ_RPN_TOKEN_OR:
-                printf(" Operator: OR\n");
-                break;
+        case WMIQ_RPN_TOKEN_OR:
+            printf(" Operator: OR\n");
+            break;
 
-            case WMIQ_RPN_TOKEN_NOT:
-                printf(" Operator: NOT\n");
+        case WMIQ_RPN_TOKEN_NOT:
+            printf(" Operator: NOT\n");
 
-            default:
-                printf(" Operator: INVALID\n");
+        default:
+            printf(" Operator: INVALID\n");
         }
     }
 
@@ -361,10 +381,10 @@ void TestQuery(IWbemQuery *pQuery)
 
     SWbemRpnEncodedQuery *pRpn = 0;
     hRes = pQuery->GetAnalysis(
-        WMIQ_ANALYSIS_RPN_SEQUENCE,
-        0,
-        (LPVOID *) &pRpn
-        );
+               WMIQ_ANALYSIS_RPN_SEQUENCE,
+               0,
+               (LPVOID *) &pRpn
+           );
 
     if (SUCCEEDED(hRes))
     {
@@ -387,22 +407,22 @@ void main(int argc, char *argv[])
     if (argc < 2)
     {
         printf("\nusage:  QueryParser \"simple select query\"");
-		printf("\nexample;  c:>QueryParser \"select RowA, RowB from tableName where propz=3\"");
+        printf("\nexample;  c:>QueryParser \"select RowA, RowB from tableName where propz=3\"");
         return;
     }
 
-    wchar_t buf[8192];	
-	HRESULT hr = StringCbPrintfW(buf, sizeof(buf), L"%S", argv[1]);
-	if (FAILED(hr))
-	{ 
-		printf("Query string cannot exceed %d characters.\n", sizeof(buf)/sizeof(wchar_t) - 1);
-		printf("StringCbPrintfW failed with error code: 0x%X.\n", hr);
-		return;
-	}
+    wchar_t buf[8192];
+    HRESULT hr = StringCbPrintfW(buf, sizeof(buf), L"%S", argv[1]);
+    if (FAILED(hr))
+    {
+        printf("Query string cannot exceed %d characters.\n", sizeof(buf)/sizeof(wchar_t) - 1);
+        printf("StringCbPrintfW failed with error code: 0x%X.\n", hr);
+        return;
+    }
 
     g_pQuery = buf;
 
-	wprintf(L"Query = %s\n", g_pQuery);
+    wprintf(L"Query = %s\n", g_pQuery);
 
 
     // Standard COM initialization stuff.
@@ -416,7 +436,7 @@ void main(int argc, char *argv[])
     IWbemQuery *pQuery = 0;
 
     hr = CoCreateInstance(CLSID_WbemQuery, 0, CLSCTX_INPROC_SERVER,
-            IID_IWbemQuery, (LPVOID *) &pQuery);
+                          IID_IWbemQuery, (LPVOID *) &pQuery);
 
     if (hr != S_OK)
         printf("Failed to create Query object.\n");

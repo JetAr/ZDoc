@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // RiffParser.h : RIFF file parsing.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -32,7 +32,7 @@ const UINT32 RIFF_LIST_SIZE = sizeof(RIFFLIST);
 
 //////////////////////////////////////////////////////////////////////////
 //  CRiffChunk
-//  Description: Wrapper for RIFFCHUNK. 
+//  Description: Wrapper for RIFFCHUNK.
 //
 //  The RIFFCHUNK structure is the chunk header.
 //////////////////////////////////////////////////////////////////////////
@@ -42,9 +42,18 @@ struct CRiffChunk : public RIFFCHUNK
     CRiffChunk();
     CRiffChunk(const RIFFCHUNK& c);
 
-    FOURCC  FourCC() const { return fcc; }
-    DWORD   DataSize() const { return cb; }
-    BOOL    IsList() const { return fcc == FOURCC_LIST; }
+    FOURCC  FourCC() const
+    {
+        return fcc;
+    }
+    DWORD   DataSize() const
+    {
+        return cb;
+    }
+    BOOL    IsList() const
+    {
+        return fcc == FOURCC_LIST;
+    }
 };
 
 
@@ -54,10 +63,10 @@ struct CRiffChunk : public RIFFCHUNK
 //  Description: Parses RIFF files.
 //
 // NOTES:
-// This object is initialized to point to a RIFF "container." The 
+// This object is initialized to point to a RIFF "container." The
 // container is either a RIFF file or a RIFF list. The parser can walk
-// through all of the chunks in the container. 
-// 
+// through all of the chunks in the container.
+//
 // If a chunk is a LIST, call EnumerateChunksInList to get a parser for
 // that list.
 //
@@ -70,16 +79,28 @@ public:
 
     HRESULT MoveToNextChunk( void );
 
-    FOURCC  RiffID() const { return m_fccID; }
-    FOURCC  RiffType() const { return m_fccType; }
+    FOURCC  RiffID() const
+    {
+        return m_fccID;
+    }
+    FOURCC  RiffType() const
+    {
+        return m_fccType;
+    }
 
-    const CRiffChunk& Chunk() const { return m_chunk; }
+    const CRiffChunk& Chunk() const
+    {
+        return m_chunk;
+    }
 
     HRESULT MoveToStartOfChunk();
     HRESULT MoveToChunkOffset(DWORD dwOffset);
     HRESULT ReadDataFromChunk(BYTE* pData, DWORD dwLengthInBytes);
-    DWORD   BytesRemainingInChunk() const { return m_dwBytesRemaining; }
-        
+    DWORD   BytesRemainingInChunk() const
+    {
+        return m_dwBytesRemaining;
+    }
+
 
 protected:
 
@@ -90,7 +111,10 @@ private:
     HRESULT     ReadRiffHeader();
     HRESULT     ReadChunkHeader();
 
-    LONGLONG    ChunkActualSize() const { return sizeof(RIFFCHUNK) + RIFFROUND(m_chunk.cb); }
+    LONGLONG    ChunkActualSize() const
+    {
+        return sizeof(RIFFCHUNK) + RIFFROUND(m_chunk.cb);
+    }
 
     IMFByteStream   *m_pStream;
 
@@ -100,7 +124,7 @@ private:
     LONGLONG    m_llContainerOffset;    // Start of the container, as an offset into the stream.
     DWORD       m_dwContainerSize;      // Size of the container including the RIFF header.
     LONGLONG    m_llCurrentChunkOffset; // Start of the current RIFF chunk, as an offset into the stream.
-        
+
     CRiffChunk  m_chunk;                // Current RIFF chunk.
 
     DWORD       m_dwBytesRemaining;     // How many bytes are left in this chunk?
@@ -123,13 +147,22 @@ public:
 
     HRESULT             ParseWAVEHeader();
 
-    const WAVEFORMATEX* Format() const { return m_pWaveFormat; }
-    DWORD               FormatSize() const { return m_cbWaveFormat; }
+    const WAVEFORMATEX* Format() const
+    {
+        return m_pWaveFormat;
+    }
+    DWORD               FormatSize() const
+    {
+        return m_cbWaveFormat;
+    }
 
-    MFTIME              FileDuration() const { return m_rtDuration; } 
+    MFTIME              FileDuration() const
+    {
+        return m_rtDuration;
+    }
 
 private:
-    
+
     CWavRiffParser(IMFByteStream *pStream, HRESULT& hr);
 
     HRESULT             ReadFormatBlock();

@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -16,8 +16,8 @@
 //
 // merge proxy stub DLL
 //
-#ifdef _MERGE_PROXYSTUB 
-// 
+#ifdef _MERGE_PROXYSTUB
+//
 // DllRegisterServer, etc.
 //
 #define REGISTER_PROXY_DLL

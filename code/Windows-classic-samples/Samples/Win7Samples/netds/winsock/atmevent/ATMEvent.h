@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -56,16 +56,16 @@ typedef struct _OPTIONS
 
 
 extern VOID Receiver(
-                    OPTIONS *pOptions);
+    OPTIONS *pOptions);
 
 extern VOID Sender(
-                  OPTIONS *pOptions);
+    OPTIONS *pOptions);
 
 extern VOID Enumerator(
-                      OPTIONS *pOptions);
+    OPTIONS *pOptions);
 
 extern void PrintQos(
-                    QOS *qos, 
-                    CHAR *lpszIndent);
+    QOS *qos,
+    CHAR *lpszIndent);
 
 #endif

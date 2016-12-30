@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,8 +44,8 @@ HRESULT Layout::Draw(float pageWidthInDips, ID2D1RenderTarget* renderTarget, ID2
     static UINT const fontResourceIDs[] = {  IDR_FONT_PERICLES, IDR_FONT_KOOTENAY };
 
     // Create a custom font collection comprising our two font resources. We could have done this
-    // in the constructor rather than every time. However, if you set break points on the loader 
-    // callbacks you'll find they're only called the first time the font collection is created. 
+    // in the constructor rather than every time. However, if you set break points on the loader
+    // callbacks you'll find they're only called the first time the font collection is created.
     // Thereafter the font collection data is cached so recreating it is quite fast.
     hr = fontContext_.Initialize();
     if (FAILED(hr))
@@ -53,10 +53,10 @@ HRESULT Layout::Draw(float pageWidthInDips, ID2D1RenderTarget* renderTarget, ID2
 
     IDWriteFontCollection* fontCollection = NULL;
     hr = fontContext_.CreateFontCollection(
-            fontResourceIDs,
-            sizeof(fontResourceIDs),
-            &fontCollection
-            );
+             fontResourceIDs,
+             sizeof(fontResourceIDs),
+             &fontCollection
+         );
     if (FAILED(hr))
         return hr;
 
@@ -84,15 +84,15 @@ HRESULT Layout::Draw(float pageWidthInDips, ID2D1RenderTarget* renderTarget, ID2
             // with the same family name.
             SafeRelease(&textFormat);
             hr = g_dwriteFactory->CreateTextFormat(
-                    formats_[i].familyName,
-                    fontCollection,
-                    DWRITE_FONT_WEIGHT_NORMAL,
-                    DWRITE_FONT_STYLE_NORMAL,
-                    DWRITE_FONT_STRETCH_NORMAL,
-                    formats_[i].pointSize * (96.0f / 72),
-                    L"en-us",
-                    &textFormat
-                    );
+                     formats_[i].familyName,
+                     fontCollection,
+                     DWRITE_FONT_WEIGHT_NORMAL,
+                     DWRITE_FONT_STYLE_NORMAL,
+                     DWRITE_FONT_STRETCH_NORMAL,
+                     formats_[i].pointSize * (96.0f / 72),
+                     L"en-us",
+                     &textFormat
+                 );
 
             spaceBefore = formats_[i].spaceBefore * (96.0f / 72);
         }
@@ -107,13 +107,13 @@ HRESULT Layout::Draw(float pageWidthInDips, ID2D1RenderTarget* renderTarget, ID2
 
             // Create the text layout object.
             hr = g_dwriteFactory->CreateTextLayout(
-                    charBuffer,
-                    stringLength,
-                    textFormat,
-                    columnWidth,
-                    0,
-                    &textLayout
-                    );
+                     charBuffer,
+                     stringLength,
+                     textFormat,
+                     columnWidth,
+                     0,
+                     &textLayout
+                 );
         }
 
         if (SUCCEEDED(hr))
@@ -125,7 +125,7 @@ HRESULT Layout::Draw(float pageWidthInDips, ID2D1RenderTarget* renderTarget, ID2
                 D2D1::Point2F(leftMargin_, y),
                 textLayout,
                 textBrush
-                );
+            );
 
             DWRITE_TEXT_METRICS metrics;
             hr = textLayout->GetMetrics(&metrics);

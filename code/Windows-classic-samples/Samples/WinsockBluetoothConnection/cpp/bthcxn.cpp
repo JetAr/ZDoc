@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -67,46 +67,57 @@ int _cdecl wmain(_In_ int argc, _In_reads_(argc)wchar_t *argv[])
     // Parse the command line
     //
     ulRetCode = ParseCmdLine(argc, argv);
-    if ( CXN_ERROR == ulRetCode ) {
+    if ( CXN_ERROR == ulRetCode )
+    {
         //
         // Command line syntax error.  Display cmd line help
         //
         ShowCmdLineHelp();
-    } else if ( CXN_SUCCESS != ulRetCode) {
+    }
+    else if ( CXN_SUCCESS != ulRetCode)
+    {
         wprintf(L"-FATAL- | Error in parsing command line\n");
     }
 
     //
     // Ask for Winsock version 2.2.
     //
-    if ( CXN_SUCCESS == ulRetCode) {
+    if ( CXN_SUCCESS == ulRetCode)
+    {
         ulRetCode = WSAStartup(MAKEWORD(2, 2), &WSAData);
-        if (CXN_SUCCESS != ulRetCode) {
+        if (CXN_SUCCESS != ulRetCode)
+        {
             wprintf(L"-FATAL- | Unable to initialize Winsock version 2.2\n");
         }
     }
 
-    if ( CXN_SUCCESS == ulRetCode) {
+    if ( CXN_SUCCESS == ulRetCode)
+    {
 
         //
         // Note, this app "prefers" the name if provided, but it is app-specific
         // Other applications may provide more generic treatment.
         //
-        if ( L'\0' != g_szRemoteName[0] ) {
+        if ( L'\0' != g_szRemoteName[0] )
+        {
             //
             // Get address from the name of the remote device and run the application
             // in client mode
             //
             ulRetCode = NameToBthAddr(g_szRemoteName, &RemoteBthAddr);
-            if ( CXN_SUCCESS != ulRetCode ) {
-                wprintf(L"-FATAL- | Unable to get address of the remote radio having name %s\n", g_szRemoteName);    
+            if ( CXN_SUCCESS != ulRetCode )
+            {
+                wprintf(L"-FATAL- | Unable to get address of the remote radio having name %s\n", g_szRemoteName);
             }
 
-            if ( CXN_SUCCESS == ulRetCode) {
+            if ( CXN_SUCCESS == ulRetCode)
+            {
                 ulRetCode = RunClientMode(RemoteBthAddr, g_ulMaxCxnCycles);
             }
-            
-        } else if ( L'\0' != g_szRemoteAddr[0] ) {
+
+        }
+        else if ( L'\0' != g_szRemoteAddr[0] )
+        {
 
             //
             // Get address from formated address-string of the remote device and
@@ -114,19 +125,23 @@ int _cdecl wmain(_In_ int argc, _In_reads_(argc)wchar_t *argv[])
             //
             int iAddrLen = sizeof(RemoteBthAddr);
             ulRetCode = WSAStringToAddressW(g_szRemoteAddr,
-                                               AF_BTH,
-                                               NULL,
-                                               (LPSOCKADDR)&RemoteBthAddr,
-                                               &iAddrLen);
-            if ( CXN_SUCCESS != ulRetCode ) {
+                                            AF_BTH,
+                                            NULL,
+                                            (LPSOCKADDR)&RemoteBthAddr,
+                                            &iAddrLen);
+            if ( CXN_SUCCESS != ulRetCode )
+            {
                 wprintf(L"-FATAL- | Unable to get address of the remote radio having formated address-string %s\n", g_szRemoteAddr);
             }
 
-            if ( CXN_SUCCESS == ulRetCode ) {
+            if ( CXN_SUCCESS == ulRetCode )
+            {
                 ulRetCode = RunClientMode(RemoteBthAddr, g_ulMaxCxnCycles);
             }
 
-        } else {
+        }
+        else
+        {
             //
             // No remote name/address specified.  Run the application in server mode
             //
@@ -156,7 +171,8 @@ ULONG NameToBthAddr(_In_ const LPWSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemote
     pWSAQuerySet = (PWSAQUERYSET) HeapAlloc(GetProcessHeap(),
                                             HEAP_ZERO_MEMORY,
                                             ulPQSSize);
-    if ( NULL == pWSAQuerySet ) {
+    if ( NULL == pWSAQuerySet )
+    {
         iResult = STATUS_NO_MEMORY;
         wprintf(L"!ERROR! | Unable to allocate memory for WSAQUERYSET\n");
     }
@@ -164,11 +180,13 @@ ULONG NameToBthAddr(_In_ const LPWSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemote
     //
     // Search for the device with the correct name
     //
-    if ( CXN_SUCCESS == iResult) {
+    if ( CXN_SUCCESS == iResult)
+    {
 
         for ( INT iRetryCount = 0;
-            !bRemoteDeviceFound && (iRetryCount < CXN_MAX_INQUIRY_RETRY);
-            iRetryCount++ ) {
+                !bRemoteDeviceFound && (iRetryCount < CXN_MAX_INQUIRY_RETRY);
+                iRetryCount++ )
+        {
             //
             // WSALookupService is used for both service search and device inquiry
             // LUP_CONTAINERS is the flag which signals that we're doing a device inquiry.
@@ -185,9 +203,12 @@ ULONG NameToBthAddr(_In_ const LPWSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemote
             //
             ulFlags |= LUP_RETURN_ADDR;
 
-            if ( 0 == iRetryCount ) {
+            if ( 0 == iRetryCount )
+            {
                 wprintf(L"*INFO* | Inquiring device from cache...\n");
-            } else {
+            }
+            else
+            {
                 //
                 // Flush the device cache for all inquiries, except for the first inquiry
                 //
@@ -225,14 +246,18 @@ ULONG NameToBthAddr(_In_ const LPWSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemote
             // Even if we have an error, we want to continue until we
             // reach the CXN_MAX_INQUIRY_RETRY
             //
-            if ( (NO_ERROR == iResult) && (NULL != hLookup) ) {
+            if ( (NO_ERROR == iResult) && (NULL != hLookup) )
+            {
                 bContinueLookup = TRUE;
-            } else if ( 0 < iRetryCount ) {
+            }
+            else if ( 0 < iRetryCount )
+            {
                 wprintf(L"=CRITICAL= | WSALookupServiceBegin() failed with error code %d, WSAGetLastError = %d\n", iResult, WSAGetLastError());
                 break;
             }
 
-            while ( bContinueLookup ) {
+            while ( bContinueLookup )
+            {
                 //
                 // Get information about next bluetooth device
                 //
@@ -246,13 +271,15 @@ ULONG NameToBthAddr(_In_ const LPWSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemote
                 if ( NO_ERROR == WSALookupServiceNext(hLookup,
                                                       ulFlags,
                                                       &ulPQSSize,
-                                                      pWSAQuerySet) ) {
-                    
+                                                      pWSAQuerySet) )
+                {
+
                     //
                     // Compare the name to see if this is the device we are looking for.
                     //
                     if ( ( pWSAQuerySet->lpszServiceInstanceName != NULL ) &&
-                         ( CXN_SUCCESS == _wcsicmp(pWSAQuerySet->lpszServiceInstanceName, pszRemoteName) ) ) {
+                            ( CXN_SUCCESS == _wcsicmp(pWSAQuerySet->lpszServiceInstanceName, pszRemoteName) ) )
+                    {
                         //
                         // Found a remote bluetooth device with matching name.
                         // Get the address of the device and exit the lookup.
@@ -263,14 +290,19 @@ ULONG NameToBthAddr(_In_ const LPWSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemote
                         bRemoteDeviceFound = TRUE;
                         bContinueLookup = FALSE;
                     }
-                } else {
+                }
+                else
+                {
                     iResult = WSAGetLastError();
-                    if ( WSA_E_NO_MORE == iResult ) { //No more data
+                    if ( WSA_E_NO_MORE == iResult )   //No more data
+                    {
                         //
                         // No more devices found.  Exit the lookup.
                         //
                         bContinueLookup = FALSE;
-                    } else if ( WSAEFAULT == iResult ) {
+                    }
+                    else if ( WSAEFAULT == iResult )
+                    {
                         //
                         // The buffer for QUERYSET was insufficient.
                         // In such case 3rd parameter "ulPQSSize" of function "WSALookupServiceNext()" receives
@@ -280,12 +312,15 @@ ULONG NameToBthAddr(_In_ const LPWSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemote
                         pWSAQuerySet = (PWSAQUERYSET) HeapAlloc(GetProcessHeap(),
                                                                 HEAP_ZERO_MEMORY,
                                                                 ulPQSSize);
-                        if ( NULL == pWSAQuerySet ) {
+                        if ( NULL == pWSAQuerySet )
+                        {
                             wprintf(L"!ERROR! | Unable to allocate memory for WSAQERYSET\n");
                             iResult = STATUS_NO_MEMORY;
                             bContinueLookup = FALSE;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         wprintf(L"=CRITICAL= | WSALookupServiceNext() failed with error code %d\n", iResult);
                         bContinueLookup = FALSE;
                     }
@@ -297,20 +332,25 @@ ULONG NameToBthAddr(_In_ const LPWSTR pszRemoteName, _Out_ PSOCKADDR_BTH pRemote
             //
             WSALookupServiceEnd(hLookup);
 
-            if ( STATUS_NO_MEMORY == iResult ) {
+            if ( STATUS_NO_MEMORY == iResult )
+            {
                 break;
             }
         }
     }
 
-    if ( NULL != pWSAQuerySet ) {
+    if ( NULL != pWSAQuerySet )
+    {
         HeapFree(GetProcessHeap(), 0, pWSAQuerySet);
         pWSAQuerySet = NULL;
     }
 
-    if ( bRemoteDeviceFound ) {
+    if ( bRemoteDeviceFound )
+    {
         iResult = CXN_SUCCESS;
-    } else {
+    }
+    else
+    {
         iResult = CXN_ERROR;
     }
 
@@ -331,14 +371,16 @@ ULONG RunClientMode(_In_ SOCKADDR_BTH RemoteAddr, _In_ int iMaxCxnCycles)
     HRESULT         res;
 
     pszData = (wchar_t *) HeapAlloc(GetProcessHeap(),
-                                 HEAP_ZERO_MEMORY,
-                                 CXN_TRANSFER_DATA_LENGTH);
-    if ( NULL == pszData ) {
+                                    HEAP_ZERO_MEMORY,
+                                    CXN_TRANSFER_DATA_LENGTH);
+    if ( NULL == pszData )
+    {
         ulRetCode = STATUS_NO_MEMORY;
         wprintf(L"=CRITICAL= | HeapAlloc failed | out of memory, gle = [%d] \n", GetLastError());
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
         //
         // Setting address family to AF_BTH indicates winsock2 to use Bluetooth sockets
         // Port should be set to 0 if ServiceClassId is spesified.
@@ -352,23 +394,26 @@ ULONG RunClientMode(_In_ SOCKADDR_BTH RemoteAddr, _In_ int iMaxCxnCycles)
         // Bluetooth device
         //
         res = StringCbCopyN(pszData, CXN_TRANSFER_DATA_LENGTH, CXN_TEST_DATA_STRING, CXN_TRANSFER_DATA_LENGTH);
-        if ( FAILED(res) ) {
+        if ( FAILED(res) )
+        {
             wprintf(L"=CRITICAL= | Creating a static data string failed\n");
             ulRetCode = CXN_ERROR;
         }
 
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
-    
+    if ( CXN_SUCCESS == ulRetCode )
+    {
+
         pszData[(CXN_TRANSFER_DATA_LENGTH/sizeof(wchar_t)) - 1] = 0;
 
         //
         // Run the connection/data-transfer for user specified number of cycles
         //
         for ( iCxnCount = 0;
-            (0 == ulRetCode) && (iCxnCount < iMaxCxnCycles || iMaxCxnCycles == 0);
-            iCxnCount++ ) {
+                (0 == ulRetCode) && (iCxnCount < iMaxCxnCycles || iMaxCxnCycles == 0);
+                iCxnCount++ )
+        {
 
             wprintf(L"\n");
 
@@ -376,7 +421,8 @@ ULONG RunClientMode(_In_ SOCKADDR_BTH RemoteAddr, _In_ int iMaxCxnCycles)
             // Open a bluetooth socket using RFCOMM protocol
             //
             LocalSocket = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
-            if ( INVALID_SOCKET == LocalSocket ) {
+            if ( INVALID_SOCKET == LocalSocket )
+            {
                 wprintf(L"=CRITICAL= | socket() call failed. WSAGetLastError = [%d]\n", WSAGetLastError());
                 ulRetCode = CXN_ERROR;
                 break;
@@ -387,7 +433,8 @@ ULONG RunClientMode(_In_ SOCKADDR_BTH RemoteAddr, _In_ int iMaxCxnCycles)
             //
             if ( SOCKET_ERROR == connect(LocalSocket,
                                          (struct sockaddr *) &SockAddrBthServer,
-                                         sizeof(SOCKADDR_BTH)) ) {
+                                         sizeof(SOCKADDR_BTH)) )
+            {
                 wprintf(L"=CRITICAL= | connect() call failed. WSAGetLastError=[%d]\n", WSAGetLastError());
                 ulRetCode = CXN_ERROR;
                 break;
@@ -401,7 +448,8 @@ ULONG RunClientMode(_In_ SOCKADDR_BTH RemoteAddr, _In_ int iMaxCxnCycles)
             if ( SOCKET_ERROR == send(LocalSocket,
                                       (char *)pszData,
                                       (int)CXN_TRANSFER_DATA_LENGTH,
-                                      0) ) {
+                                      0) )
+            {
                 wprintf(L"=CRITICAL= | send() call failed w/socket = [0x%I64X], szData = [%p], dataLen = [%I64u]. WSAGetLastError=[%d]\n", (ULONG64)LocalSocket, pszData, (ULONG64)CXN_TRANSFER_DATA_LENGTH, WSAGetLastError());
                 ulRetCode = CXN_ERROR;
                 break;
@@ -410,7 +458,8 @@ ULONG RunClientMode(_In_ SOCKADDR_BTH RemoteAddr, _In_ int iMaxCxnCycles)
             //
             // Close the socket
             //
-            if ( SOCKET_ERROR == closesocket(LocalSocket) ) {
+            if ( SOCKET_ERROR == closesocket(LocalSocket) )
+            {
                 wprintf(L"=CRITICAL= | closesocket() call failed w/socket = [0x%I64X]. WSAGetLastError=[%d]\n", (ULONG64)LocalSocket, WSAGetLastError());
                 ulRetCode = CXN_ERROR;
                 break;
@@ -421,12 +470,14 @@ ULONG RunClientMode(_In_ SOCKADDR_BTH RemoteAddr, _In_ int iMaxCxnCycles)
         }
     }
 
-    if ( INVALID_SOCKET != LocalSocket ) {
+    if ( INVALID_SOCKET != LocalSocket )
+    {
         closesocket(LocalSocket);
         LocalSocket = INVALID_SOCKET;
     }
 
-    if ( NULL != pszData ) {
+    if ( NULL != pszData )
+    {
         HeapFree(GetProcessHeap(), 0, pszData);
         pszData = NULL;
     }
@@ -467,16 +518,19 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
     // However, they are shown here as dynamic to allow for easier expansion
     //
     lpCSAddrInfo = (LPCSADDR_INFO) HeapAlloc( GetProcessHeap(),
-                                              HEAP_ZERO_MEMORY,
-                                              sizeof(CSADDR_INFO) );
-    if ( NULL == lpCSAddrInfo ) {
+                   HEAP_ZERO_MEMORY,
+                   sizeof(CSADDR_INFO) );
+    if ( NULL == lpCSAddrInfo )
+    {
         wprintf(L"!ERROR! | Unable to allocate memory for CSADDR_INFO\n");
         ulRetCode = CXN_ERROR;
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
 
-        if ( !GetComputerName(szThisComputerName, &dwLenComputerName) ) {
+        if ( !GetComputerName(szThisComputerName, &dwLenComputerName) )
+        {
             wprintf(L"=CRITICAL= | GetComputerName() call failed. WSAGetLastError=[%d]\n", WSAGetLastError());
             ulRetCode = CXN_ERROR;
         }
@@ -485,15 +539,18 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
     //
     // Open a bluetooth socket using RFCOMM protocol
     //
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
         LocalSocket = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
-        if ( INVALID_SOCKET == LocalSocket ) {
+        if ( INVALID_SOCKET == LocalSocket )
+        {
             wprintf(L"=CRITICAL= | socket() call failed. WSAGetLastError = [%d]\n", WSAGetLastError());
             ulRetCode = CXN_ERROR;
         }
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
 
         //
         // Setting address family to AF_BTH indicates winsock2 to use Bluetooth port
@@ -509,24 +566,28 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
         //
         if ( SOCKET_ERROR == bind(LocalSocket,
                                   (struct sockaddr *) &SockAddrBthLocal,
-                                  sizeof(SOCKADDR_BTH) ) ) {
+                                  sizeof(SOCKADDR_BTH) ) )
+        {
             wprintf(L"=CRITICAL= | bind() call failed w/socket = [0x%I64X]. WSAGetLastError=[%d]\n", (ULONG64)LocalSocket, WSAGetLastError());
             ulRetCode = CXN_ERROR;
         }
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
 
         ulRetCode = getsockname(LocalSocket,
                                 (struct sockaddr *)&SockAddrBthLocal,
                                 &iAddrLen);
-        if ( SOCKET_ERROR == ulRetCode ) {
+        if ( SOCKET_ERROR == ulRetCode )
+        {
             wprintf(L"=CRITICAL= | getsockname() call failed w/socket = [0x%I64X]. WSAGetLastError=[%d]\n", (ULONG64)LocalSocket, WSAGetLastError());
             ulRetCode = CXN_ERROR;
         }
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
         //
         // CSADDR_INFO
         //
@@ -550,24 +611,28 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
         // to UNICODE
         //
         res = StringCchLength(szThisComputerName, sizeof(szThisComputerName), &cbInstanceNameSize);
-        if( FAILED(res) ) {
+        if( FAILED(res) )
+        {
             wprintf(L"-FATAL- | ComputerName specified is too large\n");
             ulRetCode = CXN_ERROR;
         }
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
         cbInstanceNameSize += sizeof(CXN_INSTANCE_STRING) + 1;
         pszInstanceName = (LPWSTR)HeapAlloc(GetProcessHeap(),
-                                           HEAP_ZERO_MEMORY,
-                                           cbInstanceNameSize);
-        if ( NULL == pszInstanceName ) {
+                                            HEAP_ZERO_MEMORY,
+                                            cbInstanceNameSize);
+        if ( NULL == pszInstanceName )
+        {
             wprintf(L"-FATAL- | HeapAlloc failed | out of memory | gle = [%d] \n", GetLastError());
             ulRetCode = CXN_ERROR;
         }
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
         StringCbPrintf(pszInstanceName, cbInstanceNameSize, L"%s %s", szThisComputerName, CXN_INSTANCE_STRING);
         wsaQuerySet.lpszServiceInstanceName = pszInstanceName;
         wsaQuerySet.lpszComment = L"Example Service instance registered in the directory service through RnR";
@@ -581,7 +646,8 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
         // accept connections.  If we use non-blocking accept, advertise
         // the service after accept has been called.
         //
-        if ( SOCKET_ERROR == WSASetService(&wsaQuerySet, RNRSERVICE_REGISTER, 0) ) {
+        if ( SOCKET_ERROR == WSASetService(&wsaQuerySet, RNRSERVICE_REGISTER, 0) )
+        {
             wprintf(L"=CRITICAL= | WSASetService() call failed. WSAGetLastError=[%d]\n", WSAGetLastError());
             ulRetCode = CXN_ERROR;
         }
@@ -590,18 +656,22 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
     //
     // listen() call indicates winsock2 to listen on a given socket for any incoming connection.
     //
-    if ( CXN_SUCCESS == ulRetCode ) {
-        if ( SOCKET_ERROR == listen(LocalSocket, CXN_DEFAULT_LISTEN_BACKLOG) ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
+        if ( SOCKET_ERROR == listen(LocalSocket, CXN_DEFAULT_LISTEN_BACKLOG) )
+        {
             wprintf(L"=CRITICAL= | listen() call failed w/socket = [0x%I64X]. WSAGetLastError=[%d]\n", (ULONG64)LocalSocket, WSAGetLastError());
             ulRetCode = CXN_ERROR;
         }
     }
 
-    if ( CXN_SUCCESS == ulRetCode ) {
+    if ( CXN_SUCCESS == ulRetCode )
+    {
 
         for ( iCxnCount = 0;
-            (CXN_SUCCESS == ulRetCode) && ( (iCxnCount < iMaxCxnCycles) || (iMaxCxnCycles == 0) );
-            iCxnCount++ ) {
+                (CXN_SUCCESS == ulRetCode) && ( (iCxnCount < iMaxCxnCycles) || (iMaxCxnCycles == 0) );
+                iCxnCount++ )
+        {
 
             wprintf(L"\n");
 
@@ -614,7 +684,8 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
             // socket represents the actual connection that connects the two sockets.
             //
             ClientSocket = accept(LocalSocket, NULL, NULL);
-            if ( INVALID_SOCKET == ClientSocket ) {
+            if ( INVALID_SOCKET == ClientSocket )
+            {
                 wprintf(L"=CRITICAL= | accept() call failed. WSAGetLastError=[%d]\n", WSAGetLastError());
                 ulRetCode = CXN_ERROR;
                 break; // Break out of the for loop
@@ -627,14 +698,16 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
             pszDataBuffer = (char *)HeapAlloc(GetProcessHeap(),
                                               HEAP_ZERO_MEMORY,
                                               CXN_TRANSFER_DATA_LENGTH);
-            if ( NULL == pszDataBuffer ) {
+            if ( NULL == pszDataBuffer )
+            {
                 wprintf(L"-FATAL- | HeapAlloc failed | out of memory | gle = [%d] \n", GetLastError());
                 ulRetCode = CXN_ERROR;
                 break;
             }
             pszDataBufferIndex = pszDataBuffer;
             uiTotalLengthReceived = 0;
-            while ( bContinue && (uiTotalLengthReceived < CXN_TRANSFER_DATA_LENGTH) ) {
+            while ( bContinue && (uiTotalLengthReceived < CXN_TRANSFER_DATA_LENGTH) )
+            {
                 //
                 // recv() call indicates winsock2 to receive data
                 // of an expected length over a given connection.
@@ -649,7 +722,8 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
                                        (CXN_TRANSFER_DATA_LENGTH - uiTotalLengthReceived),
                                        0);
 
-                switch ( iLengthReceived ) {
+                switch ( iLengthReceived )
+                {
                 case 0: // socket connection has been closed gracefully
                     bContinue = FALSE;
                     break;
@@ -665,7 +739,8 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
                     //
                     // Make sure we have enough room
                     //
-                    if ( iLengthReceived > (CXN_TRANSFER_DATA_LENGTH - uiTotalLengthReceived)) {
+                    if ( iLengthReceived > (CXN_TRANSFER_DATA_LENGTH - uiTotalLengthReceived))
+                    {
                         wprintf(L"=CRITICAL= | received too much data\n");
                         bContinue = FALSE;
                         ulRetCode = CXN_ERROR;
@@ -678,9 +753,11 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
                 }
             }
 
-            if ( CXN_SUCCESS == ulRetCode ) {
+            if ( CXN_SUCCESS == ulRetCode )
+            {
 
-                if ( CXN_TRANSFER_DATA_LENGTH != uiTotalLengthReceived ) {
+                if ( CXN_TRANSFER_DATA_LENGTH != uiTotalLengthReceived )
+                {
                     wprintf(L"+WARNING+ | Data transfer aborted mid-stream. Expected Length = [%I64u], Actual Length = [%d]\n", (ULONG64)CXN_TRANSFER_DATA_LENGTH, uiTotalLengthReceived);
                 }
                 wprintf(L"*INFO* | Received following data string from remote device:\n%s\n", (wchar_t *)pszDataBuffer);
@@ -688,10 +765,13 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
                 //
                 // Close the connection
                 //
-                if ( SOCKET_ERROR == closesocket(ClientSocket) ) {
+                if ( SOCKET_ERROR == closesocket(ClientSocket) )
+                {
                     wprintf(L"=CRITICAL= | closesocket() call failed w/socket = [0x%I64X]. WSAGetLastError=[%d]\n", (ULONG64)LocalSocket, WSAGetLastError());
                     ulRetCode = CXN_ERROR;
-                } else {
+                }
+                else
+                {
                     //
                     // Make the connection invalid regardless
                     //
@@ -701,26 +781,31 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
         }
     }
 
-    if ( INVALID_SOCKET != ClientSocket ) {
+    if ( INVALID_SOCKET != ClientSocket )
+    {
         closesocket(ClientSocket);
         ClientSocket = INVALID_SOCKET;
     }
 
-    if ( INVALID_SOCKET != LocalSocket ) {
+    if ( INVALID_SOCKET != LocalSocket )
+    {
         closesocket(LocalSocket);
         LocalSocket = INVALID_SOCKET;
     }
 
-    if ( NULL != lpCSAddrInfo ) {
+    if ( NULL != lpCSAddrInfo )
+    {
         HeapFree(GetProcessHeap(), 0, lpCSAddrInfo);
         lpCSAddrInfo = NULL;
     }
-    if ( NULL != pszInstanceName ) {
+    if ( NULL != pszInstanceName )
+    {
         HeapFree(GetProcessHeap(), 0, pszInstanceName);
         pszInstanceName = NULL;
     }
 
-    if ( NULL != pszDataBuffer ) {
+    if ( NULL != pszDataBuffer )
+    {
         HeapFree(GetProcessHeap(), 0, pszDataBuffer);
         pszDataBuffer = NULL;
     }
@@ -734,41 +819,41 @@ ULONG RunServerMode(_In_ int iMaxCxnCycles)
 void ShowCmdLineHelp(void)
 {
     wprintf(
-          L"\n  Bluetooth Connection Sample application for demonstrating connection and data transfer."
-          L"\n"
-          L"\n"
-          L"\n  BTHCxn.exe  [-n<RemoteName> | -a<RemoteAddress>] "
-          L"\n                  [-c<ConnectionCycles>]"
-          L"\n"
-          L"\n"
-          L"\n  Switches applicable for Client mode:"
-          L"\n    -n<RemoteName>        Specifies name of remote BlueTooth-Device."
-          L"\n"
-          L"\n    -a<RemoteAddress>     Specifies address of remote BlueTooth-Device."
-          L"\n                          The address is in form XX:XX:XX:XX:XX:XX"
-          L"\n                          where XX is a hexidecimal byte"
-          L"\n"
-          L"\n                          One of the above two switches is required for client."
-          L"\n"
-          L"\n"
-          L"\n  Switches applicable for both Client and Server mode:"
-          L"\n    -c<ConnectionCycles>  Specifies number of connection cycles."
-          L"\n                          Default value for this parameter is 1.  Specify 0 to "
-          L"\n                          run infinite number of connection cycles."
-          L"\n"
-          L"\n"
-          L"\n"
-          L"\n  Command Line Examples:"
-          L"\n    \"BTHCxn.exe -c0\""
-          L"\n    Runs the BTHCxn server for infinite connection cycles."
-          L"\n    The application reports minimal information onto the cmd window."
-          L"\n"
-          L"\n    \"BTHCxn.exe -nServerDevice -c50\""
-          L"\n    Runs the BTHCxn client connecting to remote device (having name "
-          L"\n    \"ServerDevice\" for 50 connection cycles."
-          L"\n    The application reports minimal information onto the cmd window."
-          L"\n"
-          );
+        L"\n  Bluetooth Connection Sample application for demonstrating connection and data transfer."
+        L"\n"
+        L"\n"
+        L"\n  BTHCxn.exe  [-n<RemoteName> | -a<RemoteAddress>] "
+        L"\n                  [-c<ConnectionCycles>]"
+        L"\n"
+        L"\n"
+        L"\n  Switches applicable for Client mode:"
+        L"\n    -n<RemoteName>        Specifies name of remote BlueTooth-Device."
+        L"\n"
+        L"\n    -a<RemoteAddress>     Specifies address of remote BlueTooth-Device."
+        L"\n                          The address is in form XX:XX:XX:XX:XX:XX"
+        L"\n                          where XX is a hexidecimal byte"
+        L"\n"
+        L"\n                          One of the above two switches is required for client."
+        L"\n"
+        L"\n"
+        L"\n  Switches applicable for both Client and Server mode:"
+        L"\n    -c<ConnectionCycles>  Specifies number of connection cycles."
+        L"\n                          Default value for this parameter is 1.  Specify 0 to "
+        L"\n                          run infinite number of connection cycles."
+        L"\n"
+        L"\n"
+        L"\n"
+        L"\n  Command Line Examples:"
+        L"\n    \"BTHCxn.exe -c0\""
+        L"\n    Runs the BTHCxn server for infinite connection cycles."
+        L"\n    The application reports minimal information onto the cmd window."
+        L"\n"
+        L"\n    \"BTHCxn.exe -nServerDevice -c50\""
+        L"\n    Runs the BTHCxn client connecting to remote device (having name "
+        L"\n    \"ServerDevice\" for 50 connection cycles."
+        L"\n    The application reports minimal information onto the cmd window."
+        L"\n"
+    );
 }
 
 //
@@ -782,9 +867,11 @@ ULONG ParseCmdLine (_In_ int argc, _In_reads_(argc) wchar_t * argv[])
     ULONG   ulRetCode = CXN_SUCCESS;
     HRESULT res;
 
-    for ( int i = 1; i < argc; i++ ) {
+    for ( int i = 1; i < argc; i++ )
+    {
         wchar_t * pszToken = argv[i];
-        if ( *pszToken == L'-' || *pszToken == L'/' ) {
+        if ( *pszToken == L'-' || *pszToken == L'/' )
+        {
             wchar_t token;
 
             //
@@ -805,16 +892,21 @@ ULONG ParseCmdLine (_In_ int argc, _In_reads_(argc) wchar_t * argv[])
             //
             // Get the option-data
             //
-            switch ( token ) {
+            switch ( token )
+            {
             case L'n':
                 cbStrLen = wcslen(pszToken);
-                if ( ( 0 < cbStrLen ) && ( BTH_MAX_NAME_SIZE >= cbStrLen ) ) {
+                if ( ( 0 < cbStrLen ) && ( BTH_MAX_NAME_SIZE >= cbStrLen ) )
+                {
                     res = StringCbCopy(g_szRemoteName, sizeof(g_szRemoteName), pszToken);
-                    if ( FAILED(res) ) {
+                    if ( FAILED(res) )
+                    {
                         ulRetCode = CXN_ERROR;
                         wprintf(L"!ERROR! | cmd line | Unable to parse -n<RemoteName>, length error (min 1 char, max %d chars)\n", BTH_MAX_NAME_SIZE);
                     }
-                } else {
+                }
+                else
+                {
                     ulRetCode = CXN_ERROR;
                     wprintf(L"!ERROR! | cmd line | Unable to parse -n<RemoteName>, length error (min 1 char, max %d chars)\n", BTH_MAX_NAME_SIZE);
                 }
@@ -822,26 +914,34 @@ ULONG ParseCmdLine (_In_ int argc, _In_reads_(argc) wchar_t * argv[])
 
             case L'a':
                 cbStrLen = wcslen(pszToken);
-                if ( CXN_BDADDR_STR_LEN == cbStrLen ) {
+                if ( CXN_BDADDR_STR_LEN == cbStrLen )
+                {
                     res = StringCbCopy(g_szRemoteAddr, sizeof(g_szRemoteAddr), pszToken);
-                    if ( FAILED(res) ) {
+                    if ( FAILED(res) )
+                    {
                         ulRetCode = CXN_ERROR;
                         wprintf(L"!ERROR! | cmd line | Unable to parse -a<RemoteAddress>, Remote bluetooth radio address string length expected %d | Found: %I64u)\n", CXN_BDADDR_STR_LEN, (ULONG64)cbStrLen);
                     }
-                } else {
+                }
+                else
+                {
                     ulRetCode = CXN_ERROR;
                     wprintf(L"!ERROR! | cmd line | Unable to parse -a<RemoteAddress>, Remote bluetooth radio address string length expected %d | Found: %I64u)\n", CXN_BDADDR_STR_LEN, (ULONG64)cbStrLen);
                 }
                 break;
 
             case L'c':
-                if ( 0 < wcslen(pszToken) ) {
+                if ( 0 < wcslen(pszToken) )
+                {
                     swscanf_s(pszToken, L"%d", &g_ulMaxCxnCycles);
-                    if ( 0 > g_ulMaxCxnCycles ) {
+                    if ( 0 > g_ulMaxCxnCycles )
+                    {
                         ulRetCode = CXN_ERROR;
                         wprintf(L"!ERROR! | cmd line | Must provide +ve or 0 value with -c option\n");
                     }
-                } else {
+                }
+                else
+                {
                     ulRetCode = CXN_ERROR;
                     wprintf(L"!ERROR! | cmd line | Must provide a value with -c option\n");
                 }
@@ -853,7 +953,9 @@ ULONG ParseCmdLine (_In_ int argc, _In_reads_(argc) wchar_t * argv[])
             default:
                 ulRetCode = CXN_ERROR;
             }
-        } else {
+        }
+        else
+        {
             ulRetCode = CXN_ERROR;
             wprintf(L"!ERROR! | cmd line | Bad option prefix, use '/' or '-' \n");
         }

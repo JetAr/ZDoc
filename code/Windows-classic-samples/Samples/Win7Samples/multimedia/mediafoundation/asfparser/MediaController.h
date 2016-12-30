@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // MediaController.h : CMediaController class declaration.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -36,7 +36,10 @@ public:
 
     HRESULT PlayAudio();
 
-    BOOL HasTestMedia(){return m_fHasTestMedia;};
+    BOOL HasTestMedia()
+    {
+        return m_fHasTestMedia;
+    };
 
 
     // IUnknown methods
@@ -52,7 +55,7 @@ public:
             *ppv = static_cast<IUnknown*>(this);
         }
         else
-        {            
+        {
             *ppv = NULL;
             return E_NOINTERFACE;
         }
@@ -68,7 +71,7 @@ public:
     STDMETHODIMP_(ULONG) Release()
     {
         ULONG uCount = InterlockedDecrement(&m_nRefCount);
-        
+
         if (uCount == 0)
         {
             delete this;
@@ -97,7 +100,7 @@ private:
     BOOL        m_fAudioDeviceBusy;
 
     WAVEHDR     m_WaveHeader;
-    
+
     void    DoWaveOutThread();
 
 };

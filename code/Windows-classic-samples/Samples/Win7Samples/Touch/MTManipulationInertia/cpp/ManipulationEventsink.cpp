@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,11 +9,11 @@
 #include "CoreObject.h"
 #include <math.h>
 
-CManipulationEventSink::CManipulationEventSink(HWND hWnd, CCoreObject *coRef, int iTimerId, BOOL inertia): 
-    m_coRef(coRef), 
-    m_hWnd(hWnd), 
-    m_iTimerId(iTimerId), 
-    m_bInertia(inertia), 
+CManipulationEventSink::CManipulationEventSink(HWND hWnd, CCoreObject *coRef, int iTimerId, BOOL inertia):
+    m_coRef(coRef),
+    m_hWnd(hWnd),
+    m_iTimerId(iTimerId),
+    m_bInertia(inertia),
     m_pConnPoint(NULL),
     m_cRefCount(1)
 {
@@ -30,7 +30,7 @@ HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationStarted(
 
     m_coRef->bIsInertiaActive = FALSE;
     KillTimer(m_hWnd, m_iTimerId);
-    
+
     m_coRef->doDrawing->RestoreRealPosition();
 
     return S_OK;
@@ -64,7 +64,7 @@ HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationDelta(
 
     // Apply transformation based on rotationDelta (in radians)
     FLOAT rads = 180.0f / 3.14159f;
-    
+
     dObj->SetManipulationOrigin(x, y);
 
     dObj->Rotate(rotationDelta*rads);
@@ -75,18 +75,18 @@ HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationDelta(
     // Apply translation based on translationDelta
     dObj->Translate(translationDeltaX, translationDeltaY, m_bInertia);
 
-    if(!m_bInertia) 
+    if(!m_bInertia)
     {
         // Set values for one finger rotations
 
         FLOAT fPivotRadius = (FLOAT)(sqrt(pow(dObj->GetWidth()/2, 2)+ pow(dObj->GetHeight()/2, 2)))*0.4f;
         FLOAT fPivotPtX = dObj->GetCenterX();
         FLOAT fPivotPtY = dObj->GetCenterY();
-        
+
         HRESULT hrPPX = mp->put_PivotPointX(fPivotPtX);
         HRESULT hrPPY = mp->put_PivotPointY(fPivotPtY);
         HRESULT hrPR  = mp->put_PivotRadius(fPivotRadius);
-        
+
         if(FAILED(hrPPX) || FAILED(hrPPY) || FAILED(hrPR))
         {
             hr = E_FAIL;
@@ -113,12 +113,12 @@ HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationCompleted(
     UNREFERENCED_PARAMETER(y);
 
     HRESULT hr = S_OK;
-    
+
     IInertiaProcessor* ip = m_coRef->inertiaProc;
     IManipulationProcessor* mp = m_coRef->manipulationProc;
 
     if(!m_bInertia)
-    {    
+    {
         HRESULT hrSI = SetupInertia(ip, mp);
         HRESULT hrCO = S_OK;
 
@@ -130,10 +130,10 @@ HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationCompleted(
         // Set the core objects inertia state to TRUE so it can
         // be processed when another object is being manipulated
         m_coRef->bIsInertiaActive = TRUE;
-        
+
         // Kick off timer that handles inertia
         SetTimer(m_hWnd, m_iTimerId, DESIRED_MILLISECONDS, NULL);
-    } 
+    }
     else
     {
         m_coRef->bIsInertiaActive = FALSE;
@@ -160,7 +160,7 @@ HRESULT CManipulationEventSink::SetupInertia(IInertiaProcessor* ip, IManipulatio
 
     HRESULT hrPutIOX = ip->put_InitialOriginX(m_coRef->doDrawing->GetCenterX());
     HRESULT hrPutIOY = ip->put_InitialOriginY(m_coRef->doDrawing->GetCenterY());
-    
+
     FLOAT fVX;
     FLOAT fVY;
     FLOAT fVR;
@@ -176,8 +176,8 @@ HRESULT CManipulationEventSink::SetupInertia(IInertiaProcessor* ip, IManipulatio
     HRESULT hrPutIAV = ip->put_InitialAngularVelocity(fVR);
 
     if(FAILED(hrPutDD) || FAILED(hrPutDAD) || FAILED(hrPutIOX) || FAILED(hrPutIOY)
-        || FAILED(hrPutVX) || FAILED(hrGetVY) || FAILED(hrGetAV) || FAILED(hrPutIVX)
-        || FAILED(hrPutIVY) || FAILED(hrPutIAV))
+            || FAILED(hrPutVX) || FAILED(hrGetVY) || FAILED(hrGetAV) || FAILED(hrPutIVX)
+            || FAILED(hrPutIVY) || FAILED(hrPutIAV))
     {
         hr = E_FAIL;
     }
@@ -223,7 +223,7 @@ HRESULT CManipulationEventSink::QueryInterface(REFIID riid, LPVOID *ppvObj)
         {
             *ppvObj = static_cast<IUnknown*>(this);
         }
-        
+
         if(*ppvObj)
         {
             AddRef();
@@ -247,15 +247,15 @@ BOOL CManipulationEventSink::SetupConnPt(IUnknown *manipulationProc)
     if (m_pConnPoint == NULL)
     {
         // Check if supports connectable objects
-        success = SUCCEEDED(manipulationProc->QueryInterface(IID_IConnectionPointContainer, 
-            (LPVOID*)&(pConPointContainer)));
+        success = SUCCEEDED(manipulationProc->QueryInterface(IID_IConnectionPointContainer,
+                            (LPVOID*)&(pConPointContainer)));
 
         // Get connection point interface
         if(success)
         {
             success = SUCCEEDED(pConPointContainer->FindConnectionPoint(
-                _uuidof(_IManipulationEvents), 
-                &(m_pConnPoint)));
+                                    _uuidof(_IManipulationEvents),
+                                    &(m_pConnPoint)));
         }
 
         // Clean up connection point container
@@ -264,7 +264,7 @@ BOOL CManipulationEventSink::SetupConnPt(IUnknown *manipulationProc)
             pConPointContainer->Release();
             pConPointContainer = NULL;
         }
-        
+
         // Hook event object to the connection point
         IUnknown* pUnk = NULL;
         if(success)
@@ -278,7 +278,7 @@ BOOL CManipulationEventSink::SetupConnPt(IUnknown *manipulationProc)
         {
             success = SUCCEEDED(m_pConnPoint->Advise(pUnk, &(m_uID)));
         }
-       
+
         // Clean up IUnknown pointer
         if(pUnk != NULL)
         {
@@ -300,8 +300,8 @@ VOID CManipulationEventSink::RemoveConnPt()
     // Clean up the connection point associated to this event sink
     if(m_pConnPoint)
     {
-       m_pConnPoint->Unadvise(m_uID);
-       m_pConnPoint->Release();
-       m_pConnPoint = NULL;
+        m_pConnPoint->Unadvise(m_uID);
+        m_pConnPoint->Release();
+        m_pConnPoint = NULL;
     }
 }

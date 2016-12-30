@@ -1,4 +1,4 @@
-// RemoteSkin.cpp : Implementation of WinMain
+﻿// RemoteSkin.cpp : Implementation of WinMain
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
@@ -42,7 +42,8 @@ void CExeModule::MonitorShutdown()
         {
             bActivity = false;
             dwWait = WaitForSingleObject(hEventShutdown, dwTimeOut);
-        } while (dwWait == WAIT_OBJECT_0);
+        }
+        while (dwWait == WAIT_OBJECT_0);
         // timed out
         if (!bActivity && m_nLockCnt == 0) // if no activity let's really bail
         {
@@ -75,8 +76,8 @@ END_OBJECT_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 //
-extern "C" int WINAPI wWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPWSTR lpCmdLine, int /*nShowCmd*/)
+extern "C" int WINAPI wWinMain(HINSTANCE hInstance,
+                               HINSTANCE /*hPrevInstance*/, LPWSTR lpCmdLine, int /*nShowCmd*/)
 {
     lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
 
@@ -88,16 +89,16 @@ extern "C" int WINAPI wWinMain(HINSTANCE hInstance,
     _ASSERTE(SUCCEEDED(hRes));
     _Module.Init(ObjectMap, hInstance, &LIBID_ATLLib);
     _Module.dwThreadID = GetCurrentThreadId();
-   
+
     _Module.StartMonitor();
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
-    hRes = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, 
-        REGCLS_MULTIPLEUSE | REGCLS_SUSPENDED);
+    hRes = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER,
+                                        REGCLS_MULTIPLEUSE | REGCLS_SUSPENDED);
     _ASSERTE(SUCCEEDED(hRes));
     hRes = CoResumeClassObjects();
 #else
-    hRes = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, 
-       REGCLS_MULTIPLEUSE);
+    hRes = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER,
+                                        REGCLS_MULTIPLEUSE);
 #endif
     _ASSERTE(SUCCEEDED(hRes));
 

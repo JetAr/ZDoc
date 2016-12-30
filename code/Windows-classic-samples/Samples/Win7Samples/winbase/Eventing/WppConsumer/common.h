@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -41,13 +41,13 @@ CONST ULONG ONE_HUNDRED_NANOSECONDS_PER_SECOND  = 10000000;
 CONST PWSTR FORMAT_STRING_DATE                  = L"yyyy'-'MM'-'dd";
 CONST PWSTR FORMAT_STRING_TIME                  = L"HH':'mm':'ss";
 
-CONST ULONG WIN7_MAJOR_VERSION                  = 6; 
+CONST ULONG WIN7_MAJOR_VERSION                  = 6;
 CONST ULONG WIN7_MINOR_VERSION                  = 1;
 
 BOOLEAN
 IsOSPriorWin7(
     VOID
-    );
+);
 
 //
 //  Following is a user-defined structure that can be passed to the
@@ -60,7 +60,8 @@ IsOSPriorWin7(
 
 CONST ULONG INITIAL_FORMATBUFFER_SIZE = 65536;
 
-typedef struct _PROCESSING_CONTEXT {
+typedef struct _PROCESSING_CONTEXT
+{
 
     PWSTR TMFFile;
     ULONG PointerSize;
@@ -79,7 +80,8 @@ typedef struct _PROCESSING_CONTEXT {
         ,EventCount(0)
     {
         Buffer = (PBYTE)malloc(BufferSize);
-        if (Buffer == NULL) {
+        if (Buffer == NULL)
+        {
             throw (ERROR_OUTOFMEMORY);
         }
         OSPriorWin7 = IsOSPriorWin7();
@@ -95,7 +97,7 @@ typedef struct _PROCESSING_CONTEXT {
 BOOLEAN
 IsOSPriorWin7(
     VOID
-    )
+)
 
 /*++
 
@@ -118,7 +120,7 @@ Return Value:
 --*/
 
 {
-    BOOL VersionQuerySuccess; 
+    BOOL VersionQuerySuccess;
     OSVERSIONINFO OperatingSystemInfo;
 
     ZeroMemory(&OperatingSystemInfo, sizeof(OSVERSIONINFO));
@@ -126,12 +128,15 @@ Return Value:
 
     VersionQuerySuccess = GetVersionEx(&OperatingSystemInfo);
 
-    if (VersionQuerySuccess == TRUE) {
-        if (OperatingSystemInfo.dwMajorVersion < WIN7_MAJOR_VERSION) {
+    if (VersionQuerySuccess == TRUE)
+    {
+        if (OperatingSystemInfo.dwMajorVersion < WIN7_MAJOR_VERSION)
+        {
             return TRUE;
         }
         if ((OperatingSystemInfo.dwMajorVersion == WIN7_MAJOR_VERSION) &&
-            (OperatingSystemInfo.dwMinorVersion < WIN7_MINOR_VERSION)) {
+                (OperatingSystemInfo.dwMinorVersion < WIN7_MINOR_VERSION))
+        {
 
             return TRUE;
         }

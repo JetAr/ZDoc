@@ -1,4 +1,4 @@
-//
+﻿//
 // hello.cpp
 //
 // "Hello World" menu item handler.
@@ -55,7 +55,7 @@ void CCaseTextService::_Menu_HelloWord(CCaseTextService *_this)
 
 Exit:
     SafeRelease(pContext);
-    pFocusDoc->Release();    
+    pFocusDoc->Release();
 }
 
 //+---------------------------------------------------------------------------

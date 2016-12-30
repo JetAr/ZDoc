@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -112,8 +112,14 @@ public:
         return _hr;
     }
 
-    HRESULT GetResult() const { return _hr; }
-    PCUIDLIST_RELATIVE GetRelativeIDList() const { return _pidlRel; }
+    HRESULT GetResult() const
+    {
+        return _hr;
+    }
+    PCUIDLIST_RELATIVE GetRelativeIDList() const
+    {
+        return _pidlRel;
+    }
 
 private:
     void _Init()
@@ -305,7 +311,8 @@ public:
     // IUnknown
     IFACEMETHODIMP QueryInterface(REFIID riid, void** ppv)
     {
-        static const QITAB qit[] = {
+        static const QITAB qit[] =
+        {
             QITABENT(CFileOpenBasketPickerCallback, IFileDialogEvents),
             QITABENT(CFileOpenBasketPickerCallback, IFileDialogControlEvents),
             { 0 },
@@ -320,8 +327,14 @@ public:
     //    Unadvising will release the file dialog's only reference to this object.
     //
     // Do not do this for heap allocated objects.
-    IFACEMETHODIMP_(ULONG) AddRef()  { return 3; }
-    IFACEMETHODIMP_(ULONG) Release() { return 2; }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return 3;
+    }
+    IFACEMETHODIMP_(ULONG) Release()
+    {
+        return 2;
+    }
 
     // IFileDialogEvents
     IFACEMETHODIMP OnFileOk(IFileDialog *pfd)
@@ -375,12 +388,24 @@ public:
         return S_OK;
     }
 
-    IFACEMETHODIMP OnShareViolation(IFileDialog * /* pfd */, IShellItem * /* psi */, FDE_SHAREVIOLATION_RESPONSE * /* pResponse */) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnTypeChange(IFileDialog * /* pfd */) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnOverwrite(IFileDialog * /* pfd */, IShellItem * /* psi */, FDE_OVERWRITE_RESPONSE * /* pResponse */) { return E_NOTIMPL;}
+    IFACEMETHODIMP OnShareViolation(IFileDialog * /* pfd */, IShellItem * /* psi */, FDE_SHAREVIOLATION_RESPONSE * /* pResponse */)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnTypeChange(IFileDialog * /* pfd */)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnOverwrite(IFileDialog * /* pfd */, IShellItem * /* psi */, FDE_OVERWRITE_RESPONSE * /* pResponse */)
+    {
+        return E_NOTIMPL;
+    }
 
     // IFileDialogControlEvents
-    IFACEMETHODIMP OnItemSelected(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */, DWORD /* dwIDItem */)  { return E_NOTIMPL; }
+    IFACEMETHODIMP OnItemSelected(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */, DWORD /* dwIDItem */)
+    {
+        return E_NOTIMPL;
+    }
 
     IFACEMETHODIMP OnButtonClicked(IFileDialogCustomize *pfdc, DWORD dwIDCtl)
     {
@@ -402,8 +427,14 @@ public:
         return S_OK;
     }
 
-    IFACEMETHODIMP OnCheckButtonToggled(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */, BOOL /* bChecked */) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnControlActivating(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */) { return E_NOTIMPL; }
+    IFACEMETHODIMP OnCheckButtonToggled(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */, BOOL /* bChecked */)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnControlActivating(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */)
+    {
+        return E_NOTIMPL;
+    }
 };
 
 // This sample demonstrates how to use the file dialog in a modal way such that
@@ -468,7 +499,8 @@ public:
     // IUnknown
     IFACEMETHODIMP QueryInterface(REFIID riid, void** ppv)
     {
-        static const QITAB qit[] = {
+        static const QITAB qit[] =
+        {
             QITABENT(CPickFilesAndFoldersCallback, IFileDialogEvents),
             QITABENT(CPickFilesAndFoldersCallback, IFileDialogControlEvents),
             { 0 },
@@ -483,8 +515,14 @@ public:
     //    Unadvising will release the file dialog's only reference to this object.
     //
     // Do not do this for heap allocated objects.
-    IFACEMETHODIMP_(ULONG) AddRef()  { return 3; }
-    IFACEMETHODIMP_(ULONG) Release() { return 2; }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return 3;
+    }
+    IFACEMETHODIMP_(ULONG) Release()
+    {
+        return 2;
+    }
 
     // IFileDialogEvents
     IFACEMETHODIMP OnFileOk(IFileDialog *pfd)
@@ -554,12 +592,24 @@ public:
         return S_OK;
     }
 
-    IFACEMETHODIMP OnShareViolation(IFileDialog * /* pfd */, IShellItem * /* psi */, FDE_SHAREVIOLATION_RESPONSE * /* pResponse */) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnTypeChange(IFileDialog * /* pfd */) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnOverwrite(IFileDialog * /* pfd */, IShellItem * /* psi */ , FDE_OVERWRITE_RESPONSE * /* pResponse */) { return E_NOTIMPL;}
+    IFACEMETHODIMP OnShareViolation(IFileDialog * /* pfd */, IShellItem * /* psi */, FDE_SHAREVIOLATION_RESPONSE * /* pResponse */)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnTypeChange(IFileDialog * /* pfd */)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnOverwrite(IFileDialog * /* pfd */, IShellItem * /* psi */, FDE_OVERWRITE_RESPONSE * /* pResponse */)
+    {
+        return E_NOTIMPL;
+    }
 
     // IFileDialogControlEvents
-    IFACEMETHODIMP OnItemSelected(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */, DWORD /* dwIDItem */)  { return E_NOTIMPL; }
+    IFACEMETHODIMP OnItemSelected(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */, DWORD /* dwIDItem */)
+    {
+        return E_NOTIMPL;
+    }
 
     IFACEMETHODIMP OnButtonClicked(IFileDialogCustomize *pfdc, DWORD dwIDCtl)
     {
@@ -572,15 +622,15 @@ public:
             break;
 
         case c_idDone:
+        {
+            IFileDialog *pfd;
+            if (SUCCEEDED(pfdc->QueryInterface(&pfd)))
             {
-                IFileDialog *pfd;
-                if (SUCCEEDED(pfdc->QueryInterface(&pfd)))
-                {
-                    pfd->Close(S_OK);
-                    pfd->Release();
-                }
+                pfd->Close(S_OK);
+                pfd->Release();
             }
-            break;
+        }
+        break;
 
         default:
             break;
@@ -589,8 +639,14 @@ public:
         return S_OK;
     }
 
-    IFACEMETHODIMP OnCheckButtonToggled(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */, BOOL /* bChecked */) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnControlActivating(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */) { return E_NOTIMPL; }
+    IFACEMETHODIMP OnCheckButtonToggled(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */, BOOL /* bChecked */)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnControlActivating(IFileDialogCustomize * /* pfdc */, DWORD /* dwIDCtl */)
+    {
+        return E_NOTIMPL;
+    }
 };
 
 void PickFilesAndFolders()

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,9 +14,9 @@
 //
 //    This file contains routines associated with the SOCKET_CONTEXT structure. This
 //    structure maintains the mapping between the upper layer's socket and the
-//    corresponding lower layer's socket. The routines in this file are for allocating, 
+//    corresponding lower layer's socket. The routines in this file are for allocating,
 //    linked list management, etc.
-//    
+//
 
 #include "lspdef.h"
 
@@ -32,29 +32,29 @@ SOCKET_CONTEXT *
 FindSocketContext(
     SOCKET  s,
     BOOL    Remove
-    )
+)
 {
     SOCKET_CONTEXT  *SocketContext = NULL,
-               *info = NULL;
+                     *info = NULL;
     LIST_ENTRY *lptr = NULL;
     int         i;
 
     EnterCriticalSection( &gCriticalSection );
 
-    for(i=0; i < gLayerCount ;i++)
+    for(i=0; i < gLayerCount ; i++)
     {
         EnterCriticalSection( &gLayerInfo[ i ].ProviderCritSec );
 
         for(lptr = gLayerInfo[ i ].SocketList.Flink ;
-            lptr != &gLayerInfo[ i ].SocketList ;
-            lptr = lptr->Flink )
+                lptr != &gLayerInfo[ i ].SocketList ;
+                lptr = lptr->Flink )
         {
             info = CONTAINING_RECORD( lptr, SOCKET_CONTEXT, Link );
 
             if ( s == info->Socket )
             {
                 SocketContext = info;
-                
+
                 if ( TRUE == Remove )
                 {
                     RemoveEntryList( &info->Link );
@@ -92,17 +92,17 @@ FindSocketContext(
 //
 SOCKET_CONTEXT *
 CreateSocketContext(
-    PROVIDER  *Provider, 
-    SOCKET     Socket, 
+    PROVIDER  *Provider,
+    SOCKET     Socket,
     int       *lpErrno
-    )
+)
 {
     SOCKET_CONTEXT   *newContext = NULL;
 
     newContext = (SOCKET_CONTEXT *) LspAlloc(
-            sizeof( SOCKET_CONTEXT ),
-            lpErrno
-            );
+                     sizeof( SOCKET_CONTEXT ),
+                     lpErrno
+                 );
     if ( NULL == newContext )
     {
         dbgprint("CreateSocketContext: LspAlloc failed: %d", *lpErrno );
@@ -132,11 +132,11 @@ cleanup:
 // Description:
 //    This routine frees the socket context structure.
 //
-void 
+void
 FreeSocketContext(
     PROVIDER       *Provider,
     SOCKET_CONTEXT *Context
-    )
+)
 {
     EnterCriticalSection( &Provider->ProviderCritSec );
 
@@ -153,13 +153,13 @@ FreeSocketContext(
 //
 // Description:
 //    Closes all sockets belonging to the specified provider and frees
-//    the context information. If the lower provider socket is still 
+//    the context information. If the lower provider socket is still
 //    valid, set an abortive linger, and close the socket.
 //
-void 
+void
 FreeSocketContextList(
-        PROVIDER *provider
-        )
+    PROVIDER *provider
+)
 {
     LIST_ENTRY     *lptr = NULL;
     SOCKET_CONTEXT *context = NULL;

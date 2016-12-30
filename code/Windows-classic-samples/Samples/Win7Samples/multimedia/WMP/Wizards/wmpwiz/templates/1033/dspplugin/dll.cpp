@@ -1,4 +1,4 @@
-// [!output root]dll.cpp : Implementation of DLL Exports.
+﻿// [!output root]dll.cpp : Implementation of DLL Exports.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -74,14 +74,14 @@ STDAPI DllRegisterServer(void)
     {
         return hr;
     }
-    
+
     // Load friendly name and description strings
     CComBSTR    bstrFriendlyName;
     CComBSTR    bstrDescription;
 
     bstrFriendlyName.LoadString(IDS_FRIENDLYNAME);
     bstrDescription.LoadString(IDS_DESCRIPTION);
-[!if AUDIO]
+    [!if AUDIO]
 
     // Describe the type of data handled by the plug-in
     DMO_PARTIAL_MEDIATYPE mt = { 0 };
@@ -90,33 +90,33 @@ STDAPI DllRegisterServer(void)
 
     // Register the plug-in with WMP (for legacy pipeline support)
     hr = spRegistrar->WMPRegisterPlayerPlugin(
-                    bstrFriendlyName,   // friendly name (for menus, etc)
-                    bstrDescription,    // description (for Tools->Options->Plug-ins)
-                    NULL,               // path to app that uninstalls the plug-in
-                    1,                  // DirectShow priority for this plug-in
-                    WMP_PLUGINTYPE_DSP, // Plug-in type
-                    CLSID_[!output Safe_root],// Class ID of plug-in
-                    1,                  // No. media types supported by plug-in
-                    &mt);               // Array of media types supported by plug-in
+             bstrFriendlyName,   // friendly name (for menus, etc)
+             bstrDescription,    // description (for Tools->Options->Plug-ins)
+             NULL,               // path to app that uninstalls the plug-in
+             1,                  // DirectShow priority for this plug-in
+             WMP_PLUGINTYPE_DSP, // Plug-in type
+             CLSID_[!output Safe_root],// Class ID of plug-in
+             1,                  // No. media types supported by plug-in
+             &mt);               // Array of media types supported by plug-in
 
     // Also register for out-of-proc playback in the MF pipeline
     // We'll only do this on Windows Vista or later operating systems because
     // WMP 11 and Vista are required at a minimum.
-    if (SUCCEEDED(hr) && 
-        TRUE == IsVistaOrLater())
+    if (SUCCEEDED(hr) &&
+            TRUE == IsVistaOrLater())
     {
         hr = spRegistrar->WMPRegisterPlayerPlugin(
-                        bstrFriendlyName,   // friendly name (for menus, etc)
-                        bstrDescription,    // description (for Tools->Options->Plug-ins)
-                        NULL,               // path to app that uninstalls the plug-in
-                        1,                  // DirectShow priority for this plug-in
-                        WMP_PLUGINTYPE_DSP_OUTOFPROC, // Plug-in type
-                        CLSID_[!output Safe_root],// Class ID of plug-in
-                        1,                  // No. media types supported by plug-in
-                        &mt);               // Array of media types supported by plug-in
+                 bstrFriendlyName,   // friendly name (for menus, etc)
+                 bstrDescription,    // description (for Tools->Options->Plug-ins)
+                 NULL,               // path to app that uninstalls the plug-in
+                 1,                  // DirectShow priority for this plug-in
+                 WMP_PLUGINTYPE_DSP_OUTOFPROC, // Plug-in type
+                 CLSID_[!output Safe_root],// Class ID of plug-in
+                 1,                  // No. media types supported by plug-in
+                 &mt);               // Array of media types supported by plug-in
     }
-[!endif]
-[!if VIDEO]
+    [!endif]
+    [!if VIDEO]
 
     // Describe the type of data handled by the plug-in
     DMO_PARTIAL_MEDIATYPE* mt = new DMO_PARTIAL_MEDIATYPE[C[!output Safe_root]::k_dwValidSubtypesCount];
@@ -135,34 +135,34 @@ STDAPI DllRegisterServer(void)
 
     // Register the plug-in with WMP
     hr = spRegistrar->WMPRegisterPlayerPlugin(
-                    bstrFriendlyName,   // friendly name (for menus, etc)
-                    bstrDescription,    // description (for Tools->Options->Plug-ins)
-                    NULL,               // path to app that uninstalls the plug-in
-                    1,                  // DirectShow priority for this plug-in
-                    WMP_PLUGINTYPE_DSP, // Plug-in type
-                    CLSID_[!output Safe_root], // Class ID of plug-in
-                    C[!output Safe_root]::k_dwValidSubtypesCount, // No. media types supported by plug-in
-                    mt);                // Array of media types supported by plug-in
+             bstrFriendlyName,   // friendly name (for menus, etc)
+             bstrDescription,    // description (for Tools->Options->Plug-ins)
+             NULL,               // path to app that uninstalls the plug-in
+             1,                  // DirectShow priority for this plug-in
+             WMP_PLUGINTYPE_DSP, // Plug-in type
+             CLSID_[!output Safe_root], // Class ID of plug-in
+             C[!output Safe_root]::k_dwValidSubtypesCount, // No. media types supported by plug-in
+             mt);                // Array of media types supported by plug-in
 
     // Also register for out-of-proc playback in the MF pipeline
     // We'll only do this on Windows Vista or later operating systems because
     // WMP 11 and Vista are required at a minimum.
-    if (SUCCEEDED(hr) && 
-        TRUE == IsVistaOrLater())
+    if (SUCCEEDED(hr) &&
+            TRUE == IsVistaOrLater())
     {
         hr = spRegistrar->WMPRegisterPlayerPlugin(
-                        bstrFriendlyName,   // friendly name (for menus, etc)
-                        bstrDescription,    // description (for Tools->Options->Plug-ins)
-                        NULL,               // path to app that uninstalls the plug-in
-                        1,                  // DirectShow priority for this plug-in
-                        WMP_PLUGINTYPE_DSP_OUTOFPROC, // Plug-in type
-                        CLSID_[!output Safe_root],// Class ID of plug-in
-                        C[!output Safe_root]::k_dwValidSubtypesCount, // No. media types supported by plug-in
-                        mt);               // Array of media types supported by plug-in
+                 bstrFriendlyName,   // friendly name (for menus, etc)
+                 bstrDescription,    // description (for Tools->Options->Plug-ins)
+                 NULL,               // path to app that uninstalls the plug-in
+                 1,                  // DirectShow priority for this plug-in
+                 WMP_PLUGINTYPE_DSP_OUTOFPROC, // Plug-in type
+                 CLSID_[!output Safe_root],// Class ID of plug-in
+                 C[!output Safe_root]::k_dwValidSubtypesCount, // No. media types supported by plug-in
+                 mt);               // Array of media types supported by plug-in
     }
 
     delete [] mt;
-[!endif]
+    [!endif]
 
     if (FAILED(hr))
     {
@@ -192,7 +192,7 @@ STDAPI DllUnregisterServer(void)
 
     // Tell WMP to remove this plug-in (for legacy pipeline support)
     hr = spRegistrar->WMPUnRegisterPlayerPlugin(WMP_PLUGINTYPE_DSP, CLSID_[!output Safe_root]);
- 
+
     if(TRUE == IsVistaOrLater())
     {
         // Also unregister from the MF pipeline

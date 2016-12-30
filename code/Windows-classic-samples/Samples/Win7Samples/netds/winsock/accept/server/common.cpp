@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -25,19 +25,19 @@
 */
 void PrintAddressString(LPSOCKADDR pSockAddr, DWORD dwSockAddrLen)
 {
-    // INET6_ADDRSTRLEN is the maximum size of a valid IPv6 address 
+    // INET6_ADDRSTRLEN is the maximum size of a valid IPv6 address
     // including port,colons,NULL,etc.
     char buf[INET6_ADDRSTRLEN];
-    DWORD dwBufSize = 0;    
+    DWORD dwBufSize = 0;
 
     memset(buf,0,sizeof(buf));
     dwBufSize = sizeof(buf);
 
-    // This function converts the pSockAddr to a printable format into buf.   
-    if (WSAAddressToString(pSockAddr, 
-                           dwSockAddrLen, 
-                           NULL, 
-                           buf, 
+    // This function converts the pSockAddr to a printable format into buf.
+    if (WSAAddressToString(pSockAddr,
+                           dwSockAddrLen,
+                           NULL,
+                           buf,
                            &dwBufSize) == SOCKET_ERROR)
     {
         printf("ERROR: WSAAddressToString failed %d \n", WSAGetLastError());
@@ -80,10 +80,10 @@ void CreateListeningSockets()
 
     // getaddrinfo is the protocol independent version of GetHostByName.
     // the res contains the result.
-    if (getaddrinfo(g_AcceptContext.szInterface, 
-                g_AcceptContext.szPort,
-                &hints, 
-                &res) != NO_ERROR)
+    if (getaddrinfo(g_AcceptContext.szInterface,
+                    g_AcceptContext.szPort,
+                    &hints,
+                    &res) != NO_ERROR)
     {
         printf("getaddrinfo failed. Error = %d\n", WSAGetLastError());
         goto CLEANUP;
@@ -93,7 +93,7 @@ void CreateListeningSockets()
     {
         printf("getaddrinfo returned res = NULL\n");
         goto CLEANUP;
-    } 
+    }
 
     printf("getaddrinfo successful.Enumerating the returned addresses ...\n\n");
 
@@ -104,7 +104,7 @@ void CreateListeningSockets()
         PrintAddressString(pAddr->ai_addr, pAddr->ai_addrlen);
 
         // create a suitable socket for this interface.
-        newSock = WSASocket(pAddr->ai_family, 
+        newSock = WSASocket(pAddr->ai_family,
                             pAddr->ai_socktype,
                             pAddr->ai_protocol,
                             NULL,
@@ -114,7 +114,7 @@ void CreateListeningSockets()
         {
             printf("WSASocket failed. Error = %d\n", WSAGetLastError());
             printf("Ignoring this address and continuing with the next. \n\n");
-            
+
             // anyway, let's continue with other addresses.
             continue;
         }
@@ -129,7 +129,7 @@ void CreateListeningSockets()
             continue;
         }
 
-        printf("Socket bound successfully\n");        
+        printf("Socket bound successfully\n");
 
         // listen for upto MAX_CLIENTS number of clients.
         if (listen(newSock, MAX_CLIENTS) != NO_ERROR)
@@ -149,7 +149,7 @@ void CreateListeningSockets()
             if (ioctlsocket(newSock, FIONBIO, &nonBlocking) == SOCKET_ERROR)
             {
                 printf("Can't put socket into non-blocking mode. Error = %d\n",
-                        WSAGetLastError());
+                       WSAGetLastError());
             }
         }
 
@@ -159,18 +159,18 @@ void CreateListeningSockets()
         {
             printf("AllocAndInitSockInfo failed.\n");
             closesocket(newSock);
-            continue; 
+            continue;
         }
 
         pNewSockInfo->sock = newSock;
-        pNewSockInfo->isSocketListening = TRUE;  
+        pNewSockInfo->isSocketListening = TRUE;
 
         // all went well. add this to the list of listening sockets.
         AddSockInfoToList(&g_AcceptContext.pSockList, pNewSockInfo);
         printf("Added socket to list of listening sockets\n\n");
     }
 
-   
+
 CLEANUP:
 
     // if getaddrinfo was successful, it would have allocated memory for the
@@ -198,7 +198,7 @@ void DestroyListeningSockets()
     printf("Entering DestroyListeningSockets()\n");
 
     // iterate through all the listening sockets and free one by one.
-    pSockInfo = g_AcceptContext.pSockList; 
+    pSockInfo = g_AcceptContext.pSockList;
     while (pSockInfo != NULL)
     {
         // if the socket hasn't been closed already, close it.
@@ -235,11 +235,11 @@ PSOCK_INFO ProcessAcceptEvent(PSOCK_INFO pSockInfo)
     printf("Entering ProcessAcceptEvent() on socket %d\n", pSockInfo->sock);
 
     // accept the new connection.
-    newSock = WSAAccept(pSockInfo->sock, 
-                  (LPSOCKADDR)&clientAddress, 
-                  &clientAddressLen, 
-                  NULL, 
-                  NULL);
+    newSock = WSAAccept(pSockInfo->sock,
+                        (LPSOCKADDR)&clientAddress,
+                        &clientAddressLen,
+                        NULL,
+                        NULL);
     if (newSock == INVALID_SOCKET)
     {
         printf("ERROR: WSAAccept failed. Error = %d\n", WSAGetLastError());
@@ -253,10 +253,10 @@ PSOCK_INFO ProcessAcceptEvent(PSOCK_INFO pSockInfo)
     if (ioctlsocket(pSockInfo->sock, FIONBIO, &nonBlocking) == SOCKET_ERROR)
     {
         printf("Can't put socket into non-blocking mode. Error = %d\n",
-                WSAGetLastError());
+               WSAGetLastError());
     }
 
-    // add this socket to the global sockets list.             
+    // add this socket to the global sockets list.
     pNewSockInfo = AllocAndInitSockInfo();
     if (pNewSockInfo == NULL)
     {
@@ -266,12 +266,12 @@ PSOCK_INFO ProcessAcceptEvent(PSOCK_INFO pSockInfo)
     }
 
     pNewSockInfo->sock = newSock;
-    pNewSockInfo->isSocketListening = FALSE;    
+    pNewSockInfo->isSocketListening = FALSE;
     AddSockInfoToList(&g_AcceptContext.pSockList, pNewSockInfo);
-    printf("Added accepted socket %d to list of sockets\n", newSock);    
-                   
+    printf("Added accepted socket %d to list of sockets\n", newSock);
+
 CLEANUP:
-    printf("Exiting ProcessAcceptEvent()\n"); 
+    printf("Exiting ProcessAcceptEvent()\n");
     return pNewSockInfo;
 }
 
@@ -279,15 +279,15 @@ CLEANUP:
 /*
       This functions reads incoming data on the given socket in which a
       read event has been signalled. It read new data only if the previously
-      received data has been fully sent. 
+      received data has been fully sent.
 */
 BOOL ProcessReadEvent(PSOCK_INFO pSockInfo)
 {
-    BOOL bSocketError = FALSE;   
-    int nBytesRecd;    
+    BOOL bSocketError = FALSE;
+    int nBytesRecd;
     int err;
-    
-    printf("Entering ProcessReadEvent() on socket %d\n", pSockInfo->sock); 
+
+    printf("Entering ProcessReadEvent() on socket %d\n", pSockInfo->sock);
 
     // check if the previously received data has been fully sent or not.
     if (pSockInfo->recdData.isNewData)
@@ -307,7 +307,7 @@ BOOL ProcessReadEvent(PSOCK_INFO pSockInfo)
         // recv and queued it, we may not hit this deadlock, but still such
         // malicious clients can send too many data and not read at all and
         // thus perform a denial-of-service attack by making server run out
-        // of memory. so, there has to be a upper limit for per-socket 
+        // of memory. so, there has to be a upper limit for per-socket
         // memory usage or timeout to avoid such attacks.
         Sleep(2000);
         goto CLEANUP;
@@ -315,10 +315,10 @@ BOOL ProcessReadEvent(PSOCK_INFO pSockInfo)
 
     // previous data fully sent, now, recv the new data.
     memset(&pSockInfo->recdData,0,sizeof(pSockInfo->recdData));
-    
-    nBytesRecd = recv(pSockInfo->sock, 
-                      pSockInfo->recdData.buf, 
-                      RECV_DATA_SIZE - 1, 
+
+    nBytesRecd = recv(pSockInfo->sock,
+                      pSockInfo->recdData.buf,
+                      RECV_DATA_SIZE - 1,
                       0);
     if (nBytesRecd < 0)
     {
@@ -333,26 +333,26 @@ BOOL ProcessReadEvent(PSOCK_INFO pSockInfo)
             printf("ERROR: recv failed. error = %d\n", err);
             bSocketError = TRUE;
         }
-        goto CLEANUP;        
+        goto CLEANUP;
     }
     if (nBytesRecd == 0)
     {
         printf("recv returned 0. Remote side has closed gracefully. Good.\n");
-        bSocketError = TRUE;        
+        bSocketError = TRUE;
         goto CLEANUP;
     }
 
     // update the stats.
     pSockInfo->recdData.dataSize = nBytesRecd;
     pSockInfo->nTotalRecd += nBytesRecd;
-    pSockInfo->recdData.isNewData = TRUE;    
-    
-    printf("Received data = %s, length = %d\n", pSockInfo->recdData.buf, 
-                                                nBytesRecd);
-    
+    pSockInfo->recdData.isNewData = TRUE;
+
+    printf("Received data = %s, length = %d\n", pSockInfo->recdData.buf,
+           nBytesRecd);
+
 CLEANUP:
 
-    printf("Exiting ProcessReadEvent()\n"); 
+    printf("Exiting ProcessReadEvent()\n");
     return bSocketError;
 
 }
@@ -370,7 +370,7 @@ BOOL SendData(PSOCK_INFO pSockInfo)
     BOOL bSocketError = FALSE;
     int nBytesSent;
     int err;
-    
+
     printf("Entering SendData() on socket %d\n", pSockInfo->sock);
 
     // check if there's any data received in the buffer after the last one
@@ -383,9 +383,9 @@ BOOL SendData(PSOCK_INFO pSockInfo)
 
     // if the data buffer contains new data, begin sending from the start
     // otherwise, begin sending from the point we left in the last call.
-    nBytesSent = send(pSockInfo->sock, 
+    nBytesSent = send(pSockInfo->sock,
                       pSockInfo->recdData.buf + pSockInfo->recdData.sendOffset,
-                      pSockInfo->recdData.dataSize, 
+                      pSockInfo->recdData.dataSize,
                       0);
     if (nBytesSent == SOCKET_ERROR)
     {
@@ -411,8 +411,8 @@ BOOL SendData(PSOCK_INFO pSockInfo)
     if (pSockInfo->recdData.dataSize == 0)
         pSockInfo->recdData.isNewData = FALSE;
     pSockInfo->nTotalSent += nBytesSent;
-    printf("Sent %d bytes. Remaining = %d bytes.\n", nBytesSent, 
-                                        pSockInfo->recdData.dataSize);    
+    printf("Sent %d bytes. Remaining = %d bytes.\n", nBytesSent,
+           pSockInfo->recdData.dataSize);
 
 CLEANUP:
 

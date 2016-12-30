@@ -1,22 +1,22 @@
-
+﻿
 /*************************************************************************************************
- * Description: Implementation of the ListItemProvider class, which implements a 
+ * Description: Implementation of the ListItemProvider class, which implements a
  * UI Automation provider for a list item in a custom control.
- * 
+ *
  * See EntryPoint.cpp for a full description of this sample.
- *   
- * 
+ *
+ *
  *  Copyright (C) Microsoft Corporation.  All rights reserved.
- * 
+ *
  * This source code is intended only as a supplement to Microsoft
  * Development Tools and/or on-line documentation.  See these other
  * materials for detailed information regarding Microsoft code samples.
- * 
+ *
  * THIS CODE AND INFORMATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY
  * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  * PARTICULAR PURPOSE.
- * 
+ *
  *************************************************************************************************/
 
 #define INITGUID
@@ -88,13 +88,13 @@ IFACEMETHODIMP ListItemProvider::GetPatternProvider(PATTERNID patternId, IUnknow
     }
     else
     {
-        *pRetVal = NULL;   
+        *pRetVal = NULL;
     }
     return S_OK;
 }
 // Implementation of IRawElementProviderSimple::GetPropertyValue.
-// Gets custom properties. Because list items are not directly hosted in an HWND, 
-// more properties should be supported here than for the list box itself. 
+// Gets custom properties. Because list items are not directly hosted in an HWND,
+// more properties should be supported here than for the list box itself.
 //
 IFACEMETHODIMP ListItemProvider::GetPropertyValue(PROPERTYID propertyId, VARIANT* pRetVal)
 {
@@ -121,8 +121,8 @@ IFACEMETHODIMP ListItemProvider::GetPropertyValue(PROPERTYID propertyId, VARIANT
     else if(propertyId == UIA_HasKeyboardFocusPropertyId)
     {
         int myIndex = m_pListItemControl->GetItemIndex();
-        BOOL hasFocus = ((m_pListControl->GetSelectedIndex() == myIndex) 
-            && (m_pListControl->GetIsFocused() == true));
+        BOOL hasFocus = ((m_pListControl->GetSelectedIndex() == myIndex)
+                         && (m_pListControl->GetIsFocused() == true));
         pRetVal->vt = VT_BOOL;
         pRetVal->boolVal = hasFocus ? VARIANT_TRUE : VARIANT_FALSE;
     }
@@ -139,7 +139,7 @@ IFACEMETHODIMP ListItemProvider::GetPropertyValue(PROPERTYID propertyId, VARIANT
     else if (propertyId == UIA_IsKeyboardFocusablePropertyId)
     {
         pRetVal->vt = VT_BOOL;
-        pRetVal->boolVal = VARIANT_TRUE;  
+        pRetVal->boolVal = VARIANT_TRUE;
     }
     else if (propertyId == UIA_ItemStatusPropertyId)
     {
@@ -161,13 +161,13 @@ IFACEMETHODIMP ListItemProvider::GetPropertyValue(PROPERTYID propertyId, VARIANT
 }
 
 // Implementation of IRawElementProviderSimple::get_HostRawElementProvider.
-// Gets the UI Automation provider for the host window. 
+// Gets the UI Automation provider for the host window.
 // Return NULL. because the list items are not directly hosted in a window.
 //
 IFACEMETHODIMP ListItemProvider::get_HostRawElementProvider(IRawElementProviderSimple** pRetVal)
 {
-    *pRetVal = NULL; 
-    return S_OK; 
+    *pRetVal = NULL;
+    return S_OK;
 }
 
 // IRawElementProviderFragment implementation.
@@ -181,47 +181,47 @@ IFACEMETHODIMP ListItemProvider::Navigate(NavigateDirection direction, IRawEleme
     switch(direction)
     {
     case NavigateDirection_Parent:
-        pFrag = m_pListControl->GetListProvider(); 
+        pFrag = m_pListControl->GetListProvider();
         break;
 
     case NavigateDirection_NextSibling:
+    {
+        int myIndex = m_pListItemControl->GetItemIndex();
+        if (myIndex == m_pListControl->GetCount() - 1)
         {
-            int myIndex = m_pListItemControl->GetItemIndex();
-            if (myIndex == m_pListControl->GetCount() - 1)
-            {
-                pFrag = NULL;
-                break;
-            }
-            LISTITERATOR nextIter = m_pListControl->GetItemAt(myIndex + 1);
-            CustomListItem* pNext = (CustomListItem*)(*nextIter);
-            pFrag = pNext->GetListItemProvider();
+            pFrag = NULL;
             break;
         }
+        LISTITERATOR nextIter = m_pListControl->GetItemAt(myIndex + 1);
+        CustomListItem* pNext = (CustomListItem*)(*nextIter);
+        pFrag = pNext->GetListItemProvider();
+        break;
+    }
 
-    case NavigateDirection_PreviousSibling:  
+    case NavigateDirection_PreviousSibling:
+    {
+        int myIndex = m_pListItemControl->GetItemIndex();
+        if (myIndex <= 0)
         {
-            int myIndex = m_pListItemControl->GetItemIndex();
-            if (myIndex <= 0) 
-            {
-                pFrag = NULL;
-                break;
-            }
-            LISTITERATOR nextIter = m_pListControl->GetItemAt(myIndex - 1);
-            CustomListItem* pPrev = static_cast<CustomListItem*>(*nextIter);
-            pFrag = pPrev->GetListItemProvider();
+            pFrag = NULL;
             break;
         }
+        LISTITERATOR nextIter = m_pListControl->GetItemAt(myIndex - 1);
+        CustomListItem* pPrev = static_cast<CustomListItem*>(*nextIter);
+        pFrag = pPrev->GetListItemProvider();
+        break;
+    }
     }
     *pRetVal = pFrag;
-    if (pFrag != NULL) 
-    {   
+    if (pFrag != NULL)
+    {
         pFrag->AddRef();
     }
     return S_OK;
 }
 
 // Implementation of IRawElementProviderFragment::GetRuntimeId.
-// Gets the runtime identifier. This is an array consisting of UiaAppendRuntimeId, 
+// Gets the runtime identifier. This is an array consisting of UiaAppendRuntimeId,
 // which makes the ID unique among instances of the control, and the Automation Id.
 //
 IFACEMETHODIMP ListItemProvider::GetRuntimeId(SAFEARRAY ** pRetVal)
@@ -304,7 +304,7 @@ IFACEMETHODIMP ListItemProvider::Select()
     m_pListControl->SelectItem(index);
 
     // Force refresh even when app doesn't have focus.
-    InvalidateRect(m_pListControl->GetHwnd(), NULL, false); 
+    InvalidateRect(m_pListControl->GetHwnd(), NULL, false);
     return S_OK;
 }
 
@@ -332,7 +332,7 @@ IFACEMETHODIMP ListItemProvider::RemoveFromSelection()
 //
 IFACEMETHODIMP ListItemProvider::get_IsSelected(BOOL *pRetVal)
 {
-    *pRetVal = 
+    *pRetVal =
         (m_pListItemControl->GetItemIndex() == m_pListControl->GetSelectedIndex());
     return S_OK;
 }
@@ -343,7 +343,7 @@ IFACEMETHODIMP ListItemProvider::get_IsSelected(BOOL *pRetVal)
 IFACEMETHODIMP ListItemProvider::get_SelectionContainer(
     IRawElementProviderSimple **pRetVal)
 {
-    IRawElementProviderSimple* pParent = 
+    IRawElementProviderSimple* pParent =
         static_cast<IRawElementProviderSimple*>(m_pListControl->GetListProvider());
     pParent->AddRef();
     *pRetVal = pParent;

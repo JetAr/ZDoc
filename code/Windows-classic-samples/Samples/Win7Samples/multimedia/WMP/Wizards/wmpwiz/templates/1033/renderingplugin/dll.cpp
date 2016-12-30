@@ -1,4 +1,4 @@
-// [!output root]dll.cpp : Implementation of DLL Exports.
+﻿// [!output root]dll.cpp : Implementation of DLL Exports.
 
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -73,7 +73,7 @@ STDAPI DllRegisterServer(void)
     {
         return hr;
     }
-    
+
     // Load friendly name and description strings
     CComBSTR    bstrFriendlyName;
     CComBSTR    bstrDescription;
@@ -88,14 +88,14 @@ STDAPI DllRegisterServer(void)
 
     // Register the plug-in with WMP
     hr = spRegistrar->WMPRegisterPlayerPlugin(
-                    bstrFriendlyName,   // friendly name (for menus, etc)
-                    bstrDescription,    // description (for Tools->Options->Plug-ins)
-                    NULL,               // path to app that uninstalls the plug-in
-                    1,                  // DirectShow priority for this plug-in
-                    WMP_PLUGINTYPE_RENDERING, // Plug-in type
-                    CLSID_[!output Safe_root],// Class ID of plug-in
-                    1,                  // No. media types supported by plug-in
-                    &mt);               // Array of media types supported by plug-in
+             bstrFriendlyName,   // friendly name (for menus, etc)
+             bstrDescription,    // description (for Tools->Options->Plug-ins)
+             NULL,               // path to app that uninstalls the plug-in
+             1,                  // DirectShow priority for this plug-in
+             WMP_PLUGINTYPE_RENDERING, // Plug-in type
+             CLSID_[!output Safe_root],// Class ID of plug-in
+             1,                  // No. media types supported by plug-in
+             &mt);               // Array of media types supported by plug-in
 
     if ( FAILED( hr ) )
     {
@@ -131,7 +131,7 @@ STDAPI DllUnregisterServer(void)
     long lResult;
 
     lResult = key.Open( HKEY_CURRENT_USER, kwszPrefsRegKey, KEY_ALL_ACCESS );
-    
+
     if( ERROR_SUCCESS == lResult )
     {
         lResult = key.DeleteValue( kwszPrefsTextColor );

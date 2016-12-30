@@ -1,4 +1,4 @@
-// DrtSdkSample.cpp : Defines the entry point for the console application.
+﻿// DrtSdkSample.cpp : Defines the entry point for the console application.
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -41,31 +41,31 @@ void FlushCurrentLine()
 //
 // Description: Presents an interactive menu to the user and returns the user's choice
 //
-// Input: PCWSTR *choices - An array of strings representing the choices to be presented to 
+// Input: PCWSTR *choices - An array of strings representing the choices to be presented to
 //                          the users
 //
 //********************************************************************************************
 int GetUserChoice(PCWSTR *choices, int numchoices)
 {
-   int chr = -1;
-   wprintf(L"---------------------------------------------------------\n");
-   for(int i=0; i<numchoices; i++)
-   {
-      wprintf(L"   %i. %s\n",i+1,choices[i]);
-   }
-   wprintf(L"---------------------------------------------------------\n");
-   wprintf(L"Enter a choice (1-%i): ",numchoices);
-   wscanf_s(L"%i",&chr);
-   FlushCurrentLine();
-   if(chr > 0 && chr <= numchoices)
-   {
-      return chr - 1;
-   }
-   else
-   {
-      wprintf(L"Invalid Choice\n");
-      return -1;
-   }
+    int chr = -1;
+    wprintf(L"---------------------------------------------------------\n");
+    for(int i=0; i<numchoices; i++)
+    {
+        wprintf(L"   %i. %s\n",i+1,choices[i]);
+    }
+    wprintf(L"---------------------------------------------------------\n");
+    wprintf(L"Enter a choice (1-%i): ",numchoices);
+    wscanf_s(L"%i",&chr);
+    FlushCurrentLine();
+    if(chr > 0 && chr <= numchoices)
+    {
+        return chr - 1;
+    }
+    else
+    {
+        wprintf(L"Invalid Choice\n");
+        return -1;
+    }
 }
 
 //********************************************************************************************
@@ -76,70 +76,70 @@ int GetUserChoice(PCWSTR *choices, int numchoices)
 //********************************************************************************************
 void DisplayError(__in const PWSTR fnname, __in const HRESULT hr)
 {
-   struct error_description
-   {
-      HRESULT hr;
-      PWSTR description;
-   } valid_errors[] = 
-   {
-      {S_OK,                                L"Succeeded: S_OK"},
-      {E_INVALIDARG,                        L"Error: E_INVALIDARG"},
-      {E_OUTOFMEMORY,                       L"Error: E_OUTOFMEMORY"},
-      {ERROR_INVALID_HANDLE,                L"Error: ERROR_INVALID_HANDLE"},
-      {ERROR_INVALID_PARAMETER,             L"Error: ERROR_INVALID_PARAMETER"},
-      {ERROR_ADAP_HDW_ERR,                  L"Error: ERROR_ADAP_HDW_ERR"},
-      {DRT_E_TIMEOUT,                       L"Error: DRT_E_TIMEOUT"},
-      {DRT_E_INVALID_KEY_SIZE,              L"Error: DRT_E_INVALID_KEY_SIZE"},
-      {DRT_E_INVALID_CERT_CHAIN,            L"Error: DRT_E_INVALID_CERT_CHAIN"},
-      {DRT_E_INVALID_MESSAGE,               L"Error: DRT_E_INVALID_MESSAGE"},
-      {DRT_E_NO_MORE,                       L"Error: DRT_E_NO_MORE"},
-      {DRT_E_INVALID_MAX_ADDRESSES,         L"Error: DRT_E_INVALID_MAX_ADDRESSES"},
-      {DRT_E_SEARCH_IN_PROGRESS,            L"Error: DRT_E_SEARCH_IN_PROGRESS"},
-      {DRT_E_INVALID_KEY,                   L"Error: DRT_E_INVALID_KEY"},
-      {DRT_E_INVALID_PORT,                  L"Error: DRT_E_INVALID_PORT"},
-      {DRT_E_STILL_IN_USE,                  L"Error: DRT_E_STILL_IN_USE"},
-      {DRT_E_INVALID_ADDRESS,               L"Error: DRT_E_INVALID_ADDRESS"},
-      {DRT_E_INVALID_SCOPE,                 L"Error: DRT_E_INVALID_SCOPE"},
-      {DRT_E_INVALID_SETTINGS,              L"Error: DRT_E_INVALID_SETTINGS"},
-      {DRT_S_RETRY,                         L"Error: DRT_S_RETRY"},
-      {DRT_E_INVALID_MAX_ENDPOINTS,	        L"Error: DRT_E_INVALID_MAX_ENDPOINTS"},
-      {DRT_E_INVALID_SEARCH_RANGE,	        L"Error: DRT_E_INVALID_SEARCH_RANGE"},
-      {DRT_E_INVALID_TRANSPORT_PROVIDER,    L"Error: DRT_E_INVALID_TRANSPORT_PROVIDER"},
-      {DRT_E_INVALID_SECURITY_PROVIDER,	    L"Error: DRT_E_INVALID_SECURITY_PROVIDER"},
-      {DRT_E_STILL_IN_USE,	                L"Error: DRT_E_STILL_IN_USE"},
-      {DRT_E_INVALID_BOOTSTRAP_PROVIDER,    L"Error: DRT_E_INVALID_BOOTSTRAP_PROVIDER"},
-      {DRT_E_TRANSPORT_SHUTTING_DOWN,       L"Error: DRT_E_TRANSPORT_SHUTTING_DOWN"},
-      {DRT_E_NO_ADDRESSES_AVAILABLE,        L"Error: DRT_E_NO_ADDRESSES_AVAILABLE"},
-      {DRT_E_DUPLICATE_KEY,                 L"Error: DRT_E_DUPLICATE_KEY"},
-      {DRT_E_TRANSPORTPROVIDER_IN_USE,      L"Error: DRT_E_TRANSPORTPROVIDER_IN_USE"},
-      {DRT_E_TRANSPORTPROVIDER_NOT_ATTACHED,L"Error: DRT_E_TRANSPORTPROVIDER_NOT_ATTACHED"},
-      {DRT_E_SECURITYPROVIDER_IN_USE,	    L"Error: DRT_E_SECURITYPROVIDER_IN_USE"},
-      {DRT_E_SECURITYPROVIDER_NOT_ATTACHED,	L"Error: DRT_E_SECURITYPROVIDER_NOT_ATTACHED"},
-      {DRT_E_BOOTSTRAPPROVIDER_IN_USE,	    L"Error: DRT_E_BOOTSTRAPPROVIDER_IN_USE"},
-      {DRT_E_BOOTSTRAPPROVIDER_NOT_ATTACHED,L"Error: DRT_E_BOOTSTRAPPROVIDER_NOT_ATTACHED"},
-      {DRT_E_TRANSPORT_ALREADY_BOUND,	    L"Error: DRT_E_TRANSPORT_ALREADY_BOUND"},
-      {DRT_E_TRANSPORT_NOT_BOUND,	        L"Error: DRT_E_TRANSPORT_NOT_BOUND"},
-      {DRT_E_TRANSPORT_UNEXPECTED,	        L"Error: DRT_E_TRANSPORT_UNEXPECTED"},
-      {DRT_E_TRANSPORT_INVALID_ARGUMENT,	L"Error: DRT_E_TRANSPORT_INVALID_ARGUMENT"},
-      {DRT_E_TRANSPORT_NO_DEST_ADDRESSES,	L"Error: DRT_E_TRANSPORT_NO_DEST_ADDRESSES"},
-      {DRT_E_TRANSPORT_EXECUTING_CALLBACK,	L"Error: DRT_E_TRANSPORT_EXECUTING_CALLBACK"},
-      {DRT_E_TRANSPORT_ALREADY_EXISTS_FOR_SCOPE,L"Error: DRT_E_TRANSPORT_ALREADY_EXISTS_FOR_SCOPE"},
-      {DRT_E_INVALID_SEARCH_INFO,	        L"Error: DRT_E_INVALID_SEARCH_INFO"},
-      {DRT_E_FAULTED,	                    L"Error: DRT_E_FAULTED"},
-      {DRT_E_TRANSPORT_STILL_BOUND,	        L"Error: DRT_E_TRANSPORT_STILL_BOUND"},
-      {DRT_E_INSUFFICIENT_BUFFER,	        L"Error: DRT_E_INSUFFICIENT_BUFFER"},
-      {DRT_E_INVALID_INSTANCE_PREFIX,	    L"Error: DRT_E_INVALID_INSTANCE_PREFIX"},
-      {DRT_E_INVALID_SECURITY_MODE,	        L"Error: DRT_E_INVALID_SECURITY_MODE"},
-      {DRT_E_CAPABILITY_MISMATCH,	        L"Error: DRT_E_CAPABILITY_MISMATCH"},
-      {CRYPT_E_FILE_ERROR,                  L"Error: CRYPT_E_FILE_ERROR (Check permissions on the current directory)"},
+    struct error_description
+    {
+        HRESULT hr;
+        PWSTR description;
+    } valid_errors[] =
+    {
+        {S_OK,                                L"Succeeded: S_OK"},
+        {E_INVALIDARG,                        L"Error: E_INVALIDARG"},
+        {E_OUTOFMEMORY,                       L"Error: E_OUTOFMEMORY"},
+        {ERROR_INVALID_HANDLE,                L"Error: ERROR_INVALID_HANDLE"},
+        {ERROR_INVALID_PARAMETER,             L"Error: ERROR_INVALID_PARAMETER"},
+        {ERROR_ADAP_HDW_ERR,                  L"Error: ERROR_ADAP_HDW_ERR"},
+        {DRT_E_TIMEOUT,                       L"Error: DRT_E_TIMEOUT"},
+        {DRT_E_INVALID_KEY_SIZE,              L"Error: DRT_E_INVALID_KEY_SIZE"},
+        {DRT_E_INVALID_CERT_CHAIN,            L"Error: DRT_E_INVALID_CERT_CHAIN"},
+        {DRT_E_INVALID_MESSAGE,               L"Error: DRT_E_INVALID_MESSAGE"},
+        {DRT_E_NO_MORE,                       L"Error: DRT_E_NO_MORE"},
+        {DRT_E_INVALID_MAX_ADDRESSES,         L"Error: DRT_E_INVALID_MAX_ADDRESSES"},
+        {DRT_E_SEARCH_IN_PROGRESS,            L"Error: DRT_E_SEARCH_IN_PROGRESS"},
+        {DRT_E_INVALID_KEY,                   L"Error: DRT_E_INVALID_KEY"},
+        {DRT_E_INVALID_PORT,                  L"Error: DRT_E_INVALID_PORT"},
+        {DRT_E_STILL_IN_USE,                  L"Error: DRT_E_STILL_IN_USE"},
+        {DRT_E_INVALID_ADDRESS,               L"Error: DRT_E_INVALID_ADDRESS"},
+        {DRT_E_INVALID_SCOPE,                 L"Error: DRT_E_INVALID_SCOPE"},
+        {DRT_E_INVALID_SETTINGS,              L"Error: DRT_E_INVALID_SETTINGS"},
+        {DRT_S_RETRY,                         L"Error: DRT_S_RETRY"},
+        {DRT_E_INVALID_MAX_ENDPOINTS,	        L"Error: DRT_E_INVALID_MAX_ENDPOINTS"},
+        {DRT_E_INVALID_SEARCH_RANGE,	        L"Error: DRT_E_INVALID_SEARCH_RANGE"},
+        {DRT_E_INVALID_TRANSPORT_PROVIDER,    L"Error: DRT_E_INVALID_TRANSPORT_PROVIDER"},
+        {DRT_E_INVALID_SECURITY_PROVIDER,	    L"Error: DRT_E_INVALID_SECURITY_PROVIDER"},
+        {DRT_E_STILL_IN_USE,	                L"Error: DRT_E_STILL_IN_USE"},
+        {DRT_E_INVALID_BOOTSTRAP_PROVIDER,    L"Error: DRT_E_INVALID_BOOTSTRAP_PROVIDER"},
+        {DRT_E_TRANSPORT_SHUTTING_DOWN,       L"Error: DRT_E_TRANSPORT_SHUTTING_DOWN"},
+        {DRT_E_NO_ADDRESSES_AVAILABLE,        L"Error: DRT_E_NO_ADDRESSES_AVAILABLE"},
+        {DRT_E_DUPLICATE_KEY,                 L"Error: DRT_E_DUPLICATE_KEY"},
+        {DRT_E_TRANSPORTPROVIDER_IN_USE,      L"Error: DRT_E_TRANSPORTPROVIDER_IN_USE"},
+        {DRT_E_TRANSPORTPROVIDER_NOT_ATTACHED,L"Error: DRT_E_TRANSPORTPROVIDER_NOT_ATTACHED"},
+        {DRT_E_SECURITYPROVIDER_IN_USE,	    L"Error: DRT_E_SECURITYPROVIDER_IN_USE"},
+        {DRT_E_SECURITYPROVIDER_NOT_ATTACHED,	L"Error: DRT_E_SECURITYPROVIDER_NOT_ATTACHED"},
+        {DRT_E_BOOTSTRAPPROVIDER_IN_USE,	    L"Error: DRT_E_BOOTSTRAPPROVIDER_IN_USE"},
+        {DRT_E_BOOTSTRAPPROVIDER_NOT_ATTACHED,L"Error: DRT_E_BOOTSTRAPPROVIDER_NOT_ATTACHED"},
+        {DRT_E_TRANSPORT_ALREADY_BOUND,	    L"Error: DRT_E_TRANSPORT_ALREADY_BOUND"},
+        {DRT_E_TRANSPORT_NOT_BOUND,	        L"Error: DRT_E_TRANSPORT_NOT_BOUND"},
+        {DRT_E_TRANSPORT_UNEXPECTED,	        L"Error: DRT_E_TRANSPORT_UNEXPECTED"},
+        {DRT_E_TRANSPORT_INVALID_ARGUMENT,	L"Error: DRT_E_TRANSPORT_INVALID_ARGUMENT"},
+        {DRT_E_TRANSPORT_NO_DEST_ADDRESSES,	L"Error: DRT_E_TRANSPORT_NO_DEST_ADDRESSES"},
+        {DRT_E_TRANSPORT_EXECUTING_CALLBACK,	L"Error: DRT_E_TRANSPORT_EXECUTING_CALLBACK"},
+        {DRT_E_TRANSPORT_ALREADY_EXISTS_FOR_SCOPE,L"Error: DRT_E_TRANSPORT_ALREADY_EXISTS_FOR_SCOPE"},
+        {DRT_E_INVALID_SEARCH_INFO,	        L"Error: DRT_E_INVALID_SEARCH_INFO"},
+        {DRT_E_FAULTED,	                    L"Error: DRT_E_FAULTED"},
+        {DRT_E_TRANSPORT_STILL_BOUND,	        L"Error: DRT_E_TRANSPORT_STILL_BOUND"},
+        {DRT_E_INSUFFICIENT_BUFFER,	        L"Error: DRT_E_INSUFFICIENT_BUFFER"},
+        {DRT_E_INVALID_INSTANCE_PREFIX,	    L"Error: DRT_E_INVALID_INSTANCE_PREFIX"},
+        {DRT_E_INVALID_SECURITY_MODE,	        L"Error: DRT_E_INVALID_SECURITY_MODE"},
+        {DRT_E_CAPABILITY_MISMATCH,	        L"Error: DRT_E_CAPABILITY_MISMATCH"},
+        {CRYPT_E_FILE_ERROR,                  L"Error: CRYPT_E_FILE_ERROR (Check permissions on the current directory)"},
 
-   };
+    };
     if (hr==S_OK)
         return;
-   wprintf(L"%s ", fnname); 
-   for(int eindex=0;
-        eindex < sizeof(valid_errors) / sizeof(struct error_description);
-        eindex++ )
+    wprintf(L"%s ", fnname);
+    for(int eindex=0;
+            eindex < sizeof(valid_errors) / sizeof(struct error_description);
+            eindex++ )
     {
         if(hr==valid_errors[eindex].hr)
         {
@@ -154,7 +154,7 @@ void DisplayError(__in const PWSTR fnname, __in const HRESULT hr)
 //********************************************************************************************
 // Function: DrtEventCallback
 //
-// Description: Callback to handle general DRT Events. 
+// Description: Callback to handle general DRT Events.
 //              These include registration state changes, leafset changes, and status changes.
 //
 //********************************************************************************************
@@ -169,74 +169,74 @@ void CALLBACK DrtEventCallback(__in PVOID Param, __in BOOLEAN TimedOut)
     hr = DrtGetEventDataSize (Drt->hDrt, &ulDrtEventDataLen);
     if(FAILED(hr))
     {
-       if(hr != DRT_E_NO_MORE)
-          wprintf(L"    DrtGetEventDataSize failed: 0x%x\n",hr);
-       goto Cleanup;
+        if(hr != DRT_E_NO_MORE)
+            wprintf(L"    DrtGetEventDataSize failed: 0x%x\n",hr);
+        goto Cleanup;
     }
     pEventData = (PDRT_EVENT_DATA) malloc(ulDrtEventDataLen);
     if (pEventData == NULL)
     {
-       printf ("    Out of memory\n");
-       goto Cleanup;
+        printf ("    Out of memory\n");
+        goto Cleanup;
     }
-  
-    hr = DrtGetEventData(Drt->hDrt, ulDrtEventDataLen, pEventData); 
+
+    hr = DrtGetEventData(Drt->hDrt, ulDrtEventDataLen, pEventData);
     if(FAILED(hr))
     {
-       if(hr != DRT_E_NO_MORE)
-           wprintf(L"    DrtGetEventData failed: 0x%x\n",hr);
-       goto Cleanup;
+        if(hr != DRT_E_NO_MORE)
+            wprintf(L"    DrtGetEventData failed: 0x%x\n",hr);
+        goto Cleanup;
     }
-  
+
     if(pEventData->type == DRT_EVENT_STATUS_CHANGED)
     {
-       if(pEventData->statusChange.status == DRT_ACTIVE)
-       {
-           SetConsoleTitle(L"DrtSdkSample Current Drt Status: Active");
-           if(g_DisplayEvents)
-               wprintf(L"    DRT Status Changed to Active\n");
-       }
-       else if(pEventData->statusChange.status == DRT_ALONE)
-       {
-           SetConsoleTitle(L"DrtSdkSample Current Drt Status: Alone");
-           if(g_DisplayEvents)
-               wprintf(L"    DRT Status Changed to Alone\n");
-       }
-       else if(pEventData->statusChange.status == DRT_NO_NETWORK)
-       {
-           SetConsoleTitle(L"DrtSdkSample Current Drt Status: No Network");
-           if(g_DisplayEvents)
-               wprintf(L"    DRT Status Changed to No Network\n");
-       }
-       else if(pEventData->statusChange.status == DRT_FAULTED)
-       {
-           SetConsoleTitle(L"DrtSdkSample Current Drt Status: Faulted");
-           if(g_DisplayEvents)
-               wprintf(L"    DRT Status Changed to Faulted\n");
-       }
+        if(pEventData->statusChange.status == DRT_ACTIVE)
+        {
+            SetConsoleTitle(L"DrtSdkSample Current Drt Status: Active");
+            if(g_DisplayEvents)
+                wprintf(L"    DRT Status Changed to Active\n");
+        }
+        else if(pEventData->statusChange.status == DRT_ALONE)
+        {
+            SetConsoleTitle(L"DrtSdkSample Current Drt Status: Alone");
+            if(g_DisplayEvents)
+                wprintf(L"    DRT Status Changed to Alone\n");
+        }
+        else if(pEventData->statusChange.status == DRT_NO_NETWORK)
+        {
+            SetConsoleTitle(L"DrtSdkSample Current Drt Status: No Network");
+            if(g_DisplayEvents)
+                wprintf(L"    DRT Status Changed to No Network\n");
+        }
+        else if(pEventData->statusChange.status == DRT_FAULTED)
+        {
+            SetConsoleTitle(L"DrtSdkSample Current Drt Status: Faulted");
+            if(g_DisplayEvents)
+                wprintf(L"    DRT Status Changed to Faulted\n");
+        }
     }
     else if(pEventData->type == DRT_EVENT_LEAFSET_KEY_CHANGED)
     {
-       if(g_DisplayEvents)
-       {
-           if(pEventData->leafsetKeyChange.change == DRT_LEAFSET_KEY_ADDED)
-               wprintf(L"    Leafset Key Added Event: [hr: 0x%x]\n", pEventData->hr);
-           else if(pEventData->leafsetKeyChange.change == DRT_LEAFSET_KEY_DELETED)
-               wprintf(L"    Leafset Key Deleted Event: [hr: 0x%x]\n", pEventData->hr);
-       }
+        if(g_DisplayEvents)
+        {
+            if(pEventData->leafsetKeyChange.change == DRT_LEAFSET_KEY_ADDED)
+                wprintf(L"    Leafset Key Added Event: [hr: 0x%x]\n", pEventData->hr);
+            else if(pEventData->leafsetKeyChange.change == DRT_LEAFSET_KEY_DELETED)
+                wprintf(L"    Leafset Key Deleted Event: [hr: 0x%x]\n", pEventData->hr);
+        }
     }
     else if(pEventData->type == DRT_EVENT_REGISTRATION_STATE_CHANGED)
-    {            
-       if(g_DisplayEvents)
-           wprintf(L"    Registration State Changed Event: [hr: 0x%x, registration state: %i]\n", pEventData->hr, pEventData->registrationStateChange.state);
+    {
+        if(g_DisplayEvents)
+            wprintf(L"    Registration State Changed Event: [hr: 0x%x, registration state: %i]\n", pEventData->hr, pEventData->registrationStateChange.state);
     }
     free(pEventData);
     pEventData = NULL;
 
 Cleanup:
-   if(pEventData)
-      free(pEventData);
-   return;
+    if(pEventData)
+        free(pEventData);
+    return;
 }
 
 
@@ -279,15 +279,15 @@ bool InitializeDrt(DRT_CONTEXT *Drt)
     //
 
     hr = DrtCreateIpv6UdpTransport(
-        DRT_GLOBAL_SCOPE, 
-        0,
-        300, 
-        &Drt->port, 
-        &Drt->settings.hTransport
-        );
-    
+             DRT_GLOBAL_SCOPE,
+             0,
+             300,
+             &Drt->port,
+             &Drt->settings.hTransport
+         );
+
     VERIFY_OR_ABORT("DrtCreateTransport",hr);
-    
+
     //
     // *Security Provider*
     //
@@ -319,10 +319,10 @@ bool InitializeDrt(DRT_CONTEXT *Drt)
             VERIFY_OR_ABORT(L"ReadCertFromFile", hr);
         }
         hr = DrtCreateDerivedKeySecurityProvider(
-            Drt->pRoot,
-            Drt->pLocal,
-            &Drt->settings.pSecurityProvider
-            );
+                 Drt->pRoot,
+                 Drt->pLocal,
+                 &Drt->settings.pSecurityProvider
+             );
     }
     else if(Drt->SecurityProviderType == 2) //Custom Security Provider
     {
@@ -361,12 +361,12 @@ bool InitializeDrt(DRT_CONTEXT *Drt)
         }
         wprintf(L"DNS Bootstrapping from: %s:%i\n",pwszBootstrapHostname, usBootstrapPort);
         FlushCurrentLine();
-     
+
         hr = DrtCreateDnsBootstrapResolver(
-            usBootstrapPort,
-            pwszBootstrapHostname,
-            &Drt->settings.pBootstrapProvider
-            );
+                 usBootstrapPort,
+                 pwszBootstrapHostname,
+                 &Drt->settings.pBootstrapProvider
+             );
     }
     else if (Drt->BootstrapProviderType == 1) //PNRP Bootstrap Provider
     {
@@ -380,12 +380,12 @@ bool InitializeDrt(DRT_CONTEXT *Drt)
         wprintf(L"PNRP Bootstrapping from: %s\n",pwszBootstrapHostname);
         FlushCurrentLine();
         hr = DrtCreatePnrpBootstrapResolver(
-            TRUE,
-            pwszBootstrapHostname,
-            L"Global_",
-            NULL,
-            &Drt->settings.pBootstrapProvider
-            );
+                 TRUE,
+                 pwszBootstrapHostname,
+                 L"Global_",
+                 NULL,
+                 &Drt->settings.pBootstrapProvider
+             );
     }
     else if (Drt->BootstrapProviderType == 2) //Custom Bootstrap Provider
     {
@@ -410,12 +410,12 @@ bool InitializeDrt(DRT_CONTEXT *Drt)
         }
         wprintf(L"Custom Bootstrapping from: %s:%i\n",pwszBootstrapHostname, usBootstrapPort);
         FlushCurrentLine();
-     
+
         hr = DrtCreateCustomBootstrapResolver(
-            usBootstrapPort,
-            pwszBootstrapHostname,
-            &Drt->settings.pBootstrapProvider
-            );
+                 usBootstrapPort,
+                 pwszBootstrapHostname,
+                 &Drt->settings.pBootstrapProvider
+             );
     }
     else
     {
@@ -435,7 +435,7 @@ bool InitializeDrt(DRT_CONTEXT *Drt)
         hr = OpenFirewallForDrtSdkSample(FALSE);
 
     VERIFY_OR_ABORT("OpenFirewallForDrtSdkSample",hr);
-    
+
     //
     // Open the DRT
     //
@@ -455,7 +455,7 @@ bool InitializeDrt(DRT_CONTEXT *Drt)
     // Register a callback to handle DRT Events
     //
     RegisterWaitForSingleObject(&Drt->DrtWaitEvent, Drt->eventHandle, (WAITORTIMERCALLBACK)DrtEventCallback, Drt, INFINITE, WT_EXECUTEDEFAULT);
-    
+
 Cleanup:
     if(pwszCompName)
         delete pwszCompName;
@@ -475,16 +475,16 @@ bool GetKeyFromUser(PCWSTR pcwszKeyName, BYTE* KeyData)
     int hexdigit=0;
     wprintf(L"Enter %s as a string of hex digits, Example: 01 ff 0a b8 80 z\n", pcwszKeyName);
     wprintf(L"The current keysize is %i bytes.  Enter z as the last digit and the remainder of the key will be zero-filled (Most significant byte is first)\n",KEYSIZE);
-    for(i=KEYSIZE-1;i>=0;i--)
+    for(i=KEYSIZE-1; i>=0; i--)
     {
         if(wscanf_s(L"%2X",&hexdigit) < 1)
             break;
         KeyData[i] = (BYTE)hexdigit;
     }
-    for(;i>=0;i--)
+    for(; i>=0; i--)
         KeyData[i] = 0;
     wprintf(L"Resulting %s:\n", pcwszKeyName);
-    for(i=KEYSIZE-1;i>=0;i--)
+    for(i=KEYSIZE-1; i>=0; i--)
         wprintf(L"%02x ",KeyData[i]);
     wprintf(L"\n");
     FlushCurrentLine();
@@ -515,7 +515,7 @@ bool PerformDrtSearch(DRT_CONTEXT* Drt, INT SearchType)
     DRT_DATA minKey = {0};
     DRT_DATA maxKey = {0};
 
-    //Create a manual reset event 
+    //Create a manual reset event
     //The DRT will reset the event when the search result buffer has been consumed
     HANDLE hDrtSearchEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if(NULL == hDrtSearchEvent)
@@ -523,7 +523,7 @@ bool PerformDrtSearch(DRT_CONTEXT* Drt, INT SearchType)
         wprintf(L"Out of memory\n");
         goto Cleanup;
     }
-        
+
 
     //Set Some Defaults for SearchInfo
     SearchInfo.dwSize = sizeof(DRT_SEARCH_INFO);
@@ -578,13 +578,13 @@ bool PerformDrtSearch(DRT_CONTEXT* Drt, INT SearchType)
     }
 
     hr = DrtStartSearch(
-        Drt->hDrt, 
-        &searchKey, 
-        pSearchInfo, 
-        5000, 
-        hDrtSearchEvent, 
-        NULL, 
-        &SearchContext);
+             Drt->hDrt,
+             &searchKey,
+             pSearchInfo,
+             5000,
+             hDrtSearchEvent,
+             NULL,
+             &SearchContext);
 
     VERIFY_OR_ABORT("DrtStartSearch",hr);
 
@@ -614,7 +614,7 @@ bool PerformDrtSearch(DRT_CONTEXT* Drt, INT SearchType)
             {
                 fKeyFound = TRUE;
                 wprintf(L"*Found Key*: ");
-                for(int i=pSearchResult->registration.key.cb-1;i>=0;i--)
+                for(int i=pSearchResult->registration.key.cb-1; i>=0; i--)
                     wprintf(L"%02x ",pSearchResult->registration.key.pb[i]);
                 wprintf(L"\n");
                 PrintSearchPath(SearchContext);
@@ -622,7 +622,7 @@ bool PerformDrtSearch(DRT_CONTEXT* Drt, INT SearchType)
             else if(pSearchResult->type == DRT_MATCH_NEAR)
             {
                 wprintf(L"*Found Near Match*: ");
-                for(int i=pSearchResult->registration.key.cb-1;i>=0;i--)
+                for(int i=pSearchResult->registration.key.cb-1; i>=0; i--)
                     wprintf(L"%02x ",pSearchResult->registration.key.pb[i]);
                 wprintf(L"\n");
                 if(SearchType==3)
@@ -632,7 +632,7 @@ bool PerformDrtSearch(DRT_CONTEXT* Drt, INT SearchType)
             else if(pSearchResult->type == DRT_MATCH_INTERMEDIATE)
             {
                 wprintf(L"Intermediate Match: ");
-                for(int i=pSearchResult->registration.key.cb-1;i>=0;i--)
+                for(int i=pSearchResult->registration.key.cb-1; i>=0; i--)
                     wprintf(L"%02x ",pSearchResult->registration.key.pb[i]);
                 wprintf(L"\n");
                 DrtContinueSearch(SearchContext);
@@ -648,7 +648,8 @@ bool PerformDrtSearch(DRT_CONTEXT* Drt, INT SearchType)
             free(pSearchResult);
             pSearchResult = NULL;
         }
-    } while( (hr == DRT_E_SEARCH_IN_PROGRESS) || (hr == S_OK) );
+    }
+    while( (hr == DRT_E_SEARCH_IN_PROGRESS) || (hr == S_OK) );
     DrtEndSearch(SearchContext);
 
     //
@@ -661,13 +662,13 @@ bool PerformDrtSearch(DRT_CONTEXT* Drt, INT SearchType)
 
     if(!fKeyFound)
         wprintf(L"Could not find key\n");
-    
+
 Cleanup:
     if(pSearchResult)
         free(pSearchResult);
     if (hDrtSearchEvent)
         CloseHandle(hDrtSearchEvent);
-        
+
     return true;
 }
 
@@ -676,7 +677,7 @@ void PrintSearchPath(HDRT_SEARCH_CONTEXT SearchContext)
     HRESULT hr = S_OK;
     ULONG ulSearchPathLen = 0;
     DRT_ADDRESS_LIST* pSearchPath = NULL;
-    
+
     hr = DrtGetSearchPathSize(SearchContext, &ulSearchPathLen);
 
     if(FAILED(hr))
@@ -692,21 +693,21 @@ void PrintSearchPath(HDRT_SEARCH_CONTEXT SearchContext)
     }
 
     hr = DrtGetSearchPath(SearchContext, ulSearchPathLen, pSearchPath);
-    
+
     if(FAILED(hr))
     {
         goto Cleanup;
     }
 
     wprintf(L"Search Path:\n");
-    for(UINT i=0;i<pSearchPath->AddressCount;i++)
+    for(UINT i=0; i<pSearchPath->AddressCount; i++)
     {
         SOCKADDR_IN6 addr = *(SOCKADDR_IN6*)(&pSearchPath->AddressList[i].socketAddress);
         wprintf(L"Port: %i Flags: 0x%x, Nearness: %i Latency: %i\n",
-            addr.sin6_port,
-            pSearchPath->AddressList[i].flags,
-            pSearchPath->AddressList[i].nearness,
-            pSearchPath->AddressList[i].latency);
+                addr.sin6_port,
+                pSearchPath->AddressList[i].flags,
+                pSearchPath->AddressList[i].nearness,
+                pSearchPath->AddressList[i].latency);
     }
 
 Cleanup:
@@ -714,7 +715,7 @@ Cleanup:
     {
         free(pSearchPath);
     }
-        
+
 }
 
 
@@ -769,13 +770,13 @@ bool RegisterKey(DRT_CONTEXT* Drt)
     if(SUCCEEDED(hr))
     {
         Drt->registrations.push_back(reg);
-        
+
         // newKeyData and newPayloadData will be freed on unregister
         newKeyData = NULL;
         newPayloadData = NULL;
-        
+
         wprintf(L"Successfully Registered: ");
-        for(int i=reg.regInfo.key.cb-1;i>=0;i--)
+        for(int i=reg.regInfo.key.cb-1; i>=0; i--)
             wprintf(L"%02x ",reg.regInfo.key.pb[i]);
         wprintf(L"\n");
     }
@@ -810,9 +811,9 @@ bool UnRegisterKey(DRT_CONTEXT* Drt)
         wprintf(L"\n");
     }
     wprintf(L"Enter a registration to unregister (or c to cancel):");
-    if( (wscanf_s(L"%i",&choice) < 1) || 
-        (choice >= (int)Drt->registrations.size()) || 
-        (choice < 0) )
+    if( (wscanf_s(L"%i",&choice) < 1) ||
+            (choice >= (int)Drt->registrations.size()) ||
+            (choice < 0) )
     {
         FlushCurrentLine();
         goto Cleanup;
@@ -855,18 +856,18 @@ void CleanupDrt(DRT_CONTEXT *Drt)
             free(Drt->registrations[i].regInfo.appData.pb);
     }
     Drt->registrations.clear();
-    
+
     if (Drt->DrtWaitEvent != NULL)
     {
         UnregisterWait(Drt->DrtWaitEvent);
     }
-    
+
     if (Drt->hDrt != NULL)
     {
         DrtClose(Drt->hDrt);
         Drt->hDrt = NULL;
     }
-    
+
     if (Drt->eventHandle!= NULL)
     {
         CloseHandle(Drt->eventHandle);
@@ -914,32 +915,38 @@ void CleanupDrt(DRT_CONTEXT *Drt)
 //********************************************************************************************
 int __cdecl main()
 {
-   int nSearchType;
+    int nSearchType;
 
-   DRT_CONTEXT LocalDrt = { 0 };
+    DRT_CONTEXT LocalDrt = { 0 };
 
-   PCWSTR ppcwzSecurityProviderChoices[] = {
-      L"Initialize DRT with Null Security Provider",
-      L"Initialize DRT with Derived Key Security Provider",
-      L"Initialize DRT with Custom Security Provider",
-      L"Exit" };
+    PCWSTR ppcwzSecurityProviderChoices[] =
+    {
+        L"Initialize DRT with Null Security Provider",
+        L"Initialize DRT with Derived Key Security Provider",
+        L"Initialize DRT with Custom Security Provider",
+        L"Exit"
+    };
 
-   PCWSTR ppcwzBootStrapProviderChoices[] = {
-      L"Bootstrap with Builtin DNS Bootstrap Provider",
-      L"Bootstrap with Builtin PNRP Bootstrap Provider",
-      L"Bootstrap with Custom Bootstrap Provider",
-      L"Exit" };
+    PCWSTR ppcwzBootStrapProviderChoices[] =
+    {
+        L"Bootstrap with Builtin DNS Bootstrap Provider",
+        L"Bootstrap with Builtin PNRP Bootstrap Provider",
+        L"Bootstrap with Custom Bootstrap Provider",
+        L"Exit"
+    };
 
-   PCWSTR ppcwzSearchChoices[] = {
-      L"Register a new key",
-      L"Unregister a key",
-      L"Simple DRT Search",
-      L"Nearest Match Search",
-      L"Iterative Search",
-      L"Range Search",
-      L"Hide DRT Events",
-      L"Display DRT Events",
-      L"Exit" };
+    PCWSTR ppcwzSearchChoices[] =
+    {
+        L"Register a new key",
+        L"Unregister a key",
+        L"Simple DRT Search",
+        L"Nearest Match Search",
+        L"Iterative Search",
+        L"Range Search",
+        L"Hide DRT Events",
+        L"Display DRT Events",
+        L"Exit"
+    };
 
     SetConsoleTitle(L"DrtSdkSample Current Drt Status: Initializing");
 
@@ -950,7 +957,7 @@ int __cdecl main()
     LocalDrt.BootstrapProviderType = GetUserChoice(ppcwzBootStrapProviderChoices, 4);
     if(LocalDrt.BootstrapProviderType==-1 || LocalDrt.BootstrapProviderType==3)
         goto Cleanup;
-   
+
     if(!InitializeDrt(&LocalDrt))
         goto Cleanup;
 

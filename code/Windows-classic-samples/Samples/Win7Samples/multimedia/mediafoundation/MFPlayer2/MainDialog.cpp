@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 //
 // File: MainDialog.h
 // Implements the main dialog.
@@ -15,13 +15,13 @@
 #include "MFPlayer.h"
 #include "Player2.h"
 
-// Constants 
+// Constants
 
 const MFTIME    ONE_SECOND = 10000000; // One second in hns
-const LONG      ONE_MSEC = 1000;       // One msec in hns 
+const LONG      ONE_MSEC = 1000;       // One msec in hns
 
 const UINT_PTR  IDT_TIMER1 = 1;     // Timer ID
-const UINT      TICK_FREQ = 250;    // Timer frequency in msec      
+const UINT      TICK_FREQ = 250;    // Timer frequency in msec
 
 const LONG      MIN_VOL = 0;
 const LONG      MAX_VOL = 100;
@@ -29,17 +29,17 @@ const LONG      MAX_VOL = 100;
 
 #include <initguid.h>
 
-// CLSID of the sample video effect MFT. 
+// CLSID of the sample video effect MFT.
 // (To use this CLSID, you must build the MFT_Grayscale sample and register the DLL.)
 
 // {2F3DBC05-C011-4a8f-B264-E42E35C67BF4}
-DEFINE_GUID(CLSID_GrayscaleMFT, 
-0x2f3dbc05, 0xc011, 0x4a8f, 0xb2, 0x64, 0xe4, 0x2e, 0x35, 0xc6, 0x7b, 0xf4);
+DEFINE_GUID(CLSID_GrayscaleMFT,
+            0x2f3dbc05, 0xc011, 0x4a8f, 0xb2, 0x64, 0xe4, 0x2e, 0x35, 0xc6, 0x7b, 0xf4);
 
 
 //------------------------------------------------------------------------------
 // OpenUrlDialogInfo struct
-// 
+//
 // Contains data passed to the "Open URL" dialog proc.
 //------------------------------------------------------------------------------
 
@@ -57,13 +57,13 @@ INT_PTR CALLBACK OpenUrlDialogProc(HWND, UINT, WPARAM, LPARAM);
 void    NotifyError(HWND hwnd, const WCHAR *sErrorMessage, HRESULT hrErr);
 void    ToggleMenuItemCheck(UINT bMenuItemID, HMENU hmenu);
 HRESULT AllocGetWindowText(HWND hwnd, WCHAR **pszText, DWORD *pcchLen);
-void    EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable); 
+void    EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable);
 BOOL    StatusBar_SetText(HWND hwnd, int iPart, const WCHAR* pszText);
 
 
 inline BOOL IsMenuChecked(HMENU hmenu, UINT bMenuItemID)
 {
-    return GetMenuState(hmenu, bMenuItemID, MF_BYCOMMAND); 
+    return GetMenuState(hmenu, bMenuItemID, MF_BYCOMMAND);
 }
 
 inline float VolumeFromSlider(LONG pos)
@@ -82,7 +82,7 @@ inline LONG SliderPosFromVolume(float fLevel)
 // Constructor
 //-----------------------------------------------------------------------------
 
-MainDialog::MainDialog() : 
+MainDialog::MainDialog() :
     m_nID(IDD_DIALOG1),
     m_hDlg(0),
     m_pPlayer(NULL),
@@ -121,12 +121,12 @@ BOOL MainDialog::ShowDialog(HINSTANCE hinst)
 {
     // Show the dialog. Pass a pointer to ourselves as the LPARAM
     INT_PTR ret = DialogBoxParam(
-        hinst, 
-        MAKEINTRESOURCE(m_nID), 
-        NULL, 
-        DialogProc, 
-        (LPARAM)this
-        );
+                      hinst,
+                      MAKEINTRESOURCE(m_nID),
+                      NULL,
+                      DialogProc,
+                      (LPARAM)this
+                  );
 
     if (ret == 0 || ret == -1)
     {
@@ -151,10 +151,10 @@ HRESULT MainDialog::OnInitDialog()
 
     // Create the player object.
     hr = MFPlayer2::CreateInstance(
-        m_hDlg, 
-        GetDlgItem(IDC_VIDEO),
-        &m_pPlayer
-        );
+             m_hDlg,
+             GetDlgItem(IDC_VIDEO),
+             &m_pPlayer
+         );
 
     if (SUCCEEDED(hr))
     {
@@ -205,8 +205,8 @@ INT_PTR MainDialog::OnCommand(HWND /*hControl*/, WORD idControl, WORD /*msg*/)
         OnFastForward();
         break;
 
-    case ID_OPTIONS_VIDEOEFFECT: 
-        ToggleMenuItemCheck(idControl, GetMenu(m_hDlg)); 
+    case ID_OPTIONS_VIDEOEFFECT:
+        ToggleMenuItemCheck(idControl, GetMenu(m_hDlg));
         break;
 
     }
@@ -250,7 +250,7 @@ LRESULT MainDialog::OnNotify(NMHDR *pHdr)
         break;
     }
 
-    return result;   
+    return result;
 }
 
 //-----------------------------------------------------------------------------
@@ -299,24 +299,24 @@ INT_PTR MainDialog::OnReceiveMsg(UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_APP_NOTIFY:
         OnPlayerNotify((MFP_MEDIAPLAYER_STATE)wParam);
         break;
-   
+
     case WM_APP_ERROR:
         NotifyError(m_hDlg, L"Playback Error", (HRESULT)wParam);
-        UpdateUI( );       
+        UpdateUI( );
         break;
 
     case WM_AUDIO_EVENT:
-        {
-            // The audio level been changed.
+    {
+        // The audio level been changed.
 
-            float fVolume = *((float *)(&wParam));
-    
-            m_mute.SetButtonImage((UINT)-1, (lParam ? 1 : 0));
-            InvalidateRect(m_mute.Window(), NULL, FALSE);
+        float fVolume = *((float *)(&wParam));
 
-            Slider_SetPosition(m_hVolume, SliderPosFromVolume(fVolume));
-        }
-        break;
+        m_mute.SetButtonImage((UINT)-1, (lParam ? 1 : 0));
+        InvalidateRect(m_mute.Window(), NULL, FALSE);
+
+        Slider_SetPosition(m_hVolume, SliderPosFromVolume(fVolume));
+    }
+    break;
 
     }
     return FALSE;
@@ -333,10 +333,10 @@ void MainDialog::InitializeControls()
     m_mute.SetWindow(GetDlgItem(IDC_MUTE));
     m_play.SetWindow(GetDlgItem(IDC_PLAY));
 
-    // Create a brush for the seekbar background. 
+    // Create a brush for the seekbar background.
     // Note: Don't use GetSysColorBrush because the slider control destroys the brush.
     HBRUSH hBrush = CreateSolidBrush(RGB(0,0,0));
-    
+
     m_hSeekbar = GetDlgItem(IDC_SEEKBAR);
 
     Slider_SetBackground(m_hSeekbar, hBrush);
@@ -344,7 +344,7 @@ void MainDialog::InitializeControls()
     EnableDialogControl(m_hDlg, IDC_SEEKBAR, FALSE);
 
     hBrush = CreateSolidBrush(RGB(12,3,127));
-    
+
     m_hVolume = GetDlgItem(IDC_VOLUME);
 
     Slider_SetBackground(m_hVolume, hBrush);
@@ -376,7 +376,7 @@ void MainDialog::InitializeControls()
 
 //-----------------------------------------------------------------------------
 // OnPlayerNotify
-// 
+//
 // Called when the player object changes state.
 //-----------------------------------------------------------------------------
 
@@ -400,7 +400,7 @@ void MainDialog::OnPlayerNotify(MFP_MEDIAPLAYER_STATE state)
 
 void MainDialog::OnFileOpen()
 {
-    const WCHAR *lpstrFilter = 
+    const WCHAR *lpstrFilter =
         L"Media Files\0*.aac;*.asf;*.avi;*.m4a;*.mp3;*.mp4;*.wav;*.wma;*.wmv;*.3gp;*.3g2\0"
         L"All files\0*.*\0";
 
@@ -430,10 +430,10 @@ void MainDialog::OnFileOpen()
         // Update the state of the UI. (Regardless of success/failure code)
         UpdateUI();
 
-        // Invalidate the video window, in case there is an old video 
+        // Invalidate the video window, in case there is an old video
         // frame from the previous file and there is no video now. (eg, the
         // new file is audio only, or we failed to open this file.)
-        InvalidateRect( GetDlgItem(IDC_VIDEO) , NULL, FALSE);
+        InvalidateRect( GetDlgItem(IDC_VIDEO), NULL, FALSE);
 
         if (FAILED(hr))
         {
@@ -465,16 +465,16 @@ void MainDialog::OnOpenURL()
     HRESULT hr = S_OK;
     INT_PTR result = 0;
 
-    // Pass in an OpenUrlDialogInfo structure to the dialog. The dialog 
+    // Pass in an OpenUrlDialogInfo structure to the dialog. The dialog
     // fills in this structure with the URL. The dialog proc allocates
-    // the memory for the string. 
+    // the memory for the string.
 
     OpenUrlDialogInfo url;
     ZeroMemory(&url, sizeof(&url));
 
     // Show the Open URL dialog.
-    result = DialogBoxParam(GetInstance(), MAKEINTRESOURCE(IDD_OPENURL), m_hDlg, 
-        OpenUrlDialogProc, (LPARAM)&url);
+    result = DialogBoxParam(GetInstance(), MAKEINTRESOURCE(IDD_OPENURL), m_hDlg,
+                            OpenUrlDialogProc, (LPARAM)&url);
 
     if (result == IDOK)
     {
@@ -488,7 +488,7 @@ void MainDialog::OnOpenURL()
 
         SetStatusText(L"Opening...");
 
-        // Invalidate the video window, in case there is an old video 
+        // Invalidate the video window, in case there is an old video
         // frame from the previous file and there is no video now. (eg, the
         // new file is audio only, or we failed to open this file.)
         InvalidateRect(GetDlgItem(IDC_VIDEO), NULL, FALSE);
@@ -516,10 +516,10 @@ void MainDialog::OnScroll(WORD request, WORD /*position*/, HWND hControl)
     // We ignore the following trackbar requests:
     switch (request)
     {
-    case SB_ENDSCROLL: 
-    case SB_LEFT: 
+    case SB_ENDSCROLL:
+    case SB_LEFT:
     case SB_RIGHT:
-    case SB_THUMBPOSITION: 
+    case SB_THUMBPOSITION:
         return;
     }
 
@@ -555,7 +555,7 @@ void MainDialog::OnSeekbarNotify(const NMSLIDER_INFO *pInfo)
 
         // When dragging or selecting, seek to the position.
         if ((pInfo->hdr.code == SLIDER_NOTIFY_SELECT) ||
-            (pInfo->hdr.code == SLIDER_NOTIFY_DRAG))
+                (pInfo->hdr.code == SLIDER_NOTIFY_DRAG))
         {
             LONGLONG pos = ONE_MSEC * (LONGLONG)pInfo->position;
 
@@ -657,7 +657,7 @@ void MainDialog::OnVolumeNotify(const NMSLIDER_INFO* pInfo)
 // OnVolumeChanged
 //
 // Called when the volume changes because of actions outside of this
-// application. (For example, when the user changes the volume in the 
+// application. (For example, when the user changes the volume in the
 // Volume control panel.
 //-----------------------------------------------------------------------------
 
@@ -760,11 +760,11 @@ void MainDialog::ApplyOptions()
         IMFTransform *pMFT = NULL;
 
         hr = CoCreateInstance(
-            CLSID_GrayscaleMFT, 
-            NULL, 
-            CLSCTX_INPROC_SERVER, 
-            IID_PPV_ARGS(&pMFT)
-            );
+                 CLSID_GrayscaleMFT,
+                 NULL,
+                 CLSCTX_INPROC_SERVER,
+                 IID_PPV_ARGS(&pMFT)
+             );
 
         if (FAILED(hr))
         {
@@ -786,7 +786,7 @@ void MainDialog::ApplyOptions()
 
 //-----------------------------------------------------------------------------
 // UpdateUI
-// 
+//
 // Update the dialog based on the current playback state.
 //-----------------------------------------------------------------------------
 
@@ -816,11 +816,11 @@ void MainDialog::UpdateUI(MFP_MEDIAPLAYER_STATE state)
     BOOL bHasVideo = FALSE;
     BOOL bHasAudio = FALSE;
     BOOL bEnablePlay = FALSE;
-    BOOL bPlay = TRUE;  
-    
+    BOOL bPlay = TRUE;
+
     // If bPlay is TRUE, the Play/Pause button shows the "play" image.
     // If bEnablePlay is TRUE, the Play/Pause button is enabled.
-    
+
     BOOL bCanSeek = FALSE;
     BOOL bEnableSeek = FALSE;
 
@@ -862,7 +862,7 @@ void MainDialog::UpdateUI(MFP_MEDIAPLAYER_STATE state)
         break;
 
     case MFP_MEDIAPLAYER_STATE_STOPPED:
-        bEnablePlay = TRUE; 
+        bEnablePlay = TRUE;
         SetStatusText(L"Stopped");
         break;
     }
@@ -875,7 +875,7 @@ void MainDialog::UpdateUI(MFP_MEDIAPLAYER_STATE state)
 
     EnableDialogControl(m_hDlg, IDC_FASTFORWARD, (bEnableTrickMode && bCanFF));
     EnableDialogControl(m_hDlg, IDC_REWIND, (bEnableTrickMode && bCanRewind));
-    
+
     m_play.SetButtonImage((UINT)-1, (bPlay ? 0 : 1));
     InvalidateRect(m_play.Window(), NULL, FALSE);
 
@@ -902,14 +902,20 @@ void MainDialog::UpdateSeekBar()
     if (m_pPlayer)
     {
         hr = m_pPlayer->CanSeek(&bCanSeek);
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         // If the player can seek, set the seekbar range and start the time.
         // Otherwise, disable the seekbar.
         if (bCanSeek)
         {
             hr = m_pPlayer->GetDuration(&duration);
-            if (FAILED(hr)) { goto done; }
+            if (FAILED(hr))
+            {
+                goto done;
+            }
 
             Slider_SetRange(m_hSeekbar, 0, (LONG)(duration / ONE_MSEC));
             EnableDialogControl(m_hDlg, IDC_SEEKBAR, TRUE);
@@ -920,7 +926,7 @@ void MainDialog::UpdateSeekBar()
         else
         {
             EnableDialogControl(m_hDlg, IDC_SEEKBAR, FALSE);
-        }   
+        }
     }
 
 done:
@@ -942,7 +948,7 @@ void MainDialog::UpdateMetadata()
     HRESULT hr = S_OK;
 
     IPropertyStore *pProp = NULL;
-    
+
     PROPVARIANT var;
     PropVariantInit(&var);
 
@@ -951,7 +957,10 @@ void MainDialog::UpdateMetadata()
     if (m_pPlayer)
     {
         hr = m_pPlayer->GetMetadata(&pProp);
-        if (FAILED(hr)) { goto done; }
+        if (FAILED(hr))
+        {
+            goto done;
+        }
 
         hr = pProp->GetValue(PKEY_Title, &var);
         if (SUCCEEDED(hr) && var.vt == VT_LPWSTR)
@@ -1006,7 +1015,7 @@ void MainDialog::StopTimer()
 
 //-----------------------------------------------------------------------------
 // InitStatusBar
-// 
+//
 // Initialize the dialog status bar.
 //-----------------------------------------------------------------------------
 
@@ -1015,22 +1024,22 @@ void MainDialog::InitStatusBar()
     // NOTE: A status bar sets its own width and height.
 
     HWND hStatus = CreateWindowEx(
-        0, 
-        STATUSCLASSNAME, 
-        NULL, 
-        WS_CHILD | WS_VISIBLE,
-        0, 0, 0, 0, 
-        m_hDlg, 
-        (HMENU)(INT_PTR)IDC_STATUS_BAR,
-        GetInstance(), 
-        NULL);
+                       0,
+                       STATUSCLASSNAME,
+                       NULL,
+                       WS_CHILD | WS_VISIBLE,
+                       0, 0, 0, 0,
+                       m_hDlg,
+                       (HMENU)(INT_PTR)IDC_STATUS_BAR,
+                       GetInstance(),
+                       NULL);
 
 
     SIZE szTimeCode;
     RECT rcStatusBar;
 
     HDC hdc = GetDC(hStatus);
-        
+
     const WCHAR tmp[] = L"0000:00:00";
     GetTextExtentPoint32(hdc, tmp, ARRAYSIZE(tmp), &szTimeCode);
 
@@ -1061,14 +1070,14 @@ void MainDialog::SetStatusTime(const MFTIME& time)
     hour = (time / (ONE_SECOND * 360));
 
     hr = StringCchPrintf(
-        szTimeStamp, 
-        ARRAYSIZE(szTimeStamp), 
-        L"%d:%02d:%02d", 
-        (DWORD)hour, (DWORD)(min % 60), (DWORD)(sec % 60)
-        );
+             szTimeStamp,
+             ARRAYSIZE(szTimeStamp),
+             L"%d:%02d:%02d",
+             (DWORD)hour, (DWORD)(min % 60), (DWORD)(sec % 60)
+         );
 
     if (SUCCEEDED(hr))
-    {    
+    {
         HWND hStatus = GetDlgItem(IDC_STATUS_BAR);
 
         StatusBar_SetText(hStatus, 1, szTimeStamp);
@@ -1096,22 +1105,22 @@ void MainDialog::SetStatusText(const WCHAR *pszStatus)
 // Name: DialogProc()
 // Desc: DialogProc for the dialog. This is a static class method.
 //
-// lParam: Pointer to the CBaseDialog object. 
+// lParam: Pointer to the CBaseDialog object.
 //
-// The CBaseDialog class specifies lParam when it calls DialogBoxParam. We store the 
-// pointer as user data in the window. 
+// The CBaseDialog class specifies lParam when it calls DialogBoxParam. We store the
+// pointer as user data in the window.
 //
 // (Note: The DirectShow CBasePropertyPage class uses the same technique.)
 //-----------------------------------------------------------------------------
 INT_PTR CALLBACK MainDialog::DialogProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    MainDialog *pDlg = 0;  // Pointer to the dialog class that manages the dialog 
+    MainDialog *pDlg = 0;  // Pointer to the dialog class that manages the dialog
 
     LRESULT lresult = 0;
 
     if (msg == WM_INITDIALOG)
     {
-        // Get the pointer to the dialog object and store it in 
+        // Get the pointer to the dialog object and store it in
         // the window's user data
 
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)lParam);
@@ -1176,10 +1185,10 @@ INT_PTR CALLBACK MainDialog::DialogProc(HWND hDlg, UINT msg, WPARAM wParam, LPAR
 //-----------------------------------------------------------------------------
 
 void NotifyError(
-    HWND hwnd, 
+    HWND hwnd,
     const WCHAR *sErrorMessage,    // Error message
     HRESULT hrErr                  // Status code
-    )
+)
 {
     const size_t MESSAGE_LEN = 512;
     WCHAR message[MESSAGE_LEN];
@@ -1209,7 +1218,7 @@ INT_PTR CALLBACK OpenUrlDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
     switch (message)
     {
     case WM_INITDIALOG:
-        // The app sends a pointer to an OpenUrlDialogInfo structure as the lParam. 
+        // The app sends a pointer to an OpenUrlDialogInfo structure as the lParam.
         // We use this structure to store the URL.
         pUrl = (OpenUrlDialogInfo*)lParam;
         return (INT_PTR)TRUE;
@@ -1248,19 +1257,19 @@ INT_PTR CALLBACK OpenUrlDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
 // Toggle a menu item's checked state.
 //-----------------------------------------------------------------------------
 
-void ToggleMenuItemCheck(UINT bMenuItemID, HMENU hmenu) 
-{ 
-    BOOL bChecked = IsMenuChecked(hmenu, bMenuItemID); 
+void ToggleMenuItemCheck(UINT bMenuItemID, HMENU hmenu)
+{
+    BOOL bChecked = IsMenuChecked(hmenu, bMenuItemID);
 
     BYTE fNewState = MF_CHECKED;
 
-    if (bChecked & MF_CHECKED) 
-    { 
+    if (bChecked & MF_CHECKED)
+    {
         fNewState = MF_UNCHECKED;
     }
-    CheckMenuItem(hmenu, (UINT) bMenuItemID, 
-        MF_BYCOMMAND | fNewState); 
-    
+    CheckMenuItem(hmenu, (UINT) bMenuItemID,
+                  MF_BYCOMMAND | fNewState);
+
 }
 
 
@@ -1285,10 +1294,10 @@ HRESULT AllocGetWindowText(HWND hwnd, WCHAR **pszText, DWORD *pcchLen)
         return E_POINTER;
     }
 
-    *pszText = NULL;  
+    *pszText = NULL;
 
-    int cch = GetWindowTextLength(hwnd);  
-    if (cch < 0) 
+    int cch = GetWindowTextLength(hwnd);
+    if (cch < 0)
     {
         return E_UNEXPECTED; // This function should not return a negative value.
     }
@@ -1322,15 +1331,15 @@ HRESULT AllocGetWindowText(HWND hwnd, WCHAR **pszText, DWORD *pcchLen)
     *pszText = szTmp;
     if (pcchLen)
     {
-        *pcchLen = static_cast<DWORD>(cch);  // Return the length NOT including the '\0' 
+        *pcchLen = static_cast<DWORD>(cch);  // Return the length NOT including the '\0'
     }
     return S_OK;
 }
 
 
 
-void EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable) 
-{ 
+void EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable)
+{
     HWND hwnd = GetDlgItem(hDlg, nIDDlgItem);
 
     if (!bEnable &&  hwnd == GetFocus())
@@ -1341,7 +1350,7 @@ void EnableDialogControl(HWND hDlg, int nIDDlgItem, BOOL bEnable)
         ::SendMessage(GetParent(hwnd), WM_NEXTDLGCTL, 0, FALSE);
     }
 
-    EnableWindow(hwnd, bEnable); 
+    EnableWindow(hwnd, bEnable);
 }
 
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 
 // Print out rich error info
 void PrintError(
-    _In_ HRESULT errorCode, 
+    _In_ HRESULT errorCode,
     _In_opt_ WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -60,57 +60,57 @@ static const WS_XML_STRING nameSpace = WS_XML_STRING_VALUE("http://example.com")
 static const WS_XML_STRING emptyNamespace = WS_XML_STRING_VALUE("");
 
 static const char* xml =
-"<Orders xmlns='http://example.com'>"
+    "<Orders xmlns='http://example.com'>"
     "<PurchaseOrder id='1001'>"
     "</PurchaseOrder>"
     "<PurchaseOrder id='1002'>"
     "</PurchaseOrder>"
     "<PurchaseOrder id='1003'>"
     "</PurchaseOrder>"
-"</Orders>";
+    "</Orders>";
 
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_ERROR* error = NULL;
     WS_XML_READER* xmlReader = NULL;
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Create an XML reader
     hr = WsCreateReader(
-        NULL,
-        0, 
-        &xmlReader, 
-        error);
+             NULL,
+             0,
+             &xmlReader,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    
+
     // Setup the source input
     WS_XML_READER_BUFFER_INPUT bufferInput;
     ZeroMemory(&bufferInput, sizeof(bufferInput));
     bufferInput.input.inputType = WS_XML_READER_INPUT_TYPE_BUFFER;
     bufferInput.encodedData = (BYTE*)xml;
     bufferInput.encodedDataSize = (ULONG)strlen(xml);
-    
+
     // Setup the source encoding
     WS_XML_READER_TEXT_ENCODING textEncoding;
     ZeroMemory(&textEncoding, sizeof(textEncoding));
     textEncoding.encoding.encodingType = WS_XML_READER_ENCODING_TYPE_TEXT;
     textEncoding.charSet = WS_CHARSET_AUTO;
-    
+
     // Setup the reader
     hr = WsSetInput(xmlReader, &textEncoding.encoding, &bufferInput.input, NULL, 0, error);
     if (FAILED(hr))
@@ -174,14 +174,14 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
         // Print out the error
         PrintError(hr, error);
     }
-    
+
     if (xmlReader != NULL)
     {
         WsFreeReader(xmlReader);

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -39,12 +39,12 @@ SampleCreateVirtualDisk(
         opStatus = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
     }
-    
+
     //
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -77,19 +77,19 @@ SampleCreateVirtualDisk(
     parameters.Version2.MaximumSize = FileSize;
     parameters.Version2.BlockSizeInBytes = BlockSize;
     parameters.Version2.SectorSizeInBytes = LogicalSectorSize;
-    parameters.Version2.PhysicalSectorSizeInBytes = PhysicalSectorSize;    
+    parameters.Version2.PhysicalSectorSizeInBytes = PhysicalSectorSize;
     parameters.Version2.ParentPath = ParentPath;
-            
+
     opStatus = CreateVirtualDisk(
-        &storageType,
-        VirtualDiskPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        NULL,
-        Flags,
-        0,
-        &parameters,
-        NULL,
-        &vhdHandle);
+                   &storageType,
+                   VirtualDiskPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   NULL,
+                   Flags,
+                   0,
+                   &parameters,
+                   NULL,
+                   &vhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -106,11 +106,11 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);
     }
 
     return opStatus;
- }
+}

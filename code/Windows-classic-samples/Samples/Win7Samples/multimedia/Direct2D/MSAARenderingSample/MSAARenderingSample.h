@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -58,7 +58,7 @@ template<class Interface>
 inline void
 SafeRelease(
     Interface **ppInterfaceToRelease
-    )
+)
 {
     if (*ppInterfaceToRelease != NULL)
     {
@@ -87,24 +87,24 @@ EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 namespace MyAntialiasMode
 {
-    enum Enum
-    {
-        Aliased = 0,
-        PerPrimitive,
-        MSAA,
-        Count
-    };
+enum Enum
+{
+    Aliased = 0,
+    PerPrimitive,
+    MSAA,
+    Count
+};
 }
 
 
 namespace SampleType
 {
-    enum Enum
-    {
-        Filled,
-        Wireframe,
-        Count
-    };
+enum Enum
+{
+    Filled,
+    Wireframe,
+    Count
+};
 }
 
 /******************************************************************
@@ -132,15 +132,15 @@ private:
 
     void OnMouseMove(
         LPARAM lParam
-        );
+    );
 
     void OnKeyDown(
         SHORT vkey
-        );
+    );
 
     void OnWheel(
         WPARAM w
-        );
+    );
 
     float GetZoom()
     {
@@ -151,7 +151,7 @@ private:
 
     HRESULT RenderD2DContentIntoSurface(
         float time
-        );
+    );
 
     HRESULT RenderLoupe();
 
@@ -162,14 +162,14 @@ private:
         D3D10_DRIVER_TYPE driverType,
         UINT flags,
         ID3D10Device1 **ppDevice
-        );
+    );
 
     static LRESULT CALLBACK WndProc(
         HWND hWnd,
         UINT message,
         WPARAM wParam,
         LPARAM lParam
-        );
+    );
 
 private:
     HWND m_hwnd;

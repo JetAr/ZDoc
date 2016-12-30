@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -31,7 +31,7 @@ DllInit(
     IN PVOID DllHandle,
     IN ULONG Reason,
     IN PCONTEXT Context OPTIONAL
-    )
+)
 
 /*++
 
@@ -57,10 +57,11 @@ Return Status:
     //      defer any additional initialization.
     //
 
-    switch (Reason) {
+    switch (Reason)
+    {
     case DLL_PROCESS_ATTACH:
 #if defined (DEBUG)
-            DebugBreak();
+        DebugBreak();
 #endif
         InitializeCriticalSection( &DllCritSect );
         break;

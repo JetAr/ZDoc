@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: AMCap.h
 //
 // Desc: DirectShow sample code - audio/video capture.
@@ -17,19 +17,19 @@ extern "C"
 {
     typedef BOOL (/* WINUSERAPI */ WINAPI *PUnregisterDeviceNotification)(
         IN HDEVNOTIFY Handle
-        );
+    );
 
     typedef HDEVNOTIFY (/* WINUSERAPI */ WINAPI *PRegisterDeviceNotificationA)(
         IN HANDLE hRecipient,
         IN LPVOID NotificationFilter,
         IN DWORD Flags
-        );
+    );
 
     typedef HDEVNOTIFY (/* WINUSERAPI */ WINAPI *PRegisterDeviceNotificationW)(
         IN HANDLE hRecipient,
         IN LPVOID NotificationFilter,
         IN DWORD Flags
-        );
+    );
 }
 
 #define PRegisterDeviceNotification  PRegisterDeviceNotificationW

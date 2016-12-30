@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,7 +24,7 @@ CWasapiChat::CWasapiChat(HWND AppWindow) : CChatTransport(AppWindow),
 {
 }
 
-CWasapiChat::~CWasapiChat(void) 
+CWasapiChat::~CWasapiChat(void)
 {
     SafeRelease(&_ChatEndpoint);
     SafeRelease(&_AudioClient);
@@ -242,7 +242,7 @@ bool CWasapiChat::StartChat(bool HideFromVolumeMixer)
 void CWasapiChat::StopChat()
 {
     //
-    //  Tell the chat thread to shut down, wait for the thread to complete then clean up all the stuff we 
+    //  Tell the chat thread to shut down, wait for the thread to complete then clean up all the stuff we
     //  allocated in StartChat().
     //
     if (_ShutdownEvent)
@@ -282,7 +282,7 @@ DWORD CWasapiChat::WasapiChatThread(LPVOID Context)
             //
             //  Either stream silence to the audio client or ignore the audio samples.
             //
-            //  Note that we don't check for errors here.  This is because 
+            //  Note that we don't check for errors here.  This is because
             //      (a) there's no way of reporting the failure
             //      (b) once the streaming engine has started there's really no way for it to fail.
             //
@@ -318,7 +318,7 @@ bool CWasapiChat::HandlesMessage(HWND /*hWnd*/, UINT /*message*/)
 
 
 //
-//  Don't process Wave messages.  
+//  Don't process Wave messages.
 //
 INT_PTR CWasapiChat::MessageHandler(HWND /*hWnd*/, UINT /*message*/, WPARAM /*wParam*/, LPARAM /*lParam*/)
 {

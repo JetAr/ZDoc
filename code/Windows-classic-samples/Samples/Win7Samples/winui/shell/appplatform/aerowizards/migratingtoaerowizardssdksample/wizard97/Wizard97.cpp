@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////////
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -173,38 +173,38 @@ LRESULT CALLBACK IntroDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        { 
-            // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
+    {
+        // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
 
-            PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
-            pdata = (SHAREDWIZDATA *)(psp->lParam);
-            SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
-            break;
-        }
+        PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
+        pdata = (SHAREDWIZDATA *)(psp->lParam);
+        SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
+        break;
+    }
 
     case WM_NOTIFY:
+    {
+        LPNMHDR lpnm = (LPNMHDR) lParam;
+
+        switch (lpnm->code)
         {
-            LPNMHDR lpnm = (LPNMHDR) lParam;
+        case PSN_SETACTIVE : //Enable the Next button
+            PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT);
+            break;
 
-            switch (lpnm->code)
-            {
-            case PSN_SETACTIVE : //Enable the Next button    
-                PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT);
-                break;
+        case PSN_WIZNEXT:
+            //Handle a Next button click here
+            break;
 
-            case PSN_WIZNEXT:
-                //Handle a Next button click here
-                break;
+        case PSN_RESET:
+            //Handle a Cancel button click, if necessary
+            break;
 
-            case PSN_RESET:
-                //Handle a Cancel button click, if necessary
-                break;
-
-            default:
-                break;
-            }
+        default:
+            break;
         }
-        break;
+    }
+    break;
 
     default:
         break;
@@ -222,14 +222,14 @@ LRESULT CALLBACK IntPage1DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        { 
-            // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
+    {
+        // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
 
-            PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
-            pdata = (SHAREDWIZDATA *)(psp->lParam);
-            SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
-            break;
-        }
+        PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
+        pdata = (SHAREDWIZDATA *)(psp->lParam);
+        SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
+        break;
+    }
 
     case WM_COMMAND:
         switch (LOWORD(wParam))
@@ -262,50 +262,50 @@ LRESULT CALLBACK IntPage1DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
         break;
 
     case WM_NOTIFY:
+    {
+        LPNMHDR lpnm = (LPNMHDR) lParam;
+
+        switch (lpnm->code)
         {
-            LPNMHDR lpnm = (LPNMHDR) lParam;
+        case PSN_SETACTIVE: // Enable the appropriate buttons
 
-            switch (lpnm->code)
+            // If a radio button has been clicked or the
+            // checkbox checked, enable Back and Next
+            if (pdata->fIsBoxChecked || pdata->fIsButtonClicked)
             {
-            case PSN_SETACTIVE: // Enable the appropriate buttons
-
-                // If a radio button has been clicked or the 
-                // checkbox checked, enable Back and Next 
-                if (pdata->fIsBoxChecked || pdata->fIsButtonClicked) 
-                {
-                    PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
-                }
-                else 
-                {
-                    // Otherwise, only enable Back
-                    PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
-                }
-                break;
-
-            case PSN_WIZNEXT:
-
-                // If the checkbox is checked, jump to the final page
-
-                if (pdata->fIsBoxChecked)
-                {
-                    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_END);
-                    return TRUE;
-                }
-                break;
-
-            case PSN_WIZBACK:
-                //Handle a Back button click, if necessary
-                break;
-
-            case PSN_RESET:
-                //Handle a Cancel button click, if necessary
-                break;
-
-            default:
-                break;
+                PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
             }
+            else
+            {
+                // Otherwise, only enable Back
+                PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);
+            }
+            break;
+
+        case PSN_WIZNEXT:
+
+            // If the checkbox is checked, jump to the final page
+
+            if (pdata->fIsBoxChecked)
+            {
+                SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_END);
+                return TRUE;
+            }
+            break;
+
+        case PSN_WIZBACK:
+            //Handle a Back button click, if necessary
+            break;
+
+        case PSN_RESET:
+            //Handle a Cancel button click, if necessary
+            break;
+
+        default:
+            break;
         }
-        break;
+    }
+    break;
 
     default:
         break;
@@ -323,80 +323,80 @@ LRESULT CALLBACK IntPage2DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
     SHAREDWIZDATA *pdata = (SHAREDWIZDATA *)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 
-    switch (uMsg) 
+    switch (uMsg)
     {
     case WM_INITDIALOG:
-        { 
-            // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
+    {
+        // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
 
-            PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
-            pdata = (SHAREDWIZDATA *)(psp->lParam);
-            SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
+        PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
+        pdata = (SHAREDWIZDATA *)(psp->lParam);
+        SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
+        break;
+    }
+
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case IDC_UPDATEENABLE:
+        {
+            DWORD dwState = 0;
+            if (IsDlgButtonChecked(hwndDlg, IDC_ENABLEBACK))
+            {
+                dwState |= PSWIZB_BACK;
+            }
+            if (IsDlgButtonChecked(hwndDlg, IDC_ENABLEFINISH))
+            {
+                dwState |= PSWIZB_FINISH;
+            }
+            if (IsDlgButtonChecked(hwndDlg, IDC_DISABLEFINISH))
+            {
+                dwState |= PSWIZB_DISABLEDFINISH;
+            }
+            if (IsDlgButtonChecked(hwndDlg, IDC_ENABLENEXT))
+            {
+                dwState |= PSWIZB_NEXT;
+            }
+            SendMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, (WPARAM)0, (LPARAM)dwState);
+        }
+        break;
+        }
+        break;
+    }
+
+    case WM_NOTIFY:
+    {
+        LPNMHDR lpnm = (LPNMHDR) lParam;
+        switch (lpnm->code)
+        {
+        case PSN_SETACTIVE :
+            //Enable the correct buttons on for the active page
+            SendMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, (WPARAM)0, (LPARAM)PSWIZB_BACK | PSWIZB_NEXT);
+            break;
+
+        case PSN_WIZBACK :
+            //Handle a Back button click, if necessary
+            break;
+
+        case PSN_WIZNEXT :
+            //Handle a Next button click, if necessary
+            break;
+
+        case PSN_WIZFINISH :
+            //Handle a Finish button click, if necessary
+            break;
+
+        case PSN_RESET :
+            //Handle a Cancel button click, if necessary
             break;
         }
 
-    case WM_COMMAND:
-        {
-            switch (LOWORD(wParam))
-            {
-            case IDC_UPDATEENABLE:
-                {
-                    DWORD dwState = 0;
-                    if (IsDlgButtonChecked(hwndDlg, IDC_ENABLEBACK))
-                    {
-                        dwState |= PSWIZB_BACK;
-                    }
-                    if (IsDlgButtonChecked(hwndDlg, IDC_ENABLEFINISH))
-                    {
-                        dwState |= PSWIZB_FINISH;
-                    }
-                    if (IsDlgButtonChecked(hwndDlg, IDC_DISABLEFINISH))
-                    {
-                        dwState |= PSWIZB_DISABLEDFINISH;
-                    }
-                    if (IsDlgButtonChecked(hwndDlg, IDC_ENABLENEXT))
-                    {
-                        dwState |= PSWIZB_NEXT;
-                    }
-                    SendMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, (WPARAM)0, (LPARAM)dwState);
-                }
-                break;
-            }
-            break;
-        }	 
-
-    case WM_NOTIFY:
-        {
-            LPNMHDR lpnm = (LPNMHDR) lParam; 
-            switch (lpnm->code)
-            {
-            case PSN_SETACTIVE : 
-                //Enable the correct buttons on for the active page  
-                SendMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, (WPARAM)0, (LPARAM)PSWIZB_BACK | PSWIZB_NEXT);
-                break;
-
-            case PSN_WIZBACK :
-                //Handle a Back button click, if necessary
-                break;
-
-            case PSN_WIZNEXT :
-                //Handle a Next button click, if necessary
-                break;
-
-            case PSN_WIZFINISH :
-                //Handle a Finish button click, if necessary				
-                break;
-
-            case PSN_RESET :
-                //Handle a Cancel button click, if necessary				
-                break;            
-            }            
-
-            break;
-        }            
+        break;
+    }
     }
 
-    return 0;	
+    return 0;
 }
 
 
@@ -412,43 +412,43 @@ LRESULT CALLBACK IntPage3DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        { 
-            // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
+    {
+        // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
 
-            PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
-            pdata = (SHAREDWIZDATA *)(psp->lParam);
-            SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
-            break;
-        }
+        PROPSHEETPAGE *psp = (PROPSHEETPAGE *)lParam;
+        pdata = (SHAREDWIZDATA *)(psp->lParam);
+        SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
+        break;
+    }
 
     case WM_NOTIFY:
+    {
+        LPNMHDR lpnm = (LPNMHDR) lParam;
+
+        switch (lpnm->code)
         {
-            LPNMHDR lpnm = (LPNMHDR) lParam;
+        case PSN_SETACTIVE : //Enable the Next and Back buttons
 
-            switch (lpnm->code)
-            {
-            case PSN_SETACTIVE : //Enable the Next and Back buttons
+            PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
+            break;
 
-                PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
-                break;
+        case PSN_WIZNEXT :
+            //Handle a Next button click, if necessary
+            break;
 
-            case PSN_WIZNEXT :
-                //Handle a Next button click, if necessary
-                break;
+        case PSN_WIZBACK :
+            //Handle a Back button click, if necessary
+            break;
 
-            case PSN_WIZBACK :
-                //Handle a Back button click, if necessary
-                break;
+        case PSN_RESET :
+            //Handle a Cancel button click, if necessary
+            break;
 
-            case PSN_RESET :
-                //Handle a Cancel button click, if necessary
-                break;
-
-            default :
-                break;
-            }
+        default :
+            break;
         }
-        break;
+    }
+    break;
 
     default:
         break;
@@ -467,53 +467,53 @@ LRESULT CALLBACK EndDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        { 
-            // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
+    {
+        // Get the PROPSHEETPAGE lParam value and load it into DWL_USERDATA
 
-            PROPSHEETPAGE* psp = (PROPSHEETPAGE *)lParam;
-            pdata = (SHAREDWIZDATA *)(psp->lParam);
-            SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
-            break;
-        }
+        PROPSHEETPAGE* psp = (PROPSHEETPAGE *)lParam;
+        pdata = (SHAREDWIZDATA *)(psp->lParam);
+        SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (DWORD_PTR)pdata);
+        break;
+    }
 
     case WM_NOTIFY:
+    {
+        LPNMHDR lpnm = (LPNMHDR) lParam;
+
+        switch (lpnm->code)
         {
-            LPNMHDR lpnm = (LPNMHDR) lParam;
+        case PSN_SETACTIVE : //Enable the correct buttons on for the active page
 
-            switch (lpnm->code)
+            PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_FINISH);
+            break;
+
+        case PSN_WIZBACK :
+            //If the checkbox was checked, jump back
+            //to the first interior page, not the third
+            if (pdata->fIsBoxChecked)
             {
-            case PSN_SETACTIVE : //Enable the correct buttons on for the active page
-
-                PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_FINISH);
-                break;
-
-            case PSN_WIZBACK :
-                //If the checkbox was checked, jump back
-                //to the first interior page, not the third
-                if (pdata->fIsBoxChecked)
-                {
-                    SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_INTERIOR1);
-                    return TRUE;
-                }
-                break;
-
-            case PSN_WIZFINISH :
-                //Handle a Finish button click, if necessary
-                break;
-
-            case PSN_RESET :
-                //Handle a Cancel button click, if necessary
-                break;
-
-            default :
-                break;
+                SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_INTERIOR1);
+                return TRUE;
             }
+            break;
+
+        case PSN_WIZFINISH :
+            //Handle a Finish button click, if necessary
+            break;
+
+        case PSN_RESET :
+            //Handle a Cancel button click, if necessary
+            break;
+
+        default :
+            break;
         }
-        break;
+    }
+    break;
 
     default:
         break;
     }
 
     return 0;
-}   
+}

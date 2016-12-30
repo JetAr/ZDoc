@@ -1,4 +1,4 @@
-// DrtSdkSample.h - Interface for DrtSdkSample
+﻿// DrtSdkSample.h - Interface for DrtSdkSample
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -18,7 +18,7 @@
 
 //
 // Contains the information required for each DRT Registration
-// 
+//
 typedef struct _REG_CONTEXT
 {
     HDRT_REGISTRATION_CONTEXT       hDrtReg;
@@ -48,7 +48,7 @@ typedef struct _DRT_CONTEXT
 void DisplayError(__in const PWSTR fnname, __in const HRESULT hr);
 
 //
-// Callback to handle general DRT Events. 
+// Callback to handle general DRT Events.
 // These include registration state changes, leafset changes, and status changes.
 //
 void CALLBACK DrtEventCallback(__in PVOID Param, __in BOOLEAN TimedOut);
@@ -94,7 +94,7 @@ void FlushCurrentLine();
 
 //
 // Presents an interactive menu to the user and returns the user's choice
-//   Input: 
+//   Input:
 //      PCWSTR *choices - An array of strings representing the choices to be present to the users
 //
 int GetUserChoice(PCWSTR *choices, int numchoices);

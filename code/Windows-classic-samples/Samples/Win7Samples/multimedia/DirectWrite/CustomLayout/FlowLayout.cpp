@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,13 +18,13 @@
 
 namespace
 {
-    // Estimates the maximum number of glyph indices needed to hold a string of 
-    // a given length.  This is the formula given in the Uniscribe SDK and should
-    // cover most cases. Degenerate cases will require a reallocation.
-    UINT32 EstimateGlyphCount(UINT32 textLength)
-    {
-        return 3 * textLength / 2 + 16;
-    }
+// Estimates the maximum number of glyph indices needed to hold a string of
+// a given length.  This is the formula given in the Uniscribe SDK and should
+// cover most cases. Degenerate cases will require a reallocation.
+UINT32 EstimateGlyphCount(UINT32 textLength)
+{
+    return 3 * textLength / 2 + 16;
+}
 }
 
 
@@ -89,11 +89,11 @@ STDMETHODIMP FlowLayout::SetTextFormat(IDWriteTextFormat* textFormat)
     if (SUCCEEDED(hr))
     {
         hr = fontFamily->GetFirstMatchingFont(
-                textFormat->GetFontWeight(),
-                textFormat->GetFontStretch(),
-                textFormat->GetFontStyle(),
-                &font
-                );
+                 textFormat->GetFontWeight(),
+                 textFormat->GetFontStretch(),
+                 textFormat->GetFontStyle(),
+                 &font
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -121,7 +121,7 @@ STDMETHODIMP FlowLayout::SetNumberSubstitution(IDWriteNumberSubstitution* number
 STDMETHODIMP FlowLayout::AnalyzeText(
     const wchar_t* text,                // [textLength]
     UINT32 textLength
-    ) throw()
+) throw()
 {
     // Analyzes the given text and keeps the results for later reflow.
 
@@ -218,7 +218,7 @@ STDMETHODIMP FlowLayout::ShapeGlyphRun(
     IDWriteTextAnalyzer* textAnalyzer,
     UINT32 runIndex,
     IN OUT UINT32& glyphStart
-    )
+)
 {
     // Shapes a single run of text into glyphs.
     // Alternately, you could iteratively interleave shaping and line
@@ -271,24 +271,24 @@ STDMETHODIMP FlowLayout::ShapeGlyphRun(
         do
         {
             hr = textAnalyzer->GetGlyphs(
-                &text_[textStart],
-                textLength,
-                fontFace_,
-                run.isSideways,         // isSideways,
-                (run.bidiLevel & 1),    // isRightToLeft
-                &run.script,
-                localeName_,
-                (run.isNumberSubstituted) ? numberSubstitution_ : NULL,
-                NULL,                   // features
-                NULL,                   // featureLengths
-                0,                      // featureCount
-                maxGlyphCount,          // maxGlyphCount
-                &glyphClusters_[textStart],
-                &textProps[0],
-                &glyphIndices_[glyphStart],
-                &glyphProps[0],
-                &actualGlyphCount
-                );
+                     &text_[textStart],
+                     textLength,
+                     fontFace_,
+                     run.isSideways,         // isSideways,
+                     (run.bidiLevel & 1),    // isRightToLeft
+                     &run.script,
+                     localeName_,
+                     (run.isNumberSubstituted) ? numberSubstitution_ : NULL,
+                     NULL,                   // features
+                     NULL,                   // featureLengths
+                     0,                      // featureCount
+                     maxGlyphCount,          // maxGlyphCount
+                     &glyphClusters_[textStart],
+                     &textProps[0],
+                     &glyphIndices_[glyphStart],
+                     &glyphProps[0],
+                     &actualGlyphCount
+                 );
             tries++;
 
             if (hr == E_NOT_SUFFICIENT_BUFFER)
@@ -304,7 +304,8 @@ STDMETHODIMP FlowLayout::ShapeGlyphRun(
             {
                 break;
             }
-        } while (tries < 2); // We'll give it two chances.
+        }
+        while (tries < 2);   // We'll give it two chances.
 
         if (FAILED(hr))
             return hr;
@@ -316,25 +317,25 @@ STDMETHODIMP FlowLayout::ShapeGlyphRun(
         glyphOffsets_.resize( std::max(static_cast<size_t>(glyphStart + actualGlyphCount), glyphOffsets_.size()));
 
         hr = textAnalyzer->GetGlyphPlacements(
-            &text_[textStart],
-            &glyphClusters_[textStart],
-            &textProps[0],
-            textLength,
-            &glyphIndices_[glyphStart],
-            &glyphProps[0],
-            actualGlyphCount,
-            fontFace_,
-            fontEmSize_,
-            run.isSideways,
-            (run.bidiLevel & 1),    // isRightToLeft
-            &run.script,
-            localeName_,
-            NULL,                   // features
-            NULL,                   // featureRangeLengths
-            0,                      // featureRanges
-            &glyphAdvances_[glyphStart],
-            &glyphOffsets_[glyphStart]
-            );
+                 &text_[textStart],
+                 &glyphClusters_[textStart],
+                 &textProps[0],
+                 textLength,
+                 &glyphIndices_[glyphStart],
+                 &glyphProps[0],
+                 actualGlyphCount,
+                 fontFace_,
+                 fontEmSize_,
+                 run.isSideways,
+                 (run.bidiLevel & 1),    // isRightToLeft
+                 &run.script,
+                 localeName_,
+                 NULL,                   // features
+                 NULL,                   // featureRangeLengths
+                 0,                      // featureRanges
+                 &glyphAdvances_[glyphStart],
+                 &glyphOffsets_[glyphStart]
+             );
 
         if (FAILED(hr))
             return hr;
@@ -348,7 +349,7 @@ STDMETHODIMP FlowLayout::ShapeGlyphRun(
             std::fill(glyphAdvances_.begin() + glyphStart,
                       glyphAdvances_.begin() + glyphStart + actualGlyphCount,
                       0.0f
-                      );
+                     );
         }
 
         ////////////////////
@@ -368,7 +369,7 @@ STDMETHODIMP FlowLayout::ShapeGlyphRun(
 STDMETHODIMP FlowLayout::FlowText(
     FlowLayoutSource* flowSource,
     FlowLayoutSink* flowSink
-    )
+)
 {
     // Reflow all the text, from source to sink.
 
@@ -382,7 +383,7 @@ STDMETHODIMP FlowLayout::FlowText(
     fontFace_->GetMetrics(&fontMetrics);
 
     float fontHeight = (fontMetrics.ascent + fontMetrics.descent + fontMetrics.lineGap)
-                     * fontEmSize_ / fontMetrics.designUnitsPerEm;
+                       * fontEmSize_ / fontMetrics.designUnitsPerEm;
 
     // Get ready for series of glyph runs.
     hr = flowSink->Prepare(static_cast<UINT32>(glyphIndices_.size()));
@@ -428,7 +429,7 @@ STDMETHODIMP FlowLayout::FitText(
     UINT32 textEnd,
     float maxWidth,
     OUT ClusterPosition* clusterEnd
-    )
+)
 {
     // Fits as much text as possible into the given width,
     // using the clusters and advances returned by DWrite.
@@ -492,7 +493,7 @@ STDMETHODIMP FlowLayout::ProduceGlyphRuns(
     const FlowLayoutSource::RectF& rect,
     const ClusterPosition& clusterStart,
     const ClusterPosition& clusterEnd
-    ) const throw()
+) const throw()
 {
     // Produce a series of glyph runs from the given range
     // and send them to the sink. If the entire text fit
@@ -518,7 +519,7 @@ STDMETHODIMP FlowLayout::ProduceGlyphRuns(
         clusterStart.runIndex,
         totalRuns,
         &bidiOrdering[0]
-        );
+    );
 
     ////////////////////////////////////////
     // Ignore any trailing whitespace
@@ -567,10 +568,10 @@ STDMETHODIMP FlowLayout::ProduceGlyphRuns(
             if (glyphStart < glyphEnd)
             {
                 float lineWidth = GetClusterRangeWidth(
-                    glyphStart - justificationGlyphStart,
-                    glyphEnd   - justificationGlyphStart,
-                    &justifiedAdvances.front()
-                    );
+                                      glyphStart - justificationGlyphStart,
+                                      glyphEnd   - justificationGlyphStart,
+                                      &justifiedAdvances.front()
+                                  );
                 x = rect.right - lineWidth;
             }
         }
@@ -598,7 +599,7 @@ STDMETHODIMP FlowLayout::ProduceGlyphRuns(
                 glyphEnd = GetClusterGlyphStart(clusterWsEnd);
             }
             if ((glyphStart >= glyphEnd)
-            || (run.script.shapes & DWRITE_SCRIPT_SHAPES_NO_VISUAL))
+                    || (run.script.shapes & DWRITE_SCRIPT_SHAPES_NO_VISUAL))
             {
                 // The itemizer told us not to draw this character,
                 // either because it was a formatting, control, or other hidden character.
@@ -608,24 +609,24 @@ STDMETHODIMP FlowLayout::ProduceGlyphRuns(
             // The run width is needed to know how far to move forward,
             // and to flip the origin for right-to-left text.
             float runWidth = GetClusterRangeWidth(
-                                glyphStart - justificationGlyphStart,
-                                glyphEnd   - justificationGlyphStart,
-                                &justifiedAdvances.front()
-                                );
+                                 glyphStart - justificationGlyphStart,
+                                 glyphEnd   - justificationGlyphStart,
+                                 &justifiedAdvances.front()
+                             );
 
             // Flush this glyph run.
             hr = flowSink->SetGlyphRun(
-                (run.bidiLevel & 1) ? (x + runWidth) : (x), // origin starts from right if RTL
-                y,
-                glyphEnd - glyphStart,
-                &glyphIndices_[glyphStart],
-                &justifiedAdvances[glyphStart - justificationGlyphStart],
-                &glyphOffsets_[glyphStart],
-                fontFace_,
-                fontEmSize_,
-                run.bidiLevel,
-                run.isSideways
-                ); 
+                     (run.bidiLevel & 1) ? (x + runWidth) : (x), // origin starts from right if RTL
+                     y,
+                     glyphEnd - glyphStart,
+                     &glyphIndices_[glyphStart],
+                     &justifiedAdvances[glyphStart - justificationGlyphStart],
+                     &glyphOffsets_[glyphStart],
+                     fontFace_,
+                     fontEmSize_,
+                     run.bidiLevel,
+                     run.isSideways
+                 );
             if (FAILED(hr))
                 break;
 
@@ -641,14 +642,14 @@ void FlowLayout::ProduceBidiOrdering(
     UINT32 spanStart,
     UINT32 spanCount,
     OUT UINT32* spanIndices     // [spanCount]
-    ) const throw()
+) const throw()
 {
     // Produces an index mapping from sequential order to visual bidi order.
     // The function progresses forward, checking the bidi level of each
     // pair of spans, reversing when needed.
     //
     // See the Unicode technical report 9 for an explanation.
-    // http://www.unicode.org/reports/tr9/tr9-17.html 
+    // http://www.unicode.org/reports/tr9/tr9-17.html
 
     // Fill all entries with initial indices
     for (UINT32 i = 0; i < spanCount; ++i)
@@ -667,8 +668,8 @@ void FlowLayout::ProduceBidiOrdering(
     {
         size_t runEnd       = i + 1;
         UINT32 nextLevel    = (runEnd < spanCount)
-                            ? runs_[spanIndices[runEnd]].bidiLevel
-                            : 0; // past last element
+                              ? runs_[spanIndices[runEnd]].bidiLevel
+                              : 0; // past last element
 
         // We only care about transitions, particularly high to low,
         // because that means we have a run behind us where we can
@@ -724,7 +725,7 @@ STDMETHODIMP FlowLayout::ProduceJustifiedAdvances(
     const ClusterPosition& clusterStart,
     const ClusterPosition& clusterEnd,
     OUT std::vector<float>& justifiedAdvances
-    ) const throw()
+) const throw()
 {
     // Performs simple inter-word justification
     // using the breakpoint analysis whitespace property.
@@ -804,7 +805,7 @@ STDMETHODIMP FlowLayout::ProduceJustifiedAdvances(
 void FlowLayout::SetClusterPosition(
     IN OUT ClusterPosition& cluster,
     UINT32 textPosition
-    ) const throw()
+) const throw()
 {
     // Updates the current position and seeks its matching text analysis run.
 
@@ -814,7 +815,7 @@ void FlowLayout::SetClusterPosition(
     // find the right one.
 
     if (textPosition >= cluster.runEndPosition
-    ||  !runs_[cluster.runIndex].ContainsTextPosition(textPosition))
+            ||  !runs_[cluster.runIndex].ContainsTextPosition(textPosition))
     {
         // If we can resume the search from the previous run index,
         // (meaning the new text position comes after the previously
@@ -829,9 +830,9 @@ void FlowLayout::SetClusterPosition(
 
         // Find new run that contains the text position.
         newRunIndex = static_cast<UINT32>(
-                            std::find(runs_.begin() + newRunIndex, runs_.end(), textPosition)
-                            - runs_.begin()
-                            );
+                          std::find(runs_.begin() + newRunIndex, runs_.end(), textPosition)
+                          - runs_.begin()
+                      );
 
         // Keep run index within the list, rather than pointing off the end.
         if (newRunIndex >= runs_.size())
@@ -850,7 +851,7 @@ void FlowLayout::SetClusterPosition(
 
 void FlowLayout::AdvanceClusterPosition(
     IN OUT ClusterPosition& cluster
-    ) const throw()
+) const throw()
 {
     // Looks forward in the cluster map until finding a new cluster,
     // or until we reach the end of a cluster run returned by shaping.
@@ -889,23 +890,23 @@ UINT32 FlowLayout::GetClusterGlyphStart(const ClusterPosition& cluster) const th
     UINT32 glyphStart = runs_[cluster.runIndex].glyphStart;
 
     return (cluster.textPosition < glyphClusters_.size())
-        ? glyphStart + glyphClusters_[cluster.textPosition]
-        : glyphStart + runs_[cluster.runIndex].glyphCount;
+           ? glyphStart + glyphClusters_[cluster.textPosition]
+           : glyphStart + runs_[cluster.runIndex].glyphCount;
 }
 
 
 float FlowLayout::GetClusterRangeWidth(
     const ClusterPosition& clusterStart,
     const ClusterPosition& clusterEnd
-    ) const throw()
+) const throw()
 {
     // Sums the glyph advances between two cluster positions,
     // useful for determining how long a line or word is.
     return GetClusterRangeWidth(
-                GetClusterGlyphStart(clusterStart),
-                GetClusterGlyphStart(clusterEnd),
-                &glyphAdvances_.front()
-                );
+               GetClusterGlyphStart(clusterStart),
+               GetClusterGlyphStart(clusterEnd),
+               &glyphAdvances_.front()
+           );
 }
 
 
@@ -913,7 +914,7 @@ float FlowLayout::GetClusterRangeWidth(
     UINT32 glyphStart,
     UINT32 glyphEnd,
     const float* glyphAdvances          // [glyphEnd]
-    ) const throw()
+) const throw()
 {
     // Sums the glyph advances between two glyph offsets, given an explicit
     // advances array - useful for determining how long a line or word is.

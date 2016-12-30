@@ -1,4 +1,4 @@
-/*****************************************************************************
+﻿/*****************************************************************************
  *
  *  Fulldrag.c
  *
@@ -58,9 +58,12 @@ BOOL g_fPaintDeferred;
 void
 Hilbert(HDC hdc, int x, int y, int vx, int vy, int wx, int wy, int n)
 {
-    if (n >= MAXDEPTH) {
+    if (n >= MAXDEPTH)
+    {
         LineTo(hdc, x + (vx+wx)/2, y + (vy+wy)/2);
-    } else {
+    }
+    else
+    {
         n++;
         Hilbert(hdc, x, y, wx/2, wy/2, vx/2, vy/2, n);
         Hilbert(hdc, x+vx/2, y+vy/2, vx/2, vy/2, wx/2, wy/2, n);
@@ -90,10 +93,14 @@ Hilbert_OnPaint(HWND hwnd)
     HDC hdc;
 
     hdc = BeginPaint(hwnd, &ps);
-    if (hdc) {
-        if (g_fDragging) {
+    if (hdc)
+    {
+        if (g_fDragging)
+        {
             g_fPaintDeferred = TRUE;
-        } else {
+        }
+        else
+        {
 
             HBRUSH hbrOld;
             HPEN hpenOld;
@@ -106,7 +113,7 @@ Hilbert_OnPaint(HWND hwnd)
 
             MoveToEx(hdc, 0, 0, 0);
             Hilbert(hdc, 0, 0, GetSystemMetrics(SM_CXFULLSCREEN), 0,
-                               0, GetSystemMetrics(SM_CYFULLSCREEN), 0);
+                    0, GetSystemMetrics(SM_CYFULLSCREEN), 0);
             SelectObject(hdc, hpenOld);
             SelectObject(hdc, hbrOld);
 
@@ -127,7 +134,8 @@ Hilbert_OnPaint(HWND hwnd)
 LRESULT CALLBACK
 Hilbert_WndProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp)
 {
-    switch (wm) {
+    switch (wm)
+    {
     case WM_PAINT:
         Hilbert_OnPaint(hwnd);
         break;
@@ -152,7 +160,8 @@ Hilbert_WndProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp)
      */
     case WM_EXITSIZEMOVE:
         g_fDragging = FALSE;
-        if (g_fPaintDeferred) {
+        if (g_fPaintDeferred)
+        {
             g_fPaintDeferred = FALSE;
             InvalidateRect(hwnd, 0, TRUE);
         }
@@ -178,7 +187,8 @@ WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR pszCmdLine, int nCmdShow)
 {
     HWND hwnd;
     MSG msg;
-    WNDCLASS wc = {
+    WNDCLASS wc =
+    {
         0,
         Hilbert_WndProc,
         0,
@@ -193,12 +203,13 @@ WinMain(HINSTANCE hinst, HINSTANCE hinstPrev, LPSTR pszCmdLine, int nCmdShow)
 
     RegisterClass(&wc);
     hwnd = CreateWindow(TEXT("Hilbert"),
-		                TEXT("Hilbert"), WS_OVERLAPPEDWINDOW,
+                        TEXT("Hilbert"), WS_OVERLAPPEDWINDOW,
                         CW_USEDEFAULT, CW_USEDEFAULT,
                         CW_USEDEFAULT, CW_USEDEFAULT,
                         0, 0, hinst, 0);
     ShowWindow(hwnd, nCmdShow);
-    while (GetMessage(&msg, 0, 0, 0)) {
+    while (GetMessage(&msg, 0, 0, 0))
+    {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }

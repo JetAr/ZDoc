@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 #ifndef _SMF_
 #define _SMF_
 
-#include "global.h" 
+#include "global.h"
 
 typedef DWORD SMFRESULT;
 typedef DWORD TICKS;
@@ -47,7 +47,7 @@ typedef struct tag_smfopenstruct
     DWORD               dwTimeDivision;
     HSMF                hSmf;
 }   SMFOPENFILESTRUCT,
-    FAR *PSMFOPENFILESTRUCT;
+FAR *PSMFOPENFILESTRUCT;
 
 extern SMFRESULT FNLOCAL smfOpenFile(
     PSMFOPENFILESTRUCT  psofs);
@@ -62,7 +62,7 @@ typedef struct tag_smffileinfo
     DWORD               dwTimeDivision;
     TICKS               tkLength;
 }   SMFFILEINFO,
-    FAR *PSMFFILEINFO;
+FAR *PSMFFILEINFO;
 
 extern SMFRESULT FNLOCAL smfGetFileInfo(
     HSMF                hsmf,

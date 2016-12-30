@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,7 +17,7 @@
 #define _SEQ_
 
 #include "global.h"
-#include "smf.h"   
+#include "smf.h"
 
 #define  VERSION_MINOR              0x00
 #define  VERSION_MAJOR              0x04
@@ -25,8 +25,8 @@
 
 #define SEQ_F_EOF           0x00000001L
 #define SEQ_F_COLONIZED     0x00000002L
-#define SEQ_F_WAITING       0x00000004L   
-                                          
+#define SEQ_F_WAITING       0x00000004L
+
 #define SEQ_S_NOFILE        0
 #define SEQ_S_OPENED        1
 #define SEQ_S_PREROLLING    2
@@ -43,7 +43,7 @@ typedef struct tag_preroll
     TICKS       tkBase;
     TICKS       tkEnd;
 }   PREROLL,
-    FAR *LPPREROLL;
+FAR *LPPREROLL;
 
 typedef struct tag_seq NEAR* PSEQ;
 typedef struct tag_seq
@@ -55,7 +55,7 @@ typedef struct tag_seq
     UINT        uMCIDeviceID;       /* Our MCI device ID given to us                */
     UINT        uMCITimeFormat;     /* Current time format                          */
     UINT        uMCITimeDiv;        /* MCI_SEQ_DIV_xxx for current file             */
-	HWND		hWnd;				/* Where to post MMSG_DONE when done playing	*/
+    HWND		hWnd;				/* Where to post MMSG_DONE when done playing	*/
 
     UINT        uState;             /* Sequencer state (SEQ_S_xxx)                  */
     TICKS       tkLength;           /* Length of longest track                      */
@@ -67,60 +67,60 @@ typedef struct tag_seq
     HMIDIOUT    hmidi;              /* Handle to open MIDI device                   */
     DWORD       dwTimeDivision;     /* File time division                           */
 
-    LPBYTE      lpbAlloc;           /* Streaming buffers -- initial allocation      */ 
+    LPBYTE      lpbAlloc;           /* Streaming buffers -- initial allocation      */
     LPMIDIHDR   lpmhFree;           /* Streaming buffers -- free list               */
     LPMIDIHDR   lpmhPreroll;        /* Streaming buffers -- preroll buffer          */
     DWORD       cbPreroll;          /* Streaming buffers -- size of lpmhPreroll     */
     UINT        uBuffersInMMSYSTEM; /* Streaming buffers -- in use                  */
-    
+
     TICKS       tkBase;             /* Where playback started from in stream        */
     TICKS       tkEnd;              /* Where playback should end                    */
-    
+
     DWORD       fdwSeq;             /* Various sequencer flags                      */
 
 }   SEQ,
-    NEAR *PSEQ;
+NEAR *PSEQ;
 
 /* sequence.c
 */
 
-MMRESULT FNLOCAL seqAllocBuffers(    
+MMRESULT FNLOCAL seqAllocBuffers(
     PSEQ                pseq);
 
-VOID FNLOCAL seqFreeBuffers(         
+VOID FNLOCAL seqFreeBuffers(
     PSEQ                pseq);
 
-MMRESULT FNLOCAL seqOpenFile(        
+MMRESULT FNLOCAL seqOpenFile(
     PSEQ                pseq);
 
-MMRESULT FNLOCAL seqCloseFile(       
+MMRESULT FNLOCAL seqCloseFile(
     PSEQ                pseq);
 
-MMRESULT FNLOCAL seqPreroll(         
+MMRESULT FNLOCAL seqPreroll(
     PSEQ                pseq,
     LPPREROLL           lppreroll);
 
-MMRESULT FNLOCAL seqStart(           
+MMRESULT FNLOCAL seqStart(
     PSEQ                pseq);
 
-MMRESULT FNLOCAL seqPause(           
+MMRESULT FNLOCAL seqPause(
     PSEQ                pseq);
 
-MMRESULT FNLOCAL seqRestart(         
+MMRESULT FNLOCAL seqRestart(
     PSEQ                pseq);
 
-MMRESULT FNLOCAL seqStop(            
+MMRESULT FNLOCAL seqStop(
     PSEQ                pseq);
 
-MMRESULT FNLOCAL seqTime(            
+MMRESULT FNLOCAL seqTime(
     PSEQ                pseq,
     PTICKS              pTicks);
 
-TICKS FNLOCAL seqMillisecsToTicks(   
+TICKS FNLOCAL seqMillisecsToTicks(
     PSEQ                pseq,
     DWORD               msOffset);
 
-DWORD FNLOCAL seqTicksToMillisecs(   
+DWORD FNLOCAL seqTicksToMillisecs(
     PSEQ                pseq,
     TICKS               tkOffset);
 

@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -31,21 +31,21 @@ Methods
         This method is called periodically during data transfers. It can be
         called for one of these reasons;
 
-        IT_MSG_DATA_HEADER: The method tries to allocate memory for the 
+        IT_MSG_DATA_HEADER: The method tries to allocate memory for the
         image if the size is given in the header
 
-        IT_MSG_DATA: The method adjusts the stream size and copies the new 
+        IT_MSG_DATA: The method adjusts the stream size and copies the new
         data to the stream.
 
         case IT_MSG_STATUS: The method invoke the progress callback function.
 
-        IT_MSG_TERMINATION or IT_MSG_NEW_PAGE: For BMP images, calculates the 
-        image height if it is not given in the image header, fills in the 
-        BITMAPFILEHEADER and stores this stream in the successfully 
+        IT_MSG_TERMINATION or IT_MSG_NEW_PAGE: For BMP images, calculates the
+        image height if it is not given in the image header, fills in the
+        BITMAPFILEHEADER and stores this stream in the successfully
         transferred images array
 
     ReAllocBuffer
-        Increases the size of the current stream object, or creates a 
+        Increases the size of the current stream object, or creates a
         new stream object if this is the first call.
 
     CopyToBuffer
@@ -96,7 +96,7 @@ private:
 private:
     LONG m_cRef;
 
-	BOOL              m_bBMP;
+    BOOL              m_bBMP;
     LONG              m_nHeaderSize;
     LONG              m_nDataSize;
     CComPtr<IStream>  m_pStream;

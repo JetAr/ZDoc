@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,20 +12,20 @@ using namespace DirectX;
 // Constructor NULLs out all pointers & sets appropriate var vals
 //
 OUTPUTMANAGER::OUTPUTMANAGER() : m_SwapChain(nullptr),
-                                 m_Device(nullptr),
-                                 m_Factory(nullptr),
-                                 m_DeviceContext(nullptr),
-                                 m_RTV(nullptr),
-                                 m_SamplerLinear(nullptr),
-                                 m_BlendState(nullptr),
-                                 m_VertexShader(nullptr),
-                                 m_PixelShader(nullptr),
-                                 m_InputLayout(nullptr),
-                                 m_SharedSurf(nullptr),
-                                 m_KeyMutex(nullptr),
-                                 m_WindowHandle(nullptr),
-                                 m_NeedsResize(false),
-                                 m_OcclusionCookie(0)
+    m_Device(nullptr),
+    m_Factory(nullptr),
+    m_DeviceContext(nullptr),
+    m_RTV(nullptr),
+    m_SamplerLinear(nullptr),
+    m_BlendState(nullptr),
+    m_VertexShader(nullptr),
+    m_PixelShader(nullptr),
+    m_InputLayout(nullptr),
+    m_SharedSurf(nullptr),
+    m_KeyMutex(nullptr),
+    m_WindowHandle(nullptr),
+    m_NeedsResize(false),
+    m_OcclusionCookie(0)
 {
 }
 
@@ -79,7 +79,7 @@ DUPL_RETURN OUTPUTMANAGER::InitOutput(HWND Window, INT SingleOutput, _Out_ UINT*
     for (UINT DriverTypeIndex = 0; DriverTypeIndex < NumDriverTypes; ++DriverTypeIndex)
     {
         hr = D3D11CreateDevice(nullptr, DriverTypes[DriverTypeIndex], nullptr, 0, FeatureLevels, NumFeatureLevels,
-        D3D11_SDK_VERSION, &m_Device, &FeatureLevel, &m_DeviceContext);
+                               D3D11_SDK_VERSION, &m_Device, &FeatureLevel, &m_DeviceContext);
         if (SUCCEEDED(hr))
         {
             // Device creation succeeded, no need to loop anymore
@@ -775,31 +775,31 @@ DUPL_RETURN OUTPUTMANAGER::DrawMouse(_In_ PTR_INFO* PtrInfo)
 
     switch (PtrInfo->ShapeInfo.Type)
     {
-        case DXGI_OUTDUPL_POINTER_SHAPE_TYPE_COLOR:
-        {
-            PtrLeft = PtrInfo->Position.x;
-            PtrTop = PtrInfo->Position.y;
+    case DXGI_OUTDUPL_POINTER_SHAPE_TYPE_COLOR:
+    {
+        PtrLeft = PtrInfo->Position.x;
+        PtrTop = PtrInfo->Position.y;
 
-            PtrWidth = static_cast<INT>(PtrInfo->ShapeInfo.Width);
-            PtrHeight = static_cast<INT>(PtrInfo->ShapeInfo.Height);
+        PtrWidth = static_cast<INT>(PtrInfo->ShapeInfo.Width);
+        PtrHeight = static_cast<INT>(PtrInfo->ShapeInfo.Height);
 
-            break;
-        }
+        break;
+    }
 
-        case DXGI_OUTDUPL_POINTER_SHAPE_TYPE_MONOCHROME:
-        {
-            ProcessMonoMask(true, PtrInfo, &PtrWidth, &PtrHeight, &PtrLeft, &PtrTop, &InitBuffer, &Box);
-            break;
-        }
+    case DXGI_OUTDUPL_POINTER_SHAPE_TYPE_MONOCHROME:
+    {
+        ProcessMonoMask(true, PtrInfo, &PtrWidth, &PtrHeight, &PtrLeft, &PtrTop, &InitBuffer, &Box);
+        break;
+    }
 
-        case DXGI_OUTDUPL_POINTER_SHAPE_TYPE_MASKED_COLOR:
-        {
-            ProcessMonoMask(false, PtrInfo, &PtrWidth, &PtrHeight, &PtrLeft, &PtrTop, &InitBuffer, &Box);
-            break;
-        }
+    case DXGI_OUTDUPL_POINTER_SHAPE_TYPE_MASKED_COLOR:
+    {
+        ProcessMonoMask(false, PtrInfo, &PtrWidth, &PtrHeight, &PtrLeft, &PtrTop, &InitBuffer, &Box);
+        break;
+    }
 
-        default:
-            break;
+    default:
+        break;
     }
 
     // VERTEX creation

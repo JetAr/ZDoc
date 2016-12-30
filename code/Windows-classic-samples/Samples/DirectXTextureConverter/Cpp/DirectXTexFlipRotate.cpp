@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexFlipRotate.cpp
-//  
+//
 // DirectX Texture Library - Image flip/rotate operations
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -22,7 +22,7 @@ namespace DirectX
 // Do flip/rotate operation using WIC
 //-------------------------------------------------------------------------------------
 static HRESULT _PerformFlipRotateUsingWIC( _In_ const Image& srcImage, _In_ DWORD flags,
-                                           _In_ const WICPixelFormatGUID& pfGUID, _In_ const Image& destImage )
+        _In_ const WICPixelFormatGUID& pfGUID, _In_ const Image& destImage )
 {
     if ( !srcImage.pixels || !destImage.pixels )
         return E_POINTER;
@@ -35,8 +35,8 @@ static HRESULT _PerformFlipRotateUsingWIC( _In_ const Image& srcImage, _In_ DWOR
 
     ScopedObject<IWICBitmap> source;
     HRESULT hr = pWIC->CreateBitmapFromMemory( static_cast<UINT>( srcImage.width ), static_cast<UINT>( srcImage.height ), pfGUID,
-                                               static_cast<UINT>( srcImage.rowPitch ), static_cast<UINT>( srcImage.slicePitch ),
-                                               srcImage.pixels, &source );
+                 static_cast<UINT>( srcImage.rowPitch ), static_cast<UINT>( srcImage.slicePitch ),
+                 srcImage.pixels, &source );
     if ( FAILED(hr) )
         return hr;
 
@@ -178,7 +178,7 @@ HRESULT FlipRotate( const Image& srcImage, DWORD flags, ScratchImage& image )
     HRESULT hr = image.Initialize2D( srcImage.format, nwidth, nheight, 1, 1 );
     if ( FAILED(hr) )
         return hr;
-   
+
     const Image *rimage = image.GetImage( 0, 0, 0 );
     if ( !rimage )
         return E_POINTER;

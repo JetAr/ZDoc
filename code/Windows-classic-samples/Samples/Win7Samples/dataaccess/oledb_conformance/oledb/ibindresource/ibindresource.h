@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Microsoft OLE DB Test
 //
 // Copyright (C) 1995-2000 Microsoft Corporation
@@ -39,8 +39,8 @@
 				if(TESTB==TEST_FAIL)										\
 					odtLog<<L"FAILED on the URL - "<<m_rgRowsetURLs[ulIndex]<<"\n";
 
-//This is used when calling CreateRow with an existing URL. Skip 
-//the remaining variation if DB_E_RESOURCEEXISTS is returned. 
+//This is used when calling CreateRow with an existing URL. Skip
+//the remaining variation if DB_E_RESOURCEEXISTS is returned.
 #define		RESOURCE_EXISTS(hr)		if(hr==DB_E_RESOURCEEXISTS) goto CLEANUP;
 
 //Increment the new URL counter. Try to use a new url for every
@@ -62,12 +62,12 @@
 //separately.
 enum EOBJECTTYPE
 {
-	DSO				= 0,
-	SESSION			= 1,
-	ROWSET			= 2,
-	ROW				= 3,
-	STREAM			= 4,
-	INVALID_OBJECT	= 5  //This should always be the last one.
+    DSO				= 0,
+    SESSION			= 1,
+    ROWSET			= 2,
+    ROW				= 3,
+    STREAM			= 4,
+    INVALID_OBJECT	= 5  //This should always be the last one.
 };
 
 //This is used to identify the object on which the IBindResource
@@ -76,26 +76,29 @@ enum EOBJECTTYPE
 //on the interface on the Root Binder.
 enum ETESTCASE
 {
-	TC_RBINDER = 1,		//Root Binder
-	TC_PBINDER,			//Provider Binder
-	TC_SESSION,			//Session object
-	TC_ROW				//Row object	
+    TC_RBINDER = 1,		//Root Binder
+    TC_PBINDER,			//Provider Binder
+    TC_SESSION,			//Session object
+    TC_ROW				//Row object
 };
 
 
 ///////////////////////////////////////////////////////////////
-//CAuthenticate Class  -   Wrapper object for IAuthenticate 
+//CAuthenticate Class  -   Wrapper object for IAuthenticate
 //							interface.
 //
 ///////////////////////////////////////////////////////////////
 class CAuthenticate : public IAuthenticate
 {
 protected:
-	DWORD m_cRef;
+    DWORD m_cRef;
 
 public:
-	CAuthenticate()	{ m_cRef = 1; };
-	virtual ~CAuthenticate();
+    CAuthenticate()
+    {
+        m_cRef = 1;
+    };
+    virtual ~CAuthenticate();
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     virtual ULONG STDMETHODCALLTYPE AddRef(void);

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Metronom.cpp
 //
 // Desc: DirectShow sample code - Metronome clock filter
@@ -87,9 +87,9 @@
 //  (MIDI applications often use 120 BPM to be the standard.)
 //
 #define BPM 92      // normal clock speed - when the metronome ticks at
-                    // this rate, we'll provide normal wall clock time
-                    // (NOTE: You can set this to any value, depending on what kind
-                    // of metronome you're using.)
+// this rate, we'll provide normal wall clock time
+// (NOTE: You can set this to any value, depending on what kind
+// of metronome you're using.)
 
 //
 //  Sound threshold that must be reached in order to achieve a valid "beat".
@@ -97,8 +97,8 @@
 //  background noise) may be registered as being above this threshold.
 //
 #define THRESHOLD 150   // 8 bit samples above this value are HIGH (remember,
-                        // 128 is silence), else they are LOW
-                        // (leaving 128-255 values as valid)
+// 128 is silence), else they are LOW
+// (leaving 128-255 values as valid)
 
 #define BUFSIZE 3072    // size per wave buffer
 
@@ -119,11 +119,13 @@ AMOVIESETUP_FILTER sudMetronomeFilter =
 //
 CFactoryTemplate g_Templates[1] =
 {
-    {L"Metronome Filter",
-    &CLSID_MetronomeFilter,
-    (LPFNNewCOMObject) CMetronomeFilter::CreateInstance,
-    NULL,
-    &sudMetronomeFilter }
+    {
+        L"Metronome Filter",
+        &CLSID_MetronomeFilter,
+        (LPFNNewCOMObject) CMetronomeFilter::CreateInstance,
+        NULL,
+        &sudMetronomeFilter
+    }
 };
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
@@ -131,8 +133,8 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
 
 CMetronomeFilter::CMetronomeFilter(LPUNKNOWN pUnk, HRESULT *phr)
-                : CBaseFilter(NAME("Metronome Filter"), pUnk, &m_Lock, CLSID_NULL)
-                , m_Clock(static_cast<IBaseFilter*>(this), phr)
+    : CBaseFilter(NAME("Metronome Filter"), pUnk, &m_Lock, CLSID_NULL)
+    , m_Clock(static_cast<IBaseFilter*>(this), phr)
 {
     // Set the protected variable in CBaseFilter so that
     // CBaseFilter::GetClassID reports the correct ClassID!
@@ -206,8 +208,8 @@ LPAMOVIESETUP_FILTER CMetronomeFilter::GetSetupData()
 // CMetronome methods
 //
 CMetronome::CMetronome(LPUNKNOWN pUnk, HRESULT *phr)
-            : CBaseReferenceClock(NAME("Metronome Filter Clock"), pUnk, phr)
-            , m_pCurrentRefClock(0), m_pPrevRefClock(0)
+    : CBaseReferenceClock(NAME("Metronome Filter Clock"), pUnk, phr)
+    , m_pCurrentRefClock(0), m_pPrevRefClock(0)
 {
     EXECUTE_ASSERT(SUCCEEDED(OpenWaveDevice()));
 
@@ -264,12 +266,12 @@ REFERENCE_TIME CMetronome::GetPrivateTime()
 {
     CAutoLock cObjectLock(this);
 
-   /* If the clock has wrapped then the current time will be less than
-    * the last time we were notified so add on the extra milliseconds
-    *
-    * The time period is long enough so that the likelihood of
-    * successive calls spanning the clock cycle is not considered.
-    */
+    /* If the clock has wrapped then the current time will be less than
+     * the last time we were notified so add on the extra milliseconds
+     *
+     * The time period is long enough so that the likelihood of
+     * successive calls spanning the clock cycle is not considered.
+     */
 
     // This returns the current time in ms according to our special clock.  If
     // we used timeGetTime() here, our clock would run normally.
@@ -316,7 +318,7 @@ void CMetronome::SetSyncSource(IReferenceClock * pClock)
             }
 
             DbgLog((LOG_TRACE,1,TEXT("*** USING OUR CLOCK : reference is %d at tgt %d"),
-                   (DWORD)(MILLISECONDS * m_rtPrivateTime / UNITS), m_LastTickTime));
+                    (DWORD)(MILLISECONDS * m_rtPrivateTime / UNITS), m_LastTickTime));
 
         }
         else
@@ -330,7 +332,7 @@ void CMetronome::SetSyncSource(IReferenceClock * pClock)
             m_dwPrevSystemTime /= 2;
 
             DbgLog((LOG_TRACE,1,TEXT("*** USING SOMEONE ELSE'S CLOCK : reference is %d at tgt %d"),
-                   (DWORD)(MILLISECONDS * m_rtPrivateTime / UNITS), m_LastTickTime));
+                    (DWORD)(MILLISECONDS * m_rtPrivateTime / UNITS), m_LastTickTime));
         }
     }
 
@@ -372,9 +374,9 @@ DWORD CMetronome::MetGetTime(void)
     }
 
     DbgLog((LOG_TRACE,3,TEXT("MetTGT: %dms elapsed. Adjusted to %dms"),
-        (int)lms, (int)lfudge));
+            (int)lms, (int)lfudge));
     DbgLog((LOG_TRACE,3,TEXT("        returning %d TGT=%d"), (int)dw,
-        (int)timeGetTime()));
+            (int)timeGetTime()));
 
     m_dwLastMet = dw;
     m_dwLastTGT = tgt;
@@ -398,11 +400,11 @@ STDMETHODIMP CMetronome::OpenWaveDevice(void)
     DbgLog((LOG_TRACE,1,TEXT("*** Opening wave device....")));
 
     UINT err = waveInOpen(&m_hwi,
-        WAVE_MAPPER,
-        &wfx,
-        (DWORD_PTR) (&CMetronome::Callback),
-        (DWORD_PTR) this,
-        CALLBACK_FUNCTION);
+                          WAVE_MAPPER,
+                          &wfx,
+                          (DWORD_PTR) (&CMetronome::Callback),
+                          (DWORD_PTR) this,
+                          CALLBACK_FUNCTION);
 
     if(err != 0)
     {
@@ -598,95 +600,95 @@ void CALLBACK CMetronome::Callback(HDRVR hdrvr, UINT uMsg, DWORD_PTR dwUser,
 
     switch(uMsg)
     {
-        case WIM_DATA:
+    case WIM_DATA:
+    {
+        // really need a second worker thread here, because
+        // one shouldn't do this much in a wave callback.
+
+        LPWAVEHDR lpwh = (LPWAVEHDR) dw1;
+
+        ASSERT(lpwh);
+        ASSERT(pFilter);
+
+        DbgLog((LOG_TRACE,4,TEXT("WAVEIN Callback: %d bytes recorded"),
+                lpwh->dwBytesRecorded));
+
+        LPBYTE lp = (LPBYTE)(lpwh->lpData);
+        int len = lpwh->dwBytesRecorded;
+        int spike;
+
+        // look for a spike in this buffer we just recorded
+        while((spike = pFilter->FindSpike(lp, len)) != -1)
+        {
+            // don't let anybody else mess with our timing variables
+            pFilter->m_csClock.Lock();
+            lp += spike;
+            len -= spike;
+
+            // How long has it been since we saw a tick?
+            pFilter->m_SamplesSinceTick += spike;
+            DWORD msPerTickPrev = pFilter->m_msPerTick;
+
+            // Even though we just got the callback now, this stuff was
+            // recorded who knows how long ago, so what we're doing is not
+            // entirely correct... we're assuming that since we just noticed
+            // the tick means that it happened right now.  As long as our
+            // buffers are really small, and the system is very responsive,
+            // this won't be too bad.
+            DWORD dwTGT = timeGetTime();
+
+            // deal with clock stopping altogether for a while - pretend
+            // it kept ticking at its old rate or else we will think we're
+            // way ahead and the clock will freeze for the length of time
+            // the clock was stopped
+            // So if it's been a while since the last tick, don't use that
+            // long interval as a new tempo.  This way you can stop clapping
+            // and the movie will keep the current tempo until you start
+            // clapping a new tempo.
+            // (If it's been > 1.5s since the last tick, this is probably
+            //  the start of a new tempo).
+            if(pFilter->m_SamplesSinceTick * 1000 / 11025 > 1500)
             {
-                // really need a second worker thread here, because
-                // one shouldn't do this much in a wave callback.
-
-                LPWAVEHDR lpwh = (LPWAVEHDR) dw1;
-
-                ASSERT(lpwh);
-                ASSERT(pFilter);
-
-                DbgLog((LOG_TRACE,4,TEXT("WAVEIN Callback: %d bytes recorded"),
-                        lpwh->dwBytesRecorded));
-
-                LPBYTE lp = (LPBYTE)(lpwh->lpData);
-                int len = lpwh->dwBytesRecorded;
-                int spike;
-
-                // look for a spike in this buffer we just recorded
-                while((spike = pFilter->FindSpike(lp, len)) != -1)
-                {
-                    // don't let anybody else mess with our timing variables
-                    pFilter->m_csClock.Lock();
-                    lp += spike;
-                    len -= spike;
-
-                    // How long has it been since we saw a tick?
-                    pFilter->m_SamplesSinceTick += spike;
-                    DWORD msPerTickPrev = pFilter->m_msPerTick;
-
-                    // Even though we just got the callback now, this stuff was
-                    // recorded who knows how long ago, so what we're doing is not
-                    // entirely correct... we're assuming that since we just noticed
-                    // the tick means that it happened right now.  As long as our
-                    // buffers are really small, and the system is very responsive,
-                    // this won't be too bad.
-                    DWORD dwTGT = timeGetTime();
-
-                    // deal with clock stopping altogether for a while - pretend
-                    // it kept ticking at its old rate or else we will think we're
-                    // way ahead and the clock will freeze for the length of time
-                    // the clock was stopped
-                    // So if it's been a while since the last tick, don't use that
-                    // long interval as a new tempo.  This way you can stop clapping
-                    // and the movie will keep the current tempo until you start
-                    // clapping a new tempo.
-                    // (If it's been > 1.5s since the last tick, this is probably
-                    //  the start of a new tempo).
-                    if(pFilter->m_SamplesSinceTick * 1000 / 11025 > 1500)
-                    {
-                        DbgLog((LOG_TRACE,2,TEXT("Ignoring 1st TICK after long gap")));
-                    }
-                    else
-                    {
-                        // running our clock at the old rate, we'd be here right now
-                        pFilter->m_LastTickTime = pFilter->m_dwLastMet +
-                            (dwTGT - pFilter->m_dwLastTGT) *
-                            (60000 / BPM) / pFilter->m_msPerTick;
-
-                        pFilter->m_msPerTick = (DWORD)((LONGLONG)
-                            pFilter->m_SamplesSinceTick * 1000 / 11025);
-
-                        pFilter->m_LastTickTGT = dwTGT;
-
-                        DbgLog((LOG_TRACE,2,TEXT("TICK! after %dms, reporting %d tgt=%d"), pFilter->m_msPerTick, pFilter->m_LastTickTime, pFilter->m_LastTickTGT));
-                    }
-
-                    pFilter->m_SamplesSinceTick = 0;
-                    pFilter->m_csClock.Unlock();
-                }
-
-                // we went the whole buffer without seeing a tick.
-                pFilter->m_SamplesSinceTick += len;
-
-                if(pFilter->m_fWaveRunning)
-                {
-                    DbgLog((LOG_TRACE,4,TEXT("Sending the buffer back")));
-                    waveInAddBuffer(pFilter->m_hwi, lpwh, sizeof(WAVEHDR));
-                }
-
+                DbgLog((LOG_TRACE,2,TEXT("Ignoring 1st TICK after long gap")));
             }
-            break;
+            else
+            {
+                // running our clock at the old rate, we'd be here right now
+                pFilter->m_LastTickTime = pFilter->m_dwLastMet +
+                                          (dwTGT - pFilter->m_dwLastTGT) *
+                                          (60000 / BPM) / pFilter->m_msPerTick;
 
-        case WIM_OPEN:
-        case WIM_CLOSE:
-            break;
+                pFilter->m_msPerTick = (DWORD)((LONGLONG)
+                                               pFilter->m_SamplesSinceTick * 1000 / 11025);
 
-        default:
-            DbgLog((LOG_TRACE,2,TEXT("Unexpected wave callback message %d"), uMsg));
-            break;
+                pFilter->m_LastTickTGT = dwTGT;
+
+                DbgLog((LOG_TRACE,2,TEXT("TICK! after %dms, reporting %d tgt=%d"), pFilter->m_msPerTick, pFilter->m_LastTickTime, pFilter->m_LastTickTGT));
+            }
+
+            pFilter->m_SamplesSinceTick = 0;
+            pFilter->m_csClock.Unlock();
+        }
+
+        // we went the whole buffer without seeing a tick.
+        pFilter->m_SamplesSinceTick += len;
+
+        if(pFilter->m_fWaveRunning)
+        {
+            DbgLog((LOG_TRACE,4,TEXT("Sending the buffer back")));
+            waveInAddBuffer(pFilter->m_hwi, lpwh, sizeof(WAVEHDR));
+        }
+
+    }
+    break;
+
+    case WIM_OPEN:
+    case WIM_CLOSE:
+        break;
+
+    default:
+        DbgLog((LOG_TRACE,2,TEXT("Unexpected wave callback message %d"), uMsg));
+        break;
     }
 }
 

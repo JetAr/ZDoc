@@ -1,4 +1,4 @@
-// PlgTerm.h: interface for the CPlgTermSample class.
+﻿// PlgTerm.h: interface for the CPlgTermSample class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -14,7 +14,7 @@
 #include "PlgTermPriv.h"
 
 
-class CPlgTermSample  : 
+class CPlgTermSample  :
     public CComCoClass<CPlgTermSample, &CLSID_PlgTermSample>,
     public ITPluggableTerminalEventSinkRegistration,
     public ITPluggableTerminalInitialization,
@@ -28,7 +28,7 @@ public:
     DECLARE_REGISTRY_RESOURCEID(IDR_PLG_TEST)
 
 
-BEGIN_COM_MAP(CPlgTermSample)
+    BEGIN_COM_MAP(CPlgTermSample)
     COM_INTERFACE_ENTRY(ITPluggableTerminalEventSinkRegistration)
     COM_INTERFACE_ENTRY(ITPluggableTerminalInitialization)
     COM_INTERFACE_ENTRY(ITPlgPrivEventSink)
@@ -36,12 +36,12 @@ BEGIN_COM_MAP(CPlgTermSample)
     COM_INTERFACE_ENTRY2(IDispatch, ITTerminal)
     COM_INTERFACE_ENTRY_CHAIN(CSingleFilterTerminal)
     COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pFTM)
-END_COM_MAP()
+    END_COM_MAP()
 
     CPlgTermSample();
-	virtual ~CPlgTermSample();
+    virtual ~CPlgTermSample();
 
-    DECLARE_NOT_AGGREGATABLE(CPlgTermSample) 
+    DECLARE_NOT_AGGREGATABLE(CPlgTermSample)
     DECLARE_GET_CONTROLLING_UNKNOWN()
 
     virtual HRESULT FinalConstruct(void);
@@ -72,10 +72,10 @@ END_COM_MAP()
 
 //	virtual HRESULT GetNumExposedPins(
 //        IN   IGraphBuilder * pGraph,
-//        OUT  DWORD         * pdwNumPins); 
- 
-	
-	//
+//        OUT  DWORD         * pdwNumPins);
+
+
+    //
     // ITPluggableTerminalInitialization method
     //
 
@@ -84,36 +84,36 @@ END_COM_MAP()
         IN  DWORD                 dwMediaType,
         IN  TERMINAL_DIRECTION    Direction,
         IN  MSP_HANDLE            htAddress
-        );
+    );
 
     //
-    // overriding IObjectSafety methods. we are only safe if properly 
+    // overriding IObjectSafety methods. we are only safe if properly
     // initialized by terminal manager, so these methods will fail if this
     // is not the case.
     //
 
-    STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, 
-                                         DWORD dwOptionSetMask, 
+    STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid,
+                                         DWORD dwOptionSetMask,
                                          DWORD dwEnabledOptions);
 
-    STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, 
-                                         DWORD *pdwSupportedOptions, 
+    STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid,
+                                         DWORD *pdwSupportedOptions,
                                          DWORD *pdwEnabledOptions);
 
 
-	//
+    //
     // ITPlgPrivEventSink methods
     //
 
     STDMETHOD (FireEvent)(long lEventCode);
-    
+
     //
     // ITPluggableTerminalEventSinkRegistration methods
     //
 
     STDMETHOD(RegisterSink)(
         IN  ITPluggableTerminalEventSink *pSink
-        );
+    );
 
     STDMETHOD(UnregisterSink)();
 
@@ -132,18 +132,18 @@ private:
     // sink for firing terminal events
     //
 
-    ITPluggableTerminalEventSink* m_pEventSink; 
+    ITPluggableTerminalEventSink* m_pEventSink;
 
-	//
-	// pointer to the free threaded marshaler
-	//
+    //
+    // pointer to the free threaded marshaler
+    //
 
-	IUnknown*            m_pFTM;                
-    
-	//
-    // this terminal should only be instantiated in the context of terminal 
-    // manager. the object will only be safe for scripting if it has been 
-    // InitializeDynamic'ed. 
+    IUnknown*            m_pFTM;
+
+    //
+    // this terminal should only be instantiated in the context of terminal
+    // manager. the object will only be safe for scripting if it has been
+    // InitializeDynamic'ed.
     //
     // this flag will be set when InitializeDynamic succeeds
     //

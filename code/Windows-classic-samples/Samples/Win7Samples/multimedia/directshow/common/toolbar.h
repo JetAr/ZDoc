@@ -1,6 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 // Toolbar.h: Toolbar and rebar control classes.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -24,35 +24,35 @@ public:
         Button(int bitmap, int command);
     };
 
-	enum ButtonState
-	{
-		Normal, Hot, Disabled
-	};
+    enum ButtonState
+    {
+        Normal, Hot, Disabled
+    };
 
     Toolbar();
-	~Toolbar();
+    ~Toolbar();
     HRESULT Create(HINSTANCE hInstance, HWND hParent, DWORD_PTR id, DWORD dwStyle = 0);
-    HRESULT AddButton(const Button& button);  
+    HRESULT AddButton(const Button& button);
     HRESULT Check(int id, BOOL fCheck);
     HRESULT Enable(int id, BOOL fCheck);
 
-	HRESULT SetImageList(
-		ButtonState state,		// Button state associated with this image list (normal, disabled, hot)
-		UINT nBitmapID,			// Bitmap resource ID. Bitmap must be 24 bpp
-		const Size& buttonSize, // Size of each button in pixels
-		DWORD numButtons,		// Number of buttons
-		COLORREF mask			// Color mask
-		);
+    HRESULT SetImageList(
+        ButtonState state,		// Button state associated with this image list (normal, disabled, hot)
+        UINT nBitmapID,			// Bitmap resource ID. Bitmap must be 24 bpp
+        const Size& buttonSize, // Size of each button in pixels
+        DWORD numButtons,		// Number of buttons
+        COLORREF mask			// Color mask
+    );
 
-	HRESULT SetButtonImage(int command, int bitmap);
+    HRESULT SetButtonImage(int command, int bitmap);
 
     HRESULT ShowToolTip(NMTTDISPINFO *pDispInfo);
 
 private:
 
-	HIMAGELIST	m_hImageListNormal;
-	HIMAGELIST	m_hImageListHot;
-	HIMAGELIST	m_hImageListDisabled;
+    HIMAGELIST	m_hImageListNormal;
+    HIMAGELIST	m_hImageListHot;
+    HIMAGELIST	m_hImageListDisabled;
 };
 
 

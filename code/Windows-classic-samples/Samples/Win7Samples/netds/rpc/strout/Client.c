@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,7 +7,7 @@
 
 
 /*************************************************************************
-                  
+
                         Microsoft RPC
 						strout sample
 
@@ -23,12 +23,12 @@
 
   COMMENTS  :   This program shows how to call remote procedures that
                 allocate memory for a two dimensional array (an array of
-                character pointers). It calls the server that allocates 
+                character pointers). It calls the server that allocates
                 memory to store all the environment strings in, and copies
-                the environment variables to this memory. The client then 
+                the environment variables to this memory. The client then
                 displays all the data on the client machine.
 
-                Since this program uses the implicit binding method, some 
+                Since this program uses the implicit binding method, some
                 of the binding handling must be done at the client side
 *************************************************************************/
 
@@ -46,10 +46,10 @@ void Usage(_TUCHAR * pszProgramName)
 {
     _tprintf_s(TEXT("USAGE : %s [-option]\n"), pszProgramName);
     _tprintf_s(TEXT("Options : -n Network Address\n"));
-    _tprintf_s(TEXT("          -p Protocol Sequence\n"));  
+    _tprintf_s(TEXT("          -p Protocol Sequence\n"));
     _tprintf_s(TEXT("          -e Endpoint\n"));
-    _tprintf_s(TEXT("          -a Server Principal Name\n"));	
-    _tprintf_s(TEXT("          -o Options\n"));  
+    _tprintf_s(TEXT("          -a Server Principal Name\n"));
+    _tprintf_s(TEXT("          -o Options\n"));
     exit(EXECUTION_FAILED);
 }
 
@@ -60,23 +60,23 @@ void Usage(_TUCHAR * pszProgramName)
 int main(int argc, char *argv[])
 {
     RPC_STATUS nStatus;     /* Return value from the RPC calls          */
-	RPC_SECURITY_QOS SecQos;
+    RPC_SECURITY_QOS SecQos;
     unsigned int
-        nIdx,               /* Counter in loops                         */
-        nNumArgs;           /* Number of commandline arguments          */
-    unsigned long 
-        nNumLines = 0;      /* Number of lines in the environment block */
+    nIdx,               /* Counter in loops                         */
+    nNumArgs;           /* Number of commandline arguments          */
+    unsigned long
+    nNumLines = 0;      /* Number of lines in the environment block */
     str	*pEnvBlock;         /* Pointer to an array of string pointers   */
-    
+
     // These variables are used for the implicit binding
     _TUCHAR	*pszUuid            = NULL;
     _TUCHAR	*pszProtocolSequence= PROTOCOL_SEQUENCE;
-    _TUCHAR	*pszNetworkAddress  = NULL;	
-    _TUCHAR	*pszSpn             = NULL;	
+    _TUCHAR	*pszNetworkAddress  = NULL;
+    _TUCHAR	*pszSpn             = NULL;
     _TUCHAR	*pszEndpoint        = END_POINT;
     _TUCHAR	*pszOptions         = NULL;
     _TUCHAR	*pszStringBinding   = NULL;
-	
+
     /* Get a common handle on the command line arguments for both       */
     /* UNICODE and ASCII                                                */
 #ifdef _UNICODE
@@ -92,64 +92,65 @@ int main(int argc, char *argv[])
 #endif
 
     /* Allow the user to override settings with commandline switches    */
-    for (nIdx = 1; nIdx < nNumArgs; nIdx++) 
+    for (nIdx = 1; nIdx < nNumArgs; nIdx++)
     {
-        if ((_tcscmp(szArglist[nIdx], TEXT("-n")) == 0) || 
-            (_tcscmp(szArglist[nIdx], TEXT("-N")) == 0))
+        if ((_tcscmp(szArglist[nIdx], TEXT("-n")) == 0) ||
+                (_tcscmp(szArglist[nIdx], TEXT("-N")) == 0))
         {
             pszNetworkAddress = szArglist[++nIdx];
         }
         else if((_tcscmp(szArglist[nIdx], TEXT("-a")) == 0) ||
-            (_tcscmp(szArglist[nIdx], TEXT("-A")) == 0))
+                (_tcscmp(szArglist[nIdx], TEXT("-A")) == 0))
         {
             pszSpn = szArglist[++nIdx];
         }
-        else if((_tcscmp(szArglist[nIdx], TEXT("-p")) == 0) || 
-            (_tcscmp(szArglist[nIdx], TEXT("-P")) == 0))
+        else if((_tcscmp(szArglist[nIdx], TEXT("-p")) == 0) ||
+                (_tcscmp(szArglist[nIdx], TEXT("-P")) == 0))
         {
             pszProtocolSequence = szArglist[++nIdx];
         }
-        else if((_tcscmp(szArglist[nIdx], TEXT("-e")) == 0) || 
+        else if((_tcscmp(szArglist[nIdx], TEXT("-e")) == 0) ||
                 (_tcscmp(szArglist[nIdx], TEXT("-E")) == 0))
         {
             pszEndpoint = szArglist[++nIdx];
         }
-        else if((_tcscmp(szArglist[nIdx], TEXT("-o")) == 0) || 
+        else if((_tcscmp(szArglist[nIdx], TEXT("-o")) == 0) ||
                 (_tcscmp(szArglist[nIdx], TEXT("-O")) == 0))
         {
             pszOptions = szArglist[++nIdx];
         }
-        else 
+        else
         {
             Usage(szArglist[0]);
         }
     }
-            
+
 
     /* Since we are using implicit binding, we need to do some binding  */
     /* from the client side as well.                                    */
     /* Use a function to concatenate the elements of the string         */
     /* binding into the proper sequence                                 */
-    nStatus = RpcStringBindingCompose(	
-        pszUuid,							
-        pszProtocolSequence,
-        pszNetworkAddress,
-        pszEndpoint,
-        pszOptions,
-        &pszStringBinding);
+    nStatus = RpcStringBindingCompose(
+                  pszUuid,
+                  pszProtocolSequence,
+                  pszNetworkAddress,
+                  pszEndpoint,
+                  pszOptions,
+                  &pszStringBinding);
     EXIT_IF_FAIL(nStatus, "RpcStringBindingCompose");
 
     /* Set the binding handle that will be used to bind to the server   */
-    nStatus = RpcBindingFromStringBinding(	
-        pszStringBinding,					
-        &strout_sample_v1_0_c_ifspec);      /* The global handle used   */
+    nStatus = RpcBindingFromStringBinding(
+                  pszStringBinding,
+                  &strout_sample_v1_0_c_ifspec);      /* The global handle used   */
     EXIT_IF_FAIL(nStatus, "RpcBindingFromStringBinding");
 
     /* Initialize the pointer to NULL */
     pEnvBlock = NULL;
-	
+
     /* User did not specify spn, construct one. */
-    if (pszSpn == NULL) {
+    if (pszSpn == NULL)
+    {
         MakeSpn(&pszSpn);
     }
 
@@ -161,18 +162,19 @@ int main(int argc, char *argv[])
 
     /* Set the security provider on binding handle */
     nStatus = RpcBindingSetAuthInfoEx(strout_sample_v1_0_c_ifspec,
-                                     pszSpn,
-                                     RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-                                     RPC_C_AUTHN_GSS_NEGOTIATE,
-                                     NULL,
-                                     RPC_C_AUTHZ_NONE,
-                                     &SecQos);
-	
+                                      pszSpn,
+                                      RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
+                                      RPC_C_AUTHN_GSS_NEGOTIATE,
+                                      NULL,
+                                      RPC_C_AUTHZ_NONE,
+                                      &SecQos);
+
     printf_s("RpcBindingSetAuthInfoEx returned 0x%x\n", nStatus);
-    if (nStatus) {
+    if (nStatus)
+    {
         exit(nStatus);
-    }	
-	
+    }
+
     RpcTryExcept                /* Catch any exception that occurs      */
     {
         /* Call the remote procedure */
@@ -180,19 +182,19 @@ int main(int argc, char *argv[])
         GetRemoteEnv(strout_sample_v1_0_c_ifspec,&nNumLines, &pEnvBlock);
     }
     RpcExcept(( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
-                   (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
-                   (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
-                   (RpcExceptionCode() != STATUS_BREAKPOINT) &&
-                   (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
-                   (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
-                   (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
-                    )
-                    ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ))
+                  (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
+                  (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
+                  (RpcExceptionCode() != STATUS_BREAKPOINT) &&
+                  (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
+                  (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
+                  (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
+                )
+                ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ))
     {
-        _tprintf_s(TEXT("Run-time exception %08X = %d in %s\n"), 
-            RpcExceptionCode(), RpcExceptionCode(), TEXT(__FILE__));
+        _tprintf_s(TEXT("Run-time exception %08X = %d in %s\n"),
+                   RpcExceptionCode(), RpcExceptionCode(), TEXT(__FILE__));
 
-	    exit(EXECUTION_FAILED);
+        exit(EXECUTION_FAILED);
     }
     RpcEndExcept
 
@@ -204,8 +206,8 @@ int main(int argc, char *argv[])
     {
         _tprintf_s(TEXT("\t%s\n"), pEnvBlock[nIdx]);
     }
-	
-	
+
+
     // Deallocate all the memory used for the EnvBlock
     for (nIdx = 0; nIdx < nNumLines; nIdx++)
     {

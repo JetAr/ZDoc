@@ -1,7 +1,7 @@
-/******************************************************************************
+﻿/******************************************************************************
  * <copyright file="ShellClient.h" company="Microsoft">
  *     Copyright (c) Microsoft Corporation.  All rights reserved.
- * </copyright>                                                                
+ * </copyright>
  *****************************************************************************/
 
 #ifndef _SHELLCLIENT_H_

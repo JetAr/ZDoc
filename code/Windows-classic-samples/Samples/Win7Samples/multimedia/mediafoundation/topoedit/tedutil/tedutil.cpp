@@ -1,4 +1,4 @@
-// teddll.cpp : Implementation of DLL Exports.
+﻿// teddll.cpp : Implementation of DLL Exports.
 
 #include "stdafx.h"
 #include "tedutil.h"
@@ -47,9 +47,9 @@ STDAPI DllUnregisterServer(void)
 }
 
 STDAPI DllGetClassObject(
-  __in REFCLSID rclsid,  
-  __in REFIID riid,      
-  __deref_out LPVOID FAR* ppv
+    __in REFCLSID rclsid,
+    __in REFIID riid,
+    __deref_out LPVOID FAR* ppv
 )
 {
     return _Module.DllGetClassObject(rclsid, riid, ppv);

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: IMpeg2PsiParser.h
 //
 // Desc: DirectShow sample code - custom interface allowing the user
@@ -19,65 +19,65 @@ extern "C" {
 
 
 // {AE1A2884-540E-4077-B1AB-67A34A72298C}
-DEFINE_GUID(IID_IMpeg2PsiParser, 
-0xae1a2884, 0x540e, 0x4077, 0xb1, 0xab, 0x67, 0xa3, 0x4a, 0x72, 0x29, 0x8c);
+DEFINE_GUID(IID_IMpeg2PsiParser,
+            0xae1a2884, 0x540e, 0x4077, 0xb1, 0xab, 0x67, 0xa3, 0x4a, 0x72, 0x29, 0x8c);
 
 
-    DECLARE_INTERFACE_(IMpeg2PsiParser, IUnknown)
-    {
+DECLARE_INTERFACE_(IMpeg2PsiParser, IUnknown)
+{
 
-        STDMETHOD(GetTransportStreamId) (THIS_
-            WORD *pStreamId      
-        ) PURE;
+    STDMETHOD(GetTransportStreamId) (THIS_
+                                     WORD *pStreamId
+                                    ) PURE;
 
-        STDMETHOD(GetPatVersionNumber) (THIS_
-            BYTE *pPatVersion        
-        ) PURE;
+    STDMETHOD(GetPatVersionNumber) (THIS_
+                                    BYTE *pPatVersion
+                                   ) PURE;
 
-        STDMETHOD(GetCountOfPrograms) (THIS_
-            int *pNumOfPrograms        
-        ) PURE;
+    STDMETHOD(GetCountOfPrograms) (THIS_
+                                   int *pNumOfPrograms
+                                  ) PURE;
 
-        STDMETHOD(GetRecordProgramNumber) (THIS_
-            DWORD dwIndex, 
-            WORD * pwVal     
-        ) PURE;
+    STDMETHOD(GetRecordProgramNumber) (THIS_
+                                       DWORD dwIndex,
+                                       WORD * pwVal
+                                      ) PURE;
 
-        STDMETHOD(GetRecordProgramMapPid) (THIS_
-            DWORD dwIndex, 
-            WORD * pwVal      
-        ) PURE;
+    STDMETHOD(GetRecordProgramMapPid) (THIS_
+                                       DWORD dwIndex,
+                                       WORD * pwVal
+                                      ) PURE;
 
-        STDMETHOD(FindRecordProgramMapPid) (THIS_
-            WORD wProgramNumber, 
-            WORD * pwVal       
-        ) PURE;
-
-
-        STDMETHOD(GetPmtVersionNumber) (THIS_
-            WORD wProgramNumber, 
-            BYTE *pPmtVersion
-            )PURE;
+    STDMETHOD(FindRecordProgramMapPid) (THIS_
+                                        WORD wProgramNumber,
+                                        WORD * pwVal
+                                       ) PURE;
 
 
-        STDMETHOD(GetCountOfElementaryStreams) (THIS_
-            WORD wProgramNumber, 
-            WORD *pwVal
-            )PURE;
+    STDMETHOD(GetPmtVersionNumber) (THIS_
+                                    WORD wProgramNumber,
+                                    BYTE *pPmtVersion
+                                   )PURE;
 
-        STDMETHOD(GetRecordStreamType) (THIS_
-            WORD wProgramNumber,
-            DWORD dwRecordIndex, 
-            BYTE *pbVal
-            )PURE;
 
-        STDMETHOD(GetRecordElementaryPid) (THIS_
-            WORD wProgramNumber,
-            DWORD dwRecordIndex, 
-            WORD *pwVal
-            )PURE;
+    STDMETHOD(GetCountOfElementaryStreams) (THIS_
+                                            WORD wProgramNumber,
+                                            WORD *pwVal
+                                           )PURE;
 
-        };
+    STDMETHOD(GetRecordStreamType) (THIS_
+                                    WORD wProgramNumber,
+                                    DWORD dwRecordIndex,
+                                    BYTE *pbVal
+                                   )PURE;
+
+    STDMETHOD(GetRecordElementaryPid) (THIS_
+                                       WORD wProgramNumber,
+                                       DWORD dwRecordIndex,
+                                       WORD *pwVal
+                                      )PURE;
+
+};
 
 
 #ifdef __cplusplus

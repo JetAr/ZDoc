@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -66,10 +66,12 @@ void OnSetCertDialogInit(HWND hwndDlg)
             StringCbPrintf(szBuffer, _countof(szBuffer), _T("%d"), nCertIndex);
             // if certificate with that index exists on device we may use it as signer
             // if not - we have available slot to add new
-            if (CertificateExists(nCertIndex)) {
+            if (CertificateExists(nCertIndex))
+            {
                 AddComboStringWithData(hwndDlg, IDC_CERT_SIGNER_INDEX, szBuffer, nCertIndex);
             }
-            else {
+            else
+            {
                 AddComboStringWithData(hwndDlg, IDC_CERT_INDEX, szBuffer, nCertIndex);
             }
         }
@@ -112,19 +114,23 @@ void OnSetCertDialogDestroy(HWND hwndDlg)
     DWORD dwData = 0;
     g_newCertProps = CCertProperties();
 
-    if (GetComboData(hwndDlg, IDC_CERT_TYPE, dwData)) {
+    if (GetComboData(hwndDlg, IDC_CERT_TYPE, dwData))
+    {
         g_newCertProps.nCertType = (CERTIFICATE_TYPES)dwData;
     }
 
-    if (GetComboData(hwndDlg, IDC_VALIDATION_POLICY, dwData)) {
+    if (GetComboData(hwndDlg, IDC_VALIDATION_POLICY, dwData))
+    {
         g_newCertProps.nValidationPolicy = (CERTIFICATE_VALIDATION_POLICIES)dwData;
     }
 
-    if (GetComboData(hwndDlg, IDC_CERT_SIGNER_INDEX, dwData)) {
+    if (GetComboData(hwndDlg, IDC_CERT_SIGNER_INDEX, dwData))
+    {
         g_newCertProps.nSignerCertIndex = dwData;
     }
 
-    if (GetComboData(hwndDlg, IDC_CERT_INDEX, dwData)) {
+    if (GetComboData(hwndDlg, IDC_CERT_INDEX, dwData))
+    {
         g_newCertProps.nIndex = dwData;
     }
 }
@@ -139,10 +145,10 @@ INT_PTR CALLBACK CertSetDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARA
     case WM_COMMAND:
         switch(LOWORD(wParam))
         {
-            case IDCANCEL:
-            case IDOK:
-                EndDialog(hwndDlg, LOWORD(wParam));
-                return TRUE;
+        case IDCANCEL:
+        case IDOK:
+            EndDialog(hwndDlg, LOWORD(wParam));
+            return TRUE;
         }
         break;
     case WM_DESTROY:
@@ -159,7 +165,7 @@ void OnBnClickedAddToDevice(HWND hwndDlg)
     if (GetSelectedCertificate(hwndDlg, g_Certificate) >= 0)
     {
         if (DialogBox(GetModuleHandle(NULL),
-            MAKEINTRESOURCE(IDD_SET_CERTIFICATE), hwndDlg, CertSetDialogProc) == IDOK)
+                      MAKEINTRESOURCE(IDD_SET_CERTIFICATE), hwndDlg, CertSetDialogProc) == IDOK)
         {
             BOOL bProcessAdding = TRUE;
             DWORD nCertEncodedDataSize = 0;
@@ -171,19 +177,19 @@ void OnBnClickedAddToDevice(HWND hwndDlg)
             if ((g_newCertProps.nCertType == CERTTYPE_PCP) && (g_newCertProps.nIndex != 1))
             {
                 bProcessAdding = (MessageBox(hwndDlg,
-                    _T("Warning!\nPCp certificate should be placed to slot 1 only.\nAre you sure?"),
-                    _T("Confirm..."),
-                    MB_YESNO | MB_ICONWARNING) == IDYES);
+                                             _T("Warning!\nPCp certificate should be placed to slot 1 only.\nAre you sure?"),
+                                             _T("Confirm..."),
+                                             MB_YESNO | MB_ICONWARNING) == IDYES);
             }
 
             if ((g_newCertProps.nCertType != CERTTYPE_PCP) && (g_newCertProps.nIndex == 1))
             {
                 bProcessAdding = (MessageBox(hwndDlg,
-                    _T("Warning!\nSlot 1 reserved for PCp certificate.\nAre you sure?"),
-                    _T("Confirm..."),
-                    MB_YESNO | MB_ICONWARNING) == IDYES);
+                                             _T("Warning!\nSlot 1 reserved for PCp certificate.\nAre you sure?"),
+                                             _T("Confirm..."),
+                                             MB_YESNO | MB_ICONWARNING) == IDYES);
             }
-            
+
             if (bProcessAdding)
             {
                 CPortableDeviceImp device;
@@ -198,19 +204,20 @@ void OnBnClickedAddToDevice(HWND hwndDlg)
                     LPTSTR errBuf = NULL;
 
                     if (FormatMessage(
-                        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-                        NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                        (LPTSTR)&errBuf, 0, NULL) == 0)
+                                FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+                                NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                                (LPTSTR)&errBuf, 0, NULL) == 0)
                     {
                         // failed, check GetLastError()...
                     }
                     if (errBuf)
                     {
                         StringCbPrintf(szMessageBuf, _countof(szMessageBuf),
-                            _T("Certificate set error:\nhr = 0x%08X\n%s"), hr, errBuf);
+                                       _T("Certificate set error:\nhr = 0x%08X\n%s"), hr, errBuf);
                         LocalFree(errBuf);
                     }
-                    else {
+                    else
+                    {
                         StringCbPrintf(szMessageBuf, _countof(szMessageBuf), _T("Certificate set error:\nhr = 0x%08X"), hr);
                     }
                 }
@@ -220,8 +227,8 @@ void OnBnClickedAddToDevice(HWND hwndDlg)
                 }
 
                 MessageBox(hwndDlg,
-                    szMessageBuf, _T("Result..."),
-                    MB_OK | (FAILED(hr) ? MB_ICONERROR : MB_ICONINFORMATION));
+                           szMessageBuf, _T("Result..."),
+                           MB_OK | (FAILED(hr) ? MB_ICONERROR : MB_ICONINFORMATION));
             }
         }
     }

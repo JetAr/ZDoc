@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -56,7 +56,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         return hr;
     }
 
-#ifndef UNICODE 
+#ifndef UNICODE
     WCHAR* pwszInput = NULL;
     if (NULL != ptszInput)
     {
@@ -66,7 +66,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             return hr;
         }
     }
-    
+
     WCHAR* pwszOutput = NULL;
     if (NULL != ptszOutput)
     {
@@ -76,12 +76,12 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             return hr;
         }
     }
-    
-    
+
+
 #endif // UNICODE
 
     HANDLE  hReaderThread = NULL;
-	HANDLE  hWriterThread = NULL;
+    HANDLE  hWriterThread = NULL;
     DWORD   dwReaderThreadID = 0;
     DWORD   dwWriterThreadID = 0;
 
@@ -93,40 +93,41 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     }
 
 
-    do {
+    do
+    {
         if (FILE == iMode)
         {
             CReader reader;
             CWriter writer;
 
             //
-            // Create thread displaying statistics  
+            // Create thread displaying statistics
             //
 
             hReaderStatsEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
-			if( NULL == hReaderStatsEvent )
+            if( NULL == hReaderStatsEvent )
             {
                 hr = E_FAIL;
                 break;
             }
 
             hReaderThread = CreateThread( NULL, 0, GetReaderStats,
-                                           (LPVOID) &reader, CREATE_SUSPENDED , &dwReaderThreadID );
+                                          (LPVOID) &reader, CREATE_SUSPENDED, &dwReaderThreadID );
             if ( NULL == hReaderThread )
             {
                 hr = E_FAIL;
                 break;
             }
-			
-			hWriterStatsEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
-			if( NULL == hWriterStatsEvent )
+
+            hWriterStatsEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
+            if( NULL == hWriterStatsEvent )
             {
                 hr = E_FAIL;
                 break;
             }
 
             hWriterThread = CreateThread( NULL, 0, GetWriterStats,
-                                           (LPVOID) &writer, CREATE_SUSPENDED , &dwWriterThreadID );
+                                          (LPVOID) &writer, CREATE_SUSPENDED, &dwWriterThreadID );
             if ( NULL == hWriterThread )
             {
                 hr = E_FAIL;
@@ -140,7 +141,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             }
 
             //
-            // Create file sink for writer 
+            // Create file sink for writer
             //
 #ifndef UNICODE
             hr = writer.CreateFileSink( pwszOutput );
@@ -152,7 +153,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
                 break;
             }
 
-            
+
 
             //
             // Initialize reader.
@@ -185,13 +186,13 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
                 break;
             }
             _tprintf( _T(  "WMStats initialized successfully. \n\n" ) );
-            
+
             //
             // Resume statistics thread
             //
             ResumeThread( hReaderThread );
-			ResumeThread( hWriterThread );
-            
+            ResumeThread( hWriterThread );
+
 
             //
             // Start reader. This is a synchronous function that waits until playback is finished
@@ -208,7 +209,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             //
 
             SetEvent( hReaderStatsEvent );
-			SetEvent( hWriterStatsEvent );
+            SetEvent( hWriterStatsEvent );
 
             HANDLE hThreads[] = { hReaderThread, hWriterThread };
 
@@ -227,7 +228,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             CReader reader;
 
             //
-            // Create thread displaying statistics  
+            // Create thread displaying statistics
             //
 
             hReaderStatsEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
@@ -238,7 +239,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             }
 
             hReaderThread = CreateThread( NULL, 0, GetReaderStats,
-                                           (LPVOID) &reader, CREATE_SUSPENDED , &dwReaderThreadID );
+                                          (LPVOID) &reader, CREATE_SUSPENDED, &dwReaderThreadID );
             if ( NULL == hReaderThread )
             {
                 hr = E_FAIL;
@@ -305,7 +306,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             CWriter writer;
 
             //
-            // Create thread displaying statistics  
+            // Create thread displaying statistics
             //
 
             hWriterStatsEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
@@ -316,7 +317,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             }
 
             hWriterThread = CreateThread( NULL, 0, GetWriterStats,
-                                           (LPVOID) &writer, CREATE_SUSPENDED , &dwWriterThreadID );
+                                          (LPVOID) &writer, CREATE_SUSPENDED, &dwWriterThreadID );
             if ( NULL == hWriterThread )
             {
                 hr = E_FAIL;
@@ -403,7 +404,8 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
             }
 
         }
-    }while( FALSE );
+    }
+    while( FALSE );
 
 #ifndef UNICODE
     if (NULL != pwszInput)
@@ -417,7 +419,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
         pwszOutput = NULL;
     }
 #endif
-    
+
     if (FAILED( hr ) )
     {
         _tprintf( _T(  "WMStats failed (hr=0x%08x).\n" ), hr );
@@ -429,7 +431,7 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
     {
         CloseHandle( hWriterStatsEvent );
     }
-	if( NULL != hReaderStatsEvent )
+    if( NULL != hReaderStatsEvent )
     {
         CloseHandle( hReaderStatsEvent );
     }
@@ -456,19 +458,19 @@ int __cdecl _tmain( int argc, __in_ecount(argc) LPTSTR argv[] )
 //////////////////////////////////////////////////////////////////////////////
 void Usage()
 {
-   _tprintf( _T( "wmstats -m <mode> -i <infile> -o <output> [-s <statistics_delay>]\n" ) );
-   _tprintf( _T( "\tmode\t = mode : f- file, s - server or c - client\n" ) );
-   _tprintf( _T( "\tinfile\t = WMV file name or URL for server or client mode\n" ) );
-   _tprintf( _T( "\toutput\t = for file   : WMV output file name\n" ) );
-   _tprintf( _T( "\t\t   for server : port number\n" ) );
-   _tprintf( _T( "\t\t   for client : not valid\n" ) );
-   _tprintf( _T( "\tstatistics_delay = [sec] delay of statistics report; default 20 seconds\n" ) );
-   _tprintf( _T( "\n" ) );
-   _tprintf( _T( "Samples :\n" ) );
-   _tprintf( _T( "file                    : wmstats -m f -i c:\\wmroot\\welcome2.asf -o c:\\wmroot\\test.asf\n" ) );
-   _tprintf( _T( "client (input: network) : wmstats -m c -i http://banhammer:32800\n" ) );
-   _tprintf( _T( "client (input: file)    : wmstats -m c -i c:\\wmroot\\welcome2.asf\n" ) );
-   _tprintf( _T( "server                  : wmstats -m s -i c:\\wmroot\\welcome2.asf -o 32800\n" ) );
+    _tprintf( _T( "wmstats -m <mode> -i <infile> -o <output> [-s <statistics_delay>]\n" ) );
+    _tprintf( _T( "\tmode\t = mode : f- file, s - server or c - client\n" ) );
+    _tprintf( _T( "\tinfile\t = WMV file name or URL for server or client mode\n" ) );
+    _tprintf( _T( "\toutput\t = for file   : WMV output file name\n" ) );
+    _tprintf( _T( "\t\t   for server : port number\n" ) );
+    _tprintf( _T( "\t\t   for client : not valid\n" ) );
+    _tprintf( _T( "\tstatistics_delay = [sec] delay of statistics report; default 20 seconds\n" ) );
+    _tprintf( _T( "\n" ) );
+    _tprintf( _T( "Samples :\n" ) );
+    _tprintf( _T( "file                    : wmstats -m f -i c:\\wmroot\\welcome2.asf -o c:\\wmroot\\test.asf\n" ) );
+    _tprintf( _T( "client (input: network) : wmstats -m c -i http://banhammer:32800\n" ) );
+    _tprintf( _T( "client (input: file)    : wmstats -m c -i c:\\wmroot\\welcome2.asf\n" ) );
+    _tprintf( _T( "server                  : wmstats -m s -i c:\\wmroot\\welcome2.asf -o 32800\n" ) );
 
 }
 
@@ -485,7 +487,7 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
 
     TCHAR*    ptszMode    = NULL;
     HRESULT hr            = S_OK;
-    *ptszInput            = NULL; 
+    *ptszInput            = NULL;
     *ptszOutput           = NULL;
     iMode                 = FILE;
     dwPortNum             = -1;
@@ -502,7 +504,7 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
                 Usage();
                 return( E_INVALIDARG );
             }
-            
+
             ptszMode = argv[i];
             continue ;
 
@@ -522,7 +524,7 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
             continue;
         }
 
-        if( 0 == _tcsicmp( argv[i] , _T( "-o" ) ) )
+        if( 0 == _tcsicmp( argv[i], _T( "-o" ) ) )
         {
             i++ ;
 
@@ -536,7 +538,7 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
             continue;
         }
 
-        if( 0 == _tcsicmp( argv[i] , _T( "-t" ) ) )
+        if( 0 == _tcsicmp( argv[i], _T( "-t" ) ) )
         {
             i++ ;
 
@@ -566,7 +568,7 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
         return( E_INVALIDARG );
     }
 
-    
+
     if ('f' == *ptszMode || 'F' == *ptszMode)
     {
         iMode = FILE;    //file
@@ -585,14 +587,14 @@ HRESULT CommandLineParser( int argc, __in_ecount(argc) LPTSTR argv[], __out LPTS
         iMode = SERVER;    //server
 
         if (NULL != *ptszOutput)
-		{
-			int ret = _stscanf_s( *ptszOutput, _T( "%d" ), &dwPortNum ) ;
-			if (EOF == ret || 0 == ret || dwPortNum > 0xffff || dwPortNum == -1)
-			{
-				Usage();
-				return( E_INVALIDARG );
-			}
-		}
+        {
+            int ret = _stscanf_s( *ptszOutput, _T( "%d" ), &dwPortNum ) ;
+            if (EOF == ret || 0 == ret || dwPortNum > 0xffff || dwPortNum == -1)
+            {
+                Usage();
+                return( E_INVALIDARG );
+            }
+        }
     }
     else
     {
@@ -610,7 +612,7 @@ HRESULT ConvertStrToUnicode( LPCTSTR ptszInput, __out LPWSTR * ppwszInput )
 {
     HRESULT hr = S_OK;
     int nSizeCount = 0 ;
-    
+
     if ( NULL == ptszInput || NULL == ppwszInput)
     {
         return( E_INVALIDARG );
@@ -640,7 +642,7 @@ HRESULT ConvertStrToUnicode( LPCTSTR ptszInput, __out LPWSTR * ppwszInput )
         delete[] *ppwszInput ;
         *ppwszInput = NULL;
         return ( E_UNEXPECTED );
-    }        
+    }
 
     return( hr );
 }
@@ -695,15 +697,15 @@ void DisplayWriterStats( DWORD dwClientNum, int nStatsNum, CWriterStats *pStats,
         pStats++;
 
     }
-		_tprintf( _T( "-------------------------------------------------------\n\n" ) );
-		_tprintf( _T( "\tBitratePlusOverhead                        : %d\n"), pStatsEx->dwBitratePlusOverhead);
-		_tprintf( _T( "\tCurrentSampleDropRateInQueue               : %d\n"), pStatsEx->dwCurrentSampleDropRateInQueue);
-		_tprintf( _T( "\tCurrentSampleDropRateInCodec               : %d\n"), pStatsEx->dwCurrentSampleDropRateInCodec);
-		_tprintf( _T( "\tCurrentSampleDropRateInMultiplexer         : %d\n"), pStatsEx->dwCurrentSampleDropRateInMultiplexer);
-		_tprintf( _T( "\tTotalSampleDropsInQueue                    : %d\n"), pStatsEx->dwTotalSampleDropsInQueue);
-		_tprintf( _T( "\tTotalSampleDropsInCodec                    : %d\n"), pStatsEx->dwTotalSampleDropsInCodec);
-		_tprintf( _T( "\tTotalSampleDropsInMultiplexer              : %d\n"), pStatsEx->dwTotalSampleDropsInMultiplexer);
-		_tprintf( _T( "-------------------------------------------------------\n\n" ) );
+    _tprintf( _T( "-------------------------------------------------------\n\n" ) );
+    _tprintf( _T( "\tBitratePlusOverhead                        : %d\n"), pStatsEx->dwBitratePlusOverhead);
+    _tprintf( _T( "\tCurrentSampleDropRateInQueue               : %d\n"), pStatsEx->dwCurrentSampleDropRateInQueue);
+    _tprintf( _T( "\tCurrentSampleDropRateInCodec               : %d\n"), pStatsEx->dwCurrentSampleDropRateInCodec);
+    _tprintf( _T( "\tCurrentSampleDropRateInMultiplexer         : %d\n"), pStatsEx->dwCurrentSampleDropRateInMultiplexer);
+    _tprintf( _T( "\tTotalSampleDropsInQueue                    : %d\n"), pStatsEx->dwTotalSampleDropsInQueue);
+    _tprintf( _T( "\tTotalSampleDropsInCodec                    : %d\n"), pStatsEx->dwTotalSampleDropsInCodec);
+    _tprintf( _T( "\tTotalSampleDropsInMultiplexer              : %d\n"), pStatsEx->dwTotalSampleDropsInMultiplexer);
+    _tprintf( _T( "-------------------------------------------------------\n\n" ) );
 }
 
 ///////////////////////////////////////////////////////////////
@@ -749,7 +751,7 @@ static DWORD WINAPI GetWriterStats( LPVOID lpParameter )
     if ( NULL != lpParameter )
     {
         CWriterStats    *pStats = NULL;
-		CWriterStatsEx  *pStatsEx = NULL;
+        CWriterStatsEx  *pStatsEx = NULL;
         DWORD           dwClientNum = 0;
         DWORD           dwStatus = 0;
         int             nStatsNum = 0;

@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -26,143 +26,143 @@
 // CProxyPlugin
 //
 /////////////////////////////////////////////////////////////////////////////
-class ATL_NO_VTABLE CProxyPlugin : 
-        public CComObjectRootEx<CComMultiThreadModel>,
-        public CComCoClass<CProxyPlugin, &CLSID_ProxyPlugin>,
-        public IWMSCacheProxy,
-        public IWMSCacheProxyServerCallback,
-        public IWMSBasicPlugin
+class ATL_NO_VTABLE CProxyPlugin :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CProxyPlugin, &CLSID_ProxyPlugin>,
+    public IWMSCacheProxy,
+    public IWMSCacheProxyServerCallback,
+    public IWMSBasicPlugin
 {
 public:
-                    CProxyPlugin();
+    CProxyPlugin();
     virtual         ~CProxyPlugin();
 
-DECLARE_REGISTRY_RESOURCEID(IDR_PROXYPLUGIN)
-DECLARE_NOT_AGGREGATABLE(CProxyPlugin)
-DECLARE_GET_CONTROLLING_UNKNOWN()
-DECLARE_PROTECT_FINAL_CONSTRUCT()
+    DECLARE_REGISTRY_RESOURCEID(IDR_PROXYPLUGIN)
+    DECLARE_NOT_AGGREGATABLE(CProxyPlugin)
+    DECLARE_GET_CONTROLLING_UNKNOWN()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-BEGIN_COM_MAP(CProxyPlugin)
+    BEGIN_COM_MAP(CProxyPlugin)
     COM_INTERFACE_ENTRY(IWMSCacheProxy)
     COM_INTERFACE_ENTRY(IWMSCacheProxyServerCallback)
     COM_INTERFACE_ENTRY(IWMSBasicPlugin)
-END_COM_MAP()
+    END_COM_MAP()
 
     //
     // IWMSCacheProxy
     //
-    HRESULT STDMETHODCALLTYPE QueryCache( 
-                    BSTR bstrOriginUrl,
-                    IWMSContext *pUserContext,
-                    IWMSCommandContext *pCommandContext,
-                    IWMSContext *pPresentationContext,
-                    long QueryType,
-                    IWMSCacheProxyCallback *pCallback,
-                    VARIANT varContext
-                    );
+    HRESULT STDMETHODCALLTYPE QueryCache(
+        BSTR bstrOriginUrl,
+        IWMSContext *pUserContext,
+        IWMSCommandContext *pCommandContext,
+        IWMSContext *pPresentationContext,
+        long QueryType,
+        IWMSCacheProxyCallback *pCallback,
+        VARIANT varContext
+    );
     HRESULT STDMETHODCALLTYPE QueryCacheMissPolicy(
-                    BSTR bstrOriginUrl,
-                    IWMSContext *pUserContext,
-                    IWMSCommandContext *pCommandContext,
-                    IWMSContext *pPresentationContext,
-                    IUnknown *pCachePluginContext,
-                    long QueryType,
-                    IWMSCacheProxyCallback *pCallback,
-                    VARIANT varContext
-                    );
+        BSTR bstrOriginUrl,
+        IWMSContext *pUserContext,
+        IWMSCommandContext *pCommandContext,
+        IWMSContext *pPresentationContext,
+        IUnknown *pCachePluginContext,
+        long QueryType,
+        IWMSCacheProxyCallback *pCallback,
+        VARIANT varContext
+    );
 
-    HRESULT STDMETHODCALLTYPE RemoveCacheItem( 
-                    BSTR bstrOriginUrl,
-                    IWMSCacheProxyCallback *pCallback,
-                    VARIANT varContext
-                    )
+    HRESULT STDMETHODCALLTYPE RemoveCacheItem(
+        BSTR bstrOriginUrl,
+        IWMSCacheProxyCallback *pCallback,
+        VARIANT varContext
+    )
     {
         return( E_NOTIMPL );
     }
-    HRESULT STDMETHODCALLTYPE RemoveAllCacheItems( 
-                    IWMSCacheProxyCallback *pCallback,
-                    VARIANT varContext
-                    )
+    HRESULT STDMETHODCALLTYPE RemoveAllCacheItems(
+        IWMSCacheProxyCallback *pCallback,
+        VARIANT varContext
+    )
     {
         return( E_NOTIMPL );
     }
     HRESULT STDMETHODCALLTYPE AddCacheItem(
-                    BSTR bstrOriginUrl,
-                    BSTR bstrPrestuffUrl,
-                    long lExpiration,
-                    long lBandwidth,
-                    long lRemoteEventFlags,
-                    IWMSCacheProxyCallback *pCallback,
-                    VARIANT varContext
-                    )
+        BSTR bstrOriginUrl,
+        BSTR bstrPrestuffUrl,
+        long lExpiration,
+        long lBandwidth,
+        long lRemoteEventFlags,
+        IWMSCacheProxyCallback *pCallback,
+        VARIANT varContext
+    )
     {
         return( E_NOTIMPL );
     }
     HRESULT STDMETHODCALLTYPE QuerySpaceForCacheItem(
-                    long lContentSizeLow,
-                    long lContentSizeHigh,
-                    VARIANT_BOOL *pvarfSpaceAvail
-                    )
+        long lContentSizeLow,
+        long lContentSizeHigh,
+        VARIANT_BOOL *pvarfSpaceAvail
+    )
     {
         return( E_NOTIMPL );
     }
     HRESULT STDMETHODCALLTYPE FindCacheItem(
-                    BSTR pszOriginUrl,
-                    IWMSCacheItemDescriptor **ppCacheItemDescriptor
-                    )
+        BSTR pszOriginUrl,
+        IWMSCacheItemDescriptor **ppCacheItemDescriptor
+    )
     {
         return( E_NOTIMPL );
     }
     HRESULT STDMETHODCALLTYPE CreateCacheItemCollection(
-                    IWMSCacheItemCollection **ppCacheItemCollection
-                    )
+        IWMSCacheItemCollection **ppCacheItemCollection
+    )
     {
         return( E_NOTIMPL );
     }
-    HRESULT STDMETHODCALLTYPE OnCacheClientClose( 
-                    HRESULT resultHr,
-                    IWMSContext *pUserContext,
-                    IWMSContext *pPresentationContext
-                    );
+    HRESULT STDMETHODCALLTYPE OnCacheClientClose(
+        HRESULT resultHr,
+        IWMSContext *pUserContext,
+        IWMSContext *pPresentationContext
+    );
 
     //
     // IWMSCacheProxyServerCallback
     //
     HRESULT STDMETHODCALLTYPE OnGetContentInformation(
-                    long lHr,
-                    IWMSContext *pContentInfo,
-                    VARIANT varContext
-                    );
+        long lHr,
+        IWMSContext *pContentInfo,
+        VARIANT varContext
+    );
     HRESULT STDMETHODCALLTYPE OnCompareContentInformation(
-                    long lHr,
-                    WMS_CACHE_VERSION_COMPARE_RESPONSE CompareResponse,
-                    IWMSContext *pNewContentInfo,
-                    VARIANT varContext
-                    )
+        long lHr,
+        WMS_CACHE_VERSION_COMPARE_RESPONSE CompareResponse,
+        IWMSContext *pNewContentInfo,
+        VARIANT varContext
+    )
     {
         return( E_NOTIMPL );
     }
     HRESULT STDMETHODCALLTYPE OnDownloadContentProgress(
-                    long lHr,
-                    WMS_RECORD_PROGRESS_OPCODE opCode,
-                    IWMSContext *pArchiveContext,
-                    VARIANT varContext
-                    )
+        long lHr,
+        WMS_RECORD_PROGRESS_OPCODE opCode,
+        IWMSContext *pArchiveContext,
+        VARIANT varContext
+    )
     {
         return( E_NOTIMPL );
     }
     HRESULT STDMETHODCALLTYPE OnDownloadContentFinished(
-                    long lHr,
-                    SAFEARRAY *psaArchiveContexts,
-                    VARIANT varContext
-                    )
+        long lHr,
+        SAFEARRAY *psaArchiveContexts,
+        VARIANT varContext
+    )
     {
         return( E_NOTIMPL );
     }
     HRESULT STDMETHODCALLTYPE OnCancelDownloadContent(
-                    long lHr,
-                    VARIANT varContext
-                    )
+        long lHr,
+        VARIANT varContext
+    )
     {
         return( E_NOTIMPL );
     }
@@ -170,19 +170,19 @@ END_COM_MAP()
     //
     // IWMSBasicPlugin
     //
-    HRESULT STDMETHODCALLTYPE InitializePlugin( 
-                    IWMSContext *pServerContext,
-                    IWMSNamedValues *pNamedValues,
-                    IWMSClassObject *pClassFactory
-                    );
+    HRESULT STDMETHODCALLTYPE InitializePlugin(
+        IWMSContext *pServerContext,
+        IWMSNamedValues *pNamedValues,
+        IWMSClassObject *pClassFactory
+    );
     HRESULT STDMETHODCALLTYPE ShutdownPlugin();
-    HRESULT STDMETHODCALLTYPE GetCustomAdminInterface( 
-                    IDispatch **ppValue
-                    );
-    HRESULT STDMETHODCALLTYPE OnHeartbeat();    
+    HRESULT STDMETHODCALLTYPE GetCustomAdminInterface(
+        IDispatch **ppValue
+    );
+    HRESULT STDMETHODCALLTYPE OnHeartbeat();
     HRESULT STDMETHODCALLTYPE EnablePlugin(
-                    long *pdwFlags,
-                    long *pdwHeartbeatPeriod );
+        long *pdwFlags,
+        long *pdwHeartbeatPeriod );
     HRESULT STDMETHODCALLTYPE DisablePlugin();
 
 private:
@@ -254,7 +254,7 @@ private:
             }
 
             *ppvObject = NULL;
-            
+
             if( IID_IUnknown == riid )
             {
                 AddRef();
@@ -274,7 +274,7 @@ private:
                    BSTR *pbstrHost,
                    BSTR *pbstrPath,
                    WORD *pwPort
-                   );
+                 );
 
     IWMSCacheProxyServer *m_pICacheProxyServer;
 };

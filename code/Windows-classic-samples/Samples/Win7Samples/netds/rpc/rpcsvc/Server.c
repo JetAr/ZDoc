@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -21,7 +21,7 @@
 //  COMMENTS: The ServerStart and ServerStop functions implemented here are
 //            prototyped in service.h.  The other functions are RPC manager
 //            functions prototypes in rpcsvc.h.
-//              
+//
 
 
 
@@ -89,13 +89,13 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     //
 
     for(i = 0; i < sizeof(ProtocolArray)/sizeof(TCHAR *); i++)
-        {
+    {
 
         // Report the status to the service control manager.
         if (!ReportStatusToSCMgr(
-            SERVICE_START_PENDING, // service state
-            NO_ERROR,              // exit code
-            3000))                 // wait hint
+                    SERVICE_START_PENDING, // service state
+                    NO_ERROR,              // exit code
+                    3000))                 // wait hint
             return;
 
 
@@ -104,25 +104,25 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
                                      0);
 
         if (status == RPC_S_OK)
-            {
+        {
             fListening = TRUE;
-            }
         }
+    }
 
     if (!fListening)
-        {
+    {
         // Unable to listen to any protocol!
         //
         AddToMessageLog(TEXT("RpcServerUseProtseq() failed\n"));
         return;
-        }
+    }
 
     // Report the status to the service control manager.
     //
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
         return;
 
     // Register the services interface(s).
@@ -139,9 +139,9 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     // Report the status to the service control manager.
     //
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
         return;
 
 
@@ -152,9 +152,9 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
     status = RpcServerInqBindings(&pbindingVector);
 
     if (status != RPC_S_OK)
-        {
+    {
         return;
-        }
+    }
 
     status = RpcEpRegister(RpcServiceSample_v1_0_s_ifspec,   // from rpcsvc.h
                            pbindingVector,
@@ -162,16 +162,16 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
                            0);
 
     if (status != RPC_S_OK)
-        {
+    {
         return;
-        }
+    }
 
     // Report the status to the service control manager.
     //
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
         return;
 
     // Enable NT LM Security Support Provider (NtLmSsp service)
@@ -180,18 +180,18 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
                                        RPC_C_AUTHN_WINNT,
                                        0,
                                        0
-                                       );
+                                      );
     if (status != RPC_S_OK)
-        {
+    {
         return;
-        }
+    }
 
     // Report the status to the service control manager.
     //
     if (!ReportStatusToSCMgr(
-        SERVICE_START_PENDING, // service state
-        NO_ERROR,              // exit code
-        3000))                 // wait hint
+                SERVICE_START_PENDING, // service state
+                NO_ERROR,              // exit code
+                3000))                 // wait hint
         return;
 
 
@@ -202,16 +202,16 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
                              TRUE);                           // don't block.
 
     if (status != RPC_S_OK)
-        {
+    {
         return;
-        }
+    }
 
     // Report the status to the service control manager.
     //
     if (!ReportStatusToSCMgr(
-        SERVICE_RUNNING,       // service state
-        NO_ERROR,              // exit code
-        0))                    // wait hint
+                SERVICE_RUNNING,       // service state
+                NO_ERROR,              // exit code
+                0))                    // wait hint
         return;
 
     //
@@ -267,7 +267,7 @@ VOID ServiceStart (DWORD dwArgc, LPTSTR *lpszArgv)
 //    stop code, and return.  Otherwise, the
 //    ServiceControlManager will believe that
 //    the service has stopped responding.
-//    
+//
 VOID ServiceStop()
 {
     // Stop's the server, wakes the main thread.
@@ -295,7 +295,7 @@ VOID ServiceStop()
 error_status_t
 Ping(
     handle_t h
-    )
+)
 {
     return(0);
 }
@@ -315,31 +315,31 @@ Ping(
 
 error_status_t
 BufferIn1(
-         handle_t h,
-         byte Buffer[],
-         unsigned long Length,
-         unsigned long Size
-         )
+    handle_t h,
+    byte Buffer[],
+    unsigned long Length,
+    unsigned long Size
+)
 {
     return(0);
 }
 
 error_status_t
 BufferIn2(
-         handle_t h,
-         byte Buffer[],
-         unsigned long Length
-         )
+    handle_t h,
+    byte Buffer[],
+    unsigned long Length
+)
 {
     return(0);
 }
 
 error_status_t
 BufferIn3(
-         handle_t h,
-         byte Buffer[],
-         unsigned long Length
-         )
+    handle_t h,
+    byte Buffer[],
+    unsigned long Length
+)
 {
     return(0);
 }
@@ -359,10 +359,10 @@ BufferIn3(
 
 error_status_t
 BufferOut1(
-         handle_t h,
-         byte Buffer[],
-         unsigned long *pLength
-         )
+    handle_t h,
+    byte Buffer[],
+    unsigned long *pLength
+)
 {
     *pLength = BUFFER_SIZE;
     return(0);
@@ -370,11 +370,11 @@ BufferOut1(
 
 error_status_t
 BufferOut2(
-          handle_t h,
-          byte Buffer[],
-          unsigned long Size,
-          unsigned long *pLength
-          )
+    handle_t h,
+    byte Buffer[],
+    unsigned long Size,
+    unsigned long *pLength
+)
 {
     *pLength = BUFFER_SIZE;
     return(0);
@@ -382,26 +382,26 @@ BufferOut2(
 
 error_status_t
 BufferOut3(
-          handle_t h,
-          BUFFER *pBuffer
-          )
+    handle_t h,
+    BUFFER *pBuffer
+)
 {
     pBuffer->BufferLength = BUFFER_SIZE;
     pBuffer->Buffer = MIDL_user_allocate(BUFFER_SIZE);
 
     if (pBuffer->Buffer == 0)
-        {
+    {
         return(RPC_S_OUT_OF_MEMORY);
-        }
+    }
     return(0);
 }
 
 error_status_t
 BufferOut4(
-          handle_t h,
-          byte Buffer[],
-          unsigned long *pLength
-          )
+    handle_t h,
+    byte Buffer[],
+    unsigned long *pLength
+)
 {
     *pLength = BUFFER_SIZE;
     return(0);
@@ -421,27 +421,27 @@ BufferOut4(
 //
 error_status_t
 StructsIn1(
-          handle_t h,
-          struct BAD1 array[50]
-          )
+    handle_t h,
+    struct BAD1 array[50]
+)
 {
     return(0);
 }
 
 error_status_t
 StructsIn2(
-          handle_t h,
-          struct BAD2 array[50]
-          )
+    handle_t h,
+    struct BAD2 array[50]
+)
 {
     return(0);
 }
 
 error_status_t
 StructsIn3(
-          handle_t h,
-          struct GOOD array[50]
-          )
+    handle_t h,
+    struct GOOD array[50]
+)
 {
     return(0);
 }
@@ -466,30 +466,30 @@ StructsIn3(
 
 error_status_t
 ListIn(
-      handle_t h,
-      PLIST pList
-      )
+    handle_t h,
+    PLIST pList
+)
 {
     return(0);
 }
 
 error_status_t
 ListOut1(
-        handle_t h,
-        LIST *pList
-        )
+    handle_t h,
+    LIST *pList
+)
 {
     int i;
     for(i = 0; i < LIST_SIZE; i++)
-        {
+    {
         pList->data = i;
         pList->pNext = MIDL_user_allocate(sizeof(LIST));
         if (pList->pNext == 0)
-            {
+        {
             return(RPC_S_OUT_OF_MEMORY);
-            }
-        pList = pList->pNext;
         }
+        pList = pList->pNext;
+    }
 
     pList->data = i;
     pList->pNext = 0;
@@ -499,20 +499,20 @@ ListOut1(
 
 error_status_t
 ListOut2(
-        handle_t h,
-        LIST *pList
-        )
+    handle_t h,
+    LIST *pList
+)
 {
     int i;
     for(i = 0; i < LIST_SIZE; i++)
-        {
+    {
         pList->data = i;
         pList->pNext = RpcSsAllocate(sizeof(LIST));
         // RpcSsAllocate raises an exception when it
         // fails.  Use RpcSmAllocate is this is
         // undesirable.
         pList = pList->pNext;
-        }
+    }
 
     pList->data = i;
     pList->pNext = 0;
@@ -534,19 +534,19 @@ ListOut2(
 //
 error_status_t
 UnionCall1(
-          handle_t h,
-          unsigned long Length,
-          BAD_UNION aUnion[]
-          )
+    handle_t h,
+    unsigned long Length,
+    BAD_UNION aUnion[]
+)
 {
     return(0);
 }
 
 error_status_t
 UnionCall2(
-          handle_t h,
-          GOOD_UNION *pUnion
-          )
+    handle_t h,
+    GOOD_UNION *pUnion
+)
 {
     return(0);
 }
@@ -564,8 +564,8 @@ UnionCall2(
 //
 error_status_t
 CheckSecurity(
-             handle_t h
-             )
+    handle_t h
+)
 {
     RPC_STATUS status;
 
@@ -576,9 +576,9 @@ CheckSecurity(
     status = RpcImpersonateClient(h);
 
     if (status != RPC_S_OK)
-        {
+    {
         return(RPC_S_ACCESS_DENIED);
-        }
+    }
 
     // This thread is now running in the clients security context.
 

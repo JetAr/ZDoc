@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,7 +7,7 @@
 
 
 /*************************************************************************
-                   
+
                         Microsoft RPC strout sample
 
   FILE      :   server.c
@@ -15,7 +15,7 @@
   USAGE     :   server  -p protocol_sequence
                         -e endpoint
                         -a server principal name
-                        
+
   PURPOSE   :   Server side of the RPC distributed application strout.
 
   COMMENTS  :   This application uses the implicit binding method.
@@ -37,10 +37,10 @@ void CleanUpServer(void);
 void Usage(_TUCHAR * pszProgramName)
 {
     _tprintf_s(TEXT("USAGE : %s [-option]\n"), pszProgramName);
-    _tprintf_s(TEXT("Options : -p Protocol Sequence\n"));  
-    _tprintf_s(TEXT("          -e Endpoint\n"));	
-    _tprintf_s(TEXT(" 	       -a Server Principal Name\n"));	
-     exit(EXECUTION_OK);
+    _tprintf_s(TEXT("Options : -p Protocol Sequence\n"));
+    _tprintf_s(TEXT("          -e Endpoint\n"));
+    _tprintf_s(TEXT(" 	       -a Server Principal Name\n"));
+    exit(EXECUTION_OK);
 }
 
 
@@ -56,12 +56,12 @@ int main(int argc, char *argv[])
     // Variabels used for selecting the protocol and the endpoint
     _TUCHAR *pszProtocolSequence    = PROTOCOL_SEQUENCE;
     _TUCHAR *pszEndpoint            = END_POINT;
-    _TUCHAR *pszSpn                 = NULL;	
+    _TUCHAR *pszSpn                 = NULL;
     _TUCHAR *pszSecurity            = NULL;
 
 
-/* Get a common handle on the command line arguments for both UNICODE   */
-/* and ASCII                                                            */
+    /* Get a common handle on the command line arguments for both UNICODE   */
+    /* and ASCII                                                            */
 #ifdef _UNICODE
     LPWSTR	*pArglist = CommandLineToArgvW(GetCommandLine(), &nNumArgs);
     if (NULL == pArglist)
@@ -75,38 +75,38 @@ int main(int argc, char *argv[])
 #endif
 
     /* Allow the user to override settings with commandline switches    */
-    for (nIdx = 1; nIdx < nNumArgs; nIdx++) 
+    for (nIdx = 1; nIdx < nNumArgs; nIdx++)
     {
-        if((_tcscmp(pArglist[nIdx], TEXT("-p")) == 0) || 
-           (_tcscmp(pArglist[nIdx], TEXT("-P")) == 0))
+        if((_tcscmp(pArglist[nIdx], TEXT("-p")) == 0) ||
+                (_tcscmp(pArglist[nIdx], TEXT("-P")) == 0))
         {
             pszProtocolSequence = pArglist[++nIdx];
         }
         else if((_tcscmp(pArglist[nIdx], TEXT("-a")) == 0) ||
-           (_tcscmp(pArglist[nIdx], TEXT("-A")) == 0))
+                (_tcscmp(pArglist[nIdx], TEXT("-A")) == 0))
         {
             pszSpn = pArglist[++nIdx];
         }
-        else if((_tcscmp(pArglist[nIdx], TEXT("-e")) == 0) || 
+        else if((_tcscmp(pArglist[nIdx], TEXT("-e")) == 0) ||
                 (_tcscmp(pArglist[nIdx], TEXT("-E")) == 0))
         {
             pszEndpoint = pArglist[++nIdx];
         }
 
-	
-        else 
+
+        else
         {
             Usage(pArglist[0]);
         }
     }
-            
+
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     /* Register the interface with the RPC run-time library             */
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     _tprintf_s(TEXT("Registering the interface\n"));
-  
 
-    nStatus = RpcServerRegisterIfEx(strout_sample_v1_0_s_ifspec,  NULL, NULL, 0, RPC_C_LISTEN_MAX_CALLS_DEFAULT, NULL ); 
+
+    nStatus = RpcServerRegisterIfEx(strout_sample_v1_0_s_ifspec,  NULL, NULL, 0, RPC_C_LISTEN_MAX_CALLS_DEFAULT, NULL );
 
 
     EXIT_IF_FAIL(nStatus, "RpcServerRegisterIfEx");
@@ -120,29 +120,31 @@ int main(int argc, char *argv[])
     /* procedure calls                                                  */
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     _tprintf_s(TEXT("Selecting the protocol sequence: \"%s\"\n"),
-        pszProtocolSequence);
+               pszProtocolSequence);
     nStatus = RpcServerUseProtseqEp(
-        pszProtocolSequence,            // String with the protocol in
-        RPC_C_PROTSEQ_MAX_REQS_DEFAULT, // Max number of calls
-        pszEndpoint,                    // Endpoint addres information
-        pszSecurity);                   // Security
+                  pszProtocolSequence,            // String with the protocol in
+                  RPC_C_PROTSEQ_MAX_REQS_DEFAULT, // Max number of calls
+                  pszEndpoint,                    // Endpoint addres information
+                  pszSecurity);                   // Security
     EXIT_IF_FAIL(nStatus, "RpcServerUseProtseqsEp");
 
     /* User did not specify spn, construct one. */
-    if (pszSpn == NULL) {
+    if (pszSpn == NULL)
+    {
         MakeSpn(&pszSpn);
     }
 
     /* Using Negotiate as security provider */
     nStatus = RpcServerRegisterAuthInfo(pszSpn,
-                                       RPC_C_AUTHN_GSS_NEGOTIATE,
-                                       NULL,
-                                       NULL);
-	
+                                        RPC_C_AUTHN_GSS_NEGOTIATE,
+                                        NULL,
+                                        NULL);
+
     printf_s("RpcServerRegisterAuthInfo returned 0x%x\n", nStatus);
-    if (nStatus) {
+    if (nStatus)
+    {
         exit(nStatus);
-    }	
+    }
 
     nStatus = RpcServerRegisterIfEx(strout_sample_v1_0_s_ifspec, NULL, NULL, 0, RPC_C_LISTEN_MAX_CALLS_DEFAULT, NULL );
 
@@ -160,9 +162,9 @@ int main(int argc, char *argv[])
     }
     RpcExcept(DO_EXCEPTION)
     {
-        // Print out the exception code 
-        _tprintf_s(TEXT("Run-time exception %u in %s at line %d\n"), 
-                RpcExceptionCode(), TEXT(__FILE__), __LINE__);
+        // Print out the exception code
+        _tprintf_s(TEXT("Run-time exception %u in %s at line %d\n"),
+                   RpcExceptionCode(), TEXT(__FILE__), __LINE__);
         exit(EXECUTION_FAILED);
     }
     RpcEndExcept
@@ -186,15 +188,15 @@ int main(int argc, char *argv[])
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 void CleanUpServer(void)
 {
-    RPC_STATUS nStatus;          // Error status returned from RPC calls 
+    RPC_STATUS nStatus;          // Error status returned from RPC calls
 
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     /* Unregister the interface from the RPC run-time library           */
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     _tprintf_s(TEXT("Unregistering the Interface"));
     nStatus = RpcServerUnregisterIf(
-        NULL, NULL, // Prevents server from receiving new remote calls
-        FALSE);     // Wait until all the active calls are complete 
+                  NULL, NULL, // Prevents server from receiving new remote calls
+                  FALSE);     // Wait until all the active calls are complete
     EXIT_IF_FAIL(nStatus, "RpcServerUnRegisterIf");
 }
 

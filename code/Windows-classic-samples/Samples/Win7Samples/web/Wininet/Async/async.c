@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  Copyright (c) 2002 - 2006 Microsoft Corporation.  All Rights Reserved.
 
  THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  PARTICULAR PURPOSE.
 
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
+ THIS CODE IS NOT SUPPORTED BY MICROSOFT.
 
 --*/
 
@@ -63,16 +63,16 @@ int __cdecl wmain(int argc,
     MAIN_CONTEXT mainContext;
     APP_CONTEXT context;
     DWORD dwStatus = STATUS_SUCCESS;
-    
+
     //Parse the command line arguments
     ParseArguments(argc,
                    argv);
 
     if((dwError = SetFunctionEntryPoint()) != ERROR_SUCCESS)
     {
-              LogSysError(dwError, L"SetFunctionEntryPoint");
+        LogSysError(dwError, L"SetFunctionEntryPoint");
     }
-    
+
     //Initialize the context for the Session and Connection handles
     InitMainContext(&mainContext);
 
@@ -86,7 +86,7 @@ int __cdecl wmain(int argc,
                                         g_proxy,  //g_proxy name
                                         NULL, //g_proxy bypass, do not bypass any address
                                         INTERNET_FLAG_ASYNC); // 0 for Synchronous
-    
+
     if (!mainContext.hSession)
     {
         LogInetError(GetLastError(),L"InternetOpen");
@@ -95,7 +95,7 @@ int __cdecl wmain(int argc,
     }
 
     //Set the dwStatus callback for the handle to the Callback function
-    g_callback = InternetSetStatusCallback(mainContext.hSession, 
+    g_callback = InternetSetStatusCallback(mainContext.hSession,
                                            (INTERNET_STATUS_CALLBACK)CallBack );
 
     if (g_callback == INTERNET_INVALID_STATUS_CALLBACK)
@@ -106,13 +106,13 @@ int __cdecl wmain(int argc,
     }
 
     //Set the correct server port if using SSL
-    //Also set the flag for HttpOpenRequest 
+    //Also set the flag for HttpOpenRequest
     if(g_bSecure)
     {
         serverPort = INTERNET_DEFAULT_HTTPS_PORT;
         dwRequestFlags = INTERNET_FLAG_SECURE;
-    }    
-    
+    }
+
     //Create Connection handle and provide context for async operations
     mainContext.hConnect = InternetConnect(mainContext.hSession,
                                            g_hostName, //Name of the server to connect to
@@ -122,9 +122,9 @@ int __cdecl wmain(int argc,
                                            INTERNET_SERVICE_HTTP,
                                            0, //Do not provide any special flag
                                            (DWORD_PTR)&mainContext); //Provide the context to be
-                                                                     //used during the callbacks
+    //used during the callbacks
     //For HTTP InternetConnect returns synchronously.
-    //For FTP, ERROR_IO_PENDING should be verified too                      
+    //For FTP, ERROR_IO_PENDING should be verified too
     if (!mainContext.hConnect )
     {
         LogInetError(GetLastError(),L"InternetConnect");
@@ -135,7 +135,7 @@ int __cdecl wmain(int argc,
 
     //Initialize the context to be used in the asynchronous calls
     InitRequestContext(&mainContext,
-                                     &context);
+                       &context);
 
     //Open the file to dump the response entity body and
     //if required the file with the data to post
@@ -145,9 +145,9 @@ int __cdecl wmain(int argc,
     if (context.hFile)
     {
         dwFileSize = GetFileSize(context.hFile,
-                                 NULL); 
+                                 NULL);
     }
-    
+
     //Set the initial state of the context and the verb depending on the operation to perform
     if(g_action == GET)
     {
@@ -164,7 +164,7 @@ int __cdecl wmain(int argc,
     //Setting this flags, we make sure we get the response from the server and not the cache.
     //Also ask WinInet not to store the response in the cache.
     dwRequestFlags |= INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE;
-    
+
     //Create a Request handle
     context.hRequest = HttpOpenRequest(context.mainContext->hConnect,
                                        verb, //GET or POST
@@ -172,21 +172,21 @@ int __cdecl wmain(int argc,
                                        NULL, //USe default HTTP/1.1 as the version
                                        NULL, //Do not provide any referrer
                                        NULL, //Do not provide Accept types
-                                       dwRequestFlags, //(0 or INTERNET_FLAG_SECURE) | 
-                                                       // INTERNET_FLAG_RELOAD | 
-                                                       // INTERNET_FLAG_NO_CACHE_WRITE
+                                       dwRequestFlags, //(0 or INTERNET_FLAG_SECURE) |
+                                       // INTERNET_FLAG_RELOAD |
+                                       // INTERNET_FLAG_NO_CACHE_WRITE
                                        (DWORD_PTR)&context);
-    
+
     if (!context.hRequest )
     {
         LogInetError(GetLastError(),L"HttpOpenRequest");
         dwStatus = STATUS_FAILURE;
         goto Exit;
     }
-    
+
     //Send the request using two different options.
     //HttpSendRequest for GET and HttpSendRequestEx for POST.
-    //HttpSendRequest can also be used also to post data to a server, 
+    //HttpSendRequest can also be used also to post data to a server,
     //to do so, the data should be provided using the lpOptional
     //parameter and it's size on dwOptionalLength.
     //Here we decided to depict the use of both HttpSendRequest functions.
@@ -194,9 +194,9 @@ int __cdecl wmain(int argc,
     {
         bRequestSuccess = HttpSendRequest(context.hRequest,
                                           NULL, //do not provide additional Headers
-                                          0, //dwHeadersLength 
-                                          NULL, //Do not send any data 
-                                          0); //dwOptionalLength 
+                                          0, //dwHeadersLength
+                                          NULL, //Do not send any data
+                                          0); //dwOptionalLength
     }
     else
     {
@@ -206,7 +206,7 @@ int __cdecl wmain(int argc,
         buffersIn.lpvBuffer = NULL;
         buffersIn.dwBufferLength = 0;
         buffersIn.dwBufferTotal = dwFileSize; //content-length of data to post
-        
+
         bRequestSuccess = HttpSendRequestEx(context.hRequest,
                                             &buffersIn,
                                             NULL, //Do not use output buffers
@@ -219,37 +219,37 @@ int __cdecl wmain(int argc,
         LogInetError(dwError,L"HttpSendRequest(Ex)");
         dwStatus = STATUS_FAILURE;
         goto Exit;
-    }   
+    }
 
     //If you're using a UI thread, this call is not required
     dwSync = WaitForSingleObject(context.hEvent,
                                  g_userTimeout); // Wait until we receive the completion
-    
+
     switch(dwSync)
     {
-        case WAIT_OBJECT_0:
-            printf("Done!\n");
-            break;
-        case WAIT_ABANDONED:
-            fprintf(stderr,
-                    "The callback thread was terminated\n");
-            dwStatus = STATUS_FAILURE;
-            break;
-        case WAIT_TIMEOUT:
-            fprintf(stderr,
-                    "Timeout while waiting for event\n");
-            dwStatus = STATUS_FAILURE;
-            break;
+    case WAIT_OBJECT_0:
+        printf("Done!\n");
+        break;
+    case WAIT_ABANDONED:
+        fprintf(stderr,
+                "The callback thread was terminated\n");
+        dwStatus = STATUS_FAILURE;
+        break;
+    case WAIT_TIMEOUT:
+        fprintf(stderr,
+                "Timeout while waiting for event\n");
+        dwStatus = STATUS_FAILURE;
+        break;
     }
-    
-    Exit:
+
+Exit:
 
     CleanUp(&context);
     return dwStatus;
 }
 
-VOID CALLBACK 
-CallBack(HINTERNET hInternet ,
+VOID CALLBACK
+CallBack(HINTERNET hInternet,
          __in DWORD_PTR dwContext,
          DWORD dwInternetStatus,
          __in_bcount(dwStatusInformationLength) LPVOID lpvStatusInformation,
@@ -279,7 +279,7 @@ Return Value:
 
     //Perform the correct casting given the type of structure passed in the callback
     DWORD *dwStructType = (DWORD*)dwContext;
-    
+
     if( *dwStructType == STRUCT_TYPE_MAIN_CONTEXT)
     {
         mainContext = (MAIN_CONTEXT*)dwContext;
@@ -288,235 +288,235 @@ Return Value:
     {
         appContext = (APP_CONTEXT*)dwContext;
     }
-    
+
     fprintf(stderr,"Callback Received for Handle %p \t",hInternet);
-    
+
     switch(dwInternetStatus)
     {
-        case INTERNET_STATUS_COOKIE_SENT:
-            fprintf(stderr,"Status: Cookie found and will be sent with request\n");
-            break;
-        case INTERNET_STATUS_COOKIE_RECEIVED:
-            fprintf(stderr,"Status: Cookie Received\n");
-            break;
-        case INTERNET_STATUS_COOKIE_HISTORY:
-            {
-                InternetCookieHistory cookieHistory;
-                fprintf(stderr,"Status: Cookie History\n");
+    case INTERNET_STATUS_COOKIE_SENT:
+        fprintf(stderr,"Status: Cookie found and will be sent with request\n");
+        break;
+    case INTERNET_STATUS_COOKIE_RECEIVED:
+        fprintf(stderr,"Status: Cookie Received\n");
+        break;
+    case INTERNET_STATUS_COOKIE_HISTORY:
+    {
+        InternetCookieHistory cookieHistory;
+        fprintf(stderr,"Status: Cookie History\n");
 
-                //Verify we've a valid pointer with the correct size
-                if(lpvStatusInformation && 
-                   dwStatusInformationLength == sizeof(InternetCookieHistory))
-                {
-                    cookieHistory = *((InternetCookieHistory*)lpvStatusInformation);
-                }
-                else
-                {
-                    fprintf(stderr,"Cookie History not valid\n");
-                    goto ExitSwitch;
-                }
-                if(cookieHistory.fAccepted)
-                {
-                    fprintf(stderr,"Cookie Accepted\n");
-                }
-                if(cookieHistory.fLeashed)
-                {
-                    fprintf(stderr,"Cookie Leashed\n");
-                }        
-                if(cookieHistory.fDowngraded)
-                {
-                    fprintf(stderr,"Cookie Downgraded\n");
-                }        
-                if(cookieHistory.fRejected)
-                {
-                    fprintf(stderr,"Cookie Rejected\n");
-                }
-            }
-        ExitSwitch:
-            break;   
-        case INTERNET_STATUS_CLOSING_CONNECTION:
-            fprintf(stderr,"Status: Closing Connection\n");
-            break;
-        case INTERNET_STATUS_CONNECTED_TO_SERVER:
-            fprintf(stderr,"Status: Connected to Server\n");
-            break;
-        case INTERNET_STATUS_CONNECTING_TO_SERVER:
-            fprintf(stderr,"Status: Connecting to Server\n");
-            break;
-        case INTERNET_STATUS_CONNECTION_CLOSED:
-            fprintf(stderr,"Status: Connection Closed\n");
-            break;
-        case INTERNET_STATUS_HANDLE_CLOSING:
-            fprintf(stderr,"Status: Handle Closing\n");
-            //Signal the event for closing the handle
-            //only for the Request Handle
-            if(appContext)
-            {
-                SetEvent(appContext->hEvent);
-            }
-            break;
-        case INTERNET_STATUS_HANDLE_CREATED:
-            //Verify we've a valid pointer
-            if(lpvStatusInformation)
-            {
-                fprintf(stderr,
-                        "Handle %x created\n", 
-                        ((LPINTERNET_ASYNC_RESULT)lpvStatusInformation)->dwResult);
-            }
-            break;
-        case INTERNET_STATUS_INTERMEDIATE_RESPONSE:
-            fprintf(stderr,"Status: Intermediate response\n");
-            break;
-        case INTERNET_STATUS_RECEIVING_RESPONSE:
-            fprintf(stderr,"Status: Receiving Response\n");    
-            break;
-        case INTERNET_STATUS_RESPONSE_RECEIVED:
-            //Verify we've a valid pointer with the correct size
-            if(lpvStatusInformation && 
+        //Verify we've a valid pointer with the correct size
+        if(lpvStatusInformation &&
+                dwStatusInformationLength == sizeof(InternetCookieHistory))
+        {
+            cookieHistory = *((InternetCookieHistory*)lpvStatusInformation);
+        }
+        else
+        {
+            fprintf(stderr,"Cookie History not valid\n");
+            goto ExitSwitch;
+        }
+        if(cookieHistory.fAccepted)
+        {
+            fprintf(stderr,"Cookie Accepted\n");
+        }
+        if(cookieHistory.fLeashed)
+        {
+            fprintf(stderr,"Cookie Leashed\n");
+        }
+        if(cookieHistory.fDowngraded)
+        {
+            fprintf(stderr,"Cookie Downgraded\n");
+        }
+        if(cookieHistory.fRejected)
+        {
+            fprintf(stderr,"Cookie Rejected\n");
+        }
+    }
+ExitSwitch:
+    break;
+    case INTERNET_STATUS_CLOSING_CONNECTION:
+        fprintf(stderr,"Status: Closing Connection\n");
+        break;
+    case INTERNET_STATUS_CONNECTED_TO_SERVER:
+        fprintf(stderr,"Status: Connected to Server\n");
+        break;
+    case INTERNET_STATUS_CONNECTING_TO_SERVER:
+        fprintf(stderr,"Status: Connecting to Server\n");
+        break;
+    case INTERNET_STATUS_CONNECTION_CLOSED:
+        fprintf(stderr,"Status: Connection Closed\n");
+        break;
+    case INTERNET_STATUS_HANDLE_CLOSING:
+        fprintf(stderr,"Status: Handle Closing\n");
+        //Signal the event for closing the handle
+        //only for the Request Handle
+        if(appContext)
+        {
+            SetEvent(appContext->hEvent);
+        }
+        break;
+    case INTERNET_STATUS_HANDLE_CREATED:
+        //Verify we've a valid pointer
+        if(lpvStatusInformation)
+        {
+            fprintf(stderr,
+                    "Handle %x created\n",
+                    ((LPINTERNET_ASYNC_RESULT)lpvStatusInformation)->dwResult);
+        }
+        break;
+    case INTERNET_STATUS_INTERMEDIATE_RESPONSE:
+        fprintf(stderr,"Status: Intermediate response\n");
+        break;
+    case INTERNET_STATUS_RECEIVING_RESPONSE:
+        fprintf(stderr,"Status: Receiving Response\n");
+        break;
+    case INTERNET_STATUS_RESPONSE_RECEIVED:
+        //Verify we've a valid pointer with the correct size
+        if(lpvStatusInformation &&
                 dwStatusInformationLength == sizeof(DWORD))
+        {
+            dwBytes = *((LPDWORD)lpvStatusInformation);
+            fprintf(stderr,"Status: Response Received (%d Bytes)\n",dwBytes);
+        }
+        else
+        {
+            fprintf(stderr,"Response Received: lpvStatusInformation not valid\n");
+        }
+        break;
+    case INTERNET_STATUS_REDIRECT:
+        fprintf(stderr,"Status: Redirect\n");
+        break;
+    case INTERNET_STATUS_REQUEST_COMPLETE:
+        fprintf(stderr,"Status: Request complete\n");
+
+        //check for error first
+        dwError = ((LPINTERNET_ASYNC_RESULT)lpvStatusInformation)->dwError ;
+
+        if ( dwError != ERROR_SUCCESS)
+        {
+            LogInetError(dwError,L"Request_Complete");
+            exit(1);
+        }
+
+        switch (appContext->dwState)
+        {
+        case POST_REQ:
+            //read bytes to write
+            if((dwError = DoReadFile(appContext))!=ERROR_SUCCESS
+                    && dwError!= ERROR_IO_PENDING)
             {
-                dwBytes = *((LPDWORD)lpvStatusInformation);
-                fprintf(stderr,"Status: Response Received (%d Bytes)\n",dwBytes);
-            }
-            else
-            {
-                fprintf(stderr,"Response Received: lpvStatusInformation not valid\n");
-            }        
-            break;
-        case INTERNET_STATUS_REDIRECT:
-            fprintf(stderr,"Status: Redirect\n");
-            break;
-        case INTERNET_STATUS_REQUEST_COMPLETE:
-            fprintf(stderr,"Status: Request complete\n");
-            
-            //check for error first            
-            dwError = ((LPINTERNET_ASYNC_RESULT)lpvStatusInformation)->dwError ;
-                
-            if ( dwError != ERROR_SUCCESS)
-            {
-                LogInetError(dwError,L"Request_Complete");
+                LogSysError(dwError,L"DoReadFile");
                 exit(1);
             }
-                
-            switch (appContext->dwState)
-            {
-                case POST_REQ:     
-                    //read bytes to write   
-                    if((dwError = DoReadFile(appContext))!=ERROR_SUCCESS 
-                        && dwError!= ERROR_IO_PENDING)
-                    {
-                        LogSysError(dwError,L"DoReadFile");
-                        exit(1);
-                    } 
-                    
-                    break;
-                    
-                case POST_RES: //fall through 
-                case GET_REQ:
-                    
-                    if(!appContext->dwDownloaded )
-                    {
-                        
-                        EnterCriticalSection(&appContext->crSection);
-                        {
-                            appContext->bReceiveDone=TRUE;
-                            
-                            if (!appContext->lPendingWrites)
-                            {
-                                bQuit = TRUE;
-                            }
-                            
-                        }
-                        LeaveCriticalSection(&appContext->crSection);
-                        
-                        if(bQuit)
-                        {
-                            SetEvent(appContext->hEvent);  
-                        }
-                        
-                        break;
-                    }
-                    else if(appContext->dwDownloaded !=INVALID_DOWNLOAD_VALUE)
-                    {
-                      
-                        ZeroMemory(g_writeIO,sizeof(IO_BUF));
-                            
-                        InterlockedIncrement(&appContext->lPendingWrites);
-                        
-                        g_writeIO->aContext = appContext;
-                        
-                        g_writeIO->lpo.Offset=appContext->dwWriteOffset;
-                        CopyMemory(&g_writeIO->buffer,
-                                   appContext->pszOutBuffer,
-                                   appContext->dwDownloaded);
-                        
-                        if(!WriteFile(appContext->hRes,
-                                      &g_writeIO->buffer,
-                                      appContext->dwDownloaded,
-                                      NULL,
-                                      &g_writeIO->lpo))
-                        {
-                            if((dwError=GetLastError())!= ERROR_IO_PENDING)
-                            {
-                                LogSysError(dwError,L"WriteFile");
-                                exit(1);
-                            }
-                        }                   
-                        
-                        appContext->dwWriteOffset += appContext->dwDownloaded;
-                        
-                    }
-                    else
-                    {
-                        //appContext->dwDownloaded ==INVALID_DOWNLOAD_VALUE
-                        //We're in the initial state of the response's download
-                        fprintf(stderr,"Ready to start reading the Response Entity Body\n");
-                    }
-                    
-                    DoInternetRead(appContext);
-                    
-                    break;
-            } 
-            
+
             break;
-        case INTERNET_STATUS_REQUEST_SENT:
-            //Verify we've a valid pointer with the correct size
-            if(lpvStatusInformation && 
-               dwStatusInformationLength == sizeof(DWORD))
+
+        case POST_RES: //fall through
+        case GET_REQ:
+
+            if(!appContext->dwDownloaded )
             {
-                dwBytes = *((LPDWORD)lpvStatusInformation);
-                fprintf(stderr,"Status: Request sent (%d Bytes)\n",dwBytes);
+
+                EnterCriticalSection(&appContext->crSection);
+                {
+                    appContext->bReceiveDone=TRUE;
+
+                    if (!appContext->lPendingWrites)
+                    {
+                        bQuit = TRUE;
+                    }
+
+                }
+                LeaveCriticalSection(&appContext->crSection);
+
+                if(bQuit)
+                {
+                    SetEvent(appContext->hEvent);
+                }
+
+                break;
+            }
+            else if(appContext->dwDownloaded !=INVALID_DOWNLOAD_VALUE)
+            {
+
+                ZeroMemory(g_writeIO,sizeof(IO_BUF));
+
+                InterlockedIncrement(&appContext->lPendingWrites);
+
+                g_writeIO->aContext = appContext;
+
+                g_writeIO->lpo.Offset=appContext->dwWriteOffset;
+                CopyMemory(&g_writeIO->buffer,
+                           appContext->pszOutBuffer,
+                           appContext->dwDownloaded);
+
+                if(!WriteFile(appContext->hRes,
+                              &g_writeIO->buffer,
+                              appContext->dwDownloaded,
+                              NULL,
+                              &g_writeIO->lpo))
+                {
+                    if((dwError=GetLastError())!= ERROR_IO_PENDING)
+                    {
+                        LogSysError(dwError,L"WriteFile");
+                        exit(1);
+                    }
+                }
+
+                appContext->dwWriteOffset += appContext->dwDownloaded;
+
             }
             else
             {
-                fprintf(stderr,"Request sent: lpvStatusInformation not valid\n");
+                //appContext->dwDownloaded ==INVALID_DOWNLOAD_VALUE
+                //We're in the initial state of the response's download
+                fprintf(stderr,"Ready to start reading the Response Entity Body\n");
             }
+
+            DoInternetRead(appContext);
+
             break;
-        case INTERNET_STATUS_DETECTING_PROXY:
-            fprintf(stderr,"Status: Detecting Proxy\n");
-            break;            
-        case INTERNET_STATUS_RESOLVING_NAME:
-            fprintf(stderr,"Status: Resolving Name\n");
-            break;
-        case INTERNET_STATUS_NAME_RESOLVED:
-            fprintf(stderr,"Status: Name Resolved\n");
-            break;
-        case INTERNET_STATUS_SENDING_REQUEST:
-            fprintf(stderr,"Status: Sending request\n");
-            break;
-        case INTERNET_STATUS_STATE_CHANGE:
-            fprintf(stderr,"Status: State Change\n");
-            break;
-        case INTERNET_STATUS_P3P_HEADER:
-            fprintf(stderr,"Status: Received P3P header\n");
-            break;
-        default:
-            fprintf(stderr,"Status: Unknown (%d)\n",dwInternetStatus);
-            break;
+        }
+
+        break;
+    case INTERNET_STATUS_REQUEST_SENT:
+        //Verify we've a valid pointer with the correct size
+        if(lpvStatusInformation &&
+                dwStatusInformationLength == sizeof(DWORD))
+        {
+            dwBytes = *((LPDWORD)lpvStatusInformation);
+            fprintf(stderr,"Status: Request sent (%d Bytes)\n",dwBytes);
+        }
+        else
+        {
+            fprintf(stderr,"Request sent: lpvStatusInformation not valid\n");
+        }
+        break;
+    case INTERNET_STATUS_DETECTING_PROXY:
+        fprintf(stderr,"Status: Detecting Proxy\n");
+        break;
+    case INTERNET_STATUS_RESOLVING_NAME:
+        fprintf(stderr,"Status: Resolving Name\n");
+        break;
+    case INTERNET_STATUS_NAME_RESOLVED:
+        fprintf(stderr,"Status: Name Resolved\n");
+        break;
+    case INTERNET_STATUS_SENDING_REQUEST:
+        fprintf(stderr,"Status: Sending request\n");
+        break;
+    case INTERNET_STATUS_STATE_CHANGE:
+        fprintf(stderr,"Status: State Change\n");
+        break;
+    case INTERNET_STATUS_P3P_HEADER:
+        fprintf(stderr,"Status: Received P3P header\n");
+        break;
+    default:
+        fprintf(stderr,"Status: Unknown (%d)\n",dwInternetStatus);
+        break;
     }
 }
 
-DWORD 
+DWORD
 DoReadFile(__in APP_CONTEXT* aContext)
 /*++
 
@@ -534,9 +534,9 @@ Return Value:
     DWORD dwError = ERROR_SUCCESS;
 
     ZeroMemory(g_readIO,sizeof(IO_BUF));
-    
+
     g_readIO->aContext = aContext;
-    
+
     g_readIO->lpo.Offset = aContext->dwReadOffset;
 
     if ( !ReadFile(aContext->hFile,
@@ -545,7 +545,7 @@ Return Value:
                    NULL,
                    &g_readIO->lpo) )
     {
-        
+
         if ( (dwError=GetLastError()) == ERROR_HANDLE_EOF )
         {
             //Clear the error code since we've handled the error conditions
@@ -602,7 +602,7 @@ Exit:
     return dwError;
 }
 
-VOID 
+VOID
 DoInternetWrite(__in APP_CONTEXT *aContext)
 /*++
 
@@ -625,16 +625,16 @@ Return Value:
                          aContext->dwRead,
                          &aContext->dwWritten))
     {
-        //read bytes to write   
+        //read bytes to write
         if((dwError=DoReadFile(aContext)) != ERROR_SUCCESS
-            && dwError != ERROR_IO_PENDING)
+                && dwError != ERROR_IO_PENDING)
 
         {
             LogSysError(dwError,L"DoReadFile");
             exit(1);
-        } 
+        }
     }
-    
+
     if (  (dwError=GetLastError()) == ERROR_IO_PENDING)
     {
         fprintf(stderr,"Waiting for InternetWriteFile to complete\n");
@@ -676,15 +676,15 @@ Return Value:
             EnterCriticalSection(&aContext->crSection);
             {
                 aContext->bReceiveDone = TRUE;
-                
+
                 if (!aContext->lPendingWrites)
                 {
                     bQuit = TRUE;
                 }
-                
+
             }
             LeaveCriticalSection(&aContext->crSection);
-            
+
             if (bQuit)
             {
                 SetEvent(aContext->hEvent);
@@ -701,15 +701,15 @@ Return Value:
         g_writeIO->lpo.Offset = aContext->dwWriteOffset;
         CopyMemory(&g_writeIO->buffer,
                    aContext->pszOutBuffer,
-                   aContext->dwDownloaded); 
-        
+                   aContext->dwDownloaded);
+
         if (!WriteFile(aContext->hRes,
                        &g_writeIO->buffer,
                        aContext->dwDownloaded,
                        NULL,
                        &g_writeIO->lpo))
         {
-            
+
             if ( (dwError = GetLastError()) != ERROR_IO_PENDING )
             {
                 LogSysError(dwError,L"WriteFile");
@@ -739,8 +739,8 @@ WriteFileCallBack(DWORD dwErrorCode,
 /*++
 
 Routine Description:
-     Callback routine for Asynchronous file write completions. This 
-     routine determines if the response is completely received and 
+     Callback routine for Asynchronous file write completions. This
+     routine determines if the response is completely received and
      all writes are completed before signalling the event to terminate
      the program. Frees the Overlapped object.
 
@@ -764,21 +764,21 @@ Return Value:
     if (dwErrorCode == ERROR_SUCCESS)
     {
         ioBuf = CONTAINING_RECORD(lpOverlapped,
-                                                      IO_BUF,
-                                                      lpo);
+                                  IO_BUF,
+                                  lpo);
         aContext = ioBuf->aContext;
 
         EnterCriticalSection(&aContext->crSection);
         {
             if (!InterlockedDecrement(&aContext->lPendingWrites)
-                && aContext->bReceiveDone)
+                    && aContext->bReceiveDone)
             {
                 bQuit = TRUE;
-               
+
             }
         }
         LeaveCriticalSection(&aContext->crSection);
-     
+
         if (bQuit)
         {
             SetEvent(aContext->hEvent);
@@ -815,8 +815,8 @@ Return Value:
     APP_CONTEXT *aContext;
     IO_BUF *ioBuf;
 
-    if ( dwErrorCode == ERROR_SUCCESS || 
-          g_pfnRtlNtStatusToDosError(dwErrorCode) == ERROR_HANDLE_EOF  )
+    if ( dwErrorCode == ERROR_SUCCESS ||
+            g_pfnRtlNtStatusToDosError(dwErrorCode) == ERROR_HANDLE_EOF  )
     {
         ioBuf = CONTAINING_RECORD(lpOverlapped,
                                   IO_BUF,
@@ -844,7 +844,7 @@ Return Value:
     return;
 }
 
-VOID 
+VOID
 InitMainContext(__inout MAIN_CONTEXT *aMainContext)
 /*++
 
@@ -866,7 +866,7 @@ Return Value:
     return;
 }
 
-VOID 
+VOID
 InitRequestContext(__in MAIN_CONTEXT* aMainContext,
                    __inout APP_CONTEXT *aContext)
 /*++
@@ -877,7 +877,7 @@ Routine Description:
 
 Arguments:
     aContext - Pointer to Application context structure
-    aMainContext - Pointer to MAIN_CONTEXT structure containing the sesion and 
+    aMainContext - Pointer to MAIN_CONTEXT structure containing the sesion and
     connection handles.
 
 Return Value:
@@ -899,26 +899,26 @@ Return Value:
     aContext->hRes = NULL;
 
     aContext->pszOutBuffer = Malloc(BUFFER_LEN);
-        
+
     //create event
     aContext->hEvent = CreateEvent(NULL, //Sec attrib
                                    FALSE, //Auto reset
                                    FALSE, //Initial state unsignalled
-                                   L"MAIN_SYNC"); 
-    
+                                   L"MAIN_SYNC");
+
     if (!aContext->hEvent)
     {
         LogSysError(GetLastError(),L"CreateEvent");
         exit(1);
     }
-    
+
     //initialize critical section
     InitializeCriticalSection(&aContext->crSection);
 
     return;
 }
 
-VOID 
+VOID
 CleanUp(__in APP_CONTEXT* aContext)
 /*++
 
@@ -935,54 +935,54 @@ Return Value:
 {
     DWORD dwSync = 0;
 
-    if( aContext->hFile) 
+    if( aContext->hFile)
     {
         CloseHandle(aContext->hFile);
     }
-    if( aContext->hRes) 
+    if( aContext->hRes)
     {
         CloseHandle(aContext->hRes);
     }
-    if( aContext->hRequest ) 
+    if( aContext->hRequest )
     {
         InternetCloseHandle(aContext->hRequest );
         // Wait for the closing of the handle
-        dwSync = WaitForSingleObject(aContext->hEvent,INFINITE); 
+        dwSync = WaitForSingleObject(aContext->hEvent,INFINITE);
         if(WAIT_ABANDONED == dwSync)
         {
             fprintf(stderr,"The callback thread has terminated.\n");
         }
     }
-    if( aContext->mainContext->hConnect ) 
+    if( aContext->mainContext->hConnect )
     {
         //Remove the callback from the Connection handle.
         //Since se set the callback on the session handle previous to create the conenction and
         //request handles, they inherited the callback function.
-        //Setting the callback function to null in the Connect handle, will ensure we don't get 
+        //Setting the callback function to null in the Connect handle, will ensure we don't get
         //a notification when the handle is closed
         g_callback = InternetSetStatusCallback( aContext->mainContext->hConnect, NULL );
 
-        //Call InternetCloseHandle and do not wait for the closing notification 
+        //Call InternetCloseHandle and do not wait for the closing notification
         //in the callback funciton
         InternetCloseHandle(aContext->mainContext->hConnect );
 
     }
-     if( aContext->mainContext->hSession) 
-    { 
+    if( aContext->mainContext->hSession)
+    {
         //Remove the callback from the Session handle
         g_callback = InternetSetStatusCallback( aContext->mainContext->hSession, NULL );
         //At this point the Session handle should be valid
         InternetCloseHandle(aContext->mainContext->hSession );
     }
-    if( aContext->hEvent) 
+    if( aContext->hEvent)
     {
         CloseHandle(aContext->hEvent);
     }
-    
+
     DeleteCriticalSection(&aContext->crSection);
 
     Free(aContext->pszOutBuffer);
-    
+
     //Free the structures containing the overlapped structure
     Free(g_readIO);
     Free(g_writeIO);
@@ -996,17 +996,17 @@ Return Value:
 #ifdef DEBUG
     printf("Cleanup:\nAlloc count is %d\n",allocCount);
     printf("Free count is %d\n",freeCount);
-#endif  
+#endif
 }
 
-VOID 
+VOID
 OpenFiles(__inout APP_CONTEXT *aContext)
 /*++
 
 Routine Description:
     This routine opens files in async mode and binds a thread from the
     thread-pool to handle the callback for asynchronous operations. Always
-    opens a file to write output to. 
+    opens a file to write output to.
 
 Arguments:
     aContext - Pointer to Application context structure
@@ -1021,7 +1021,7 @@ Return Value:
         //Open input file
         aContext->hFile = CreateFile(g_inputFile,
                                      GENERIC_READ,
-                                     FILE_SHARE_READ, 
+                                     FILE_SHARE_READ,
                                      NULL, // handle cannot be inherited
                                      OPEN_ALWAYS, // if file exists, open it
                                      FILE_ATTRIBUTE_NORMAL|FILE_FLAG_OVERLAPPED,
@@ -1032,12 +1032,12 @@ Return Value:
             LogSysError(GetLastError(),L"CreateFile");
             exit(1);
         }
-        
+
         if ( ! BindIoCompletionCallback(aContext->hFile,ReadFileCallBack,0))
         {
             LogSysError(GetLastError(),L"BindIoCompletionCallback");
             exit(1);
-            
+
         }
     }
 
@@ -1049,27 +1049,27 @@ Return Value:
                                 CREATE_ALWAYS, // if file exists, delete it
                                 FILE_ATTRIBUTE_NORMAL|FILE_FLAG_OVERLAPPED,
                                 NULL);  //No template file
-    
+
     if (!aContext->hRes)
     {
         LogSysError(GetLastError(),L"CreateFile");
-        exit(1);       
+        exit(1);
     }
-    
+
     if ( ! BindIoCompletionCallback(aContext->hRes,WriteFileCallBack,0) )
     {
         LogSysError(GetLastError(),L"BindIoCompletionCallback");
-        exit(1);        
+        exit(1);
     }
 
     //Allocate Memory for the IO_BUFF structures
-   g_writeIO = Malloc(sizeof(IO_BUF));
-   g_readIO = Malloc(sizeof(IO_BUF));
+    g_writeIO = Malloc(sizeof(IO_BUF));
+    g_readIO = Malloc(sizeof(IO_BUF));
 
 }
 
 
-VOID 
+VOID
 ParseArguments(int argc,
                __in_ecount(argc) LPWSTR *argv)
 /*++
@@ -1086,102 +1086,102 @@ Return Value:
     None.
 
 --*/
-{ 
+{
     int i;
     DWORD dwError = 0;
     UINT uRetVal;
 
     for (i = 1; i < argc; ++i)
-    {        
+    {
         if ( wcsncmp(argv[i],L"-",1))
         {
             printf("Invalid switch %ws\n",argv[i]);
             i++;
             continue;
         }
-        
+
         switch(argv[i][1])
-        {            
-            case L'p':
-                
-                g_bUseProxy = 1;
-                if (i < argc-1)
-                {
-                    g_proxy = argv[++i];
-                }
-                break;
-                
-            case L'h':
-                
-                if ( i < argc-1)
-                {
-                    g_hostName = argv[++i];
-                }
-                
-                break;
-                
-            case L'o':
-                
-                if ( i < argc-1)
-                {
-                    g_resource = argv[++i];
-                }
-                
-                break;
-                
-            case L'r':
-            
-                if ( i < argc-1)
-                {
-                    g_inputFile = argv[++i];
-                }
-                
-                break;
+        {
+        case L'p':
 
-            case L'w':
-                
-                if ( i < argc-1)
-                {
-                    g_outputFile = argv[++i];
-                }
-                
-                break;
-            
-            case L'a':
-                
-                if ( i < argc-1)
-                {
-                    if ( !_wcsnicmp(argv[i+1],L"get",3))
-                    {
-                        g_action = GET;
-                    }
-                    else if (!_wcsnicmp(argv[i+1],L"post",4))
-                    {
-                        g_action = POST;
-                    }
-                }
-                ++i;
-                break;
+            g_bUseProxy = 1;
+            if (i < argc-1)
+            {
+                g_proxy = argv[++i];
+            }
+            break;
 
-            case L's':
-                g_bSecure = TRUE;
-                break;
+        case L'h':
 
-            case L't':
-                if ( i < argc-1)
+            if ( i < argc-1)
+            {
+                g_hostName = argv[++i];
+            }
+
+            break;
+
+        case L'o':
+
+            if ( i < argc-1)
+            {
+                g_resource = argv[++i];
+            }
+
+            break;
+
+        case L'r':
+
+            if ( i < argc-1)
+            {
+                g_inputFile = argv[++i];
+            }
+
+            break;
+
+        case L'w':
+
+            if ( i < argc-1)
+            {
+                g_outputFile = argv[++i];
+            }
+
+            break;
+
+        case L'a':
+
+            if ( i < argc-1)
+            {
+                if ( !_wcsnicmp(argv[i+1],L"get",3))
                 {
-                    //Verify the user provided a valid number for the default time
-                    if (0 != isdigit((UCHAR)argv[i+1][0]))
-                    {
-                        g_userTimeout = _wtoi(argv[++i]);
-                    }
+                    g_action = GET;
                 }
-                break;        
+                else if (!_wcsnicmp(argv[i+1],L"post",4))
+                {
+                    g_action = POST;
+                }
+            }
+            ++i;
+            break;
 
-            default:
-                ShowUsage();
-                exit(1);
-                break;
+        case L's':
+            g_bSecure = TRUE;
+            break;
+
+        case L't':
+            if ( i < argc-1)
+            {
+                //Verify the user provided a valid number for the default time
+                if (0 != isdigit((UCHAR)argv[i+1][0]))
+                {
+                    g_userTimeout = _wtoi(argv[++i]);
+                }
+            }
+            break;
+
+        default:
+            ShowUsage();
+            exit(1);
+            break;
         }
     }
 
@@ -1202,28 +1202,28 @@ Return Value:
         printf("Error: File to post not specified\n");
         dwError++;
     }
-    
+
     if (!g_outputFile)
     {
         g_bCreatedTempFile = TRUE;
         g_outputFile = Malloc(MAX_PATH);
-        // Create a temporary file. 
-        uRetVal = GetTempFileName(L".", // current directory 
-                                  L"TMP",        // temp file name prefix 
-                                  0,            // create unique name 
-                                  g_outputFile);  // buffer for name 
+        // Create a temporary file.
+        uRetVal = GetTempFileName(L".", // current directory
+                                  L"TMP",        // temp file name prefix
+                                  0,            // create unique name
+                                  g_outputFile);  // buffer for name
         if (uRetVal == 0)
         {
             printf ("GetTempFileName failed with error %d.\n", GetLastError());
             dwError++;
         }
         else
-        {          
+        {
             printf("Defaulting output file to: %ws\n", g_outputFile);
         }
-           
+
     }
-    
+
     if (dwError)
     {
         exit(1);
@@ -1259,9 +1259,9 @@ Return Value:
     printf("-t : Specify time to wait for completing the operation in async mode. Default 2 minutes");
 }
 
-VOID 
+VOID
 LogInetError(DWORD err,
-                          __in LPCWSTR str)
+             __in LPCWSTR str)
 /*++
 
 Routine Description:
@@ -1269,7 +1269,7 @@ Routine Description:
 
 Arguments:
      err - Error number obtained from GetLastError()
-     str - String pointer holding caller-context information 
+     str - String pointer holding caller-context information
 
 Return Value:
     None.
@@ -1280,7 +1280,7 @@ Return Value:
     LPTSTR msgBuffer = Malloc(ERR_MSG_LEN*sizeof(TCHAR));
 
     ZeroMemory(msgBuffer,ERR_MSG_LEN*sizeof(TCHAR));
-    
+
     dwResult = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE,
                              GetModuleHandle(L"wininet.dll"),
                              err,
@@ -1288,7 +1288,7 @@ Return Value:
                              msgBuffer,
                              ERR_MSG_LEN,
                              NULL);
-    
+
     if (dwResult)
     {
         fprintf(stderr,"%ws: %ws\n",str,msgBuffer);
@@ -1314,7 +1314,7 @@ Routine Description:
 
 Arguments:
      err - Error number obtained from GetLastError()
-     str - String pointer holding caller-context information 
+     str - String pointer holding caller-context information
 
 Return Value:
     None.
@@ -1325,7 +1325,7 @@ Return Value:
     LPTSTR msgBuffer = Malloc(ERR_MSG_LEN*sizeof(TCHAR));
 
     ZeroMemory(msgBuffer,ERR_MSG_LEN*sizeof(TCHAR));
-    
+
     dwResult = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
                              NULL,
                              err,
@@ -1333,7 +1333,7 @@ Return Value:
                              msgBuffer,
                              ERR_MSG_LEN,
                              NULL);
-    
+
     if (dwResult)
     {
         fprintf(stderr,
@@ -1347,7 +1347,7 @@ Return Value:
                 "Error %d while formatting message for %d in %ws\n",
                 GetLastError(),
                 err,
-                str);    
+                str);
     }
     Free(msgBuffer);
 }
@@ -1374,7 +1374,7 @@ Return Value:
 #endif
 
     ptr = malloc(size);
-    
+
     if (!ptr)
     {
         fprintf(stderr,"Out of Memory\n");
@@ -1404,11 +1404,11 @@ Return Value:
 #ifdef DEBUG
     InterlockedIncrement(&freeCount);
 #endif
-    
+
     free(memblock);
 }
 
-DWORD 
+DWORD
 SetFunctionEntryPoint()
 /*++
 
@@ -1423,18 +1423,18 @@ Return Value:
 
 --*/
 {
-	DWORD dwError = ERROR_SUCCESS;
+    DWORD dwError = ERROR_SUCCESS;
 
-	HMODULE hModule = GetModuleHandle( L"ntdll.dll" );
+    HMODULE hModule = GetModuleHandle( L"ntdll.dll" );
 
-       if(hModule)
-       {
-        	SetLastError( ERROR_SUCCESS );
-                
-        	g_pfnRtlNtStatusToDosError = ( PRtlNtStatusToDosError ) GetProcAddress( hModule, "RtlNtStatusToDosError" );
-       }
-       
-	dwError = GetLastError();
+    if(hModule)
+    {
+        SetLastError( ERROR_SUCCESS );
 
-	return dwError;
+        g_pfnRtlNtStatusToDosError = ( PRtlNtStatusToDosError ) GetProcAddress( hModule, "RtlNtStatusToDosError" );
+    }
+
+    dwError = GetLastError();
+
+    return dwError;
 }

@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -159,11 +159,11 @@ CWrappedCredentialEvents::CWrappedCredentialEvents() :
     _cRef(1), _pWrapperCredential(NULL), _pEvents(NULL)
 {}
 
-// 
+//
 // Save a copy of LogonUI's ICredentialProviderCredentialEvents pointer for doing callbacks
 // and the "this" pointer of the wrapper credential to specify events as coming from.
 //
-// Pointers are saved as weak references (ie, without a reference count) to avoid circular 
+// Pointers are saved as weak references (ie, without a reference count) to avoid circular
 // references.  (For instance, The wrapper credential has a reference on the wrapped credential
 // and the wrapped credential should take a reference on this object.  If we had a reference
 // on the wrapper credential, there would be a cycle.)  The wrapper credential must manage

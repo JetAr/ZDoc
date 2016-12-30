@@ -1,4 +1,4 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+﻿/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
 #pragma once
 #ifndef _IMAPI2TEST_AUDIO_EVENTS_
@@ -21,11 +21,11 @@ class  CAudioEvent :
 
     // This is the list of all interfaces supported by the object
     BEGIN_COM_MAP(CAudioEvent)
-        COM_INTERFACE_ENTRY(IDispatch)
+    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
     BEGIN_SINK_MAP(CAudioEvent)
-        SINK_ENTRY_EX(1, IID_DDiscFormat2TrackAtOnceEvents, DISPID_DDISCFORMAT2TAOEVENTS_UPDATE, &Update)
+    SINK_ENTRY_EX(1, IID_DDiscFormat2TrackAtOnceEvents, DISPID_DDISCFORMAT2TAOEVENTS_UPDATE, &Update)
     END_SINK_MAP()
 
 public: // DDiscFormat2TrackAtOnceEvents

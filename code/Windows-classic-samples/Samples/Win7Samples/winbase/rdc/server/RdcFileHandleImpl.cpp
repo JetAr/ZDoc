@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -28,14 +28,14 @@ class RdcGeneratorJob
 {
 public:
     RdcGeneratorJob()
-            :
-            m_Failed ( false ),
-            m_Depth ( 0 ),
-            m_HorizonSize1 ( MSRDC_DEFAULT_HORIZONSIZE_1 ),
-            m_HorizonSizeN ( MSRDC_DEFAULT_HORIZONSIZE_N ),
-            m_HashWindowSize1 ( MSRDC_DEFAULT_HASHWINDOWSIZE_1 ),
-            m_HashWindowSizeN ( MSRDC_DEFAULT_HASHWINDOWSIZE_N ),
-            m_SimilarityEnabled ( false )
+        :
+        m_Failed ( false ),
+        m_Depth ( 0 ),
+        m_HorizonSize1 ( MSRDC_DEFAULT_HORIZONSIZE_1 ),
+        m_HorizonSizeN ( MSRDC_DEFAULT_HORIZONSIZE_N ),
+        m_HashWindowSize1 ( MSRDC_DEFAULT_HASHWINDOWSIZE_1 ),
+        m_HashWindowSizeN ( MSRDC_DEFAULT_HASHWINDOWSIZE_N ),
+        m_SimilarityEnabled ( false )
     {
         for ( ULONG i = 0; i < MSRDC_MAXIMUM_DEPTH; ++i )
         {
@@ -313,11 +313,11 @@ DebugHresult RdcGeneratorJob::CreateSignatures ( RdcFileHandleImpl *rdcFileHandl
     DebugHresult hr = S_OK;
 
     RdcBufferPointer inputPointer =
-        {
-            0,
-            0,
-            m_InputBuffer.Begin()
-        };
+    {
+        0,
+        0,
+        m_InputBuffer.Begin()
+    };
     RdcBufferPointer outputPointer[MSRDC_MAXIMUM_DEPTH];
     RdcBufferPointer *outputPointers[MSRDC_MAXIMUM_DEPTH] = {0};
 

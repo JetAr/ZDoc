@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -135,33 +135,33 @@ STDMETHODIMP CApplication::OnViewChanged(
     {
         switch (verb)
         {
-            // The view was newly created.
-            case UI_VIEWVERB_CREATE:
+        // The view was newly created.
+        case UI_VIEWVERB_CREATE:
+        {
+            hr = S_OK;
+            break;
+        }
+        // The view has been resized.  For the Ribbon view, the application should
+        // call GetHeight to determine the height of the ribbon.
+        case UI_VIEWVERB_SIZE:
+        {
+            IUIRibbon* pRibbon = NULL;
+            UINT uRibbonHeight;
+            // Call to the framework to determine the desired height of the Ribbon.
+            hr = pView->QueryInterface(IID_PPV_ARGS(&pRibbon));
+            if (SUCCEEDED(hr))
             {
-                hr = S_OK;
-                break;
+                hr = pRibbon->GetHeight(&uRibbonHeight);
+                pRibbon->Release();
             }
-            // The view has been resized.  For the Ribbon view, the application should
-            // call GetHeight to determine the height of the ribbon.
-            case UI_VIEWVERB_SIZE:
-            {
-                IUIRibbon* pRibbon = NULL;
-                UINT uRibbonHeight;
-                // Call to the framework to determine the desired height of the Ribbon.
-                hr = pView->QueryInterface(IID_PPV_ARGS(&pRibbon));
-                if (SUCCEEDED(hr))
-                {
-                    hr = pRibbon->GetHeight(&uRibbonHeight);
-                    pRibbon->Release();
-                }
-                break;
-            }
-            // The view was destroyed.
-            case UI_VIEWVERB_DESTROY:
-            {
-                hr = S_OK;
-                break;
-            }
+            break;
+        }
+        // The view was destroyed.
+        case UI_VIEWVERB_DESTROY:
+        {
+            hr = S_OK;
+            break;
+        }
         }
     }
     return hr;

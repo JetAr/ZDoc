@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -100,14 +100,14 @@ INT_PTR CALLBACK MediaPlayerDialogProc(HWND hWnd, UINT message, WPARAM wParam, L
         {
             MessageBox(hWnd, L"Unable to allocate media player", L"Initialization Failure", MB_OK);
             EndDialog(hWnd, -1);
-			break;
+            break;
         }
         HRESULT hr = g_MediaPlayer->Initialize();
         if (FAILED(hr))
         {
             MessageBox(hWnd, L"Unable to initialize media player", L"Initialization Failure", MB_OK);
             EndDialog(hWnd, -1);
-			break;
+            break;
         }
 
         float volume = g_MediaPlayer->GetVolume();
@@ -140,14 +140,14 @@ INT_PTR CALLBACK MediaPlayerDialogProc(HWND hWnd, UINT message, WPARAM wParam, L
             EndDialog(hWnd, TRUE);
             handled = TRUE;
             break;
-            
+
         //
         //  The user checked the "Pause on Duck" option - ask the media player to sync to that state.
         //
         case IDC_CHECK_PAUSE_ON_DUCK:
             g_MediaPlayer->SyncPauseOnDuck(IsDlgButtonChecked(hWnd, IDC_CHECK_PAUSE_ON_DUCK) == BST_CHECKED);
             break;
-            
+
         //
         //  The user checked the "Opt Out" option - ask the media player to sync to that state.
         //
@@ -201,7 +201,7 @@ INT_PTR CALLBACK MediaPlayerDialogProc(HWND hWnd, UINT message, WPARAM wParam, L
             openFileName.Flags = OFN_ENABLESIZING | OFN_FILEMUSTEXIST;
             openFileName.hInstance = g_hInstance;
             openFileName.hwndOwner = hWnd;
-            
+
             if (GetOpenFileName(&openFileName))
             {
                 SetDlgItemText(hWnd, IDC_EDIT_FILENAME, openFileName.lpstrFile);
@@ -355,14 +355,14 @@ INT_PTR CALLBACK MediaPlayerDialogProc(HWND hWnd, UINT message, WPARAM wParam, L
     //  The caller passes the new Mute state in wParam and the new volume value in lParam.
     //
     case WM_APP_SESSION_VOLUME_CHANGED:
-        {
-            BOOL newMute = (BOOL)wParam;
-            float newVolume = LPARAM2FLOAT(lParam);
-            int volumePos = static_cast<int>(newVolume * 100);
-            SendMessage(GetDlgItem(hWnd, IDC_SLIDER_VOLUME), TBM_SETPOS, TRUE, volumePos);
-            CheckDlgButton(hWnd, IDC_CHECK_MUTE, newMute ? BST_CHECKED : BST_UNCHECKED);
-            break;
-        }
+    {
+        BOOL newMute = (BOOL)wParam;
+        float newVolume = LPARAM2FLOAT(lParam);
+        int volumePos = static_cast<int>(newVolume * 100);
+        SendMessage(GetDlgItem(hWnd, IDC_SLIDER_VOLUME), TBM_SETPOS, TRUE, volumePos);
+        CheckDlgButton(hWnd, IDC_CHECK_MUTE, newMute ? BST_CHECKED : BST_UNCHECKED);
+        break;
+    }
 
     default:
         //
@@ -370,7 +370,7 @@ INT_PTR CALLBACK MediaPlayerDialogProc(HWND hWnd, UINT message, WPARAM wParam, L
         //
         //  Otherwise just let our caller know that they need to handle it.
         //
-       break;
+        break;
     }
     return handled;
 }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -131,7 +131,11 @@ PCWSTR EventName(long lEvent)
 {
     PCWSTR psz = L"";
 
-    static const struct { PCWSTR pszName; long lEvent; } c_rgEventNames[] =
+    static const struct
+    {
+        PCWSTR pszName;
+        long lEvent;
+    } c_rgEventNames[] =
     {
         MAP_ENTRY(SHCNE_RENAMEITEM),
         MAP_ENTRY(SHCNE_CREATE),
@@ -303,8 +307,14 @@ public:
         return _hr;
     }
 
-    HRESULT GetResult() const { return _hr; }
-    PCUIDLIST_RELATIVE GetRelativeIDList() const { return _pidlRel; }
+    HRESULT GetResult() const
+    {
+        return _hr;
+    }
+    PCUIDLIST_RELATIVE GetRelativeIDList() const
+    {
+        return _pidlRel;
+    }
 
 private:
     void _Init()
@@ -438,12 +448,12 @@ public:
         if (lEvent == SHCNE_RENAMEITEM || lEvent == SHCNE_RENAMEFOLDER)
         {
             _logWindow.LogMessagePrintf(GROUPID_NAMES, EventName(lEvent),
-                L"%s ==> %s", StringToEmpty(pszLeft), StringToEmpty(pszRight));
+                                        L"%s ==> %s", StringToEmpty(pszLeft), StringToEmpty(pszRight));
         }
         else
         {
             _logWindow.LogMessagePrintf(GROUPID_NAMES, EventName(lEvent),
-                L"%s , %s", StringToEmpty(pszLeft), StringToEmpty(pszRight));
+                                        L"%s , %s", StringToEmpty(pszLeft), StringToEmpty(pszRight));
         }
 
         CoTaskMemFree(pszLeft);
@@ -603,37 +613,37 @@ INT_PTR CChangeNotifyApp::_DlgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_COMMAND:
+    {
+        const int idCmd = GET_WM_COMMAND_ID(wParam, lParam);
+        switch (idCmd)
         {
-            const int idCmd = GET_WM_COMMAND_ID(wParam, lParam);
-            switch (idCmd)
+        case IDOK:
+        case IDCANCEL:
+            return EndDialog(_hdlg, idCmd);
+
+        case IDC_RECURSIVE:
+            if (_psiDrop)
             {
-            case IDOK:
-            case IDCANCEL:
-                return EndDialog(_hdlg, idCmd);
-
-            case IDC_RECURSIVE:
-                if (_psiDrop)
-                {
-                    _StartWatching();
-                }
-                break;
-
-            case IDC_PICK:
-                _PickItem();
-                break;
+                _StartWatching();
             }
+            break;
+
+        case IDC_PICK:
+            _PickItem();
+            break;
         }
-        break;
+    }
+    break;
 
     case WM_NOTIFY:
+    {
+        NMHDR *pnm = (NMHDR*)lParam;
+        if (pnm->idFrom == IDC_LISTVIEW)
         {
-            NMHDR *pnm = (NMHDR*)lParam;
-            if (pnm->idFrom == IDC_LISTVIEW)
-            {
-                _logWindow.OnNotify(pnm);
-            }
+            _logWindow.OnNotify(pnm);
         }
-        break;
+    }
+    break;
 
     case WM_SIZE:
         OnSize(_hdlg, c_rgAnchors, ARRAYSIZE(c_rgAnchors), _rgAnchorOffsets);

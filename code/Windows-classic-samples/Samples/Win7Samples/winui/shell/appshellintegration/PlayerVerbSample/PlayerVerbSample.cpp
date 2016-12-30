@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -153,7 +153,8 @@ private:
     // IUnknown
     IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv)
     {
-        static const QITAB qit[] = {
+        static const QITAB qit[] =
+        {
             QITABENT(CFileOpenBasketPicker, IFileDialogEvents),
             QITABENT(CFileOpenBasketPicker, IFileDialogControlEvents),
             { 0 },
@@ -161,8 +162,14 @@ private:
         return QISearch(this, qit, riid, ppv);
     }
 
-    IFACEMETHODIMP_(ULONG) AddRef() { return 3; }
-    IFACEMETHODIMP_(ULONG) Release() { return 2; }
+    IFACEMETHODIMP_(ULONG) AddRef()
+    {
+        return 3;
+    }
+    IFACEMETHODIMP_(ULONG) Release()
+    {
+        return 2;
+    }
 
     // IFileDialogEvents
     IFACEMETHODIMP OnFileOk(IFileDialog *pfd)
@@ -275,30 +282,42 @@ private:
         return S_OK;
     }
 
-    IFACEMETHODIMP OnShareViolation(IFileDialog * /*pfd*/, IShellItem * /*psi*/, FDE_SHAREVIOLATION_RESPONSE * /*pResponse*/) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnTypeChange(IFileDialog * /*pfd*/) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnOverwrite(IFileDialog * /*pfd*/, IShellItem * /*psi*/, FDE_OVERWRITE_RESPONSE * /*pResponse*/) { return E_NOTIMPL;}
+    IFACEMETHODIMP OnShareViolation(IFileDialog * /*pfd*/, IShellItem * /*psi*/, FDE_SHAREVIOLATION_RESPONSE * /*pResponse*/)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnTypeChange(IFileDialog * /*pfd*/)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnOverwrite(IFileDialog * /*pfd*/, IShellItem * /*psi*/, FDE_OVERWRITE_RESPONSE * /*pResponse*/)
+    {
+        return E_NOTIMPL;
+    }
 
     // IFileDialogControlEvents
-    IFACEMETHODIMP OnItemSelected(IFileDialogCustomize * /*pfdc*/, DWORD /*dwIDCtl*/, DWORD /*dwIDItem*/)  { return E_NOTIMPL; }
+    IFACEMETHODIMP OnItemSelected(IFileDialogCustomize * /*pfdc*/, DWORD /*dwIDCtl*/, DWORD /*dwIDItem*/)
+    {
+        return E_NOTIMPL;
+    }
 
     IFACEMETHODIMP OnButtonClicked(IFileDialogCustomize *pfdc, DWORD dwIDCtl)
     {
         switch (dwIDCtl)
         {
         case c_idAdd:
+        {
+            // instead of using IFileDialog::GetCurrentSelection() we need to get the
+            // selection from the view as that handles the "none implies folder" case
+            IShellItemArray *psia;
+            HRESULT hr = GetSelectionFromSite(pfdc, TRUE, &psia);
+            if (SUCCEEDED(hr))
             {
-                // instead of using IFileDialog::GetCurrentSelection() we need to get the
-                // selection from the view as that handles the "none implies folder" case
-                IShellItemArray *psia;
-                HRESULT hr = GetSelectionFromSite(pfdc, TRUE, &psia);
-                if (SUCCEEDED(hr))
-                {
-                    _DoAdd(psia);
-                    psia->Release();
-                }
+                _DoAdd(psia);
+                psia->Release();
             }
-            break;
+        }
+        break;
 
         case c_idDone:
             IFileDialog *pfd;
@@ -316,8 +335,14 @@ private:
         return S_OK;
     }
 
-    IFACEMETHODIMP OnCheckButtonToggled(IFileDialogCustomize * /*pfdc*/, DWORD /*dwIDCtl*/, BOOL /*bChecked*/) { return E_NOTIMPL; }
-    IFACEMETHODIMP OnControlActivating(IFileDialogCustomize * /*pfdc*/, DWORD /*dwIDCtl*/) { return E_NOTIMPL; }
+    IFACEMETHODIMP OnCheckButtonToggled(IFileDialogCustomize * /*pfdc*/, DWORD /*dwIDCtl*/, BOOL /*bChecked*/)
+    {
+        return E_NOTIMPL;
+    }
+    IFACEMETHODIMP OnControlActivating(IFileDialogCustomize * /*pfdc*/, DWORD /*dwIDCtl*/)
+    {
+        return E_NOTIMPL;
+    }
 
     void _DoAdd(IShellItemArray *psia)
     {
@@ -835,12 +860,12 @@ private:
 
 ANCHOR const CPlayerApplication::c_rgAnchors[] =
 {
-  { IDC_EXPLORER_BROWSER,   AF_LEFT | AF_RIGHT | AF_TOP | AF_BOTTOM },
-  { IDC_OPEN,               AF_LEFT | AF_BOTTOM },
-  { IDC_CLEAR,              AF_LEFT | AF_BOTTOM },
-  { IDC_ADD,                AF_LEFT | AF_BOTTOM },
-  { IDC_STATUS,             AF_LEFT | AF_BOTTOM },
-  { IDC_GRIPPER,            AF_RIGHT | AF_BOTTOM },
+    { IDC_EXPLORER_BROWSER,   AF_LEFT | AF_RIGHT | AF_TOP | AF_BOTTOM },
+    { IDC_OPEN,               AF_LEFT | AF_BOTTOM },
+    { IDC_CLEAR,              AF_LEFT | AF_BOTTOM },
+    { IDC_ADD,                AF_LEFT | AF_BOTTOM },
+    { IDC_STATUS,             AF_LEFT | AF_BOTTOM },
+    { IDC_GRIPPER,            AF_RIGHT | AF_BOTTOM },
 };
 
 void CPlayerApplication::_OnInitDlg()
@@ -890,28 +915,28 @@ INT_PTR CPlayerApplication::_DlgProc(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/
         break;
 
     case WM_COMMAND:
+    {
+        int const idCmd = GET_WM_COMMAND_ID(wParam, lParam);
+        switch (idCmd)
         {
-            int const idCmd = GET_WM_COMMAND_ID(wParam, lParam);
-            switch (idCmd)
-            {
-            case IDOK:
-            case IDCANCEL:
-                return EndDialog(_hdlg, idCmd);
+        case IDOK:
+        case IDCANCEL:
+            return EndDialog(_hdlg, idCmd);
 
-            case IDC_OPEN:
-                _OpenSelectedItem();
-                break;
+        case IDC_OPEN:
+            _OpenSelectedItem();
+            break;
 
-            case IDC_CLEAR:
-                ClearQueue();
-                break;
+        case IDC_CLEAR:
+            ClearQueue();
+            break;
 
-            case IDC_ADD:
-                _AddItems();
-                break;
-            }
+        case IDC_ADD:
+            _AddItems();
+            break;
         }
-        break;
+    }
+    break;
 
     case WM_DESTROY:
         _OnDestroyDlg();
@@ -955,13 +980,13 @@ HRESULT RegisterApp()
     CRegisterExtension reAddToQueue(__uuidof(CPlayerApplication::CAddToQueueVerb));
 
     HRESULT hr = rePlay.RegisterPlayerVerbs(rgAssociationElementsPhotos, ARRAYSIZE(rgAssociationElementsPhotos),
-    // HRESULT hr = rePlay.RegisterPlayerVerbs(rgAssociationElementsMusic, ARRAYSIZE(rgAssociationElementsMusic),
-        c_szPlayVerb, c_szPlayVerbName);
+                                            // HRESULT hr = rePlay.RegisterPlayerVerbs(rgAssociationElementsMusic, ARRAYSIZE(rgAssociationElementsMusic),
+                                            c_szPlayVerb, c_szPlayVerbName);
     if (SUCCEEDED(hr))
     {
         hr = reAddToQueue.RegisterPlayerVerbs(rgAssociationElementsPhotos, ARRAYSIZE(rgAssociationElementsPhotos),
-        // hr = reAddToQueue.RegisterPlayerVerbs(rgAssociationElementsMusic, ARRAYSIZE(rgAssociationElementsMusic),
-            c_szAddToQueueVerb, c_szAddToQUeueVerbName);
+                                              // hr = reAddToQueue.RegisterPlayerVerbs(rgAssociationElementsMusic, ARRAYSIZE(rgAssociationElementsMusic),
+                                              c_szAddToQueueVerb, c_szAddToQUeueVerbName);
     }
     return hr;
 }
@@ -998,7 +1023,7 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR pszCmdLine, int)
         else
         {
             if (!StrStrI(pszCmdLine, c_szEmbeddingCmdLineOption) &&
-                !StrStrI(pszCmdLine, c_szNoRegisterCmdLineOption))
+                    !StrStrI(pszCmdLine, c_szNoRegisterCmdLineOption))
             {
                 TASKDIALOGCONFIG taskDialogParams = { sizeof(taskDialogParams) };
                 taskDialogParams.dwFlags = TDF_USE_COMMAND_LINKS | TDF_ALLOW_DIALOG_CANCELLATION;

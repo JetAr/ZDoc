@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@ Arguments:
 
 Return Value:
     S_OK if parsing was succesful and the command line arguments could be meaningfully
-    decoded. 
+    decoded.
 
 --*/
 
@@ -28,12 +28,12 @@ ParseCmdLineArgs(
     __in                INT     argc,
     __in_ecount(argc)   TCHAR   **argv,
     __out               PDWORD  pdwCmdLineOption
-    )
+)
 {
     HRESULT hr = S_OK;
 
     if ( NULL == argv ||
-         NULL == pdwCmdLineOption 
+            NULL == pdwCmdLineOption
        )
     {
         hr = E_INVALIDARG;
@@ -53,25 +53,25 @@ ParseCmdLineArgs(
         argv++;
 
         if ( !_tcsicmp(*argv, L"/s" ) ||
-             !_tcsicmp(*argv, L"-s" ) 
-            )
+                !_tcsicmp(*argv, L"-s" )
+           )
         {
             *pdwCmdLineOption |= PRINT_JOB_SIMPLE;
         }
         else if ( !_tcsicmp(*argv, L"/m" ) ||
-                  !_tcsicmp(*argv, L"-m" ) 
-            )
+                  !_tcsicmp(*argv, L"-m" )
+                )
         {
             *pdwCmdLineOption |= PRINT_JOB_MULTIPLEPRINTTICKET;
         }
         else if ( !_tcsicmp(*argv, L"/i" ) ||
-                  !_tcsicmp(*argv, L"-i" ) 
-            )
+                  !_tcsicmp(*argv, L"-i" )
+                )
         {
             *pdwCmdLineOption |= PRINT_JOB_IMAGEPASSTHROUGH;
         }
         else
-        { 
+        {
             hr = __HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
             *pdwCmdLineOption |= DISPLAY_USAGE;
         }
@@ -83,9 +83,9 @@ ParseCmdLineArgs(
 
 
 extern "C" int _cdecl _tmain(
-    __in              INT     argc, 
+    __in              INT     argc,
     __in_ecount(argc) TCHAR*  argv[]
-    )
+)
 {
     HRESULT hr               = S_OK;
     DWORD   dwCmdLineOptions = 0;
@@ -102,9 +102,9 @@ extern "C" int _cdecl _tmain(
     else
     {
         if (dwCmdLineOptions & PRINT_JOB_SIMPLE)
-        {     
+        {
             hr = CreatePrintTicketJobSimple();
-        }                       
+        }
         else if (dwCmdLineOptions & PRINT_JOB_MULTIPLEPRINTTICKET )
         {
             hr = CreatePrintJobMultiplePrintTicket();

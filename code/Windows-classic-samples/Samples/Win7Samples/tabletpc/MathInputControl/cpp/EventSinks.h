@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -53,8 +53,8 @@ public:
 
         // This object only supports IDispatch/_IMathInputControlEvents
         if ((riid == IID_IUnknown)
-            || (riid == IID_IDispatch)
-            || (riid == DIID__IMathInputControlEvents))
+                || (riid == IID_IDispatch)
+                || (riid == DIID__IMathInputControlEvents))
         {
             *ppvObject = (IDispatch *) this;
 
@@ -129,20 +129,20 @@ public:
     {
         switch(dispidMember)
         {
-            case DISPID_MICInsert:
-                OnMICInsert((BSTR)pdispparams->rgvarg[0].bstrVal);
-                break;
+        case DISPID_MICInsert:
+            OnMICInsert((BSTR)pdispparams->rgvarg[0].bstrVal);
+            break;
 
-            case DISPID_MICClose:
-                OnMICClose();
-                break;
+        case DISPID_MICClose:
+            OnMICClose();
+            break;
 
-            case DISPID_MICClear:
-                OnMICClear();
-                break;
+        case DISPID_MICClear:
+            OnMICClear();
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
 
         return S_OK;
@@ -185,8 +185,8 @@ public:
             // Get the connection point container
             IConnectionPointContainer *pIConnectionPointContainer;
             hr = pIMathInputControl->QueryInterface(
-                IID_IConnectionPointContainer,
-                (void **) &pIConnectionPointContainer);
+                     IID_IConnectionPointContainer,
+                     (void **) &pIConnectionPointContainer);
 
             if (FAILED(hr))
             {
@@ -195,7 +195,7 @@ public:
 
             // Find the connection point for Math Input Control events
             hr = pIConnectionPointContainer->FindConnectionPoint(
-                __uuidof(_IMathInputControlEvents), &m_pIConnectionPoint);
+                     __uuidof(_IMathInputControlEvents), &m_pIConnectionPoint);
 
             if (SUCCEEDED(hr))
             {

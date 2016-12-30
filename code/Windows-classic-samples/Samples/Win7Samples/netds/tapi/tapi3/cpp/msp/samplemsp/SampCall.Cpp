@@ -1,10 +1,10 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
 Module Name:
 
-    sampcall.cpp 
+    sampcall.cpp
 
 Abstract:
 
@@ -56,14 +56,14 @@ HRESULT CSampleMSPCall::Init(
     IN      MSP_HANDLE          htCall,
     IN      DWORD               dwReserved,
     IN      DWORD               dwMediaType
-    )
+)
 {
     // No need to acquire locks on this call because it is called only
     // once when the object is created. No other calls can be made on
     // this object at this point.
 
     LOG((MSP_TRACE, "CSampleMSPCall::Init - enter"));
-    
+
     //
     // First do the base class method. We are adding to the functionality,
     // not replacing it.
@@ -72,14 +72,14 @@ HRESULT CSampleMSPCall::Init(
     HRESULT hr;
 
     hr = CMSPCallMultiGraph::Init(pMSPAddress,
-                                   htCall,
-                                   dwReserved,
-                                   dwMediaType);
+                                  htCall,
+                                  dwReserved,
+                                  dwMediaType);
 
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CSampleMSPCall::Init - "
-            "base class method failed: %x", hr));
+             "base class method failed: %x", hr));
 
         return hr;
     }
@@ -105,7 +105,7 @@ HRESULT CSampleMSPCall::Init(
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CSampleMSPCall::Init - "
-            "couldn't create capture stream: %x", hr));
+             "couldn't create capture stream: %x", hr));
 
         return hr;
     }
@@ -115,13 +115,13 @@ HRESULT CSampleMSPCall::Init(
     if ( m_pCaptureStream == NULL )
     {
         LOG((MSP_ERROR, "CSampleMSPCall::Init - "
-            "couldn't dynamic_cast capture stream - exit E_FAIL"));
+             "couldn't dynamic_cast capture stream - exit E_FAIL"));
 
         return E_FAIL;
     }
 
     pStream->Release();
- 
+
     //
     // Create the render stream.
     //
@@ -133,7 +133,7 @@ HRESULT CSampleMSPCall::Init(
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CSampleMSPCall::Init - "
-            "couldn't create capture stream: %x", hr));
+             "couldn't create capture stream: %x", hr));
 
         return hr;
     }
@@ -143,7 +143,7 @@ HRESULT CSampleMSPCall::Init(
     if ( m_pRenderStream == NULL )
     {
         LOG((MSP_ERROR, "CSampleMSPCall::Init - "
-            "couldn't dynamic_cast render stream - exit E_FAIL"));
+             "couldn't dynamic_cast render stream - exit E_FAIL"));
 
         return E_FAIL;
     }
@@ -167,11 +167,11 @@ STDMETHODIMP CSampleMSPCall::CreateStream (
     IN      DWORD               dwMediaType,
     IN      TERMINAL_DIRECTION  Direction,
     IN OUT  ITStream **         ppStream
-    )
+)
 {
     LOG((MSP_TRACE, "CSampleMSPCall::CreateStream entered."));
     LOG((MSP_TRACE, "CSampleMSPCall::CreateStream - "
-        "we have a fixed set of streams - exit TAPI_E_MAXSTREAMS"));
+         "we have a fixed set of streams - exit TAPI_E_MAXSTREAMS"));
 
     return TAPI_E_MAXSTREAMS;
 }
@@ -186,11 +186,11 @@ STDMETHODIMP CSampleMSPCall::CreateStream (
 
 STDMETHODIMP CSampleMSPCall::RemoveStream (
     IN      ITStream *          pStream
-    )
+)
 {
     LOG((MSP_TRACE, "CSampleMSPCall::RemoveStream entered."));
     LOG((MSP_TRACE, "CSampleMSPCall::RemoveStream - "
-        "we have a fixed set of streams - exit TAPI_E_NOTSUPPORTED"));
+         "we have a fixed set of streams - exit TAPI_E_NOTSUPPORTED"));
 
     return TAPI_E_NOTSUPPORTED;
 }
@@ -203,23 +203,23 @@ STDMETHODIMP CSampleMSPCall::RemoveStream (
 //
 
 HRESULT CSampleMSPCall::CreateStreamObject(
-        IN      DWORD               dwMediaType,
-        IN      TERMINAL_DIRECTION  Direction,
-        IN      IMediaEvent *       pGraph,
-        IN      ITStream **         ppStream
-        )
+    IN      DWORD               dwMediaType,
+    IN      TERMINAL_DIRECTION  Direction,
+    IN      IMediaEvent *       pGraph,
+    IN      ITStream **         ppStream
+)
 {
     LOG((MSP_TRACE, "CSampleMSPCall::CreateStreamObject - enter"));
 
     HRESULT hr;
     CMSPComObject<CSampleMSPStream> * pStream;
- 
+
     hr = CMSPComObject<CSampleMSPStream>::CreateInstance( &pStream );
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CSampleMSPCall::CreateStreamObject - "
-            "can't create stream object - 0x%08x", hr));
+             "can't create stream object - 0x%08x", hr));
 
         return hr;
     }
@@ -230,22 +230,22 @@ HRESULT CSampleMSPCall::CreateStreamObject(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CSampleMSPCall::CreateStreamObject - "
-            "can't get ITStream interface - 0x%08x", hr));
+             "can't get ITStream interface - 0x%08x", hr));
 
         delete pStream;
         return hr;
     }
 
     hr = pStream->Init( (MSP_HANDLE) m_pMSPAddress,
-                       this,
-                       pGraph,
-                       dwMediaType,
-                       Direction);
+                        this,
+                        pGraph,
+                        dwMediaType,
+                        Direction);
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CSampleMSPCall::CreateStreamObject - "
-            "can't Init stream object - 0x%08x", hr));
+             "can't Init stream object - 0x%08x", hr));
 
         (*ppStream)->Release();
         return hr;
@@ -296,7 +296,7 @@ HRESULT CSampleMSPCall::CreateStreamObject(
 HRESULT CSampleMSPCall::ReceiveTSPCallData(
     IN      PBYTE               pBuffer,
     IN      DWORD               dwSize
-    )
+)
 {
     LOG((MSP_TRACE, "CSampleMSPCall::ReceiveTSPCallData - enter"));
 
@@ -307,7 +307,7 @@ HRESULT CSampleMSPCall::ReceiveTSPCallData(
     if (!pBuffer)
     {
         LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
-            "bad buffer - exit E_POINTER"));
+             "bad buffer - exit E_POINTER"));
 
         return E_POINTER;
     }
@@ -319,7 +319,7 @@ HRESULT CSampleMSPCall::ReceiveTSPCallData(
     if ( dwSize < sizeof(DWORD) )
     {
         LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
-            "need a DWORD for command - exit E_INVALIDARG"));
+             "need a DWORD for command - exit E_INVALIDARG"));
 
         return E_INVALIDARG;
     }
@@ -341,79 +341,79 @@ HRESULT CSampleMSPCall::ReceiveTSPCallData(
     switch ( ((DWORD *) pBuffer) [0] )
     {
     case 0: // configure the transports
+    {
+        //
+        // In a real MSP, this sort of command would have meaningful
+        // arguments that are passed to the streams. For our
+        // purposes, let's just define this to have two DWORD
+        // arguments and print what they are when we receive
+        // the command.
+        //
+
+        if ( dwSize < 3 * sizeof(DWORD) )
         {
-            //
-            // In a real MSP, this sort of command would have meaningful
-            // arguments that are passed to the streams. For our
-            // purposes, let's just define this to have two DWORD
-            // arguments and print what they are when we receive
-            // the command.
-            //
+            LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
+                 "need 3 DWORDs for Config Transports command - "
+                 "exit E_INVALIDARG"));
 
-            if ( dwSize < 3 * sizeof(DWORD) )
-            {
-                LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
-                    "need 3 DWORDs for Config Transports command - "
-                    "exit E_INVALIDARG"));
-
-                return E_INVALIDARG;
-            }
-            LOG((MSP_INFO, "CSampleMSPCall::ReceiveTSPCallData - "
-                "configuring transport - dword args %d, %d",
-                ((DWORD *) pBuffer) [1],
-                ((DWORD *) pBuffer) [2]));
-
-            //
-            // Use our saved class pointers to access the private method,
-            // and also to conveniently differentiate between render and
-            // capture. Note that the capture stream is the one with a
-            // capture terminal, and the render stream is the one with the
-            // render terminal, so the arguments would have to be matched
-            // here based on the data from the buffer (if there were any).
-            //
-
-            hr = m_pCaptureStream->ConfigureTransport ( ); 
-
-            if ( FAILED(hr) )
-            {
-                LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
-                    "capture stream ConfigureTransport failed 0x%08x - "
-                    "firing CALL_STREAM_FAIL", hr));
-
-                m_pCaptureStream->FireEvent(CALL_STREAM_FAIL, hr, CALL_CAUSE_UNKNOWN);
-            }
-
-            hr = m_pRenderStream ->ConfigureTransport( );
-
-            if ( FAILED(hr) )
-            {
-                LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
-                    "render stream ConfigureTransport failed 0x%08x - "
-                    "firing CALL_STREAM_FAIL", hr));
-
-                m_pRenderStream->FireEvent(CALL_STREAM_FAIL, hr, CALL_CAUSE_UNKNOWN);
-            }
-
+            return E_INVALIDARG;
         }
-        break;
+        LOG((MSP_INFO, "CSampleMSPCall::ReceiveTSPCallData - "
+             "configuring transport - dword args %d, %d",
+             ((DWORD *) pBuffer) [1],
+             ((DWORD *) pBuffer) [2]));
+
+        //
+        // Use our saved class pointers to access the private method,
+        // and also to conveniently differentiate between render and
+        // capture. Note that the capture stream is the one with a
+        // capture terminal, and the render stream is the one with the
+        // render terminal, so the arguments would have to be matched
+        // here based on the data from the buffer (if there were any).
+        //
+
+        hr = m_pCaptureStream->ConfigureTransport ( );
+
+        if ( FAILED(hr) )
+        {
+            LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
+                 "capture stream ConfigureTransport failed 0x%08x - "
+                 "firing CALL_STREAM_FAIL", hr));
+
+            m_pCaptureStream->FireEvent(CALL_STREAM_FAIL, hr, CALL_CAUSE_UNKNOWN);
+        }
+
+        hr = m_pRenderStream ->ConfigureTransport( );
+
+        if ( FAILED(hr) )
+        {
+            LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
+                 "render stream ConfigureTransport failed 0x%08x - "
+                 "firing CALL_STREAM_FAIL", hr));
+
+            m_pRenderStream->FireEvent(CALL_STREAM_FAIL, hr, CALL_CAUSE_UNKNOWN);
+        }
+
+    }
+    break;
 
     case 1: // start streaming
-        {
-            hr = m_pCaptureStream ->StartStream();
-            hr = m_pRenderStream  ->StartStream();
-        }
-        break;
+    {
+        hr = m_pCaptureStream ->StartStream();
+        hr = m_pRenderStream  ->StartStream();
+    }
+    break;
 
     case 2: // stop streaming
-        {
-            hr = m_pCaptureStream ->StopStream();
-            hr = m_pRenderStream  ->StopStream();
-        }
-        break;
+    {
+        hr = m_pCaptureStream ->StopStream();
+        hr = m_pRenderStream  ->StopStream();
+    }
+    break;
 
     default:
         LOG((MSP_ERROR, "CSampleMSPCall::ReceiveTSPCallData - "
-            "invalid command - exit E_INVALIDARG"));
+             "invalid command - exit E_INVALIDARG"));
 
         return E_INVALIDARG;
 

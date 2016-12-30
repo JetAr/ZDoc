@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -14,7 +14,7 @@
 #include "Storage.h"
 
 //
-// This sample demonstrates how to use the AddVirtualDiskParent API to build a diff chain by 
+// This sample demonstrates how to use the AddVirtualDiskParent API to build a diff chain by
 // explicitly setting the parent after opening the child.
 //
 
@@ -33,14 +33,14 @@ SampleAddVirtualDiskParent(
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
-    
+
     //
     // Open the VHD.
     //
-    // The AddVirtualDiskParent requires a V2 handle open. 
+    // The AddVirtualDiskParent requires a V2 handle open.
     //
     // The child must be opened read-only prior to calling AddVirtualDiskParent.
     //
@@ -53,13 +53,13 @@ SampleAddVirtualDiskParent(
     openParameters.Version2.ReadOnly = TRUE;
 
     opStatus = OpenVirtualDisk(
-        &storageType,
-        VirtualDiskPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN,
-        &openParameters,
-        &vhdHandle);
-    
+                   &storageType,
+                   VirtualDiskPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_CUSTOM_DIFF_CHAIN,
+                   &openParameters,
+                   &vhdHandle);
+
     if (opStatus != ERROR_SUCCESS)
     {
         goto Cleanup;
@@ -69,7 +69,7 @@ SampleAddVirtualDiskParent(
     if (opStatus != ERROR_SUCCESS)
     {
         goto Cleanup;
-    }    
+    }
 
 Cleanup:
 
@@ -81,11 +81,11 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);
     }
 
     return opStatus;
- }
+}

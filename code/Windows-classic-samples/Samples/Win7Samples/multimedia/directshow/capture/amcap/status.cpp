@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Status.cpp
 //
 // Desc: Status Bar Window Code
@@ -45,15 +45,15 @@ statusCreateTools(void)
 
     /* Create the font we'll use for the status bar - use system as default */
     ghFont = CreateFont(12, 0,      // height, width
-        0, 0,                       // escapement, orientation
-        FW_NORMAL,                  // weight,
-        FALSE, FALSE, FALSE,        // attributes
-        ANSI_CHARSET,               // charset
-        OUT_DEFAULT_PRECIS,         // output precision
-        CLIP_DEFAULT_PRECIS,        // clip precision
-        DEFAULT_QUALITY,            // quality
-        VARIABLE_PITCH | FF_MODERN,
-        TEXT("Helv"));
+                        0, 0,                       // escapement, orientation
+                        FW_NORMAL,                  // weight,
+                        FALSE, FALSE, FALSE,        // attributes
+                        ANSI_CHARSET,               // charset
+                        OUT_DEFAULT_PRECIS,         // output precision
+                        CLIP_DEFAULT_PRECIS,        // clip precision
+                        DEFAULT_QUALITY,            // quality
+                        VARIABLE_PITCH | FF_MODERN,
+                        TEXT("Helv"));
 
     if(ghFont == NULL)
         ghFont = GetStockObject(SYSTEM_FONT);
@@ -171,67 +171,67 @@ LRESULT CALLBACK statusWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
     switch(msg)
     {
-        case WM_CREATE:
-        {
+    case WM_CREATE:
+    {
 
-            // The following code is correct for x64, but the /Wp64 switch doesn't think so.
-            // Therefore, temporarily disable warning C4312.
+        // The following code is correct for x64, but the /Wp64 switch doesn't think so.
+        // Therefore, temporarily disable warning C4312.
 #pragma warning(push)
 #pragma warning(disable: 4312)
 
-            /* we need to create the static text control for the status bar */
-            hwndSText = CreateWindow(szText,
-                                     TEXT(""),
-                                     WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS,
-                                     0, 0, 0, 0,
-                                     hwnd,
-                                     (HMENU) 1,  // child id
-                                     GetWindowInstance(hwnd),   // Returns (HMODULE)LONG_PTR
-                                     NULL);
+        /* we need to create the static text control for the status bar */
+        hwndSText = CreateWindow(szText,
+                                 TEXT(""),
+                                 WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS,
+                                 0, 0, 0, 0,
+                                 hwnd,
+                                 (HMENU) 1,  // child id
+                                 GetWindowInstance(hwnd),   // Returns (HMODULE)LONG_PTR
+                                 NULL);
 #pragma warning(pop)
 
 
-            if(!hwndSText)
-                return -1;
+        if(!hwndSText)
+            return -1;
 
-            break;
-        }
+        break;
+    }
 
-        case WM_DESTROY:
-            statusDeleteTools();
-            break;
+    case WM_DESTROY:
+        statusDeleteTools();
+        break;
 
-        case WM_SIZE:
-        {
-            RECT rc;
+    case WM_SIZE:
+    {
+        RECT rc;
 
-            GetClientRect(hwnd, &rc);
+        GetClientRect(hwnd, &rc);
 
-            MoveWindow(GetDlgItem(hwnd, 1),    // get child window handle
-                2, 1,                          // xy just inside
-                rc.right - 4,
-                rc.bottom - 2,
-                TRUE);
+        MoveWindow(GetDlgItem(hwnd, 1),    // get child window handle
+                   2, 1,                          // xy just inside
+                   rc.right - 4,
+                   rc.bottom - 2,
+                   TRUE);
 
-            break;
-        }
+        break;
+    }
 
-        case WM_PAINT:
-        {
-            BeginPaint(hwnd, &ps);
+    case WM_PAINT:
+    {
+        BeginPaint(hwnd, &ps);
 
-            // only the background and the child window need painting
-            EndPaint(hwnd, &ps);
-            break;
-        }
+        // only the background and the child window need painting
+        EndPaint(hwnd, &ps);
+        break;
+    }
 
-        case WM_SYSCOLORCHANGE:
-            statusDeleteTools();
-            statusCreateTools();
-            break;
+    case WM_SYSCOLORCHANGE:
+        statusDeleteTools();
+        statusCreateTools();
+        break;
 
-        case WM_ERASEBKGND:
-            break;
+    case WM_ERASEBKGND:
+        break;
 
     }
 
@@ -247,24 +247,24 @@ LRESULT CALLBACK fnText(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     switch(msg)
     {
-        case WM_SETTEXT:
-            DefWindowProc(hwnd, msg, wParam, lParam);
-            InvalidateRect(hwnd,NULL,FALSE);
-            UpdateWindow(hwnd);
-            return 0L;
+    case WM_SETTEXT:
+        DefWindowProc(hwnd, msg, wParam, lParam);
+        InvalidateRect(hwnd,NULL,FALSE);
+        UpdateWindow(hwnd);
+        return 0L;
 
-        case WM_ERASEBKGND:
-            return 0L;
+    case WM_ERASEBKGND:
+        return 0L;
 
-        case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
 
-            BeginPaint(hwnd, &ps);
-            PaintText(hwnd, ps.hdc);
-            EndPaint(hwnd, &ps);
-            return 0L;
-        }
+        BeginPaint(hwnd, &ps);
+        PaintText(hwnd, ps.hdc);
+        EndPaint(hwnd, &ps);
+        return 0L;
+    }
     }
 
     return DefWindowProc(hwnd, msg, wParam, lParam);

@@ -1,4 +1,4 @@
-
+﻿
 #include "private.h"
 #include "TextEditor.h"
 
@@ -36,7 +36,7 @@ void CTextEditor::MoveSelectionNext()
 {
     UINT nTextLength = GetTextLength();
     if (_nSelEnd < nTextLength)
-       _nSelEnd++;
+        _nSelEnd++;
 
     _nSelStart = _nSelEnd;
     _pTextStore->OnSelectionChange();

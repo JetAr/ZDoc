@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //------------------------------------------------------------
 
@@ -14,7 +14,7 @@
 
 // Print out rich error info
 void PrintError(
-    __in HRESULT errorCode, 
+    __in HRESULT errorCode,
     __in_opt WS_ERROR* error)
 {
     wprintf(L"Failure: errorCode=0x%lx\n", errorCode);
@@ -53,7 +53,7 @@ Exit:
     }
 }
 
-HANDLE closeServer = NULL;  
+HANDLE closeServer = NULL;
 
 
 static const WCHAR ExpectedShipDate [] = L"1/1/2006";
@@ -61,15 +61,15 @@ static const WCHAR OrderStatusString [] = L"Pending";
 
 volatile long numberOfOrders = 0;
 
-// In this sample, wsutil is used with the /string:WS_STRING command line option 
+// In this sample, wsutil is used with the /string:WS_STRING command line option
 // to compile the schema files. When /string:WS_STRING is used, wsutil generates stubs
 // using WS_STRING (instead of WCHAR*) type for strings.
 HRESULT CALLBACK PurchaseOrderImpl(
     __in const WS_OPERATION_CONTEXT* context,
-    __in int quantity, 
-    __in WS_STRING productName, 
+    __in int quantity,
+    __in WS_STRING productName,
     __out unsigned int* orderID,
-    __in WS_STRING* expectedShipDate, 
+    __in WS_STRING* expectedShipDate,
     __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
@@ -77,57 +77,57 @@ HRESULT CALLBACK PurchaseOrderImpl(
 
     WS_HEAP* heap = NULL;
     HRESULT hr = S_OK;
-    
-    wprintf(L"%ld, %.*s\n", 
-        quantity, 
-        productName.length,
-        productName.chars);
+
+    wprintf(L"%ld, %.*s\n",
+            quantity,
+            productName.length,
+            productName.chars);
     fflush(stdout);
-    
+
     hr = WsGetOperationContextProperty(
-        context, 
-        WS_OPERATION_CONTEXT_PROPERTY_HEAP, 
-        &heap, 
-        sizeof(heap), 
-        error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
-    
+             context,
+             WS_OPERATION_CONTEXT_PROPERTY_HEAP,
+             &heap,
+             sizeof(heap),
+             error);
+    if (FAILED(hr))
+    {
+        goto Exit;
+    }
+
     hr = WsAlloc(
-        heap, 
-        sizeof(ExpectedShipDate), 
-        (void**)&expectedShipDate->chars, 
-        error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
-    
+             heap,
+             sizeof(ExpectedShipDate),
+             (void**)&expectedShipDate->chars,
+             error);
+    if (FAILED(hr))
+    {
+        goto Exit;
+    }
+
     hr = StringCbCopyW(
-        expectedShipDate->chars, 
-        sizeof(ExpectedShipDate), 
-        ExpectedShipDate);
-if (FAILED(hr))
-{
-    goto Exit;
-}
-    
+             expectedShipDate->chars,
+             sizeof(ExpectedShipDate),
+             ExpectedShipDate);
+    if (FAILED(hr))
+    {
+        goto Exit;
+    }
+
     *orderID = 123;
     expectedShipDate->length = (ULONG)wcslen(ExpectedShipDate);
-    
+
 Exit:
     return hr;
 }
 
-// In this sample, wsutil is used with the /string:WS_STRING command line option 
+// In this sample, wsutil is used with the /string:WS_STRING command line option
 // to compile the schema files. When /string:WS_STRING is used, wsutil generates stubs
-// using WS_STRING (instead of WCHAR*) type for strings. 
+// using WS_STRING (instead of WCHAR*) type for strings.
 HRESULT CALLBACK GetOrderStatusImpl(
     __in const WS_OPERATION_CONTEXT* context,
     __out unsigned int* orderID,
-    __out WS_STRING* status, 
+    __out WS_STRING* status,
     __in_opt const WS_ASYNC_CONTEXT* asyncContext,
     __in_opt WS_ERROR* error)
 {
@@ -142,41 +142,41 @@ HRESULT CALLBACK GetOrderStatusImpl(
         // Fill out details about the fault
         _OrderNotFoundFaultType orderNotFound;
         orderNotFound.orderID = *orderID;
-        
+
         static const WS_XML_STRING _faultDetailName = WS_XML_STRING_VALUE("OrderNotFound");
         static const WS_XML_STRING _faultDetailNs = WS_XML_STRING_VALUE("http://example.com");
         static const WS_XML_STRING _faultAction = WS_XML_STRING_VALUE("http://example.com/fault");
-        static const WS_ELEMENT_DESCRIPTION _faultElementDescription = 
-        { 
-            (WS_XML_STRING*)&_faultDetailName, 
-            (WS_XML_STRING*)&_faultDetailNs, 
-            WS_UINT32_TYPE, 
-            NULL 
+        static const WS_ELEMENT_DESCRIPTION _faultElementDescription =
+        {
+            (WS_XML_STRING*)&_faultDetailName,
+            (WS_XML_STRING*)&_faultDetailNs,
+            WS_UINT32_TYPE,
+            NULL
         };
-        static const WS_FAULT_DETAIL_DESCRIPTION orderNotFoundFaultTypeDescription = 
-        { 
-            (WS_XML_STRING*)&_faultAction, 
-            (WS_ELEMENT_DESCRIPTION*)&_faultElementDescription 
+        static const WS_FAULT_DETAIL_DESCRIPTION orderNotFoundFaultTypeDescription =
+        {
+            (WS_XML_STRING*)&_faultAction,
+            (WS_ELEMENT_DESCRIPTION*)&_faultElementDescription
         };
-        
+
         // Set fault detail information in the error object
         hr = WsSetFaultErrorDetail(
-            error,
-            &orderNotFoundFaultTypeDescription,
-            WS_WRITE_REQUIRED_VALUE,
-            &orderNotFound,
-            sizeof(orderNotFound));
-        
+                 error,
+                 &orderNotFoundFaultTypeDescription,
+                 WS_WRITE_REQUIRED_VALUE,
+                 &orderNotFound,
+                 sizeof(orderNotFound));
+
         if (FAILED(hr))
         {
             goto Exit;
         }
-        
+
         // Add an error string to the error object.  This string will
         // be included in the fault that is sent.
         static const WS_STRING errorMessage = WS_STRING_VALUE(L"Invalid order ID");
         hr = WsAddErrorString(error, &errorMessage);
-        
+
         if (FAILED(hr))
         {
             goto Exit;
@@ -185,46 +185,46 @@ HRESULT CALLBACK GetOrderStatusImpl(
         hr = E_FAIL;
         goto Exit;
     }
-    
+
     *orderID = *orderID;
-    
+
     hr = WsGetOperationContextProperty(
-        context, 
-        WS_OPERATION_CONTEXT_PROPERTY_HEAP, 
-        &heap, 
-        sizeof(heap), 
-        error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
-    
+             context,
+             WS_OPERATION_CONTEXT_PROPERTY_HEAP,
+             &heap,
+             sizeof(heap),
+             error);
+    if (FAILED(hr))
+    {
+        goto Exit;
+    }
+
     hr = WsAlloc(
-        heap, 
-        sizeof(OrderStatusString), 
-        (void**)&status->chars, 
-        error);
-if (FAILED(hr))
-{
-    goto Exit;
-}
-    
+             heap,
+             sizeof(OrderStatusString),
+             (void**)&status->chars,
+             error);
+    if (FAILED(hr))
+    {
+        goto Exit;
+    }
+
     hr = StringCbCopyW(
-        status->chars, 
-        sizeof(OrderStatusString), 
-        OrderStatusString);
-if (FAILED(hr))
-{
-    goto Exit;
-}
-    
+             status->chars,
+             sizeof(OrderStatusString),
+             OrderStatusString);
+    if (FAILED(hr))
+    {
+        goto Exit;
+    }
+
     status->length = (ULONG)wcslen(OrderStatusString);
 Exit:
     return hr;
 }
 
 HRESULT CALLBACK CloseChannelCallback(
-    __in const WS_OPERATION_CONTEXT* context, 
+    __in const WS_OPERATION_CONTEXT* context,
     __in_opt const WS_ASYNC_CONTEXT* asyncContext)
 {
     UNREFERENCED_PARAMETER(context);
@@ -241,7 +241,7 @@ HRESULT CALLBACK CloseChannelCallback(
 static const PurchaseOrderBindingFunctionTable purchaseOrderFunctions = {PurchaseOrderImpl, GetOrderStatusImpl};
 
 // Method contract for the service
-static const WS_SERVICE_CONTRACT purchaseOrderContract = 
+static const WS_SERVICE_CONTRACT purchaseOrderContract =
 {
     &PurchaseOrder_wsdl.contracts.PurchaseOrderBinding, // comes from the generated header.
     NULL, // for not specifying the default contract
@@ -252,7 +252,7 @@ static const WS_SERVICE_CONTRACT purchaseOrderContract =
 // Main entry point
 int __cdecl wmain()
 {
-    
+
     HRESULT hr = S_OK;
     WS_SERVICE_HOST* host = NULL;
     WS_SERVICE_ENDPOINT serviceEndpoint = {};
@@ -264,8 +264,8 @@ int __cdecl wmain()
     serviceProperties[0].id = WS_SERVICE_ENDPOINT_PROPERTY_CLOSE_CHANNEL_CALLBACK;
     serviceProperties[0].value = &closeCallbackProperty;
     serviceProperties[0].valueSize = sizeof(closeCallbackProperty);
-    
-    
+
+
     // Initialize service endpoint
     serviceEndpoint.address.url.chars = L"http://+:80/example"; // address given as uri
     serviceEndpoint.address.url.length = (ULONG)wcslen(serviceEndpoint.address.url.chars);
@@ -274,44 +274,44 @@ int __cdecl wmain()
     serviceEndpoint.contract = &purchaseOrderContract;  // the contract
     serviceEndpoint.properties = serviceProperties;
     serviceEndpoint.propertyCount = WsCountOf(serviceProperties);
-    
+
     // Create an error object for storing rich error information
     hr = WsCreateError(
-        NULL, 
-        0, 
-        &error);
+             NULL,
+             0,
+             &error);
     if (FAILED(hr))
     {
         goto Exit;
     }
     // Create Event object for closing the server
     closeServer = CreateEvent(
-        NULL, 
-        TRUE, 
-        FALSE, 
-        NULL);
+                      NULL,
+                      TRUE,
+                      FALSE,
+                      NULL);
     if (closeServer == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
-    }   
+    }
     // Creating a service host
     hr = WsCreateServiceHost(
-        serviceEndpoints, 
-        1, 
-        NULL, 
-        0, 
-        &host, 
-        error);
+             serviceEndpoints,
+             1,
+             NULL,
+             0,
+             &host,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
     }
-    // WsOpenServiceHost to start the listeners in the service host 
+    // WsOpenServiceHost to start the listeners in the service host
     hr = WsOpenServiceHost(
-        host, 
-        NULL, 
-        error);
+             host,
+             NULL,
+             error);
     if (FAILED(hr))
     {
         goto Exit;
@@ -323,7 +323,7 @@ int __cdecl wmain()
     {
         goto Exit;
     }
-    
+
 Exit:
     if (FAILED(hr))
     {
@@ -334,8 +334,8 @@ Exit:
     {
         WsFreeServiceHost(host);
     }
-    
-    
+
+
     if (error != NULL)
     {
         WsFreeError(error);

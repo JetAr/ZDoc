@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -41,12 +41,12 @@ STDMETHODIMP CMainWindow::QueryInterface(REFIID iid, LPVOID *ppvObj)
 {
     if (ppvObj == NULL)
     {
-	    return E_POINTER;
+        return E_POINTER;
     }
 
     if (iid == IID_IUnknown)
     {
-	    *ppvObj = (IUnknown *) this;
+        *ppvObj = (IUnknown *) this;
     }
     else
     {
@@ -54,7 +54,7 @@ STDMETHODIMP CMainWindow::QueryInterface(REFIID iid, LPVOID *ppvObj)
         return E_NOINTERFACE;
     }
 
-	AddRef();
+    AddRef();
     return S_OK;
 }
 
@@ -100,7 +100,7 @@ ATOM CMainWindow::Register()
     wcex.hInstance      = g_hInstance;
     wcex.hIcon          = LoadIcon(NULL, IDI_APPLICATION);
     wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH) (COLOR_APPWORKSPACE + 1); 
+    wcex.hbrBackground  = (HBRUSH) (COLOR_APPWORKSPACE + 1);
     wcex.lpszMenuName   = MAKEINTRESOURCE(IDR_MENU);
     wcex.lpszClassName  = _T("MainWindow");
 
@@ -116,7 +116,7 @@ int CMainWindow::DoModal()
 {
     MSG msg;
 
-    while (GetMessage(&msg, NULL, 0, 0)) 
+    while (GetMessage(&msg, NULL, 0, 0))
     {
         if (!TranslateMDISysAccel(m_hMDIClient, &msg))
         {
@@ -130,10 +130,10 @@ int CMainWindow::DoModal()
 
 //////////////////////////////////////////////////////////////////////////
 //
-// CMainWindow::WindowProc 
+// CMainWindow::WindowProc
 //
 
-LRESULT 
+LRESULT
 CALLBACK
 CMainWindow::WindowProc(
     HWND   hWnd,
@@ -146,146 +146,146 @@ CMainWindow::WindowProc(
 
     switch (uMsg)
     {
-        case WM_CREATE:
+    case WM_CREATE:
+    {
+        LPCREATESTRUCT pcs = (LPCREATESTRUCT) lParam;
+
+        that = (CMainWindow *) pcs->lpCreateParams;
+
+        // Create the MDI client window that will handle the MDI child windows
+
+        CLIENTCREATESTRUCT ccs = { 0 };
+
+        ccs.hWindowMenu  = GetSubMenu(GetMenu(hWnd), WINDOW_MENU_POSITION);
+        ccs.idFirstChild = FIRST_MDI_CHILD;
+
+        that->m_hMDIClient = CreateWindowEx(
+                                 0,
+                                 _T("MDICLIENT"),
+                                 0,
+                                 WS_CLIPCHILDREN | WS_CHILD | WS_VISIBLE,
+                                 0,
+                                 0,
+                                 0,
+                                 0,
+                                 hWnd,
+                                 NULL,
+                                 g_hInstance,
+                                 &ccs
+                             );
+
+        if (that->m_hMDIClient == NULL)
         {
-            LPCREATESTRUCT pcs = (LPCREATESTRUCT) lParam;
+            return -1;
+        }
 
-            that = (CMainWindow *) pcs->lpCreateParams;
+        that->AddRef();
 
-            // Create the MDI client window that will handle the MDI child windows
+        SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) that);
 
-            CLIENTCREATESTRUCT ccs = { 0 };
+        break;
+    }
 
-            ccs.hWindowMenu  = GetSubMenu(GetMenu(hWnd), WINDOW_MENU_POSITION);
-            ccs.idFirstChild = FIRST_MDI_CHILD;
+    case WM_DESTROY:
+    {
+        SetWindowLongPtr(hWnd, GWLP_USERDATA, NULL);
 
-            that->m_hMDIClient = CreateWindowEx(
-                0,
-                _T("MDICLIENT"), 
-                0, 
-                WS_CLIPCHILDREN | WS_CHILD | WS_VISIBLE, 
-                0,
-                0,
-                0, 
-                0,
-                hWnd,
-                NULL, 
-                g_hInstance, 
-                &ccs
-            );
+        that->Release();
 
-            if (that->m_hMDIClient == NULL)
-            {
-                return -1;
-            }
+        PostQuitMessage(0);
 
-            that->AddRef();
+        break;
+    }
 
-            SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) that);
+    case WM_SETCURSOR:
+    {
+        if (that->m_bDisplayWaitCursor)
+        {
+            SetCursor(LoadCursor(NULL, IDC_WAIT));
 
+            return TRUE;
+        }
+
+        break;
+    }
+
+    case WM_INITMENU:
+    {
+        if (that->m_pEventCallback != NULL)
+        {
+            LONG nNumDevices = that->m_pEventCallback->GetNumDevices();
+
+            UINT uEnable = nNumDevices > 0 ? MF_ENABLED : MF_GRAYED;
+
+            EnableMenuItem((HMENU) wParam, ID_FILE_FROM_SCANNER_OR_CAMERA, uEnable);
+        }
+
+        break;
+    }
+
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case ID_FILE_FROM_SCANNER_OR_CAMERA:
+        {
+            that->OnFromScannerOrCamera();
             break;
         }
 
-        case WM_DESTROY:
+        case ID_FILE_EXIT:
         {
-            SetWindowLongPtr(hWnd, GWLP_USERDATA, NULL);
-
-            that->Release();
-
-            PostQuitMessage(0);
-
+            DestroyWindow(hWnd);
             break;
         }
 
-        case WM_SETCURSOR:
+        case ID_WINDOW_CASCADE:
         {
-            if (that->m_bDisplayWaitCursor)
-            {
-                SetCursor(LoadCursor(NULL, IDC_WAIT));
-
-                return TRUE;
-            }
-
+            SendMessage(that->m_hMDIClient, WM_MDICASCADE, 0, 0);
             break;
         }
 
-        case WM_INITMENU:
+        case ID_WINDOW_TILE_HORIZONTALLY:
         {
-            if (that->m_pEventCallback != NULL)
-            {
-                LONG nNumDevices = that->m_pEventCallback->GetNumDevices();
-
-                UINT uEnable = nNumDevices > 0 ? MF_ENABLED : MF_GRAYED;
-
-                EnableMenuItem((HMENU) wParam, ID_FILE_FROM_SCANNER_OR_CAMERA, uEnable);
-            }
-
+            SendMessage(that->m_hMDIClient, WM_MDITILE, MDITILE_HORIZONTAL, 0);
             break;
         }
 
-        case WM_COMMAND:
+        case ID_WINDOW_TILE_VERTICALLY:
         {
-            switch (LOWORD(wParam))
-            {
-                case ID_FILE_FROM_SCANNER_OR_CAMERA:
-                {
-                    that->OnFromScannerOrCamera();
-                    break;
-                }
+            SendMessage(that->m_hMDIClient, WM_MDITILE, MDITILE_VERTICAL, 0);
+            break;
+        }
 
-                case ID_FILE_EXIT:
-                {
-                    DestroyWindow(hWnd);
-                    break;
-                }
+        case ID_WINDOW_ARRANGE_ICONS:
+        {
+            SendMessage(that->m_hMDIClient, WM_MDIICONARRANGE, 0, 0);
+            break;
+        }
 
-                case ID_WINDOW_CASCADE:
-                {
-                    SendMessage(that->m_hMDIClient, WM_MDICASCADE, 0, 0);
-                    break;
-                }
+        case ID_HELP_ABOUT:
+        {
+            TCHAR szAppName[DEFAULT_STRING_SIZE] = _T("");
 
-                case ID_WINDOW_TILE_HORIZONTALLY:
-                {
-                    SendMessage(that->m_hMDIClient, WM_MDITILE, MDITILE_HORIZONTAL, 0);
-                    break;
-                }
+            LoadString(g_hInstance, IDS_APP_NAME, szAppName, COUNTOF(szAppName));
 
-                case ID_WINDOW_TILE_VERTICALLY:
-                {
-                    SendMessage(that->m_hMDIClient, WM_MDITILE, MDITILE_VERTICAL, 0);
-                    break;
-                }
-
-                case ID_WINDOW_ARRANGE_ICONS:
-                {
-                    SendMessage(that->m_hMDIClient, WM_MDIICONARRANGE, 0, 0);
-                    break;
-                }
-
-                case ID_HELP_ABOUT:
-                {
-                    TCHAR szAppName[DEFAULT_STRING_SIZE] = _T("");
-
-	                LoadString(g_hInstance, IDS_APP_NAME, szAppName, COUNTOF(szAppName));
-
-                    ShellAbout(hWnd, szAppName, NULL, NULL);
-
-                    break;
-                }
-            }
+            ShellAbout(hWnd, szAppName, NULL, NULL);
 
             break;
         }
+        }
+
+        break;
+    }
     }
 
     return DefFrameProc(
-        hWnd,
-        that == NULL ? NULL : that->m_hMDIClient,
-        uMsg,
-        wParam,
-        lParam
-    );
+               hWnd,
+               that == NULL ? NULL : that->m_hMDIClient,
+               uMsg,
+               wParam,
+               lParam
+           );
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -304,31 +304,31 @@ LRESULT CMainWindow::OnFromScannerOrCamera()
     WiaWrap::CComPtrArray<IStream> ppStream;
 
     hr = WiaWrap::WiaGetImage(
-        m_hMDIClient,
-        StiDeviceTypeDefault,
-        0,
-        WIA_INTENT_NONE,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        &ppStream.Count(),
-        &ppStream
-    );
+             m_hMDIClient,
+             StiDeviceTypeDefault,
+             0,
+             WIA_INTENT_NONE,
+             NULL,
+             NULL,
+             NULL,
+             NULL,
+             NULL,
+             &ppStream.Count(),
+             &ppStream
+         );
 
     m_bDisplayWaitCursor = FALSE;
 
     // If there was an error, display an error message box
 
-	if (FAILED(hr)) 
+    if (FAILED(hr))
     {
-		TCHAR szError[DEFAULT_STRING_SIZE] = _T("");
+        TCHAR szError[DEFAULT_STRING_SIZE] = _T("");
 
-		LoadString(g_hInstance, IDS_ERROR_GET_IMAGE_DLG, szError, COUNTOF(szError));
+        LoadString(g_hInstance, IDS_ERROR_GET_IMAGE_DLG, szError, COUNTOF(szError));
 
         MessageBox(m_hMDIClient, szError, NULL, MB_ICONHAND | MB_OK);
-	}
+    }
 
     // Open a new window for each successfully transferred image
 
@@ -342,11 +342,11 @@ LRESULT CMainWindow::OnFromScannerOrCamera()
 
             TCHAR szFormat[DEFAULT_STRING_SIZE] = _T("%d");
 
-		    LoadString(g_hInstance, IDS_BITMAP_WINDOW_TITLE, szFormat, COUNTOF(szFormat));
+            LoadString(g_hInstance, IDS_BITMAP_WINDOW_TITLE, szFormat, COUNTOF(szFormat));
 
-		    TCHAR szTitle[DEFAULT_STRING_SIZE];
+            TCHAR szTitle[DEFAULT_STRING_SIZE];
 
-    	    _sntprintf_s(szTitle, COUNTOF(szTitle) -1 ,_TRUNCATE, szFormat, m_nNumImages);
+            _sntprintf_s(szTitle, COUNTOF(szTitle) -1,_TRUNCATE, szFormat, m_nNumImages);
 
             szTitle[COUNTOF(szTitle) - 1] = _T('\0');
 
@@ -359,9 +359,9 @@ LRESULT CMainWindow::OnFromScannerOrCamera()
                 CW_USEDEFAULT,
                 CW_USEDEFAULT,
                 CW_USEDEFAULT,
-                m_hMDIClient, 
-                NULL, 
-                g_hInstance, 
+                m_hMDIClient,
+                NULL,
+                g_hInstance,
                 pBitmapWnd
             );
         }

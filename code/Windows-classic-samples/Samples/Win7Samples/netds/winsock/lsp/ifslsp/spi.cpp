@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 //  This sample illustrates how to develop an IFS Layered Service Provider (LSP) which
 //  functions as a TCP proxy client. Because this LSP only needs to intercept a handful
 //  of functions like WSPSocket and WSPConnect as well as the fact it does not need to
-//  intercept operation completion (e.g. intercept a WSPRecv after it completes but 
+//  intercept operation completion (e.g. intercept a WSPRecv after it completes but
 //  before the application receives the indication), the LSP can be implemented as an
 //  IFS provider. This means that the socket handle returned from this LSP is simply
 //  the provider's handle below this LSP. However, this does mean this LSP must be
@@ -25,7 +25,7 @@
 //  provider's. That is, when this LSP is loaded, it loads the lower provider's
 //  function table, copies it as its own, and overrides only a few functions. This
 //  proc table is then returned to the caller.
-//    
+//
 #include "lspdef.h"
 #include <strsafe.h>
 
@@ -58,11 +58,11 @@ static int  gStartupCount = 0;      // Global startup count (for every WSPStartu
 
 // Parses a buffer looking for an HTTP GET request and returns the requested URL
 int
-FindUrl( 
-        __in_ecount(buflen) char *buf,
-        int buflen,
-        __out char **start
-        );
+FindUrl(
+    __in_ecount(buflen) char *buf,
+    int buflen,
+    __out char **start
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -77,12 +77,12 @@ FindUrl(
 //    Provides initialization when the LSP DLL is loaded. In our case we simply,
 //    initialize some critical sections used throughout the DLL.
 //
-BOOL WINAPI 
+BOOL WINAPI
 DllMain(
-        IN HINSTANCE hinstDll, 
-        IN DWORD dwReason, 
-        LPVOID lpvReserved
-       )
+    IN HINSTANCE hinstDll,
+    IN DWORD dwReason,
+    LPVOID lpvReserved
+)
 {
     UNREFERENCED_PARAMETER( hinstDll );
     UNREFERENCED_PARAMETER( lpvReserved );
@@ -90,47 +90,47 @@ DllMain(
     switch (dwReason)
     {
 
-        case DLL_PROCESS_ATTACH:
-            //
-            // Initialize some critical section objects 
-            //
-            __try
-            {
-                InitializeCriticalSection( &gCriticalSection );
-                InitializeCriticalSection( &gDebugCritSec );
-            }
-            __except( EXCEPTION_EXECUTE_HANDLER )
-            {
-                goto cleanup;
-            }
-            break;
+    case DLL_PROCESS_ATTACH:
+        //
+        // Initialize some critical section objects
+        //
+        __try
+        {
+            InitializeCriticalSection( &gCriticalSection );
+            InitializeCriticalSection( &gDebugCritSec );
+        }
+        __except( EXCEPTION_EXECUTE_HANDLER )
+        {
+            goto cleanup;
+        }
+        break;
 
-        case DLL_THREAD_ATTACH:
-            break;
+    case DLL_THREAD_ATTACH:
+        break;
 
-        case DLL_THREAD_DETACH:
-            break;
+    case DLL_THREAD_DETACH:
+        break;
 
-        case DLL_PROCESS_DETACH:
-            gDetached = TRUE;
+    case DLL_PROCESS_DETACH:
+        gDetached = TRUE;
 
-            EnterCriticalSection( &gCriticalSection );
-            if ( NULL != gLayerInfo )
-            {
-                int Error;
+        EnterCriticalSection( &gCriticalSection );
+        if ( NULL != gLayerInfo )
+        {
+            int Error;
 
-                // Free LSP structures if still present as well as call WSPCleanup
-                //    for all providers this LSP loaded
-                FreeLspProviders( gLayerInfo, gLayerCount, &Error );
-                gLayerInfo = NULL;
-                gLayerCount = 0;
-            }
-            LeaveCriticalSection( &gCriticalSection );
+            // Free LSP structures if still present as well as call WSPCleanup
+            //    for all providers this LSP loaded
+            FreeLspProviders( gLayerInfo, gLayerCount, &Error );
+            gLayerInfo = NULL;
+            gLayerCount = 0;
+        }
+        LeaveCriticalSection( &gCriticalSection );
 
-            DeleteCriticalSection( &gCriticalSection );
-            DeleteCriticalSection( &gDebugCritSec );
+        DeleteCriticalSection( &gCriticalSection );
+        DeleteCriticalSection( &gDebugCritSec );
 
-            break;
+        break;
     }
 
     return TRUE;
@@ -140,17 +140,17 @@ cleanup:
     return FALSE;
 }
 
-// 
+//
 // Function: WSPCleanup
 //
 // Description:
 //    Decrement the entry count. If equal to zero then we can prepare to have us
 //    unloaded so all resources should be freed
 //
-int WSPAPI 
+int WSPAPI
 WSPCleanup(
-        LPINT lpErrno  
-        )
+    LPINT lpErrno
+)
 {
     int        rc = SOCKET_ERROR;
 
@@ -183,7 +183,7 @@ WSPCleanup(
         gLayerInfo = NULL;
         gLayerCount = 0;
     }
-    
+
     rc = NO_ERROR;
 
 cleanup:
@@ -197,14 +197,14 @@ cleanup:
 // Function: WSPCloseSocket
 //
 // Description:
-//    The LSP captures the WSPCloseSocket call to know when it can free the 
+//    The LSP captures the WSPCloseSocket call to know when it can free the
 //    socket context structure created for every socket.
 //
 int WSPAPI
 WSPCloseSocket(
-        SOCKET s,
-        LPINT  lpErrno
-        )
+    SOCKET s,
+    LPINT  lpErrno
+)
 {
     SOCKET_CONTEXT *sockContext = NULL;
     int             rc = SOCKET_ERROR;
@@ -221,9 +221,9 @@ WSPCloseSocket(
 
     // Pass the socket down to close it
     rc = sockContext->Provider->NextProcTable.lpWSPCloseSocket(
-            s,
-            lpErrno
-            );
+             s,
+             lpErrno
+         );
 
     // Just free the structure as its alreayd removed from the provider's list
     LspFree( sockContext );
@@ -242,17 +242,17 @@ cleanup:
 //    Once the "correct" destination is determined, the connect call is passed
 //    to the lower provider.
 //
-int WSPAPI 
+int WSPAPI
 WSPConnect(
-        SOCKET                s,
-        const struct sockaddr FAR * name,
-        int                   namelen,
-        LPWSABUF              lpCallerData,
-        LPWSABUF              lpCalleeData,
-        LPQOS                 lpSQOS,
-        LPQOS                 lpGQOS,
-        LPINT                 lpErrno
-        )
+    SOCKET                s,
+    const struct sockaddr FAR * name,
+    int                   namelen,
+    LPWSABUF              lpCallerData,
+    LPWSABUF              lpCalleeData,
+    LPQOS                 lpSQOS,
+    LPQOS                 lpGQOS,
+    LPINT                 lpErrno
+)
 {
     SOCKET_CONTEXT *sockContext = NULL;
     SOCKADDR       *proxyAddr = NULL;
@@ -272,15 +272,15 @@ WSPConnect(
     FindDestinationAddress( sockContext, name, namelen, &proxyAddr, &proxyLen );
 
     rc = sockContext->Provider->NextProcTable.lpWSPConnect(
-            s,
-            proxyAddr, 
-            proxyLen, 
-            lpCallerData, 
-            lpCalleeData,
-            lpSQOS, 
-            lpGQOS, 
-            lpErrno
-            );
+             s,
+             proxyAddr,
+             proxyLen,
+             lpCallerData,
+             lpCalleeData,
+             lpSQOS,
+             lpGQOS,
+             lpErrno
+         );
 
 cleanup:
 
@@ -291,17 +291,17 @@ cleanup:
 // Function: WSPGetPeerName
 //
 // Description:
-//    Since the LSP is proxying the remote address, this function needs to be 
+//    Since the LSP is proxying the remote address, this function needs to be
 //    intercepted in order to return the address that the application thinks its
 //    connected to.
 //
-int WSPAPI 
-WSPGetPeerName(  
-        SOCKET          s,
-        struct sockaddr FAR * name,
-        LPINT           namelen,
-        LPINT           lpErrno
-        )
+int WSPAPI
+WSPGetPeerName(
+    SOCKET          s,
+    struct sockaddr FAR * name,
+    LPINT           namelen,
+    LPINT           lpErrno
+)
 {
     SOCKET_CONTEXT *sockContext = NULL;
     int             rc = SOCKET_ERROR;
@@ -332,7 +332,7 @@ WSPGetPeerName(
 
             memcpy( name, &sockContext->OriginalAddress, *namelen );
             *namelen = sockContext->AddressLength;
-        } 
+        }
         __except( EXCEPTION_EXECUTE_HANDLER )
         {
             *lpErrno = WSAEFAULT;
@@ -345,11 +345,11 @@ WSPGetPeerName(
     ASSERT( sockContext->Provider->NextProcTable.lpWSPGetPeerName );
 
     rc = sockContext->Provider->NextProcTable.lpWSPGetPeerName(
-            s,
-            name,
-            namelen, 
-            lpErrno
-            );
+             s,
+             name,
+             namelen,
+             lpErrno
+         );
 
 cleanup:
 
@@ -364,13 +364,13 @@ cleanup:
 //
 int WSPAPI
 WSPGetSockOpt(
-        SOCKET s,
-        int level,
-        int optname,
-        __out_bcount(*optlen) char FAR * optval,
-        __inout LPINT optlen,
-        LPINT lpErrno
-        )
+    SOCKET s,
+    int level,
+    int optname,
+    __out_bcount(*optlen) char FAR * optval,
+    __inout LPINT optlen,
+    LPINT lpErrno
+)
 {
     SOCKET_CONTEXT *sockContext = NULL;
     int             rc = NO_ERROR;
@@ -387,44 +387,44 @@ WSPGetSockOpt(
     ASSERT( sockContext->Provider->NextProcTable.lpWSPGetSockOpt );
 
     if ( ( SOL_SOCKET == level ) && (
-            ( SO_PROTOCOL_INFOA == optname ) ||
-            ( SO_PROTOCOL_INFOW == optname )
-         )
+                ( SO_PROTOCOL_INFOA == optname ) ||
+                ( SO_PROTOCOL_INFOW == optname )
+            )
        )
     {
         __try
         {
             switch ( optname )
             {
-                case SO_PROTOCOL_INFOA:
-                    if (  *optlen < sizeof( WSAPROTOCOL_INFOA ) )
-                    {
-                        *optlen = sizeof( WSAPROTOCOL_INFOA );
-                        *lpErrno = WSAEFAULT;
-                        rc = SOCKET_ERROR;
-                        goto cleanup;
-                    }
-
+            case SO_PROTOCOL_INFOA:
+                if (  *optlen < sizeof( WSAPROTOCOL_INFOA ) )
+                {
                     *optlen = sizeof( WSAPROTOCOL_INFOA );
-                    memcpy( optval, &sockContext->Provider->LayerProvider,
-                            sizeof( WSAPROTOCOL_INFOA ) );
+                    *lpErrno = WSAEFAULT;
+                    rc = SOCKET_ERROR;
+                    goto cleanup;
+                }
 
-                    break;
+                *optlen = sizeof( WSAPROTOCOL_INFOA );
+                memcpy( optval, &sockContext->Provider->LayerProvider,
+                        sizeof( WSAPROTOCOL_INFOA ) );
 
-                case SO_PROTOCOL_INFOW:
-                    if ( *optlen < sizeof( WSAPROTOCOL_INFOW ) )
-                    {
-                        *optlen = sizeof( WSAPROTOCOL_INFOW );
-                        *lpErrno = WSAEFAULT;
-                        rc = SOCKET_ERROR;
-                        goto cleanup;
-                    }
+                break;
 
+            case SO_PROTOCOL_INFOW:
+                if ( *optlen < sizeof( WSAPROTOCOL_INFOW ) )
+                {
                     *optlen = sizeof( WSAPROTOCOL_INFOW );
-                    memcpy( optval, &sockContext->Provider->LayerProvider,
-                            sizeof( WSAPROTOCOL_INFOW ) );
+                    *lpErrno = WSAEFAULT;
+                    rc = SOCKET_ERROR;
+                    goto cleanup;
+                }
 
-                    break;
+                *optlen = sizeof( WSAPROTOCOL_INFOW );
+                memcpy( optval, &sockContext->Provider->LayerProvider,
+                        sizeof( WSAPROTOCOL_INFOW ) );
+
+                break;
 
             }
         }
@@ -437,28 +437,28 @@ WSPGetSockOpt(
 
         if ( SO_PROTOCOL_INFOA == optname )
         {
-            WideCharToMultiByte( 
-                    CP_ACP, 
-                    0,
-                    sockContext->Provider->LayerProvider.szProtocol,
-                    -1,
-                    ( (WSAPROTOCOL_INFOA *)optval )->szProtocol,
-                    WSAPROTOCOL_LEN+1,
-                    NULL,
-                    NULL
-                    );
+            WideCharToMultiByte(
+                CP_ACP,
+                0,
+                sockContext->Provider->LayerProvider.szProtocol,
+                -1,
+                ( (WSAPROTOCOL_INFOA *)optval )->szProtocol,
+                WSAPROTOCOL_LEN+1,
+                NULL,
+                NULL
+            );
         }
     }
     else
     {
         rc = sockContext->Provider->NextProcTable.lpWSPGetSockOpt(
-                s,
-                level,
-                optname,
-                optval,
-                optlen,
-                lpErrno
-                );
+                 s,
+                 level,
+                 optname,
+                 optval,
+                 optlen,
+                 lpErrno
+             );
     }
 
 cleanup:
@@ -474,20 +474,20 @@ cleanup:
 //    ConnectEx function. This routine returns the LSPs ConnectEx function when
 //    the application requests it.
 //
-int WSPAPI 
+int WSPAPI
 WSPIoctl(
-        SOCKET          s,
-        DWORD           dwIoControlCode,
-        LPVOID          lpvInBuffer,
-        DWORD           cbInBuffer,
-        LPVOID          lpvOutBuffer,
-        DWORD           cbOutBuffer,
-        LPDWORD         lpcbBytesReturned,
-        LPWSAOVERLAPPED lpOverlapped,
-        LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
-        LPWSATHREADID   lpThreadId,
-        LPINT           lpErrno
-        )
+    SOCKET          s,
+    DWORD           dwIoControlCode,
+    LPVOID          lpvInBuffer,
+    DWORD           cbInBuffer,
+    LPVOID          lpvOutBuffer,
+    DWORD           cbOutBuffer,
+    LPDWORD         lpcbBytesReturned,
+    LPWSAOVERLAPPED lpOverlapped,
+    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+    LPWSATHREADID   lpThreadId,
+    LPINT           lpErrno
+)
 {
     SOCKET_CONTEXT *sockContext = NULL;
     GUID            ConnectExGuid = WSAID_CONNECTEX;
@@ -499,7 +499,7 @@ WSPIoctl(
         if ( 0 == memcmp( lpvInBuffer, &ConnectExGuid, sizeof( GUID ) ) )
         {
             // Return a pointer to our intermediate extension function
-            __try 
+            __try
             {
                 if ( cbOutBuffer < sizeof( LPFN_CONNECTEX ) )
                 {
@@ -533,25 +533,25 @@ WSPIoctl(
 
     // Pass the call to the lower layer
     rc = sockContext->Provider->NextProcTable.lpWSPIoctl(
-            s,
-            dwIoControlCode, 
-            lpvInBuffer,
-            cbInBuffer, 
-            lpvOutBuffer, 
-            cbOutBuffer, 
-            lpcbBytesReturned, 
-            lpOverlapped, 
-            lpCompletionRoutine, 
-            lpThreadId, 
-            lpErrno
-            );
+             s,
+             dwIoControlCode,
+             lpvInBuffer,
+             cbInBuffer,
+             lpvOutBuffer,
+             cbOutBuffer,
+             lpcbBytesReturned,
+             lpOverlapped,
+             lpCompletionRoutine,
+             lpThreadId,
+             lpErrno
+         );
 
 cleanup:
 
     return rc;
 }
 
-// 
+//
 // Function: WSPSend
 //
 // Description:
@@ -561,23 +561,23 @@ cleanup:
 //      buffers. Note that this samply only intercepts the WSPSend routine since
 //      we're interested in only HTTP TCP traffic. If we wanted to parse datagram
 //      oriented protocols we should then also intercept WSPSendTo, WSASendMsg,
-//      and TransmitPackets. Note that we don't intercept TransmitFile or 
+//      and TransmitPackets. Note that we don't intercept TransmitFile or
 //      TransmitPackets for this HTTP parsing since the client HTTP sides do not
 //      use those APIs for sending requests (i.e. these extension functions are
 //      typically used in the server response).
 //
 int WSPAPI
 WSPSend(
-        SOCKET          s,
-        LPWSABUF        lpBuffers,
-        DWORD           dwBufferCount,
-        LPDWORD         lpNumberOfBytesSent,
-        DWORD           dwFlags,
-        LPWSAOVERLAPPED lpOverlapped,
-        LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
-        LPWSATHREADID   lpThreadId,
-        LPINT           lpErrno
-       )
+    SOCKET          s,
+    LPWSABUF        lpBuffers,
+    DWORD           dwBufferCount,
+    LPDWORD         lpNumberOfBytesSent,
+    DWORD           dwFlags,
+    LPWSAOVERLAPPED lpOverlapped,
+    LPWSAOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine,
+    LPWSATHREADID   lpThreadId,
+    LPINT           lpErrno
+)
 {
     SOCKET_CONTEXT *sockContext = NULL;
     DWORD           i;
@@ -599,7 +599,7 @@ WSPSend(
     // Parse the send buffer and look for HTTP GET requests
     __try
     {
-        for(i=0; i < dwBufferCount ;i++)
+        for(i=0; i < dwBufferCount ; i++)
         {
             len = FindUrl( lpBuffers[ i ].buf, lpBuffers[ i ].len, &start );
             if ( ( len > 0 ) && ( len+1 < DEFAULT_PRINT_BUFFER ) )
@@ -637,16 +637,16 @@ WSPSend(
     //    since it intercepts all IO completion notifications.
 
     rc = sockContext->Provider->NextProcTable.lpWSPSend(
-            s,
-            lpBuffers,
-            dwBufferCount, 
-            lpNumberOfBytesSent,
-            dwFlags,
-            lpOverlapped,
-            lpCompletionRoutine,
-            lpThreadId,
-            lpErrno
-            );
+             s,
+             lpBuffers,
+             dwBufferCount,
+             lpNumberOfBytesSent,
+             dwFlags,
+             lpOverlapped,
+             lpCompletionRoutine,
+             lpThreadId,
+             lpErrno
+         );
 cleanup:
 
     return rc;
@@ -661,16 +661,16 @@ cleanup:
 //    context structure is created for the socket returned from the lower provider.
 //    This context is used if the socket is later connected to a proxied address.
 //
-SOCKET WSPAPI 
+SOCKET WSPAPI
 WSPSocket(
-        int                 af,
-        int                 type,
-        int                 protocol,
-        LPWSAPROTOCOL_INFOW lpProtocolInfo,
-        GROUP               g,
-        DWORD               dwFlags,
-        LPINT               lpErrno
-        )
+    int                 af,
+    int                 type,
+    int                 protocol,
+    LPWSAPROTOCOL_INFOW lpProtocolInfo,
+    GROUP               g,
+    DWORD               dwFlags,
+    LPINT               lpErrno
+)
 {
     WSAPROTOCOL_INFOW   InfoCopy = {0};
     SOCKET_CONTEXT     *sockContext = NULL;
@@ -681,20 +681,20 @@ WSPSocket(
 
     // Find the LSP entry which matches the given provider info
     lowerProvider = FindMatchingLspEntryForProtocolInfo(
-            lpProtocolInfo,
-            gLayerInfo,
-            gLayerCount
-            );
+                        lpProtocolInfo,
+                        gLayerInfo,
+                        gLayerCount
+                    );
     if ( NULL == lowerProvider )
     {
         dbgprint("WSPSocket: FindMatchingLspEntryForProtocolInfo failed!" );
         goto cleanup;
     }
 
-    if ( 0 == lowerProvider->StartupCount ) 
+    if ( 0 == lowerProvider->StartupCount )
     {
-        rc = InitializeProvider( lowerProvider, MAKEWORD(2,2), lpProtocolInfo, 
-               gMainUpCallTable, lpErrno );
+        rc = InitializeProvider( lowerProvider, MAKEWORD(2,2), lpProtocolInfo,
+                                 gMainUpCallTable, lpErrno );
         if ( SOCKET_ERROR == rc )
         {
             dbgprint("WSPSocket: InitializeProvider failed: %d", *lpErrno);
@@ -714,7 +714,7 @@ WSPSocket(
             InfoCopy.iSocketType = lpProtocolInfo->iSocketType;
         if (protocol == FROM_PROTOCOL_INFO)
             InfoCopy.iProtocol = lpProtocolInfo->iProtocol;
-        
+
         lpProtocolInfo = &InfoCopy;
     }
 
@@ -724,14 +724,14 @@ WSPSocket(
     // Create the socket from the lower layer
     //
     nextProviderSocket = lowerProvider->NextProcTable.lpWSPSocket(
-            af, 
-            type, 
-            protocol, 
-            lpProtocolInfo,
-            g, 
-            dwFlags,
-            lpErrno
-            );
+                             af,
+                             type,
+                             protocol,
+                             lpProtocolInfo,
+                             g,
+                             dwFlags,
+                             lpErrno
+                         );
     if ( INVALID_SOCKET == nextProviderSocket )
     {
         dbgprint("WSPSocket: NextProcTable.WSPSocket failed: %d", *lpErrno);
@@ -742,10 +742,10 @@ WSPSocket(
     // Create the context information to be associated with this socket
     //
     sockContext = CreateSocketContext(
-            lowerProvider,
-            nextProviderSocket,
-            lpErrno
-            );
+                      lowerProvider,
+                      nextProviderSocket,
+                      lpErrno
+                  );
     if ( NULL == sockContext )
     {
         dbgprint( "WSPSocket: CreateSocketContext failed: %d", *lpErrno );
@@ -756,10 +756,10 @@ WSPSocket(
     // Associate ownership of this handle with our LSP
     //
     sret = gMainUpCallTable.lpWPUModifyIFSHandle(
-            lowerProvider->LayerProvider.dwCatalogEntryId,
-            nextProviderSocket,
-            lpErrno
-            );
+               lowerProvider->LayerProvider.dwCatalogEntryId,
+               nextProviderSocket,
+               lpErrno
+           );
     if ( INVALID_SOCKET == sret )
     {
         dbgprint( "WSPSocket: WPUModifyIFSHandle failed: %d", *lpErrno );
@@ -774,12 +774,12 @@ cleanup:
 
     // If an error occured close the socket if it was already created
     if ( ( NULL != sockContext ) && ( NULL != lowerProvider ) &&
-         ( INVALID_SOCKET != nextProviderSocket ) )
+            ( INVALID_SOCKET != nextProviderSocket ) )
     {
         rc = lowerProvider->NextProcTable.lpWSPCloseSocket(
-                nextProviderSocket,
-                lpErrno
-                );
+                 nextProviderSocket,
+                 lpErrno
+             );
         if ( SOCKET_ERROR == rc )
         {
             dbgprint( "WSPSocket: WSPCloseSocket failed: %d", *lpErrno );
@@ -801,18 +801,18 @@ cleanup:
 //    the IFS LSP is intercepting then state *must* be maintained; otherwise, the
 //    search for the context would fail and an error be returned.
 //
-SOCKET WSPAPI 
+SOCKET WSPAPI
 WSPAccept(
-        SOCKET               s,
-        struct sockaddr FAR *addr,
-        LPINT                addrlen,
-        LPCONDITIONPROC      lpfnCondition,
-        DWORD_PTR            dwCallbackData,
-        LPINT                lpErrno
-        )
+    SOCKET               s,
+    struct sockaddr FAR *addr,
+    LPINT                addrlen,
+    LPCONDITIONPROC      lpfnCondition,
+    DWORD_PTR            dwCallbackData,
+    LPINT                lpErrno
+)
 {
     SOCKET_CONTEXT     *sockContext = NULL,
-                       *acceptContext = NULL;
+                        *acceptContext = NULL;
     SOCKET              acceptProviderSocket = INVALID_SOCKET,
                         sret;
     int                 rc;
@@ -830,13 +830,13 @@ WSPAccept(
     // Create the socket from the lower layer
     //
     acceptProviderSocket = sockContext->Provider->NextProcTable.lpWSPAccept(
-            s, 
-            addr, 
-            addrlen, 
-            lpfnCondition,
-            dwCallbackData,
-            lpErrno
-            );
+                               s,
+                               addr,
+                               addrlen,
+                               lpfnCondition,
+                               dwCallbackData,
+                               lpErrno
+                           );
     if ( INVALID_SOCKET == acceptProviderSocket )
     {
         dbgprint("WSPAccept: NextProcTable.WSPAccept failed: %d", *lpErrno);
@@ -847,10 +847,10 @@ WSPAccept(
     // Create the context information to be associated with this socket
     //
     acceptContext = CreateSocketContext(
-            sockContext->Provider,
-            acceptProviderSocket,
-            lpErrno
-            );
+                        sockContext->Provider,
+                        acceptProviderSocket,
+                        lpErrno
+                    );
     if ( NULL == sockContext )
     {
         dbgprint( "WSPAccept: CreateSocketContext failed: %d", *lpErrno );
@@ -861,10 +861,10 @@ WSPAccept(
     // Associate ownership of this handle with our LSP
     //
     sret = gMainUpCallTable.lpWPUModifyIFSHandle(
-            sockContext->Provider->LayerProvider.dwCatalogEntryId,
-            acceptProviderSocket,
-            lpErrno
-            );
+               sockContext->Provider->LayerProvider.dwCatalogEntryId,
+               acceptProviderSocket,
+               lpErrno
+           );
     if ( INVALID_SOCKET == sret )
     {
         dbgprint( "WSPAccept: WPUModifyIFSHandle failed: %d", *lpErrno );
@@ -879,12 +879,12 @@ cleanup:
 
     // If an error occured close the socket if it was already created
     if ( ( NULL != sockContext ) && ( NULL != acceptContext ) &&
-         ( INVALID_SOCKET != acceptProviderSocket ) )
+            ( INVALID_SOCKET != acceptProviderSocket ) )
     {
         rc = sockContext->Provider->NextProcTable.lpWSPCloseSocket(
-                acceptProviderSocket,
-                lpErrno
-                );
+                 acceptProviderSocket,
+                 lpErrno
+             );
         if ( SOCKET_ERROR == rc )
         {
             dbgprint( "WSPAccept: WSPCloseSocket failed: %d", *lpErrno );
@@ -929,20 +929,20 @@ cleanup:
 //         UDP socket will have a proc table that points into the BASE TCP/IPv4
 //         provider.
 //
-//         However, if the two LSP2 entries were installed in two calls to 
+//         However, if the two LSP2 entries were installed in two calls to
 //         WSCInstallProvider with two GUIDs, then when a UDP/IPv4 socket is created
 //         LSP2's WSPStartup is invoked again at which point the correct proc
 //         table is built using the LSP1's function pointers which LSP2 doesn't wish
 //         to override.
 //
-int WSPAPI 
+int WSPAPI
 WSPStartup(
     WORD                wVersion,
     LPWSPDATA           lpWSPData,
     LPWSAPROTOCOL_INFOW lpProtocolInfo,
     WSPUPCALLTABLE      UpCallTable,
     LPWSPPROC_TABLE     lpProcTable
-    )
+)
 {
     PROVIDER           *loadProvider = NULL;
     int                 Error = WSAEPROVIDERFAILEDINIT,
@@ -981,11 +981,11 @@ WSPStartup(
     //    entry with a unique GUID. Because of this each layered protocol entry for
     //    the IFS LSP should be installed with its own unique GUID.
     loadProvider = FindMatchingLspEntryForProtocolInfo(
-            lpProtocolInfo,
-            gLayerInfo,
-            gLayerCount,
-            TRUE
-            );
+                       lpProtocolInfo,
+                       gLayerInfo,
+                       gLayerCount,
+                       TRUE
+                   );
     if ( NULL == loadProvider )
     {
         dbgprint("WSPStartup: FindMatchingLspEntryForProtocolInfo failed!");
@@ -998,8 +998,8 @@ WSPStartup(
     if ( 0 == loadProvider->StartupCount )
     {
 
-        rc = InitializeProvider( loadProvider, wVersion, lpProtocolInfo, 
-                UpCallTable, &Error );
+        rc = InitializeProvider( loadProvider, wVersion, lpProtocolInfo,
+                                 UpCallTable, &Error );
         if ( SOCKET_ERROR == rc )
         {
             dbgprint("WSPStartup: InitializeProvider failed: %d", Error );
@@ -1049,17 +1049,17 @@ cleanup:
 //      This function is invoked whenver a connection request is made by the upper
 //      layer which can occur at the WSPConnect and ConnectEx functions. This method
 //      determines whether the application's destination address should be
-//      redirected to another destination. Currently, this function just looks for 
+//      redirected to another destination. Currently, this function just looks for
 //      a single IPv4 destination address and substitutes it with another.
 //
 void
-FindDestinationAddress( 
-        SOCKET_CONTEXT *context, 
-        const SOCKADDR *destAddr, 
-        int             destLen,
-        SOCKADDR      **proxyAddr, 
-        int            *proxyLen
-        )
+FindDestinationAddress(
+    SOCKET_CONTEXT *context,
+    const SOCKADDR *destAddr,
+    int             destLen,
+    SOCKADDR      **proxyAddr,
+    int            *proxyLen
+)
 {
     UNREFERENCED_PARAMETER( context );
     UNREFERENCED_PARAMETER( destLen );
@@ -1081,7 +1081,7 @@ FindDestinationAddress(
         {
             memcpy( &context->ProxiedAddress, destAddr, context->AddressLength );
             ( (SOCKADDR_IN *)&context->ProxiedAddress )->sin_addr.s_addr = inet_addr(
-                    "157.56.237.9"
+                        "157.56.237.9"
                     );
 
             *proxyAddr = (SOCKADDR *) &context->ProxiedAddress;
@@ -1103,10 +1103,10 @@ FindDestinationAddress(
 //
 void
 FreeLspProviders(
-        PROVIDER   *lspProvider,
-        int         lspProviderCount,
-        int        *lpErrno
-        )
+    PROVIDER   *lspProvider,
+    int         lspProviderCount,
+    int        *lpErrno
+)
 {
     int     i;
 
@@ -1114,7 +1114,7 @@ FreeLspProviders(
         return;
 
     // Need to iterate through the LSP providers and call WSPCleanup accordingly
-    for(i=0; i < lspProviderCount ;i++)
+    for(i=0; i < lspProviderCount ; i++)
     {
         while( 0 != lspProvider[ i ].StartupCount )
         {
@@ -1130,10 +1130,10 @@ FreeLspProviders(
         }
     }
 
-    for(i=0; i < lspProviderCount ;i++)
+    for(i=0; i < lspProviderCount ; i++)
     {
         FreeSocketContextList( &lspProvider[ i ] );
-        
+
         DeleteCriticalSection( &lspProvider[ i ].ProviderCritSec );
     }
 
@@ -1148,11 +1148,11 @@ FreeLspProviders(
 //      request. It parses the buffer and returns the URL which is being requested.
 //
 int
-FindUrl( 
-        __in_ecount(buflen) char   *buf,
-        int     buflen,
-        __out char  **start
-        )
+FindUrl(
+    __in_ecount(buflen) char   *buf,
+    int     buflen,
+    __out char  **start
+)
 {
     char   *subptr = NULL, *substart = NULL;
     int     subidx,
@@ -1168,7 +1168,7 @@ FindUrl(
         subidx   = idx;
         subptr   = "GET";
 
-        // Once a character is matched proceed to check for a complete match 
+        // Once a character is matched proceed to check for a complete match
         //    while ensuring we don't go past the end of the buffer (since it may not
         //    be NULL terminated -- at least not the portion we're currently looking
         //    at)
@@ -1184,7 +1184,7 @@ FindUrl(
         {
             // A GET request was found so skip over the subsequent space
             idx = subidx + 1;
-            
+
             // Validate we're still within the buffer
             if ( idx >= buflen )
             {

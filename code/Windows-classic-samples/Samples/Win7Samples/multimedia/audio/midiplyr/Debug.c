@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,7 +15,7 @@
 
 #ifdef   DEBUG
 #include <windows.h>
-#include <mmsystem.h>  
+#include <mmsystem.h>
 #include <stdarg.h>
 #include <strsafe.h>
 
@@ -25,7 +25,7 @@
 PRIVATE VOID FAR CDECL DbgVPrintF(LPSTR szFmt, LPSTR va);
 
 BOOL                        __gfDbgEnabled  = TRUE;
-UINT                        __guDbgLevel    = 0;   
+UINT                        __guDbgLevel    = 0;
 
 WORD                        wDebugLevel     = 0;
 
@@ -76,7 +76,7 @@ VOID WINAPI WinAssert(
 *
 *****************************************************************************/
 VOID FAR CDECL DbgVPrintF(
-    LPSTR                   szFmt, 
+    LPSTR                   szFmt,
     LPSTR                   va)
 {
     char                    ach[DEBUG_MAX_LINE_LEN];
@@ -96,20 +96,20 @@ VOID FAR CDECL DbgVPrintF(
     {
         switch(*szFmt)
         {
-            case '!':
-                fDebugBreak = TRUE;
-                szFmt++;
-                continue;
+        case '!':
+            fDebugBreak = TRUE;
+            szFmt++;
+            continue;
 
-            case '`':
-                fPrefix = FALSE;
-                szFmt++;
-                continue;
+        case '`':
+            fPrefix = FALSE;
+            szFmt++;
+            continue;
 
-            case '~':
-                fCRLF = FALSE;
-                szFmt++;
-                continue;
+        case '~':
+            fCRLF = FALSE;
+            szFmt++;
+            continue;
         }
 
         break;
@@ -136,7 +136,7 @@ VOID FAR CDECL DbgVPrintF(
     {
         hr = StringCchVPrintfA(pDestEnd, cchRemaining, szFmt, (va_list)va);
     }
-        
+
 
 
     if (SUCCEEDED(hr))
@@ -173,8 +173,8 @@ VOID FAR CDECL DbgVPrintF(
 *
 *****************************************************************************/
 void FAR CDECL dprintf(
-    UINT                    uDbgLevel, 
-    LPSTR                   szFmt, 
+    UINT                    uDbgLevel,
+    LPSTR                   szFmt,
     ...)
 {
     va_list                 va;
@@ -257,7 +257,7 @@ UINT WINAPI DbgInitialize(BOOL fEnable)
     DbgEnable(fEnable);
 
     return (__guDbgLevel);
-} 
+}
 
 
 #endif

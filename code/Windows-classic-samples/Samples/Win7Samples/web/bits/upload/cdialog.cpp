@@ -1,18 +1,18 @@
-//+---------------------------------------------------------------------------
+﻿//+---------------------------------------------------------------------------
 //
-//  Copyright (c) Microsoft Corporation. All rights reserved. 
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
 //  BITS Upload sample
 //  ==================
 //
-//  Module name: 
+//  Module name:
 //  cdialog.cpp
 //
 //  Purpose:
-//  This module implements the CSimpleDialog class, which is 
+//  This module implements the CSimpleDialog class, which is
 //  used in the sample to display the User Interface.
-// 
+//
 //  Note that the actual file upload is triggered by pressing "OK" on the UI.
 //  So looking at the implementation of the method OnOK() is a good
 //  starting point for tracking the sample's main code path.
@@ -49,12 +49,12 @@ CSimpleDialog::CSimpleDialog(HINSTANCE hInstance, ULONG ulDialogId)
 {
     m_hInstance   = hInstance;
     m_ulDialogId  = ulDialogId;
-    m_hWnd        = NULL;           // Handle returned by CreateDialogParam 
+    m_hWnd        = NULL;           // Handle returned by CreateDialogParam
     m_DlgProc     = DlgProc;        // Point to default dialog proc
 }
 
 //---------------------------------------------------------------------------
-CSimpleDialog::~CSimpleDialog()    
+CSimpleDialog::~CSimpleDialog()
 {
 }
 
@@ -68,12 +68,12 @@ HRESULT CSimpleDialog::Show(INT iShowState)
     HRESULT hr = S_OK;
 
     m_hWnd = CreateDialogParam(
-        m_hInstance,
-        MAKEINTRESOURCE(m_ulDialogId),
-        NULL,                           // hWndParent
-        m_DlgProc,
-        (LPARAM)this
-        );
+                 m_hInstance,
+                 MAKEINTRESOURCE(m_ulDialogId),
+                 NULL,                           // hWndParent
+                 m_DlgProc,
+                 (LPARAM)this
+             );
 
     if (!m_hWnd)
     {
@@ -82,7 +82,7 @@ HRESULT CSimpleDialog::Show(INT iShowState)
     else
     {
         // the return just says if the window was previously visible or not
-        BOOL bReturn = ShowWindow(m_hWnd, iShowState);  
+        BOOL bReturn = ShowWindow(m_hWnd, iShowState);
     }
 
     return hr;
@@ -106,14 +106,14 @@ HRESULT CSimpleDialog::AddStatusMessage(LPCWSTR wszFormat, ...)
     SYSTEMTIME Time;
     WCHAR      wszTimeBuf[20]              = {0};
     WCHAR      wszNewText[MAX_BUFFER_SIZE] = {0};
-    
+
 
     if (!wszFormat)
     {
         return S_OK;
     }
 
-    // 
+    //
     // Build a string with the text passed as a parameter
     //
     va_list arglist;
@@ -189,7 +189,7 @@ HRESULT CSimpleDialog::AddStatusMessage(LPCWSTR wszFormat, ...)
     // Automatically scroll down the edit box
     //
     SendMessage(hJobStatus, EM_SETSEL, (WPARAM)0, (LPARAM)-1);
-	SendMessage(hJobStatus, EM_SCROLLCARET, 0, 0);
+    SendMessage(hJobStatus, EM_SCROLLCARET, 0, 0);
 
 cleanup:
 
@@ -222,19 +222,19 @@ LRESULT CSimpleDialog::OnInitDialog(HWND hDlg, WPARAM wParam, LPARAM lParam)
     HWND    hUploadReply  = NULL;
 
     // Set combobox contents
-	SendDlgItemMessage(hDlg, IDC_VIRTUALDIR, CB_ADDSTRING, 0, (LPARAM)STR_VIRTUALDIR_PLAIN);
-	SendDlgItemMessage(hDlg, IDC_VIRTUALDIR, CB_ADDSTRING, 0, (LPARAM)STR_VIRTUALDIR_NOTIFICATIONS);
+    SendDlgItemMessage(hDlg, IDC_VIRTUALDIR, CB_ADDSTRING, 0, (LPARAM)STR_VIRTUALDIR_PLAIN);
+    SendDlgItemMessage(hDlg, IDC_VIRTUALDIR, CB_ADDSTRING, 0, (LPARAM)STR_VIRTUALDIR_NOTIFICATIONS);
     SendDlgItemMessage(hDlg, IDC_VIRTUALDIR, CB_LIMITTEXT, (WPARAM)(INTERNET_MAX_URL_LENGTH-1), (LPARAM)0);
     SendDlgItemMessage(hDlg, IDC_VIRTUALDIR, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 
     //hVirtualDir = GetDlgItem(hDlg, IDC_VIRTUALDIR);
-    //SetWindowText(hVirtualDir, STR_VIRTUALDIR_DEFAULT); 
+    //SetWindowText(hVirtualDir, STR_VIRTUALDIR_DEFAULT);
 
     hSampleText = GetDlgItem(hDlg, IDC_SAMPLETEXT);
-    SetWindowText(hSampleText, STR_SAMPLETEXT_DEFAULT); 
+    SetWindowText(hSampleText, STR_SAMPLETEXT_DEFAULT);
 
     hUploadReply = GetDlgItem(hDlg, IDC_UPLOADREPLY_CHECKBOX);
-    SendMessage(hUploadReply, BM_SETCHECK, BST_UNCHECKED, 0 );    
+    SendMessage(hUploadReply, BM_SETCHECK, BST_UNCHECKED, 0 );
 
 
     SetFocus(hSampleText);
@@ -244,7 +244,7 @@ LRESULT CSimpleDialog::OnInitDialog(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
 //---------------------------------------------------------------------------
 LRESULT CSimpleDialog::OnOK(HWND hDlg, WPARAM wParam, LPARAM lParam)
-{ 
+{
     HRESULT hr = S_OK;
     WCHAR   wszBuffSampleText[MAX_BUFFER_SIZE]         = {0};
     WCHAR   wszBuffVirtualDir[INTERNET_MAX_URL_LENGTH] = {0};
@@ -256,12 +256,12 @@ LRESULT CSimpleDialog::OnOK(HWND hDlg, WPARAM wParam, LPARAM lParam)
     // Grab input values from the UI
     //
     hr = CollectUserInput(
-        wszBuffVirtualDir, 
-        ARRAYSIZE(wszBuffVirtualDir),
-        wszBuffSampleText, 
-        ARRAYSIZE(wszBuffSampleText),
-        &fRequireUploadReply
-    );
+             wszBuffVirtualDir,
+             ARRAYSIZE(wszBuffVirtualDir),
+             wszBuffSampleText,
+             ARRAYSIZE(wszBuffSampleText),
+             &fRequireUploadReply
+         );
     if (FAILED(hr))
     {
 
@@ -318,7 +318,7 @@ LRESULT CSimpleDialog::OnDestroy(HWND hDlg, WPARAM wParam, LPARAM lParam)
 //
 LRESULT CSimpleDialog::OnNcDestroy(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-    m_hWnd = NULL;             // Since this is a modeless-only dialog 
+    m_hWnd = NULL;             // Since this is a modeless-only dialog
 
     return 1;
 }
@@ -326,13 +326,13 @@ LRESULT CSimpleDialog::OnNcDestroy(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
 //---------------------------------------------------------------------------
 LRESULT CSimpleDialog::OnCancel(HWND hDlg, WPARAM wParam, LPARAM lParam)
-{ 
+{
     return DestroyWindow(m_hWnd);
 }
 
 //---------------------------------------------------------------------------
 LRESULT CSimpleDialog::OnClose(HWND hDlg, WPARAM wParam, LPARAM lParam)
-{ 
+{
     HRESULT hr = S_OK;
     CSmartComPtr<IEnumBackgroundCopyJobs> JobsEnum;
     CSmartComPtr<IBackgroundCopyJob>      Job;
@@ -340,7 +340,7 @@ LRESULT CSimpleDialog::OnClose(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     //
     // As we are leaving the application, cancel jobs that are still
-    // in progress. This will only apply to Jobs submitted by this 
+    // in progress. This will only apply to Jobs submitted by this
     // user AND with our predefined description string
     //
     hr = g_JobManager->EnumJobs(0, JobsEnum.GrabOutPtr());
@@ -390,30 +390,30 @@ done:
 //---------------------------------------------------------------------------
 //  Since this is a static function we can't use a 'this' pointer.
 //  We get around this by storing the 'this' pointer in the
-//  lParam of CreateDialogParam.  When we get WM_INITDIALOG we get this 
+//  lParam of CreateDialogParam.  When we get WM_INITDIALOG we get this
 //  pointer back in the lParam.  Now we can use SetWindowLongPtr to store
-//  it, and later retireve it with GetWindowLongPtr.  Once we have a 
+//  it, and later retireve it with GetWindowLongPtr.  Once we have a
 //  valid 'this' pointer we can cast it back to the base class and then
 //  call the base class's ProcessMessage function.
 //
 
 INT_PTR CALLBACK CSimpleDialog::DlgProc (
-  HWND     hDlg,           //[in] Handle to dialog box
-  UINT     uMsg,           //[in] Message
-  WPARAM   wParam,         //[in] First message parameter
-  LPARAM   lParam          //[in] Second message parameter
-  )
+    HWND     hDlg,           //[in] Handle to dialog box
+    UINT     uMsg,           //[in] Message
+    WPARAM   wParam,         //[in] First message parameter
+    LPARAM   lParam          //[in] Second message parameter
+)
 {
     BOOL bReturn = FALSE;
     if (WM_INITDIALOG == uMsg)
     {
-        SetWindowLongPtr(hDlg, GWLP_USERDATA, lParam);  
+        SetWindowLongPtr(hDlg, GWLP_USERDATA, lParam);
     }
 
     CSimpleDialog* pThis = reinterpret_cast<CSimpleDialog *>(GetWindowLongPtr(hDlg, GWLP_USERDATA));
     if (pThis != NULL)
     {
-        bReturn = pThis->ProcessMessage(hDlg, uMsg, wParam, lParam);  
+        bReturn = pThis->ProcessMessage(hDlg, uMsg, wParam, lParam);
     }
 
     return bReturn;
@@ -424,64 +424,64 @@ INT_PTR CALLBACK CSimpleDialog::DlgProc (
 //  DialogProc delegates this responsibility to each instance of the class.
 //
 BOOL CSimpleDialog::ProcessMessage (
-  HWND     hDlg,           //[in] Handle to dialog box
-  UINT     uMsg,           //[in] Message
-  WPARAM   wParam,         //[in] First message parameter
-  LPARAM   lParam          //[in] Second message parameter
-  )
+    HWND     hDlg,           //[in] Handle to dialog box
+    UINT     uMsg,           //[in] Message
+    WPARAM   wParam,         //[in] First message parameter
+    LPARAM   lParam          //[in] Second message parameter
+)
 {
     LRESULT lResult = 0;
     switch (uMsg)
     {
-        case WM_INITDIALOG:
-            lResult = OnInitDialog(hDlg, wParam, lParam);
+    case WM_INITDIALOG:
+        lResult = OnInitDialog(hDlg, wParam, lParam);
+        break;
+
+    case WM_DESTROY:
+        lResult = OnDestroy(hDlg, wParam, lParam);
+        break;
+
+    case WM_NCDESTROY:
+        lResult = OnNcDestroy(hDlg, wParam, lParam);
+        break;
+
+    case WM_CLOSE:
+        lResult = OnClose(hDlg, wParam, lParam);
+        break;
+
+    case WM_COMMAND:
+        switch (wParam)
+        {
+        case IDOK:
+            lResult = OnOK(hDlg, wParam, lParam);
             break;
 
-        case WM_DESTROY:
-            lResult = OnDestroy(hDlg, wParam, lParam);
+        case IDCANCEL:
+            lResult = OnCancel(hDlg, wParam, lParam);
             break;
 
-        case WM_NCDESTROY:
-            lResult = OnNcDestroy(hDlg, wParam, lParam);
-            break;
-
-        case WM_CLOSE:
-            lResult = OnClose(hDlg, wParam, lParam);
-            break;
-
-        case WM_COMMAND:
-            switch (wParam)
-            {
-                case IDOK:
-                    lResult = OnOK(hDlg, wParam, lParam);
-                    break;
-
-                case IDCANCEL:
-                    lResult = OnCancel(hDlg, wParam, lParam);
-                    break;
-
-                default:
-                    break;
-            }
         default:
             break;
+        }
+    default:
+        break;
     }
 
     return(BOOL)lResult;
-} 
+}
 
 // ==========================================================================
 // Auxiliary methods (private)
 // ==========================================================================
 
 HRESULT CSimpleDialog::CollectUserInput(
-    IN OUT WCHAR *wszBuffVirtualDir, 
-    IN     DWORD  cchBuffVirtualDir, 
-    IN OUT WCHAR *wszBuffSampleText, 
+    IN OUT WCHAR *wszBuffVirtualDir,
+    IN     DWORD  cchBuffVirtualDir,
+    IN OUT WCHAR *wszBuffSampleText,
     IN     DWORD  cchBuffSampleText,
-    OUT    BOOL  *fRequireUploadReply 
+    OUT    BOOL  *fRequireUploadReply
 )
-{ 
+{
     HRESULT hr                      = S_OK;
     HWND    hSampleText             = NULL;
     HWND    hVirtualDir             = NULL;
@@ -500,7 +500,7 @@ HRESULT CSimpleDialog::CollectUserInput(
 
     hVirtualDir = GetDlgItem(m_hWnd, IDC_VIRTUALDIR);
 
-     // get the index of the selection on the combobox
+    // get the index of the selection on the combobox
     idx = SendMessage(hVirtualDir, CB_GETCURSEL, (LPARAM)0, 0);
     if (idx == CB_ERR)
     {
@@ -513,21 +513,21 @@ HRESULT CSimpleDialog::CollectUserInput(
             goto cleanup;
         }
 
-        SendMessage( 
-          hVirtualDir,                // handle to destination window 
-          WM_GETTEXT,                 // message to send
-          (LPARAM)len,                // number of characters to copy
-          (WPARAM)wszBuffVirtualDir   // text buffer
+        SendMessage(
+            hVirtualDir,                // handle to destination window
+            WM_GETTEXT,                 // message to send
+            (LPARAM)len,                // number of characters to copy
+            (WPARAM)wszBuffVirtualDir   // text buffer
         );
     }
     else
     {
-        len = SendMessage( 
-          hVirtualDir,                 // handle to destination window 
-          CB_GETLBTEXTLEN,             // message to send
-          (WPARAM)idx,                 // item index
-          (LPARAM)0                    // not used; must be zero
-        );
+        len = SendMessage(
+                  hVirtualDir,                 // handle to destination window
+                  CB_GETLBTEXTLEN,             // message to send
+                  (WPARAM)idx,                 // item index
+                  (LPARAM)0                    // not used; must be zero
+              );
 
         if ((len == CB_ERR) || ((static_cast<DWORD>(len)+1) >= cchBuffVirtualDir)) // len + 1 includes the \0
         {
@@ -562,6 +562,6 @@ HRESULT CSimpleDialog::CollectUserInput(
     }
 
 cleanup:
-    
+
     return hr;
 }

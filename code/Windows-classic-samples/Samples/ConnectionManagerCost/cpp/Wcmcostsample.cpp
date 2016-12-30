@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,7 @@
 //********************************************************************************************
 void WCMGetCost()
 {
-    GUID interfaceGUID = {0};    
+    GUID interfaceGUID = {0};
     WCHAR profileName[WLAN_MAX_NAME_LENGTH+1];
     DWORD dwRetCode = NO_ERROR;
     DWORD dwSize = 0;
@@ -31,12 +31,12 @@ void WCMGetCost()
     {
         //Get Cost using WcmQueryProperty
         dwRetCode = WcmQueryProperty(&interfaceGUID,
-                                    profileName, 
-                                    wcm_intf_property_connection_cost, 
-                                    NULL, 
-                                    &dwSize, 
-                                    &pData);
-            
+                                     profileName,
+                                     wcm_intf_property_connection_cost,
+                                     NULL,
+                                     &dwSize,
+                                     &pData);
+
         if (dwRetCode == ERROR_SUCCESS)
         {
             if (pData == NULL)
@@ -63,7 +63,7 @@ void WCMGetCost()
     }
 }
 
-    
+
 //********************************************************************************************
 // Function: WCMGetProfileData
 //
@@ -72,26 +72,26 @@ void WCMGetCost()
 //********************************************************************************************
 void WCMGetProfileData()
 {
-    GUID interfaceGUID = {0};    
+    GUID interfaceGUID = {0};
     WCHAR profileName[WLAN_MAX_NAME_LENGTH+1];
     DWORD dwRetCode = NO_ERROR;
     DWORD dwSize = 0;
     PBYTE pData = NULL;
     HRESULT hr = S_OK;
-    
+
     ZeroMemory(profileName, WLAN_MAX_NAME_LENGTH*sizeof(WCHAR));
     //Get interface GUID and profile name
     hr = GetInterfaceAndProfileName(&interfaceGUID, profileName, WLAN_MAX_NAME_LENGTH);
     if (hr == S_OK)
     {
-        //Get Profile Data using WcmQueryProperty             
-        dwRetCode = WcmQueryProperty(&interfaceGUID, 
-                                    profileName, 
-                                    wcm_intf_property_dataplan_status, 
-                                    NULL, 
-                                    &dwSize, 
-                                    &pData);
-                
+        //Get Profile Data using WcmQueryProperty
+        dwRetCode = WcmQueryProperty(&interfaceGUID,
+                                     profileName,
+                                     wcm_intf_property_dataplan_status,
+                                     NULL,
+                                     &dwSize,
+                                     &pData);
+
         if ((dwRetCode == ERROR_SUCCESS) && (pData != NULL))
         {
             WCM_DATAPLAN_STATUS * data = reinterpret_cast<WCM_DATAPLAN_STATUS*> (pData);
@@ -117,14 +117,14 @@ void WCMGetProfileData()
 void WCMSetCost()
 {
     DWORD dwNewCost = 0;
-    GUID interfaceGUID = {0};    
+    GUID interfaceGUID = {0};
     WCHAR profileName[WLAN_MAX_NAME_LENGTH+1];
     DWORD dwRetCode = NO_ERROR;
     DWORD dwSize = 0;
     PBYTE pData = NULL;
     HRESULT hr = S_OK;
     WCM_CONNECTION_COST_DATA wcmCostData = {0};
-    
+
     ZeroMemory(profileName, WLAN_MAX_NAME_LENGTH*sizeof(WCHAR));
     //Get interface GUID and profile name
     hr = GetInterfaceAndProfileName(&interfaceGUID, profileName, WLAN_MAX_NAME_LENGTH);
@@ -134,21 +134,21 @@ void WCMSetCost()
         wprintf(L"Enter the new cost:\n");
         wscanf_s(L"%u",&dwNewCost);
         FlushCurrentLine();
-        
+
         wcmCostData.ConnectionCost = dwNewCost;
         pData = (PBYTE)&wcmCostData;
         dwSize = sizeof(wcmCostData);
-        
-        //Set cost using WcmSetProperty             
+
+        //Set cost using WcmSetProperty
         dwRetCode = WcmSetProperty(&interfaceGUID,
                                    profileName,
-                                   wcm_intf_property_connection_cost, 
+                                   wcm_intf_property_connection_cost,
                                    NULL,
-                                   dwSize, 
+                                   dwSize,
                                    pData
-                                   );
+                                  );
         if (dwRetCode == ERROR_SUCCESS)
-        {        
+        {
             wprintf(L"Cost set successfully\n");
         }
         else
@@ -168,7 +168,7 @@ void WCMSetCost()
 //********************************************************************************************
 void WCMSetProfileData()
 {
-    GUID interfaceGUID = {0};    
+    GUID interfaceGUID = {0};
     WCHAR profileName[WLAN_MAX_NAME_LENGTH+1];
     DWORD dwRetCode = NO_ERROR;
     DWORD dwSize = 0;
@@ -180,7 +180,7 @@ void WCMSetProfileData()
     PBYTE pData = NULL;
     SYSTEMTIME currentTime = {0};
     HRESULT hr = S_OK;
-    
+
     ZeroMemory(profileName, WLAN_MAX_NAME_LENGTH*sizeof(WCHAR));
     //Get interface GUID and profile name
     hr = GetInterfaceAndProfileName(&interfaceGUID, profileName, WLAN_MAX_NAME_LENGTH);
@@ -209,7 +209,7 @@ void WCMSetProfileData()
         FlushCurrentLine();
         wcmProfData.DataLimitInMegabytes = profDataLimitInMegabytes;
 
-        
+
         //Set Profile speed value
         wprintf(L"Enter Profile Inbound Bandwidth value in Kbps:\n");
         wscanf_s(L"%u", &profInboundBandwidthInKbps);
@@ -226,21 +226,21 @@ void WCMSetProfileData()
         wscanf_s(L"%u", &profMaxTransferSizeInMegabytes);
         FlushCurrentLine();
         wcmProfData.MaxTransferSizeInMegabytes = profMaxTransferSizeInMegabytes;
-  
+
         dwSize = sizeof(wcmProfData);
         pData = (PBYTE)&wcmProfData;
-        
-        //Set Profile Data using WcmSetProperty             
+
+        //Set Profile Data using WcmSetProperty
         dwRetCode = WcmSetProperty(&interfaceGUID,
                                    profileName,
-                                   wcm_intf_property_dataplan_status, 
+                                   wcm_intf_property_dataplan_status,
                                    NULL,
-                                   dwSize, 
+                                   dwSize,
                                    pData
-                                   );
-        
+                                  );
+
         if (dwRetCode == ERROR_SUCCESS)
-        {        
+        {
             wprintf(L"Profile Data set successfully\n");
         }
         else
@@ -263,24 +263,24 @@ void EvaluateUserChoice(_In_ int userchoice)
 {
     switch (userchoice)
     {
-        case 1:
-            WCMGetCost();
-            break;
-        case 2:
-            WCMGetProfileData();
-            break;
-        case 3:
-            WCMSetCost();
-            break;
-        case 4:
-            WCMSetProfileData();
-            break;
-        case 5:
-            break;
-        default:
-            wprintf(L"Invalid choice. Please enter a valid choice number \n");
-     }       
-}     
+    case 1:
+        WCMGetCost();
+        break;
+    case 2:
+        WCMGetProfileData();
+        break;
+    case 3:
+        WCMSetCost();
+        break;
+    case 4:
+        WCMSetProfileData();
+        break;
+    case 5:
+        break;
+    default:
+        wprintf(L"Invalid choice. Please enter a valid choice number \n");
+    }
+}
 
 //********************************************************************************************
 // Function: GetUserChoice
@@ -291,34 +291,36 @@ void EvaluateUserChoice(_In_ int userchoice)
 
 int GetUserChoice()
 {
-   int chr = -1;
-   int numchoices = 5;
-   PCWSTR choices[] = {
-      L"Get Cost",
-      L"Get Profile Data ",
-      L"Set Cost",
-      L"Set Profile Data",
-      L"Exit" };
-   wprintf(L"---------------------------------------------------------\n");
-   
-   for(int i=0; i<numchoices; i++)
-   {
-      wprintf(L"   %i. %s\n",i+1,choices[i]);
-   }
-   
-   wprintf(L"---------------------------------------------------------\n");
-   wprintf(L"Enter a choice (1-%i): ",numchoices);
-   wscanf_s(L"%i",&chr);
-   FlushCurrentLine();
-   if (chr > 0 && chr <= numchoices)
-   {
-      EvaluateUserChoice(chr);      
-   }
-   else
-   {
-      wprintf(L"Invalid Choice. Please enter a valid choice number\n");
-   }
-   return chr;
+    int chr = -1;
+    int numchoices = 5;
+    PCWSTR choices[] =
+    {
+        L"Get Cost",
+        L"Get Profile Data ",
+        L"Set Cost",
+        L"Set Profile Data",
+        L"Exit"
+    };
+    wprintf(L"---------------------------------------------------------\n");
+
+    for(int i=0; i<numchoices; i++)
+    {
+        wprintf(L"   %i. %s\n",i+1,choices[i]);
+    }
+
+    wprintf(L"---------------------------------------------------------\n");
+    wprintf(L"Enter a choice (1-%i): ",numchoices);
+    wscanf_s(L"%i",&chr);
+    FlushCurrentLine();
+    if (chr > 0 && chr <= numchoices)
+    {
+        EvaluateUserChoice(chr);
+    }
+    else
+    {
+        wprintf(L"Invalid Choice. Please enter a valid choice number\n");
+    }
+    return chr;
 }
 
 
@@ -332,12 +334,12 @@ int GetUserChoice()
 void __cdecl main()
 {
     int userChoice = -1;
-    
+
     //Get user choice option to play with the WCM sample SDK
     while (userChoice != CHOICE_EXIT)
     {
         userChoice = GetUserChoice();
-            
+
     }
     wprintf(L"WCM Sample SDK exited\n");
 }

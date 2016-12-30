@@ -1,13 +1,13 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // BC.cpp
-//  
+//
 // Block-compression (BC) functionality for BC1, BC2, BC3 (orginal DXTn formats)
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
-//  
+//
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // http://go.microsoft.com/fwlink/?LinkId=248926
@@ -118,8 +118,12 @@ static void OptimizeRGB(_Out_ HDRColorA *pX, _Out_ HDRColorA *pY,
     // Single color block.. no need to root-find
     if(fAB < FLT_MIN)
     {
-        pX->r = X.r; pX->g = X.g; pX->b = X.b;
-        pY->r = Y.r; pY->g = Y.g; pY->b = Y.b;
+        pX->r = X.r;
+        pX->g = X.g;
+        pX->b = X.b;
+        pY->r = Y.r;
+        pY->g = Y.g;
+        pY->b = Y.b;
         return;
     }
 
@@ -190,20 +194,28 @@ static void OptimizeRGB(_Out_ HDRColorA *pX, _Out_ HDRColorA *pY,
 
     if(iDirMax & 2)
     {
-        float f = X.g; X.g = Y.g; Y.g = f;
+        float f = X.g;
+        X.g = Y.g;
+        Y.g = f;
     }
 
     if(iDirMax & 1)
     {
-        float f = X.b; X.b = Y.b; Y.b = f;
+        float f = X.b;
+        X.b = Y.b;
+        Y.b = f;
     }
 
 
     // Two color block.. no need to root-find
     if(fAB < 1.0f / 4096.0f)
     {
-        pX->r = X.r; pX->g = X.g; pX->b = X.b;
-        pY->r = Y.r; pY->g = Y.g; pY->b = Y.b;
+        pX->r = X.r;
+        pX->g = X.g;
+        pX->b = X.b;
+        pY->r = Y.r;
+        pY->g = Y.g;
+        pY->b = Y.b;
         return;
     }
 
@@ -248,8 +260,8 @@ static void OptimizeRGB(_Out_ HDRColorA *pX, _Out_ HDRColorA *pY,
 
         for(size_t iPoint = 0; iPoint < NUM_PIXELS_PER_BLOCK; iPoint++)
         {
-            float fDot = (pPoints[iPoint].r - X.r) * Dir.r + 
-                         (pPoints[iPoint].g - X.g) * Dir.g + 
+            float fDot = (pPoints[iPoint].r - X.r) * Dir.r +
+                         (pPoints[iPoint].g - X.g) * Dir.g +
                          (pPoints[iPoint].b - X.b) * Dir.b;
 
 
@@ -307,14 +319,18 @@ static void OptimizeRGB(_Out_ HDRColorA *pX, _Out_ HDRColorA *pY,
         }
 
         if((dX.r * dX.r < fEpsilon) && (dX.g * dX.g < fEpsilon) && (dX.b * dX.b < fEpsilon) &&
-           (dY.r * dY.r < fEpsilon) && (dY.g * dY.g < fEpsilon) && (dY.b * dY.b < fEpsilon))
+                (dY.r * dY.r < fEpsilon) && (dY.g * dY.g < fEpsilon) && (dY.b * dY.b < fEpsilon))
         {
             break;
         }
     }
 
-    pX->r = X.r; pX->g = X.g; pX->b = X.b;
-    pY->r = Y.r; pY->g = Y.g; pY->b = Y.b;
+    pX->r = X.r;
+    pX->g = X.g;
+    pX->b = X.b;
+    pY->r = Y.r;
+    pY->g = Y.g;
+    pY->b = Y.b;
 }
 
 
@@ -356,12 +372,20 @@ inline static void DecodeBC1( _Out_writes_(NUM_PIXELS_PER_BLOCK) XMVECTOR *pColo
     {
         switch(dw & 3)
         {
-        case 0: pColor[i] = clr0; break;
-        case 1: pColor[i] = clr1; break;
-        case 2: pColor[i] = clr2; break;
+        case 0:
+            pColor[i] = clr0;
+            break;
+        case 1:
+            pColor[i] = clr1;
+            break;
+        case 2:
+            pColor[i] = clr2;
+            break;
 
         case 3:
-        default: pColor[i] = clr3; break;
+        default:
+            pColor[i] = clr3;
+            break;
         }
     }
 }
@@ -377,7 +401,7 @@ static void EncodeBC1(_Out_ D3DX_BC1 *pBC, _In_reads_(NUM_PIXELS_PER_BLOCK) cons
 
     // Determine if we need to colorkey this block
     size_t uSteps;
-    
+
     if (bColorKey)
     {
         size_t uColorKey = 0;
@@ -403,8 +427,8 @@ static void EncodeBC1(_Out_ D3DX_BC1 *pBC, _In_reads_(NUM_PIXELS_PER_BLOCK) cons
         uSteps = 4;
     }
 
-    // Quantize block to R56B5, using Floyd Stienberg error diffusion.  This 
-    // increases the chance that colors will map directly to the quantized 
+    // Quantize block to R56B5, using Floyd Stienberg error diffusion.  This
+    // increases the chance that colors will map directly to the quantized
     // axis endpoints.
     HDRColorA Color[NUM_PIXELS_PER_BLOCK];
     HDRColorA Error[NUM_PIXELS_PER_BLOCK];
@@ -423,7 +447,7 @@ static void EncodeBC1(_Out_ D3DX_BC1 *pBC, _In_reads_(NUM_PIXELS_PER_BLOCK) cons
         if (flags & BC_FLAGS_DITHER_RGB)
         {
             Clr.r += Error[i].r;
-            Clr.g += Error[i].g;    
+            Clr.g += Error[i].g;
             Clr.b += Error[i].b;
         }
 
@@ -806,7 +830,7 @@ void D3DXDecodeBC2(XMVECTOR *pColor, const uint8_t *pBC)
 
     for(size_t i = 0; i < 8; ++i, dw >>= 4)
     {
-        #pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
+#pragma prefast(suppress:22103, "writing blocks in two halves confuses tool")
         pColor[i] = XMVectorSetW( pColor[i], (float) (dw & 0xf) * (1.0f / 15.0f) );
     }
 
@@ -850,7 +874,7 @@ void D3DXEncodeBC2(uint8_t *pBC, const XMVECTOR *pColor, DWORD flags)
         pBC2->bitmap[i >> 3] |= (u << 28);
 
         if (flags & BC_FLAGS_DITHER_A)
-        {     
+        {
             float fDiff = fAlph - (float) u * (1.0f / 15.0f);
 
             if(3 != (i & 3))
@@ -910,12 +934,12 @@ void D3DXDecodeBC3(XMVECTOR *pColor, const uint8_t *pBC)
     fAlpha[0] = ((float) pBC3->alpha[0]) * (1.0f / 255.0f);
     fAlpha[1] = ((float) pBC3->alpha[1]) * (1.0f / 255.0f);
 
-    if(pBC3->alpha[0] > pBC3->alpha[1]) 
+    if(pBC3->alpha[0] > pBC3->alpha[1])
     {
         for(size_t i = 1; i < 7; ++i)
             fAlpha[i + 1] = (fAlpha[0] * (7 - i) + fAlpha[1] * i) * (1.0f / 7.0f);
     }
-    else 
+    else
     {
         for(size_t i = 1; i < 5; ++i)
             fAlpha[i + 1] = (fAlpha[0] * (5 - i) + fAlpha[1] * i) * (1.0f / 5.0f);
@@ -949,8 +973,8 @@ void D3DXEncodeBC3(uint8_t *pBC, const XMVECTOR *pColor, DWORD flags)
 
     auto pBC3 = reinterpret_cast<D3DX_BC3 *>(pBC);
 
-    // Quantize block to A8, using Floyd Stienberg error diffusion.  This 
-    // increases the chance that colors will map directly to the quantized 
+    // Quantize block to A8, using Floyd Stienberg error diffusion.  This
+    // increases the chance that colors will map directly to the quantized
     // axis endpoints.
     float fAlpha[NUM_PIXELS_PER_BLOCK];
     float fError[NUM_PIXELS_PER_BLOCK];
@@ -973,7 +997,7 @@ void D3DXEncodeBC3(uint8_t *pBC, const XMVECTOR *pColor, DWORD flags)
             fMinAlpha = fAlpha[i];
         else if(fAlpha[i] > fMaxAlpha)
             fMaxAlpha = fAlpha[i];
-    
+
         if (flags & BC_FLAGS_DITHER_A)
         {
             float fDiff = fAlph - fAlpha[i];

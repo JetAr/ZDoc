@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -79,15 +79,15 @@ BOOL APIENTRY DllMain( HANDLE hModule,
     UNREFERENCED_PARAMETER(lpReserved);
     switch (ul_reason_for_call)
     {
-        case DLL_PROCESS_ATTACH:
-            s_hDllInstance = (HINSTANCE) hModule;
-            break;
-        case DLL_THREAD_ATTACH:
-        case DLL_THREAD_DETACH:
-        case DLL_PROCESS_DETACH:
-            break;
-        default:
-            return FALSE;
+    case DLL_PROCESS_ATTACH:
+        s_hDllInstance = (HINSTANCE) hModule;
+        break;
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
+    default:
+        return FALSE;
     }
     return TRUE;
 }
@@ -113,7 +113,7 @@ STDAPI DllRegisterServer(void)
     RegDeleteKeyW(HKEY_LOCAL_MACHINE, MY_RECO_REGKEY);
     // Create the new key
     lRes = RegCreateKeyExW(HKEY_LOCAL_MACHINE, MY_RECO_REGKEY, 0, NULL,
-        REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkeyMyReco, &dwDisposition);
+                           REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hkeyMyReco, &dwDisposition);
     assert(lRes == ERROR_SUCCESS && "Can't write registry");
     if (lRes != ERROR_SUCCESS)
     {
@@ -124,7 +124,7 @@ STDAPI DllRegisterServer(void)
     // Get the Reco DLL's full pathname and write it to the registry
     dwLength = GetModuleFileNameW((HMODULE)s_hDllInstance, wzRecognizerPath, MAX_PATH);
     lRes = RegSetValueExW(hkeyMyReco, RECO_DLL_REGVALNAME, NULL, REG_SZ,
-        (BYTE*)wzRecognizerPath, sizeof(WCHAR)*dwLength);
+                          (BYTE*)wzRecognizerPath, sizeof(WCHAR)*dwLength);
     assert(lRes == ERROR_SUCCESS && "Can't write registry");
     if (lRes != ERROR_SUCCESS)
     {
@@ -132,7 +132,7 @@ STDAPI DllRegisterServer(void)
         return E_UNEXPECTED;
     }
 
-        // Get the Reco attributes from the DLL and write them to registry
+    // Get the Reco attributes from the DLL and write them to registry
     hr = GetRecoAttributesHelper(s_hDllInstance, &recoAttr);
     if (FAILED(hr))
     {
@@ -140,7 +140,7 @@ STDAPI DllRegisterServer(void)
         return E_UNEXPECTED;
     }
     lRes = RegSetValueExW(hkeyMyReco, RECO_LANGUAGES_REGVALNAME, 0, REG_BINARY,
-        (BYTE*)recoAttr.awLanguageId, 64 * sizeof(WORD));
+                          (BYTE*)recoAttr.awLanguageId, 64 * sizeof(WORD));
     assert(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
     {
@@ -148,7 +148,7 @@ STDAPI DllRegisterServer(void)
         return E_UNEXPECTED;
     }
     lRes = RegSetValueExW(hkeyMyReco, RECO_CAPABILITIES_REGVALNAME, 0, REG_DWORD,
-        (BYTE*)&(recoAttr.dwRecoCapabilityFlags), sizeof(DWORD));
+                          (BYTE*)&(recoAttr.dwRecoCapabilityFlags), sizeof(DWORD));
     assert(lRes == ERROR_SUCCESS);
     if (lRes != ERROR_SUCCESS)
     {
@@ -294,44 +294,44 @@ static HRESULT GetRecoAttributesHelper(HINSTANCE hDllInstance, RECO_ATTRS* pReco
 
     // Load the recognizer friendly name
     if (0 == LoadStringW(s_hDllInstance,                    // handle to resource module
-        RESID_MY_FRIENDLYNAME,                              // resource identifier
-        pRecoAttrs->awcFriendlyName,                        // resource buffer
-        ARRAYSIZE(pRecoAttrs->awcFriendlyName)              // size of buffer
-        ))
+                         RESID_MY_FRIENDLYNAME,                              // resource identifier
+                         pRecoAttrs->awcFriendlyName,                        // resource buffer
+                         ARRAYSIZE(pRecoAttrs->awcFriendlyName)              // size of buffer
+                        ))
     {
         return E_FAIL;
     }
     // Load the recognizer vendor name
     if (0 == LoadStringW(s_hDllInstance,                    // handle to resource module
-        RESID_MY_VENDORNAME,                                // resource identifier
-        pRecoAttrs->awcVendorName,                          // resource buffer
-        ARRAYSIZE(pRecoAttrs->awcVendorName)                // size of buffer
-        ))
+                         RESID_MY_VENDORNAME,                                // resource identifier
+                         pRecoAttrs->awcVendorName,                          // resource buffer
+                         ARRAYSIZE(pRecoAttrs->awcVendorName)                // size of buffer
+                        ))
     {
         return E_FAIL;
     }
 
     // Load the resources
     hrsrc = FindResource(s_hDllInstance,     // module handle
-        MAKEINTRESOURCE(RESID_MY_RECO_INFO), // resource name
-        RT_RCDATA                            // resource type
-        );
+                         MAKEINTRESOURCE(RESID_MY_RECO_INFO), // resource name
+                         RT_RCDATA                            // resource type
+                        );
     if (NULL == hrsrc)
     {
         // The resource is not found!
         return E_FAIL;
     }
     hg = LoadResource(
-        s_hDllInstance, // module handle
-        hrsrc           // resource handle
-        );
+             s_hDllInstance, // module handle
+             hrsrc           // resource handle
+         );
     if (NULL == hg)
     {
         return E_FAIL;
     }
     pv = (LPBYTE)LockResource(
-        hg   // handle to resource
-        );
+             hg   // handle to resource
+         );
     if (NULL == pv)
     {
         return E_FAIL;
@@ -547,10 +547,10 @@ static void Transform(const XFORM *pXf, POINT * aPoints, ULONG cPoints)
 }
 
 HRESULT WINAPI AddStroke(HRECOCONTEXT hrc,
-          const PACKET_DESCRIPTION *pPacketDesc,
-          ULONG cbPacket,                                       // I: Size of packet array (in BYTEs)
-          const BYTE *pPacket,                                  // I: Array of packets
-          const XFORM *pXForm)                                  // I: Transform to apply to each point
+                         const PACKET_DESCRIPTION *pPacketDesc,
+                         ULONG cbPacket,                                       // I: Size of packet array (in BYTEs)
+                         const BYTE *pPacket,                                  // I: Array of packets
+                         const XFORM *pXForm)                                  // I: Transform to apply to each point
 {
     // Add a copy of the given stroke points to the reco context.
 
@@ -624,7 +624,7 @@ HRESULT WINAPI AddStroke(HRECOCONTEXT hrc,
     if (pPacketDesc)
     {
         if (pPacketDesc->cPacketProperties < 2 ||      // Need 2+ properties
-            NULL == pPacketDesc->pPacketProperties)     // Corrupted structure
+                NULL == pPacketDesc->pPacketProperties)     // Corrupted structure
         {
             assert(0);      // This should never happen!
             return TPC_E_INVALID_PACKET_DESCRIPTION;
@@ -647,7 +647,8 @@ HRESULT WINAPI AddStroke(HRECOCONTEXT hrc,
                 break;
         }
         if (!bXFound || !bYFound)               // X- or Y-coordinates are
-        {                                       // not part of the packet!
+        {
+            // not part of the packet!
             return TPC_E_INVALID_PACKET_DESCRIPTION;
         }
     }
@@ -657,7 +658,7 @@ HRESULT WINAPI AddStroke(HRECOCONTEXT hrc,
         ulYIndex = 1;
     }
 
-        // Get ready to copy the ink points to MY_STROKE struct
+    // Get ready to copy the ink points to MY_STROKE struct
     MY_STROKE *pStroke = new MY_STROKE;
     if( !pStroke )
     {
@@ -670,7 +671,7 @@ HRESULT WINAPI AddStroke(HRECOCONTEXT hrc,
         goto OutOfMemory;
     }
 
-        // Copy the points
+    // Copy the points
     POINT *pPoint = pStroke->aPoints;
     const LONG  *pLongs = (const LONG *)pPacket;
     for( ULONG iPoint=0; iPoint<cPoints; iPoint++ )
@@ -682,17 +683,17 @@ HRESULT WINAPI AddStroke(HRECOCONTEXT hrc,
     }
     pStroke->cPoints = cPoints;
 
-        // Transform points from Tablet space to ink space
+    // Transform points from Tablet space to ink space
     Transform(pXForm, pStroke->aPoints, cPoints);
 
-        // Insert the new stroke at front of the list
+    // Insert the new stroke at front of the list
     pStroke->pNext = pRC->pStrokeList;
     pRC->pStrokeList = pStroke;
 
     pRC->cStrokes++;              // Update number of strokes
 
-        // Update number of points in all strokes.
-        // (We track this for our example. It is not essential.)
+    // Update number of points in all strokes.
+    // (We track this for our example. It is not essential.)
     pRC->cPointsTot += cPoints;
 
     return S_OK;
@@ -760,7 +761,7 @@ HRESULT WINAPI SetGuide(HRECOCONTEXT hrc, const RECO_GUIDE* pGuide, ULONG iIndex
     if( pGuide )  // pGuide not NULL means lined or boxed mode
     {
         if ((pGuide->cHorzBox < 0 || pGuide->cVertBox < 0) ||    // invalid
-            (pGuide->cHorzBox > 0 && pGuide->cVertBox == 0))     // vertical lined mode
+                (pGuide->cHorzBox > 0 && pGuide->cVertBox == 0))     // vertical lined mode
         {
             return E_INVALIDARG;
         }
@@ -834,13 +835,15 @@ HRESULT WINAPI ResetContext(HRECOCONTEXT hrc)
         return E_POINTER;
     }
     MY_RECOCONTEXT *pRC = (MY_RECOCONTEXT*) hrc;
-    DestroyStrokeList( pRC->pStrokeList ); pRC->pStrokeList = NULL;
+    DestroyStrokeList( pRC->pStrokeList );
+    pRC->pStrokeList = NULL;
     pRC->cStrokes = 0;
     pRC->cPointsTot = 0;
     pRC->wzBestResult[0] = 0;
     if( pRC->pLattice )
     {
-        DestroyLattice( pRC->pLattice ); pRC->pLattice = NULL;
+        DestroyLattice( pRC->pLattice );
+        pRC->pLattice = NULL;
     }
     return S_OK;
 }
@@ -874,15 +877,15 @@ HRESULT WINAPI Process(HRECOCONTEXT hrc, BOOL *pbPartialProcessing)
     }
 
     HRESULT hr = StringCchPrintfW( pRC->wzBestResult, ARRAYSIZE(pRC->wzBestResult), L"Strokes=%d  Points=%d",
-        pRC->cStrokes, pRC->cPointsTot );
+                                   pRC->cStrokes, pRC->cPointsTot );
     if( FAILED(hr) )
     {
         iRet = E_FAIL;
         goto Exit;
     }
 
-        // Find number of rows and columns in guide.
-        // Determine if lined mode.
+    // Find number of rows and columns in guide.
+    // Determine if lined mode.
     ULONG cRow = 0;
     ULONG cCol = 0;
     bool bIsLined = false;
@@ -905,12 +908,12 @@ HRESULT WINAPI Process(HRECOCONTEXT hrc, BOOL *pbPartialProcessing)
         goto Exit;
     }
 
-        // At this point we are in either lined mode or boxed mode but
-        // not free mode. The remainder of this routine enumerates the
-        // lines or boxes containing ink.
+    // At this point we are in either lined mode or boxed mode but
+    // not free mode. The remainder of this routine enumerates the
+    // lines or boxes containing ink.
 
-        // Allocate 2D array of booleans to keep track of which boxes contain ink points.
-        // For lined mode, the array has a single column.
+    // Allocate 2D array of booleans to keep track of which boxes contain ink points.
+    // For lined mode, the array has a single column.
     if( ULONG_MAX / cRow < cCol )
     {
         assert(0 && "Overflow");
@@ -925,9 +928,9 @@ HRESULT WINAPI Process(HRECOCONTEXT hrc, BOOL *pbPartialProcessing)
     }
     ZeroMemory( abIsBoxDirty, cRow*cCol*sizeof(BYTE) );
 
-        // Scan through the ink to mark boxes containing ink points
+    // Scan through the ink to mark boxes containing ink points
     MY_STROKE *pStroke = pRC->pStrokeList;
-    for( ;pStroke; pStroke = pStroke->pNext )
+    for( ; pStroke; pStroke = pStroke->pNext )
     {
         POINT *pPoint = pStroke->aPoints;
         for( ULONG iPoint=0; iPoint < pStroke->cPoints; iPoint++, pPoint++ )
@@ -944,20 +947,20 @@ HRESULT WINAPI Process(HRECOCONTEXT hrc, BOOL *pbPartialProcessing)
         }
     }
 
-        // Prepare to concatenate line/box numbers to the result
+    // Prepare to concatenate line/box numbers to the result
     hr = StringCchCatW(
-        pRC->wzBestResult,
-        ARRAYSIZE(pRC->wzBestResult),
-        bIsLined ? L"  Lines used=" : L"  Boxes used=" );
+             pRC->wzBestResult,
+             ARRAYSIZE(pRC->wzBestResult),
+             bIsLined ? L"  Lines used=" : L"  Boxes used=" );
     if( FAILED(hr) )
     {
         iRet = E_FAIL;
         goto Exit;
     }
 
-        // Concatenate the numbers iteratively to the end of the result string.
-        // For simplicity, we opt for a less efficient implementation which
-        // scans for the end of the result string for each concatenation.
+    // Concatenate the numbers iteratively to the end of the result string.
+    // For simplicity, we opt for a less efficient implementation which
+    // scans for the end of the result string for each concatenation.
 
     bool bIsTruncated = false;  // true if result string runs out of space
     for( ULONG iRow=0; iRow < cRow && !bIsTruncated; iRow++ )
@@ -966,7 +969,7 @@ HRESULT WINAPI Process(HRECOCONTEXT hrc, BOOL *pbPartialProcessing)
         {
             if( abIsBoxDirty[iRow*cCol + iCol] )
             {
-                    // Get the next item to concatenate
+                // Get the next item to concatenate
                 WCHAR wzTmp[20];
                 if( bIsLined )
                 {
@@ -986,17 +989,17 @@ HRESULT WINAPI Process(HRECOCONTEXT hrc, BOOL *pbPartialProcessing)
                         goto Exit;
                     }
                 }
-                    // Concatenate the item to the end of the result
+                // Concatenate the item to the end of the result
                 hr = StringCchCatW( pRC->wzBestResult, ARRAYSIZE(pRC->wzBestResult), wzTmp );
                 if( FAILED(hr) )
                 {
-                        // overwrite tail of wzBestResult with "<truncated>"
+                    // overwrite tail of wzBestResult with "<truncated>"
                     const WCHAR wzTrunc[] = L"<truncated>";
                     const size_t len = ARRAYSIZE(wzTrunc);
                     hr = StringCchCopyW(
-                        pRC->wzBestResult+ARRAYSIZE(pRC->wzBestResult)-len,
-                        len,
-                        wzTrunc);
+                             pRC->wzBestResult+ARRAYSIZE(pRC->wzBestResult)-len,
+                             len,
+                             wzTrunc);
                     if( FAILED(hr) )
                     {
                         iRet = E_FAIL;
@@ -1085,10 +1088,11 @@ HRESULT WINAPI GetLatticePtr(HRECOCONTEXT hrc, RECO_LATTICE **ppLattice)
 
     if( pRC->pLattice ) // free existing lattice data
     {
-        DestroyLattice( pRC->pLattice ); pRC->pLattice = NULL;
+        DestroyLattice( pRC->pLattice );
+        pRC->pLattice = NULL;
     }
 
-        // RECO_LATTICE initialization
+    // RECO_LATTICE initialization
     RECO_LATTICE *pLattice = pRC->pLattice = new RECO_LATTICE;
     if( !pLattice )
     {
@@ -1118,13 +1122,13 @@ HRESULT WINAPI GetLatticePtr(HRECOCONTEXT hrc, RECO_LATTICE **ppLattice)
     }
     pLattice->pulBestResultIndexes[0] = 0;
 
-        // RECO_LATTICE_COLUMN initialization
-        // We have just one Lattice Column to initialize
+    // RECO_LATTICE_COLUMN initialization
+    // We have just one Lattice Column to initialize
     RECO_LATTICE_COLUMN *pLatticeColumn = pLattice->pLatticeColumns;
     pLatticeColumn->key = 0;
     pLatticeColumn->cpProp.cProperties = 0;
     pLatticeColumn->cpProp.apProps = NULL;
-        // fake the stroke mapping:
+    // fake the stroke mapping:
     pLatticeColumn->cStrokes = pRC->cStrokes;
     pLatticeColumn->pStrokes = new ULONG[pRC->cStrokes];
     if( !pLatticeColumn->pStrokes )
@@ -1142,8 +1146,8 @@ HRESULT WINAPI GetLatticePtr(HRECOCONTEXT hrc, RECO_LATTICE **ppLattice)
         goto OutOfMemory;
     }
 
-        // RECO_LATTICE_ELEMENT initialization
-        // We have just one Column Element to initialize
+    // RECO_LATTICE_ELEMENT initialization
+    // We have just one Column Element to initialize
     RECO_LATTICE_ELEMENT *pLatticeElement = pLatticeColumn->pLatticeElements;
     pLatticeElement->score = 0;
     pLatticeElement->type = RECO_TYPE_WSTRING;
@@ -1156,7 +1160,7 @@ HRESULT WINAPI GetLatticePtr(HRECOCONTEXT hrc, RECO_LATTICE **ppLattice)
     *ppLattice = pLattice;
     return S_OK;
 
-    OutOfMemory:
+OutOfMemory:
     if( pLattice->pLatticeColumns )
     {
         if( pLattice->pLatticeColumns->pStrokes )

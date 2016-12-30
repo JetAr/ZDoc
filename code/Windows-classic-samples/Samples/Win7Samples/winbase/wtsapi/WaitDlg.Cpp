@@ -1,4 +1,4 @@
-// WaitDlg.cpp : implementation file
+﻿// WaitDlg.cpp : implementation file
 //  Copyright 1995-1999, Citrix Systems Inc.
 //  Copyright (c) 1997 - 2000  Microsoft Corporation
 //
@@ -20,26 +20,26 @@ static char THIS_FILE[] = __FILE__;
 
 
 CWaitDlg::CWaitDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CWaitDlg::IDD, pParent)
+    : CDialog(CWaitDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CWaitDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+    //{{AFX_DATA_INIT(CWaitDlg)
+    // NOTE: the ClassWizard will add member initialization here
+    //}}AFX_DATA_INIT
 }
 
 
 void CWaitDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWaitDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+    CDialog::DoDataExchange(pDX);
+    //{{AFX_DATA_MAP(CWaitDlg)
+    // NOTE: the ClassWizard will add DDX and DDV calls here
+    //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(CWaitDlg, CDialog)
-	//{{AFX_MSG_MAP(CWaitDlg)
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CWaitDlg)
+    //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

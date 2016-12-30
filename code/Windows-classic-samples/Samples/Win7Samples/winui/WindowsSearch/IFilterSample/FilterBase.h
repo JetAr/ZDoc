@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -369,7 +369,10 @@ public:
 
 protected:
     // Service functions for derived classes
-    inline DWORD GetChunkId() const { return m_dwChunkId; }
+    inline DWORD GetChunkId() const
+    {
+        return m_dwChunkId;
+    }
 
 public:
     CFilterBase() : m_dwChunkId(0), m_iText(0), m_pStream(NULL)

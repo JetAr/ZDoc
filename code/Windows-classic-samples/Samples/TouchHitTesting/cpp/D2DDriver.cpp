@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -63,69 +63,69 @@ HRESULT CD2DDriver::CreateDeviceResources()
         {
             // Create white brush
             hr = _pRenderTarget->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::White),
-                &_pWhiteBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::White),
+                     &_pWhiteBrush
+                 );
         }
 
         if (SUCCEEDED(hr))
         {
             // Create Blue gradient brush
             hr = _CreateGradient(&_pBLBrush,
-                D2D1::ColorF::Aqua,
-                1.0f,
-                1.0f,
-                D2D1::ColorF::DarkBlue,
-                1.0f,
-                0.0f);
+                                 D2D1::ColorF::Aqua,
+                                 1.0f,
+                                 1.0f,
+                                 D2D1::ColorF::DarkBlue,
+                                 1.0f,
+                                 0.0f);
         }
 
         if (SUCCEEDED(hr))
         {
             // Create Orange gradient brush
             _CreateGradient(&_pORBrush,
-                D2D1::ColorF::Yellow,
-                1.0f,
-                1.0f,
-                D2D1::ColorF::OrangeRed,
-                1.0f,
-                0.0f);
+                            D2D1::ColorF::Yellow,
+                            1.0f,
+                            1.0f,
+                            D2D1::ColorF::OrangeRed,
+                            1.0f,
+                            0.0f);
         }
 
         if (SUCCEEDED(hr))
         {
             // Create bg gradient brush
             hr = _CreateGradient(&_pBGBrush,
-                D2D1::ColorF::LightSlateGray,
-                1.0f,
-                1.0f,
-                D2D1::ColorF::Black,
-                1.0f,
-                0.0f);
+                                 D2D1::ColorF::LightSlateGray,
+                                 1.0f,
+                                 1.0f,
+                                 D2D1::ColorF::Black,
+                                 1.0f,
+                                 0.0f);
         }
 
         if (SUCCEEDED(hr))
         {
             // Create dim gray gradient brush
             hr = _CreateGradient(&_pDGBrush,
-                D2D1::ColorF::DimGray,
-                1.0f,
-                1.0f,
-                D2D1::ColorF::Black,
-                1.0f,
-                0.0f);
+                                 D2D1::ColorF::DimGray,
+                                 1.0f,
+                                 1.0f,
+                                 D2D1::ColorF::Black,
+                                 1.0f,
+                                 0.0f);
         }
 
         if (SUCCEEDED(hr))
         {
             // Create dark gray gradient brush
             hr = _CreateGradient(&_pDKGBrush,
-                D2D1::ColorF::DarkGray,
-                1.0f,
-                1.0f,
-                D2D1::ColorF::Gray,
-                1.0f,
-                0.0f);
+                                 D2D1::ColorF::DarkGray,
+                                 1.0f,
+                                 1.0f,
+                                 D2D1::ColorF::Gray,
+                                 1.0f,
+                                 0.0f);
         }
 
         if (SUCCEEDED(hr))
@@ -136,24 +136,24 @@ HRESULT CD2DDriver::CreateDeviceResources()
 
             // Create a DirectWrite factory.
             hr = DWriteCreateFactory(
-                DWRITE_FACTORY_TYPE_SHARED,
-                __uuidof(_pDWriteFactory),
-                reinterpret_cast<IUnknown **>(&_pDWriteFactory)
-                );
+                     DWRITE_FACTORY_TYPE_SHARED,
+                     __uuidof(_pDWriteFactory),
+                     reinterpret_cast<IUnknown **>(&_pDWriteFactory)
+                 );
 
             if (SUCCEEDED(hr))
             {
                 // Create a DirectWrite text format object.
                 hr = _pDWriteFactory->CreateTextFormat(
-                    mscFontName,
-                    nullptr,
-                    DWRITE_FONT_WEIGHT_NORMAL,
-                    DWRITE_FONT_STYLE_NORMAL,
-                    DWRITE_FONT_STRETCH_NORMAL,
-                    mscFontSize,
-                    L"", //locale
-                    &_pTextFormat
-                    );
+                         mscFontName,
+                         nullptr,
+                         DWRITE_FONT_WEIGHT_NORMAL,
+                         DWRITE_FONT_STYLE_NORMAL,
+                         DWRITE_FONT_STRETCH_NORMAL,
+                         mscFontSize,
+                         L"", //locale
+                         &_pTextFormat
+                     );
             }
 
             if (SUCCEEDED(hr))
@@ -197,19 +197,19 @@ HRESULT CD2DDriver::RenderBackground(_In_ float clientWidth, _In_ float clientHe
 
         // Apply rotate transform
         rotateMatrix = D2D1::Matrix3x2F::Rotation(static_cast<float>(randomAngle),
-        D2D1::Point2F(static_cast<float>(randomPositionX + randomDimension/2),
-                static_cast<float>(randomPositionY + randomDimension/2)
-            )
-        );
+                       D2D1::Point2F(static_cast<float>(randomPositionX + randomDimension/2),
+                                     static_cast<float>(randomPositionY + randomDimension/2)
+                                    )
+                                                 );
 
         _pRenderTarget->SetTransform(&rotateMatrix);
 
         square = D2D1::RectF(
-            static_cast<float>(randomPositionX),
-            static_cast<float>(randomPositionY),
-            static_cast<float>(randomDimension),
-            static_cast<float>(randomDimension)
-        );
+                     static_cast<float>(randomPositionX),
+                     static_cast<float>(randomPositionY),
+                     static_cast<float>(randomDimension),
+                     static_cast<float>(randomDimension)
+                 );
 
         roundedSquare = D2D1::RoundedRect(square, 10.0f, 10.0f);
         _pRenderTarget->FillRoundedRectangle(&roundedSquare, _pWhiteBrush);
@@ -243,7 +243,7 @@ HRESULT CD2DDriver::CreateRenderTarget()
 
     // Create a Direct2D render target
     hr = _pD2DFactory->CreateHwndRenderTarget(D2D1::RenderTargetProperties(),
-        D2D1::HwndRenderTargetProperties(_hWnd, size), &_pRenderTarget);
+            D2D1::HwndRenderTargetProperties(_hWnd, size), &_pRenderTarget);
     _pRenderTarget->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 
     return hr;
@@ -287,12 +287,12 @@ HRESULT CD2DDriver::_CreateGradient(
     if(SUCCEEDED(hr))
     {
         hr = _pRenderTarget->CreateLinearGradientBrush(
-            D2D1::LinearGradientBrushProperties(
-            D2D1::Point2F(0.0f, 0.0f),
-            D2D1::Point2F(0.0f, 0.0f)),
-            D2D1::BrushProperties(),
-            pStops,
-            pplgBrush);
+                 D2D1::LinearGradientBrushProperties(
+                     D2D1::Point2F(0.0f, 0.0f),
+                     D2D1::Point2F(0.0f, 0.0f)),
+                 D2D1::BrushProperties(),
+                 pStops,
+                 pplgBrush);
     }
 
     return hr;
@@ -316,20 +316,20 @@ ID2D1LinearGradientBrush *CD2DDriver::GetBrush(_In_ DrawingColor color)
     // get the brush from the D2DDriver class.
     switch (color)
     {
-        case Blue:
-            brush = _pBLBrush;
-            break;
-        case Orange:
-            brush = _pORBrush;
-            break;
-        case DimGray:
-            brush = _pDGBrush;
-            break;
-        case DarkGray:
-            brush = _pDKGBrush;
-            break;
-        default:
-            brush = _pDGBrush;
+    case Blue:
+        brush = _pBLBrush;
+        break;
+    case Orange:
+        brush = _pORBrush;
+        break;
+    case DimGray:
+        brush = _pDGBrush;
+        break;
+    case DarkGray:
+        brush = _pDKGBrush;
+        break;
+    default:
+        brush = _pDGBrush;
     }
 
     return brush;

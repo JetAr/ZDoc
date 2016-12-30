@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
@@ -10,7 +10,7 @@ Module Name:
 
 Abstract:
 
-    Declaration for the AVIFileReader class. 
+    Declaration for the AVIFileReader class.
 
 */
 
@@ -22,12 +22,12 @@ Abstract:
 // an abstraction for a media file open for reading
 //
 
-class CAVIFileReader  
+class CAVIFileReader
 {
 
 public:
 
-    
+
     //
     // open stream
     //
@@ -46,26 +46,26 @@ public:
     // close stream
     //
 
-	virtual ~CAVIFileReader();
+    virtual ~CAVIFileReader();
 
-    
+
     //
     // read stream data into buffer
     //
 
     HRESULT Read(BYTE *pBuffer, LONG nBufferSize, LONG *pBytesWritten);
 
-    
+
     //
-    // returns waveformat for the open file. the caller must free 
+    // returns waveformat for the open file. the caller must free
     // returned memory
     //
-    
+
     HRESULT GetFormat(WAVEFORMATEX **ppWaveFormat);
 
 
     //
-    // return TRUE if the file was opened and is a valid wave file containing 
+    // return TRUE if the file was opened and is a valid wave file containing
     // an audio stream
     //
 
@@ -89,14 +89,14 @@ public:
 
 private:
 
-    
+
     //
     // audio stream
     //
-    
+
     PAVISTREAM  m_pAudioStream;
 
-    
+
     //
     // format of the audio stream
     //

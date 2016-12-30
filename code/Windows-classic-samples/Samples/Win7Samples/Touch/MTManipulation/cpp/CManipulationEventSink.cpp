@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -24,10 +24,10 @@
 // in:
 //      pcDrawingObject - pointer to the CDrawingObject class (the rectangle)
 CManipulationEventSink::CManipulationEventSink(CDrawingObject* pcDrawingObject)
-:   m_cRefCount(1),
-    m_pConnection(NULL),
-    m_dwCookie(0),
-    m_pcDrawingObject(pcDrawingObject)
+    :   m_cRefCount(1),
+        m_pConnection(NULL),
+        m_dwCookie(0),
+        m_pcDrawingObject(pcDrawingObject)
 {
     ASSERT((pcDrawingObject != NULL) && L"CManipulationEventSink constructor: incorrect argument");
 }
@@ -74,8 +74,8 @@ bool CManipulationEventSink::Connect(IManipulationProcessor* pManipulationProces
     // Release the connection container.
     pConnectionContainer->Release();
 
-    // Advise. Establishes an advisory connection between the connection point and the 
-    // caller's sink object. 
+    // Advise. Establishes an advisory connection between the connection point and the
+    // caller's sink object.
     hr = m_pConnection->Advise(this, &m_dwCookie);
     if (FAILED(hr))
     {
@@ -120,12 +120,12 @@ CManipulationEventSink::~CManipulationEventSink()
 
 // IManipulationEvents implementation
 
-// This event is called by the ManipulationProcessor when manipulation 
+// This event is called by the ManipulationProcessor when manipulation
 // is detected (starts). Not used by this application.
 // in:
-//     x - x coordiante of the initial point of manipulation 
+//     x - x coordiante of the initial point of manipulation
 //         (1/100 of pixel)
-//     y - y coordiante of the initial point of manipulation 
+//     y - y coordiante of the initial point of manipulation
 //         (1/100 of pixel)
 HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationStarted(
     FLOAT /* x */,
@@ -134,12 +134,12 @@ HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationStarted(
     return S_OK;
 }
 
-// This event is called by the ManipulationProcessor during the movement of 
+// This event is called by the ManipulationProcessor during the movement of
 // the fingers.
 // in:
-//                      x - x coordiante of the initial point of manipulation 
+//                      x - x coordiante of the initial point of manipulation
 //                          (1/100 of pixel)
-//                      y - y coordiante of the initial point of manipulation 
+//                      y - y coordiante of the initial point of manipulation
 //                          (1/100 of pixel)
 //      translationDeltaX - shift of the x-coordinate (1/100 of pixel)
 //      translationDeltaY - shift of the y-coordinate (1/100 of pixel)
@@ -170,12 +170,12 @@ HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationDelta(
     return S_OK;
 }
 
-// This event is called by the ManipulationProcessor when manipulation is 
-// completed. Not used by this application. 
+// This event is called by the ManipulationProcessor when manipulation is
+// completed. Not used by this application.
 // in:
-//                      x - x coordinate of the initial point of manipulation 
+//                      x - x coordinate of the initial point of manipulation
 //                          (1/100 of pixel)
-//                      y - y coordinate of the initial point of manipulation 
+//                      y - y coordinate of the initial point of manipulation
 //                          (1/100 of pixel)
 // cumulativeTranslationX - cumulative shift of x-coordinate (1/100 of pixel)
 // cumulativeTranslationY - cumulative shift of y-coordinate (1/100 of pixel)
@@ -196,23 +196,23 @@ HRESULT STDMETHODCALLTYPE CManipulationEventSink::ManipulationCompleted(
 
 // IUnknown implementation
 
-// The IUnknown interface lets clients get pointers to other interfaces on a 
+// The IUnknown interface lets clients get pointers to other interfaces on a
 // given object through the QueryInterface method, and manage the existence of
-// the object through the IUnknown::AddRef and IUnknown::Release methods. All 
-// other COM interfaces are inherited, directly or indirectly, from IUnknown. 
-// Therefore, the three methods in IUnknown are the first entries in the VTable 
-// for every interface. 
+// the object through the IUnknown::AddRef and IUnknown::Release methods. All
+// other COM interfaces are inherited, directly or indirectly, from IUnknown.
+// Therefore, the three methods in IUnknown are the first entries in the VTable
+// for every interface.
 
-// The IUnknown::AddRef method increments the reference count for an interface 
-// on an object. It should be called for every new copy of a pointer to an 
-// interface on a given object. 
+// The IUnknown::AddRef method increments the reference count for an interface
+// on an object. It should be called for every new copy of a pointer to an
+// interface on a given object.
 ULONG CManipulationEventSink::AddRef(void)
 {
     return InterlockedIncrement(&m_cRefCount);
 }
 
-// Decrements the reference count for the calling interface on a object. 
-// If the reference count on the object falls to 0, the object is freed 
+// Decrements the reference count for the calling interface on a object.
+// If the reference count on the object falls to 0, the object is freed
 // from memory.
 ULONG CManipulationEventSink::Release(void)
 {
@@ -224,15 +224,15 @@ ULONG CManipulationEventSink::Release(void)
     return cNewRefCount;
 }
 
-// Returns a pointer to a specified interface on an object to which a client 
-// currently holds an interface pointer. This function must call IUnknown::AddRef 
-// on the pointer it returns. 
-// in: 
+// Returns a pointer to a specified interface on an object to which a client
+// currently holds an interface pointer. This function must call IUnknown::AddRef
+// on the pointer it returns.
+// in:
 //    riid - Identifier of the interface being requested.
 // out:
-//  ppvObj - Address of pointer variable that receives the interface pointer 
-//           requested in riid. Upon successful return, *ppvObject contains the 
-//           requested interface pointer to the object. If the object does not 
+//  ppvObj - Address of pointer variable that receives the interface pointer
+//           requested in riid. Upon successful return, *ppvObject contains the
+//           requested interface pointer to the object. If the object does not
 //           support the interface specified in iid, *ppvObject is set to NULL.
 HRESULT CManipulationEventSink::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {

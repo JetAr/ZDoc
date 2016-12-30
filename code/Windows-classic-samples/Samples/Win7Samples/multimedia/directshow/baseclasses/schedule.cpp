@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Schedule.cpp
 //
 // Desc: DirectShow base classes.
@@ -18,11 +18,11 @@
 /* Construct & destructors */
 
 CAMSchedule::CAMSchedule( HANDLE ev )
-: CBaseObject(TEXT("CAMSchedule"))
-, head(&z, 0), z(0, MAX_TIME)
-, m_dwNextCookie(0), m_dwAdviseCount(0)
-, m_pAdviseCache(0), m_dwCacheCount(0)
-, m_ev( ev )
+    : CBaseObject(TEXT("CAMSchedule"))
+    , head(&z, 0), z(0, MAX_TIME)
+    , m_dwNextCookie(0), m_dwAdviseCount(0)
+    , m_pAdviseCache(0), m_dwCacheCount(0)
+    , m_ev( ev )
 {
     head.m_dwAdviseCookie = z.m_dwAdviseCookie = 0;
 }
@@ -76,8 +76,8 @@ REFERENCE_TIME CAMSchedule::GetNextAdviseTime()
 
 DWORD_PTR CAMSchedule::AddAdvisePacket
 ( const REFERENCE_TIME & time1
-, const REFERENCE_TIME & time2
-, HANDLE h, BOOL periodic
+  , const REFERENCE_TIME & time2
+  , HANDLE h, BOOL periodic
 )
 {
     // Since we use MAX_TIME as a sentry, we can't afford to
@@ -100,8 +100,10 @@ DWORD_PTR CAMSchedule::AddAdvisePacket
     }
     if (p)
     {
-        p->m_rtEventTime = time1; p->m_rtPeriod = time2;
-        p->m_hNotify = h; p->m_bPeriodic = periodic;
+        p->m_rtEventTime = time1;
+        p->m_rtPeriod = time2;
+        p->m_hNotify = h;
+        p->m_bPeriodic = periodic;
         Result = AddAdvisePacket( p );
     }
     else Result = 0;
@@ -124,14 +126,14 @@ HRESULT CAMSchedule::Unadvise(DWORD_PTR dwAdviseCookie)
             Delete( p_prev->RemoveNext() );
             --m_dwAdviseCount;
             hr = S_OK;
-	    // Having found one cookie that matches, there should be no more
-            #ifdef DEBUG
-	       while (p_n = p_prev->Next())
-               {
-                   ASSERT(p_n->m_dwAdviseCookie != dwAdviseCookie);
-                   p_prev = p_n;
-               }
-            #endif
+            // Having found one cookie that matches, there should be no more
+#ifdef DEBUG
+            while (p_n = p_prev->Next())
+            {
+                ASSERT(p_n->m_dwAdviseCookie != dwAdviseCookie);
+                p_prev = p_n;
+            }
+#endif
             break;
         }
         p_prev = p_n;
@@ -146,15 +148,15 @@ REFERENCE_TIME CAMSchedule::Advise( const REFERENCE_TIME & rtTime )
     CAdvisePacket * pAdvise;
 
     DbgLog((LOG_TIMING, 2,
-        TEXT("CAMSchedule::Advise( %lu ms )"), ULONG(rtTime / (UNITS / MILLISECONDS))));
+            TEXT("CAMSchedule::Advise( %lu ms )"), ULONG(rtTime / (UNITS / MILLISECONDS))));
 
     CAutoLock lck(&m_Serialize);
 
-    #ifdef DEBUG
-        if (DbgCheckModuleLevel(LOG_TIMING, 4)) DumpLinkedList();
-    #endif
+#ifdef DEBUG
+    if (DbgCheckModuleLevel(LOG_TIMING, 4)) DumpLinkedList();
+#endif
 
-    //  Note - DON'T cache the difference, it might overflow 
+    //  Note - DON'T cache the difference, it might overflow
     while ( rtTime >= (rtNextTime = (pAdvise=head.m_next)->m_rtEventTime) &&
             !pAdvise->IsZ() )
     {
@@ -197,7 +199,7 @@ DWORD_PTR CAMSchedule::AddAdvisePacket( __inout CAdvisePacket * pPacket )
 
     const DWORD_PTR Result = pPacket->m_dwAdviseCookie = ++m_dwNextCookie;
     // This relies on the fact that z is a sentry with a maximal m_rtEventTime
-    for(;;p_prev = p_n)
+    for(;; p_prev = p_n)
     {
         p_n = p_prev->m_next;
         if ( p_n->m_rtEventTime >= pPacket->m_rtEventTime ) break;
@@ -206,7 +208,7 @@ DWORD_PTR CAMSchedule::AddAdvisePacket( __inout CAdvisePacket * pPacket )
     ++m_dwAdviseCount;
 
     DbgLog((LOG_TIMING, 2, TEXT("Added advise %lu, for thread 0x%02X, scheduled at %lu"),
-    	pPacket->m_dwAdviseCookie, GetCurrentThreadId(), (pPacket->m_rtEventTime / (UNITS / MILLISECONDS)) ));
+            pPacket->m_dwAdviseCookie, GetCurrentThreadId(), (pPacket->m_rtEventTime / (UNITS / MILLISECONDS)) ));
 
     // If packet added at the head, then clock needs to re-evaluate wait time.
     if ( p_prev == &head ) SetEvent( m_ev );
@@ -243,7 +245,7 @@ void CAMSchedule::ShuntHead()
     ASSERT( pPacket->m_rtEventTime < MAX_TIME );
 
     // This relies on the fact that z is a sentry with a maximal m_rtEventTime
-    for(;;p_prev = p_n)
+    for(;; p_prev = p_n)
     {
         p_n = p_prev->m_next;
         if ( p_n->m_rtEventTime > pPacket->m_rtEventTime ) break;
@@ -254,10 +256,10 @@ void CAMSchedule::ShuntHead()
         head.m_next = pPacket->m_next;
         (p_prev->m_next = pPacket)->m_next = p_n;
     }
-    #ifdef DEBUG
-        DbgLog((LOG_TIMING, 2, TEXT("Periodic advise %lu, shunted to %lu"),
-    	    pPacket->m_dwAdviseCookie, (pPacket->m_rtEventTime / (UNITS / MILLISECONDS)) ));
-    #endif
+#ifdef DEBUG
+    DbgLog((LOG_TIMING, 2, TEXT("Periodic advise %lu, shunted to %lu"),
+            pPacket->m_dwAdviseCookie, (pPacket->m_rtEventTime / (UNITS / MILLISECONDS)) ));
+#endif
     m_Serialize.Unlock();
 }
 
@@ -269,15 +271,15 @@ void CAMSchedule::DumpLinkedList()
     int i=0;
     DbgLog((LOG_TIMING, 1, TEXT("CAMSchedule::DumpLinkedList() this = 0x%p"), this));
     for ( CAdvisePacket * p = &head
-        ; p
-        ; p = p->m_next         , i++
-        )	
+                              ; p
+            ; p = p->m_next, i++
+        )
     {
         DbgLog((LOG_TIMING, 1, TEXT("Advise List # %lu, Cookie %d,  RefTime %lu"),
-            i,
-	    p->m_dwAdviseCookie,
-	    p->m_rtEventTime / (UNITS / MILLISECONDS)
-            ));
+                i,
+                p->m_dwAdviseCookie,
+                p->m_rtEventTime / (UNITS / MILLISECONDS)
+               ));
     }
     m_Serialize.Unlock();
 }

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -33,7 +33,7 @@ SampleMergeVirtualDisk(
     // Specify UNKNOWN for both device and vendor so the system will use the
     // file extension to determine the correct VHD format.
     //
-    
+
     storageType.DeviceId = VIRTUAL_STORAGE_TYPE_DEVICE_UNKNOWN;
     storageType.VendorId = VIRTUAL_STORAGE_TYPE_VENDOR_UNKNOWN;
 
@@ -46,14 +46,14 @@ SampleMergeVirtualDisk(
 
     memset(&openParameters, 0, sizeof(openParameters));
     openParameters.Version = OPEN_VIRTUAL_DISK_VERSION_2;
-    
+
     opStatus = OpenVirtualDisk(
-        &storageType,
-        LeafPath,
-        VIRTUAL_DISK_ACCESS_NONE,
-        OPEN_VIRTUAL_DISK_FLAG_NONE,
-        &openParameters,
-        &vhdHandle);
+                   &storageType,
+                   LeafPath,
+                   VIRTUAL_DISK_ACCESS_NONE,
+                   OPEN_VIRTUAL_DISK_FLAG_NONE,
+                   &openParameters,
+                   &vhdHandle);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -80,10 +80,10 @@ SampleMergeVirtualDisk(
     mergeParameters.Version2.MergeTargetDepth = 2;
 
     opStatus = MergeVirtualDisk(
-        vhdHandle,
-        MERGE_VIRTUAL_DISK_FLAG_NONE,
-        &mergeParameters,
-        NULL);
+                   vhdHandle,
+                   MERGE_VIRTUAL_DISK_FLAG_NONE,
+                   &mergeParameters,
+                   NULL);
 
     if (opStatus != ERROR_SUCCESS)
     {
@@ -100,11 +100,11 @@ Cleanup:
     {
         wprintf(L"error = %u\n", opStatus);
     }
-    
+
     if (vhdHandle != INVALID_HANDLE_VALUE)
     {
         CloseHandle(vhdHandle);
     }
 
     return opStatus;
- }
+}

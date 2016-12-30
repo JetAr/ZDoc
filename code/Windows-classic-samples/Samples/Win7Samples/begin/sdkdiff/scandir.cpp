@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -69,7 +69,8 @@ extern BOOL bTrace;  /* in sdkdiff.cpp.  Read only here */
  * hold name and information about a given file (one ITEM in a DIRectory)
  * caller's DIRITEM handle is a pointer to one of these structures
  */
-struct diritem {
+struct diritem
+{
     LPSTR name;             /* ptr to filename (final element only) */
     long size;              /* filesize */
     DWORD checksum;         /* checksum of file */
@@ -88,7 +89,8 @@ struct diritem {
 
 /* DIRECT: hold state about directory and current position in list of filenames.
  */
-typedef struct direct {
+typedef struct direct
+{
     LPSTR relname;          /* name of dir relative to DIRLIST root */
     DIRLIST head;           /* back ptr (to get fullname and server) */
     struct direct * parent; /* parent directory (NULL if above tree root)*/
@@ -111,7 +113,8 @@ typedef struct direct {
  * a pointer to one of these. Although this is not built from a LIST object,
  * it behaves like a list to the caller.
  */
-struct dirlist {
+struct dirlist
+{
 
     char rootname[MAX_PATH];        /* name of root of tree */
     BOOL bFile;             /* TRUE if root of tree is file, not dir */
@@ -167,10 +170,10 @@ DIRITEM dir_findnextfile(DIRLIST dl, DIRECT curdir);
 
 DIRLIST
 dir_buildlist(
-              LPSTR path,
-              BOOL bSum,
-              BOOL bOnDemand
-              )
+    LPSTR path,
+    BOOL bSum,
+    BOOL bOnDemand
+)
 {
     DIRLIST dlOut = 0;
     DIRLIST dl = 0;
@@ -179,7 +182,7 @@ dir_buildlist(
     LPSTR pstr;
     LPSTR pPat = NULL;
     LPSTR pTag = NULL;
-	HRESULT hr;
+    HRESULT hr;
 
     /*
      * copy the path so we can modify it
@@ -196,12 +199,13 @@ dir_buildlist(
         pstr = dir_finalelem(tmppath);
         pPat = (char*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, lstrlen(pstr) +1);
         if (pPat == NULL)
-			goto LError;
-		hr = StringCchCopy(pPat, (lstrlen(pstr)+1), pstr);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			goto LError;
-		}
+            goto LError;
+        hr = StringCchCopy(pPat, (lstrlen(pstr)+1), pstr);
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_COPY);
+            goto LError;
+        }
         *pstr = '\0';
     }
 
@@ -209,10 +213,11 @@ dir_buildlist(
     if (lstrlen(tmppath) == 0)
     {
         hr = StringCchCopy(tmppath, MAX_PATH, ".");
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			goto LError;
-		}
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_COPY);
+            goto LError;
+        }
     }
     else
     {
@@ -221,7 +226,7 @@ dir_buildlist(
          */
         pstr = &tmppath[lstrlen(tmppath) -1];
         if ((*pstr == '\\') && (pstr > tmppath) && (pstr[-1] != ':')
-            && !IsDBCSLeadByte((BYTE)*(pstr-1)))
+                && !IsDBCSLeadByte((BYTE)*(pstr-1)))
         {
             *pstr = '\0';
         }
@@ -253,9 +258,9 @@ dir_buildlist(
     dl = (DIRLIST) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct dirlist));
     if (dl == NULL)
     {
-		goto LError;
+        goto LError;
     }
-	dl->pOtherDirList = NULL;
+    dl->pOtherDirList = NULL;
 
     /* convert the pathname to an absolute path */
     if (NULL == _fullpath(dl->rootname, tmppath, sizeof(dl->rootname)))
@@ -265,7 +270,7 @@ dir_buildlist(
 
     dl->bSum = bSum;
     dl->bSum = FALSE;  // to speed things up. even if we do want checksums,
-                       // let's get them on demand, not right now.
+    // let's get them on demand, not right now.
     dl->bFile = bFile;
 
     if (pPat)
@@ -278,12 +283,13 @@ dir_buildlist(
     /* make a '.' directory for the tree root directory -
      * all files and subdirs will be listed from here
      */
-    {    /* Do NOT chain on anything with garbage pointers in it */
+    {
+        /* Do NOT chain on anything with garbage pointers in it */
         DIRECT temp;
         temp = (DIRECT) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct direct));
         if (temp == NULL)
-			return NULL;
-		dl->dot = temp;
+            return NULL;
+        dl->dot = temp;
     }
 
     dir_dirinit(dl->dot, dl, NULL, ".");
@@ -301,7 +307,7 @@ dir_buildlist(
 
         dl->dot->bScanned = TRUE;
 
-		if (!dir_addfile(dl->dot, dir_finalelem(tmppath), fsize, ft, attr, 0))
+        if (!dir_addfile(dl->dot, dir_finalelem(tmppath), fsize, ft, attr, 0))
             goto LError;
     }
     else
@@ -336,11 +342,11 @@ LError:
 
 BOOL
 dir_appendlist(
-               DIRLIST *pdl,
-               LPCSTR path,
-               BOOL bSum,
-               int *psequence
-               )
+    DIRLIST *pdl,
+    LPCSTR path,
+    BOOL bSum,
+    int *psequence
+)
 {
     DIRLIST dl;
     BOOL bFile=FALSE;
@@ -348,19 +354,19 @@ dir_appendlist(
     LPSTR pstr;
     LPSTR pTag = NULL;
     BOOL fSuccess = FALSE;
-	HRESULT hr;
+    HRESULT hr;
 
     if (path)
     {
         // copy the path so we can modify it
         hr = StringCchCopy(tmppath, MAX_PATH, path);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY); 
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
 
-		// remove the trailing slash if unnecessary (\, c:\ need it)
+        // remove the trailing slash if unnecessary (\, c:\ need it)
         pstr = &tmppath[lstrlen(tmppath) -1];
         if ((*pstr == '\\') && (pstr > tmppath) && (pstr[-1] != ':')
-            && !IsDBCSLeadByte((BYTE)*(pstr-1)))
+                && !IsDBCSLeadByte((BYTE)*(pstr-1)))
         {
             *pstr = '\0';
         }
@@ -394,13 +400,13 @@ dir_appendlist(
         /* alloc and init the DIRLIST head */
         *pdl = (DIRLIST) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct dirlist));
         if (*pdl == NULL)
-			goto LError;
-		(*pdl)->pOtherDirList = NULL;
+            goto LError;
+        (*pdl)->pOtherDirList = NULL;
 
         (*pdl)->bSum = bSum;
         (*pdl)->bSum = FALSE;   // to speed things up. even if we do want
-                                // checksums, let's get them on demand, not
-                                // right now.
+        // checksums, let's get them on demand, not
+        // right now.
         (*pdl)->bFile = FALSE;
 
         /* make a null directory for the tree root directory -
@@ -409,8 +415,8 @@ dir_appendlist(
         /* Do NOT chain on anything with garbage pointers in it */
         temp = (DIRECT) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(struct direct));
         if (temp == NULL)
-			goto LError;
-		(*pdl)->dot = temp;
+            goto LError;
+        (*pdl)->dot = temp;
 
         dir_dirinit((*pdl)->dot, (*pdl), NULL, "");
         (*pdl)->dot->relname[0] = 0;
@@ -432,7 +438,7 @@ dir_appendlist(
 
             fsize = dir_getpathsizeetc(tmppath, &ft, &attr);
 
-			if (!dir_addfile(dl->dot, tmppath, fsize, ft, attr, psequence))
+            if (!dir_addfile(dl->dot, tmppath, fsize, ft, attr, psequence))
                 goto LError;
         }
     }
@@ -447,9 +453,9 @@ LError:
 
 void
 dir_setotherdirlist(
-                    DIRLIST dl,
-                    DIRLIST otherdl
-                    )
+    DIRLIST dl,
+    DIRLIST otherdl
+)
 {
     dl->pOtherDirList = otherdl;
 }
@@ -457,17 +463,19 @@ dir_setotherdirlist(
 /* free up the DIRLIST and all associated memory */
 void
 dir_delete(
-           DIRLIST dl
-           )
+    DIRLIST dl
+)
 {
-    if (dl == NULL) {
+    if (dl == NULL)
+    {
         return;
     }
 
     dir_cleardirect(dl->dot);
     HeapFree(GetProcessHeap(), NULL, dl->dot);
 
-    if (dl->pPattern) {
+    if (dl->pPattern)
+    {
         HeapFree(GetProcessHeap(), NULL, dl->pPattern);
     }
 
@@ -479,10 +487,11 @@ dir_delete(
 /* was the original build request a file or a directory ? */
 BOOL
 dir_isfile(
-           DIRLIST dl
-           )
+    DIRLIST dl
+)
 {
-    if (dl == NULL) {
+    if (dl == NULL)
+    {
         return(FALSE);
     }
 
@@ -496,10 +505,11 @@ dir_isfile(
  */
 DIRITEM
 dir_firstitem(
-              DIRLIST dl
-              )
+    DIRLIST dl
+)
 {
-    if (dl == NULL) {
+    if (dl == NULL)
+    {
         return(NULL);
     }
 
@@ -529,14 +539,15 @@ dir_firstitem(
  */
 DIRITEM
 dir_nextitem(
-             DIRLIST dl,
-             DIRITEM cur,
-             BOOL fDeep
-             )
+    DIRLIST dl,
+    DIRITEM cur,
+    BOOL fDeep
+)
 {
     DIRITEM next;
 
-    if ((dl == NULL) || (cur == NULL)) {
+    if ((dl == NULL) || (cur == NULL))
+    {
         TRACE_ERROR("DIR: null arguments to dir_nextitem", FALSE);
         return(NULL);
     }
@@ -545,7 +556,8 @@ dir_nextitem(
 
     /* local list */
 
-    if ( (next = (DIRITEM)List_Next(cur)) != NULL) {
+    if ( (next = (DIRITEM)List_Next(cur)) != NULL)
+    {
         /* there was another file on this list */
         return(next);
     }
@@ -559,28 +571,32 @@ dir_nextitem(
 
 DIRITEM
 dir_findnextfile(
-                 DIRLIST dl,
-                 DIRECT curdir
-                 )
+    DIRLIST dl,
+    DIRECT curdir
+)
 {
     DIRITEM curfile;
 
     if (bAbort) return NULL;  /* user requested abort */
 
-    if ((dl == NULL) || (curdir == NULL)) {
+    if ((dl == NULL) || (curdir == NULL))
+    {
         return(NULL);
     }
 
     /* scan the subdir if necessary */
-    if (!curdir->bScanned) {
+    if (!curdir->bScanned)
+    {
         dir_scan(curdir, FALSE);
     }
 
     /* have we already read the files in this directory ? */
-    if (curdir->pos == DL_FILES) {
+    if (curdir->pos == DL_FILES)
+    {
         /* no - return head of file list */
         curfile = (DIRITEM) List_First(curdir->diritems);
-        if (curfile != NULL) {
+        if (curfile != NULL)
+        {
             return(curfile);
         }
 
@@ -590,16 +606,21 @@ dir_findnextfile(
 
     /* try the next subdir on the list, if any */
     /* is this the first or the next */
-    if (curdir->curdir == NULL) {
+    if (curdir->curdir == NULL)
+    {
         curdir->curdir = (DIRECT) List_First(curdir->directs);
-    } else {
+    }
+    else
+    {
         curdir->curdir = (DIRECT) List_Next(curdir->curdir);
     }
     /* did we find a subdir ? */
-    if (curdir->curdir == NULL) {
+    if (curdir->curdir == NULL)
+    {
 
         /* no more dirs - go back to parent if there is one */
-        if (curdir->parent == NULL) {
+        if (curdir->parent == NULL)
+        {
             /* no parent - we have exhausted the tree */
             return(NULL);
         }
@@ -627,49 +648,58 @@ dir_findnextfile(
 
 /*
  * get a description of this DIRLIST - this is essentially the
- * rootname with any wildcard specifier at the end. 
+ * rootname with any wildcard specifier at the end.
  *
  * NOTE that this is not a valid path to the tree root - for that you
  * need dir_getrootpath().
  */
 LPSTR
 dir_getrootdescription(
-                       DIRLIST dl
-                       )
+    DIRLIST dl
+)
 {
     LPSTR pname;
-	HRESULT hr;
+    HRESULT hr;
 
     // allow enough space for \\servername! + MAX_PATH
     pname = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, MAX_PATH + 15);
-    if (pname == NULL) {
+    if (pname == NULL)
+    {
         return(NULL);
     }
 
-    if (dl->pDescription) {
+    if (dl->pDescription)
+    {
         hr = StringCchCopy(pname, (MAX_PATH+15), dl->pDescription);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			return (NULL);
-		}
-    } else {
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_COPY);
+            return (NULL);
+        }
+    }
+    else
+    {
         hr = StringCchCopy(pname, (MAX_PATH+15), dl->rootname);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			return (NULL);
-		}
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_COPY);
+            return (NULL);
+        }
 
-        if (dl->pPattern) {
+        if (dl->pPattern)
+        {
             hr = StringCchCat(pname,(MAX_PATH+15), "\\");
-			if (FAILED(hr)) {
-				OutputError(hr, IDS_SAFE_CAT);
-				return (NULL);
-			}
+            if (FAILED(hr))
+            {
+                OutputError(hr, IDS_SAFE_CAT);
+                return (NULL);
+            }
             hr = StringCchCat(pname,(MAX_PATH+15),dl->pPattern);
-			if (FAILED(hr)) {
-				OutputError(hr, IDS_SAFE_CAT);
-				return (NULL);
-			}
+            if (FAILED(hr))
+            {
+                OutputError(hr, IDS_SAFE_CAT);
+                return (NULL);
+            }
         }
     }
 
@@ -681,9 +711,9 @@ dir_getrootdescription(
  */
 VOID
 dir_freerootdescription(
-                        DIRLIST dl,
-                        LPSTR string
-                        )
+    DIRLIST dl,
+    LPSTR string
+)
 {
     HeapFree(GetProcessHeap(), NULL, string);
 }
@@ -697,8 +727,8 @@ dir_freerootdescription(
  */
 LPSTR
 dir_getrootpath(
-                DIRLIST dl
-                )
+    DIRLIST dl
+)
 {
     return(dl->rootname);
 }
@@ -710,9 +740,9 @@ dir_getrootpath(
  */
 void
 dir_freerootpath(
-                 DIRLIST dl,
-                 LPSTR path
-                 )
+    DIRLIST dl,
+    LPSTR path
+)
 {
     return;
 }
@@ -725,11 +755,12 @@ void
 dir_setdescription(DIRLIST dl, LPCSTR psz)
 {
     dl->pDescription = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, lstrlen(psz) + 1);
-	if (dl->pDescription) {
+    if (dl->pDescription)
+    {
         HRESULT hr = StringCchCopy(dl->pDescription, (lstrlen(psz)+1), psz);
-		if (FAILED(hr)) 
-			OutputError(hr, IDS_SAFE_COPY);
-	}
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
+    }
 }
 
 
@@ -740,8 +771,8 @@ dir_setdescription(DIRLIST dl, LPCSTR psz)
  */
 BOOL
 dir_iswildcard(
-               DIRLIST dl
-               )
+    DIRLIST dl
+)
 {
     return (dl->pPattern != NULL);
 }
@@ -758,12 +789,15 @@ dir_iswildcard(
  */
 DIRLIST
 dir_getlist(
-            DIRITEM item
-            )
+    DIRITEM item
+)
 {
-    if (item == NULL) {
+    if (item == NULL)
+    {
         return(NULL);
-    } else {
+    }
+    else
+    {
         return(item->direct->head);
     }
 }
@@ -775,30 +809,33 @@ dir_getlist(
  */
 LPSTR
 dir_getrelname(
-               DIRITEM cur
-               )
+    DIRITEM cur
+)
 {
     LPSTR name;
-	HRESULT hr;
+    HRESULT hr;
 
     /* check this is a valid item */
-    if (cur == NULL) {
+    if (cur == NULL)
+    {
         return(NULL);
     }
 
     name = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, MAX_PATH);
-	if (name == NULL)
-		return NULL;
-        hr = StringCchCopy(name, MAX_PATH, cur->direct->relname);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			return(NULL);
-		}
+    if (name == NULL)
+        return NULL;
+    hr = StringCchCopy(name, MAX_PATH, cur->direct->relname);
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_COPY);
+        return(NULL);
+    }
     hr = StringCchCat(name, MAX_PATH, cur->name);
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_CAT);
-		return(NULL);
-	}
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_CAT);
+        return(NULL);
+    }
 
     return(name);
 } /* dir_getrelname */
@@ -810,12 +847,14 @@ dir_getrelname(
  */
 void
 dir_freerelname(
-                DIRITEM cur,
-                LPSTR name
-                )
+    DIRITEM cur,
+    LPSTR name
+)
 {
-    if ((cur != NULL)) {
-        if (name != NULL) {
+    if ((cur != NULL))
+    {
+        if (name != NULL)
+        {
             HeapFree(GetProcessHeap(), NULL, name);
         }
     }
@@ -825,28 +864,31 @@ dir_freerelname(
 /*
  * get an open-able name for the file. This is the complete pathname
  * of the item (DIRLIST rootpath + DIRITEM relname)
- * 
+ *
  */
 LPSTR
 dir_getopenname(
-                DIRITEM item
-                )
+    DIRITEM item
+)
 {
     LPSTR fname;
     DIRLIST phead;
-	HRESULT hr;
+    HRESULT hr;
 
-    if (item == NULL) {
+    if (item == NULL)
+    {
         return(NULL);
     }
 
     phead = item->direct->head;
 
-    if (item->localname != NULL) {
+    if (item->localname != NULL)
+    {
         return(item->localname);
     }
 
-    if (phead->bFile) {
+    if (phead->bFile)
+    {
         return(phead->rootname);
     }
 
@@ -856,34 +898,41 @@ dir_getopenname(
     if (!fname)
         return NULL;
     hr = StringCchCopy(fname, MAX_PATH, phead->rootname);
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_COPY);
-		return(NULL);
-	}
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_COPY);
+        return(NULL);
+    }
 
     /*
      * it's a simple local name - add both relname and name to make
      * the complete filename
      */
     /* avoid the . or .\ at the end of the relname */
-    if (*CharPrev(fname, fname+lstrlen(fname)) == '\\') {
+    if (*CharPrev(fname, fname+lstrlen(fname)) == '\\')
+    {
         hr = StringCchCat(fname, MAX_PATH,&item->direct->relname[2]);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			return(NULL);
-		}
-    } else {
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_COPY);
+            return(NULL);
+        }
+    }
+    else
+    {
         hr = StringCchCat(fname, MAX_PATH,&item->direct->relname[1]);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_CAT);
-			return(NULL);
-		}
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_CAT);
+            return(NULL);
+        }
     }
     hr = StringCchCat(fname, MAX_PATH, item->name);
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_CAT);
-		return(NULL);
-	}
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_CAT);
+        return(NULL);
+    }
 
     return(fname);
 }
@@ -896,19 +945,22 @@ dir_getopenname(
  */
 void
 dir_freeopenname(
-                 DIRITEM item,
-                 LPSTR openname
-                 )
+    DIRITEM item,
+    LPSTR openname
+)
 {
-    if ((item == NULL) || (openname == NULL)) {
+    if ((item == NULL) || (openname == NULL))
+    {
         return;
     }
 
-    if (item->localname != NULL) {
+    if (item->localname != NULL)
+    {
         /* freed in dir_cleardirect */
         return;
     }
-    if (item->direct->head->bFile) {
+    if (item->direct->head->bFile)
+    {
         /* we used the rootname */
         return;
     }
@@ -920,19 +972,20 @@ dir_freeopenname(
 
 /*
  * return an open file handle to the file. if it is local,
- * just open the file. 
+ * just open the file.
  */
 HANDLE
 dir_openfile(
-             DIRITEM item
-             )
+    DIRITEM item
+)
 {
     LPSTR fname;
     HANDLE fh;
 
 
     fname = dir_getopenname(item);
-    if (fname == NULL) {
+    if (fname == NULL)
+    {
         return INVALID_HANDLE_VALUE;
     }
 
@@ -952,9 +1005,9 @@ dir_openfile(
  */
 void
 dir_closefile(
-              DIRITEM item,
-              HANDLE fh
-              )
+    DIRITEM item,
+    HANDLE fh
+)
 {
     CloseHandle(fh);
 
@@ -967,8 +1020,8 @@ dir_closefile(
 */
 void
 dir_rescanfile(
-               DIRITEM di
-               )
+    DIRITEM di
+)
 {
     LPSTR fullname;
 
@@ -993,8 +1046,8 @@ dir_rescanfile(
 /* return a TRUE iff item has a valid checksum */
 BOOL
 dir_validchecksum(
-                  DIRITEM item
-                  )
+    DIRITEM item
+)
 {
     return (item!=NULL) && (item->sumvalid);
 }
@@ -1002,8 +1055,8 @@ dir_validchecksum(
 
 BOOL
 dir_fileerror(
-              DIRITEM item
-              )
+    DIRITEM item
+)
 {
     return (item == NULL) || (item->fileerror);
 }
@@ -1014,33 +1067,38 @@ dir_fileerror(
  */
 DWORD
 dir_getchecksum(
-                DIRITEM cur
-                )
+    DIRITEM cur
+)
 {
     LPSTR fullname;
 
     /* check this is a valid item */
-    if (cur == NULL) {
+    if (cur == NULL)
+    {
         return(0);
     }
 
-    if (!cur->sumvalid) {
+    if (!cur->sumvalid)
+    {
         /*
          * need to calculate checksum
          */
-            LONG err;
+        LONG err;
 
-            fullname = dir_getopenname(cur);
-            cur->checksum = checksum_file(fullname, &err);
-            if (err==0) {
-                cur->sumvalid = TRUE;
-                cur->fileerror = FALSE;
-            } else {
-                cur->fileerror = TRUE;
-                return 0;
-            }
+        fullname = dir_getopenname(cur);
+        cur->checksum = checksum_file(fullname, &err);
+        if (err==0)
+        {
+            cur->sumvalid = TRUE;
+            cur->fileerror = FALSE;
+        }
+        else
+        {
+            cur->fileerror = TRUE;
+            return 0;
+        }
 
-            dir_freeopenname(cur, fullname);
+        dir_freeopenname(cur, fullname);
     }
 
     return(cur->checksum);
@@ -1051,11 +1109,12 @@ dir_getchecksum(
 /* return the file size (set during scanning) - returns 0 if invalid */
 long
 dir_getfilesize(
-                DIRITEM cur
-                )
+    DIRITEM cur
+)
 {
     /* check this is a valid item */
-    if (cur == NULL) {
+    if (cur == NULL)
+    {
         return(0);
     }
 
@@ -1066,11 +1125,12 @@ dir_getfilesize(
 /* return the file attributes (set during scanning) - returns 0 if invalid */
 DWORD
 dir_getattr(
-            DIRITEM cur
-            )
+    DIRITEM cur
+)
 {
     /* check this is a valid item */
-    if (cur == NULL) {
+    if (cur == NULL)
+    {
         return(0);
     }
 
@@ -1081,11 +1141,12 @@ dir_getattr(
 /* return the file time (last write time) (set during scanning), (0,0) if invalid */
 FILETIME
 dir_GetFileTime(
-                DIRITEM cur
-                )
+    DIRITEM cur
+)
 {
     /* return time of (0,0) if this is an invalid item */
-    if (cur == NULL) {
+    if (cur == NULL)
+    {
         FILETIME ft;
         ft.dwLowDateTime = 0;
         ft.dwHighDateTime = 0;
@@ -1104,11 +1165,11 @@ dir_GetFileTime(
  */
 void
 dir_extractwildportions(
-                       LPSTR pDest,
-                       LPSTR pSource,
-                       LPSTR pPattern,
-                       LPSTR pTag
-                       )
+    LPSTR pDest,
+    LPSTR pSource,
+    LPSTR pPattern,
+    LPSTR pTag
+)
 {
     int size;
 
@@ -1117,17 +1178,23 @@ dir_extractwildportions(
      * end
      */
 
-    if (pPattern[0] == '*') {
+    if (pPattern[0] == '*')
+    {
         size = lstrlen(pSource) - (lstrlen(pPattern) -1);
 
-    } else if (pPattern[lstrlen(pPattern) -1] == '*') {
+    }
+    else if (pPattern[lstrlen(pPattern) -1] == '*')
+    {
         pSource += lstrlen(pPattern) -1;
         size = lstrlen(pSource);
-    } else {
+    }
+    else
+    {
         size = lstrlen(pSource);
     }
 
-    if (pTag != NULL) {
+    if (pTag != NULL)
+    {
         size -= lstrlen(pTag);
     }
 
@@ -1143,11 +1210,11 @@ dir_extractwildportions(
  */
 int
 dir_compwildcard(
-                DIRLIST dleft,
-                DIRLIST dright,
-                LPSTR lname,
-                LPSTR rname
-                )
+    DIRLIST dleft,
+    DIRLIST dright,
+    LPSTR lname,
+    LPSTR rname
+)
 {
     LPSTR pfinal1, pfinal2;
     char final1[MAX_PATH], final2[MAX_PATH];
@@ -1170,7 +1237,8 @@ dir_compwildcard(
      * all done.
      */
     res = utils_CompPath(final1,final2);
-    if (res != 0) {
+    if (res != 0)
+    {
         return(res);
     }
 
@@ -1213,8 +1281,8 @@ static int nLocalCopies;        /* cleared in startcopy, ++d in copy
 /* start a bulk copy */
 BOOL
 dir_startcopy(
-              DIRLIST dl
-              )
+    DIRLIST dl
+)
 {
     nLocalCopies = 0;
     return(TRUE);
@@ -1222,10 +1290,10 @@ dir_startcopy(
 
 int
 dir_endcopy(
-            DIRLIST dl
-            )
+    DIRLIST dl
+)
 {
-	return(nLocalCopies);
+    return(nLocalCopies);
 } /* dir_endcopy */
 
 /* Build the real path from item and newroot into newpath.
@@ -1235,15 +1303,15 @@ dir_endcopy(
  */
 BOOL
 dir_MakeValidPath(
-                  LPSTR newpath,
-                  DIRITEM item,
-                  LPSTR newroot
-                  )
+    LPSTR newpath,
+    DIRITEM item,
+    LPSTR newroot
+)
 {
     LPSTR relname;
     LPSTR pstart, pdest, pel;
     BOOL bOK = TRUE;
-	HRESULT hr;
+    HRESULT hr;
 
     /*
      * name of file relative to the tree root
@@ -1256,23 +1324,26 @@ dir_MakeValidPath(
      * ensure that the directory exists, creating it if necessary.
      */
     hr = StringCchCopy(newpath, MAX_PATH, newroot);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
 
     /* add separating slash if not already there */
-    if (*CharPrev(newpath, newpath+lstrlen(newpath)) != '\\') {
+    if (*CharPrev(newpath, newpath+lstrlen(newpath)) != '\\')
+    {
         hr = StringCchCat(newpath, MAX_PATH, "\\");
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_CAT);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_CAT);
     }
 
     pstart = relname;
-    while ( (pel = My_mbschr(pstart, '\\')) != NULL) {
+    while ( (pel = My_mbschr(pstart, '\\')) != NULL)
+    {
 
         /*
          * ignore .
          */
-        if (My_mbsncmp(pstart, ".\\", 2) != 0) {
+        if (My_mbsncmp(pstart, ".\\", 2) != 0)
+        {
 
             pdest = &newpath[lstrlen(newpath)];
 
@@ -1283,8 +1354,10 @@ dir_MakeValidPath(
             pdest[pel - pstart] = '\0';
 
             /* create subdir if necessary */
-            if (!dir_isvaliddir(newpath)) {
-                if (_mkdir(newpath) != 0) {
+            if (!dir_isvaliddir(newpath))
+            {
+                if (_mkdir(newpath) != 0)
+                {
                     /* note error, but keep going */
                     bOK = FALSE;
                 }
@@ -1292,8 +1365,8 @@ dir_MakeValidPath(
 
             // now insert the backslash
             hr = StringCchCat(pdest, (MAX_PATH - lstrlen(newpath)),"\\");
-			if (FAILED(hr)) 
-				OutputError(hr, IDS_SAFE_CAT);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_CAT);
         }
 
         /* found another element ending in slash. incr past the \\ */
@@ -1307,8 +1380,8 @@ dir_MakeValidPath(
      * element
      */
     hr = StringCchCat(newpath, (MAX_PATH - lstrlen(newpath)), pstart);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_CAT);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_CAT);
     dir_freerelname(item, relname);
     return bOK;
 }
@@ -1321,11 +1394,11 @@ dir_MakeValidPath(
  */
 BOOL
 dir_copy(
-         DIRITEM item,
-         LPSTR newroot,
-         BOOL HitReadOnly,
-         BOOL CopyNoAttributes
-         )
+    DIRITEM item,
+    LPSTR newroot,
+    BOOL HitReadOnly,
+    BOOL CopyNoAttributes
+)
 {
     /*
      * newpath must be static for Win 3.1 so that it is in the
@@ -1338,17 +1411,18 @@ dir_copy(
     BY_HANDLE_FILE_INFORMATION bhfi;
     HANDLE hfile;
     DWORD fa;
-	HRESULT hr;
+    HRESULT hr;
 
     /*
      * check that the newroot directory itself exists
      */
-    if ((item == NULL) || !dir_isvaliddir(newroot)) {
+    if ((item == NULL) || !dir_isvaliddir(newroot))
+    {
         return(FALSE);
     }
 
     if (!dir_MakeValidPath(newpath, item, newroot)) return FALSE;
-     
+
     /* local copy of file */
     LPSTR pOpenName;
 
@@ -1360,31 +1434,37 @@ dir_copy(
      */
     bOK = TRUE;
     fa = GetFileAttributes(newpath);
-    if ( (fa != -1) &&  (fa & FILE_ATTRIBUTE_READONLY)) {
+    if ( (fa != -1) &&  (fa & FILE_ATTRIBUTE_READONLY))
+    {
         hr = StringCchPrintf(msg, (MAX_PATH+40), LoadRcString(IDS_IS_READONLY),
-                 (LPSTR) newpath);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
+                             (LPSTR) newpath);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
 
         sdkdiff_UI(TRUE);
         if ((HitReadOnly)
-		 || (MessageBox(hwndClient, msg, LoadRcString(IDS_COPY_FILES),
-                           MB_OKCANCEL|MB_ICONSTOP) == IDOK)) {
+                || (MessageBox(hwndClient, msg, LoadRcString(IDS_COPY_FILES),
+                               MB_OKCANCEL|MB_ICONSTOP) == IDOK))
+        {
             sdkdiff_UI(FALSE);
             SetFileAttributes(newpath, fa & ~FILE_ATTRIBUTE_READONLY);
-            DeleteFile(newpath);   
-        } else {
+            DeleteFile(newpath);
+        }
+        else
+        {
             sdkdiff_UI(FALSE);
             bOK = FALSE; /* don't overwrite */
-             // abort the copy... go and release resources
+            // abort the copy... go and release resources
         }
-     }
+    }
 
-    if (bOK) {
+    if (bOK)
+    {
         bOK = CopyFile(pOpenName, newpath, FALSE);
     }
     // The attributes are copied by CopyFile
-    if (bOK) {
+    if (bOK)
+    {
 
         /* having copied the file, now copy the times */
         hfile = CreateFile(pOpenName, GENERIC_READ, 0, NULL,
@@ -1401,16 +1481,17 @@ dir_copy(
                     &bhfi.ftLastWriteTime);
         CloseHandle(hfile);
 
-        if (CopyNoAttributes) {
+        if (CopyNoAttributes)
+        {
             // Prepare to kill the attributes...
             SetFileAttributes(newpath, FILE_ATTRIBUTE_NORMAL);
-        } 
+        }
     }
     if (bOK)
         ++nLocalCopies;
 
     dir_freeopenname(item, pOpenName);
-  
+
 
     return(bOK);
 } /* dir_copy */
@@ -1426,21 +1507,22 @@ dir_copy(
  */
 void
 dir_dirinit(
-            DIRECT dir,
-            DIRLIST head,
-            DIRECT parent,
-            LPSTR name
-            )
+    DIRECT dir,
+    DIRLIST head,
+    DIRECT parent,
+    LPSTR name
+)
 {
     int size;
-	HRESULT hr;
+    HRESULT hr;
 
     dir->head = head;
     dir->parent = parent;
 
     /* add on one for the null and one for the trailing slash */
     size = lstrlen(name) + 2;
-    if (parent != NULL) {
+    if (parent != NULL)
+    {
         size += lstrlen(parent->relname);
     }
 
@@ -1449,24 +1531,27 @@ dir_dirinit(
      */
     dir->relname = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size);
     if (dir->relname == NULL)
-		return;
-	if (parent != NULL) {
+        return;
+    if (parent != NULL)
+    {
         hr = StringCchCopy(dir->relname, size,parent->relname);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
-    } else {
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
+    }
+    else
+    {
         dir->relname[0] = '\0';
     }
 
     hr = StringCchCat(dir->relname, size, name);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_CAT);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_CAT);
 
     if (*CharPrev(dir->relname, dir->relname+lstrlen(dir->relname)) != '\\')
     {
         hr = StringCchCat(dir->relname, size, "\\");
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_CAT);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_CAT);
     }
 
     /* force name to lowercase */
@@ -1485,27 +1570,27 @@ dir_dirinit(
  */
 BOOL
 dir_fileinit(
-             DIRITEM pfile,
-             DIRECT dir,
-             LPSTR path,
-             long size,
-             FILETIME ft,
-             DWORD attr,
-             int *psequence
-             )
+    DIRITEM pfile,
+    DIRECT dir,
+    LPSTR path,
+    long size,
+    FILETIME ft,
+    DWORD attr,
+    int *psequence
+)
 {
     BOOL bFileOk = TRUE;
-	HRESULT hr;
+    HRESULT hr;
 
     pfile->name = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, lstrlen(path) + 1);
     if (pfile->name == NULL)
-		return NULL;
+        return NULL;
 
-	hr = StringCchCopy(pfile->name, (lstrlen(path)+1), path);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    hr = StringCchCopy(pfile->name, (lstrlen(path)+1), path);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
 
-	/*force name to lower case */
+    /*force name to lower case */
     AnsiLowerBuff(pfile->name, lstrlen(path));
 
     pfile->direct = dir;
@@ -1517,21 +1602,27 @@ dir_fileinit(
 
     pfile->localname = NULL;
 
-    if (dir->head->bSum) {
+    if (dir->head->bSum)
+    {
         LONG err;
         LPSTR openname;
 
         openname = dir_getopenname(pfile);
         pfile->checksum = checksum_file(openname, &err);
 
-        if (err!=0) {
+        if (err!=0)
+        {
             pfile->sumvalid = FALSE;
-        } else {
+        }
+        else
+        {
             pfile->sumvalid = TRUE;
         }
         dir_freeopenname(pfile, openname);
 
-    } else {
+    }
+    else
+    {
         pfile->sumvalid = FALSE;
     }
 
@@ -1543,16 +1634,18 @@ dir_fileinit(
 /* is this a valid file or not */
 BOOL
 dir_isvalidfile(
-                LPSTR path
-                )
+    LPSTR path
+)
 {
     DWORD dwAttrib;
 
     dwAttrib = GetFileAttributes(path);
-    if (dwAttrib == -1) {
+    if (dwAttrib == -1)
+    {
         return(FALSE);
     }
-    if (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) {
+    if (dwAttrib & FILE_ATTRIBUTE_DIRECTORY)
+    {
         return(FALSE);
     }
     return(TRUE);
@@ -1562,16 +1655,18 @@ dir_isvalidfile(
 /* is this a valid directory ? */
 BOOL
 dir_isvaliddir(
-               LPCSTR path
-               )
+    LPCSTR path
+)
 {
     DWORD dwAttrib;
 
     dwAttrib = GetFileAttributes(path);
-    if (dwAttrib == -1) {
+    if (dwAttrib == -1)
+    {
         return(FALSE);
     }
-    if (dwAttrib & FILE_ATTRIBUTE_DIRECTORY) {
+    if (dwAttrib & FILE_ATTRIBUTE_DIRECTORY)
+    {
         return(TRUE);
     }
     return(FALSE);
@@ -1587,9 +1682,9 @@ dir_isvaliddir(
  */
 void
 dir_scan(
-         DIRECT dir,
-         BOOL bRecurse
-         )
+    DIRECT dir,
+    BOOL bRecurse
+)
 {
     PSTR path=NULL, completepath = NULL;
     int size;
@@ -1601,7 +1696,7 @@ dir_scan(
     LPSTR name;
     HANDLE hFind;
     WIN32_FIND_DATA finddata;
-	HRESULT hr;
+    HRESULT hr;
 
     /* make the complete search string including *.* */
     size = lstrlen(dir->head->rootname);
@@ -1610,17 +1705,18 @@ dir_scan(
     /* add on one null and \*.* */
     // in fact, we need space for pPattern instead of *.* but add an
     // extra few in case pPattern is less than *.*
-    if (dir->head->pPattern != NULL) {
+    if (dir->head->pPattern != NULL)
+    {
         size += lstrlen(dir->head->pPattern);
     }
     size += 5;
 
     path = (PSTR)HeapAlloc(GetProcessHeap(), NULL, size);
-	if (path == NULL)
-		goto LSkip;
+    if (path == NULL)
+        goto LSkip;
     completepath = (PSTR)HeapAlloc(GetProcessHeap(), NULL, size);
-	if (completepath == NULL)
-		goto LSkip;
+    if (completepath == NULL)
+        goto LSkip;
 
     if (!path || !completepath)
         goto LSkip;
@@ -1629,20 +1725,23 @@ dir_scan(
      * fill out path with all but the *.*
      */
     hr = StringCchCopy(path, size, dir->head->rootname);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
 
     /* omit the . at the beginning of the relname, and the
      * .\ if there is a trailing \ on the rootname
      */
-    if (*CharPrev(path, path+lstrlen(path)) == '\\') {
+    if (*CharPrev(path, path+lstrlen(path)) == '\\')
+    {
         hr = StringCchCat(path, size, &dir->relname[2]);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_CAT);
-    } else {
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_CAT);
+    }
+    else
+    {
         hr = StringCchCat(path, size, &dir->relname[1]);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_CAT);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_CAT);
     }
 
 
@@ -1653,11 +1752,11 @@ dir_scan(
      */
 
     hr = StringCchCopy(completepath, size, path);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
     hr = StringCchCat(completepath, size, "*.*");
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_CAT);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_CAT);
 
 
     /*
@@ -1667,36 +1766,46 @@ dir_scan(
     hFind = FindFirstFile(completepath, &finddata);
     bMore = (hFind != INVALID_HANDLE_VALUE);
 
-    while (bMore) {
+    while (bMore)
+    {
 
         bIsDir = (finddata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
         name = (LPSTR) &finddata.cFileName;
-        filesize = finddata.nFileSizeLow;     
-        if (bIsDir) {
+        filesize = finddata.nFileSizeLow;
+        if (bIsDir)
+        {
             if ( (lstrcmp(name, ".") != 0) &&
-                 (lstrcmp(name, "..") != 0))  {
+                    (lstrcmp(name, "..") != 0))
+            {
 
-                if (dir->head->pOtherDirList == NULL) {
+                if (dir->head->pOtherDirList == NULL)
+                {
                     dir_adddirect(dir, name);
-                } else {
+                }
+                else
+                {
                     char otherName[MAX_PATH+1];
                     hr = StringCchCopy(otherName, (MAX_PATH+1), dir_getrootpath(dir->head->pOtherDirList));
-					if (FAILED(hr))
-						OutputError(hr, IDS_SAFE_COPY);
-                    if (otherName[strlen(otherName)-1] == '\\') {
+                    if (FAILED(hr))
+                        OutputError(hr, IDS_SAFE_COPY);
+                    if (otherName[strlen(otherName)-1] == '\\')
+                    {
                         hr = StringCchCat(otherName, (MAX_PATH+1), &dir->relname[2]);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_CAT);
-                    } else {
+                        if (FAILED(hr))
+                            OutputError(hr, IDS_SAFE_CAT);
+                    }
+                    else
+                    {
                         hr = StringCchCat(otherName, (MAX_PATH+1), &dir->relname[1]);
-						if (FAILED(hr))
-							OutputError(hr, IDS_SAFE_CAT);
+                        if (FAILED(hr))
+                            OutputError(hr, IDS_SAFE_CAT);
                     }
                     hr = StringCchCat(otherName, (MAX_PATH+1), name);
-					if (FAILED(hr))
-						OutputError(hr, IDS_SAFE_CAT);
+                    if (FAILED(hr))
+                        OutputError(hr, IDS_SAFE_CAT);
 
-                    if (dir_isvaliddir(otherName)) {
+                    if (dir_isvaliddir(otherName))
+                    {
                         dir_adddirect(dir, name);
                     }
                 }
@@ -1713,26 +1822,28 @@ dir_scan(
      * now do it a second time looking for files
      */
     hr = StringCchCopy(completepath, size, path);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_COPY);
-    hr = StringCchCat(completepath, size, 
-            dir->head->pPattern == NULL ? "*.*" : dir->head->pPattern);
-	if (FAILED(hr))
-		OutputError(hr, IDS_SAFE_CAT);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_COPY);
+    hr = StringCchCat(completepath, size,
+                      dir->head->pPattern == NULL ? "*.*" : dir->head->pPattern);
+    if (FAILED(hr))
+        OutputError(hr, IDS_SAFE_CAT);
 
     /* read all file entries in the directory */
     hFind = FindFirstFile(completepath, &finddata);
     bMore = (hFind != INVALID_HANDLE_VALUE);
 
-    while (bMore) {
+    while (bMore)
+    {
         if (bAbort) break;  /* user requested abort */
 
         bIsDir = (finddata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
         name = (LPSTR) &finddata.cFileName;
         filesize = finddata.nFileSizeLow;
         ft = finddata.ftLastWriteTime;
-        if (!bIsDir) {
-			dir_addfile(dir, name, filesize, ft, finddata.dwFileAttributes, 0);
+        if (!bIsDir)
+        {
+            dir_addfile(dir, name, filesize, ft, finddata.dwFileAttributes, 0);
         }
         bMore = FindNextFile(hFind, &finddata);
     }
@@ -1746,8 +1857,10 @@ LSkip:
     dir->bScanned = TRUE;
     dir->pos = DL_FILES;
 
-    if (bRecurse) {
-		for( child=(DIRECT)List_First(dir->directs);  child!=NULL;  child = (DIRECT)List_Next((LPVOID)child)) {
+    if (bRecurse)
+    {
+        for( child=(DIRECT)List_First(dir->directs);  child!=NULL;  child = (DIRECT)List_Next((LPVOID)child))
+        {
             if (bAbort) break;  /* user requested abort */
             dir_scan(child, TRUE);
         }
@@ -1764,23 +1877,25 @@ LSkip:
  */
 BOOL
 dir_addfile(
-            DIRECT dir,
-            LPSTR path,
-            DWORD size,
-            FILETIME ft,
-            DWORD attr,
-            int *psequence
-            )
+    DIRECT dir,
+    LPSTR path,
+    DWORD size,
+    FILETIME ft,
+    DWORD attr,
+    int *psequence
+)
 {
     DIRITEM pfile;
 
-    AnsiLowerBuff(path, lstrlen(path));  
+    AnsiLowerBuff(path, lstrlen(path));
 
     // when psequence is passed, do not sort the list
     if (!psequence)
     {
-		for( pfile=(DIRITEM)List_Last(dir->diritems);  pfile!=NULL;  pfile = (DIRITEM)List_Prev((LPVOID)pfile)) {
-            if (utils_CompPath(pfile->name, path) <= 0) {
+        for( pfile=(DIRITEM)List_Last(dir->diritems);  pfile!=NULL;  pfile = (DIRITEM)List_Prev((LPVOID)pfile))
+        {
+            if (utils_CompPath(pfile->name, path) <= 0)
+            {
                 break;     /* goes after this one */
             }
         }
@@ -1795,7 +1910,7 @@ dir_addfile(
         pfile = (DIRITEM)List_NewBefore(dir->diritems, NULL, sizeof(struct diritem));
     }
 
-	if (!dir_fileinit(pfile, dir, path, size, ft, attr, psequence))
+    if (!dir_fileinit(pfile, dir, path, size, ft, attr, psequence))
     {
         List_Delete(pfile);
         return FALSE;
@@ -1811,16 +1926,17 @@ dir_addfile(
  */
 void
 dir_adddirect(
-              DIRECT dir,
-              LPSTR path
-              )
+    DIRECT dir,
+    LPSTR path
+)
 {
     DIRECT child;
     LPSTR finalel;
     char achTempName[MAX_PATH];
 
     AnsiLowerBuff(path, lstrlen(path));
-    for( child=(DIRECT)List_First(dir->directs);  child!=NULL;  child = (DIRECT)List_Next((LPVOID)child)) {
+    for( child=(DIRECT)List_First(dir->directs);  child!=NULL;  child = (DIRECT)List_Next((LPVOID)child))
+    {
         int cmpval;
 
         /* we need to compare the child name with the new name.
@@ -1841,22 +1957,23 @@ dir_adddirect(
         cmpval = utils_CompPath(achTempName, path);
 
 #ifdef trace
-        {   
-			HRESULT hr;
-			char msg[600];
+        {
+            HRESULT hr;
+            char msg[600];
             hr = StringCchPrintf( msg, 600, "dir_adddirect: %s %s %s\n"
-                      , achTempName
-                      , ( cmpval<0 ? "<"
-                          : (cmpval==0 ? "=" : ">")
-                        )
-                      , path
-                    );
-			if (FAILED(hr))
-				OutputError(hr, IDS_SAFE_PRINTF);
+                                  , achTempName
+                                  , ( cmpval<0 ? "<"
+                                      : (cmpval==0 ? "=" : ">")
+                                    )
+                                  , path
+                                );
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
             if (bTrace) Trace_File(msg);
         }
 #endif
-        if (cmpval > 0) {
+        if (cmpval > 0)
+        {
 
             /* goes before this one */
             child = (DIRECT)List_NewBefore(dir->directs, child, sizeof(struct direct));
@@ -1875,18 +1992,21 @@ dir_adddirect(
  */
 void
 dir_cleardirect(
-                DIRECT dir
-                )
+    DIRECT dir
+)
 {
     DIRITEM pfile;
     DIRECT child;
 
     /* clear contents of files list */
-	for( pfile=(DIRITEM)List_First(dir->diritems);  pfile!=NULL;  pfile = (DIRITEM)List_Next((LPVOID)pfile)) {
+    for( pfile=(DIRITEM)List_First(dir->diritems);  pfile!=NULL;  pfile = (DIRITEM)List_Next((LPVOID)pfile))
+    {
         HeapFree(GetProcessHeap(), NULL, pfile->name);
 
-        if (pfile->localname) {
-            if (pfile->bLocalIsTemp) {
+        if (pfile->localname)
+        {
+            if (pfile->bLocalIsTemp)
+            {
                 /*
                  * the copy will have copied the attributes,
                  * including read-only. We should unset this bit
@@ -1899,13 +2019,14 @@ dir_cleardirect(
             }
 
             HeapFree(GetProcessHeap(), NULL, pfile->localname);
-            pfile->localname = NULL; 
+            pfile->localname = NULL;
         }
     }
     List_Destroy(&dir->diritems);
 
     /* clear contents of dirs list (recursively) */
-	for( child=(DIRECT)List_First(dir->directs);  child!=NULL;  child = (DIRECT)List_Next((LPVOID)child)) {
+    for( child=(DIRECT)List_First(dir->directs);  child!=NULL;  child = (DIRECT)List_Next((LPVOID)child))
+    {
         dir_cleardirect(child);
     }
     List_Destroy(&dir->directs);
@@ -1923,34 +2044,39 @@ dir_cleardirect(
  */
 LPSTR
 dir_finalelem(
-              LPSTR path
-              )
+    LPSTR path
+)
 {
     LPSTR chp;
     int size;
 
     /* is the final character a slash ? */
     size = lstrlen(path) - 1;
-    if (*(chp = CharPrev(path, path+lstrlen(path))) == '\\') {
-            /* find the slash before this */
-            while (chp > path) {
-                    if (*(chp = CharPrev(path, chp)) == '\\') {
-                            /* skip the slash itself */
-                            chp++;
-                            break;
-                    }
+    if (*(chp = CharPrev(path, path+lstrlen(path))) == '\\')
+    {
+        /* find the slash before this */
+        while (chp > path)
+        {
+            if (*(chp = CharPrev(path, chp)) == '\\')
+            {
+                /* skip the slash itself */
+                chp++;
+                break;
             }
-            return(chp);
+        }
+        return(chp);
     }
     /* look for final slash */
     chp = My_mbsrchr(path, '\\');
-    if (chp != NULL) {
+    if (chp != NULL)
+    {
         return(chp+1);
     }
 
     /* no slash - is there a drive letter ? */
     chp = My_mbsrchr(path, ':');
-    if (chp != NULL) {
+    if (chp != NULL)
+    {
         return(chp+1);
     }
 
@@ -1964,10 +2090,10 @@ dir_finalelem(
 /* find the size of a file given a pathname to it */
 long
 dir_getpathsizeetc(
-                   LPSTR path,
-                   FILETIME *pft,
-                   DWORD *pattr
-                   )
+    LPSTR path,
+    FILETIME *pft,
+    DWORD *pattr
+)
 {
     HANDLE fh;
     long size;
@@ -1981,7 +2107,7 @@ dir_getpathsizeetc(
         hFind = FindFirstFile(path, &finddata);
         if (hFind == INVALID_HANDLE_VALUE)
         {
-            return 0;                      
+            return 0;
         }
         else
         {
@@ -2002,7 +2128,7 @@ dir_getpathsizeetc(
     CloseHandle(fh);
     return(size);
 } /* dir_getpathsize */
- 
+
 /* ---- helpers ----------------------------------------------------------- */
 
 BOOL iswildpath(LPCSTR pszPath)

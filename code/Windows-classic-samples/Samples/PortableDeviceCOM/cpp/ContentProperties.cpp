@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -380,7 +380,7 @@ void GetObjectIdentifierFromPersistentUniqueIdentifier(
             {
                 // 3) Attempt to get the unique idenifier for the object from the device
                 hr = content->GetObjectIDsFromPersistentUniqueIDs(persistentUniqueIDs.Get(),
-                                                                    &objectIDs);
+                        &objectIDs);
                 if (SUCCEEDED(hr))
                 {
                     PROPVARIANT objectID = {0};
@@ -438,7 +438,7 @@ public:
         _In_         REFIID  riid,
         _COM_Outptr_ void**  ppv)
     {
-        static const QITAB qitab[] = 
+        static const QITAB qitab[] =
         {
             QITABENT(CGetBulkValuesCallback, IPortableDevicePropertiesBulkCallback),
             { },
@@ -513,7 +513,7 @@ public:
 
     IFACEMETHODIMP OnEnd(
         _In_ REFGUID context,
-             HRESULT status)
+        HRESULT status)
     {
         wprintf(L"** BULK Property operation ending, status = 0x%lx, context = %ws **\n", status, (PCWSTR)CGuidToString(context));
 
@@ -551,7 +551,7 @@ public:
         _In_         REFIID  riid,
         _COM_Outptr_ void**  ppv)
     {
-        static const QITAB qitab[] = 
+        static const QITAB qitab[] =
         {
             QITABENT(CGetBulkValuesCallback, IPortableDevicePropertiesBulkCallback),
             { },
@@ -623,7 +623,7 @@ public:
 
     IFACEMETHODIMP OnEnd(
         _In_ REFGUID context,
-             HRESULT status)
+        HRESULT status)
     {
         wprintf(L"** BULK Property operation ending, status = 0x%lx, context = %ws **\n", status, (PCWSTR)CGuidToString(context));
 
@@ -755,7 +755,7 @@ void ReadContentPropertiesBulk(
     if (SUCCEEDED(hr))
     {
         hr = CreateIPortableDevicePropVariantCollectionWithAllObjectIDs(content.Get(),
-                                                                        &objectIDs);
+                &objectIDs);
     }
 
 
@@ -764,9 +764,9 @@ void ReadContentPropertiesBulk(
     if (SUCCEEDED(hr))
     {
         hr = propertiesBulk->QueueGetValuesByObjectList(objectIDs.Get(),
-                                                        propertiesToRead.Get(),
-                                                        callback.Get(),
-                                                        &context);
+                propertiesToRead.Get(),
+                callback.Get(),
+                &context);
         // 9) Call Start() to actually begin the property operation
         if(SUCCEEDED(hr))
         {
@@ -898,7 +898,7 @@ void WriteContentPropertiesBulk(
     if (SUCCEEDED(hr))
     {
         hr = CreateIPortableDevicePropVariantCollectionWithAllObjectIDs(content.Get(),
-                                                                        &objectIDs);
+                &objectIDs);
     }
 
     if (SUCCEEDED(hr))
@@ -982,8 +982,8 @@ void WriteContentPropertiesBulk(
     if (SUCCEEDED(hr))
     {
         hr = propertiesBulk->QueueSetValuesByObjectList(propertiesToWrite.Get(),
-                                                        callback.Get(),
-                                                        &context);
+                callback.Get(),
+                &context);
         // 10) Call Start() to actually begin the property operation
         if(SUCCEEDED(hr))
         {
@@ -1154,11 +1154,11 @@ void ReadContentPropertiesBulkFilteringByFormat(
     {
         static const DWORD DEPTH = 100;
         hr = propertiesBulk->QueueGetValuesByObjectFormat(WPD_OBJECT_FORMAT_MP3,
-                                                          WPD_DEVICE_OBJECT_ID,
-                                                          DEPTH,
-                                                          propertiesToRead.Get(),
-                                                          callback.Get(),
-                                                          &context);
+                WPD_DEVICE_OBJECT_ID,
+                DEPTH,
+                propertiesToRead.Get(),
+                callback.Get(),
+                &context);
         // 9) Call Start() to actually begin the property operation
         if(SUCCEEDED(hr))
         {

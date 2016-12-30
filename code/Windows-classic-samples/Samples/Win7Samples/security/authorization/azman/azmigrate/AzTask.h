@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -24,7 +24,7 @@ Abstract:
 class CAzTask :
     public CAzBase<IAzTask>
 {
-        friend class CAzTask;
+    friend class CAzTask;
 
 public:
     CAzTask(void);

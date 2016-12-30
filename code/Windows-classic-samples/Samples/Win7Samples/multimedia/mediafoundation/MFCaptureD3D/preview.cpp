@@ -1,7 +1,7 @@
-//////////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////////
 //
 // preview.cpp: Manages video preview.
-// 
+//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -24,7 +24,7 @@ HRESULT CPreview::CreateInstance(
     HWND hVideo,        // Handle to the video window.
     HWND hEvent,        // Handle to the window to receive notifications.
     CPreview **ppPlayer // Receives a pointer to the CPreview object.
-    )
+)
 {
     assert(hVideo != NULL);
     assert(hEvent != NULL);
@@ -60,7 +60,7 @@ HRESULT CPreview::CreateInstance(
 //  constructor
 //-------------------------------------------------------------------
 
-CPreview::CPreview(HWND hVideo, HWND hEvent) : 
+CPreview::CPreview(HWND hVideo, HWND hEvent) :
     m_pReader(NULL),
     m_hwndVideo(hVideo),
     m_hwndEvent(hEvent),
@@ -157,7 +157,7 @@ ULONG CPreview::Release()
 
 HRESULT CPreview::QueryInterface(REFIID riid, void** ppv)
 {
-    static const QITAB qit[] = 
+    static const QITAB qit[] =
     {
         QITABENT(CPreview, IMFSourceReaderCallback),
         { 0 },
@@ -180,7 +180,7 @@ HRESULT CPreview::OnReadSample(
     DWORD /* dwStreamFlags */,
     LONGLONG /* llTimestamp */,
     IMFSample *pSample      // Can be NULL
-    )
+)
 {
     HRESULT hr = S_OK;
     IMFMediaBuffer *pBuffer = NULL;
@@ -213,13 +213,13 @@ HRESULT CPreview::OnReadSample(
     if (SUCCEEDED(hr))
     {
         hr = m_pReader->ReadSample(
-            (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-            0,
-            NULL,   // actual
-            NULL,   // flags
-            NULL,   // timestamp
-            NULL    // sample
-            );
+                 (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                 0,
+                 NULL,   // actual
+                 NULL,   // flags
+                 NULL,   // timestamp
+                 NULL    // sample
+             );
     }
 
     if (FAILED(hr))
@@ -248,9 +248,9 @@ HRESULT CPreview::TryMediaType(IMFMediaType *pType)
 
     hr = pType->GetGUID(MF_MT_SUBTYPE, &subtype);
 
-    if (FAILED(hr)) 
-    { 
-        return hr;    
+    if (FAILED(hr))
+    {
+        return hr;
     }
 
     // Do we support this type directly?
@@ -269,15 +269,18 @@ HRESULT CPreview::TryMediaType(IMFMediaType *pType)
             m_draw.GetFormat(i, &subtype);
 
             hr = pType->SetGUID(MF_MT_SUBTYPE, subtype);
-            
-            if (FAILED(hr)) { break; }
+
+            if (FAILED(hr))
+            {
+                break;
+            }
 
             // Try to set this type on the source reader.
             hr = m_pReader->SetCurrentMediaType(
-                (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-                NULL,
-                pType
-                );
+                     (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                     NULL,
+                     pType
+                 );
 
             if (SUCCEEDED(hr))
             {
@@ -300,7 +303,7 @@ HRESULT CPreview::TryMediaType(IMFMediaType *pType)
 //-------------------------------------------------------------------
 // SetDevice
 //
-// Set up preview for a specified video capture device. 
+// Set up preview for a specified video capture device.
 //-------------------------------------------------------------------
 
 HRESULT CPreview::SetDevice(IMFActivate *pActivate)
@@ -321,19 +324,19 @@ HRESULT CPreview::SetDevice(IMFActivate *pActivate)
     if (SUCCEEDED(hr))
     {
         hr = pActivate->ActivateObject(
-            __uuidof(IMFMediaSource), 
-            (void**)&pSource
-            );
+                 __uuidof(IMFMediaSource),
+                 (void**)&pSource
+             );
     }
 
     // Get the symbolic link.
     if (SUCCEEDED(hr))
     {
         hr = pActivate->GetAllocatedString(
-            MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_SYMBOLIC_LINK,
-            &m_pwszSymbolicLink,
-            &m_cchSymbolicLink
-            );
+                 MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_SYMBOLIC_LINK,
+                 &m_pwszSymbolicLink,
+                 &m_cchSymbolicLink
+             );
     }
 
 
@@ -356,18 +359,18 @@ HRESULT CPreview::SetDevice(IMFActivate *pActivate)
     if (SUCCEEDED(hr))
     {
         hr = pAttributes->SetUnknown(
-            MF_SOURCE_READER_ASYNC_CALLBACK,
-            this
-            );
+                 MF_SOURCE_READER_ASYNC_CALLBACK,
+                 this
+             );
     }
 
     if (SUCCEEDED(hr))
     {
         hr = MFCreateSourceReaderFromMediaSource(
-            pSource,
-            pAttributes,
-            &m_pReader
-            );
+                 pSource,
+                 pAttributes,
+                 &m_pReader
+             );
     }
 
     // Try to find a suitable output type.
@@ -376,12 +379,15 @@ HRESULT CPreview::SetDevice(IMFActivate *pActivate)
         for (DWORD i = 0; ; i++)
         {
             hr = m_pReader->GetNativeMediaType(
-                (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-                i,
-                &pType
-                );
+                     (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                     i,
+                     &pType
+                 );
 
-            if (FAILED(hr)) { break; }
+            if (FAILED(hr))
+            {
+                break;
+            }
 
             hr = TryMediaType(pType);
 
@@ -399,13 +405,13 @@ HRESULT CPreview::SetDevice(IMFActivate *pActivate)
     {
         // Ask for the first sample.
         hr = m_pReader->ReadSample(
-            (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
-            0,
-            NULL,
-            NULL,
-            NULL,
-            NULL
-            );
+                 (DWORD)MF_SOURCE_READER_FIRST_VIDEO_STREAM,
+                 0,
+                 NULL,
+                 NULL,
+                 NULL,
+                 NULL
+             );
     }
 
     if (FAILED(hr))
@@ -462,7 +468,7 @@ HRESULT CPreview::ResizeVideo(WORD /*width*/, WORD /*height*/)
 //  Checks whether the current device has been lost.
 //
 //  The application should call this method in response to a
-//  WM_DEVICECHANGE message. (The application must register for 
+//  WM_DEVICECHANGE message. (The application must register for
 //  device notification to receive this message.)
 //-------------------------------------------------------------------
 
@@ -476,7 +482,7 @@ HRESULT CPreview::CheckDeviceLost(DEV_BROADCAST_HDR *pHdr, BOOL *pbDeviceLost)
     }
 
     *pbDeviceLost = FALSE;
-    
+
     if (pHdr == NULL)
     {
         return S_OK;

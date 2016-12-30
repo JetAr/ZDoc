@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -53,7 +53,7 @@ HRESULT CCommandWindow::Initialize(__in CSampleProvider *pProvider)
     }
     _pProvider = pProvider;
     _pProvider->AddRef();
-    
+
     // Create and launch the window thread.
     HANDLE hThread = CreateThread(NULL, 0, _ThreadProc, this, 0, NULL);
     if (hThread == NULL)
@@ -112,20 +112,20 @@ HRESULT CCommandWindow::_InitInstance()
     HRESULT hr = S_OK;
 
     // Create our window to receive events.
-    // 
-    // This dialog is for demonstration purposes only.  It is not recommended to create 
-    // dialogs that are visible even before a credential enumerated by this credential 
+    //
+    // This dialog is for demonstration purposes only.  It is not recommended to create
+    // dialogs that are visible even before a credential enumerated by this credential
     // provider is selected.  Additionally, any dialogs that are created by a credential
     // provider should not have a NULL hwndParent, but should be parented to the HWND
     // returned by ICredentialProviderCredentialEvents::OnCreatingWindow.
     _hWnd = CreateWindowEx(
-        WS_EX_TOPMOST, 
-        c_szClassName, 
-        c_szDisconnected, 
-        WS_DLGFRAME,
-        200, 200, 200, 80, 
-        NULL,
-        NULL, _hInst, NULL);
+                WS_EX_TOPMOST,
+                c_szClassName,
+                c_szDisconnected,
+                WS_DLGFRAME,
+                200, 200, 200, 80,
+                NULL,
+                NULL, _hInst, NULL);
     if (_hWnd == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -134,13 +134,13 @@ HRESULT CCommandWindow::_InitInstance()
     if (SUCCEEDED(hr))
     {
         // Add a button to the window.
-        _hWndButton = CreateWindow(L"Button", L"Press to connect", 
-                             WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, 
-                             10, 10, 180, 30, 
-                             _hWnd, 
-                             NULL,
-                             _hInst,
-                             NULL);
+        _hWndButton = CreateWindow(L"Button", L"Press to connect",
+                                   WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                                   10, 10, 180, 30,
+                                   _hWnd,
+                                   NULL,
+                                   _hInst,
+                                   NULL);
         if (_hWndButton == NULL)
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -158,7 +158,7 @@ HRESULT CCommandWindow::_InitInstance()
             {
                 if (!UpdateWindow(_hWnd))
                 {
-                   hr = HRESULT_FROM_WIN32(GetLastError());
+                    hr = HRESULT_FROM_WIN32(GetLastError());
                 }
             }
         }
@@ -183,7 +183,8 @@ BOOL CCommandWindow::_ProcessNextMessage()
     switch (msg.message)
     {
     // Return to the thread loop and let it know to exit.
-    case WM_EXIT_THREAD: return FALSE;
+    case WM_EXIT_THREAD:
+        return FALSE;
 
     // Toggle the connection status, which also involves updating the UI.
     case WM_TOGGLE_CONNECTED_STATUS:
@@ -222,7 +223,7 @@ LRESULT CALLBACK CCommandWindow::_WndProc(__in HWND hWnd, __in UINT message, __i
         PostMessage(hWnd, WM_TOGGLE_CONNECTED_STATUS, 0, 0);
         break;
 
-    // To play it safe, we hide the window when "closed" and post a message telling the 
+    // To play it safe, we hide the window when "closed" and post a message telling the
     // thread to exit.
     case WM_CLOSE:
         ShowWindow(hWnd, SW_HIDE);
@@ -235,7 +236,7 @@ LRESULT CALLBACK CCommandWindow::_WndProc(__in HWND hWnd, __in UINT message, __i
     return 0;
 }
 
-// Our thread procedure. We actually do a lot of work here that could be put back on the 
+// Our thread procedure. We actually do a lot of work here that could be put back on the
 // main thread, such as setting up the window, etc.
 DWORD WINAPI CCommandWindow::_ThreadProc(__in LPVOID lpParameter)
 {
@@ -251,7 +252,7 @@ DWORD WINAPI CCommandWindow::_ThreadProc(__in LPVOID lpParameter)
     // Create the window.
     pCommandWindow->_hInst = GetModuleHandle(NULL);
     if (pCommandWindow->_hInst != NULL)
-    {            
+    {
         hr = pCommandWindow->_MyRegisterClass();
         if (SUCCEEDED(hr))
         {
@@ -266,8 +267,8 @@ DWORD WINAPI CCommandWindow::_ThreadProc(__in LPVOID lpParameter)
     // ProcessNextMessage will pump our message pump and return false if it comes across
     // a message telling us to exit the thread.
     if (SUCCEEDED(hr))
-    {        
-        while (pCommandWindow->_ProcessNextMessage()) 
+    {
+        while (pCommandWindow->_ProcessNextMessage())
         {
         }
     }

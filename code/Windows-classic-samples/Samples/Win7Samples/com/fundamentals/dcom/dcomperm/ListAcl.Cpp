@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -15,9 +15,9 @@
 
 
 /*---------------------------------------------------------------------------*\
- * NAME: 
+ * NAME:
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void WarnIfGlobalPolicySet()
 {
@@ -28,21 +28,21 @@ void WarnIfGlobalPolicySet()
     BYTE  bArray[512]   = {0};
     DWORD dwReturnValue = ERROR_SUCCESS;
 
-    if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
-                    _T("SOFTWARE\\Policies\\Microsoft\\Windows NT\\DCOM"), 
-                    0, 
-                    KEY_READ, 
+    if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                    _T("SOFTWARE\\Policies\\Microsoft\\Windows NT\\DCOM"),
+                    0,
+                    KEY_READ,
                     &hregPolicy) == ERROR_SUCCESS)
     {
         cbData = sizeof(bArray);
 
-        dwReturnValue = RegQueryValueEx(hregPolicy, 
-                                        _T("MachineAccessRestriction"), 
-                                        0, 
-                                        &dwType, 
-                                        bArray, 
+        dwReturnValue = RegQueryValueEx(hregPolicy,
+                                        _T("MachineAccessRestriction"),
+                                        0,
+                                        &dwType,
+                                        bArray,
                                         &cbData);
-        
+
         if(dwReturnValue != ERROR_FILE_NOT_FOUND)
         {
 
@@ -70,15 +70,15 @@ void WarnIfGlobalPolicySet()
 /*---------------------------------------------------------------------------*\
  * NAME: DisplayAccess                                                       *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void DisplayAccess(
-    DWORD dwAccessMask, 
-    DWORD dwSDType, 
-    LPCTSTR tszAccessType, 
-    LPCTSTR tszUser, 
+    DWORD dwAccessMask,
+    DWORD dwSDType,
+    LPCTSTR tszAccessType,
+    LPCTSTR tszUser,
     LPCTSTR tszDomain
-    )
+)
 {
 
     BOOL fLegacy = IsLegacySecurityModel();
@@ -91,16 +91,16 @@ void DisplayAccess(
     if(dwSDType & SDTYPE_ACCESS)
     {
         BOOL fLocalAccess = (dwAccessMask & COM_RIGHTS_EXECUTE_LOCAL  ) ||
-                             ((dwAccessMask & COM_RIGHTS_EXECUTE) && 
-                              !(dwAccessMask & COM_RIGHTS_EXECUTE_REMOTE));
+                            ((dwAccessMask & COM_RIGHTS_EXECUTE) &&
+                             !(dwAccessMask & COM_RIGHTS_EXECUTE_REMOTE));
 
         BOOL fRemoteAccess = (dwAccessMask & COM_RIGHTS_EXECUTE_REMOTE  ) ||
-                             ((dwAccessMask & COM_RIGHTS_EXECUTE) && 
+                             ((dwAccessMask & COM_RIGHTS_EXECUTE) &&
                               !(dwAccessMask & COM_RIGHTS_EXECUTE_LOCAL));
 
         if(fLegacy && dwAccessMask & COM_RIGHTS_EXECUTE)
         {
-            _tprintf (_T("Access %s to %s\\%s.\n"), 
+            _tprintf (_T("Access %s to %s\\%s.\n"),
                       tszAccessType,
                       tszDomain, tszUser);
 
@@ -108,72 +108,72 @@ void DisplayAccess(
         else if(!fLegacy && (fLocalAccess || fRemoteAccess))
         {
 
-            _tprintf (_T("%s access %s to %s\\%s.\n"), 
-                      fLocalAccess ? 
-                      fRemoteAccess ? 
-                      _T("Remote and Local") : _T("Local") : _T("Remote") ,
+            _tprintf (_T("%s access %s to %s\\%s.\n"),
+                      fLocalAccess ?
+                      fRemoteAccess ?
+                      _T("Remote and Local") : _T("Local") : _T("Remote"),
                       tszAccessType,
                       tszDomain, tszUser);
-         }
+        }
     }
     else
     {
 
         BOOL fLocalLaunchAccess = (dwAccessMask & COM_RIGHTS_EXECUTE_LOCAL  ) ||
-                             ((dwAccessMask & COM_RIGHTS_EXECUTE) && 
-                             !(dwAccessMask & (COM_RIGHTS_EXECUTE_REMOTE  |
-                                               COM_RIGHTS_ACTIVATE_REMOTE |
-                                               COM_RIGHTS_ACTIVATE_LOCAL)));
+                                  ((dwAccessMask & COM_RIGHTS_EXECUTE) &&
+                                   !(dwAccessMask & (COM_RIGHTS_EXECUTE_REMOTE  |
+                                           COM_RIGHTS_ACTIVATE_REMOTE |
+                                           COM_RIGHTS_ACTIVATE_LOCAL)));
 
         BOOL fRemoteLaunchAccess = (dwAccessMask & COM_RIGHTS_EXECUTE_REMOTE  ) ||
-                             ((dwAccessMask & COM_RIGHTS_EXECUTE) && 
-                             !(dwAccessMask & (COM_RIGHTS_EXECUTE_LOCAL   |
-                                               COM_RIGHTS_ACTIVATE_REMOTE |
-                                               COM_RIGHTS_ACTIVATE_LOCAL)));
+                                   ((dwAccessMask & COM_RIGHTS_EXECUTE) &&
+                                    !(dwAccessMask & (COM_RIGHTS_EXECUTE_LOCAL   |
+                                            COM_RIGHTS_ACTIVATE_REMOTE |
+                                            COM_RIGHTS_ACTIVATE_LOCAL)));
 
         BOOL fLocalActivateAccess = (dwAccessMask & COM_RIGHTS_ACTIVATE_LOCAL) ||
-                             ((dwAccessMask & COM_RIGHTS_EXECUTE) && 
-                             !(dwAccessMask & (COM_RIGHTS_EXECUTE_LOCAL  |
-                                               COM_RIGHTS_EXECUTE_REMOTE |
-                                               COM_RIGHTS_ACTIVATE_REMOTE)));
+                                    ((dwAccessMask & COM_RIGHTS_EXECUTE) &&
+                                     !(dwAccessMask & (COM_RIGHTS_EXECUTE_LOCAL  |
+                                             COM_RIGHTS_EXECUTE_REMOTE |
+                                             COM_RIGHTS_ACTIVATE_REMOTE)));
 
         BOOL fRemoteActivateAccess = (dwAccessMask & COM_RIGHTS_ACTIVATE_REMOTE) ||
-                             ((dwAccessMask & COM_RIGHTS_EXECUTE) && 
-                             !(dwAccessMask & (COM_RIGHTS_EXECUTE_LOCAL  |
-                                               COM_RIGHTS_EXECUTE_REMOTE |
-                                               COM_RIGHTS_ACTIVATE_LOCAL)));
+                                     ((dwAccessMask & COM_RIGHTS_EXECUTE) &&
+                                      !(dwAccessMask & (COM_RIGHTS_EXECUTE_LOCAL  |
+                                              COM_RIGHTS_EXECUTE_REMOTE |
+                                              COM_RIGHTS_ACTIVATE_LOCAL)));
 
         if(fLegacy && dwAccessMask & COM_RIGHTS_EXECUTE)
         {
-            _tprintf (_T("Launch %s to %s\\%s.\n"), 
+            _tprintf (_T("Launch %s to %s\\%s.\n"),
                       tszAccessType,
                       tszDomain, tszUser);
 
         }
-        else 
+        else
         {
             if(!fLegacy && (fLocalLaunchAccess || fRemoteLaunchAccess))
             {
 
-                _tprintf (_T("%s launch %s to %s\\%s.\n"), 
-                          fLocalLaunchAccess ? 
-                          fRemoteLaunchAccess ? 
-                          _T("Remote and Local") : _T("Local") : _T("Remote") ,
-                          tszAccessType,
-                          tszDomain, tszUser);
-             }
-             if(!fLegacy && (fLocalActivateAccess || fRemoteActivateAccess))
-             {
-
-                _tprintf (_T("%s activation %s to %s\\%s.\n"), 
-                          fLocalActivateAccess ? 
-                          fRemoteActivateAccess ? 
+                _tprintf (_T("%s launch %s to %s\\%s.\n"),
+                          fLocalLaunchAccess ?
+                          fRemoteLaunchAccess ?
                           _T("Remote and Local") : _T("Local") : _T("Remote"),
                           tszAccessType,
                           tszDomain, tszUser);
-             }
+            }
+            if(!fLegacy && (fLocalActivateAccess || fRemoteActivateAccess))
+            {
 
-         }
+                _tprintf (_T("%s activation %s to %s\\%s.\n"),
+                          fLocalActivateAccess ?
+                          fRemoteActivateAccess ?
+                          _T("Remote and Local") : _T("Local") : _T("Remote"),
+                          tszAccessType,
+                          tszDomain, tszUser);
+            }
+
+        }
 
     }
 
@@ -182,12 +182,12 @@ void DisplayAccess(
 /*---------------------------------------------------------------------------*\
  * NAME: ListACL                                                             *
  * --------------------------------------------------------------------------*
- * DESCRIPTION: 
+ * DESCRIPTION:
 \*---------------------------------------------------------------------------*/
 void ListACL (
     PACL Acl,
     DWORD dwSDType
-    )
+)
 {
     ACL_SIZE_INFORMATION     aclSizeInfo                      = {0};
     ACL_REVISION_INFORMATION aclRevInfo                       = {0};
@@ -239,13 +239,13 @@ void ListACL (
                               &snu);
 
 
-            DisplayAccess(pAccessAllowedAce->Mask, 
-                          dwSDType, 
-                          _T("permitted"), 
-                          tszUserName, 
+            DisplayAccess(pAccessAllowedAce->Mask,
+                          dwSDType,
+                          _T("permitted"),
+                          tszUserName,
                           tszDomainName);
 
-        } 
+        }
         else if (pAceHeader->AceType == ACCESS_DENIED_ACE_TYPE)
         {
             pAccessDeniedAce = (ACCESS_DENIED_ACE *) pvAce;
@@ -258,12 +258,12 @@ void ListACL (
                               &cchName,
                               &snu);
 
-            DisplayAccess(pAccessDeniedAce->Mask, 
-                          dwSDType, 
-                          _T("denied"), 
-                          tszUserName, 
+            DisplayAccess(pAccessDeniedAce->Mask,
+                          dwSDType,
+                          _T("denied"),
+                          tszUserName,
                           tszDomainName);
-  
+
         }
-   }
+    }
 }

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: RefClock.cpp
 //
 // Desc: DirectShow base classes - implements the IReferenceClock interface.
@@ -61,23 +61,23 @@ CBaseReferenceClock::~CBaseReferenceClock()
         EXECUTE_ASSERT( CloseHandle(m_hThread) );
         m_hThread = 0;
         EXECUTE_ASSERT( CloseHandle(m_pSchedule->GetEvent()) );
-	delete m_pSchedule;
+        delete m_pSchedule;
     }
 }
 
 // A derived class may supply a hThreadEvent if it has its own thread that will take care
 // of calling the schedulers Advise method.  (Refere to CBaseReferenceClock::AdviseThread()
 // to see what such a thread has to do.)
-CBaseReferenceClock::CBaseReferenceClock( __in_opt LPCTSTR pName, 
-                                          __inout_opt LPUNKNOWN pUnk, 
-                                          __inout HRESULT *phr, 
-                                          __inout_opt CAMSchedule * pShed )
-: CUnknown( pName, pUnk )
-, m_rtLastGotTime(0)
-, m_TimerResolution(0)
-, m_bAbort( FALSE )
-, m_pSchedule( pShed ? pShed : new CAMSchedule(CreateEvent(NULL, FALSE, FALSE, NULL)) )
-, m_hThread(0)
+CBaseReferenceClock::CBaseReferenceClock( __in_opt LPCTSTR pName,
+        __inout_opt LPUNKNOWN pUnk,
+        __inout HRESULT *phr,
+        __inout_opt CAMSchedule * pShed )
+    : CUnknown( pName, pUnk )
+    , m_rtLastGotTime(0)
+    , m_TimerResolution(0)
+    , m_bAbort( FALSE )
+    , m_pSchedule( pShed ? pShed : new CAMSchedule(CreateEvent(NULL, FALSE, FALSE, NULL)) )
+    , m_hThread(0)
 {
 
 #ifdef DXMPERF
@@ -103,9 +103,9 @@ CBaseReferenceClock::CBaseReferenceClock( __in_opt LPCTSTR pName,
         m_dwPrevSystemTime = timeGetTime();
         m_rtPrivateTime = (UNITS / MILLISECONDS) * m_dwPrevSystemTime;
 
-        #ifdef PERF
-            m_idGetSystemTime = MSR_REGISTER(TEXT("CBaseReferenceClock::GetTime"));
-        #endif
+#ifdef PERF
+        m_idGetSystemTime = MSR_REGISTER(TEXT("CBaseReferenceClock::GetTime"));
+#endif
 
         if ( !pShed )
         {
@@ -267,7 +267,8 @@ STDMETHODIMP CBaseReferenceClock::SetTimeDelta(const REFERENCE_TIME & TimeDelta)
 
     // Just break if passed an improper time delta value
     LONGLONG llDelta = TimeDelta > 0 ? TimeDelta : -TimeDelta;
-    if (llDelta > UNITS * 1000) {
+    if (llDelta > UNITS * 1000)
+    {
         DbgLog((LOG_TRACE, 0, TEXT("Bad Time Delta")));
         //DebugBreak();
     }
@@ -288,16 +289,16 @@ STDMETHODIMP CBaseReferenceClock::SetTimeDelta(const REFERENCE_TIME & TimeDelta)
 
     // Sev == 0 => > 2 second delta!
     DbgLog((LOG_TIMING, Severity < 0 ? 0 : Severity,
-        TEXT("Sev %2i: CSystemClock::SetTimeDelta(%8ld us) %lu -> %lu ms."),
-        Severity, usDelta, DWORD(ConvertToMilliseconds(m_rtPrivateTime)),
-        DWORD(ConvertToMilliseconds(TimeDelta+m_rtPrivateTime)) ));
+            TEXT("Sev %2i: CSystemClock::SetTimeDelta(%8ld us) %lu -> %lu ms."),
+            Severity, usDelta, DWORD(ConvertToMilliseconds(m_rtPrivateTime)),
+            DWORD(ConvertToMilliseconds(TimeDelta+m_rtPrivateTime)) ));
 
     // Don't want the DbgBreak to fire when running stress on debug-builds.
-    #ifdef BREAK_ON_SEVERE_TIME_DELTA
-        if (Severity < 0)
-            DbgBreakPoint(TEXT("SetTimeDelta > 16 seconds!"),
-                          TEXT(__FILE__),__LINE__);
-    #endif
+#ifdef BREAK_ON_SEVERE_TIME_DELTA
+    if (Severity < 0)
+        DbgBreakPoint(TEXT("SetTimeDelta > 16 seconds!"),
+                      TEXT(__FILE__),__LINE__);
+#endif
 
 #endif
 
@@ -346,8 +347,8 @@ HRESULT CBaseReferenceClock::AdviseThread()
         const REFERENCE_TIME  rtNow = GetPrivateTime();
 
         DbgLog((LOG_TIMING, 3,
-              TEXT("CBaseRefClock::AdviseThread() Woke at = %lu ms"),
-              ConvertToMilliseconds(rtNow) ));
+                TEXT("CBaseRefClock::AdviseThread() Woke at = %lu ms"),
+                ConvertToMilliseconds(rtNow) ));
 
         // We must add in a millisecond, since this is the resolution of our
         // WaitForSingleObject timer.  Failure to do so will cause us to loop
@@ -365,22 +366,27 @@ HRESULT CBaseReferenceClock::AdviseThread()
 }
 
 HRESULT CBaseReferenceClock::SetDefaultTimerResolution(
-        REFERENCE_TIME timerResolution // in 100ns
-    )
+    REFERENCE_TIME timerResolution // in 100ns
+)
 {
     CAutoLock cObjectLock(this);
-    if( 0 == timerResolution  ) {
-        if( m_TimerResolution ) {
-           timeEndPeriod( m_TimerResolution );
-           m_TimerResolution = 0;
+    if( 0 == timerResolution  )
+    {
+        if( m_TimerResolution )
+        {
+            timeEndPeriod( m_TimerResolution );
+            m_TimerResolution = 0;
         }
-    } else {
+    }
+    else
+    {
         TIMECAPS tc;
         DWORD dwMinResolution = (TIMERR_NOERROR == timeGetDevCaps(&tc, sizeof(tc)))
-                            ? tc.wPeriodMin
-                            : 1;
+                                ? tc.wPeriodMin
+                                : 1;
         DWORD dwResolution = max( dwMinResolution, DWORD(timerResolution / 10000) );
-        if( dwResolution != m_TimerResolution ) {
+        if( dwResolution != m_TimerResolution )
+        {
             timeEndPeriod(m_TimerResolution);
             m_TimerResolution = dwResolution;
             timeBeginPeriod( m_TimerResolution );
@@ -390,10 +396,11 @@ HRESULT CBaseReferenceClock::SetDefaultTimerResolution(
 }
 
 HRESULT CBaseReferenceClock::GetDefaultTimerResolution(
-        __out REFERENCE_TIME* pTimerResolution // in 100ns
-    )
+    __out REFERENCE_TIME* pTimerResolution // in 100ns
+)
 {
-    if( !pTimerResolution ) {
+    if( !pTimerResolution )
+    {
         return E_POINTER;
     }
     CAutoLock cObjectLock(this);

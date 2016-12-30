@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
@@ -29,25 +29,25 @@ namespace WiaWrap
 // ReadPropertyLong
 //
 
-HRESULT 
+HRESULT
 ReadPropertyLong(
-    IWiaPropertyStorage *pWiaPropertyStorage, 
-    const PROPSPEC      *pPropSpec, 
+    IWiaPropertyStorage *pWiaPropertyStorage,
+    const PROPSPEC      *pPropSpec,
     LONG                *plResult
 )
 {
     PROPVARIANT PropVariant;
 
     HRESULT hr = pWiaPropertyStorage->ReadMultiple(
-        1, 
-        pPropSpec, 
-        &PropVariant
-    );
+                     1,
+                     pPropSpec,
+                     &PropVariant
+                 );
 
     // Generally, the return value should be checked against S_FALSE.
     // If ReadMultiple returns S_FALSE, it means the property name or ID
     // had valid syntax, but it didn't exist in this property set, so
-    // no properties were retrieved, and each PROPVARIANT structure is set 
+    // no properties were retrieved, and each PROPVARIANT structure is set
     // to VT_EMPTY. But the following switch statement will handle this case
     // and return E_FAIL. So the caller of ReadPropertyLong does not need
     // to check for S_FALSE explicitly.
@@ -56,102 +56,102 @@ ReadPropertyLong(
     {
         switch (PropVariant.vt)
         {
-            case VT_I1:
-            {
-                *plResult = (LONG) PropVariant.cVal;
+        case VT_I1:
+        {
+            *plResult = (LONG) PropVariant.cVal;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_UI1:
-            {
-                *plResult = (LONG) PropVariant.bVal;
+        case VT_UI1:
+        {
+            *plResult = (LONG) PropVariant.bVal;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_I2:
-            {
-                *plResult = (LONG) PropVariant.iVal;
+        case VT_I2:
+        {
+            *plResult = (LONG) PropVariant.iVal;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_UI2:
-            {
-                *plResult = (LONG) PropVariant.uiVal;
+        case VT_UI2:
+        {
+            *plResult = (LONG) PropVariant.uiVal;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_I4:
-            {
-                *plResult = (LONG) PropVariant.lVal;
+        case VT_I4:
+        {
+            *plResult = (LONG) PropVariant.lVal;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_UI4:
-            {
-                *plResult = (LONG) PropVariant.ulVal;
+        case VT_UI4:
+        {
+            *plResult = (LONG) PropVariant.ulVal;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_INT:
-            {
-                *plResult = (LONG) PropVariant.intVal;
+        case VT_INT:
+        {
+            *plResult = (LONG) PropVariant.intVal;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_UINT:
-            {
-                *plResult = (LONG) PropVariant.uintVal;
+        case VT_UINT:
+        {
+            *plResult = (LONG) PropVariant.uintVal;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_R4:
-            {
-                *plResult = (LONG) (PropVariant.fltVal + 0.5);
+        case VT_R4:
+        {
+            *plResult = (LONG) (PropVariant.fltVal + 0.5);
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_R8:
-            {
-                *plResult = (LONG) (PropVariant.dblVal + 0.5);
+        case VT_R8:
+        {
+            *plResult = (LONG) (PropVariant.dblVal + 0.5);
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            default:
-            {
-                hr = E_FAIL;
+        default:
+        {
+            hr = E_FAIL;
 
-                break;
-            }
+            break;
+        }
         }
     }
 
@@ -165,25 +165,25 @@ ReadPropertyLong(
 // ReadPropertyGuid
 //
 
-HRESULT 
+HRESULT
 ReadPropertyGuid(
-    IWiaPropertyStorage *pWiaPropertyStorage, 
-    const PROPSPEC      *pPropSpec, 
+    IWiaPropertyStorage *pWiaPropertyStorage,
+    const PROPSPEC      *pPropSpec,
     GUID                *pguidResult
 )
 {
     PROPVARIANT PropVariant;
 
     HRESULT hr = pWiaPropertyStorage->ReadMultiple(
-        1, 
-        pPropSpec, 
-        &PropVariant
-    );
+                     1,
+                     pPropSpec,
+                     &PropVariant
+                 );
 
     // Generally, the return value should be checked against S_FALSE.
     // If ReadMultiple returns S_FALSE, it means the property name or ID
     // had valid syntax, but it didn't exist in this property set, so
-    // no properties were retrieved, and each PROPVARIANT structure is set 
+    // no properties were retrieved, and each PROPVARIANT structure is set
     // to VT_EMPTY. But the following switch statement will handle this case
     // and return E_FAIL. So the caller of ReadPropertyGuid does not need
     // to check for S_FALSE explicitly.
@@ -192,49 +192,49 @@ ReadPropertyGuid(
     {
         switch (PropVariant.vt)
         {
-            case VT_CLSID:
-            {
-                *pguidResult = *PropVariant.puuid; 
+        case VT_CLSID:
+        {
+            *pguidResult = *PropVariant.puuid;
 
-                hr = S_OK;
+            hr = S_OK;
 
-                break;
-            }
+            break;
+        }
 
-            case VT_BSTR:
-            {
-                hr = CLSIDFromString(PropVariant.bstrVal, pguidResult);
+        case VT_BSTR:
+        {
+            hr = CLSIDFromString(PropVariant.bstrVal, pguidResult);
 
-                break;
-            }
+            break;
+        }
 
-            case VT_LPWSTR:
-            {
-                hr = CLSIDFromString(PropVariant.pwszVal, pguidResult);
+        case VT_LPWSTR:
+        {
+            hr = CLSIDFromString(PropVariant.pwszVal, pguidResult);
 
-                break;
-            }
+            break;
+        }
 
-            case VT_LPSTR:
-            {
-                WCHAR wszGuid[MAX_GUID_STRING_LEN];
-                size_t *pConvertedChars = NULL; 
+        case VT_LPSTR:
+        {
+            WCHAR wszGuid[MAX_GUID_STRING_LEN];
+            size_t *pConvertedChars = NULL;
 
-                mbstowcs_s(pConvertedChars, wszGuid, COUNTOF(wszGuid) - 1 ,PropVariant.pszVal, MAX_GUID_STRING_LEN);
+            mbstowcs_s(pConvertedChars, wszGuid, COUNTOF(wszGuid) - 1,PropVariant.pszVal, MAX_GUID_STRING_LEN);
 
-                wszGuid[MAX_GUID_STRING_LEN - 1] = L'\0';
+            wszGuid[MAX_GUID_STRING_LEN - 1] = L'\0';
 
-                hr = CLSIDFromString(wszGuid, pguidResult);
+            hr = CLSIDFromString(wszGuid, pguidResult);
 
-                break;
-            }
+            break;
+        }
 
-            default:
-            {
-                hr = E_FAIL;
+        default:
+        {
+            hr = E_FAIL;
 
-                break;
-            }
+            break;
+        }
         }
     }
 
@@ -248,7 +248,7 @@ ReadPropertyGuid(
 // WiaGetNumDevices
 //
 
-HRESULT 
+HRESULT
 WiaGetNumDevices(
     IWiaDevMgr *pSuppliedWiaDevMgr,
     ULONG      *pulNumDevices
@@ -284,9 +284,9 @@ WiaGetNumDevices(
     CComPtr<IEnumWIA_DEV_INFO> pIEnumWIA_DEV_INFO;
 
     hr = pWiaDevMgr->EnumDeviceInfo(
-        0,
-        &pIEnumWIA_DEV_INFO
-    );
+             0,
+             &pIEnumWIA_DEV_INFO
+         );
 
     if (FAILED(hr))
     {
@@ -314,8 +314,8 @@ WiaGetNumDevices(
 // DefaultProgressCallback
 //
 
-HRESULT 
-CALLBACK 
+HRESULT
+CALLBACK
 DefaultProgressCallback(
     LONG   lStatus,
     LONG   lPercentComplete,
@@ -338,33 +338,33 @@ DefaultProgressCallback(
 
     // Form the message text
 
-	UINT uID;
+    UINT uID;
 
     switch (lStatus)
     {
-        case IT_STATUS_TRANSFER_FROM_DEVICE:
-		{
-			uID = IDS_STATUS_TRANSFER_FROM_DEVICE;
-            break;
-		}
+    case IT_STATUS_TRANSFER_FROM_DEVICE:
+    {
+        uID = IDS_STATUS_TRANSFER_FROM_DEVICE;
+        break;
+    }
 
-        case IT_STATUS_PROCESSING_DATA:
-		{
-            uID = IDS_STATUS_PROCESSING_DATA;
-            break;
-		}
+    case IT_STATUS_PROCESSING_DATA:
+    {
+        uID = IDS_STATUS_PROCESSING_DATA;
+        break;
+    }
 
-        case IT_STATUS_TRANSFER_TO_CLIENT:
-		{
-            uID = IDS_STATUS_TRANSFER_TO_CLIENT;
-            break;
-		}
+    case IT_STATUS_TRANSFER_TO_CLIENT:
+    {
+        uID = IDS_STATUS_TRANSFER_TO_CLIENT;
+        break;
+    }
 
-		default:
-		{
-			return E_INVALIDARG;
-		}
-    }		
+    default:
+    {
+        return E_INVALIDARG;
+    }
+    }
 
     TCHAR szFormat[DEFAULT_STRING_SIZE] = _T("%d");
 
@@ -390,7 +390,7 @@ DefaultProgressCallback(
 // WiaGetImage
 //
 
-HRESULT 
+HRESULT
 WiaGetImage(
     HWND                 hWndParent,
     LONG                 lDeviceType,
@@ -443,16 +443,16 @@ WiaGetImage(
                 return hr;
             }
         }
-    
+
         // Display the device selection common dialog
 
         hr = pWiaDevMgr->SelectDeviceDlg(
-            hWndParent,
-            lDeviceType,
-            lFlags,
-            0,
-            &pItemRoot
-        );
+                 hWndParent,
+                 lDeviceType,
+                 lFlags,
+                 0,
+                 &pItemRoot
+             );
 
         if (FAILED(hr) || hr == S_FALSE)
         {
@@ -460,17 +460,17 @@ WiaGetImage(
         }
     }
 
-    // Display the image selection common dialog 
+    // Display the image selection common dialog
 
     CComPtrArray<IWiaItem> ppIWiaItem;
 
     hr = pItemRoot->DeviceDlg(
-        hWndParent,
-        lFlags,
-        lIntent,
-        &ppIWiaItem.Count(),
-        &ppIWiaItem
-    );
+             hWndParent,
+             lFlags,
+             lIntent,
+             &ppIWiaItem.Count(),
+             &ppIWiaItem
+         );
 
     if (FAILED(hr) || hr == S_FALSE)
     {
@@ -479,7 +479,7 @@ WiaGetImage(
 
     // For ADF scanners, the common dialog explicitly sets the page count to one.
     // So in order to transfer multiple images, set the page count to ALL_PAGES
-    // if the WIA_DEVICE_DIALOG_SINGLE_IMAGE flag is not specified, 
+    // if the WIA_DEVICE_DIALOG_SINGLE_IMAGE flag is not specified,
 
     if (!(lFlags & WIA_DEVICE_DIALOG_SINGLE_IMAGE))
     {
@@ -502,10 +502,10 @@ WiaGetImage(
         LONG nDevType;
 
         hr = ReadPropertyLong(
-            pWiaRootPropertyStorage, 
-            &specDevType, 
-            &nDevType
-        );
+                 pWiaRootPropertyStorage,
+                 &specDevType,
+                 &nDevType
+             );
 
         if (SUCCEEDED(hr) && (GET_STIDEVICE_TYPE(nDevType) == StiDeviceTypeScanner))
         {
@@ -519,10 +519,10 @@ WiaGetImage(
             LONG nDocumentHandlingSelect;
 
             hr = ReadPropertyLong(
-                pWiaRootPropertyStorage, 
-                &specDocumentHandlingSelect, 
-                &nDocumentHandlingSelect
-            );
+                     pWiaRootPropertyStorage,
+                     &specDocumentHandlingSelect,
+                     &nDocumentHandlingSelect
+                 );
 
             if (SUCCEEDED(hr) && (nDocumentHandlingSelect & FEEDER))
             {
@@ -532,7 +532,7 @@ WiaGetImage(
                 specPages.propid = WIA_DPS_PAGES;
 
                 PROPVARIANT varPages;
-                    
+
                 varPages.vt = VT_I4;
                 varPages.lVal = ALL_PAGES;
 
@@ -542,7 +542,7 @@ WiaGetImage(
                     &varPages,
                     WIA_DPS_FIRST
                 );
-                
+
                 PropVariantClear(&varPages);
             }
         }
@@ -567,7 +567,7 @@ WiaGetImage(
     CComPtr<CDataCallback> pDataCallback = new CDataCallback(
         pfnProgressCallback,
         pProgressCallbackParam,
-        plCount, 
+        plCount,
         pppStream
     );
 
@@ -609,11 +609,11 @@ WiaGetImage(
         varTymed.lVal = TYMED_CALLBACK;
 
         hr = pWiaPropertyStorage->WriteMultiple(
-            1,
-            &specTymed,
-            &varTymed,
-            WIA_IPA_FIRST
-        );
+                 1,
+                 &specTymed,
+                 &varTymed,
+                 WIA_IPA_FIRST
+             );
 
         PropVariantClear(&varTymed);
 
@@ -639,10 +639,10 @@ WiaGetImage(
             specPreferredFormat.propid = WIA_IPA_PREFERRED_FORMAT;
 
             hr = ReadPropertyGuid(
-                pWiaPropertyStorage,
-                &specPreferredFormat,
-                pguidFormat
-            );
+                     pWiaPropertyStorage,
+                     &specPreferredFormat,
+                     pguidFormat
+                 );
 
             if (FAILED(hr))
             {
@@ -670,11 +670,11 @@ WiaGetImage(
         *varFormat.puuid = *pguidFormat;
 
         hr = pWiaPropertyStorage->WriteMultiple(
-            1,
-            &specFormat,
-            &varFormat,
-            WIA_IPA_FIRST
-        );
+                 1,
+                 &specFormat,
+                 &varFormat,
+                 WIA_IPA_FIRST
+             );
 
         PropVariantClear(&varFormat);
 
@@ -693,10 +693,10 @@ WiaGetImage(
         LONG nBufferSize;
 
         hr = ReadPropertyLong(
-            pWiaPropertyStorage, 
-            &specBufferSize, 
-            &nBufferSize
-        );
+                 pWiaPropertyStorage,
+                 &specBufferSize,
+                 &nBufferSize
+             );
 
         if (FAILED(hr))
         {
@@ -714,9 +714,9 @@ WiaGetImage(
         // Start the transfer
 
         hr = pIWiaDataTransfer->idtGetBandedData(
-            &WiaDataTransferInfo,
-            pDataCallback
-        );
+                 &WiaDataTransferInfo,
+                 pDataCallback
+             );
 
         if (FAILED(hr) || hr == S_FALSE)
         {

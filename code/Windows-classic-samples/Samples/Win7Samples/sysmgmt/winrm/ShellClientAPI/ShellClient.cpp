@@ -1,7 +1,7 @@
-/******************************************************************************
+﻿/******************************************************************************
  * <copyright file="ShellClient.cpp" company="Microsoft">
  *     Copyright (c) Microsoft Corporation.  All rights reserved.
- * </copyright>                                                                
+ * </copyright>
  *****************************************************************************/
 
 #include "ShellClient.h"
@@ -9,15 +9,15 @@
 // Constructor.
 CShellClient::CShellClient()
     : m_apiHandle(NULL),
-    m_session(NULL),
-    m_shell(NULL),
-    m_command(NULL),
-    m_errorCode(NO_ERROR),
-    m_ReceiveErrorCode(NO_ERROR),
-    m_event(NULL),
-    m_ReceiveEvent(NULL),
-    m_bSetup(FALSE),
-    m_bExecute(FALSE)
+      m_session(NULL),
+      m_shell(NULL),
+      m_command(NULL),
+      m_errorCode(NO_ERROR),
+      m_ReceiveErrorCode(NO_ERROR),
+      m_event(NULL),
+      m_ReceiveEvent(NULL),
+      m_bSetup(FALSE),
+      m_bExecute(FALSE)
 {
     ZeroMemory(&m_async, sizeof(m_async));
 }
@@ -37,7 +37,7 @@ BOOL CShellClient::Setup(__in PCWSTR connection,
     if (m_bSetup) return TRUE;
 
     // initialize the WinRM client
-    m_errorCode = WSManInitialize(0, 
+    m_errorCode = WSManInitialize(0,
                                   &m_apiHandle);
     if (NO_ERROR != m_errorCode)
     {
@@ -50,13 +50,13 @@ BOOL CShellClient::Setup(__in PCWSTR connection,
     serverAuthenticationCredentials.authenticationMechanism = authenticationMechanism;
     serverAuthenticationCredentials.userAccount.username = username;
     serverAuthenticationCredentials.userAccount.password = password;
-    m_errorCode = WSManCreateSession(m_apiHandle, 
-                                     connection, 
-                                     0, 
+    m_errorCode = WSManCreateSession(m_apiHandle,
+                                     connection,
+                                     0,
                                      &serverAuthenticationCredentials,
-                                     NULL, 
+                                     NULL,
                                      &m_session);
-    if (NO_ERROR != m_errorCode) 
+    if (NO_ERROR != m_errorCode)
     {
         wprintf(L"WSManCreateSession failed: %d\n", m_errorCode);
         return FALSE;
@@ -67,10 +67,10 @@ BOOL CShellClient::Setup(__in PCWSTR connection,
     WSMAN_DATA data;
     data.type = WSMAN_DATA_TYPE_DWORD;
     data.number = 60000;
-    m_errorCode = WSManSetSessionOption(m_session, 
-                                        option, 
+    m_errorCode = WSManSetSessionOption(m_session,
+                                        option,
                                         &data);
-    if (NO_ERROR != m_errorCode) 
+    if (NO_ERROR != m_errorCode)
     {
         wprintf(L"WSManSetSessionOption failed: %d\n", m_errorCode);
         return FALSE;
@@ -122,7 +122,7 @@ BOOL CShellClient::Execute(__in PCWSTR resourceUri,
 
     // WSManCreateShell
     WSManCreateShell(m_session,
-                     0,  
+                     0,
                      resourceUri,
                      NULL,
                      NULL,
@@ -130,7 +130,7 @@ BOOL CShellClient::Execute(__in PCWSTR resourceUri,
                      &m_async,
                      &m_shell);
     WaitForSingleObject(m_event, INFINITE);
-    if (NO_ERROR != m_errorCode) 
+    if (NO_ERROR != m_errorCode)
     {
         wprintf(L"WSManCreateShell failed: %d\n", m_errorCode);
         return FALSE;
@@ -138,14 +138,14 @@ BOOL CShellClient::Execute(__in PCWSTR resourceUri,
 
     // WSManRunShellCommand
     WSManRunShellCommand(m_shell,
-                         0,  
+                         0,
                          commandLine,
                          NULL,
                          NULL,
                          &m_async,
                          &m_command);
     WaitForSingleObject(m_event, INFINITE);
-    if (NO_ERROR != m_errorCode) 
+    if (NO_ERROR != m_errorCode)
     {
         wprintf(L"WSManRunShellCommand failed: %d\n", m_errorCode);
         return FALSE;
@@ -175,14 +175,14 @@ BOOL CShellClient::Execute(__in PCWSTR resourceUri,
 
     // Receive operation is finished
     WaitForSingleObject(m_ReceiveEvent, INFINITE);
-    if (NO_ERROR != m_ReceiveErrorCode) 
+    if (NO_ERROR != m_ReceiveErrorCode)
     {
         wprintf(L"WSManReceiveShellOutput failed: %d\n", m_ReceiveErrorCode);
         return FALSE;
     }
     m_errorCode = WSManCloseOperation(receiveOperation,
                                       0);
-    if (NO_ERROR != m_errorCode) 
+    if (NO_ERROR != m_errorCode)
     {
         wprintf(L"WSManCloseOperation failed: %d\n", m_errorCode);
         return FALSE;
@@ -191,7 +191,7 @@ BOOL CShellClient::Execute(__in PCWSTR resourceUri,
     return TRUE;
 }
 
-BOOL CShellClient::Send(__in_opt PSTR sendData, 
+BOOL CShellClient::Send(__in_opt PSTR sendData,
                         BOOL endOfStream)
 {
     // WSManSendShellInput
@@ -218,14 +218,14 @@ BOOL CShellClient::Send(__in_opt PSTR sendData,
                         &m_async,
                         &sendOperation);
     WaitForSingleObject(m_event, INFINITE);
-    if (NO_ERROR != m_errorCode) 
+    if (NO_ERROR != m_errorCode)
     {
         wprintf(L"WSManSendShellInput failed: %d\n", m_errorCode);
         return FALSE;
     }
     m_errorCode = WSManCloseOperation(sendOperation,
                                       0);
-    if (NO_ERROR != m_errorCode) 
+    if (NO_ERROR != m_errorCode)
     {
         wprintf(L"WSManCloseOperation failed: %d\n", m_errorCode);
         return FALSE;
@@ -243,7 +243,7 @@ VOID CShellClient::Cleanup()
                           0,
                           &m_async);
         WaitForSingleObject(m_event, INFINITE);
-        if (NO_ERROR != m_errorCode) 
+        if (NO_ERROR != m_errorCode)
         {
             wprintf(L"WSManCloseCommand failed: %d\n", m_errorCode);
         }
@@ -259,7 +259,7 @@ VOID CShellClient::Cleanup()
                         0,
                         &m_async);
         WaitForSingleObject(m_event, INFINITE);
-        if (NO_ERROR != m_errorCode) 
+        if (NO_ERROR != m_errorCode)
         {
             wprintf(L"WSManCloseShell failed: %d\n", m_errorCode);
         }
@@ -276,7 +276,7 @@ VOID CShellClient::Cleanup()
         wprintf(L"WSManCloseSession failed: %d\n", m_errorCode);
     }
 
-    // deinitializes the Winrm client stack; all operations will 
+    // deinitializes the Winrm client stack; all operations will
     // finish before this API will return
     m_errorCode = WSManDeinitialize(m_apiHandle, 0);
     if (NO_ERROR != m_errorCode)
@@ -308,7 +308,7 @@ void CALLBACK CShellClient::WSManShellCompletionFunction(
     __in_opt WSMAN_COMMAND_HANDLE command,
     __in_opt WSMAN_OPERATION_HANDLE operationHandle,
     __in_opt WSMAN_RECEIVE_DATA_RESULT *data
-    )
+)
 {
     if (operationContext)
     {
@@ -328,7 +328,7 @@ void CALLBACK CShellClient::m_WSManShellCompletionFunction(
     __in_opt WSMAN_COMMAND_HANDLE command,
     __in_opt WSMAN_OPERATION_HANDLE operationHandle,
     __in_opt WSMAN_RECEIVE_DATA_RESULT *data
-    )
+)
 {
     if (error && 0 != error->code)
     {
@@ -358,7 +358,7 @@ void CALLBACK CShellClient::ReceiveCallback(
     __in_opt WSMAN_COMMAND_HANDLE command,
     __in_opt WSMAN_OPERATION_HANDLE operationHandle,
     __in_opt WSMAN_RECEIVE_DATA_RESULT *data
-    )
+)
 {
     if (operationContext)
     {
@@ -378,7 +378,7 @@ void CALLBACK CShellClient::m_ReceiveCallback(
     __in_opt WSMAN_COMMAND_HANDLE command,
     __in_opt WSMAN_OPERATION_HANDLE operationHandle,
     __in_opt WSMAN_RECEIVE_DATA_RESULT *data
-    )
+)
 {
     if (error && 0 != error->code)
     {
@@ -393,8 +393,8 @@ void CALLBACK CShellClient::m_ReceiveCallback(
     // Output the received data to the console
     if (data && data->streamData.type == WSMAN_DATA_TYPE_BINARY && data->streamData.binaryData.dataLength)
     {
-        HANDLE hFile = ((0 == _wcsicmp(data->streamId, WSMAN_STREAM_ID_STDERR)) ? 
-                         GetStdHandle(STD_ERROR_HANDLE) : GetStdHandle(STD_OUTPUT_HANDLE));
+        HANDLE hFile = ((0 == _wcsicmp(data->streamId, WSMAN_STREAM_ID_STDERR)) ?
+                        GetStdHandle(STD_ERROR_HANDLE) : GetStdHandle(STD_OUTPUT_HANDLE));
 
         DWORD t_BufferWriteLength = 0;
         WriteFile(hFile,

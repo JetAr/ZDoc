@@ -1,11 +1,11 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 //
 // Microsoft Windows Media
 // Copyright ( C) Microsoft Corporation. All rights reserved.
 //
 // FileName:            WMVRecompress.cpp
 //
-// Abstract:            Implementation of CWMVRecompress class. 
+// Abstract:            Implementation of CWMVRecompress class.
 //
 //*****************************************************************************
 
@@ -111,11 +111,11 @@ HRESULT CWMVRecompress::CreateReader( const WCHAR * pwszInputFile )
     WMT_ATTR_DATATYPE enumType;
     WORD cbLength = sizeof( m_qwDuration );
 
-    hr = m_pReaderHeaderInfo->GetAttributeByName( &wStreamNum, 
-                                                  g_wszWMDuration, 
-                                                  &enumType, 
-                                                  (BYTE *)&m_qwDuration, 
-                                                  &cbLength );
+    hr = m_pReaderHeaderInfo->GetAttributeByName( &wStreamNum,
+            g_wszWMDuration,
+            &enumType,
+            (BYTE *)&m_qwDuration,
+            &cbLength );
     if( FAILED( hr ) )
     {
         return( hr );
@@ -137,13 +137,13 @@ HRESULT CWMVRecompress::CreateReader( const WCHAR * pwszInputFile )
     }
 
     return( hr );
-} 
+}
 
 //------------------------------------------------------------------------------
 // Name: CWMVRecompress::CreateWriter()
 // Desc: Creates a writer and sets the profile and output of this writer.
 //------------------------------------------------------------------------------
-HRESULT CWMVRecompress::CreateWriter( const WCHAR * pwszOutputFile, 
+HRESULT CWMVRecompress::CreateWriter( const WCHAR * pwszOutputFile,
                                       IWMProfile * pProfile )
 {
     HRESULT             hr = S_OK;
@@ -187,11 +187,11 @@ HRESULT CWMVRecompress::CreateWriter( const WCHAR * pwszOutputFile,
     }
 
     return( hr );
-} 
+}
 
 //------------------------------------------------------------------------------
 // Name: CWMVRecompress::GetOutputMap()
-// Desc: Creates the map from the reader ouputs to the writer inputs and 
+// Desc: Creates the map from the reader ouputs to the writer inputs and
 //       the map from the reader outputs to the reader streams.
 //------------------------------------------------------------------------------
 HRESULT CWMVRecompress::GetOutputMap()
@@ -227,7 +227,7 @@ HRESULT CWMVRecompress::GetOutputMap()
         {
             break;
         }
-         
+
         //
         // Get the stream count of the reader
         //
@@ -236,7 +236,7 @@ HRESULT CWMVRecompress::GetOutputMap()
         {
             break;
         }
-         
+
         //
         // Allocate memory for the map
         //
@@ -261,7 +261,7 @@ HRESULT CWMVRecompress::GetOutputMap()
             if( FAILED( hr ) )
             {
                 break;
-            }                       
+            }
 
             //
             // Get the type of this output property
@@ -270,7 +270,7 @@ HRESULT CWMVRecompress::GetOutputMap()
             if( FAILED( hr ) )
             {
                 break;
-            }                       
+            }
 
             //
             // Get the connection name of this output
@@ -279,8 +279,8 @@ HRESULT CWMVRecompress::GetOutputMap()
             if( FAILED( hr ) )
             {
                 break;
-            }           
-            
+            }
+
             pwszOutputConnectionName = new WCHAR[ cbConnectionName ];
             if( NULL == pwszOutputConnectionName )
             {
@@ -292,8 +292,8 @@ HRESULT CWMVRecompress::GetOutputMap()
             if( FAILED( hr ) )
             {
                 break;
-            }           
-            
+            }
+
             //
             // This loop tries to find a matching input of the writer for this output:
             // 1. The input must not be matched by other outputs of the reader.
@@ -304,7 +304,7 @@ HRESULT CWMVRecompress::GetOutputMap()
             {
                 //
                 // Seach for the current reader outputs to writer inputs map
-                // 
+                //
                 DWORD k;
                 for( k = 0; k < i; k ++ )
                 {
@@ -315,8 +315,8 @@ HRESULT CWMVRecompress::GetOutputMap()
                 }
 
                 //
-                // If this input has been matched by other outputs of the reader, 
-                // then don't use this input. 
+                // If this input has been matched by other outputs of the reader,
+                // then don't use this input.
                 //
                 if( k < i )
                 {
@@ -330,7 +330,7 @@ HRESULT CWMVRecompress::GetOutputMap()
                 if( FAILED( hr ) )
                 {
                     break;
-                }                       
+                }
 
                 //
                 // Get the type of this input property
@@ -340,12 +340,12 @@ HRESULT CWMVRecompress::GetOutputMap()
                 {
                     break;
                 }
-                
+
                 SAFE_RELEASE( pWriterInputProps );
 
                 //
-                // If this input type of the writer is equal to the output 
-                // type of the reader, we found a match. 
+                // If this input type of the writer is equal to the output
+                // type of the reader, we found a match.
                 //
                 if( guidReaderOutput == guidWriterInput )
                 {
@@ -362,7 +362,7 @@ HRESULT CWMVRecompress::GetOutputMap()
             }
 
             //
-            // If we cannot find a match for this output, mark it in the map. 
+            // If we cannot find a match for this output, mark it in the map.
             //
             if( j >= m_cWriterInput )
             {
@@ -370,12 +370,12 @@ HRESULT CWMVRecompress::GetOutputMap()
             }
 
             //
-            // In a multiple bitrate(MBR) file, several streams could have the 
-            // same output number. When playing the MBR file, the reader 
+            // In a multiple bitrate(MBR) file, several streams could have the
+            // same output number. When playing the MBR file, the reader
             // determines the best stream to use based on the available resource.
             //
-            // This loop finds the actual stream from which this reader output 
-            // comes. This information will be used to set up multichannel 
+            // This loop finds the actual stream from which this reader output
+            // comes. This information will be used to set up multichannel
             // encoding and smart recompression.
             //
             for( j = 0; j < cReaderStream; j ++ )
@@ -396,8 +396,8 @@ HRESULT CWMVRecompress::GetOutputMap()
                 if( FAILED( hr ) )
                 {
                     break;
-                }           
-                
+                }
+
                 pwszStreamConnectionName = new WCHAR[ cbConnectionName ];
                 if( NULL == pwszStreamConnectionName )
                 {
@@ -409,12 +409,12 @@ HRESULT CWMVRecompress::GetOutputMap()
                 if( FAILED( hr ) )
                 {
                     break;
-                }   
-                
+                }
+
                 SAFE_RELEASE( pReaderStreamConfig );
 
                 //
-                // If this output comes from this stream, they should have the 
+                // If this output comes from this stream, they should have the
                 // same conneciton name
                 //
                 if( 0 == _wcsicmp( pwszStreamConnectionName, pwszOutputConnectionName ) )
@@ -443,7 +443,7 @@ HRESULT CWMVRecompress::GetOutputMap()
 
         //
         // At least one output of the reader should be mapped to the input
-        // of the writer. 
+        // of the writer.
         //
         if( !fMatch )
         {
@@ -468,10 +468,10 @@ HRESULT CWMVRecompress::GetOutputMap()
 
 //------------------------------------------------------------------------------
 // Name: CWMVRecompress::SetWriterInput()
-// Desc: Sets the input properties of the writer. The method will set up 
+// Desc: Sets the input properties of the writer. The method will set up
 //       multichannel source and smart recompression if it's necessary.
 //------------------------------------------------------------------------------
-HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel, 
+HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                                         BOOL fSmartRecompression )
 {
     HRESULT             hr = S_OK;
@@ -516,34 +516,34 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                 if( FAILED( hr ) )
                 {
                     break;
-                }                       
+                }
 
                 // Get the input media properties of the writer
-                hr = m_pWriter->GetInputProps( m_pdwOutputToInput[ i ], 
+                hr = m_pWriter->GetInputProps( m_pdwOutputToInput[ i ],
                                                &pWriterInputProps );
                 if( FAILED( hr ) )
                 {
                     break;
-                }                       
+                }
 
                 // Get the media type
                 hr = pWriterInputProps->GetType( &enumType );
                 if( FAILED( hr ) )
                 {
                     break;
-                }                       
+                }
 
                 //
-                // We need do more work if the stream type is audio and 
+                // We need do more work if the stream type is audio and
                 // multichannel output or smart recompression is enabled.
                 //
-                if( ( fMultiChannel || fSmartRecompression ) && 
-                    WMMEDIATYPE_Audio == enumType )
+                if( ( fMultiChannel || fSmartRecompression ) &&
+                        WMMEDIATYPE_Audio == enumType )
                 {
                     //
-                    // Get the stream from which this output comes 
+                    // Get the stream from which this output comes
                     //
-                    hr = m_pReaderProfile->GetStream( m_pdwOutputToStream[ i ], 
+                    hr = m_pReaderProfile->GetStream( m_pdwOutputToStream[ i ],
                                                       &pReaderStreamConfig );
                     if( FAILED( hr ) )
                     {
@@ -553,8 +553,8 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                     //
                     // Get the media property interface of this stream
                     //
-                    hr = pReaderStreamConfig->QueryInterface( IID_IWMMediaProps, 
-                                                              (void **)&pReaderStreamProps );
+                    hr = pReaderStreamConfig->QueryInterface( IID_IWMMediaProps,
+                            (void **)&pReaderStreamProps );
                     if( FAILED( hr ) )
                     {
                         break;
@@ -567,7 +567,7 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                     if( FAILED( hr ) )
                     {
                         break;
-                    }                       
+                    }
 
                     pStreamMediaType = (WM_MEDIA_TYPE *)new BYTE[ cbMediaType ];
                     if( NULL == pStreamMediaType )
@@ -576,21 +576,21 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                         break;
                     }
 
-                    hr = pReaderStreamProps->GetMediaType( pStreamMediaType, 
+                    hr = pReaderStreamProps->GetMediaType( pStreamMediaType,
                                                            &cbMediaType );
                     if( FAILED( hr ) )
                     {
                         break;
-                    }       
+                    }
 
                     //
                     // Enable multichannel output for the reader if it's required.
-                    // We'll only enable multichannel output when the source has 
+                    // We'll only enable multichannel output when the source has
                     // more than 2 channels.
                     //
-                    // Multichannel output only works on Windodws XP, and it's 
-                    // not necessary unless a multichannel profile is used in 
-                    // the writer. 
+                    // Multichannel output only works on Windodws XP, and it's
+                    // not necessary unless a multichannel profile is used in
+                    // the writer.
                     //
 
                     WAVEFORMATEX * pWFX = (WAVEFORMATEX *)pStreamMediaType->pbFormat;
@@ -601,10 +601,10 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
 
                         BOOL fEnableDiscreteOutput = TRUE;
                         hr = pReaderAdvanced2->SetOutputSetting( i,
-                                                                 g_wszEnableDiscreteOutput,
-                                                                 WMT_TYPE_BOOL,
-                                                                 (BYTE *)&fEnableDiscreteOutput,
-                                                                 sizeof( BOOL ) );
+                                g_wszEnableDiscreteOutput,
+                                WMT_TYPE_BOOL,
+                                (BYTE *)&fEnableDiscreteOutput,
+                                sizeof( BOOL ) );
                         if( FAILED( hr ) )
                         {
                             break;
@@ -612,10 +612,10 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
 
                         DWORD dwSpeakerConfig = pWFX->nChannels;
                         hr = pReaderAdvanced2->SetOutputSetting( i,
-                                                                 g_wszSpeakerConfig,
-                                                                 WMT_TYPE_DWORD,
-                                                                 (BYTE *)&dwSpeakerConfig,
-                                                                 sizeof( DWORD ) );
+                                g_wszSpeakerConfig,
+                                WMT_TYPE_DWORD,
+                                (BYTE *)&dwSpeakerConfig,
+                                sizeof( DWORD ) );
                         if( FAILED( hr ) )
                         {
                             break;
@@ -644,25 +644,25 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                     //
                     if( fSmartRecompression )
                     {
-                        _tprintf( _T( "Smart recompression is enabled for input %d of the writer.\n" ), 
+                        _tprintf( _T( "Smart recompression is enabled for input %d of the writer.\n" ),
                                   m_pdwOutputToInput[ i ] );
 
-                        hr = pWriterInputProps->QueryInterface( IID_IWMPropertyVault, 
+                        hr = pWriterInputProps->QueryInterface( IID_IWMPropertyVault,
                                                                 (void **)&pPropertyVault );
                         if( FAILED( hr ))
                         {
                             break;
                         }
 
-                        hr = pPropertyVault->SetProperty( g_wszOriginalWaveFormat, 
-                                                          WMT_TYPE_BINARY, 
-                                                          pStreamMediaType->pbFormat, 
+                        hr = pPropertyVault->SetProperty( g_wszOriginalWaveFormat,
+                                                          WMT_TYPE_BINARY,
+                                                          pStreamMediaType->pbFormat,
                                                           pStreamMediaType->cbFormat );
                         if( FAILED( hr ))
                         {
                             break;
                         }
-                    }                       
+                    }
                 }
 
                 //
@@ -672,7 +672,7 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                 if( FAILED( hr ) )
                 {
                     break;
-                }                       
+                }
 
                 pOutputMediaType = (WM_MEDIA_TYPE *)new BYTE[ cbMediaType ];
                 if( NULL == pOutputMediaType )
@@ -681,15 +681,15 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                     break;
                 }
 
-                hr = pReaderOutputProps->GetMediaType( pOutputMediaType, 
+                hr = pReaderOutputProps->GetMediaType( pOutputMediaType,
                                                        &cbMediaType );
                 if( FAILED( hr ) )
                 {
                     break;
-                }       
+                }
 
                 //
-                // Apply the media type of the output to the input property 
+                // Apply the media type of the output to the input property
                 // of the writer
                 //
                 hr = pWriterInputProps->SetMediaType( pOutputMediaType );
@@ -705,7 +705,7 @@ HRESULT CWMVRecompress::SetWriterInput( BOOL fMultiChannel,
                 if( FAILED( hr ) )
                 {
                     break;
-                }                       
+                }
 
                 //
                 // Release all resources
@@ -755,8 +755,8 @@ HRESULT CWMVRecompress::Preprocess()
 
     //
     // Get the IWMWriterPreprocess interface from the writer
-    // 
-    hr = m_pWriter->QueryInterface( IID_IWMWriterPreprocess, 
+    //
+    hr = m_pWriter->QueryInterface( IID_IWMWriterPreprocess,
                                     (void **)&m_pWriterPreprocess );
     if( FAILED( hr ) )
     {
@@ -775,15 +775,15 @@ HRESULT CWMVRecompress::Preprocess()
 
     //
     // Before preprocessing, we need to iterate all inputs of the writer
-    // and get the preprocessing passes. Different inputs of the writer 
-    // could have different preprocessing passes. 
+    // and get the preprocessing passes. Different inputs of the writer
+    // could have different preprocessing passes.
     //
     DWORD i;
     for( i = 0; i < m_cWriterInput; i ++ )
     {
         //
-        // If this input doesn't have a matching input in the reader, 
-        // we don't need to do preprocessing for this input. 
+        // If this input doesn't have a matching input in the reader,
+        // we don't need to do preprocessing for this input.
         //
         DWORD j;
         for( j = 0; j < m_cReaderOutput; j ++ )
@@ -799,9 +799,9 @@ HRESULT CWMVRecompress::Preprocess()
             //
             // Get the maximum number of preprocessing passes for this input
             //
-            hr = m_pWriterPreprocess->GetMaxPreprocessingPasses( i, 
-                                                                 0, 
-                                                                 &m_pdwPreprocessPass[ i ] );
+            hr = m_pWriterPreprocess->GetMaxPreprocessingPasses( i,
+                    0,
+                    &m_pdwPreprocessPass[ i ] );
             if( FAILED( hr ) )
             {
                 return( hr );
@@ -815,9 +815,9 @@ HRESULT CWMVRecompress::Preprocess()
                 //
                 // Use the maximum number of preprocessing passes
                 //
-                hr = m_pWriterPreprocess->SetNumPreprocessingPasses( i, 
-                                                                     0, 
-                                                                     m_pdwPreprocessPass[ i ] );
+                hr = m_pWriterPreprocess->SetNumPreprocessingPasses( i,
+                        0,
+                        m_pdwPreprocessPass[ i ] );
                 if( FAILED( hr ) )
                 {
                     return( hr );
@@ -825,7 +825,7 @@ HRESULT CWMVRecompress::Preprocess()
 
                 //
                 // Begin preprocessing for this input
-                // 
+                //
                 hr = m_pWriterPreprocess->BeginPreprocessingPass( i, 0 );
                 if( FAILED( hr ) )
                 {
@@ -836,7 +836,7 @@ HRESULT CWMVRecompress::Preprocess()
         else
         {
             //
-            // Set the preprocessing pass to 0 if the input doesn't have 
+            // Set the preprocessing pass to 0 if the input doesn't have
             // a matching output in the reader
             //
             m_pdwPreprocessPass[ i ] = 0;
@@ -867,7 +867,7 @@ HRESULT CWMVRecompress::Preprocess()
         }
 
         //
-        // Set m_bPreprocessing flag to true, so OnSample() will deliver the 
+        // Set m_bPreprocessing flag to true, so OnSample() will deliver the
         // sample to m_pWriterPreprocess, not to m_pWriter.
         //
         m_bPreprocessing = TRUE;
@@ -946,7 +946,7 @@ HRESULT CWMVRecompress::Process()
     HRESULT hr = S_OK;
 
     //
-    // Set m_bPreprocessing flag to false, so OnSample() will deliver the 
+    // Set m_bPreprocessing flag to false, so OnSample() will deliver the
     // sample to m_pWriter, not to m_pWriterPreprocess.
     //
     m_bPreprocessing = FALSE;
@@ -1016,7 +1016,7 @@ HRESULT CWMVRecompress::WaitForCompletion()
 // Name: CWMVRecompress::Recompress()
 // Desc: Copies the input file to the output file, using the specified profile.
 //------------------------------------------------------------------------------
-HRESULT CWMVRecompress::Recompress( const WCHAR * pwszInputFile, 
+HRESULT CWMVRecompress::Recompress( const WCHAR * pwszInputFile,
                                     const WCHAR * pwszOutputFile,
                                     IWMProfile * pProifle,
                                     BOOL fMultiPass,
@@ -1082,7 +1082,7 @@ HRESULT CWMVRecompress::Recompress( const WCHAR * pwszInputFile,
         }
 
         //
-        // Get the map from the reader ouputs to the writer inputs and 
+        // Get the map from the reader ouputs to the writer inputs and
         // the map from the reader outputs to the reader streams
         //
         hr = GetOutputMap();
@@ -1091,7 +1091,7 @@ HRESULT CWMVRecompress::Recompress( const WCHAR * pwszInputFile,
             _tprintf( _T( "Could not get the output map (hr=0x%08x).\n" ), hr );
             break;
         }
-        
+
         //
         // Set the properties of writer inputs
         //
@@ -1175,7 +1175,7 @@ HRESULT CWMVRecompress::Recompress( const WCHAR * pwszInputFile,
             {
                 _tprintf( _T( "Processing samples failed: Invalid preprocessing passes. Use -m option\n" ) );
             }
-            else 
+            else
             {
                 _tprintf( _T( "Processing samples failed: Error (hr=0x%08x)\n" ), hr );
             }
@@ -1204,11 +1204,11 @@ HRESULT CWMVRecompress::Recompress( const WCHAR * pwszInputFile,
         }
 
         _tprintf( _T( "Recompression finished.\n" ) );
-        
+
         //
         // Note: The output file is indexed automatically.
-        // You can use IWMWriterFileSink3::SetAutoIndexing(FALSE) to disable 
-        // auto indexing. 
+        // You can use IWMWriterFileSink3::SetAutoIndexing(FALSE) to disable
+        // auto indexing.
         //
     }
     while( FALSE );
@@ -1236,11 +1236,11 @@ HRESULT CWMVRecompress::Recompress( const WCHAR * pwszInputFile,
 // Desc: Implementation of IWMReaderCallback::OnSample.
 //------------------------------------------------------------------------------
 HRESULT CWMVRecompress::OnSample( /* [in] */ DWORD dwOutputNum,
-                                  /* [in] */ QWORD qwSampleTime,
-                                  /* [in] */ QWORD qwSampleDuration,
-                                  /* [in] */ DWORD dwFlags,
-                                  /* [in] */ INSSBuffer __RPC_FAR * pSample,
-                                  /* [in] */ void __RPC_FAR * pvContext )
+        /* [in] */ QWORD qwSampleTime,
+        /* [in] */ QWORD qwSampleDuration,
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ INSSBuffer __RPC_FAR * pSample,
+        /* [in] */ void __RPC_FAR * pvContext )
 {
     HRESULT hr = S_OK;
 
@@ -1263,7 +1263,7 @@ HRESULT CWMVRecompress::OnSample( /* [in] */ DWORD dwOutputNum,
             m_dwProgress ++;
             _tprintf( _T( "*" ) );
         }
-        
+
         //
         // If it's preprocessing, we pass the sample to m_pWriterPreprocess,
         // otherwise we pass the sample to the m_pWriter.
@@ -1277,9 +1277,9 @@ HRESULT CWMVRecompress::OnSample( /* [in] */ DWORD dwOutputNum,
             if( m_pdwPreprocessPass[ dwInput ] > 0 )
             {
                 hr = m_pWriterPreprocess->PreprocessSample( dwInput,        // input number
-                                                            qwSampleTime,   // presentation time
-                                                            dwFlags,        // flags
-                                                            pSample );      // the data
+                        qwSampleTime,   // presentation time
+                        dwFlags,        // flags
+                        pSample );      // the data
             }
         }
         else
@@ -1308,10 +1308,10 @@ HRESULT CWMVRecompress::OnSample( /* [in] */ DWORD dwOutputNum,
 // Desc: Implementation of IWMStatusCallback::OnStatus.
 //------------------------------------------------------------------------------
 HRESULT CWMVRecompress::OnStatus( /* [in] */ WMT_STATUS Status,
-                                  /* [in] */ HRESULT hr,
-                                  /* [in] */ WMT_ATTR_DATATYPE dwType,
-                                  /* [in] */ BYTE __RPC_FAR * pValue,
-                                  /* [in] */ void __RPC_FAR * pvContext)
+        /* [in] */ HRESULT hr,
+        /* [in] */ WMT_ATTR_DATATYPE dwType,
+        /* [in] */ BYTE __RPC_FAR * pValue,
+        /* [in] */ void __RPC_FAR * pvContext)
 {
     //
     // If an error code already exists, just set the event and return.
@@ -1363,7 +1363,7 @@ HRESULT CWMVRecompress::OnStatus( /* [in] */ WMT_STATUS Status,
         m_hr = S_OK;
         m_fEOF = TRUE;
         SetEvent( m_hEvent );
-        
+
         break;
     }
 
@@ -1375,7 +1375,7 @@ HRESULT CWMVRecompress::OnStatus( /* [in] */ WMT_STATUS Status,
 // Desc: Implementation of IWMReaderCallbackAdvanced::OnTime.
 //------------------------------------------------------------------------------
 HRESULT CWMVRecompress::OnTime( /* [in] */ QWORD qwCurrentTime,
-                                /* [in] */ void __RPC_FAR * pvContext)
+        /* [in] */ void __RPC_FAR * pvContext)
 {
     //
     // Keep asking for 1 second of the stream till EOF
@@ -1403,11 +1403,11 @@ HRESULT CWMVRecompress::OnTime( /* [in] */ QWORD qwCurrentTime,
 // Desc: Implementation of IWMReaderCallbackAdvanced::OnStreamSample.
 //------------------------------------------------------------------------------
 HRESULT CWMVRecompress::OnStreamSample( /* [in] */ WORD wStreamNum,
-                                        /* [in] */ QWORD cnsSampleTime,
-                                        /* [in] */ QWORD cnsSampleDuration,
-                                        /* [in] */ DWORD dwFlags,
-                                        /* [in] */ INSSBuffer __RPC_FAR * pSample,
-                                        /* [in] */ void __RPC_FAR * pvContext )
+        /* [in] */ QWORD cnsSampleTime,
+        /* [in] */ QWORD cnsSampleDuration,
+        /* [in] */ DWORD dwFlags,
+        /* [in] */ INSSBuffer __RPC_FAR * pSample,
+        /* [in] */ void __RPC_FAR * pvContext )
 {
     //
     // The samples are expected in OnSample
@@ -1423,32 +1423,32 @@ HRESULT CWMVRecompress::OnStreamSample( /* [in] */ WORD wStreamNum,
 // Implementation of other IWMReaderCallbackAdvanced methods.
 //------------------------------------------------------------------------------
 HRESULT CWMVRecompress::OnStreamSelection( /* [in] */ WORD wStreamCount,
-                                           /* [in] */ WORD __RPC_FAR * pStreamNumbers,
-                                           /* [in] */ WMT_STREAM_SELECTION __RPC_FAR * pSelections,
-                                           /* [in] */ void __RPC_FAR * pvContext )
+        /* [in] */ WORD __RPC_FAR * pStreamNumbers,
+        /* [in] */ WMT_STREAM_SELECTION __RPC_FAR * pSelections,
+        /* [in] */ void __RPC_FAR * pvContext )
 {
     return(S_OK);
 }
 
 HRESULT CWMVRecompress::OnOutputPropsChanged( /* [in] */ DWORD dwOutputNum,
-                                              /* [in] */ WM_MEDIA_TYPE __RPC_FAR * pMediaType,
-                                              /* [in] */ void __RPC_FAR * pvContext )
+        /* [in] */ WM_MEDIA_TYPE __RPC_FAR * pMediaType,
+        /* [in] */ void __RPC_FAR * pvContext )
 {
     return(S_OK);
 }
 
 HRESULT CWMVRecompress::AllocateForOutput( /* [in] */ DWORD dwOutputNum,
-                                           /* [in] */ DWORD cbBuffer,
-                                           /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
-                                           /* [in] */ void __RPC_FAR * pvContext)
+        /* [in] */ DWORD cbBuffer,
+        /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
+        /* [in] */ void __RPC_FAR * pvContext)
 {
     return E_NOTIMPL;
 }
 
 HRESULT CWMVRecompress::AllocateForStream( /* [in] */ WORD wStreamNum,
-                                           /* [in] */ DWORD cbBuffer,
-                                           /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
-                                           /* [in] */ void __RPC_FAR * pvContext)
+        /* [in] */ DWORD cbBuffer,
+        /* [out] */ INSSBuffer __RPC_FAR *__RPC_FAR * ppBuffer,
+        /* [in] */ void __RPC_FAR * pvContext)
 {
     return E_NOTIMPL;
 }
@@ -1457,7 +1457,7 @@ HRESULT CWMVRecompress::AllocateForStream( /* [in] */ WORD wStreamNum,
 // Implementation of IUnknown methods.
 //------------------------------------------------------------------------------
 HRESULT CWMVRecompress::QueryInterface( /* [in] */ REFIID riid,
-                                        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR * ppvObject)
+        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR * ppvObject)
 {
     if( NULL == ppvObject )
     {
@@ -1510,7 +1510,7 @@ ULONG CWMVRecompress::Release()
 
 //------------------------------------------------------------------------------
 // Name: CWMVRecompress::ListSystemProfile()
-// Desc: Enumerates all system profiles (version 8.0), and displays their 
+// Desc: Enumerates all system profiles (version 8.0), and displays their
 //       indexes and names.
 //------------------------------------------------------------------------------
 HRESULT CWMVRecompress::ListSystemProfile()
@@ -1535,8 +1535,8 @@ HRESULT CWMVRecompress::ListSystemProfile()
             break;
         }
 
-        hr = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2, 
-                                                 ( void ** )&pIWMProfileManager2 );
+        hr = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2,
+                ( void ** )&pIWMProfileManager2 );
         if( FAILED( hr ) )
         {
             break;
@@ -1556,7 +1556,7 @@ HRESULT CWMVRecompress::ListSystemProfile()
         {
             break;
         }
-    
+
         _tprintf( _T( "Profile Indexes are as follows:\n" ) );
 
         //
@@ -1588,7 +1588,7 @@ HRESULT CWMVRecompress::ListSystemProfile()
             {
                 break;
             }
-    
+
             //
             // Display the system profile index and name
             //
@@ -1620,8 +1620,8 @@ HRESULT CWMVRecompress::ListSystemProfile()
 // Name: CWMVRecompress::LoadSystemProfile()
 // Desc: Loads a system profile (version 8.0) by the index.
 //------------------------------------------------------------------------------
-HRESULT CWMVRecompress::LoadSystemProfile( DWORD dwProfileIndex, 
-                                           IWMProfile ** ppIWMProfile )
+HRESULT CWMVRecompress::LoadSystemProfile( DWORD dwProfileIndex,
+        IWMProfile ** ppIWMProfile )
 {
     HRESULT             hr = S_OK;
     IWMProfileManager   * pIWMProfileManager = NULL;
@@ -1643,8 +1643,8 @@ HRESULT CWMVRecompress::LoadSystemProfile( DWORD dwProfileIndex,
             break;
         }
 
-        hr = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2, 
-                                                 ( void ** )&pIWMProfileManager2 );
+        hr = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2,
+                ( void ** )&pIWMProfileManager2 );
         if( FAILED( hr ) )
         {
             break;
@@ -1662,8 +1662,8 @@ HRESULT CWMVRecompress::LoadSystemProfile( DWORD dwProfileIndex,
         //
         // Load the system profile by index
         //
-        hr = pIWMProfileManager->LoadSystemProfile( dwProfileIndex, 
-                                                    ppIWMProfile );
+        hr = pIWMProfileManager->LoadSystemProfile( dwProfileIndex,
+                ppIWMProfile );
         if( FAILED( hr ) )
         {
             break;
@@ -1684,8 +1684,8 @@ HRESULT CWMVRecompress::LoadSystemProfile( DWORD dwProfileIndex,
 // Name: CWMVRecompress::LoadCustomProfile()
 // Desc: Loads a custom profile from file.
 //------------------------------------------------------------------------------
-HRESULT CWMVRecompress::LoadCustomProfile( const WCHAR * pwszProfileFile, 
-                                           IWMProfile ** ppIWMProfile )
+HRESULT CWMVRecompress::LoadCustomProfile( const WCHAR * pwszProfileFile,
+        IWMProfile ** ppIWMProfile )
 {
     HRESULT             hr = S_OK;
     DWORD               dwLength = 0;
@@ -1713,12 +1713,12 @@ HRESULT CWMVRecompress::LoadCustomProfile( const WCHAR * pwszProfileFile,
         //
         // Open the profile file
         //
-        hFile = CreateFileW( pwszProfileFile, 
-                             GENERIC_READ, 
-                             FILE_SHARE_READ, 
-                             NULL, 
-                             OPEN_EXISTING, 
-                             FILE_ATTRIBUTE_NORMAL, 
+        hFile = CreateFileW( pwszProfileFile,
+                             GENERIC_READ,
+                             FILE_SHARE_READ,
+                             NULL,
+                             OPEN_EXISTING,
+                             FILE_ATTRIBUTE_NORMAL,
                              NULL );
         if( INVALID_HANDLE_VALUE == hFile )
         {
@@ -1764,8 +1764,8 @@ HRESULT CWMVRecompress::LoadCustomProfile( const WCHAR * pwszProfileFile,
         //
         // Load the profile from the buffer
         //
-        hr = pProfileManager->LoadProfileByData( pProfile, 
-                                                 ppIWMProfile );
+        hr = pProfileManager->LoadProfileByData( pProfile,
+                ppIWMProfile );
         if( FAILED(hr) )
         {
             break;

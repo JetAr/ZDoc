@@ -1,4 +1,4 @@
-#define IDD_DIALOG1                     101
+﻿#define IDD_DIALOG1                     101
 #define IDC_STATIC1                     101
 #define IDC_BROWSER                     101
 #define IDS_EMPTY                       101

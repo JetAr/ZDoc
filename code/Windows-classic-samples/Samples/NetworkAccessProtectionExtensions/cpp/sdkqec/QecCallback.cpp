@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,32 +27,32 @@ const GUID CONN_ID =
 //      xxyyzzaabbccmmnn-xxyyzzaabb...
 
 void PrintByte(
-    _In_reads_(byteCount) BYTE* pByte, 
-    _In_ DWORD byteCount, 
+    _In_reads_(byteCount) BYTE* pByte,
+    _In_ DWORD byteCount,
     _In_ DWORD indentCount)
 {
-   DWORD i = 0, j = 0, k = 0;
-   if (pByte == NULL || byteCount == 0)
-   {
-      wprintf(L"It is empty\n");
-      goto Cleanup;
-   }
+    DWORD i = 0, j = 0, k = 0;
+    if (pByte == NULL || byteCount == 0)
+    {
+        wprintf(L"It is empty\n");
+        goto Cleanup;
+    }
 
-   for( ; i < byteCount; )
-   {
-      for( j = 0; j < indentCount; ++j)
-         wprintf( L" " );
-      for( ; i < byteCount && k < 8; ++i, ++k )
-         wprintf( L"%2.2X ", pByte[i] );
-      if( i < byteCount )
-         wprintf( L"- " );
-      for( ; i < byteCount && k < 16; ++i, ++k )
-         wprintf( L"%2.2X ", pByte[i] );
-      wprintf( L"\n" );
-      k = 0;
-   }
+    for( ; i < byteCount; )
+    {
+        for( j = 0; j < indentCount; ++j)
+            wprintf( L" " );
+        for( ; i < byteCount && k < 8; ++i, ++k )
+            wprintf( L"%2.2X ", pByte[i] );
+        if( i < byteCount )
+            wprintf( L"- " );
+        for( ; i < byteCount && k < 16; ++i, ++k )
+            wprintf( L"%2.2X ", pByte[i] );
+        wprintf( L"\n" );
+        k = 0;
+    }
 Cleanup:
-   return;
+    return;
 }
 
 
@@ -129,7 +129,7 @@ STDMETHODIMP QecCallback::NotifySoHChange()
         wprintf(L"\nQecCallback::NotifySoHChange(): call to CreateConnectionObject() failed (error = 0x%08x)\n",hr);
         goto Cleanup;
     }
-    
+
     //  Call GetSohRequest.
     hr = m_pBinding->GetSoHRequest(m_pConnection, &m_retriggerHint);
     if (FAILED(hr))
@@ -152,8 +152,8 @@ STDMETHODIMP QecCallback::NotifySoHChange()
         goto Cleanup;
     }
 
-        wprintf(L"\nQecCallback::NotifySoHChange(): Rcvd NetworkSohReq of Size: %#x\n",networkSohRequest->size);
-        PrintByte(networkSohRequest->data, networkSohRequest->size, 2);
+    wprintf(L"\nQecCallback::NotifySoHChange(): Rcvd NetworkSohReq of Size: %#x\n",networkSohRequest->size);
+    PrintByte(networkSohRequest->data, networkSohRequest->size, 2);
 
 Cleanup:
     wprintf(L"\nQecCallback::NotifySoHChange() Exit\n");
@@ -226,7 +226,7 @@ STDMETHODIMP QecCallback::GetConnections(
         // add a reference to the connection prior to passing it out
         m_pConnection->AddRef();
     }
-    
+
 Cleanup:
     wprintf(L"\nQecCallback::GetConnections() Exit\n");
     return hr;
@@ -238,7 +238,7 @@ Cleanup:
 // Implementation of IUnknown
 
 STDMETHODIMP QecCallback::QueryInterface(
-    __RPC__in const IID& iid, 
+    __RPC__in const IID& iid,
     __RPC__out void** ppv)
 {
     if (iid == IID_IUnknown)

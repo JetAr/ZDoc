@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: Dialog.h
 // Desc: Dialog class
 //
@@ -23,7 +23,7 @@ void        ShowLastError(HWND hwnd);
 /******************************************************************************
  *
  *  CBaseDialog Class
- *  Implements a Win32 modal dialog. 
+ *  Implements a Win32 modal dialog.
  *
  *  Examle of usage:
  *
@@ -36,7 +36,7 @@ void        ShowLastError(HWND hwnd);
  *  Call ShowDialog to show the dialog:
  *      if (pDlg)
  *	    {
- *          pDlg->ShowDialog(m_hinst, m_hwndParent); 
+ *          pDlg->ShowDialog(m_hinst, m_hwndParent);
  *      }
  *
  *****************************************************************************/
@@ -45,25 +45,28 @@ class CBaseDialog
 {
 
 private:
-	LONG		m_NcTop;
-	LONG		m_NcBottom;
-	LONG		m_NcWidth;
-	void		CalcNcSize();
+    LONG		m_NcTop;
+    LONG		m_NcBottom;
+    LONG		m_NcWidth;
+    void		CalcNcSize();
 
 protected:
     HINSTANCE   m_hinst;    // application instance
     HWND        m_hwnd;     // parent window - can be NULL
     HWND        m_hDlg;     // this dialog window
-    int         m_nID;      // Resource ID of the dialog window 
-                            // (Set this in the constructor)
+    int         m_nID;      // Resource ID of the dialog window
+    // (Set this in the constructor)
 
 protected:
 
     // Dialog proc for the dialog we manage
     static INT_PTR CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
-    
+
     // Return one of our dialog controls
-	HWND GetDlgItem(int nID) { return ::GetDlgItem(m_hDlg, nID); }
+    HWND GetDlgItem(int nID)
+    {
+        return ::GetDlgItem(m_hDlg, nID);
+    }
 
     void EnableWindow(int nID, BOOL bEnable)
     {
@@ -85,7 +88,7 @@ protected:
     void SetControlWindow(Control& control, int nID);
 
     // Redraw a control
-	void RedrawControl(int nID);
+    void RedrawControl(int nID);
 
 
     // some wrappers for Win32 functions
@@ -129,11 +132,20 @@ protected:
     // Override the following to handle various window messages
 
     // WM_INIT_DIALOG
-    virtual HRESULT OnInitDialog() { return S_OK; }   
+    virtual HRESULT OnInitDialog()
+    {
+        return S_OK;
+    }
 
     // IDOK and IDCANCEL. Return TRUE to close the dialog or FALSE to leave it open
-    virtual BOOL OnOK() { return TRUE; }
-    virtual BOOL OnCancel() { return TRUE; }
+    virtual BOOL OnOK()
+    {
+        return TRUE;
+    }
+    virtual BOOL OnCancel()
+    {
+        return TRUE;
+    }
 
     // WM_COMMAND (except IDOK and IDCANCEL)
     virtual INT_PTR OnCommand(HWND /*hControl*/, WORD /*idControl*/, WORD /*msg*/)
@@ -153,13 +165,13 @@ protected:
         return FALSE;
     }
 
-	virtual void EndDialog(INT_PTR cmd)
-	{
-		if (m_hDlg)
-		{
-			::EndDialog(m_hDlg, cmd);
-		}
-	}
+    virtual void EndDialog(INT_PTR cmd)
+    {
+        if (m_hDlg)
+        {
+            ::EndDialog(m_hDlg, cmd);
+        }
+    }
 
 public:
     CBaseDialog(int nID);
@@ -167,9 +179,18 @@ public:
 
     virtual BOOL ShowDialog(HINSTANCE hinst, HWND hwnd);
 
-	LONG NonClientTop() const { return m_NcTop; }
-	LONG NonClientBottom() const { return m_NcBottom; }
-	LONG NonClientWidth() const { return m_NcWidth; }
+    LONG NonClientTop() const
+    {
+        return m_NcTop;
+    }
+    LONG NonClientBottom() const
+    {
+        return m_NcBottom;
+    }
+    LONG NonClientWidth() const
+    {
+        return m_NcWidth;
+    }
 };
 
 

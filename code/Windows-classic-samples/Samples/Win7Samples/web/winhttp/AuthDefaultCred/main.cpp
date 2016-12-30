@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -6,7 +6,7 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved
 //
-// Simple Winhttp application using default credentials to 
+// Simple Winhttp application using default credentials to
 // authenticate with server that require NTLM authentication
 // WARNING: It is not secure to use default credentials on an untrusted
 //        server/network or internet server.
@@ -42,7 +42,7 @@ wmain(
 
     pwszServerName = argv[1];
 
-    // Use WinHttpOpen to obtain a session handle and specify no proxy  
+    // Use WinHttpOpen to obtain a session handle and specify no proxy
     hSession = WinHttpOpen(USER_AGENT,
                            WINHTTP_ACCESS_TYPE_NO_PROXY,
                            WINHTTP_NO_PROXY_NAME,
@@ -113,9 +113,9 @@ wmain(
     if (!WinHttpSendRequest(hRequest,
                             WINHTTP_NO_ADDITIONAL_HEADERS,
                             0,
-                            WINHTTP_NO_REQUEST_DATA, 
+                            WINHTTP_NO_REQUEST_DATA,
                             0,
-                            0, 
+                            0,
                             0))
     {
         dwError = GetLastError();
@@ -147,7 +147,7 @@ wmain(
     }
 
     // Expect to get status code 200
-    if(dwStatusCode == 200)  
+    if(dwStatusCode == 200)
     {
         wprintf(L"Got expected status code=200\n");
     }

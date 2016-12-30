@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -45,7 +45,7 @@ IFACEMETHODIMP CDeviceContextMenuFactory::CreateInstance(
     __in_opt IUnknown* pUnkOuter,
     __in REFIID riid,
     __deref_out void** ppvObject
-    )
+)
 {
     HRESULT hr  = E_FAIL;
     CDeviceContextMenu* pCDeviceContextMenu = NULL;
@@ -65,7 +65,7 @@ IFACEMETHODIMP CDeviceContextMenuFactory::CreateInstance(
     {
         return E_OUTOFMEMORY;
     }
-	
+
     hr = pCDeviceContextMenu->QueryInterface( riid, ppvObject );
     pCDeviceContextMenu->Release();
 
@@ -78,7 +78,7 @@ IFACEMETHODIMP CDeviceContextMenuFactory::CreateInstance(
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenuFactory::LockServer(
     BOOL bLock
-    )
+)
 {
     if( TRUE == bLock )
     {
@@ -101,9 +101,9 @@ IFACEMETHODIMP CDeviceContextMenuFactory::LockServer(
 // CDeviceContextMenuFactory::QueryInterface
 //------------------------------------------------------------------------------
 IFACEMETHODIMP CDeviceContextMenuFactory::QueryInterface(
-    __in REFIID riid, 
+    __in REFIID riid,
     __deref_out void** ppvObject
-    )
+)
 {
     HRESULT hr = S_OK;
 

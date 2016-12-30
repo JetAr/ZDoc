@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -102,15 +102,15 @@ BOOL CBaseWindow::_Create(ATOM atom, DWORD dwExStyle, DWORD dwStyle, _In_opt_ CB
         // create real window
 
         _wndHandle = CreateWindowEx(dwExStyle,
-            (LPCTSTR)atom,
-            NULL,
-            dwStyle,
-            0, 0,
-            wndWidth, wndHeight,
-            _pParentWnd ? _pParentWnd->_GetWnd() : parentWndHandle,    // parentWndHandle
-            NULL,
-            Global::dllInstanceHandle,
-            this);   // lpParam
+                                    (LPCTSTR)atom,
+                                    NULL,
+                                    dwStyle,
+                                    0, 0,
+                                    wndWidth, wndHeight,
+                                    _pParentWnd ? _pParentWnd->_GetWnd() : parentWndHandle,    // parentWndHandle
+                                    NULL,
+                                    Global::dllInstanceHandle,
+                                    this);   // lpParam
 
         if (!_wndHandle)
         {
@@ -406,7 +406,7 @@ void CBaseWindow::CalcFitPointAroundTextExtent(_In_ const RECT *prcTextExtent, _
     {
         ppt->y = 0;
     }
-    else 
+    else
     {
         ppt->y = prcWorkArea->bottom - (prcWindow->bottom - prcWindow->top);
     }
@@ -440,7 +440,7 @@ DWORD CBaseWindow::RectInRect(_In_ const RECT *prcLimit, _In_ const RECT *prcTar
     DWORD dwFlags = 0;
     // Check if prcTarget is entirely inside prcLimit
     if (prcLimit->left <= prcTarget->left && prcTarget->right  <= prcLimit->right &&
-        prcLimit->top  <= prcTarget->top  && prcTarget->bottom <= prcLimit->bottom)
+            prcLimit->top  <= prcTarget->top  && prcTarget->bottom <= prcLimit->bottom)
     {
         return RECT_INSIDE;
     }
@@ -454,7 +454,7 @@ DWORD CBaseWindow::RectInRect(_In_ const RECT *prcLimit, _In_ const RECT *prcTar
         assert(FALSE);
         dwFlags |= RECT_TOO_WIDE;
     }
-    else if (prcTarget->left < prcLimit->left) 
+    else if (prcTarget->left < prcLimit->left)
     {
         dwFlags |= RECT_OVER_LEFT;
     }
@@ -520,7 +520,7 @@ void CBaseWindow::_SetCaptureObject(_In_opt_ CBaseWindow *pUIObj)
 
     pUIWnd->_pUIObjCapture = pUIObj;
     if (pUIObj != nullptr)
-    { 
+    {
         SetCapture(pUIWnd->_GetWnd());
     }
     else

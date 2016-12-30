@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1999 - 2000 Microsoft Corporation, all rights reserved
 
@@ -23,7 +23,8 @@ extern "C"
 
 CComModule  _Module;
 
-const IID IID_IEAPProviderConfig = {
+const IID IID_IEAPProviderConfig =
+{
     0x66A2DB19,
     0xD706,
     0x11D0,
@@ -31,7 +32,8 @@ const IID IID_IEAPProviderConfig = {
 };
 
 // Define the EAP UI GUIDs here
-const CLSID CLSID_EapCfg = { /* 3b9aae60-a032-11d2-95f6-00104b98f3f5 */
+const CLSID CLSID_EapCfg =   /* 3b9aae60-a032-11d2-95f6-00104b98f3f5 */
+{
     0x3b9aae60,
     0xa032,
     0x11d2,
@@ -39,7 +41,7 @@ const CLSID CLSID_EapCfg = { /* 3b9aae60-a032-11d2-95f6-00104b98f3f5 */
 };
 
 BEGIN_OBJECT_MAP(ObjectMap)
-    OBJECT_ENTRY(CLSID_EapCfg, CEapCfg)
+OBJECT_ENTRY(CLSID_EapCfg, CEapCfg)
 END_OBJECT_MAP()
 
 /*
@@ -78,7 +80,7 @@ DllMain(
 
 Notes:
     Used to determine whether the DLL can be unloaded by OLE
-    
+
 */
 
 STDAPI
@@ -100,7 +102,7 @@ DllCanUnloadNow(
 
 Notes:
     Returns a class factory to create an object of the requested type
-    
+
 */
 
 STDAPI
@@ -118,7 +120,7 @@ DllGetClassObject(
 Notes:
     Adds entries to the system registry. Registers object, typelib and all
     interfaces in typelib
-    
+
 */
 
 STDAPI
@@ -133,7 +135,7 @@ DllRegisterServer(
 
 Notes:
     Removes entries from the system registry
-    
+
 */
 
 STDAPI

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -31,11 +31,11 @@ int __cdecl main(void)
 
     // Removes the range from the policy
     dwError = DhcpV4RemovePolicyRange(
-        pwszServer,     //Server IP Address, NULL signifies the current server (where the program is executed)
-        dwScope,        // Subnet Address
-        pwszPolicyName, // Name of the policy
-        &range          // Range that needs to be removed
-        );
+                  pwszServer,     //Server IP Address, NULL signifies the current server (where the program is executed)
+                  dwScope,        // Subnet Address
+                  pwszPolicyName, // Name of the policy
+                  &range          // Range that needs to be removed
+              );
     if(ERROR_SUCCESS != dwError)
     {
         wprintf(L"DhcpV4RemovePolicyRange failed with Error = %d\n",dwError);

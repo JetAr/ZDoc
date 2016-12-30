@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   srengalt.h 
+*   srengalt.h
 *       This file contains the declaration of the CSrEngineAlternates class.
 *       This implements the interface ISpSRAlternates.
 *       When an app calls GetAlternates or Commit on a result, SAPI will
@@ -23,9 +23,9 @@
 #include "SampleSrEngine.h"
 #include "resource.h"
 
-class ATL_NO_VTABLE CSrEngineAlternates : 
-	public CComObjectRootEx<CComMultiThreadModel>,
-	public CComCoClass<CSrEngineAlternates, &CLSID_SampleSREngineAlternates>,
+class ATL_NO_VTABLE CSrEngineAlternates :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CSrEngineAlternates, &CLSID_SampleSREngineAlternates>,
     public ISpSRAlternates
 {
 public:
@@ -35,17 +35,17 @@ public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
     BEGIN_COM_MAP(CSrEngineAlternates)
-    	COM_INTERFACE_ENTRY(ISpSRAlternates)
+    COM_INTERFACE_ENTRY(ISpSRAlternates)
     END_COM_MAP()
 
 public:
 
-    STDMETHODIMP GetAlternates( 
+    STDMETHODIMP GetAlternates(
         SPPHRASEALTREQUEST *pAltRequest,
         SPPHRASEALT **ppAlts,
         ULONG *pcAlts);
-    
-    STDMETHODIMP Commit( 
+
+    STDMETHODIMP Commit(
         SPPHRASEALTREQUEST *pAltRequest,
         SPPHRASEALT *pAlt,
         void **ppvResultExtra,

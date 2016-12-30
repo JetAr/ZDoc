@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -99,15 +99,15 @@ polFindObjIdInList(
     IN DWORD count,
     IN WCHAR const * const *ppwsz);
 
-// 
+//
 // Class CCertPolicySample
-// 
+//
 // Actual policy module for a CA Policy
 //
 //
 
-class CCertPolicySample: 
-    public CComDualImpl<ICertPolicy2, &IID_ICertPolicy2, &LIBID_CERTPOLICYSAMPLELib>, 
+class CCertPolicySample:
+    public CComDualImpl<ICertPolicy2, &IID_ICertPolicy2, &LIBID_CERTPOLICYSAMPLELib>,
     public ISupportErrorInfo,
     public CComObjectRoot,
     public CComCoClass<CCertPolicySample, &CLSID_CCertPolicySample>
@@ -115,29 +115,29 @@ class CCertPolicySample:
 public:
     CCertPolicySample()
     {
-	m_strDescription = NULL;
+        m_strDescription = NULL;
 
         // RevocationExtension variables:
 
-	m_dwRevocationFlags = 0;
-	m_wszASPRevocationURL = NULL;
+        m_dwRevocationFlags = 0;
+        m_wszASPRevocationURL = NULL;
 
         m_dwDispositionFlags = 0;
         m_dwEditFlags = 0;
 
-	m_cEnableRequestExtensions = 0;
-	m_apwszEnableRequestExtensions = NULL;
+        m_cEnableRequestExtensions = 0;
+        m_apwszEnableRequestExtensions = NULL;
 
-	m_cEnableEnrolleeRequestExtensions = 0;
-	m_apwszEnableEnrolleeRequestExtensions = NULL;
+        m_cEnableEnrolleeRequestExtensions = 0;
+        m_apwszEnableEnrolleeRequestExtensions = NULL;
 
-	m_cDisableExtensions = 0;
-	m_apwszDisableExtensions = NULL;
+        m_cDisableExtensions = 0;
+        m_apwszDisableExtensions = NULL;
 
-	// CA Name
+        // CA Name
         m_strRegStorageLoc = NULL;
 
-	m_strCAName = NULL;
+        m_strCAName = NULL;
         m_strCASanitizedName = NULL;
         m_strCASanitizedDSName = NULL;
         m_strMachineDNSName = NULL;
@@ -152,82 +152,85 @@ public:
     }
     ~CCertPolicySample();
 
-BEGIN_COM_MAP(CCertPolicySample)
+    BEGIN_COM_MAP(CCertPolicySample)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(ICertPolicy)
     COM_INTERFACE_ENTRY(ICertPolicy2)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
-END_COM_MAP()
+    END_COM_MAP()
 
-DECLARE_NOT_AGGREGATABLE(CCertPolicySample) 
-// Remove the comment from the line above if you don't want your object to 
+    DECLARE_NOT_AGGREGATABLE(CCertPolicySample)
+// Remove the comment from the line above if you don't want your object to
 // support aggregation.  The default is to support it
 
-DECLARE_REGISTRY(
-    CCertPolicySample,
-    wszCLASS_CERTPOLICYSAMPLE TEXT(".1"),
-    wszCLASS_CERTPOLICYSAMPLE,
-    IDS_CERTPOLICY_DESC,
-    THREADFLAGS_BOTH)
+    DECLARE_REGISTRY(
+        CCertPolicySample,
+        wszCLASS_CERTPOLICYSAMPLE TEXT(".1"),
+        wszCLASS_CERTPOLICYSAMPLE,
+        IDS_CERTPOLICY_DESC,
+        THREADFLAGS_BOTH)
 
 // ISupportsErrorInfo
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 // ICertPolicy
 public:
-    STDMETHOD(Initialize)( 
-		/* [in] */ BSTR const strConfig);
+    STDMETHOD(Initialize)(
+        /* [in] */ BSTR const strConfig);
 
-    STDMETHOD(VerifyRequest)( 
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG Context,
-		/* [in] */ LONG bNewRequest,
-		/* [in] */ LONG Flags,
-		/* [out, retval] */ LONG __RPC_FAR *pDisposition);
+    STDMETHOD(VerifyRequest)(
+        /* [in] */ BSTR const strConfig,
+        /* [in] */ LONG Context,
+        /* [in] */ LONG bNewRequest,
+        /* [in] */ LONG Flags,
+        /* [out, retval] */ LONG __RPC_FAR *pDisposition);
 
-    STDMETHOD(GetDescription)( 
-		/* [out, retval] */ BSTR __RPC_FAR *pstrDescription);
+    STDMETHOD(GetDescription)(
+        /* [out, retval] */ BSTR __RPC_FAR *pstrDescription);
 
     STDMETHOD(ShutDown)();
 
 // ICertPolicy2
 public:
     STDMETHOD(GetManageModule)(
-		/* [out, retval] */ ICertManageModule **ppManageModule);
+        /* [out, retval] */ ICertManageModule **ppManageModule);
 
 public:
     HRESULT AddBasicConstraintsCommon(
-		IN ICertServerPolicy *pServer,
-		IN CERT_EXTENSION const *pExtension,
-		IN BOOL fCA,
-		IN BOOL fEnableExtension);
+        IN ICertServerPolicy *pServer,
+        IN CERT_EXTENSION const *pExtension,
+        IN BOOL fCA,
+        IN BOOL fEnableExtension);
 
-    BSTRC GetPolicyDescription() { return(m_strDescription); }
+    BSTRC GetPolicyDescription()
+    {
+        return(m_strDescription);
+    }
 
 
     HRESULT AddV1TemplateNameExtension(
-		IN ICertServerPolicy *pServer,
-		OPTIONAL IN WCHAR const *pwszTemplateName);
+        IN ICertServerPolicy *pServer,
+        OPTIONAL IN WCHAR const *pwszTemplateName);
 
 private:
     CERT_CONTEXT const *_GetIssuer(
-		IN ICertServerPolicy *pServer);
+        IN ICertServerPolicy *pServer);
 
     HRESULT _EnumerateExtensions(
-		IN ICertServerPolicy *pServer,
-		IN LONG bNewRequest,
-		IN BOOL fFirstPass,
-		IN BOOL fEnableEnrolleeExtensions,
-		IN DWORD cCriticalExtensions,
-		IN WCHAR const * const *apwszCriticalExtensions);
+        IN ICertServerPolicy *pServer,
+        IN LONG bNewRequest,
+        IN BOOL fFirstPass,
+        IN BOOL fEnableEnrolleeExtensions,
+        IN DWORD cCriticalExtensions,
+        IN WCHAR const * const *apwszCriticalExtensions);
 
 #if DBG_CERTSRV
     VOID _DumpStringArray(
-	__in PCSTR pszType,
-	__in DWORD count,
-	__in_ecount(count) LPWSTR const *apwsz);
+        __in PCSTR pszType,
+        __in DWORD count,
+        __in_ecount(count) LPWSTR const *apwsz);
 #else
-    #define _DumpStringArray(pszType, count, apwsz)
+#define _DumpStringArray(pszType, count, apwsz)
 #endif
 
     VOID _FreeStringArray(
@@ -238,9 +241,9 @@ private:
 
 
     HRESULT _SetSystemStringProp(
-		IN ICertServerPolicy *pServer,
-		IN WCHAR const *pwszName,
-		OPTIONAL IN WCHAR const *pwszValue);
+        IN ICertServerPolicy *pServer,
+        IN WCHAR const *pwszName,
+        OPTIONAL IN WCHAR const *pwszValue);
 
     HRESULT _AddStringArray(
         __in CSPCZZWSTR pwszzValue,
@@ -266,37 +269,37 @@ private:
         __deref_inout_ecount(*pcStrings) LPWSTR **papwszRegValues);
 
     VOID _InitRevocationExtension(
-		IN HKEY hkey);
+        IN HKEY hkey);
 
     VOID _InitRequestExtensionList(
-		IN HKEY hkey);
+        IN HKEY hkey);
 
     VOID _InitDisableExtensionList(
-		IN HKEY hkey);
+        IN HKEY hkey);
 
     HRESULT _AddRevocationExtension(
-		IN ICertServerPolicy *pServer);
+        IN ICertServerPolicy *pServer);
 
     HRESULT _AddOldCertTypeExtension(
-		IN ICertServerPolicy *pServer,
-		IN BOOL fCA);
+        IN ICertServerPolicy *pServer,
+        IN BOOL fCA);
 
     HRESULT _AddAuthorityKeyId(
-		IN ICertServerPolicy *pServer);
+        IN ICertServerPolicy *pServer);
 
     HRESULT _AddDefaultKeyUsageExtension(
-		IN ICertServerPolicy *pServer,
-		IN BOOL fCA);
+        IN ICertServerPolicy *pServer,
+        IN BOOL fCA);
 
     HRESULT _AddEnhancedKeyUsageExtension(
-		IN ICertServerPolicy *pServer);
+        IN ICertServerPolicy *pServer);
 
     HRESULT _AddDefaultBasicConstraintsExtension(
-		IN ICertServerPolicy *pServer,
-		IN BOOL fCA);
+        IN ICertServerPolicy *pServer,
+        IN BOOL fCA);
 
     HRESULT _SetValidityPeriod(
-		IN ICertServerPolicy *pServer);
+        IN ICertServerPolicy *pServer);
 
 
 private:
@@ -341,9 +344,9 @@ private:
 
 };
 
-// 
+//
 // Class CRequestInstance
-// 
+//
 // Instance data for a certificate that is being created.
 //
 
@@ -354,45 +357,57 @@ public:
     CRequestInstance()
     {
         m_strTemplateName = NULL;
-	m_strTemplateObjId = NULL;
-	m_pPolicy = NULL;
+        m_strTemplateObjId = NULL;
+        m_pPolicy = NULL;
 
     }
 
     ~CRequestInstance();
 
     HRESULT Initialize(
-		IN CCertPolicySample *pPolicy,
-		IN ICertServerPolicy *pServer,
-		OUT BOOL *pfEnableEnrolleeExtensions);
+        IN CCertPolicySample *pPolicy,
+        IN ICertServerPolicy *pServer,
+        OUT BOOL *pfEnableEnrolleeExtensions);
 
     HRESULT SetTemplateName(
-		IN ICertServerPolicy *pServer,
-		IN OPTIONAL WCHAR const *pwszTemplateName,
-		IN OPTIONAL WCHAR const *pwszTemplateObjId);
+        IN ICertServerPolicy *pServer,
+        IN OPTIONAL WCHAR const *pwszTemplateName,
+        IN OPTIONAL WCHAR const *pwszTemplateObjId);
 
-    BSTRC GetTemplateName() { return(m_strTemplateName); }
-    BSTRC GetTemplateObjId() { return(m_strTemplateObjId); }
+    BSTRC GetTemplateName()
+    {
+        return(m_strTemplateName);
+    }
+    BSTRC GetTemplateObjId()
+    {
+        return(m_strTemplateObjId);
+    }
 
 
-    BOOL IsCARequest() { return(m_fCA); }
+    BOOL IsCARequest()
+    {
+        return(m_fCA);
+    }
 
-    CCertPolicySample *GetPolicy() { return(m_pPolicy); }
+    CCertPolicySample *GetPolicy()
+    {
+        return(m_pPolicy);
+    }
 
 private:
 
     HRESULT _SetFlagsProperty(
-		IN ICertServerPolicy *pServer,
-		IN WCHAR const *pwszPropName,
-		IN DWORD dwFlags);
+        IN ICertServerPolicy *pServer,
+        IN WCHAR const *pwszPropName,
+        IN DWORD dwFlags);
 
     BOOL _TemplateNamesMatch(
-		IN WCHAR const *pwszTemplateName1,
-		IN WCHAR const *pwszTemplateName2,
-		OUT BOOL *pfTemplateMissing);
+        IN WCHAR const *pwszTemplateName1,
+        IN WCHAR const *pwszTemplateName2,
+        OUT BOOL *pfTemplateMissing);
 
-    VOID _Cleanup();		
-private:			
+    VOID _Cleanup();
+private:
     CCertPolicySample *m_pPolicy;
     BSTR                   m_strTemplateName;	// certificate type requested
     BSTR                   m_strTemplateObjId;	// certificate type requested

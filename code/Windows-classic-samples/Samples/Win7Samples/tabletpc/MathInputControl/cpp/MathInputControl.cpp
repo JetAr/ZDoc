@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,7 +12,7 @@
 //      This program demonstrates how you can:
 //          create Math Input Control,
 //          set up events between main application and Math Input Control,
-//          recognize handwritten math inside the control and 
+//          recognize handwritten math inside the control and
 //          display recognition result inside the text box.
 //
 //      The interfaces used are:
@@ -50,7 +50,7 @@ CMathInputControlHost* g_pMathInputControlHost;
 // CMathInputControlHost implementation /////////////////
 
 /////////////////////////////////////////////////////////
-//                                          
+//
 // CMathInputControlHost::Init
 //
 // Initialization of Math Input Control host object consist
@@ -74,11 +74,11 @@ HRESULT CMathInputControlHost::Init(HWND hWnd, HWND hWndEdit)
     m_hWndEdit = hWndEdit;
 
     // Create Math Input Control object
-    hr = CoCreateInstance(CLSID_MathInputControl, 
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_IMathInputControl,
-        (void **)&m_pIMathInputControl);
+    hr = CoCreateInstance(CLSID_MathInputControl,
+                          NULL,
+                          CLSCTX_INPROC_SERVER,
+                          IID_IMathInputControl,
+                          (void **)&m_pIMathInputControl);
 
     if (FAILED(hr))
     {
@@ -126,7 +126,7 @@ HRESULT CMathInputControlHost::Init(HWND hWnd, HWND hWndEdit)
 }
 
 /////////////////////////////////////////////////////////
-//                                          
+//
 // CMathInputControlHost::OnMICInsert
 //
 // The _IMathInputControlEvents's event handler.
@@ -140,8 +140,8 @@ HRESULT CMathInputControlHost::Init(HWND hWnd, HWND hWndEdit)
 //
 /////////////////////////////////////////////////////////
 HRESULT CMathInputControlHost::OnMICInsert(
-        BSTR bstrRecoResultMathML
-        )
+    BSTR bstrRecoResultMathML
+)
 {
     if (!m_hWndEdit)
     {
@@ -160,7 +160,7 @@ HRESULT CMathInputControlHost::OnMICInsert(
 }
 
 /////////////////////////////////////////////////////////
-//                                          
+//
 // CMathInputControlHost::OnMICClose
 //
 // In this implementation close is equivalent to hide.
@@ -173,14 +173,14 @@ HRESULT CMathInputControlHost::OnMICInsert(
 /////////////////////////////////////////////////////////
 HRESULT CMathInputControlHost::OnMICClose(void)
 {
-    // Hide the control. 
+    // Hide the control.
     // Alternative implementation might choose to destroy the control
     // at this point and to create it again when needed.
     return HideMIC();
 }
 
 /////////////////////////////////////////////////////////
-//                                          
+//
 // CMathInputControlHost::OnMICClear
 //
 // Clear the content of the Math Input Control. At the same
@@ -235,7 +235,7 @@ HRESULT CMathInputControlHost::OnMICClear(void)
 }
 
 /////////////////////////////////////////////////////////
-//                                          
+//
 // CMathInputControlHost::OnMICShow
 //
 // Show the Math Input Control if it is hidden. Control
@@ -278,10 +278,10 @@ LRESULT CMathInputControlHost::OnMICShow()
 }
 
 /////////////////////////////////////////////////////////
-//                                          
+//
 // CMathInputControlHost::HideMIC
 //
-// Hide the Math Input Control window if it is visible. 
+// Hide the Math Input Control window if it is visible.
 // Control is not destroyed.
 //
 // Return Values (HRESULT):
@@ -367,19 +367,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_SIZE:
-        {
-            // Resize the edit box control over the whole main window.
-            HWND hWndEdit = g_pMathInputControlHost->GetEditWindow();
-            MoveWindow(
-                hWndEdit,       // Handle to the window.
-                0,              // Specifies the new position of the left side of the window.
-                0,              // Specifies the new position of the top of the window.
-                LOWORD(lParam), // Specifies the new width of the window.
-                HIWORD(lParam), // Specifies the new height of the window.
-                TRUE            // Specifies whether the window is to be repainted.
-                );
-        }
-        break;
+    {
+        // Resize the edit box control over the whole main window.
+        HWND hWndEdit = g_pMathInputControlHost->GetEditWindow();
+        MoveWindow(
+            hWndEdit,       // Handle to the window.
+            0,              // Specifies the new position of the left side of the window.
+            0,              // Specifies the new position of the top of the window.
+            LOWORD(lParam), // Specifies the new width of the window.
+            HIWORD(lParam), // Specifies the new height of the window.
+            TRUE            // Specifies whether the window is to be repainted.
+        );
+    }
+    break;
 
     case WM_COMMAND:
         if (wParam == ID_SHOW)
@@ -436,7 +436,7 @@ BOOL RegisterWindowClass(HINSTANCE hInstance)
     {
         MessageBox(NULL, L"Failed to register window class!",
                    gc_wszAppName, MB_ICONERROR);
-        false; 
+        false;
     }
 
     return true;
@@ -481,19 +481,19 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
     // Create the application window
     HWND hWnd = CreateWindowEx(
-        WS_EX_CLIENTEDGE,     // Specifies the extended window style of the window being created.
-        gc_wszAppName,        // If a string, it specifies the window class name.
-        gc_wszAppName,        // Pointer to a null-terminated string that specifies the window name.
-        WS_OVERLAPPEDWINDOW,  // Specifies the style of the window being created.
-        CW_USEDEFAULT,        // Specifies the initial horizontal position of the window.
-        CW_USEDEFAULT,        // Specifies the initial vertical position of the window.
-        CW_USEDEFAULT,        // Specifies the width, in device units, of the window.
-        CW_USEDEFAULT,        // Specifies the height, in device units, of the window.
-        NULL,                 // Handle to the parent or owner window of the window being created.
-        NULL,                 // Handle to a menu, or specifies a child-window identifier.
-        hInstance,            // Handle to the instance of the module to be associated with the window.
-        NULL                  // Pointer to a value to be passed to the window through the CREATESTRUCT structure.
-        );
+                    WS_EX_CLIENTEDGE,     // Specifies the extended window style of the window being created.
+                    gc_wszAppName,        // If a string, it specifies the window class name.
+                    gc_wszAppName,        // Pointer to a null-terminated string that specifies the window name.
+                    WS_OVERLAPPEDWINDOW,  // Specifies the style of the window being created.
+                    CW_USEDEFAULT,        // Specifies the initial horizontal position of the window.
+                    CW_USEDEFAULT,        // Specifies the initial vertical position of the window.
+                    CW_USEDEFAULT,        // Specifies the width, in device units, of the window.
+                    CW_USEDEFAULT,        // Specifies the height, in device units, of the window.
+                    NULL,                 // Handle to the parent or owner window of the window being created.
+                    NULL,                 // Handle to a menu, or specifies a child-window identifier.
+                    hInstance,            // Handle to the instance of the module to be associated with the window.
+                    NULL                  // Pointer to a value to be passed to the window through the CREATESTRUCT structure.
+                );
 
     if (NULL == hWnd)
     {
@@ -506,19 +506,19 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     // Create the edit box inside application windows.
     // Inserted MathML will be placed inside this edit box.
     HWND hWndEdit = CreateWindow(
-        L"edit",         // If a string, it specifies the window class name.
-        NULL,            // Pointer to a null-terminated string that specifies the window name.
-        // Specifies the style of the window being created.
-        WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL,
-        0,               // Specifies the initial horizontal position of the window.
-        0,               // Specifies the initial vertical position of the window.
-        0,               // Specifies the width, in device units, of the window.
-        0,               // Specifies the height, in device units, of the window.
-        hWnd,            // Handle to the parent or owner window of the window being created.
-        (HMENU)ID_EDIT,  // Handle to a menu, or specifies a child-window identifier 
-        hInstance,       // Handle to the instance of the module to be associated with the window.
-        NULL             // Pointer to a value to be passed to the window through the CREATESTRUCT structure.
-        );
+                        L"edit",         // If a string, it specifies the window class name.
+                        NULL,            // Pointer to a null-terminated string that specifies the window name.
+                        // Specifies the style of the window being created.
+                        WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL,
+                        0,               // Specifies the initial horizontal position of the window.
+                        0,               // Specifies the initial vertical position of the window.
+                        0,               // Specifies the width, in device units, of the window.
+                        0,               // Specifies the height, in device units, of the window.
+                        hWnd,            // Handle to the parent or owner window of the window being created.
+                        (HMENU)ID_EDIT,  // Handle to a menu, or specifies a child-window identifier
+                        hInstance,       // Handle to the instance of the module to be associated with the window.
+                        NULL             // Pointer to a value to be passed to the window through the CREATESTRUCT structure.
+                    );
 
     if (NULL == hWnd)
     {

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 template <class TBase=IMFAttributes>
 class CMFAttributesImpl : public TBase
@@ -257,7 +257,7 @@ public:
     // Helper functions
 
     HRESULT SerializeToStream(DWORD dwOptions, IStream* pStm)
-        // dwOptions: Flags from MF_ATTRIBUTE_SERIALIZE_OPTIONS
+    // dwOptions: Flags from MF_ATTRIBUTE_SERIALIZE_OPTIONS
     {
         assert(_pAttributes);
         return MFSerializeAttributesToStream(_pAttributes, dwOptions, pStm);

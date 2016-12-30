@@ -1,4 +1,4 @@
-// wkguid.cpp : Defines the entry point for the console application.
+﻿// wkguid.cpp : Defines the entry point for the console application.
 //
 
 #include <wchar.h>
@@ -13,61 +13,61 @@
 #include <ntdsapi.h>
 
 HRESULT GetWKDomainObject(LPOLESTR szBindableWKGUID, //IN. Bindable string GUID of well-known object.
-						  IADs **ppObject //OUT. Return a pointer to the specified well-known object.
-						  );
+                          IADs **ppObject //OUT. Return a pointer to the specified well-known object.
+                         );
 
 
 void wmain( int argc, wchar_t *argv[ ])
 {
-wprintf(L"This program finds the User's container in the current Window 2000 domain\n");
-wprintf(L"It uses the WKGUID binding string format.\n");
+    wprintf(L"This program finds the User's container in the current Window 2000 domain\n");
+    wprintf(L"It uses the WKGUID binding string format.\n");
 //Intialize COM
-CoInitialize(NULL);
-HRESULT hr = S_OK;
+    CoInitialize(NULL);
+    HRESULT hr = S_OK;
 //Get rootDSE and the domain container's DN.
-IADs *pObject = NULL;
-hr = GetWKDomainObject(GUID_USERS_CONTAINER_W, //IN. Bindable string GUID of Users container.
-						  &pObject //OUT. Return a pointer to the specified well-known object.
-						  );
-if (FAILED(hr))
-{
-   wprintf(L"Not Found. Could not bind to the User container.\n");
-   if (pObject)
-     pObject->Release();
-   return;
-}
+    IADs *pObject = NULL;
+    hr = GetWKDomainObject(GUID_USERS_CONTAINER_W, //IN. Bindable string GUID of Users container.
+                           &pObject //OUT. Return a pointer to the specified well-known object.
+                          );
+    if (FAILED(hr))
+    {
+        wprintf(L"Not Found. Could not bind to the User container.\n");
+        if (pObject)
+            pObject->Release();
+        return;
+    }
 
-BSTR bstr = NULL;
-hr = pObject->get_ADsPath(&bstr);
-if (SUCCEEDED(hr))
-{
-    wprintf (L"\nADsPath of Users Container (using WKGUID binding format):\n%s\n", bstr);
-    FreeADsStr(bstr);
-}
+    BSTR bstr = NULL;
+    hr = pObject->get_ADsPath(&bstr);
+    if (SUCCEEDED(hr))
+    {
+        wprintf (L"\nADsPath of Users Container (using WKGUID binding format):\n%s\n", bstr);
+        FreeADsStr(bstr);
+    }
 
-hr = pObject->get_Name(&bstr);
-if (SUCCEEDED(hr))
-{
-    wprintf (L"\nName of Users Container (using WKGUID binding format):\n%s\n", bstr);
-    FreeADsStr(bstr);
-}
+    hr = pObject->get_Name(&bstr);
+    if (SUCCEEDED(hr))
+    {
+        wprintf (L"\nName of Users Container (using WKGUID binding format):\n%s\n", bstr);
+        FreeADsStr(bstr);
+    }
 
-VARIANT var;
-VariantInit(&var);
-hr = pObject->Get(L"distinguishedName",&var);
-if (SUCCEEDED(hr))
-{
-    wprintf (L"\nName of Users Container: %s\n", V_BSTR(&var));
-}
-VariantClear(&var);
-    
-if (pObject)
-	pObject->Release();
+    VARIANT var;
+    VariantInit(&var);
+    hr = pObject->Get(L"distinguishedName",&var);
+    if (SUCCEEDED(hr))
+    {
+        wprintf (L"\nName of Users Container: %s\n", V_BSTR(&var));
+    }
+    VariantClear(&var);
+
+    if (pObject)
+        pObject->Release();
 
 
 //Uninitalize COM
-CoUninitialize();
-return;
+    CoUninitialize();
+    return;
 
 }
 
@@ -83,64 +83,64 @@ return;
 */
 
 HRESULT GetWKDomainObject(LPOLESTR szBindableWKGUID, //IN. Bindable string GUID of well-known object.
-						  IADs **ppObject //OUT. Return a pointer to the specified well-known object.
-						  )
+                          IADs **ppObject //OUT. Return a pointer to the specified well-known object.
+                         )
 {
-HRESULT hr = E_FAIL;
+    HRESULT hr = E_FAIL;
 //Get rootDSE and the domain container's DN.
-IADs *pObject = NULL;
-LPOLESTR szPath = new OLECHAR[MAX_PATH];
-VARIANT var;
-hr = ADsOpenObject(L"LDAP://rootDSE",
-				 NULL,
-				 NULL,
-				 ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
-				 IID_IADs,
-				 (void**)&pObject);
+    IADs *pObject = NULL;
+    LPOLESTR szPath = new OLECHAR[MAX_PATH];
+    VARIANT var;
+    hr = ADsOpenObject(L"LDAP://rootDSE",
+                       NULL,
+                       NULL,
+                       ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
+                       IID_IADs,
+                       (void**)&pObject);
 
-VariantInit(&var);
+    VariantInit(&var);
 //Get current domain DN.
-if (SUCCEEDED(hr))
-{
-	hr = pObject->Get(L"defaultNamingContext",&var);
-	if (SUCCEEDED(hr))
-	{
-		//Build the WKGUID binding string.
-		wcscpy_s(szPath,MAX_PATH,L"LDAP://");
-		wcscat_s(szPath,MAX_PATH,L"<WKGUID=");
-		wcscat_s(szPath,MAX_PATH,szBindableWKGUID);
-		wcscat_s(szPath,MAX_PATH,L",");
-		wcscat_s(szPath,MAX_PATH,V_BSTR(&var));
-		wcscat_s(szPath,MAX_PATH,L">");
-		//Print the binding string.
-		//wprintf(L"WKGUID binding string: %s\n",szPath);
-		VariantClear(&var);
-		//Bind to the well-known object.
-		hr = ADsOpenObject(szPath,
-						 NULL,
-						 NULL,
-						 ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
-						 IID_IADs,
-						 (void**)ppObject);
-		if (FAILED(hr))
-		{
-			if (*ppObject)
-			{
-			  (*ppObject)->Release();
-			  (*ppObject) = NULL;
-			}
-		}
-	}
+    if (SUCCEEDED(hr))
+    {
+        hr = pObject->Get(L"defaultNamingContext",&var);
+        if (SUCCEEDED(hr))
+        {
+            //Build the WKGUID binding string.
+            wcscpy_s(szPath,MAX_PATH,L"LDAP://");
+            wcscat_s(szPath,MAX_PATH,L"<WKGUID=");
+            wcscat_s(szPath,MAX_PATH,szBindableWKGUID);
+            wcscat_s(szPath,MAX_PATH,L",");
+            wcscat_s(szPath,MAX_PATH,V_BSTR(&var));
+            wcscat_s(szPath,MAX_PATH,L">");
+            //Print the binding string.
+            //wprintf(L"WKGUID binding string: %s\n",szPath);
+            VariantClear(&var);
+            //Bind to the well-known object.
+            hr = ADsOpenObject(szPath,
+                               NULL,
+                               NULL,
+                               ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
+                               IID_IADs,
+                               (void**)ppObject);
+            if (FAILED(hr))
+            {
+                if (*ppObject)
+                {
+                    (*ppObject)->Release();
+                    (*ppObject) = NULL;
+                }
+            }
+        }
+    }
+
+    delete [] szPath;
+
+    if (pObject)
+        pObject->Release();
+
+    return hr;
 }
 
-delete [] szPath;
 
-if (pObject)
-  pObject->Release();
 
-return hr;
-}
-	
-
-						  
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -18,7 +18,7 @@ const WCHAR SZ_DECODER_NAME[] = L"Sample MPEG-1 Decoder";
 
 // {df20ddfa-0d19-463a-ab46-e5d8ef6efd69}
 DEFINE_GUID(CLSID_MPEG1SampleDecoder,
-0xdf20ddfa, 0x0d19, 0x463a, 0xab, 0x46, 0xe5, 0xd8, 0xef, 0x6e, 0xfd, 0x69);
+            0xdf20ddfa, 0x0d19, 0x463a, 0xab, 0x46, 0xe5, 0xd8, 0xef, 0x6e, 0xfd, 0x69);
 
 HRESULT Decoder_CreateInstance(REFIID riid, void **ppv);
 
@@ -49,7 +49,7 @@ public:
     // IUnknown
     IFACEMETHODIMP QueryInterface(REFIID riid, void ** ppv)
     {
-        static const QITAB qit[] = 
+        static const QITAB qit[] =
         {
             QITABENT(CClassFactory, IClassFactory),
             { 0 }
@@ -95,8 +95,8 @@ public:
         return hr;
     }
 
-    IFACEMETHODIMP LockServer(BOOL bLock) 
-    { 
+    IFACEMETHODIMP LockServer(BOOL bLock)
+    {
         if (bLock)
         {
             DllAddRef();
@@ -162,7 +162,7 @@ HRESULT CreateRegKeyAndSetValue(const REGISTRY_ENTRY *pRegistryEntry)
     HRESULT hr;
     HKEY hKey;
 
-    LONG lRet = RegCreateKeyExW(pRegistryEntry->hkeyRoot, pRegistryEntry->pszKeyName, 
+    LONG lRet = RegCreateKeyExW(pRegistryEntry->hkeyRoot, pRegistryEntry->pszKeyName,
                                 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL);
     if (lRet != ERROR_SUCCESS)
     {
@@ -171,8 +171,8 @@ HRESULT CreateRegKeyAndSetValue(const REGISTRY_ENTRY *pRegistryEntry)
     else
     {
         lRet = RegSetValueExW(hKey, pRegistryEntry->pszValueName, 0, REG_SZ,
-                            (LPBYTE) pRegistryEntry->pszData,
-                            ((DWORD) wcslen(pRegistryEntry->pszData) + 1) * sizeof(WCHAR));
+                              (LPBYTE) pRegistryEntry->pszData,
+                              ((DWORD) wcslen(pRegistryEntry->pszData) + 1) * sizeof(WCHAR));
 
         hr = HRESULT_FROM_WIN32(lRet);
 
@@ -186,19 +186,19 @@ HRESULT CreateRegKeyAndSetValue(const REGISTRY_ENTRY *pRegistryEntry)
 STDAPI DllRegisterServer()
 {
     HRESULT hr;
- 
+
     WCHAR szModuleName[MAX_PATH];
 
-    MFT_REGISTER_TYPE_INFO aDecoderInputTypes[] = 
+    MFT_REGISTER_TYPE_INFO aDecoderInputTypes[] =
     {
         { MFMediaType_Video, MEDIASUBTYPE_MPEG1Payload },
     };
 
-    MFT_REGISTER_TYPE_INFO aDecoderOutputTypes[] = 
+    MFT_REGISTER_TYPE_INFO aDecoderOutputTypes[] =
     {
         { MFMediaType_Video, MFVideoFormat_RGB32 }
     };
-    
+
 
     if (!GetModuleFileNameW(g_hModule, szModuleName, ARRAYSIZE(szModuleName)))
     {
@@ -208,7 +208,7 @@ STDAPI DllRegisterServer()
     {
         // List of registry entries we want to create
 
-        const REGISTRY_ENTRY rgRegistryEntries[] = 
+        const REGISTRY_ENTRY rgRegistryEntries[] =
         {
             // RootKey             KeyName                                                              ValueName           Data
             {HKEY_LOCAL_MACHINE,   L"Software\\Classes\\CLSID\\" SZ_DECODER_CLSID,                      NULL,               SZ_DECODER_NAME},
@@ -233,21 +233,21 @@ STDAPI DllRegisterServer()
     {
         // Register the decoder for MFTEnum(Ex).
         hr = MFTRegister(
-            CLSID_MPEG1SampleDecoder,                   // CLSID
-            MFT_CATEGORY_VIDEO_DECODER,                 // Category
-            const_cast<LPWSTR>(SZ_DECODER_NAME),        // Friendly name
-            0,                                          // Flags
-            ARRAYSIZE(aDecoderInputTypes),              // Number of input types
-            aDecoderInputTypes,                         // Input types
-            ARRAYSIZE(aDecoderOutputTypes),             // Number of output types
-            aDecoderOutputTypes,                        // Output types
-            NULL                                        // Attributes (optional)
-            );
+                 CLSID_MPEG1SampleDecoder,                   // CLSID
+                 MFT_CATEGORY_VIDEO_DECODER,                 // Category
+                 const_cast<LPWSTR>(SZ_DECODER_NAME),        // Friendly name
+                 0,                                          // Flags
+                 ARRAYSIZE(aDecoderInputTypes),              // Number of input types
+                 aDecoderInputTypes,                         // Input types
+                 ARRAYSIZE(aDecoderOutputTypes),             // Number of output types
+                 aDecoderOutputTypes,                        // Output types
+                 NULL                                        // Attributes (optional)
+             );
     }
 
     return hr;
 }
- 
+
 // Unregisters this COM server
 STDAPI DllUnregisterServer()
 {

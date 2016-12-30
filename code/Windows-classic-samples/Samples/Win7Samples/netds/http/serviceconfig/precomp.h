@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
 
  THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
@@ -6,7 +6,7 @@
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
  PARTICULAR PURPOSE.
 
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
+ THIS CODE IS NOT SUPPORTED BY MICROSOFT.
 
 --*/
 
@@ -38,35 +38,35 @@ typedef enum _HTTPCFG_TYPE
 } HTTPCFG_TYPE, *PHTTPCFG_TYPE;
 
 int DoSsl(
-    int          argc, 
-    __in_ecount(argc) WCHAR        **argv, 
+    int          argc,
+    __in_ecount(argc) WCHAR        **argv,
     HTTPCFG_TYPE Type
-    );
+);
 
 int DoUrlAcl(
-    int          argc, 
-    __in_ecount(argc) WCHAR        **argv, 
+    int          argc,
+    __in_ecount(argc) WCHAR        **argv,
     HTTPCFG_TYPE Type
-    );
+);
 
 int DoIpListen(
-    int          argc, 
-    __in_ecount(argc) WCHAR        **argv, 
+    int          argc,
+    __in_ecount(argc) WCHAR        **argv,
     HTTPCFG_TYPE Type
-    );
+);
 
 DWORD
 GetAddress(
-    __in_opt PWSTR  pIp, 
+    __in_opt PWSTR  pIp,
     PVOID   pBuffer,
     ULONG   Length
-    );
+);
 
-UINT 
+UINT
 NlsPutMsg (
-    IN UINT MsgNumber, 
+    IN UINT MsgNumber,
     IN ...
-    );
+);
 
 
 #endif  // _PRECOMP_H_

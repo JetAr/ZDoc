@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -9,7 +9,7 @@
 //
 // Abstract:
 //		This file includes the necessary declarations for implementing the IWCNConnectNotify Interface
-// 
+//
 
 
 #ifndef WCNCONNECTNOTIFY_H
@@ -34,33 +34,33 @@
 
 
 class
-WcnConnectNotification :
-   public CComObjectRootEx<CComMultiThreadModel>,
-   public IWCNConnectNotify
+    WcnConnectNotification :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public IWCNConnectNotify
 {
-   public:
+public:
 
-      static const UINT CONNECT_TIME_OUT = 180000;      
+    static const UINT CONNECT_TIME_OUT = 180000;
 
-      BEGIN_COM_MAP(WcnConnectNotification)
-         COM_INTERFACE_ENTRY(IWCNConnectNotify)
-      END_COM_MAP()
+    BEGIN_COM_MAP(WcnConnectNotification)
+    COM_INTERFACE_ENTRY(IWCNConnectNotify)
+    END_COM_MAP()
 
-      WcnConnectNotification();
-      ~WcnConnectNotification();
+    WcnConnectNotification();
+    ~WcnConnectNotification();
 
-	  HRESULT Init();
+    HRESULT Init();
 
-	  //IWcnConnectNotify 
-      HRESULT STDMETHODCALLTYPE ConnectSucceeded();
-      HRESULT STDMETHODCALLTYPE ConnectFailed(HRESULT hrFailure);
+    //IWcnConnectNotify
+    HRESULT STDMETHODCALLTYPE ConnectSucceeded();
+    HRESULT STDMETHODCALLTYPE ConnectFailed(HRESULT hrFailure);
 
-      HRESULT WaitForConnectionResult();
+    HRESULT WaitForConnectionResult();
 
-      HANDLE connectEndEvent;
+    HANDLE connectEndEvent;
 
-      BOOL connectSucceededCallBackInvoked;
-      BOOL connectFailedCallBackInvoked;
+    BOOL connectSucceededCallBackInvoked;
+    BOOL connectFailedCallBackInvoked;
 };
 
 

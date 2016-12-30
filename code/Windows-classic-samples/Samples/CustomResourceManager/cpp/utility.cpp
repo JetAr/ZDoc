@@ -1,4 +1,4 @@
-//*********************************************************
+﻿//*********************************************************
 //
 // Copyright (c) Microsoft. All rights reserved.
 // THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
@@ -67,30 +67,30 @@ HRESULT RemoveAllInheritedAces(PACL *ppAcl)
     }
 
     bResult = GetAclInformation(
-        *ppAcl,
-        &aclInformation,
-        sizeof(aclInformation),
-        AclSizeInformation
-        );
+                  *ppAcl,
+                  &aclInformation,
+                  sizeof(aclInformation),
+                  AclSizeInformation
+              );
     FailGracefullyGLE(bResult, L"GetAclInformation");
-    
+
     totalCount = aclInformation.AceCount;
-    while ( aceIndex < totalCount ) 
+    while ( aceIndex < totalCount )
     {
         bResult = GetAce(
-            *ppAcl,
-            aceIndex,
-            &ace
-            );
+                      *ppAcl,
+                      aceIndex,
+                      &ace
+                  );
         FailGracefullyGLE(bResult, L"GetAce");
-                        
-        aceFlags = ((PACE_HEADER)ace)->AceFlags; 
 
-        if (IS_FLAG_SET(aceFlags,INHERITED_ACE)) 
+        aceFlags = ((PACE_HEADER)ace)->AceFlags;
+
+        if (IS_FLAG_SET(aceFlags,INHERITED_ACE))
         {
             bResult = DeleteAce(
-                *ppAcl,
-                aceIndex);
+                          *ppAcl,
+                          aceIndex);
             FailGracefullyGLE(bResult, L"DeleteAce");
 
             totalCount--;
@@ -124,21 +124,21 @@ HRESULT AddAllAcesFromAcl(PACL sourceAcl, PACL *ppDestAcl, bool onlyAddUnique)
     }
 
     bResult = GetAclInformation(
-        sourceAcl,
-        &aclInformation,
-        sizeof(aclInformation),
-        AclSizeInformation
-        );
+                  sourceAcl,
+                  &aclInformation,
+                  sizeof(aclInformation),
+                  AclSizeInformation
+              );
 
     FailGracefullyGLE(bResult, L"GetAclInformation");
 
     for ( DWORD i = 0; i < aclInformation.AceCount; i ++ )
     {
         bResult = GetAce(
-            sourceAcl,
-            i,
-            &ace
-            );
+                      sourceAcl,
+                      i,
+                      &ace
+                  );
 
         FailGracefullyGLE(bResult, L"GetAce");
 
@@ -150,11 +150,11 @@ HRESULT AddAllAcesFromAcl(PACL sourceAcl, PACL *ppDestAcl, bool onlyAddUnique)
         {
 
             hr = ACEAlreadyInACL(
-                *ppDestAcl,
-                ace,
-                &alreadyExists,
-                false
-                );
+                     *ppDestAcl,
+                     ace,
+                     &alreadyExists,
+                     false
+                 );
 
             FailGracefully(hr, L"ACEAlreadyInACL");
 
@@ -197,25 +197,25 @@ HRESULT RemoveExplicitUniqueAces(PACL acl, PACL *ppDestAcl)
     }
 
     bResult = GetAclInformation(
-        *ppDestAcl,
-        &aclInformation,
-        sizeof(aclInformation),
-        AclSizeInformation
-        );
+                  *ppDestAcl,
+                  &aclInformation,
+                  sizeof(aclInformation),
+                  AclSizeInformation
+              );
     FailGracefullyGLE(bResult, L"GetAclInformation");
 
     totalCount = aclInformation.AceCount;
     while ( aceIndex < totalCount )
     {
         bResult = GetAce(
-            *ppDestAcl,
-            aceIndex,
-            &ace
-            );
+                      *ppDestAcl,
+                      aceIndex,
+                      &ace
+                  );
 
         FailGracefullyGLE(bResult, L"GetAce");
-        
-        aceFlags = ((PACE_HEADER)ace)->AceFlags; 
+
+        aceFlags = ((PACE_HEADER)ace)->AceFlags;
 
         // We only care about explcit (i.e. non-inherited) ACEs
         if ( IS_FLAG_SET(aceFlags, INHERITED_ACE) )
@@ -225,14 +225,14 @@ HRESULT RemoveExplicitUniqueAces(PACL acl, PACL *ppDestAcl)
         }
 
         hr = ACEAlreadyInACL(
-            acl,
-            ace,
-            &alreadyExists,
-            false
-            );
+                 acl,
+                 ace,
+                 &alreadyExists,
+                 false
+             );
 
         FailGracefully(hr, L"ACEAlreadyInACL");
-        
+
         // If it's not in 'acl', then it's unique
         if ( alreadyExists == FALSE )
         {
@@ -252,10 +252,10 @@ exit_gracefully:
 
 // Go through all of the ACEs in the ACL and see if 'ace' is equal to any of them.
 HRESULT ACEAlreadyInACL(
-        _In_ PACL acl, 
-        _In_ LPVOID ace, 
-        _Out_ LPBOOL lpbAcePresent, 
-        _In_ bool forInheritancePurposes)
+    _In_ PACL acl,
+    _In_ LPVOID ace,
+    _Out_ LPBOOL lpbAcePresent,
+    _In_ bool forInheritancePurposes)
 {
     BOOL bResult = 0;
     DWORD errorCode = 0;
@@ -274,7 +274,7 @@ HRESULT ACEAlreadyInACL(
     DWORD sidLength1;
     DWORD sidLength2;
     int result;
-    
+
     if ( !ARGUMENT_PRESENT(acl) || !ARGUMENT_PRESENT(ace) )
     {
         return E_INVALIDARG;
@@ -301,26 +301,26 @@ HRESULT ACEAlreadyInACL(
     }
 
     bResult = GetAclInformation(
-        acl,
-        &aclInformation,
-        sizeof(aclInformation),
-        AclSizeInformation
-        );
+                  acl,
+                  &aclInformation,
+                  sizeof(aclInformation),
+                  AclSizeInformation
+              );
     FailGracefullyGLE(bResult, L"GetAclInformation");
-    
+
     totalCount = aclInformation.AceCount;
     for ( DWORD i = 0; i < totalCount; i ++ )
     {
         bResult = GetAce(
-            acl,
-            i,
-            &pExistingAce
-            );
+                      acl,
+                      i,
+                      &pExistingAce
+                  );
         FailGracefullyGLE(bResult, L"GetAce");
-        
+
         existingAceType = ((PACE_HEADER)pExistingAce)->AceType;
         existingAceSize = ((PACE_HEADER)pExistingAce)->AceSize;
-        existingAceFlags = ((PACE_HEADER)pExistingAce)->AceFlags; 
+        existingAceFlags = ((PACE_HEADER)pExistingAce)->AceFlags;
 
         if ( forInheritancePurposes )
         {
@@ -331,9 +331,9 @@ HRESULT ACEAlreadyInACL(
             }
             else
             {
-                // Wipe out the inheritance flags that couldn't possibly be on the 
-                // child. (e.g. when we have a NO_PROPAGATE_INHERIT_ACE, the ACE 
-                // will make it to the child, but the flag will get unset in 
+                // Wipe out the inheritance flags that couldn't possibly be on the
+                // child. (e.g. when we have a NO_PROPAGATE_INHERIT_ACE, the ACE
+                // will make it to the child, but the flag will get unset in
                 // AddInheritableAcesFromAcl).
                 existingAceFlags &= ~INHERIT_ONLY_ACE;
 
@@ -350,19 +350,19 @@ HRESULT ACEAlreadyInACL(
         }
 
         if ( existingAceFlags == aceFlags &&
-               existingAceSize == aceSize &&
-               existingAceType == aceType )
+                existingAceSize == aceSize &&
+                existingAceType == aceType )
         {
-            // That was our quick check, now we should compare the 
+            // That was our quick check, now we should compare the
             // actual contents (mask and SID)
             sidStart1 = GetSidStart(aceType, pExistingAce);
             sidStart2 = GetSidStart(aceType, ace);
             sidLength1 = GetLengthSid((PSID)sidStart1);
             sidLength2 = GetLengthSid((PSID)sidStart2);
 
-            // This is needed even though we just compared the sizes because 
-            // of callback aces - the size of the ACLs may coincidentally be 
-            // the same because the sums of the sid length and condition 
+            // This is needed even though we just compared the sizes because
+            // of callback aces - the size of the ACLs may coincidentally be
+            // the same because the sums of the sid length and condition
             // sizes are equal
             if ( sidLength1 != sidLength2 )
             {
@@ -370,9 +370,9 @@ HRESULT ACEAlreadyInACL(
             }
 
             result = memcmp(
-                (PSID)sidStart1, 
-                (PSID)sidStart2, 
-                aceSize - sizeof(ACE_HEADER) - sizeof(ACCESS_MASK));
+                         (PSID)sidStart1,
+                         (PSID)sidStart2,
+                         aceSize - sizeof(ACE_HEADER) - sizeof(ACCESS_MASK));
             if ( result == 0  )
             {
                 *lpbAcePresent = TRUE;
@@ -406,12 +406,12 @@ HRESULT AddAceToAcl(LPVOID pNewAce, PACL *ppAcl, bool bAddToEndOfList)
     }
 
     bResult = AddAce(
-        *ppAcl,
-        ACL_REVISION, 
-        addPosition,
-        pNewAce,
-        ((PACE_HEADER)pNewAce)->AceSize
-        );
+                  *ppAcl,
+                  ACL_REVISION,
+                  addPosition,
+                  pNewAce,
+                  ((PACE_HEADER)pNewAce)->AceSize
+              );
 
     // See if we failed due to an insufficient buffer size
     if ( !bResult )
@@ -422,20 +422,20 @@ HRESULT AddAceToAcl(LPVOID pNewAce, PACL *ppAcl, bool bAddToEndOfList)
             // Not enough space. Allocate a bigger ACL.
 
             bResult = GetAclInformation(
-                *ppAcl,
-                &aclInformation,
-                sizeof(aclInformation),
-                AclSizeInformation
-                );
+                          *ppAcl,
+                          &aclInformation,
+                          sizeof(aclInformation),
+                          AclSizeInformation
+                      );
             FailGracefullyGLE(bResult, L"GetAclInformation");
-                            
+
             aceSize = ((PACE_HEADER)pNewAce)->AceSize;
             oldSize = aclInformation.AclBytesInUse;
 
             // Can't overflow WORD boundary
             hr = UShortAdd(aceSize, (USHORT)oldSize, &uSize);
             FailGracefully(hr, L"UShortAdd");
-            
+
             // Give us some extra space so that we don't have to keep
             // reallocating.
             hr = UShortMult(uSize, 2, &uSize);
@@ -461,7 +461,7 @@ HRESULT AddAceToAcl(LPVOID pNewAce, PACL *ppAcl, bool bAddToEndOfList)
                 hr = E_OUTOFMEMORY;
                 goto exit_gracefully;
             }
-                            
+
             // Note: no need to initialize the new ACL
             memcpy(biggerDACL, *ppAcl, oldSize);
 
@@ -469,17 +469,17 @@ HRESULT AddAceToAcl(LPVOID pNewAce, PACL *ppAcl, bool bAddToEndOfList)
             biggerDACL->AclSize = (WORD)dwNewSizeNeeded;
 
             *ppAcl = biggerDACL;
-            
+
             // Make sure this doesn't get freed later
             biggerDACL = nullptr;
 
             bResult = AddAce(
-                *ppAcl,
-                ACL_REVISION, 
-                addPosition,
-                pNewAce,
-                ((PACE_HEADER)pNewAce)->AceSize
-                );
+                          *ppAcl,
+                          ACL_REVISION,
+                          addPosition,
+                          pNewAce,
+                          ((PACE_HEADER)pNewAce)->AceSize
+                      );
             FailGracefullyGLE(bResult, L"AddAce");
         }
         else
@@ -496,7 +496,7 @@ exit_gracefully:
 LPVOID GetSidStart(BYTE aceType, LPVOID ace)
 {
     LONG offset = 0;
-    switch (aceType) 
+    switch (aceType)
     {
     case ACCESS_ALLOWED_ACE_TYPE:
     case ACCESS_DENIED_ACE_TYPE:
@@ -518,7 +518,7 @@ LPVOID GetSidStart(BYTE aceType, LPVOID ace)
 }
 
 HRESULT ConvertSecurityDescriptor(
-    PSECURITY_DESCRIPTOR pSelfRelSD, 
+    PSECURITY_DESCRIPTOR pSelfRelSD,
     PSECURITY_DESCRIPTOR *ppAbsoluteSD)
 {
     BOOL bResult;
@@ -535,15 +535,15 @@ HRESULT ConvertSecurityDescriptor(
     *ppAbsoluteSD = nullptr;
 
     // Confirm that pSelfRelSD is actually self relative
-    if( 
-        !ARGUMENT_PRESENT(pSelfRelSD) || 
+    if(
+        !ARGUMENT_PRESENT(pSelfRelSD) ||
         !IS_FLAG_SET(((SECURITY_DESCRIPTOR*)(pSelfRelSD))->Control, SE_SELF_RELATIVE)
-        )
+    )
     {
         return E_INVALIDARG;
     }
 
-    // Call it once so that the sizes will be set to the correct values. This 
+    // Call it once so that the sizes will be set to the correct values. This
     // will return a buffer-too-small error, so we don't check the return value
     MakeAbsoluteSD(
         pSelfRelSD,
@@ -557,13 +557,13 @@ HRESULT ConvertSecurityDescriptor(
         &dwOwnerSize,
         nullptr,
         &dwPrimaryGroupSize
-        );
+    );
 
-    sizeNeeded = 
-        dwAbsoluteSDSize + 
-        dwDaclSize + 
-        dwSaclSize + 
-        dwOwnerSize + 
+    sizeNeeded =
+        dwAbsoluteSDSize +
+        dwDaclSize +
+        dwSaclSize +
+        dwOwnerSize +
         dwPrimaryGroupSize;
     *ppAbsoluteSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LMEM_FIXED, sizeNeeded);
 
@@ -571,26 +571,26 @@ HRESULT ConvertSecurityDescriptor(
     {
         return E_OUTOFMEMORY;
     }
-    
-    BYTE* position = (BYTE *)(*ppAbsoluteSD);  
-    pDacl = reinterpret_cast<PACL>(position += dwAbsoluteSDSize);  
-    pSacl  = reinterpret_cast<PACL>(position += dwDaclSize);  
-    pOwner = reinterpret_cast<PSID>(position += dwSaclSize);  
-    pPrimaryGroup = reinterpret_cast<PSID>(position += dwOwnerSize); 
+
+    BYTE* position = (BYTE *)(*ppAbsoluteSD);
+    pDacl = reinterpret_cast<PACL>(position += dwAbsoluteSDSize);
+    pSacl  = reinterpret_cast<PACL>(position += dwDaclSize);
+    pOwner = reinterpret_cast<PSID>(position += dwSaclSize);
+    pPrimaryGroup = reinterpret_cast<PSID>(position += dwOwnerSize);
 
     bResult = MakeAbsoluteSD(
-        pSelfRelSD,
-        *ppAbsoluteSD,
-        &dwAbsoluteSDSize,
-        pDacl,
-        &dwDaclSize,
-        pSacl,
-        &dwSaclSize,
-        pOwner,
-        &dwOwnerSize,
-        pPrimaryGroup,
-        &dwPrimaryGroupSize
-        );
+                  pSelfRelSD,
+                  *ppAbsoluteSD,
+                  &dwAbsoluteSDSize,
+                  pDacl,
+                  &dwDaclSize,
+                  pSacl,
+                  &dwSaclSize,
+                  pOwner,
+                  &dwOwnerSize,
+                  pPrimaryGroup,
+                  &dwPrimaryGroupSize
+              );
 
     if ( !bResult )
     {
@@ -619,11 +619,11 @@ HRESULT GetSizeOfAllInheritableAces(PACL acl, DWORD &dwSizeNeeded)
     }
 
     bResult = GetAclInformation(
-        acl,
-        &aclInformation,
-        sizeof(aclInformation),
-        AclSizeInformation
-        );
+                  acl,
+                  &aclInformation,
+                  sizeof(aclInformation),
+                  AclSizeInformation
+              );
     FailGracefullyGLE(bResult, L"GetAclInformation");
 
     totalCount = aclInformation.AceCount;
@@ -631,20 +631,20 @@ HRESULT GetSizeOfAllInheritableAces(PACL acl, DWORD &dwSizeNeeded)
     // Start with zero as the size. We'll only initialize this
     // to sizeof(ACL) if we find an inheritable ACE.
     dwSizeNeeded = 0;
-                    
+
     for ( DWORD aceIndex = 0; aceIndex < totalCount; aceIndex ++ )
     {
         bResult = GetAce(
-            acl,
-            aceIndex,
-            &ace
-            );
+                      acl,
+                      aceIndex,
+                      &ace
+                  );
         FailGracefullyGLE(bResult, L"GetAce");
-                        
-        aceFlags = ((PACE_HEADER)ace)->AceFlags; 
+
+        aceFlags = ((PACE_HEADER)ace)->AceFlags;
 
         // Only count the inheritable ACEs
-        if (IsInheritableAce(aceFlags)) 
+        if (IsInheritableAce(aceFlags))
         {
             // Initialize the size now that we've found an inheritable ACE
             if ( dwSizeNeeded == 0 )
@@ -669,34 +669,34 @@ HRESULT AddInheritableAcesFromAcl(PACL sourceAcl, PACL *ppDestAcl)
     LPVOID ace;
     BYTE aceFlags;
     WORD aceSize;
-    
+
     if ( !ARGUMENT_PRESENT(sourceAcl) || !ARGUMENT_PRESENT(*ppDestAcl) )
     {
         return E_INVALIDARG;
     }
 
     bResult = GetAclInformation(
-        sourceAcl,
-        &aclInformation,
-        sizeof(aclInformation),
-        AclSizeInformation
-        );
+                  sourceAcl,
+                  &aclInformation,
+                  sizeof(aclInformation),
+                  AclSizeInformation
+              );
     FailGracefullyGLE(bResult, L"GetAclInformation");
 
     for ( DWORD i = 0; i < aclInformation.AceCount; i ++ )
     {
         bResult = GetAce(
-            sourceAcl,
-            i,
-            &ace
-            );
+                      sourceAcl,
+                      i,
+                      &ace
+                  );
 
         FailGracefullyGLE(bResult, L"GetAce");
-        
-        aceFlags = ((PACE_HEADER)ace)->AceFlags; 
+
+        aceFlags = ((PACE_HEADER)ace)->AceFlags;
 
         // We only care about the inheritable ACEs
-        if (IsInheritableAce(aceFlags)) 
+        if (IsInheritableAce(aceFlags))
         {
             // We don't need to see if the ACE is already in the child's DACL
             // because we always remove all inherited ACEs before calling this
@@ -723,7 +723,7 @@ HRESULT AddInheritableAcesFromAcl(PACL sourceAcl, PACL *ppDestAcl)
             ((PACE_HEADER)newAce)->AceFlags &= ~INHERIT_ONLY;
 
             // NO_PROPAGATE_INHERIT_ACE means the inheritance only applies to
-            // the child, not the grandchildren, so we need to unset the 
+            // the child, not the grandchildren, so we need to unset the
             // applicable inheritance flags.
             if ( IS_FLAG_SET(aceFlags, NO_PROPAGATE_INHERIT_ACE) )
             {
@@ -734,7 +734,7 @@ HRESULT AddInheritableAcesFromAcl(PACL sourceAcl, PACL *ppDestAcl)
 
             hr = AddAceToAcl(newAce, ppDestAcl, false);
             FailGracefully(hr, L"AddAceToAcl");
-            
+
             LocalFree(newAce);
             newAce = nullptr;
         }

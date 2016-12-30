@@ -1,4 +1,4 @@
-//+--------------------------------------------------------------------------
+﻿//+--------------------------------------------------------------------------
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -47,8 +47,8 @@ extern LPWSTR g_pwszUnavailable;
 
 HRESULT
 GetServerCallbackInterface(
-                           OUT ICertServerExit** ppServer,
-                           IN LONG Context)
+    OUT ICertServerExit** ppServer,
+    IN LONG Context)
 {
     HRESULT hr;
 
@@ -59,11 +59,11 @@ GetServerCallbackInterface(
     }
 
     hr = CoCreateInstance(
-        CLSID_CCertServerExit,
-        NULL,               // pUnkOuter
-        CLSCTX_INPROC_SERVER,
-        IID_ICertServerExit,
-        (VOID **) ppServer);
+             CLSID_CCertServerExit,
+             NULL,               // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             IID_ICertServerExit,
+             (VOID **) ppServer);
     _JumpIfError(hr, error, "Exit:CoCreateInstance");
 
     if (*ppServer == NULL)
@@ -113,8 +113,8 @@ CCertExitSample::~CCertExitSample()
 
 STDMETHODIMP
 CCertExitSample::Initialize(
-                      /* [in] */ BSTR const strConfig,
-                      /* [retval][out] */ LONG __RPC_FAR *pEventMask)
+    /* [in] */ BSTR const strConfig,
+    /* [retval][out] */ LONG __RPC_FAR *pEventMask)
 {
     HRESULT hr = S_OK;
     DWORD cbbuf;
@@ -156,11 +156,11 @@ CCertExitSample::Initialize(
     // get storage location
 
     hr = exitGetProperty(
-        pServer,
-        FALSE,	// fRequest
-        wszPROPMODULEREGLOC,
-        PROPTYPE_STRING,
-        &varValue);
+             pServer,
+             FALSE,	// fRequest
+             wszPROPMODULEREGLOC,
+             PROPTYPE_STRING,
+             &varValue);
     _JumpIfErrorStr(hr, error, "Exit:exitGetProperty", wszPROPMODULEREGLOC);
 
     len = wcslen(varValue.bstrVal) + 1;
@@ -175,22 +175,22 @@ CCertExitSample::Initialize(
 
     // get CA type
     hr = exitGetProperty(
-        pServer,
-        FALSE,	// fRequest
-        wszPROPCATYPE,
-        PROPTYPE_LONG,
-        &varValue);
+             pServer,
+             FALSE,	// fRequest
+             wszPROPCATYPE,
+             PROPTYPE_LONG,
+             &varValue);
     _JumpIfErrorStr(hr, error, "Exit:exitGetProperty", wszPROPCATYPE);
 
     CAType = (ENUM_CATYPES) varValue.lVal;
     VariantClear(&varValue);
 
     hr = RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,
-        m_pwszRegStorageLoc,
-        0,              // dwReserved
-        KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE,
-        &m_hExitKey);
+             HKEY_LOCAL_MACHINE,
+             m_pwszRegStorageLoc,
+             0,              // dwReserved
+             KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE,
+             &m_hExitKey);
 
     if (S_OK != hr)
     {
@@ -203,23 +203,23 @@ CCertExitSample::Initialize(
     }
 
     hr = exitGetProperty(
-        pServer,
-        FALSE,	// fRequest
-        wszPROPCERTCOUNT,
-        PROPTYPE_LONG,
-        &varValue);
+             pServer,
+             FALSE,	// fRequest
+             wszPROPCERTCOUNT,
+             PROPTYPE_LONG,
+             &varValue);
     _JumpIfErrorStr(hr, error, "Exit:exitGetProperty", wszPROPCERTCOUNT);
 
     m_cCACert = varValue.lVal;
 
     cbbuf = sizeof(m_dwExitPublishFlags);
     hr = RegQueryValueEx(
-        m_hExitKey,
-        wszREGCERTPUBLISHFLAGS,
-        NULL,           // lpdwReserved
-        &dwType,
-        (BYTE *) &m_dwExitPublishFlags,
-        &cbbuf);
+             m_hExitKey,
+             wszREGCERTPUBLISHFLAGS,
+             NULL,           // lpdwReserved
+             &dwType,
+             (BYTE *) &m_dwExitPublishFlags,
+             &cbbuf);
     if (S_OK != hr)
     {
         m_dwExitPublishFlags = 0;
@@ -245,9 +245,9 @@ error:
 
 HRESULT
 CCertExitSample::_ExpandEnvironmentVariables(
-                                       __in LPCWSTR pwszIn,
-                                       __out_ecount(cwcOut) LPWSTR pwszOut,
-                                       IN DWORD cwcOut)
+    __in LPCWSTR pwszIn,
+    __out_ecount(cwcOut) LPWSTR pwszOut,
+    IN DWORD cwcOut)
 {
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
     WCHAR awcVar[MAX_PATH];
@@ -311,9 +311,9 @@ error:
 
 HRESULT
 exitGetRequestAttribute(
-                        IN ICertServerExit *pServer,
-                        IN WCHAR const *pwszAttributeName,
-                        OUT BSTR *pstrOut)
+    IN ICertServerExit *pServer,
+    IN WCHAR const *pwszAttributeName,
+    OUT BSTR *pstrOut)
 {
     HRESULT hr;
     BSTR strName = NULL;
@@ -346,9 +346,9 @@ error:
 
 HRESULT
 CCertExitSample::_WriteCertToFile(
-                            IN ICertServerExit *pServer,
-                            IN BYTE const *pbCert,
-                            IN DWORD cbCert)
+    IN ICertServerExit *pServer,
+    IN BYTE const *pbCert,
+    IN DWORD cbCert)
 {
     HRESULT hr;
     BSTR strCertFile = NULL;
@@ -366,11 +366,11 @@ CCertExitSample::_WriteCertToFile(
     if (S_OK != hr)
     {
         DBGPRINT((
-            fDebug,
-            "Exit:exitGetRequestAttribute(%ws): %x%hs\n",
-            wszPROPEXITCERTFILE,
-            hr,
-            CERTSRV_E_PROPERTY_EMPTY == hr? " EMPTY VALUE" : ""));
+                     fDebug,
+                     "Exit:exitGetRequestAttribute(%ws): %x%hs\n",
+                     wszPROPEXITCERTFILE,
+                     hr,
+                     CERTSRV_E_PROPERTY_EMPTY == hr? " EMPTY VALUE" : ""));
         if (CERTSRV_E_PROPERTY_EMPTY == hr)
         {
             hr = S_OK;
@@ -381,19 +381,19 @@ CCertExitSample::_WriteCertToFile(
     // build file name as "requestid.cer"
 
     hr = exitGetProperty(
-        pServer,
-        TRUE,  // fRequest,
-        wszPROPREQUESTREQUESTID,
-        PROPTYPE_LONG,
-        &varRequestID);
+             pServer,
+             TRUE,  // fRequest,
+             wszPROPREQUESTREQUESTID,
+             PROPTYPE_LONG,
+             &varRequestID);
     _JumpIfErrorStr(hr, error, "Exit:exitGetProperty", wszPROPREQUESTREQUESTID);
 
     StringCbPrintf(wszFile, sizeof(wszFile), L"%d.cer", V_I4(&varRequestID));
 
     hr = _ExpandEnvironmentVariables(
-        L"%SystemRoot%\\System32\\" wszCERTENROLLSHAREPATH L"\\",
-        wszDir,
-        ARRAYSIZE(wszDir));
+             L"%SystemRoot%\\System32\\" wszCERTENROLLSHAREPATH L"\\",
+             wszDir,
+             ARRAYSIZE(wszDir));
     _JumpIfError(hr, error, "_ExpandEnvironmentVariables");
 
     hr = ceBuildPathAndExt(wszDir, wszFile, NULL, &pwszPath);
@@ -402,13 +402,13 @@ CCertExitSample::_WriteCertToFile(
     // open file & write binary cert out.
 
     hFile = CreateFile(
-        pwszPath,
-        GENERIC_WRITE,
-        0,			// dwShareMode
-        NULL,		// lpSecurityAttributes
-        CREATE_NEW,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL);		// hTemplateFile
+                pwszPath,
+                GENERIC_WRITE,
+                0,			// dwShareMode
+                NULL,		// lpSecurityAttributes
+                CREATE_NEW,
+                FILE_ATTRIBUTE_NORMAL,
+                NULL);		// hTemplateFile
     if (INVALID_HANDLE_VALUE == hFile)
     {
         hr = ceHLastError();
@@ -423,12 +423,12 @@ CCertExitSample::_WriteCertToFile(
     {
         hr = STG_E_WRITEFAULT;
         DBGPRINT((
-            fDebug,
-            "Exit:WriteFile(%ws): attempted %x, actual %x bytes: %x\n",
-            pwszPath,
-            cbCert,
-            cbWritten,
-            hr));
+                     fDebug,
+                     "Exit:WriteFile(%ws): attempted %x, actual %x bytes: %x\n",
+                     pwszPath,
+                     cbCert,
+                     cbWritten,
+                     hr));
         goto error;
     }
 
@@ -454,7 +454,7 @@ error:
 
 HRESULT
 CCertExitSample::_NotifyNewCert(
-                          /* [in] */ LONG Context)
+    /* [in] */ LONG Context)
 {
     HRESULT hr;
     VARIANT varCert;
@@ -467,22 +467,22 @@ CCertExitSample::_NotifyNewCert(
     if (m_dwExitPublishFlags & EXITPUB_FILE)
     {
         hr = CoCreateInstance(
-            CLSID_CCertServerExit,
-            NULL,               // pUnkOuter
-            CLSCTX_INPROC_SERVER,
-            IID_ICertServerExit,
-            (VOID **) &pServer);
+                 CLSID_CCertServerExit,
+                 NULL,               // pUnkOuter
+                 CLSCTX_INPROC_SERVER,
+                 IID_ICertServerExit,
+                 (VOID **) &pServer);
         _JumpIfError(hr, error, "Exit:CoCreateInstance");
 
         hr = pServer->SetContext(Context);
         _JumpIfError(hr, error, "Exit:SetContext");
 
         hr = exitGetProperty(
-            pServer,
-            FALSE,	// fRequest,
-            wszPROPRAWCERTIFICATE,
-            PROPTYPE_BINARY,
-            &varCert);
+                 pServer,
+                 FALSE,	// fRequest,
+                 wszPROPRAWCERTIFICATE,
+                 PROPTYPE_BINARY,
+                 &varCert);
         _JumpIfErrorStr(
             hr,
             error,
@@ -496,9 +496,9 @@ CCertExitSample::_NotifyNewCert(
         }
 
         hr = _WriteCertToFile(
-            pServer,
-            (BYTE const *) varCert.bstrVal,
-            SysStringByteLen(varCert.bstrVal));
+                 pServer,
+                 (BYTE const *) varCert.bstrVal,
+                 SysStringByteLen(varCert.bstrVal));
         _JumpIfError(hr, error, "_WriteCertToFile");
     }
 
@@ -521,7 +521,7 @@ error:
 
 HRESULT
 CCertExitSample::_NotifyCRLIssued(
-                            /* [in] */ LONG Context)
+    /* [in] */ LONG Context)
 {
     HRESULT hr;
     ICertServerExit *pServer = NULL;
@@ -534,11 +534,11 @@ CCertExitSample::_NotifyCRLIssued(
     VariantInit(&varDeltaCRL);
 
     hr = CoCreateInstance(
-        CLSID_CCertServerExit,
-        NULL,               // pUnkOuter
-        CLSCTX_INPROC_SERVER,
-        IID_ICertServerExit,
-        (VOID **) &pServer);
+             CLSID_CCertServerExit,
+             NULL,               // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             IID_ICertServerExit,
+             (VOID **) &pServer);
     _JumpIfError(hr, error, "Exit:CoCreateInstance");
 
     hr = pServer->SetContext(Context);
@@ -546,11 +546,11 @@ CCertExitSample::_NotifyCRLIssued(
 
 
     hr = exitGetProperty(
-        pServer,
-        FALSE,	// fRequest,
-        wszPROPDELTACRLSDISABLED,
-        PROPTYPE_LONG,
-        &varBaseCRL);
+             pServer,
+             FALSE,	// fRequest,
+             wszPROPDELTACRLSDISABLED,
+             PROPTYPE_LONG,
+             &varBaseCRL);
     _JumpIfErrorStr(
         hr,
         error,
@@ -577,11 +577,11 @@ CCertExitSample::_NotifyCRLIssued(
 
         StringCbPrintf(wszCRLPROP, sizeof(wszCRLPROP), wszPROPCRLSTATE L".%u", i);
         hr = exitGetProperty(
-            pServer,
-            FALSE,	// fRequest,
-            wszCRLPROP,
-            PROPTYPE_LONG,
-            &varBaseCRL);
+                 pServer,
+                 FALSE,	// fRequest,
+                 wszCRLPROP,
+                 PROPTYPE_LONG,
+                 &varBaseCRL);
         _JumpIfErrorStr(hr, error, "Exit:exitGetProperty", wszCRLPROP);
 
         if (CA_DISP_VALID != varBaseCRL.lVal)
@@ -593,22 +593,22 @@ CCertExitSample::_NotifyCRLIssued(
 
         StringCbPrintf(wszCRLPROP, sizeof(wszCRLPROP), wszPROPRAWCRL L".%u", i);
         hr = exitGetProperty(
-            pServer,
-            FALSE,	// fRequest,
-            wszCRLPROP,
-            PROPTYPE_BINARY,
-            &varBaseCRL);
+                 pServer,
+                 FALSE,	// fRequest,
+                 wszCRLPROP,
+                 PROPTYPE_BINARY,
+                 &varBaseCRL);
         _JumpIfErrorStr(hr, error, "Exit:exitGetProperty", wszCRLPROP);
 
         // Grab the raw delta CRL (which may not exist)
 
         StringCbPrintf(wszCRLPROP, sizeof(wszCRLPROP), wszPROPRAWDELTACRL L".%u", i);
         hr = exitGetProperty(
-            pServer,
-            FALSE,	// fRequest,
-            wszCRLPROP,
-            PROPTYPE_BINARY,
-            &varDeltaCRL);
+                 pServer,
+                 FALSE,	// fRequest,
+                 wszCRLPROP,
+                 PROPTYPE_BINARY,
+                 &varDeltaCRL);
         _PrintIfErrorStr2(
             hr,
             "Exit:exitGetProperty",
@@ -644,8 +644,8 @@ error:
 
 STDMETHODIMP
 CCertExitSample::Notify(
-                  /* [in] */ LONG ExitEvent,
-                  /* [in] */ LONG Context)
+    /* [in] */ LONG ExitEvent,
+    /* [in] */ LONG Context)
 {
     char *psz = "UNKNOWN EVENT";
     HRESULT hr = S_OK;
@@ -690,19 +690,19 @@ CCertExitSample::Notify(
 
 
     DBGPRINT((
-        fDebug,
-        "Exit:Notify(%hs=%x, ctx=%x) rc=%x\n",
-        psz,
-        ExitEvent,
-        Context,
-        hr));
+                 fDebug,
+                 "Exit:Notify(%hs=%x, ctx=%x) rc=%x\n",
+                 psz,
+                 ExitEvent,
+                 Context,
+                 hr));
     return(hr);
 }
 
 
 STDMETHODIMP
 CCertExitSample::GetDescription(
-                          /* [retval][out] */ BSTR *pstrDescription)
+    /* [retval][out] */ BSTR *pstrDescription)
 {
     HRESULT hr = S_OK;
     WCHAR sz[MAX_PATH];
@@ -730,17 +730,17 @@ error:
 
 STDMETHODIMP
 CCertExitSample::GetManageModule(
-                           /* [out, retval] */ ICertManageModule **ppManageModule)
+    /* [out, retval] */ ICertManageModule **ppManageModule)
 {
     HRESULT hr;
 
     *ppManageModule = NULL;
     hr = CoCreateInstance(
-        CLSID_CCertManageExitModuleSample,
-        NULL,               // pUnkOuter
-        CLSCTX_INPROC_SERVER,
-        IID_ICertManageModule,
-        (VOID **) ppManageModule);
+             CLSID_CCertManageExitModuleSample,
+             NULL,               // pUnkOuter
+             CLSCTX_INPROC_SERVER,
+             IID_ICertManageModule,
+             (VOID **) ppManageModule);
     _JumpIfError(hr, error, "CoCreateInstance");
 
 error:
@@ -773,11 +773,11 @@ CCertExitSample::InterfaceSupportsErrorInfo(REFIID riid)
 
 HRESULT
 exitGetProperty(
-                IN ICertServerExit *pServer,
-                IN BOOL fRequest,
-                IN WCHAR const *pwszPropertyName,
-                IN DWORD PropType,
-                OUT VARIANT *pvarOut)
+    IN ICertServerExit *pServer,
+    IN BOOL fRequest,
+    IN WCHAR const *pwszPropertyName,
+    IN DWORD PropType,
+    OUT VARIANT *pvarOut)
 {
     HRESULT hr;
     BSTR strName = NULL;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@ using namespace SDK_SAMPLE_COMMON;
 
 namespace SDK_SAMPLE_QEC
 {
-    static const UINT16 NUMBER_OF_HRESULTS = 1;
+static const UINT16 NUMBER_OF_HRESULTS = 1;
 }
 
 
@@ -27,7 +27,7 @@ using namespace SDK_SAMPLE_QEC;
 
 // This is a pseudo-COM object, i.e. not co-create-able and not in registry.
 class QecCallback
-   : public INapEnforcementClientCallback
+    : public INapEnforcementClientCallback
 
 {
 public:
@@ -35,11 +35,11 @@ public:
     // IUnknown
 
     STDMETHODIMP QueryInterface(
-        /* [in] */ __RPC__in const IID& iid, 
+        /* [in] */ __RPC__in const IID& iid,
         /* [out] */ __RPC__out void** ppv);
 
     STDMETHODIMP_(ULONG) AddRef();
-    
+
     STDMETHODIMP_(ULONG) Release();
 
     // INapEnforcementClientCallback

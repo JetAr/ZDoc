@@ -1,13 +1,13 @@
-#pragma once
+﻿#pragma once
 
 class DebugHresult
 {
 public:
     DebugHresult()
-            : m_HR ( S_OK )
+        : m_HR ( S_OK )
     {}
     DebugHresult ( HRESULT hr )
-            : m_HR ( hr )
+        : m_HR ( hr )
     {
         RDCAssert ( hr == S_OK );
     }

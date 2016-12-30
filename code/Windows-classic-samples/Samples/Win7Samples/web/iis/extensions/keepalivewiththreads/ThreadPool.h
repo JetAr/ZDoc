@@ -1,4 +1,4 @@
-/* Copyright (c) 1997-2002  Microsoft Corporation
+﻿/* Copyright (c) 1997-2002  Microsoft Corporation
 
 	Module Name:
 
@@ -17,8 +17,8 @@
 
 CRITICAL_SECTION csQueueLock;
 
-/* 
-	Semaphore to wait on in worker thread; each time an ECB is added to the 
+/*
+	Semaphore to wait on in worker thread; each time an ECB is added to the
 	ECBqueue by HttpExtensionProc, the semaphore must be released once
 */
 
@@ -39,4 +39,4 @@ BOOL InitThreadPool(void);
 
 /* Function that threads in pool run */
 
-DWORD WINAPI WorkerFunction(LPVOID); 
+DWORD WINAPI WorkerFunction(LPVOID);

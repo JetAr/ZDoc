@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -96,7 +96,7 @@ HRESULT CLocalCertStoreImp::GetCertificatesList(CCertificate *&parCertificates, 
     }
 
     // pass 1, get certificates count
-    nCertificatesCnt = 0; 
+    nCertificatesCnt = 0;
     while(pCertContext = ::CertEnumCertificatesInStore(m_hCertStoreHandle, pCertContext))
     {
         nCertificatesCnt ++;
@@ -111,17 +111,18 @@ HRESULT CLocalCertStoreImp::GetCertificatesList(CCertificate *&parCertificates, 
         CCertificate &certificate = parCertificates[nCertIndex++];
 
         hr = GetDecodedCertName(
-                &pCertContext->pCertInfo->Issuer,
-                CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG | CERT_NAME_STR_NO_QUOTING_FLAG,
-                szStringBuf, _countof(szStringBuf));
-        if (SUCCEEDED(hr)) {
+                 &pCertContext->pCertInfo->Issuer,
+                 CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG | CERT_NAME_STR_NO_QUOTING_FLAG,
+                 szStringBuf, _countof(szStringBuf));
+        if (SUCCEEDED(hr))
+        {
             certificate.set_Issuer(szStringBuf);
         }
 
         hr = GetDecodedCertName(
-                &pCertContext->pCertInfo->Subject,
-                CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG | CERT_NAME_STR_NO_QUOTING_FLAG,
-                szStringBuf, _countof(szStringBuf));
+                 &pCertContext->pCertInfo->Subject,
+                 CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG | CERT_NAME_STR_NO_QUOTING_FLAG,
+                 szStringBuf, _countof(szStringBuf));
         if (SUCCEEDED(hr))
         {
             certificate.set_Subject(szStringBuf);
@@ -146,13 +147,13 @@ HRESULT CLocalCertStoreImp::AddCertificate(CCertificate &certificate)
     }
 
     if (CertAddEncodedCertificateToStore(
-        m_hCertStoreHandle, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-        certificate.get_EncodedData(nCertEncodedSize), nCertEncodedSize,
-        CERT_STORE_ADD_NEW, NULL) == FALSE)
+                m_hCertStoreHandle, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
+                certificate.get_EncodedData(nCertEncodedSize), nCertEncodedSize,
+                CERT_STORE_ADD_NEW, NULL) == FALSE)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
-    
+
     return hr;
 }
 

@@ -1,4 +1,4 @@
-//
+﻿//
 // tmgrsink.cpp
 //
 // ITfThreadMgrEventSink implementation.

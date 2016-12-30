@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -185,7 +185,7 @@ void DisplayFunctionalObjectIDs(
                 // We have a functional object identifier.  It is assumed that
                 // object identifiers are returned as VT_LPWSTR varTypes.
                 if (objectID.vt      == VT_LPWSTR &&
-                    objectID.pwszVal != nullptr)
+                        objectID.pwszVal != nullptr)
                 {
                     // Display the object identifiers separated by commas
                     wprintf(L"%ws", objectID.pwszVal);
@@ -261,7 +261,7 @@ void ListFunctionalObjects(
                 // We have a functional category.  It is assumed that
                 // functional categories are returned as VT_CLSID varTypes.
                 if (pv.vt    == VT_CLSID &&
-                    pv.puuid != nullptr)
+                        pv.puuid != nullptr)
                 {
                     // Display the functional category name
                     wprintf(L"Functional Category: ");
@@ -322,7 +322,7 @@ void DisplayContentTypes(
                 // We have a content type.  It is assumed that
                 // content types are returned as VT_CLSID varTypes.
                 if (contentType.vt    == VT_CLSID &&
-                    contentType.puuid != nullptr)
+                        contentType.puuid != nullptr)
                 {
                     // Display the content types separated by commas
                     DisplayContentType(*contentType.puuid);
@@ -396,7 +396,7 @@ void ListFunctionalCategories(
                 // We have a functional category.  It is assumed that
                 // functional categories are returned as VT_CLSID varTypes.
                 if (pv.vt    == VT_CLSID &&
-                    pv.puuid != nullptr)
+                        pv.puuid != nullptr)
                 {
                     // Display the functional category name
                     DisplayFunctionalCategory(*pv.puuid);
@@ -464,7 +464,7 @@ void ListSupportedContentTypes(
                 // We have a functional category.  It is assumed that
                 // functional categories are returned as VT_CLSID varTypes.
                 if (pv.vt    == VT_CLSID &&
-                    pv.puuid != nullptr)
+                        pv.puuid != nullptr)
                 {
                     // Display the functional category name
                     wprintf(L"Functional Category: ");
@@ -549,7 +549,7 @@ BOOL SupportsFunctionalCategory(
                 // We have a functional category.  It is assumed that
                 // functional categories are returned as VT_CLSID varTypes.
                 if (pv.vt    == VT_CLSID &&
-                    pv.puuid != nullptr)
+                        pv.puuid != nullptr)
                 {
                     isSupported = IsEqualGUID(functionalCategory, *pv.puuid);
                 }
@@ -704,7 +704,7 @@ HRESULT ReadProfileInformationProperties(
     if (SUCCEEDED(hr))
     {
         hr = objectProperties->GetIPortableDeviceValuesCollectionValue(WPD_RENDERING_INFORMATION_PROFILES,
-                                                                       &renderingInfoProfilesTemp);
+                &renderingInfoProfilesTemp);
         if (FAILED(hr))
         {
             wprintf(L"! Failed to get WPD_RENDERING_INFORMATION_PROFILES from rendering information, hr= 0x%lx\n", hr);
@@ -737,34 +737,34 @@ void DisplayExpectedValues(
     {
         switch(formAttribute)
         {
-            case WPD_PROPERTY_ATTRIBUTE_FORM_RANGE:
-                {
-                    DWORD rangeMin  = 0;
-                    DWORD rangeMax  = 0;
-                    DWORD rangeStep = 0;
+        case WPD_PROPERTY_ATTRIBUTE_FORM_RANGE:
+        {
+            DWORD rangeMin  = 0;
+            DWORD rangeMax  = 0;
+            DWORD rangeStep = 0;
 
-                    hr = expectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_MIN, &rangeMin);
-                    if (FAILED(hr))
-                    {
-                        wprintf(L"! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_MIN from expected values collection, hr = 0x%lx\n", hr);
-                    }
-                    hr = expectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_MAX, &rangeMax);
-                    if (FAILED(hr))
-                    {
-                        wprintf(L"! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_MAX from expected values collection, hr = 0x%lx\n", hr);
-                    }
-                    hr = expectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_STEP, &rangeStep);
-                    if (FAILED(hr))
-                    {
-                        wprintf(L"! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_STEP from expected values collection, hr = 0x%lx\n", hr);
-                    }
+            hr = expectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_MIN, &rangeMin);
+            if (FAILED(hr))
+            {
+                wprintf(L"! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_MIN from expected values collection, hr = 0x%lx\n", hr);
+            }
+            hr = expectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_MAX, &rangeMax);
+            if (FAILED(hr))
+            {
+                wprintf(L"! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_MAX from expected values collection, hr = 0x%lx\n", hr);
+            }
+            hr = expectedValues->GetUnsignedIntegerValue(WPD_PROPERTY_ATTRIBUTE_RANGE_STEP, &rangeStep);
+            if (FAILED(hr))
+            {
+                wprintf(L"! Failed to get WPD_PROPERTY_ATTRIBUTE_RANGE_STEP from expected values collection, hr = 0x%lx\n", hr);
+            }
 
-                    wprintf(L"MIN: %u, MAX: %u, STEP: %u\n", rangeMin, rangeMax, rangeStep);
-                }
-                break;
-            default:
-                wprintf(L"* DisplayExpectedValues helper function did not display attributes for form %u", formAttribute);
-                break;
+            wprintf(L"MIN: %u, MAX: %u, STEP: %u\n", rangeMin, rangeMax, rangeStep);
+        }
+        break;
+        default:
+            wprintf(L"* DisplayExpectedValues helper function did not display attributes for form %u", formAttribute);
+            break;
         }
     }
 }
@@ -879,8 +879,8 @@ void ListRenderingCapabilityInformation(
         PROPVARIANT pv = {0};
         hr = renderingInfoObjects->GetAt(0, &pv);
         if (SUCCEEDED(hr)           &&
-            pv.vt      == VT_LPWSTR &&
-            pv.pwszVal != nullptr)
+                pv.vt      == VT_LPWSTR &&
+                pv.pwszVal != nullptr)
         {
             hr = ReadProfileInformationProperties(device,
                                                   pv.pwszVal,
@@ -984,7 +984,7 @@ void ListSupportedEvents(
                 // We have an event.  It is assumed that
                 // events are returned as VT_CLSID varTypes.
                 if (pv.vt    == VT_CLSID &&
-                    pv.puuid != nullptr)
+                        pv.puuid != nullptr)
                 {
                     // Display the event name
                     DisplayEvent(*pv.puuid);

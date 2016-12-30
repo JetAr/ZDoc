@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -56,13 +56,13 @@ STDMETHODIMP CCustomRenderer::SetHDC(HDC hDC)
 
 // Interface implementation
 STDMETHODIMP CCustomRenderer::Packets(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const StylusInfo *pStylusInfo,
-            /* [in] */ ULONG cPktCount,
-            /* [in] */ ULONG cPktBuffLength,
-            /* [size_is][in] */ LONG *pPackets,
-            /* [out][in] */ ULONG *pcInOutPkts,
-            /* [out][in] */ LONG **ppInOutPkts)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const StylusInfo *pStylusInfo,
+    /* [in] */ ULONG cPktCount,
+    /* [in] */ ULONG cPktBuffLength,
+    /* [size_is][in] */ LONG *pPackets,
+    /* [out][in] */ ULONG *pcInOutPkts,
+    /* [out][in] */ LONG **ppInOutPkts)
 {
     ULONG cPropertyCount = cPktBuffLength/cPktCount;
 
@@ -86,31 +86,31 @@ STDMETHODIMP CCustomRenderer::Packets(
 }
 
 STDMETHODIMP CCustomRenderer::StylusDown(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const StylusInfo *pStylusInfo,
-            /* [in] */ ULONG cPropCountPerPkt,
-            /* [size_is][in] */ LONG *pPacket,
-            /* [out][in] */ LONG **ppInOutPkt)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const StylusInfo *pStylusInfo,
+    /* [in] */ ULONG cPropCountPerPkt,
+    /* [size_is][in] */ LONG *pPacket,
+    /* [out][in] */ LONG **ppInOutPkt)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::StylusUp(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const StylusInfo *pStylusInfo,
-            /* [in] */ ULONG cPropCountPerPkt,
-            /* [size_is][in] */ LONG *pPacket,
-            /* [out][in] */ LONG **ppInOutPkt)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const StylusInfo *pStylusInfo,
+    /* [in] */ ULONG cPropCountPerPkt,
+    /* [size_is][in] */ LONG *pPacket,
+    /* [out][in] */ LONG **ppInOutPkt)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::Error(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ IStylusPlugin *piPlugin,
-            /* [in] */ RealTimeStylusDataInterest dataInterest,
-            /* [in] */ HRESULT hrErrorCode,
-            /* [out][in] */ LONG_PTR *lptrKey)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ IStylusPlugin *piPlugin,
+    /* [in] */ RealTimeStylusDataInterest dataInterest,
+    /* [in] */ HRESULT hrErrorCode,
+    /* [out][in] */ LONG_PTR *lptrKey)
 {
     CString strError;
     strError.Format(L"An error occured. Error code: %d", hrErrorCode);
@@ -119,7 +119,7 @@ STDMETHODIMP CCustomRenderer::Error(
 }
 
 STDMETHODIMP CCustomRenderer::DataInterest(
-            /* [retval][out] */ RealTimeStylusDataInterest *pDataInterest)
+    /* [retval][out] */ RealTimeStylusDataInterest *pDataInterest)
 {
     *pDataInterest = (RealTimeStylusDataInterest)(RTSDI_Packets | RTSDI_Error);
     return S_OK;
@@ -129,100 +129,100 @@ STDMETHODIMP CCustomRenderer::DataInterest(
 
 /// The remaining interface methods are not used in this sample application
 STDMETHODIMP CCustomRenderer::RealTimeStylusEnabled(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ ULONG cTcidCount,
-            /* [size_is][in] */ const TABLET_CONTEXT_ID *pTcids)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ ULONG cTcidCount,
+    /* [size_is][in] */ const TABLET_CONTEXT_ID *pTcids)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::RealTimeStylusDisabled(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ ULONG cTcidCount,
-            /* [size_is][in] */ const TABLET_CONTEXT_ID *pTcids)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ ULONG cTcidCount,
+    /* [size_is][in] */ const TABLET_CONTEXT_ID *pTcids)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::StylusInRange(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ TABLET_CONTEXT_ID tcid,
-            /* [in] */ STYLUS_ID sid)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ TABLET_CONTEXT_ID tcid,
+    /* [in] */ STYLUS_ID sid)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::StylusOutOfRange(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ TABLET_CONTEXT_ID tcid,
-            /* [in] */ STYLUS_ID sid)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ TABLET_CONTEXT_ID tcid,
+    /* [in] */ STYLUS_ID sid)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::StylusButtonDown(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ STYLUS_ID sid,
-            /* [in] */ const GUID *pGuidStylusButton,
-            /* [out][in] */ POINT *pStylusPos)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ STYLUS_ID sid,
+    /* [in] */ const GUID *pGuidStylusButton,
+    /* [out][in] */ POINT *pStylusPos)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::StylusButtonUp(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ STYLUS_ID sid,
-            /* [in] */ const GUID *pGuidStylusButton,
-            /* [out][in] */ POINT *pStylusPos)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ STYLUS_ID sid,
+    /* [in] */ const GUID *pGuidStylusButton,
+    /* [out][in] */ POINT *pStylusPos)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::InAirPackets(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const StylusInfo *pStylusInfo,
-            /* [in] */ ULONG cPktCount,
-            /* [in] */ ULONG cPktBuffLength,
-            /* [size_is][in] */ LONG *pPackets,
-            /* [out][in] */ ULONG *pcInOutPkts,
-            /* [out][in] */ LONG **ppInOutPkts)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const StylusInfo *pStylusInfo,
+    /* [in] */ ULONG cPktCount,
+    /* [in] */ ULONG cPktBuffLength,
+    /* [size_is][in] */ LONG *pPackets,
+    /* [out][in] */ ULONG *pcInOutPkts,
+    /* [out][in] */ LONG **ppInOutPkts)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::CustomStylusDataAdded(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ const GUID *pGuidId,
-            /* [in] */ ULONG cbData,
-            /* [in] */ const BYTE *pbData)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ const GUID *pGuidId,
+    /* [in] */ ULONG cbData,
+    /* [in] */ const BYTE *pbData)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::SystemEvent(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ TABLET_CONTEXT_ID tcid,
-            /* [in] */ STYLUS_ID sid,
-            /* [in] */ SYSTEM_EVENT event,
-            /* [in] */ SYSTEM_EVENT_DATA eventdata)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ TABLET_CONTEXT_ID tcid,
+    /* [in] */ STYLUS_ID sid,
+    /* [in] */ SYSTEM_EVENT event,
+    /* [in] */ SYSTEM_EVENT_DATA eventdata)
 {
     return S_OK;
 }
 STDMETHODIMP CCustomRenderer::TabletAdded(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ IInkTablet *piTablet)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ IInkTablet *piTablet)
 {
     return S_OK;
 }
 STDMETHODIMP CCustomRenderer::TabletRemoved(
-            /* [in] */ IRealTimeStylus *piRtsSrc,
-            /* [in] */ LONG iTabletIndex)
+    /* [in] */ IRealTimeStylus *piRtsSrc,
+    /* [in] */ LONG iTabletIndex)
 {
     return S_OK;
 }
 
 STDMETHODIMP CCustomRenderer::UpdateMapping(
-            /* [in] */ IRealTimeStylus *piRtsSrc)
+    /* [in] */ IRealTimeStylus *piRtsSrc)
 {
     return S_OK;
 }

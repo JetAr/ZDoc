@@ -1,4 +1,4 @@
-#include "WSOleDB.h"
+﻿#include "WSOleDB.h"
 #include "cmdline.h"
 
 using namespace std;
@@ -53,7 +53,7 @@ int CExclFlagParam::Init(int argc, WCHAR* argv[])
     if (ERROR_INVALID_PARAMETER == iRes)
     {
         wcout << L"/" << m_pszTrueParamName << L" and /" <<
-                         m_pszFalseParamName << L" parameters can't be used together!" << endl;
+              m_pszFalseParamName << L" parameters can't be used together!" << endl;
     }
     else if (!m_fExists)
     {
@@ -72,8 +72,8 @@ int CSetWSTRValueParam::Init(int argc, WCHAR* argv[])
         {
             m_fExists = TRUE;
             if (i + 1 < argc &&         // if it's not last word in command line
-                '/' != argv[i+1][0] &&  // and not followed by other parameter
-                '-' != argv[i+1][0])    // Parameter values starting with '/' and '-' are not supported
+                    '/' != argv[i+1][0] &&  // and not followed by other parameter
+                    '-' != argv[i+1][0])    // Parameter values starting with '/' and '-' are not supported
             {
                 m_pszValue = argv[i + 1];
             }
@@ -92,8 +92,8 @@ int CSetLCIDValueParam::Init(int argc, WCHAR* argv[])
         {
             m_fExists = TRUE;
             if (i + 1 < argc &&         // if it's not last word in command line
-                '/' != argv[i+1][0] &&  // and not followed by other parameter
-                '-' != argv[i+1][0])    // Parameter values starting with '/' and '-' are not supported
+                    '/' != argv[i+1][0] &&  // and not followed by other parameter
+                    '-' != argv[i+1][0])    // Parameter values starting with '/' and '-' are not supported
             {
                 m_lcidValue = _wtoi(argv[i + 1]);
             }
@@ -112,7 +112,7 @@ int CSetIntValueParam::Init(int argc, WCHAR* argv[])
         {
             m_fExists = TRUE;
             if (i + 1 < argc &&         // if it's not last word in command line
-                '/' != argv[i+1][0])    // and not followed by other parameter
+                    '/' != argv[i+1][0])    // and not followed by other parameter
             {
                 m_iValue = _wtoi(argv[i + 1]);
             }
@@ -131,8 +131,8 @@ int CSetSyntaxValueParam::Init(int argc, WCHAR* argv[])
         {
             m_fExists = TRUE;
             if (i + 1 < argc &&         // if it's not last word in command line
-                '/' != argv[i+1][0] &&  // and not followed by other parameter
-                '-' != argv[i+1][0])    // Parameter values starting with '/' and '-' are not supported
+                    '/' != argv[i+1][0] &&  // and not followed by other parameter
+                    '-' != argv[i+1][0])    // Parameter values starting with '/' and '-' are not supported
             {
                 if (_wcsicmp(argv[i + 1], L"None") == 0)
                 {
@@ -187,8 +187,8 @@ int CSetTermExpansionValueParam::Init(int argc, WCHAR* argv[])
         {
             m_fExists = TRUE;
             if (i + 1 < argc &&         // if it's not last word in command line
-                '/' != argv[i+1][0] &&  // and not followed by other parameter
-                '-' != argv[i+1][0])    // Parameter values starting with '/' and '-' are not supported
+                    '/' != argv[i+1][0] &&  // and not followed by other parameter
+                    '-' != argv[i+1][0])    // Parameter values starting with '/' and '-' are not supported
             {
                 if (_wcsicmp(argv[i + 1], L"None") == 0)
                 {

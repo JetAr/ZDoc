@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -66,7 +66,8 @@ wmain (
                         ARRAYSIZE(ReportInformation.wzConsentKey),
                         L"Sample Consent Key");
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Failed to set the consent key, error: 0x%08X\n", hr);
         goto End;
     }
@@ -78,7 +79,8 @@ wmain (
                         ARRAYSIZE(ReportInformation.wzApplicationName),
                         L"UI Customization Sample");
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Failed to set the application name, error: 0x%08X\n", hr);
         goto End;
     }
@@ -90,7 +92,8 @@ wmain (
                         ARRAYSIZE(ReportInformation.wzApplicationPath),
                         L"Sample Application Path");
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Failed to set the application path, error: 0x%08X\n", hr);
         goto End;
     }
@@ -102,7 +105,8 @@ wmain (
                         ARRAYSIZE(ReportInformation.wzDescription),
                         L"Sample Problem Description");
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Failed to set the description, error: 0x%08X\n", hr);
         goto End;
     }
@@ -114,7 +118,8 @@ wmain (
                         ARRAYSIZE(ReportInformation.wzFriendlyEventName),
                         L"Sample Problem Friendly Name");
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Failed to set the friendly event name, error: 0x%08X\n", hr);
         goto End;
     }
@@ -128,7 +133,8 @@ wmain (
                           &ReportInformation,
                           &ReportHandle);
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"WerReportCreate failed, error: 0x%08X\n", hr);
         goto End;
     }
@@ -142,21 +148,24 @@ wmain (
     //
     hr = WerReportSetParameter(ReportHandle, 0, L"Param1", L"Value1");
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Set parameter failed for parameter 0, error: 0x%08X\n", hr);
         goto End;
     }
 
     hr = WerReportSetParameter(ReportHandle, 1, L"Param2", L"Value2");
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Set parameter failed for parameter 1, error: 0x%08X\n", hr);
         goto End;
     }
 
     hr = WerReportSetParameter(ReportHandle, 2, L"Param3", L"Value3");
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"Set parameter failed for parameter 3, error: 0x%08X\n", hr);
         goto End;
     }
@@ -174,7 +183,8 @@ wmain (
                                WerUIConsentDlgHeader,
                                L"Sample Consent Dialog Header");
 
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"WerReportSetUIOption failed, error: 0x%08X\n", hr);
         goto End;
     }
@@ -189,7 +199,8 @@ wmain (
                                WerUIConsentDlgBody,
                                L"Sample Consent Dialog Body");
 
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"WerReportSetUIOption failed, error: 0x%08X\n", hr);
         goto End;
     }
@@ -204,7 +215,8 @@ wmain (
     hr = WerReportSetUIOption (ReportHandle,
                                WerUIIconFilePath,
                                L"%windir%\\system32\\calc.exe");
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"WerReportSetUIOption failed, error: 0x%08X\n", hr);
         goto End;
     }
@@ -219,7 +231,8 @@ wmain (
                                WerUIOnlineSolutionCheckText,
                                L"Sample Check for Solution");
 
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"WerReportSetUIOption failed, error: 0x%08X\n", hr);
         goto End;
     }
@@ -234,7 +247,8 @@ wmain (
                                WerUICloseText,
                                L"Sample Close the program");
 
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"WerReportSetUIOption failed, error: 0x%08X\n", hr);
         goto End;
     }
@@ -249,7 +263,8 @@ wmain (
     //
     hr = WerReportSubmit (ReportHandle, WerConsentNotAsked, 0, &SubmitResult);
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         wprintf (L"WerReportSubmit failed, error: 0x%08X\n", hr);
         goto End;
     }
@@ -261,19 +276,22 @@ wmain (
 
 End:
 
-    if (ReportHandle) {
+    if (ReportHandle)
+    {
         //
         // Close the handle to the report. Call this API after report has been
         // submitted, or the handle is no longer needed.
         //
         hr = WerReportCloseHandle (ReportHandle);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr))
+        {
             wprintf (L"WerReportCloseHandle failed, error: 0x%08X\n", hr);
         }
     }
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         //
         // Return -1 to indicate that an error occured
         //

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -13,10 +13,10 @@ CClientInformation::CClientInformation()
     HRESULT hr = S_OK;
 
     EXEC_CHECKHR(::CoCreateInstance(CLSID_PortableDeviceValues,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_IPortableDeviceValues,
-                          (VOID**)&m_pValues));
+                                    NULL,
+                                    CLSCTX_INPROC_SERVER,
+                                    IID_IPortableDeviceValues,
+                                    (VOID**)&m_pValues));
     EXEC_CHECKHR(m_pValues->SetStringValue(WPD_CLIENT_NAME, L"EhStorEnumerator"));
     EXEC_CHECKHR(m_pValues->SetUnsignedIntegerValue(WPD_CLIENT_MAJOR_VERSION, 1));
     EXEC_CHECKHR(m_pValues->SetUnsignedIntegerValue(WPD_CLIENT_MINOR_VERSION, 1));
@@ -35,7 +35,8 @@ CClientInformation::~CClientInformation()
 
 BOOL CCertProperties::get_CertType(LPTSTR szType, LONG nBufferSize)
 {
-    if (szType == NULL || nBufferSize <= 1) {
+    if (szType == NULL || nBufferSize <= 1)
+    {
         return FALSE;
     }
 
@@ -69,7 +70,8 @@ BOOL CCertProperties::get_CertType(LPTSTR szType, LONG nBufferSize)
 
 BOOL CCertProperties::get_ValidationPolicy(LPTSTR szPolicy, LONG nBufferSize)
 {
-    if (szPolicy == NULL || nBufferSize <= 1) {
+    if (szPolicy == NULL || nBufferSize <= 1)
+    {
         return FALSE;
     }
 
@@ -96,10 +98,10 @@ BOOL CCertProperties::get_ValidationPolicy(LPTSTR szPolicy, LONG nBufferSize)
 CPortableDeviceCmdParams::CPortableDeviceCmdParams()
 {
     ::CoCreateInstance(CLSID_PortableDeviceValues,
-                      NULL,
-                      CLSCTX_INPROC_SERVER,
-                      IID_IPortableDeviceValues,
-                      (VOID**)&m_pParams);
+                       NULL,
+                       CLSCTX_INPROC_SERVER,
+                       IID_IPortableDeviceValues,
+                       (VOID**)&m_pParams);
 }
 
 CPortableDeviceCmdParams::~CPortableDeviceCmdParams()
@@ -242,17 +244,18 @@ HRESULT CPortableDeviceCmdResults::GetPasswordSiloInfo(CPasswordSiloInformation 
         CoTaskMemFree(pbBuffer);
         pbBuffer = NULL;
     }
-    
+
     EXEC_CHECKHR(m_pResults->GetUnsignedIntegerValue(
-                                ENHANCED_STORAGE_PROPERTY_AUTHENTICATION_STATE,
-                                &siloInfo.dwAuthnState));
+                     ENHANCED_STORAGE_PROPERTY_AUTHENTICATION_STATE,
+                     &siloInfo.dwAuthnState));
 
     // retrieve admin hint
     if (SUCCEEDED(hr))
     {
         nStringBufferSize = siloInfo.SiloInfo.MaxAdminHintSize + 1;
         szStringBuffer = (LPTSTR) malloc(nStringBufferSize * sizeof(TCHAR));
-        if (szStringBuffer == NULL) {
+        if (szStringBuffer == NULL)
+        {
             hr = E_OUTOFMEMORY;
         }
     }
@@ -268,7 +271,8 @@ HRESULT CPortableDeviceCmdResults::GetPasswordSiloInfo(CPasswordSiloInformation 
     {
         nStringBufferSize = siloInfo.SiloInfo.MaxUserHintSize + 1;
         szStringBuffer = (LPTSTR) malloc(nStringBufferSize * sizeof(TCHAR));
-        if (szStringBuffer == NULL) {
+        if (szStringBuffer == NULL)
+        {
             hr = E_OUTOFMEMORY;
         }
     }
@@ -284,7 +288,8 @@ HRESULT CPortableDeviceCmdResults::GetPasswordSiloInfo(CPasswordSiloInformation 
     {
         nStringBufferSize = siloInfo.SiloInfo.MaxUserNameSize + 1;
         szStringBuffer = (LPTSTR) malloc(nStringBufferSize * sizeof(TCHAR));
-        if (szStringBuffer == NULL) {
+        if (szStringBuffer == NULL)
+        {
             hr = E_OUTOFMEMORY;
         }
     }
@@ -300,7 +305,8 @@ HRESULT CPortableDeviceCmdResults::GetPasswordSiloInfo(CPasswordSiloInformation 
     {
         nStringBufferSize = siloInfo.SiloInfo.MaxSiloNameSize + 1;
         szStringBuffer = (LPTSTR) malloc(nStringBufferSize * sizeof(TCHAR));
-        if (szStringBuffer == NULL) {
+        if (szStringBuffer == NULL)
+        {
             hr = E_OUTOFMEMORY;
         }
     }
@@ -337,10 +343,10 @@ HRESULT CPortableDeviceManagerImp::InitManager()
     hr = CoInitialize(NULL);
 
     EXEC_CHECKHR(CoCreateInstance(CLSID_PortableDeviceManager,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_IPortableDeviceManager,
-                          (VOID**)&m_pPortableDeviceManager));
+                                  NULL,
+                                  CLSCTX_INPROC_SERVER,
+                                  IID_IPortableDeviceManager,
+                                  (VOID**)&m_pPortableDeviceManager));
 
     return hr;
 }
@@ -465,10 +471,10 @@ HRESULT CPortableDeviceImp::OpenDevice(LPCTSTR szPNPid)
     CClientInformation clientInfo;
 
     EXEC_CHECKHR(::CoCreateInstance(CLSID_PortableDevice,
-                          NULL,
-                          CLSCTX_INPROC_SERVER,
-                          IID_IPortableDevice,
-                          (VOID**)&m_pPortableDevice));
+                                    NULL,
+                                    CLSCTX_INPROC_SERVER,
+                                    IID_IPortableDevice,
+                                    (VOID**)&m_pPortableDevice));
 
     EXEC_CHECKHR(m_pPortableDevice->Open(szPNPid, clientInfo));
 
@@ -494,11 +500,11 @@ HRESULT CPortableDeviceImp::PasswordQueryInformation(CPasswordSiloInformation &s
 }
 
 HRESULT CPortableDeviceImp::PasswordChangePassword(
-                                PASSWD_INDICATOR nPasswordIndicator,
-                                LPCTSTR szOldPassword,
-                                LPCTSTR szNewPassword,
-                                LPCTSTR szPasswordHint,
-                                LPCTSTR szSID)
+    PASSWD_INDICATOR nPasswordIndicator,
+    LPCTSTR szOldPassword,
+    LPCTSTR szNewPassword,
+    LPCTSTR szPasswordHint,
+    LPCTSTR szSID)
 {
     HRESULT hr = S_OK;
 
@@ -579,9 +585,9 @@ HRESULT CPortableDeviceImp::PasswordUnauthorizeActAccess()
 }
 
 HRESULT CPortableDeviceImp::PasswordCreateUser(LPCTSTR szAdminPassword,
-                                               LPCTSTR szUserName,
-                                               LPCTSTR szUserPassword,
-                                               LPCTSTR szUserPasswordHint)
+        LPCTSTR szUserName,
+        LPCTSTR szUserPassword,
+        LPCTSTR szUserPasswordHint)
 {
     HRESULT hr = S_OK;
 
@@ -629,9 +635,9 @@ HRESULT CPortableDeviceImp::PasswordDeleteUser(LPCTSTR szAdminPassword)
 }
 
 HRESULT CPortableDeviceImp::PasswordConfigAdministrator(
-                                    LPCTSTR szAdminPassword,
-                                    ULONG nMaxAuthFailures,
-                                    LPCTSTR szSiloName)
+    LPCTSTR szAdminPassword,
+    ULONG nMaxAuthFailures,
+    LPCTSTR szSiloName)
 {
     HRESULT hr = S_OK;
 
@@ -664,9 +670,9 @@ HRESULT CPortableDeviceImp::PasswordConfigAdministrator(
 }
 
 HRESULT CPortableDeviceImp::PasswordInitializeUserPassword(
-                                    LPCTSTR szAdminPassword,
-                                    LPCTSTR szUserPassword,
-                                    LPCTSTR szUserPasswordHint)
+    LPCTSTR szAdminPassword,
+    LPCTSTR szUserPassword,
+    LPCTSTR szUserPasswordHint)
 {
     HRESULT hr = S_OK;
 
@@ -797,27 +803,27 @@ HRESULT CPortableDeviceImp::CertGetState(ULONG &nState, LPTSTR szState, LONG nBu
     {
         switch (nState)
         {
-            case 0x0:
-                StringCchCopy(szState, nBufferSize, _T("Unknown"));
-                break;
-            case 0x1:
-                StringCchCopy(szState, nBufferSize, _T("No Authentication Required"));
-                break;
-            case 0x2:
-                StringCchCopy(szState, nBufferSize, _T("Not Authenticated"));
-                break;
-            case 0x3:
-                StringCchCopy(szState, nBufferSize, _T("Authenticated"));
-                break;
-            case 0x80000001:
-                StringCchCopy(szState, nBufferSize, _T("Authentication Denied"));
-                break;
-            case 0x80000002:
-                StringCchCopy(szState, nBufferSize, _T("Device Error"));
-                break;
-            default:
-                StringCbPrintf(szState, nBufferSize, _T("Invalid(%d)"), nState);
-                break;
+        case 0x0:
+            StringCchCopy(szState, nBufferSize, _T("Unknown"));
+            break;
+        case 0x1:
+            StringCchCopy(szState, nBufferSize, _T("No Authentication Required"));
+            break;
+        case 0x2:
+            StringCchCopy(szState, nBufferSize, _T("Not Authenticated"));
+            break;
+        case 0x3:
+            StringCchCopy(szState, nBufferSize, _T("Authenticated"));
+            break;
+        case 0x80000001:
+            StringCchCopy(szState, nBufferSize, _T("Authentication Denied"));
+            break;
+        case 0x80000002:
+            StringCchCopy(szState, nBufferSize, _T("Device Error"));
+            break;
+        default:
+            StringCbPrintf(szState, nBufferSize, _T("Invalid(%d)"), nState);
+            break;
         }
     }
 
@@ -936,7 +942,8 @@ HRESULT CPortableDeviceImp::CertGetSiloCapablity(SILO_CAPABLITY_TYPE nCapablityT
         if (SUCCEEDED(hr))
         {
             ppCapablities = (LPTSTR*)malloc(nCapablitiesCnt * sizeof(LPTSTR));
-            if (!ppCapablities) {
+            if (!ppCapablities)
+            {
                 hr = E_OUTOFMEMORY;
             }
         }
@@ -944,7 +951,8 @@ HRESULT CPortableDeviceImp::CertGetSiloCapablity(SILO_CAPABLITY_TYPE nCapablityT
         if (SUCCEEDED(hr))
         {
             szCapablity = (LPTSTR)(malloc)((nMaxCapablityLen + 1) * sizeof(TCHAR));
-            if (!szCapablity) {
+            if (!szCapablity)
+            {
                 hr = E_OUTOFMEMORY;
             }
         }

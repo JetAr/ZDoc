@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: MemFile.cpp
 //
 // Desc: DirectShow sample code - application using async filter.
@@ -48,25 +48,32 @@ int __cdecl _tmain( int argc, TCHAR* argv[] )
     }
 
     /* Set subtype based on file extension */
-    if(lstrcmpi(lpType, TEXT("mpg")) == 0) {
+    if(lstrcmpi(lpType, TEXT("mpg")) == 0)
+    {
         mt.subtype = MEDIASUBTYPE_MPEG1System;
     }
-    else if(lstrcmpi(lpType, TEXT("mpa")) == 0) {
+    else if(lstrcmpi(lpType, TEXT("mpa")) == 0)
+    {
         mt.subtype = MEDIASUBTYPE_MPEG1Audio;
     }
-    else if(lstrcmpi(lpType, TEXT("mpv")) == 0) {
+    else if(lstrcmpi(lpType, TEXT("mpv")) == 0)
+    {
         mt.subtype = MEDIASUBTYPE_MPEG1Video;
     }
-    else if(lstrcmpi(lpType, TEXT("dat")) == 0) {
+    else if(lstrcmpi(lpType, TEXT("dat")) == 0)
+    {
         mt.subtype = MEDIASUBTYPE_MPEG1VideoCD;
     }
-    else if(lstrcmpi(lpType, TEXT("avi")) == 0) {
+    else if(lstrcmpi(lpType, TEXT("avi")) == 0)
+    {
         mt.subtype = MEDIASUBTYPE_Avi;
     }
-    else if(lstrcmpi(lpType, TEXT("mov")) == 0) {
+    else if(lstrcmpi(lpType, TEXT("mov")) == 0)
+    {
         mt.subtype = MEDIASUBTYPE_QTMovie;
     }
-    else if(lstrcmpi(lpType, TEXT("wav")) == 0) {
+    else if(lstrcmpi(lpType, TEXT("wav")) == 0)
+    {
         mt.subtype = MEDIASUBTYPE_WAVE;
     }
     else
@@ -104,11 +111,11 @@ int __cdecl _tmain( int argc, TCHAR* argv[] )
     DWORD dwBytesRead;
 
     if(!ReadFile(hFile,
-                (LPVOID)pbMem,
-                uliSize.LowPart,
-                &dwBytesRead,
-                NULL) ||
-        (dwBytesRead != uliSize.LowPart))
+                 (LPVOID)pbMem,
+                 uliSize.LowPart,
+                 &dwBytesRead,
+                 NULL) ||
+            (dwBytesRead != uliSize.LowPart))
     {
         _tprintf(_T("Could not read file\n"));
         CloseHandle(hFile);

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <windows.h>
 #include <tchar.h>
@@ -15,119 +15,119 @@ extern DWORD g_dwMainThreadID;
 // This is the root class of all classes the objects of which are referenced counted.
 class CReferenceCountedObject : public IUnknown
 {
-  public :
+public :
     CReferenceCountedObject();
     virtual ~CReferenceCountedObject();
 
-	// IUnknown methods
+    // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObject);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-  protected :
-	LONG		m_cRef;
+protected :
+    LONG		m_cRef;
 };
 
 
 
 class CClassFactory : public IClassFactory
 {
-  public :
+public :
     CClassFactory();
-	virtual ~CClassFactory();
+    virtual ~CClassFactory();
 
-	// IUnknown methods
+    // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObject);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IClassFactory methods.
+    // IClassFactory methods.
     STDMETHODIMP CreateInstance
-	( 
-      IUnknown __RPC_FAR *pUnkOuter,
-      REFIID riid,
-      void __RPC_FAR *__RPC_FAR *ppvObject
-	);
-        
+    (
+        IUnknown __RPC_FAR *pUnkOuter,
+        REFIID riid,
+        void __RPC_FAR *__RPC_FAR *ppvObject
+    );
+
     STDMETHODIMP LockServer
-	(
-      BOOL fLock
-	);
+    (
+        BOOL fLock
+    );
 
-  protected :
-	LONG		m_cRef;
+protected :
+    LONG		m_cRef;
 
-  public :
-	// Shut down the application.
-	static void AttemptToTerminateServer();
+public :
+    // Shut down the application.
+    static void AttemptToTerminateServer();
 };
 
 class CNotifyInterfaceImp : public CReferenceCountedObject, public IBackgroundCopyCallback2
 {
-  public :
+public :
     CNotifyInterfaceImp();
     ~CNotifyInterfaceImp();
 
-	// Overridden IUnknown methods
+    // Overridden IUnknown methods
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObject);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-  public :
+public :
     // IBackgroundCopyCallback2 interface impl.
-	STDMETHOD(JobTransferred)(IBackgroundCopyJob* pJob);
-	STDMETHOD(JobError)(IBackgroundCopyJob* pJob, IBackgroundCopyError* pError);
-	STDMETHOD(JobModification)(IBackgroundCopyJob* pJob, DWORD dwReserved);
-	STDMETHOD(FileTransferred)(IBackgroundCopyJob* pJob, IBackgroundCopyFile* pFile);
+    STDMETHOD(JobTransferred)(IBackgroundCopyJob* pJob);
+    STDMETHOD(JobError)(IBackgroundCopyJob* pJob, IBackgroundCopyError* pError);
+    STDMETHOD(JobModification)(IBackgroundCopyJob* pJob, DWORD dwReserved);
+    STDMETHOD(FileTransferred)(IBackgroundCopyJob* pJob, IBackgroundCopyFile* pFile);
 
     // IDispatch interface impl.
     STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)
     {
-	  return E_NOTIMPL;
+        return E_NOTIMPL;
     }
-	   
+
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo** pptinfo)
     {
-	  return E_NOTIMPL;
+        return E_NOTIMPL;
     }
-	   
+
     STDMETHOD(GetIDsOfNames)(REFIID riid, __in_ecount(cNames) LPOLESTR* rgszNames, UINT cNames,
-		   LCID lcid, DISPID* rgdispid)
+                             LCID lcid, DISPID* rgdispid)
     {
-	  return E_NOTIMPL;
+        return E_NOTIMPL;
     }
-	   
+
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid,
-		   LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
-		   EXCEPINFO* pexcepinfo, UINT* puArgErr)
+                      LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
+                      EXCEPINFO* pexcepinfo, UINT* puArgErr)
     {
-	  return E_NOTIMPL;
+        return E_NOTIMPL;
     }
 
 };
 
 class CNotifyInterfaceImp_Factory : public CClassFactory
 {
-  public :
+public :
     CNotifyInterfaceImp_Factory();
-	~CNotifyInterfaceImp_Factory();
+    ~CNotifyInterfaceImp_Factory();
 
-	// IUnknown methods
+    // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObject);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IClassFactory methods.
+    // IClassFactory methods.
     STDMETHODIMP CreateInstance
-	( 
-      IUnknown __RPC_FAR *pUnkOuter,
-      REFIID riid,
-      void __RPC_FAR *__RPC_FAR *ppvObject
-	);
-        
+    (
+        IUnknown __RPC_FAR *pUnkOuter,
+        REFIID riid,
+        void __RPC_FAR *__RPC_FAR *ppvObject
+    );
+
     STDMETHODIMP LockServer
-	(
-      BOOL fLock
-	);
+    (
+        BOOL fLock
+    );
 };
 

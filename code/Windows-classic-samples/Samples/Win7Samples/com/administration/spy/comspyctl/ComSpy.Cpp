@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,8 +22,8 @@ LONGLONG PerformanceFrequency = 0;
 //
 //    for some reason this define isn't being included
 //
-    
-// const GUID CLSID_StockFontPage = {0x7ebdaae0, 0x8120, 0x11cf, { 0x89, 0x9f, 0x0, 0xaa, 0x0, 0x68, 0x8b, 0x10}};        
+
+// const GUID CLSID_StockFontPage = {0x7ebdaae0, 0x8120, 0x11cf, { 0x89, 0x9f, 0x0, 0xaa, 0x0, 0x68, 0x8b, 0x10}};
 
 
 //
@@ -48,25 +48,25 @@ static const LPCWSTR pwszColNames[] =
 CComSpy::CComSpy() :
     m_ctlSysListView32(L"SysListView32", this, 1)
 {
-     m_hWndList = NULL;
+    m_hWndList = NULL;
     m_bLogToFile = FALSE;
     m_hFile = NULL;
     m_cEvents = 0;
     m_bShowGridLines = TRUE;
-    m_bWindowOnly = TRUE; 
-    for (int i=0;i<NUMBER_COLUMNS;i++)
+    m_bWindowOnly = TRUE;
+    for (int i=0; i<NUMBER_COLUMNS; i++)
     {
         m_nWidth[i] = 60;
     }
-    
+
     m_hFont = NULL;
     m_bShowOnScreen = TRUE;
     m_bCSV = FALSE;
     m_bAudit = FALSE;
     m_spSqlAudit = NULL;
-    
+
     CComBSTR bstrAppName(L"SysApp");
-    m_pSysAppInfo = new CAppInfo((LPCWSTR)bstrAppName, this); 
+    m_pSysAppInfo = new CAppInfo((LPCWSTR)bstrAppName, this);
     _ASSERTE(m_pSysAppInfo);
 }
 
@@ -77,7 +77,7 @@ HRESULT CComSpy::OnDrawAdvanced(ATL_DRAWINFO& di)
 }
 LRESULT CComSpy::OnRButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    HMENU hMenu = LoadMenu(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_SPYMENU));    
+    HMENU hMenu = LoadMenu(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_SPYMENU));
     _ASSERTE(hMenu != NULL);
     if (!hMenu)
         return 0;
@@ -89,7 +89,7 @@ LRESULT CComSpy::OnRButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
     _ASSERTE(hPopup != NULL);
     if (!hPopup)
         return 0;
-    TrackPopupMenu(hPopup, TPM_LEFTALIGN | TPM_RIGHTBUTTON, local.x, local.y, NULL, m_hWndList, NULL); 
+    TrackPopupMenu(hPopup, TPM_LEFTALIGN | TPM_RIGHTBUTTON, local.x, local.y, NULL, m_hWndList, NULL);
 
     return 0;
 }
@@ -102,12 +102,12 @@ LRESULT CComSpy::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     rc.bottom -= rc.top;
     rc.top = rc.left = 0;
     DWORD dwStyle = WS_VISIBLE|WS_CHILD|LVS_REPORT|LVS_SINGLESEL|WS_BORDER;
-    if (!m_hWndList) 
+    if (!m_hWndList)
         m_hWndList = m_ctlSysListView32.Create(m_hWnd, rc, L"", dwStyle);
 
     _ASSERTE(m_hWndList);
     put_ShowGridLines(m_bShowGridLines);
-    
+
     //
     //    we always want the list to be Full Row Select --
     //    note: this only works if the user has IE 3.0 installed
@@ -117,16 +117,16 @@ LRESULT CComSpy::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     ListView_SetExtendedListViewStyle(m_hWndList, dwStyle);
 
     //
-    //    create the columns in our list 
+    //    create the columns in our list
     //
     LV_COLUMN col;
     ZeroMemory(&col, sizeof(col));
     col.mask = LVCF_TEXT|LVCF_WIDTH;
     col.fmt = LVCFMT_LEFT;
     int i;
-    for (i=0;i<NUMBER_COLUMNS;i++)
+    for (i=0; i<NUMBER_COLUMNS; i++)
     {
-        col.cx = m_nWidth[i];    
+        col.cx = m_nWidth[i];
         col.pszText = (LPWSTR)pwszColNames[i];  // Ok, ListView_InsertColumn does not write to this string
         col.cchTextMax  = lstrlen(col.pszText);
         ListView_InsertColumn(m_hWndList, i, &col);
@@ -135,10 +135,10 @@ LRESULT CComSpy::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     QueryPerformanceFrequency((LARGE_INTEGER *)&PerformanceFrequency);
 
     if (m_hFont)
-    {    
+    {
         // this is set if the container app has set our properties using the property bag
         ::SendMessage(m_hWndList, WM_SETFONT, (WPARAM)m_hFont, MAKELPARAM(TRUE,0));
-    }        
+    }
 
     return 0;
 }
@@ -157,10 +157,10 @@ LRESULT CComSpy::OnInitMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         temp += "...";
 
     ModifyMenu(hMenu, ID_LOG, MF_BYCOMMAND|MF_STRING, ID_LOG, temp);
-    CheckMenuItem(hMenu, ID_LOG,  m_bLogToFile ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED); 
-    CheckMenuItem(hMenu, ID_OPTIONS_GRID_LINES,  m_bShowGridLines ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED); 
-    CheckMenuItem(hMenu, ID_SHOW_ON_SCREEN,  m_bShowOnScreen ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);     
-    CheckMenuItem(hMenu, ID_AUDIT,  m_bAudit ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);     
+    CheckMenuItem(hMenu, ID_LOG,  m_bLogToFile ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
+    CheckMenuItem(hMenu, ID_OPTIONS_GRID_LINES,  m_bShowGridLines ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
+    CheckMenuItem(hMenu, ID_SHOW_ON_SCREEN,  m_bShowOnScreen ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
+    CheckMenuItem(hMenu, ID_AUDIT,  m_bAudit ? MF_BYCOMMAND|MF_CHECKED : MF_BYCOMMAND|MF_UNCHECKED);
 
     m_hMenuDebug = GetSubMenu(hMenu, 5);
     _ASSERTE(m_hMenuDebug);
@@ -189,9 +189,9 @@ LRESULT CComSpy::OnLogToFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
                 return 0;
         }
         m_hFile = CreateFile(m_sLogFile, GENERIC_WRITE,
-                            0, (LPSECURITY_ATTRIBUTES) NULL,
-                            OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL,
-                            (HANDLE) NULL);
+                             0, (LPSECURITY_ATTRIBUTES) NULL,
+                             OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL,
+                             (HANDLE) NULL);
 
         if (!m_hFile)
         {
@@ -209,8 +209,8 @@ LRESULT CComSpy::OnLogToFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
         }
 
     }
-    
-    return 0;    
+
+    return 0;
 }
 //
 //    User wants to choose a log file -- show the common dialog
@@ -224,7 +224,7 @@ LRESULT CComSpy::OnChooseLogFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
         StringCchCopy(szFile, MAX_PATH, m_sLogFile.m_str);
     else
         StringCchCopy(szFile, MAX_PATH, L"ComSpy.Log");
-    
+
     // Fill in the OPENFILENAME structure to support a template and hook.
     OpenFileName.lStructSize       = sizeof(OPENFILENAME);
     OpenFileName.hwndOwner         = m_hWndList;
@@ -250,14 +250,14 @@ LRESULT CComSpy::OnChooseLogFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     // Call the common dialog function.
     if (GetSaveFileName(&OpenFileName))
     {
-        m_sLogFile = OpenFileName.lpstrFile;            
+        m_sLogFile = OpenFileName.lpstrFile;
         if (_wcsicmp(OpenFileName.lpstrFile + OpenFileName.nFileExtension, L"csv") == 0)
             m_bCSV = TRUE;
 
     }
-     
+
     return 0;
-    
+
 }
 
 
@@ -272,8 +272,8 @@ LRESULT CComSpy::OnToggleGridLines(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     m_bShowGridLines = 1 - m_bShowGridLines;
 
     DWORD dwStyle = ListView_GetExtendedListViewStyle(m_hWndList);
-    (m_bShowGridLines) ? dwStyle |= LVS_EX_GRIDLINES : 
-                         dwStyle &= ~LVS_EX_GRIDLINES;
+    (m_bShowGridLines) ? dwStyle |= LVS_EX_GRIDLINES :
+                                    dwStyle &= ~LVS_EX_GRIDLINES;
 
     ListView_SetExtendedListViewStyle(m_hWndList, dwStyle);
 
@@ -337,7 +337,7 @@ LRESULT CComSpy::OnSave(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
         StringCchCopy(szFile, MAX_PATH, m_sLogFile.m_str);
     else
         StringCchCopy(szFile, MAX_PATH, L"COMSpy.Log");
-    
+
     OpenFileName.lStructSize       = sizeof(OPENFILENAME);
     OpenFileName.hwndOwner         = m_hWndList;
     OpenFileName.hInstance         = _Module.GetModuleInstance( );
@@ -362,32 +362,32 @@ LRESULT CComSpy::OnSave(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
     // Call the common dialog function.
     if (GetSaveFileName(&OpenFileName))
     {
-    
+
         FILE* f;
         if (_tfopen_s(&f, OpenFileName.lpstrFile, L"a+") == 0)
         {
             int nCount = ListView_GetItemCount(m_hWndList);
             int i, j;
-            WCHAR wszBuffer[MAX_MSG_LENGTH]; 
+            WCHAR wszBuffer[MAX_MSG_LENGTH];
             for (i=0; i<nCount; i++)
             {
                 for (j=0; j < 4; j++)
                 {
                     ListView_GetItemText(m_hWndList, i, j, wszBuffer, ARRAYSIZE(wszBuffer));
-                    _ftprintf(f, L"%s\t",wszBuffer);                    
-                }        
+                    _ftprintf(f, L"%s\t",wszBuffer);
+                }
                 while ( i < nCount - 1)
                 {
                     i++; // move to next column
 
                     // now get the name/value pairs
-                    ListView_GetItemText(m_hWndList, i, 4, wszBuffer, ARRAYSIZE(wszBuffer));                    
+                    ListView_GetItemText(m_hWndList, i, 4, wszBuffer, ARRAYSIZE(wszBuffer));
                     if (*wszBuffer)
                     {
-                        
-                        _ftprintf(f, L"\n\t\t\t\t%s\t", wszBuffer);                    
+
+                        _ftprintf(f, L"\n\t\t\t\t%s\t", wszBuffer);
                         ListView_GetItemText(m_hWndList, i, 5, wszBuffer, ARRAYSIZE(wszBuffer));
-                        _ftprintf(f, L"%s",wszBuffer);                                    
+                        _ftprintf(f, L"%s",wszBuffer);
                     }
                     else
                     {
@@ -400,10 +400,10 @@ LRESULT CComSpy::OnSave(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled
 
             fclose(f);
         }
-                    
+
 
     }
-     
+
     return 0;
 
 
@@ -421,7 +421,7 @@ bool CComSpy::ShouldScroll(int nIndex)
     bool bRet = false;
     int nCountPage = ListView_GetCountPerPage(m_hWndList);
     int nTopIndex = ListView_GetTopIndex(m_hWndList);
-    if (nTopIndex + nCountPage>= nIndex)    
+    if (nTopIndex + nCountPage>= nIndex)
         bRet = true;
     return bRet;
 }
@@ -440,7 +440,7 @@ HRESULT CComSpy::ShutdownApplication(LPCWSTR pwszApplicationName)
 
     size_t nElementsRemoved = m_map.erase(pwszApplicationName);
     _ASSERTE(nElementsRemoved == 1);
-    delete pInfo;    
+    delete pInfo;
     return S_OK;
 }
 
@@ -459,7 +459,7 @@ bool CComSpy::AddEventToList(LONGLONG perfCount, LPCWSTR pwszEvent, LPCWSTR pwsz
         WCHAR sSep[2];
         sSep[0] = m_bCSV ? L',' : L'\t';
         sSep[1] = L'\0';
-        _ASSERTE(m_hFile);    
+        _ASSERTE(m_hFile);
         WCHAR wszBuffer[MAX_MSG_LENGTH];
         ZeroMemory(wszBuffer, sizeof(wszBuffer));
 
@@ -468,14 +468,14 @@ bool CComSpy::AddEventToList(LONGLONG perfCount, LPCWSTR pwszEvent, LPCWSTR pwsz
         if (m_hFile)
         {
 
-            DWORD cbWritten;            
+            DWORD cbWritten;
             bRet = (FALSE != WriteFile(m_hFile, wszBuffer, lstrlen(wszBuffer) * sizeof(WCHAR), &cbWritten, NULL));
 
         }
     }
     if (m_bShowOnScreen)
     {
-        int nCount = ListView_GetItemCount(m_hWndList); 
+        int nCount = ListView_GetItemCount(m_hWndList);
         LV_ITEM item;
         WCHAR sz[8];
         StringCchPrintf(sz, ARRAYSIZE(sz), L"%ld", m_cEvents++);
@@ -484,7 +484,7 @@ bool CComSpy::AddEventToList(LONGLONG perfCount, LPCWSTR pwszEvent, LPCWSTR pwsz
         item.iItem = nCount;
         item.pszText = sz;
         item.cchTextMax = lstrlen(sz);
-        
+
         ListView_InsertItem(m_hWndList, &item);
         ListView_SetItemText(m_hWndList, nCount, 1, (LPWSTR)pwszEvent);
 
@@ -493,12 +493,12 @@ bool CComSpy::AddEventToList(LONGLONG perfCount, LPCWSTR pwszEvent, LPCWSTR pwsz
         ListView_SetItemText(m_hWndList, nCount, 2, szTick);
         ListView_SetItemText(m_hWndList, nCount, 3, (LPWSTR)pwszApplication);
         if (ShouldScroll(nCount))
-            ListView_EnsureVisible(m_hWndList, nCount, FALSE);        
+            ListView_EnsureVisible(m_hWndList, nCount, FALSE);
     }
     return TRUE;
 }
 //
-//    this method is called by all the sinks to add a Named/Value pair to the 
+//    this method is called by all the sinks to add a Named/Value pair to the
 //    list
 //
 bool CComSpy::AddParamValueToList(LPCWSTR pwszParamName, LPCWSTR pwszValue)
@@ -509,20 +509,20 @@ bool CComSpy::AddParamValueToList(LPCWSTR pwszParamName, LPCWSTR pwszValue)
         WCHAR sSep[2];
         sSep[0] = m_bCSV ? L',' : L'\t';
         sSep[1] = L'\0';
-        _ASSERTE(m_hFile);    
+        _ASSERTE(m_hFile);
         WCHAR wszBuffer[MAX_MSG_LENGTH];
         ZeroMemory(wszBuffer, sizeof(wszBuffer));
         StringCchPrintf(wszBuffer, ARRAYSIZE(wszBuffer), L"%s%s%s%s%s%s\n", sSep, sSep, sSep, pwszParamName,sSep, pwszValue);
         if (m_hFile)
         {
 
-            DWORD cbWritten;            
+            DWORD cbWritten;
             bRet = (FALSE != WriteFile(m_hFile, wszBuffer, lstrlen(wszBuffer) * sizeof(WCHAR), &cbWritten, NULL));
-        }        
+        }
     }
     if (m_bShowOnScreen)
     {
-        int nCount = ListView_GetItemCount(m_hWndList); 
+        int nCount = ListView_GetItemCount(m_hWndList);
         LV_ITEM item;
         item.mask = LVIF_TEXT;
         item.iItem = nCount;
@@ -534,7 +534,7 @@ bool CComSpy::AddParamValueToList(LPCWSTR pwszParamName, LPCWSTR pwszValue)
         ListView_SetItemText(m_hWndList, nItem, 4, (LPWSTR)pwszParamName);
         ListView_SetItemText(m_hWndList, nItem, 5, (LPWSTR)pwszValue);
         if (ShouldScroll(nCount))
-            ListView_EnsureVisible(m_hWndList, nItem, FALSE);        
+            ListView_EnsureVisible(m_hWndList, nItem, FALSE);
     }
 
 
@@ -546,7 +546,7 @@ bool CComSpy::AddParamValueToList(LPCWSTR pwszParamName, LPCWSTR pwszValue)
 //
 LRESULT CComSpy::OnSelectApplications(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    CSelectEventsDlg dlg(&m_map, m_pSysAppInfo, this); 
+    CSelectEventsDlg dlg(&m_map, m_pSysAppInfo, this);
     dlg.DoModal();
     return 0;
 }
@@ -563,13 +563,13 @@ LRESULT CComSpy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     CAppInfo * pInfo;
     for (iter = m_map.begin(); iter != m_map.end(); ++iter)
     {
-    
-        pInfo = (*iter).second;        
+
+        pInfo = (*iter).second;
         delete pInfo;
     }
     m_map.clear();
-    
-    if(m_pSysAppInfo) 
+
+    if(m_pSysAppInfo)
         delete m_pSysAppInfo;
 
 
@@ -595,15 +595,15 @@ LRESULT CComSpy::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 //
 LRESULT CComSpy::OnChooseFont(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    HRESULT hr = S_OK;        
+    HRESULT hr = S_OK;
     CComPtr<IUnknown> pUnk;
     ControlQueryInterface(IID_PPV_ARGS(&pUnk));
     _ASSERTE(pUnk != NULL);
     LPCWSTR pwszTitle = L"Com Spy - Choose Font";
     hr = OleCreatePropertyFrame(m_hWnd, m_rcPos.top, m_rcPos.left, pwszTitle,
-        1, &pUnk.p, 1, (LPCLSID)&CLSID_StockFontPage, // Ok, OleCreatePropertyFrame will not write to this
-        LOCALE_USER_DEFAULT, 0, 0);
-    
+                                1, &pUnk.p, 1, (LPCLSID)&CLSID_StockFontPage, // Ok, OleCreatePropertyFrame will not write to this
+                                LOCALE_USER_DEFAULT, 0, 0);
+
     return 0;
 }
 
@@ -618,16 +618,16 @@ STDMETHODIMP CComSpy::put_LogFile(BSTR newVal)
 
     HANDLE hTemp;
     hTemp = CreateFile(newVal, GENERIC_WRITE,
-                        0, (LPSECURITY_ATTRIBUTES) NULL,
-                        OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL,
-                        (HANDLE) NULL);
+                       0, (LPSECURITY_ATTRIBUTES) NULL,
+                       OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL,
+                       (HANDLE) NULL);
 
 
     if (hTemp)
     {
         if (m_hFile)
         {
-            CloseHandle(m_hFile);                        
+            CloseHandle(m_hFile);
         }
 
         m_hFile = hTemp;
@@ -635,7 +635,7 @@ STDMETHODIMP CComSpy::put_LogFile(BSTR newVal)
     else
         return E_INVALIDARG;
 
-    
+
     m_sLogFile = newVal;
     return S_OK;
 }
@@ -648,11 +648,11 @@ STDMETHODIMP CComSpy::get_ShowGridLines(BOOL * pVal)
 
 STDMETHODIMP CComSpy::put_ShowGridLines(BOOL newVal)
 {
-    
+
     m_bShowGridLines = newVal;
     DWORD dwStyle = ListView_GetExtendedListViewStyle(m_hWndList);
-    (m_bShowGridLines) ? dwStyle |= LVS_EX_GRIDLINES : 
-                         dwStyle &= ~LVS_EX_GRIDLINES;
+    (m_bShowGridLines) ? dwStyle |= LVS_EX_GRIDLINES :
+                                    dwStyle &= ~LVS_EX_GRIDLINES;
 
     ListView_SetExtendedListViewStyle(m_hWndList, dwStyle);
     FireViewChange();
@@ -668,8 +668,8 @@ STDMETHODIMP CComSpy::get_Audit(BOOL * pVal)
 
 STDMETHODIMP CComSpy::put_Audit(BOOL newVal)
 {
-    
-    m_bAudit = newVal;    
+
+    m_bAudit = newVal;
     EnableAudit(m_bAudit);
     return S_OK;
 }
@@ -684,7 +684,7 @@ STDMETHODIMP CComSpy::get_ColWidth(short nColumn, long * pVal)
 }
 
 STDMETHODIMP CComSpy::put_ColWidth(short nColumn, long newVal)
-{        
+{
     if (nColumn >= NUMBER_COLUMNS)
         return E_INVALIDARG;
 
@@ -696,10 +696,10 @@ STDMETHODIMP CComSpy::put_ColWidth(short nColumn, long newVal)
 
 
 HRESULT CComSpy::IPersistStreamInit_Load(LPSTREAM pStm, const ATL_PROPMAP_ENTRY* pMap)
-{    
-    
+{
+
     ULONG cbRead;
-    
+
     // read in the version
     UINT nVersion;
     pStm->Read(&nVersion, sizeof(UINT), &cbRead);
@@ -725,7 +725,7 @@ HRESULT CComSpy::IPersistStreamInit_Load(LPSTREAM pStm, const ATL_PROPMAP_ENTRY*
     pStm->Read(&m_bShowGridLines, sizeof(m_bShowGridLines),&cbRead);
     put_ShowGridLines(m_bShowGridLines);
 
-    // show on screen    
+    // show on screen
     pStm->Read(&m_bShowOnScreen, sizeof(m_bShowOnScreen),&cbRead);
     put_ShowOnScreen(m_bShowOnScreen);
 
@@ -734,17 +734,17 @@ HRESULT CComSpy::IPersistStreamInit_Load(LPSTREAM pStm, const ATL_PROPMAP_ENTRY*
     put_LogToFile(m_bLogToFile);
 
     // csv files
-    pStm->Read(&m_bCSV, sizeof(m_bCSV), &cbRead);    
-    
+    pStm->Read(&m_bCSV, sizeof(m_bCSV), &cbRead);
+
     // csv files
-    pStm->Read(&m_bAudit, sizeof(m_bAudit), &cbRead);    
+    pStm->Read(&m_bAudit, sizeof(m_bAudit), &cbRead);
     EnableAudit(m_bAudit);
 
     // read the col widths
     int i;
     long nWidth;
-    for (i=0;i<NUMBER_COLUMNS;i++)
-    {        
+    for (i=0; i<NUMBER_COLUMNS; i++)
+    {
         pStm->Read(&nWidth, sizeof(nWidth), &cbRead);
         put_ColWidth(i, nWidth);
     }
@@ -770,10 +770,10 @@ HRESULT CComSpy::IPersistStreamInit_Load(LPSTREAM pStm, const ATL_PROPMAP_ENTRY*
             CComPtr<IFont> spFont;
             m_pFont->QueryInterface(IID_PPV_ARGS(&spFont));
             _ASSERTE(spFont);
-            m_hFont = CreateHFontFromIFont(spFont);                    
+            m_hFont = CreateHFontFromIFont(spFont);
         }
     }
-        
+
 
     return S_OK;
 }
@@ -786,7 +786,7 @@ HRESULT CComSpy::IPersistStreamInit_Save(LPSTREAM pStm, BOOL /* fClearDirty */, 
     // write a version
     UINT nVersion  = 4;
     pStm->Write(&nVersion, sizeof(UINT), &cbWritten);
-    
+
     // write the log file size
     long nChars = m_sLogFile.Length();
     pStm->Write(&nChars, sizeof(long), &cbWritten);
@@ -798,7 +798,7 @@ HRESULT CComSpy::IPersistStreamInit_Save(LPSTREAM pStm, BOOL /* fClearDirty */, 
     // write the BOOL if gridlines should be shown
     pStm->Write(&m_bShowGridLines, sizeof(m_bShowGridLines), &cbWritten);
 
-    // write the BOOL if the user wants to see the messages 
+    // write the BOOL if the user wants to see the messages
     pStm->Write(&m_bShowOnScreen, sizeof(m_bShowOnScreen), &cbWritten);
 
     // write the BOOL if the user wants to log the messages
@@ -813,20 +813,20 @@ HRESULT CComSpy::IPersistStreamInit_Save(LPSTREAM pStm, BOOL /* fClearDirty */, 
     // write the col widths
     int i;
     long nWidth;
-    for (i=0;i<NUMBER_COLUMNS;i++)
+    for (i=0; i<NUMBER_COLUMNS; i++)
     {
         get_ColWidth(i, &nWidth);
         _ASSERTE(nWidth);
         pStm->Write(&nWidth, sizeof(nWidth), &cbWritten);
     }
-    
+
     // ask the font to persist itself in the stream
     BOOL bCustomFont;
     if (m_pFont)
     {
         bCustomFont = TRUE;
         pStm->Write(&bCustomFont, sizeof(bCustomFont), &cbWritten);
-        CComPtr<IPersistStream> pPersistStream;    
+        CComPtr<IPersistStream> pPersistStream;
         m_pFont->QueryInterface(IID_PPV_ARGS(&pPersistStream));
         _ASSERTE(pPersistStream);
         pPersistStream->Save(pStm, FALSE);
@@ -851,7 +851,7 @@ HFONT CComSpy::CreateHFontFromIFont(__in IFont* pFont)
 {
 
     _ASSERTE(pFont);
-    HFONT hFont;    
+    HFONT hFont;
     LOGFONT lf;
     ZeroMemory(&lf, sizeof(lf));
     CComBSTR bstr;
@@ -862,21 +862,21 @@ HFONT CComSpy::CreateHFontFromIFont(__in IFont* pFont)
     HDC hDC = ::GetDC(NULL);
     _ASSERTE(hDC);
     long lCaps = GetDeviceCaps(hDC, LOGPIXELSY);
-    lf.lfHeight =  -MulDiv(cy.Hi, lCaps, 72); 
-    lf.lfHeight += -MulDiv(cy.Lo, lCaps, 720000); 
+    lf.lfHeight =  -MulDiv(cy.Hi, lCaps, 72);
+    lf.lfHeight += -MulDiv(cy.Lo, lCaps, 720000);
     ::ReleaseDC(NULL, hDC);
     short sVal;
     pFont->get_Weight(&sVal);
-    lf.lfWeight  = sVal; 
+    lf.lfWeight  = sVal;
     BOOL bFlag;
     pFont->get_Italic(&bFlag);
-    lf.lfItalic = bFlag; 
+    lf.lfItalic = bFlag;
     pFont->get_Underline(&bFlag);
-    lf.lfUnderline = bFlag; 
+    lf.lfUnderline = bFlag;
     pFont->get_Strikethrough(&bFlag);
-    lf.lfStrikeOut = bFlag; 
+    lf.lfStrikeOut = bFlag;
     pFont->get_Charset(&sVal);
-    lf.lfCharSet = (BYTE)sVal; 
+    lf.lfCharSet = (BYTE)sVal;
     hFont = CreateFontIndirect(&lf);
     return hFont;
 
@@ -891,7 +891,7 @@ STDMETHODIMP CComSpy::SelectApplications()
 
 STDMETHODIMP CComSpy::SaveToFile()
 {
-    
+
     BOOL bHandled = TRUE;
     OnSave(0,0,0,bHandled);
     return S_OK;
@@ -899,7 +899,7 @@ STDMETHODIMP CComSpy::SaveToFile()
 
 STDMETHODIMP CComSpy::ClearAllEvents()
 {
-    
+
     BOOL bHandled = TRUE;
     OnClear(0,0,0,bHandled);
     return S_OK;
@@ -933,14 +933,14 @@ STDMETHODIMP CComSpy::put_LogToFile(BOOL newVal)
 
         if (m_hFile)
         {
-            CloseHandle(m_hFile);            
+            CloseHandle(m_hFile);
             m_hFile = NULL;
         }
 
         m_hFile = CreateFile(m_sLogFile, GENERIC_WRITE,
-                            0, (LPSECURITY_ATTRIBUTES) NULL,
-                            OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL,
-                            (HANDLE) NULL);
+                             0, (LPSECURITY_ATTRIBUTES) NULL,
+                             OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL,
+                             (HANDLE) NULL);
 
         if (!m_hFile)
         {
@@ -1019,7 +1019,7 @@ bool CComSpy::AddRunningAspsToDebugMenu(HMENU hMenu)
     long lApplications;
     spMtsGrp->Refresh(); // its important to call this!
     spMtsGrp->get_Count(&lApplications);
-    
+
     CComPtr<IUnknown> spUnk;
     CComPtr<IMtsEvents> spEvents;
     long lPID;
@@ -1034,15 +1034,15 @@ bool CComSpy::AddRunningAspsToDebugMenu(HMENU hMenu)
         {
 
             CComBSTR bstrName;
-            spEvents->get_PackageName(&bstrName.m_str);                    
+            spEvents->get_PackageName(&bstrName.m_str);
             spEvents->GetProcessID(&lPID);
             ZeroMemory(szBuf, sizeof(szBuf));
             if (bstrName.m_str)
             {
-                StringCchPrintf(szBuf, ARRAYSIZE(szBuf), L"%s - PID: %ld", bstrName.m_str, lPID);                    
-                int nRet = InsertMenu(hMenu, -1, MF_BYPOSITION|MF_STRING, ID_DEBUG_BEGIN + i, szBuf);                
-            }            
-            
+                StringCchPrintf(szBuf, ARRAYSIZE(szBuf), L"%s - PID: %ld", bstrName.m_str, lPID);
+                int nRet = InsertMenu(hMenu, -1, MF_BYPOSITION|MF_STRING, ID_DEBUG_BEGIN + i, szBuf);
+            }
+
         }
         spUnk.Release();
         spEvents.Release();
@@ -1055,8 +1055,8 @@ bool CComSpy::AddRunningAspsToDebugMenu(HMENU hMenu)
 //    user wants to debug a Application --
 //
 //    NOTE:   This is designed to work with Microsoft Developer Studio
-//            if you want to add support for another tool, modify the 
-//            ShellExecute() line below.  This is alson non-robust in 
+//            if you want to add support for another tool, modify the
+//            ShellExecute() line below.  This is alson non-robust in
 //            the sense that it requires MSDEV.EXE to be in the path
 //            and set up correctly.
 //
@@ -1065,7 +1065,7 @@ LRESULT CComSpy::OnDebugApplication(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
 
     HCURSOR hBusy = LoadCursor(NULL, IDC_WAIT);
     HCURSOR hOldCur = SetCursor(hBusy);
-    WCHAR szBuf[128];    
+    WCHAR szBuf[128];
     ZeroMemory(szBuf, sizeof(szBuf));
     int nChars;
     _ASSERTE(m_hMenuDebug);
@@ -1085,8 +1085,8 @@ LRESULT CComSpy::OnDebugApplication(WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
             return 0;
         }
 
-        p+=3;        
-        WCHAR wszBuffer[MAX_PATH];        
+        p+=3;
+        WCHAR wszBuffer[MAX_PATH];
         StringCchPrintf(wszBuffer, MAX_PATH, L"-p %s -e %s", p, p);
         HINSTANCE hInst = ShellExecute( NULL, L"open", L"msdev", wszBuffer, NULL, SW_SHOWNORMAL);
     }
@@ -1107,7 +1107,7 @@ HRESULT CComSpy::EnableAudit(BOOL bEnable)
 
     if (m_spSqlAudit)        // make EnableAudit() idempotent -- we are already enabled
         return S_OK;
-    
+
     HRESULT hr;
     hr = CoCreateInstance(CLSID_ComSpyAudit, NULL, CLSCTX_ALL, IID_PPV_ARGS(&m_spSqlAudit));
     if (SUCCEEDED(hr))
@@ -1123,15 +1123,15 @@ HRESULT CComSpy::EnableAudit(BOOL bEnable)
                 L"Make sure that the DSN exists, the Database has the\n"
                 L"schema contained in ComSpyAudit.SQL, and you have\n"
                 L"the permission to access the database.";
-                                                                    
+
             ::MessageBox(m_hWndList, pwszMsg,  L"ComSpy", MB_ICONSTOP);
             m_spSqlAudit.Release();
         }
     }
     else
     {
-        
-        ::MessageBox(m_hWndList, L"Unable to create the ComSpyAudit component!",  L"ComSpy", MB_ICONSTOP);            
+
+        ::MessageBox(m_hWndList, L"Unable to create the ComSpyAudit component!",  L"ComSpy", MB_ICONSTOP);
     }
 
     return hr;
@@ -1152,7 +1152,7 @@ HRESULT CComSpy::putref_Font(__in IFontDisp* pFontDisp)
         }
         m_hFont = CreateHFontFromIFont(spFont);
         if (m_hFont)
-        {                                
+        {
             ::SendMessage(m_hWndList, WM_SETFONT, (WPARAM)m_hFont, 0L);
         }
     }

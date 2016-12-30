@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -36,19 +36,19 @@ BOOLEAN
 EqualComputerName(
     IN PUNICODE_STRING String1,
     IN PUNICODE_STRING String2
-    );
+);
 
 NTSTATUS
 QuerySystemTime (
     OUT PLARGE_INTEGER SystemTime
-    );
+);
 
 
 BOOL
 GetPasswordExpired(
     IN LARGE_INTEGER PasswordLastSet,
     IN LARGE_INTEGER MaxPasswordAge
-    );
+);
 
 NTSTATUS
 AccountRestrictions(
@@ -58,24 +58,24 @@ AccountRestrictions(
     IN PLOGON_HOURS LogonHours,
     OUT PLARGE_INTEGER LogoffTime,
     OUT PLARGE_INTEGER KickoffTime
-    );
+);
 
 LARGE_INTEGER
 NetpSecondsToDeltaTime(
     IN ULONG Seconds
-    );
+);
 
 VOID
 InitUnicodeString(
     OUT PUNICODE_STRING DestinationString,
     IN PCWSTR SourceString OPTIONAL
-    );
+);
 
 VOID
 CopyUnicodeString(
     OUT PUNICODE_STRING DestinationString,
     IN PUNICODE_STRING SourceString OPTIONAL
-    );
+);
 
 
 
@@ -193,7 +193,8 @@ Return Value:
 
     (VOID) QuerySystemTime( &LogonTime );
 
-    switch ( LogonLevel ) {
+    switch ( LogonLevel )
+    {
     case NetlogonInteractiveInformation:
     case NetlogonServiceInformation:
 
@@ -218,7 +219,8 @@ Return Value:
         // (Nor are interactive or service logons allowed to them.)
         //
 
-        if ( (Flags & MSV1_0_PASSTHRU) == 0 ) {
+        if ( (Flags & MSV1_0_PASSTHRU) == 0 )
+        {
             UserAccountControl |= USER_TEMP_DUPLICATE_ACCOUNT;
         }
 
@@ -239,7 +241,8 @@ Return Value:
     //  Treat this as though the User Account doesn't exist.
     //
 
-    if ( (UserAccountControl & UserAll->UserAccountControl) == 0 ) {
+    if ( (UserAccountControl & UserAll->UserAccountControl) == 0 )
+    {
         *Authoritative = FALSE;
         Status = STATUS_NO_SUCH_USER;
         goto Cleanup;
@@ -248,7 +251,8 @@ Return Value:
     //
     // This SubAuthentication package doesn't allow guest logons.
     //
-    if ( Flags & MSV1_0_GUEST_LOGON ) {
+    if ( Flags & MSV1_0_GUEST_LOGON )
+    {
         *Authoritative = FALSE;
         Status = STATUS_NO_SUCH_USER;
         goto Cleanup;
@@ -261,7 +265,8 @@ Return Value:
     //
 
     if ( UserAll->UserId != DOMAIN_USER_RID_ADMIN &&
-         (UserAll->UserAccountControl & USER_ACCOUNT_AUTO_LOCKED) ) {
+            (UserAll->UserAccountControl & USER_ACCOUNT_AUTO_LOCKED) )
+    {
 
         //
         // Since the UI strongly encourages admins to disable user
@@ -269,9 +274,12 @@ Return Value:
         // non-authoritative allowing the search to continue for other
         // accounts by the same name.
         //
-        if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
+        if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED )
+        {
             *Authoritative = FALSE;
-        } else {
+        }
+        else
+        {
             *Authoritative = TRUE;
         }
         Status = STATUS_ACCOUNT_LOCKED_OUT;
@@ -283,7 +291,8 @@ Return Value:
     // Check the password.
     //
 
-    if ( FALSE /* VALIDATE THE USER'S PASSWORD HERE */ ) {
+    if ( FALSE /* VALIDATE THE USER'S PASSWORD HERE */ )
+    {
 
         Status = STATUS_WRONG_PASSWORD;
 
@@ -293,9 +302,12 @@ Return Value:
         // non-authoritative allowing the search to continue for other
         // accounts by the same name.
         //
-        if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
+        if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED )
+        {
             *Authoritative = FALSE;
-        } else {
+        }
+        else
+        {
             *Authoritative = TRUE;
         }
 
@@ -306,7 +318,8 @@ Return Value:
     // Prevent some things from effecting the Administrator user
     //
 
-    if (UserAll->UserId == DOMAIN_USER_RID_ADMIN) {
+    if (UserAll->UserId == DOMAIN_USER_RID_ADMIN)
+    {
 
         //
         //  The administrator account doesn't have a forced logoff time.
@@ -318,13 +331,16 @@ Return Value:
         KickoffTime->HighPart = 0x7FFFFFFF;
         KickoffTime->LowPart = 0xFFFFFFFF;
 
-    } else {
+    }
+    else
+    {
 
         //
         // Check if the account is disabled.
         //
 
-        if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
+        if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED )
+        {
             //
             // Since the UI strongly encourages admins to disable user
             // accounts rather than delete them.  Treat disabled acccount as
@@ -341,7 +357,8 @@ Return Value:
         //
 
         if ( UserAll->AccountExpires.QuadPart != 0 &&
-             LogonTime.QuadPart >= UserAll->AccountExpires.QuadPart ) {
+                LogonTime.QuadPart >= UserAll->AccountExpires.QuadPart )
+        {
             *Authoritative = TRUE;
             Status = STATUS_ACCOUNT_EXPIRED;
             goto Cleanup;
@@ -349,10 +366,10 @@ Return Value:
 
 #if 1
 
-    //
-    //  If your using SAM's password expiration date, use this code, otherwise
-    //  use the code below and supply your own password set date...
-    //
+        //
+        //  If your using SAM's password expiration date, use this code, otherwise
+        //  use the code below and supply your own password set date...
+        //
 
         //
         // The password is valid, check to see if the password is expired.
@@ -363,11 +380,15 @@ Return Value:
         // want to consider not checking the SAM password expiration times here.
         //
 
-        if ( LogonTime.QuadPart >= UserAll->PasswordMustChange.QuadPart ) {
+        if ( LogonTime.QuadPart >= UserAll->PasswordMustChange.QuadPart )
+        {
 
-            if ( UserAll->PasswordLastSet.QuadPart == 0 ) {
+            if ( UserAll->PasswordLastSet.QuadPart == 0 )
+            {
                 Status = STATUS_PASSWORD_MUST_CHANGE;
-            } else {
+            }
+            else
+            {
                 Status = STATUS_PASSWORD_EXPIRED;
             }
             *Authoritative = TRUE;
@@ -380,7 +401,8 @@ Return Value:
         // Response is correct. So, check if the password has expired or not
         //
 
-        if (! (UserAll->UserAccountControl & USER_DONT_EXPIRE_PASSWORD)) {
+        if (! (UserAll->UserAccountControl & USER_DONT_EXPIRE_PASSWORD))
+        {
             LARGE_INTEGER MaxPasswordAge;
             MaxPasswordAge.HighPart = 0x7FFFFFFF;
             MaxPasswordAge.LowPart = 0xFFFFFFFF;
@@ -394,7 +416,8 @@ Return Value:
             PasswordDateSet.HighPart = 0;
 
             if ( GetPasswordExpired( PasswordDateSet,
-                        MaxPasswordAge )) {
+                                     MaxPasswordAge ))
+            {
 
                 Status = STATUS_PASSWORD_EXPIRED;
                 goto Cleanup;
@@ -406,37 +429,39 @@ Return Value:
 
 #if 1
 
-    //
-    // Validate the workstation the user logged on from.
-    //
-    // Ditch leading \\ on workstation name before passing it to SAM.
-    //
+        //
+        // Validate the workstation the user logged on from.
+        //
+        // Ditch leading \\ on workstation name before passing it to SAM.
+        //
 
-    LocalWorkstation = LogonNetworkInfo->Identity.Workstation;
-    if ( LocalWorkstation.Length > 0 &&
-         LocalWorkstation.Buffer[0] == L'\\' &&
-         LocalWorkstation.Buffer[1] == L'\\' ) {
-        LocalWorkstation.Buffer += 2;
-        LocalWorkstation.Length -= 2*sizeof(WCHAR);
-        LocalWorkstation.MaximumLength -= 2*sizeof(WCHAR);
-    }
+        LocalWorkstation = LogonNetworkInfo->Identity.Workstation;
+        if ( LocalWorkstation.Length > 0 &&
+                LocalWorkstation.Buffer[0] == L'\\' &&
+                LocalWorkstation.Buffer[1] == L'\\' )
+        {
+            LocalWorkstation.Buffer += 2;
+            LocalWorkstation.Length -= 2*sizeof(WCHAR);
+            LocalWorkstation.MaximumLength -= 2*sizeof(WCHAR);
+        }
 
 
-    //
-    //  To validate the user's logon hours as SAM does it, use this code,
-    //  otherwise, supply your own checks below this code.
-    //
+        //
+        //  To validate the user's logon hours as SAM does it, use this code,
+        //  otherwise, supply your own checks below this code.
+        //
 
-    Status = AccountRestrictions( UserAll->UserId,
-                                  &LocalWorkstation,
-                                  (PUNICODE_STRING) &UserAll->WorkStations,
-                                  &UserAll->LogonHours,
-                                  LogoffTime,
-                                  KickoffTime );
+        Status = AccountRestrictions( UserAll->UserId,
+                                      &LocalWorkstation,
+                                      (PUNICODE_STRING) &UserAll->WorkStations,
+                                      &UserAll->LogonHours,
+                                      LogoffTime,
+                                      KickoffTime );
 
-    if ( !NT_SUCCESS( Status )) {
-        goto Cleanup;
-    }
+        if ( !NT_SUCCESS( Status ))
+        {
+            goto Cleanup;
+        }
 
 #else
 
@@ -444,7 +469,8 @@ Return Value:
         // Validate the user's logon hours.
         //
 
-        if ( TRUE /* VALIDATE THE LOGON HOURS */ ) {
+        if ( TRUE /* VALIDATE THE LOGON HOURS */ )
+        {
 
 
             //
@@ -458,7 +484,9 @@ Return Value:
 
             KickoffTime->HighPart = 0x7FFFFFFF;
             KickoffTime->LowPart = 0xFFFFFFFF;
-        } else {
+        }
+        else
+        {
             Status = STATUS_INVALID_LOGON_HOURS;
             *Authoritative = TRUE;
             goto Cleanup;
@@ -469,7 +497,8 @@ Return Value:
         // Validate if the user can log on from this workstation.
         //  (Supply subauthentication package specific code here.)
 
-        if ( LogonNetworkInfo->Identity.Workstation.Buffer == NULL ) {
+        if ( LogonNetworkInfo->Identity.Workstation.Buffer == NULL )
+        {
             Status = STATUS_INVALID_WORKSTATION;
             *Authoritative = TRUE;
             goto Cleanup;
@@ -501,7 +530,7 @@ BOOL
 GetPasswordExpired (
     IN LARGE_INTEGER PasswordLastSet,
     IN LARGE_INTEGER MaxPasswordAge
-    )
+)
 
 /*++
 
@@ -531,13 +560,17 @@ Return Value:
     // last set plus the maximum age.
     //
 
-    if ( PasswordLastSet.QuadPart < 0 || MaxPasswordAge.QuadPart > 0 ) {
+    if ( PasswordLastSet.QuadPart < 0 || MaxPasswordAge.QuadPart > 0 )
+    {
 
         rc = TRUE;      // default for invalid times is that it is expired.
 
-    } else {
+    }
+    else
+    {
 
-        __try {
+        __try
+        {
 
             PasswordMustChange.QuadPart =
                 PasswordLastSet.QuadPart - MaxPasswordAge.QuadPart;
@@ -545,28 +578,39 @@ Return Value:
             // Limit the resultant time to the maximum valid absolute time
             //
 
-            if ( PasswordMustChange.QuadPart < 0 ) {
+            if ( PasswordMustChange.QuadPart < 0 )
+            {
 
                 rc = FALSE;
 
-            } else {
+            }
+            else
+            {
 
                 Status = QuerySystemTime( &TimeNow );
-                if (NT_SUCCESS(Status)) {
+                if (NT_SUCCESS(Status))
+                {
 
-                    if ( TimeNow.QuadPart >= PasswordMustChange.QuadPart ) {
+                    if ( TimeNow.QuadPart >= PasswordMustChange.QuadPart )
+                    {
                         rc = TRUE;
 
-                    } else {
+                    }
+                    else
+                    {
 
                         rc = FALSE;
                     }
-                } else {
+                }
+                else
+                {
                     rc = FALSE;     // won't fail if QuerySystemTime failed.
                 }
             }
 
-        } __except(EXCEPTION_EXECUTE_HANDLER) {
+        }
+        __except(EXCEPTION_EXECUTE_HANDLER)
+        {
 
             rc = TRUE;
         }
@@ -580,7 +624,7 @@ Return Value:
 NTSTATUS
 QuerySystemTime (
     OUT PLARGE_INTEGER SystemTime
-    )
+)
 
 /*++
 
@@ -608,7 +652,8 @@ Return Value:
 
     GetSystemTime( &CurrentTime );
 
-    if ( !SystemTimeToFileTime( &CurrentTime, (LPFILETIME) SystemTime ) ) {
+    if ( !SystemTimeToFileTime( &CurrentTime, (LPFILETIME) SystemTime ) )
+    {
         return STATUS_ACCESS_VIOLATION;
     }
 
@@ -619,7 +664,7 @@ NTSTATUS
 SampMatchworkstation(
     IN PUNICODE_STRING LogonWorkStation,
     IN PUNICODE_STRING WorkStations
-    )
+)
 
 /*++
 
@@ -663,8 +708,9 @@ Return Value:
     //
 
     if ( ( LogonWorkStation == NULL ) ||
-        ( LogonWorkStation->Length == 0 ) ||
-        ( WorkStations->Length == 0 ) ) {
+            ( LogonWorkStation->Length == 0 ) ||
+            ( WorkStations->Length == 0 ) )
+    {
 
         return( STATUS_SUCCESS );
     }
@@ -680,19 +726,23 @@ Return Value:
     // WorkStations.
     //
 
-    if ( WorkStations->Length > LocalBufferLength ) {
+    if ( WorkStations->Length > LocalBufferLength )
+    {
 
         WorkStationsListCopy.Buffer = LocalAlloc( 0, WorkStations->Length );
         BufferAllocated = TRUE;
 
-        if ( WorkStationsListCopy.Buffer == NULL ) {
+        if ( WorkStationsListCopy.Buffer == NULL )
+        {
             NtStatus = STATUS_INSUFFICIENT_RESOURCES;
             return( NtStatus );
         }
 
         WorkStationsListCopy.MaximumLength = WorkStations->Length;
 
-    } else {
+    }
+    else
+    {
 
         WorkStationsListCopy.Buffer = Buffer;
         WorkStationsListCopy.MaximumLength = LocalBufferLength;
@@ -708,17 +758,20 @@ Return Value:
 
     TmpBuffer = WorkStationsListCopy.Buffer;
 
-    while( WorkStationName = wcstok_s(TmpBuffer, L",", &pszTempNextToken) ) {
+    while( WorkStationName = wcstok_s(TmpBuffer, L",", &pszTempNextToken) )
+    {
 
         TmpBuffer = NULL;
         InitUnicodeString( &Unicode, WorkStationName );
-        if (EqualComputerName( &Unicode, LogonWorkStation )) {
+        if (EqualComputerName( &Unicode, LogonWorkStation ))
+        {
             NtStatus = STATUS_SUCCESS;
             break;
         }
     }
 
-    if ( BufferAllocated ) {
+    if ( BufferAllocated )
+    {
         LocalFree( WorkStationsListCopy.Buffer );
     }
 
@@ -733,7 +786,7 @@ AccountRestrictions(
     IN PLOGON_HOURS LogonHours,
     OUT PLARGE_INTEGER LogoffTime,
     OUT PLARGE_INTEGER KickoffTime
-    )
+)
 
 /*++
 
@@ -808,7 +861,8 @@ Return Value:
     // Only check for users other than the builtin ADMIN
     //
 
-    if ( UserRid != DOMAIN_USER_RID_ADMIN) {
+    if ( UserRid != DOMAIN_USER_RID_ADMIN)
+    {
 
         //
         // Scan to make sure the workstation being logged into is in the
@@ -818,7 +872,8 @@ Return Value:
 
         NtStatus = SampMatchworkstation( LogonWorkStation, WorkStations );
 
-        if ( NT_SUCCESS( NtStatus ) ) {
+        if ( NT_SUCCESS( NtStatus ) )
+        {
 
             //
             // Check to make sure that the current time is a valid time to log
@@ -847,7 +902,7 @@ Return Value:
 
             TimeZoneId = GetTimeZoneInformation(
                              (LPTIME_ZONE_INFORMATION) &TimeZoneInformation
-                             );
+                         );
 
             //
             // Next, get the appropriate bias (signed integer in minutes) to subtract from
@@ -859,7 +914,8 @@ Return Value:
             // local time  = UTC time - bias in 100Ns units
             //
 
-            switch (TimeZoneId) {
+            switch (TimeZoneId)
+            {
 
             case TIME_ZONE_ID_UNKNOWN:
 
@@ -892,7 +948,8 @@ Return Value:
                 break;
             }
 
-            if (NT_SUCCESS(NtStatus)) {
+            if (NT_SUCCESS(NtStatus))
+            {
 
                 //
                 // Convert the Bias from minutes to 100ns units
@@ -909,18 +966,19 @@ Return Value:
                 NtStatus = QuerySystemTime( &CurrentUTCTime );
             }
 
-            if ( NT_SUCCESS( NtStatus ) ) {
+            if ( NT_SUCCESS( NtStatus ) )
+            {
 
                 CurrentTime.QuadPart = CurrentUTCTime.QuadPart -
-                              BiasIn100NsUnits.QuadPart;
+                                       BiasIn100NsUnits.QuadPart;
 
                 FileTimeToSystemTime( (PFILETIME)&CurrentTime, &CurrentTimeFields );
 
                 CurrentMsIntoWeek = (((( CurrentTimeFields.wDayOfWeek * 24 ) +
                                        CurrentTimeFields.wHour ) * 60 +
-                                       CurrentTimeFields.wMinute ) * 60 +
-                                       CurrentTimeFields.wSecond ) * 1000 +
-                                       CurrentTimeFields.wMilliseconds;
+                                      CurrentTimeFields.wMinute ) * 60 +
+                                     CurrentTimeFields.wSecond ) * 1000 +
+                                    CurrentTimeFields.wMilliseconds;
 
                 MillisecondsIntoWeekXUnitsPerWeek.QuadPart =
                     ((LONGLONG)CurrentMsIntoWeek) *
@@ -932,11 +990,14 @@ Return Value:
                 CurrentUnitsIntoWeek = LargeUnitsIntoWeek.LowPart;
 
                 if ( !( LogonHours->LogonHours[ CurrentUnitsIntoWeek / 8] &
-                    ( 0x01 << ( CurrentUnitsIntoWeek % 8 ) ) ) ) {
+                        ( 0x01 << ( CurrentUnitsIntoWeek % 8 ) ) ) )
+                {
 
                     NtStatus = STATUS_INVALID_LOGON_HOURS;
 
-                } else {
+                }
+                else
+                {
 
                     //
                     // Determine the next time that the user is NOT supposed to be logged
@@ -946,17 +1007,20 @@ Return Value:
                     i = 0;
                     LogoffUnitsIntoWeek = CurrentUnitsIntoWeek;
 
-                    do {
+                    do
+                    {
 
                         i++;
 
                         LogoffUnitsIntoWeek = ( LogoffUnitsIntoWeek + 1 ) % LogonHours->UnitsPerWeek;
 
-                    } while ( ( i <= LogonHours->UnitsPerWeek ) &&
-                        ( LogonHours->LogonHours[ LogoffUnitsIntoWeek / 8 ] &
-                        ( 0x01 << ( LogoffUnitsIntoWeek % 8 ) ) ) );
+                    }
+                    while ( ( i <= LogonHours->UnitsPerWeek ) &&
+                            ( LogonHours->LogonHours[ LogoffUnitsIntoWeek / 8 ] &
+                              ( 0x01 << ( LogoffUnitsIntoWeek % 8 ) ) ) );
 
-                    if ( i > LogonHours->UnitsPerWeek ) {
+                    if ( i > LogonHours->UnitsPerWeek )
+                    {
 
                         //
                         // All times are allowed, so there's no logoff
@@ -970,7 +1034,9 @@ Return Value:
                         KickoffTime->HighPart = 0x7FFFFFFF;
                         KickoffTime->LowPart = 0xFFFFFFFF;
 
-                    } else {
+                    }
+                    else
+                    {
 
                         //
                         // LogoffUnitsIntoWeek points at which time unit the
@@ -987,11 +1053,14 @@ Return Value:
 
                         LogoffMsIntoWeek = MillisecondsPerUnit * LogoffUnitsIntoWeek;
 
-                        if ( LogoffMsIntoWeek < CurrentMsIntoWeek ) {
+                        if ( LogoffMsIntoWeek < CurrentMsIntoWeek )
+                        {
 
                             DeltaMs = MILLISECONDS_PER_WEEK - ( CurrentMsIntoWeek - LogoffMsIntoWeek );
 
-                        } else {
+                        }
+                        else
+                        {
 
                             DeltaMs = LogoffMsIntoWeek - CurrentMsIntoWeek;
                         }
@@ -999,13 +1068,14 @@ Return Value:
                         Delta100Ns.QuadPart = (LONGLONG) DeltaMs * 10000;
 
                         LogoffTime->QuadPart = CurrentUTCTime.QuadPart +
-                                      Delta100Ns.QuadPart;
+                                               Delta100Ns.QuadPart;
 
                         //
                         // Grab the domain's ForceLogoff time.
                         //
 
-                        if ( GetForceLogoff ) {
+                        if ( GetForceLogoff )
+                        {
                             NET_API_STATUS NetStatus;
                             LPUSER_MODALS_INFO_0 UserModals0;
 
@@ -1013,7 +1083,8 @@ Return Value:
                                                           0,
                                                           (LPBYTE *)&UserModals0 );
 
-                            if ( NetStatus == 0 ) {
+                            if ( NetStatus == 0 )
+                            {
                                 GetForceLogoff = FALSE;
 
                                 ForceLogoff = NetpSecondsToDeltaTime( UserModals0->usrmod0_force_logoff );
@@ -1035,7 +1106,8 @@ Return Value:
 
                         KickoffTime->QuadPart = LogoffTime->QuadPart - ForceLogoff.QuadPart;
 
-                        if (KickoffTime->QuadPart < 0) {
+                        if (KickoffTime->QuadPart < 0)
+                        {
 
                             KickoffTime->HighPart = 0x7FFFFFFF;
                             KickoffTime->LowPart = 0xFFFFFFFF;
@@ -1045,7 +1117,9 @@ Return Value:
             }
         }
 
-    } else {
+    }
+    else
+    {
 
         //
         // Never kick administrators off
@@ -1064,7 +1138,7 @@ Return Value:
 LARGE_INTEGER
 NetpSecondsToDeltaTime(
     IN ULONG Seconds
-    )
+)
 
 /*++
 
@@ -1092,27 +1166,33 @@ Return Value:
     // Special case TIMEQ_FOREVER (return a full scale negative)
     //
 
-    if ( Seconds == TIMEQ_FOREVER ) {
+    if ( Seconds == TIMEQ_FOREVER )
+    {
         DeltaTime.LowPart = 0;
         DeltaTime.HighPart = (LONG) 0x80000000;
 
-    //
-    // Convert seconds to 100ns units simply by multiplying by 10000000.
-    //
-    // Convert to delta time by negating.
-    //
+        //
+        // Convert seconds to 100ns units simply by multiplying by 10000000.
+        //
+        // Convert to delta time by negating.
+        //
 
-    } else {
+    }
+    else
+    {
 
         LargeSeconds.LowPart = Seconds;
         LargeSeconds.HighPart = 0;
 
         Answer.QuadPart = LargeSeconds.QuadPart * 10000000;
 
-          if ( Answer.QuadPart < 0 ) {
+        if ( Answer.QuadPart < 0 )
+        {
             DeltaTime.LowPart = 0;
             DeltaTime.HighPart = (LONG) 0x80000000;
-        } else {
+        }
+        else
+        {
             DeltaTime.QuadPart = -Answer.QuadPart;
         }
 
@@ -1126,7 +1206,7 @@ BOOLEAN
 EqualComputerName(
     IN PUNICODE_STRING String1,
     IN PUNICODE_STRING String2
-    )
+)
 /*++
 
 Routine Description:
@@ -1156,7 +1236,8 @@ Return Value:
     //
 
     if ((String1->Length > CNLEN*sizeof(WCHAR)) ||
-        (String2->Length > CNLEN*sizeof(WCHAR))) {
+            (String2->Length > CNLEN*sizeof(WCHAR)))
+    {
         return(FALSE);
 
     }
@@ -1169,34 +1250,34 @@ Return Value:
         Computer1,
         String1->Buffer,
         String1->Length
-        );
+    );
     Computer1[String1->Length/sizeof(WCHAR)] = L'\0';
 
     CopyMemory(
         Computer2,
         String2->Buffer,
         String2->Length
-        );
+    );
     Computer2[String2->Length/sizeof(WCHAR)] = L'\0';
 
-/*
-    //
-    // Convert the computer names to OEM
-    //
+    /*
+        //
+        // Convert the computer names to OEM
+        //
 
-    if (!CharToOemW(
-            Computer1,
-            OemComputer1
-            )) {
-        return(FALSE);
-    }
+        if (!CharToOemW(
+                Computer1,
+                OemComputer1
+                )) {
+            return(FALSE);
+        }
 
-    if (!CharToOemW(
-            Computer2,
-            OemComputer2
-            )) {
-        return(FALSE);
-    } */
+        if (!CharToOemW(
+                Computer2,
+                OemComputer2
+                )) {
+            return(FALSE);
+        } */
 
     //
     // Do a case insensitive comparison of the oem computer names.
@@ -1216,7 +1297,7 @@ VOID
 InitUnicodeString(
     OUT PUNICODE_STRING DestinationString,
     IN PCWSTR SourceString OPTIONAL
-    )
+)
 
 /*++
 
@@ -1246,22 +1327,24 @@ Return Value:
     ULONG Length;
 
     DestinationString->Buffer = (PWSTR)SourceString;
-    if (SourceString != NULL) {
+    if (SourceString != NULL)
+    {
         Length = (ULONG)(wcslen( SourceString ) * sizeof( WCHAR ));
         DestinationString->Length = (USHORT)Length;
         DestinationString->MaximumLength = (USHORT)(Length + sizeof(UNICODE_NULL));
-        }
-    else {
+    }
+    else
+    {
         DestinationString->MaximumLength = 0;
         DestinationString->Length = 0;
-        }
+    }
 }
 
 VOID
 CopyUnicodeString(
     OUT PUNICODE_STRING DestinationString,
     IN PUNICODE_STRING SourceString OPTIONAL
-    )
+)
 
 /*++
 
@@ -1293,21 +1376,26 @@ Return Value:
     UNALIGNED WCHAR *src, *dst;
     ULONG n;
 
-    if (SourceString != NULL) {
+    if (SourceString != NULL)
+    {
         dst = DestinationString->Buffer;
         src = SourceString->Buffer;
         n = SourceString->Length;
-        if ((USHORT)n > DestinationString->MaximumLength) {
+        if ((USHORT)n > DestinationString->MaximumLength)
+        {
             n = DestinationString->MaximumLength;
         }
 
         DestinationString->Length = (USHORT)n;
         CopyMemory(dst, src, n);
-        if (DestinationString->Length < DestinationString->MaximumLength) {
+        if (DestinationString->Length < DestinationString->MaximumLength)
+        {
             dst[n / sizeof(WCHAR)] = UNICODE_NULL;
         }
 
-    } else {
+    }
+    else
+    {
         DestinationString->Length = 0;
     }
 
@@ -1339,6 +1427,6 @@ Msv1_0SubAuthenticationFilter (
                 Authoritative,
                 LogoffTime,
                 KickoffTime
-                ) );
+            ) );
 }
 // subauth.c eof

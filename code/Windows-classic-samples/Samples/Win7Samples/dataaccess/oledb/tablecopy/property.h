@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1991-2000 Microsoft Corporation
 //
@@ -45,7 +45,7 @@ HRESULT SetProperty(DBPROPID PropertyID, GUID guidPropertySet, ULONG* pcPropSets
 //Free Property
 HRESULT FreeProperties(ULONG cPropSets, DBPROPSET* rgPropSets);
 HRESULT FreeProperties(ULONG cProperties, DBPROP* rgProperties);
-	
+
 //Variants
 HRESULT InitVariants(ULONG cVariants, VARIANT* rgVariants);
 HRESULT FreeVariants(ULONG cVariants, VARIANT* rgVariants);

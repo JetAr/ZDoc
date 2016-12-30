@@ -1,4 +1,4 @@
-/* Copyright (c) 1997-2002  Microsoft Corporation
+﻿/* Copyright (c) 1997-2002  Microsoft Corporation
 
 	Module Name:
 
@@ -39,11 +39,11 @@ BOOL SendErrorToClient(LPEXTENSION_CONTROL_BLOCK pec, CHAR *szErrorText);
 
 BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pVer)
 {
-	pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
+    pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
 
-	strncpy_s((LPSTR) pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc) , "ReadClient Extension", HSE_MAX_EXT_DLL_NAME_LEN);
+    strncpy_s((LPSTR) pVer->lpszExtensionDesc, sizeof(pVer->lpszExtensionDesc), "ReadClient Extension", HSE_MAX_EXT_DLL_NAME_LEN);
 
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -64,140 +64,147 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pVer)
 
 DWORD WINAPI HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pec)
 {
-	BOOL bResult;
-	CHAR *szBuffer;
-	CHAR szTemp[BUFFER_LENGTH];
-	CHAR szTmpBuf[BUFFER_LENGTH];
-	DWORD dwBytesRead;
-	DWORD dwBytesWritten;
-	DWORD dwTotalRead;
-	DWORD dwTotalWritten;
-	DWORD dwContentLength;
-	DWORD dwBufferSize;
-	HSE_SEND_HEADER_EX_INFO SendHeaderExInfo;
+    BOOL bResult;
+    CHAR *szBuffer;
+    CHAR szTemp[BUFFER_LENGTH];
+    CHAR szTmpBuf[BUFFER_LENGTH];
+    DWORD dwBytesRead;
+    DWORD dwBytesWritten;
+    DWORD dwTotalRead;
+    DWORD dwTotalWritten;
+    DWORD dwContentLength;
+    DWORD dwBufferSize;
+    HSE_SEND_HEADER_EX_INFO SendHeaderExInfo;
 
-	/* Determine the amount of data available from the Content-Length header */
+    /* Determine the amount of data available from the Content-Length header */
 
-	dwBufferSize = sizeof(szTmpBuf) - 1;
+    dwBufferSize = sizeof(szTmpBuf) - 1;
 
-	bResult = pec->GetServerVariable(pec->ConnID, "CONTENT_LENGTH", szTmpBuf, &dwBufferSize);
+    bResult = pec->GetServerVariable(pec->ConnID, "CONTENT_LENGTH", szTmpBuf, &dwBufferSize);
 
-	if (!bResult) {
+    if (!bResult)
+    {
 
-		bResult = SendErrorToClient(pec, "Content-Length header not found");
+        bResult = SendErrorToClient(pec, "Content-Length header not found");
 
-		if (!bResult)
-			return HSE_STATUS_ERROR;
-	
-		return HSE_STATUS_SUCCESS;
-	}
+        if (!bResult)
+            return HSE_STATUS_ERROR;
 
-	dwContentLength = atol(szTmpBuf);
+        return HSE_STATUS_SUCCESS;
+    }
 
-	/* Allocate the buffer based on the Content-Length */
+    dwContentLength = atol(szTmpBuf);
 
-	szBuffer = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwContentLength + 5);
+    /* Allocate the buffer based on the Content-Length */
 
-	if (NULL == szBuffer) {
+    szBuffer = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwContentLength + 5);
 
-		sprintf_s(szTemp, sizeof(szTemp),"Unable to allocate %ld bytes of memory for buffer", dwContentLength + 5);
+    if (NULL == szBuffer)
+    {
 
-		bResult = SendErrorToClient(pec, szTemp);
+        sprintf_s(szTemp, sizeof(szTemp),"Unable to allocate %ld bytes of memory for buffer", dwContentLength + 5);
 
-		if (!bResult)
-			return HSE_STATUS_ERROR;
-			
-		return HSE_STATUS_SUCCESS;
-	}
+        bResult = SendErrorToClient(pec, szTemp);
 
-	/* If the client didn't post anything, return and create a nice form for them */
+        if (!bResult)
+            return HSE_STATUS_ERROR;
 
-	if (0 == pec->cbAvailable) {
+        return HSE_STATUS_SUCCESS;
+    }
 
-		bResult = SendErrorToClient(pec, "Your request did not contain any data");
+    /* If the client didn't post anything, return and create a nice form for them */
 
-		if (!bResult)
-			return HSE_STATUS_ERROR;
+    if (0 == pec->cbAvailable)
+    {
 
-		return HSE_STATUS_SUCCESS;
-	}
+        bResult = SendErrorToClient(pec, "Your request did not contain any data");
 
-	/* Initialize variables before reading in the data */
+        if (!bResult)
+            return HSE_STATUS_ERROR;
 
-	dwTotalWritten = 0;
-	dwTotalRead = pec->cbAvailable;
+        return HSE_STATUS_SUCCESS;
+    }
 
-	/* Copy the first chunk of the data into the buffer */
+    /* Initialize variables before reading in the data */
 
-	strncpy_s(szBuffer, sizeof(szBuffer), pec->lpbData, dwTotalRead);
+    dwTotalWritten = 0;
+    dwTotalRead = pec->cbAvailable;
 
-	szBuffer[dwTotalRead] = 0;
+    /* Copy the first chunk of the data into the buffer */
 
-	/* Loop to read in the rest of the data from the client */
+    strncpy_s(szBuffer, sizeof(szBuffer), pec->lpbData, dwTotalRead);
 
-	while (dwTotalRead < pec->cbTotalBytes) {
+    szBuffer[dwTotalRead] = 0;
 
-		/* Set the size of our temporary buffer */
+    /* Loop to read in the rest of the data from the client */
 
-		dwBytesRead = sizeof(szTmpBuf) - 1;
+    while (dwTotalRead < pec->cbTotalBytes)
+    {
 
-		if ((dwTotalRead + dwBytesRead) > pec->cbTotalBytes)
-			dwBytesRead = pec->cbTotalBytes - dwTotalRead;
+        /* Set the size of our temporary buffer */
 
-		/* Read the data into the temporary buffer */
+        dwBytesRead = sizeof(szTmpBuf) - 1;
 
-		bResult = pec->ReadClient(pec->ConnID, szTmpBuf, &dwBytesRead);
+        if ((dwTotalRead + dwBytesRead) > pec->cbTotalBytes)
+            dwBytesRead = pec->cbTotalBytes - dwTotalRead;
 
-		if (!bResult) {
+        /* Read the data into the temporary buffer */
 
-				HeapFree(GetProcessHeap(), 0, szBuffer);
+        bResult = pec->ReadClient(pec->ConnID, szTmpBuf, &dwBytesRead);
 
-				return HSE_STATUS_ERROR;
-		}
+        if (!bResult)
+        {
 
-		/* NULL-Terminate the temporary buffer */
+            HeapFree(GetProcessHeap(), 0, szBuffer);
 
-		szTmpBuf[dwBytesRead] = 0;
+            return HSE_STATUS_ERROR;
+        }
 
-		/* Append the temporary buffer to the real buffer */
+        /* NULL-Terminate the temporary buffer */
 
-		if (0 != dwBytesRead)
-			strcat_s(szBuffer + dwTotalRead, sizeof(szBuffer)-dwTotalRead, szTmpBuf);
+        szTmpBuf[dwBytesRead] = 0;
 
-		dwTotalRead += dwBytesRead;
-	} 
+        /* Append the temporary buffer to the real buffer */
 
-	/* All the data has been read in and stored in our buffer. Now send the data back to the client */
+        if (0 != dwBytesRead)
+            strcat_s(szBuffer + dwTotalRead, sizeof(szBuffer)-dwTotalRead, szTmpBuf);
 
-	SendHeaderExInfo.pszStatus = "200 OK";
-	SendHeaderExInfo.pszHeader = "Content-Type: text/html\r\n\r\n";
-	SendHeaderExInfo.cchStatus = lstrlen(SendHeaderExInfo.pszStatus);
-	SendHeaderExInfo.cchHeader = lstrlen(SendHeaderExInfo.pszHeader);
-	SendHeaderExInfo.fKeepConn = FALSE;
+        dwTotalRead += dwBytesRead;
+    }
 
-	bResult = pec->ServerSupportFunction(pec->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &SendHeaderExInfo, NULL, NULL);
+    /* All the data has been read in and stored in our buffer. Now send the data back to the client */
 
-	if (!bResult) {
+    SendHeaderExInfo.pszStatus = "200 OK";
+    SendHeaderExInfo.pszHeader = "Content-Type: text/html\r\n\r\n";
+    SendHeaderExInfo.cchStatus = lstrlen(SendHeaderExInfo.pszStatus);
+    SendHeaderExInfo.cchHeader = lstrlen(SendHeaderExInfo.pszHeader);
+    SendHeaderExInfo.fKeepConn = FALSE;
 
-		HeapFree(GetProcessHeap(), 0, szBuffer);
+    bResult = pec->ServerSupportFunction(pec->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &SendHeaderExInfo, NULL, NULL);
 
-		return HSE_STATUS_ERROR;
-	}
+    if (!bResult)
+    {
 
-	dwBytesWritten = dwTotalRead;
+        HeapFree(GetProcessHeap(), 0, szBuffer);
 
-	bResult = pec->WriteClient(pec->ConnID, szBuffer, &dwBytesWritten, 0);
+        return HSE_STATUS_ERROR;
+    }
 
-	if (!bResult) {
+    dwBytesWritten = dwTotalRead;
 
-		HeapFree(GetProcessHeap(), 0, szBuffer);
+    bResult = pec->WriteClient(pec->ConnID, szBuffer, &dwBytesWritten, 0);
 
-		return HSE_STATUS_ERROR;
-	}
+    if (!bResult)
+    {
 
-	HeapFree(GetProcessHeap(), 0, szBuffer);
+        HeapFree(GetProcessHeap(), 0, szBuffer);
 
-	return HSE_STATUS_SUCCESS;
+        return HSE_STATUS_ERROR;
+    }
+
+    HeapFree(GetProcessHeap(), 0, szBuffer);
+
+    return HSE_STATUS_SUCCESS;
 }
 
 /*
@@ -216,7 +223,7 @@ DWORD WINAPI HttpExtensionProc(LPEXTENSION_CONTROL_BLOCK pec)
 
 BOOL WINAPI TerminateExtension(DWORD dwFlags)
 {
-	return TRUE;
+    return TRUE;
 }
 
 /*
@@ -238,35 +245,35 @@ BOOL WINAPI TerminateExtension(DWORD dwFlags)
 
 BOOL SendErrorToClient( LPEXTENSION_CONTROL_BLOCK pec, CHAR *szErrorText )
 {
-	BOOL bResult;
-	CHAR szTemp[BUFFER_LENGTH];
-	DWORD dwBytesWritten;
-	HSE_SEND_HEADER_EX_INFO SendHeaderExInfo;
+    BOOL bResult;
+    CHAR szTemp[BUFFER_LENGTH];
+    DWORD dwBytesWritten;
+    HSE_SEND_HEADER_EX_INFO SendHeaderExInfo;
 
-	SendHeaderExInfo.pszStatus = "200 OK";
-	SendHeaderExInfo.pszHeader = "Content-Type: text/html\r\n\r\n";
-	SendHeaderExInfo.cchStatus = lstrlen(SendHeaderExInfo.pszStatus);
-	SendHeaderExInfo.cchHeader = lstrlen(SendHeaderExInfo.pszHeader);
-	SendHeaderExInfo.fKeepConn = FALSE;
+    SendHeaderExInfo.pszStatus = "200 OK";
+    SendHeaderExInfo.pszHeader = "Content-Type: text/html\r\n\r\n";
+    SendHeaderExInfo.cchStatus = lstrlen(SendHeaderExInfo.pszStatus);
+    SendHeaderExInfo.cchHeader = lstrlen(SendHeaderExInfo.pszHeader);
+    SendHeaderExInfo.fKeepConn = FALSE;
 
-	bResult = pec->ServerSupportFunction(pec->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &SendHeaderExInfo, NULL, NULL);
+    bResult = pec->ServerSupportFunction(pec->ConnID, HSE_REQ_SEND_RESPONSE_HEADER_EX, &SendHeaderExInfo, NULL, NULL);
 
-	if (!bResult)
-		return FALSE;
-	
-	dwBytesWritten = sprintf_s( 
-			szTemp, sizeof(szTemp),
-			"<h3>Error: %s</h3><p>\r\n\r\n"
-			"Usage: readcli.dll<p>\r\n\r\n"
-			"Request must be a POST request, with extra data<p>\r\n"
-			"<h2>Sample Form</h2>\r\n"
-			"Enter data below:<br>\r\n"
-			"<form method=POST action=\"readcli.dll\">\r\n"
-			"<input type=text name=test size=80><br>\r\n"
-			"<input type=submit>\r\n",
-			szErrorText);
+    if (!bResult)
+        return FALSE;
 
-	bResult = pec->WriteClient(pec->ConnID, szTemp, &dwBytesWritten, 0);
+    dwBytesWritten = sprintf_s(
+                         szTemp, sizeof(szTemp),
+                         "<h3>Error: %s</h3><p>\r\n\r\n"
+                         "Usage: readcli.dll<p>\r\n\r\n"
+                         "Request must be a POST request, with extra data<p>\r\n"
+                         "<h2>Sample Form</h2>\r\n"
+                         "Enter data below:<br>\r\n"
+                         "<form method=POST action=\"readcli.dll\">\r\n"
+                         "<input type=text name=test size=80><br>\r\n"
+                         "<input type=submit>\r\n",
+                         szErrorText);
 
-	return bResult;
+    bResult = pec->WriteClient(pec->ConnID, szTemp, &dwBytesWritten, 0);
+
+    return bResult;
 }

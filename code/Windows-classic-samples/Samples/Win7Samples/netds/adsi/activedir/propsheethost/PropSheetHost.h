@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 //    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
 //    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 //    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -28,60 +28,60 @@
 #define VIEW_POINTER_OFFSET   GWLP_USERDATA
 
 #ifndef CFSTR_DS_PARENTHWND
-    #define CFSTR_DS_PARENTHWND_W L"DsAdminParentHwndClipFormat"
-    #define CFSTR_DS_PARENTHWND_A "DsAdminParentHwndClipFormat"
+#define CFSTR_DS_PARENTHWND_W L"DsAdminParentHwndClipFormat"
+#define CFSTR_DS_PARENTHWND_A "DsAdminParentHwndClipFormat"
 
-    #ifdef UNICODE
-        #define CFSTR_DS_PARENTHWND CFSTR_DS_PARENTHWND_W
-    #else
-        #define CFSTR_DS_PARENTHWND CFSTR_DS_PARENTHWND_A
-    #endif //UNICODE
+#ifdef UNICODE
+#define CFSTR_DS_PARENTHWND CFSTR_DS_PARENTHWND_W
+#else
+#define CFSTR_DS_PARENTHWND CFSTR_DS_PARENTHWND_A
+#endif //UNICODE
 #endif //CFSTR_DS_PARENTHWND
 
 #ifndef CFSTR_DS_PROPSHEETCONFIG
-    #define CFSTR_DS_PROPSHEETCONFIG_W L"DsPropSheetCfgClipFormat"
-    #define CFSTR_DS_PROPSHEETCONFIG_A "DsPropSheetCfgClipFormat"
+#define CFSTR_DS_PROPSHEETCONFIG_W L"DsPropSheetCfgClipFormat"
+#define CFSTR_DS_PROPSHEETCONFIG_A "DsPropSheetCfgClipFormat"
 
-    #ifdef UNICODE
-        #define CFSTR_DS_PROPSHEETCONFIG CFSTR_DS_PROPSHEETCONFIG_W
-    #else
-        #define CFSTR_DS_PROPSHEETCONFIG CFSTR_DS_PROPSHEETCONFIG_A
-    #endif //UNICODE
+#ifdef UNICODE
+#define CFSTR_DS_PROPSHEETCONFIG CFSTR_DS_PROPSHEETCONFIG_W
+#else
+#define CFSTR_DS_PROPSHEETCONFIG CFSTR_DS_PROPSHEETCONFIG_A
+#endif //UNICODE
 #endif //CFSTR_DS_PROPSHEETCONFIG
 
 
 #ifndef WM_ADSPROP_SHEET_CREATE
-    #define WM_ADSPROP_SHEET_CREATE (WM_USER + 1108)
+#define WM_ADSPROP_SHEET_CREATE (WM_USER + 1108)
 #endif
 
 
 #ifndef WM_DSA_SHEET_CREATE_NOTIFY
-    #define WM_DSA_SHEET_CREATE_NOTIFY (WM_USER + 6)
+#define WM_DSA_SHEET_CREATE_NOTIFY (WM_USER + 6)
 #endif
 
 
 #ifndef WM_DSA_SHEET_CLOSE_NOTIFY
-    #define WM_DSA_SHEET_CLOSE_NOTIFY (WM_USER + 5) 
+#define WM_DSA_SHEET_CLOSE_NOTIFY (WM_USER + 5)
 #endif
 
 
 #ifndef DSA_SEC_PAGE_INFO
-    typedef struct _DSA_SEC_PAGE_INFO
-    {
-        HWND hwndParentSheet;
-        DWORD offsetTitle;
-        DSOBJECTNAMES dsObjectNames;
-    } DSA_SEC_PAGE_INFO, *PDSA_SEC_PAGE_INFO;
+typedef struct _DSA_SEC_PAGE_INFO
+{
+    HWND hwndParentSheet;
+    DWORD offsetTitle;
+    DSOBJECTNAMES dsObjectNames;
+} DSA_SEC_PAGE_INFO, *PDSA_SEC_PAGE_INFO;
 #endif //DSA_SEC_PAGE_INFO
 
 #ifndef PROPSHEETCFG
-    typedef struct _PROPSHEETCFG
-    {  
-        LONG_PTR lNotifyHandle;  
-        HWND hwndParentSheet;  
-        HWND hwndHidden;  
-        WPARAM wParamSheetClose;
-    } PROPSHEETCFG, *PPROPSHEETCFG;
+typedef struct _PROPSHEETCFG
+{
+    LONG_PTR lNotifyHandle;
+    HWND hwndParentSheet;
+    HWND hwndHidden;
+    WPARAM wParamSheetClose;
+} PROPSHEETCFG, *PPROPSHEETCFG;
 #endif //PROPSHEETCFG
 
 #define PROP_SHEET_HOST_ID 0xCDCDCDCD
@@ -113,7 +113,7 @@ private:
 public:
     CPropSheetHost(HINSTANCE hInstance, HWND hwndParent = NULL);
     ~CPropSheetHost();
-   
+
 public:
     HRESULT SetObject(LPCWSTR pwszADsPath);
     HRESULT SetObject(IADs *pads);

@@ -1,9 +1,9 @@
-//
+﻿//
 // Copyright (c) 2006 Microsoft Corporation. All rights reserved.
-// 
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
+//
+// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
+// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
 
@@ -30,15 +30,16 @@ using namespace System::Management::Automation::Runspaces;
 /// 5. Retrieving and displaying error records that were generated
 ///    during the execution of that script.
 /// </remarks>
-int 
+int
 __cdecl main()
 {
     // Define a list of processes to look for
-    array<String^>^ processNames = gcnew array<String^>(4) {
-        "lsass", 
-            "nosuchprocess", 
-            "services", 
-            "nosuchprocess2" 
+    array<String^>^ processNames = gcnew array<String^>(4)
+    {
+        "lsass",
+        "nosuchprocess",
+        "services",
+        "nosuchprocess2"
     };
 
     // The script to run to get these processes. Input passed
@@ -57,8 +58,8 @@ __cdecl main()
     for each (PSObject^ result in invoker->Invoke(script, processNames, errors))
     {
         Console::WriteLine("{0,-20} {1}",
-            result->Members["ProcessName"]->Value,
-            result->Members["HandleCount"]->Value);
+                           result->Members["ProcessName"]->Value,
+                           result->Members["HandleCount"]->Value);
     }
 
     // Now process any error records that were generated while running the script.

@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Sample Provider
 // (C) Copyright 1991 - 1999 Microsoft Corporation. All Rights Reserved.
 //
@@ -26,15 +26,15 @@ static const int TYPE_SLONG = 3;
 // @rdesc NONE
 //
 CRowset::CRowset
-    (
+(
     LPUNKNOWN pUnkOuter         //@parm IN | Outer Unkown Pointer
-    )	// invoke ctor for base class
-	: CBaseObj( BOT_ROWSET )
+)	// invoke ctor for base class
+    : CBaseObj( BOT_ROWSET )
 {
 
     //  Initialize simple member vars
     m_cRef          = 0L;
-	m_pUnkOuter		= pUnkOuter ? pUnkOuter : this;
+    m_pUnkOuter		= pUnkOuter ? pUnkOuter : this;
 
     // Intialize buffered row count + pointers to allocated memory
     m_pFileio           = NULL;
@@ -52,20 +52,20 @@ CRowset::CRowset
     m_rgbRowData        = NULL;
     m_dwStatus          = 0;
     m_pUtilProp         = NULL;
-	m_pCreator			= NULL;
+    m_pCreator			= NULL;
 
-	m_wszFilePath[0]		= L'\0';
-	m_wszDataSourcePath[0]	= L'\0';
+    m_wszFilePath[0]		= L'\0';
+    m_wszDataSourcePath[0]	= L'\0';
 
     //  Initially, NULL all contained interfaces
     m_pIAccessor                    = NULL;
     m_pIColumnsInfo                 = NULL;
-	m_pIConvertType					= NULL;
+    m_pIConvertType					= NULL;
     m_pIRowset                      = NULL;
     m_pIRowsetChange                = NULL;
     m_pIRowsetIdentity              = NULL;
     m_pIRowsetInfo                  = NULL;
-	m_pIGetRow						= NULL;
+    m_pIGetRow						= NULL;
 
     // Increment global object count.
     OBJECT_CONSTRUCTED();
@@ -81,9 +81,9 @@ CRowset::CRowset
 // @rdesc NONE
 //
 CRowset:: ~CRowset
-    (
+(
     void
-    )
+)
 {
     // Free pointers.
     // (Note delete is safe for NULL ptr.)
@@ -97,20 +97,20 @@ CRowset:: ~CRowset
     // Each accessor is allocated via new/delete.
     // We store an array of ptrs to each accessor (m_pextbufferAccessor).
     if (m_pextbufferAccessor)
-	{
+    {
         HACCESSOR   hAccessor, hAccessorLast;
         PACCESSOR   pAccessor;
 
         m_pextbufferAccessor->GetFirstLastItemH(hAccessor, hAccessorLast);
-        
-		for (; hAccessor <= hAccessorLast; hAccessor++)
-		{
+
+        for (; hAccessor <= hAccessorLast; hAccessor++)
+        {
             m_pextbufferAccessor->GetItemOfExtBuffer(hAccessor, &pAccessor);
             SAFE_DELETE( pAccessor );
-		}
-        
-		SAFE_DELETE( m_pextbufferAccessor );
-	}
+        }
+
+        SAFE_DELETE( m_pextbufferAccessor );
+    }
 
     //  Free contained interfaces
     SAFE_DELETE( m_pIAccessor );
@@ -120,17 +120,17 @@ CRowset:: ~CRowset
     SAFE_DELETE( m_pIRowsetChange );
     SAFE_DELETE( m_pIRowsetIdentity );
     SAFE_DELETE( m_pIRowsetInfo );
-	SAFE_DELETE( m_pIGetRow );
+    SAFE_DELETE( m_pIGetRow );
 
     // free CFileio object
     if (m_pFileio)
         SAFE_DELETE( m_pFileio );
 
-	if( m_pCreator )
-		m_pCreator->GetOuterUnknown()->Release();
+    if( m_pCreator )
+        m_pCreator->GetOuterUnknown()->Release();
 
-	if( m_pParentObj )	
-		m_pParentObj->GetOuterUnknown()->Release();
+    if( m_pParentObj )
+        m_pParentObj->GetOuterUnknown()->Release();
 
     // Decrement global object count.
     OBJECT_DESTRUCTED();
@@ -147,24 +147,24 @@ CRowset:: ~CRowset
 //      @flag  FALSE | Initialization failed
 //
 BOOL CRowset::FInit
-    (
+(
     CFileIO *   pCFileio,		//@parm IN | pointer to Fileio object
-	CBaseObj *	pParentBaseObj,	//@parm IN | pointer to Base Object creating the rowset
-	WCHAR *		pwszFilePath,	//@parm IN | The File Path of the csv file
-	WCHAR *		pwszDataSource	//@parm IN | The datasource path
-    )
+    CBaseObj *	pParentBaseObj,	//@parm IN | pointer to Base Object creating the rowset
+    WCHAR *		pwszFilePath,	//@parm IN | The File Path of the csv file
+    WCHAR *		pwszDataSource	//@parm IN | The datasource path
+)
 {
-	// Asserts
-	assert(pCFileio);
-	assert(pParentBaseObj);
+    // Asserts
+    assert(pCFileio);
+    assert(pParentBaseObj);
     assert(m_pUnkOuter);
     assert(pParentBaseObj);
 
     LPUNKNOWN pIUnknown = m_pUnkOuter;
     m_pFileio = pCFileio;
 
-	m_pParentObj = pParentBaseObj;
-	m_pParentObj->GetOuterUnknown()->AddRef();
+    m_pParentObj = pParentBaseObj;
+    m_pParentObj->GetOuterUnknown()->AddRef();
 
     //--------------------
     // Get FileInfo
@@ -174,11 +174,11 @@ BOOL CRowset::FInit
     if( m_cCols <= 0 )
         return FALSE;
 
-	m_cbRowSize = m_pFileio->GetRowSize();
-    
+    m_cbRowSize = m_pFileio->GetRowSize();
+
     if (FAILED( CreateHelperFunctions()))
         return FALSE;
-    
+
     m_cbTotalRowSize = m_pIBuffer->cbSlot;
 
     //--------------------
@@ -197,8 +197,8 @@ BOOL CRowset::FInit
 
     // allocate utility object that manages our properties
     m_pUtilProp = new CUtilProp();
-	if (!m_pUtilProp)
-		return FALSE;
+    if (!m_pUtilProp)
+        return FALSE;
 
     // Allocate contained interface objects
     // Note that our approach is simple - we always create *all* of the Rowset interfaces
@@ -207,28 +207,28 @@ BOOL CRowset::FInit
     // Also, none of our interfaces conflict. If any did conflict, then we could
     // not just blindly create them all.
     m_pIColumnsInfo             = new CImpIColumnsInfo( this, pIUnknown );
-	m_pIConvertType				= new CImpIConvertType(this, pIUnknown);
+    m_pIConvertType				= new CImpIConvertType(this, pIUnknown);
     m_pIRowset                  = new CImpIRowset( this, pIUnknown );
     m_pIRowsetIdentity          = new CImpIRowsetIdentity( this, pIUnknown );
     m_pIRowsetInfo              = new CImpIRowsetInfo( this, pIUnknown );
-	m_pIAccessor                = new CImpIAccessor( this, pIUnknown );
-	m_pIGetRow					= new CImpIGetRow( this, pIUnknown );
+    m_pIAccessor                = new CImpIAccessor( this, pIUnknown );
+    m_pIGetRow					= new CImpIGetRow( this, pIUnknown );
 
-	if (!m_pFileio->IsReadOnly())
-		m_pIRowsetChange		= new CImpIRowsetChange( this, pIUnknown );
+    if (!m_pFileio->IsReadOnly())
+        m_pIRowsetChange		= new CImpIRowsetChange( this, pIUnknown );
 
-	if (m_pIAccessor && FAILED(m_pIAccessor->FInit(TRUE)))
-		return FALSE;
+    if (m_pIAccessor && FAILED(m_pIAccessor->FInit(TRUE)))
+        return FALSE;
 
-	StringCchCopyW(m_wszFilePath, sizeof(m_wszFilePath)/sizeof(WCHAR), pwszFilePath);
-	StringCchCopyW(m_wszDataSourcePath, sizeof(m_wszDataSourcePath)/sizeof(WCHAR), pwszDataSource);
+    StringCchCopyW(m_wszFilePath, sizeof(m_wszFilePath)/sizeof(WCHAR), pwszFilePath);
+    StringCchCopyW(m_wszDataSourcePath, sizeof(m_wszDataSourcePath)/sizeof(WCHAR), pwszDataSource);
 
     // if all interfaces were created, return success
     return (BOOL) (m_pIAccessor && m_pIColumnsInfo && m_pIConvertType &&
                    m_pIRowset && m_pIRowsetIdentity && m_pIRowsetInfo &&
-				   ((m_pFileio->IsReadOnly() && !m_pIRowsetChange) ||
-				    (!m_pFileio->IsReadOnly() && m_pIRowsetChange)) &&
-					m_pIGetRow);
+                   ((m_pFileio->IsReadOnly() && !m_pIRowsetChange) ||
+                    (!m_pFileio->IsReadOnly() && m_pIRowsetChange)) &&
+                   m_pIGetRow);
 }
 
 
@@ -244,10 +244,10 @@ BOOL CRowset::FInit
 //      @flag E_INVALIDARG | One or more arguments are invalid.
 //
 STDMETHODIMP CRowset::QueryInterface
-    (
+(
     REFIID riid,
     LPVOID * ppv
-    )
+)
 {
     if (NULL == ppv)
         return ResultFromScode( E_INVALIDARG );
@@ -272,15 +272,15 @@ STDMETHODIMP CRowset::QueryInterface
         *ppv = (LPVOID) m_pIRowsetIdentity;
     else if (riid == IID_IRowsetInfo)
         *ppv = (LPVOID) m_pIRowsetInfo;
-	else if (riid == IID_IGetRow)
-		*ppv = (LPVOID) m_pIGetRow;
+    else if (riid == IID_IGetRow)
+        *ppv = (LPVOID) m_pIGetRow;
 
     //  If we're going to return an interface, AddRef it first
     if (*ppv)
-        {
+    {
         ((LPUNKNOWN) *ppv)->AddRef();
         return ResultFromScode( S_OK );
-        }
+    }
     else
         return ResultFromScode( E_NOINTERFACE );
 }
@@ -293,9 +293,9 @@ STDMETHODIMP CRowset::QueryInterface
 // @rdesc Current reference count
 //
 STDMETHODIMP_( DBREFCOUNT ) CRowset::AddRef
-     (
-     void
-     )
+(
+    void
+)
 {
     return ++m_cRef;
 }
@@ -309,16 +309,16 @@ STDMETHODIMP_( DBREFCOUNT ) CRowset::AddRef
 // @rdesc Current reference count
 //
 STDMETHODIMP_( DBREFCOUNT ) CRowset::Release
-     (
-     void
-     )
+(
+    void
+)
 {
     if (!--m_cRef)
-        {
+    {
         this->m_pCreator->DecrementOpenRowsets();
         delete this;
         return 0;
-        }
+    }
 
     return m_cRef;
 }
@@ -332,9 +332,9 @@ STDMETHODIMP_( DBREFCOUNT ) CRowset::Release
 //      @flag E_FAIL | Helper classes were not created
 //
 HRESULT CRowset::CreateHelperFunctions
-    (
+(
     void
-    )
+)
 {
     //----------------------
     // Create helper objects
@@ -348,8 +348,8 @@ HRESULT CRowset::CreateHelperFunctions
     // List of free slots.
     // This manages the allocation of sets of contiguous rows.
     if (FAILED( InitializeSlotList( MAX_TOTAL_ROWBUFF_SIZE / (ULONG)m_cbRowSize,
-                         (ULONG) m_cbRowSize, g_dwPageSize, m_prowbitsIBuffer,
-                         &m_pIBuffer, &m_rgbRowData )))
+                                    (ULONG) m_cbRowSize, g_dwPageSize, m_prowbitsIBuffer,
+                                    &m_pIBuffer, &m_rgbRowData )))
         return ResultFromScode( E_FAIL );
 
     // Locate some free slots.
@@ -374,9 +374,9 @@ HRESULT CRowset::CreateHelperFunctions
 //      @flag E_FAIL | Bindings could not be set
 //
 HRESULT CRowset::Rebind
-    (
+(
     BYTE *pBase                 //@parm IN | Base pointer for Data Area
-    )
+)
 {
     COLUMNDATA  *pColumn;
 
@@ -391,20 +391,20 @@ HRESULT CRowset::Rebind
 
     // Optimize by not doing it over again.
     if( pBase != m_pLastBindBase )
-	{
+    {
         m_pLastBindBase = 0;
 
         for (DBORDINAL cCols=1; cCols <= m_cCols; cCols++)
-		{
-			pColumn = m_pFileio->GetColumnData(cCols, (ROWBUFF *)pBase);
-            
-			if( FAILED( m_pFileio->SetColumnBind(cCols, pColumn)) )
+        {
+            pColumn = m_pFileio->GetColumnData(cCols, (ROWBUFF *)pBase);
+
+            if( FAILED( m_pFileio->SetColumnBind(cCols, pColumn)) )
                 return( E_FAIL );
-		}
+        }
 
         // Remember in case we bind to same place again.
         m_pLastBindBase = pBase;
-	}
+    }
 
     return( S_OK );
 }
@@ -419,10 +419,10 @@ HRESULT CRowset::Rebind
 // @rdesc Pointer to the buffer.
 //
 ROWBUFF* CRowset::GetRowBuff
-    (
+(
     DBCOUNTITEM iRow,           //@parm IN | Row to get address of.
     BOOL  fDataLocation         //@parm IN | Get the Data offset.
-    )
+)
 {
     // This assumes iRow is valid...
     // How can we calculate maximum row?
@@ -431,11 +431,11 @@ ROWBUFF* CRowset::GetRowBuff
     assert( m_cbRowSize );
     assert( iRow > 0 );
 
-	// Get the LSTSlot address or the Data offset (We need to make sure this structure is properly aligned)
-	if ( fDataLocation )
-		return (ROWBUFF *) ROUND_UP ((m_rgbRowData + m_cbTotalRowSize*iRow), COLUMN_ALIGNVAL);
-	else
-		return (ROWBUFF *) ROUND_UP ((m_rgbRowData + m_cbRowSize + (m_cbTotalRowSize*(iRow-1))), COLUMN_ALIGNVAL);
+    // Get the LSTSlot address or the Data offset (We need to make sure this structure is properly aligned)
+    if ( fDataLocation )
+        return (ROWBUFF *) ROUND_UP ((m_rgbRowData + m_cbTotalRowSize*iRow), COLUMN_ALIGNVAL);
+    else
+        return (ROWBUFF *) ROUND_UP ((m_rgbRowData + m_cbRowSize + (m_cbTotalRowSize*(iRow-1))), COLUMN_ALIGNVAL);
 }
 
 
@@ -451,34 +451,35 @@ ROWBUFF* CRowset::GetRowBuff
 // for a data type
 //
 HRESULT GetInternalTypeFromCSVType
-    (
+(
     SWORD  swDataType,  //@parm IN | Data Type
     BOOL   fIsSigned,   //@parm IN | Signed or Unsigned
     DWORD  *pdwdbType   //@parm OUT | OLE DB type for DBColumnInfo
-    )
+)
 {
-    static struct {
+    static struct
+    {
         SWORD   swCSVType;
         BOOL    fIsSigned;          // 1=signed, 0=unsigned
         BOOL    fSignedDistinction; // 1=signed matters
         DWORD   dwdbType;
     } TypeTable[] =
-        {
-            {TYPE_CHAR,         0, 0, DBTYPE_STR },
-            {TYPE_SLONG,        1, 1, DBTYPE_I4  },
-        };
+    {
+        {TYPE_CHAR,         0, 0, DBTYPE_STR },
+        {TYPE_SLONG,        1, 1, DBTYPE_I4  },
+    };
 
     for (int j=0; j < NUMELEM( TypeTable ); j++)
-        {
+    {
         if (swDataType == TypeTable[j].swCSVType        // type match
-        && (!TypeTable[j].fSignedDistinction            // care about sign?
-            || fIsSigned == TypeTable[j].fIsSigned))    // sign match
-            {
+                && (!TypeTable[j].fSignedDistinction            // care about sign?
+                    || fIsSigned == TypeTable[j].fIsSigned))    // sign match
+        {
             assert( pdwdbType );
             *pdwdbType     = TypeTable[j].dwdbType;
             return ResultFromScode( S_OK );
-            }
         }
+    }
 
     // Should never get here, since we supposedly have
     // a table of all possible CSV types.
@@ -492,28 +493,28 @@ HRESULT GetInternalTypeFromCSVType
 //
 BOOL CRowset::SupportIRowsetChange()
 {
-	BOOL		fIRowsetChange = FALSE;
-	ULONG		cPropSets      = 0;
-	DBPROPSET *	rgPropSets     = NULL;
-	DBPROPID	rgPropId[1];
-	DBPROPIDSET	rgPropertySets[1];
+    BOOL		fIRowsetChange = FALSE;
+    ULONG		cPropSets      = 0;
+    DBPROPSET *	rgPropSets     = NULL;
+    DBPROPID	rgPropId[1];
+    DBPROPIDSET	rgPropertySets[1];
 
     // Get the value of the DBPROP_CANHOLDROWS property
-	rgPropertySets[0].guidPropertySet = DBPROPSET_ROWSET;
-	rgPropertySets[0].rgPropertyIDs	  = rgPropId;
-	rgPropertySets[0].cPropertyIDs	  = 1;
-	rgPropId[0]                       = DBPROP_IRowsetChange;
+    rgPropertySets[0].guidPropertySet = DBPROPSET_ROWSET;
+    rgPropertySets[0].rgPropertyIDs	  = rgPropId;
+    rgPropertySets[0].cPropertyIDs	  = 1;
+    rgPropId[0]                       = DBPROP_IRowsetChange;
 
-	// Get the IRowsetChange Property from m_pUtilProp
-	GetCUtilProp()->GetProperties(PROPSET_ROWSET, 1, rgPropertySets, 
-											&cPropSets, &rgPropSets);
-	
-	// Get the Prompt value
-	if( V_BOOL(&rgPropSets->rgProperties->vValue) == VARIANT_TRUE )
-		fIRowsetChange = TRUE;
+    // Get the IRowsetChange Property from m_pUtilProp
+    GetCUtilProp()->GetProperties(PROPSET_ROWSET, 1, rgPropertySets,
+                                  &cPropSets, &rgPropSets);
 
-	// release properties 
-	FreeProperties(&cPropSets, &rgPropSets);
+    // Get the Prompt value
+    if( V_BOOL(&rgPropSets->rgProperties->vValue) == VARIANT_TRUE )
+        fIRowsetChange = TRUE;
 
-	return fIRowsetChange;
+    // release properties
+    FreeProperties(&cPropSets, &rgPropSets);
+
+    return fIRowsetChange;
 }

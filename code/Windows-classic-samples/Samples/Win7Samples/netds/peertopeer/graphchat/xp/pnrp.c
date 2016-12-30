@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -40,7 +40,7 @@ const DWORD REGISTRATION_LIFETIME = 60 * 60 * 8; // 8 hours
 //
 // Returns:  HRESULT
 //
-HRESULT PnrpRegister(PCWSTR pwzIdentity, PCWSTR pwzName, 
+HRESULT PnrpRegister(PCWSTR pwzIdentity, PCWSTR pwzName,
                      PCWSTR pwzCloud, __in PEER_NODE_INFO* pNodeInfo)
 {
     HRESULT         hr = S_OK;
@@ -52,7 +52,7 @@ HRESULT PnrpRegister(PCWSTR pwzIdentity, PCWSTR pwzName,
     ULONG           i;
     INT             iRet;
 
-    
+
     //
     // build a CSADDR_INFO array from the PEER_NODE_INFO
     //
@@ -174,12 +174,12 @@ HRESULT PnrpResolve(PCWSTR pwzName, PCWSTR pwzCloud, __out SOCKADDR_IN6* pAddr)
     querySet.lpszServiceInstanceName = (PWSTR) pwzName;
     querySet.lpszContext = (PWSTR) pwzCloud;
     querySet.lpBlob = &blPnrpData;
-    
+
     // start resolve
     iRet = WSALookupServiceBegin(
-            &querySet,
-            LUP_RETURN_NAME | LUP_RETURN_ADDR | LUP_RETURN_COMMENT,
-            &hLookup);
+               &querySet,
+               LUP_RETURN_NAME | LUP_RETURN_ADDR | LUP_RETURN_COMMENT,
+               &hLookup);
 
     if (iRet != 0)
     {
@@ -204,7 +204,7 @@ HRESULT PnrpResolve(PCWSTR pwzName, PCWSTR pwzCloud, __out SOCKADDR_IN6* pAddr)
             }
         }
         else
-        {        
+        {
             hr = HRESULT_FROM_WIN32(dwError);
         }
     }
@@ -225,7 +225,7 @@ HRESULT PnrpResolve(PCWSTR pwzName, PCWSTR pwzCloud, __out SOCKADDR_IN6* pAddr)
         for (i = 0; i < pResults->dwNumberOfCsAddrs; i++)
         {
             if (pResults->lpcsaBuffer[i].iProtocol == IPPROTO_TCP &&
-                pResults->lpcsaBuffer[i].RemoteAddr.iSockaddrLength == sizeof(SOCKADDR_IN6))
+                    pResults->lpcsaBuffer[i].RemoteAddr.iSockaddrLength == sizeof(SOCKADDR_IN6))
             {
                 CopyMemory(pAddr, pResults->lpcsaBuffer[i].RemoteAddr.lpSockaddr, sizeof(SOCKADDR_IN6));
                 fFound = TRUE;
@@ -244,7 +244,7 @@ HRESULT PnrpResolve(PCWSTR pwzName, PCWSTR pwzCloud, __out SOCKADDR_IN6* pAddr)
     {
         WSALookupServiceEnd(hLookup);
     }
-    
+
     free(pResults);
     return hr;
 }
@@ -304,15 +304,15 @@ HRESULT PnrpUnregister(PCWSTR pwzIdentity, PCWSTR pwzName, PCWSTR pwzCloud)
 //
 // Arguments:
 //   pdwLocalScopeID[out]: Identifier of local connection
-//   pwzCloudName[out]   : Name of local connection 
+//   pwzCloudName[out]   : Name of local connection
 //                         (NULL results in no value returned)
-//   cchCloudNameSize[in]: number of characters in pwzCloudName 
+//   cchCloudNameSize[in]: number of characters in pwzCloudName
 //                         (usually MAX_CLOUD_NAME)
 //
 // Returns:  HRESULT
 //
-HRESULT GetLocalCloudInfo(DWORD cchCloudName, 
-                          __out_ecount_opt(cchCloudName) PWSTR pwzCloudName, 
+HRESULT GetLocalCloudInfo(DWORD cchCloudName,
+                          __out_ecount_opt(cchCloudName) PWSTR pwzCloudName,
                           __out_opt DWORD* pdwLocalScopeID)
 {
     HRESULT         hr = S_OK;
@@ -329,7 +329,7 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
     // Fill out information for WSA query
     CloudInfo.dwSize = sizeof(CloudInfo);
     CloudInfo.Cloud.Scope = PNRP_LINK_LOCAL_SCOPE;
-    
+
     blPnrpData.cbSize = sizeof(CloudInfo);
     blPnrpData.pBlobData = (LPBYTE)&CloudInfo;
 
@@ -339,9 +339,9 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
     querySet.lpBlob = &blPnrpData;
 
     iErr = WSALookupServiceBegin(
-            &querySet, 
-            LUP_RETURN_NAME|LUP_RETURN_BLOB, 
-            &hLookup);
+               &querySet,
+               LUP_RETURN_NAME|LUP_RETURN_BLOB,
+               &hLookup);
 
     if (iErr != 0)
     {
@@ -355,24 +355,24 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
         // Get size of results
         iErr = WSALookupServiceNext(hLookup, 0, &dwResultSize, &tempResultSet);
 
-		if (iErr != 0)
-		{
-			dwErr = WSAGetLastError();
-			if (dwErr == WSAEFAULT)
-			{
-				// allocate space for results
-				pResults = (WSAQUERYSET*) malloc(dwResultSize);
+        if (iErr != 0)
+        {
+            dwErr = WSAGetLastError();
+            if (dwErr == WSAEFAULT)
+            {
+                // allocate space for results
+                pResults = (WSAQUERYSET*) malloc(dwResultSize);
 
-				if (pResults == NULL)
-				{
-					hr = HRESULT_FROM_WIN32(WSAGetLastError());
-				}
-			}
-			else
-			{
-				hr = HRESULT_FROM_WIN32(dwErr);
-			}
-		}
+                if (pResults == NULL)
+                {
+                    hr = HRESULT_FROM_WIN32(WSAGetLastError());
+                }
+            }
+            else
+            {
+                hr = HRESULT_FROM_WIN32(dwErr);
+            }
+        }
     }
 
     if (SUCCEEDED(hr))
@@ -390,7 +390,7 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
     {
         if (pwzCloudName)
         {
-            hr = StringCchCopy(pwzCloudName, cchCloudName, pResults->lpszServiceInstanceName);                
+            hr = StringCchCopy(pwzCloudName, cchCloudName, pResults->lpszServiceInstanceName);
             if (FAILED(hr))
             {
                 DisplayHrError(L"Failed to copy cloud name", hr);
@@ -398,7 +398,7 @@ HRESULT GetLocalCloudInfo(DWORD cchCloudName,
         }
         if (pdwLocalScopeID)
         {
-            *pdwLocalScopeID = ((PNRPCLOUDINFO*)pResults->lpBlob->pBlobData)->Cloud.ScopeId;  
+            *pdwLocalScopeID = ((PNRPCLOUDINFO*)pResults->lpBlob->pBlobData)->Cloud.ScopeId;
         }
     }
 

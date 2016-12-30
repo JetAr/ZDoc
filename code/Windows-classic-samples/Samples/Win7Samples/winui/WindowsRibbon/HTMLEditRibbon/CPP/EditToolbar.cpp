@@ -1,4 +1,4 @@
-// EditToolbar.cpp : implementation file
+﻿// EditToolbar.cpp : implementation file
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -32,19 +32,19 @@ CEditToolbar::~CEditToolbar()
 
 
 BEGIN_MESSAGE_MAP(CEditToolbar, CToolBar)
-	//{{AFX_MSG_MAP(CEditToolbar)
-	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+    //{{AFX_MSG_MAP(CEditToolbar)
+    ON_WM_CREATE()
+    //}}AFX_MSG_MAP
 
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CEditToolbar message handlers
 
-int CEditToolbar::OnCreate(LPCREATESTRUCT lpCreateStruct) 
+int CEditToolbar::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-	if (CToolBar::OnCreate(lpCreateStruct) == -1)
-		return -1;
+    if (CToolBar::OnCreate(lpCreateStruct) == -1)
+        return -1;
 
-	return 0;
+    return 0;
 }

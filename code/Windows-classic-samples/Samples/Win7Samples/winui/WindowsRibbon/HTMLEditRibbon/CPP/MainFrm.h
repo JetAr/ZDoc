@@ -1,4 +1,4 @@
-// MainFrm.h : interface of the CMainFrame class
+﻿// MainFrm.h : interface of the CMainFrame class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -27,7 +27,7 @@ class CHTMLEdView;
 
 class CMainFrame : public CFrameWnd
 {
-    
+
 protected: // create from serialization only
     CMainFrame();
     DECLARE_DYNCREATE(CMainFrame)
@@ -43,17 +43,17 @@ public:
 // Overrides
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CMainFrame)
-    public:
+public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    protected:
+protected:
     virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
     //}}AFX_VIRTUAL
 
 // Implementation
 public:
     CView* GetSourceView();
-    CView* GetWebView();    
-	void SwapView();
+    CView* GetWebView();
+    void SwapView();
     HRESULT SwapView(int nCmdId);
     virtual ~CMainFrame();
     CEditToolbar m_wndEditBar;

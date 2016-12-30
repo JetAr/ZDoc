@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////
 //
 //
 // Copyright (c) 1998-2001  Microsoft Corporation
@@ -20,18 +20,18 @@
 INT_PTR
 CALLBACK
 MainDialogProc(
-				HWND hDlg,
-				UINT uMsg,
-				WPARAM wParam,
-				LPARAM lParam
-				);
+    HWND hDlg,
+    UINT uMsg,
+    WPARAM wParam,
+    LPARAM lParam
+);
 
 HRESULT
 GetTerminal(
-				IN	ITAddress *,
-				IN	BSTR bstrMedia,
-				OUT	ITTerminal ** ppTerminal
-				);
+    IN	ITAddress *,
+    IN	BSTR bstrMedia,
+    OUT	ITTerminal ** ppTerminal
+);
 HRESULT
 RegisterTapiEventInterface();
 
@@ -44,17 +44,17 @@ ListenOnAddresses();
 
 HRESULT
 ListenOnThisAddress(
-				IN	ITAddress * pAddress
-				);
+    IN	ITAddress * pAddress
+);
 
 HRESULT
 AnswerTheCall();
 
-HRESULT 
+HRESULT
 PutPlayList(
-				IN	ITTerminal *pITTerminal, 
-				IN	BSTR bstrFileName
-				);
+    IN	ITTerminal *pITTerminal,
+    IN	BSTR bstrFileName
+);
 
 HRESULT
 DisconnectTheCall();
@@ -64,13 +64,13 @@ ReleaseTheCall();
 
 void
 DoMessage(
-				IN	LPWSTR pszMessage
-				);
+    IN	LPWSTR pszMessage
+);
 
 void
 SetStatusMessage(
-				IN	LPWSTR pszMessage
-				);
+    IN	LPWSTR pszMessage
+);
 
 HRESULT
 InitializeTapi();

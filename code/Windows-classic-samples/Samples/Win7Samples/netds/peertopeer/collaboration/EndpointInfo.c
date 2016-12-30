@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -97,9 +97,9 @@ void GetEndpointName()
 
 //-----------------------------------------------------------------------------
 // Function:    DisplayEndpointObjects
-// Purpose:     Retrieves and displays object information from an endpoint. 
+// Purpose:     Retrieves and displays object information from an endpoint.
 //              Should call PeerCollabRefreshEndpointData before using this function.
-// Parameters:  
+// Parameters:
 //   PCPEER_ENDPOINT : [in] endpoint about which information is displayed
 //
 HRESULT DisplayEndpointObjects(__in PCPEER_ENDPOINT pcEndpoint)
@@ -113,7 +113,7 @@ HRESULT DisplayEndpointObjects(__in PCPEER_ENDPOINT pcEndpoint)
     // Get a list of objects published by this endpoint - The NULL parameter
     // indicates that we wish to retrieve all objects
     hr = PeerCollabEnumObjects(pcEndpoint, NULL, &hObjectEnum);
-    
+
     if (FAILED(hr))
     {
         wprintf(L"Error retrieving objects. HRESULT=0x%x\n", hr);
@@ -161,7 +161,7 @@ exit:
 //-----------------------------------------------------------------------------
 // Function:    DisplayEndpointApplications
 // Purpose:     Retrieves and displays application information from an endpoint
-// Parameters:  
+// Parameters:
 //   PCPEER_ENDPOINT : [in] endpoint about which information is displayed
 //
 HRESULT DisplayEndpointApplications(__in PCPEER_ENDPOINT pcEndpoint)
@@ -172,7 +172,7 @@ HRESULT DisplayEndpointApplications(__in PCPEER_ENDPOINT pcEndpoint)
     ULONG               i = 0;
     HRESULT             hr = S_OK;
 
-    // Get a list of applications from the endpoint - The NULL parameter 
+    // Get a list of applications from the endpoint - The NULL parameter
     // indicates that we want to retrieve all applications
     hr = PeerCollabEnumApplications(pcEndpoint, NULL, &hApplicationEnum);
 

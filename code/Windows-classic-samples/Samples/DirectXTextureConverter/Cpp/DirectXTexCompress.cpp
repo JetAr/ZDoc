@@ -1,6 +1,6 @@
-//-------------------------------------------------------------------------------------
+﻿//-------------------------------------------------------------------------------------
 // DirectXTexCompress.cpp
-//  
+//
 // DirectX Texture Library - Texture compression
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
@@ -40,20 +40,64 @@ inline static bool _DetermineEncoderSettings( _In_ DXGI_FORMAT format, _Out_ BC_
     switch(format)
     {
     case DXGI_FORMAT_BC1_UNORM:
-    case DXGI_FORMAT_BC1_UNORM_SRGB:    pfEncode = nullptr;         blocksize = 8;   cflags = 0; break;
+    case DXGI_FORMAT_BC1_UNORM_SRGB:
+        pfEncode = nullptr;
+        blocksize = 8;
+        cflags = 0;
+        break;
     case DXGI_FORMAT_BC2_UNORM:
-    case DXGI_FORMAT_BC2_UNORM_SRGB:    pfEncode = D3DXEncodeBC2;   blocksize = 16;  cflags = 0; break;
+    case DXGI_FORMAT_BC2_UNORM_SRGB:
+        pfEncode = D3DXEncodeBC2;
+        blocksize = 16;
+        cflags = 0;
+        break;
     case DXGI_FORMAT_BC3_UNORM:
-    case DXGI_FORMAT_BC3_UNORM_SRGB:    pfEncode = D3DXEncodeBC3;   blocksize = 16;  cflags = 0; break;
-    case DXGI_FORMAT_BC4_UNORM:         pfEncode = D3DXEncodeBC4U;  blocksize = 8;   cflags = TEX_FILTER_RGB_COPY_RED; break;
-    case DXGI_FORMAT_BC4_SNORM:         pfEncode = D3DXEncodeBC4S;  blocksize = 8;   cflags = TEX_FILTER_RGB_COPY_RED; break;
-    case DXGI_FORMAT_BC5_UNORM:         pfEncode = D3DXEncodeBC5U;  blocksize = 16;  cflags = TEX_FILTER_RGB_COPY_RED | TEX_FILTER_RGB_COPY_GREEN; break;
-    case DXGI_FORMAT_BC5_SNORM:         pfEncode = D3DXEncodeBC5S;  blocksize = 16;  cflags = TEX_FILTER_RGB_COPY_RED | TEX_FILTER_RGB_COPY_GREEN; break;
-    case DXGI_FORMAT_BC6H_UF16:         pfEncode = D3DXEncodeBC6HU; blocksize = 16;  cflags = 0; break;
-    case DXGI_FORMAT_BC6H_SF16:         pfEncode = D3DXEncodeBC6HS; blocksize = 16;  cflags = 0; break;
+    case DXGI_FORMAT_BC3_UNORM_SRGB:
+        pfEncode = D3DXEncodeBC3;
+        blocksize = 16;
+        cflags = 0;
+        break;
+    case DXGI_FORMAT_BC4_UNORM:
+        pfEncode = D3DXEncodeBC4U;
+        blocksize = 8;
+        cflags = TEX_FILTER_RGB_COPY_RED;
+        break;
+    case DXGI_FORMAT_BC4_SNORM:
+        pfEncode = D3DXEncodeBC4S;
+        blocksize = 8;
+        cflags = TEX_FILTER_RGB_COPY_RED;
+        break;
+    case DXGI_FORMAT_BC5_UNORM:
+        pfEncode = D3DXEncodeBC5U;
+        blocksize = 16;
+        cflags = TEX_FILTER_RGB_COPY_RED | TEX_FILTER_RGB_COPY_GREEN;
+        break;
+    case DXGI_FORMAT_BC5_SNORM:
+        pfEncode = D3DXEncodeBC5S;
+        blocksize = 16;
+        cflags = TEX_FILTER_RGB_COPY_RED | TEX_FILTER_RGB_COPY_GREEN;
+        break;
+    case DXGI_FORMAT_BC6H_UF16:
+        pfEncode = D3DXEncodeBC6HU;
+        blocksize = 16;
+        cflags = 0;
+        break;
+    case DXGI_FORMAT_BC6H_SF16:
+        pfEncode = D3DXEncodeBC6HS;
+        blocksize = 16;
+        cflags = 0;
+        break;
     case DXGI_FORMAT_BC7_UNORM:
-    case DXGI_FORMAT_BC7_UNORM_SRGB:    pfEncode = D3DXEncodeBC7;   blocksize = 16;  cflags = 0; break;
-    default:                            pfEncode = nullptr;         blocksize = 0;   cflags = 0; return false;
+    case DXGI_FORMAT_BC7_UNORM_SRGB:
+        pfEncode = D3DXEncodeBC7;
+        blocksize = 16;
+        cflags = 0;
+        break;
+    default:
+        pfEncode = nullptr;
+        blocksize = 0;
+        cflags = 0;
+        return false;
     }
 
     return true;
@@ -131,7 +175,7 @@ static HRESULT _CompressBC( _In_ const Image& image, _In_ const Image& result, _
                     {
                         for( size_t s = image.width; s < 4; ++s )
                         {
-                            temp[ t*4 + s ] = temp[ t*4 + uSrc[s] ]; 
+                            temp[ t*4 + s ] = temp[ t*4 + uSrc[s] ];
                         }
                     }
                 }
@@ -142,14 +186,14 @@ static HRESULT _CompressBC( _In_ const Image& image, _In_ const Image& result, _
                     {
                         for( size_t s =0; s < 4; ++s )
                         {
-                            temp[ t*4 + s ] = temp[ uSrc[t]*4 + s ]; 
+                            temp[ t*4 + s ] = temp[ uSrc[t]*4 + s ];
                         }
                     }
                 }
             }
 
             _ConvertScanline( temp, 16, result.format, format, cflags );
-            
+
             if ( pfEncode )
                 pfEncode( dptr, temp, bcflags );
             else
@@ -207,7 +251,7 @@ static HRESULT _CompressBC_Parallel( _In_ const Image& image, _In_ const Image& 
 
     bool fail = false;
 
-#pragma omp parallel for
+    #pragma omp parallel for
     for( int nb=0; nb < static_cast<int>( nBlocks ); ++nb )
     {
         const size_t nbWidth = std::max<size_t>(1, image.width / 4);
@@ -236,7 +280,7 @@ static HRESULT _CompressBC_Parallel( _In_ const Image& image, _In_ const Image& 
             fail = true;
 
         _ConvertScanline( temp, 16, result.format, format, cflags );
-            
+
         if ( pfEncode )
             pfEncode( pDest, temp, bcflags );
         else
@@ -343,14 +387,30 @@ static HRESULT _DecompressBC( _In_ const Image& cImage, _In_ const Image& result
     DXGI_FORMAT cformat;
     switch( cImage.format )
     {
-    case DXGI_FORMAT_BC1_TYPELESS:  cformat = DXGI_FORMAT_BC1_UNORM; break;
-    case DXGI_FORMAT_BC2_TYPELESS:  cformat = DXGI_FORMAT_BC2_UNORM; break;
-    case DXGI_FORMAT_BC3_TYPELESS:  cformat = DXGI_FORMAT_BC3_UNORM; break;
-    case DXGI_FORMAT_BC4_TYPELESS:  cformat = DXGI_FORMAT_BC4_UNORM; break;
-    case DXGI_FORMAT_BC5_TYPELESS:  cformat = DXGI_FORMAT_BC5_UNORM; break;
-    case DXGI_FORMAT_BC6H_TYPELESS: cformat = DXGI_FORMAT_BC6H_UF16; break;
-    case DXGI_FORMAT_BC7_TYPELESS:  cformat = DXGI_FORMAT_BC7_UNORM; break;
-    default:                        cformat = cImage.format;         break;
+    case DXGI_FORMAT_BC1_TYPELESS:
+        cformat = DXGI_FORMAT_BC1_UNORM;
+        break;
+    case DXGI_FORMAT_BC2_TYPELESS:
+        cformat = DXGI_FORMAT_BC2_UNORM;
+        break;
+    case DXGI_FORMAT_BC3_TYPELESS:
+        cformat = DXGI_FORMAT_BC3_UNORM;
+        break;
+    case DXGI_FORMAT_BC4_TYPELESS:
+        cformat = DXGI_FORMAT_BC4_UNORM;
+        break;
+    case DXGI_FORMAT_BC5_TYPELESS:
+        cformat = DXGI_FORMAT_BC5_UNORM;
+        break;
+    case DXGI_FORMAT_BC6H_TYPELESS:
+        cformat = DXGI_FORMAT_BC6H_UF16;
+        break;
+    case DXGI_FORMAT_BC7_TYPELESS:
+        cformat = DXGI_FORMAT_BC7_UNORM;
+        break;
+    default:
+        cformat = cImage.format;
+        break;
     }
 
     // Determine BC format decoder
@@ -359,19 +419,49 @@ static HRESULT _DecompressBC( _In_ const Image& cImage, _In_ const Image& result
     switch(cformat)
     {
     case DXGI_FORMAT_BC1_UNORM:
-    case DXGI_FORMAT_BC1_UNORM_SRGB:    pfDecode = D3DXDecodeBC1;   sbpp = 8;   break;
+    case DXGI_FORMAT_BC1_UNORM_SRGB:
+        pfDecode = D3DXDecodeBC1;
+        sbpp = 8;
+        break;
     case DXGI_FORMAT_BC2_UNORM:
-    case DXGI_FORMAT_BC2_UNORM_SRGB:    pfDecode = D3DXDecodeBC2;   sbpp = 16;  break;
+    case DXGI_FORMAT_BC2_UNORM_SRGB:
+        pfDecode = D3DXDecodeBC2;
+        sbpp = 16;
+        break;
     case DXGI_FORMAT_BC3_UNORM:
-    case DXGI_FORMAT_BC3_UNORM_SRGB:    pfDecode = D3DXDecodeBC3;   sbpp = 16;  break;
-    case DXGI_FORMAT_BC4_UNORM:         pfDecode = D3DXDecodeBC4U;  sbpp = 8;   break;
-    case DXGI_FORMAT_BC4_SNORM:         pfDecode = D3DXDecodeBC4S;  sbpp = 8;   break;
-    case DXGI_FORMAT_BC5_UNORM:         pfDecode = D3DXDecodeBC5U;  sbpp = 16;  break;
-    case DXGI_FORMAT_BC5_SNORM:         pfDecode = D3DXDecodeBC5S;  sbpp = 16;  break;
-    case DXGI_FORMAT_BC6H_UF16:         pfDecode = D3DXDecodeBC6HU; sbpp = 16;  break;
-    case DXGI_FORMAT_BC6H_SF16:         pfDecode = D3DXDecodeBC6HS; sbpp = 16;  break;
+    case DXGI_FORMAT_BC3_UNORM_SRGB:
+        pfDecode = D3DXDecodeBC3;
+        sbpp = 16;
+        break;
+    case DXGI_FORMAT_BC4_UNORM:
+        pfDecode = D3DXDecodeBC4U;
+        sbpp = 8;
+        break;
+    case DXGI_FORMAT_BC4_SNORM:
+        pfDecode = D3DXDecodeBC4S;
+        sbpp = 8;
+        break;
+    case DXGI_FORMAT_BC5_UNORM:
+        pfDecode = D3DXDecodeBC5U;
+        sbpp = 16;
+        break;
+    case DXGI_FORMAT_BC5_SNORM:
+        pfDecode = D3DXDecodeBC5S;
+        sbpp = 16;
+        break;
+    case DXGI_FORMAT_BC6H_UF16:
+        pfDecode = D3DXDecodeBC6HU;
+        sbpp = 16;
+        break;
+    case DXGI_FORMAT_BC6H_SF16:
+        pfDecode = D3DXDecodeBC6HS;
+        sbpp = 16;
+        break;
     case DXGI_FORMAT_BC7_UNORM:
-    case DXGI_FORMAT_BC7_UNORM_SRGB:    pfDecode = D3DXDecodeBC7;   sbpp = 16;  break;
+    case DXGI_FORMAT_BC7_UNORM_SRGB:
+        pfDecode = D3DXDecodeBC7;
+        sbpp = 16;
+        break;
     default:
         return HRESULT_FROM_WIN32( ERROR_NOT_SUPPORTED );
     }
@@ -443,11 +533,21 @@ bool _IsAlphaAllOpaqueBC( _In_ const Image& cImage )
     DXGI_FORMAT cformat;
     switch( cImage.format )
     {
-    case DXGI_FORMAT_BC1_TYPELESS:  cformat = DXGI_FORMAT_BC1_UNORM; break;
-    case DXGI_FORMAT_BC2_TYPELESS:  cformat = DXGI_FORMAT_BC2_UNORM; break;
-    case DXGI_FORMAT_BC3_TYPELESS:  cformat = DXGI_FORMAT_BC3_UNORM; break;
-    case DXGI_FORMAT_BC7_TYPELESS:  cformat = DXGI_FORMAT_BC7_UNORM; break;
-    default:                        cformat = cImage.format;         break;
+    case DXGI_FORMAT_BC1_TYPELESS:
+        cformat = DXGI_FORMAT_BC1_UNORM;
+        break;
+    case DXGI_FORMAT_BC2_TYPELESS:
+        cformat = DXGI_FORMAT_BC2_UNORM;
+        break;
+    case DXGI_FORMAT_BC3_TYPELESS:
+        cformat = DXGI_FORMAT_BC3_UNORM;
+        break;
+    case DXGI_FORMAT_BC7_TYPELESS:
+        cformat = DXGI_FORMAT_BC7_UNORM;
+        break;
+    default:
+        cformat = cImage.format;
+        break;
     }
 
     // Determine BC format decoder
@@ -456,13 +556,25 @@ bool _IsAlphaAllOpaqueBC( _In_ const Image& cImage )
     switch(cformat)
     {
     case DXGI_FORMAT_BC1_UNORM:
-    case DXGI_FORMAT_BC1_UNORM_SRGB:    pfDecode = D3DXDecodeBC1;   sbpp = 8;   break;
+    case DXGI_FORMAT_BC1_UNORM_SRGB:
+        pfDecode = D3DXDecodeBC1;
+        sbpp = 8;
+        break;
     case DXGI_FORMAT_BC2_UNORM:
-    case DXGI_FORMAT_BC2_UNORM_SRGB:    pfDecode = D3DXDecodeBC2;   sbpp = 16;  break;
+    case DXGI_FORMAT_BC2_UNORM_SRGB:
+        pfDecode = D3DXDecodeBC2;
+        sbpp = 16;
+        break;
     case DXGI_FORMAT_BC3_UNORM:
-    case DXGI_FORMAT_BC3_UNORM_SRGB:    pfDecode = D3DXDecodeBC3;   sbpp = 16;  break;
+    case DXGI_FORMAT_BC3_UNORM_SRGB:
+        pfDecode = D3DXDecodeBC3;
+        sbpp = 16;
+        break;
     case DXGI_FORMAT_BC7_UNORM:
-    case DXGI_FORMAT_BC7_UNORM_SRGB:    pfDecode = D3DXDecodeBC7;   sbpp = 16;  break;
+    case DXGI_FORMAT_BC7_UNORM_SRGB:
+        pfDecode = D3DXDecodeBC7;
+        sbpp = 16;
+        break;
     default:
         // BC4, BC5, and BC6 don't have alpha channels
         return false;

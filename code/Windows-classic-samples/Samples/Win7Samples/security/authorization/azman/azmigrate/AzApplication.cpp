@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -22,7 +22,8 @@ Abstract:
 CAzApplication::CAzApplication(void):CAzBase<IAzApplication>()
 {
 }
-CAzApplication::CAzApplication(IAzApplication *pApp,bool pIsNewApp) :CAzBase<IAzApplication>(pApp,pIsNewApp){   
+CAzApplication::CAzApplication(IAzApplication *pApp,bool pIsNewApp) :CAzBase<IAzApplication>(pApp,pIsNewApp)
+{
 }
 
 
@@ -37,11 +38,12 @@ Arguments: pApp - Source Application
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
-HRESULT CAzApplication::Copy(CAzApplication &pApp) {
+HRESULT CAzApplication::Copy(CAzApplication &pApp)
+{
 
     CAzLogging::Entering(_TEXT("Copy"));
 
@@ -53,13 +55,15 @@ HRESULT CAzApplication::Copy(CAzApplication &pApp) {
 
     HRESULT hr;
 
-    for (long i=0;i<m_uchNumberOfProps;i++) {
+    for (long i=0; i<m_uchNumberOfProps; i++)
+    {
 
         hr=pApp.m_native->GetProperty(m_props[i],CComVariant(), &cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting IAzApplication Property ID:"),COLE2T(getName()),m_props[i]);
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=m_native->SetProperty(m_props[i],cVVar,CComVariant());
 
@@ -70,27 +74,30 @@ HRESULT CAzApplication::Copy(CAzApplication &pApp) {
         }
 
     }
-    
-    if (!CAzGlobalOptions::m_bIgnorePolicyAdmins) {
+
+    if (!CAzGlobalOptions::m_bIgnorePolicyAdmins)
+    {
 
         hr=pApp.m_native->get_DelegatedPolicyUsers(&cVVar);
 
-        CAzLogging::Log(hr,_TEXT("Getting IAzApplication Delegated Policy Users"),COLE2T(getName()));			
+        CAzLogging::Log(hr,_TEXT("Getting IAzApplication Delegated Policy Users"),COLE2T(getName()));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzApplication::AddDelegatedPolicyUser);
 
             CAzLogging::Log(hr,_TEXT("Setting IAzApplication Delegated Policy Users"),COLE2T(getName()));
 
             cVVar.Clear();
-        } 
+        }
 
         hr=pApp.m_native->get_PolicyAdministrators(&cVVar);
 
         CAzLogging::Log(hr,_TEXT("Getting IAzApplication Policy Admins"),COLE2T(getName()));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzApplication::AddPolicyAdministrator);
 
@@ -103,14 +110,15 @@ HRESULT CAzApplication::Copy(CAzApplication &pApp) {
 
         CAzLogging::Log(hr,_TEXT("Getting IAzApplication Policy Readers"),COLE2T(getName()));
 
-        if (SUCCEEDED(hr)) {
+        if (SUCCEEDED(hr))
+        {
 
             hr=InitializeUsingSafeArray(cVVar,&IAzApplication::AddPolicyReader);
 
             CAzLogging::Log(hr,_TEXT("Setting IAzApplication Delegated Policy Readers"),COLE2T(getName()));
 
             cVVar.Clear();
-        } 
+        }
 
     }
     hr=m_native->Submit(0,CComVariant());
@@ -136,12 +144,13 @@ Arguments: pApp - Source Application
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
-HRESULT CAzApplication::CreateChildItems(CAzApplication &pApp){
+HRESULT CAzApplication::CreateChildItems(CAzApplication &pApp)
+{
 
     /*Below order has to be the same
 
@@ -153,11 +162,11 @@ HRESULT CAzApplication::CreateChildItems(CAzApplication &pApp){
 
     HRESULT hr=CreateOperations(pApp);
 
-    CAzLogging::Log(hr,_TEXT("Creating Operations for IAzApplication"),COLE2T(getName()));			
+    CAzLogging::Log(hr,_TEXT("Creating Operations for IAzApplication"),COLE2T(getName()));
 
     hr=CAzHelper<IAzApplication>::CreateAppGroups(pApp.m_native,m_native);
 
-    CAzLogging::Log(hr,_TEXT("Creating Application Groups for IAzApplication"),COLE2T(getName()));	
+    CAzLogging::Log(hr,_TEXT("Creating Application Groups for IAzApplication"),COLE2T(getName()));
 
     hr=CAzHelper<IAzApplication>::CreateTasks(pApp.m_native,m_native);
 
@@ -192,11 +201,12 @@ Arguments: pApp - Source Application
 
 Return Value:
 
-    Returns success, appropriate failure value 
+    Returns success, appropriate failure value
 
 --*/
 
-HRESULT CAzApplication::CreateOperations(CAzApplication &pApp){
+HRESULT CAzApplication::CreateOperations(CAzApplication &pApp)
+{
 
     CAzLogging::Entering(_TEXT("CAzApplication::CreateOperations"));
 
@@ -208,21 +218,22 @@ HRESULT CAzApplication::CreateOperations(CAzApplication &pApp){
 
     HRESULT hr=pApp.m_native->get_Operations(&spAzOpes);
 
-    CAzLogging::Log(hr,_TEXT("Getting operations for IAzApplication"),COLE2T(getName()));			
+    CAzLogging::Log(hr,_TEXT("Getting operations for IAzApplication"),COLE2T(getName()));
 
     if (FAILED(hr))
         goto lError1;
 
     hr=spAzOpes->get_Count(&lCount);
 
-    CAzLogging::Log(hr,_TEXT("Getting operation count for IAzApplication from IAzOperations"),COLE2T(getName()));			
+    CAzLogging::Log(hr,_TEXT("Getting operation count for IAzApplication from IAzOperations"),COLE2T(getName()));
 
     if (FAILED(hr))
         goto lError1;
 
-    if (lCount==0)	
+    if (lCount==0)
         goto lError1;
-    for (long i = 1 ; i <= lCount ; i++) {
+    for (long i = 1 ; i <= lCount ; i++)
+    {
 
         CComPtr<IAzOperation> spOp,spNewOp;
 
@@ -237,7 +248,7 @@ HRESULT CAzApplication::CreateOperations(CAzApplication &pApp){
 
         cVappl.Clear();
 
-        hr = spDispatchtmp.QueryInterface(&spOp);		
+        hr = spDispatchtmp.QueryInterface(&spOp);
 
         if (FAILED(hr))
             goto lError1;
@@ -278,12 +289,13 @@ Arguments: pApp - Source Application
 
 Return Value:
 
-    Returns success, appropriate failure value of the get/set methods done within 
+    Returns success, appropriate failure value of the get/set methods done within
     this method
 
 --*/
 
-HRESULT CAzApplication::CreateScopes(CAzApplication &pApp){
+HRESULT CAzApplication::CreateScopes(CAzApplication &pApp)
+{
 
     CAzLogging::Entering(_TEXT("CAzApplication::CreateScopes"));
 
@@ -307,9 +319,10 @@ HRESULT CAzApplication::CreateScopes(CAzApplication &pApp){
     if (FAILED(hr))
         goto lError1;
 
-    if (lCount==0)	
+    if (lCount==0)
         goto lError1;
-    for (long i = 1 ; i <= lCount ; i++) {
+    for (long i = 1 ; i <= lCount ; i++)
+    {
 
         CComPtr<IAzScope> spSrcScope,spNewScope;
 
@@ -324,7 +337,7 @@ HRESULT CAzApplication::CreateScopes(CAzApplication &pApp){
 
         cVappl.Clear();
 
-        hr = spDispatchtmp.QueryInterface(&spSrcScope);		
+        hr = spDispatchtmp.QueryInterface(&spSrcScope);
 
         if (FAILED(hr))
             goto lError1;
@@ -361,7 +374,8 @@ CAzApplication::~CAzApplication(void)
 {
 }
 // All the properties which are "Settable" for IAzApplication
-const unsigned int CAzApplication::m_props[]={
+const unsigned int CAzApplication::m_props[]=
+{
     AZ_PROP_APPLICATION_DATA,
     AZ_PROP_APPLICATION_AUTHZ_INTERFACE_CLSID,
     AZ_PROP_APPLICATION_VERSION,

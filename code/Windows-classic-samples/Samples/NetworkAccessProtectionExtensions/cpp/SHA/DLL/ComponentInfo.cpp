@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,12 +17,12 @@ extern HMODULE g_hModule;
 extern LONG g_nComObjsInUse;
 
 // {E19DDEC2-3FBE-4C3B-9317-679760C13AAE}
-const CLSID CLSID_ComponentInfo = 
+const CLSID CLSID_ComponentInfo =
 { 0xe19ddec2, 0x3fbe, 0x4c3b, { 0x93, 0x17, 0x67, 0x97, 0x60, 0xc1, 0x3a, 0xae } };
 
 // CComponentInfo
 
-CComponentInfo::CComponentInfo() : 
+CComponentInfo::CComponentInfo() :
     m_cRef(0)
 {
     InterlockedIncrement(&g_nComObjsInUse) ;
@@ -121,8 +121,8 @@ STDMETHODIMP CComponentInfo::GetIcon(
     hr = AllocateMemory(*ppDllFilePath, MAX_PATH_WCHAR_SIZE);
     if (FAILED(hr))
     {
-		*ppDllFilePath = NULL;
-		goto Cleanup;
+        *ppDllFilePath = NULL;
+        goto Cleanup;
     }
 
     DWORD fileNameLength = 0;
@@ -159,7 +159,7 @@ Cleanup:
 }
 
 STDMETHODIMP CComponentInfo::ConvertErrorCodeToMessageId(
-    __RPC__in HRESULT errorCode, 
+    __RPC__in HRESULT errorCode,
     __RPC__out MessageId * pMsgId)
 {
     HRESULT hr = S_OK;
@@ -174,25 +174,25 @@ STDMETHODIMP CComponentInfo::ConvertErrorCodeToMessageId(
     // The following cases are examples, add more error codes here
     switch (errorCode)
     {
-        case QUAR_E_NOTPATCHED:
-            *pMsgId = SDK_SAMPLE_CLIENT_NOT_PATCHED_MSG_ID;
-            break;
-        case S_OK:
-            *pMsgId = SDK_SAMPLE_COMPLIANT_CLIENT_MSG_ID;
-            break;
-        default:
-            // return an error
-            hr = E_UNEXPECTED;
-            DebugPrintfW(L" ---          Unknown error code (error = 0x%08x)",
-            hr);
-            break;
+    case QUAR_E_NOTPATCHED:
+        *pMsgId = SDK_SAMPLE_CLIENT_NOT_PATCHED_MSG_ID;
+        break;
+    case S_OK:
+        *pMsgId = SDK_SAMPLE_COMPLIANT_CLIENT_MSG_ID;
+        break;
+    default:
+        // return an error
+        hr = E_UNEXPECTED;
+        DebugPrintfW(L" ---          Unknown error code (error = 0x%08x)",
+                     hr);
+        break;
     }
 
     return hr;
 }
 
 STDMETHODIMP CComponentInfo::GetLocalizedString(
-    MessageId msgId, 
+    MessageId msgId,
     __RPC__deref_out CountedString ** ppString)
 {
     HRESULT hr = S_OK;
@@ -204,27 +204,27 @@ STDMETHODIMP CComponentInfo::GetLocalizedString(
     }
 
     // Allocate memory for string
-    hr = AllocateMemory(*ppString, MAX_PATH_WCHAR_SIZE);  
+    hr = AllocateMemory(*ppString, MAX_PATH_WCHAR_SIZE);
     if (FAILED(hr))
     {
-		*ppString = NULL;
-		goto Cleanup;
+        *ppString = NULL;
+        goto Cleanup;
     }
 
     // Read from the resource file
     DWORD stringLength = 0;
     stringLength = FormatMessageW(FORMAT_MESSAGE_FROM_HMODULE,
-                            g_hModule,
-                            msgId,
-                            LANG_ID,
-                            (*ppString)->string,
-                            (MAX_PATH+1) ,
-                            NULL);
+                                  g_hModule,
+                                  msgId,
+                                  LANG_ID,
+                                  (*ppString)->string,
+                                  (MAX_PATH+1),
+                                  NULL);
 
-    // if failed to read from the mc file, return error    
-    if (stringLength == 0)  
+    // if failed to read from the mc file, return error
+    if (stringLength == 0)
     {
-	hr = HRESULT_FROM_WIN32(GetLastError());        
+        hr = HRESULT_FROM_WIN32(GetLastError());
         DebugPrintfW(L" ---          Error getting FormatMessageW (error = 0x%08x)", hr);
         goto Cleanup;
     }
@@ -244,7 +244,7 @@ Cleanup:
 // Implementation of IUnknown
 
 STDMETHODIMP CComponentInfo::QueryInterface(
-    __RPC__in const IID& iid, 
+    __RPC__in const IID& iid,
     __RPC__out void** ppv)
 {
     if (iid == IID_IUnknown)

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,7 +27,7 @@ HRESULT SetFont(CMainFrame* pFrame, IPropertyStore* pStore)
     {
         return E_FAIL;
     }
-    
+
     // Set Font Face.
     PROPVARIANT face;
     hr = pStore->GetValue(UI_PKEY_FontProperties_Family, &face);
@@ -44,7 +44,7 @@ HRESULT SetFont(CMainFrame* pFrame, IPropertyStore* pStore)
     }
 
     PropVariantClear(&face);
-        
+
     // Set Font Size.
     PROPVARIANT size;
     hr = pStore->GetValue(UI_PKEY_FontProperties_Size, &size);
@@ -114,7 +114,7 @@ HRESULT UpdateFont(CMainFrame* pFrame, IPropertyStore* pStore)
     }
 
     s += 7;
-    
+
     hr = VarDecFromI2(s, (DECIMAL*)&size);
     if (FAILED(hr))
     {
@@ -122,7 +122,7 @@ HRESULT UpdateFont(CMainFrame* pFrame, IPropertyStore* pStore)
     }
 
     size.vt = VT_DECIMAL;
-    
+
     hr = pStore->SetValue(UI_PKEY_FontProperties_Size, size);
     if (FAILED(hr))
     {
@@ -135,5 +135,5 @@ HRESULT UpdateFont(CMainFrame* pFrame, IPropertyStore* pStore)
         return hr;
     }
 
-    return pStore->Commit();    
+    return pStore->Commit();
 }

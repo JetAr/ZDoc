@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: AsyncFlt.h
 //
 // Desc: DirectShow sample code - header file for async filter.
@@ -10,7 +10,7 @@
 
 // c553f2c0-1529-11d0-b4d1-00805f6cbbea
 DEFINE_GUID(CLSID_AsyncSample,
-0xc553f2c0, 0x1529, 0x11d0, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea);
+            0xc553f2c0, 0x1529, 0x11d0, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea);
 
 
 //  NOTE:  This filter does NOT support AVI format
@@ -38,9 +38,12 @@ public:
 
     HRESULT SetPointer(LONGLONG llPos)
     {
-        if (llPos < 0 || llPos > m_llLength) {
+        if (llPos < 0 || llPos > m_llLength)
+        {
             return S_FALSE;
-        } else {
+        }
+        else
+        {
             m_llPosition = llPos;
             return S_OK;
         }
@@ -57,15 +60,19 @@ public:
         /*  Wait until the bytes are here! */
         DWORD dwTime = timeGetTime();
 
-        if (m_llPosition + dwBytesToRead > m_llLength) {
+        if (m_llPosition + dwBytesToRead > m_llLength)
+        {
             dwReadLength = (DWORD)(m_llLength - m_llPosition);
-        } else {
+        }
+        else
+        {
             dwReadLength = dwBytesToRead;
         }
         DWORD dwTimeToArrive =
             ((DWORD)m_llPosition + dwReadLength) / m_dwKBPerSec;
 
-        if (dwTime - m_dwTimeStart < dwTimeToArrive) {
+        if (dwTime - m_dwTimeStart < dwTimeToArrive)
+        {
             Sleep(dwTimeToArrive - dwTime + m_dwTimeStart);
         }
 
@@ -81,8 +88,8 @@ public:
     {
         LONGLONG llCurrentAvailable =
             static_cast <LONGLONG> (UInt32x32To64((timeGetTime() - m_dwTimeStart),m_dwKBPerSec));
- 
-       *pSizeAvailable =  min(m_llLength, llCurrentAvailable);
+
+        *pSizeAvailable =  min(m_llLength, llCurrentAvailable);
         return m_llLength;
     }
 
@@ -132,9 +139,12 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv)
     {
-        if (riid == IID_IFileSourceFilter) {
+        if (riid == IID_IFileSourceFilter)
+        {
             return GetInterface((IFileSourceFilter *)this, ppv);
-        } else {
+        }
+        else
+        {
             return CAsyncReader::NonDelegatingQueryInterface(riid, ppv);
         }
     }
@@ -152,27 +162,32 @@ public:
 #ifndef UNICODE
         TCHAR *lpszFileName=0;
         lpszFileName = new char[cch * 2];
-        if (!lpszFileName) {
-      	    return E_OUTOFMEMORY;
+        if (!lpszFileName)
+        {
+            return E_OUTOFMEMORY;
         }
         WideCharToMultiByte(GetACP(), 0, lpwszFileName, -1,
-    			lpszFileName, cch, NULL, NULL);
+                            lpszFileName, cch, NULL, NULL);
 #else
-        TCHAR lpszFileName[MAX_PATH]={0};
+        TCHAR lpszFileName[MAX_PATH]= {0};
         (void)StringCchCopy(lpszFileName, NUMELMS(lpszFileName), lpwszFileName);
 #endif
         CAutoLock lck(&m_csFilter);
 
         /*  Check the file type */
         CMediaType cmt;
-        if (NULL == pmt) {
+        if (NULL == pmt)
+        {
             cmt.SetType(&MEDIATYPE_Stream);
             cmt.SetSubtype(&MEDIASUBTYPE_NULL);
-        } else {
+        }
+        else
+        {
             cmt = *pmt;
         }
 
-        if (!ReadTheFile(lpszFileName)) {
+        if (!ReadTheFile(lpszFileName))
+        {
 #ifndef UNICODE
             delete [] lpszFileName;
 #endif
@@ -184,11 +199,11 @@ public:
         m_pFileName = new WCHAR[cch];
 
         if (m_pFileName!=NULL)
-    	    CopyMemory(m_pFileName, lpwszFileName, cch*sizeof(WCHAR));
+            CopyMemory(m_pFileName, lpwszFileName, cch*sizeof(WCHAR));
 
         // this is not a simple assignment... pointers and format
         // block (if any) are intelligently copied
-    	m_mt = cmt;
+        m_mt = cmt;
 
         /*  Work out file type */
         cmt.bTemporalCompression = TRUE;	       //???
@@ -205,16 +220,19 @@ public:
         CheckPointer(ppszFileName, E_POINTER);
         *ppszFileName = NULL;
 
-        if (m_pFileName!=NULL) {
-        	DWORD n = sizeof(WCHAR)*(1+lstrlenW(m_pFileName));
+        if (m_pFileName!=NULL)
+        {
+            DWORD n = sizeof(WCHAR)*(1+lstrlenW(m_pFileName));
 
             *ppszFileName = (LPOLESTR) CoTaskMemAlloc( n );
-            if (*ppszFileName!=NULL) {
-                  CopyMemory(*ppszFileName, m_pFileName, n);
+            if (*ppszFileName!=NULL)
+            {
+                CopyMemory(*ppszFileName, m_pFileName, n);
             }
         }
 
-        if (pmt!=NULL) {
+        if (pmt!=NULL)
+        {
             CopyMediaType(pmt, &m_mt);
         }
 

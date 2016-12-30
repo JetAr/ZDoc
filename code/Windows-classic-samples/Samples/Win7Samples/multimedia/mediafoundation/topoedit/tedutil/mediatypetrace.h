@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -22,7 +22,7 @@
         pAttrStr += _skip; \
         goto done; \
     } \
-    
+
 LPCSTR STRING_FROM_GUID( GUID Attr )
 {
     LPCSTR pAttrStr = NULL;
@@ -30,7 +30,7 @@ LPCSTR STRING_FROM_GUID( GUID Attr )
     // Generics
     INTERNAL_GUID_TO_STRING( MF_MT_MAJOR_TYPE, 6 );                     // MAJOR_TYPE
     INTERNAL_GUID_TO_STRING( MF_MT_SUBTYPE, 6 );                        // SUBTYPE
-    INTERNAL_GUID_TO_STRING( MF_MT_ALL_SAMPLES_INDEPENDENT, 6 );        // ALL_SAMPLES_INDEPENDENT   
+    INTERNAL_GUID_TO_STRING( MF_MT_ALL_SAMPLES_INDEPENDENT, 6 );        // ALL_SAMPLES_INDEPENDENT
     INTERNAL_GUID_TO_STRING( MF_MT_FIXED_SIZE_SAMPLES, 6 );             // FIXED_SIZE_SAMPLES
     INTERNAL_GUID_TO_STRING( MF_MT_COMPRESSED, 6 );                     // COMPRESSED
     INTERNAL_GUID_TO_STRING( MF_MT_SAMPLE_SIZE, 6 );                    // SAMPLE_SIZE
@@ -87,7 +87,7 @@ LPCSTR STRING_FROM_GUID( GUID Attr )
     INTERNAL_GUID_TO_STRING( MFAudioFormat_MP3, 14 );                   // MP3
     INTERNAL_GUID_TO_STRING( MFAudioFormat_MPEG, 14 );                  // MPEG
 
-done:    
+done:
     return pAttrStr;
 }
 
@@ -98,7 +98,7 @@ public:
         : m_spMT(pMT)
     {
     }
-    
+
     LPCSTR GetString()
     {
         HRESULT hr = S_OK;
@@ -110,18 +110,18 @@ public:
 
         if( m_szResp.IsEmpty() == FALSE )
         {
-        goto done;
+            goto done;
         }
 
         if( m_spMT == NULL )
         {
-        m_szResp.Append( "<NULL>" );
+            m_szResp.Append( "<NULL>" );
 
-        goto done;
+            goto done;
         }
 
         hr = m_spMT->GetMajorType( &MajorType );
-        CHECKHR_GOTO( hr, done );    
+        CHECKHR_GOTO( hr, done );
 
         pszGuidStr = STRING_FROM_GUID(MajorType);
         if (pszGuidStr != NULL)
@@ -131,7 +131,7 @@ public:
         }
         else
         {
-        m_szResp.Append( "Other: " );
+            m_szResp.Append( "Other: " );
         }
 
         hr = m_spMT->GetCount(&cAttrCount);
@@ -139,34 +139,34 @@ public:
 
         for( UINT32 i = 0; i < cAttrCount; i++ )
         {
-        GUID guidId;
-        MF_ATTRIBUTE_TYPE attrType;
+            GUID guidId;
+            MF_ATTRIBUTE_TYPE attrType;
 
-        hr = m_spMT->GetItemByIndex(i, &guidId, NULL);
-        CHECKHR_GOTO( hr, done );
+            hr = m_spMT->GetItemByIndex(i, &guidId, NULL);
+            CHECKHR_GOTO( hr, done );
 
-        hr = m_spMT->GetItemType(guidId, &attrType);
-        CHECKHR_GOTO( hr, done );
+            hr = m_spMT->GetItemType(guidId, &attrType);
+            CHECKHR_GOTO( hr, done );
 
-        pszGuidStr = STRING_FROM_GUID(guidId);
-        if (pszGuidStr != NULL)
-        {
-            m_szResp.Append( pszGuidStr );
-        }
-        else
-        {
-            LPOLESTR guidStr = NULL;
-            StringFromCLSID(guidId, &guidStr);
-            
-            m_szResp.Append(CW2A(guidStr));
+            pszGuidStr = STRING_FROM_GUID(guidId);
+            if (pszGuidStr != NULL)
+            {
+                m_szResp.Append( pszGuidStr );
+            }
+            else
+            {
+                LPOLESTR guidStr = NULL;
+                StringFromCLSID(guidId, &guidStr);
 
-            CoTaskMemFree(guidStr);
-        }
+                m_szResp.Append(CW2A(guidStr));
 
-        m_szResp.Append( "=" );
+                CoTaskMemFree(guidStr);
+            }
 
-        switch( attrType )
-        {
+            m_szResp.Append( "=" );
+
+            switch( attrType )
+            {
             case MF_ATTRIBUTE_UINT32:
             {
                 UINT32 Val;
@@ -176,7 +176,7 @@ public:
                 tempStr.Format("%d", Val);
                 m_szResp.Append(tempStr) ;
                 break;
-            }                
+            }
             case MF_ATTRIBUTE_UINT64:
             {
                 UINT64 Val;
@@ -199,7 +199,7 @@ public:
                 m_szResp.Append( tempStr );
 
                 break;
-            }                
+            }
             case MF_ATTRIBUTE_DOUBLE:
             {
                 DOUBLE Val;
@@ -210,7 +210,7 @@ public:
                 m_szResp.Append(tempStr);
 
                 break;
-            }                
+            }
             case MF_ATTRIBUTE_GUID:
             {
                 GUID Val;
@@ -228,14 +228,14 @@ public:
                 {
                     LPOLESTR guidStr = NULL;
                     StringFromCLSID(Val, &guidStr);
-                    
+
                     m_szResp.Append(CW2A(guidStr));
 
                     CoTaskMemFree(guidStr);
                 }
-                
+
                 break;
-            }                
+            }
             case MF_ATTRIBUTE_STRING:
             {
                 hr = m_spMT->GetString( guidId, TempBuf, sizeof(TempBuf) / sizeof(TempBuf[0]), NULL );
@@ -248,12 +248,12 @@ public:
 
                 m_szResp.Append( CW2A(TempBuf) );
                 break;
-            }                
+            }
             case MF_ATTRIBUTE_BLOB:
             {
                 m_szResp.Append( "<BLOB>" );
                 break;
-            }                
+            }
             case MF_ATTRIBUTE_IUNKNOWN:
             {
                 m_szResp.Append( "<UNK>" );
@@ -261,29 +261,29 @@ public:
             }
             default:
                 assert(0);
-        }
+            }
 
-        m_szResp.Append( ", " );
+            m_szResp.Append( ", " );
         }
 
         assert( m_szResp.GetLength() >= 2);
         m_szResp.Left( m_szResp.GetLength() - 2);
 
-        done:
+done:
 
         if (FAILED(hr))
         {
-        m_szResp.Empty();
-        return NULL;
+            m_szResp.Empty();
+            return NULL;
         }
         else
         {
-        return (LPCSTR)m_szResp;
+            return (LPCSTR)m_szResp;
         }
     }
-    
-    
+
+
 private:
     CAtlStringA m_szResp;
-    CComPtr<IMFMediaType> m_spMT;    
+    CComPtr<IMFMediaType> m_spMT;
 };

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -42,7 +42,7 @@ void UpdateContentOnDevice(
     REFGUID          ContentType,
     PCWSTR           pszFileTypeFilter,
     PCWSTR           pszDefaultFileExtension);
-    
+
 // Content properties
 void ReadContentProperties(IPortableDevice* pDevice);
 void WriteContentProperties(IPortableDevice* pDevice);
@@ -123,120 +123,120 @@ void DoMenu()
             uiSelection = (UINT) atoi(szSelection);
             switch (uiSelection)
             {
-                case 0:
-                    EnumerateAllDevices();
-                    break;
-                case 1:
-                    // Unregister any device event registrations before
-                    // creating a new IPortableDevice
-                    UnregisterForEventNotifications(pIPortableDevice);
+            case 0:
+                EnumerateAllDevices();
+                break;
+            case 1:
+                // Unregister any device event registrations before
+                // creating a new IPortableDevice
+                UnregisterForEventNotifications(pIPortableDevice);
 
-                    // Release the old IPortableDevice interface before
-                    // obtaining a new one.
-                    pIPortableDevice = NULL;
-                    ChooseDevice(&pIPortableDevice);
-                    break;
-                case 2:
-                    EnumerateAllContent(pIPortableDevice);
-                    break;
-                case 3:
-                    TransferContentFromDevice(pIPortableDevice);
-                    break;
-                case 4:
-                    DeleteContentFromDevice(pIPortableDevice);
-                    break;
-                case 5:
-                    MoveContentAlreadyOnDevice(pIPortableDevice);
-                    break;
-                case 6:
-                    TransferContentToDevice(pIPortableDevice,
-                                            WPD_CONTENT_TYPE_IMAGE,
-                                            L"JPEG (*.JPG)\0*.JPG\0JPEG (*.JPEG)\0*.JPEG\0JPG (*.JPE)\0*.JPE\0JPG (*.JFIF)\0*.JFIF\0\0",
-                                            L"JPG");
-                    break;
-                case 7:
-                    TransferContentToDevice(pIPortableDevice,
-                                            WPD_CONTENT_TYPE_AUDIO,
-                                            L"WMA (*.WMA)\0*.WMA\0\0",
-                                            L"WMA");
-                    break;
-                case 8:
-                    TransferContentToDevice(pIPortableDevice,
-                                            WPD_CONTENT_TYPE_CONTACT,
-                                            L"VCARD (*.VCF)\0*.VCF\0\0",
-                                            L"VCF");
-                    break;
-                case 9:
-                    TransferContactToDevice(pIPortableDevice);
-                    break;
-                case 10:
-                    CreateFolderOnDevice(pIPortableDevice);
-                    break;
-                case 11:
-                    CreateContactPhotoResourceOnDevice(pIPortableDevice);
-                    break;
-                case 12:
-                    ReadContentProperties(pIPortableDevice);
-                    break;
-                case 13:
-                    WriteContentProperties(pIPortableDevice);
-                    break;
-                case 14:
-                    GetObjectIdentifierFromPersistentUniqueIdentifier(pIPortableDevice);
-                    break;
-                case 15:
-                    ListFunctionalCategories(pIPortableDevice);
-                    break;
-                case 16:
-                    ListFunctionalObjects(pIPortableDevice);
-                    break;
-                case 17:
-                    ListSupportedContentTypes(pIPortableDevice);
-                    break;
-                case 18:
-                    ListRenderingCapabilityInformation(pIPortableDevice);
-                    break;
-                case 19:
-                    RegisterForEventNotifications(pIPortableDevice);
-                    break;
-                case 20:
-                    UnregisterForEventNotifications(pIPortableDevice);
-                    break;
-                case 21:
-                    ListSupportedEvents(pIPortableDevice);
-                    break;
-                case 22:
-                    ReadHintLocations(pIPortableDevice);
-                    break;
-                case 23:
-                    ReadContentPropertiesBulk(pIPortableDevice);
-                    break;
-                case 24:
-                    WriteContentPropertiesBulk(pIPortableDevice);
-                    break;
-                case 25:
-                    ReadContentPropertiesBulkFilteringByFormat(pIPortableDevice);
-                    break;
-                case 26:
-                    UpdateContentOnDevice(pIPortableDevice,
-                                          WPD_CONTENT_TYPE_IMAGE,
-                                          L"JPEG (*.JPG)\0*.JPG\0JPEG (*.JPEG)\0*.JPEG\0JPG (*.JPE)\0*.JPE\0JPG (*.JFIF)\0*.JFIF\0\0",
-                                          L"JPG");
-                    break;
-                case 27:
-                    UpdateContentOnDevice(pIPortableDevice,
-                                          WPD_CONTENT_TYPE_AUDIO,
-                                          L"WMA (*.WMA)\0*.WMA\0\0",
-                                          L"WMA");
-                    break;
-                case 28:
-                    UpdateContentOnDevice(pIPortableDevice,
-                                          WPD_CONTENT_TYPE_CONTACT,
-                                          L"VCARD (*.VCF)\0*.VCF\0\0",
-                                          L"VCF");
-                    break;
-                default:
-                    break;
+                // Release the old IPortableDevice interface before
+                // obtaining a new one.
+                pIPortableDevice = NULL;
+                ChooseDevice(&pIPortableDevice);
+                break;
+            case 2:
+                EnumerateAllContent(pIPortableDevice);
+                break;
+            case 3:
+                TransferContentFromDevice(pIPortableDevice);
+                break;
+            case 4:
+                DeleteContentFromDevice(pIPortableDevice);
+                break;
+            case 5:
+                MoveContentAlreadyOnDevice(pIPortableDevice);
+                break;
+            case 6:
+                TransferContentToDevice(pIPortableDevice,
+                                        WPD_CONTENT_TYPE_IMAGE,
+                                        L"JPEG (*.JPG)\0*.JPG\0JPEG (*.JPEG)\0*.JPEG\0JPG (*.JPE)\0*.JPE\0JPG (*.JFIF)\0*.JFIF\0\0",
+                                        L"JPG");
+                break;
+            case 7:
+                TransferContentToDevice(pIPortableDevice,
+                                        WPD_CONTENT_TYPE_AUDIO,
+                                        L"WMA (*.WMA)\0*.WMA\0\0",
+                                        L"WMA");
+                break;
+            case 8:
+                TransferContentToDevice(pIPortableDevice,
+                                        WPD_CONTENT_TYPE_CONTACT,
+                                        L"VCARD (*.VCF)\0*.VCF\0\0",
+                                        L"VCF");
+                break;
+            case 9:
+                TransferContactToDevice(pIPortableDevice);
+                break;
+            case 10:
+                CreateFolderOnDevice(pIPortableDevice);
+                break;
+            case 11:
+                CreateContactPhotoResourceOnDevice(pIPortableDevice);
+                break;
+            case 12:
+                ReadContentProperties(pIPortableDevice);
+                break;
+            case 13:
+                WriteContentProperties(pIPortableDevice);
+                break;
+            case 14:
+                GetObjectIdentifierFromPersistentUniqueIdentifier(pIPortableDevice);
+                break;
+            case 15:
+                ListFunctionalCategories(pIPortableDevice);
+                break;
+            case 16:
+                ListFunctionalObjects(pIPortableDevice);
+                break;
+            case 17:
+                ListSupportedContentTypes(pIPortableDevice);
+                break;
+            case 18:
+                ListRenderingCapabilityInformation(pIPortableDevice);
+                break;
+            case 19:
+                RegisterForEventNotifications(pIPortableDevice);
+                break;
+            case 20:
+                UnregisterForEventNotifications(pIPortableDevice);
+                break;
+            case 21:
+                ListSupportedEvents(pIPortableDevice);
+                break;
+            case 22:
+                ReadHintLocations(pIPortableDevice);
+                break;
+            case 23:
+                ReadContentPropertiesBulk(pIPortableDevice);
+                break;
+            case 24:
+                WriteContentPropertiesBulk(pIPortableDevice);
+                break;
+            case 25:
+                ReadContentPropertiesBulkFilteringByFormat(pIPortableDevice);
+                break;
+            case 26:
+                UpdateContentOnDevice(pIPortableDevice,
+                                      WPD_CONTENT_TYPE_IMAGE,
+                                      L"JPEG (*.JPG)\0*.JPG\0JPEG (*.JPEG)\0*.JPEG\0JPG (*.JPE)\0*.JPE\0JPG (*.JFIF)\0*.JFIF\0\0",
+                                      L"JPG");
+                break;
+            case 27:
+                UpdateContentOnDevice(pIPortableDevice,
+                                      WPD_CONTENT_TYPE_AUDIO,
+                                      L"WMA (*.WMA)\0*.WMA\0\0",
+                                      L"WMA");
+                break;
+            case 28:
+                UpdateContentOnDevice(pIPortableDevice,
+                                      WPD_CONTENT_TYPE_CONTACT,
+                                      L"VCARD (*.VCF)\0*.VCF\0\0",
+                                      L"VCF");
+                break;
+            default:
+                break;
             }
         }
         else

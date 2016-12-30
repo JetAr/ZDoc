@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -30,7 +30,7 @@ bool DisableMMCSS;
 
 wchar_t *OutputEndpoint;
 
-CommandLineSwitch CmdLineArgs[] = 
+CommandLineSwitch CmdLineArgs[] =
 {
     { L"?", L"Print this help", CommandLineSwitch::SwitchTypeNone, reinterpret_cast<void **>(&ShowHelp)},
     { L"h", L"Print this help", CommandLineSwitch::SwitchTypeNone, reinterpret_cast<void **>(&ShowHelp)},
@@ -59,7 +59,7 @@ void Help(LPCWSTR ProgramName)
 }
 
 //
-//  Retrieves the device friendly name for a particular device in a device collection.  
+//  Retrieves the device friendly name for a particular device in a device collection.
 //
 //  The returned string was allocated using malloc() so it should be freed using free();
 //
@@ -218,7 +218,7 @@ bool PickDevice(IMMDevice **DeviceToUse, bool *IsDefaultDevice, ERole *DefaultDe
             }
             break;
         }
-    } 
+    }
     else if (OutputEndpoint != NULL)
     {
         hr = deviceEnumerator->GetDevice(OutputEndpoint, &device);
@@ -276,7 +276,7 @@ Exit:
 //
 //  RIFF header:    8 bytes consisting of the signature "RIFF" followed by a 4 byte file length.
 //  WAVE header:    4 bytes consisting of the signature "WAVE".
-//  fmt header:     4 bytes consisting of the signature "fmt " followed by a WAVEFORMATEX 
+//  fmt header:     4 bytes consisting of the signature "fmt " followed by a WAVEFORMATEX
 //  WAVEFORMAT:     <n> bytes containing a waveformat structure.
 //  DATA header:    8 bytes consisting of the signature "data" followed by a 4 byte file length.
 //  wave data:      <m> bytes containing wave data.
@@ -294,7 +294,7 @@ struct WAVEHEADER
 };
 
 //  Static RIFF header, we'll append the format to it.
-const BYTE WaveHeader[] = 
+const BYTE WaveHeader[] =
 {
     'R',   'I',   'F',   'F',  0x00,  0x00,  0x00,  0x00, 'W',   'A',   'V',   'E',   'f',   'm',   't',   ' ', 0x00, 0x00, 0x00, 0x00
 };
@@ -392,9 +392,9 @@ void SaveWaveData(BYTE *CaptureBuffer, size_t BufferSize, const WAVEFORMATEX *Wa
                     hr = StringCbCat(waveFileName, sizeof(waveFileName), L".WAV");
                     if (SUCCEEDED(hr))
                     {
-                        HANDLE waveHandle = CreateFile(waveFileName, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 
-                            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, 
-                            NULL);
+                        HANDLE waveHandle = CreateFile(waveFileName, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS,
+                                                       FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
+                                                       NULL);
                         if (waveHandle != INVALID_HANDLE_VALUE)
                         {
                             if (WriteWaveFile(waveHandle, CaptureBuffer, BufferSize, WaveFormat))
@@ -507,7 +507,7 @@ int wmain(int argc, wchar_t* argv[])
             //  mix format and we can allocate the buffer that we're going to capture.
             //
             //
-            //  The buffer is going to contain "TargetDuration" seconds worth of PCM data.  That means 
+            //  The buffer is going to contain "TargetDuration" seconds worth of PCM data.  That means
             //  we're going to have TargetDuration*samples/second frames multiplied by the frame size.
             //
             size_t captureBufferSize = capturer->SamplesPerSecond() * TargetDurationInSec * capturer->FrameSize();
@@ -525,7 +525,8 @@ int wmain(int argc, wchar_t* argv[])
                 {
                     printf(".");
                     Sleep(1000);
-                } while (--TargetDurationInSec);
+                }
+                while (--TargetDurationInSec);
                 printf("\n");
 
                 capturer->Stop();

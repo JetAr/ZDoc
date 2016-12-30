@@ -1,4 +1,4 @@
-#define IDS_APP_TITLE                   100
+﻿#define IDS_APP_TITLE                   100
 
 #define IDI_APP                         101
 #define IDI_OVERLAY1                    102

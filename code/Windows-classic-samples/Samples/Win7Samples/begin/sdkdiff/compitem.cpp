@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -48,7 +48,8 @@
  * the user has a handle to a compitem, which is in fact a pointer to
  * one of these structs.
  */
-struct compitem {
+struct compitem
+{
 
     FILEDATA left;          /* handle for left-hand file */
     FILEDATA right;         /* handle for right-hand file */
@@ -135,20 +136,28 @@ compitem_new(DIRITEM leftname, DIRITEM rightname, LIST list, BOOL fExact)
      * filedata objects are responsible for reading the file and
      * accessing the lines in it. Don't read in the files until we need to.
      */
-    if (leftname != NULL) {
+    if (leftname != NULL)
+    {
         ci->left = file_new(leftname, FALSE);
-        if (ci->left == NULL) {
+        if (ci->left == NULL)
+        {
             return(NULL);
         }
-    } else {
+    }
+    else
+    {
         ci->left = NULL;
     }
-    if ( rightname != NULL) {
+    if ( rightname != NULL)
+    {
         ci->right = file_new(rightname, FALSE);
-        if (ci->right == NULL) {
+        if (ci->right == NULL)
+        {
             return(NULL);
         }
-    } else {
+    }
+    else
+    {
         ci->right = NULL;
     }
 
@@ -156,7 +165,8 @@ compitem_new(DIRITEM leftname, DIRITEM rightname, LIST list, BOOL fExact)
     /*
      * see if we have one or two files, and set the state accordingly
      */
-    if ( ! ci->left && !ci->right) {
+    if ( ! ci->left && !ci->right)
+    {
         /* two NULL files - this is wrong */
         return(NULL);
     }
@@ -164,16 +174,22 @@ compitem_new(DIRITEM leftname, DIRITEM rightname, LIST list, BOOL fExact)
     SetStateAndTag(ci, leftname, rightname, fExact);
 
     if ( ((ci->state == STATE_DIFFER) && !TrackDifferent) ||
-         ((ci->state == STATE_SAME)   && !TrackSame)      ) {
-        if ( ci->right != NULL ) {
+            ((ci->state == STATE_SAME)   && !TrackSame)      )
+    {
+        if ( ci->right != NULL )
+        {
             file_delete( ci->right );
         }
-        if ( ci->left != NULL ) {
+        if ( ci->left != NULL )
+        {
             file_delete( ci->left );
         }
-        if ( list == NULL ) {
-           HeapFree(GetProcessHeap(), NULL, (LPSTR)ci);
-        } else {
+        if ( list == NULL )
+        {
+            HeapFree(GetProcessHeap(), NULL, (LPSTR)ci);
+        }
+        else
+        {
             List_Delete( ci );
         }
     }
@@ -195,7 +211,7 @@ void compitem_rescan(COMPITEM ci)
 {
     DIRITEM diLeft, diRight;
 
-    /* 
+    /*
        The way we get from a ci to the info we
        need is ci->filedata->diritem->direct->dirlist->hpipe.
        We let scandir do the work.
@@ -207,7 +223,8 @@ void compitem_rescan(COMPITEM ci)
     dir_rescanfile(diLeft);
     dir_rescanfile(diRight);
 
-    if (ci->result != NULL) {
+    if (ci->result != NULL)
+    {
         HeapFree(GetProcessHeap(), NULL, ci->result);
         ci->result = NULL;
     }
@@ -231,7 +248,8 @@ void compitem_rescan(COMPITEM ci)
 void
 compitem_delete(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return;
     }
 
@@ -248,7 +266,8 @@ compitem_delete(COMPITEM ci)
         HeapFree(GetProcessHeap(), NULL, ci->result);
 
     /* free the compitem struct itself if not alloced on a list */
-    if (ci->bDiscard) {
+    if (ci->bDiscard)
+    {
         HeapFree(GetProcessHeap(), NULL, ci);
     }
 }
@@ -264,27 +283,33 @@ void
 compitem_discardsections(COMPITEM ci)
 {
     /* delete the lists of sections we built */
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return;
     }
-    if (ci->secs_composite) {
+    if (ci->secs_composite)
+    {
         section_deletelist(ci->secs_composite);
         ci->secs_composite = NULL;
     }
-    if (ci->secs_left) {
+    if (ci->secs_left)
+    {
         section_deletelist(ci->secs_left);
         ci->secs_left = NULL;
     }
-    if (ci->secs_right) {
+    if (ci->secs_right)
+    {
         section_deletelist(ci->secs_right);
         ci->secs_right = NULL;
     }
 
     /* reset the line lists to throw away cached hash codes and links */
-    if (ci->left != NULL) {
+    if (ci->left != NULL)
+    {
         file_reset(ci->left);
     }
-    if (ci->right != NULL) {
+    if (ci->right != NULL)
+    {
         file_reset(ci->right);
     }
 }
@@ -295,13 +320,15 @@ compitem_discardsections(COMPITEM ci)
 LIST
 compitem_getcomposite(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return NULL;
     }
     /*
      * do the comparison if we haven't already done it
      */
-    if (ci->secs_composite == NULL) {
+    if (ci->secs_composite == NULL)
+    {
         ci_makecomposite(ci);
     }
 
@@ -312,13 +339,15 @@ compitem_getcomposite(COMPITEM ci)
 LIST
 compitem_getleftsections(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return NULL;
     }
     /*
      * do the comparison if we haven't already done it
      */
-    if (ci->secs_composite == NULL) {
+    if (ci->secs_composite == NULL)
+    {
         ci_makecomposite(ci);
     }
 
@@ -329,13 +358,15 @@ compitem_getleftsections(COMPITEM ci)
 LIST
 compitem_getrightsections(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return NULL;
     }
     /*
      * do the comparison if we haven't already done it
      */
-    if (ci->secs_composite == NULL) {
+    if (ci->secs_composite == NULL)
+    {
         ci_makecomposite(ci);
     }
 
@@ -346,7 +377,8 @@ compitem_getrightsections(COMPITEM ci)
 FILEDATA
 compitem_getleftfile(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return(NULL);
     }
     return(ci->left);
@@ -356,7 +388,8 @@ compitem_getleftfile(COMPITEM ci)
 FILEDATA
 compitem_getrightfile(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return(NULL);
     }
     return(ci->right);
@@ -366,7 +399,8 @@ compitem_getrightfile(COMPITEM ci)
 int
 compitem_getstate(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return(0);
     }
     return(ci->state);
@@ -376,7 +410,8 @@ compitem_getstate(COMPITEM ci)
 LPSTR
 compitem_gettext_tag(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return(NULL);
     }
     return(ci->tag);
@@ -386,7 +421,8 @@ compitem_gettext_tag(COMPITEM ci)
 LPSTR
 compitem_gettext_result(COMPITEM ci)
 {
-    if (ci == NULL) {
+    if (ci == NULL)
+    {
         return(NULL);
     }
     return(ci->result);
@@ -412,44 +448,52 @@ compitem_getfilename(VIEW view, COMPITEM item, int option)
 {
     LPSTR fname;
 
-    if (item == NULL) {
+    if (item == NULL)
+    {
         return(NULL);
     }
 
-    switch (option) {
-        case CI_LEFT:
-            if (item->left != NULL) {
-                return(dir_getopenname(file_getdiritem(item->left)));
-            } else {
-                return(NULL);
-            }
-
-        case CI_RIGHT:
-            if (item->right != NULL) {
-                return(dir_getopenname(file_getdiritem(item->right)));
-            } else {
-                return(NULL);
-            }
-
-        case CI_COMP:
-
-            /* caller has asked for the filename of the composite file.
-             * we need to create a temporary file and write the
-             * lines in the composite section list out to it.
-             */
-            fname = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, MAX_PATH);
-            if (fname == NULL)
-				return NULL;
-			GetTempPath(MAX_PATH, fname);
-            GetTempFileName(fname, "wdf", 0, fname);
-
-            /* write out the temp file and return the result */
-            compitem_savecomp(view, item, fname, expand_include);
-            return fname;
-
-        default:
-            TRACE_ERROR(LoadRcString(IDS_BAD_ARGUMENT), FALSE);
+    switch (option)
+    {
+    case CI_LEFT:
+        if (item->left != NULL)
+        {
+            return(dir_getopenname(file_getdiritem(item->left)));
+        }
+        else
+        {
             return(NULL);
+        }
+
+    case CI_RIGHT:
+        if (item->right != NULL)
+        {
+            return(dir_getopenname(file_getdiritem(item->right)));
+        }
+        else
+        {
+            return(NULL);
+        }
+
+    case CI_COMP:
+
+        /* caller has asked for the filename of the composite file.
+         * we need to create a temporary file and write the
+         * lines in the composite section list out to it.
+         */
+        fname = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, MAX_PATH);
+        if (fname == NULL)
+            return NULL;
+        GetTempPath(MAX_PATH, fname);
+        GetTempFileName(fname, "wdf", 0, fname);
+
+        /* write out the temp file and return the result */
+        compitem_savecomp(view, item, fname, expand_include);
+        return fname;
+
+    default:
+        TRACE_ERROR(LoadRcString(IDS_BAD_ARGUMENT), FALSE);
+        return(NULL);
     }
 }
 
@@ -462,39 +506,45 @@ compitem_getfilename(VIEW view, COMPITEM item, int option)
 LPSTR
 compitem_savecomp(VIEW view, COMPITEM item, LPSTR savename, int compopts)
 {
-	char		fname[2*MAX_PATH + 1];
-	HCURSOR		hcurs;
+    char		fname[2*MAX_PATH + 1];
+    HCURSOR		hcurs;
 
-	if (item == NULL) {
-		return NULL;
-	}
+    if (item == NULL)
+    {
+        return NULL;
+    }
 
-	if (savename == NULL) {
-		/* Ask for the filename - using gfile standard dialogs */
-		savename = fname;
-		if (!gfile_open(hwndClient, LoadRcString(IDS_SAVE_COMPFILE), ".txt", "*.txt", NULL, 0, savename)) {
-			return NULL;
-		}
-	}
-	else {
-		HRESULT hr = StringCchCopy(fname, (2*MAX_PATH+1), savename);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			return NULL;
-		}
-		GetFullPathName(savename, 2*MAX_PATH + 1, fname, NULL);
-		savename = fname;
-	}
+    if (savename == NULL)
+    {
+        /* Ask for the filename - using gfile standard dialogs */
+        savename = fname;
+        if (!gfile_open(hwndClient, LoadRcString(IDS_SAVE_COMPFILE), ".txt", "*.txt", NULL, 0, savename))
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        HRESULT hr = StringCchCopy(fname, (2*MAX_PATH+1), savename);
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_COPY);
+            return NULL;
+        }
+        GetFullPathName(savename, 2*MAX_PATH + 1, fname, NULL);
+        savename = fname;
+    }
 
-	/* Write to file */
-	hcurs = SetCursor(LoadCursor(NULL, IDC_WAIT));
-	if (!compitem_writefile(view, item, savename, compopts)) {
-		return NULL;
-	}
-	
-	/* Return filename */
-	SetCursor(hcurs);
-	return savename;
+    /* Write to file */
+    hcurs = SetCursor(LoadCursor(NULL, IDC_WAIT));
+    if (!compitem_writefile(view, item, savename, compopts))
+    {
+        return NULL;
+    }
+
+    /* Return filename */
+    SetCursor(hcurs);
+    return savename;
 }
 
 /*
@@ -506,126 +556,135 @@ compitem_savecomp(VIEW view, COMPITEM item, LPSTR savename, int compopts)
 LPSTR
 compitem_writefile(VIEW view, COMPITEM item, LPSTR savename, int compopts)
 {
-	HANDLE		fh;
-	SECTION		sec;
-	LINE		line;
-	COMPLIST	list;
-	LPSTR		lhead;
-	LPSTR		tag, text;
-	char		msg[2*MAX_PATH+100];
-	UINT		linecount = 0;
+    HANDLE		fh;
+    SECTION		sec;
+    LINE		line;
+    COMPLIST	list;
+    LPSTR		lhead;
+    LPSTR		tag, text;
+    char		msg[2*MAX_PATH+100];
+    UINT		linecount = 0;
     DWORD       cbWritten;
 
-	/* Return immediately if no file name or item */
-	if (!savename || !*savename || !item) {
-		return NULL;
-	}
+    /* Return immediately if no file name or item */
+    if (!savename || !*savename || !item)
+    {
+        return NULL;
+    }
 
-	/* Try to open the file */
-	fh = CreateFile(savename, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
-	if (fh == INVALID_HANDLE_VALUE) {
-		HRESULT hr = StringCchPrintf(msg, (2*MAX_PATH+100),"Cannot open %s", savename);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_PRINTF);
-			return NULL;
-		}
-		sdkdiff_UI(TRUE);
-		MessageBox(hwndClient, msg, "Sdkdiff", MB_ICONSTOP|MB_OK);
-		sdkdiff_UI(FALSE);
-		return NULL;
-	}
+    /* Try to open the file */
+    fh = CreateFile(savename, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, 0, NULL);
+    if (fh == INVALID_HANDLE_VALUE)
+    {
+        HRESULT hr = StringCchPrintf(msg, (2*MAX_PATH+100),"Cannot open %s", savename);
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_PRINTF);
+            return NULL;
+        }
+        sdkdiff_UI(TRUE);
+        MessageBox(hwndClient, msg, "Sdkdiff", MB_ICONSTOP|MB_OK);
+        sdkdiff_UI(FALSE);
+        return NULL;
+    }
 
-	/* Make sure the composite list has been built */
-	if (item->secs_composite == NULL) {
-		ci_makecomposite(item);
-	}
+    /* Make sure the composite list has been built */
+    if (item->secs_composite == NULL)
+    {
+        ci_makecomposite(item);
+    }
 
-	/* write out the header line */
-	list = view_getcomplist(view);
-	lhead = complist_getdescription(list);
-	HRESULT hr = StringCchPrintf(msg, (2*MAX_PATH+100), "-- %s -- %s -- includes %s%s%s%s%s lines\r\n",
-			 lhead,
-			 item->tag,
-			 (LPSTR) ((compopts & INCLUDE_SAME) ? "identical," : ""),
-			 (LPSTR) ((compopts & INCLUDE_LEFTONLY) ? "left-only," : ""),
-			 (LPSTR) ((compopts & INCLUDE_RIGHTONLY) ? "right-only," : ""),
-			 (LPSTR) ((compopts & INCLUDE_MOVEDLEFT) ? "moved-left," : ""),
-			 (LPSTR) ((compopts & INCLUDE_MOVEDRIGHT) ? "moved-right" : "") );
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_PRINTF);
-		return NULL;
-	}
-	WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
-	complist_freedescription(list, lhead);
-		
-	/* Write out every line in every section on the composite
-	 * list to the temp file.
-	 */
-    for( sec=(SECTION)List_First(item->secs_composite);  sec!=NULL;  sec = (SECTION)List_Next((LPVOID)sec)) {
-		tag = "    ";  /* avoid strange diagnostic */
-		/* get the tag field based on the section state*/
-		switch(section_getstate(sec)) {
+    /* write out the header line */
+    list = view_getcomplist(view);
+    lhead = complist_getdescription(list);
+    HRESULT hr = StringCchPrintf(msg, (2*MAX_PATH+100), "-- %s -- %s -- includes %s%s%s%s%s lines\r\n",
+                                 lhead,
+                                 item->tag,
+                                 (LPSTR) ((compopts & INCLUDE_SAME) ? "identical," : ""),
+                                 (LPSTR) ((compopts & INCLUDE_LEFTONLY) ? "left-only," : ""),
+                                 (LPSTR) ((compopts & INCLUDE_RIGHTONLY) ? "right-only," : ""),
+                                 (LPSTR) ((compopts & INCLUDE_MOVEDLEFT) ? "moved-left," : ""),
+                                 (LPSTR) ((compopts & INCLUDE_MOVEDRIGHT) ? "moved-right" : "") );
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_PRINTF);
+        return NULL;
+    }
+    WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
+    complist_freedescription(list, lhead);
 
-		case STATE_SAME:
-			if (!(compopts & INCLUDE_SAME))
-				continue;
-			tag = "    ";
-			break;
+    /* Write out every line in every section on the composite
+     * list to the temp file.
+     */
+    for( sec=(SECTION)List_First(item->secs_composite);  sec!=NULL;  sec = (SECTION)List_Next((LPVOID)sec))
+    {
+        tag = "    ";  /* avoid strange diagnostic */
+        /* get the tag field based on the section state*/
+        switch(section_getstate(sec))
+        {
 
-		case STATE_LEFTONLY:
-		case STATE_SIMILARLEFT:
-			if (!(compopts & INCLUDE_LEFTONLY))
-				continue;
-			tag = " <! ";
-			break;
-		case STATE_RIGHTONLY:
-		case STATE_SIMILARRIGHT:
-			if (!(compopts & INCLUDE_RIGHTONLY))
-				continue;
-			tag = " !> ";
-			break;
+        case STATE_SAME:
+            if (!(compopts & INCLUDE_SAME))
+                continue;
+            tag = "    ";
+            break;
 
-		case STATE_MOVEDLEFT:
-			if (!(compopts & INCLUDE_MOVEDLEFT))
-				continue;
-			tag = " <- ";
-			break;
+        case STATE_LEFTONLY:
+        case STATE_SIMILARLEFT:
+            if (!(compopts & INCLUDE_LEFTONLY))
+                continue;
+            tag = " <! ";
+            break;
+        case STATE_RIGHTONLY:
+        case STATE_SIMILARRIGHT:
+            if (!(compopts & INCLUDE_RIGHTONLY))
+                continue;
+            tag = " !> ";
+            break;
 
-		case STATE_MOVEDRIGHT:
-			if (!(compopts & INCLUDE_MOVEDRIGHT))
-				continue;
-			tag = " -> ";
-			break;
-		}
+        case STATE_MOVEDLEFT:
+            if (!(compopts & INCLUDE_MOVEDLEFT))
+                continue;
+            tag = " <- ";
+            break;
 
-		/* write out each line in this section.
-		 * non-standard traverse of list as we only
-		 * want to go from section first to section last
-		 * inclusive.
-		 */
-		for (line = section_getfirstline(sec); line != NULL; line = (LINE)List_Next(line)) {
-			/* write out to file */
-			text = line_gettext(line);
-			WriteFile(fh, tag, lstrlen(tag), &cbWritten, NULL);
-			WriteFile(fh, text, lstrlen(text), &cbWritten, NULL);
-			++linecount;
+        case STATE_MOVEDRIGHT:
+            if (!(compopts & INCLUDE_MOVEDRIGHT))
+                continue;
+            tag = " -> ";
+            break;
+        }
 
-			if (line == section_getlastline(sec))
-				break;
-		}
-	}
+        /* write out each line in this section.
+         * non-standard traverse of list as we only
+         * want to go from section first to section last
+         * inclusive.
+         */
+        for (line = section_getfirstline(sec); line != NULL; line = (LINE)List_Next(line))
+        {
+            /* write out to file */
+            text = line_gettext(line);
+            WriteFile(fh, tag, lstrlen(tag), &cbWritten, NULL);
+            WriteFile(fh, text, lstrlen(text), &cbWritten, NULL);
+            ++linecount;
 
-	/* Write the footer */
-	hr = StringCchPrintf(msg, (2*MAX_PATH+100),"-- %u lines listed\r\n", linecount);
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_PRINTF);
-		return NULL;
-	}
-	WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
+            if (line == section_getlastline(sec))
+                break;
+        }
+    }
 
-	/* Close the file and return */
-	CloseHandle(fh);
-	return savename;
+    /* Write the footer */
+    hr = StringCchPrintf(msg, (2*MAX_PATH+100),"-- %u lines listed\r\n", linecount);
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_PRINTF);
+        return NULL;
+    }
+    WriteFile(fh, msg, lstrlen(msg), &cbWritten, NULL);
+
+    /* Close the file and return */
+    CloseHandle(fh);
+    return savename;
 }
 
 /*
@@ -639,27 +698,29 @@ compitem_writefile(VIEW view, COMPITEM item, LPSTR savename, int compopts)
 void
 compitem_freefilename(COMPITEM item, int option, LPSTR filename)
 {
-    if ((item == NULL) || (filename == NULL)) {
+    if ((item == NULL) || (filename == NULL))
+    {
         return;
     }
 
-    switch (option) {
+    switch (option)
+    {
 
-        case CI_LEFT:
-            dir_freeopenname(file_getdiritem(item->left), filename);
-            break;
+    case CI_LEFT:
+        dir_freeopenname(file_getdiritem(item->left), filename);
+        break;
 
-        case CI_RIGHT:
-            dir_freeopenname(file_getdiritem(item->right), filename);
-            break;
+    case CI_RIGHT:
+        dir_freeopenname(file_getdiritem(item->right), filename);
+        break;
 
-        case CI_COMP:
+    case CI_COMP:
 
-            /* this is a temporary file we created. Delete it. */
-            DeleteFile(filename);
+        /* this is a temporary file we created. Delete it. */
+        DeleteFile(filename);
 
-            HeapFree(GetProcessHeap(), NULL, filename);
-            break;
+        HeapFree(GetProcessHeap(), NULL, filename);
+        break;
     }
 }
 
@@ -671,7 +732,8 @@ compitem_freefilename(COMPITEM item, int option, LPSTR filename)
 void
 compitem_setmark(COMPITEM item, BOOL bMark)
 {
-    if (item == NULL) {
+    if (item == NULL)
+    {
         return;
     }
 
@@ -683,9 +745,12 @@ compitem_setmark(COMPITEM item, BOOL bMark)
 BOOL
 compitem_getmark(COMPITEM item)
 {
-    if (item == NULL) {
+    if (item == NULL)
+    {
         return(FALSE);
-    } else {
+    }
+    else
+    {
         return(item->bMarked);
     }
 }
@@ -699,13 +764,15 @@ BOOL IsDocName(DIRITEM di)
     BOOL bRet = FALSE;
     LPSTR name = dir_getrelname(di);
     LPSTR ext;                                   /* extension part of name */
-    if (name!=NULL) {                            /* there is a name */
+    if (name!=NULL)                              /* there is a name */
+    {
         ext = My_mbsrchr(name, '.');
-        if (ext!=NULL) {                        /* there is a dot in name */
+        if (ext!=NULL)                          /* there is a dot in name */
+        {
             ++ext;                              /* skip past the dot */
             if (   (0==lstrcmp(ext,"doc"))      /* N.B depends on name being lower case */
-                   ||  (0==lstrcmp(ext,"txt"))
-                   ||  (0==lstrcmp(ext,"rtf"))
+                    ||  (0==lstrcmp(ext,"txt"))
+                    ||  (0==lstrcmp(ext,"rtf"))
                )
                 bRet = TRUE;                /* doc type */
         }
@@ -723,18 +790,20 @@ BOOL IsCName(DIRITEM di)
     LPSTR name = dir_getrelname(di);
     LPSTR ext;                                   /* extension part of name */
 
-    if (name!=NULL) {                          /* there is a name */
+    if (name!=NULL)                            /* there is a name */
+    {
 
         ext = My_mbsrchr(name, '.');
-        if (ext!=NULL) {                      /* there is a dot in the name */
+        if (ext!=NULL)                        /* there is a dot in the name */
+        {
 
             ++ext;                            /* skip past the dot */
             if (  (0==lstrcmp(ext,"c"))
-                  || (0==lstrcmp(ext,"h"))
-                  || (0==lstrcmp(ext,"cxx"))
-                  || (0==lstrcmp(ext,"hxx"))
-                  || (0==lstrcmp(ext,"cpp"))
-                  || (0==lstrcmp(ext,"hpp"))
+                    || (0==lstrcmp(ext,"h"))
+                    || (0==lstrcmp(ext,"cxx"))
+                    || (0==lstrcmp(ext,"hxx"))
+                    || (0==lstrcmp(ext,"cpp"))
+                    || (0==lstrcmp(ext,"hpp"))
                )
                 bRet = TRUE;                /*  "C" type */
         }
@@ -751,13 +820,15 @@ static char LeftRoot[MAX_PATH];
 void compitem_SetCopyPaths(LPSTR RightPath, LPSTR LeftPath)
 {
     HRESULT hr = StringCchCopy(LeftRoot, MAX_PATH, LeftPath);
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_COPY);
-	}
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_COPY);
+    }
     hr = StringCchCopy(RightRoot, MAX_PATH, RightPath);
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_COPY);
-	}
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_COPY);
+    }
 
 } /* compitem_SetCopyPaths */
 
@@ -765,18 +836,20 @@ void compitem_SetCopyPaths(LPSTR RightPath, LPSTR LeftPath)
 void FindDelimiters(DIRITEM leftname, DIRITEM rightname, LPSTR delims)
 {
     extern BOOL gbPerverseCompare; // in sdkdiff.c
-	HRESULT hr;
+    HRESULT hr;
 
-	if (gbPerverseCompare) {
-		hr = StringCchCopy(delims, 64, ".!?;\n");
-		if (FAILED(hr)) 
-			OutputError(hr, IDS_SAFE_COPY);
-	}
-	else { /* default - guess */
+    if (gbPerverseCompare)
+    {
+        hr = StringCchCopy(delims, 64, ".!?;\n");
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
+    }
+    else   /* default - guess */
+    {
         hr = StringCchCopy(delims, 64, "\n");
-		if (FAILED(hr)) 
-			OutputError(hr, IDS_SAFE_COPY);
-	}
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
+    }
 
 } /* FindDelimiters */
 
@@ -791,20 +864,24 @@ ci_copytext(LPSTR in)
 {
     LPSTR out;
 
-    if (in == NULL) {
+    if (in == NULL)
+    {
         out = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, 1);
-		if (out == NULL)
-			return NULL;
+        if (out == NULL)
+            return NULL;
         out[0] = '\0';
-    } else {
+    }
+    else
+    {
         out = (char*)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, lstrlen(in) + 1);
-		if (out == NULL)
-			return NULL;
-		HRESULT hr = StringCchCopy(out, (lstrlen(in)+1), in);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			return NULL;
-		}
+        if (out == NULL)
+            return NULL;
+        HRESULT hr = StringCchCopy(out, (lstrlen(in)+1), in);
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_COPY);
+            return NULL;
+        }
     }
     return(out);
 } /* ci_copytext */
@@ -814,52 +891,62 @@ LPSTR ci_AddTimeString(LPSTR in, COMPITEM ci, DIRITEM leftname, DIRITEM rightnam
     FILETIME ftLeft;
     FILETIME ftRight;
     long rc;
-    char buff[400] = {0}; 
+    char buff[400] = {0};
     LPTSTR lpStr;
 
     HRESULT hr = StringCchCatN(buff, 400,in, sizeof(buff)-1);
-	if (FAILED(hr)) {
-		OutputError(hr, IDS_SAFE_CAT);
-		return NULL;
-	}
+    if (FAILED(hr))
+    {
+        OutputError(hr, IDS_SAFE_CAT);
+        return NULL;
+    }
 
     ftLeft = file_GetTime(ci->left);
     ftRight = file_GetTime(ci->right);
     if ((ftLeft.dwLowDateTime || ftLeft.dwHighDateTime) &&
-        (ftRight.dwLowDateTime || ftRight.dwHighDateTime))
+            (ftRight.dwLowDateTime || ftRight.dwHighDateTime))
     {
         rc = CompareFileTime(&ftLeft, &ftRight);
 
         if((lpStr = (LPSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (lstrlen(in)+1)*sizeof(TCHAR))) == NULL)
             return NULL;
         hr = StringCchCopy(lpStr, (lstrlen(in)+1*sizeof(TCHAR)), in);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_COPY);
-			return NULL;
-		}
-        if (rc<0) {
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_COPY);
+            return NULL;
+        }
+        if (rc<0)
+        {
             LPSTR str = dir_getrootdescription(dir_getlist(rightname));
             hr = StringCchPrintf(buff, 400, LoadRcString(IDS_IS_MORE_RECENT), lpStr, str);
-			if (FAILED(hr)) {
-				OutputError(hr, IDS_SAFE_PRINTF);
-				return NULL;
-			}
+            if (FAILED(hr))
+            {
+                OutputError(hr, IDS_SAFE_PRINTF);
+                return NULL;
+            }
             dir_freerootdescription(dir_getlist(rightname), str);
-        } else if (rc>0) {
+        }
+        else if (rc>0)
+        {
             LPSTR str = dir_getrootdescription(dir_getlist(leftname));
             hr = StringCchPrintf(buff, 400, LoadRcString(IDS_IS_MORE_RECENT), lpStr, str);
-			if (FAILED(hr)) {
-				OutputError(hr, IDS_SAFE_PRINTF);
-				return NULL;
-			}
+            if (FAILED(hr))
+            {
+                OutputError(hr, IDS_SAFE_PRINTF);
+                return NULL;
+            }
             dir_freerootdescription(dir_getlist(leftname), str);
-		} else {
+        }
+        else
+        {
             hr = StringCchCat(buff, 400, LoadRcString(IDS_IDENTICAL_TIMES));
-			if (FAILED(hr)) {
-				OutputError(hr, IDS_SAFE_CAT);
-				return NULL;
-			}
-		}
+            if (FAILED(hr))
+            {
+                OutputError(hr, IDS_SAFE_CAT);
+                return NULL;
+            }
+        }
         HeapFree(GetProcessHeap(), NULL, lpStr);
     }
 
@@ -901,7 +988,8 @@ ci_onesection(FILEDATA file)
 void
 ci_makecomposite(COMPITEM ci)
 {
-    if (ci->secs_composite != NULL) {
+    if (ci->secs_composite != NULL)
+    {
         return;
     }
 
@@ -910,7 +998,8 @@ ci_makecomposite(COMPITEM ci)
     /* if there is only one file, make a single item list
      * of sections
      */
-    if (ci->left == NULL) {
+    if (ci->left == NULL)
+    {
         ci->secs_left = NULL;
         ci->secs_right = ci_onesection(ci->right);
 
@@ -919,7 +1008,9 @@ ci_makecomposite(COMPITEM ci)
          */
         ci->secs_composite = ci_onesection(ci->right);
         return;
-    } else if (ci->right == NULL) {
+    }
+    else if (ci->right == NULL)
+    {
         ci->secs_right = NULL;
         ci->secs_left = ci_onesection(ci->left);
 
@@ -940,21 +1031,25 @@ ci_makecomposite(COMPITEM ci)
      * refresh the outline view since any action that gets this function
      * called will refresh the outline view anyway.
      */
-    if (ci->state == STATE_DIFFER) {
+    if (ci->state == STATE_DIFFER)
+    {
         if (  (List_Card(ci->secs_composite) == 1)
-              && (STATE_SAME==section_getstate((SECTION)List_First(ci->secs_composite)))
-           ) {
+                && (STATE_SAME==section_getstate((SECTION)List_First(ci->secs_composite)))
+           )
+        {
             sdkdiff_UI(TRUE);
             MessageBox(hwndClient, LoadRcString(IDS_DIFF_BLANK_ONLY),
                        "Sdkdiff", MB_ICONINFORMATION|MB_OK);
             sdkdiff_UI(FALSE);
 
-            if (ci->result != NULL) {
+            if (ci->result != NULL)
+            {
                 HeapFree(GetProcessHeap(), NULL, ci->result);
                 ci->result = NULL;
             }
             ci->result = ci_copytext(LoadRcString(IDS_DIFF_BLANK_ONLY));
-        } else ci->state = STATE_DIFFER;  /* could be that blanks option has
+        }
+        else ci->state = STATE_DIFFER;  /* could be that blanks option has
                                              changed and it was blanks only
                                              differ which now counts as different
                                           */
@@ -1035,7 +1130,8 @@ ci_compare(COMPITEM ci)
     lines_left = file_getlinelist(ci->left);
     lines_right = file_getlinelist(ci->right);
 
-    if ((lines_left == NULL) || (lines_right == NULL)) {
+    if ((lines_left == NULL) || (lines_right == NULL))
+    {
         ci->secs_left = NULL;
         ci->secs_right = NULL;
         ci->secs_composite = NULL;
@@ -1048,7 +1144,8 @@ ci_compare(COMPITEM ci)
     StartTicks = GetTickCount();
     Ticks = StartTicks;
 #endif
-    do {
+    do
+    {
 
         /* we have made no changes so far this time round the
          * loop
@@ -1063,7 +1160,8 @@ ci_compare(COMPITEM ci)
                                   (LINE)List_Last(lines_right), NULL);
 
         /* link up matching unique lines between these sections */
-        if (section_match(whole_left, whole_right, bTryDups)) {
+        if (section_match(whole_left, whole_right, bTryDups))
+        {
             bChanges = TRUE;
         }
 
@@ -1072,11 +1170,13 @@ ci_compare(COMPITEM ci)
         section_delete(whole_right);
 
         /* discard previous section lists if made */
-        if (ci->secs_left) {
+        if (ci->secs_left)
+        {
             section_deletelist(ci->secs_left);
             ci->secs_left = NULL;
         }
-        if (ci->secs_right) {
+        if (ci->secs_right)
+        {
             section_deletelist(ci->secs_right);
             ci->secs_right = NULL;
         }
@@ -1089,22 +1189,25 @@ ci_compare(COMPITEM ci)
          * sections that are not matched. returns true if any
          * further links were made
          */
-        if (section_matchlists(ci->secs_left, ci->secs_right, bTryDups)) {
+        if (section_matchlists(ci->secs_left, ci->secs_right, bTryDups))
+        {
             bChanges = TRUE;
         }
 
 #ifdef trace
         /* profiling */
-        {   char Msg[80];
+        {
+            char Msg[80];
             DWORD tks = GetTickCount();
             HRESULT hr = StringCchPrintf( Msg, 80, "ci_compare loop %ld, total %d %s %s \n"
-                      , tks-Ticks, tks-StartTicks
-                      , (bChanges ? "Changes," : "No changes,")
-                      , (bTryDups ? "Was trying dups." : "Was not trying dups.")
-                    );
-			if (FAILED(hr)) {
-				OutputError(hr, IDS_SAFE_PRINTF);
-			}
+                                          , tks-Ticks, tks-StartTicks
+                                          , (bChanges ? "Changes," : "No changes,")
+                                          , (bTryDups ? "Was trying dups." : "Was not trying dups.")
+                                        );
+            if (FAILED(hr))
+            {
+                OutputError(hr, IDS_SAFE_PRINTF);
+            }
             Trace_File(Msg);
             Ticks = GetTickCount();
             /* correct for time spent profiling */
@@ -1114,12 +1217,15 @@ ci_compare(COMPITEM ci)
 
         /* repeat as long as we keep adding new links */
         if (bChanges) bTryDups = FALSE;
-        else if ((bTryDups==FALSE) & Algorithm2) {bTryDups = TRUE;
+        else if ((bTryDups==FALSE) & Algorithm2)
+        {
+            bTryDups = TRUE;
             bChanges = TRUE;  // at least one more go
         }
 
 
-    } while (bChanges);
+    }
+    while (bChanges);
 
     /* all possible lines linked, and section lists made .
      * combine the two section lists to get a view of the
@@ -1132,11 +1238,13 @@ ci_compare(COMPITEM ci)
     ci->secs_composite = section_makecomposite(ci->secs_left, ci->secs_right);
 #ifdef trace
     Ticks = GetTickCount()-StartTicks;
-    {   char Msg[80];
+    {
+        char Msg[80];
         HRESULT hr = StringCchPrintf( Msg, 80, "section_makecomposite time = %d\n", Ticks);
-		if (FAILED(hr)) {
-			OutputError(hr, IDS_SAFE_PRINTF);
-		}
+        if (FAILED(hr))
+        {
+            OutputError(hr, IDS_SAFE_PRINTF);
+        }
         Trace_File(Msg);
     }
 #endif
@@ -1156,20 +1264,28 @@ void SetStateAndTag( COMPITEM ci, DIRITEM leftname, DIRITEM rightname, BOOL fExa
     LPSTR str2 = dir_getrelname(rightname);
     char buf[2*MAX_PATH+20];
     TCHAR tmpbuf[MAX_PATH];
-	HRESULT hr;
+    HRESULT hr;
 
     /* if only one file - set name to that */
-    if (ci->left == NULL) {
+    if (ci->left == NULL)
+    {
         ci->tag = ci_copytext(str2);
-    } else if (ci->right == NULL) {
+    }
+    else if (ci->right == NULL)
+    {
         ci->tag = ci_copytext(str1);
-    } else {
-        if (lstrcmpi(str1, str2) == 0) {
+    }
+    else
+    {
+        if (lstrcmpi(str1, str2) == 0)
+        {
             ci->tag = ci_copytext(str2);
-        } else {
+        }
+        else
+        {
             hr = StringCchPrintf(buf, (2*MAX_PATH+20), "%s : %s", str1, str2);
-			if (FAILED(hr)) 
-				OutputError(hr, IDS_SAFE_PRINTF);
+            if (FAILED(hr))
+                OutputError(hr, IDS_SAFE_PRINTF);
             ci->tag = ci_copytext(buf);
         }
     }
@@ -1178,7 +1294,8 @@ void SetStateAndTag( COMPITEM ci, DIRITEM leftname, DIRITEM rightname, BOOL fExa
     dir_freerelname(rightname, str2);
 
 
-    if (ci->left == NULL) {
+    if (ci->left == NULL)
+    {
 
         BOOL Readable = TRUE;
         // At this point we COULD try to set Readable but we would need
@@ -1188,31 +1305,35 @@ void SetStateAndTag( COMPITEM ci, DIRITEM leftname, DIRITEM rightname, BOOL fExa
 
         str1 = dir_getrootdescription(dir_getlist(rightname));
         hr = StringCchCopy(tmpbuf, MAX_PATH, (Readable ? TEXT("") : LoadRcString(IDS_UNREADABLE)));
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_COPY);
         hr = StringCchPrintf(buf, (2*MAX_PATH+20), LoadRcString(IDS_ONLY_IN), str1, tmpbuf);
-		if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
+        if (FAILED(hr))
+            OutputError(hr, IDS_SAFE_PRINTF);
         dir_freerootdescription(dir_getlist(rightname), str1);
 
         ci->result = ci_copytext(buf);
         ci->state = STATE_FILERIGHTONLY;
-    } else if (ci->right == NULL) {
+    }
+    else if (ci->right == NULL)
+    {
 
         BOOL Readable = TRUE;        // See above
 
         str1 = dir_getrootdescription(dir_getlist(leftname));
         hr = StringCchCopy(tmpbuf, MAX_PATH, (Readable ? TEXT("") : LoadRcString(IDS_UNREADABLE)));
         if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_COPY);
-		hr = StringCchPrintf(buf, (2*MAX_PATH+20), LoadRcString(IDS_ONLY_IN), str1, tmpbuf);
+            OutputError(hr, IDS_SAFE_COPY);
+        hr = StringCchPrintf(buf, (2*MAX_PATH+20), LoadRcString(IDS_ONLY_IN), str1, tmpbuf);
         if (FAILED(hr))
-			OutputError(hr, IDS_SAFE_PRINTF);
-		dir_freerootdescription(dir_getlist(leftname), str1);
+            OutputError(hr, IDS_SAFE_PRINTF);
+        dir_freerootdescription(dir_getlist(leftname), str1);
 
         ci->result = ci_copytext(buf);
         ci->state = STATE_FILELEFTONLY;
-    } else {
+    }
+    else
+    {
         /* two files - are they the same ? compare
          * the file sizes, and if necessary, checksums.
          * if the sizes differ, we don't need to checksum.
@@ -1221,14 +1342,20 @@ void SetStateAndTag( COMPITEM ci, DIRITEM leftname, DIRITEM rightname, BOOL fExa
         // if there is some error in the file, we can mark them
         // as differs and set the text to indicate that one or
         // both is unreadable.
-        if (dir_fileerror(leftname)) {
+        if (dir_fileerror(leftname))
+        {
             ci->state = STATE_DIFFER;
-            if (dir_fileerror(rightname)) {
+            if (dir_fileerror(rightname))
+            {
                 ci->result = ci_copytext(LoadRcString(IDS_BOTH_UNREADABLE));
-            } else {
+            }
+            else
+            {
                 ci->result = ci_copytext(LoadRcString(IDS_LEFT_UNREADABLE));
             }
-        } else if (dir_fileerror(rightname)) {
+        }
+        else if (dir_fileerror(rightname))
+        {
             ci->state = STATE_DIFFER;
             ci->result = ci_copytext(LoadRcString(IDS_RIGHT_UNREADABLE));
         }
@@ -1263,43 +1390,62 @@ void SetStateAndTag( COMPITEM ci, DIRITEM leftname, DIRITEM rightname, BOOL fExa
         */
 
 
-        else if (dir_getfilesize(leftname) != dir_getfilesize(rightname)) {
+        else if (dir_getfilesize(leftname) != dir_getfilesize(rightname))
+        {
             ci->state = STATE_DIFFER;
             ci->result = ci_AddTimeString(LoadRcString(IDS_DIFFERENT), ci, leftname, rightname);
-        } else if (dir_validchecksum(leftname) && dir_validchecksum(rightname)) {
-            if (dir_getchecksum(leftname) == dir_getchecksum(rightname)) {
+        }
+        else if (dir_validchecksum(leftname) && dir_validchecksum(rightname))
+        {
+            if (dir_getchecksum(leftname) == dir_getchecksum(rightname))
+            {
                 ci->result =  ci_copytext(LoadRcString(IDS_IDENTICAL));
                 ci->state = STATE_SAME;
-            } else {
+            }
+            else
+            {
                 ci->result = ci_AddTimeString(LoadRcString(IDS_DIFFERENT), ci, leftname, rightname);
                 ci->state = STATE_DIFFER;
             }
-        } else if (!fExact) {
+        }
+        else if (!fExact)
+        {
             ci->result = ci_AddTimeString(LoadRcString(IDS_SAME_SIZE), ci, leftname, rightname);
             ci->state = STATE_SAME;
-        } else {
+        }
+        else
+        {
             DWORD LSum = dir_getchecksum(leftname);
             DWORD RSum = dir_getchecksum(rightname);
 
-            if (!dir_validchecksum(rightname) ) {
-                if (!dir_validchecksum(leftname) ) {
+            if (!dir_validchecksum(rightname) )
+            {
+                if (!dir_validchecksum(leftname) )
+                {
                     ci->result = ci_AddTimeString(LoadRcString(IDS_BOTH_UNREADABLE), ci, leftname, rightname);
                     ci->state = STATE_DIFFER;
-                } else {
+                }
+                else
+                {
                     ci->result = ci_AddTimeString(LoadRcString(IDS_RIGHT_UNREADABLE), ci, leftname, rightname);
                     ci->state = STATE_DIFFER;
                 }
-            } else if (!dir_validchecksum(leftname) ) {
+            }
+            else if (!dir_validchecksum(leftname) )
+            {
                 ci->result = ci_AddTimeString(LoadRcString(IDS_LEFT_UNREADABLE), ci, leftname, rightname);
                 ci->state = STATE_DIFFER;
-            } else if (LSum!=RSum) {
+            }
+            else if (LSum!=RSum)
+            {
                 ci->result = ci_AddTimeString(LoadRcString(IDS_DIFFERENT), ci, leftname, rightname);
                 ci->state = STATE_DIFFER;
-            } else {
+            }
+            else
+            {
                 ci->result =  ci_copytext(LoadRcString(IDS_IDENTICAL));
                 ci->state = STATE_SAME;
             }
         }
     }
 } /* SetStateAndTag */
- 

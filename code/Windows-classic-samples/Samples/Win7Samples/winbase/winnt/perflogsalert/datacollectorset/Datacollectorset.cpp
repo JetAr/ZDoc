@@ -1,4 +1,4 @@
-/*++
+﻿/*++
  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -8,7 +8,7 @@
 
 Abstract:
 
-	This sample demonstrates how PLA API can programmatically collect performance data. 
+	This sample demonstrates how PLA API can programmatically collect performance data.
 
 Environment:
 
@@ -36,7 +36,7 @@ CreateArray(
     SAFEARRAY **OutArray,
     ULONG     Count,
     ...
-    )
+)
 /*++
 
 Routine Description:
@@ -45,7 +45,7 @@ Routine Description:
 
 Arguments:
 
-    OutArray - Pointer that will point to the 
+    OutArray - Pointer that will point to the
 
     Count - Number of strings that will be the array.
 
@@ -60,7 +60,7 @@ Return Value:
     HRESULT   hr;
     ULONG     i;
     PCWSTR    String;
-    va_list   va_marker;    
+    va_list   va_marker;
     SAFEARRAY *Array = NULL;
     BSTR      *Data  = NULL;
 
@@ -72,7 +72,8 @@ Return Value:
 
     va_start(va_marker, Count);
 
-    for (i = 0; i < Count; i++) {
+    for (i = 0; i < Count; i++)
+    {
         String = va_arg(va_marker, PCWSTR);
 
         Data[i] = SysAllocString(String);
@@ -84,11 +85,13 @@ Return Value:
     *OutArray = Array;
 
 Exit:
-    if (NULL != Data) {
+    if (NULL != Data)
+    {
         SafeArrayUnaccessData(Array);
     }
 
-    if (FAILED(hr) && NULL != Array) {
+    if (FAILED(hr) && NULL != Array)
+    {
         SafeArrayDestroy(Array);
     }
 
@@ -98,7 +101,7 @@ Exit:
 HRESULT
 PrintDataCollectors(
     IDataCollectorSet *CollectorSet
-    )
+)
 /*++
 
 Routine Description:
@@ -131,7 +134,8 @@ Return Value:
     CHECK_HR(hr);
 
     Index.vt = VT_I4;
-    for (Index.lVal = 0; Index.lVal < Count; Index.lVal++) {
+    for (Index.lVal = 0; Index.lVal < Count; Index.lVal++)
+    {
         RELEASE(Collector);
         hr = Collectors->get_Item(Index, &Collector);
         CHECK_HR(hr);
@@ -160,7 +164,7 @@ Exit:
 HRESULT
 CreatePerformanceCounterCollector(
     IDataCollectorCollection *Collectors
-    )
+)
 /*++
 
 Routine Description:
@@ -210,7 +214,7 @@ Return Value:
 Exit:
 
     FREE_SAFEARRAY(Counters);
-    
+
     RELEASE(Collector);
     RELEASE(PerfCollector);
 
@@ -220,7 +224,7 @@ Exit:
 HRESULT
 CreateTraceCollector(
     IDataCollectorCollection *Collectors
-    )
+)
 /*++
 
 Routine Description:
@@ -262,7 +266,7 @@ Exit:
 HRESULT
 CreateConfigurationCollector(
     IDataCollectorCollection *Collectors
-    )
+)
 /*++
 
 Routine Description:
@@ -325,7 +329,7 @@ Exit:
 HRESULT
 CreateAlertCollector(
     IDataCollectorCollection *Collectors
-    )
+)
 /*++
 
 Routine Description:
@@ -391,7 +395,7 @@ Exit:
 HRESULT
 CreateCollectorSet(
     BSTR Name
-    )
+)
 /*++
 
 Routine Description:
@@ -463,7 +467,7 @@ Exit:
 HRESULT
 DeleteCollectorSet(
     BSTR Name
-    )
+)
 /*++
 
 Routine Description:
@@ -497,7 +501,7 @@ Return Value:
     CHECK_HR(hr);
 
 Exit:
-    
+
     RELEASE(CollectorSet);
 
     return hr;
@@ -506,7 +510,7 @@ Exit:
 HRESULT
 StartCollectorSet(
     BSTR Name
-    )
+)
 /*++
 
 Routine Description:
@@ -540,7 +544,7 @@ Return Value:
     CHECK_HR(hr);
 
 Exit:
-    
+
     RELEASE(CollectorSet);
 
     return hr;
@@ -549,7 +553,7 @@ Exit:
 HRESULT
 StopCollectorSet(
     BSTR Name
-    )
+)
 /*++
 
 Routine Description:
@@ -583,7 +587,7 @@ Return Value:
     CHECK_HR(hr);
 
 Exit:
-    
+
     RELEASE(CollectorSet);
 
     return hr;
@@ -592,7 +596,7 @@ Exit:
 HRESULT
 QueryCollectorSet(
     BSTR Name
-    )
+)
 /*++
 
 Routine Description:
@@ -632,7 +636,7 @@ Return Value:
     CHECK_HR(hr);
 
     wprintf(L"Name: %s\nStatus: %s\n", Name2, StatusNames[Status]);
-    
+
     hr = PrintDataCollectors(CollectorSet);
     CHECK_HR(hr);
 
@@ -687,7 +691,8 @@ Return Value:
     CHECK_HR(hr);
 
     Index.vt = VT_I4;
-    for (Index.lVal = 0; Index.lVal < Count; Index.lVal++) {
+    for (Index.lVal = 0; Index.lVal < Count; Index.lVal++)
+    {
         RELEASE(CollectorSet);
         hr = CollectorSets->get_Item(Index, &CollectorSet);
         CHECK_HR(hr);
@@ -721,41 +726,55 @@ int __cdecl wmain(int argc, WCHAR **argv)
     //
     // Check the argument count and initialize COM
     //
-    if (3 != argc && 1 != argc) {
-        fwprintf(stderr, 
+    if (3 != argc && 1 != argc)
+    {
+        fwprintf(stderr,
                  L"Usage: %s [<create|delete|start|stop|query> <name>]\n",
                  argv[0]);
         return -1;
     }
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         fwprintf(stderr, L"CoInitializeEx failed: 0x%x\n", hr);
         return hr;
     }
 
-    if (1 == argc) {
+    if (1 == argc)
+    {
         //
         // No arguments, just list the DCSs
         //
         hr = ListCollectorSets();
         CHECK_HR(hr);
-    } else {
+    }
+    else
+    {
         //
         // Create BSTR name and call worker function based on the arguments
         //
         Name = SysAllocString(argv[2]);
         CHECK_MEMORY(Name);
 
-        if (0 == _wcsicmp(L"create", argv[1])) {
+        if (0 == _wcsicmp(L"create", argv[1]))
+        {
             hr = CreateCollectorSet(Name);
-        } else if (0 == _wcsicmp(L"delete", argv[1])) {
+        }
+        else if (0 == _wcsicmp(L"delete", argv[1]))
+        {
             hr = DeleteCollectorSet(Name);
-        } else if (0 == _wcsicmp(L"start", argv[1])) {
+        }
+        else if (0 == _wcsicmp(L"start", argv[1]))
+        {
             hr = StartCollectorSet(Name);
-        } else if (0 == _wcsicmp(L"stop", argv[1])) {
+        }
+        else if (0 == _wcsicmp(L"stop", argv[1]))
+        {
             hr = StopCollectorSet(Name);
-        } else if (0 == _wcsicmp(L"query", argv[1])) {
+        }
+        else if (0 == _wcsicmp(L"query", argv[1]))
+        {
             hr = QueryCollectorSet(Name);
         }
         CHECK_HR(hr);
@@ -767,9 +786,12 @@ Exit:
 
     CoUninitialize();
 
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         fwprintf(stderr, L"\nError: 0x%x.\n", hr);
-    } else {
+    }
+    else
+    {
         wprintf(L"\nSuccess.\n");
     }
 

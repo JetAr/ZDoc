@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Microsoft OLE DB TABLECOPY Sample
 // Copyright (C) 1991-2000 Microsoft Corporation
 //
@@ -27,23 +27,23 @@ class CProgress : public CDialogBase
 {
 public:
 
-	//Constructors
-	CProgress(HWND hWnd, HINSTANCE hInst);
-	virtual ~CProgress();
+    //Constructors
+    CProgress(HWND hWnd, HINSTANCE hInst);
+    virtual ~CProgress();
 
-	//members
-	static  BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	virtual INT_PTR Display();
-	virtual ULONG	Destroy();
+    //members
+    static  BOOL WINAPI DlgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+    virtual INT_PTR Display();
+    virtual ULONG	Destroy();
 
-	virtual BOOL SetHeading(WCHAR* pwszText);
-	virtual BOOL SetText(WCHAR* pwszText);
+    virtual BOOL SetHeading(WCHAR* pwszText);
+    virtual BOOL SetText(WCHAR* pwszText);
 
-	virtual BOOL Update(WCHAR* pwszText);
-	virtual BOOL Cancel();
+    virtual BOOL Update(WCHAR* pwszText);
+    virtual BOOL Cancel();
 
-	//data
-	BOOL		m_fCancel;
+    //data
+    BOOL		m_fCancel;
 };
 
 #endif //_PROGRESS_H_

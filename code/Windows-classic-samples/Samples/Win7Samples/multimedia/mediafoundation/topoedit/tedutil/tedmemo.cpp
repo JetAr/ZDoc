@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -34,7 +34,7 @@ HRESULT CTedAttributesSerializer::Serialize(ITedDataSaver* pSaver)
     UINT32 cItems;
     IFC( m_pAttributes->GetCount(&cItems) );
 
-    DWORD cUsedItems = 0;        
+    DWORD cUsedItems = 0;
     for(UINT32 i = 0; i < cItems; i++)
     {
         GUID gidKey;
@@ -235,7 +235,7 @@ CTedNodeMemo::CTedNodeMemo()
 {
 }
 
-CTedNodeMemo::CTedNodeMemo(double x, double y, const CAtlStringW& strLabel, int nID) 
+CTedNodeMemo::CTedNodeMemo(double x, double y, const CAtlStringW& strLabel, int nID)
     : m_x(x), m_y(y), m_strLabel(strLabel), m_nID(nID)
 {
 
@@ -249,15 +249,15 @@ CTedNodeMemo::~CTedNodeMemo()
     }
 }
 
-HRESULT CTedNodeMemo::Serialize(ITedDataSaver* pSaver) 
+HRESULT CTedNodeMemo::Serialize(ITedDataSaver* pSaver)
 {
     HRESULT hr = S_OK;
 
     CAtlStringW converter;
-    
+
     converter.Format(L"%f", m_x);
     IFC( pSaver->SaveData(L"X", converter) );
-    
+
     converter.Format(L"%f", m_y);
     IFC( pSaver->SaveData(L"Y", converter) );
 
@@ -284,7 +284,7 @@ Cleanup:
     return hr;
 }
 
-HRESULT CTedNodeMemo::Deserialize(ITedDataLoader* pLoader) 
+HRESULT CTedNodeMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
     DWORD cNodeAttributes;
@@ -305,7 +305,7 @@ HRESULT CTedNodeMemo::Deserialize(ITedDataLoader* pLoader)
     IFC( pLoader->LoadData(L"Label", &szData, 0) );
     m_strLabel = szData;
     CoTaskMemFree(szData);
-    
+
     IFC( pLoader->LoadData(L"NodeAttributesCount", &szData, 0) );
     cNodeAttributes =  wcstoul(szData, NULL, 10);
     CoTaskMemFree(szData);
@@ -361,17 +361,17 @@ CTedSourceMemo::CTedSourceMemo()
 {
 }
 
-CTedSourceMemo::CTedSourceMemo(double x, double y, const CAtlStringW& strLabel, int nID, const CAtlStringW& strSourceURL) 
+CTedSourceMemo::CTedSourceMemo(double x, double y, const CAtlStringW& strLabel, int nID, const CAtlStringW& strSourceURL)
     : CTedNodeMemo(x, y, strLabel, nID), m_strSourceURL(strSourceURL)
 {
 }
 
-HRESULT CTedSourceMemo::Serialize(ITedDataSaver* pSaver) 
+HRESULT CTedSourceMemo::Serialize(ITedDataSaver* pSaver)
 {
     HRESULT hr = S_OK;
 
     IFC(pSaver->BeginSaveObject(L"CTedSourceMemo"));
-    
+
     IFC(CTedNodeMemo::Serialize(pSaver));
 
     IFC(pSaver->SaveData(L"URL", m_strSourceURL));
@@ -381,7 +381,7 @@ Cleanup:
     return hr;
 }
 
-HRESULT CTedSourceMemo::Deserialize(ITedDataLoader* pLoader) 
+HRESULT CTedSourceMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
 
@@ -408,7 +408,7 @@ CTedOutputMemo::CTedOutputMemo(double x, double y, const CAtlStringW& strLabel, 
 {
 }
 
-HRESULT CTedOutputMemo::Serialize(ITedDataSaver* pSaver) 
+HRESULT CTedOutputMemo::Serialize(ITedDataSaver* pSaver)
 {
     HRESULT hr = S_OK;
 
@@ -418,7 +418,7 @@ Cleanup:
     return hr;
 }
 
-HRESULT CTedOutputMemo::Deserialize(ITedDataLoader* pLoader) 
+HRESULT CTedOutputMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
 
@@ -440,7 +440,7 @@ CTedAudioOutputMemo::CTedAudioOutputMemo(double x, double y, const CAtlStringW& 
 {
 }
 
-HRESULT CTedAudioOutputMemo::Serialize(ITedDataSaver* pSaver) 
+HRESULT CTedAudioOutputMemo::Serialize(ITedDataSaver* pSaver)
 {
     HRESULT hr = S_OK;
 
@@ -452,7 +452,7 @@ Cleanup:
     return hr;
 }
 
-HRESULT CTedAudioOutputMemo::Deserialize(ITedDataLoader* pLoader) 
+HRESULT CTedAudioOutputMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
 
@@ -465,7 +465,7 @@ Cleanup:
 ////////////////////////////////////////////////////
 //
 
-CTedVideoOutputMemo::CTedVideoOutputMemo() 
+CTedVideoOutputMemo::CTedVideoOutputMemo()
 {
 }
 
@@ -474,7 +474,7 @@ CTedVideoOutputMemo::CTedVideoOutputMemo(double x, double y, const CAtlStringW& 
 {
 }
 
-HRESULT CTedVideoOutputMemo::Serialize(ITedDataSaver* pSaver) 
+HRESULT CTedVideoOutputMemo::Serialize(ITedDataSaver* pSaver)
 {
     HRESULT hr = S_OK;
 
@@ -486,7 +486,7 @@ Cleanup:
     return hr;
 }
 
-HRESULT CTedVideoOutputMemo::Deserialize(ITedDataLoader* pLoader) 
+HRESULT CTedVideoOutputMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
 
@@ -499,7 +499,7 @@ Cleanup:
 ///////////////////////////////////////////////////////
 //
 
-CTedCustomOutputMemo::CTedCustomOutputMemo() 
+CTedCustomOutputMemo::CTedCustomOutputMemo()
 {
 }
 
@@ -533,7 +533,7 @@ HRESULT CTedCustomOutputMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
     LPWSTR converter = NULL;
-    
+
     IFC( CTedOutputMemo::Deserialize(pLoader) );
 
     IFC( pLoader->LoadData(L"CustomSinkID", &converter, 0) );
@@ -547,7 +547,7 @@ Cleanup:
 ///////////////////////////////////////////////////////
 //
 
-CTedTransformMemo::CTedTransformMemo() 
+CTedTransformMemo::CTedTransformMemo()
 {
 }
 
@@ -556,13 +556,13 @@ CTedTransformMemo::CTedTransformMemo(double x, double y, const CAtlStringW& strL
 {
 }
 
-HRESULT CTedTransformMemo::Serialize(ITedDataSaver* pSaver) 
+HRESULT CTedTransformMemo::Serialize(ITedDataSaver* pSaver)
 {
     HRESULT hr = S_OK;
 
     CAtlStringW converter;
     LPOLESTR clsidStr = NULL;
-    
+
     IFC(pSaver->BeginSaveObject(L"CTedTransformMemo"));
     IFC(CTedNodeMemo::Serialize(pSaver));
 
@@ -573,30 +573,30 @@ HRESULT CTedTransformMemo::Serialize(ITedDataSaver* pSaver)
 
     CoTaskMemFree(clsidStr);
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
-HRESULT CTedTransformMemo::Deserialize(ITedDataLoader* pLoader) 
+HRESULT CTedTransformMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
 
     LPWSTR converter;
-    
+
     IFC(CTedNodeMemo::Deserialize(pLoader));
 
     IFC(pLoader->LoadData(L"CLSID", &converter, 0));
     IFC(CLSIDFromString(W2OLE(converter), &m_clsid));
     CoTaskMemFree(converter);
-    
- Cleanup:
+
+Cleanup:
     return hr;
 }
 
 ///////////////////////////////////////////////////////
 //
 
-CTedTeeMemo::CTedTeeMemo() 
+CTedTeeMemo::CTedTeeMemo()
 {
 }
 
@@ -606,37 +606,37 @@ CTedTeeMemo::CTedTeeMemo(double x, double y, const CAtlStringW& strLabel, int nI
 
 }
 
-HRESULT CTedTeeMemo::Serialize(ITedDataSaver* pSaver) 
+HRESULT CTedTeeMemo::Serialize(ITedDataSaver* pSaver)
 {
     HRESULT hr = S_OK;
 
     CAtlStringW converter;
-    
+
     IFC(pSaver->BeginSaveObject(L"CTedTeeMemo"));
     IFC(CTedNodeMemo::Serialize(pSaver));
 
     converter.Format(L"%d", m_nNextOutputIndex);
     IFC(pSaver->SaveData(L"NextOutputIndex", converter));
 
- Cleanup:
+Cleanup:
     return hr;
 }
 
-HRESULT CTedTeeMemo::Deserialize(ITedDataLoader* pLoader) 
+HRESULT CTedTeeMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
 
     LPWSTR converter;
-    
+
     IFC(CTedNodeMemo::Deserialize(pLoader));
 
     IFC(pLoader->LoadData(L"NextOutputIndex", &converter, 0));
     m_nNextOutputIndex = _wtoi(converter);
     CoTaskMemFree(converter);
-    
- Cleanup:
+
+Cleanup:
     return hr;
-}    
+}
 ///////////////////////////////////////////////////////
 //
 
@@ -644,17 +644,17 @@ CTedConnectionMemo::CTedConnectionMemo()
 {
 }
 
-CTedConnectionMemo::CTedConnectionMemo(int nOutputNodeID, int nOutputPinID, int nInputNodeID, int nInputPinID) 
+CTedConnectionMemo::CTedConnectionMemo(int nOutputNodeID, int nOutputPinID, int nInputNodeID, int nInputPinID)
     : m_nOutputNodeID(nOutputNodeID), m_nOutputPinID(nOutputPinID)
     , m_nInputNodeID(nInputNodeID), m_nInputPinID(nInputPinID)
 {
 
 }
 
-HRESULT CTedConnectionMemo::Serialize(ITedDataSaver* pSaver) 
+HRESULT CTedConnectionMemo::Serialize(ITedDataSaver* pSaver)
 {
     HRESULT hr = S_OK;
-    
+
     CAtlStringW converter;
 
     IFC(pSaver->BeginSaveObject(L"CTedConnectionMemo"));
@@ -675,7 +675,7 @@ Cleanup:
     return hr;
 }
 
-HRESULT CTedConnectionMemo::Deserialize(ITedDataLoader* pLoader) 
+HRESULT CTedConnectionMemo::Deserialize(ITedDataLoader* pLoader)
 {
     HRESULT hr = S_OK;
 

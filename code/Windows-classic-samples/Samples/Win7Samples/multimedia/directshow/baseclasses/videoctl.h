@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: VideoCtl.h
 //
 // Desc: DirectShow base classes.
@@ -54,7 +54,8 @@ public:
     virtual CAggDirectDraw::~CAggDirectDraw() { };
 
     // Set the object we should be aggregating
-    void SetDirectDraw(__inout LPDIRECTDRAW pDirectDraw) {
+    void SetDirectDraw(__inout LPDIRECTDRAW pDirectDraw)
+    {
         m_pDirectDraw = pDirectDraw;
     }
 
@@ -105,7 +106,8 @@ public:
     virtual ~CAggDrawSurface() { };
 
     // Set the object we should be aggregating
-    void SetDirectDrawSurface(__inout LPDIRECTDRAWSURFACE pDirectDrawSurface) {
+    void SetDirectDrawSurface(__inout LPDIRECTDRAWSURFACE pDirectDrawSurface)
+    {
         m_pDirectDrawSurface = pDirectDrawSurface;
     }
 

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -62,121 +62,129 @@
 /*
  Description:   Allocates memory for the transmitted type and converts from
                 local type to the transmitted type
-                
- Arguments:     
-    pLocal:     pointer to local type
-    ppWire:     pointer to the transmitted type pointer. This function should 
-                allocate memory for the transmitted data type. 
 
- Return Value:  None.                    
+ Arguments:
+    pLocal:     pointer to local type
+    ppWire:     pointer to the transmitted type pointer. This function should
+                allocate memory for the transmitted data type.
+
+ Return Value:  None.
 */
 
-// Calculate size that converted data will 
+// Calculate size that converted data will
 // require in the buffer
-unsigned long __RPC_USER WCHAR_STRING_UserSize( 
-    ULONG __RPC_FAR * pulFlags, 
+unsigned long __RPC_USER WCHAR_STRING_UserSize(
+    ULONG __RPC_FAR * pulFlags,
     unsigned long    startingSize,
-	WCHAR_STRING __RPC_FAR * pStr){
-	  return startingSize + sizeof(CHAR_STRING);
+    WCHAR_STRING __RPC_FAR * pStr)
+{
+    return startingSize + sizeof(CHAR_STRING);
 }
 
 
-unsigned char * __RPC_USER WCHAR_STRING_UserMarshal( 
-    ULONG __RPC_FAR *pulFlags, 
-    unsigned char __RPC_FAR * pBufferStart, 
-	WCHAR_STRING __RPC_FAR * pStr){	
+unsigned char * __RPC_USER WCHAR_STRING_UserMarshal(
+    ULONG __RPC_FAR *pulFlags,
+    unsigned char __RPC_FAR * pBufferStart,
+    WCHAR_STRING __RPC_FAR * pStr)
+{
 
-	unsigned char __RPC_FAR * pCurBuffer = pBufferStart;
+    unsigned char __RPC_FAR * pCurBuffer = pBufferStart;
 
-	size_t uSize;
+    size_t uSize;
 
-	wcstombs_s(&uSize,pBufferStart,sizeof(CHAR_STRING), *pStr, sizeof(CHAR_STRING) );
+    wcstombs_s(&uSize,pBufferStart,sizeof(CHAR_STRING), *pStr, sizeof(CHAR_STRING) );
 
-	//strcpy(pBufferStart,"This is just a test");
-	((char *)pCurBuffer) += STRING_SIZE;
+    //strcpy(pBufferStart,"This is just a test");
+    ((char *)pCurBuffer) += STRING_SIZE;
 
-	printf_s("\nServer side has finished marshalling");
-	return pCurBuffer;
+    printf_s("\nServer side has finished marshalling");
+    return pCurBuffer;
 }
 
 
-unsigned char * __RPC_USER WCHAR_STRING_UserUnmarshal( 
-    ULONG __RPC_FAR * pulFlags, 
-    unsigned char __RPC_FAR * pBufferStart, 
-	WCHAR_STRING __RPC_FAR * pStr){	
+unsigned char * __RPC_USER WCHAR_STRING_UserUnmarshal(
+    ULONG __RPC_FAR * pulFlags,
+    unsigned char __RPC_FAR * pBufferStart,
+    WCHAR_STRING __RPC_FAR * pStr)
+{
 
-	size_t uSize;
-	
-	unsigned char __RPC_FAR * pCurBuffer = pBufferStart;
+    size_t uSize;
 
-	mbstowcs_s(&uSize,*pStr, sizeof(CHAR_STRING), pBufferStart, sizeof(WCHAR_STRING) );
+    unsigned char __RPC_FAR * pCurBuffer = pBufferStart;
+
+    mbstowcs_s(&uSize,*pStr, sizeof(CHAR_STRING), pBufferStart, sizeof(WCHAR_STRING) );
     //wcscpy(*pStr,L"This is also a test");
 
     ((char *)pCurBuffer) += STRING_SIZE;
-	
-	return pCurBuffer;
+
+    return pCurBuffer;
 }
 
 
-void __RPC_USER WCHAR_STRING_UserFree( 
-    ULONG __RPC_FAR * pulFlags, 
-    WCHAR_STRING __RPC_FAR * pStr 
-	){
-	//free(pStr);	
+void __RPC_USER WCHAR_STRING_UserFree(
+    ULONG __RPC_FAR * pulFlags,
+    WCHAR_STRING __RPC_FAR * pStr
+)
+{
+    //free(pStr);
 }
 
-// Calculate size that converted data will 
+// Calculate size that converted data will
 // require in the buffer
-unsigned long __RPC_USER WCHAR_STRING_UserSize64( 
-    ULONG __RPC_FAR * pulFlags, 
+unsigned long __RPC_USER WCHAR_STRING_UserSize64(
+    ULONG __RPC_FAR * pulFlags,
     unsigned long    startingSize,
-	WCHAR_STRING __RPC_FAR * pStr){
-	  return startingSize + sizeof(CHAR_STRING);
+    WCHAR_STRING __RPC_FAR * pStr)
+{
+    return startingSize + sizeof(CHAR_STRING);
 }
 
 
-unsigned char * __RPC_USER WCHAR_STRING_UserMarshal64( 
-    ULONG __RPC_FAR *pulFlags, 
-    unsigned char __RPC_FAR * pBufferStart, 
-	WCHAR_STRING __RPC_FAR * pStr){	
+unsigned char * __RPC_USER WCHAR_STRING_UserMarshal64(
+    ULONG __RPC_FAR *pulFlags,
+    unsigned char __RPC_FAR * pBufferStart,
+    WCHAR_STRING __RPC_FAR * pStr)
+{
 
-	unsigned char __RPC_FAR * pCurBuffer = pBufferStart;
+    unsigned char __RPC_FAR * pCurBuffer = pBufferStart;
 
-	size_t uSize;
+    size_t uSize;
 
-	wcstombs_s(&uSize,pBufferStart,sizeof(CHAR_STRING), *pStr, sizeof(CHAR_STRING) );
+    wcstombs_s(&uSize,pBufferStart,sizeof(CHAR_STRING), *pStr, sizeof(CHAR_STRING) );
 
-	//strcpy(pBufferStart,"This is just a test");
-	((char *)pCurBuffer) += STRING_SIZE;
+    //strcpy(pBufferStart,"This is just a test");
+    ((char *)pCurBuffer) += STRING_SIZE;
 
-	printf_s("\nServer side has finished marshalling");
-	return pCurBuffer;
+    printf_s("\nServer side has finished marshalling");
+    return pCurBuffer;
 }
 
 
-unsigned char * __RPC_USER WCHAR_STRING_UserUnmarshal64( 
-    ULONG __RPC_FAR * pulFlags, 
-    unsigned char __RPC_FAR * pBufferStart, 
-	WCHAR_STRING __RPC_FAR * pStr){	
+unsigned char * __RPC_USER WCHAR_STRING_UserUnmarshal64(
+    ULONG __RPC_FAR * pulFlags,
+    unsigned char __RPC_FAR * pBufferStart,
+    WCHAR_STRING __RPC_FAR * pStr)
+{
 
-	size_t uSize;
-	
-	unsigned char __RPC_FAR * pCurBuffer = pBufferStart;
+    size_t uSize;
 
-	mbstowcs_s(&uSize,*pStr, sizeof(CHAR_STRING), pBufferStart, sizeof(WCHAR_STRING) );
+    unsigned char __RPC_FAR * pCurBuffer = pBufferStart;
+
+    mbstowcs_s(&uSize,*pStr, sizeof(CHAR_STRING), pBufferStart, sizeof(WCHAR_STRING) );
     //wcscpy(*pStr,L"This is also a test");
 
     ((char *)pCurBuffer) += STRING_SIZE;
-	
-	return pCurBuffer;
+
+    return pCurBuffer;
 }
 
 
-void __RPC_USER WCHAR_STRING_UserFree64( 
-    ULONG __RPC_FAR * pulFlags, 
-    WCHAR_STRING __RPC_FAR * pStr 
-	){
-	//free(pStr);	
+void __RPC_USER WCHAR_STRING_UserFree64(
+    ULONG __RPC_FAR * pulFlags,
+    WCHAR_STRING __RPC_FAR * pStr
+)
+{
+    //free(pStr);
 }
 
 /***************************************************************************/

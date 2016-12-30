@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------
+﻿// --------------------------------------------------------------------
 //
 //  Copyright (c) Microsoft Corporation.  All rights reserved
 //
@@ -37,16 +37,29 @@
 #include <ole2.h>
 
 BOOL WINAPI PrxDllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
-{return TRUE;}
+{
+    return TRUE;
+}
 
-STDAPI PrxDllCanUnloadNow(void){return S_OK;}
+STDAPI PrxDllCanUnloadNow(void)
+{
+    return S_OK;
+}
 
 STDAPI PrxDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
-{return CLASS_E_CLASSNOTAVAILABLE;}
+{
+    return CLASS_E_CLASSNOTAVAILABLE;
+}
 
-STDAPI PrxDllRegisterServer(void){return S_OK;}
+STDAPI PrxDllRegisterServer(void)
+{
+    return S_OK;
+}
 
-STDAPI PrxDllUnregisterServer(void){return S_OK;}
+STDAPI PrxDllUnregisterServer(void)
+{
+    return S_OK;
+}
 
 #endif //!PROXY_DELEGATION
 

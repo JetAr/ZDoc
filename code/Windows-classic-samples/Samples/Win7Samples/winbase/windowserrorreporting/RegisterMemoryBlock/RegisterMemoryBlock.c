@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
     THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -31,7 +31,8 @@ Abstract:
 //
 // This is the volatile state information we want to be present in the crash dump file.
 //
-typedef struct _STATE_BLOCK {
+typedef struct _STATE_BLOCK
+{
     WCHAR Text[256];
     struct _STATE_BLOCK* SecondStateBlock;
 } STATE_BLOCK, *PSTATE_BLOCK;
@@ -60,7 +61,8 @@ wmain (
     //
     hr = WerRegisterMemoryBlock (&g_StateBlock, sizeof (STATE_BLOCK));
 
-    if (FAILED (hr)) {
+    if (FAILED (hr))
+    {
         wprintf (L"WerRegisterMemoryBlock has failed: 0x%08X\n", hr);
         return -1;
     }
@@ -77,10 +79,12 @@ wmain (
     //
     // Put some strings in the state blocks.
     //
-    if (SecondStateBlock) {
+    if (SecondStateBlock)
+    {
         hr = WerRegisterMemoryBlock (SecondStateBlock, sizeof (STATE_BLOCK));
 
-        if (FAILED (hr)) {
+        if (FAILED (hr))
+        {
             wprintf (L"WerRegisterMemoryBlock has failed: 0x%08X\n", hr);
             return -1;
         }

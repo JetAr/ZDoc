@@ -1,4 +1,4 @@
-// HTMLEdView.cpp : implementation of the CHTMLEdView class
+﻿// HTMLEdView.cpp : implementation of the CHTMLEdView class
 //
 // This is a part of the Microsoft Foundation Classes C++ library.
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -32,35 +32,35 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE(CHTMLEdView, CHtmlEditView)
 BEGIN_DHTMLEDITING_CMDMAP(CHTMLEdView)
-    DHTMLEDITING_CMD_ENTRY(ID_EDIT_CUT, IDM_CUT)
-    DHTMLEDITING_CMD_ENTRY(ID_EDIT_COPY, IDM_COPY)
-    DHTMLEDITING_CMD_ENTRY(ID_EDIT_PASTE, IDM_PASTE)
-    DHTMLEDITING_CMD_ENTRY(ID_EDIT_UNDO, IDM_UNDO)
-    DHTMLEDITING_CMD_ENTRY(ID_EDIT_SELECT_ALL, IDM_SELECTALL)
-    DHTMLEDITING_CMD_ENTRY(ID_EDIT_FONT, IDM_FONT)
-    DHTMLEDITING_CMD_ENTRY(ID_BUTTON_INDENT, IDM_INDENT)
-    DHTMLEDITING_CMD_ENTRY(ID_BUTTON_OUTDENT, IDM_OUTDENT)
-    DHTMLEDITING_CMD_ENTRY(ID_BUTTON_IMAGE, IDM_IMAGE)
-    DHTMLEDITING_CMD_ENTRY_FUNC(ID_FORMAT_ABSOLUTEPOSITIONELEMENT, IDM_ABSOLUTE_POSITION, &CHTMLEdView::SetAbsPos)
-    DHTMLEDITING_CMD_ENTRY_FUNC(ID_FORMAT_STATICELEMENT, IDM_ABSOLUTE_POSITION, &CHTMLEdView::SetStaticPos)
-    DHTMLEDITING_CMD_ENTRY_FUNC(ID_BUTTON_ABSOLUTE, IDM_ABSOLUTE_POSITION, &CHTMLEdView::SetAbsPos)
-    DHTMLEDITING_CMD_ENTRY_FUNC(ID_BUTTON_STATIC, IDM_ABSOLUTE_POSITION, &CHTMLEdView::SetStaticPos)
-    DHTMLEDITING_CMD_ENTRY(ID_BUTTON_HYPERLINK, IDM_HYPERLINK)
-    DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_BOLD, IDM_BOLD, AFX_UI_ELEMTYPE_CHECBOX)
-    DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_ITALIC, IDM_ITALIC, AFX_UI_ELEMTYPE_CHECBOX)
-    DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_UNDERLINE, IDM_UNDERLINE, AFX_UI_ELEMTYPE_CHECBOX)
-    DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_BULLETLIST, IDM_UNORDERLIST, AFX_UI_ELEMTYPE_CHECBOX)
-    DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_NUMBERLIST, IDM_ORDERLIST, AFX_UI_ELEMTYPE_CHECBOX)
-    DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_LEFTJUSTIFY, IDM_JUSTIFYLEFT, AFX_UI_ELEMTYPE_CHECBOX)
-    DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_CENTERJUSTIFY, IDM_JUSTIFYCENTER, AFX_UI_ELEMTYPE_CHECBOX)
-    DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_RIGHTJUSTIFY, IDM_JUSTIFYRIGHT, AFX_UI_ELEMTYPE_CHECBOX)
+DHTMLEDITING_CMD_ENTRY(ID_EDIT_CUT, IDM_CUT)
+DHTMLEDITING_CMD_ENTRY(ID_EDIT_COPY, IDM_COPY)
+DHTMLEDITING_CMD_ENTRY(ID_EDIT_PASTE, IDM_PASTE)
+DHTMLEDITING_CMD_ENTRY(ID_EDIT_UNDO, IDM_UNDO)
+DHTMLEDITING_CMD_ENTRY(ID_EDIT_SELECT_ALL, IDM_SELECTALL)
+DHTMLEDITING_CMD_ENTRY(ID_EDIT_FONT, IDM_FONT)
+DHTMLEDITING_CMD_ENTRY(ID_BUTTON_INDENT, IDM_INDENT)
+DHTMLEDITING_CMD_ENTRY(ID_BUTTON_OUTDENT, IDM_OUTDENT)
+DHTMLEDITING_CMD_ENTRY(ID_BUTTON_IMAGE, IDM_IMAGE)
+DHTMLEDITING_CMD_ENTRY_FUNC(ID_FORMAT_ABSOLUTEPOSITIONELEMENT, IDM_ABSOLUTE_POSITION, &CHTMLEdView::SetAbsPos)
+DHTMLEDITING_CMD_ENTRY_FUNC(ID_FORMAT_STATICELEMENT, IDM_ABSOLUTE_POSITION, &CHTMLEdView::SetStaticPos)
+DHTMLEDITING_CMD_ENTRY_FUNC(ID_BUTTON_ABSOLUTE, IDM_ABSOLUTE_POSITION, &CHTMLEdView::SetAbsPos)
+DHTMLEDITING_CMD_ENTRY_FUNC(ID_BUTTON_STATIC, IDM_ABSOLUTE_POSITION, &CHTMLEdView::SetStaticPos)
+DHTMLEDITING_CMD_ENTRY(ID_BUTTON_HYPERLINK, IDM_HYPERLINK)
+DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_BOLD, IDM_BOLD, AFX_UI_ELEMTYPE_CHECBOX)
+DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_ITALIC, IDM_ITALIC, AFX_UI_ELEMTYPE_CHECBOX)
+DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_UNDERLINE, IDM_UNDERLINE, AFX_UI_ELEMTYPE_CHECBOX)
+DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_BULLETLIST, IDM_UNORDERLIST, AFX_UI_ELEMTYPE_CHECBOX)
+DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_NUMBERLIST, IDM_ORDERLIST, AFX_UI_ELEMTYPE_CHECBOX)
+DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_LEFTJUSTIFY, IDM_JUSTIFYLEFT, AFX_UI_ELEMTYPE_CHECBOX)
+DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_CENTERJUSTIFY, IDM_JUSTIFYCENTER, AFX_UI_ELEMTYPE_CHECBOX)
+DHTMLEDITING_CMD_ENTRY_TYPE(ID_BUTTON_RIGHTJUSTIFY, IDM_JUSTIFYRIGHT, AFX_UI_ELEMTYPE_CHECBOX)
 
 END_DHTMLEDITING_CMDMAP()
 
 BEGIN_MESSAGE_MAP(CHTMLEdView, CHtmlEditView)
     ON_UPDATE_COMMAND_UI(ID_BUTTON_BLOCKFMT, OnUpdateBlockFmt)
     ON_UPDATE_COMMAND_UI(ID_BUTTON_COLOR, OnUpdateColor)
-    ON_NOTIFY(TBN_DROPDOWN, AFX_IDW_TOOLBAR , OnEditBarNotify)
+    ON_NOTIFY(TBN_DROPDOWN, AFX_IDW_TOOLBAR, OnEditBarNotify)
     ON_COMMAND_RANGE(FORMATBASE,FORMATBASE+100,OnFormatPopup)
 END_MESSAGE_MAP()
 
@@ -98,7 +98,7 @@ CHTMLEdView::~CHTMLEdView()
 {
     if(m_pFmtMenu) delete m_pFmtMenu;
     if(m_pClrMenu) delete m_pClrMenu;
-    if(m_pMainMenu) 
+    if(m_pMainMenu)
     {
         m_pMainMenu->DestroyMenu();
         delete m_pMainMenu;
@@ -182,9 +182,9 @@ BOOL CHTMLEdView::GetCommandStatus(UINT nCmdID)
 }
 
 HRESULT CHTMLEdView::OnShowContextMenu(DWORD /*dwID*/,
-                            LPPOINT ppt,
-                            LPUNKNOWN /*pcmdtReserved*/,
-                            LPDISPATCH /*pdispReserved*/)
+                                       LPPOINT ppt,
+                                       LPUNKNOWN /*pcmdtReserved*/,
+                                       LPDISPATCH /*pdispReserved*/)
 {
     if (!m_pMainMenu)
     {
@@ -235,7 +235,7 @@ void CHTMLEdView::OnContextMenuAction(long itemIndex)
     }
 }
 
-void CHTMLEdView::OnInitialUpdate() 
+void CHTMLEdView::OnInitialUpdate()
 {
     CString strCmdLine(AfxGetApp()->m_lpCmdLine);
     CHTMLEdDoc * pDoc = NULL;
@@ -244,12 +244,12 @@ void CHTMLEdView::OnInitialUpdate()
         pDoc =(CHTMLEdDoc * )GetDocument();
         ENSURE(pDoc);
         pDoc->OnOpenDocument((LPCTSTR)strCmdLine);
-    }	
+    }
     CHtmlEditView::OnInitialUpdate();
 }
 
 void CHTMLEdView::UpdateFontCombos()
-{	
+{
     CString szResult,szCurFmt;
     int nSel;
     short nCurSize;
@@ -335,7 +335,7 @@ void CHTMLEdView::PopBlockFmtMenu()
         if(!m_pFmtMenu->CreatePopupMenu())
             return;
     }
-    
+
     m_pFmtMenu->ClearStringArray();
     CStringArray &ar = m_pFmtMenu->GetStringArray();
     CString curFmt;
@@ -360,9 +360,9 @@ void CHTMLEdView::PopBlockFmtMenu()
     pFrame->m_wndEditBar.ClientToScreen(rc);
 
     m_pFmtMenu->TrackPopupMenu(TPM_LEFTALIGN|TPM_LEFTBUTTON,
-                                rc.left+3,rc.bottom,this);
+                               rc.left+3,rc.bottom,this);
 
-}			
+}
 void CHTMLEdView::OnFormatPopup(UINT nCommandID)
 {
     //format popup menu was hit
@@ -381,7 +381,7 @@ UINT_PTR CALLBACK CdlgHook(  HWND hdlg,UINT uiMsg,WPARAM /*wParam*/, LPARAM lPar
         CRect *rc = (CRect*)pcc->lCustData;
         if(rc)
             SetWindowPos(hdlg,HWND_TOP,rc->right,rc->bottom,
-            0,0,SWP_NOZORDER|SWP_NOSIZE);
+                         0,0,SWP_NOZORDER|SWP_NOSIZE);
         SetWindowText(hdlg, _T("Choose a Foreground Color"));
         delete rc;
     }
@@ -414,7 +414,7 @@ void CHTMLEdView::PopColorMenu()
     }
 }
 
-void CHTMLEdView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView) 
+void CHTMLEdView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
 {
 
     if(bActivate && pActivateView==this && pDeactiveView != this)
@@ -422,7 +422,7 @@ void CHTMLEdView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pD
         //we're being activated get the HTML from the WebView
         UpdateView();
     }
-    
+
     CHtmlEditView::OnActivateView(bActivate, pActivateView, pDeactiveView);
 }
 

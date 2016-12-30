@@ -1,4 +1,4 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+﻿/*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 Copyright (c) 1992 - 2000  Microsoft Corporation
 
@@ -10,8 +10,8 @@ Abstract:
 
     Sample SNMP Extension Agent for Windows NT.
 
-    These files (testdll.c, testmib.c, and testmib.h) provide an example of 
-    how to structure an Extension Agent DLL which works in conjunction with 
+    These files (testdll.c, testmib.c, and testmib.h) provide an example of
+    how to structure an Extension Agent DLL which works in conjunction with
     the SNMP Extendible Agent for Windows NT.
 
     Extensive comments have been included to describe its structure and
@@ -68,15 +68,15 @@ Abstract:
 // each entry in the MIB.
 
 typedef struct mib_entry
-           {
-	   AsnObjectIdentifier Oid;
-	   void *              Storage;
-	   BYTE                Type;
-	   UINT                Access;
-	   UINT                (*MibFunc)( UINT, struct mib_entry *,
-	                                   RFC1157VarBind * );
-	   struct mib_entry *  MibNext;
-	   } MIB_ENTRY;
+{
+    AsnObjectIdentifier Oid;
+    void *              Storage;
+    BYTE                Type;
+    UINT                Access;
+    UINT                (*MibFunc)( UINT, struct mib_entry *,
+                                    RFC1157VarBind * );
+    struct mib_entry *  MibNext;
+} MIB_ENTRY;
 
 
 // Internal MIB structure.
@@ -93,33 +93,33 @@ extern AsnObjectIdentifier MIB_OidPrefix;
 // Function Prototypes.
 
 UINT ResolveVarBind(
-        IN OUT RFC1157VarBind *VarBind, // Variable Binding to resolve
-	IN UINT PduAction               // Action specified in PDU
-	);
+    IN OUT RFC1157VarBind *VarBind, // Variable Binding to resolve
+    IN UINT PduAction               // Action specified in PDU
+);
 
 UINT MIB_leaf_func(
-        IN UINT Action,
-	IN MIB_ENTRY *MibPtr,
-	IN RFC1157VarBind *VarBind
-	);
+    IN UINT Action,
+    IN MIB_ENTRY *MibPtr,
+    IN RFC1157VarBind *VarBind
+);
 
 UINT MIB_control_func(
-        IN UINT Action,
-	IN MIB_ENTRY *MibPtr,
-	IN RFC1157VarBind *VarBind
-	);
+    IN UINT Action,
+    IN MIB_ENTRY *MibPtr,
+    IN RFC1157VarBind *VarBind
+);
 
 UINT MIB_doneness_func(
-        IN UINT Action,
-	IN MIB_ENTRY *MibPtr,
-	IN RFC1157VarBind *VarBind
-	);
+    IN UINT Action,
+    IN MIB_ENTRY *MibPtr,
+    IN RFC1157VarBind *VarBind
+);
 
 UINT MIB_toasttype_func(
-        IN UINT Action,
-	IN MIB_ENTRY *MibPtr,
-	IN RFC1157VarBind *VarBind
-	);
+    IN UINT Action,
+    IN MIB_ENTRY *MibPtr,
+    IN RFC1157VarBind *VarBind
+);
 
 
 #endif /* testmib_h */

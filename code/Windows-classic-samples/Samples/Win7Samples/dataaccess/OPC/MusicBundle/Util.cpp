@@ -1,4 +1,4 @@
-//<SnippetMusicBundle_cppUtilWholePage>
+﻿//<SnippetMusicBundle_cppUtilWholePage>
 /*****************************************************************************
 *
 * File: Util.cpp
@@ -8,18 +8,18 @@
 * ------------------------------------
 *
 *  This file is part of the Microsoft Windows SDK Code Samples.
-* 
+*
 *  Copyright (C) Microsoft Corporation.  All rights reserved.
-* 
+*
 * This source code is intended only as a supplement to Microsoft
 * Development Tools and/or on-line documentation.  See these other
 * materials for detailed information regarding Microsoft code samples.
-* 
+*
 * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 * PARTICULAR PURPOSE.
-* 
+*
 ****************************************************************************/
 
 #include <stdio.h>
@@ -39,7 +39,7 @@
 HRESULT
 GetLastErrorAsHResult(
     VOID
-    )
+)
 {
     DWORD dwError = GetLastError();
 
@@ -56,9 +56,9 @@ GetRelationshipTargetPart(
     IOpcRelationship  *relationship,// Relationship that targets the required part.
     LPCWSTR  expectedContentType,   // Content type expected for the target part.
     IOpcPart  **targetPart          // Recieves pointer to target part. Method may return a valid
-                                    // pointer even on failure, and the caller must always release
-                                    // if a non-NULL value is returned.
-    )
+    // pointer even on failure, and the caller must always release
+    // if a non-NULL value is returned.
+)
 {
     OPC_URI_TARGET_MODE targetMode;
     IOpcUri * sourceUri = NULL;
@@ -77,17 +77,17 @@ GetRelationshipTargetPart(
         relationship->GetRelationshipType(&relationshipType);
 
         fwprintf(
-            stderr, 
+            stderr,
             L"Invalid music bundle package: relationship with type %s must have Internal target mode.\n",
             (PWSTR)relationshipType
-            );
+        );
 
         // Set the return code to an error.
         hr = E_FAIL;
 
         CoTaskMemFree(static_cast<LPVOID>(relationshipType));
     }
-        
+
     // Relationship's target is a part; the target mode is 'Internal'.
 
     if (SUCCEEDED(hr))
@@ -95,14 +95,14 @@ GetRelationshipTargetPart(
         // Get the URI of the relationship source.
         hr = relationship->GetSourceUri(&sourceUri);
     }
-    
-    
+
+
     if (SUCCEEDED(hr))
     {
         // Get the URI of the relationship target.
         hr = relationship->GetTargetUri(&targetUri);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Resolve the target URI to the part name of the target part.
@@ -120,9 +120,9 @@ GetRelationshipTargetPart(
     {
         // The part does not exist in the part set.
         fwprintf(
-            stderr, 
+            stderr,
             L"Invalid music bundle package: the target part of relationship does not exist.\n"
-            );
+        );
 
         // Set the return code to an error.
         hr = E_FAIL;
@@ -147,9 +147,9 @@ GetRelationshipTargetPart(
             // Content type of the part did not match the expected content
             // type.
             fwprintf(
-                stderr, 
+                stderr,
                 L"Invalid music bundle package: the target part does not have correct content type.\n"
-                );
+            );
 
             // Set the return code to an error.
             hr = E_FAIL;
@@ -192,9 +192,9 @@ GetRelationshipByType(
     IOpcRelationshipSet  *relsSet,         // Relationship set that contains the relationship.
     LPCWSTR  relationshipType,             // The relationship type of the relationship.
     IOpcRelationship  **targetRelationship // Recieves the relationship. Method may return a valid
-                                           // pointer even on failure, and the caller must always release
-                                           // if a non-NULL value is returned.
-    )
+    // pointer even on failure, and the caller must always release
+    // if a non-NULL value is returned.
+)
 {
     IOpcRelationshipEnumerator * relsEnumerator = NULL;
     BOOL hasNext;
@@ -206,8 +206,8 @@ GetRelationshipByType(
     // Enumerate through relationships, ensuring that there is exactly one
     // relationship that has the specified type.
     while (SUCCEEDED(hr) &&
-           SUCCEEDED(hr = relsEnumerator->MoveNext(&hasNext)) &&
-           hasNext)
+            SUCCEEDED(hr = relsEnumerator->MoveNext(&hasNext)) &&
+            hasNext)
     {
         count++;
 
@@ -215,10 +215,10 @@ GetRelationshipByType(
         {
             // There is more than one relationship of the specified type.
             fwprintf(
-                stderr, 
+                stderr,
                 L"Invalid music bundle package: cannot have more than 1 relationship with type: %s.\n",
                 relationshipType
-                );
+            );
 
             // Set the return code to an error.
             hr = E_FAIL;
@@ -233,22 +233,22 @@ GetRelationshipByType(
             hr = relsEnumerator->GetCurrent(targetRelationship);
         }
     }
-    
+
     if (SUCCEEDED(hr))
     {
-         if (count == 0)
-         {
-             // There were no relationships in the set that had the specified
-             // type.
-             fwprintf(
-                 stderr, 
-                 L"Invalid music bundle package: relationship with type %s does not exist.\n",
-                 relationshipType
-                 );
+        if (count == 0)
+        {
+            // There were no relationships in the set that had the specified
+            // type.
+            fwprintf(
+                stderr,
+                L"Invalid music bundle package: relationship with type %s does not exist.\n",
+                relationshipType
+            );
 
-             // Set the return code to an error.
-             hr = E_FAIL;
-         }
+            // Set the return code to an error.
+            hr = E_FAIL;
+        }
     }
 
     if (relsEnumerator)
@@ -271,14 +271,14 @@ GetFullFileName(
     LPCWSTR  filePath,    // The base directory path.
     LPCWSTR  fileName,    // Name of the file.
     LPWSTR  *fullFileName // The resultant full file name. The caller must free the memory allocated
-                          // for this string buffer.
-    )
+    // for this string buffer.
+)
 {
     HRESULT hr = S_OK;
     size_t cchFileName = 0;
     size_t cchLength = 0;
     WCHAR * szDest = NULL;
-    
+
     if (fullFileName == NULL)
     {
         // The fullFileName out parameter is required.
@@ -310,11 +310,11 @@ GetFullFileName(
         // character.
         cchFileName += cchLength;
         cchFileName += 1;
-    
-        // Allocate memory for the full file name buffer of the length in 
+
+        // Allocate memory for the full file name buffer of the length in
         // cchFileName.
         *fullFileName = (LPWSTR)CoTaskMemAlloc(cchFileName*sizeof(WCHAR));
-    
+
         if (*fullFileName == NULL)
         {
             // Error encountered during allocation
@@ -359,8 +359,8 @@ CreateDirectoryFromPartName(
     LPCWSTR  filePath,    // The base directory path.
     LPCWSTR  partName,    // Part name to use to create full file name.
     LPWSTR  *fullFileName // The resultant full file name. The caller must free the memory allocated
-                          // for this string buffer.
-    )
+    // for this string buffer.
+)
 {
     HRESULT hr = S_OK;
     size_t cchFileName = 0;
@@ -380,16 +380,16 @@ CreateDirectoryFromPartName(
         // Get the length of the base directory string buffer.
         hr = StringCchLength(filePath, STRSAFE_MAX_CCH, &cchLength);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Store the length of the base directory string buffer.
         cchFileName += cchLength;
 
-        // Get the length of the part name string buffer.    
+        // Get the length of the part name string buffer.
         hr = StringCchLength(partName, STRSAFE_MAX_CCH, &cchLength);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Calculate the length of the full file name string buffer by adding
@@ -398,11 +398,11 @@ CreateDirectoryFromPartName(
         // character.
         cchFileName += cchLength;
         cchFileName += 1;
-    
-        // Allocate memory for the full file name buffer of the length in 
-        // cchFileName. 
+
+        // Allocate memory for the full file name buffer of the length in
+        // cchFileName.
         *fullFileName = (LPWSTR)CoTaskMemAlloc(cchFileName*sizeof(WCHAR));
-    
+
         if (!*fullFileName)
         {
             // Error encountered during allocation
@@ -423,7 +423,7 @@ CreateDirectoryFromPartName(
         // entire buffer with '0's if the copy fails.
         hr = StringCchCopyEx(szDest, cchFileName, filePath, &szDest, &cchFileName, 0);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Recursively create the directory structure using base file path
@@ -436,7 +436,7 @@ CreateDirectoryFromPartName(
                 // contains a directory name.
                 // Temporarily null terminate string and create the directory.
                 *szDest = '\0';
-    
+
                 BOOL createDirSucceeded = CreateDirectory(*fullFileName, NULL);
 
                 if (!createDirSucceeded)
@@ -444,7 +444,7 @@ CreateDirectoryFromPartName(
                     // Creation of the directory failed; get the error returned
                     // by the CreateDirectory function.
                     hr = GetLastErrorAsHResult();
-    
+
                     if (hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS))
                     {
                         // Ignore error if directory already exists.
@@ -478,14 +478,14 @@ WriteFileContentToPart(
     LPCWSTR  filePath, // Directory where the file is located.
     LPCWSTR  fileName, // Name of file whose content will be deserialized.
     IOpcPart  *opcPart // Part into which the file content is deserialized.
-   
-    )
+
+)
 {
     HRESULT hr = S_OK;
     LPWSTR fullFileName = NULL;
     IStream * fileStream = NULL;
     IStream * partStream = NULL;
-    
+
     // Get the full file name of the file.
     hr = GetFullFileName(filePath, fileName, &fullFileName);
 
@@ -493,12 +493,12 @@ WriteFileContentToPart(
     {
         // Create a read-only stream over the file.
         hr = opcFactory->CreateStreamOnFile(
-                fullFileName,
-                OPC_STREAM_IO_READ,
-                NULL,
-                FILE_ATTRIBUTE_NORMAL,
-                &fileStream
-                );
+                 fullFileName,
+                 OPC_STREAM_IO_READ,
+                 NULL,
+                 FILE_ATTRIBUTE_NORMAL,
+                 &fileStream
+             );
     }
 
     if (SUCCEEDED(hr))
@@ -506,23 +506,23 @@ WriteFileContentToPart(
         // Get the content stream of the part.
         hr = opcPart->GetContentStream(&partStream);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Part content is overwritten; truncate the size of the stream to zero.
         ULARGE_INTEGER zero = {0};
         hr = partStream->SetSize(zero);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Copy the content from the file stream to the part content stream.
         ULARGE_INTEGER ul = {(UINT) -1, (UINT) -1};
         hr = fileStream->CopyTo(partStream, ul, NULL, NULL);
     }
-    
+
     CoTaskMemFree(static_cast<LPVOID>(fullFileName));
-    
+
     if (fileStream)
     {
         fileStream->Release();
@@ -546,36 +546,36 @@ HRESULT
 DisplayStreamContent(
     LPCWSTR  title,  // The title to be displayed above the stream contents.
     IStream  *stream // The stream whose contents are displayed.
-    
-    )
+
+)
 {
     HRESULT hr = S_OK;
     byte buffer[MAX_BUFFER_SIZE] = {};
     ULONG bytesRead = 1;
-    
+
     // Display title.
     wprintf(L"++++++ %s ++++++\n", title);
-    
+
     // Read and display data from screen.
     while (SUCCEEDED(hr) && bytesRead > 0)
     {
         // Pass in 'size - 1' so the buffer is always null-terminated
         // when passed in to the wprintf method.
         hr = stream->Read(buffer, sizeof(buffer) - 1, &bytesRead);
-    
+
         if (SUCCEEDED(hr) && bytesRead > 0)
-        {   
+        {
             // Display data.
             wprintf(L"%S\n", buffer);
         }
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Display end deliminator.
         wprintf(L"++++++ End %s ++++++\n\n", title);
     }
-    
+
     return hr;
 }
 
@@ -589,8 +589,8 @@ WritePartContentToFile(
     IOpcFactory  *opcFactory,
     LPCWSTR  filePath, // Base directory path where the file is created.
     IOpcPart  *opcPart // Part whose content is serialized.
-    
-    )
+
+)
 {
     HRESULT hr = S_OK;
     LPWSTR fullFileName = NULL;
@@ -598,50 +598,50 @@ WritePartContentToFile(
     IStream * partStream = NULL;
     IOpcPartUri * opcPartUri = NULL;
     BSTR partUriString = NULL;
-    
+
     // Get the part name of this part.
     hr = opcPart->GetName(&opcPartUri);
-    
+
     if (SUCCEEDED(hr))
     {
         // Get the part name as string.
         hr = opcPartUri->GetAbsoluteUri(&partUriString);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Create the full file name and the directory structure.
         hr = CreateDirectoryFromPartName(filePath, partUriString, &fullFileName);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Create a write-only stream over the file where part content will be
         // serialized.
         hr = opcFactory->CreateStreamOnFile(
-                fullFileName,
-                OPC_STREAM_IO_WRITE,
-                NULL,
-                FILE_ATTRIBUTE_NORMAL,
-                &fileStream
-                );
+                 fullFileName,
+                 OPC_STREAM_IO_WRITE,
+                 NULL,
+                 FILE_ATTRIBUTE_NORMAL,
+                 &fileStream
+             );
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Get the part content stream.
         hr = opcPart->GetContentStream(&partStream);
     }
-    
+
     if (SUCCEEDED(hr))
     {
         // Copy the part content stream to the file stream.
         ULARGE_INTEGER const ul = {(UINT) -1, (UINT) -1};
         hr = partStream->CopyTo(fileStream, ul, NULL, NULL);
     }
-    
+
     CoTaskMemFree(static_cast<LPVOID>(fullFileName));
-    
+
     if (fileStream)
     {
         fileStream->Release();
@@ -653,14 +653,14 @@ WritePartContentToFile(
         partStream->Release();
         partStream = NULL;
     }
-    
+
     if (opcPartUri)
     {
         opcPartUri->Release();
         opcPartUri = NULL;
     }
     SysFreeString(partUriString);
-    
+
     return hr;
 }
 //</SnippetMusicBundle_cppUtilWholePage>

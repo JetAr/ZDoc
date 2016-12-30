@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -19,7 +19,7 @@
 HRESULT EditableLayout::RecreateLayout(
     IN OUT IDWriteTextLayout*& currentLayout,
     const std::wstring& text
-    )
+)
 {
     // Recreates the internally held layout.
 
@@ -28,13 +28,13 @@ HRESULT EditableLayout::RecreateLayout(
     IDWriteTextLayout* newLayout = NULL;
 
     hr = factory_->CreateTextLayout(
-            text.c_str(),
-            static_cast<UINT32>(text.length()),
-            currentLayout,
-            currentLayout->GetMaxWidth(),
-            currentLayout->GetMaxHeight(),
-            &newLayout
-            );
+             text.c_str(),
+             static_cast<UINT32>(text.length()),
+             currentLayout,
+             currentLayout->GetMaxWidth(),
+             currentLayout->GetMaxHeight(),
+             &newLayout
+         );
 
     if (SUCCEEDED(hr))
         SafeAttach(&currentLayout, SafeDetach(&newLayout));
@@ -52,7 +52,7 @@ void EditableLayout::CopySinglePropertyRange(
     UINT32 startPosForNew,
     UINT32 length,
     EditableLayout::CaretFormat* caretFormat
-    )
+)
 {
     // Copies a single range of similar properties, from one old layout
     // to a new one.
@@ -138,7 +138,7 @@ void EditableLayout::CopySinglePropertyRange(
 UINT32 CalculateRangeLengthAt(
     IDWriteTextLayout* layout,
     UINT32 pos
-    )
+)
 {
     // Determines the length of a block of similarly formatted properties.
 
@@ -150,7 +150,7 @@ UINT32 CalculateRangeLengthAt(
         pos,
         &weight,
         &incrementAmount
-        );
+    );
 
     UINT32 rangeLength = incrementAmount.length - (pos - incrementAmount.startPosition);
     return rangeLength;
@@ -164,7 +164,7 @@ void EditableLayout::CopyRangedProperties(
     UINT32 newLayoutTextOffset,
     IDWriteTextLayout* newLayout,
     bool isOffsetNegative
-    )
+)
 {
     // Copies properties that set on ranges.
 
@@ -181,7 +181,7 @@ void EditableLayout::CopyRangedProperties(
                 newLayout,
                 currentPos - newLayoutTextOffset,
                 rangeLength
-                );
+            );
         }
         else
         {
@@ -191,7 +191,7 @@ void EditableLayout::CopyRangedProperties(
                 newLayout,
                 currentPos + newLayoutTextOffset,
                 rangeLength
-                );
+            );
         }
         currentPos += rangeLength;
     }
@@ -205,7 +205,7 @@ STDMETHODIMP EditableLayout::InsertTextAt(
     WCHAR const* textToInsert,                  // [lengthToInsert]
     UINT32 textToInsertLength,
     CaretFormat* caretFormat
-    )
+)
 {
     // Inserts text and shifts all formatting.
 
@@ -276,7 +276,7 @@ STDMETHODIMP EditableLayout::RemoveTextAt(
     IN OUT std::wstring& text,
     UINT32 position,
     UINT32 lengthToRemove
-    )
+)
 {
     // Removes text and shifts all formatting.
 
@@ -310,7 +310,7 @@ STDMETHODIMP EditableLayout::RemoveTextAt(
         if (position == 0)
         {
             // The rest of the text
-            CopyRangedProperties(oldLayout, lengthToRemove, oldTextLength, lengthToRemove, newLayout, true); 
+            CopyRangedProperties(oldLayout, lengthToRemove, oldTextLength, lengthToRemove, newLayout, true);
         }
         else
         {
@@ -332,7 +332,7 @@ STDMETHODIMP EditableLayout::RemoveTextAt(
 STDMETHODIMP EditableLayout::Clear(
     IN OUT IDWriteTextLayout*& currentLayout,
     IN OUT std::wstring& text
-    )
+)
 {
     HRESULT hr = S_OK;
 
@@ -357,7 +357,7 @@ STDMETHODIMP EditableLayout::Clear(
 void EditableLayout::CopyGlobalProperties(
     IDWriteTextLayout* oldLayout,
     IDWriteTextLayout* newLayout
-    )
+)
 {
     // Copies global properties that are not range based.
 

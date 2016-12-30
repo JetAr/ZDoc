@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -27,11 +27,11 @@ HRESULT CreateThumbnailToolbar(HWND hWnd)
             // Figure out what bitmap to use for the thumbnail toolbar buttons - we
             // make the decision based on the system's small icon width. This will make
             // us DPI-friendly.
-            struct 
+            struct
             {
                 PCWSTR pbmp;
                 int cx;
-            } 
+            }
             const bitmaps[3] =
             {
                 { MAKEINTRESOURCE(IDB_BUTTONIMAGES_96),  16 },
@@ -51,7 +51,7 @@ HRESULT CreateThumbnailToolbar(HWND hWnd)
             }
 
             HIMAGELIST himl = ImageList_LoadImage(g_hInstance, bitmaps[iButtons].pbmp,
-                bitmaps[iButtons].cx, 0, RGB(255,0,255), IMAGE_BITMAP, LR_CREATEDIBSECTION);
+                                                  bitmaps[iButtons].cx, 0, RGB(255,0,255), IMAGE_BITMAP, LR_CREATEDIBSECTION);
             if (himl)
             {
                 hr = pTaskbarList->ThumbBarSetImageList(hWnd, himl);
@@ -116,28 +116,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         CreateThumbnailToolbar(hWnd);
     }
     else switch (message)
-    {
+        {
         case WM_COMMAND:
         {
             int const wmId = LOWORD(wParam);
             switch (wmId)
             {
-                case IDTB_BUTTON1:
-                case IDTB_BUTTON2:
-                case IDTB_BUTTON3:
-                {
-                    WCHAR szMsg[100];
-                    StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"Thumbnail toolbar button clicked, ID=%d", wmId);
-                    MessageBox(hWnd, szMsg, L"Application", MB_OK);
-                    break;
-                }
+            case IDTB_BUTTON1:
+            case IDTB_BUTTON2:
+            case IDTB_BUTTON3:
+            {
+                WCHAR szMsg[100];
+                StringCchPrintf(szMsg, ARRAYSIZE(szMsg), L"Thumbnail toolbar button clicked, ID=%d", wmId);
+                MessageBox(hWnd, szMsg, L"Application", MB_OK);
+                break;
+            }
 
-                case IDM_EXIT:
-                    DestroyWindow(hWnd);
-                    break;
+            case IDM_EXIT:
+                DestroyWindow(hWnd);
+                break;
 
-                default:
-                    return DefWindowProc(hWnd, message, wParam, lParam);
+            default:
+                return DefWindowProc(hWnd, message, wParam, lParam);
             }
             break;
         }
@@ -148,7 +148,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         default:
             return DefWindowProc(hWnd, message, wParam, lParam);
-    }
+        }
     return 0;
 }
 
@@ -178,7 +178,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR /* pszCmdLine */, int 
         LoadString(g_hInstance, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
 
         HWND hWnd = CreateWindowEx(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, 400, 400, NULL, NULL, g_hInstance, NULL);
+                                   CW_USEDEFAULT, CW_USEDEFAULT, 400, 400, NULL, NULL, g_hInstance, NULL);
         if (hWnd)
         {
             ShowWindow(hWnd, nCmdShow);

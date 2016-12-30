@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -20,7 +20,7 @@ void print_result(HRESULT hr)
     {
         _cwprintf(L"[S_OK]\r\n");
     }
-    else 
+    else
     {
         _cwprintf(L"[ERROR: %x]\r\n", hr);
     }
@@ -79,11 +79,11 @@ int _cdecl wmain(int argc, __in_ecount(argc) LPWSTR* argv)
     if( S_OK == hr )
     {
         hr = StringCbPrintfW(
-            szLocalAddress, sizeof(szLocalAddress),
-            L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
-            uuid.Data1, uuid.Data2, uuid.Data3,
-            uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3], 
-            uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]); 
+                 szLocalAddress, sizeof(szLocalAddress),
+                 L"urn:uuid:%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+                 uuid.Data1, uuid.Data2, uuid.Data3,
+                 uuid.Data4[0], uuid.Data4[1], uuid.Data4[2], uuid.Data4[3],
+                 uuid.Data4[4], uuid.Data4[5], uuid.Data4[6], uuid.Data4[7]);
     }
 
     // Build the proxy
@@ -91,7 +91,7 @@ int _cdecl wmain(int argc, __in_ecount(argc) LPWSTR* argv)
     {
         _cwprintf(L"Creating a proxy for device %s...", pszDeviceAddress);
         hr = CreateCStockQuoteProxy( pszDeviceAddress, szLocalAddress,
-                &pStockQuoteProxy, NULL );
+                                     &pStockQuoteProxy, NULL );
         print_result( hr );
     }
 
@@ -114,9 +114,9 @@ int _cdecl wmain(int argc, __in_ecount(argc) LPWSTR* argv)
 
     if( S_OK == hr )
     {
-        _cwprintf(L"Trade Price for %s is %f\r\n", 
-            tradePriceRequest.tickerSymbol, 
-            pTradePrice->price);
+        _cwprintf(L"Trade Price for %s is %f\r\n",
+                  tradePriceRequest.tickerSymbol,
+                  pTradePrice->price);
     }
 
     _cwprintf(L"Cleaning up resources... ");

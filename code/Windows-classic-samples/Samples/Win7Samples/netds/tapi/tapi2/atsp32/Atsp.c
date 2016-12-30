@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright 1995 - 2000 Microsoft Corporation
 
@@ -10,7 +10,7 @@ Notes:
 
 --*/
 
-               
+
 #define TAPI_CURRENT_VERSION 0x00030000
 #include "atsp.h"
 #include <assert.h>
@@ -24,7 +24,7 @@ DllMain(
     HANDLE  hDLL,
     DWORD   dwReason,
     LPVOID  lpReserved
-    )
+)
 {
     if (dwReason ==  DLL_PROCESS_ATTACH)
     {
@@ -43,7 +43,7 @@ DllMain(
                 0,
                 KEY_ALL_ACCESS,
                 &hKey
-                );
+            );
 
             dwDataSize = sizeof (DWORD);
             gdwDebugLevel=0;
@@ -55,7 +55,7 @@ DllMain(
                 &dwDataType,
                 (LPBYTE) &gdwDebugLevel,
                 &dwDataSize
-                );
+            );
 
             RegCloseKey (hKey);
         }
@@ -70,7 +70,7 @@ DllMain(
 void
 CommThread(
     PDRVLINE    pLine
-    )
+)
 {
     char            buf[4];
     DWORD           dwThreadID = GetCurrentThreadId(), dwNumBytes;
@@ -79,11 +79,11 @@ CommThread(
 
 
     DBGOUT((
-        3,
-        "CommThread (id=%d): enter, port=%s",
-        dwThreadID,
-        pLine->szComm
-        ));
+               3,
+               "CommThread (id=%d): enter, port=%s",
+               dwThreadID,
+               pLine->szComm
+           ));
 
     hEvent = pOverlapped->hEvent;
     buf[0] = buf[1] = '.';
@@ -120,11 +120,11 @@ CommThread(
         buf[1] &= 0x7f; // remove the parity bit
 
         DBGOUT((
-            3,
-            "CommThread (id=%d): read '%c'",
-            dwThreadID,
-            (buf[1] == '\r' ? '.' : buf[1])
-            ));
+                   3,
+                   "CommThread (id=%d): read '%c'",
+                   dwThreadID,
+                   (buf[1] == '\r' ? '.' : buf[1])
+               ));
 
         switch ((buf[0] << 8) + buf[1])
         {
@@ -179,10 +179,10 @@ LONG
 TSPIAPI TSPI_lineMSPIdentify(
     DWORD               dwDeviceID,
     GUID *              pCLSID
-    )
+)
 {
 
-   LONG  lResult = 0;
+    LONG  lResult = 0;
 
 #if DBG
     FUNC_PARAM  params[] =
@@ -200,72 +200,72 @@ TSPIAPI TSPI_lineMSPIdentify(
 #endif
 
 
-    Prolog (&info); 
+    Prolog (&info);
 
-	//
-	// Identify the CLSID of the our MSP
-	// this is the CLSID of Sample MSP in the 
-	// TAPI3 SDK
-	//
-    
+    //
+    // Identify the CLSID of the our MSP
+    // this is the CLSID of Sample MSP in the
+    // TAPI3 SDK
+    //
+
     *pCLSID = CLSID_SAMPMSP;
-    
+
     return (Epilog (&info, lResult));
 
 }
 
 
 LONG
-TSPIAPI TSPI_lineReceiveMSPData(   							
-	HDRVLINE        hdLine,
-    HDRVCALL        hdCall,         
-    HDRVMSPLINE     hdMSPLine,		
+TSPIAPI TSPI_lineReceiveMSPData(
+    HDRVLINE        hdLine,
+    HDRVCALL        hdCall,
+    HDRVMSPLINE     hdMSPLine,
     LPBYTE          pBuffer,
     DWORD           dwSize
-    )
+)
 {
-	LONG lResult             = 0;
+    LONG lResult             = 0;
 
 #if DBG
-	FUNC_PARAM  params[] =
-	{
-		{  gszhdLine, hdLine },
-		{  gszhdCall, hdCall},
-		{ "hdMSPLine", hdMSPLine},
-		{ "pBuffer"  , pBuffer},
-		{ "dwSize" , dwSize}
-		
-	};
-	
-	FUNC_INFO   info =
-	{
-		"TSPI_lineReceiveMSPData",
-		5,
-		params
-	};
-	
+    FUNC_PARAM  params[] =
+    {
+        {  gszhdLine, hdLine },
+        {  gszhdCall, hdCall},
+        { "hdMSPLine", hdMSPLine},
+        { "pBuffer", pBuffer},
+        { "dwSize", dwSize}
+
+    };
+
+    FUNC_INFO   info =
+    {
+        "TSPI_lineReceiveMSPData",
+        5,
+        params
+    };
+
 #endif
-	
-	Prolog (&info); 
-	
-	//
-	// Place code to Process Data received from the MSP
-	//
-	
-	return (Epilog (&info, lResult));
+
+    Prolog (&info);
+
+    //
+    // Place code to Process Data received from the MSP
+    //
+
+    return (Epilog (&info, lResult));
 }
 
 LONG
-TSPIAPI		
+TSPIAPI
 TSPI_lineCreateMSPInstance(
-	  HDRVLINE        hdLine,
-      DWORD           dwAddressID,
-      HTAPIMSPLINE    htMSPLine,
-      LPHDRVMSPLINE   phdMSPLine
-    )
+    HDRVLINE        hdLine,
+    DWORD           dwAddressID,
+    HTAPIMSPLINE    htMSPLine,
+    LPHDRVMSPLINE   phdMSPLine
+)
 {
     LONG		lResult = 0;
-	PDRVLINE    pLine   = (PDRVLINE) hdLine;
+    PDRVLINE    pLine   = (PDRVLINE) hdLine;
 
 #if DBG
     FUNC_PARAM  params[] =
@@ -285,34 +285,34 @@ TSPI_lineCreateMSPInstance(
 
 
     Prolog (&info);
-   
-	//
-	// we save the TAPI MSP handle as a member value
-	// in the line in order to be able to send MSP messages
-	// with the line/client identification to TAPISRV.
-	// tapisrv identifies the client with the call handle and or the
-	// MSP handle.. both cannot be ambiguous.
-	//
 
-	pLine->htMSPLineHandle = htMSPLine;
+    //
+    // we save the TAPI MSP handle as a member value
+    // in the line in order to be able to send MSP messages
+    // with the line/client identification to TAPISRV.
+    // tapisrv identifies the client with the call handle and or the
+    // MSP handle.. both cannot be ambiguous.
+    //
+
+    pLine->htMSPLineHandle = htMSPLine;
 
 
-	//
-	// we fake a TTSP handle for TAPI we are not keeping track of this
-	//
+    //
+    // we fake a TTSP handle for TAPI we are not keeping track of this
+    //
 
-	*phdMSPLine = 0;
+    *phdMSPLine = 0;
 
-	return (Epilog (&info, lResult));
-    
+    return (Epilog (&info, lResult));
+
 }
 
 LONG
 TSPIAPI TSPI_lineCloseMSPInstance(
-		HDRVMSPLINE         hdMSPLine
-        )
+    HDRVMSPLINE         hdMSPLine
+)
 {
-   LONG  lResult = 0;
+    LONG  lResult = 0;
 
 #if DBG
     FUNC_PARAM  params[] =
@@ -332,10 +332,10 @@ TSPIAPI TSPI_lineCloseMSPInstance(
 
     Prolog (&info);
 
-	//
-	// no - op there is no information stored with the 
-	// msp so we dont need to free anything or remove anything 
-	//
+    //
+    // no - op there is no information stored with the
+    // msp so we dont need to free anything or remove anything
+    //
 
     return (Epilog (&info, lResult));
 
@@ -348,7 +348,7 @@ LONG
 TSPIAPI
 TSPI_lineClose(
     HDRVLINE    hdLine
-    )
+)
 {
     LONG        lResult = 0;
 #if DBG
@@ -374,7 +374,7 @@ LONG
 TSPIAPI
 TSPI_lineCloseCall(
     HDRVCALL    hdCall
-    )
+)
 {
     PDRVLINE    pLine = (PDRVLINE) hdCall;
 #if DBG
@@ -410,7 +410,7 @@ TSPI_lineConditionalMediaDetection(
     HDRVLINE            hdLine,
     DWORD               dwMediaModes,
     LPLINECALLPARAMS    const lpCallParams
-    )
+)
 {
 #if DBG
     FUNC_PARAM  params[] =
@@ -446,7 +446,7 @@ TSPI_lineDrop(
     HDRVCALL        hdCall,
     LPCSTR          lpsUserUserInfo,
     DWORD           dwSize
-    )
+)
 {
     PDRVLINE    pLine = (PDRVLINE) hdCall;
 #if DBG
@@ -482,7 +482,7 @@ TSPI_lineGetAddressCaps(
     DWORD              dwTSPIVersion,
     DWORD              dwExtVersion,
     LPLINEADDRESSCAPS  lpAddressCaps
-    )
+)
 {
 
 #if DBG
@@ -513,16 +513,16 @@ TSPI_lineGetAddressCaps(
     }
 
     lpAddressCaps->dwNeededSize =
-    lpAddressCaps->dwUsedSize   = sizeof(LINEADDRESSCAPS);
+        lpAddressCaps->dwUsedSize   = sizeof(LINEADDRESSCAPS);
 
     lpAddressCaps->dwLineDeviceID       = dwDeviceID;
     lpAddressCaps->dwAddressSharing     = LINEADDRESSSHARING_PRIVATE;
     lpAddressCaps->dwCallInfoStates     = LINECALLINFOSTATE_MEDIAMODE |
                                           LINECALLINFOSTATE_APPSPECIFIC;
     lpAddressCaps->dwCallerIDFlags      =
-    lpAddressCaps->dwCalledIDFlags      =
-    lpAddressCaps->dwRedirectionIDFlags =
-    lpAddressCaps->dwRedirectingIDFlags = LINECALLPARTYID_UNAVAIL;
+        lpAddressCaps->dwCalledIDFlags      =
+            lpAddressCaps->dwRedirectionIDFlags =
+                lpAddressCaps->dwRedirectingIDFlags = LINECALLPARTYID_UNAVAIL;
     lpAddressCaps->dwCallStates         = LINECALLSTATE_IDLE |
                                           LINECALLSTATE_OFFERING |
                                           LINECALLSTATE_ACCEPTED |
@@ -558,7 +558,7 @@ TSPI_lineGetAddressStatus(
     HDRVLINE            hdLine,
     DWORD               dwAddressID,
     LPLINEADDRESSSTATUS lpAddressStatus
-    )
+)
 {
 #if DBG
     FUNC_PARAM  params[] =
@@ -582,7 +582,7 @@ TSPI_lineGetAddressStatus(
     Prolog (&info);
 
     lpAddressStatus->dwNeededSize =
-    lpAddressStatus->dwUsedSize   = sizeof(LINEADDRESSSTATUS);
+        lpAddressStatus->dwUsedSize   = sizeof(LINEADDRESSSTATUS);
 
     lpAddressStatus->dwNumActiveCalls  = (pLine->htCall ? 1 : 0);
     lpAddressStatus->dwAddressFeatures = LINEADDRFEATURE_MAKECALL;
@@ -596,7 +596,7 @@ TSPIAPI
 TSPI_lineGetCallAddressID(
     HDRVCALL            hdCall,
     LPDWORD             lpdwAddressID
-    )
+)
 {
 #if DBG
     FUNC_PARAM  params[] =
@@ -628,7 +628,7 @@ TSPIAPI
 TSPI_lineGetCallInfo(
     HDRVCALL        hdCall,
     LPLINECALLINFO  lpLineInfo
-    )
+)
 {
 #if DBG
     FUNC_PARAM  params[] =
@@ -650,7 +650,7 @@ TSPI_lineGetCallInfo(
     Prolog (&info);
 
     lpLineInfo->dwNeededSize =
-    lpLineInfo->dwUsedSize   = sizeof(LINECALLINFO);
+        lpLineInfo->dwUsedSize   = sizeof(LINECALLINFO);
 
     lpLineInfo->dwBearerMode         = LINEBEARERMODE_VOICE;
     lpLineInfo->dwMediaMode          = pLine->dwMediaMode;
@@ -664,10 +664,10 @@ TSPI_lineGetCallInfo(
     lpLineInfo->dwOrigin             = LINECALLORIGIN_OUTBOUND;
     lpLineInfo->dwReason             = LINECALLREASON_DIRECT;
     lpLineInfo->dwCallerIDFlags      =
-    lpLineInfo->dwCalledIDFlags      =
-    lpLineInfo->dwConnectedIDFlags   =
-    lpLineInfo->dwRedirectionIDFlags =
-    lpLineInfo->dwRedirectingIDFlags = LINECALLPARTYID_UNAVAIL;
+        lpLineInfo->dwCalledIDFlags      =
+            lpLineInfo->dwConnectedIDFlags   =
+                lpLineInfo->dwRedirectionIDFlags =
+                    lpLineInfo->dwRedirectingIDFlags = LINECALLPARTYID_UNAVAIL;
 
     return (Epilog (&info, lResult));
 }
@@ -678,7 +678,7 @@ TSPIAPI
 TSPI_lineGetCallStatus(
     HDRVCALL            hdCall,
     LPLINECALLSTATUS    lpLineStatus
-    )
+)
 {
 #if DBG
     FUNC_PARAM  params[] =
@@ -700,7 +700,7 @@ TSPI_lineGetCallStatus(
     Prolog (&info);
 
     lpLineStatus->dwNeededSize =
-    lpLineStatus->dwUsedSize   = sizeof(LINECALLSTATUS);
+        lpLineStatus->dwUsedSize   = sizeof(LINECALLSTATUS);
 
     lpLineStatus->dwCallState  = pLine->dwCallState;
 
@@ -720,9 +720,9 @@ TSPI_lineGetDevCaps(
     DWORD           dwTSPIVersion,
     DWORD           dwExtVersion,
     LPLINEDEVCAPS   lpLineDevCaps
-    )
+)
 {
-  HRESULT hr;
+    HRESULT hr;
 #if DBG
     FUNC_PARAM  params[] =
     {
@@ -742,16 +742,16 @@ TSPI_lineGetDevCaps(
     LONG            lResult = 0;
     static WCHAR    szProviderInfo[] = L"AT-compatible modem service provider";
 
-    #define PROVIDER_INFO_SIZE (37 * sizeof (WCHAR))
+#define PROVIDER_INFO_SIZE (37 * sizeof (WCHAR))
 
     Prolog (&info);
 
     lpLineDevCaps->dwNeededSize = sizeof (LINEDEVCAPS) + PROVIDER_INFO_SIZE +
-        (MAX_DEV_NAME_LENGTH + 1) * sizeof (WCHAR);
+                                  (MAX_DEV_NAME_LENGTH + 1) * sizeof (WCHAR);
 
     if (lpLineDevCaps->dwTotalSize >= lpLineDevCaps->dwNeededSize)
     {
-        #define LINECONFIG_SIZE   (2 * (MAX_DEV_NAME_LENGTH + 1) + 40)
+#define LINECONFIG_SIZE   (2 * (MAX_DEV_NAME_LENGTH + 1) + 40)
 
         char    szLineConfig[LINECONFIG_SIZE], szLineN[16], *p;
         HKEY    hKey;
@@ -772,13 +772,13 @@ TSPI_lineGetDevCaps(
             0,
             KEY_ALL_ACCESS,
             &hKey
-            );
+        );
 
         dwDataSize = LINECONFIG_SIZE;
         hr = StringCbPrintfA (szLineN,sizeof(szLineN), "Line%d", dwDeviceID - gdwLineDeviceIDBase);
         assert_str(hr);
-        hr = StringCbCopyA (szLineConfig, sizeof(szLineConfig),gszDefLineConfigParams);		
-        assert_str(hr);		
+        hr = StringCbCopyA (szLineConfig, sizeof(szLineConfig),gszDefLineConfigParams);
+        assert_str(hr);
 
         RegQueryValueEx(
             hKey,
@@ -787,7 +787,7 @@ TSPI_lineGetDevCaps(
             &dwDataType,
             (LPBYTE) szLineConfig,
             &dwDataSize
-            );
+        );
 
         RegCloseKey (hKey);
 
@@ -795,9 +795,9 @@ TSPI_lineGetDevCaps(
         *p = 0;
 
         lpLineDevCaps->dwLineNameSize   = (lstrlen (szLineConfig) + 1) *
-            sizeof (WCHAR);
+                                          sizeof (WCHAR);
         lpLineDevCaps->dwLineNameOffset = sizeof(LINEDEVCAPS) +
-            PROVIDER_INFO_SIZE;
+                                          PROVIDER_INFO_SIZE;
 
         MultiByteToWideChar(
             CP_ACP,
@@ -806,7 +806,7 @@ TSPI_lineGetDevCaps(
             -1,
             (WCHAR *) ((LPBYTE) (lpLineDevCaps + 1) + PROVIDER_INFO_SIZE),
             (lpLineDevCaps->dwLineNameSize)/sizeof(WCHAR)
-            );
+        );
     }
     else
     {
@@ -822,18 +822,18 @@ TSPI_lineGetDevCaps(
                                          LINEMEDIAMODE_DATAMODEM;
 
 
-	//
-	// Specify  LINEDEVCAPFLAGS_MSP so tapi knows to call lineMSPIdentify for
-	// the MSP CLSID. Note: version must be 3.0 or higher
-	//
+    //
+    // Specify  LINEDEVCAPFLAGS_MSP so tapi knows to call lineMSPIdentify for
+    // the MSP CLSID. Note: version must be 3.0 or higher
+    //
 
     lpLineDevCaps->dwDevCapFlags       = LINEDEVCAPFLAGS_CLOSEDROP |
                                          LINEDEVCAPFLAGS_DIALBILLING |
                                          LINEDEVCAPFLAGS_DIALQUIET |
                                          LINEDEVCAPFLAGS_DIALDIALTONE |
-										 LINEDEVCAPFLAGS_MSP;
+                                         LINEDEVCAPFLAGS_MSP;
 
-	lpLineDevCaps->dwAddressTypes	   =  LINEADDRESSTYPE_PHONENUMBER;
+    lpLineDevCaps->dwAddressTypes	   =  LINEADDRESSTYPE_PHONENUMBER;
 
     lpLineDevCaps->dwMaxNumActiveCalls = 1;
     lpLineDevCaps->dwRingModes         = 1;
@@ -853,9 +853,9 @@ TSPI_lineGetID(
     LPVARSTRING lpDeviceID,
     LPCWSTR     lpszDeviceClass,
     HANDLE      hTargetProcess
-    )
+)
 {
-HRESULT hr;
+    HRESULT hr;
 
 #if DBG
     FUNC_PARAM  params[] =
@@ -879,7 +879,7 @@ HRESULT hr;
     DWORD       dwNeededSize = sizeof(VARSTRING) + sizeof (DWORD);
     LONG        lResult = 0;
     PDRVLINE    pLine = (dwSelect == LINECALLSELECT_CALL ?
-                    (PDRVLINE) hdCall : (PDRVLINE) hdLine);
+                         (PDRVLINE) hdCall : (PDRVLINE) hdLine);
 
 
     Prolog (&info);
@@ -930,20 +930,20 @@ HRESULT hr;
             }
 
             if (!DuplicateHandle(
-                    GetCurrentProcess(),
-                    pLine->hComm,
-                    hTargetProcess,
-                    &hCommDup,
-                    0,
-                    TRUE,
-                    DUPLICATE_SAME_ACCESS
+                        GetCurrentProcess(),
+                        pLine->hComm,
+                        hTargetProcess,
+                        &hCommDup,
+                        0,
+                        TRUE,
+                        DUPLICATE_SAME_ACCESS
                     ))
             {
                 DBGOUT((
-                    1,
-                    "TSPI_lineGetID: DupHandle failed, err=%ld",
-                    GetLastError()
-                    ));
+                           1,
+                           "TSPI_lineGetID: DupHandle failed, err=%ld",
+                           GetLastError()
+                       ));
 
                 lResult = LINEERR_OPERATIONFAILED;
 
@@ -960,10 +960,10 @@ HRESULT hr;
 
 
             hr = StringCbCopyA(
-                ((char *)(lpDeviceID + 1)) + sizeof (HANDLE),
-                lpDeviceID->dwTotalSize - sizeof(VARSTRING) -sizeof(HANDLE),
-                 pLine->szComm
-                );
+                     ((char *)(lpDeviceID + 1)) + sizeof (HANDLE),
+                     lpDeviceID->dwTotalSize - sizeof(VARSTRING) -sizeof(HANDLE),
+                     pLine->szComm
+                 );
             assert_str(hr);
 
             MultiByteToWideChar(
@@ -973,7 +973,7 @@ HRESULT hr;
                 -1,
                 (WCHAR *)((LPBYTE)((((WCHAR *)(lpDeviceID + 1)))) + sizeof (HANDLE)),
                 (lpDeviceID->dwTotalSize - sizeof(VARSTRING) -sizeof(HANDLE))/sizeof(WCHAR)
-                );
+            );
         }
 
         lpDeviceID->dwNeededSize = dwNeededSize;
@@ -994,7 +994,7 @@ TSPIAPI
 TSPI_lineGetLineDevStatus(
     HDRVLINE        hdLine,
     LPLINEDEVSTATUS lpLineDevStatus
-    )
+)
 {
 #if DBG
     FUNC_PARAM  params[] =
@@ -1017,7 +1017,7 @@ TSPI_lineGetLineDevStatus(
     Prolog (&info);
 
     lpLineDevStatus->dwUsedSize =
-    lpLineDevStatus->dwNeededSize = sizeof (LINEDEVSTATUS);
+        lpLineDevStatus->dwNeededSize = sizeof (LINEDEVSTATUS);
 
     lpLineDevStatus->dwNumActiveCalls = (pLine->htCall ? 1 : 0);
     //lpLineDevStatus->dwLineFeatures =
@@ -1032,7 +1032,7 @@ TSPIAPI
 TSPI_lineGetNumAddressIDs(
     HDRVLINE    hdLine,
     LPDWORD     lpdwNumAddressIDs
-    )
+)
 {
 #if DBG
     FUNC_PARAM  params[] =
@@ -1072,13 +1072,13 @@ TSPI_lineMakeCall(
     LPCWSTR             lpszDestAddress,
     DWORD               dwCountryCode,
     LPLINECALLPARAMS    const lpCallParams
-    )
+)
 {
     char        szCommands[64], szCommand[64], szDestAddress[128];
     DWORD       dwThreadID, dwNumBytes, dwError;
     PDRVLINE    pLine = (PDRVLINE) hdLine;
     HRESULT hr;
-	
+
 #if DBG
     FUNC_PARAM  params[] =
     {
@@ -1110,7 +1110,7 @@ TSPI_lineMakeCall(
             128,
             NULL,
             NULL
-            );
+        );
     }
 
     Prolog (&info);
@@ -1151,20 +1151,21 @@ TSPI_lineMakeCall(
 
 
         hr = StringCbPrintfA(
-            szLineN,
-            sizeof(szLineN),
-            "Line%d",
-            ((PDRVLINE) hdLine)->dwDeviceID - gdwLineDeviceIDBase
-            );
+                 szLineN,
+                 sizeof(szLineN),
+                 "Line%d",
+                 ((PDRVLINE) hdLine)->dwDeviceID - gdwLineDeviceIDBase
+             );
         assert_str(hr);
         dwDataSize = 256;
 
         pszConfig = DrvAlloc (dwDataSize);
 
-        if (!pszConfig) {
-	      (*gpfnCompletionProc)(dwRequestID, LINEERR_NOMEM);
-        	goto TSPI_lineMakeCall_return;
-      	}
+        if (!pszConfig)
+        {
+            (*gpfnCompletionProc)(dwRequestID, LINEERR_NOMEM);
+            goto TSPI_lineMakeCall_return;
+        }
 
         RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
@@ -1172,7 +1173,7 @@ TSPI_lineMakeCall(
             0,
             KEY_ALL_ACCESS,
             &hKey
-            );
+        );
 
         RegQueryValueEx(
             hKey,
@@ -1181,7 +1182,7 @@ TSPI_lineMakeCall(
             &dwDataType,
             (LPBYTE) pszConfig,
             &dwDataSize
-            );
+        );
 
         pszConfig[dwDataSize] = '\0';       // *pszConfig = "MyLine,COM1,L0"
 
@@ -1198,7 +1199,7 @@ TSPI_lineMakeCall(
         *p2 = 0;                            // *p = "COM1"
 
         hr = StringCbCopyA(pLine->szComm, sizeof(pLine->szComm),p );
-        assert_str(hr);		
+        assert_str(hr);
 
         //
         // szCommands
@@ -1206,7 +1207,7 @@ TSPI_lineMakeCall(
 
         p2++;                               // *p2 = "L0"
         hr = StringCbCopyA(szCommands, sizeof(szCommands),p2);
-        assert_str(hr);		
+        assert_str(hr);
         DrvFree (pszConfig);
     }
 
@@ -1216,22 +1217,22 @@ TSPI_lineMakeCall(
     //
 
     if ((pLine->hComm = CreateFile(
-            pLine->szComm,
-            GENERIC_READ | GENERIC_WRITE,
-            0, //FILE_SHARE_READ | FILE_SHARE_WRITE,
-            NULL, // no security attrs
-            OPEN_EXISTING,
-            FILE_FLAG_OVERLAPPED,
-            NULL  // no template file
+                            pLine->szComm,
+                            GENERIC_READ | GENERIC_WRITE,
+                            0, //FILE_SHARE_READ | FILE_SHARE_WRITE,
+                            NULL, // no security attrs
+                            OPEN_EXISTING,
+                            FILE_FLAG_OVERLAPPED,
+                            NULL  // no template file
 
-            )) == INVALID_HANDLE_VALUE)
+                        )) == INVALID_HANDLE_VALUE)
     {
         DBGOUT((
-            3,
-            "TSPI_lineMakeCall: CreateFile(%s) failed, err=%ld",
-            pLine->szComm,
-            GetLastError()
-            ));
+                   3,
+                   "TSPI_lineMakeCall: CreateFile(%s) failed, err=%ld",
+                   pLine->szComm,
+                   GetLastError()
+               ));
 
         (*gpfnCompletionProc)(dwRequestID, LINEERR_RESOURCEUNAVAIL);
         goto TSPI_lineMakeCall_return;
@@ -1255,7 +1256,7 @@ TSPI_lineMakeCall(
         }
 
         if (lpCallParams &&
-            lpCallParams->dwMediaMode != LINEMEDIAMODE_INTERACTIVEVOICE)
+                lpCallParams->dwMediaMode != LINEMEDIAMODE_INTERACTIVEVOICE)
         {
             hr = StringCbPrintfA (szCommand, sizeof(szCommand),"AT%sDT%s\r", szCommands, p);
             assert_str(hr);
@@ -1275,7 +1276,7 @@ TSPI_lineMakeCall(
     pLine->htCall          = htCall;
     pLine->bDropInProgress = FALSE;
     pLine->dwMediaMode     = (lpCallParams ? lpCallParams->dwMediaMode :
-        LINEMEDIAMODE_INTERACTIVEVOICE);
+                              LINEMEDIAMODE_INTERACTIVEVOICE);
 
     *lphdCall = (HDRVCALL) pLine;
 
@@ -1287,21 +1288,21 @@ TSPI_lineMakeCall(
     pLine->Overlapped.hEvent = CreateEvent (NULL, TRUE, FALSE, NULL);
 
     if (!WriteFile(
-            pLine->hComm,
-            szCommand,
-            lstrlen (szCommand),
-            &dwNumBytes,
-            &pLine->Overlapped
+                pLine->hComm,
+                szCommand,
+                lstrlen (szCommand),
+                &dwNumBytes,
+                &pLine->Overlapped
             )
 
-        && (dwError = GetLastError()) != ERROR_IO_PENDING)
+            && (dwError = GetLastError()) != ERROR_IO_PENDING)
     {
         DBGOUT((
-            1,
-            "TSPI_lineMakeCall: WriteFile(%s) failed, error=%d",
-            pLine->szComm,
-            dwError
-            ));
+                   1,
+                   "TSPI_lineMakeCall: WriteFile(%s) failed, error=%d",
+                   pLine->szComm,
+                   dwError
+               ));
 
         pLine->htCall = NULL;
         CloseHandle (pLine->hComm);
@@ -1328,26 +1329,26 @@ TSPI_lineMakeCall(
 
 
         if (!(hCommThread = CreateThread(
-                (LPSECURITY_ATTRIBUTES) NULL,
-                0,
-                (LPTHREAD_START_ROUTINE) CommThread,
-                pLine,
-                0,
-                &dwThreadID
-                )))
+                                (LPSECURITY_ATTRIBUTES) NULL,
+                                0,
+                                (LPTHREAD_START_ROUTINE) CommThread,
+                                pLine,
+                                0,
+                                &dwThreadID
+                            )))
         {
             DBGOUT((
-                1,
-                "TSPI_lineMakeCall: CreateThread failed, err=%ld",
-                GetLastError()
-                ));
+                       1,
+                       "TSPI_lineMakeCall: CreateThread failed, err=%ld",
+                       GetLastError()
+                   ));
 
             GetOverlappedResult(
                 pLine->hComm,
                 &pLine->Overlapped,
                 &dwNumBytes,
                 TRUE
-                );
+            );
 
             SetCallState (pLine, LINECALLSTATE_IDLE, 0);
             CloseHandle (pLine->hComm);
@@ -1372,7 +1373,7 @@ TSPI_lineNegotiateTSPIVersion(
     DWORD   dwLowVersion,
     DWORD   dwHighVersion,
     LPDWORD lpdwTSPIVersion
-    )
+)
 {
     LONG        lResult = 0;
 #if DBG
@@ -1393,8 +1394,8 @@ TSPI_lineNegotiateTSPIVersion(
 
     Prolog (&info);
 
-	// version 3.0 to allow MSP usage
-	//
+    // version 3.0 to allow MSP usage
+    //
 
     *lpdwTSPIVersion = 0x00030000;
     return (Epilog (&info, lResult));
@@ -1409,7 +1410,7 @@ TSPI_lineOpen(
     LPHDRVLINE  lphdLine,
     DWORD       dwTSPIVersion,
     LINEEVENT   lpfnEventProc
-    )
+)
 {
     LONG        lResult;
     PDRVLINE    pLine;
@@ -1457,7 +1458,7 @@ TSPIAPI
 TSPI_lineSetDefaultMediaDetection(
     HDRVLINE    hdLine,
     DWORD       dwMediaModes
-    )
+)
 {
 #if DBG
     FUNC_PARAM  params[] =
@@ -1494,7 +1495,7 @@ TSPIAPI
 TSPI_providerConfig(
     HWND    hwndOwner,
     DWORD   dwPermanentProviderID
-    )
+)
 {
     //
     // Although this func is never called by TAPI v2.0, we export
@@ -1514,7 +1515,7 @@ TSPI_providerGenericDialogData(
     DWORD               dwObjectType,
     LPVOID              lpParams,
     DWORD               dwSize
-    )
+)
 {
     LONG        lResult = 0;
 #if DBG
@@ -1550,7 +1551,7 @@ TSPI_providerInit(
     DWORD_PTR           dwNumPhones,
     ASYNC_COMPLETION    lpfnCompletionProc,
     LPDWORD             lpdwTSPIOptions
-    )
+)
 {
     LONG        lResult = 0;
 #if DBG
@@ -1585,7 +1586,7 @@ TSPIAPI
 TSPI_providerInstall(
     HWND    hwndOwner,
     DWORD   dwPermanentProviderID
-    )
+)
 {
     //
     // Although this func is never called by TAPI v2.0, we export
@@ -1604,7 +1605,7 @@ TSPIAPI
 TSPI_providerRemove(
     HWND    hwndOwner,
     DWORD   dwPermanentProviderID
-    )
+)
 {
     //
     // Although this func is never called by TAPI v2.0, we export
@@ -1622,7 +1623,7 @@ TSPIAPI
 TSPI_providerShutdown(
     DWORD   dwTSPIVersion,
     DWORD   dwPermanentProviderID
-    )
+)
 {
     LONG        lResult = 0;
 #if DBG
@@ -1655,42 +1656,42 @@ TSPI_providerEnumDevices(
     HPROVIDER   hProvider,
     LINEEVENT   lpfnLineCreateProc,
     PHONEEVENT  lpfnPhoneCreateProc
-    )
+)
 {
-   HKEY     hKey;
-   DWORD    dwNumLines, dwDataType, dwDataSize;
+    HKEY     hKey;
+    DWORD    dwNumLines, dwDataType, dwDataSize;
 
 
-   //
-   // Retrieve the number of devices we're
-   // configured for from our registry section
-   //
+    //
+    // Retrieve the number of devices we're
+    // configured for from our registry section
+    //
 
-   RegOpenKeyEx(
-       HKEY_LOCAL_MACHINE,
-       gszAtspKey,
-       0,
-       KEY_ALL_ACCESS,
-       &hKey
-       );
+    RegOpenKeyEx(
+        HKEY_LOCAL_MACHINE,
+        gszAtspKey,
+        0,
+        KEY_ALL_ACCESS,
+        &hKey
+    );
 
-   dwDataSize = sizeof(dwNumLines);
-   dwNumLines = 0;
+    dwDataSize = sizeof(dwNumLines);
+    dwNumLines = 0;
 
-   RegQueryValueEx(
-       hKey,
-       gszNumLines,
-       0,
-       &dwDataType,
-       (LPBYTE) &dwNumLines,
-       &dwDataSize
-       );
+    RegQueryValueEx(
+        hKey,
+        gszNumLines,
+        0,
+        &dwDataType,
+        (LPBYTE) &dwNumLines,
+        &dwDataSize
+    );
 
-   RegCloseKey (hKey);
+    RegCloseKey (hKey);
 
-   *lpdwNumLines  = dwNumLines;
-   *lpdwNumPhones = 0;
-   return 0;
+    *lpdwNumLines  = dwNumLines;
+    *lpdwNumPhones = 0;
+    return 0;
 }
 
 
@@ -1698,7 +1699,7 @@ LONG
 TSPIAPI
 TSPI_providerUIIdentify(
     LPWSTR   lpszUIDLLName
-    )
+)
 {
     LONG        lResult = 0;
     HRESULT     hr = 0;
@@ -1734,7 +1735,7 @@ TUISPI_lineConfigDialog(
     DWORD               dwDeviceID,
     HWND                hwndOwner,
     LPCWSTR             lpszDeviceClass
-    )
+)
 {
     char        szDeviceClass[128];
     LONG        lResult = 0;
@@ -1766,7 +1767,7 @@ TUISPI_lineConfigDialog(
             128,
             NULL,
             NULL
-            );
+        );
     }
 
     Prolog (&info);
@@ -1777,7 +1778,7 @@ TUISPI_lineConfigDialog(
         hwndOwner,
         (DLGPROC) ConfigDlgProc,
         0
-        );
+    );
 
     return (Epilog (&info, lResult));
 }
@@ -1789,7 +1790,7 @@ TUISPI_providerConfig(
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     HWND                hwndOwner,
     DWORD               dwPermanentProviderID
-    )
+)
 {
     LONG        lResult = 0;
 #if DBG
@@ -1816,7 +1817,7 @@ TUISPI_providerConfig(
         hwndOwner,
         (DLGPROC) ConfigDlgProc,
         0
-        );
+    );
 
     return (Epilog (&info, lResult));
 }
@@ -1828,7 +1829,7 @@ TUISPI_providerInstall(
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     HWND                hwndOwner,
     DWORD               dwPermanentProviderID
-    )
+)
 {
     LONG    lResult;
 
@@ -1841,7 +1842,7 @@ TUISPI_providerInstall(
             hwndOwner,
             (DLGPROC) ConfigDlgProc,
             0
-            );
+        );
     }
 
     return lResult;
@@ -1854,7 +1855,7 @@ TUISPI_providerRemove(
     TUISPIDLLCALLBACK   lpfnUIDLLCallback,
     HWND                hwndOwner,
     DWORD               dwPermanentProviderID
-    )
+)
 {
     HKEY    hKey;
     char    szSoftwareMsft[] = "Software\\Microsoft", szATSP[] = "ATSP";
@@ -1870,7 +1871,7 @@ TUISPI_providerRemove(
         0,
         KEY_ALL_ACCESS,
         &hKey
-        );
+    );
 
     RegDeleteKeyA (hKey, szATSP);
     RegCloseKey (hKey);
@@ -1892,7 +1893,7 @@ PASCAL
 EnableChildren(
     HWND    hwnd,
     BOOL    bEnable
-    )
+)
 {
     int i;
     static int aiControlIDs[] =
@@ -1918,7 +1919,7 @@ PASCAL
 SelectDevice(
     HWND    hwnd,
     LRESULT     iDevice
-    )
+)
 {
     SendDlgItemMessage (hwnd, IDC_DEVICES, LB_SETCURSEL, iDevice, 0);
     PostMessage(hwnd, WM_COMMAND, IDC_DEVICES | (LBN_SELCHANGE << 16), 0);
@@ -1932,7 +1933,7 @@ ConfigDlgProc(
     UINT    msg,
     WPARAM  wParam,
     LPARAM  lParam
-    )
+)
 {
     static  HKEY    hAtspKey;
 
@@ -1962,40 +1963,40 @@ ConfigDlgProc(
 
 
             if ((lResult = RegCreateKeyEx(
-                    HKEY_LOCAL_MACHINE,
-                    gszAtspKey,
-                    0,
-                    "",
-                    REG_OPTION_NON_VOLATILE,
-                    KEY_ALL_ACCESS,
-                    (LPSECURITY_ATTRIBUTES) NULL,
-                    &hAtspKey,
-                    &dwDisposition
+                               HKEY_LOCAL_MACHINE,
+                               gszAtspKey,
+                               0,
+                               "",
+                               REG_OPTION_NON_VOLATILE,
+                               KEY_ALL_ACCESS,
+                               (LPSECURITY_ATTRIBUTES) NULL,
+                               &hAtspKey,
+                               &dwDisposition
 
-                    )) != ERROR_SUCCESS)
+                           )) != ERROR_SUCCESS)
             {
                 DBGOUT((
-                    3,
-                    "RegCreateKeyEx(%s,ALL_ACCESS) failed, err=%d",
-                    gszAtspKey,
-                    lResult
-                    ));
+                           3,
+                           "RegCreateKeyEx(%s,ALL_ACCESS) failed, err=%d",
+                           gszAtspKey,
+                           lResult
+                       ));
 
                 if ((lResult = RegOpenKeyEx(
-                        HKEY_LOCAL_MACHINE,
-                        gszAtspKey,
-                        0,
-                        KEY_QUERY_VALUE,
-                        &hAtspKey
+                                   HKEY_LOCAL_MACHINE,
+                                   gszAtspKey,
+                                   0,
+                                   KEY_QUERY_VALUE,
+                                   &hAtspKey
 
-                        )) != ERROR_SUCCESS)
+                               )) != ERROR_SUCCESS)
                 {
                     DBGOUT((
-                        3,
-                        "RegOpenKeyEx(%s,ALL_ACCESS) failed, err=%d",
-                        gszAtspKey,
-                        lResult
-                        ));
+                               3,
+                               "RegOpenKeyEx(%s,ALL_ACCESS) failed, err=%d",
+                               gszAtspKey,
+                               lResult
+                           ));
 
                     EndDialog (hwnd, 0);
                     return FALSE;
@@ -2020,7 +2021,7 @@ ConfigDlgProc(
                         EnableWindow(
                             GetDlgItem (hwnd, aiControlIDs[i]),
                             FALSE
-                            );
+                        );
                     }
                 }
             }
@@ -2041,7 +2042,7 @@ ConfigDlgProc(
             &dwDataType,
             (LPBYTE) &iNumLines,
             &dwDataSize
-            );
+        );
 
         SendDlgItemMessage(
             hwnd,
@@ -2049,7 +2050,7 @@ ConfigDlgProc(
             EM_LIMITTEXT,
             MAX_DEV_NAME_LENGTH,
             0
-            );
+        );
 
         SendDlgItemMessage(
             hwnd,
@@ -2057,10 +2058,10 @@ ConfigDlgProc(
             EM_LIMITTEXT,
             MAX_DEV_NAME_LENGTH,
             0
-            );
+        );
 
         if (!(pBuf = DrvAlloc (MAX_BUF_SIZE)))
-        	break;
+            break;
 
         for (i = 0; i < iNumLines; i++)
         {
@@ -2068,8 +2069,8 @@ ConfigDlgProc(
             PDRVLINECONFIG  pLineConfig;
             LONG            lResult;
 
-	     if (!(pLineConfig = DrvAlloc (sizeof(DRVLINECONFIG))))
-	     	break;
+            if (!(pLineConfig = DrvAlloc (sizeof(DRVLINECONFIG))))
+                break;
 
             hr = StringCbPrintfA (szLineN, sizeof(szLineN),"Line%d", i);
             assert_str(hr);
@@ -2077,13 +2078,13 @@ ConfigDlgProc(
             dwDataSize = 256;
 
             lResult = RegQueryValueEx(
-                hAtspKey,
-                szLineN,
-                0,
-                &dwDataType,
-                (LPBYTE) pBuf,
-                &dwDataSize
-                );
+                          hAtspKey,
+                          szLineN,
+                          0,
+                          &dwDataType,
+                          (LPBYTE) pBuf,
+                          &dwDataSize
+                      );
 
 
             //
@@ -2105,7 +2106,7 @@ ConfigDlgProc(
                 LB_ADDSTRING,
                 0,
                 (LPARAM) pBuf
-                );
+            );
 
             SendDlgItemMessage(
                 hwnd,
@@ -2113,7 +2114,7 @@ ConfigDlgProc(
                 LB_SETITEMDATA,
                 i,
                 (LPARAM) pLineConfig
-                );
+            );
 
             p++;
             for (p2 = p; *p2 != ','; p2++);
@@ -2148,7 +2149,7 @@ ConfigDlgProc(
                     LB_ADDSTRING,
                     0,
                     (LPARAM) aszPorts[i]
-                    );
+                );
             }
         }
 
@@ -2170,20 +2171,20 @@ ConfigDlgProc(
 
 
         iSelection = SendDlgItemMessage(
-            hwnd,
-            IDC_DEVICES,
-            LB_GETCURSEL,
-            0,
-            0
-            );
+                         hwnd,
+                         IDC_DEVICES,
+                         LB_GETCURSEL,
+                         0,
+                         0
+                     );
 
         pLineConfig = (PDRVLINECONFIG) SendDlgItemMessage(
-            hwnd,
-            IDC_DEVICES,
-            LB_GETITEMDATA,
-            (WPARAM) iSelection,
-            0
-            );
+                          hwnd,
+                          IDC_DEVICES,
+                          LB_GETITEMDATA,
+                          (WPARAM) iSelection,
+                          0
+                      );
 
         switch (LOWORD((DWORD)wParam))
         {
@@ -2200,7 +2201,7 @@ ConfigDlgProc(
                     LB_GETTEXT,
                     iSelection,
                     (LPARAM) buf
-                    );
+                );
 
                 SetDlgItemText (hwnd, IDC_NAME, buf);
 
@@ -2210,7 +2211,7 @@ ConfigDlgProc(
                     LB_SELECTSTRING,
                     (WPARAM) -1,
                     (LPARAM) pLineConfig->szPort
-                    );
+                );
 
                 SetDlgItemText (hwnd, IDC_COMMANDS, pLineConfig->szCommands);
             }
@@ -2232,7 +2233,7 @@ ConfigDlgProc(
                     LB_DELETESTRING,
                     iSelection,
                     0
-                    );
+                );
 
                 SendDlgItemMessage(
                     hwnd,
@@ -2240,7 +2241,7 @@ ConfigDlgProc(
                     LB_INSERTSTRING,
                     iSelection,
                     (LPARAM) buf
-                    );
+                );
 
                 SendDlgItemMessage(
                     hwnd,
@@ -2248,7 +2249,7 @@ ConfigDlgProc(
                     LB_SETCURSEL,
                     iSelection,
                     0
-                    );
+                );
 
                 SendDlgItemMessage(
                     hwnd,
@@ -2256,7 +2257,7 @@ ConfigDlgProc(
                     LB_SETITEMDATA,
                     iSelection,
                     (LPARAM) pLineConfig
-                    );
+                );
             }
 
             break;
@@ -2266,12 +2267,12 @@ ConfigDlgProc(
             if (HIWORD(wParam) == LBN_SELCHANGE)
             {
                 iSelection = SendDlgItemMessage(
-                    hwnd,
-                    IDC_PORT,
-                    LB_GETCURSEL,
-                    0,
-                    0
-                    );
+                                 hwnd,
+                                 IDC_PORT,
+                                 LB_GETCURSEL,
+                                 0,
+                                 0
+                             );
 
                 SendDlgItemMessage(
                     hwnd,
@@ -2279,7 +2280,7 @@ ConfigDlgProc(
                     LB_GETTEXT,
                     iSelection,
                     (LPARAM) pLineConfig->szPort
-                    );
+                );
             }
 
             break;
@@ -2293,7 +2294,7 @@ ConfigDlgProc(
                     IDC_COMMANDS,
                     pLineConfig->szCommands,
                     63
-                    );
+                );
             }
 
             break;
@@ -2301,21 +2302,21 @@ ConfigDlgProc(
         case IDC_ADD:
         {
             LRESULT             iNumLines;
-			int				i = 2;
+            int				i = 2;
             char            szLineName[32];
             PDRVLINECONFIG  pLineConfig;
 
             if(!(pLineConfig = DrvAlloc (sizeof(DRVLINECONFIG))))
-            	break;
+                break;
 
 
             iNumLines = SendDlgItemMessage(
-                hwnd,
-                IDC_DEVICES,
-                LB_GETCOUNT,
-                0,
-                0
-                );
+                            hwnd,
+                            IDC_DEVICES,
+                            LB_GETCOUNT,
+                            0,
+                            0
+                        );
 
             hr = StringCbCopyA (pLineConfig->szPort, sizeof(pLineConfig->szPort),"COM1");
             assert_str(hr);
@@ -2328,11 +2329,11 @@ ConfigDlgProc(
 find_unique_line_name:
 
             if (SendDlgItemMessage(
-                    hwnd,
-                    IDC_DEVICES,
-                    LB_FINDSTRING,
-                    (WPARAM) -1,
-                    (LPARAM) szLineName
+                        hwnd,
+                        IDC_DEVICES,
+                        LB_FINDSTRING,
+                        (WPARAM) -1,
+                        (LPARAM) szLineName
 
                     ) != LB_ERR)
             {
@@ -2347,7 +2348,7 @@ find_unique_line_name:
                 LB_ADDSTRING,
                 0,
                 (LPARAM) szLineName
-                );
+            );
 
             SendDlgItemMessage(
                 hwnd,
@@ -2355,7 +2356,7 @@ find_unique_line_name:
                 LB_SETITEMDATA,
                 iNumLines,
                 (LPARAM) pLineConfig
-                );
+            );
 
             EnableChildren (hwnd, TRUE);
 
@@ -2369,7 +2370,7 @@ find_unique_line_name:
                 EM_SETSEL,
                 0,
                 (LPARAM) -1
-                );
+            );
 
             break;
         }
@@ -2381,12 +2382,12 @@ find_unique_line_name:
             DrvFree (pLineConfig);
 
             iNumLines = SendDlgItemMessage(
-                hwnd,
-                IDC_DEVICES,
-                LB_DELETESTRING,
-                iSelection,
-                0
-                );
+                            hwnd,
+                            IDC_DEVICES,
+                            LB_DELETESTRING,
+                            iSelection,
+                            0
+                        );
 
             if (iNumLines == 0)
             {
@@ -2405,7 +2406,7 @@ find_unique_line_name:
         case IDOK:
         {
             int     i;
-			LRESULT	iNumLines;
+            LRESULT	iNumLines;
             char   *pBuf;
 
 
@@ -2414,15 +2415,15 @@ find_unique_line_name:
             //
 
             if (!(pBuf = DrvAlloc (256)))
-            	break;
+                break;
 
             iNumLines = SendDlgItemMessage(
-                hwnd,
-                IDC_DEVICES,
-                LB_GETCOUNT,
-                0,
-                0
-                );
+                            hwnd,
+                            IDC_DEVICES,
+                            LB_GETCOUNT,
+                            0,
+                            0
+                        );
 
             RegSetValueEx(
                 hAtspKey,
@@ -2431,7 +2432,7 @@ find_unique_line_name:
                 REG_DWORD,
                 (LPBYTE) &iNumLines,
                 sizeof(DWORD)
-                );
+            );
 
 
             //
@@ -2450,23 +2451,23 @@ find_unique_line_name:
                     LB_GETTEXT,
                     i,
                     (LPARAM) pBuf
-                    );
+                );
 
                 pLineConfig = (PDRVLINECONFIG) SendDlgItemMessage(
-                    hwnd,
-                    IDC_DEVICES,
-                    LB_GETITEMDATA,
-                    i,
-                    0
-                    );
+                                  hwnd,
+                                  IDC_DEVICES,
+                                  LB_GETITEMDATA,
+                                  i,
+                                  0
+                              );
 
                 hr = StringCbPrintfA(
-                    pBuf + strlen (pBuf),
-                    MAX_BUF_SIZE-strlen(pBuf),
-                    ",%s,%s",
-                    pLineConfig->szPort,
-                    pLineConfig->szCommands
-                    );
+                         pBuf + strlen (pBuf),
+                         MAX_BUF_SIZE-strlen(pBuf),
+                         ",%s,%s",
+                         pLineConfig->szPort,
+                         pLineConfig->szCommands
+                     );
                 assert_str(hr);
 
                 hr = StringCbPrintfA (szLineN, sizeof(szLineN),"Line%d", i);
@@ -2479,7 +2480,7 @@ find_unique_line_name:
                     REG_SZ,
                     (LPBYTE) pBuf,
                     lstrlen (pBuf) + 1
-                    );
+                );
 
                 DrvFree (pLineConfig);
             }
@@ -2508,7 +2509,7 @@ LPVOID
 PASCAL
 DrvAlloc(
     DWORD dwSize
-    )
+)
 {
     return (LocalAlloc (LPTR, dwSize));
 }
@@ -2518,7 +2519,7 @@ VOID
 PASCAL
 DrvFree(
     LPVOID lp
-    )
+)
 {
     LocalFree (lp);
 }
@@ -2530,7 +2531,7 @@ SetCallState(
     PDRVLINE    pLine,
     DWORD       dwCallState,
     DWORD       dwCallStateMode
-    )
+)
 {
     if (dwCallState != pLine->dwCallState)
     {
@@ -2544,7 +2545,7 @@ SetCallState(
             dwCallState,
             dwCallStateMode,
             pLine->dwMediaMode
-            );
+        );
     }
 }
 
@@ -2555,7 +2556,7 @@ void
 PASCAL
 Prolog(
     PFUNC_INFO  pInfo
-    )
+)
 {
     DWORD i;
 
@@ -2565,26 +2566,26 @@ Prolog(
     for (i = 0; i < pInfo->dwNumParams; i++)
     {
         if (pInfo->aParams[i].dwVal &&
-            pInfo->aParams[i].lpszVal[3] == 'z') // lpszVal = "lpsz..."
+                pInfo->aParams[i].lpszVal[3] == 'z') // lpszVal = "lpsz..."
         {
             DBGOUT((
-                3,
-                "%s%s=x%lx, '%s'",
-                gszTab,
-                pInfo->aParams[i].lpszVal,
-                pInfo->aParams[i].dwVal,
-                pInfo->aParams[i].dwVal
-                ));
+                       3,
+                       "%s%s=x%lx, '%s'",
+                       gszTab,
+                       pInfo->aParams[i].lpszVal,
+                       pInfo->aParams[i].dwVal,
+                       pInfo->aParams[i].dwVal
+                   ));
         }
         else
         {
             DBGOUT((
-                3,
-                "%s%s=x%lx",
-                gszTab,
-                pInfo->aParams[i].lpszVal,
-                pInfo->aParams[i].dwVal
-                ));
+                       3,
+                       "%s%s=x%lx",
+                       gszTab,
+                       pInfo->aParams[i].lpszVal,
+                       pInfo->aParams[i].dwVal
+                   ));
         }
     }
 }
@@ -2595,7 +2596,7 @@ PASCAL
 Epilog(
     PFUNC_INFO  pInfo,
     LONG        lResult
-    )
+)
 {
     DBGOUT((3, "%s: returning x%x", pInfo->lpszFuncName, lResult));
 
@@ -2609,7 +2610,7 @@ DebugOutput(
     DWORD   dwDbgLevel,
     LPCSTR  lpszFormat,
     ...
-    )
+)
 {
     if (dwDbgLevel <= gdwDebugLevel)
     {
@@ -2623,7 +2624,7 @@ DebugOutput(
 
 
         strncat_s (buf, sizeof(buf),"\n", 127 - strlen(buf));
-		buf[127] = '\0';
+        buf[127] = '\0';
 
         OutputDebugString (buf);
 
@@ -2639,7 +2640,7 @@ PASCAL
 ProviderInstall(
     char   *pszProviderName,
     BOOL    bNoMultipleInstance
-    )
+)
 {
     LONG    lResult;
 
@@ -2671,25 +2672,25 @@ ProviderInstall(
         if (!(hTapi32 = LoadLibrary ("tapi32.dll")))
         {
             DBGOUT((
-                1,
-                "LoadLibrary(tapi32.dll) failed, err=%d",
-                GetLastError()
-                ));
+                       1,
+                       "LoadLibrary(tapi32.dll) failed, err=%d",
+                       GetLastError()
+                   ));
 
             lResult = LINEERR_OPERATIONFAILED;
             goto ProviderInstall_return;
         }
 
         if (!(pfnGetProviderList = (LONG (WINAPI *)())GetProcAddress(
-                hTapi32,
-                (LPCSTR) "lineGetProviderList"
-                )))
+                                       hTapi32,
+                                       (LPCSTR) "lineGetProviderList"
+                                   )))
         {
             DBGOUT((
-                1,
-                "GetProcAddr(lineGetProviderList) failed, err=%d",
-                GetLastError()
-                ));
+                       1,
+                       "GetProcAddr(lineGetProviderList) failed, err=%d",
+                       GetLastError()
+                   ));
 
             lResult = LINEERR_OPERATIONFAILED;
             goto ProviderInstall_unloadTapi32;
@@ -2737,13 +2738,13 @@ ProviderInstall_allocProviderList:
         //
 
         pProviderEntry = (LPLINEPROVIDERENTRY) (((LPBYTE) pProviderList) +
-            pProviderList->dwProviderListOffset);
+                                                pProviderList->dwProviderListOffset);
 
         for (i = 0; i < pProviderList->dwNumProviders; i++)
         {
             char   *pszInstalledProviderName = ((char *) pProviderList) +
-                        pProviderEntry->dwProviderFilenameOffset,
-                   *p;
+                                               pProviderEntry->dwProviderFilenameOffset,
+                                               *p;
 
 
             //
@@ -2806,7 +2807,7 @@ void
 PASCAL
 DropActiveCall(
     PDRVLINE    pLine
-    )
+)
 {
     if (pLine->hComm)
     {
@@ -2825,10 +2826,10 @@ DropActiveCall(
         if (pLine->dwMediaMode != LINEMEDIAMODE_INTERACTIVEVOICE)
         {
             if (!WriteFile(
-                    pLine->hComm,
-                    "+++\r", 4,
-                    &dwNumBytes,
-                    &overlapped
+                        pLine->hComm,
+                        "+++\r", 4,
+                        &dwNumBytes,
+                        &overlapped
                     ))
             {
                 if ((dwError = GetLastError()) == ERROR_IO_PENDING)
@@ -2838,7 +2839,7 @@ DropActiveCall(
                         &overlapped,
                         &dwNumBytes,
                         TRUE
-                        );
+                    );
 
                     ResetEvent (overlapped.hEvent);
                 }
@@ -2857,7 +2858,7 @@ DropActiveCall(
                     &overlapped,
                     &dwNumBytes,
                     TRUE
-                    );
+                );
             }
             else
             {

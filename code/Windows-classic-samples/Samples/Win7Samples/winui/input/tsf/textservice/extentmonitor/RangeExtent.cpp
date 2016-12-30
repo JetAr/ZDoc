@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////
+﻿//////////////////////////////////////////////////////////////////////
 //
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 //  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
@@ -109,24 +109,24 @@ LRESULT CALLBACK CRangeExtentViewer::_WndProc(HWND hwnd, UINT uMsg, WPARAM wPara
     CRangeExtentViewer *_this;
     HDC hdc;
     PAINTSTRUCT ps;
-  
+
     _this = _GetThis(hwnd);
 
     switch (uMsg)
     {
-        case WM_CREATE:
-            _SetThis(hwnd, lParam);
-            return 0;
+    case WM_CREATE:
+        _SetThis(hwnd, lParam);
+        return 0;
 
-        case WM_PAINT:
-            hdc = BeginPaint(hwnd, &ps);
-            if (_this)
-                _this->OnPaint(hwnd, hdc);
-            EndPaint(hwnd, &ps);
-            break;
+    case WM_PAINT:
+        hdc = BeginPaint(hwnd, &ps);
+        if (_this)
+            _this->OnPaint(hwnd, hdc);
+        EndPaint(hwnd, &ps);
+        break;
 
-        default:
-            return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    default:
+        return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
     return 0;
 }
@@ -144,8 +144,8 @@ void CRangeExtentViewer::Show(RECT *prc)
         return;
 
     InvalidateRect(_hwnd, NULL, TRUE);
-    SetWindowPos(_hwnd, 
-                 HWND_TOPMOST, 
+    SetWindowPos(_hwnd,
+                 HWND_TOPMOST,
                  prc->left,
                  prc->top,
                  prc->right - prc->left > 2 ? prc->right - prc->left : 2,
@@ -203,7 +203,7 @@ void CRangeExtentViewer::OnPaint(HWND hwnd, HDC hdc)
 void CExtentMonitorTextService::_EnsureRangeExtentViewer()
 {
     if (!_pRangeExtentViewer)
-         _pRangeExtentViewer = new CRangeExtentViewer(L"View", 0x00D0D0);
+        _pRangeExtentViewer = new CRangeExtentViewer(L"View", 0x00D0D0);
     if (_pRangeExtentViewer)
         _pRangeExtentViewer->CreateWnd();
 }

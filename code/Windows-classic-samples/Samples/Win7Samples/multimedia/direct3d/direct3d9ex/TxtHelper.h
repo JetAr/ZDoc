@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------
+﻿//--------------------------------------------------------------------------------------
 // File: TxtHelper.h
 //
 // Text helper class for drawing txt
@@ -14,8 +14,15 @@ class CTextHelper
 public:
     CTextHelper( ID3DXFont* pFont, ID3DXSprite* pSprite, int nLineHeight );
 
-    void SetInsertionPos( int x, int y ) { m_pt.x = x; m_pt.y = y; }
-    void SetForegroundColor( D3DXCOLOR clr ) { m_clr = clr; }
+    void SetInsertionPos( int x, int y )
+    {
+        m_pt.x = x;
+        m_pt.y = y;
+    }
+    void SetForegroundColor( D3DXCOLOR clr )
+    {
+        m_clr = clr;
+    }
 
     void Begin();
     HRESULT DrawFormattedTextLine( const WCHAR* strMsg, ... );
@@ -38,8 +45,8 @@ CTextHelper::CTextHelper( ID3DXFont* pFont, ID3DXSprite* pSprite, int nLineHeigh
     m_pFont = pFont;
     m_pSprite = pSprite;
     m_clr = D3DXCOLOR(1,1,1,1);
-    m_pt.x = 0; 
-    m_pt.y = 0; 
+    m_pt.x = 0;
+    m_pt.y = 0;
     m_nLineHeight = nLineHeight;
 }
 
@@ -48,7 +55,7 @@ CTextHelper::CTextHelper( ID3DXFont* pFont, ID3DXSprite* pSprite, int nLineHeigh
 HRESULT CTextHelper::DrawFormattedTextLine( const WCHAR* strMsg, ... )
 {
     WCHAR strBuffer[512];
-    
+
     va_list args;
     va_start(args, strMsg);
     StringCchVPrintf( strBuffer, 512, strMsg, args );
@@ -62,12 +69,12 @@ HRESULT CTextHelper::DrawFormattedTextLine( const WCHAR* strMsg, ... )
 //--------------------------------------------------------------------------------------
 HRESULT CTextHelper::DrawTextLine( const WCHAR* strMsg )
 {
-    if( NULL == m_pFont ) 
+    if( NULL == m_pFont )
         return E_INVALIDARG;
 
     HRESULT hr;
     RECT rc;
-    SetRect( &rc, m_pt.x, m_pt.y, 0, 0 ); 
+    SetRect( &rc, m_pt.x, m_pt.y, 0, 0 );
     hr = m_pFont->DrawText( m_pSprite, strMsg, -1, &rc, DT_NOCLIP, m_clr );
     if( FAILED(hr) )
         return hr;
@@ -81,7 +88,7 @@ HRESULT CTextHelper::DrawTextLine( const WCHAR* strMsg )
 HRESULT CTextHelper::DrawFormattedTextLine( RECT &rc, DWORD dwFlags, const WCHAR* strMsg, ... )
 {
     WCHAR strBuffer[512];
-    
+
     va_list args;
     va_start(args, strMsg);
     StringCchVPrintf( strBuffer, 512, strMsg, args );
@@ -94,7 +101,7 @@ HRESULT CTextHelper::DrawFormattedTextLine( RECT &rc, DWORD dwFlags, const WCHAR
 
 HRESULT CTextHelper::DrawTextLine( RECT &rc, DWORD dwFlags, const WCHAR* strMsg )
 {
-    if( NULL == m_pFont ) 
+    if( NULL == m_pFont )
         return E_INVALIDARG;
 
     HRESULT hr;

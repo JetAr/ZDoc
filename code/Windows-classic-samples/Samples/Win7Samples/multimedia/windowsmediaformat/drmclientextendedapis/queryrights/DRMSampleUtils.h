@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 //
 // DRMSampleUtils.h : Contains common macros and functions for DRM samples.
 //
@@ -52,7 +52,7 @@ const int     g_TempStringSize           = 80;
 // Functions
 ///////////////////////////////////////////////////////////////////////////////
 void DisplayError(HRESULT ErrorCode, const wchar_t* pwszMessage);
-HRESULT ParseKIDFile(WCHAR* pwszInFile, 
-                     WCHAR*** pppKIDStrings, 
+HRESULT ParseKIDFile(WCHAR* pwszInFile,
+                     WCHAR*** pppKIDStrings,
                      int* pNumStrings);
 

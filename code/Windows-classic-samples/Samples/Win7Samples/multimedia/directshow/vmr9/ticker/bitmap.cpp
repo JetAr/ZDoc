@@ -1,7 +1,7 @@
-//------------------------------------------------------------------------------
+﻿//------------------------------------------------------------------------------
 // File: Bitmap.cpp
 //
-// Desc: DirectShow sample code - Bitmap manipulation routines for 
+// Desc: DirectShow sample code - Bitmap manipulation routines for
 //       VMR alpha-blended bitmap
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -23,7 +23,7 @@
 // Constants
 //
 const float EDGE_BUFFER=0.04f; // Pixel buffer between bitmap and window edge
-                               // (represented in composition space [0 - 1.0f])
+// (represented in composition space [0 - 1.0f])
 
 const float SLIDE_VALUE = 0.05f;  // Amount to slide image in composition space
 
@@ -36,7 +36,7 @@ const int SLIDE_TIMEOUT = 125;   // 125 ms between ticker movements
 IVMRMixerBitmap9 *pBMP = NULL;
 DWORD g_dwTickerFlags=0;
 int gnSlideTimer=0;
-TCHAR g_szAppText[DYNAMIC_TEXT_SIZE]={0};
+TCHAR g_szAppText[DYNAMIC_TEXT_SIZE]= {0};
 
 float g_fBitmapCompWidth=0;  // Width of bitmap in composition space units
 int g_nImageWidth=0;         // Width of text bitmap
@@ -49,7 +49,7 @@ TCHAR g_szFontStyle[32] = {DEFAULT_FONT_STYLE};
 COLORREF g_rgbColors    = DEFAULT_FONT_COLOR;
 
 // Destination rectangle used for alpha-blended text
-VMR9NormalizedRect  g_rDest={0};
+VMR9NormalizedRect  g_rDest= {0};
 
 
 HRESULT BlendApplicationImage(HWND hwndApp)
@@ -93,7 +93,7 @@ HRESULT BlendApplicationImage(HWND hwndApp)
     g_fBitmapCompWidth = (float)g_nImageWidth / (float)cx;
 
     // Display the bitmap in the bottom right corner.
-    // rSrc specifies the source rectangle in the GDI device context 
+    // rSrc specifies the source rectangle in the GDI device context
     // rDest specifies the destination rectangle in composition space (0.0f to 1.0f)
     SetRect(&bmpInfo.rSrc, 0, 0, g_nImageWidth, bm.bmHeight);
     bmpInfo.rDest.left   = 1.0f;
@@ -156,7 +156,7 @@ void ClearTickerState(void)
 HRESULT DisableTicker(DWORD dwFlags)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     // Read the current bitmap settings
     hr = pBMP->GetAlphaBitmapParameters(&bmpInfo);
@@ -196,7 +196,7 @@ HRESULT DisableTicker(DWORD dwFlags)
         EnableMenuItem(ghMenu, ID_TICKER_DYNAMIC_TEXT, MF_ENABLED);
         EnableMenuItem(ghMenu, ID_SET_FONT, MF_ENABLED);
         EnableMenuItem(ghMenu, ID_SET_TEXT, MF_ENABLED);
-     }
+    }
 
     return hr;
 }
@@ -235,10 +235,10 @@ void SlideTicker(DWORD dwFlags)
 
 
 VOID CALLBACK TimerProc(
-  HWND hwnd,         // handle to window
-  UINT uMsg,         // WM_TIMER message
-  UINT_PTR idEvent,  // timer identifier
-  DWORD dwTime       // current system time
+    HWND hwnd,         // handle to window
+    UINT uMsg,         // WM_TIMER message
+    UINT_PTR idEvent,  // timer identifier
+    DWORD dwTime       // current system time
 )
 {
     HandleSlide();
@@ -248,14 +248,14 @@ VOID CALLBACK TimerProc(
 void HandleSlide(void)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     hr = pBMP->GetAlphaBitmapParameters(&bmpInfo);
     if (FAILED(hr))
         Msg(TEXT("GetAlphaBitmapParameters FAILED!  hr=0x%x\r\n"), hr);
 
     // Slowly decrease the X coordinate
-    bmpInfo.rDest.left  -= SLIDE_VALUE;   
+    bmpInfo.rDest.left  -= SLIDE_VALUE;
     bmpInfo.rDest.right -= SLIDE_VALUE;
 
     // Once the bitmap disappears off the left side of the screen,
@@ -277,7 +277,7 @@ void HandleSlide(void)
 void ResetBitmapPosition(void)
 {
     HRESULT hr;
-    VMR9AlphaBitmap bmpInfo={0};
+    VMR9AlphaBitmap bmpInfo= {0};
 
     hr = pBMP->GetAlphaBitmapParameters(&bmpInfo);
     if (FAILED(hr))
@@ -317,7 +317,7 @@ void EnableTickerMenu(BOOL bEnable)
 }
 
 
-HFONT UserSelectFont( void ) 
+HFONT UserSelectFont( void )
 {
     // Allow the user to specify the text font to use with
     // dynamic text scrolling.  Display the Windows ChooseFont() dialog.
@@ -325,11 +325,11 @@ HFONT UserSelectFont( void )
 }
 
 
-HFONT SetTextFont(BOOL bShowDialog) 
-{ 
-    CHOOSEFONT cf={0}; 
-    LOGFONT lf={0}; 
-    HFONT hfont; 
+HFONT SetTextFont(BOOL bShowDialog)
+{
+    CHOOSEFONT cf= {0};
+    LOGFONT lf= {0};
+    HFONT hfont;
     HDC hdc;
     LONG lHeight;
 
@@ -338,35 +338,35 @@ HFONT SetTextFont(BOOL bShowDialog)
     lHeight = -MulDiv( g_lFontPointSize, GetDeviceCaps(hdc, LOGPIXELSY), 72 );
     ReleaseDC( ghApp, hdc );
 
-    // Initialize members of the LOGFONT structure. 
+    // Initialize members of the LOGFONT structure.
     StringCchCopy(lf.lfFaceName, LF_FACESIZE, g_szFontName);
     lf.lfHeight = lHeight;      // Logical units
 
     // Prevent font smoothing, which could distort the text and leave
-    // white pixels on the edges.  Disabling antialiasing leads to 
+    // white pixels on the edges.  Disabling antialiasing leads to
     // smoother text in this context.
     lf.lfQuality = NONANTIALIASED_QUALITY;
 
-    // Initialize members of the CHOOSEFONT structure. 
-    cf.lStructSize = sizeof(CHOOSEFONT); 
-    cf.hwndOwner   = ghApp; 
-    cf.hDC         = (HDC)NULL; 
-    cf.lpLogFont   = &lf; 
-    cf.iPointSize  = g_lFontPointSize * 10; 
-    cf.rgbColors   = g_rgbColors; 
-    cf.lCustData   = 0L; 
-    cf.lpfnHook    = (LPCFHOOKPROC)NULL; 
-    cf.hInstance   = (HINSTANCE) NULL; 
-    cf.lpszStyle   = g_szFontStyle; 
-    cf.nFontType   = SCREEN_FONTTYPE; 
-    cf.nSizeMin    = 0; 
-    cf.lpTemplateName = NULL; 
-    cf.Flags = CF_SCREENFONTS | CF_SCALABLEONLY | CF_INITTOLOGFONTSTRUCT | 
-               CF_EFFECTS     | CF_USESTYLE     | CF_LIMITSIZE; 
+    // Initialize members of the CHOOSEFONT structure.
+    cf.lStructSize = sizeof(CHOOSEFONT);
+    cf.hwndOwner   = ghApp;
+    cf.hDC         = (HDC)NULL;
+    cf.lpLogFont   = &lf;
+    cf.iPointSize  = g_lFontPointSize * 10;
+    cf.rgbColors   = g_rgbColors;
+    cf.lCustData   = 0L;
+    cf.lpfnHook    = (LPCFHOOKPROC)NULL;
+    cf.hInstance   = (HINSTANCE) NULL;
+    cf.lpszStyle   = g_szFontStyle;
+    cf.nFontType   = SCREEN_FONTTYPE;
+    cf.nSizeMin    = 0;
+    cf.lpTemplateName = NULL;
+    cf.Flags = CF_SCREENFONTS | CF_SCALABLEONLY | CF_INITTOLOGFONTSTRUCT |
+               CF_EFFECTS     | CF_USESTYLE     | CF_LIMITSIZE;
 
     // Limit font size to prevent bitmap from becoming too wide
-    cf.nSizeMax = MAX_FONT_SIZE; 
- 
+    cf.nSizeMax = MAX_FONT_SIZE;
+
     // If we previously changed a pure white font to 'almost white'
     // to support writing white text over a white colorkey, then
     // configure the font dialog for pure white text.
@@ -376,7 +376,7 @@ HFONT SetTextFont(BOOL bShowDialog)
     // Display the CHOOSEFONT common-dialog box.  When it closes,
     // the CHOOSEFONT structure members will be updated.
     if (bShowDialog)
-        ChooseFont(&cf); 
+        ChooseFont(&cf);
 
     // Save the user's selections for configuring the dialog box next time.
     // The style is automatically saved in g_szFontStyle (cf.lpszStyle)
@@ -390,11 +390,11 @@ HFONT SetTextFont(BOOL bShowDialog)
     if (g_rgbColors == PURE_WHITE)
         g_rgbColors = ALMOST_WHITE;
 
-    // Create a logical font based on the user's selection and 
-    // return a handle identifying that font.  
-    hfont = CreateFontIndirect(cf.lpLogFont); 
-    return (hfont); 
-} 
+    // Create a logical font based on the user's selection and
+    // return a handle identifying that font.
+    hfont = CreateFontIndirect(cf.lpLogFont);
+    return (hfont);
+}
 
 
 HRESULT BlendApplicationText(HWND hwndApp, TCHAR *szNewText)
@@ -405,7 +405,7 @@ HRESULT BlendApplicationText(HWND hwndApp, TCHAR *szNewText)
     // Read the default video size
     hr = pWC->GetNativeVideoSize(&cx, &cy, NULL, NULL);
     if (FAILED(hr))
-      return hr;
+        return hr;
 
     // Create a device context compatible with the current window
     HDC hdc = GetDC(hwndApp);
@@ -419,7 +419,7 @@ HRESULT BlendApplicationText(HWND hwndApp, TCHAR *szNewText)
     // currently selected font.  These dimensions are used to create
     // a bitmap below.
     int nLength, nTextBmpWidth, nTextBmpHeight;
-    SIZE sz={0};
+    SIZE sz= {0};
     nLength = (int) _tcslen(szNewText);
     GetTextExtentPoint32(hdcBmp, szNewText, nLength, &sz);
     nTextBmpHeight = sz.cy;
@@ -458,7 +458,7 @@ HRESULT BlendApplicationText(HWND hwndApp, TCHAR *szNewText)
     g_fBitmapCompWidth = (float)g_nImageWidth / (float)cx;
 
     // Display the bitmap in the bottom right corner.
-    // rSrc specifies the source rectangle in the GDI device context 
+    // rSrc specifies the source rectangle in the GDI device context
     // rDest specifies the destination rectangle in composition space (0.0f to 1.0f)
     bmpInfo.rDest.left  = 1.0f;
     bmpInfo.rDest.right = 1.0f + g_fBitmapCompWidth;

@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -148,7 +148,7 @@ void DisplayLocalApplicationInfo(__in PCPEER_APPLICATION_REGISTRATION_INFO pAppl
 
     wprintf(L"\tPublication Scope: %s\n", PublicationScope(pApplication->dwPublicationScope));
 
-    
+
 }
 
 //-----------------------------------------------------------------------------
@@ -263,7 +263,7 @@ exit:
 //                         invite is the specific contact that the user intended.  If an elements is non-
 //                         null the invitation is sent to a specific contact on a specific endpoint.
 //   ppEndpoint    :  [in] An array of pointers to PEER_ENDPOINT structures to send an invitations to.
-//                         The length of the array is uNumEndpoints.  
+//                         The length of the array is uNumEndpoints.
 //   pInvite       :  [in] The invitation
 //   uNumEndpoints :  [in] The number of endpoints in the arrays
 //
@@ -474,7 +474,7 @@ exit:
 //                         invite is the specific contact that the user intended.  If an elements is non-
 //                         null the invitation is sent to a specific contact on a specific endpoint.
 //   ppEndpoint    :  [in] An array of pointers to PEER_ENDPOINT structures to send an invitations to.
-//                         The length of the array is uNumEndpoints.  
+//                         The length of the array is uNumEndpoints.
 //   fSynchronous  :  [in] FALSE to send asynchronous invitations.  TRUE to send synchronous invitations.
 //                         If sending synchronous invitations uNumEndpoints must equal 1.
 //   uNumEndpoints :  [in] The number of endpoints in the arrays
@@ -590,7 +590,7 @@ exit:
             }
         }
 
-        SAFE_FREE(ppContacts);        
+        SAFE_FREE(ppContacts);
     }
 
     if (ppEndpoint)
@@ -604,7 +604,7 @@ exit:
             }
         }
 
-        SAFE_FREE(ppEndpoint);        
+        SAFE_FREE(ppEndpoint);
     }
 
     return;

@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@ int WINAPI WinMain(
     HINSTANCE /*hPrevInstance*/,
     LPSTR /*lpCmdLine*/,
     int /*nCmdShow*/
-    )
+)
 {
     // Ignore the return value because we want to continue running even in the
     // unlikely event that HeapSetInformation fails.
@@ -109,18 +109,18 @@ HRESULT DemoApp::Initialize()
         m_pD2DFactory->GetDesktopDpi(&dpiX, &dpiY);
 
         m_hwnd = CreateWindow(
-            L"D2DDemoApp",
-            L"Direct2D Demo App",
-            WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT,
-            CW_USEDEFAULT,
-            static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
-            static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
-            NULL,
-            NULL,
-            HINST_THISCOMPONENT,
-            this
-            );
+                     L"D2DDemoApp",
+                     L"Direct2D Demo App",
+                     WS_OVERLAPPEDWINDOW,
+                     CW_USEDEFAULT,
+                     CW_USEDEFAULT,
+                     static_cast<UINT>(ceil(640.f * dpiX / 96.f)),
+                     static_cast<UINT>(ceil(480.f * dpiY / 96.f)),
+                     NULL,
+                     NULL,
+                     HINST_THISCOMPONENT,
+                     this
+                 );
 
         hr = m_hwnd ? S_OK : E_FAIL;
         if (SUCCEEDED(hr))
@@ -169,24 +169,24 @@ HRESULT DemoApp::CreateDeviceResources()
     {
         // Create a DC render target.
         D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
-            D2D1_RENDER_TARGET_TYPE_DEFAULT,
-            D2D1::PixelFormat(
-                DXGI_FORMAT_B8G8R8A8_UNORM,
-                D2D1_ALPHA_MODE_IGNORE),
-            0,
-            0,
-            D2D1_RENDER_TARGET_USAGE_NONE,
-            D2D1_FEATURE_LEVEL_DEFAULT
-            );
+                D2D1_RENDER_TARGET_TYPE_DEFAULT,
+                D2D1::PixelFormat(
+                    DXGI_FORMAT_B8G8R8A8_UNORM,
+                    D2D1_ALPHA_MODE_IGNORE),
+                0,
+                0,
+                D2D1_RENDER_TARGET_USAGE_NONE,
+                D2D1_FEATURE_LEVEL_DEFAULT
+                                              );
 
         hr = m_pD2DFactory->CreateDCRenderTarget(&props, &m_pDCRT);
         if (SUCCEEDED(hr))
         {
             // Create a black brush.
             hr = m_pDCRT->CreateSolidColorBrush(
-                D2D1::ColorF(D2D1::ColorF::Black),
-                &m_pBlackBrush
-                );
+                     D2D1::ColorF(D2D1::ColorF::Black),
+                     &m_pBlackBrush
+                 );
         }
     }
 
@@ -274,7 +274,7 @@ HRESULT DemoApp::OnRender(const PAINTSTRUCT &ps)
                 100.0f),
             m_pBlackBrush,
             3.0
-            );
+        );
 
         m_pDCRT->DrawLine(
             D2D1::Point2F(150.0f, 150.0f),
@@ -283,7 +283,7 @@ HRESULT DemoApp::OnRender(const PAINTSTRUCT &ps)
                 (150.0f - 100.0f * 0.988f)),
             m_pBlackBrush,
             3.0
-            );
+        );
 
         m_pDCRT->DrawLine(
             D2D1::Point2F(150.0f, 150.0f),
@@ -292,7 +292,7 @@ HRESULT DemoApp::OnRender(const PAINTSTRUCT &ps)
                 (150.0f + 100.0f * 0.8509f)),
             m_pBlackBrush,
             3.0
-            );
+        );
 
         m_pDCRT->DrawLine(
             D2D1::Point2F(150.0f, 150.0f),
@@ -301,7 +301,7 @@ HRESULT DemoApp::OnRender(const PAINTSTRUCT &ps)
                 (150.0f - 100.0f * 0.15425f)),
             m_pBlackBrush,
             3.0
-            );
+        );
 
         hr = m_pDCRT->EndDraw();
         if (SUCCEEDED(hr))
@@ -313,9 +313,9 @@ HRESULT DemoApp::OnRender(const PAINTSTRUCT &ps)
             // Save the original object.
             HGDIOBJ original = NULL;
             original = SelectObject(
-                ps.hdc,
-                GetStockObject(DC_PEN)
-                );
+                           ps.hdc,
+                           GetStockObject(DC_PEN)
+                       );
 
             HPEN blackPen = CreatePen(PS_SOLID, 3, 0);
             SelectObject(ps.hdc, blackPen);
@@ -383,17 +383,17 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             hwnd,
             GWLP_USERDATA,
             PtrToUlong(pDemoApp)
-            );
+        );
 
         result = 1;
     }
     else
     {
         DemoApp *pDemoApp = reinterpret_cast<DemoApp *>(static_cast<LONG_PTR>(
-            ::GetWindowLongPtrW(
-                hwnd,
-                GWLP_USERDATA
-                )));
+                                ::GetWindowLongPtrW(
+                                    hwnd,
+                                    GWLP_USERDATA
+                                )));
 
         bool wasHandled = false;
 
@@ -403,23 +403,23 @@ LRESULT CALLBACK DemoApp::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
             {
             case WM_PAINT:
             case WM_DISPLAYCHANGE:
-                {
-                    PAINTSTRUCT ps;
-                    BeginPaint(hwnd, &ps);
-                    pDemoApp->OnRender(ps);
-                    EndPaint(hwnd, &ps);
-                }
-                result = 0;
-                wasHandled = true;
-                break;
+            {
+                PAINTSTRUCT ps;
+                BeginPaint(hwnd, &ps);
+                pDemoApp->OnRender(ps);
+                EndPaint(hwnd, &ps);
+            }
+            result = 0;
+            wasHandled = true;
+            break;
 
             case WM_DESTROY:
-                {
-                    PostQuitMessage(0);
-                }
-                result = 1;
-                wasHandled = true;
-                break;
+            {
+                PostQuitMessage(0);
+            }
+            result = 1;
+            wasHandled = true;
+            break;
             }
         }
 

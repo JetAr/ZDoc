@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -17,13 +17,13 @@ CPicture::CPicture(CONTENT_ID id, LPWSTR pwszFile)
 
     //
     // Copy the filename locally for the alternate text
-    // 
+    //
     if (NULL != pwszFile)
     {
         size_t length = wcslen(pwszFile) + 1;
         m_pwszFile = new WCHAR[length];
         if (NULL != m_pwszFile)
-        {           
+        {
             StringCchCopyW(m_pwszFile, length, pwszFile);
         }
     }
@@ -50,7 +50,7 @@ CPicture::~CPicture()
 void CPicture::LoadContent(DWORD* pdwSize, BYTE** ppbData, ISideShowCapabilities * /*pICapabilities*/)
 {
     if (NULL == pdwSize ||
-        NULL == ppbData)
+            NULL == ppbData)
     {
         return;
     }
@@ -82,26 +82,26 @@ LPSTR CPicture::GetContentXML()
 
     CXmlElement* pBody = xmlDoc.AddElement(L"body");
     CXmlElement* pContent = pBody->AddElement(L"content");
-        pContent->AddAttribute(L"id", m_contentID);
-        pContent->AddAttribute(L"title", m_pwszFile);
-        CXmlElement* pImage = pContent->AddElement(L"img");
-            pImage->AddAttribute(L"align", L"c");
-            pImage->AddAttribute(L"fit", L"screen");
-            pImage->AddAttribute(L"alt", m_pwszFile);
-            //
-            // The Image ID is the CONTENT_ID of the raw image bytes;
-            // that is the same as this content ID, offset by
-            // (CID_RAWIMAGE_FIRST - CID_XMLIMAGE_FIRST)
-            //
-            pImage->AddAttribute(L"id", m_contentID + (CID_RAWIMAGE_FIRST - CID_XMLIMAGE_FIRST));
+    pContent->AddAttribute(L"id", m_contentID);
+    pContent->AddAttribute(L"title", m_pwszFile);
+    CXmlElement* pImage = pContent->AddElement(L"img");
+    pImage->AddAttribute(L"align", L"c");
+    pImage->AddAttribute(L"fit", L"screen");
+    pImage->AddAttribute(L"alt", m_pwszFile);
+    //
+    // The Image ID is the CONTENT_ID of the raw image bytes;
+    // that is the same as this content ID, offset by
+    // (CID_RAWIMAGE_FIRST - CID_XMLIMAGE_FIRST)
+    //
+    pImage->AddAttribute(L"id", m_contentID + (CID_RAWIMAGE_FIRST - CID_XMLIMAGE_FIRST));
 
-        CXmlElement* pLeftBtn = pContent->AddElement(L"btn");
-            pLeftBtn->AddAttribute(L"key", L"left");
-            pLeftBtn->AddAttribute(L"target", m_prevId);
+    CXmlElement* pLeftBtn = pContent->AddElement(L"btn");
+    pLeftBtn->AddAttribute(L"key", L"left");
+    pLeftBtn->AddAttribute(L"target", m_prevId);
 
-        CXmlElement* pRightBtn = pContent->AddElement(L"btn");
-            pRightBtn->AddAttribute(L"key", L"right");
-            pRightBtn->AddAttribute(L"target", m_nextId);
+    CXmlElement* pRightBtn = pContent->AddElement(L"btn");
+    pRightBtn->AddAttribute(L"key", L"right");
+    pRightBtn->AddAttribute(L"target", m_nextId);
 
     BSTR bstrXml;
     xmlDoc.GetXml(&bstrXml);

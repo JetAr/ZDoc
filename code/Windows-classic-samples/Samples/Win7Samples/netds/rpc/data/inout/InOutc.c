@@ -1,4 +1,4 @@
-
+﻿
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 						Microsoft RPC
-           
+
                       InOut Example
 
     FILE:       inoutc.c
@@ -55,7 +55,7 @@ void Usage(char * pszProgramName)
     fprintf_s(stderr, " -p protocol_sequence\n");
     fprintf_s(stderr, " -n network_address\n");
     fprintf_s(stderr, " -e endpoint\n");
-    fprintf_s(stderr, " -a server principal name\n");	
+    fprintf_s(stderr, " -a server principal name\n");
     fprintf_s(stderr, " -o options\n");
     fprintf_s(stderr, " -1 parameter_1\n");
     fprintf_s(stderr, " -2 parameter_2\n");
@@ -70,19 +70,22 @@ void __cdecl main(int argc, char **argv)
     unsigned char * pszProtocolSequence = "ncacn_ip_tcp";
     unsigned char * pszNetworkAddress   = NULL;
     unsigned char * pszEndpoint         = "8765";
-    unsigned char * pszSpn              = NULL;	
+    unsigned char * pszSpn              = NULL;
     unsigned char * pszOptions          = NULL;
     unsigned char * pszStringBinding    = NULL;
-	RPC_SECURITY_QOS SecQos;
+    RPC_SECURITY_QOS SecQos;
     short   s1 = 257;
     short   s2 = 631;
     float   f3 = (float) 0.406;
     int i;
 
     /* allow the user to override settings with command line switches */
-    for (i = 1; i < argc; i++) {
-        if ((*argv[i] == '-') || (*argv[i] == '/')) {
-            switch (tolower(*(argv[i]+1))) {
+    for (i = 1; i < argc; i++)
+    {
+        if ((*argv[i] == '-') || (*argv[i] == '/'))
+        {
+            switch (tolower(*(argv[i]+1)))
+            {
             case 'p':  // protocol sequence
                 pszProtocolSequence = argv[++i];
                 break;
@@ -92,7 +95,7 @@ void __cdecl main(int argc, char **argv)
             case 'e':
                 pszEndpoint = argv[++i];
                 break;
-            case 'a': 
+            case 'a':
                 pszSpn = argv[++i];
                 break;
             case 'o':
@@ -129,7 +132,8 @@ void __cdecl main(int argc, char **argv)
                                      &pszStringBinding);
     printf_s("RpcStringBindingCompose returned 0x%x\n", status);
     printf_s("pszStringBinding = %s\n", pszStringBinding);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
@@ -137,12 +141,14 @@ void __cdecl main(int argc, char **argv)
     status = RpcBindingFromStringBinding(pszStringBinding,
                                          &inout_IfHandle);
     printf_s("RpcBindingFromStringBinding returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
-	
+
     /* User did not specify spn, construct one. */
-    if (pszSpn == NULL) {
+    if (pszSpn == NULL)
+    {
         MakeSpn(&pszSpn);
     }
 
@@ -151,7 +157,7 @@ void __cdecl main(int argc, char **argv)
     SecQos.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
     SecQos.IdentityTracking = RPC_C_QOS_IDENTITY_DYNAMIC;
     SecQos.ImpersonationType = RPC_C_IMP_LEVEL_IDENTIFY;
-	
+
     /* Set the security provider on binding handle */
     status = RpcBindingSetAuthInfoEx(inout_IfHandle,
                                      pszSpn,
@@ -160,16 +166,18 @@ void __cdecl main(int argc, char **argv)
                                      NULL,
                                      RPC_C_AUTHZ_NONE,
                                      &SecQos);
-	
+
     printf_s("RpcBindingSetAuthInfoEx returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
-    }	
-		
+    }
+
     printf_s("Calling the remote procedure 'InOutProc'\n");
     printf_s("  parameters = %d %d %0.3f\n", s1, s2, f3);
 
-    RpcTryExcept {
+    RpcTryExcept
+    {
         InOutProc(inout_IfHandle,s1, &s2, &f3);  // call the remote procedure
 
         printf_s("Returning from the remote procedure 'InOutProc'\n");
@@ -178,30 +186,33 @@ void __cdecl main(int argc, char **argv)
         Shutdown(inout_IfHandle);
     }
     RpcExcept(( ( (RpcExceptionCode() != STATUS_ACCESS_VIOLATION) &&
-                   (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
-                   (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
-                   (RpcExceptionCode() != STATUS_BREAKPOINT) &&
-                   (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
-                   (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
-                   (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
-                    )
-                    ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )) {
+                  (RpcExceptionCode() != STATUS_DATATYPE_MISALIGNMENT) &&
+                  (RpcExceptionCode() != STATUS_PRIVILEGED_INSTRUCTION) &&
+                  (RpcExceptionCode() != STATUS_BREAKPOINT) &&
+                  (RpcExceptionCode() != STATUS_STACK_OVERFLOW) &&
+                  (RpcExceptionCode() != STATUS_IN_PAGE_ERROR) &&
+                  (RpcExceptionCode() != STATUS_GUARD_PAGE_VIOLATION)
+                )
+                ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH ))
+    {
         printf_s("Runtime reported exception %ld\n", RpcExceptionCode() );
 
-	}
+    }
     RpcEndExcept
 
     /* The call to the remote procedure is complete. */
     /* Free the string and binding handle.           */
     status = RpcBindingFree(&inout_IfHandle);
     printf_s("RpcBindingFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     status = RpcStringFree(&pszStringBinding);
     printf_s("RpcStringFree returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 

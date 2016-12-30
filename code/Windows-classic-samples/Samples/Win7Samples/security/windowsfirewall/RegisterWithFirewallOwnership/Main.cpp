@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -8,7 +8,7 @@ Copyright (c) Microsoft Corporation. All Rights Reserved.
 
 Abstract:
     This C++ file includes sample code that takes ownership
-	of the NET_FW_RULE_CATEGORY_FIREWALL using the Microsoft 
+	of the NET_FW_RULE_CATEGORY_FIREWALL using the Microsoft
 	Windows Firewall APIs.
 
 --********************************************************************/
@@ -31,24 +31,24 @@ Abstract:
 
 // Forward declarations
 DWORD ArrayOfLongsToVariant(
-                            __in unsigned long numItems,
-                            __in_ecount(numItems) const long* items,
-                            __out VARIANT* dst
-                            );
+    __in unsigned long numItems,
+    __in_ecount(numItems) const long* items,
+    __out VARIANT* dst
+);
 //
-// Purpose: 
+// Purpose:
 //   Entry point for the process
 //
 // Parameters:
 //   None
-// 
+//
 // Return value:
 //   None
 //
-void __cdecl main() 
-{ 
+void __cdecl main()
+{
     DWORD result = NO_ERROR;
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
     INetFwProduct* product = NULL;
     INetFwProducts* products = NULL;
     IUnknown* registration = NULL;
@@ -60,14 +60,14 @@ void __cdecl main()
     BOOL comInit =  FALSE;
 
     //Allocate Memory
-    categories = (long *)calloc (numberOfCategories , sizeof(long));
+    categories = (long *)calloc (numberOfCategories, sizeof(long));
     BAIL_ON_ALLOC_FAILURE(categories, calloc);
 
     //Take Firewall Category Ownership
     categories[0] = NET_FW_RULE_CATEGORY_FIREWALL;
     result = ArrayOfLongsToVariant(numberOfCategories, categories, &varCategories);
-    
-	displayName = SysAllocString(L"@RegisterFirewallSample.exe,-127");
+
+    displayName = SysAllocString(L"@RegisterFirewallSample.exe,-127");
     BAIL_ON_ALLOC_FAILURE(displayName, SysAllocString);
 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -122,7 +122,7 @@ void __cdecl main()
         //Failed to Register Products
         wprintf(L"Register failed: 0x%08lx\n", hr);
         goto CLEANUP;
-    }			
+    }
 
     hr = products->get_Count( &count);
     if (FAILED(hr))
@@ -130,34 +130,34 @@ void __cdecl main()
         //Failed to get Count of Products
         wprintf(L"Get count failed: 0x%08lx\n", hr);
         goto CLEANUP;
-    }		
+    }
     wprintf(L"INetFwProducts_Count returned %ld.\n", count);
 
     wprintf(L"Hit any key to unregister.\n");
     _getch();
 
 CLEANUP:
-	if (registration != NULL)
-   {
-      registration->Release();
-   }
-   if (products != NULL)
-   {
-      products->Release();
-   }
-   if (product != NULL)
-   {
-      product->Release();
-   }
-   if (comInit)
-   {
-      CoUninitialize();
-   }
-   free(categories);
-   SysFreeString(displayName);
-   VariantClear(&varCategories);
-   return;
-} 
+    if (registration != NULL)
+    {
+        registration->Release();
+    }
+    if (products != NULL)
+    {
+        products->Release();
+    }
+    if (product != NULL)
+    {
+        product->Release();
+    }
+    if (comInit)
+    {
+        CoUninitialize();
+    }
+    free(categories);
+    SysFreeString(displayName);
+    VariantClear(&varCategories);
+    return;
+}
 
 
 
@@ -165,10 +165,10 @@ CLEANUP:
 //This Function Converts and Array of Longs to Variant
 
 DWORD ArrayOfLongsToVariant(
-                            __in unsigned long numItems,
-                            __in_ecount(numItems) const long* items,
-                            __out VARIANT* dst
-                            )
+    __in unsigned long numItems,
+    __in_ecount(numItems) const long* items,
+    __out VARIANT* dst
+)
 {
     DWORD result = NO_ERROR;
     SAFEARRAYBOUND bound[1];

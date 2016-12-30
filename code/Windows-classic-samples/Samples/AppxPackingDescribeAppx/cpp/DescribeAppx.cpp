@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -152,7 +152,7 @@ HRESULT ReadManifestApplications(
 //             package manifest using the IAppxManifestReader2::GetQualifiedResources
 //             method.
 //
-// Note: IAppxManifestReader2::GetQualifiedResources differs from the 
+// Note: IAppxManifestReader2::GetQualifiedResources differs from the
 // IAppxManifestReader::GetResources method in that the latter returns an
 // IAppxManifestResourcesEnumerator object, which can only enumerate over
 // Language attributes specified on a Resource element. To read all the
@@ -213,17 +213,17 @@ HRESULT ReadManifestQualifiedResources(
                             {
                                 switch(dxFeatureLevel)
                                 {
-                                    case DX_FEATURE_LEVEL_9:
-                                        dxFeatureLevelString = L"DX_FEATURE_LEVEL_9";
-                                        break;
-                                    case DX_FEATURE_LEVEL_10:
-                                        dxFeatureLevelString = L"DX_FEATURE_LEVEL_10";
-                                        break;
-                                    case DX_FEATURE_LEVEL_11:
-                                        dxFeatureLevelString = L"DX_FEATURE_LEVEL_11";
-                                        break;
-                                    default:
-                                        hr = E_UNEXPECTED;
+                                case DX_FEATURE_LEVEL_9:
+                                    dxFeatureLevelString = L"DX_FEATURE_LEVEL_9";
+                                    break;
+                                case DX_FEATURE_LEVEL_10:
+                                    dxFeatureLevelString = L"DX_FEATURE_LEVEL_10";
+                                    break;
+                                case DX_FEATURE_LEVEL_11:
+                                    dxFeatureLevelString = L"DX_FEATURE_LEVEL_11";
+                                    break;
+                                default:
+                                    hr = E_UNEXPECTED;
                                 }
                                 if (SUCCEEDED(hr))
                                 {
@@ -501,30 +501,30 @@ HRESULT GetPackageReader(
 
     // Create a new Appx factory
     hr = CoCreateInstance(
-            __uuidof(AppxFactory),
-            NULL,
-            CLSCTX_INPROC_SERVER,
-            __uuidof(IAppxFactory),
-            (LPVOID*)(&appxFactory));
+             __uuidof(AppxFactory),
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             __uuidof(IAppxFactory),
+             (LPVOID*)(&appxFactory));
 
     // Create a stream over the input Appx package
     if (SUCCEEDED(hr))
     {
         hr = SHCreateStreamOnFileEx(
-                inputFileName,
-                STGM_READ | STGM_SHARE_EXCLUSIVE,
-                0, // default file attributes
-                FALSE, // do not create new file
-                NULL, // no template
-                &inputStream);
+                 inputFileName,
+                 STGM_READ | STGM_SHARE_EXCLUSIVE,
+                 0, // default file attributes
+                 FALSE, // do not create new file
+                 NULL, // no template
+                 &inputStream);
     }
 
     // Create a new package reader using the factory.
     if (SUCCEEDED(hr))
     {
         hr = appxFactory->CreatePackageReader(
-                inputStream,
-                reader);
+                 inputStream,
+                 reader);
     }
 
     // Clean up allocated resources

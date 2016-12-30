@@ -1,4 +1,4 @@
-/*
+﻿/*
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
@@ -9,7 +9,7 @@ Module Name:
 Abstract:
 
     Implementation of CWorkerThread class
- 
+
 */
 
 
@@ -30,7 +30,7 @@ HRESULT CWorkerThread::Initialize()
 {
 
     //
-    // if the thread is already initialized 
+    // if the thread is already initialized
     //
 
     if ( (NULL != m_hThreadHandle) && (0 != m_nThreadID) )
@@ -45,7 +45,7 @@ HRESULT CWorkerThread::Initialize()
     //
     // start the thread
     //
-    
+
     m_hThreadHandle = CreateThread(NULL,        // security
                                    0,           // stack
                                    ThreadFunction,    // thread function
@@ -55,7 +55,7 @@ HRESULT CWorkerThread::Initialize()
 
     //
     // thread creation failed. log a message and return an error
-    // 
+    //
 
     if (NULL == m_hThreadHandle)
     {
@@ -69,9 +69,9 @@ HRESULT CWorkerThread::Initialize()
     //
     // thread created. log thread id.
     //
-    
+
     LogMessage("CWorkerThread::Initialize() succeeded. thread id [0x%lx]",
-                m_nThreadID);
+               m_nThreadID);
 
     return S_OK;
 
@@ -89,7 +89,7 @@ HRESULT CWorkerThread::Initialize()
 HRESULT CWorkerThread::Shutdown()
 {
 
-     LogError("CWorkerThread::Shutdown() entered");
+    LogError("CWorkerThread::Shutdown() entered");
 
     //
     // if the thread is running, post quit message and wait for thread to exit
@@ -97,20 +97,20 @@ HRESULT CWorkerThread::Shutdown()
 
     if (NULL != m_hThreadHandle)
     {
-        
+
         //
         // let the thread know it's time to go home
         //
 
         PostMessage(WM_QUIT, NULL, NULL);
-    
+
 
         //
         // wait for the thread to disappear
         //
 
         DWORD rc = WaitForSingleObject(m_hThreadHandle, INFINITE);
-        
+
         //
         // close thread handle
         //
@@ -164,20 +164,20 @@ CWorkerThread::~CWorkerThread()
 {
     LogError("CWorkerThread::~CWorkerThread() entered");
 
-    
+
     //
-    // the thread should not be running at this point -- the app should have 
+    // the thread should not be running at this point -- the app should have
     // called Shutdown()
-    // 
-    
+    //
+
     if (NULL != m_hThreadHandle)
     {
         LogError("CWorkerThread::~CWorkerThread thread [%ld] is still running",
-                  m_nThreadID);
+                 m_nThreadID);
     }
 
     _ASSERTE(NULL == m_hThreadHandle);
-    
+
 
     LogError("CWorkerThread::~CWorkerThread() finished");
 }
@@ -194,9 +194,9 @@ CWorkerThread::~CWorkerThread()
 BOOL CWorkerThread::PostMessage( UINT Msg,       // message to post
                                  WPARAM wParam,  // first message parameter
                                  LPARAM lParam   // second message parameter
-                                 )
+                               )
 {
-    
+
     BOOL bReturn = FALSE;
 
 
@@ -236,7 +236,7 @@ unsigned long _stdcall CWorkerThread::ThreadFunction(void *)
 
     //
     // force creation of message queue
-    // 
+    //
 
     MSG msg;
 
@@ -244,47 +244,47 @@ unsigned long _stdcall CWorkerThread::ThreadFunction(void *)
     //
     // keep retrieving messages until we fail or get WM_QUIT
     //
-    
+
     while (GetMessage(&msg, NULL, 0, 0))
     {
 
         switch (msg.message)
         {
-        
+
         case WM_PRIVATETAPIEVENT:
-            {
+        {
 
-                //
-                // get event from the message
-                //
+            //
+            // get event from the message
+            //
 
-                TAPI_EVENT TapiEvent = (TAPI_EVENT)msg.wParam;
-                IDispatch *pEvent = (IDispatch*)msg.lParam;
-
-
-                //
-                // pass event to the event handler
-                //
-                
-                OnTapiEvent(TapiEvent, pEvent);
-
-                pEvent = NULL;
+            TAPI_EVENT TapiEvent = (TAPI_EVENT)msg.wParam;
+            IDispatch *pEvent = (IDispatch*)msg.lParam;
 
 
-                //
-                // do not check the error code from event handler - 
-                // there is not much we can do here anyway.
-                //
-                
-                //
-                // Note: pEvent is released by OnTapiEvent, so we should not
-                // use it after OnTapiEvent returns
-                //
+            //
+            // pass event to the event handler
+            //
+
+            OnTapiEvent(TapiEvent, pEvent);
+
+            pEvent = NULL;
 
 
-            }
+            //
+            // do not check the error code from event handler -
+            // there is not much we can do here anyway.
+            //
 
-            break;
+            //
+            // Note: pEvent is released by OnTapiEvent, so we should not
+            // use it after OnTapiEvent returns
+            //
+
+
+        }
+
+        break;
 
         default:
 

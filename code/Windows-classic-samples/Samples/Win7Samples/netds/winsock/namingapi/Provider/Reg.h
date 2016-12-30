@@ -1,4 +1,4 @@
-/********************************************************************++
+﻿/********************************************************************++
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -38,7 +38,7 @@ typedef struct _RegInfo
     ULONG cAddresses;
     CSADDR_INFO *prgAddresses;
 } RegInfo;
- 
+
 INT  AddRegistration(__in LPWSAQUERYSET2 pQuerySet);
 INT  RemoveRegistration(__in LPWSAQUERYSET2 pQuerySet);
 INT  FindRegistration(PCWSTR pcwzEmailAddress, PCWSTR pcwzServiceName, RegInfo **ppRegInfo);
@@ -46,7 +46,7 @@ void RemoveAllRegistrations();
 
 ULONG StringSize(PCWSTR wz);
 INT CopyString(PCWSTR wzSrc, __deref_out PWSTR *pwzDest);
-INT CopyAddrs(__in_ecount(dwAddrs) CSADDR_INFO *rgAddrsSrc, 
-                                   DWORD dwAddrs,
+INT CopyAddrs(__in_ecount(dwAddrs) CSADDR_INFO *rgAddrsSrc,
+              DWORD dwAddrs,
               __deref_out          CSADDR_INFO **prgAddrsDest);
 

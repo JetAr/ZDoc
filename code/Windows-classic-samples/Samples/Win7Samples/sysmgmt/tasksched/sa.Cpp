@@ -1,4 +1,4 @@
-// ===========================================================================
+﻿// ===========================================================================
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -47,31 +47,31 @@
 //              the service control manager APIs. Doing it in the code
 //              directly makes a good enhancement to the program below.
 //              Note that only administrators may start the service.
-//              Users of systems that expect non-administrators to 
+//              Users of systems that expect non-administrators to
 //              schedule tasks should use the System Services snapin
 //              in Windows NT 5.0 to set the service to AutoStart,
 //              if it is not already.
-// 
-//              Since there is not a service controller on Win9x, 
+//
+//              Since there is not a service controller on Win9x,
 //              the user may start the service by executing the
 //              binary directly from the command line (mstask.exe).
-//              Win9x users will see a system tray icon if the service 
+//              Win9x users will see a system tray icon if the service
 //              is running.
 //
 //              The service may also be started from the folder UI available
-//              directly by opening "My Computer" and then opening the 
+//              directly by opening "My Computer" and then opening the
 //              "Scheduled Tasks" folder.  The start command appears on the
 //              "Advanced" menu.
 //
-//              Sample code to start and stop the service, on both 
+//              Sample code to start and stop the service, on both
 //              Windows NT and Win9x based systems appears in the
 //              documentation.
 //
-//              If the Task Scheduler service is not running, most 
-//              of this program will fail to execute.  If there are 
-//              tasks waiting to execute after login, the service 
+//              If the Task Scheduler service is not running, most
+//              of this program will fail to execute.  If there are
+//              tasks waiting to execute after login, the service
 //              will have been started by default.
-//             
+//
 //---------------------------------------------------------------------------
 
 #include <stdio.h>
@@ -116,7 +116,7 @@ const int MAX_TIME_LENGTH = 6;
 // Synopsis:        Entry point for code.  Parses command line,
 //                  and calls appropriate subfunction as a result.
 //
-//  Arguments:      See DisplayHelp().  Uses argv, argc to get 
+//  Arguments:      See DisplayHelp().  Uses argv, argc to get
 //                  command line args.
 //
 //  Returns:        S_OK for success or the failure code for failure.
@@ -154,7 +154,7 @@ LONG main (int argc, char **argv)
     uCodePage = _getmbcp();
 
     // Convert the string; be sure to check return value
-   
+
     if (!MultiByteToWideChar(uCodePage, 0, argv[0], -1, lpwszProgName, MAX_COMMAND_LENGTH))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -163,10 +163,10 @@ LONG main (int argc, char **argv)
     }
 
     // Check number of command line arguments.
-    //      1 argument      =   enumerate work items 
+    //      1 argument      =   enumerate work items
     //      2 args          =   display help (don't init OLE)
-    //      3 args          =   delete work item 
-    //      4, 5 or 6 args  =   add a work item 
+    //      3 args          =   delete work item
+    //      4, 5 or 6 args  =   add a work item
     //      all others      =   error, display help
 
     if ((argc == 2) || (argc > 6))
@@ -183,98 +183,35 @@ LONG main (int argc, char **argv)
         wprintf(L"Error:  OLE initialization and instantiation failed with 0x%x\n", hr);
         return hr;
     }
-    
+
     switch(argc)
     {
-        case 1:
-            // User would like to enumerate work items 
+    case 1:
+        // User would like to enumerate work items
 
-            hr = EnumerateJobs();
-            if (FAILED(hr))
-            {
-                wprintf(L"Error:  Job enumeration failed with 0x%x\n", hr);
-            }
-            break;
+        hr = EnumerateJobs();
+        if (FAILED(hr))
+        {
+            wprintf(L"Error:  Job enumeration failed with 0x%x\n", hr);
+        }
+        break;
 
-        case 3:
-            if (! lstrcmpiA(argv[2], lpcszDeleteFlag))
-            {
-                // User would like to delete work item in argv[1]
-
-                // It is good practice to check lengths on all input params prior to using as a safety precaution against attack
-                // strlen() is OK to use for this as the command line arguments will be NULL terminated
-                
-                if (strlen(argv[1]) > MAX_COMMAND_LENGTH -1)
-                {
-                    wprintf(L"Error:  Job name too long\n");
-                    hr = E_FAIL;
-                    break;
-                }
-
-                // Convert the string; be sure to check return value
-
-                if (!MultiByteToWideChar(uCodePage, 0, argv[1], -1, lpwszJobName, MAX_COMMAND_LENGTH))
-                {
-                    hr = HRESULT_FROM_WIN32(GetLastError());
-                    wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
-                    break;
-                }
-
-                hr = DeleteJob(lpwszJobName);
-                if (FAILED(hr))
-                {
-                    wprintf(L"Error:  Job deletion failed with 0x%x\n", hr);
-                }
-            }
-            else
-            {
-                // User has made an error in command line args
-
-                //  Note that it is usually not safe to have a user-supplied value output via a %s format in a printf statement;
-                //  however, we have already verified the length of lpwszProgName, so we can be confident that these calls are safe.
-                
-                wprintf(L"Error:  Must be %s taskname.job /DELETE\n\n", lpwszProgName);
-                wprintf(L"%s /?  for more help.\n", lpwszProgName);
-                hr = E_FAIL;
-            }
-            break;
-
-        case 4:
-        case 5:
-        case 6:
-            // User would like to add a work item.  The following
-            // argument cases apply:
-            //      4 - User has specified work item name, but not given 
-            //          username or password.  Will prompt later.
-            //      5 - User has specified work item name and username,
-            //          but no password.  Will prompt later.            
-            //      6 - User has specified all information.
+    case 3:
+        if (! lstrcmpiA(argv[2], lpcszDeleteFlag))
+        {
+            // User would like to delete work item in argv[1]
 
             // It is good practice to check lengths on all input params prior to using as a safety precaution against attack
             // strlen() is OK to use for this as the command line arguments will be NULL terminated
-            
+
             if (strlen(argv[1]) > MAX_COMMAND_LENGTH -1)
             {
                 wprintf(L"Error:  Job name too long\n");
                 hr = E_FAIL;
                 break;
             }
-            
-            if (strlen(argv[2]) > MAX_TIME_LENGTH -1)
-            {
-                wprintf(L"Error:  Time too long\n");
-                hr = E_FAIL;
-                break;
-            }
 
-            if (strlen(argv[3]) > MAX_COMMAND_LENGTH -1)
-            {
-                wprintf(L"Error:  Command too long\n");
-                hr = E_FAIL;
-                break;
-            }
-            
-            // Convert the strings; be sure to check return values
+            // Convert the string; be sure to check return value
 
             if (!MultiByteToWideChar(uCodePage, 0, argv[1], -1, lpwszJobName, MAX_COMMAND_LENGTH))
             {
@@ -282,88 +219,151 @@ LONG main (int argc, char **argv)
                 wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
                 break;
             }
-            	
-            if (!MultiByteToWideChar(uCodePage, 0, argv[2], -1, lpwszTime, MAX_TIME_LENGTH))
-            {
-                hr = HRESULT_FROM_WIN32(GetLastError());
-                wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
-                break;
-            }
 
-            hr = ConvertToSystemTime(lpwszTime, &tTime);
+            hr = DeleteJob(lpwszJobName);
             if (FAILED(hr))
             {
-                wprintf(L"Error:  Conversion of command line time to system time failed with 0x%x\n", hr);
-                break;
+                wprintf(L"Error:  Job deletion failed with 0x%x\n", hr);
             }
-            
-            if (!MultiByteToWideChar(uCodePage, 0, argv[3], -1, lpwszCommand, MAX_COMMAND_LENGTH))
-            {
-                hr = HRESULT_FROM_WIN32(GetLastError());
-                wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
-                break;
-            }
+        }
+        else
+        {
+            // User has made an error in command line args
 
-            *lpwszUserName = L'\0';
-            *lpwszPassword = L'\0';
+            //  Note that it is usually not safe to have a user-supplied value output via a %s format in a printf statement;
+            //  however, we have already verified the length of lpwszProgName, so we can be confident that these calls are safe.
 
-            if (argc > 4)
-            {
-                // It is good practice to check lengths on all input params prior to using as a safety precaution against attack
-                // strlen() is OK to use for this as the command line arguments will be NULL terminated
-
-                if (strlen(argv[4]) > MAX_ACCOUNT_LENGTH -1)
-                {
-                    wprintf(L"Error:  User name too long\n");
-                    hr = E_FAIL;
-                    break;
-                }
-
-                // Convert the string; be sure to check return value
-
-                if (!MultiByteToWideChar(uCodePage, 0, argv[4], -1, lpwszUserName, MAX_ACCOUNT_LENGTH))
-                {
-                    hr = HRESULT_FROM_WIN32(GetLastError());
-                    wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
-                    break;
-                }
-            }
-            
-            if (argc == 6)
-            {
-                // It is good practice to check lengths on all input params prior to using as a safety precaution against attack
-                // strlen() is OK to use for this as the command line arguments will be NULL terminated
-
-                if (strlen(argv[5]) > MAX_PASSWORD_LENGTH -1)
-                {
-                    wprintf(L"Error:  User name too long\n");
-                    hr = E_FAIL;
-                    break;
-                }
-
-                // Convert the string; be sure to check return value
-
-                if (!MultiByteToWideChar(uCodePage, 0, argv[5], -1, lpwszPassword, MAX_PASSWORD_LENGTH))
-                {
-                    hr = HRESULT_FROM_WIN32(GetLastError());
-                    wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
-                    break;
-                }
-            }
-            
-            hr = AddJob(lpwszJobName, &tTime, lpwszCommand, lpwszUserName, lpwszPassword);
-            if (FAILED(hr))
-            {
-                wprintf(L"Error:  Job creation failed with 0x%x\n", hr);
-            }
-            
-            break;
-
-        default:
+            wprintf(L"Error:  Must be %s taskname.job /DELETE\n\n", lpwszProgName);
+            wprintf(L"%s /?  for more help.\n", lpwszProgName);
             hr = E_FAIL;
-            DisplayHelp(lpwszProgName);
+        }
+        break;
+
+    case 4:
+    case 5:
+    case 6:
+        // User would like to add a work item.  The following
+        // argument cases apply:
+        //      4 - User has specified work item name, but not given
+        //          username or password.  Will prompt later.
+        //      5 - User has specified work item name and username,
+        //          but no password.  Will prompt later.
+        //      6 - User has specified all information.
+
+        // It is good practice to check lengths on all input params prior to using as a safety precaution against attack
+        // strlen() is OK to use for this as the command line arguments will be NULL terminated
+
+        if (strlen(argv[1]) > MAX_COMMAND_LENGTH -1)
+        {
+            wprintf(L"Error:  Job name too long\n");
+            hr = E_FAIL;
+            break;
+        }
+
+        if (strlen(argv[2]) > MAX_TIME_LENGTH -1)
+        {
+            wprintf(L"Error:  Time too long\n");
+            hr = E_FAIL;
+            break;
+        }
+
+        if (strlen(argv[3]) > MAX_COMMAND_LENGTH -1)
+        {
+            wprintf(L"Error:  Command too long\n");
+            hr = E_FAIL;
+            break;
+        }
+
+        // Convert the strings; be sure to check return values
+
+        if (!MultiByteToWideChar(uCodePage, 0, argv[1], -1, lpwszJobName, MAX_COMMAND_LENGTH))
+        {
+            hr = HRESULT_FROM_WIN32(GetLastError());
+            wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
+            break;
+        }
+
+        if (!MultiByteToWideChar(uCodePage, 0, argv[2], -1, lpwszTime, MAX_TIME_LENGTH))
+        {
+            hr = HRESULT_FROM_WIN32(GetLastError());
+            wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
+            break;
+        }
+
+        hr = ConvertToSystemTime(lpwszTime, &tTime);
+        if (FAILED(hr))
+        {
+            wprintf(L"Error:  Conversion of command line time to system time failed with 0x%x\n", hr);
+            break;
+        }
+
+        if (!MultiByteToWideChar(uCodePage, 0, argv[3], -1, lpwszCommand, MAX_COMMAND_LENGTH))
+        {
+            hr = HRESULT_FROM_WIN32(GetLastError());
+            wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
+            break;
+        }
+
+        *lpwszUserName = L'\0';
+        *lpwszPassword = L'\0';
+
+        if (argc > 4)
+        {
+            // It is good practice to check lengths on all input params prior to using as a safety precaution against attack
+            // strlen() is OK to use for this as the command line arguments will be NULL terminated
+
+            if (strlen(argv[4]) > MAX_ACCOUNT_LENGTH -1)
+            {
+                wprintf(L"Error:  User name too long\n");
+                hr = E_FAIL;
+                break;
+            }
+
+            // Convert the string; be sure to check return value
+
+            if (!MultiByteToWideChar(uCodePage, 0, argv[4], -1, lpwszUserName, MAX_ACCOUNT_LENGTH))
+            {
+                hr = HRESULT_FROM_WIN32(GetLastError());
+                wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
+                break;
+            }
+        }
+
+        if (argc == 6)
+        {
+            // It is good practice to check lengths on all input params prior to using as a safety precaution against attack
+            // strlen() is OK to use for this as the command line arguments will be NULL terminated
+
+            if (strlen(argv[5]) > MAX_PASSWORD_LENGTH -1)
+            {
+                wprintf(L"Error:  User name too long\n");
+                hr = E_FAIL;
+                break;
+            }
+
+            // Convert the string; be sure to check return value
+
+            if (!MultiByteToWideChar(uCodePage, 0, argv[5], -1, lpwszPassword, MAX_PASSWORD_LENGTH))
+            {
+                hr = HRESULT_FROM_WIN32(GetLastError());
+                wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
+                break;
+            }
+        }
+
+        hr = AddJob(lpwszJobName, &tTime, lpwszCommand, lpwszUserName, lpwszPassword);
+        if (FAILED(hr))
+        {
+            wprintf(L"Error:  Job creation failed with 0x%x\n", hr);
+        }
+
+        break;
+
+    default:
+        hr = E_FAIL;
+        DisplayHelp(lpwszProgName);
     }
-    
+
     Cleanup();
     return hr;
 }
@@ -373,7 +373,7 @@ LONG main (int argc, char **argv)
 //
 // Function:        Init()
 //
-// Synopsis:        Called to initialize and instantiate a task 
+// Synopsis:        Called to initialize and instantiate a task
 //                  scheduler object.
 //
 // Arguments:       none (void)
@@ -381,7 +381,7 @@ LONG main (int argc, char **argv)
 // Returns:         HRESULT indicating success or failure.  S_OK on success.
 //
 // Side effect:     Sets global pointer g_pITaskScheduler, for use in other
-//                  functions.  
+//                  functions.
 //
 //---------------------------------------------------------------------------
 
@@ -402,11 +402,11 @@ HRESULT Init()
     // CLSID from the header file mstask.h
 
     hr = CoCreateInstance(
-        CLSID_CTaskScheduler,
-        NULL,
-        CLSCTX_INPROC_SERVER,
-        IID_ITaskScheduler,
-        (void **) &g_pITaskScheduler);
+             CLSID_CTaskScheduler,
+             NULL,
+             CLSCTX_INPROC_SERVER,
+             IID_ITaskScheduler,
+             (void **) &g_pITaskScheduler);
 
     // Should we fail, unload the library
 
@@ -441,7 +441,7 @@ void Cleanup()
         g_pITaskScheduler->Release();
         g_pITaskScheduler = NULL;
     }
-   
+
     // Unload the library, now that our pointer is freed.
 
     CoUninitialize();
@@ -451,7 +451,7 @@ void Cleanup()
 
 //+--------------------------------------------------------------------------
 //
-// Function:    DisplayHelp() 
+// Function:    DisplayHelp()
 //
 // Synopsis:    Prints out help and usage information
 //
@@ -465,8 +465,8 @@ void DisplayHelp(LPWSTR lpwszProgName)
 {
     //  Note that it is usually not safe to have a user-supplied value output via a %s format in a printf statement;
     //  however, we have already verified the length of lpwszProgName, so we can be confident that these calls will not overflow.
-    
-    wprintf(L"%s -- a small program to replicate some\n", lpwszProgName); 
+
+    wprintf(L"%s -- a small program to replicate some\n", lpwszProgName);
     wprintf(L"\tfunctionality of the AT command, using the\n");
     wprintf(L"\tnew Task Scheduler interfaces.\n\n");
 
@@ -483,7 +483,7 @@ void DisplayHelp(LPWSTR lpwszProgName)
 
     wprintf(L"Task Time is in 24 hour format (such as 15:30) and is the\n");
     wprintf(L"next instance of this time within 24 hours.\n\n");
-    
+
     wprintf(L"The Command should contain the name of the executable to run.\n");
     wprintf(L"Note that the pathname may NOT contain spaces.  If the\n");
     wprintf(L"program requires command line parameters, enclose the entire\n");
@@ -493,16 +493,16 @@ void DisplayHelp(LPWSTR lpwszProgName)
     wprintf(L"Under Windows NT, if not specified, you will be prompted.\n");
     wprintf(L"Under Windows 95, both fields are ignored.  If not specified\n");
     wprintf(L"on the command line, you will not be prompted.\n\n");
-    
+
     return;
 }
- 
+
 
 //+--------------------------------------------------------------------------
 //
 // Function:    EnumerateJobs()
 //
-// Synopsis:    Goes through all scheduled work items on a system and 
+// Synopsis:    Goes through all scheduled work items on a system and
 //              lists them, along with a short trigger string.
 //
 // Arguments:   none (void).  Requires g_pITaskScheduler.
@@ -522,7 +522,7 @@ HRESULT EnumerateJobs()
     WORD wTrigCount = 0;
     WORD wTemp;
 
-    
+
     //
     // Get an enumeration pointer, using ITaskScheduler::Enum
     //
@@ -555,7 +555,7 @@ HRESULT EnumerateJobs()
         }
 
         // QI pIU for pITask
-   
+
         hr = pIU->QueryInterface(IID_ITask, (void **) &pITask);
         pIU->Release();
         pIU = NULL;
@@ -569,8 +569,8 @@ HRESULT EnumerateJobs()
 
         // rgpwszNames[0] is the value returned by the Task Scheduler API
         // and should be appropriately bounded and therefore safe to pass into %s
-        
-        wprintf(L"Task: %s\n",rgpwszNames[0]); 
+
+        wprintf(L"Task: %s\n",rgpwszNames[0]);
 
         // Use ITask::GetTriggerCount to get count of triggers
 
@@ -581,7 +581,7 @@ HRESULT EnumerateJobs()
             pITask->Release();
             break;
         }
-        
+
         for (wTemp = 0; wTemp < wTrigCount; wTemp++)
         {
             // Dump Triggers using ITask::GetTriggerString
@@ -609,23 +609,24 @@ HRESULT EnumerateJobs()
 
         CoTaskMemFree(rgpwszNames[0]);
         CoTaskMemFree(rgpwszNames);
-        
+
         // Free the ITask pointer
-    
+
         pITask->Release();
 
-    } while(1);
+    }
+    while(1);
 
     // Release the enumeration pointer
-    
+
     pITask = NULL;
 
     pIEnumWorkItems->Release();
     pIEnumWorkItems = NULL;
 
-    return hr; 
-}    
-    
+    return hr;
+}
+
 
 //+--------------------------------------------------------------------------
 //
@@ -672,8 +673,8 @@ HRESULT DeleteJob(LPWSTR lpwszJobName)
 //---------------------------------------------------------------------------
 
 HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
-                LPWSTR lpwszCommand, LPWSTR lpwszUserName,
-                LPWSTR lpwszPassword)
+               LPWSTR lpwszCommand, LPWSTR lpwszUserName,
+               LPWSTR lpwszPassword)
 {
     HRESULT hr = S_OK;
     IUnknown *pIU;
@@ -686,7 +687,7 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
     TASK_TRIGGER TaskTrig;
     WCHAR lpwszAppName[MAX_COMMAND_LENGTH];
     int i;
-    
+
     //
     // Initialize the pointers to NULL, so that the fail-out routine works
     // All pointer cleanup will be done at the end of the routine.
@@ -701,9 +702,9 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
     // Add the task.  Most likely failure is that work item already exists.
     // Uses ITaskScheduler::NewWorkItem
 
-    hr = g_pITaskScheduler->NewWorkItem(lpwszJobName, 
-                                        CLSID_CTask, 
-                                        IID_ITask, 
+    hr = g_pITaskScheduler->NewWorkItem(lpwszJobName,
+                                        CLSID_CTask,
+                                        IID_ITask,
                                         &pIU);
     if (FAILED(hr))
     {
@@ -713,14 +714,14 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
 
     // We now have an IUnknown pointer.  This is queried for an ITask
     // pointer on the work item we just added.
-    
+
     hr = pIU->QueryInterface(IID_ITask, (void **) &pITask);
     if (FAILED(hr))
     {
         wprintf(L"Error:  IUnknown failed to yield ITask with 0x%x\n", hr);
         goto finish;
     }
-    
+
     //
     // In order for security to work and be set, later we need to
     // attach the task object to a file on disk.  Therefore,
@@ -728,17 +729,17 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
     // also will confirm that the object on disk doesn't already
     // exist - which could be a potential source of later errors.
     //
-    // The task scheduler does not normally commit jobs to disk 
+    // The task scheduler does not normally commit jobs to disk
     // immediately upon creation because disk access is slow compared
     // to the in-memory operation of creating a task.  Therefore,
     // you can rapidly create lots of task objects (for instance,
-    // in response to incoming net events) and commit when things 
+    // in response to incoming net events) and commit when things
     // slow down.
     //
     // Here, we don't care about speed.
-    // 
+    //
 
-    hr = pITask->QueryInterface(IID_IPersistFile, (void **) &pIPF); 
+    hr = pITask->QueryInterface(IID_IPersistFile, (void **) &pIPF);
     if (FAILED(hr))
     {
         wprintf(L"Error:  QI for IPersistFile failed with 0x%x\n", hr);
@@ -769,11 +770,11 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
 
         if (i > MAX_COMMAND_LENGTH - 1)
         {
-            wprintf(L"Error:  Attempted to exceed buffer size while copying application name\n"); 
+            wprintf(L"Error:  Attempted to exceed buffer size while copying application name\n");
             hr = E_FAIL;
             goto finish;
         }
-        
+
         lpwszCommand++;
     }
     lpwszAppName[i] = L'\0';
@@ -781,13 +782,13 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
     {
         lpwszCommand++;
     }
-    
+
     // Set command name with ITask::SetApplicationName
 
     hr = pITask->SetApplicationName(lpwszAppName);
     if (FAILED(hr))
     {
-        wprintf(L"Error:  Failed to set command name (with parms) with 0x%x\n", hr); 
+        wprintf(L"Error:  Failed to set command name (with parms) with 0x%x\n", hr);
         goto finish;
     }
 
@@ -799,7 +800,7 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
         wprintf(L"Error:  Failed to set parameters with 0x%x\n", hr);
         goto finish;
     }
-        
+
     // Set the comment, so we know how this job got there
     // Uses ITask::SetComment
 
@@ -812,7 +813,7 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
 
     // Set the flags on the task object
     // Use the base class member to do this - IScheduledWorkItem::SetFlags()
-    
+
     hr = pITask->QueryInterface(IID_IScheduledWorkItem, (void **) &pISWI);
     if (FAILED(hr))
     {
@@ -882,15 +883,15 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
     hr = pITask->SetAccountInformation(lpwszUserName, lpwszPassword);
     if (hr != SCHED_E_NO_SECURITY_SERVICES)
     {
-    
+
         // Check to see if username is null
 
         if (*lpwszPassword == L'\0')
         {
             // String conversion initialization
-        
+
             UINT uCodePage = _getmbcp();
-        
+
             // If password was null, chance username is, too.
 
             if (*lpwszUserName == L'\0')
@@ -909,24 +910,24 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
 
                 // eliminate the new line character if it was read
                 // this will always be the case if the input is less than MAX_ACCOUNT_LENGTH - 1
-                
+
                 if (char* pNewLine = strchr(lpszUserName, '\n'))
                 {
                     *pNewLine = '\0';
                 }
-                
+
                 // Convert the string; be sure to check return value
-               
+
                 if (!MultiByteToWideChar(uCodePage, 0, lpszUserName, -1, lpwszUserName, MAX_ACCOUNT_LENGTH))
                 {
                     hr = HRESULT_FROM_WIN32(GetLastError());
                     wprintf(L"Error:  Multibyte to wide character conversion failed with 0x%x\n", hr);
                     goto finish;
                 }
-                
+
                 wprintf(L"\n");
             }
-    
+
             wprintf(L"Enter password to user %s: ",lpwszUserName);
 
             // never use scanf() or wscanf(), as it is all too easy for a user to overflow the buffer
@@ -941,14 +942,14 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
 
             // eliminate the new line character if it was read
             // this will always be the case if the input is less than MAX_ACCOUNT_LENGTH - 1
-            
+
             if (char* pNewLine = strchr(lpszPassword, '\n'))
             {
                 *pNewLine = '\0';
             }
 
             // Convert the string; be sure to check return value
-           
+
             if (!MultiByteToWideChar(uCodePage, 0, lpszPassword, -1, lpwszPassword, MAX_PASSWORD_LENGTH))
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
@@ -964,7 +965,7 @@ HRESULT AddJob(LPWSTR lpwszJobName, LPSYSTEMTIME lptTime,
     // This fails for Win9x, but we ignore the failure.
     //
     // Note that setting security is the LAST THING WE DO BEFORE SAVING
-    // THE TASK. 
+    // THE TASK.
     //
 
     hr = pITask->SetAccountInformation(lpwszUserName, lpwszPassword);
@@ -998,21 +999,21 @@ finish:
     // We no longer need ITask
 
     if (pITask)
-    {    
+    {
         pITask->Release();
         pITask = NULL;
     }
 
     // Done with ITaskTrigger pointer
-    
+
     if (pITaskTrig)
     {
         pITaskTrig->Release();
         pITaskTrig = NULL;
     }
-    
+
     // Done with IPersistFile
-    
+
     if (pIPF)
     {
         pIPF->Release();
@@ -1023,20 +1024,20 @@ finish:
 
     if (pIU)
     {
-       pIU->Release();
-       pIU = NULL;
+        pIU->Release();
+        pIU = NULL;
     }
 
     // And if we have a IScheduledWorkItem
 
     if (pISWI)
     {
-       pISWI->Release();
-       pISWI = NULL;
+        pISWI->Release();
+        pISWI = NULL;
     }
 
     return hr;
-} 
+}
 
 
 //+--------------------------------------------------------------------------
@@ -1066,7 +1067,7 @@ HRESULT ConvertToSystemTime(LPWSTR lpwszTime, LPSYSTEMTIME lptTime)
     // Extract minutes and hour from string
     // Note that both h:mm and hh:mm are valid, but nothing else
     // It is safe to call wcslen() on lpwszTime because we already know it is NULL terminated
-    
+
     if ((wcslen(lpwszTime) > MAX_TIME_LENGTH - 1) || (wcslen(lpwszTime) < MAX_TIME_LENGTH - 2))
     {
         wprintf(L"Error:  Invalid time string given\n");
@@ -1074,7 +1075,7 @@ HRESULT ConvertToSystemTime(LPWSTR lpwszTime, LPSYSTEMTIME lptTime)
     }
 
     // Hours first.
-    
+
     i = 0;
     while (*lpwszTime != ':')
     {
@@ -1090,14 +1091,14 @@ HRESULT ConvertToSystemTime(LPWSTR lpwszTime, LPSYSTEMTIME lptTime)
     }
     szTemp[i] = L'\0';
     lpwszTime++;
- 
+
     // Convert to value
 
     wHr = (WORD) wcstoul(szTemp, &szEnd1, 10);
-    
+
     // Now do minutes
     // It is safe to call wcslen() on lpwszTime because we already know it is NULL terminated
- 
+
     i = wcslen(lpwszTime);
     if (i != 2)
     {
@@ -1105,7 +1106,7 @@ HRESULT ConvertToSystemTime(LPWSTR lpwszTime, LPSYSTEMTIME lptTime)
         wprintf(L"Error:  Bad minutes in time string (need 00 - 59)\n");
         return E_FAIL;
     }
-    
+
     j = 0;
     while (i)
     {
@@ -1119,75 +1120,75 @@ HRESULT ConvertToSystemTime(LPWSTR lpwszTime, LPSYSTEMTIME lptTime)
     wMin = (WORD) wcstoul(szTemp, &szEnd2, 10);
 
     // Now figure out if we are running today or tomorrow
-    
+
     GetLocalTime(&tNow);
-    if ((wHr < tNow.wHour) || 
-       ((wHr == tNow.wHour) && (wMin < tNow.wMinute)))
+    if ((wHr < tNow.wHour) ||
+            ((wHr == tNow.wHour) && (wMin < tNow.wMinute)))
     {
         // Job is tomorrow - we must figure out what tomorrow is
-        
+
         switch(tNow.wMonth)
         {
-            case 4:
-            case 6:
-            case 9:
-            case 11:
-                // Thirty day months
-                
-                if ((tNow.wDay + 1) > 30)
-                {
-                    tNow.wDay = 1;
-                    tNow.wMonth++;
-                }
-                else
-                {
-                    tNow.wDay++;
-                }
-                break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            // Thirty day months
 
-            case 2:
-                // February
-                // Leap Year?
-                
-                if ((tNow.wYear % 4) == 0) 
-                {
-                    wMaxFeb = 29;
-                }
-                if (((tNow.wYear % 100) == 0) &&
+            if ((tNow.wDay + 1) > 30)
+            {
+                tNow.wDay = 1;
+                tNow.wMonth++;
+            }
+            else
+            {
+                tNow.wDay++;
+            }
+            break;
+
+        case 2:
+            // February
+            // Leap Year?
+
+            if ((tNow.wYear % 4) == 0)
+            {
+                wMaxFeb = 29;
+            }
+            if (((tNow.wYear % 100) == 0) &&
                     ((tNow.wYear % 400) != 0))
-                {
-                    wMaxFeb = 28;
-                }
+            {
+                wMaxFeb = 28;
+            }
 
-                if ((tNow.wDay + 1) > wMaxFeb)
-                {
-                    tNow.wDay = 1;
-                    tNow.wMonth++;
-                }
-                else
-                {
-                    tNow.wDay++;
-                }
-                break;
+            if ((tNow.wDay + 1) > wMaxFeb)
+            {
+                tNow.wDay = 1;
+                tNow.wMonth++;
+            }
+            else
+            {
+                tNow.wDay++;
+            }
+            break;
 
-            default:
-                // 31 day months.  Handle Dec. later
-                
-                if ((tNow.wDay + 1) > 31)
-                {
-                    tNow.wDay = 1;
-                    tNow.wMonth++;
-                }
-                else
-                {
-                    tNow.wDay++;
-                }
-                
-                if (tNow.wMonth > 12)
-                {
-                    tNow.wMonth = 1;
-                    tNow.wYear++;
-                }
+        default:
+            // 31 day months.  Handle Dec. later
+
+            if ((tNow.wDay + 1) > 31)
+            {
+                tNow.wDay = 1;
+                tNow.wMonth++;
+            }
+            else
+            {
+                tNow.wDay++;
+            }
+
+            if (tNow.wMonth > 12)
+            {
+                tNow.wMonth = 1;
+                tNow.wYear++;
+            }
         }
     }
 
@@ -1219,4 +1220,4 @@ HRESULT ConvertToSystemTime(LPWSTR lpwszTime, LPSYSTEMTIME lptTime)
     lptTime->wSecond = 0;
     lptTime->wMilliseconds = 0;
     return S_OK;
-} 
+}

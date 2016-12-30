@@ -1,4 +1,4 @@
-/*++
+﻿/*++
 
 Copyright (c) 2003  Microsoft Corporation
 
@@ -37,30 +37,30 @@ DWORD   ISAPI_REQUEST::_dwOsMajorVersion = 0;
 
 ISAPI_REQUEST::ISAPI_REQUEST(
     EXTENSION_CONTROL_BLOCK *   pEcb
-    )
+)
     : _pEcb( pEcb ),
       _dwMaxSyncWriteSize( 0 ), // Use ISAPI_STRING default
       _fNeedDoneWithSession( FALSE ),
       _fClientIsConnected( TRUE ),
       _hImpersonationToken( NULL )
-/*++
+      /*++
 
-Purpose:
+      Purpose:
 
-    Initializes the ISAPI_REQUEST object
+          Initializes the ISAPI_REQUEST object
 
-    During initialization, this object will determine
-    the IIS version.
+          During initialization, this object will determine
+          the IIS version.
 
-Arguments:
+      Arguments:
 
-    pEcb - The ECB for the request to associate with this object
+          pEcb - The ECB for the request to associate with this object
 
-Returns:
+      Returns:
 
-    None
+          None
 
---*/
+      --*/
 {
     //
     // Set the max response buffer size
@@ -88,7 +88,7 @@ Returns:
     //
 
     if ( _dwIISMajorVersion == 4 &&
-         _dwIISMinorVersion == 0 )
+            _dwIISMinorVersion == 0 )
     {
         _dwIISMajorVersion = QueryOsMajorVersion();
     }
@@ -96,7 +96,7 @@ Returns:
 
 ISAPI_REQUEST::~ISAPI_REQUEST(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -146,7 +146,7 @@ BOOL
 ISAPI_REQUEST::SyncSendStatusAndHeaders(
     CHAR *  szStatus,
     CHAR *  szHeaders
-    )
+)
 /*++
 
 Purpose:
@@ -221,7 +221,7 @@ Returns:
     dwStatus = atoi( szStatus );
 
     if ( dwStatus < 100 ||
-         dwStatus > 999 )
+            dwStatus > 999 )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         goto Failed;
@@ -241,10 +241,10 @@ Returns:
     //
 
     fResult =  _pEcb->ServerSupportFunction( _pEcb->ConnID,
-                                             HSE_REQ_SEND_RESPONSE_HEADER,
-                                             szStatus,
-                                             NULL,
-                                             (DWORD*)szHeaders );
+               HSE_REQ_SEND_RESPONSE_HEADER,
+               szStatus,
+               NULL,
+               (DWORD*)szHeaders );
 
     if ( !fResult )
     {
@@ -273,7 +273,7 @@ BOOL
 ISAPI_REQUEST::SyncWriteClientArgs(
     CHAR *  szFormat,
     va_list args
-    )
+)
 /*++
 
 Purpose:
@@ -301,7 +301,7 @@ Returns:
     //
 
     fResult = IsapiString.vsprintf_s( szFormat,
-                                    args );
+                                      args );
 
     if ( !fResult )
     {
@@ -344,7 +344,7 @@ BOOL
 ISAPI_REQUEST::SyncWriteClientString(
     CHAR *  szFormat,
     ...
-    )
+)
 /*++
 
 Purpose:
@@ -387,7 +387,7 @@ ISAPI_REQUEST::SyncWriteCompleteResponse(
     CHAR *  szHeaders,
     CHAR *  szFormat,
     ...
-    )
+)
 /*++
 
 Purpose:
@@ -450,7 +450,7 @@ BOOL
 ISAPI_REQUEST::GetServerVariable(
     CHAR *          szVariable,
     ISAPI_STRING *  pIsapiString
-    )
+)
 /*++
 
 Purpose:
@@ -549,7 +549,7 @@ BOOL
 ISAPI_REQUEST::GetServerVariable(
     CHAR *  szVariable,
     ISAPI_STRINGW * pIsapiStringW
-    )
+)
 /*++
 
 Purpose:
@@ -647,7 +647,7 @@ Failed:
 BOOL
 ISAPI_REQUEST::ReadAllEntity(
     ISAPI_BUFFER *  pBuffer
-    )
+)
 /*++
 
 Purpose:
@@ -808,7 +808,7 @@ Returns:
 BOOL
 ISAPI_REQUEST::SetBufferedResponseStatus(
     CHAR *  szStatus
-    )
+)
 /*++
 
 Purpose:
@@ -832,7 +832,7 @@ BOOL
 ISAPI_REQUEST::AddHeaderToBufferedResponse(
     CHAR *  szName,
     CHAR *  szValue
-    )
+)
 /*++
 
 Purpose:
@@ -888,7 +888,7 @@ BOOL
 ISAPI_REQUEST::PrintfToResponseBuffer(
     CHAR *  szFormat,
     ...
-    )
+)
 /*++
 
 Purpose:
@@ -924,7 +924,7 @@ Returns:
     va_start( args, szFormat );
 
     fResult = CurrentChunk.vsprintf_s( szFormat,
-                                     args );
+                                       args );
 
     va_end( args );
 
@@ -955,7 +955,7 @@ BOOL
 ISAPI_REQUEST::AddDataToResponseBuffer(
     VOID *  pData,
     DWORD   cbData
-    )
+)
 /*++
 
 Purpose:
@@ -984,14 +984,14 @@ BOOL
 ISAPI_REQUEST::AsyncTransmitBufferedResponse(
     PFN_HSE_IO_COMPLETION   pfnCompletion,
     DWORD                   dwExpireSeconds
-    )
+)
 /*++
 
 Purpose:
 
     Asynchronously sends the complete, buffered response
     to the client.
-    
+
     This function automatically calculates and adds an "Expires"
     header, based on the expiration specified by the caller. It
     also calculates and adds a content-length header, and
@@ -1150,7 +1150,7 @@ Failed:
 DWORD
 ISAPI_REQUEST::QueryMaxSyncWriteSize(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1179,7 +1179,7 @@ Returns:
 VOID
 ISAPI_REQUEST::SetMaxSyncWriteSize(
     DWORD   dwMaxSyncWriteSize
-    )
+)
 /*++
 
 Purpose:
@@ -1208,7 +1208,7 @@ Returns:
 DWORD
 ISAPI_REQUEST::QueryMaxResponseBufferSize(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1231,7 +1231,7 @@ Returns:
 VOID
 ISAPI_REQUEST::SetMaxResponseBufferSize(
     DWORD   dwMaxResponseBufferSize
-    )
+)
 /*++
 
 Purpose:
@@ -1254,7 +1254,7 @@ Returns:
 EXTENSION_CONTROL_BLOCK *
 ISAPI_REQUEST::QueryEcb(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1277,7 +1277,7 @@ Returns:
 DWORD
 ISAPI_REQUEST::QueryIISMajorVersion(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1300,7 +1300,7 @@ Returns:
 DWORD
 ISAPI_REQUEST::QueryIISMinorVersion(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1323,7 +1323,7 @@ Returns:
 BOOL
 ISAPI_REQUEST::QueryIsClientConnected(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1387,7 +1387,7 @@ Returns:
 BOOL
 ISAPI_REQUEST::UnimpersonateClient(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1438,7 +1438,7 @@ Failed:
 BOOL
 ISAPI_REQUEST::ImpersonateClient(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1488,7 +1488,7 @@ Failed:
 BOOL
 ISAPI_REQUEST::AsyncSendResponseIIS4(
     PFN_HSE_IO_COMPLETION   pfnCompletion
-    )
+)
 /*++
 
 Purpose:
@@ -1584,7 +1584,7 @@ Failed:
 BOOL
 ISAPI_REQUEST::AsyncSendResponseIIS5(
     PFN_HSE_IO_COMPLETION   pfnCompletion
-    )
+)
 /*++
 
 Purpose:
@@ -1685,7 +1685,7 @@ Returns:
 
     if ( !fResult )
     {
-        // 
+        //
         // Since the ServerSupportFunction failed, we know that no
         // completion will occur.  It is therefore safe for us to
         // touch members of this object.
@@ -1705,7 +1705,7 @@ BOOL
 ISAPI_REQUEST::AsyncSendResponseIIS6(
     PFN_HSE_IO_COMPLETION   pfnCompletion,
     BOOL                    fCacheResponse
-    )
+)
 /*++
 
 Purpose:
@@ -1838,7 +1838,7 @@ Returns:
 
     if ( !fResult )
     {
-        // 
+        //
         // Since the ServerSupportFunction failed, we know that no
         // completion will occur.  It is therefore safe for us to
         // touch members of this object.
@@ -1865,7 +1865,7 @@ Failed:
 DWORD
 ISAPI_REQUEST::QueryOsMajorVersion(
     VOID
-    )
+)
 /*++
 
 Purpose:
@@ -1930,7 +1930,7 @@ Done:
 DWORD
 SyncSendGenericServerError(
     EXTENSION_CONTROL_BLOCK *   pecb
-    )
+)
 /*++
 
 Purpose:

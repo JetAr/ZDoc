@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -12,9 +12,9 @@
 // Initially, we define rectangle to be in the center of the client area. So whenever
 // user resize window the rectangle is placed in the middle of client window with
 // a width set to half of width of client window and height set to half of the heights of
-// client window. Rectangle is placed in the center of the client area. 
+// client window. Rectangle is placed in the center of the client area.
 //
-// By using the fingers the user can zoom in, zoom out, move or rotate the rectangle. 
+// By using the fingers the user can zoom in, zoom out, move or rotate the rectangle.
 //
 
 #include "CDrawingObject.h"
@@ -50,11 +50,11 @@ void CDrawingObject::ResetObject(const int cxClient, const int cyClient)
     _dScalingFactor = 1.0;
 
     // Initial rotation angle is 0.0 (no rotation)
-    _dRotationAngle = 0.0; 
+    _dRotationAngle = 0.0;
 }
 
-// This function will be called by the main app whenever WM_PAINT message is 
-// received. It is responsible to redraw the rectangle. Here we calculate the 
+// This function will be called by the main app whenever WM_PAINT message is
+// received. It is responsible to redraw the rectangle. Here we calculate the
 // positon of the rectangle corners.
 // in:
 //      hdc - handle to device context
@@ -66,9 +66,9 @@ void CDrawingObject::Paint(HDC hdc)
     // select new pen for drawing
     HGDIOBJ hPenOld = SelectObject(hdc, hPen);
 
-    // first create a polyline that describes the rectangle scaled by the 
+    // first create a polyline that describes the rectangle scaled by the
     // scaling factor
-    POINT ptRect[5];    
+    POINT ptRect[5];
 
     // upper left cofner
     ptRect[0].x = -(LONG)(_dScalingFactor * _szRect.cx/2);
@@ -85,7 +85,7 @@ void CDrawingObject::Paint(HDC hdc)
     // lower left corner
     ptRect[3].x = ptRect[0].x;
     ptRect[3].y = ptRect[2].y;
-    
+
     // upper left corner, we are closing the rectangle
     ptRect[4] = ptRect[0];
 

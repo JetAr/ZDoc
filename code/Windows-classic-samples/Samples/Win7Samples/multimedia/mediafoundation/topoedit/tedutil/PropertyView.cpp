@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -16,7 +16,8 @@
 #include "atlconv.h"
 #include "nserror.h"
 
-KeyStringTypeTriplet CPropertyInfo::ms_AttributeKeyStrings[] = {
+KeyStringTypeTriplet CPropertyInfo::ms_AttributeKeyStrings[] =
+{
     { MF_TOPONODE_CONNECT_METHOD, L"MF_TOPONODE_CONNECT_METHOD", VT_UI4, TED_ATTRIBUTE_CATEGORY_TOPONODE },
     { MF_TOPONODE_DECODER, L"MF_TOPONODE_DECODER", VT_UI4, TED_ATTRIBUTE_CATEGORY_TOPONODE },
     { MF_TOPONODE_DECRYPTOR, L"MF_TOPONODE_DECRYPTOR", VT_UI4, TED_ATTRIBUTE_CATEGORY_TOPONODE },
@@ -148,7 +149,8 @@ KeyStringTypeTriplet CPropertyInfo::ms_AttributeKeyStrings[] = {
 
 #define AttributeKeyStringsLength sizeof(CPropertyInfo::ms_AttributeKeyStrings) / sizeof(KeyStringTypeTriplet)
 
-KeyStringPair CPropertyInfo::ms_AttributeValueStrings[] = {
+KeyStringPair CPropertyInfo::ms_AttributeValueStrings[] =
+{
     { MFMediaType_Audio, L"MFMediaType_Audio" },
     { MFMediaType_Video, L"MFMediaType_Video" },
     { MFMediaType_Protected, L"MFMediaType_Protected" },
@@ -240,29 +242,29 @@ BOOL ConvertStringToSystemTime(const CAtlString& strValue, LPSYSTEMTIME pSystemT
     int iCharLoc = strValue.Find('/');
     if(-1 == iCharLoc) return FALSE;
     pSystemTime->wMonth = (WORD) _wtoi( strValue.Left(iCharLoc) );
- 
+
     int iLastLoc = iCharLoc + 1;
     iCharLoc = strValue.Find('/', iLastLoc);
     if(-1 == iCharLoc) return FALSE;
     pSystemTime->wDay = (WORD) _wtoi( strValue.Mid(iLastLoc, iCharLoc - iLastLoc) );
-    
+
     iLastLoc = iCharLoc + 1;
     iCharLoc = strValue.Find(' ', iLastLoc);
     if(-1 == iCharLoc) return FALSE;
     pSystemTime->wYear = (WORD) _wtoi( strValue.Mid(iLastLoc, iCharLoc - iLastLoc) );
-    
+
     iLastLoc = iCharLoc + 1;
     iCharLoc = strValue.Find(':', iLastLoc);
     if(-1 == iCharLoc) return FALSE;
     pSystemTime->wHour = (WORD) _wtoi( strValue.Mid(iLastLoc, iCharLoc - iLastLoc) );
-    
+
     iLastLoc = iCharLoc + 1;
     iCharLoc = strValue.Find(':', iLastLoc);
     if(-1 == iCharLoc) return FALSE;
     pSystemTime->wMinute = (WORD) _wtoi( strValue.Mid(iLastLoc, iCharLoc - iLastLoc) );
-    
+
     pSystemTime->wSecond = (WORD) _wtoi( strValue.Mid(iLastLoc) );
-    
+
     return TRUE;
 }
 
@@ -301,7 +303,7 @@ HRESULT CPropertyInfo::QueryInterface(REFIID riid, void** ppInterface)
 ULONG CPropertyInfo::AddRef()
 {
     ULONG cRef = InterlockedIncrement(&m_cRef);
- 
+
     return cRef;
 }
 
@@ -322,7 +324,7 @@ void CPropertyInfo::ConvertKeyToString(GUID key, /* out */ CAtlStringW& strName)
     USES_CONVERSION;
 
     bool found = false;
-    
+
     for(DWORD i = 0; i < AttributeKeyStringsLength; i++)
     {
         if(ms_AttributeKeyStrings[i].m_key == key)
@@ -336,10 +338,10 @@ void CPropertyInfo::ConvertKeyToString(GUID key, /* out */ CAtlStringW& strName)
     if(!found)
     {
         LPOLESTR strClsid = NULL;
-    
+
         StringFromCLSID(key, &strClsid);
         strName = OLE2W(strClsid);
-    
+
         CoTaskMemFree(strClsid);
     }
 }
@@ -347,148 +349,148 @@ void CPropertyInfo::ConvertKeyToString(GUID key, /* out */ CAtlStringW& strName)
 void CPropertyInfo::ConvertPropertyValueToString(GUID key, PROPVARIANT propVal, /* out */ CAtlStringW& strValue)
 {
     USES_CONVERSION;
-        
+
     switch(propVal.vt)
     {
-        case VT_I1:
-            strValue.Format(L"%d", propVal.cVal);
-            break;
-        case VT_UI1:
-            strValue.Format(L"%d", propVal.bVal);
-            break;
-        case VT_I2:
-            strValue.Format(L"%d", propVal.iVal);
-            break;
-        case VT_UI2:
-            strValue.Format(L"%d", propVal.uiVal);
-            break;
-        case VT_I4:
-            strValue.Format(L"%d", propVal.lVal);
-            break;
-        case VT_UI4:
-            if(MF_TOPONODE_ERRORCODE == key)
-            {
-                strValue.Format(L"%x", propVal.ulVal);
-            }
-            else
-            {
-                strValue.Format(L"%d", propVal.ulVal);
-            }
-            break;
-        case VT_UI8:
-            if(MF_MT_FRAME_RATE == key ||MF_MT_PIXEL_ASPECT_RATIO == key || MF_MT_FRAME_SIZE == key)
-            {
-                UINT32 numerator, denominator;
-                denominator = propVal.uhVal.LowPart;
-                numerator = propVal.uhVal.HighPart;
-
-                strValue.Format(L"N: %d  D: %d", numerator, denominator);
-            }
-            else
-            {
-                strValue.Format(L"%ld", propVal.uhVal.QuadPart);
-            }
-            
-            break;
-        case VT_INT:
-            strValue.Format(L"%d", propVal.intVal);
-            break;
-        case VT_UINT:
-            strValue.Format(L"%d", propVal.uintVal);
-            break;
-        case VT_R4:
-            strValue.Format(L"%f", propVal.fltVal);
-            break;
-        case VT_R8:
-            strValue.Format(L"%f", propVal.dblVal);
-            break;
-        case VT_BOOL:
-            if(VARIANT_TRUE == propVal.boolVal)
-            {
-                strValue = L"True";
-            }
-            else
-            {
-                strValue = L"False";
-            }
-            break;
-        case VT_LPSTR:
-            strValue = CA2W(propVal.pszVal);
-            break;
-        case VT_LPWSTR:
-            strValue = propVal.pwszVal;
-            break;
-        case VT_UNKNOWN:
-            if(NULL == propVal.punkVal)
-            {
-                strValue = L"NULL IUnknown";
-            }
-            else
-            {
-                strValue = L"IUnknown";
-            }
-            break;
-        case VT_CLSID:
+    case VT_I1:
+        strValue.Format(L"%d", propVal.cVal);
+        break;
+    case VT_UI1:
+        strValue.Format(L"%d", propVal.bVal);
+        break;
+    case VT_I2:
+        strValue.Format(L"%d", propVal.iVal);
+        break;
+    case VT_UI2:
+        strValue.Format(L"%d", propVal.uiVal);
+        break;
+    case VT_I4:
+        strValue.Format(L"%d", propVal.lVal);
+        break;
+    case VT_UI4:
+        if(MF_TOPONODE_ERRORCODE == key)
         {
-            bool found = false;
-
-            if(propVal.puuid != NULL)
-            {
-                for(DWORD i = 0; i < AttributeValueStringsLength; i++)
-                {                
-                    if(ms_AttributeValueStrings[i].m_key ==  *(propVal.puuid) )
-                    {
-                        strValue = ms_AttributeValueStrings[i].m_str;
-                        found = true;
-                        break;
-                    }
-                }
-            
-
-                if(!found)
-                {
-                    LPOLESTR strClsid = NULL;
-        
-                    StringFromCLSID(*propVal.puuid, &strClsid);
-                    strValue = OLE2W(strClsid);
-        
-                    CoTaskMemFree(strClsid);
-                }
-            }
-            else
-            {
-                strValue = L"{00000000-0000-0000-0000-000000000000}";
-            }
-
-            break;
+            strValue.Format(L"%x", propVal.ulVal);
         }
-        case VT_VECTOR | VT_UI1:
-            if(MF_PD_ASF_FILEPROPERTIES_CREATION_TIME == key || MF_PD_LAST_MODIFIED_TIME == key)
+        else
+        {
+            strValue.Format(L"%d", propVal.ulVal);
+        }
+        break;
+    case VT_UI8:
+        if(MF_MT_FRAME_RATE == key ||MF_MT_PIXEL_ASPECT_RATIO == key || MF_MT_FRAME_SIZE == key)
+        {
+            UINT32 numerator, denominator;
+            denominator = propVal.uhVal.LowPart;
+            numerator = propVal.uhVal.HighPart;
+
+            strValue.Format(L"N: %d  D: %d", numerator, denominator);
+        }
+        else
+        {
+            strValue.Format(L"%ld", propVal.uhVal.QuadPart);
+        }
+
+        break;
+    case VT_INT:
+        strValue.Format(L"%d", propVal.intVal);
+        break;
+    case VT_UINT:
+        strValue.Format(L"%d", propVal.uintVal);
+        break;
+    case VT_R4:
+        strValue.Format(L"%f", propVal.fltVal);
+        break;
+    case VT_R8:
+        strValue.Format(L"%f", propVal.dblVal);
+        break;
+    case VT_BOOL:
+        if(VARIANT_TRUE == propVal.boolVal)
+        {
+            strValue = L"True";
+        }
+        else
+        {
+            strValue = L"False";
+        }
+        break;
+    case VT_LPSTR:
+        strValue = CA2W(propVal.pszVal);
+        break;
+    case VT_LPWSTR:
+        strValue = propVal.pwszVal;
+        break;
+    case VT_UNKNOWN:
+        if(NULL == propVal.punkVal)
+        {
+            strValue = L"NULL IUnknown";
+        }
+        else
+        {
+            strValue = L"IUnknown";
+        }
+        break;
+    case VT_CLSID:
+    {
+        bool found = false;
+
+        if(propVal.puuid != NULL)
+        {
+            for(DWORD i = 0; i < AttributeValueStringsLength; i++)
             {
-                PFILETIME pFileTime;
-                SYSTEMTIME SystemTime;
-                
-                pFileTime = (PFILETIME) propVal.caub.pElems;
-                if(FileTimeToSystemTime(pFileTime, &SystemTime))
+                if(ms_AttributeValueStrings[i].m_key ==  *(propVal.puuid) )
                 {
-                    SYSTEMTIME LocalTime;
-                    if(SystemTimeToTzSpecificLocalTime(NULL /* current active timezone */, &SystemTime, &LocalTime))
-                    {
-                        strValue.Format(L"%d/%d/%d %d:%d:%d", LocalTime.wMonth, LocalTime.wDay,
-                            LocalTime.wYear, LocalTime.wHour, LocalTime.wMinute, LocalTime.wSecond);
-                    }
+                    strValue = ms_AttributeValueStrings[i].m_str;
+                    found = true;
+                    break;
                 }
             }
-            else
+
+
+            if(!found)
             {
-                CAtlString strTemp;
-                for(DWORD i = 0; i < propVal.caub.cElems; i++)
+                LPOLESTR strClsid = NULL;
+
+                StringFromCLSID(*propVal.puuid, &strClsid);
+                strValue = OLE2W(strClsid);
+
+                CoTaskMemFree(strClsid);
+            }
+        }
+        else
+        {
+            strValue = L"{00000000-0000-0000-0000-000000000000}";
+        }
+
+        break;
+    }
+    case VT_VECTOR | VT_UI1:
+        if(MF_PD_ASF_FILEPROPERTIES_CREATION_TIME == key || MF_PD_LAST_MODIFIED_TIME == key)
+        {
+            PFILETIME pFileTime;
+            SYSTEMTIME SystemTime;
+
+            pFileTime = (PFILETIME) propVal.caub.pElems;
+            if(FileTimeToSystemTime(pFileTime, &SystemTime))
+            {
+                SYSTEMTIME LocalTime;
+                if(SystemTimeToTzSpecificLocalTime(NULL /* current active timezone */, &SystemTime, &LocalTime))
                 {
-                    strValue.AppendFormat(L"%2.2x%s", propVal.caub.pElems[i], (i == propVal.caub.cElems - 1) ? "" : " ");
+                    strValue.Format(L"%d/%d/%d %d:%d:%d", LocalTime.wMonth, LocalTime.wDay,
+                                    LocalTime.wYear, LocalTime.wHour, LocalTime.wMinute, LocalTime.wSecond);
                 }
             }
-            
-            break;
+        }
+        else
+        {
+            CAtlString strTemp;
+            for(DWORD i = 0; i < propVal.caub.cElems; i++)
+            {
+                strValue.AppendFormat(L"%2.2x%s", propVal.caub.pElems[i], (i == propVal.caub.cElems - 1) ? "" : " ");
+            }
+        }
+
+        break;
     }
 }
 
@@ -496,7 +498,7 @@ void CPropertyInfo::ConvertStringToKey(CAtlStringW strName, /* out */ GUID& key)
 {
     USES_CONVERSION;
     bool found = false;
-    
+
     for(DWORD i = 0; i < AttributeKeyStringsLength; i++)
     {
         if(ms_AttributeKeyStrings[i].m_str == strName)
@@ -510,7 +512,7 @@ void CPropertyInfo::ConvertStringToKey(CAtlStringW strName, /* out */ GUID& key)
     if(!found)
     {
         LPOLESTR strClsid = W2OLE(strName.GetBuffer());
-    
+
         CLSIDFromString(strClsid, &key);
     }
 }
@@ -518,117 +520,117 @@ void CPropertyInfo::ConvertStringToKey(CAtlStringW strName, /* out */ GUID& key)
 void CPropertyInfo::ConvertStringToPropertyValue(GUID key, CAtlStringW strValue, VARTYPE vt, /* out */ PROPVARIANT& propVal)
 {
     USES_CONVERSION;
-    
+
     propVal.vt = vt;
 
     switch(vt)
     {
-        case VT_I1:
-            propVal.cVal = (CHAR) _wtoi(strValue);
-            break;
-        case VT_UI1:
-            propVal.bVal =(UCHAR)  _wtoi(strValue);
-            break;
-        case VT_I2:
-            propVal.iVal = (SHORT) _wtoi(strValue);
-            break;
-        case VT_UI2:
-            propVal.uiVal = (USHORT) _wtoi(strValue);
-            break;
-        case VT_I4:
-            propVal.lVal = _wtoi(strValue);
-            break;
-        case VT_UI4:
-            propVal.ulVal = (ULONG) _wtoi64(strValue);
-            break;
-        case VT_UI8:
+    case VT_I1:
+        propVal.cVal = (CHAR) _wtoi(strValue);
+        break;
+    case VT_UI1:
+        propVal.bVal =(UCHAR)  _wtoi(strValue);
+        break;
+    case VT_I2:
+        propVal.iVal = (SHORT) _wtoi(strValue);
+        break;
+    case VT_UI2:
+        propVal.uiVal = (USHORT) _wtoi(strValue);
+        break;
+    case VT_I4:
+        propVal.lVal = _wtoi(strValue);
+        break;
+    case VT_UI4:
+        propVal.ulVal = (ULONG) _wtoi64(strValue);
+        break;
+    case VT_UI8:
+    {
+        if(strValue.GetLength() > 0 && strValue.GetAt(0) == 'N')
         {
-            if(strValue.GetLength() > 0 && strValue.GetAt(0) == 'N')
-            {
-                UINT32 numerator, denominator;
-                int charLoc = strValue.Find(' ', 4);
+            UINT32 numerator, denominator;
+            int charLoc = strValue.Find(' ', 4);
 
-                numerator = (UINT32) _wtoi64(strValue.Mid(3, charLoc - 3));
-                denominator = (UINT32) _wtoi64(strValue.Mid(charLoc + 5));
+            numerator = (UINT32) _wtoi64(strValue.Mid(3, charLoc - 3));
+            denominator = (UINT32) _wtoi64(strValue.Mid(charLoc + 5));
 
-                propVal.uhVal.LowPart = denominator;
-                propVal.uhVal.HighPart = numerator;
-            }
-            else
-            {
-                propVal.uhVal.QuadPart = _wtoi64(strValue);
-            }
-            break;
-        }        
-        case VT_INT:
-            propVal.intVal = _wtoi(strValue);
-            break;
-        case VT_UINT:
-            propVal.uintVal = (UINT) _wtoi64(strValue);
-            break;
-        case VT_R4:
-            propVal.fltVal = (FLOAT) _wtof(strValue);
-            break;
-        case VT_R8:
-            propVal.dblVal = _wtof(strValue);
-            break;
-        case VT_BOOL:
-            if(strValue == L"True")
-            {
-                propVal.boolVal = VARIANT_TRUE;
-            }
-            else
-            {
-                propVal.boolVal = VARIANT_FALSE;
-            }
-            break;
-        case VT_LPSTR:
-            propVal.pszVal = (LPSTR) CoTaskMemAlloc(sizeof(CHAR) * (strValue.GetLength() + 1));
-            strcpy_s(propVal.pszVal, strValue.GetLength() + 1, CW2A(strValue.GetBuffer()));
-            break;
-        case VT_LPWSTR:
-            propVal.pwszVal = (LPWSTR) CoTaskMemAlloc(sizeof(WCHAR) * (strValue.GetLength() + 1));
-            wcscpy_s(propVal.pwszVal, strValue.GetLength() + 1, strValue.GetBuffer());
-            break;
-        case VT_CLSID:
-        {
-            propVal.puuid = (GUID*) CoTaskMemAlloc(sizeof(GUID));
-            bool found = false;
-    
-            for(DWORD i = 0; i < AttributeValueStringsLength; i++)
-            {
-                if(ms_AttributeValueStrings[i].m_str ==  strValue )
-                {
-                    *(propVal.puuid) = ms_AttributeValueStrings[i].m_key;
-                    found = true;
-                    break;
-                }
-            }
-
-            if(!found)
-            {
-                CLSIDFromString(W2OLE(strValue.GetBuffer()), propVal.puuid);
-            }
-
-            break;
+            propVal.uhVal.LowPart = denominator;
+            propVal.uhVal.HighPart = numerator;
         }
-        case VT_VECTOR | VT_UI1:
+        else
         {
-            if(MF_PD_ASF_FILEPROPERTIES_CREATION_TIME == key || MF_PD_LAST_MODIFIED_TIME == key)
-            {
-                FILETIME FileTime;
-                SYSTEMTIME SystemTime;
-                ZeroMemory(&SystemTime, sizeof(SYSTEMTIME));
-                
-                ConvertStringToSystemTime(strValue, &SystemTime);
-                SystemTimeToFileTime(&SystemTime, &FileTime);
-             
-                propVal.caub.pElems = (BYTE*) CoTaskMemAlloc(sizeof(FileTime));
-                CopyMemory(propVal.pbVal, (BYTE*) &FileTime, sizeof(FileTime));
-                propVal.caub.cElems = sizeof(FileTime);
-            }
-            break;
+            propVal.uhVal.QuadPart = _wtoi64(strValue);
         }
+        break;
+    }
+    case VT_INT:
+        propVal.intVal = _wtoi(strValue);
+        break;
+    case VT_UINT:
+        propVal.uintVal = (UINT) _wtoi64(strValue);
+        break;
+    case VT_R4:
+        propVal.fltVal = (FLOAT) _wtof(strValue);
+        break;
+    case VT_R8:
+        propVal.dblVal = _wtof(strValue);
+        break;
+    case VT_BOOL:
+        if(strValue == L"True")
+        {
+            propVal.boolVal = VARIANT_TRUE;
+        }
+        else
+        {
+            propVal.boolVal = VARIANT_FALSE;
+        }
+        break;
+    case VT_LPSTR:
+        propVal.pszVal = (LPSTR) CoTaskMemAlloc(sizeof(CHAR) * (strValue.GetLength() + 1));
+        strcpy_s(propVal.pszVal, strValue.GetLength() + 1, CW2A(strValue.GetBuffer()));
+        break;
+    case VT_LPWSTR:
+        propVal.pwszVal = (LPWSTR) CoTaskMemAlloc(sizeof(WCHAR) * (strValue.GetLength() + 1));
+        wcscpy_s(propVal.pwszVal, strValue.GetLength() + 1, strValue.GetBuffer());
+        break;
+    case VT_CLSID:
+    {
+        propVal.puuid = (GUID*) CoTaskMemAlloc(sizeof(GUID));
+        bool found = false;
+
+        for(DWORD i = 0; i < AttributeValueStringsLength; i++)
+        {
+            if(ms_AttributeValueStrings[i].m_str ==  strValue )
+            {
+                *(propVal.puuid) = ms_AttributeValueStrings[i].m_key;
+                found = true;
+                break;
+            }
+        }
+
+        if(!found)
+        {
+            CLSIDFromString(W2OLE(strValue.GetBuffer()), propVal.puuid);
+        }
+
+        break;
+    }
+    case VT_VECTOR | VT_UI1:
+    {
+        if(MF_PD_ASF_FILEPROPERTIES_CREATION_TIME == key || MF_PD_LAST_MODIFIED_TIME == key)
+        {
+            FILETIME FileTime;
+            SYSTEMTIME SystemTime;
+            ZeroMemory(&SystemTime, sizeof(SYSTEMTIME));
+
+            ConvertStringToSystemTime(strValue, &SystemTime);
+            SystemTimeToFileTime(&SystemTime, &FileTime);
+
+            propVal.caub.pElems = (BYTE*) CoTaskMemAlloc(sizeof(FileTime));
+            CopyMemory(propVal.pbVal, (BYTE*) &FileTime, sizeof(FileTime));
+            propVal.caub.cElems = sizeof(FileTime);
+        }
+        break;
+    }
     }
 }
 
@@ -640,19 +642,19 @@ CNodePropertyInfo::CNodePropertyInfo(CComPtr<IMFTopologyNode> spNode)
     : m_spNode(spNode)
 {
     HRESULT hr = S_OK;
-    
+
     CComPtr<IPropertyStore> spPropStore;
     hr = spNode->QueryInterface(IID_IPropertyStore, (void**) &m_spNodePropertyStore);
 
-    if(E_NOINTERFACE == hr) 
+    if(E_NOINTERFACE == hr)
     {
         CComPtr<IUnknown> spUnk;
- 
+
         hr = spNode->GetObject(&spUnk);
 
         if(SUCCEEDED(hr) && spUnk != NULL)
         {
-           spUnk->QueryInterface(IID_IPropertyStore, (void**) &m_spNodePropertyStore);
+            spUnk->QueryInterface(IID_IPropertyStore, (void**) &m_spNodePropertyStore);
         }
     }
 
@@ -668,23 +670,23 @@ HRESULT CNodePropertyInfo::GetPropertyInfoName(__out LPWSTR* szName, __out TED_A
     CAtlString str(L"Node Attributes");
     size_t AllocLen = (str.GetLength() + 1) * sizeof(WCHAR);
     *szName = (LPWSTR) CoTaskMemAlloc(AllocLen);
-    
+
     if(NULL == *szName)
     {
         return E_OUTOFMEMORY;
     }
-    
+
     wcscpy_s(*szName, str.GetLength() + 1, str.GetString());
-    
+
     *pCategory = TED_ATTRIBUTE_CATEGORY_TOPONODE;
-    
+
     return S_OK;
 }
 
 HRESULT CNodePropertyInfo::GetPropertyCount(DWORD* pdwCount)
 {
     HRESULT hr = S_OK;
-    
+
     if(NULL == pdwCount)
     {
         IFC(E_POINTER);
@@ -702,7 +704,7 @@ HRESULT CNodePropertyInfo::GetPropertyCount(DWORD* pdwCount)
     {
         *pdwCount = 0;
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -719,14 +721,14 @@ HRESULT CNodePropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strName, __o
 
     *strName = NULL;
     *strValue = NULL;
-    
+
     if(NULL != m_spNodeAttributes)
     {
         GUID key;
         PROPVARIANT propVal;
 
         PropVariantInit(&propVal);
-        
+
         IFC( m_spNodeAttributes->GetItemByIndex(dwIndex, &key, &propVal) );
 
         ConvertKeyToString(key, strNameTemp);
@@ -740,7 +742,7 @@ HRESULT CNodePropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strName, __o
         PROPVARIANT propVal;
 
         PropVariantInit(&propVal);
-        
+
         IFC( m_spNodePropertyStore->GetAt(dwIndex, &propKey) );
         IFC( m_spNodePropertyStore->GetValue(propKey, &propVal) );
 
@@ -768,26 +770,26 @@ Cleanup:
         CoTaskMemFree(*strName);
         CoTaskMemFree(*strValue);
     }
-    
+
     return hr;
 }
 
 HRESULT CNodePropertyInfo::GetPropertyType(DWORD dwIndex, __out VARTYPE* vt)
 {
     HRESULT hr = S_OK;
- 
+
     if(NULL == vt)
     {
         IFC( E_POINTER );
     }
-   
+
     if(NULL != m_spNodeAttributes)
     {
         GUID key;
         PROPVARIANT propVal;
 
         PropVariantInit(&propVal);
-        
+
         IFC( m_spNodeAttributes->GetItemByIndex(dwIndex, &key, &propVal) );
 
         *vt = propVal.vt;
@@ -800,7 +802,7 @@ HRESULT CNodePropertyInfo::GetPropertyType(DWORD dwIndex, __out VARTYPE* vt)
         PROPVARIANT propVal;
 
         PropVariantInit(&propVal);
-        
+
         IFC( m_spNodePropertyStore->GetAt(dwIndex, &propKey) );
         IFC( m_spNodePropertyStore->GetValue(propKey, &propVal) );
 
@@ -808,7 +810,7 @@ HRESULT CNodePropertyInfo::GetPropertyType(DWORD dwIndex, __out VARTYPE* vt)
 
         PropVariantClear(&propVal);
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -822,7 +824,7 @@ HRESULT CNodePropertyInfo::SetProperty(DWORD dwIndex, __in LPCWSTR strName, VART
 
     ConvertStringToKey(strName, key);
     ConvertStringToPropertyValue(key, strValue, vt, propVal);
-    
+
     if(NULL != m_spNodeAttributes)
     {
         IFC( m_spNodeAttributes->SetItem(key, propVal) );
@@ -833,7 +835,7 @@ HRESULT CNodePropertyInfo::SetProperty(DWORD dwIndex, __in LPCWSTR strName, VART
 
         propKey.fmtid = key;
         propKey.pid = PID_FIRST_USABLE;
-        
+
         IFC( m_spNodePropertyStore->SetValue(propKey, propVal) );
     }
 
@@ -861,23 +863,23 @@ HRESULT CConnectionPropertyInfo::GetPropertyInfoName(__out LPWSTR* szName, __out
     CAtlString str(L"Media Types");
     size_t AllocLen = (str.GetLength() + 1) * sizeof(WCHAR);
     *szName = (LPWSTR) CoTaskMemAlloc(AllocLen);
-    
+
     if(NULL == *szName)
     {
         return E_OUTOFMEMORY;
     }
-    
+
     wcscpy_s(*szName, str.GetLength() + 1, str.GetString());
-    
+
     *pCategory = TED_ATTRIBUTE_CATEGORY_MEDIATYPE;
-    
+
     return S_OK;
 }
 
 HRESULT CConnectionPropertyInfo::GetPropertyCount(DWORD* pdwCount)
 {
     HRESULT hr = S_OK;
-    
+
     if(NULL == pdwCount)
     {
         return E_POINTER;
@@ -894,7 +896,7 @@ HRESULT CConnectionPropertyInfo::GetPropertyCount(DWORD* pdwCount)
     {
         unUpstreamCount = 1;
     }
-    
+
     if(m_spDownstreamType)
     {
         IFC( m_spDownstreamType->GetCount(&unDownstreamCount) );
@@ -905,7 +907,7 @@ HRESULT CConnectionPropertyInfo::GetPropertyCount(DWORD* pdwCount)
     }
 
     *pdwCount = DWORD( unUpstreamCount + unDownstreamCount + 3);
-    
+
 Cleanup:
     return hr;
 }
@@ -918,13 +920,13 @@ HRESULT CConnectionPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strNam
     {
         return E_POINTER;
     }
-    
+
     UINT32 unUpstreamCount;
     CAtlStringW strNameTemp, strValueTemp;
 
     *strName = NULL;
     *strValue = NULL;
-    
+
     if(m_spUpstreamType)
     {
         IFC( m_spUpstreamType->GetCount(&unUpstreamCount) );
@@ -933,7 +935,7 @@ HRESULT CConnectionPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strNam
     {
         unUpstreamCount = 1;
     }
-   
+
     if(unUpstreamCount + 1 > dwIndex)
     {
         if(0 == dwIndex)
@@ -960,7 +962,7 @@ HRESULT CConnectionPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strNam
 
                 PropVariantClear(&propVal);
             }
-        }            
+        }
     }
     else if(unUpstreamCount + 1 == dwIndex)
     {
@@ -992,7 +994,7 @@ HRESULT CConnectionPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strNam
             PropVariantClear(&propVal);
         }
     }
-    
+
     *strName = (LPWSTR) CoTaskMemAlloc((strNameTemp.GetLength() + 1) * sizeof(WCHAR));
     if(!*strName) IFC( E_OUTOFMEMORY );
     wcscpy_s(*strName, strNameTemp.GetLength() + 1, strNameTemp.GetBuffer());
@@ -1007,14 +1009,14 @@ Cleanup:
         CoTaskMemFree(*strName);
         CoTaskMemFree(*strValue);
     }
-    
+
     return hr;
 }
 
 HRESULT CConnectionPropertyInfo::GetPropertyType(DWORD dwIndex, __out VARTYPE* vt)
 {
     HRESULT hr = S_OK;
-    
+
     UINT32 unUpstreamCount;
 
     if(NULL == vt)
@@ -1030,7 +1032,7 @@ HRESULT CConnectionPropertyInfo::GetPropertyType(DWORD dwIndex, __out VARTYPE* v
     {
         unUpstreamCount = 1;
     }
-    
+
     if(unUpstreamCount + 1 > dwIndex)
     {
         if(0 == dwIndex)
@@ -1056,7 +1058,7 @@ HRESULT CConnectionPropertyInfo::GetPropertyType(DWORD dwIndex, __out VARTYPE* v
 
                 PropVariantClear(&propVal);
             }
-        }            
+        }
     }
     else if(unUpstreamCount + 1 == dwIndex)
     {
@@ -1087,7 +1089,7 @@ HRESULT CConnectionPropertyInfo::GetPropertyType(DWORD dwIndex, __out VARTYPE* v
             PropVariantClear(&propVal);
         }
     }
-    
+
 Cleanup:
     return hr;
 }
@@ -1102,7 +1104,7 @@ HRESULT CConnectionPropertyInfo::SetProperty(DWORD dwIndex, __in LPCWSTR strName
 
     ConvertStringToKey(strName, key);
     ConvertStringToPropertyValue(key, strValue, vt, propVal);
-    
+
     IFC( m_spUpstreamType->GetCount(&unUpstreamCount) );
 
     if(dwIndex <= unUpstreamCount + 1)
@@ -1138,23 +1140,23 @@ HRESULT CAttributesPropertyInfo::GetPropertyInfoName(__out LPWSTR* szName, __out
 {
     size_t AllocLen = (m_strName.GetLength() + 1) * sizeof(WCHAR);
     *szName = (LPWSTR) CoTaskMemAlloc(AllocLen);
-    
+
     if(NULL == *szName)
     {
         return E_OUTOFMEMORY;
     }
-    
+
     wcscpy_s(*szName, m_strName.GetLength() + 1, m_strName.GetString());
-    
+
     *pCategory = m_Category;
-    
+
     return S_OK;
 }
 
 HRESULT CAttributesPropertyInfo::GetPropertyCount(DWORD* pdwCount)
 {
-     HRESULT hr = S_OK;
-    
+    HRESULT hr = S_OK;
+
     if(NULL == pdwCount)
     {
         return E_POINTER;
@@ -1178,7 +1180,7 @@ HRESULT CAttributesPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strNam
 
     *strName = NULL;
     *strValue = NULL;
-    
+
     IFC( m_spAttributes->GetItemByIndex(dwIndex, &key, &var) );
 
     ConvertKeyToString(key, strNameTemp);
@@ -1191,14 +1193,14 @@ HRESULT CAttributesPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strNam
     *strValue = (LPWSTR) CoTaskMemAlloc((strValueTemp.GetLength() + 1) * sizeof(WCHAR));
     if(!*strValue) IFC( E_OUTOFMEMORY );
     wcscpy_s(*strValue, strValueTemp.GetLength() + 1, strValueTemp.GetBuffer());
-    
+
 Cleanup:
     if(FAILED(hr))
     {
         CoTaskMemFree(*strName);
         CoTaskMemFree(*strValue);
     }
-    
+
     PropVariantClear(&var);
     return hr;
 }
@@ -1220,7 +1222,7 @@ HRESULT CAttributesPropertyInfo::GetPropertyType(DWORD dwIndex, __out VARTYPE* v
     IFC( m_spAttributes->GetItemByIndex(dwIndex, &key, &var) );
 
     *vt = var.vt;
-    
+
 Cleanup:
     PropVariantClear(&var);
     return hr;
@@ -1263,16 +1265,16 @@ HRESULT COTAPropertyInfo::GetPropertyInfoName(__out LPWSTR* szName, __out TED_AT
     CAtlString str(L"OTA Attributes");
     size_t AllocLen = (str.GetLength() + 1) * sizeof(WCHAR);
     *szName = (LPWSTR) CoTaskMemAlloc(AllocLen);
-    
+
     if(NULL == *szName)
     {
         return E_OUTOFMEMORY;
     }
-    
+
     wcscpy_s(*szName, str.GetLength() + 1, str.GetString());
-    
+
     *pCategory = TED_ATTRIBUTE_CATEGORY_OTA;
-    
+
     return S_OK;
 }
 
@@ -1291,7 +1293,7 @@ HRESULT COTAPropertyInfo::GetPropertyCount(DWORD* pdwCount)
 HRESULT COTAPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strName, __out LPWSTR* strValue)
 {
     HRESULT hr = S_OK;
-    
+
     if(NULL == strName || NULL == strValue)
     {
         return E_POINTER;
@@ -1304,7 +1306,7 @@ HRESULT COTAPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strName, __ou
 
     *strName = NULL;
     *strValue = NULL;
-    
+
     if(0 == dwIndex)
     {
         *strName = (LPWSTR) CoTaskMemAlloc(25 * sizeof(WCHAR));
@@ -1318,36 +1320,36 @@ HRESULT COTAPropertyInfo::GetProperty(DWORD dwIndex, __out LPWSTR* strName, __ou
 
         switch(action)
         {
-            case PEACTION_NO:
-                *strName = (LPWSTR) CoTaskMemAlloc(12 * sizeof(WCHAR));
-                CHECK_ALLOC(*strName);
-                wcscpy_s(*strName, 12, L"PEACTION_NO");
-                break;
-            case PEACTION_PLAY:
-                *strName = (LPWSTR) CoTaskMemAlloc(14 * sizeof(WCHAR));
-                CHECK_ALLOC(*strName);
-                wcscpy_s(*strName, 14, L"PEACTION_PLAY");
-                break;
-            case PEACTION_COPY:
-                *strName = (LPWSTR) CoTaskMemAlloc(14 * sizeof(WCHAR));
-                CHECK_ALLOC(*strName);
-                wcscpy_s(*strName, 14, L"PEACTION_COPY");
-                break;
-            case PEACTION_EXPORT:
-                *strName = (LPWSTR) CoTaskMemAlloc(16 * sizeof(WCHAR));
-                CHECK_ALLOC(*strName);
-                wcscpy_s(*strName, 16, L"PEACTION_EXPORT");
-                break;
-            case PEACTION_EXTRACT:
-                *strName = (LPWSTR) CoTaskMemAlloc(17 * sizeof(WCHAR));
-                CHECK_ALLOC(*strName);
-                wcscpy_s(*strName, 17, L"PEACTION_EXTRACT");
-                break;
-            case PEACTION_LAST:
-                *strName = (LPWSTR) CoTaskMemAlloc(14 * sizeof(WCHAR));
-                CHECK_ALLOC(*strName);
-                wcscpy_s(*strName, 14, L"PEACTION_LAST");
-                break;
+        case PEACTION_NO:
+            *strName = (LPWSTR) CoTaskMemAlloc(12 * sizeof(WCHAR));
+            CHECK_ALLOC(*strName);
+            wcscpy_s(*strName, 12, L"PEACTION_NO");
+            break;
+        case PEACTION_PLAY:
+            *strName = (LPWSTR) CoTaskMemAlloc(14 * sizeof(WCHAR));
+            CHECK_ALLOC(*strName);
+            wcscpy_s(*strName, 14, L"PEACTION_PLAY");
+            break;
+        case PEACTION_COPY:
+            *strName = (LPWSTR) CoTaskMemAlloc(14 * sizeof(WCHAR));
+            CHECK_ALLOC(*strName);
+            wcscpy_s(*strName, 14, L"PEACTION_COPY");
+            break;
+        case PEACTION_EXPORT:
+            *strName = (LPWSTR) CoTaskMemAlloc(16 * sizeof(WCHAR));
+            CHECK_ALLOC(*strName);
+            wcscpy_s(*strName, 16, L"PEACTION_EXPORT");
+            break;
+        case PEACTION_EXTRACT:
+            *strName = (LPWSTR) CoTaskMemAlloc(17 * sizeof(WCHAR));
+            CHECK_ALLOC(*strName);
+            wcscpy_s(*strName, 17, L"PEACTION_EXTRACT");
+            break;
+        case PEACTION_LAST:
+            *strName = (LPWSTR) CoTaskMemAlloc(14 * sizeof(WCHAR));
+            CHECK_ALLOC(*strName);
+            wcscpy_s(*strName, 14, L"PEACTION_LAST");
+            break;
         }
     }
 
@@ -1361,7 +1363,7 @@ Cleanup:
         CoTaskMemFree(*strName);
         CoTaskMemFree(*strValue);
     }
-    
+
     return hr;
 }
 

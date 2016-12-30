@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------
+﻿//--------------------------------------------------------------------
 // Microsoft OLE DB Test
 //
-// Copyright 1995-2000 Microsoft Corporation.  
+// Copyright 1995-2000 Microsoft Corporation.
 //
 // @doc
 //
@@ -41,8 +41,8 @@ const WCHAR		wszDefaultSavePrompt[]		= L"Default Save Prompt returned by the pro
 //--------------------------------------------------------------------
 enum EDELETE_FILE
 {
-	DELETE_YES,
-	DELETE_NO
+    DELETE_YES,
+    DELETE_NO
 };
 
 #endif 	//_IPERSIST_H_

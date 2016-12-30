@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -179,7 +179,7 @@ Return Value:
 
     hr = pXHR->GetResponseHeader(L"server", &pwszSingleHeader);
     if (FAILED(hr) &&
-        hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
+            hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
     {
         goto Exit;
     }
@@ -239,7 +239,7 @@ Return Value:
         hr = pStream->Read(buffer, MAX_BUFFER_LENGTH - 1, &cbRead);
 
         if (FAILED(hr) ||
-            cbRead == 0)
+                cbRead == 0)
         {
             goto Exit;
         }
@@ -363,7 +363,7 @@ Return Value:
 }
 
 STDMETHODIMP
-CXMLHttpRequest3Callback::OnServerCertificateReceived( 
+CXMLHttpRequest3Callback::OnServerCertificateReceived(
     __RPC__in_opt IXMLHTTPRequest3 *pXHR,
     DWORD dwCertErrors,
     DWORD cServerCertChain,
@@ -415,8 +415,8 @@ Return Value:
         cbCertEncoded = rgServerCertChain[i].cbCert;
 
         pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                                                    pbCertEncoded,
-                                                    cbCertEncoded);
+                       pbCertEncoded,
+                       cbCertEncoded);
 
         //
         // Use the certificate context here.
@@ -463,7 +463,7 @@ Exit:
 }
 
 STDMETHODIMP
-CXMLHttpRequest3Callback::OnClientCertificateRequested( 
+CXMLHttpRequest3Callback::OnClientCertificateRequested(
     __RPC__in_opt IXMLHTTPRequest3 *pXHR,
     DWORD cIssuerList,
     __RPC__in_ecount_full_opt(cIssuerList) const WCHAR **rgpwszIssuerList
@@ -519,7 +519,7 @@ Exit:
 }
 
 STDMETHODIMP
-CXMLHttpRequest3Callback::DuplicateIssuerList( 
+CXMLHttpRequest3Callback::DuplicateIssuerList(
     _In_ DWORD cIssuerList,
     _In_reads_(cIssuerList) const WCHAR **rgpwszIssuerList,
     _Out_ const WCHAR ***prgpwszDuplicateIssuerList
@@ -772,8 +772,8 @@ Return Value:
     }
 
     for (pCertContext = CertEnumCertificatesInStore(hMyCertStore, pCertContext);
-         pCertContext != NULL;
-         pCertContext = CertEnumCertificatesInStore(hMyCertStore, pCertContext))
+            pCertContext != NULL;
+            pCertContext = CertEnumCertificatesInStore(hMyCertStore, pCertContext))
     {
         hr = CompareIssuer((VOID*) pCertContext, cIssuerList, rgpwszIssuerList, &fMatch);
 
@@ -793,12 +793,12 @@ Return Value:
     }
 
     pSelectedContext = CryptUIDlgSelectCertificateFromStore(hMemStore,
-                                                            NULL,
-                                                            NULL,
-                                                            NULL,
-                                                            0,
-                                                            0,
-                                                            NULL);
+                       NULL,
+                       NULL,
+                       NULL,
+                       0,
+                       0,
+                       NULL);
 
     if (pSelectedContext == NULL)
     {

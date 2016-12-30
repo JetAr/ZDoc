@@ -1,10 +1,10 @@
-/*++
+﻿/*++
 
 Copyright (c) 1999 - 2000  Microsoft Corporation
 
 Module Name:
 
-    sampstrm.cpp 
+    sampstrm.cpp
 
 Abstract:
 
@@ -82,7 +82,7 @@ void CSampleMSPStream::FinalRelease()
 
 STDMETHODIMP CSampleMSPStream::get_Name (
     OUT     BSTR *                  ppName
-    )
+)
 {
     LOG((MSP_TRACE, "CSampleMSPStream::get_Name - enter"));
 
@@ -93,7 +93,7 @@ STDMETHODIMP CSampleMSPStream::get_Name (
     if (!ppName)
     {
         LOG((MSP_TRACE, "CSampleMSPStream::get_Name - "
-            "bad return pointer - returning E_POINTER"));
+             "bad return pointer - returning E_POINTER"));
 
         return E_POINTER;
     }
@@ -103,7 +103,7 @@ STDMETHODIMP CSampleMSPStream::get_Name (
     //
 
     ULONG ulID;
-    
+
     if ( m_Direction == TD_CAPTURE )
     {
         ulID = IDS_CAPTURE_STREAM;
@@ -128,11 +128,11 @@ STDMETHODIMP CSampleMSPStream::get_Name (
     if ( iReturn == 0 )
     {
         _ASSERTE( FALSE );
-        
+
         *ppName = NULL;
 
         LOG((MSP_ERROR, "CSampleMSPStream::get_Name - "
-            "LoadString failed - returning E_UNEXPECTED"));
+             "LoadString failed - returning E_UNEXPECTED"));
 
         return E_UNEXPECTED;
     }
@@ -146,7 +146,7 @@ STDMETHODIMP CSampleMSPStream::get_Name (
     if ( *ppName == NULL )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::get_Name - "
-            "SysAllocString failed - returning E_OUTOFMEMORY"));
+             "SysAllocString failed - returning E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -165,7 +165,7 @@ STDMETHODIMP CSampleMSPStream::get_Name (
 
 STDMETHODIMP CSampleMSPStream::SelectTerminal(
     IN      ITTerminal *            pTerminal
-    )
+)
 {
     LOG((MSP_TRACE, "CSampleMSPStream::SelectTerminal - enter"));
 
@@ -182,7 +182,7 @@ STDMETHODIMP CSampleMSPStream::SelectTerminal(
     if ( 0 != m_Terminals.GetSize() )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::SelectTerminal - "
-            "exit TAPI_E_MAXTERMINALS"));
+             "exit TAPI_E_MAXTERMINALS"));
 
         return TAPI_E_MAXTERMINALS;
     }
@@ -196,7 +196,7 @@ STDMETHODIMP CSampleMSPStream::SelectTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::SelectTerminal - "
-            "base class method failed - exit 0x%08x", hr));
+             "base class method failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -223,14 +223,14 @@ STDMETHODIMP CSampleMSPStream::SelectTerminal(
     if ( FAILED(hr) )
     {
         LOG((MSP_TRACE, "CSampleMSPStream::SelectTerminal - "
-            "can't regain old graph state - unselecting terminal - "
-            "exit 0x%08x", hr));
+             "can't regain old graph state - unselecting terminal - "
+             "exit 0x%08x", hr));
 
-		//
-		// Unselect it to undo all of the above.
-		//
+        //
+        // Unselect it to undo all of the above.
+        //
 
-	    UnselectTerminal(pTerminal);
+        UnselectTerminal(pTerminal);
 
         return hr;
     }
@@ -245,8 +245,8 @@ STDMETHODIMP CSampleMSPStream::SelectTerminal(
 //
 
 STDMETHODIMP CSampleMSPStream::UnselectTerminal (
-        IN     ITTerminal *             pTerminal
-        )
+    IN     ITTerminal *             pTerminal
+)
 {
     LOG((MSP_TRACE, "CSampleMSPStream::UnselectTerminal - enter"));
 
@@ -267,7 +267,7 @@ STDMETHODIMP CSampleMSPStream::UnselectTerminal (
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CSampleMSPStream::UnselectTerminal - "
-            "base class method failed - exit 0x%08x", hr));
+             "base class method failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -283,7 +283,7 @@ STDMETHODIMP CSampleMSPStream::UnselectTerminal (
         //
         // At this point we need to make sure the stream is stopped.
         // We can't use our own StopStream method because it
-        // (1) changes the desired graph state to Stopped and 
+        // (1) changes the desired graph state to Stopped and
         // (2) does nothing if no terminal has been selected (which it now
         //     thinks is the case)
         //
@@ -301,7 +301,7 @@ STDMETHODIMP CSampleMSPStream::UnselectTerminal (
         if ( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CSampleMSPStream::UnselectTerminal - "
-                "Stop failed - 0x%08x", hr));
+                 "Stop failed - 0x%08x", hr));
 
             // don't return hr -- we really want to continue and
             // disconnect if we can!
@@ -319,7 +319,7 @@ STDMETHODIMP CSampleMSPStream::UnselectTerminal (
         if ( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CSampleMSPStream::UnselectTerminal - "
-                "QI for ITTerminalControl failed - exit 0x%08x", hr));
+                 "QI for ITTerminalControl failed - exit 0x%08x", hr));
 
             return hr;
         }
@@ -337,7 +337,7 @@ STDMETHODIMP CSampleMSPStream::UnselectTerminal (
         if ( FAILED(hr) )
         {
             LOG((MSP_ERROR, "CSampleMSPStream::UnselectTerminal - "
-                "DisconnectTerminal failed - exit 0x%08x", hr));
+                 "DisconnectTerminal failed - exit 0x%08x", hr));
 
             return hr;
         }
@@ -373,7 +373,7 @@ STDMETHODIMP CSampleMSPStream::StartStream (void)
     if ( ! m_fTransportConfigured )
     {
         LOG((MSP_WARN, "CSampleMSPStream::PauseStream - "
-            "transport not configured so nothing to do yet - exit S_OK"));
+             "transport not configured so nothing to do yet - exit S_OK"));
 
         return S_OK;
     }
@@ -385,7 +385,7 @@ STDMETHODIMP CSampleMSPStream::StartStream (void)
     if ( 0 == m_Terminals.GetSize() )
     {
         LOG((MSP_WARN, "CSampleMSPStream::StartStream - "
-            "no Terminal so nothing to do yet - exit S_OK"));
+             "no Terminal so nothing to do yet - exit S_OK"));
 
         return S_OK;
     }
@@ -406,7 +406,7 @@ STDMETHODIMP CSampleMSPStream::StartStream (void)
         FireEvent(CALL_STREAM_FAIL, hr, CALL_CAUSE_CONNECT_FAIL);
 
         LOG((MSP_ERROR, "CSampleMSPStream::StartStream - "
-            "our ConnectTerminal failed - exit 0x%08x", hr));
+             "our ConnectTerminal failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -426,7 +426,7 @@ STDMETHODIMP CSampleMSPStream::StartStream (void)
         FireEvent(CALL_STREAM_FAIL, hr, CALL_CAUSE_UNKNOWN);
 
         LOG((MSP_ERROR, "CSampleMSPStream::StartStream - "
-            "Run failed - exit 0x%08x", hr));
+             "Run failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -444,7 +444,7 @@ STDMETHODIMP CSampleMSPStream::StartStream (void)
         if ( FAILED(hr2) )
         {
             LOG((MSP_ERROR, "CSampleMSPStream::StartStream - "
-                "FireEvent failed - exit 0x%08x", hr2));
+                 "FireEvent failed - exit 0x%08x", hr2));
 
             return hr2;
         }
@@ -474,7 +474,7 @@ STDMETHODIMP CSampleMSPStream::PauseStream (void)
     if ( ! m_fTransportConfigured )
     {
         LOG((MSP_WARN, "CSampleMSPStream::PauseStream - "
-            "transport not configured so nothing to do yet - exit S_OK"));
+             "transport not configured so nothing to do yet - exit S_OK"));
 
         return S_OK;
     }
@@ -486,7 +486,7 @@ STDMETHODIMP CSampleMSPStream::PauseStream (void)
     if ( 0 == m_Terminals.GetSize() )
     {
         LOG((MSP_WARN, "CSampleMSPStream::PauseStream - "
-            "no Terminal so nothing to do yet - exit S_OK"));
+             "no Terminal so nothing to do yet - exit S_OK"));
 
         return S_OK;
     }
@@ -507,7 +507,7 @@ STDMETHODIMP CSampleMSPStream::PauseStream (void)
         FireEvent(CALL_STREAM_FAIL, hr, CALL_CAUSE_CONNECT_FAIL);
 
         LOG((MSP_ERROR, "CSampleMSPStream::StartStream - "
-            "our ConnectTerminal failed - exit 0x%08x", hr));
+             "our ConnectTerminal failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -527,7 +527,7 @@ STDMETHODIMP CSampleMSPStream::PauseStream (void)
         FireEvent(CALL_STREAM_FAIL, hr, CALL_CAUSE_UNKNOWN);
 
         LOG((MSP_ERROR, "CSampleMSPStream::PauseStream - "
-            "Pause failed - exit 0x%08x", hr));
+             "Pause failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -545,7 +545,7 @@ STDMETHODIMP CSampleMSPStream::PauseStream (void)
             m_ActualGraphState = State_Paused;
 
             LOG((MSP_ERROR, "CSampleMSPStream::PauseStream - "
-                "FireEvent failed - exit 0x%08x", hr2));
+                 "FireEvent failed - exit 0x%08x", hr2));
 
             return hr2;
         }
@@ -577,7 +577,7 @@ STDMETHODIMP CSampleMSPStream::StopStream (void)
     if ( ! m_fTransportConfigured )
     {
         LOG((MSP_WARN, "CSampleMSPStream::StopStream - "
-            "transport not configured - exit S_OK"));
+             "transport not configured - exit S_OK"));
 
         return S_OK;
     }
@@ -589,7 +589,7 @@ STDMETHODIMP CSampleMSPStream::StopStream (void)
     if ( 0 == m_Terminals.GetSize() )
     {
         LOG((MSP_WARN, "CSampleMSPStream::StopStream - "
-            "no Terminal - exit S_OK"));
+             "no Terminal - exit S_OK"));
 
         return S_OK;
     }
@@ -613,7 +613,7 @@ STDMETHODIMP CSampleMSPStream::StopStream (void)
         m_DesiredGraphState = m_ActualGraphState;
 
         LOG((MSP_ERROR, "CSampleMSPStream::StopStream - "
-            "Stop failed - exit 0x%08x", hr));
+             "Stop failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -631,7 +631,7 @@ STDMETHODIMP CSampleMSPStream::StopStream (void)
             m_ActualGraphState = State_Stopped;
 
             LOG((MSP_ERROR, "CSampleMSPStream::StopStream - "
-                "FireEvent failed - exit 0x%08x", hr2));
+                 "FireEvent failed - exit 0x%08x", hr2));
 
             return hr2;
         }
@@ -700,7 +700,7 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::ConnectTerminal - "
-            "get_State on terminal failed - exit 0x%08x", hr));
+             "get_State on terminal failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -716,7 +716,7 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
         _ASSERTE( state == TS_INUSE );
 
         LOG((MSP_ERROR, "CSampleMSPStream::ConnectTerminal - "
-            "terminal already connected on this stream - exit S_OK"));
+             "terminal already connected on this stream - exit S_OK"));
 
         return S_OK;
     }
@@ -733,7 +733,7 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     if ( state == TS_INUSE )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::ConnectTerminal - "
-            "terminal in use - exit TAPI_E_TERMINALINUSE"));
+             "terminal in use - exit TAPI_E_TERMINALINUSE"));
 
         return TAPI_E_TERMINALINUSE;
     }
@@ -750,7 +750,7 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::ConnectTerminal - "
-            "QI for ITTerminalControl failed - exit 0x%08x", hr));
+             "QI for ITTerminalControl failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -771,8 +771,8 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::ConnectTerminal - "
-            "query for number of terminal pins failed - exit 0x%08x", hr));
-        
+             "query for number of terminal pins failed - exit 0x%08x", hr));
+
         pTerminalControl->Release();
 
         return hr;
@@ -781,7 +781,7 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     if ( 1 != dwNumPinsAvailable )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::ConnectTerminal - "
-            "unsupported number of terminal pins - exit E_FAIL"));
+             "unsupported number of terminal pins - exit E_FAIL"));
 
         pTerminalControl->Release();
 
@@ -798,13 +798,13 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
                                            0,
                                            &dwNumPinsAvailable,
                                            &pTerminalPin);
-    
+
     if ( FAILED(hr) )
     {
         pTerminalControl->Release();
 
         LOG((MSP_ERROR, "CSampleMSPStream::ConnectTerminal - "
-            "ConnectTerminal on terminal failed - exit 0x%08x", hr));
+             "ConnectTerminal on terminal failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -814,7 +814,7 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
     //
 
     hr = ConnectToTerminalPin(pTerminalPin);
-    
+
     pTerminalPin->Release();
 
     if ( FAILED(hr) )
@@ -824,7 +824,7 @@ HRESULT CSampleMSPStream::ConnectTerminal(ITTerminal * pTerminal)
         pTerminalControl->Release();
 
         LOG((MSP_ERROR, "CSampleMSPStream::ConnectTerminal - "
-            "ConnectToTerminalPin failed - exit 0x%08x", hr));
+             "ConnectToTerminalPin failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -880,7 +880,7 @@ HRESULT CSampleMSPStream::ProcessGraphEvent(
     IN  long lEventCode,
     IN  long lParam1,
     IN  long lParam2
-    )
+)
 {
     LOG((MSP_EVENT, "CSampleMSPStream::ProcessGraphEvent - enter"));
 
@@ -889,12 +889,12 @@ HRESULT CSampleMSPStream::ProcessGraphEvent(
     switch (lEventCode)
     {
     case EC_COMPLETE:
-        
+
         hr = FireEvent(CALL_STREAM_INACTIVE, (HRESULT) lParam1, CALL_CAUSE_UNKNOWN);
         break;
-    
+
     case EC_USERABORT:
-        
+
         hr = FireEvent(CALL_STREAM_INACTIVE, S_OK, CALL_CAUSE_UNKNOWN);
         break;
 
@@ -907,16 +907,16 @@ HRESULT CSampleMSPStream::ProcessGraphEvent(
         break;
 
     default:
-        
+
         LOG((MSP_EVENT, "CSampleMSPStream::ProcessGraphEvent - "
-            "ignoring event code %d", lEventCode));
+             "ignoring event code %d", lEventCode));
         break;
     }
 
     if ( FAILED(hr) )
     {
         LOG((MSP_ERROR, "CSampleMSPStream::ProcessGraphEvent - "
-            "FireEvent failed - exit 0x%08x", hr));
+             "FireEvent failed - exit 0x%08x", hr));
 
         return hr;
     }
@@ -939,30 +939,30 @@ HRESULT CSampleMSPStream::FireEvent(
     IN MSP_CALL_EVENT        type,
     IN HRESULT               hrError,
     IN MSP_CALL_EVENT_CAUSE  cause
-    )                                          
+)
 {
     LOG((MSP_EVENT, "CSampleMSPStream::FireEvent - enter"));
 
     //
-    // Create the event structure. 
+    // Create the event structure.
     //
 
     //
-    // Note: 
+    // Note:
     //
-    // MSPEVENTITEMs are allocated with AllocateEventItem and freed with 
+    // MSPEVENTITEMs are allocated with AllocateEventItem and freed with
     // FreeEventItem
     //
-    // AllocateEventItem takes an optional argument that specifies how many 
+    // AllocateEventItem takes an optional argument that specifies how many
     // extra bytes need to be allocated in addition to the size of MSPEVENTITEM
-    // 
+    //
 
     MSPEVENTITEM * pEventItem = AllocateEventItem();
 
     if (pEventItem == NULL)
     {
         LOG((MSP_ERROR, "CSampleMSPStream::FireEvent - "
-            "can't create MSPEVENTITEM structure - exit E_OUTOFMEMORY"));
+             "can't create MSPEVENTITEM structure - exit E_OUTOFMEMORY"));
 
         return E_OUTOFMEMORY;
     }
@@ -1040,13 +1040,13 @@ HRESULT CSampleMSPStream::FireEvent(
     }
 
     LOG((dwLevel, "CSampleMSPStream::FireEvent - "
-                  "EVENT DUMP: type      = %s", pszType));
+         "EVENT DUMP: type      = %s", pszType));
     LOG((dwLevel, "CSampleMSPStream::FireEvent - "
-                  "EVENT DUMP: pStream   = %p", pStream));    
+         "EVENT DUMP: pStream   = %p", pStream));
     LOG((dwLevel, "CSampleMSPStream::FireEvent - "
-                  "EVENT DUMP: pTerminal = %p", pTerminal));    
+         "EVENT DUMP: pTerminal = %p", pTerminal));
     LOG((dwLevel, "CSampleMSPStream::FireEvent - "
-                  "EVENT DUMP: hrError   = %08x", hrError));    
+         "EVENT DUMP: hrError   = %08x", hrError));
 
 #endif // ifdef MSPLOG
 
@@ -1059,16 +1059,16 @@ HRESULT CSampleMSPStream::FireEvent(
     if (FAILED(hr))
     {
         LOG((MSP_ERROR, "CSampleMSPStream::FireEvent - "
-            "HandleStreamEvent failed - returning 0x%08x", hr));
+             "HandleStreamEvent failed - returning 0x%08x", hr));
 
         pStream->Release();
         pTerminal->Release();
 
-        
+
         //
         // Note:
         //
-        // MSPEVENTITEMs are allocated with AllocateEventItem and freed with 
+        // MSPEVENTITEMs are allocated with AllocateEventItem and freed with
         // FreeEventItem
         //
 

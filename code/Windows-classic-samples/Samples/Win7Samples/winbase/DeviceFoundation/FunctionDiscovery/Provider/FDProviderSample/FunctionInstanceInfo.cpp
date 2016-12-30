@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -7,7 +7,7 @@
 //
 //  Abstract:
 //
-//      Implement class TFunctionInstanceInfo.  A class to store information 
+//      Implement class TFunctionInstanceInfo.  A class to store information
 //      representing a function instance to be returned to a client.
 
 #include "stdafx.h"
@@ -54,12 +54,12 @@ VOID TFunctionInstanceInfo::Release()
 }  // TFunctionInstanceInfo::Release
 
 HRESULT TFunctionInstanceInfo::CreateInstance(
-        __in GUID* pDeviceId,
-        __in_opt TDeviceInfo* pDeviceInfo,
-        __in SOCKADDR_STORAGE* pFromAddr,
-        INT FromAddrLen,
-        ULONG InterfaceIndex,
-        __deref_out TFunctionInstanceInfo** ppFunctionInstanceInfo)
+    __in GUID* pDeviceId,
+    __in_opt TDeviceInfo* pDeviceInfo,
+    __in SOCKADDR_STORAGE* pFromAddr,
+    INT FromAddrLen,
+    ULONG InterfaceIndex,
+    __deref_out TFunctionInstanceInfo** ppFunctionInstanceInfo)
 {
     HRESULT hr = S_OK;
     TFunctionInstanceInfo* pFunctionInstanceInfo = NULL;
@@ -86,15 +86,15 @@ HRESULT TFunctionInstanceInfo::CreateInstance(
     if (S_OK == hr)
     {
         memcpy(
-            &IpNetRow2.Address, 
-            pFromAddr, 
+            &IpNetRow2.Address,
+            pFromAddr,
             (FromAddrLen <= sizeof(IpNetRow2.Address)) ? FromAddrLen : sizeof(IpNetRow2.Address));
         IpNetRow2.InterfaceIndex = InterfaceIndex;
         err = GetIpNetEntry2(&IpNetRow2);
         if (NO_ERROR != err)
         {
             // Could not find the MAC address in the cache, lets hit the wire.
-             err = ResolveIpNetEntry2(&IpNetRow2, NULL);
+            err = ResolveIpNetEntry2(&IpNetRow2, NULL);
         }
 
         if (NO_ERROR == err)
@@ -112,13 +112,13 @@ HRESULT TFunctionInstanceInfo::CreateInstance(
     if (S_OK == hr)
     {
         err = GetNameInfo(
-            (PSOCKADDR) pFromAddr,
-            FromAddrLen,
-            pFunctionInstanceInfo->m_szIPAddress,
-            ARRAYSIZE(pFunctionInstanceInfo->m_szIPAddress),
-            NULL, 
-            0,
-            NI_NUMERICHOST | NI_NOFQDN);
+                  (PSOCKADDR) pFromAddr,
+                  FromAddrLen,
+                  pFunctionInstanceInfo->m_szIPAddress,
+                  ARRAYSIZE(pFunctionInstanceInfo->m_szIPAddress),
+                  NULL,
+                  0,
+                  NI_NUMERICHOST | NI_NOFQDN);
         if (err != 0)
         {
             hr = HRESULT_FROM_WIN32(WSAGetLastError());
@@ -129,8 +129,8 @@ HRESULT TFunctionInstanceInfo::CreateInstance(
     if (S_OK == hr)
     {
         err = UuidToString(
-            pDeviceId,
-            (RPC_WSTR*) &pFunctionInstanceInfo->m_pszDeviceId);
+                  pDeviceId,
+                  (RPC_WSTR*) &pFunctionInstanceInfo->m_pszDeviceId);
         if (RPC_S_OK != err)
         {
             hr = E_OUTOFMEMORY;
@@ -148,7 +148,7 @@ HRESULT TFunctionInstanceInfo::CreateInstance(
 
     // Create an array of device categories
     if (   (S_OK == hr)
-        && *pFunctionInstanceInfo->m_DeviceInfo.szDeviceCategory)
+            && *pFunctionInstanceInfo->m_DeviceInfo.szDeviceCategory)
     {
         // Count the number of delimeters in the string
         pFunctionInstanceInfo->m_cDeviceCategoriesCount = 1;
@@ -170,19 +170,19 @@ HRESULT TFunctionInstanceInfo::CreateInstance(
             // Tokenize the device categories and save the pointers
 
             pszToken = wcstok_s(pFunctionInstanceInfo->m_DeviceInfo.szDeviceCategory,
-                szDelimeters,
-                &pszNextToken);
+                                szDelimeters,
+                                &pszNextToken);
 
             while (   pszToken
-                   && (iCategoryIndex < pFunctionInstanceInfo->m_cDeviceCategoriesCount))
+                      && (iCategoryIndex < pFunctionInstanceInfo->m_cDeviceCategoriesCount))
             {
                 pFunctionInstanceInfo->m_ppszDeviceCategories[iCategoryIndex] = pszToken;
                 ++iCategoryIndex;
-                  
+
                 pszToken = wcstok_s(
-                    NULL,
-                    szDelimeters,
-                    &pszNextToken);
+                               NULL,
+                               szDelimeters,
+                               &pszNextToken);
             }
         }
         else
@@ -226,9 +226,9 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
     // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
 
     // Set the PKEY_PNPX_GlobalIdentity property.
-    // This property is used to identify this instance of the device 
+    // This property is used to identify this instance of the device
     // (Piece of plastic) on the network.
-    // Every Function Instance must have a property store with at least the 
+    // Every Function Instance must have a property store with at least the
     // Global Identity set.
     PropVar.vt = VT_LPWSTR;
     PropVar.pwszVal = m_pszDeviceId;
@@ -247,7 +247,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
     // Device category is used to group devices in the UI.
     // See the PNP-X implementes guilde
     if (   (S_OK == hr)
-        && m_ppszDeviceCategories)
+            && m_ppszDeviceCategories)
     {
         PropVar.vt = VT_VECTOR | VT_LPWSTR;
         PropVar.calpwstr.cElems = m_cDeviceCategoriesCount;
@@ -257,10 +257,10 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
     }
 
     // FriendlyName
-    // NOTE: Both PKEY_PNPX_FriendlyName 
+    // NOTE: Both PKEY_PNPX_FriendlyName
     // and PKEY_Device_FriendlyName must be set
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szFriendlyName)
+            && *m_DeviceInfo.szFriendlyName)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szFriendlyName;
@@ -274,10 +274,10 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
     }
 
     // Manufacturer
-    // NOTE: Both PKEY_PNPX_Manufacturer 
+    // NOTE: Both PKEY_PNPX_Manufacturer
     // and PKEY_Device_Manufacturer must be set
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szManufacturer)
+            && *m_DeviceInfo.szManufacturer)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szManufacturer;
@@ -292,7 +292,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
 
     // ManufacturerUrl
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szManufacturerUrl)
+            && *m_DeviceInfo.szManufacturerUrl)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szManufacturerUrl;
@@ -306,7 +306,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
 
     // ModelName
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szModelName)
+            && *m_DeviceInfo.szModelName)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szModelName;
@@ -321,7 +321,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
 
     // ModelNumber
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szModelNumber)
+            && *m_DeviceInfo.szModelNumber)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szModelNumber;
@@ -331,11 +331,11 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
 
     // ModelUrl
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szModelUrl)
+            && *m_DeviceInfo.szModelUrl)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szModelUrl;
-        
+
         hr = pPropertyStore->SetValue(PKEY_PNPX_ModelUrl, PropVar);
 
         // For the sample we'll assume that the URL to
@@ -349,17 +349,17 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
 
     // UPC
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szUpc)
+            && *m_DeviceInfo.szUpc)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szUpc;
-        
+
         hr = pPropertyStore->SetValue(PKEY_PNPX_Upc, PropVar);
     }
 
     // FirmwareVersion
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szFirmwareVersion)
+            && *m_DeviceInfo.szFirmwareVersion)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szFirmwareVersion;
@@ -374,7 +374,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
 
     // SerialNumber
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szSerialNumber)
+            && *m_DeviceInfo.szSerialNumber)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szSerialNumber;
@@ -385,7 +385,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
     // Presentation URL
     // Typically this is a administration page hosted by the device.
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szPresentationUrl)
+            && *m_DeviceInfo.szPresentationUrl)
     {
         PropVar.vt = VT_LPWSTR;
         PropVar.pwszVal = m_DeviceInfo.szPresentationUrl;
@@ -400,7 +400,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
         PropVar.vt = VT_VECTOR | VT_UI1;
         PropVar.caub.cElems = m_PhysicalAddressLength;
         PropVar.caub.pElems = m_PhysicalAddress;
-        
+
         hr = pPropertyStore->SetValue(PKEY_PNPX_PhysicalAddress, PropVar);
     }
 
@@ -421,7 +421,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
     // A Function Instance must have PKEY_Device_HardwareIds
     // and optionally PKEY_Device_CompatibleIds to support driver installation.
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szPnPHardwareId)
+            && *m_DeviceInfo.szPnPHardwareId)
     {
         PWSTR ppszHardwareIds[1] = { m_DeviceInfo.szPnPHardwareId };
 
@@ -435,7 +435,7 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
     // PKEY_PNPX_Installable must be set to mark this
     // function instance as installable in the UI
     if (   (S_OK == hr)
-        && *m_DeviceInfo.szPnPHardwareId)  // Can only install a device that have Hardware or Compatible IDs
+            && *m_DeviceInfo.szPnPHardwareId)  // Can only install a device that have Hardware or Compatible IDs
     {
         PropVar.vt = VT_BOOL;
         PropVar.boolVal = VARIANT_TRUE;
@@ -460,15 +460,15 @@ HRESULT TFunctionInstanceInfo::PopulatePropertyStore(
 
         PropVar.vt = VT_VECTOR | VT_LPWSTR;
         PropVar.calpwstr.cElems = 1;
-        PropVar.calpwstr.pElems = ppszCompatibleTypes;  
+        PropVar.calpwstr.pElems = ppszCompatibleTypes;
 
         hr = pPropertyStore->SetValue(PKEY_PNPX_CompatibleTypes, PropVar);
     }
-    
+
 
     // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO
     //
-    // Set any additional PKEY_Device_*, PKEY_PNPX_* 
+    // Set any additional PKEY_Device_*, PKEY_PNPX_*
     // or Provider specific custom properties here.
     //
     // TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO - TODO

@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
    THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF
    ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -60,7 +60,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
     {
         ITfKeystrokeMgr *pKeyMgr;
         ITfMessagePump  *pMsgPump;
-        
+
         // get the keystroke manager interfce
         if(SUCCEEDED(g_pThreadMgr->QueryInterface(IID_ITfKeystrokeMgr, (void **)&pKeyMgr)))
         {
@@ -68,7 +68,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
             if(SUCCEEDED(g_pThreadMgr->QueryInterface(IID_ITfMessagePump, (void **)&pMsgPump)))
             {
                 BOOL    fResult = TRUE;
-                
+
                 while(fResult)
                 {
                     MSG     msg;
@@ -85,7 +85,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
                     {
                         // does an ime want it?
                         if (pKeyMgr->TestKeyDown(msg.wParam, msg.lParam, &fEaten) == S_OK && fEaten &&
-                            pKeyMgr->KeyDown(msg.wParam, msg.lParam, &fEaten) == S_OK && fEaten)
+                                pKeyMgr->KeyDown(msg.wParam, msg.lParam, &fEaten) == S_OK && fEaten)
                         {
                             continue;
                         }
@@ -94,7 +94,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
                     {
                         // does an ime want it?
                         if (pKeyMgr->TestKeyUp(msg.wParam, msg.lParam, &fEaten) == S_OK && fEaten &&
-                            pKeyMgr->KeyUp(msg.wParam, msg.lParam, &fEaten) == S_OK && fEaten)
+                                pKeyMgr->KeyUp(msg.wParam, msg.lParam, &fEaten) == S_OK && fEaten)
                         {
                             continue;
                         }
@@ -111,10 +111,10 @@ int WINAPI WinMain( HINSTANCE hInstance,
                         nReturn = (int)msg.wParam;
                     }
                 }
-                
+
                 pMsgPump->Release();
             }
-            
+
             pKeyMgr->Release();
         }
     }

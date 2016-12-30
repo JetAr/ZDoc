@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -44,12 +44,30 @@ public:
     void Shutdown();
     bool Start(RenderBuffer *RenderBufferQueue);
     void Stop();
-    WORD ChannelCount() { return _MixFormat->nChannels; }
-    UINT32 SamplesPerSecond() { return _MixFormat->nSamplesPerSec; }
-    UINT32 BytesPerSample() { return _MixFormat->wBitsPerSample / 8; }
-    RenderSampleType SampleType() { return _RenderSampleType; }
-    UINT32 FrameSize() { return _FrameSize; }
-    UINT32 BufferSize() { return _BufferSize; }
+    WORD ChannelCount()
+    {
+        return _MixFormat->nChannels;
+    }
+    UINT32 SamplesPerSecond()
+    {
+        return _MixFormat->nSamplesPerSec;
+    }
+    UINT32 BytesPerSample()
+    {
+        return _MixFormat->wBitsPerSample / 8;
+    }
+    RenderSampleType SampleType()
+    {
+        return _RenderSampleType;
+    }
+    UINT32 FrameSize()
+    {
+        return _FrameSize;
+    }
+    UINT32 BufferSize()
+    {
+        return _BufferSize;
+    }
     UINT32 BufferSizePerPeriod();
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
@@ -94,18 +112,48 @@ private:
     void TerminateStreamSwitch();
     bool HandleStreamSwitchEvent();
 
-    STDMETHOD(OnDisplayNameChanged) (LPCWSTR /*NewDisplayName*/, LPCGUID /*EventContext*/) { return S_OK; };
-    STDMETHOD(OnIconPathChanged) (LPCWSTR /*NewIconPath*/, LPCGUID /*EventContext*/) { return S_OK; };
-    STDMETHOD(OnSimpleVolumeChanged) (float /*NewSimpleVolume*/, BOOL /*NewMute*/, LPCGUID /*EventContext*/) { return S_OK; }
-    STDMETHOD(OnChannelVolumeChanged) (DWORD /*ChannelCount*/, float /*NewChannelVolumes*/[], DWORD /*ChangedChannel*/, LPCGUID /*EventContext*/) { return S_OK; };
-    STDMETHOD(OnGroupingParamChanged) (LPCGUID /*NewGroupingParam*/, LPCGUID /*EventContext*/) {return S_OK; };
-    STDMETHOD(OnStateChanged) (AudioSessionState /*NewState*/) { return S_OK; };
+    STDMETHOD(OnDisplayNameChanged) (LPCWSTR /*NewDisplayName*/, LPCGUID /*EventContext*/)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnIconPathChanged) (LPCWSTR /*NewIconPath*/, LPCGUID /*EventContext*/)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnSimpleVolumeChanged) (float /*NewSimpleVolume*/, BOOL /*NewMute*/, LPCGUID /*EventContext*/)
+    {
+        return S_OK;
+    }
+    STDMETHOD(OnChannelVolumeChanged) (DWORD /*ChannelCount*/, float /*NewChannelVolumes*/[], DWORD /*ChangedChannel*/, LPCGUID /*EventContext*/)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnGroupingParamChanged) (LPCGUID /*NewGroupingParam*/, LPCGUID /*EventContext*/)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnStateChanged) (AudioSessionState /*NewState*/)
+    {
+        return S_OK;
+    };
     STDMETHOD(OnSessionDisconnected) (AudioSessionDisconnectReason DisconnectReason);
-    STDMETHOD(OnDeviceStateChanged) (LPCWSTR /*DeviceId*/, DWORD /*NewState*/) { return S_OK; }
-    STDMETHOD(OnDeviceAdded) (LPCWSTR /*DeviceId*/) { return S_OK; };
-    STDMETHOD(OnDeviceRemoved) (LPCWSTR /*DeviceId(*/) { return S_OK; };
+    STDMETHOD(OnDeviceStateChanged) (LPCWSTR /*DeviceId*/, DWORD /*NewState*/)
+    {
+        return S_OK;
+    }
+    STDMETHOD(OnDeviceAdded) (LPCWSTR /*DeviceId*/)
+    {
+        return S_OK;
+    };
+    STDMETHOD(OnDeviceRemoved) (LPCWSTR /*DeviceId(*/)
+    {
+        return S_OK;
+    };
     STDMETHOD(OnDefaultDeviceChanged) (EDataFlow Flow, ERole Role, LPCWSTR NewDefaultDeviceId);
-    STDMETHOD(OnPropertyValueChanged) (LPCWSTR /*DeviceId*/, const PROPERTYKEY /*Key*/){return S_OK; };
+    STDMETHOD(OnPropertyValueChanged) (LPCWSTR /*DeviceId*/, const PROPERTYKEY /*Key*/)
+    {
+        return S_OK;
+    };
 
     //
     //  IUnknown

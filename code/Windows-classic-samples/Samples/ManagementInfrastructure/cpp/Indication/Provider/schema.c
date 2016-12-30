@@ -1,4 +1,4 @@
-//
+﻿//
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -1842,20 +1842,20 @@ static MI_PropertyDecl MI_CONST* MI_CONST MSFT_WindowsServiceStarted_props[] =
 
 static MI_CONST MI_ProviderFT MSFT_WindowsServiceStarted_funcs =
 {
-  (MI_ProviderFT_Load)MSFT_WindowsServiceStarted_Load,
-  (MI_ProviderFT_Unload)MSFT_WindowsServiceStarted_Unload,
-  (MI_ProviderFT_GetInstance)NULL,
-  (MI_ProviderFT_EnumerateInstances)NULL,
-  (MI_ProviderFT_CreateInstance)NULL,
-  (MI_ProviderFT_ModifyInstance)NULL,
-  (MI_ProviderFT_DeleteInstance)NULL,
-  (MI_ProviderFT_AssociatorInstances)NULL,
-  (MI_ProviderFT_ReferenceInstances)NULL,
-  (MI_ProviderFT_EnableIndications)MSFT_WindowsServiceStarted_EnableIndications,
-  (MI_ProviderFT_DisableIndications)MSFT_WindowsServiceStarted_DisableIndications,
-  (MI_ProviderFT_Subscribe)MSFT_WindowsServiceStarted_Subscribe,
-  (MI_ProviderFT_Unsubscribe)MSFT_WindowsServiceStarted_Unsubscribe,
-  (MI_ProviderFT_Invoke)NULL,
+    (MI_ProviderFT_Load)MSFT_WindowsServiceStarted_Load,
+    (MI_ProviderFT_Unload)MSFT_WindowsServiceStarted_Unload,
+    (MI_ProviderFT_GetInstance)NULL,
+    (MI_ProviderFT_EnumerateInstances)NULL,
+    (MI_ProviderFT_CreateInstance)NULL,
+    (MI_ProviderFT_ModifyInstance)NULL,
+    (MI_ProviderFT_DeleteInstance)NULL,
+    (MI_ProviderFT_AssociatorInstances)NULL,
+    (MI_ProviderFT_ReferenceInstances)NULL,
+    (MI_ProviderFT_EnableIndications)MSFT_WindowsServiceStarted_EnableIndications,
+    (MI_ProviderFT_DisableIndications)MSFT_WindowsServiceStarted_DisableIndications,
+    (MI_ProviderFT_Subscribe)MSFT_WindowsServiceStarted_Subscribe,
+    (MI_ProviderFT_Unsubscribe)MSFT_WindowsServiceStarted_Unsubscribe,
+    (MI_ProviderFT_Invoke)NULL,
 };
 
 static MI_CONST MI_Boolean MSFT_WindowsServiceStarted_Indication_qual_value = 1;
@@ -1952,20 +1952,20 @@ static MI_PropertyDecl MI_CONST* MI_CONST MSFT_WindowsServiceStopped_props[] =
 
 static MI_CONST MI_ProviderFT MSFT_WindowsServiceStopped_funcs =
 {
-  (MI_ProviderFT_Load)MSFT_WindowsServiceStopped_Load,
-  (MI_ProviderFT_Unload)MSFT_WindowsServiceStopped_Unload,
-  (MI_ProviderFT_GetInstance)NULL,
-  (MI_ProviderFT_EnumerateInstances)NULL,
-  (MI_ProviderFT_CreateInstance)NULL,
-  (MI_ProviderFT_ModifyInstance)NULL,
-  (MI_ProviderFT_DeleteInstance)NULL,
-  (MI_ProviderFT_AssociatorInstances)NULL,
-  (MI_ProviderFT_ReferenceInstances)NULL,
-  (MI_ProviderFT_EnableIndications)MSFT_WindowsServiceStopped_EnableIndications,
-  (MI_ProviderFT_DisableIndications)MSFT_WindowsServiceStopped_DisableIndications,
-  (MI_ProviderFT_Subscribe)MSFT_WindowsServiceStopped_Subscribe,
-  (MI_ProviderFT_Unsubscribe)MSFT_WindowsServiceStopped_Unsubscribe,
-  (MI_ProviderFT_Invoke)NULL,
+    (MI_ProviderFT_Load)MSFT_WindowsServiceStopped_Load,
+    (MI_ProviderFT_Unload)MSFT_WindowsServiceStopped_Unload,
+    (MI_ProviderFT_GetInstance)NULL,
+    (MI_ProviderFT_EnumerateInstances)NULL,
+    (MI_ProviderFT_CreateInstance)NULL,
+    (MI_ProviderFT_ModifyInstance)NULL,
+    (MI_ProviderFT_DeleteInstance)NULL,
+    (MI_ProviderFT_AssociatorInstances)NULL,
+    (MI_ProviderFT_ReferenceInstances)NULL,
+    (MI_ProviderFT_EnableIndications)MSFT_WindowsServiceStopped_EnableIndications,
+    (MI_ProviderFT_DisableIndications)MSFT_WindowsServiceStopped_DisableIndications,
+    (MI_ProviderFT_Subscribe)MSFT_WindowsServiceStopped_Subscribe,
+    (MI_ProviderFT_Unsubscribe)MSFT_WindowsServiceStopped_Unsubscribe,
+    (MI_ProviderFT_Invoke)NULL,
 };
 
 static MI_CONST MI_Boolean MSFT_WindowsServiceStopped_Indication_qual_value = 1;
@@ -2079,7 +2079,8 @@ MI_SchemaDecl schemaDecl =
 */
 
 MI_Result MI_CALL MI_Server_GetVersion(
-    MI_Uint32* version){
+    MI_Uint32* version)
+{
     return __mi_server->serverFT->GetVersion(version);
 }
 

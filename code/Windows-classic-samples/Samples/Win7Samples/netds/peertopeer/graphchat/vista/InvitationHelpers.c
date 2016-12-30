@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
 THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
 TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
@@ -12,16 +12,16 @@ Module Name:
 
 Abstract:
 
-    This C file includes sample code inviting people near me to an 
+    This C file includes sample code inviting people near me to an
     application.
 
 Feedback:
-    If you have any questions or feedback, please contact us using 
+    If you have any questions or feedback, please contact us using
     any of the mechanisms below:
 
-    Email: peerfb@microsoft.com 
-    Newsgroup: Microsoft.public.win32.programmer.networks 
-    Website: http://www.microsoft.com/p2p 
+    Email: peerfb@microsoft.com
+    Newsgroup: Microsoft.public.win32.programmer.networks
+    Website: http://www.microsoft.com/p2p
 
 --********************************************************************/
 
@@ -60,7 +60,7 @@ HRESULT RefreshEndpointData(PCPEER_ENDPOINT pEndpoint)
     eventReg.eventType = PEER_EVENT_REQUEST_STATUS_CHANGED;
     eventReg.pInstance = NULL;
 
-    // Register to be notified when the request finishes  
+    // Register to be notified when the request finishes
     hr = PeerCollabRegisterEvent(hEvent, 1, &eventReg, &hPeerEvent);
 
     if (SUCCEEDED(hr))
@@ -72,7 +72,7 @@ HRESULT RefreshEndpointData(PCPEER_ENDPOINT pEndpoint)
             PeerCollabUnregisterEvent(hPeerEvent);
             CloseHandle(hEvent);
             return hr;
-        }   
+        }
 
         // Block until an event is set indicating that endpoint data has
         // successfully been refreshed
@@ -81,8 +81,8 @@ HRESULT RefreshEndpointData(PCPEER_ENDPOINT pEndpoint)
             // Find out if refresh request succeeded
             hr = PeerCollabGetEventData(hPeerEvent, &pEventData);
 
-            if (SUCCEEDED(hr) && 
-                SUCCEEDED(pEventData->requestStatusChangedData.hrChange))
+            if (SUCCEEDED(hr) &&
+                    SUCCEEDED(pEventData->requestStatusChangedData.hrChange))
             {
                 PeerFreeData(pEventData);
             }
@@ -102,7 +102,7 @@ HRESULT RefreshEndpointData(PCPEER_ENDPOINT pEndpoint)
 //             the desired application
 //
 // Returns:    DWORD
-//        
+//
 DWORD CALLBACK ProcessInviteResponse(LPVOID lpContext)
 {
     PPEER_INVITATION_RESPONSE pResponse = NULL;
@@ -128,12 +128,12 @@ DWORD CALLBACK ProcessInviteResponse(LPVOID lpContext)
         if (pResponse->action == PEER_INVITATION_RESPONSE_EXPIRED)
         {
             MessageBox(NULL, L"The invitation expired without being accepted.", L"Invitation Error", MB_OK);
-        }     
+        }
     }
 
     // Free the used PEER resources
     //
-    PeerFreeData(pResponse); 
+    PeerFreeData(pResponse);
 
     FreeInvitationContext(pInvitationContext);
 
@@ -158,7 +158,7 @@ HRESULT DuplicateInvitationContext(ENDPOINT_INVITATION_CONTEXT ** pDestination, 
     // Copy the base structure
     //
     pTempDestination = malloc(sizeof(ENDPOINT_INVITATION_CONTEXT));
-    
+
     if (NULL == pTempDestination)
     {
         return E_OUTOFMEMORY;
@@ -175,7 +175,7 @@ HRESULT DuplicateInvitationContext(ENDPOINT_INVITATION_CONTEXT ** pDestination, 
         FreeInvitationContext(pTempDestination);
         return E_OUTOFMEMORY;
     }
-    
+
     ZeroMemory(pTempDestination->pEndpoint, sizeof(PEER_ENDPOINT));
     memcpy(&pTempDestination->pEndpoint->address, &pSource->pEndpoint->address, sizeof(PEER_ADDRESS));
 
@@ -188,9 +188,9 @@ HRESULT DuplicateInvitationContext(ENDPOINT_INVITATION_CONTEXT ** pDestination, 
         FreeInvitationContext(pTempDestination);
         return E_OUTOFMEMORY;
     }
-    
+
     ZeroMemory(pTempDestination->pInvite, sizeof(PEER_INVITATION));
-    
+
     // Copy the application data
     //
     pTempDestination->pInvite->applicationData.cbData = pSource->pInvite->applicationData.cbData;
@@ -201,7 +201,7 @@ HRESULT DuplicateInvitationContext(ENDPOINT_INVITATION_CONTEXT ** pDestination, 
         FreeInvitationContext(pTempDestination);
         return E_OUTOFMEMORY;
     }
-    
+
     memcpy(pTempDestination->pInvite->applicationData.pbData, pSource->pInvite->applicationData.pbData, pSource->pInvite->applicationData.cbData);
 
     // Copy the invitation message
@@ -213,7 +213,7 @@ HRESULT DuplicateInvitationContext(ENDPOINT_INVITATION_CONTEXT ** pDestination, 
         FreeInvitationContext(pTempDestination);
         return E_OUTOFMEMORY;
     }
-    
+
     memcpy(pTempDestination->pInvite->pwzMessage, pSource->pInvite->pwzMessage, cbMessage);
 
     // Copy the application ID
@@ -229,7 +229,7 @@ HRESULT DuplicateInvitationContext(ENDPOINT_INVITATION_CONTEXT ** pDestination, 
 // Function:    Free Invitation Context
 //
 // Purpose:     Frees an ENDPOINT_INVITATION_CONTEXT structure allocated by the model
-//              
+//
 // Returns:        VOID
 //
 VOID FreeInvitationContext(ENDPOINT_INVITATION_CONTEXT * pInvitationContext)
@@ -259,7 +259,7 @@ HRESULT SendInviteOnThread(ENDPOINT_INVITATION_CONTEXT * pIncomingInvitationCont
     ENDPOINT_INVITATION_CONTEXT * pInvitationContext = NULL;
 
     hr = DuplicateInvitationContext(&pInvitationContext, pIncomingInvitationContext);
-    
+
     if (SUCCEEDED(hr))
     {
         if (!QueueUserWorkItem(ProcessInviteResponse, (PVOID) pInvitationContext, 0))

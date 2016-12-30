@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2003 <company name>
 //
@@ -103,7 +103,7 @@ CClipBookServerParamsPage::CClipBookServerParamsPage( void )
 void
 CClipBookServerParamsPage::DoDataExchange(
     CDataExchange * pDXIn
-    )
+)
 {
     if ( ! pDXIn->m_bSaveAndValidate || ! BSaved() )
     {

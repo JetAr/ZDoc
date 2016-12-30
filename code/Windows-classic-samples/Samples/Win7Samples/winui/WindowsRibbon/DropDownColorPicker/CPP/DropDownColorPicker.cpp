@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -54,7 +54,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     }
 
     // Main message loop.
-    MSG msg;    
+    MSG msg;
     while (GetMessage(&msg, NULL, 0, 0))
     {
         TranslateMessage(&msg);
@@ -113,11 +113,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     HWND hWnd;
 
     hWnd = CreateWindow(wszWindowClass, wszTitle, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
-                    CW_USEDEFAULT, 0, 500, 650, NULL, NULL, hInstance, NULL);
+                        CW_USEDEFAULT, 0, 500, 650, NULL, NULL, hInstance, NULL);
 
     if (!hWnd)
     {
-       return FALSE;
+        return FALSE;
     }
     // Initialize renderer.
     g_renderer.Initialize(hWnd);

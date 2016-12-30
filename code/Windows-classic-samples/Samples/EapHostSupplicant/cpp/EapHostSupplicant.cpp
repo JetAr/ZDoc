@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -113,47 +113,47 @@ DWORD GetEapHostPeerAPIsFunctionPointers()
     //Get the function pointer to all the functions implemented inside the dll.
     //
     funcEapHostPeerInitialize = (EapHostPeerInitialize)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerInitialize");
+                                GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerInitialize");
     funcEapHostPeerUninitialize = (EapHostPeerUninitialize)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerUninitialize");
+                                  GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerUninitialize");
     funcBeginSession = (EapHostPeerBeginSession)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerBeginSession");
+                       GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerBeginSession");
     funcProcessReceivedPacket = (EapHostPeerProcessReceivedPacket)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerProcessReceivedPacket");
+                                GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerProcessReceivedPacket");
     funcGetSendPacket = (EapHostPeerGetSendPacket)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetSendPacket");
+                        GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetSendPacket");
     funcGetResult = (EapHostPeerGetResult)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetResult");
+                    GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetResult");
     funcGetUIContext = (EapHostPeerGetUIContext)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetUIContext");
+                       GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetUIContext");
     funcSetUIContext = (EapHostPeerSetUIContext)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerSetUIContext");
+                       GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerSetUIContext");
     funcGetRespAttributes = (EapHostPeerGetResponseAttributes)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetResponseAttributes");
+                            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetResponseAttributes");
     funcSetRespAttributes = (EapHostPeerSetResponseAttributes)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerSetResponseAttributes");
+                            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerSetResponseAttributes");
     funcGetAuthStatus = (EapHostPeerGetAuthStatus)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetAuthStatus");
+                        GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerGetAuthStatus");
     funcEndSession = (EapHostPeerEndSession)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerEndSession");
+                     GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerEndSession");
     funcClearConnection = (EapHostPeerClearConnection)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerClearConnection");
+                          GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerClearConnection");
     funcFreeEapError = (EapHostPeerFreeEapError)
-            GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerFreeEapError");
+                       GetProcAddress(handleLibrary, (LPCSTR)"EapHostPeerFreeEapError");
 
     if (funcBeginSession ==  NULL ||
-        funcProcessReceivedPacket == NULL ||
-        funcGetSendPacket == NULL ||
-        funcGetResult == NULL ||
-        funcGetUIContext == NULL ||
-        funcSetUIContext == NULL ||
-        funcGetRespAttributes == NULL ||
-        funcSetRespAttributes == NULL ||
-        funcGetAuthStatus == NULL ||
-        funcEndSession == NULL ||
-        funcClearConnection == NULL ||
-        funcFreeEapError == NULL
-        )
+            funcProcessReceivedPacket == NULL ||
+            funcGetSendPacket == NULL ||
+            funcGetResult == NULL ||
+            funcGetUIContext == NULL ||
+            funcSetUIContext == NULL ||
+            funcGetRespAttributes == NULL ||
+            funcSetRespAttributes == NULL ||
+            funcGetAuthStatus == NULL ||
+            funcEndSession == NULL ||
+            funcClearConnection == NULL ||
+            funcFreeEapError == NULL
+       )
     {
         retCode = HRESULT_CODE(E_POINTER);
     }
@@ -185,7 +185,7 @@ DWORD GetEapMethodFromListOfInstalledEapMethods(EAP_METHOD_TYPE *pEapMethodType)
     // Call the EapHost Config API to get the list of Eap Methods installed and the properties each
     // one supports.
     retCode = EapHostPeerGetMethods(&eapMethodsInfo,
-                                          &pEapError);
+                                    &pEapError);
     if(retCode != ERROR_SUCCESS)
     {
         //Report Error
@@ -225,9 +225,9 @@ Cleanup:
 // it needs to re-authenticate when the health state changes.
 //
 void SdkEapNotificationHandler(
-                 IN GUID connId,
-                 IN void* pContextData
-                 )
+    IN GUID connId,
+    IN void* pContextData
+)
 {
     DWORD retCode = ERROR_SUCCESS;
 
@@ -290,9 +290,9 @@ DWORD Initialize()
     //Create an event which Runtime thread uses to listen for UI thread.
     //
     event_WaitforUIThread = CreateEvent(NULL,        // no security attributes
-                                FALSE,              // auto-reset enabled
-                                FALSE,              // non-signaled state initially
-                                NULL);              // event without a name
+                                        FALSE,              // auto-reset enabled
+                                        FALSE,              // non-signaled state initially
+                                        NULL);              // event without a name
     if(event_WaitforUIThread == NULL)
     {
         // Report Error
@@ -304,9 +304,9 @@ DWORD Initialize()
     // Create an event which UI thread uses to listen to Runtime thread.
     //
     event_WaitforRuntimeThread = CreateEvent(NULL, //no security attributes
-                                FALSE,               // auto-reset enabled
-                                FALSE,               // non-signaled state initially
-                                NULL);               // event without a name
+                                 FALSE,               // auto-reset enabled
+                                 FALSE,               // non-signaled state initially
+                                 NULL);               // event without a name
     if(event_WaitforRuntimeThread == NULL)
     {
         // Report Error
@@ -318,12 +318,12 @@ DWORD Initialize()
     // Create a thread that handles UI calls (API - EapHostPeerInvokeInteractiveUI) to EapHost.
     //
     UIThreadHandle = (HANDLE) CreateThread(
-                                NULL,
-                                0,
-                                (LPTHREAD_START_ROUTINE)HandleUICalls,
-                                0,
-                                0,
-                                NULL);
+                         NULL,
+                         0,
+                         (LPTHREAD_START_ROUTINE)HandleUICalls,
+                         0,
+                         0,
+                         NULL);
     if(UIThreadHandle == NULL)
     {
         retCode = GetLastError();
@@ -353,83 +353,83 @@ DWORD HandleEapHostPeerResponseAction(EapHostPeerResponseAction responseAction)
 
     switch(responseAction)
     {
-        //
-        // Suggests that authentication result packet has come from the authenticator.
-        //
-        case EapHostPeerResponseResult:
-            retCode = HandleEapHostPeerResponseAction_GetResult(EapHostPeerMethodResultFromMethod);
+    //
+    // Suggests that authentication result packet has come from the authenticator.
+    //
+    case EapHostPeerResponseResult:
+        retCode = HandleEapHostPeerResponseAction_GetResult(EapHostPeerMethodResultFromMethod);
 
-            break;
+        break;
 
-        //
-        // Suggests that UI needs to be invoked.
-        //
-        case EapHostPeerResponseInvokeUi:
-            retCode = HandleEapHostPeerResponseAction_InvokeUI();
+    //
+    // Suggests that UI needs to be invoked.
+    //
+    case EapHostPeerResponseInvokeUi:
+        retCode = HandleEapHostPeerResponseAction_InvokeUI();
 
-            break;
+        break;
 
-        //
-        // Suggests that there are EapAttributes with EapHost/EapMethod that needs to be processed by supplicant.
-        //
-        case EapHostPeerResponseRespond:
-            retCode = HandleEapHostPeerResponseAction_Respond();
+    //
+    // Suggests that there are EapAttributes with EapHost/EapMethod that needs to be processed by supplicant.
+    //
+    case EapHostPeerResponseRespond:
+        retCode = HandleEapHostPeerResponseAction_Respond();
 
-            break;
+        break;
 
-        //
-        // Suggests that some internal problem occured which cannot be fixed. Therefore close the current
-        // authentication session and begin authentication from start.
-        //
-        case EapHostPeerResponseStartAuthentication:
-            {
-                //End the existing Session.
-                EAP_ERROR *pEapError = NULL;
-                retCode = funcEndSession(eapSessionId, &pEapError);
-                if(retCode != ERROR_SUCCESS)
-                {
-                    //Report Error
-                    funcFreeEapError(pEapError);
-                    goto Cleanup;
-                }
+    //
+    // Suggests that some internal problem occured which cannot be fixed. Therefore close the current
+    // authentication session and begin authentication from start.
+    //
+    case EapHostPeerResponseStartAuthentication:
+    {
+        //End the existing Session.
+        EAP_ERROR *pEapError = NULL;
+        retCode = funcEndSession(eapSessionId, &pEapError);
+        if(retCode != ERROR_SUCCESS)
+        {
+            //Report Error
+            funcFreeEapError(pEapError);
+            goto Cleanup;
+        }
 
-                //Start a new Session.
-                retCode = BeginAuthentication();
-                if(retCode != ERROR_SUCCESS)
-                {
-                    //Report Error
-                    goto Cleanup;
-                }
+        //Start a new Session.
+        retCode = BeginAuthentication();
+        if(retCode != ERROR_SUCCESS)
+        {
+            //Report Error
+            goto Cleanup;
+        }
 
-            }
-            break;
+    }
+    break;
 
-        //
-        // Suggests that there is a packet that EapMethod wants to send to Authenticator. Therefore,
-        // supplicant should get the packet from EapMethod via EapHost and transport it to the authenticator.
-        //
-        case EapHostPeerResponseSend:
-            retCode = HandleEapHostPeerResponseAction_Send();
+    //
+    // Suggests that there is a packet that EapMethod wants to send to Authenticator. Therefore,
+    // supplicant should get the packet from EapMethod via EapHost and transport it to the authenticator.
+    //
+    case EapHostPeerResponseSend:
+        retCode = HandleEapHostPeerResponseAction_Send();
 
-            break;
+        break;
 
-        //
-        // No action needs to be taken.
-        //
-        case EapHostPeerResponseNone:
+    //
+    // No action needs to be taken.
+    //
+    case EapHostPeerResponseNone:
 
-            break;
+        break;
 
-        //
-        // Suggests that no action needs to be taken.
-        //
-        case EapHostPeerResponseDiscard:
+    //
+    // Suggests that no action needs to be taken.
+    //
+    case EapHostPeerResponseDiscard:
 
-            break;
+        break;
 
-        default:
+    default:
 
-            break;
+        break;
     }
 
     if(retCode != ERROR_SUCCESS)
@@ -505,8 +505,8 @@ DWORD BeginAuthentication()
     // future authentications.
     //
     retCode = ReadBLOBFromRegistry(CONNECTION_PROPERTIES,
-                                sizeConnectionData,
-                                connectionData);
+                                   sizeConnectionData,
+                                   connectionData);
     if((retCode != ERROR_SUCCESS) && (retCode != ERROR_FILE_NOT_FOUND))
     {
         EapTrace("ReadBLOBFromRegistry returned error = %d",retCode);
@@ -538,17 +538,17 @@ DWORD BeginAuthentication()
 
         // Get XMLDOMElement from XMLDOMDocument.
         IXMLDOMElement  *pEapConnNode;
-            hr = pXMLConnectionProperties->get_documentElement(&pEapConnNode);
+        hr = pXMLConnectionProperties->get_documentElement(&pEapConnNode);
 
         // Call EapHost Config API to convert XMLDomElement to Config BLOB
         retCode = EapHostPeerConfigXml2Blob(
-                    dwFlags,
-                    pEapConnNode,
-                    &dwSizeOfConnectionDataOut,
-                    &pConnectionDataOut,
-                    &eapType,
-                    &pEapError
-                    );
+                      dwFlags,
+                      pEapConnNode,
+                      &dwSizeOfConnectionDataOut,
+                      &pConnectionDataOut,
+                      &eapType,
+                      &pEapError
+                  );
         if(retCode != ERROR_SUCCESS)
         {
             //Report Error
@@ -574,13 +574,13 @@ DWORD BeginAuthentication()
         }
     }
 
-       //
-       // Check to see if user blob is saved from previous authentication which can be used
-       // for this authentication.
-       //
+    //
+    // Check to see if user blob is saved from previous authentication which can be used
+    // for this authentication.
+    //
     retCode = ReadBLOBFromRegistry(USER_PROPERTIES,
-                                sizeUserData,
-                                userData);
+                                   sizeUserData,
+                                   userData);
     if((retCode != ERROR_SUCCESS) && (retCode != ERROR_FILE_NOT_FOUND))
     {
         EapTrace("ReadBLOBFromRegistry returned error = %d",retCode);
@@ -609,9 +609,9 @@ DWORD BeginAuthentication()
     // Below all the three parameters are passed as NULL.
     //
     retCode = Impersonate(hTokenImpersonateUser,
-                        NULL,
-                        NULL,
-                        NULL);
+                          NULL,
+                          NULL,
+                          NULL);
 
     //
     // Must call EapHostPeerInitialize() before calling any EapHostPeerXXX API.
@@ -628,21 +628,21 @@ DWORD BeginAuthentication()
     // Call BeginSession() in the EAP Host. This starts the authentication process.
     //
     retCode = funcBeginSession(
-                dwFlags,                        //Flags
-                eapType,                        //EAP_METHOD_TYPE
-                NULL,                       //EapAttributes
-                hTokenImpersonateUser,      //HANDLE
-                sizeConnectionData,         //Connection Data Size
-                connectionData,             //Connection Data
-                sizeUserData,               //User Data Size
-                userData,                   //User Data
-                MAX_PACKET_SIZE,            //Max Packet
-                &connectionId,              //ConnectionId
-                (NOTIFICATIONHANDLER)SdkEapNotificationHandler,  //Notification Call Back Handler
-                (void*)threadId,                //Context Data (Thread Identifier)
-                &eapSessionId,              // Session Id
-                &pEapError
-                );
+                  dwFlags,                        //Flags
+                  eapType,                        //EAP_METHOD_TYPE
+                  NULL,                       //EapAttributes
+                  hTokenImpersonateUser,      //HANDLE
+                  sizeConnectionData,         //Connection Data Size
+                  connectionData,             //Connection Data
+                  sizeUserData,               //User Data Size
+                  userData,                   //User Data
+                  MAX_PACKET_SIZE,            //Max Packet
+                  &connectionId,              //ConnectionId
+                  (NOTIFICATIONHANDLER)SdkEapNotificationHandler,  //Notification Call Back Handler
+                  (void*)threadId,                //Context Data (Thread Identifier)
+                  &eapSessionId,              // Session Id
+                  &pEapError
+              );
     if(retCode != ERROR_SUCCESS)
     {
         //Error Reporting
@@ -679,12 +679,12 @@ DWORD BeginAuthentication()
         // Pass the received packet to EapMethod to process it.
         //
         retCode = funcProcessReceivedPacket(
-                eapSessionId,                       //Session Id
-                gdwReceivedPacketLen,               //Length of the Packet
-                pReceivedPacket,                    //Packet
-                &action,                                //EapHostPeerResponseAction
-                &pEapError
-                );
+                      eapSessionId,                       //Session Id
+                      gdwReceivedPacketLen,               //Length of the Packet
+                      pReceivedPacket,                    //Packet
+                      &action,                                //EapHostPeerResponseAction
+                      &pEapError
+                  );
         if(retCode != ERROR_SUCCESS)
         {
             // Error Reporting
@@ -775,13 +775,13 @@ DWORD HandleUICalls(LPVOID lpParameter)
         // care of calling Identity and Interactive UI depending on the context.
         //
         retCode = EapHostPeerInvokeInteractiveUI(
-                    hwndParent,
-                    dwSizeofUIContextData,
-                    pUIContextData,
-                    &dwSizeOfDataFromInteractiveUI,
-                    &pDataFromInteractiveUI,
-                    &pEapError
-                    );
+                      hwndParent,
+                      dwSizeofUIContextData,
+                      pUIContextData,
+                      &dwSizeOfDataFromInteractiveUI,
+                      &pDataFromInteractiveUI,
+                      &pEapError
+                  );
         if(retCode != ERROR_SUCCESS)
         {
             // Error Reporting
@@ -822,9 +822,9 @@ DWORD HandleEapHostPeerResponseAction_Respond()
     // Get the attributes from EapHost/EapMethod that needs to be processed by the supplicant.
     //
     retCode = funcGetRespAttributes(
-                    eapSessionId,
-                    &in_attributes,
-                    &pEapError);
+                  eapSessionId,
+                  &in_attributes,
+                  &pEapError);
     if(retCode != ERROR_SUCCESS)
     {
         // Error Reporting
@@ -842,32 +842,32 @@ DWORD HandleEapHostPeerResponseAction_Respond()
 
         switch(pEapAttribute->eaType)
         {
-            case 1:
+        case 1:
 
-                isCorrectAttr = 1;
+            isCorrectAttr = 1;
 
-                //
-                // Expected Attribute ---- eaType = 1; dwLength = 4; pValue = 40
-                //
-                {
-                    DWORD attrLength = 0;
-                    DWORD attrValue = 0;
-                    attrLength = pEapAttribute->dwLength;
+            //
+            // Expected Attribute ---- eaType = 1; dwLength = 4; pValue = 40
+            //
+            {
+                DWORD attrLength = 0;
+                DWORD attrValue = 0;
+                attrLength = pEapAttribute->dwLength;
 
-                    if(attrLength != sizeof(DWORD))
-                        isCorrectAttr = 0;
+                if(attrLength != sizeof(DWORD))
+                    isCorrectAttr = 0;
 
-                    attrValue = *((DWORD *)pEapAttribute->pValue);
+                attrValue = *((DWORD *)pEapAttribute->pValue);
 
-                    if(attrValue != EAPTYPE)
-                        isCorrectAttr = 0;
+                if(attrValue != EAPTYPE)
+                    isCorrectAttr = 0;
 
-                }
+            }
 
             break;
 
-            default:
-                EapTrace("Supplicant does not process attributes except EapAttrType = 1");
+        default:
+            EapTrace("Supplicant does not process attributes except EapAttrType = 1");
             break;
         }
     }
@@ -900,11 +900,11 @@ DWORD HandleEapHostPeerResponseAction_Respond()
     // Set the response attributes to EapMethod via EapHost.
     //
     retCode = funcSetRespAttributes(
-                        eapSessionId,
-                        out_attributes,
-                        &action,
-                        &pEapError
-                        );
+                  eapSessionId,
+                  out_attributes,
+                  &action,
+                  &pEapError
+              );
     if(retCode != ERROR_SUCCESS)
     {
         // Error Reporting
@@ -942,11 +942,11 @@ DWORD HandleEapHostPeerResponseAction_InvokeUI()
     // EapHostPeerInvokeInteractiveUI API.
     //
     retCode = funcGetUIContext(
-                eapSessionId,
-                &dwSizeofUIContextData,
-                &pUIContextData,
-                &pEapError
-                );
+                  eapSessionId,
+                  &dwSizeofUIContextData,
+                  &pUIContextData,
+                  &pEapError
+              );
     if(retCode != ERROR_SUCCESS)
     {
         // Error Reporting
@@ -978,12 +978,12 @@ DWORD HandleEapHostPeerResponseAction_InvokeUI()
     // Set the context data received from the above call of EapHostPeerInvokeInteractiveUI.
     //
     retCode = funcSetUIContext(
-                eapSessionId,
-                dwSizeOfDataFromInteractiveUI,
-                pDataFromInteractiveUI,
-                &action,
-                &pEapError
-                );
+                  eapSessionId,
+                  dwSizeOfDataFromInteractiveUI,
+                  pDataFromInteractiveUI,
+                  &action,
+                  &pEapError
+              );
     if(retCode != ERROR_SUCCESS)
     {
         // Error Reporting
@@ -1019,11 +1019,11 @@ DWORD HandleEapHostPeerResponseAction_GetResult(EapHostPeerMethodResultReason re
     // Get the final result of authentication from EapHost.
     //
     retCode = funcGetResult(
-                eapSessionId,
-                reason,
-                &result,
-                &pEapError
-                );
+                  eapSessionId,
+                  reason,
+                  &result,
+                  &pEapError
+              );
     if(retCode != ERROR_SUCCESS)
     {
         // Error Reporting
@@ -1045,8 +1045,8 @@ DWORD HandleEapHostPeerResponseAction_GetResult(EapHostPeerMethodResultReason re
             // In this example we store raw data in regsitry. One may wish to encrypt it.
             //
             retCode = StoreBLOBInRegistry(CONNECTION_PROPERTIES,
-                                        result.dwSizeofConnectionData,
-                                        result.pConnectionData);
+                                          result.dwSizeofConnectionData,
+                                          result.pConnectionData);
             if(retCode != ERROR_SUCCESS)
             {
                 EapTrace("StoreBLOBInRegistry returned error = %d",retCode);
@@ -1063,8 +1063,8 @@ DWORD HandleEapHostPeerResponseAction_GetResult(EapHostPeerMethodResultReason re
             // In this example we store raw data in regsitry. One may wish to encrypt it.
             //
             retCode = StoreBLOBInRegistry(USER_PROPERTIES,
-                                        result.dwSizeofUserData,
-                                        result.pUserData);
+                                          result.dwSizeofUserData,
+                                          result.pUserData);
             if(retCode != ERROR_SUCCESS)
             {
                 EapTrace("StoreBLOBInRegistry returned error = %d",retCode);
@@ -1249,7 +1249,7 @@ DWORD CreateDOMDocumentFromXML(DWORD type, IXMLDOMDocument2** pXMLDOMDocument2)
     }
 
     hr = CoCreateInstance(CLSID_DOMDocument60, NULL, CLSCTX_INPROC_SERVER,
-           IID_IXMLDOMDocument2, (void**)&(*pXMLDOMDocument2));
+                          IID_IXMLDOMDocument2, (void**)&(*pXMLDOMDocument2));
     if(FAILED(hr))
     {
         //Report Error
@@ -1261,27 +1261,27 @@ DWORD CreateDOMDocumentFromXML(DWORD type, IXMLDOMDocument2** pXMLDOMDocument2)
 
     switch(type)
     {
-        case CONNECTION_PROPERTIES:
-            xmlFileNameVariant.bstrVal = SysAllocString(L"SdkEapConn.xml");
-            if(xmlFileNameVariant.bstrVal == NULL)
-            {
-                retCode = ERROR_OUTOFMEMORY;
-                goto Cleanup;
-            }
-            break;
+    case CONNECTION_PROPERTIES:
+        xmlFileNameVariant.bstrVal = SysAllocString(L"SdkEapConn.xml");
+        if(xmlFileNameVariant.bstrVal == NULL)
+        {
+            retCode = ERROR_OUTOFMEMORY;
+            goto Cleanup;
+        }
+        break;
 
-        case USER_PROPERTIES:
-            xmlFileNameVariant.bstrVal = SysAllocString(L"SdkEapUser.xml");
-            if(xmlFileNameVariant.bstrVal == NULL)
-            {
-                retCode = ERROR_OUTOFMEMORY;
-                goto Cleanup;
-            }
-            break;
+    case USER_PROPERTIES:
+        xmlFileNameVariant.bstrVal = SysAllocString(L"SdkEapUser.xml");
+        if(xmlFileNameVariant.bstrVal == NULL)
+        {
+            retCode = ERROR_OUTOFMEMORY;
+            goto Cleanup;
+        }
+        break;
 
-        default:
-            //Report Error
-            break;
+    default:
+        //Report Error
+        break;
     }
 
     hr = (*pXMLDOMDocument2)->load(xmlFileNameVariant, &isSuccessful);
@@ -1341,19 +1341,19 @@ Cleanup:
 // UserName, Password and Domain are required for Logon.
 //
 DWORD Impersonate(HANDLE &pToken,
-                                      LPCWSTR user,
-                                      LPCWSTR domain,
-                                      LPCWSTR pswd)
+                  LPCWSTR user,
+                  LPCWSTR domain,
+                  LPCWSTR pswd)
 {
     DWORD retCode = ERROR_SUCCESS;
     BOOL  fOk = FALSE;
 
     fOk = LogonUserW( user,
-                  domain,
-                  pswd,
-                  LOGON32_LOGON_INTERACTIVE,
-                  LOGON32_PROVIDER_DEFAULT,
-                  &pToken );
+                      domain,
+                      pswd,
+                      LOGON32_LOGON_INTERACTIVE,
+                      LOGON32_PROVIDER_DEFAULT,
+                      &pToken );
 
     if ( fOk == FALSE )
     {
@@ -1396,21 +1396,21 @@ DWORD StoreBLOBInRegistry(DWORD type, DWORD sizeOfBLOB, BYTE *pBLOB)
                             L"SOFTWARE\\SdkEap",
                             0,
                             KEY_ALL_ACCESS,
-                               &hKeyEap);
+                            &hKeyEap);
     if (retCode != ERROR_SUCCESS)
     {
         if (retCode == ERROR_FILE_NOT_FOUND)
         {
             // Create a new key.
             retCode = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
-                        L"SOFTWARE\\SdkEap",
-                        0,
-                        NULL,
-                        REG_OPTION_VOLATILE,
-                        KEY_ALL_ACCESS,
-                        NULL,
-                        &hKeyEap,
-                        lpdwDisposition);
+                                     L"SOFTWARE\\SdkEap",
+                                     0,
+                                     NULL,
+                                     REG_OPTION_VOLATILE,
+                                     KEY_ALL_ACCESS,
+                                     NULL,
+                                     &hKeyEap,
+                                     lpdwDisposition);
             if (retCode != ERROR_SUCCESS)
             {
                 EapTrace("StoreBLOBInRegistry: Could not open reg key");
@@ -1434,13 +1434,13 @@ DWORD StoreBLOBInRegistry(DWORD type, DWORD sizeOfBLOB, BYTE *pBLOB)
         swprintf_s( wszKey, 128, L"UserBlob_%u", EAPTYPE );
 
     retCode = RegSetValueEx(
-                    hKeyEap,
-                    wszKey,
-                    0,
-                    REG_BINARY,
-                    pBLOB,
-                    sizeOfBLOB
-                    );
+                  hKeyEap,
+                  wszKey,
+                  0,
+                  REG_BINARY,
+                  pBLOB,
+                  sizeOfBLOB
+              );
     if ( retCode != ERROR_SUCCESS )
     {
         EapTrace("StoreBLOBInRegistry: Cannot set regkey %d", retCode);
@@ -1469,10 +1469,10 @@ DWORD ReadBLOBFromRegistry(DWORD type, DWORD &sizeOfBLOB, BYTE *&pBLOB)
     // Open the registry value.
     //
     retCode = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
-                                     L"SOFTWARE\\SdkEap",
-                                     0,
-                                     KEY_READ,
-                                     &hKeyEap);
+                            L"SOFTWARE\\SdkEap",
+                            0,
+                            KEY_READ,
+                            &hKeyEap);
     if (retCode != ERROR_SUCCESS)
     {
         goto Cleanup;
@@ -1489,7 +1489,7 @@ DWORD ReadBLOBFromRegistry(DWORD type, DWORD &sizeOfBLOB, BYTE *&pBLOB)
         // Read the specified regvalue.
         //
         retCode = RegQueryValueExW(hKeyEap, wszKey, NULL, &dwRegValueType,
-                                        NULL, &cbRegValueData);
+                                   NULL, &cbRegValueData);
         if (retCode != ERROR_SUCCESS)
         {
             goto Cleanup;
@@ -1513,7 +1513,7 @@ DWORD ReadBLOBFromRegistry(DWORD type, DWORD &sizeOfBLOB, BYTE *&pBLOB)
 
             // Get the real value. (Errors handled by code outside if() clause.)
             retCode = RegQueryValueExW(hKeyEap, wszKey, NULL, &dwRegValueType,
-                                 (PBYTE)pBLOB, &cbRegValueData);
+                                       (PBYTE)pBLOB, &cbRegValueData);
             if (retCode != ERROR_SUCCESS)
             {
                 EapTrace("ReadBLOBFromRegistry(): Error -- couldn't get registry value! (error %d)", retCode);
@@ -1549,7 +1549,7 @@ DWORD DeleteBLOBFromRegistry()
 
     // Check if the key -- "HKLM\Software" exist.
     retCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE, eapRootKeyName,
-                    0, KEY_ALL_ACCESS, &hkEapBlob);
+                           0, KEY_ALL_ACCESS, &hkEapBlob);
     if(retCode != ERROR_SUCCESS)
     {
         // Trace Error
@@ -1600,11 +1600,11 @@ DisplayInstalledEapMethods(
     int   result = 0;
 
     result = (int)DialogBoxParam(
-                     GetModuleHandle(NULL),
-                     MAKEINTRESOURCE(IDD_DIALOG),
-                     hwndParent,
-                     DialogProc,
-                     (LPARAM)pEapMethodsData);
+                 GetModuleHandle(NULL),
+                 MAKEINTRESOURCE(IDD_DIALOG),
+                 hwndParent,
+                 DialogProc,
+                 (LPARAM)pEapMethodsData);
 
     if (result < 0)
     {
@@ -1629,13 +1629,13 @@ INT_PTR CALLBACK DialogProc(
 
     switch (unMsg)
     {
-        case WM_INITDIALOG:
-            dwErr = InitDialog(hWnd, lParam);
+    case WM_INITDIALOG:
+        dwErr = InitDialog(hWnd, lParam);
         break;
 
-        case WM_COMMAND:
-            pEapMethodsData = (EAP_METHOD_INFO_ARRAY *)((LONG_PTR)GetWindowLongPtr(hWnd, DWLP_USER));
-            dwErr = CommandProc(pEapMethodsData, LOWORD(wParam), hWnd);
+    case WM_COMMAND:
+        pEapMethodsData = (EAP_METHOD_INFO_ARRAY *)((LONG_PTR)GetWindowLongPtr(hWnd, DWLP_USER));
+        dwErr = CommandProc(pEapMethodsData, LOWORD(wParam), hWnd);
         break;
     }
 
@@ -1676,9 +1676,9 @@ BOOL InitDialog(
         pLocalEapMethodInfo = &((eapMethodsInfo->pEapMethods)[dwMethodCount]);
 
         lResult = SendMessage(hWnd,
-                                       (UINT) LB_ADDSTRING,
-                                       (WPARAM) 0,
-                                       (LPARAM)pLocalEapMethodInfo->pwszFriendlyName);
+                              (UINT) LB_ADDSTRING,
+                              (WPARAM) 0,
+                              (LPARAM)pLocalEapMethodInfo->pwszFriendlyName);
         if(lResult == LB_ERR)
             goto Cleanup;
 
@@ -1725,9 +1725,9 @@ CommandProc(
     }
 
     selIndex =  (DWORD)SendMessage(hWnd,
-                               (UINT) LB_GETCURSEL,
-                               (WPARAM) 0,
-                               (LPARAM) 0);
+                                   (UINT) LB_GETCURSEL,
+                                   (WPARAM) 0,
+                                   (LPARAM) 0);
     if(selIndex == LB_ERR)
         goto Cleanup;
 
@@ -1735,140 +1735,140 @@ CommandProc(
 
     switch(wId)
     {
-        case IDC_METHODLIST:
-            //
-            // We already know about the index that is selected.
-            // 1. Remove the Eap Properties corresponding to the earlier selected text.
-            // 2. Check if the new selected Eap suppports configuration. Accordingly, enable/disable the
-            //     the Configure button.
+    case IDC_METHODLIST:
+        //
+        // We already know about the index that is selected.
+        // 1. Remove the Eap Properties corresponding to the earlier selected text.
+        // 2. Check if the new selected Eap suppports configuration. Accordingly, enable/disable the
+        //     the Configure button.
 
-            // 1.
-            hWnd = GetDlgItem(hWndDlg, IDC_PROPERTYTEXT);
-            if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
-            {
-                EapTrace("Error -- CommandProc -- IDC_PROPERTYTEXT -- (error %d)",GetLastError());
-                goto Cleanup;
-            }
-            // eapPropText = NULL
-            fOk = SetWindowText(hWnd, eapPropText);
-            if(fOk == 0)
-                goto Cleanup;
+        // 1.
+        hWnd = GetDlgItem(hWndDlg, IDC_PROPERTYTEXT);
+        if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
+        {
+            EapTrace("Error -- CommandProc -- IDC_PROPERTYTEXT -- (error %d)",GetLastError());
+            goto Cleanup;
+        }
+        // eapPropText = NULL
+        fOk = SetWindowText(hWnd, eapPropText);
+        if(fOk == 0)
+            goto Cleanup;
 
-            // 2.
-            hWnd = GetDlgItem(hWndDlg, IDC_CONFIGURE);
-            if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
+        // 2.
+        hWnd = GetDlgItem(hWndDlg, IDC_CONFIGURE);
+        if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
+        {
+            EapTrace("Error -- CommandProc -- IDC_CONFIGURE -- (error %d)",GetLastError());
+            goto Cleanup;
+        }
+        {
+            BOOL  isHighlighted = FALSE;
+            if(!(pLocalEapMethodInfo->eapProperties & eapPropSupportsConfig))
             {
-                EapTrace("Error -- CommandProc -- IDC_CONFIGURE -- (error %d)",GetLastError());
-                goto Cleanup;
+                isHighlighted = TRUE;
             }
-            {
-                BOOL  isHighlighted = FALSE;
-                if(!(pLocalEapMethodInfo->eapProperties & eapPropSupportsConfig))
-                {
-                    isHighlighted = TRUE;
-                }
-                SendMessage(hWnd,
+            SendMessage(hWnd,
                         (UINT) BM_SETSTATE,
                         (WPARAM) isHighlighted,
                         (LPARAM) 0);
-            }
+        }
 
-            break;
+        break;
 
-        case IDC_PROPERTIES:
-            //
-            // Display the Properties that the selected Eap Method supports
-            //
+    case IDC_PROPERTIES:
+        //
+        // Display the Properties that the selected Eap Method supports
+        //
 
-            hWnd = GetDlgItem(hWndDlg, IDC_PROPERTYTEXT);
-            if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
-            {
-                EapTrace("Error -- CommandProc -- IDC_PROPERTYTEXT -- (error %d)",GetLastError());
-                goto Cleanup;
-            }
+        hWnd = GetDlgItem(hWndDlg, IDC_PROPERTYTEXT);
+        if (hWnd == NULL)              // GetDlgItem() returns NULL for errors.
+        {
+            EapTrace("Error -- CommandProc -- IDC_PROPERTYTEXT -- (error %d)",GetLastError());
+            goto Cleanup;
+        }
 
-            eapPropLen = sizeof(eapPropText)/sizeof(wchar_t);
+        eapPropLen = sizeof(eapPropText)/sizeof(wchar_t);
 
-            if(pLocalEapMethodInfo->eapProperties & eapPropCipherSuiteNegotiation)
-                eapPropTextCtr = swprintf_s(eapPropText, eapPropLen, L"CipherSuiteNegotiation \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropMutualAuth)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Mutual Authentication \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropIntegrity)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Integrity \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropReplayProtection)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Replay Protection \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropConfidentiality)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Confidentiality \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropKeyDerivation)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Key Derivation \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength64)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength64 \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength128)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength128 \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength256)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength256 \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength512)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength512 \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength1024)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength1024 \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropDictionaryAttackResistance)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"DictionaryAttackResistance \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropFastReconnect)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"FastReconnect \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropCryptoBinding)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"CryptoBinding \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropSessionIndependence)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"SessionIndependence \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropFragmentation)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Fragmentation \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropChannelBinding)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"ChannelBinding \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropNap)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Supports Nap \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropStandalone)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Standalone \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropMppeEncryption)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"MppeEncryption \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropTunnelMethod)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"TunnelMethod \n");
-            if(pLocalEapMethodInfo->eapProperties & eapPropSupportsConfig)
-                eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"SupportsConfig \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropCipherSuiteNegotiation)
+            eapPropTextCtr = swprintf_s(eapPropText, eapPropLen, L"CipherSuiteNegotiation \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropMutualAuth)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Mutual Authentication \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropIntegrity)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Integrity \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropReplayProtection)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Replay Protection \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropConfidentiality)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Confidentiality \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropKeyDerivation)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Key Derivation \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength64)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength64 \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength128)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength128 \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength256)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength256 \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength512)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength512 \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropKeyStrength1024)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"KeyStrength1024 \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropDictionaryAttackResistance)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"DictionaryAttackResistance \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropFastReconnect)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"FastReconnect \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropCryptoBinding)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"CryptoBinding \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropSessionIndependence)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"SessionIndependence \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropFragmentation)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Fragmentation \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropChannelBinding)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"ChannelBinding \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropNap)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Supports Nap \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropStandalone)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"Standalone \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropMppeEncryption)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"MppeEncryption \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropTunnelMethod)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"TunnelMethod \n");
+        if(pLocalEapMethodInfo->eapProperties & eapPropSupportsConfig)
+            eapPropTextCtr += swprintf_s(eapPropText + eapPropTextCtr, eapPropLen - eapPropTextCtr, L"SupportsConfig \n");
 
-            fOk = SetWindowText(hWnd, eapPropText);
-            if(fOk == 0)
-                goto Cleanup;
+        fOk = SetWindowText(hWnd, eapPropText);
+        if(fOk == 0)
+            goto Cleanup;
 
-            break;
+        break;
 
-        case IDC_CONFIGURE:
-            //
-            // Invoke the ConfigUI for the selected Eap Method.
-            //
-            retCode = EapHostPeerInvokeConfigUI(
-                            hWndDlg,
-                            0,
-                            pLocalEapMethodInfo->eaptype,
-                            0,
-                            NULL,
-                            &sizeConnectionData,
-                            &connectionData,
-                            &pEapError);
-            if(retCode != ERROR_SUCCESS)
-            {
-                //Report Error
-                EapHostPeerFreeErrorMemory(pEapError);
-                goto Cleanup;
-            }
-            break;
+    case IDC_CONFIGURE:
+        //
+        // Invoke the ConfigUI for the selected Eap Method.
+        //
+        retCode = EapHostPeerInvokeConfigUI(
+                      hWndDlg,
+                      0,
+                      pLocalEapMethodInfo->eaptype,
+                      0,
+                      NULL,
+                      &sizeConnectionData,
+                      &connectionData,
+                      &pEapError);
+        if(retCode != ERROR_SUCCESS)
+        {
+            //Report Error
+            EapHostPeerFreeErrorMemory(pEapError);
+            goto Cleanup;
+        }
+        break;
 
-        case IDC_EXITDIALOG:
-            EndDialog(hWndDlg, wId);
+    case IDC_EXITDIALOG:
+        EndDialog(hWndDlg, wId);
 
-            break;
+        break;
 
-        default:
+    default:
 
-            break;
+        break;
     }
 
     fOk = TRUE;

@@ -1,4 +1,4 @@
-// [!output root]dll.cpp : Implementation of DLL Exports.
+﻿// [!output root]dll.cpp : Implementation of DLL Exports.
 // Copyright (c) Microsoft Corporation. All rights reserved.
 
 #include "stdafx.h"

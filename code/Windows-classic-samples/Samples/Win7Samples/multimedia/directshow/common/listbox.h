@@ -1,4 +1,4 @@
-//-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // File: Listbox.h
 // Desc: Listbox control class
 //
@@ -20,7 +20,10 @@ protected:
 public:
     ListBox();
     void SetWindow(HWND hwnd);
-    bool IsMultiSelect() const { return m_bMultiSelect; }
+    bool IsMultiSelect() const
+    {
+        return m_bMultiSelect;
+    }
 
     BOOL AddString(LPCTSTR sz);
     BOOL AddItem(LPCTSTR szName, void* pItemData);

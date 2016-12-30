@@ -1,16 +1,16 @@
-
+﻿
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 7.00.0499 */
+/* File created by MIDL compiler version 7.00.0499 */
 /* at Thu Apr 19 15:54:48 2007
  */
 /* Compiler settings for .\RegisterServer.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
+    error checks: allocation ref bounds_check enum stub_data
+    VC __declspec() decoration level:
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
          DECLSPEC_UUID(), MIDL_INTERFACE()
 */
@@ -43,7 +43,7 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IDllRegister_FWD_DEFINED__
 #define __IDllRegister_FWD_DEFINED__
@@ -74,87 +74,88 @@ typedef struct RegistrationClass RegistrationClass;
 #include "ocidl.h"
 
 #ifdef __cplusplus
-extern "C"{
-#endif 
+extern "C" {
+#endif
 
 
 #ifndef __IDllRegister_INTERFACE_DEFINED__
 #define __IDllRegister_INTERFACE_DEFINED__
 
 /* interface IDllRegister */
-/* [helpstring][uuid][object] */ 
+/* [helpstring][uuid][object] */
 
 
 EXTERN_C const IID IID_IDllRegister;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("D6117008-CCE3-4614-8ACD-769FA5E8B265")
-    IDllRegister : public IUnknown
-    {
-    public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RegisterDll( 
-            /* [in] */ BSTR lpFileName) = 0;
-        
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnRegisterDll( 
-            /* [in] */ BSTR lpFileName) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("D6117008-CCE3-4614-8ACD-769FA5E8B265")
+IDllRegister :
+public IUnknown
+{
+public:
+    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RegisterDll(
+        /* [in] */ BSTR lpFileName) = 0;
+
+    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnRegisterDll(
+        /* [in] */ BSTR lpFileName) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IDllRegisterVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IDllRegister * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IDllRegister * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IDllRegister * This);
-        
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterDll )( 
-            IDllRegister * This,
-            /* [in] */ BSTR lpFileName);
-        
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnRegisterDll )( 
-            IDllRegister * This,
-            /* [in] */ BSTR lpFileName);
-        
-        END_INTERFACE
-    } IDllRegisterVtbl;
+typedef struct IDllRegisterVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IDllRegister
-    {
-        CONST_VTBL struct IDllRegisterVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IDllRegister * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IDllRegister * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IDllRegister * This);
+
+    /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterDll )(
+        IDllRegister * This,
+        /* [in] */ BSTR lpFileName);
+
+    /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnRegisterDll )(
+        IDllRegister * This,
+        /* [in] */ BSTR lpFileName);
+
+    END_INTERFACE
+} IDllRegisterVtbl;
+
+interface IDllRegister
+{
+    CONST_VTBL struct IDllRegisterVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
 
 #define IDllRegister_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) )
 
 #define IDllRegister_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
+    ( (This)->lpVtbl -> AddRef(This) )
 
 #define IDllRegister_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
+    ( (This)->lpVtbl -> Release(This) )
 
 
 #define IDllRegister_RegisterDll(This,lpFileName)	\
-    ( (This)->lpVtbl -> RegisterDll(This,lpFileName) ) 
+    ( (This)->lpVtbl -> RegisterDll(This,lpFileName) )
 
 #define IDllRegister_UnRegisterDll(This,lpFileName)	\
-    ( (This)->lpVtbl -> UnRegisterDll(This,lpFileName) ) 
+    ( (This)->lpVtbl -> UnRegisterDll(This,lpFileName) )
 
 #endif /* COBJMACROS */
 
@@ -171,83 +172,84 @@ EXTERN_C const IID IID_IDllRegister;
 #define __IExeRegister_INTERFACE_DEFINED__
 
 /* interface IExeRegister */
-/* [helpstring][uuid][object] */ 
+/* [helpstring][uuid][object] */
 
 
 EXTERN_C const IID IID_IExeRegister;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("7585D4FA-07BD-4b4e-9AAB-0749C334558B")
-    IExeRegister : public IUnknown
-    {
-    public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RegisterExe( 
-            /* [in] */ BSTR lpFileName,
-            HWND hwndWindow) = 0;
-        
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnregisterExe( 
-            /* [in] */ BSTR lpFileName,
-            HWND hwndWindow) = 0;
-        
-    };
-    
+
+MIDL_INTERFACE("7585D4FA-07BD-4b4e-9AAB-0749C334558B")
+IExeRegister :
+public IUnknown
+{
+public:
+    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RegisterExe(
+        /* [in] */ BSTR lpFileName,
+        HWND hwndWindow) = 0;
+
+    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnregisterExe(
+        /* [in] */ BSTR lpFileName,
+        HWND hwndWindow) = 0;
+
+};
+
 #else 	/* C style interface */
 
-    typedef struct IExeRegisterVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IExeRegister * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IExeRegister * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IExeRegister * This);
-        
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterExe )( 
-            IExeRegister * This,
-            /* [in] */ BSTR lpFileName,
-            HWND hwndWindow);
-        
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnregisterExe )( 
-            IExeRegister * This,
-            /* [in] */ BSTR lpFileName,
-            HWND hwndWindow);
-        
-        END_INTERFACE
-    } IExeRegisterVtbl;
+typedef struct IExeRegisterVtbl
+{
+    BEGIN_INTERFACE
 
-    interface IExeRegister
-    {
-        CONST_VTBL struct IExeRegisterVtbl *lpVtbl;
-    };
+    HRESULT ( STDMETHODCALLTYPE *QueryInterface )(
+        IExeRegister * This,
+        /* [in] */ REFIID riid,
+        /* [iid_is][out] */
+        __RPC__deref_out  void **ppvObject);
 
-    
+    ULONG ( STDMETHODCALLTYPE *AddRef )(
+        IExeRegister * This);
+
+    ULONG ( STDMETHODCALLTYPE *Release )(
+        IExeRegister * This);
+
+    /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterExe )(
+        IExeRegister * This,
+        /* [in] */ BSTR lpFileName,
+        HWND hwndWindow);
+
+    /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnregisterExe )(
+        IExeRegister * This,
+        /* [in] */ BSTR lpFileName,
+        HWND hwndWindow);
+
+    END_INTERFACE
+} IExeRegisterVtbl;
+
+interface IExeRegister
+{
+    CONST_VTBL struct IExeRegisterVtbl *lpVtbl;
+};
+
+
 
 #ifdef COBJMACROS
 
 
 #define IExeRegister_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
+    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) )
 
 #define IExeRegister_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
+    ( (This)->lpVtbl -> AddRef(This) )
 
 #define IExeRegister_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
+    ( (This)->lpVtbl -> Release(This) )
 
 
 #define IExeRegister_RegisterExe(This,lpFileName,hwndWindow)	\
-    ( (This)->lpVtbl -> RegisterExe(This,lpFileName,hwndWindow) ) 
+    ( (This)->lpVtbl -> RegisterExe(This,lpFileName,hwndWindow) )
 
 #define IExeRegister_UnregisterExe(This,lpFileName,hwndWindow)	\
-    ( (This)->lpVtbl -> UnregisterExe(This,lpFileName,hwndWindow) ) 
+    ( (This)->lpVtbl -> UnregisterExe(This,lpFileName,hwndWindow) )
 
 #endif /* COBJMACROS */
 
@@ -262,15 +264,15 @@ EXTERN_C const IID IID_IExeRegister;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
-unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
-unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long, BSTR * );
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * );
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * );
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * );
 
-unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
-unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
-unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
-void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
+unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long, HWND * );
+unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * );
+unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * );
+void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * );
 
 /* end of Additional Prototypes */
 

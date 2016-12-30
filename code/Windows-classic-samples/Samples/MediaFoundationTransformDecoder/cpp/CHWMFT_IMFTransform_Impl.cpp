@@ -1,4 +1,4 @@
-#include "CHWMFT.h"
+﻿#include "CHWMFT.h"
 #include "CAutoLock.h"
 #include <mferror.h>
 #include <mfapi.h>
@@ -65,7 +65,8 @@ HRESULT CHWMFT::GetAttributes(
         }
 
         (*ppAttributes)->AddRef();
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -77,10 +78,10 @@ HRESULT CHWMFT::GetInputAvailableType(
 {
     /*****************************************
     ** Todo: This function will return a media
-    ** type at a given index. The SDK 
+    ** type at a given index. The SDK
     ** implementation uses a static array of
     ** media types. Your MFT may want to use
-    ** a dynamic array and modify the list 
+    ** a dynamic array and modify the list
     ** order depending on the MFTs state
     ** See http://msdn.microsoft.com/en-us/library/ms704814(v=VS.85).aspx
     *****************************************/
@@ -149,7 +150,8 @@ HRESULT CHWMFT::GetInputAvailableType(
             (*ppType) = pMT;
             (*ppType)->AddRef();
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pMT);
 
@@ -203,8 +205,8 @@ HRESULT CHWMFT::GetInputCurrentType(
             }
 
             /*******************************************
-            ** Return a copy of the media type, not the 
-            ** internal one. Returning the internal one 
+            ** Return a copy of the media type, not the
+            ** internal one. Returning the internal one
             ** will allow an external component to modify
             ** the internal media type
             *******************************************/
@@ -224,7 +226,8 @@ HRESULT CHWMFT::GetInputCurrentType(
 
         (*ppType) = pMT;
         (*ppType)->AddRef();
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pMT);
 
@@ -277,7 +280,8 @@ HRESULT CHWMFT::GetInputStatus(
                 *pdwFlags = MFT_INPUT_STATUS_ACCEPT_DATA;
             }
         }
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -339,7 +343,8 @@ HRESULT CHWMFT::GetInputStreamInfo(
         pStreamInfo->cbSize         = 0; // No minimum size is required
         pStreamInfo->cbMaxLookahead = 0; // No lookahead is performed
         pStreamInfo->cbAlignment    = 0; // No memory allignment is required
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -351,10 +356,10 @@ HRESULT CHWMFT::GetOutputAvailableType(
 {
     /*****************************************
     ** Todo: This function will return a media
-    ** type at a given index. The SDK 
+    ** type at a given index. The SDK
     ** implementation uses a static array of
     ** media types. Your MFT may want to use
-    ** a dynamic array and modify the list 
+    ** a dynamic array and modify the list
     ** order depending on the MFTs state
     ** See http://msdn.microsoft.com/en-us/library/ms703812(v=VS.85).aspx
     *****************************************/
@@ -443,7 +448,8 @@ HRESULT CHWMFT::GetOutputAvailableType(
             (*ppType) = pMT;
             (*ppType)->AddRef();
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pMT);
 
@@ -505,8 +511,8 @@ HRESULT CHWMFT::GetOutputCurrentType(
             }
 
             /*******************************************
-            ** Return a copy of the media type, not the 
-            ** internal one. Returning the internal one 
+            ** Return a copy of the media type, not the
+            ** internal one. Returning the internal one
             ** will allow an external component to modify
             ** the internal media type
             *******************************************/
@@ -526,7 +532,8 @@ HRESULT CHWMFT::GetOutputCurrentType(
 
         (*ppType) = pMT;
         (*ppType)->AddRef();
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pMT);
 
@@ -570,7 +577,8 @@ HRESULT CHWMFT::GetOutputStatus(
         }
 
         TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Output Status Flags: 0x%x",  __FUNCTION__, (*pdwFlags));
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit (hr=0x%x)",  __FUNCTION__, hr);
 
@@ -582,7 +590,7 @@ HRESULT CHWMFT::GetOutputStreamAttributes(
     IMFAttributes** ppAttributes)
 {
     /*****************************************
-    ** Todo: This MFT does not support a 
+    ** Todo: This MFT does not support a
     ** hardware handshake, so this function
     ** is not implemented
     ** See http://msdn.microsoft.com/en-us/library/ms703886(v=VS.85).aspx,
@@ -628,18 +636,19 @@ HRESULT CHWMFT::GetOutputStreamInfo(
             break;
         }
 
-        pStreamInfo->dwFlags        =   MFT_OUTPUT_STREAM_WHOLE_SAMPLES             | 
+        pStreamInfo->dwFlags        =   MFT_OUTPUT_STREAM_WHOLE_SAMPLES             |
                                         MFT_OUTPUT_STREAM_SINGLE_SAMPLE_PER_BUFFER  |
                                         MFT_OUTPUT_STREAM_FIXED_SAMPLE_SIZE         |
-                                        MFT_OUTPUT_STREAM_CAN_PROVIDE_SAMPLES;         
+                                        MFT_OUTPUT_STREAM_CAN_PROVIDE_SAMPLES;
         pStreamInfo->cbSize         = (MFT_OUTPUT_WIDTH * MFT_OUTPUT_HEIGHT) * 4; // Since the MFT can output RGB32,
-                                                                                  // it may need as many as 4 bytes
-                                                                                  // per pixel, so the output buffer
-                                                                                  // size must be set accordinly
-                                                                                  // Todo: Change this value depending
-                                                                                  // On the current output type
+        // it may need as many as 4 bytes
+        // per pixel, so the output buffer
+        // size must be set accordinly
+        // Todo: Change this value depending
+        // On the current output type
         pStreamInfo->cbAlignment    = 0; // No memory allignment is required
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -671,7 +680,8 @@ HRESULT CHWMFT::GetStreamCount(
 
         *pdwInputStreams = MFT_MAX_STREAMS;
         *pdwOutputStreams = MFT_MAX_STREAMS;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -717,7 +727,8 @@ HRESULT CHWMFT::GetStreamIDs(
 
         pdwInputIDs[0]  = 0;
         pdwOutputIDs[0] = 0;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -743,7 +754,7 @@ HRESULT CHWMFT::GetStreamLimits(
         }
 
         if((pdwInputMinimum == NULL) || (pdwInputMaximum == NULL) ||
-            (pdwOutputMinimum == NULL) || (pdwOutputMaximum == NULL))
+                (pdwOutputMinimum == NULL) || (pdwOutputMaximum == NULL))
         {
             hr = E_POINTER;
             break;
@@ -760,7 +771,8 @@ HRESULT CHWMFT::GetStreamLimits(
         *pdwInputMaximum    = MFT_MAX_STREAMS;
         *pdwOutputMinimum   = MFT_MAX_STREAMS;
         *pdwOutputMaximum   = MFT_MAX_STREAMS;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -802,14 +814,15 @@ HRESULT CHWMFT::ProcessEvent(
         }
 
         /****************************************
-        ** Todo: this MFT does not handle any 
-        ** events. It allows them all to be 
+        ** Todo: this MFT does not handle any
+        ** events. It allows them all to be
         ** propagated downstream. If your MFT
         ** needs to handle events, implement this
         ** function
         ****************************************/
         hr = E_NOTIMPL;
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -889,7 +902,8 @@ HRESULT CHWMFT::ProcessInput(
         {
             break;
         }
-    }while(false);
+    }
+    while(false);
 
     TraceString(CHMFTTracing::TRACE_INFORMATION, L"%S(): Exit (hr=0x%x)",  __FUNCTION__, hr);
 
@@ -924,50 +938,50 @@ HRESULT CHWMFT::ProcessMessage(
         switch(eMessage)
         {
         case MFT_MESSAGE_NOTIFY_START_OF_STREAM:
+        {
+            hr = OnStartOfStream();
+            if(FAILED(hr))
             {
-                hr = OnStartOfStream();
-                if(FAILED(hr))
-                {
-                    break;
-                }
+                break;
             }
-            break;
+        }
+        break;
         case MFT_MESSAGE_NOTIFY_END_OF_STREAM:
+        {
+            hr = OnEndOfStream();
+            if(FAILED(hr))
             {
-                hr = OnEndOfStream();
-                if(FAILED(hr))
-                {
-                    break;
-                }
+                break;
             }
-            break;
+        }
+        break;
         case MFT_MESSAGE_COMMAND_DRAIN:
+        {
+            hr = OnDrain((UINT32)ulParam);
+            if(FAILED(hr))
             {
-                hr = OnDrain((UINT32)ulParam);
-                if(FAILED(hr))
-                {
-                    break;
-                }
+                break;
             }
-            break;
+        }
+        break;
         case MFT_MESSAGE_COMMAND_FLUSH:
+        {
+            hr = OnFlush();
+            if(FAILED(hr))
             {
-                hr = OnFlush();
-                if(FAILED(hr))
-                {
-                    break;
-                }
+                break;
             }
-            break;
+        }
+        break;
         case MFT_MESSAGE_COMMAND_MARKER:
+        {
+            hr = OnMarker(ulParam);
+            if(FAILED(hr))
             {
-                hr = OnMarker(ulParam);
-                if(FAILED(hr))
-                {
-                    break;
-                }
+                break;
             }
-            break;
+        }
+        break;
         /************************************************
         ** Todo: Add any MFT Messages that are not already
         ** covered
@@ -976,7 +990,8 @@ HRESULT CHWMFT::ProcessMessage(
             // Nothing to do, return S_OK
             break;
         };
-    }while(false);
+    }
+    while(false);
 
     return hr;
 }
@@ -1065,7 +1080,7 @@ HRESULT CHWMFT::ProcessOutput(
         ** member
         *******************************/
         pOutputSamples[0].dwStreamID    = 0;
-        
+
         if((pOutputSamples[0].pSample) == NULL)
         {
             // The MFT is providing it's own samples
@@ -1090,7 +1105,8 @@ HRESULT CHWMFT::ProcessOutput(
                 {
                     break;
                 }
-            }while(false);
+            }
+            while(false);
 
             SAFERELEASE(pBuffer);
 
@@ -1117,7 +1133,7 @@ HRESULT CHWMFT::ProcessOutput(
 
                 do
                 {
-                    hr = MFCreateMediaEvent(METransformDrainComplete , GUID_NULL, S_OK, NULL, &pDrainCompleteEvent);
+                    hr = MFCreateMediaEvent(METransformDrainComplete, GUID_NULL, S_OK, NULL, &pDrainCompleteEvent);
                     if(FAILED(hr))
                     {
                         break;
@@ -1146,7 +1162,8 @@ HRESULT CHWMFT::ProcessOutput(
                     {
                         break;
                     }
-                }while(false);
+                }
+                while(false);
 
                 SAFERELEASE(pDrainCompleteEvent);
 
@@ -1158,7 +1175,8 @@ HRESULT CHWMFT::ProcessOutput(
                 m_dwStatus &= (~MYMFT_STATUS_DRAINING);
             }
         }
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pSample);
 
@@ -1240,7 +1258,8 @@ HRESULT CHWMFT::SetInputType(
         }
 
         IsMFTReady();
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pMT);
 
@@ -1252,7 +1271,7 @@ HRESULT CHWMFT::SetOutputBounds(
     LONGLONG hnsUpperBound)
 {
     /*****************************************
-    ** Todo: This MFT does not support  
+    ** Todo: This MFT does not support
     ** sample boundries
     ** See http://msdn.microsoft.com/en-us/library/ms693812(v=VS.85).aspx
     *****************************************/
@@ -1341,7 +1360,8 @@ HRESULT CHWMFT::SetOutputType(
         }
 
         IsMFTReady();
-    }while(false);
+    }
+    while(false);
 
     SAFERELEASE(pMT);
 

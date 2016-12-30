@@ -1,4 +1,4 @@
-//+-------------------------------------------------------------------------
+﻿//+-------------------------------------------------------------------------
 //
 //  Microsoft Windows Media Technologies
 //  Copyright (C) Microsoft Corporation. All rights reserved.
@@ -8,7 +8,7 @@
 //  Contents:
 //
 //--------------------------------------------------------------------------
-#if !defined(AFX_STDAFX_H__DDE8437E_FFF8_4CA6_8514_387D7E8125DF__INCLUDED_) 
+#if !defined(AFX_STDAFX_H__DDE8437E_FFF8_4CA6_8514_387D7E8125DF__INCLUDED_)
 #define AFX_STDAFX_H__DDE8437E_FFF8_4CA6_8514_387D7E8125DF__INCLUDED_
 
 #if _MSC_VER > 1000

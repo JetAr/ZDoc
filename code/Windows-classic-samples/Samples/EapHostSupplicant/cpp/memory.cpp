@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 
@@ -40,8 +40,8 @@ InitializeHeap(
     g_localHeap = NULL;   // Make sure the global value is initialized.
 
     g_localHeap = HeapCreate(0,  // Serialize access to the heap
-                                           1,   // Create a 0-byte heap; allocations will increase it, as necessary.
-                                           0);  // Heap is growable; limited only by available memory
+                             1,   // Create a 0-byte heap; allocations will increase it, as necessary.
+                             0);  // Heap is growable; limited only by available memory
     if (! g_localHeap)
     {
         dwErr = GetLastError();

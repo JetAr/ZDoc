@@ -1,12 +1,12 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
 //
-// Copyright � Microsoft Corporation. All rights reserved
+// Copyright © Microsoft Corporation. All rights reserved
 
 /******************************************************************************
-*   srengext.h 
+*   srengext.h
 *       This file contains the declaration of the CSampleSRExtension class.
 *       This implements the custom interface ISampleSRExtension.
 *       When an app QI's for this from the reco context, SAPI will
@@ -16,29 +16,29 @@
 
 #pragma once
 
-#include "stdafx.h" 
+#include "stdafx.h"
 #include "SampleSrEngine.h"
 #include "resource.h"
 
-class ATL_NO_VTABLE CSampleSRExtension : 
-public CComObjectRootEx<CComMultiThreadModel>,
-public CComCoClass<CSampleSRExtension, &CLSID_SampleSRExtension>,
-public ISampleSRExtension,
-public ISpDisplayAlternates,
-public ISpEnginePronunciation
+class ATL_NO_VTABLE CSampleSRExtension :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public CComCoClass<CSampleSRExtension, &CLSID_SampleSRExtension>,
+    public ISampleSRExtension,
+    public ISpDisplayAlternates,
+    public ISpEnginePronunciation
 {
 public:
 
-DECLARE_REGISTRY_RESOURCEID(IDR_SRENGEXT)
-DECLARE_GET_CONTROLLING_UNKNOWN()
-DECLARE_PROTECT_FINAL_CONSTRUCT()
-        
-BEGIN_COM_MAP(CSampleSRExtension)
+    DECLARE_REGISTRY_RESOURCEID(IDR_SRENGEXT)
+    DECLARE_GET_CONTROLLING_UNKNOWN()
+    DECLARE_PROTECT_FINAL_CONSTRUCT()
+
+    BEGIN_COM_MAP(CSampleSRExtension)
     COM_INTERFACE_ENTRY(ISampleSRExtension)
     COM_INTERFACE_ENTRY(ISpDisplayAlternates)
     COM_INTERFACE_ENTRY(ISpEnginePronunciation)
-END_COM_MAP()
-        
+    END_COM_MAP()
+
     HRESULT FinalConstruct()
     {
         // Fail if CRecoExt is created as a non-aggregate object.
@@ -64,8 +64,8 @@ END_COM_MAP()
 
     // ISpDisplayAlternates methods
     STDMETHODIMP GetDisplayAlternates(
-        const SPDISPLAYPHRASE *pPhrase, 
-        ULONG cRequestCount, 
+        const SPDISPLAYPHRASE *pPhrase,
+        ULONG cRequestCount,
         SPDISPLAYPHRASE **ppCoMemPhrases,
         ULONG *pcPhrasesReturned);
 
@@ -73,14 +73,14 @@ END_COM_MAP()
 
 
     // ISpEnginePronunciation methods
-    STDMETHODIMP Normalize( 
+    STDMETHODIMP Normalize(
         LPCWSTR pszWord,
         LPCWSTR pszLeftContext,
         LPCWSTR pszRightContext,
         WORD LangID,
         SPNORMALIZATIONLIST *pNormalizationList);
-        
-    STDMETHODIMP GetPronunciations( 
+
+    STDMETHODIMP GetPronunciations(
         LPCWSTR pszWord,
         LPCWSTR pszLeftContext,
         LPCWSTR pszRightContext,

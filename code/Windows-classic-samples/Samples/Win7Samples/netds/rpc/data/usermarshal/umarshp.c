@@ -1,4 +1,4 @@
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
+﻿// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
 // THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 // PARTICULAR PURPOSE.
@@ -8,7 +8,7 @@
 
 /****************************************************************************
 						 Microsoft RPC
-          
+
                          umarsh Example
 
     FILE:       umarshp.c
@@ -17,7 +17,7 @@
                 side of RPC distributed application
 
     FUNCTIONS:  ModifyMyWString() - Display the string passed in, modify it, and return
-				ModifyMyString() - 
+				ModifyMyString() -
                 Shutdown() - shuts down the server side
 
     COMMENTS:   Related to umarshs.c
@@ -46,7 +46,7 @@ Comments:   This sample is meant to demonstrate a typical use of the
 
 ****************************************************************************/
 void ModifyMyWString(IN RPC_BINDING_HANDLE hBinding,
-					 WCHAR_STRING * pStr)
+                     WCHAR_STRING * pStr)
 {
     wprintf_s(L"\nModifyMyWString: received UNICODE string:\n%s\n\n", *pStr );
     wcscpy_s(*pStr, wcslen(*pStr),L"This string comes back on the wire as UNICODE");
@@ -71,7 +71,7 @@ Comments:   This sample is meant to demonstrate a typical use of the
 
 ****************************************************************************/
 void ModifyMyString(IN RPC_BINDING_HANDLE hBinding,
-					WCHAR_STRING * pStr)
+                    WCHAR_STRING * pStr)
 {
     wprintf_s(L"\nModifyMyString: received UNICODE string:\n%s\n\n", *pStr );
     wcscpy_s(*pStr,wcslen(*pStr), L"This UNICODE string comes back on the wire as ASCII");
@@ -104,14 +104,16 @@ void Shutdown(IN RPC_BINDING_HANDLE hBinding)
     printf_s("Calling RpcMgmtStopServerListening\n");
     status = RpcMgmtStopServerListening(NULL);
     printf_s("RpcMgmtStopServerListening returned: 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 
     printf_s("Calling RpcServerUnregisterIf\n");
     status = RpcServerUnregisterIf(NULL, NULL, FALSE);
     printf_s("RpcServerUnregisterIf returned 0x%x\n", status);
-    if (status) {
+    if (status)
+    {
         exit(status);
     }
 }
