@@ -54,6 +54,8 @@
 *.sbr
 *.sdf
 *.opensdf
+*.VC.db
+*.VC.opendb
 
 *.bak
 
