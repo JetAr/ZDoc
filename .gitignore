@@ -38,7 +38,9 @@
 *.ncb
 *.ilk
 *.obj
+*.iobj
 *.pdb
+*.ipdb
 *.suo
 *.htm
 *.idb
